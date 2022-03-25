@@ -2,186 +2,250 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518B44E726C
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Mar 2022 12:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0F24E74B8
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Mar 2022 15:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354920AbiCYLvf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Mar 2022 07:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
+        id S1358977AbiCYOEa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Mar 2022 10:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345320AbiCYLve (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Mar 2022 07:51:34 -0400
-Received: from out203-205-221-190.mail.qq.com (out203-205-221-190.mail.qq.com [203.205.221.190])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C52D3AFC;
-        Fri, 25 Mar 2022 04:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648208996;
-        bh=IPtd5NBJKkBEY0L1pQtW4blGnh3srn/WBBwWRTexlrw=;
-        h=From:To:Cc:Subject:Date;
-        b=r+WJMRLGw2sGKSgekix4f2uFMbge+HYA0TlkB4dDAiBWo+DDAjTRmgE+NGvz+/9X5
-         rsPVWUq9HeH0xNEFQWW/W47Mx7gSZT05ui5IOecyz+zAI/kpRsbxaZ9ZrABUP04qRl
-         qxhijTneYrdHD0kosTf06f2NRhRko8uCBaBg8LF4=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
-        id C732ECB1; Fri, 25 Mar 2022 19:49:51 +0800
-X-QQ-mid: xmsmtpt1648208991turlnigp0
-Message-ID: <tencent_3E071B85643888D2C8BF388804334CAE2706@qq.com>
-X-QQ-XMAILINFO: MZ7OTbK+3aE5SaqPAIQeWKjDXnRL7UbB0WYL4yx1oTafA5+9iJBprA7gZQLM/c
-         Px2EHDjur6vcGFMz1zZzST7o0PemfNlrw3+G4fbJXUitmxn0SpQ/QpCOkDsQnQ2ZQEO4gU/Wx5sv
-         CnOncfyRJDWFilZxE//u+3/HLjPrZFDjV5pqDuPj6GELM61xA6Z9wiowoR/TdBAzs+++ydswqPlS
-         tuqxGPe5x/gnjAEWoqR/QU5+gk1IPmMeFh+7mZJ1fQ/on3TqG6qAp6hMjckhSbKC523IHyZzPYb+
-         anKXUKNVssZ2EjpQ849qAf+NBEmJfocABJlFATBspj+bfdCpQuOlcNdjrTJf5l6vrWxJRWW6SkKl
-         lwZGFfixdFw3kLvUhorn0ypHU6h0NQZ/3SOfSHfSSpSnxtyowWqnXVK9v37B2sU6r6NtaATEHqtF
-         qqucgY96CvGchHorApMW2vJfCLgiYHTf6srOH1/GvclsUNfw8CL9+iUaqt922zvRUsXXSrWDlhW/
-         67V1Qi7rqJR39VST2GOnHuYq+/ac8qzUCEKGJuLfdKJtnPbgixdN3D+3ga4z2uts/4w/ouuOlxpW
-         4Zf0Ii3a9dJiBJQDjtiU2bJVPFtw3ZLj1KPiqqjR+3kPAhxXiQJDKoMeqYDAbMru6gll4DYET1W+
-         5aFLW5BGIkMGvkfoWWN8OfHyL/rHhNpqdrpOyv+KmOXA3fv1+GiMh7H6FUaFh+sRx2mLt7+mbfl3
-         6kS+t/T6UjnRiGiEfemzc8e95Ccrq6we4xOGLO3Dd7K8CRyCW9bEzRpR6D3gOF/gXEE54pA017/G
-         qbYgvaE1Gz/Sc2PHk/5mSR+LZKYrfJcpDx5/5NiXOPzlQlMWhDutduEke4pQLJY4a1HvmPHmv7XD
-         XcpSb1G3pF8b7LRc/YxNUxQ9W8MtW+kVY0y5LAhkZ7Tw/yE+cFNL5ecPyUMuL16nwj5qMQvL3buB
-         pXgfYzh141TIT1StdOog==
-From:   xkernel.wang@foxmail.com
-To:     john@phrozen.org, tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] MIPS: lantiq: check the return value of kzalloc()
-Date:   Fri, 25 Mar 2022 19:49:41 +0800
-X-OQ-MSGID: <20220325114941.4648-1-xkernel.wang@foxmail.com>
+        with ESMTP id S1359168AbiCYOE0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Mar 2022 10:04:26 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43170D8F44
+        for <linux-mips@vger.kernel.org>; Fri, 25 Mar 2022 07:02:50 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id pv16so15646477ejb.0
+        for <linux-mips@vger.kernel.org>; Fri, 25 Mar 2022 07:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mTkB/8ok0Jsn34jiNB203Plx4NPfqmN3UIIy2Jyu7bo=;
+        b=In8qGeWW39amfdfMaC7ALJwwk2vGMRr7lk3s0LuuCmMDrxlYuKp3Rw/6rsW5fK8Glk
+         owwPL6TsetbV897lpSyliYR53rBbH8Du7kfmVB1i0Wx9yhTKjEZhQsfhRlWmVajNgvOM
+         nhs+APW1gXhEvsnz0sfKQ/EUrupA0vRe1xplRl8+TDIn9B7Zncg8D4QuK/DlQ4WuexHq
+         UWWHyB9h7j7K03KcGsElBWO8Kkm7WPVH4bc32h1GD8EeuI25OMggTeHvyLN/rqLMAY8N
+         JKCGBqpmnvRhobpxCr29K1Y3o9HVPXUz4M0crNYKx0m2G2e+u0xQ2+x4B7N6x2u/wK/X
+         LWxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mTkB/8ok0Jsn34jiNB203Plx4NPfqmN3UIIy2Jyu7bo=;
+        b=uGBv8lzD4KsaFgFWRoOrsSs/jvompfBMxNvKqDuTFQriUhLYJBio4JIDoqVAoLXhuB
+         f+1ThrfdKog9HmOrIpRIGb1HLRRxjNpgOxUyt7tTkeiILSPc17fYNAYGYzMVegn7jlaD
+         oSayF7/Jc8CmjiGRVqiKfMggPDAkLhVAiRKEBTG0kiTXSj4GkL/xghKLM8FamTQA6jIi
+         LjXM9z7D6ed2DOtrPcJ5ro7sseVFALVZ/Vhkd07TpTgcKKOj6hKjy0Vs72CvpM8lzBfD
+         OGASUghZqP1v8myi0KP9x7jDoCZK66zTu662nDzMfeRfSUrW8oFqHcullW0F5bzDNVAW
+         /+yg==
+X-Gm-Message-State: AOAM533lBhoGRgUKrrB1jUzXMv/ewX9/HVzYJjcpV2j/09K5eLVvB9mO
+        Zoo9bWhiShYpkJj1t+1j57Cu2bAPycao58ZwdSY=
+X-Google-Smtp-Source: ABdhPJwa+fESlJNgq3HJUEZBYThRPkGFuUFWog5FxbokThEcrv6N1wNu+ZKY4DjXlyBAga2mWsQ1PY/VlBrI93FD4kU=
+X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id
+ cr21-20020a170906d55500b006db148e05ccmr11527925ejc.63.1648216967841; Fri, 25
+ Mar 2022 07:02:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Fri, 25 Mar 2022 14:02:37 +0000
+Message-ID: <CAHpNFcMj2Pr5EyTEW2S_UDnLSpzacEznEb=aSOr-arV5F-i4oA@mail.gmail.com>
+Subject: New GPU/CPU & Motherboard Bios strategy for ASUS unique RX6700XTC-FlareEdition2021
+To:     mobile@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+https://www.phoronix.com/scan.php?page=3Dnews_item&px=3DLinux-5.18-x86-Plat=
+form-Drivers
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check the
-return value of it to prevent potential wrong memory access or
-memory leak.
+New GPU/CPU & Motherboard Bios strategy for ASUS unique
+RX6700XTC-FlareEdition2021
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- arch/mips/lantiq/falcon/sysctrl.c |  2 ++
- arch/mips/lantiq/xway/gptu.c      |  2 ++
- arch/mips/lantiq/xway/sysctrl.c   | 46 ++++++++++++++++++++-----------
- 3 files changed, 34 insertions(+), 16 deletions(-)
+Important Business : RS
+Date: Sun, Jan 3, 2021 at 11:12 AM
+To: Kr*****, L** <l**.kr****@amd.com>
+  To: <Med**@xilinx.com>
 
-diff --git a/arch/mips/lantiq/falcon/sysctrl.c b/arch/mips/lantiq/falcon/sysctrl.c
-index 42222f8..446a253 100644
---- a/arch/mips/lantiq/falcon/sysctrl.c
-+++ b/arch/mips/lantiq/falcon/sysctrl.c
-@@ -167,6 +167,8 @@ static inline void clkdev_add_sys(const char *dev, unsigned int module,
- {
- 	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
-+	if (!clk)
-+		return;
- 	clk->cl.dev_id = dev;
- 	clk->cl.con_id = NULL;
- 	clk->cl.clk = clk;
-diff --git a/arch/mips/lantiq/xway/gptu.c b/arch/mips/lantiq/xway/gptu.c
-index 3d5683e..200fe9f 100644
---- a/arch/mips/lantiq/xway/gptu.c
-+++ b/arch/mips/lantiq/xway/gptu.c
-@@ -122,6 +122,8 @@ static inline void clkdev_add_gptu(struct device *dev, const char *con,
- {
- 	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
-+	if (!clk)
-+		return;
- 	clk->cl.dev_id = dev_name(dev);
- 	clk->cl.con_id = con;
- 	clk->cl.clk = clk;
-diff --git a/arch/mips/lantiq/xway/sysctrl.c b/arch/mips/lantiq/xway/sysctrl.c
-index 917fac1..084f6ca 100644
---- a/arch/mips/lantiq/xway/sysctrl.c
-+++ b/arch/mips/lantiq/xway/sysctrl.c
-@@ -315,6 +315,8 @@ static void clkdev_add_pmu(const char *dev, const char *con, bool deactivate,
- {
- 	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
-+	if (!clk)
-+		return;
- 	clk->cl.dev_id = dev;
- 	clk->cl.con_id = con;
- 	clk->cl.clk = clk;
-@@ -338,6 +340,8 @@ static void clkdev_add_cgu(const char *dev, const char *con,
- {
- 	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
-+	if (!clk)
-+		return;
- 	clk->cl.dev_id = dev;
- 	clk->cl.con_id = con;
- 	clk->cl.clk = clk;
-@@ -356,24 +360,28 @@ static void clkdev_add_pci(void)
- 	struct clk *clk_ext = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
- 	/* main pci clock */
--	clk->cl.dev_id = "17000000.pci";
--	clk->cl.con_id = NULL;
--	clk->cl.clk = clk;
--	clk->rate = CLOCK_33M;
--	clk->rates = valid_pci_rates;
--	clk->enable = pci_enable;
--	clk->disable = pmu_disable;
--	clk->module = 0;
--	clk->bits = PMU_PCI;
--	clkdev_add(&clk->cl);
-+	if (clk) {
-+		clk->cl.dev_id = "17000000.pci";
-+		clk->cl.con_id = NULL;
-+		clk->cl.clk = clk;
-+		clk->rate = CLOCK_33M;
-+		clk->rates = valid_pci_rates;
-+		clk->enable = pci_enable;
-+		clk->disable = pmu_disable;
-+		clk->module = 0;
-+		clk->bits = PMU_PCI;
-+		clkdev_add(&clk->cl);
-+	}
- 
- 	/* use internal/external bus clock */
--	clk_ext->cl.dev_id = "17000000.pci";
--	clk_ext->cl.con_id = "external";
--	clk_ext->cl.clk = clk_ext;
--	clk_ext->enable = pci_ext_enable;
--	clk_ext->disable = pci_ext_disable;
--	clkdev_add(&clk_ext->cl);
-+	if (clk_ext) {
-+		clk_ext->cl.dev_id = "17000000.pci";
-+		clk_ext->cl.con_id = "external";
-+		clk_ext->cl.clk = clk_ext;
-+		clk_ext->enable = pci_ext_enable;
-+		clk_ext->disable = pci_ext_disable;
-+		clkdev_add(&clk_ext->cl);
-+	}
- }
- 
- /* xway socs can generate clocks on gpio pins */
-@@ -393,9 +401,15 @@ static void clkdev_add_clkout(void)
- 		char *name;
- 
- 		name = kzalloc(sizeof("clkout0"), GFP_KERNEL);
-+		if (!name)
-+			continue;
- 		sprintf(name, "clkout%d", i);
- 
- 		clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
-+		if (!clk) {
-+			kfree(name);
-+			continue;
-+		}
- 		clk->cl.dev_id = "1f103000.cgu";
- 		clk->cl.con_id = name;
- 		clk->cl.clk = clk;
--- 
+FPGA BitFile & Code Opt (c)RS 2021-01
 
+Priority of Operating process for streamlining Dynamic FPGA units on
+CPU & GPU By Rupert S
+
+Factors common in FPGA are:100000 Gates to 750000 Gates (Ideal for
+complex tasks)
+
+Programmable Processor command implementation & reprogram  speed 3ns
+to 15 Seconds
+2 million gates
+Processor core usage to reprogram ?
+15% of a 200Mhz processor =3D 200ns programming time
+Processor core usage to reprogram ? 20% to 25% of a 200Mhz processor =3D
+30ns programming time
+
+250 to 2900 Gates 1uns to 2ns
+(ideal for small complex instructions)
+Processor usage (in programming) 2 to 5% CPU @200Mhz
+
+2000 to 12500 to 25000 Gates (ideal for very complex function)
+30uns to 8ns (ideal for small complex instructions & RISC)
+
+Processor usage (in programming) 2 to 9% CPU @200Mhz
+
+Plans to load a BitFile rely on constant use & not on the fly, However
+small gate arrays permit microsecond coding..
+
+However I do state that a parameter for operating order is specified &
+for most users Automatic.
+
+Operating system functions.. for example AUDIO are a priority & will
+stay consistent..
+
+So we will have specific common instructions that are specific to OS &
+BIOS Firmware..
+Commons will take 20% of a large FPGA (relative)
+
+With the aim of having at least 4 common & hard to match functions; As
+a core large ARRAY..The aim being not to reprogram every second,
+
+For example during boot process with: Bitfile preorder profile:
+1uns to 2ns (ideal for small complex instructions)
+
+During the operation of the Computer or array the FPGA may contain
+specific ANTIVirus & firewall functions, That we map to ML
+
+The small unit groups of fast reprogrammables will be ideal for
+application that we are using for more than 30 minutes.. & May be
+clustered.
+
+Optimus (Prime) bitfile : RS
+Obviously handheld devices require uniquely optimum feature set & tiny
+processor size..
+Create the boundry and push that limit.
+
+We will obviously prefer to enable Hardcode pre trained models such as :
+
+SiMD
+Tessellation & maths objective : for gaming & science
+Dynamic DMA Clusters (OS,Security,Root)
+Maths Unit
+HardDrive Accelerators
+Compressors
+Compiler optimisers CPU/GPU
+Core Prefetch/ML optimiser (on die)
+Combined Shader & function for both DirectX,Metal & Vulkan utility..
+GPU & CPU Synergy Network & Cache.
+Direct Audio & Video,Haptic processing dynamic; element 3D Extrapolation..
+Dynamic Meta Data processing & conversion ..
+(Very important because not all Meta data is understood directly in
+the used process.)
+
+Obviously handheld devices require uniquely optimum feature set & tiny
+processor size..
+Create the boundry and push that limit.
+
+(c)Rupert S https://science.n-helix.com
+
+"processor programs a reprogrammable execution unit with the bitfile
+so that the reprogrammable execution unit is capable of executing
+specialized instructions associated with the program."
+
+https://hothardware.com/news/amd-patent-hybrid-cpu-fpga-design-xilinx
+
+"AMD Patent Reveals Hybrid CPU-FPGA Design That Could Be Enabled By Xilinx =
+Tech
+xilinx office
+
+While they often aren=E2=80=99t as great as CPUs on their own, FPGAs can do=
+ a
+wonderful job accelerating specific tasks. Whether it's accelerating
+acting as a fabric for wide-scale datacenter services boosting AI
+performance, an FPGA in the hands of a capable engineer can offload a
+wide variety of tasks from a CPU and speed processes along. Intel has
+talked a big game about integrating Xeons with FPGAs over the last six
+years, but it hasn't resulted in a single product hitting its lineup.
+A new patent by AMD, though, could mean that the FPGA newcomer might
+be ready to make one of its own.
+
+In October, AMD announced plans to acquire Xilinx as part of a big
+push into the datacenter. On Thursday, the United States Patent and
+Trademark Office (USPTO) published an AMD patent for integrating
+programmable execution units with a CPU. AMD made 20 claims in its
+patent application, but the gist is that a processor can include one
+or more execution units that can be programmed to handle different
+types of custom instruction sets. That's exactly what an FPGA does. It
+might be a little bit until we see products based on this design, as
+it seems a little too soon to be part of CPUs included in recent EPYC
+leaks.
+
+While AMD has made waves with its chiplet designs for Zen 2 and Zen 3
+processors, that doesn't seem to be what's happening here. The
+programmable unit in AMD's FPGA patent actually shares registers with
+the processor's floating-point and integer execution units, which
+would be difficult, or at least very slow, if they're not on the same
+package. This kind of integration should make it easy for developers
+to weave these custom instructions into applications, and the CPU
+would just know to pass those onto the on-processor FPGA. Those
+programmable units can handle atypical data types, specifically FP16
+(or half-precision) values used to speed up AI training and inference.
+
+xilinx vu19p
+
+In the case of multiple programmable units, each unit could be
+programmed with a different set of specialized instructions, so the
+processor could accelerate multiple instruction sets, and these
+programmable EUs can be reprogrammed on the fly. The idea is that when
+a processor loads a program, it also loads a bitfile that configures
+the programmable execution unit to speed up certain tasks. The CPU's
+own decode and dispatch unit could address the programmable unit,
+passing those custom instructions to be processed.
+
+AMD has been working on different ways to speed up AI calculations for
+years. First the company announced and released the Radeon Impact
+series of AI accelerators, which were just big headless Radeon
+graphics processors with custom drivers. The company doubled down on
+that with the release of the MI60, its first 7-nm GPU ahead of the
+Radeon RX 5000 series launch, in 2018. A shift to focusing on AI via
+FPGAs after the Xilinx acquisition makes sense, and we're excited to
+see what the company comes up with."
+
+*****
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
+tml
+
+
+Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/03/ice-ssrtp.html
+
+https://science.n-helix.com/2021/11/ihmtes.html
+
+https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+https://science.n-helix.com/2021/12/3d-audio-plugin.html
+
+Integral to Telecoms Security TRNG
+
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
