@@ -2,73 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78CA4E87D2
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 15:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DA04E87EC
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 15:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiC0NCb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Mar 2022 09:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        id S234214AbiC0Nyy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Mar 2022 09:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiC0NCa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 09:02:30 -0400
-X-Greylist: delayed 396 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Mar 2022 06:00:51 PDT
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A699817A9B;
-        Sun, 27 Mar 2022 06:00:51 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 311EA3200973;
-        Sun, 27 Mar 2022 08:54:11 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sun, 27 Mar 2022 08:54:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=0Poh99Zp5F+kUx
-        onhOeLMx5mbCgIAbikKidBnjSuO14=; b=mk5o9K8+r5CsemyYP5iZZiLO2vXUvh
-        QeHDy8TFePh/0Ltoq3PfFWCPwVD3SoUOhvnPC8P9LY2TMgfQsgxLOeKaAszy1Z4P
-        tcelHY1V4whM/sIr3Ho+u7JSUW1gzBAaTDFp4R2mU2LgLK4MHXwApLvg7PUxW4t/
-        HrKkl/nLygPxK0Sl2pxG0X0TIt2RGtY4RV7bPiupwhphiSNtmwoZRak7JMTAXdxZ
-        uMdx9a8NLNbEnVtCLTf35PyVN4z3pxw6TL/G2ypyoPvljoejPRyuTpALcVYi0QZY
-        0+7NSqfL3798c2PTinQluMpLZ1B7PKjRQyrqcKrU6MqtBmYgAqT+Jwpw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=0Poh99Zp5F+kUxonhOeLMx5mbCgIAbikKidBnjSuO
-        14=; b=jvzYHtT0IcVKhFVmeiTMy0Y3W6KTZpLc6mnTsvnLbUvPQtltH9jBpwJ4Z
-        vmRUvhmTg1SeltMTaGhgUa+SzXeq1sZNQFD9ocYXr251HpVDUBuyU2Fw92qJpvGT
-        Z8qh9V2T/j1DLp3G7h5OkiNc14Xlbj4ysK2maycFnRy9+ZtoqGAFiG+ih9MkXjnU
-        6YCeFlyyZNIzKrphmaEyiQ0/o66L1FCFs/y4cD/L97pFnqfbxh5sQ1WuAy3A2ZMo
-        +kZcjeUgCyk8jUdFXOarPz0fsBTsBUZ/3/bTCu8pQmjW0f2q+MyYy4ZSIToDY2ud
-        z+bSHp1SLaCw0xvV9ZkXmUueKN48A==
-X-ME-Sender: <xms:cF5AYsPWhGaKC4GVosNulieA6UPoZtzHTCsEVuv2VJK3AiYr9bOwDA>
-    <xme:cF5AYi-_PF3ZXtj6wB-YWW7GBJqaK6Bafouidw-ZXK2RyRpzED3Uhv3BETVEQyEJ7
-    jtgPh9hjRHeMWBevxM>
-X-ME-Received: <xmr:cF5AYjT5VT-sVxPpm6mNjZbbQdDkaW4ilFjZUDvqZRGk_ucwcrusBtsBBiBC4Zw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehhedgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeejhfehtdefjeeuudehudevleegudethfduiedugeevudehgefh
-    vefhueeguedtgeenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:cF5AYks_U06sRHaVf83kuZ-wTsZkiTXz-g50lW9n6cuXnQWJ6lxLqg>
-    <xmx:cF5AYkcZt8Nni4pPNht3eZ0KY43PhOwdF0o-J5pWQMtYksFTjkiQyQ>
-    <xmx:cF5AYo0pBjY1B8QXRq2X19yKopKlTye4qazZ9sNYDlK6T3CZUMV4mw>
-    <xmx:cl5AYoOOM0ZId1xMffmZVveh7L1GYDratW_puMOcJzDdt-4XbFCTzw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 27 Mar 2022 08:54:06 -0400 (EDT)
-Message-ID: <169412ca-9167-b214-d613-4fe0e76ad36a@flygoat.com>
-Date:   Sun, 27 Mar 2022 13:54:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v12 3/6] dt-bindings: display: Add Loongson display
- controller
-Content-Language: en-GB
+        with ESMTP id S233574AbiC0Nyx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 09:54:53 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BAFB85C;
+        Sun, 27 Mar 2022 06:53:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648389194; x=1679925194;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ftpBL5isBU6wAN2J5Wb1nf5ir7WISc6nuxwRuY7UEnQ=;
+  b=AH5HJqpY8gYjvzL5p+C5B4WXt4rh/rFz+V14QbJ1hBzgk3zpCY/79i31
+   XMx3t3rQHDm7Rbz1K0m99KeumHI8PAMem5c8LKjdaHIkzyp5gxf7yluwd
+   qJlkassnuhUBBo5GCc7A8nSsTbAs1AcN8xYLRB8G7XHW5RfOMRLe0uQsm
+   N4vyDH6vqMhk+ZAdhDOEEdLvmpWsZ0KVGe3YWr9u58BTLKmnOgDAaUobS
+   4XP8SLtWdsOwW+EF27VkMJV1s4OjrXeAe2rsw1Lg8Q0Ssp5YbtG/NQcks
+   KtF0kJjfaoqv0C+BCsbRKwy/67zFo8HlUhmgRXSFcBYIo0UyBM2wZN3z3
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="258820343"
+X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
+   d="scan'208";a="258820343"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 06:53:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
+   d="scan'208";a="617542612"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Mar 2022 06:53:07 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYTKM-00014v-Cw; Sun, 27 Mar 2022 13:53:06 +0000
+Date:   Sun, 27 Mar 2022 21:52:32 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Sui Jingfeng <15330273260@189.cn>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
@@ -79,149 +52,92 @@ To:     Sui Jingfeng <15330273260@189.cn>,
         Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Carpenter <error27@gmail.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Ilia Mirkin <imirkin@alum.mit.edu>,
         Qing Zhang <zhangqing@loongson.cn>,
         suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220327113846.2498146-1-15330273260@189.cn>
- <20220327113846.2498146-4-15330273260@189.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20220327113846.2498146-4-15330273260@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 5/6] drm/loongson: add drm driver for loongson
+ display controller
+Message-ID: <202203272117.q6tMwBFo-lkp@intel.com>
+References: <20220327113846.2498146-6-15330273260@189.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220327113846.2498146-6-15330273260@189.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Sui,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on robh/for-next linus/master v5.17 next-20220325]
+[cannot apply to mripard/sunxi/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-loongson-add-drm-driver-for-loongson-display-controller/20220327-194016
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: parisc-randconfig-r003-20220327 (https://download.01.org/0day-ci/archive/20220327/202203272117.q6tMwBFo-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e90d831d05f2c1b5631fd706fb449e83e64f632c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sui-Jingfeng/drm-loongson-add-drm-driver-for-loongson-display-controller/20220327-194016
+        git checkout e90d831d05f2c1b5631fd706fb449e83e64f632c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash drivers/gpu/drm/loongson/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/loongson/lsdc_debugfs.c:149: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * vram debugfs related ...
 
 
-在 2022/3/27 12:38, Sui Jingfeng 写道:
-> Add DT bindings and simple usages for Loongson display controller
-> found in LS7A1000 bridges chip and LS2k1000 SoC.
->
-> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
-[...]
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    bus {
-> +
-> +        #address-cells = <3>;
-> +        #size-cells = <2>;
-> +        #interrupt-cells = <2>;
-> +
-> +        display-controller@6,1 {
-> +            compatible = "loongson,ls7a1000-dc";
-> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
-> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            i2c@6 {
-> +                compatible = "loongson,gpio-i2c";
-> +                reg = <0x00001650 0x00000020>;
-Hi Jingfeng,
+vim +149 drivers/gpu/drm/loongson/lsdc_debugfs.c
 
-Thanks for your patch.
+   147	
+   148	/**
+ > 149	 * vram debugfs related ...
+   150	 */
+   151	static int lsdc_vram_mm_show(struct seq_file *m, void *data)
+   152	{
+   153		struct drm_info_node *node = (struct drm_info_node *)m->private;
+   154		struct drm_vram_mm *vmm = node->minor->dev->vram_mm;
+   155		struct ttm_resource_manager *man = ttm_manager_type(&vmm->bdev, TTM_PL_VRAM);
+   156		struct drm_printer p = drm_seq_file_printer(m);
+   157	
+   158		ttm_resource_manager_debug(man, &p);
+   159		return 0;
+   160	}
+   161	
 
-Just curious about what is this "reg" for?
-> +                loongson,nr = <6>;
-Why nr start from 6?
-
-The approach you are handling I2C seems to be wired..
-
-Actually you can reference how network subsystem is handling
-MDIO controller built-in into Ethernet controller [1] in this case. It is
-basically the same problem.
-
-[1]: 
-https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-
-Thanks.
-- Jiaxun
-
-> +                loongson,sda = <0>;
-> +                loongson,scl = <1>;
-> +                loongson,udelay = <5>;
-> +                loongson,timeout = <2200>;
-> +            };
-> +
-> +            i2c@7 {
-> +                compatible = "loongson,gpio-i2c";
-> +                reg = <0x00001650 0x00000020>;
-> +                loongson,nr = <7>;
-> +                loongson,sda = <2>;
-> +                loongson,scl = <3>;
-> +                loongson,udelay = <5>;
-> +                loongson,timeout = <2200>;
-> +            };
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                port@0 {
-> +                    reg = <0>;
-> +                    endpoint {
-> +                            remote-endpoint = <&vga_encoder_in>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +                    endpoint {
-> +                            remote-endpoint = <&dvi_encoder_in>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    bus {
-> +
-> +        #address-cells = <3>;
-> +        #size-cells = <2>;
-> +        #interrupt-cells = <2>;
-> +
-> +        display-controller@6,0 {
-> +            compatible = "loongson,ls2k1000-dc";
-> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
-> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                port@0 {
-> +                    reg = <0>;
-> +                    endpoint {
-> +                            remote-endpoint = <&panel_in>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +                    endpoint {
-> +                            remote-endpoint = <&hdmi_encoder_in>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
