@@ -2,381 +2,242 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3984E8606
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 07:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D544E8766
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 13:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235232AbiC0Flg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Mar 2022 01:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S233682AbiC0Lkn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Mar 2022 07:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235203AbiC0Flf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 01:41:35 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD51B4B1F0
-        for <linux-mips@vger.kernel.org>; Sat, 26 Mar 2022 22:39:54 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id p15so22604115ejc.7
-        for <linux-mips@vger.kernel.org>; Sat, 26 Mar 2022 22:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
-        b=OtwB7mGJUasgZlH+7SPhyQ5Ks5i2bfDW4Wy+j/EQXTiLgTo6ZvS00DXj3DrO4Uj++u
-         ndRfnz9M/5Ir0tGI+IV5mU89XVRdVNRweQa6EDFqmh7iFBBywWrtn7vyUxBLSEEbsKNR
-         koPjg9XgUxk+h3h79ZYQsgGpVoc9HTjRdj/PES1SYh0GJ6QK8cAUluxB9guNUo71TBIo
-         38w2BsXHnYxyGIAfp1D7+xp3XZqLc4ghBd96Y69BwVLudiSgXNvcvbHnlH+dnfFprK0o
-         QUZ7+rXfTj/owDcBSFJwAVOLF8N5blI509CZ91FpWGS1fSgqyd1+/FJ7zwFrL5+6LHnc
-         PGsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
-        b=CMollwEgdGrlVF11agQzQ0EVr07/Z6RnH5fDeZBScKqlmjLow4pWaYcfKWsjvYjFum
-         JrYjEiryIruHO4SusNuhNl3EBmF7vyVLUlZ6LC6djYQTXW2ASlrTdN57bNjBzbnOB0sP
-         D/OzI0GTJwygeIAoTMaPC1joBMwCNitj8zg7i5R0KQfHZdOuAI7w1NAJViiwEXwvkIF6
-         xhcf9TzYePwWGT4YZ9KEPkk2tOxtTPMWotIiYK+8LUL/DHL0LIH+mzHM0icphh84Qojt
-         Z3VnOtMWzfDrEHTGxo4KYnHg0/ekA8jlNG8coM09m2+yQlysb+wblS/CabDbrlA8a3aU
-         aj0Q==
-X-Gm-Message-State: AOAM530O7zI5/B5R6RKmG7vFrA3J0zp8fu3aZP7WULHzwGEjIiok203R
-        4oc73gNzcczDIl3fIN7/ccqrlSfHnQ9cxDRgMJ4=
-X-Google-Smtp-Source: ABdhPJzCOVofvmTh82oj+qn8IqGE+D0DGEF6nJd2ktr1OjSsm26Hcvu5URNaJZmBmpHfg3Zx1fC+xLROSUFsmCQt9Xo=
-X-Received: by 2002:a17:907:1c9c:b0:6e0:df50:d39d with SMTP id
- nb28-20020a1709071c9c00b006e0df50d39dmr5194440ejc.24.1648359593062; Sat, 26
- Mar 2022 22:39:53 -0700 (PDT)
+        with ESMTP id S233345AbiC0Lkm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 07:40:42 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA7E645AEB;
+        Sun, 27 Mar 2022 04:39:01 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:60662.210632910
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 7DA54100199;
+        Sun, 27 Mar 2022 19:38:48 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 514bf9d62b8d488c9dbce10218197a13 for mripard@kernel.org;
+        Sun, 27 Mar 2022 19:39:00 CST
+X-Transaction-ID: 514bf9d62b8d488c9dbce10218197a13
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v12 0/6] drm/loongson: add drm driver for loongson display controller
+Date:   Sun, 27 Mar 2022 19:38:40 +0800
+Message-Id: <20220327113846.2498146-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 27 Mar 2022 06:39:43 +0100
-Message-ID: <CAHpNFcNcQ-hcDk8XpiUq2G3KzBx92tEAD7y8NM9QzNNhh3Y3eQ@mail.gmail.com>
-Subject: Presenting GPRS VT2 from ViaLicensing today world wide RS : for
- ViaLicencing GPRS is quite a package, New from RS @ Via 2022
-To:     info@vialicensing.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-GPRS New Solutions ViaSystems 2022 : For VIA 2G> 5G Security IS THE
-LAW We Will Progress GPRS Will Survive as a manageable system in
-Africa & south america "We The People Are Hungry" Leaf Random & GPRS
-Security : Operating Systems will manage, But how long will we survive
-with No KLOGS : progress in linux ?
-https://lkml.org/lkml/2022/3/25/991
+There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+bridge chip, the display controller is a PCI device in those chips. It
+has two display pipes but with only one hardware cursor. Each way has
+a DVO interface which provide RGB888 signals, vertical & horizontal
+synchronisations, data enable and the pixel clock. Each CRTC is able to
+scanout from 1920x1080 resolution at 60Hz, the maxmium resolution is
+2048x2048 according to the hardware spec. Loongson display controllers
+are simple which require scanout buffers to be physically contiguous.
+
+For LS7A1000 bridge chip, the DC is equipped with a dedicated video RAM
+which is typically 64MB or more. In this case, VRAM helper based driver
+is intend to be used even through the DC can scanout form system memory.
+
+While LS2K1000 is a SoC which is a typically UMA device, only system
+memory is available. Therefore CMA helper based driver is intend to be
+used. It is possible to use VRAM helper based driver on LS2K1000 by
+carving out part of system memory as VRAM though.
+
+For LS7A1000, there are 4 dedicated GPIOs whose control register is
+located at the DC register space, They are used to emulate two way i2c.
+One for DVO0, another for DVO1. LS2K1000 and LS2K0500 SoC don't have such
+GPIO hardwared, they grab i2c adapter from other module, either general
+purpose GPIO emulated i2c or hardware i2c adapter.
+
+    +------+            +-----------------------------------+
+    | DDR4 |            |  +-------------------+            |
+    +------+            |  | PCIe Root complex |   LS7A1000 |
+       || MC0           |  +--++---------++----+            |
+  +----------+  HT 3.0  |     ||         ||                 |
+  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+       || MC1           +---------------|--|----------------+
+    +------+                            |  |
+    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+                      +-------+                      +------+
+
+The above picture give a simple usage of LS7A1000, note that the encoder
+is not necessary adv7125 or tfp410, other candicates can be ch7034b,
+sil9022, ite66121 and lt8618 etc.
+
+v2: Fixup warnings reported by kernel test robot
+
+v3: Fix more grammar mistakes in Kconfig reported by Randy Dunlap and give
+    more details about lsdc.
+
+v4:
+   1) Add dts required and explain why device tree is required.
+   2) Give more description about lsdc and VRAM helper based driver.
+   3) Fix warnings reported by kernel test robot.
+   4) Introduce stride_alignment member into struct lsdc_chip_desc, the
+      stride alignment is 256 bytes for ls7a1000, ls2k1000 and ls2k0500.
+
+v5:
+   1) Using writel and readl replace writeq and readq, to fix kernel test
+      robot report build error on other archtecture.
+   2) Set default fb format to XRGB8888 at crtc reset time.
+
+v6:
+   1) Explain why we are not switch to drm dridge subsystem on ls2k1000.
+   2) Explain why tiny drm driver is not suitable for us.
+   3) Give a short description of the trival dirty update implement based
+      on CMA helper.
+
+v7:
+   1) Remove select I2C_GPIO and I2C_LS2X in Kconfig, it is not ready now
+   2) Licensing issues are fixed suggested by Krzysztof Kozlowski.
+   3) Remove lsdc_pixpll_print(), part of it move to debugfs.
+   4) Set prefer_shadow to true if vram based driver is in using.
+   5) Replace double blank lines with single line in all files.
+   6) Verbose cmd line parameter is replaced with drm_dbg()
+   7) All warnnings reported by ./scripts/checkpatch.pl --strict are fixed
+   8) Get edid from dtb support is removed as suggested by Maxime Ripard
+   9) Fix typos and various improvement
+
+v8:
+   1) Drop damage update implement and its command line.
+   2) Drop DRM_LSDC_VRAM_DRIVER config option as suggested by Maxime.
+   3) Deduce DC's identification from its compatible property.
+   4) Drop the board specific dts patch.
+   5) Add documention about the display controller device node.
+
+v9:
+   1) Fix the warnings reported by checkpatch script and fix typos
+
+v10:
+   1) Pass `make dt_binding_check` validation
+   2) Fix warnings reported by kernel test robot
+
+v11:
+   1) Convert the driver to use drm bridge and of graph framework.
+   2) Dump register value support through debugfs.
+   3) Select DRM_TTM and DRM_TTM_HELPER in Kconfig which fix linkage
+      problem when built it into the kernel.
+   4) Non 64 pixel(256 bytes aligned) horiziontal resolutons got
+      supported by hacking, default is disabled, enable it by using
+      'loongson.relax_alignment=1' on kernel cmd line.
+   5) Various improvement as required by Maxime.
+
+v12:
+   1) Add gammma support, it is broken because hardware engineer
+      does not implement this correctly. Using 'loongson.gamma=1' on
+      the kernel cmd line to enable this and see what will happen.
+      We implemlent this for IC varification.
+   2) Separate debugfs related code from lsdc_drv.c
+   3) Built-in GPIO emulate i2c refinement.
+   4) Various improvement as required by Rob.
+
+Sui Jingfeng (6):
+  MIPS: Loongson64: dts: update the display controller device node
+  MIPS: Loongson64: introduce board specific dts and add model property
+  dt-bindings: display: Add Loongson display controller
+  MIPS: Loongson64: defconfig: enable display bridge drivers
+  drm/loongson: add drm driver for loongson display controller
+  MAINTAINERS: add maintainers for DRM LSDC driver
+
+ .../loongson/loongson,display-controller.yaml | 322 ++++++++++
+ MAINTAINERS                                   |   9 +
+ arch/mips/boot/dts/loongson/Makefile          |   4 +
+ arch/mips/boot/dts/loongson/lemote_a1901.dts  |  96 +++
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 +
+ .../boot/dts/loongson/ls2k1000_pai_udb.dts    | 107 ++++
+ .../boot/dts/loongson/ls3a4000_7a1000_evb.dts | 138 +++++
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |  24 +-
+ arch/mips/configs/loongson2k_defconfig        |   5 +
+ arch/mips/configs/loongson3_defconfig         |   5 +
+ drivers/gpu/drm/Kconfig                       |   2 +
+ drivers/gpu/drm/Makefile                      |   1 +
+ drivers/gpu/drm/loongson/Kconfig              |  25 +
+ drivers/gpu/drm/loongson/Makefile             |  16 +
+ drivers/gpu/drm/loongson/lsdc_crtc.c          | 395 ++++++++++++
+ drivers/gpu/drm/loongson/lsdc_debugfs.c       | 176 ++++++
+ drivers/gpu/drm/loongson/lsdc_debugfs.h       |  17 +
+ drivers/gpu/drm/loongson/lsdc_drv.c           | 417 +++++++++++++
+ drivers/gpu/drm/loongson/lsdc_drv.h           | 155 +++++
+ drivers/gpu/drm/loongson/lsdc_i2c.c           | 285 +++++++++
+ drivers/gpu/drm/loongson/lsdc_i2c.h           |  38 ++
+ drivers/gpu/drm/loongson/lsdc_irq.c           |  57 ++
+ drivers/gpu/drm/loongson/lsdc_irq.h           |  17 +
+ drivers/gpu/drm/loongson/lsdc_output.c        | 261 ++++++++
+ drivers/gpu/drm/loongson/lsdc_output.h        |  21 +
+ drivers/gpu/drm/loongson/lsdc_pci_drv.c       | 346 +++++++++++
+ drivers/gpu/drm/loongson/lsdc_plane.c         | 447 ++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_pll.c           | 573 ++++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_pll.h           |  87 +++
+ drivers/gpu/drm/loongson/lsdc_regs.h          | 221 +++++++
+ 30 files changed, 4270 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+ create mode 100644 arch/mips/boot/dts/loongson/lemote_a1901.dts
+ create mode 100644 arch/mips/boot/dts/loongson/ls2k1000_pai_udb.dts
+ create mode 100644 arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+ create mode 100644 drivers/gpu/drm/loongson/Kconfig
+ create mode 100644 drivers/gpu/drm/loongson/Makefile
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pci_drv.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pll.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pll.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
+
+-- 
+2.25.1
 
-Jitter RAND Support Data Set + GPRS Dongle usage Technology : Alarming
-as the GPRS 20% of key '20% of the key discovered Full Potential Hack'
-is With Real /Dev/random #NoHack
-
-Real hardened Rust Implementation & code for use:
-https://github.com/P1sec/gea-implementation
-
-Weekly Seed source : https://pollinate.n-helix.com/
-
-*****
-
-ICE-SSRTP GEA Replacement 2022 + (c)RS
-
-IiCE-SSR for digital channel infrastructure can help heal GPRS+ 3G+ 4G+ 5G+
-
-Time NTP Protocols : is usable in 2G+ <> 5G+LTE Network SIM
-
-ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GEA-2
-'Ideal for USB Dongle & Radio' in Rust RS ' Ideal for Quality TPM
-Implementation'
-
-"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
-of GEA-1 with a higher amount of processing, and apparently not
-weakened) are bit-oriented stream ciphers."
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Example of use:
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade marker
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-*
-
-Good for cables ? and noise ?
-
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
-
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
-
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
-
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
-
-Transistor emission fatigue...
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
-
-
-Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-https://science.n-helix.com/2022/03/ice-ssrtp.html
-
-https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-https://science.n-helix.com/2021/12/3d-audio-plugin.html
-
-Integral to Telecoms Security TRNG
-
-*RAND OP Ubuntu :
-https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
-
-https://pollinate.n-helix.com
-
-*
-
-***** Dukes Of THRUST ******
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-Dev/Random : Importance
-
-Dev/Random : Importance : Our C/T/RNG Can Help GEA-2 Open Software
-implementation of 3 Bits (T/RNG) Not 1 : We need Chaos : GEA-1 and
-GEA-2 Implementations we will improve with our /Dev/Random
-
-Our C/T/RNG Can Help GEA-2 Open Software implementation of 3 Bits
-(T/RNG) Not 1 : We need Chaos : GEA-1 and GEA-2 Implementations we
-will improve with our /Dev/Random
-
-We can improve GPRS 2G to 5G networks still need to save power, GPRS
-Doubles a phones capacity to run all day,
-
-Code can and will be improved, Proposals include:
-
-Blake2
-ChaCha
-SM4
-SHA2
-SHA3
-
-Elliptic Encipher
-AES
-Poly ChaCha
-
-Firstly we need a good solid & stable /dev/random
-
-So we can examine the issue with a true SEED!
-
-Rupert S https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-TRNG Samples & Method DRAND Proud!
-
-https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
-https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
-https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
-https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
-
-https://github.com/P1sec/gea-implementation
-
-"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
-of GEA-1 with a higher amount of processing, and apparently not
-weakened) are bit-oriented stream ciphers."
-
-"A stream cipher, such as the well-known RC4 or GEA-1, usually works
-through using the Xor operation against a plaintext. The Xor operation
-being symmetrical, this means that encrypting should be considered the
-same operation as decrypting: GEA-1 and GEA-2 are basically
-pseudo-random data generators, taking a seed (the key, IV and
-direction bit of the GPRS data, which are concatenated),
-
-The generated random data (the keystream) is xored with the clear-text
-data (the plaintext) for encrypting. Then, later, the keystream is
-xored with the encrypted data (the ciphertext) for decrypting. That is
-why the functions called in the target library for decrypting and
-encrypting are the same.
-
-GEA-1 and GEA-2 are bit-oriented, unlike RC4 which is byte-oriented,
-because their algorithms generate only one bit of pseudo-random data
-at once (derived from their internal state), while algorithms like RC4
-generate no less than one byte at once (in RC4's case, derived from
-
-permutation done in its internal state). Even though the keystream
-bits are put together by the current encryption / decryption C and
-Rust libraries into bytes in order to generate usable keystream,
-obviously.
-
-Based on this, you can understand that GEA-1 and GEA-2 are LFSR:
-Linear Feedback Shift Register-oriented ciphers, because their
-internal state is stored into fixed-size registers. This includes the
-S and W registers which serve for initialization / key scheduling
-purposes and are respectively 64 and 97-bit wide registers, and the A,
-B, C (and for GEA-2 only D) registers which serve for the purpose of
-keystream generation, which are respectively 31, 32, 33 and 29-bit
-wide registers.
-
-On each iteration of the keystream generation, each register is
-bit-wise rotated by one position, while the bit being rotated from the
-left towards the right side (or conversely depending on in which bit
-order you internally represent your registers) is fed back to the
-algorithm and mutated depending on given conditions. Hence, the
-
-shifted-out bit is derived from other processing, and reinserted,
-while being for this reason possibly flipped depending on conditions
-depending on bits present at the other side of the given register.
-
-This is the explanation for the name of linear feedback shift register
-(shift because of the shift operation required for the rotation, and
-linear feedback because of the constant-time transform operation
-involved).
-
-The rest of the register may also be mutated at each iteration steps,
-as in the case of the GEA-1 and 2, whole fixed Xor sequences (which
-differ for each register) may be applied depending on whether the
-rotated bit is a 0 or a 1.
-
-Note that a step where the register iterates is called clocking (the
-register is clocked), and that the fixed points where the register may
-be Xor'ed when the rotated bit becomes a 1 are called taps. The linear
-function which may transmute the rotated bit at the clocking step
-(taking several bits of the original register as an input) is called
-the F function.
-
-Those kind of bit-oriented LFSR algorithms, such as GEA-1 and 2 (for
-GPRS) and A5/1 and 2 (for GSM), were designed this way for optimal
-hardware implementations in the late 80's and early 90's."
-
-*****
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
-
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
-
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
-
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
-
-Transistor emission fatigue...
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-
-***** Dukes Of THRUST ******
-
-Autism, Deafness & the hard of hearing : In need of ANC & Active audio
-clarification or correction 2022-01
-
-Sony & a few others make noise cancelling headphones that are suitable
-for people with Acute disfunction to brain function for ear drums ...
-Attention deficit or Autism,
-The newer Sony headsets are theoretically enablers of a clear
-confusion free world for Autistic people..
-Reaching out to a larger audience of people simply annoyed by a
-confusing world; While they listen to music..
-Can and does protect a small percentage of people who are confused &
-harassed by major discord located in all jurisdictions of life...
-
-Crazy noise levels, Or simply drowned in HISSING Static:
-
-Search for active voice enhanced noise cancellation today.
-
-Rupert S https://science.n-helix.com
-
-
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-
-https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
-
-
-https://www.orosound.com/
-
-https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/
