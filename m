@@ -2,82 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DA04E87EC
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 15:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190404E87F2
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 16:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234214AbiC0Nyy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Mar 2022 09:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S235646AbiC0ODx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Mar 2022 10:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbiC0Nyx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 09:54:53 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BAFB85C;
-        Sun, 27 Mar 2022 06:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648389194; x=1679925194;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ftpBL5isBU6wAN2J5Wb1nf5ir7WISc6nuxwRuY7UEnQ=;
-  b=AH5HJqpY8gYjvzL5p+C5B4WXt4rh/rFz+V14QbJ1hBzgk3zpCY/79i31
-   XMx3t3rQHDm7Rbz1K0m99KeumHI8PAMem5c8LKjdaHIkzyp5gxf7yluwd
-   qJlkassnuhUBBo5GCc7A8nSsTbAs1AcN8xYLRB8G7XHW5RfOMRLe0uQsm
-   N4vyDH6vqMhk+ZAdhDOEEdLvmpWsZ0KVGe3YWr9u58BTLKmnOgDAaUobS
-   4XP8SLtWdsOwW+EF27VkMJV1s4OjrXeAe2rsw1Lg8Q0Ssp5YbtG/NQcks
-   KtF0kJjfaoqv0C+BCsbRKwy/67zFo8HlUhmgRXSFcBYIo0UyBM2wZN3z3
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="258820343"
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="258820343"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 06:53:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="617542612"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Mar 2022 06:53:07 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYTKM-00014v-Cw; Sun, 27 Mar 2022 13:53:06 +0000
-Date:   Sun, 27 Mar 2022 21:52:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        with ESMTP id S232854AbiC0ODx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 10:03:53 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40724BBAF;
+        Sun, 27 Mar 2022 07:02:14 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id e4so13108411oif.2;
+        Sun, 27 Mar 2022 07:02:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=ESfFqUyi5DO4us9FBeXvh3yFju448DlfeiezEoyiJ+o=;
+        b=zRavEkAQC7+tAFvAOIu28Nf3SK/FN9v/8RNnMCTbWahTuqEprUC8VY4jFr5CMpRL5M
+         HrrUmfnzvADBbOSOAsNpe7Xonq4G+qCLk41T7GBR20eJkNiDJ689v8tznZvcfYXrhCQR
+         nzCPQ9u7IyRVjz+RTNgs/Awde1FgR4ShItXyHoR9kXAW0txy6XjVz09gj4ivh4EhZpMI
+         6iKUl/jGJCW6F6gT/HfxssX6VTfco7zpWcU7O68MQhvMhOM/hlY0duW5GeKwpST0Yq3S
+         M+Eu/fL2QjsDX+KjMksiiRS/sBwaedJz7vqh8mq+YB+IEAEYy31KDLF1D6BWYtObnHlW
+         D79g==
+X-Gm-Message-State: AOAM533Jkr59Yyq4x1hHVjAz4kjOG+1q8hyuNYVTfp9GrbnWSKSITMD+
+        JkvqmglGgCKcyKd+C8RuEQ==
+X-Google-Smtp-Source: ABdhPJxdXmCXwfJxnUC4f+8NgXNJS8r1JCu8KDUQA7dtspjSpD7unbMjCem5Kdi/CNB+OZol7qMxhA==
+X-Received: by 2002:a54:4516:0:b0:2ec:8ee8:90c3 with SMTP id l22-20020a544516000000b002ec8ee890c3mr13594539oil.81.1648389733902;
+        Sun, 27 Mar 2022 07:02:13 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 15-20020a056870004f00b000def9984dc9sm445438oaz.7.2022.03.27.07.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 07:02:13 -0700 (PDT)
+Received: (nullmailer pid 4042147 invoked by uid 1000);
+        Sun, 27 Mar 2022 14:02:11 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
         Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <error27@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
         Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 5/6] drm/loongson: add drm driver for loongson
- display controller
-Message-ID: <202203272117.q6tMwBFo-lkp@intel.com>
-References: <20220327113846.2498146-6-15330273260@189.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220327113846.2498146-6-15330273260@189.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Lucas Stach <l.stach@pengutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        David Airlie <airlied@linux.ie>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Zack Rusin <zackr@vmware.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+In-Reply-To: <20220327113846.2498146-4-15330273260@189.cn>
+References: <20220327113846.2498146-1-15330273260@189.cn> <20220327113846.2498146-4-15330273260@189.cn>
+Subject: Re: [PATCH v12 3/6] dt-bindings: display: Add Loongson display controller
+Date:   Sun, 27 Mar 2022 09:02:11 -0500
+Message-Id: <1648389731.700898.4042146.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,59 +78,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sui,
+On Sun, 27 Mar 2022 19:38:43 +0800, Sui Jingfeng wrote:
+> Add DT bindings and simple usages for Loongson display controller
+> found in LS7A1000 bridges chip and LS2k1000 SoC.
+> 
+> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> ---
+>  .../loongson/loongson,display-controller.yaml | 322 ++++++++++++++++++
+>  1 file changed, 322 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> 
 
-Thank you for the patch! Perhaps something to improve:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on robh/for-next linus/master v5.17 next-20220325]
-[cannot apply to mripard/sunxi/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+yamllint warnings/errors:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-loongson-add-drm-driver-for-loongson-display-controller/20220327-194016
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: parisc-randconfig-r003-20220327 (https://download.01.org/0day-ci/archive/20220327/202203272117.q6tMwBFo-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e90d831d05f2c1b5631fd706fb449e83e64f632c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sui-Jingfeng/drm-loongson-add-drm-driver-for-loongson-display-controller/20220327-194016
-        git checkout e90d831d05f2c1b5631fd706fb449e83e64f632c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash drivers/gpu/drm/loongson/
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dt.yaml: display-controller@6,1: 'ports' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+doc reference errors (make refcheckdocs):
 
-All warnings (new ones prefixed by >>):
+See https://patchwork.ozlabs.org/patch/1609879
 
->> drivers/gpu/drm/loongson/lsdc_debugfs.c:149: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * vram debugfs related ...
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-vim +149 drivers/gpu/drm/loongson/lsdc_debugfs.c
+pip3 install dtschema --upgrade
 
-   147	
-   148	/**
- > 149	 * vram debugfs related ...
-   150	 */
-   151	static int lsdc_vram_mm_show(struct seq_file *m, void *data)
-   152	{
-   153		struct drm_info_node *node = (struct drm_info_node *)m->private;
-   154		struct drm_vram_mm *vmm = node->minor->dev->vram_mm;
-   155		struct ttm_resource_manager *man = ttm_manager_type(&vmm->bdev, TTM_PL_VRAM);
-   156		struct drm_printer p = drm_seq_file_printer(m);
-   157	
-   158		ttm_resource_manager_debug(man, &p);
-   159		return 0;
-   160	}
-   161	
+Please check and re-submit.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
