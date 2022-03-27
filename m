@@ -2,53 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44324E888E
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 17:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EAA4E895E
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 20:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235930AbiC0P5f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Mar 2022 11:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
+        id S236370AbiC0Siz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Mar 2022 14:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235926AbiC0P5e (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 11:57:34 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4629136B71
-        for <linux-mips@vger.kernel.org>; Sun, 27 Mar 2022 08:55:53 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id o10so24077793ejd.1
-        for <linux-mips@vger.kernel.org>; Sun, 27 Mar 2022 08:55:53 -0700 (PDT)
+        with ESMTP id S236304AbiC0Sil (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 14:38:41 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C634092B
+        for <linux-mips@vger.kernel.org>; Sun, 27 Mar 2022 11:37:00 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id r13so24480916ejd.5
+        for <linux-mips@vger.kernel.org>; Sun, 27 Mar 2022 11:37:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
-        b=HMAbI9tlfFODaYz3IY20RPiVYIUzzXF49wRNPBoaSkqhwx2iS77E9aH0vPkXx6xnBD
-         Y5A8TVa/Nq++saEWr4NXmDUYTEscOzdOU5ww3B8uyenScx/zGrE2Wch7r2Y1c0KGe92A
-         gBOPWNPSqbe4Mi7KEeqyOUlmJEruAqRlW42a5NeJGSuFgI8Xv6zYY+YwOEsrRYQNTWd2
-         0clyY8jWFdf2QtTzLUefig9U/uFuE5557wVh7qbLi5pzAGiGlii9XnFFSwVSMn+S7Iv0
-         STfsUy3DaaFmy5uSgG0YMiS3g7ClOpF3YZMXVOg+Dz9s4t62yDlkNf5SdSFuFN9SUHAh
-         rYVA==
+        bh=vPkWPK9fcrenNX3+70MAXLkgTo7ZH+XGzuJnlJpQ+tY=;
+        b=K0FOnBwPoH0sISCMEALWpe2aHrvlhzM6ps+MqZ7dum3H1lrvM3N8BGs5NpZPrmLgRG
+         +SQhcFojpo6YZNqBPG5ROAgrp4wfk2/vqvAMlog0HEot6OtbZ8kXtgmlaHG+CbnPFaWq
+         dSzz8HbD9VvgHsDxkcbGPnmeXTk1clpoSTAg4qmlPZAF11MNWBd0IPFZX9incy5adj8O
+         ClbE4TQ8wKsPcUhpqJVoUdJsz0Z81hYukaT1GYK7JJWAgoXhn2HxzQJjgydG0nk0+h/K
+         +ebttYTJCTa6636N9oVdASUHb2bztz676S9JmoEL8FwiG/mDT1rZSbjfoAGL8fVwSbdE
+         1EGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
-        b=fzsnuaMb3yCAofFCUOaydX7IIQJFEagmfqv973eVsORFTBNfu3yzShv8YdO5/mN62v
-         ePuQSOabnzo6bBWEGK5Eu/aBHLvqGUtNOXU1newOCHE47ToSrB1fLrF9yxITs6t58RkM
-         F+QntYKuSEPPA8WckDrqxoCzT5DIAhjv0cqjn7NVYZ7IhXQgQJEGZSB8e4qngWDkW6Ug
-         mp7VEHV5gjxmhNSdBaJAMo3ujjgOSCUcomdI1ocZmZmWvfCKnmogsiMk85xzl6U0NbD1
-         iwXeCoWH/k7Qwp6RaTMv16fgbRXn8x7NO/F0X3D9NV9mhrm9n7WVPZXrJILJUBoLsv/u
-         1FqQ==
-X-Gm-Message-State: AOAM533bF07wCXsnTroPt6xcio539vWn1e3wd+hiwonsdWfnNzt5BuID
-        eS4hH9w/n8jA/SFSAGCjAdQ28dNidC7yhsjSyH4=
-X-Google-Smtp-Source: ABdhPJyLiKz0GwYU5cR/csBxCvmrzbrh2KMyD30Hj2voPwVz7xw7NU21XKDoM8c22plYLoZ95q8P64BpSEuaA+XD01w=
-X-Received: by 2002:a17:907:d13:b0:6e0:b799:8fcc with SMTP id
- gn19-20020a1709070d1300b006e0b7998fccmr12472723ejc.11.1648396551243; Sun, 27
- Mar 2022 08:55:51 -0700 (PDT)
+        bh=vPkWPK9fcrenNX3+70MAXLkgTo7ZH+XGzuJnlJpQ+tY=;
+        b=zeBG2NANTdqKzQQa+eDmIGJW7hxRMXAmpmJYTsNTH4GfJHa1r2r0WUQ10AFRKSGbFR
+         XZjg+MYsdCb4abr3Ouojgs6kkVguqNNsw9wvMpH2O2sWUDeNTi6Lp80HME9IHX+MJlGX
+         PITifb7ymkrsQWvz72mTv7FTtOEUpklQDlQCxv+pYkUN9a8dhCBg1pZW/dOQtntMY80d
+         88h8gE7xgVJc4e/jQ8WHdTgf6J6b9CWs7JkrCJnnPkrZQsYQkPXn/b++sK2NGnYFQzJf
+         JwqiH5OFzAiBGMa0OfLuBQGrEIXlubywLquFHpGi1Vh8YlZrqo3mJLi9Iu9iuQnzEjXc
+         dSgA==
+X-Gm-Message-State: AOAM532sbfAzAnpureQ/UKdX4pt5xxptYjT2H+uCaVrg+Hj9vUpkTVkz
+        pekqqKjKSipCYAhpoyXiUj8HU7JxWkK7QHMAs6w=
+X-Google-Smtp-Source: ABdhPJwLGrFHvKqbadJlybD5vZR20nmJ1xLDZFySDZ5iPxe3wgxVdyGbVwAuQ8+Awfi9M6uo6g59KnVrCUqV8QyLfe0=
+X-Received: by 2002:a17:906:1e94:b0:6cc:4382:f12e with SMTP id
+ e20-20020a1709061e9400b006cc4382f12emr22844093ejj.482.1648406217735; Sun, 27
+ Mar 2022 11:36:57 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 27 Mar 2022 16:55:42 +0100
-Message-ID: <CAHpNFcP61zVHxhgLprwgB=0M+QaQhmJhRCw1vfCcJ8TSq2Vkcg@mail.gmail.com>
-Subject: Presenting GPRS VT2 from ViaLicensing today world wide RS : for
- ViaLicencing GPRS is quite a package, New from RS @ Via 2022
-To:     info@vialicensing.com
+Date:   Sun, 27 Mar 2022 19:36:20 +0100
+Message-ID: <CAHpNFcMpMEkmWPjSNnoYuAY=9H-1Sqx-WtKqZ-SW=ipeN5BhwQ@mail.gmail.com>
+Subject: (Refinement) Presenting GPRS VT2 from ViaLicensing today world wide
+ RS : for ViaLicencing GPRS is quite a package, New from RS @ Via 2022
+To:     press@vialicensing.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -59,24 +59,6 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
-
-GPRS New Solutions ViaSystems 2022 : For VIA 2G> 5G Security IS THE
-LAW We Will Progress GPRS Will Survive as a manageable system in
-Africa & south america "We The People Are Hungry" Leaf Random & GPRS
-Security : Operating Systems will manage, But how long will we survive
-with No KLOGS : progress in linux ?
-https://lkml.org/lkml/2022/3/25/991
-
-Jitter RAND Support Data Set + GPRS Dongle usage Technology : Alarming
-as the GPRS 20% of key '20% of the key discovered Full Potential Hack'
-is With Real /Dev/random #NoHack
-
-Real hardened Rust Implementation & code for use:
-https://github.com/P1sec/gea-implementation
-
-Weekly Seed source : https://pollinate.n-helix.com/
-
-*****
 
 ICE-SSRTP GEA Replacement 2022 + (c)RS
 
@@ -99,6 +81,31 @@ Interleaved signals help Isolate noise from a Signal Send & Receive ...
 Overlapping inverted waves are a profile for complex audio & FFT is the result.
 
 Interleaved, Inverted & Compressed & a simple encryption?
+
+*
+
+Time differentiated : Interleave, Inversion & differentiating Elliptic curve.
+
+We will be able to know and test the Cypher : PRINCIPLE OF INTENT TO TRUST
+
+We know of a cypher but : (Principle RS)
+
+We blend the cypher..
+Interleaved pages of a cypher obfuscate : PAL CScam does this
+
+Timed : Theoretically unique to you in principle for imprecision, But
+we cannot really have imprecise in Crypto!
+
+But we can have a set time & in effect Elliptic curve a transient variable T,
+With this, Interleave the resulting pages (RAM Buffer Concept)
+
+Invert them over Time Var = T
+
+We can do all & principally this is relatively simple.
+
+(c)RS
+
+*
 
 Example of use:
 
@@ -169,6 +176,8 @@ Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
 https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
 
 https://science.n-helix.com/2022/03/ice-ssrtp.html
+
+https://science.n-helix.com/2021/11/ihmtes.html
 
 https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
 https://science.n-helix.com/2021/11/wave-focus-anc.html
