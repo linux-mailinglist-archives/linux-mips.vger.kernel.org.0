@@ -2,66 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9277D4E854C
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 05:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3984E8606
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Mar 2022 07:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbiC0Dzh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 26 Mar 2022 23:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
+        id S235232AbiC0Flg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Mar 2022 01:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233861AbiC0Dzg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 26 Mar 2022 23:55:36 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2893C13DDF
-        for <linux-mips@vger.kernel.org>; Sat, 26 Mar 2022 20:53:57 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id u26so13390083eda.12
-        for <linux-mips@vger.kernel.org>; Sat, 26 Mar 2022 20:53:57 -0700 (PDT)
+        with ESMTP id S235203AbiC0Flf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 01:41:35 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD51B4B1F0
+        for <linux-mips@vger.kernel.org>; Sat, 26 Mar 2022 22:39:54 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id p15so22604115ejc.7
+        for <linux-mips@vger.kernel.org>; Sat, 26 Mar 2022 22:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=uXaRvLUj+1B5FMxtaQVDP6hPG33CuATLlxKJ63s1fLU=;
-        b=WHbYB3D/saNPToEkj0WBAa6nXvL0HqfyU+Y5hpaCgsZHyQXCuaSeRuenQPGDxRBqMG
-         UyzlGbn3CCnOsy+T29J1n/Ld8koFyyfXtS+nBvXASsct4dvFn9CXwkNCJoWK3vzn4pI+
-         8aOjLzCUBC5MtfXmPdaXpVWaBCcNeELP+IpTc4EYHOCf9zYkZv/mX9DIeboIUOcBWdb2
-         1CXdUy3wyYocilgEY3l2a0JX2G0Awwjp6eqAFl5AonsT2Ntdll4p+K9ZMH6+tScCs29o
-         arF7GSfy4Hw1iTLsjoJf5JZsA/FlydB32Ii8bfHAo1IZJO6yfLV94YxeP1orA4QxKF7n
-         9DXg==
+        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
+        b=OtwB7mGJUasgZlH+7SPhyQ5Ks5i2bfDW4Wy+j/EQXTiLgTo6ZvS00DXj3DrO4Uj++u
+         ndRfnz9M/5Ir0tGI+IV5mU89XVRdVNRweQa6EDFqmh7iFBBywWrtn7vyUxBLSEEbsKNR
+         koPjg9XgUxk+h3h79ZYQsgGpVoc9HTjRdj/PES1SYh0GJ6QK8cAUluxB9guNUo71TBIo
+         38w2BsXHnYxyGIAfp1D7+xp3XZqLc4ghBd96Y69BwVLudiSgXNvcvbHnlH+dnfFprK0o
+         QUZ7+rXfTj/owDcBSFJwAVOLF8N5blI509CZ91FpWGS1fSgqyd1+/FJ7zwFrL5+6LHnc
+         PGsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=uXaRvLUj+1B5FMxtaQVDP6hPG33CuATLlxKJ63s1fLU=;
-        b=xOTwNKDb9ZLxs3wHoUKOrV6CzC9gz0IU7dOMzKeuiiBEIxIQioMo60q1Zny5mWZUBl
-         ADGrp1O1ywK6mVpG3Ix8szcLfvfPYCmR1CfQE+KSgGexLm1wf6lsQj32KXyN7+VPdVJ/
-         Jst1LRoQXFMkXONo2K+fbTiZ4/6p2R1nVUBEZ4B3ylDIRqHclMGxSDpAJcobY6zQYqVc
-         o8Ao4xjpAWe+8sqliGbRMYNSUB+jnfOuOqxXcVAWMsSN+Bs2SN33mpuNO+m/6rnaexcl
-         2EmkrpIx8xGQ+6G038LNWfvMSsI5RoGRLVCFJJI/A+rGikyRP6BRRIMtFrFoFpJ/gl5t
-         QyEA==
-X-Gm-Message-State: AOAM531jLMlR2k8FDprblF+xpyh+3680eo7l+QPyipeCxh5Lc7NAhR/Z
-        Pn6A9KfEQEBz/+iF4MfWEOP5RUD3SE5jPeZ2/MA=
-X-Google-Smtp-Source: ABdhPJzZD8Z2yWonCFr6uw6HTW3jwHIxz8mSt1fdP844JxY8by8YlapVE2a4JgJWnjZlUWC1MJLGeCDgSiCh9jr8jcY=
-X-Received: by 2002:a05:6402:8d7:b0:419:1162:a507 with SMTP id
- d23-20020a05640208d700b004191162a507mr8313467edz.157.1648353235326; Sat, 26
- Mar 2022 20:53:55 -0700 (PDT)
+        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
+        b=CMollwEgdGrlVF11agQzQ0EVr07/Z6RnH5fDeZBScKqlmjLow4pWaYcfKWsjvYjFum
+         JrYjEiryIruHO4SusNuhNl3EBmF7vyVLUlZ6LC6djYQTXW2ASlrTdN57bNjBzbnOB0sP
+         D/OzI0GTJwygeIAoTMaPC1joBMwCNitj8zg7i5R0KQfHZdOuAI7w1NAJViiwEXwvkIF6
+         xhcf9TzYePwWGT4YZ9KEPkk2tOxtTPMWotIiYK+8LUL/DHL0LIH+mzHM0icphh84Qojt
+         Z3VnOtMWzfDrEHTGxo4KYnHg0/ekA8jlNG8coM09m2+yQlysb+wblS/CabDbrlA8a3aU
+         aj0Q==
+X-Gm-Message-State: AOAM530O7zI5/B5R6RKmG7vFrA3J0zp8fu3aZP7WULHzwGEjIiok203R
+        4oc73gNzcczDIl3fIN7/ccqrlSfHnQ9cxDRgMJ4=
+X-Google-Smtp-Source: ABdhPJzCOVofvmTh82oj+qn8IqGE+D0DGEF6nJd2ktr1OjSsm26Hcvu5URNaJZmBmpHfg3Zx1fC+xLROSUFsmCQt9Xo=
+X-Received: by 2002:a17:907:1c9c:b0:6e0:df50:d39d with SMTP id
+ nb28-20020a1709071c9c00b006e0df50d39dmr5194440ejc.24.1648359593062; Sat, 26
+ Mar 2022 22:39:53 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 27 Mar 2022 04:53:45 +0100
-Message-ID: <CAHpNFcNX7G+exq5KiyHS=EC5Ptuu8to+gn5v3tP4RCyX2cg+OA@mail.gmail.com>
-Subject: GPRS New Solutions ViaSystems 2022 : For VIA 2G> 5G Security IS THE
- LAW We Will Progress GPRS Will Survive as a manageable system in Africa &
- south america "We The People Are Hungry" Leaf Random & GPRS Security :
- Operating Systems will manage, But how long will we survive with No KLOGS :
- progress in linux ? https://lkml.org/lkml/2022/3/25/991
+Date:   Sun, 27 Mar 2022 06:39:43 +0100
+Message-ID: <CAHpNFcNcQ-hcDk8XpiUq2G3KzBx92tEAD7y8NM9QzNNhh3Y3eQ@mail.gmail.com>
+Subject: Presenting GPRS VT2 from ViaLicensing today world wide RS : for
+ ViaLicencing GPRS is quite a package, New from RS @ Via 2022
 To:     info@vialicensing.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
+
+GPRS New Solutions ViaSystems 2022 : For VIA 2G> 5G Security IS THE
+LAW We Will Progress GPRS Will Survive as a manageable system in
+Africa & south america "We The People Are Hungry" Leaf Random & GPRS
+Security : Operating Systems will manage, But how long will we survive
+with No KLOGS : progress in linux ?
+https://lkml.org/lkml/2022/3/25/991
 
 Jitter RAND Support Data Set + GPRS Dongle usage Technology : Alarming
 as the GPRS 20% of key '20% of the key discovered Full Potential Hack'
