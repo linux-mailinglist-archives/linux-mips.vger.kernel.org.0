@@ -2,41 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0680A4E90B3
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Mar 2022 11:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5D74E9234
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Mar 2022 12:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239622AbiC1JEL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Mar 2022 05:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S238243AbiC1KDX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Mar 2022 06:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238671AbiC1JEK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Mar 2022 05:04:10 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18A9653E0C;
-        Mon, 28 Mar 2022 02:02:26 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:54834.655473141
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id D96DF1002BE;
-        Mon, 28 Mar 2022 17:01:59 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 3f3720f820be42faa0e22b914cbd3427 for lkp@intel.com;
-        Mon, 28 Mar 2022 17:02:25 CST
-X-Transaction-ID: 3f3720f820be42faa0e22b914cbd3427
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <efc756c5-9ea3-66df-4885-82f57ff31b1f@189.cn>
-Date:   Mon, 28 Mar 2022 17:01:52 +0800
+        with ESMTP id S234956AbiC1KDW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Mar 2022 06:03:22 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885022E6AB;
+        Mon, 28 Mar 2022 03:01:42 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B52E25805CA;
+        Mon, 28 Mar 2022 06:01:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 28 Mar 2022 06:01:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=nZAXAsNq5mkXS/
+        Tat8STmC+wZsmvosjFIg/ceUBcJqc=; b=WYHjRNRomMF4TRAvFWRRVqXrs5m6Is
+        mzslJIjAuA8z2BTRksJvkmhag7H7RJpQdCLslYRoLuQ3maMsoSSJrV2HLSBIlCAW
+        jshD03+X0ACSPvpUtojcAj+8b3rToajbLbVfKU9Dd0jZKaM1zqEw+HywJguNbVzq
+        Fd1rpTL4fUSAKVInVU5CX3BaXdoDubbb3sGXJormk7AtGiLaHFWnmyFpja0fnas1
+        pk3LoeelFvtqP92oi0kdsk0/5JmdFYf5Jv7YVuzvQk3HQRPS7LVVKty8P//84eED
+        3tatol9M0OKwS05BZvzRz4hI6RXNFxjyKQ7sGiss/T1eTPTURUr+WlpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=nZAXAsNq5mkXS/Tat8STmC+wZsmvosjFIg/ceUBcJ
+        qc=; b=UjhMydFA6oMwcIZFOQPzjVulFHkMOgEUJaeP+wz0Pq6+oeglmuim0P+Tt
+        XkPazk54RreexS1kx0IHlc6rmIUK0xX3TLG7wjOvI5doTbsYFsVK6UhP6rnCNOiF
+        UCTf/j8HjfInkN6IN92M/bAP0y9TIzEJQZ22YSc/+MhKY+k+oQznGuD2iqxfaDmP
+        mHGoX6xXUsCUGyXAP7iG+K32zaRqI5mXWEPwqizSPo8QWwHTMiOyT37hr1bNW01Y
+        53EjPglKHD6bwxBZRRGVGZySpBs56L98VdLsQnNr7d+2GKvTpkHvlESz1DazPEQb
+        dfrh+M1jUlRq4+hVY/PIn2yfGpCyA==
+X-ME-Sender: <xms:g4dBYi9Q3MODDCCyQzWXzfi5RDhva3kCO9wgx5w6sBqLC-27pn7aUA>
+    <xme:g4dBYit6Ikr7mGLDM7SlMgFnz6T49JZJ5-1XkNM5QfJsTEWFiTzexk0zA-yO9ed51
+    td0m82As79rOYAwjoc>
+X-ME-Received: <xmr:g4dBYoD-dGvs6WDAN7tv3Gu0iGwbY7LIECBcYhKx7SNrg7E7gXtQfPsw0Tvf9to>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehjedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
+    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:g4dBYqfIWsD5D2Wh72VfeXSqKe2lVb3uOsF44hao6cTNLKd4qBqzqw>
+    <xmx:g4dBYnM9JX_O0Pa032o-K-2QiSk_qLC_7bxPyyd8FugMf0lCbIOq6w>
+    <xmx:g4dBYkkY-3gsXftuPzFj8rsOr6spkXkvXCfCjpY-1XkPFkeJ_A31Uw>
+    <xmx:hYdBYqcgPS7UFBK5xT6JyQAN_RZh0tyqlwjglG3RuTKYVSKNgR-nMw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Mar 2022 06:01:36 -0400 (EDT)
+Message-ID: <44408f8f-20ac-a558-ece9-d14c7b99ca50@flygoat.com>
+Date:   Mon, 28 Mar 2022 11:01:36 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Subject: Re: [PATCH v13 5/6] drm/loongson: add drm driver for loongson display
  controller
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
+Content-Language: en-GB
+To:     Sui Jingfeng <15330273260@189.cn>,
+        kernel test robot <lkp@intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Roland Scheidegger <sroland@vmware.com>,
@@ -51,7 +83,6 @@ To:     kernel test robot <lkp@intel.com>,
         Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Ilia Mirkin <imirkin@alum.mit.edu>,
@@ -62,14 +93,15 @@ Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220328022835.2508587-5-15330273260@189.cn>
  <202203281653.wiRaycuD-lkp@intel.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <202203281653.wiRaycuD-lkp@intel.com>
+ <efc756c5-9ea3-66df-4885-82f57ff31b1f@189.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <efc756c5-9ea3-66df-4885-82f57ff31b1f@189.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,156 +109,28 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-On 2022/3/28 16:51, kernel test robot wrote:
-> Hi Sui,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on drm/drm-next]
-> [also build test WARNING on robh/for-next linus/master v5.17 next-20220328]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MIPS-Loongson64-dts-update-the-display-controller-device-node/20220328-103101
-> base:   git://anongit.freedesktop.org/drm/drm drm-next
-> config: microblaze-randconfig-s032-20220328 (https://download.01.org/0day-ci/archive/20220328/202203281653.wiRaycuD-lkp@intel.com/config)
-> compiler: microblaze-linux-gcc (GCC) 11.2.0
-> reproduce:
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # apt-get install sparse
->          # sparse version: v0.6.4-dirty
->          # https://github.com/intel-lab-lkp/linux/commit/836c0ab646f65b0a8c6574b5d2495c8617e96545
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Sui-Jingfeng/MIPS-Loongson64-dts-update-the-display-controller-device-node/20220328-103101
->          git checkout 836c0ab646f65b0a8c6574b5d2495c8617e96545
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/gpu/drm/loongson/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
->
-> sparse warnings: (new ones prefixed by >>)
->>> drivers/gpu/drm/loongson/lsdc_i2c.c:179:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *dir_reg @@     got void * @@
->     drivers/gpu/drm/loongson/lsdc_i2c.c:179:23: sparse:     expected void [noderef] __iomem *dir_reg
->     drivers/gpu/drm/loongson/lsdc_i2c.c:179:23: sparse:     got void *
->>> drivers/gpu/drm/loongson/lsdc_i2c.c:180:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *dat_reg @@     got void * @@
->     drivers/gpu/drm/loongson/lsdc_i2c.c:180:23: sparse:     expected void [noderef] __iomem *dat_reg
->     drivers/gpu/drm/loongson/lsdc_i2c.c:180:23: sparse:     got void *
->     drivers/gpu/drm/loongson/lsdc_i2c.c:252:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *dir_reg @@     got void * @@
->     drivers/gpu/drm/loongson/lsdc_i2c.c:252:23: sparse:     expected void [noderef] __iomem *dir_reg
->     drivers/gpu/drm/loongson/lsdc_i2c.c:252:23: sparse:     got void *
->     drivers/gpu/drm/loongson/lsdc_i2c.c:253:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *dat_reg @@     got void * @@
->     drivers/gpu/drm/loongson/lsdc_i2c.c:253:23: sparse:     expected void [noderef] __iomem *dat_reg
->     drivers/gpu/drm/loongson/lsdc_i2c.c:253:23: sparse:     got void *
-> --
->>> drivers/gpu/drm/loongson/lsdc_pci_drv.c:185:61: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *reg_base @@     got void [noderef] __iomem *reg_base @@
->     drivers/gpu/drm/loongson/lsdc_pci_drv.c:185:61: sparse:     expected void *reg_base
->     drivers/gpu/drm/loongson/lsdc_pci_drv.c:185:61: sparse:     got void [noderef] __iomem *reg_base
-> --
->>> drivers/gpu/drm/loongson/lsdc_output.c:232:63: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *reg_base @@     got void [noderef] __iomem *reg_base @@
->     drivers/gpu/drm/loongson/lsdc_output.c:232:63: sparse:     expected void *reg_base
->     drivers/gpu/drm/loongson/lsdc_output.c:232:63: sparse:     got void [noderef] __iomem *reg_base
->
-> vim +179 drivers/gpu/drm/loongson/lsdc_i2c.c
->
->     129	
->     130	struct lsdc_i2c *lsdc_of_create_i2c_adapter(struct device *parent,
->     131						    void *reg_base,
->     132						    struct device_node *i2c_np)
->     133	{
->     134		unsigned int udelay = 5;
->     135		unsigned int timeout = 2200;
->     136		int nr = -1;
->     137		struct i2c_adapter *adapter;
->     138		struct lsdc_i2c *li2c;
->     139		u32 sda, scl;
->     140		int ret;
->     141	
->     142		li2c = kzalloc(sizeof(*li2c), GFP_KERNEL);
->     143		if (!li2c)
->     144			return ERR_PTR(-ENOMEM);
->     145	
->     146		spin_lock_init(&li2c->reglock);
->     147	
->     148		ret = of_property_read_u32(i2c_np, "loongson,sda", &sda);
->     149		if (ret) {
->     150			dev_err(parent, "No sda pin number provided\n");
->     151			return ERR_PTR(ret);
->     152		}
->     153	
->     154		ret = of_property_read_u32(i2c_np, "loongson,scl", &scl);
->     155		if (ret) {
->     156			dev_err(parent, "No scl pin number provided\n");
->     157			return ERR_PTR(ret);
->     158		}
->     159	
->     160		ret = of_property_read_u32(i2c_np, "loongson,nr", &nr);
->     161		if (ret) {
->     162			int id;
->     163	
->     164			if (ret == -EINVAL)
->     165				dev_dbg(parent, "no nr provided\n");
->     166	
->     167			id = of_alias_get_id(i2c_np, "i2c");
->     168			if (id >= 0)
->     169				nr = id;
->     170		}
->     171	
->     172		li2c->sda = 1 << sda;
->     173		li2c->scl = 1 << scl;
->     174	
->     175		/* Optional properties which made the driver more flexible */
->     176		of_property_read_u32(i2c_np, "loongson,udelay", &udelay);
->     177		of_property_read_u32(i2c_np, "loongson,timeout", &timeout);
->     178	
->   > 179		li2c->dir_reg = reg_base + LS7A_DC_GPIO_DIR_REG;
->   > 180		li2c->dat_reg = reg_base + LS7A_DC_GPIO_DAT_REG;
->     181	
->     182		li2c->bit.setsda = ls7a_i2c_set_sda;
->     183		li2c->bit.setscl = ls7a_i2c_set_scl;
->     184		li2c->bit.getsda = ls7a_i2c_get_sda;
->     185		li2c->bit.getscl = ls7a_i2c_get_scl;
->     186		li2c->bit.udelay = udelay;
->     187		li2c->bit.timeout = usecs_to_jiffies(timeout);
->     188		li2c->bit.data = li2c;
->     189	
->     190		adapter = &li2c->adapter;
->     191		adapter->algo_data = &li2c->bit;
->     192		adapter->owner = THIS_MODULE;
->     193		adapter->class = I2C_CLASS_DDC;
->     194		adapter->dev.parent = parent;
->     195		adapter->nr = nr;
->     196		adapter->dev.of_node = i2c_np;
->     197	
->     198		snprintf(adapter->name, sizeof(adapter->name), "gpio-i2c-%d", nr);
->     199	
->     200		i2c_set_adapdata(adapter, li2c);
->     201	
->     202		ret = i2c_bit_add_numbered_bus(adapter);
->     203		if (ret) {
->     204			if (i2c_np)
->     205				of_node_put(i2c_np);
->     206	
->     207			kfree(li2c);
->     208			return ERR_PTR(ret);
->     209		}
->     210	
->     211		dev_info(parent, "sda=%u, scl=%u, nr=%d, udelay=%u, timeout=%u\n",
->     212			 li2c->sda, li2c->scl, nr, udelay, timeout);
->     213	
->     214		ret = devm_add_action_or_reset(parent, lsdc_of_release_i2c_adapter, li2c);
->     215		if (ret)
->     216			return NULL;
->     217	
->     218		return li2c;
->     219	}
->     220	
 
-Hi,  my driver will not used on microblaze arch,
+在 2022/3/28 10:01, Sui Jingfeng 写道:
+>
+> On 2022/3/28 16:51, kernel test robot wrote:
+>> Hi Sui,
+[...]
+>>
+>
+> Hi,  my driver will not used on microblaze arch,
+>
+> what does this warnings means, do i need to fix this?
 
-what does this warnings means, do i need to fix this?
+Hi Jingfeng,
+
+The problem it discovered is general for all archs.
+
+Type of reg_base (MMIO pointer) should be "void __iomem *" instead of 
+"void *"
+everywhere, including parameter list.
+
+__iomem is the attribute for MMIO.
+
+Thanks.
+- Jiaxun
 
