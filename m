@@ -2,28 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5DB4E8C24
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Mar 2022 04:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7286A4E8C28
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Mar 2022 04:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237603AbiC1CbD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Mar 2022 22:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S237575AbiC1CbI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Mar 2022 22:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237575AbiC1Caz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 22:30:55 -0400
+        with ESMTP id S237588AbiC1CbH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Mar 2022 22:31:07 -0400
 Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2F3A3CA51;
-        Sun, 27 Mar 2022 19:29:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E7A83DDCB;
+        Sun, 27 Mar 2022 19:29:27 -0700 (PDT)
 HMM_SOURCE_IP: 10.64.8.31:36846.2128613048
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
 Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 3E5C61002CE;
-        Mon, 28 Mar 2022 10:29:10 +0800 (CST)
+        by 189.cn (HERMES) with SMTP id 67F081002EB;
+        Mon, 28 Mar 2022 10:29:24 +0800 (CST)
 Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 4018e42cb1184197bfe2ac7a58a6760d for mripard@kernel.org;
-        Mon, 28 Mar 2022 10:29:15 CST
-X-Transaction-ID: 4018e42cb1184197bfe2ac7a58a6760d
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id be20503059574d5492c710e1e54cfd59 for mripard@kernel.org;
+        Mon, 28 Mar 2022 10:29:26 CST
+X-Transaction-ID: be20503059574d5492c710e1e54cfd59
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 172.27.8.53
 X-MEDUSA-Status: 0
@@ -51,9 +51,9 @@ To:     Maxime Ripard <mripard@kernel.org>,
         suijingfeng <suijingfeng@loongson.cn>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v13 4/6] MIPS: Loongson64: defconfig: enable display bridge drivers
-Date:   Mon, 28 Mar 2022 10:28:33 +0800
-Message-Id: <20220328022835.2508587-4-15330273260@189.cn>
+Subject: [PATCH v13 6/6] MAINTAINERS: add maintainers for DRM LSDC driver
+Date:   Mon, 28 Mar 2022 10:28:35 +0800
+Message-Id: <20220328022835.2508587-6-15330273260@189.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220328022835.2508587-1-15330273260@189.cn>
 References: <20220328022835.2508587-1-15330273260@189.cn>
@@ -69,47 +69,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-ls3A4000 evb board ship with adv7123 and tfp410 while ls2k1000 PI board
-use a DPI panel from FORLINX company and a sii9022 HDMI transmitter.
+ This patch add myself as maintainer
+
+ My company email is <suijingfeng@loongson.cn>
+ my personal email is <15330273260@189.cn>
 
 Signed-off-by: Sui Jingfeng <15330273260@189.cn>
 ---
- arch/mips/configs/loongson2k_defconfig | 5 +++++
- arch/mips/configs/loongson3_defconfig  | 5 +++++
- 2 files changed, 10 insertions(+)
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
-index e948ca487e2d..0a97c332a5c3 100644
---- a/arch/mips/configs/loongson2k_defconfig
-+++ b/arch/mips/configs/loongson2k_defconfig
-@@ -243,6 +243,11 @@ CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=y
-+CONFIG_DRM_DISPLAY_CONNECTOR=m
-+CONFIG_DRM_PANEL_SIMPLE=m
-+CONFIG_DRM_SII902X=m
-+CONFIG_DRM_SIMPLE_BRIDGE=m
-+CONFIG_DRM_TI_TFP410=m
- CONFIG_FB_RADEON=y
- CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_LCD_PLATFORM=m
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 25ecd15bc952..35e2fc998768 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -280,6 +280,11 @@ CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=m
-+CONFIG_DRM_DISPLAY_CONNECTOR=m
-+CONFIG_DRM_PANEL_SIMPLE=m
-+CONFIG_DRM_SII902X=m
-+CONFIG_DRM_SIMPLE_BRIDGE=m
-+CONFIG_DRM_TI_TFP410=m
- CONFIG_DRM_QXL=y
- CONFIG_DRM_VIRTIO_GPU=y
- CONFIG_FB=y
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 10476280acb8..21184d8577f4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6487,6 +6487,15 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+ F:	drivers/gpu/drm/lima/
+ F:	include/uapi/drm/lima_drm.h
+ 
++DRM DRIVERS FOR LOONGSON
++M:	suijingfeng <suijingfeng@loongson.cn>
++L:	dri-devel@lists.freedesktop.org
++S:	Maintained
++W:	https://www.loongson.cn/
++T:	git git://anongit.freedesktop.org/drm/drm-misc
++F:	Documentation/devicetree/bindings/display/loongson/
++F:	drivers/gpu/drm/loongson/
++
+ DRM DRIVERS FOR MEDIATEK
+ M:	Chun-Kuang Hu <chunkuang.hu@kernel.org>
+ M:	Philipp Zabel <p.zabel@pengutronix.de>
 -- 
 2.25.1
 
