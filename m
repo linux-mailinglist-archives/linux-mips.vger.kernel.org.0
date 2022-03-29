@@ -2,109 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92434EA4BD
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Mar 2022 03:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39744EA4ED
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Mar 2022 04:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiC2Br7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Mar 2022 21:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S229907AbiC2CIS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Mar 2022 22:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiC2Brv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Mar 2022 21:47:51 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9921CCAD9
-        for <linux-mips@vger.kernel.org>; Mon, 28 Mar 2022 18:46:05 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1648518363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mzzwEJFVlfhVrSEyRVWxpetdTlhTag7bSJsOqkPYJC0=;
-        b=UoUNSoFcsAp4ej9vYwyXwYekqjo0mGN/KPeGGR9xitYBA70nlkdzxvBjfvgK/2A3dCFkQ7
-        kxCpbtRaIWCvLpofcEVRt9N7cug/1UfdqESCicF9zR10x2735KuISUEpW1Z3xRXOncoRZZ
-        TFVhtb4w7Wxaw4dSDaA2o2cm39P0EJQ=
-From:   Jackie Liu <liu.yun@linux.dev>
-To:     linus.walleij@linaro.org, ralf@linux-mips.org,
-        tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, jic23@kernel.org,
-        andy.shevchenko@gmail.com
-Subject: [PATCH] MIPS: rb532: move GPIOD definition into C-files
-Date:   Tue, 29 Mar 2022 09:45:37 +0800
-Message-Id: <20220329014537.4180966-1-liu.yun@linux.dev>
+        with ESMTP id S229707AbiC2CIS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Mar 2022 22:08:18 -0400
+X-Greylist: delayed 1817 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 19:06:34 PDT
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C35552E9CF;
+        Mon, 28 Mar 2022 19:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=mY4De
+        9R7rL76ko6BC33fB4XqBVBoP3XsFOBIbCmaZbE=; b=HJSpxhFilR7YNxGiBXm7Q
+        IEEqbbtD58NG//LRSRA8CcSOn+l1GC/6SQqQaBcYo/qJ+EAMBq5TP/+Z6UPL0pFr
+        hA9vme162OWfZb9/stWSxxlFpe3gmw9LuU/wSEK60oFA5N3NHgeCAxMuDKLPHKie
+        lDOoOjZlKoHhryZRVD1m9I=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp8 (Coremail) with SMTP id NORpCgDn3h54YkJieyUrEg--.264S2;
+        Tue, 29 Mar 2022 09:35:53 +0800 (CST)
+From:   xiaolinkui2022@126.com
+To:     tsbogend@alpha.franken.de, david@redhat.com, f.fainelli@gmail.com,
+        akpm@linux-foundation.org, arnd@arndb.de, rppt@kernel.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiaolinkui <xiaolinkui@kylinos.cn>
+Subject: [PATCH] mips: Fix a compilation error.
+Date:   Tue, 29 Mar 2022 09:35:38 +0800
+Message-Id: <20220329013538.21275-1-xiaolinkui2022@126.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: NORpCgDn3h54YkJieyUrEg--.264S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ur1UCw13AF1rJFW5urW5GFg_yoW5Jr1UpF
+        1DJr1kKFZ8Wr45uFyfAa4v9FW3Ja1DGa90vFWUXr909Fn2qFy8Jrn2kryYvr1ktay0qa40
+        krWfXw1qgr4Yvw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jQDGOUUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: p0ld0z5lqn3xasqsjqqrswhudrp/1tbiaRrSb1pEFKnR7QAAsR
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Jackie Liu <liuyun01@kylinos.cn>
+From: xiaolinkui <xiaolinkui@kylinos.cn>
 
-My kernel robot report build error from drivers/iio/adc/da9150-gpadc.c,
+Commit 4d5b3bdc0ecb ("MIPS: Fix a warning for virt_to_page") will
+trigger a compilation error as follows with kernel v5.17-rc8:
+(CONFIG_RDMA_SIW=y)
 
-We define GPIOD in rb.h, in fact he should only be used in gpio.c, but
-it affects the driver da9150-gpadc.c which goes against the original
-intention of the design, just move it to his scope.
+In file included from ./arch/mips/include/asm/page.h:270,
+                 from ./arch/mips/include/asm/io.h:29,
+                 from ./arch/mips/include/asm/mmiowb.h:5,
+                 from ./include/linux/spinlock.h:64,
+                 from ./include/linux/wait.h:9,
+                 from ./include/linux/net.h:19,
+                 from drivers/infiniband/sw/siw/siw_qp_tx.c:8:
+drivers/infiniband/sw/siw/siw_qp_tx.c: In function ‘siw_tx_hdt’:
+./arch/mips/include/asm/page.h:255:53: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+  255 | #define virt_to_pfn(kaddr)    PFN_DOWN(virt_to_phys((void *)(kaddr)))
+      |                                                     ^
+./include/asm-generic/memory_model.h:18:41: note: in definition of macro ‘__pfn_to_page’
+   18 | #define __pfn_to_page(pfn) (mem_map + ((pfn) - ARCH_PFN_OFFSET))
+      |                                         ^~~
+./arch/mips/include/asm/page.h:255:31: note: in expansion of macro ‘PFN_DOWN’
+  255 | #define virt_to_pfn(kaddr)    PFN_DOWN(virt_to_phys((void *)(kaddr)))
+      |                               ^~~~~~~~
+./arch/mips/include/asm/page.h:256:41: note: in expansion of macro ‘virt_to_pfn’
+  256 | #define virt_to_page(kaddr) pfn_to_page(virt_to_pfn(kaddr))
+      |                                         ^~~~~~~~~~~
+drivers/infiniband/sw/siw/siw_qp_tx.c:538:23: note: in expansion of macro ‘virt_to_page’
+  538 |     page_array[seg] = virt_to_page(va & PAGE_MASK);
+      |                       ^~~~~~~~~~~~
 
-At the same time, GPIONMIEN and IMASK6 are not used anywhere, just delete
-them.
-
-Suggested-by: Jonathan Cameron <jic23@kernel.org>
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+Fixes: 37d15948eb72 ("MIPS: page.h: Define virt_to_pfn()")
+Fixes: 4d5b3bdc0ecb ("MIPS: Fix a warning for virt_to_page")
+Fixes: b9be6f18cf9e ("rdma/siw: transmit path")
+Signed-off-by: xiaolinkui <xiaolinkui@kylinos.cn>
 ---
- arch/mips/include/asm/mach-rc32434/rb.h | 9 ---------
- arch/mips/rb532/gpio.c                  | 8 ++++++++
- 2 files changed, 8 insertions(+), 9 deletions(-)
+ arch/mips/include/asm/page.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/mach-rc32434/rb.h b/arch/mips/include/asm/mach-rc32434/rb.h
-index 34d179ca020b..dd9d4b026e62 100644
---- a/arch/mips/include/asm/mach-rc32434/rb.h
-+++ b/arch/mips/include/asm/mach-rc32434/rb.h
-@@ -29,15 +29,6 @@
- #define DEV3TC		0x01003C
- #define BTCS		0x010040
- #define BTCOMPARE	0x010044
--#define GPIOBASE	0x050000
--/* Offsets relative to GPIOBASE */
--#define GPIOFUNC	0x00
--#define GPIOCFG		0x04
--#define GPIOD		0x08
--#define GPIOILEVEL	0x0C
--#define GPIOISTAT	0x10
--#define GPIONMIEN	0x14
--#define IMASK6		0x38
- #define LO_WPX		(1 << 0)
- #define LO_ALE		(1 << 1)
- #define LO_CLE		(1 << 2)
-diff --git a/arch/mips/rb532/gpio.c b/arch/mips/rb532/gpio.c
-index 94f02ada4082..43e188d53a49 100644
---- a/arch/mips/rb532/gpio.c
-+++ b/arch/mips/rb532/gpio.c
-@@ -37,6 +37,14 @@
- #include <asm/mach-rc32434/rb.h>
- #include <asm/mach-rc32434/gpio.h>
+diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
+index 96bc798c1ec1..0f986f4ad4f0 100644
+--- a/arch/mips/include/asm/page.h
++++ b/arch/mips/include/asm/page.h
+@@ -252,7 +252,7 @@ static inline int pfn_valid(unsigned long pfn)
  
-+#define GPIOBASE	0x050000
-+/* Offsets relative to GPIOBASE */
-+#define GPIOFUNC	0x00
-+#define GPIOCFG		0x04
-+#define GPIOD		0x08
-+#define GPIOILEVEL	0x0C
-+#define GPIOISTAT	0x10
-+
- struct rb532_gpio_chip {
- 	struct gpio_chip chip;
- 	void __iomem	 *regbase;
+ #endif
+ 
+-#define virt_to_pfn(kaddr)   	PFN_DOWN(virt_to_phys((void *)(kaddr)))
++#define virt_to_pfn(kaddr)   	PFN_DOWN(__pa(kaddr))
+ #define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
+ 
+ extern bool __virt_addr_valid(const volatile void *kaddr);
 -- 
-2.25.1
+2.17.1
 
