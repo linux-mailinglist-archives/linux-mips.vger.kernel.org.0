@@ -2,367 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAFA4EA4E1
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Mar 2022 04:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EB94EA507
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Mar 2022 04:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiC2CEC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Mar 2022 22:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
+        id S230234AbiC2CSt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Mar 2022 22:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiC2CEB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Mar 2022 22:04:01 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08C5E2DABC;
-        Mon, 28 Mar 2022 19:02:17 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:35108.382441773
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 027B61002F1;
-        Tue, 29 Mar 2022 10:02:12 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 1c657df391bc415c9b4103b4f7128aa7 for robh@kernel.org;
-        Tue, 29 Mar 2022 10:02:16 CST
-X-Transaction-ID: 1c657df391bc415c9b4103b4f7128aa7
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <cf9132cc-460d-2acc-d751-26452c86a6ba@189.cn>
-Date:   Tue, 29 Mar 2022 10:02:11 +0800
+        with ESMTP id S230208AbiC2CSt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Mar 2022 22:18:49 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC31B1B84FE
+        for <linux-mips@vger.kernel.org>; Mon, 28 Mar 2022 19:17:05 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r23so19095185edb.0
+        for <linux-mips@vger.kernel.org>; Mon, 28 Mar 2022 19:17:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=OgOwwwPtBqtH2Nfvw1oTQa9WeHu8kROOmi+nT3PQOWs=;
+        b=V7+/CQTv/H4n6YyDO8BLudQHcJgZxpoNa9CD/3M3UIY/1jEZXiWxext68upgmuvFwF
+         BjngFaVv5dGVhg4VDJI5HYCL6/kzbJXP7GRK754XfWFlOyw4Z9ApV049UlrmyqTyM4Zv
+         kkfiZEncbpF3dD3yofGwLrJ9Y8U0zARijB2jtTZx9kBPdoVTNiJhCYOUp+gBvrwQ6lVC
+         w2+Dd7W5+5Z9DjOX89fTRhJlos0ncJXGJa1SgdOfIGQ0TgOgDBI0Xqnsy0z+7seCrSQ+
+         C8UWfBv35a+04581MsPqEEpXrGQpKxiKZu2MrOwsZUy+uI7Zz9nfoKYBt1qVIsrcp2ph
+         dS6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=OgOwwwPtBqtH2Nfvw1oTQa9WeHu8kROOmi+nT3PQOWs=;
+        b=pyW/zDLq8EXnTLq2DLGcm70Kfumk8wLOuTNQQb0OZRR2LuUdWWZksbRD+jSOnkObQO
+         p+w7lFdtyCGlzLiA/v1XkvyyY80OAkCdMta05dsSR/q5QzjV+NhKHzUkzHUUe+t9lfCc
+         /Pl9qxXuQmpB3EuX3uKSpr+ocCTenOaajQT37cgGVRfB6ZsVlIT18FA1A0cqbX8GPYpt
+         8y7k629rdpccOX+WL1gHdYI3q1dOU9bALlWLXVXNkTdTthF85h92Pykx11uIdQ7QbmsW
+         SP97S4bK7TomLnTQdyRY90pjju9gCHmDl/NiGwMEn3x+nb5KJyCd3Zka3Q2h5tq0FTlK
+         bWDg==
+X-Gm-Message-State: AOAM530FhDDPkjlQLBGTKaHVrXU6MjOrBA6leC4YLW+Tt5N5RDX2ldr9
+        apnGhjO2hlz2CflVxa1ErKGtP5jcsMcuL9qJzO8=
+X-Google-Smtp-Source: ABdhPJyuFLNxU6tDwxqf3G3+4NkWH0WP5fgIDlKCEEToOCDFNckn0o8usGU5L7W468nFbMiVibAYURDgefwZiDNvWq0=
+X-Received: by 2002:a50:d592:0:b0:415:e599:4166 with SMTP id
+ v18-20020a50d592000000b00415e5994166mr1251977edi.195.1648520224123; Mon, 28
+ Mar 2022 19:17:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
- controller
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Qing Zhang <zhangqing@loongson.cn>,
-        David Airlie <airlied@linux.ie>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        devicetree@vger.kernel.org, suijingfeng <suijingfeng@loongson.cn>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-6-15330273260@189.cn>
- <YjkITWpbnCmhKaX+@robh.at.kernel.org>
- <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
- <Yjo3umi9bJ0xb2Gl@robh.at.kernel.org>
- <199a2869-cd83-d24e-0ad0-25d15d76fc13@189.cn>
- <YjsamuFslv6qlQMZ@robh.at.kernel.org>
- <ac75aeff-1fca-f46f-1043-8437ef845ff9@189.cn>
- <YjxxhNnmqteTIEOa@robh.at.kernel.org>
- <165597c7-3ac3-9d32-a70f-95214b242e0b@189.cn>
- <YkHAgkGvsWQ+2Gbh@robh.at.kernel.org>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <YkHAgkGvsWQ+2Gbh@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Tue, 29 Mar 2022 03:16:55 +0100
+Message-ID: <CAHpNFcMxWJHfjAbAX+5uLsd7LaK1Kfo2DArFMOeSMt1pkeFh2w@mail.gmail.com>
+Subject: Dev/Random : 4096-bit LFSR used for entropy collection : Submission 118
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Dev/Random : 4096-bit LFSR used for entropy collection
 
-On 2022/3/28 22:04, Rob Herring wrote:
-> On Sat, Mar 26, 2022 at 06:04:46PM +0800, Sui Jingfeng wrote:
->> On 2022/3/24 21:26, Rob Herring wrote:
->>> On Thu, Mar 24, 2022 at 09:48:19AM +0800, Sui Jingfeng wrote:
->>>> On 2022/3/23 21:03, Rob Herring wrote:
->>>>> On Wed, Mar 23, 2022 at 11:38:55AM +0800, Sui Jingfeng wrote:
->>>>>> On 2022/3/23 04:55, Rob Herring wrote:
->>>>>>> On Tue, Mar 22, 2022 at 10:33:45AM +0800, Sui Jingfeng wrote:
->>>>>>>> On 2022/3/22 07:20, Rob Herring wrote:
->>>>>>>>> On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
->>>>>>>>>> From: suijingfeng <suijingfeng@loongson.cn>
->>>>>>>>>>
->>>>>>>>> Needs a commit message.
->>>>>>>>>
->>>>>>>>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->>>>>>>>>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->>>>>>>>> Same person? Don't need both emails.
->>>>>>>> Yes,  suijingfeng@loongson.cn is my company's email. But it can not be used
->>>>>>>> to send patches to dri-devel,
->>>>>>>>
->>>>>>>> when send patches with this email, the patch will not be shown on patch
->>>>>>>> works.
->>>>>>>>
->>>>>>>> Emails  are either blocked or got  rejected  by loongson's mail server.  It
->>>>>>>> can only receive emails
->>>>>>>>
->>>>>>>> from you and other people, but not dri-devel. so have to use my personal
->>>>>>>> email(15330273260@189.cn) to send patches.
->>>>>>>>
->>>>>>>>>> ---
->>>>>>>>>>       .../loongson/loongson,display-controller.yaml | 230 ++++++++++++++++++
->>>>>>>>>>       1 file changed, 230 insertions(+)
->>>>>>>>>>       create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>>>>>>>>>
->>>>>>>>>> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>>>>>>>>> new file mode 100644
->>>>>>>>>> index 000000000000..7be63346289e
->>>>>>>>>> --- /dev/null
->>>>>>>>>> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>>>>>>>>> @@ -0,0 +1,230 @@
->>>>>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>>>>>> +%YAML 1.2
->>>>>>>>>> +---
->>>>>>>>>> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
->>>>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>>>>> +
->>>>>>>>>> +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
->>>>>>>>>> +
->>>>>>>>>> +maintainers:
->>>>>>>>>> +  - Sui Jingfeng <suijingfeng@loongson.cn>
->>>>>>>>>> +
->>>>>>>>>> +description: |+
->>>>>>>>>> +
->>>>>>>>>> +  Loongson display controllers are simple which require scanout buffers
->>>>>>>>>> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
->>>>>>>>>> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
->>>>>>>>>> +  with a dedicated video RAM which is 64MB or more, precise size can be
->>>>>>>>>> +  read from the PCI BAR 2 of the GPU device(0x0014:0x7A15) in the bridge
->>>>>>>>>> +  chip.
->>>>>>>>>> +
->>>>>>>>>> +  LSDC has two display pipes, each way has a DVO interface which provide
->>>>>>>>>> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
->>>>>>>>>> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
->>>>>>>>>> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
->>>>>>>>>> +
->>>>>>>>>> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
->>>>>>>>>> +  located at the DC register space. They are used to emulate two way i2c,
->>>>>>>>>> +  One for DVO0, another for DVO1.
->>>>>>>>>> +
->>>>>>>>>> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
->>>>>>>>>> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
->>>>>>>>>> +
->>>>>>>>>> +  LSDC's display pipeline have several components as below description,
->>>>>>>>>> +
->>>>>>>>>> +  The display controller in LS7A1000:
->>>>>>>>>> +     ___________________                                     _________
->>>>>>>>>> +    |            -------|                                   |         |
->>>>>>>>>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
->>>>>>>>>> +    |  _   _     -------|        ^             ^            |_________|
->>>>>>>>>> +    | | | | |    -------|        |             |
->>>>>>>>>> +    | |_| |_|    | i2c0 <--------+-------------+
->>>>>>>>>> +    |            -------|
->>>>>>>>>> +    |   DC IN LS7A1000  |
->>>>>>>>>> +    |  _   _     -------|
->>>>>>>>>> +    | | | | |    | i2c1 <--------+-------------+
->>>>>>>>>> +    | |_| |_|    -------|        |             |             _________
->>>>>>>>>> +    |            -------|        |             |            |         |
->>>>>>>>>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->>>>>>>>>> +    |            -------|                                   |_________|
->>>>>>>>>> +    |___________________|
->>>>>>>>>> +
->>>>>>>>>> +  Simple usage of LS7A1000 with LS3A4000 CPU:
->>>>>>>>>> +
->>>>>>>>>> +    +------+            +-----------------------------------+
->>>>>>>>>> +    | DDR4 |            |  +-------------------+            |
->>>>>>>>>> +    +------+            |  | PCIe Root complex |   LS7A1000 |
->>>>>>>>>> +       || MC0           |  +--++---------++----+            |
->>>>>>>>>> +  +----------+  HT 3.0  |     ||         ||                 |
->>>>>>>>>> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
->>>>>>>>>> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
->>>>>>>>>> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
->>>>>>>>>> +       || MC1           +---------------|--|----------------+
->>>>>>>>>> +    +------+                            |  |
->>>>>>>>>> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->>>>>>>>>> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->>>>>>>>>> +                      +-------+                      +------+
->>>>>>>>>> +
->>>>>>>>>> +  The display controller in LS2K1000/LS2K0500:
->>>>>>>>>> +     ___________________                                     _________
->>>>>>>>>> +    |            -------|                                   |         |
->>>>>>>>>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
->>>>>>>>>> +    |  _   _     -------|        ^              ^           |_________|
->>>>>>>>>> +    | | | | |           |        |              |
->>>>>>>>>> +    | |_| |_|           |     +------+          |
->>>>>>>>>> +    |                   <---->| i2c0 |<---------+
->>>>>>>>>> +    |   DC IN LS2K1000  |     +------+
->>>>>>>>>> +    |  _   _            |     +------+
->>>>>>>>>> +    | | | | |           <---->| i2c1 |----------+
->>>>>>>>>> +    | |_| |_|           |     +------+          |            _________
->>>>>>>>>> +    |            -------|        |              |           |         |
->>>>>>>>>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->>>>>>>>>> +    |            -------|                                   |_________|
->>>>>>>>>> +    |___________________|
->>>>>>>>>> +
->>>>>>>>>> +properties:
->>>>>>>>>> +  $nodename:
->>>>>>>>>> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
->>>>>>>>>> +
->>>>>>>>>> +  compatible:
->>>>>>>>>> +    oneOf:
->>>>>>>>>> +      - items:
->>>>>>>>>> +          - enum:
->>>>>>>>>> +              - loongson,ls7a1000-dc
->>>>>>>>>> +              - loongson,ls2k1000-dc
->>>>>>>>>> +              - loongson,ls2k0500-dc
->>>>>>>>>> +
->>>>>>>>>> +  reg:
->>>>>>>>>> +    maxItems: 1
->>>>>>>>>> +
->>>>>>>>>> +  interrupts:
->>>>>>>>>> +    maxItems: 1
->>>>>>>>>> +
->>>>>>>>>> +  '#address-cells':
->>>>>>>>>> +    const: 1
->>>>>>>>>> +
->>>>>>>>>> +  '#size-cells':
->>>>>>>>>> +    const: 0
->>>>>>>>>> +
->>>>>>>>>> +  i2c-gpio@0:
->>>>>>>>>> +    description: |
->>>>>>>>>> +      Built-in GPIO emulate i2c exported for external display bridge
->>>>>>>>> If you have i2c-gpio, that belongs at the DT top-level, not here.
->>>>>>>>>
->>>>>>>>>> +      configuration, onitor detection and edid read back etc, for ls7a1000
->>>>>>>>>> +      only. Its compatible must be lsdc,i2c-gpio-0. The reg property can be
->>>>>>>>> No, there's a defined i2c-gpio compatible already.
->>>>>>>> This is different from the i2c-gpio already defined under drivers/i2c/busses/i2c-gpio.c,
->>>>>>>> By design, my i2c-gpio is vendor specific properties, lsdc device driver create the i2c
->>>>>>>> adapter at runtime. These are 4 dedicated GPIOs whose control register is located at the
->>>>>>>> LSDC register space, not general purpose GPIOs with separate control register resource.
->>>>>>>> So i think it is the child node of display-controller@6,1, it belongs to LSDC.
->>>>>>>> It seems that put it at the DT top-level break the hierarchy and relationship.
->>>>>>> Okay, I see. Then just 'i2c' for the node names. You need a reference to
->>>>>>> i2c-controller.yaml for these nodes too.
->>>>>>>
->>>>>>> The compatible should not have an index in it.
->>>>>> OK, i will fix this at the next version. thanks.
->>>>>>>>>> +      used to specify a I2c adapter bus number, if you don't specify one
->>>>>>>>>> +      i2c driver core will dynamically assign a bus number. Please specify
->>>>>>>>> Bus numbers are a linux detail not relevant to DT binding.
->>>>>>>>>
->>>>>>>>>> +      it only when its bus number matters. Bus number greater than 6 is safe
->>>>>>>>>> +      because ls7a1000 bridge have 6 hardware I2C controller integrated.
->>>>>>>>>> +
->>>>>>>>>> +  i2c-gpio@1:
->>>>>>>>>> +    description: |
->>>>>>>>>> +      Built-in GPIO emulate i2c exported for external display bridge
->>>>>>>>>> +      configuration, onitor detection and edid read back etc, for ls7a1000
->>>>>>>>>> +      only. Its compatible must be lsdc,i2c-gpio-1.
->>>>>>>>>> +
->>>>>>>>>> +  ports:
->>>>>>>>>> +    $ref: /schemas/graph.yaml#/properties/ports
->>>>>>>>>> +
->>>>>>>>>> +    properties:
->>>>>>>>>> +      port@0:
->>>>>>>>>> +        $ref: /schemas/graph.yaml#/properties/port
->>>>>>>>>> +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
->>>>>>>>>> +
->>>>>>>>>> +      port@1:
->>>>>>>>>> +        $ref: /schemas/graph.yaml#/properties/port
->>>>>>>>>> +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
->>>>>>>>>> +
->>>>>>>>>> +    required:
->>>>>>>>>> +      - port@0
->>>>>>>>>> +      - port@1
->>>>>>>>>> +
->>>>>>>>>> +required:
->>>>>>>>>> +  - compatible
->>>>>>>>>> +  - reg
->>>>>>>>>> +  - interrupts
->>>>>>>>>> +  - ports
->>>>>>>>>> +
->>>>>>>>>> +additionalProperties: false
->>>>>>>>>> +
->>>>>>>>>> +examples:
->>>>>>>>>> +  - |
->>>>>>>>>> +    #include <dt-bindings/interrupt-controller/irq.h>
->>>>>>>>>> +    bus {
->>>>>>>>>> +
->>>>>>>>>> +        #address-cells = <3>;
->>>>>>>>>> +        #size-cells = <2>;
->>>>>>>>>> +        #interrupt-cells = <2>;
->>>>>>>>>> +
->>>>>>>>>> +        display-controller@6,1 {
->>>>>>>>>> +            compatible = "loongson,ls7a1000-dc";
->>>>>>>>>> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
->>>>>>>>>> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>>>>> +
->>>>>>>>>> +            #address-cells = <1>;
->>>>>>>>>> +            #size-cells = <0>;
->>>>>>>>>> +
->>>>>>>>>> +            i2c-gpio@0 {
->>>>>>>>>> +                compatible = "lsdc,i2c-gpio-0";
->>>>>>>>>> +                reg = <6>;
->>>>>>> 'reg' needs to be documented with some description of what 6 and 7
->>>>>>> represent. If they are the control register offset, then make the
->>>>>>> address translatable (use 'ranges' and define the size).
->>>>>> By design, the reg property is used to specify a I2c adapter bus number,
->>>>>> if we don't specify one, i2c driver core will dynamically assign a bus number.
->>>>>> then the nr of the i2c adapter will started from 0. I want is start from 6
->>>>>> to avoid potential conflict feature hardware I2C driver.
->>>>>>
->>>>>> Because LS7A1000 bridge chip have 6 hardware I2C controller integrated,
->>>>>> but its driver is not up-streamed yet. By default these hardware I2C controller's
->>>>>> nr is started from 0.
->>>>> Linux's numbering doesn't belong in DT. So no, you can't use 'reg' in
->>>>> that way.
->>>> Then,  can i use something like lsdc,nr = <6> ?
->>>>>> Even through i2c driver core can dynamically generate a number, i still want it
->>>>>> to be fixed and keep consistent and explicit. That is, i2c6 is for display pipe 0,
->>>>>> i2c7 is for display pipe 1. This follow the convention and flexible enough.
->>>>> You may want that, but that is not how the kernel works. Specific
->>>>> numbers are not guaranteed. I'm sure you've seen this for disks, network
->>>>> interfaces, etc.
->>>>>
->>>>> Rob
->>>> 2c_bit_add_numbered_bus() will guarantee it for you as long as If no devices
->>>> have pre-been declared for this bus.
->>>>
->>>> you can read the comment of 2c_bit_add_numbered_bus() at
->>>> drivers/i2c/i2c-core-base.c
->>> I didn't say it wasn't possible. It is not best practice. Grep
->>> i2c_bit_add_numbered_bus and see how many users there are.
->> i2c-gpio.c at drivers/i2c/busses/ just do the same thing.
-> No, the id for i2c-gpio nodes (any DT node without 'reg') will be -1
-> which means dynamically assigned.
->
->
->> + nvidia,bpmp-bus-id: + $ref: /schemas/types.yaml#/definitions/uint32 +
->> description: Indicates the I2C bus number this DT node represents, + as
->> defined by the BPMP firmware.
-> The key difference is the numbering is defined by the BPMP firmware.
->
-Bus numbers are a linux detail, I am not sure it is relevant to BPMP firmware.
-and BPMP firmware is not relevant here.
+Basically the HASH is what makes a difference, In respect to BLAKE2
+running out of entropy...
+An internal backup PKI AES/Blake2 Secondary HASH stored in Kernel...
 
-The point is you applied that patch, you are admit the fact that bus numbers
-could be in DT.
+Bear in mind that the backup seed is worked from quality Random & is
+99% unique : "We are The 99%"
 
->>> Even if the kernel allows specifying bus numbers,your Linux bus numbers don't
->>> belong in DT.
->> Again, Does does devicetree specification prohibit this?
-> No. The spec is not the last word on what's allowed or not. Lots of
-> patterns exist already which we can't change, but that doesn't mean they
-> should be copied by new users.
->
-> Rob
+This keeps simple Pseudo numbers from being the bearer of predictable
+kernel Security behavior,
+Nothing wrong with keeping more! & we can for system device pools for example!
 
-We develop that part by our own, only find that there are someone do the 
-same thing when it got push back.
+For reference core HASH reserve storage can be per type:
 
-We believe that it is very flexible actually, anyway if you still don't 
-change you mind we can rewrite it.
+Main groups for Secondary hash main leaf HASH:
 
-I have resend my patches,  see it at 
-https://patchwork.freedesktop.org/series/101843/
+/Dev
+/Memory
+/Storage
+/Keys
+/Con
 
-Please take spare time to review it if you would like, thanks you.
+Rupert S
 
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+
+
+Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/03/ice-ssrtp.html
+
+https://science.n-helix.com/2021/11/ihmtes.html
+
+https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+https://science.n-helix.com/2021/12/3d-audio-plugin.html
+
+https://aka.ms/win10rng
+
+"https://www.spinics.net/lists/stable/msg543787.html
+
+From: "Jason A. Donenfeld" <Jason@xxxxxxxxx>
+
+[ Upstream commit 6e8ec2552c7d13991148e551e3325a624d73fac6 ]
+
+The current 4096-bit LFSR used for entropy collection had a few
+desirable attributes for the context in which it was created. For
+example, the state was huge, which meant that /dev/random would be able
+to output quite a bit of accumulated entropy before blocking. It was
+also, in its time, quite fast at accumulating entropy byte-by-byte,
+which matters given the varying contexts in which mix_pool_bytes() is
+called. And its diffusion was relatively high, which meant that changes
+would ripple across several words of state rather quickly.
+
+However, it also suffers from a few security vulnerabilities. In
+particular, inputs learned by an attacker can be undone, but moreover,
+if the state of the pool leaks, its contents can be controlled and
+entirely zeroed out. I've demonstrated this attack with this SMT2
+script, <https://xn--4db.cc/5o9xO8pb>, which Boolector/CaDiCal solves in
+a matter of seconds on a single core of my laptop, resulting in little
+proof of concept C demonstrators such as <https://xn--4db.cc/jCkvvIaH/c>.
+
+For basically all recent formal models of RNGs, these attacks represent
+a significant cryptographic flaw. But how does this manifest
+practically? If an attacker has access to the system to such a degree
+that he can learn the internal state of the RNG, arguably there are
+other lower hanging vulnerabilities -- side-channel, infoleak, or
+otherwise -- that might have higher priority. On the other hand, seed
+files are frequently used on systems that have a hard time generating
+much entropy on their own, and these seed files, being files, often leak
+or are duplicated and distributed accidentally, or are even seeded over
+the Internet intentionally, where their contents might be recorded or
+tampered with. Seen this way, an otherwise quasi-implausible
+vulnerability is a bit more practical than initially thought.
+
+Another aspect of the current mix_pool_bytes() function is that, while
+its performance was arguably competitive for the time in which it was
+created, it's no longer considered so. This patch improves performance
+significantly: on a high-end CPU, an i7-11850H, it improves performance
+of mix_pool_bytes() by 225%, and on a low-end CPU, a Cortex-A7, it
+improves performance by 103%.
+
+This commit replaces the LFSR of mix_pool_bytes() with a straight-
+forward cryptographic hash function, BLAKE2s, which is already in use
+for pool extraction. Universal hashing with a secret seed was considered
+too, something along the lines of <https://eprint.iacr.org/2013/338>,
+but the requirement for a secret seed makes for a chicken & egg problem.
+Instead we go with a formally proven scheme using a computational hash
+function, described in sections 5.1, 6.4, and B.1.8 of
+<https://eprint.iacr.org/2019/198>."
