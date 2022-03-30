@@ -2,113 +2,194 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB17D4ECC3C
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Mar 2022 20:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B28B4ECC5B
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Mar 2022 20:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350501AbiC3S1O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Mar 2022 14:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S1350214AbiC3SiO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Mar 2022 14:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242859AbiC3S0p (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Mar 2022 14:26:45 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562144B1C4
-        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 11:23:50 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-de3ca1efbaso22885573fac.9
-        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 11:23:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
-        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
-         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
-         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
-         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
-         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
-         ou5A==
+        with ESMTP id S1351167AbiC3SdV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Mar 2022 14:33:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D028A5131A
+        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 11:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648665030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RZbGTsE6fj+tWEXGzmO8DRMy8Cnx5er20TMqeDcb2Ps=;
+        b=FvdKfycdo2LEiYciwI9rYAa1KN4KdYE2V3cr4N2xZBzkGfnF8+9Dsjgnq/RInuhq5om823
+        3/SH190syZT2ThpAms9PTHwnuCHmsXKxj5SGAip/dStmSTca2culTN3BbWPYfWtLkRCXxL
+        I60WOX4mWsM+0VN2IA7cJfSbrdmrbzg=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-241-s9130-kvN7iDrvYToOXgZw-1; Wed, 30 Mar 2022 14:30:29 -0400
+X-MC-Unique: s9130-kvN7iDrvYToOXgZw-1
+Received: by mail-qv1-f72.google.com with SMTP id ke13-20020a056214300d00b00443901b0386so1346138qvb.14
+        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 11:30:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
-        b=IubS0p3XPq7HwpguSgSaKC/MGOTfvbUzD1qhZafDU/gEgAkqieLp1FNoFuESMmkyBm
-         KWNPz9yH1GNkRvFp/6KW2Rr6Qnw4aqsKqSNIxxoStedqPyiWLBIzzQu+aF3gyfy4ZOPP
-         X+0apzOLQUbTUxfIGEbZwNlBdfMOGMHXkq/fwQWxdNRBJjEGv+N2csTgidw1WfGOYuhD
-         CwMq6KQlycxNbu8DnEbmlxdbLNHhN6IjbAXGbYn0LPy6CaBXWeDs43Kmm3RT5Hs1IAwi
-         VRRs8xUGXqd7VH6SXZ8fpcxQVwJ4fAr8uoLagu1iPcOi93AneheiGTbV8fQCmvekE+Ap
-         60BA==
-X-Gm-Message-State: AOAM532FqbOyq/ul9SMzO99DuLv0BMd1dxQ7addYBFHOxVdc3kIJygCN
-        bzDu/fPdRNhpSYzRf6ryWhHRRQUhQ25q2GjQvBovsrpg8e9j
-X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
-X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
- ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
- Mar 2022 11:23:38 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RZbGTsE6fj+tWEXGzmO8DRMy8Cnx5er20TMqeDcb2Ps=;
+        b=BRTWiTL6f5gNw6/jDjWDndKpitu06ecidan0/UfGKFoR/jqs4NrEtuELPqsVuZtYHl
+         o2/QJdDR0j9g3wnlKLDe5o/UGlA8qcPYOGsd2Ft84XR1l+dRpo2rq1N0s0goGUouqVXX
+         NqpaEkI+NQSeXYzeyeFQ4kx+CkDux+RsSXbHA2dVTayT327QVBpz7GpPLdIlEAcLjpa+
+         zBzeTRIPRt01agzvsDIHa+Ry012pIfJpaob8mbvvev5Y8qxbFTU99IpLqe42dwl9sLOL
+         3e6w0htO/poub1osxtzyQfDm2zYOV0SV4EHrexZ+HGZiJA759yh+elxFvfJ/egrmuZP0
+         LYsA==
+X-Gm-Message-State: AOAM532terxDG694xaP8Narqb+gdcAE3LvtASVDnLUMYDIwC7VwjwRum
+        aiNQj+q6TFzcOvmu6gR4M6fNsS7MI+dShT81s6QJWfZHqFqzv1A4VqataVWOGHkORKA9qdTASik
+        mcdduBa0Bx/QPWmqVgxNvvQ==
+X-Received: by 2002:a37:414c:0:b0:67e:6d68:c585 with SMTP id o73-20020a37414c000000b0067e6d68c585mr756738qka.196.1648665026787;
+        Wed, 30 Mar 2022 11:30:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxV7GTt34CXdG/qDCogIthPSHMHYYlDRsKEVG6uvoZamRv82rxB1y8ernA5KphBy4D/a0zmOw==
+X-Received: by 2002:a37:414c:0:b0:67e:6d68:c585 with SMTP id o73-20020a37414c000000b0067e6d68c585mr756718qka.196.1648665026496;
+        Wed, 30 Mar 2022 11:30:26 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm18698113qtx.58.2022.03.30.11.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 11:30:26 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 14:30:24 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v2 16/26] KVM: x86/mmu: Cache the access bits of shadowed
+ translations
+Message-ID: <YkShwFaRqlQpyL87@xz-m1.local>
+References: <20220311002528.2230172-1-dmatlack@google.com>
+ <20220311002528.2230172-17-dmatlack@google.com>
+ <YjGgjTnP/9sG8L+2@xz-m1.local>
+ <CALzav=fZQYC7YyTbZqbkYTYVUXCq4skc6pkQ2S59BoSxbkKUhw@mail.gmail.com>
 MIME-Version: 1.0
-Reply-To: isabellasayouba0@gmail.com
-Sender: 040stherchurch@gmail.com
-Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
- 11:23:37 -0700 (PDT)
-From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
-Date:   Wed, 30 Mar 2022 18:23:37 +0000
-X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
-Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
-Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CALzav=fZQYC7YyTbZqbkYTYVUXCq4skc6pkQ2S59BoSxbkKUhw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
-kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
-jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
-kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
-leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
-quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
-seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
-ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
-grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
-tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
-gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
-5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
-44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
-44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
-DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
-44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
-44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
-44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
-5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
-geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
-qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
-gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
-sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
-gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
-uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
-gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
-gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
-vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
-puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
-6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
-44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
-44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
-44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
-6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
-56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
-44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
-iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
-guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
-vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
-uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
-jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
-puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
-gonjgIINCg==
+On Tue, Mar 22, 2022 at 03:51:54PM -0700, David Matlack wrote:
+> On Wed, Mar 16, 2022 at 1:32 AM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > On Fri, Mar 11, 2022 at 12:25:18AM +0000, David Matlack wrote:
+> > > In order to split a huge page we need to know what access bits to assign
+> > > to the role of the new child page table. This can't be easily derived
+> > > from the huge page SPTE itself since KVM applies its own access policies
+> > > on top, such as for HugePage NX.
+> > >
+> > > We could walk the guest page tables to determine the correct access
+> > > bits, but that is difficult to plumb outside of a vCPU fault context.
+> > > Instead, we can store the original access bits for each leaf SPTE
+> > > alongside the GFN in the gfns array. The access bits only take up 3
+> > > bits, which leaves 61 bits left over for gfns, which is more than
+> > > enough. So this change does not require any additional memory.
+> >
+> > I have a pure question on why eager page split needs to worry on hugepage
+> > nx..
+> >
+> > IIUC that was about forbidden huge page being mapped as executable.  So
+> > afaiu the only missing bit that could happen if we copy over the huge page
+> > ptes is the executable bit.
+> >
+> > But then?  I think we could get a page fault on fault->exec==true on the
+> > split small page (because when we copy over it's cleared, even though the
+> > page can actually be executable), but it should be well resolved right
+> > after that small page fault.
+> >
+> > The thing is IIUC this is a very rare case, IOW, it should mostly not
+> > happen in 99% of the use case?  And there's a slight penalty when it
+> > happens, but only perf-wise.
+> >
+> > As I'm not really fluent with the code base, perhaps I missed something?
+> 
+> You're right that we could get away with not knowing the shadowed
+> access permissions to assign to the child SPTEs when splitting a huge
+> SPTE. We could just copy the huge SPTE access permissions and then let
+> the execute bit be repaired on fault (although those faults would be a
+> performance cost).
+> 
+> But the access permissions are also needed to lookup an existing
+> shadow page (or create a new shadow page) to use to split the huge
+> page. For example, let's say we are going to split a huge page that
+> does not have execute permissions enabled. That could be because NX
+> HugePages are enabled or because we are shadowing a guest translation
+> that does not allow execution (or both). We wouldn't want to propagate
+> the no-execute permission into the child SP role.access if the
+> shadowed translation really does allow execution (and vice versa).
+
+Then the follow up (pure) question is what will happen if we simply
+propagate the no-exec permission into the child SP?
+
+I think that only happens with direct sptes where guest used huge pages
+because that's where the shadow page will be huge, so IIUC that's checked
+here when the small page fault triggers:
+
+static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+				   unsigned direct_access)
+{
+	if (is_shadow_present_pte(*sptep) && !is_large_pte(*sptep)) {
+		struct kvm_mmu_page *child;
+
+		/*
+		 * For the direct sp, if the guest pte's dirty bit
+		 * changed form clean to dirty, it will corrupt the
+		 * sp's access: allow writable in the read-only sp,
+		 * so we should update the spte at this point to get
+		 * a new sp with the correct access.
+		 */
+		child = to_shadow_page(*sptep & PT64_BASE_ADDR_MASK);
+		if (child->role.access == direct_access)
+			return;
+
+		drop_parent_pte(child, sptep);
+		kvm_flush_remote_tlbs_with_address(vcpu->kvm, child->gfn, 1);
+	}
+}
+
+Due to missing EXEC the role.access check will not match with direct
+access, which is the guest pgtable value which has EXEC set.  Then IIUC
+we'll simply drop the no-exec SP and replace it with a new one with exec
+perm.  The question is, would that untimately work too?
+
+Even if that works, I agree this sounds tricky because we're potentially
+caching fake sp.role conditionally and it seems we never do that before.
+It's just that the other option that you proposed here seems to add other
+way of complexity on caching spte permission information while kvm doesn't
+do either before.  IMHO we need to see which is the best trade off.
+
+I could have missed something else, though.
+
+Thanks,
+
+-- 
+Peter Xu
+
