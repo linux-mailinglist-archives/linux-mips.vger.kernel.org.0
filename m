@@ -2,57 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CCF4EC856
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Mar 2022 17:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17534ECA30
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Mar 2022 18:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347144AbiC3PfC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Mar 2022 11:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S1349115AbiC3RAs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Mar 2022 13:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348251AbiC3PfB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Mar 2022 11:35:01 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D2F5FF1A
-        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 08:33:15 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bq8so28337603ejb.10
-        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 08:33:15 -0700 (PDT)
+        with ESMTP id S1349118AbiC3RAq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Mar 2022 13:00:46 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792E2140A7
+        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 09:58:59 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id c10so24369812ejs.13
+        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 09:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=k4tOjXwVcjRbwIqO75tPZMywji6NA5bvyUrV2lo9zfU=;
-        b=ZvpGgO0rTRy4BxXcRwzsHHFuZRo4g3CARr5qe1cMD3fSVYBkhDQT6I2pcj7Wkus4vD
-         L/pV4kO5BVuN7x61TI7A+uMRtm6324yVDgXfaYOq8q+KMQ4/V+pPoRb3AiLc/FKSr3if
-         J+GN3sLdj4bXGUUPsxuj3SC4VikYaGpYroHXs5RMwPBZOrA1zUbc8rzoSnbIoyzl5VYP
-         89L+v9l7lH3QmK4n4TBz8AELmkTFCPVCwiqHn4OIwiNAuuOatlSMaRsSEJOknqnFEvhk
-         bDxbb6BqZPGpGeIOCUn9EPudkbn9Vuherq8IXnE6nukxV9ijFCla9WR35o8ITBwkLi59
-         jHgQ==
+        bh=tC9xiYjFteTOncjiaBTt8b1lonIMt5KBs2kzaARMTvg=;
+        b=gKilfGZ/BW4ymBas9eTaslJMraxFS69x8emaggw5hq09SM6nYnv9h+AV/76n0VI0oV
+         diIJ1dvJN+Iyfdp/NHmHmzUOK/AdR4GMzuzjkXkLM3ssOqJC0deW4IAX7imMiRryVMIN
+         EuX3A6lcmpNH2R9sEPCFSjiWmFK/9V7Q4WBxUIAyqOa4e2UHy/OUW2A/kumVQAYtHwGF
+         0LZevRFY4+Dp8P4U115YBFCZKlro1ppgzRYDJ2gmZr2v3KKtvvgsqWWX7Rgv+1B8d4i7
+         BjEZvJ5KglcpLyachzbPFEWjCjXho5hmJ05TNYs3Bp+uE2j4sGUf6kvtIJ9p03RcNJd/
+         S08w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=k4tOjXwVcjRbwIqO75tPZMywji6NA5bvyUrV2lo9zfU=;
-        b=QGPj85bBgUKGUdioZX+eP+ZEyVxZhPqvk3EKIkponFZwoRtxgXapJNPMadHt0seiXY
-         IWM3z21xYS8KVw7AtqrUExxvmTj5NpHy5KjKY7rAwbspVjBvSOoWL9ccXxiHieAabmuE
-         gvv0sZs01LX5r8nMjfTzSfV3EqbSHjNws3E9Q0PH3RQY4JYJ6rrgWEjzj0H8n8772LB1
-         1svhhzJojQp3rKSmx75/gVlfdkeiryMaXSHq+1YBaKg/qF2eF8wHxv5vcHBKv86E1Y2n
-         90NLc1ed6fvYr/hYsS6oGhEe347PU5bN3HxLwRHoM8zb1iWExc+m8vQiK46t4GEVffI7
-         EcGA==
-X-Gm-Message-State: AOAM530Q1sEq/U7c0PX+pfRRIvdZh3p7BdShhmXtYwwJcKGmSXIlIY2V
-        63WtaBjNtfVY37rQ3gjawOW+Jie1j0g6rXJlujA=
-X-Google-Smtp-Source: ABdhPJwqVo/RXrPoFsKPyisy5cThCgK4HiCNge6BTqyGlCrCBOuLxp78snnPGrCVRBmrldImsNzhfzIlFfVZyJBHyi0=
-X-Received: by 2002:a17:907:a42a:b0:6e4:973b:9d34 with SMTP id
- sg42-20020a170907a42a00b006e4973b9d34mr102917ejc.24.1648654393947; Wed, 30
- Mar 2022 08:33:13 -0700 (PDT)
+        bh=tC9xiYjFteTOncjiaBTt8b1lonIMt5KBs2kzaARMTvg=;
+        b=Cc6Mm0OUZm94EnETBLeEGHZ3nGJ1Ngqx3LLi5Q4JUyqTL6v/spoyi8wnJJhsZ2+/Ql
+         2J0TdyWrJoIuPFtkjZlgenNM/Ob3Q8TiEGbyNRNk0Q5q9kkOh4GCnbfSKRRJyXaGCFEd
+         YfFPDNPhVHqthlb24cofABqwIv6RSrOPGRVgHMpc3TCeLN6Vz76Ej7cP6dK8l1ZRz/HB
+         9XzoELJcDQ75zGfCsd30MBRkqlzq0SsdY/deD3iQbKcdlMHbgsRMjBJy7ydfwr6q97un
+         1c+lZH4HaS0/lI/VJdllLs9R7D4zt7Cd5tFQJG1THQIKAKronivmkR8JmvXA1Q1JXzcV
+         kr9w==
+X-Gm-Message-State: AOAM533M3m+Lf2RBxiIwu+EgVgLI2+rEvbOxh31TLRCZu65sqoHYK/ec
+        +yuoZ9JbWiadlI48j3DK+a8poyUcu7miof28WGs=
+X-Google-Smtp-Source: ABdhPJww1SXOxh8nP7o9HrnJ/L1MBAAibUfwnCN0DkBlbqocQ/BR/7lGbG0fiXP7I2EAmgZqSgcPOR/b/3gCtBN78cU=
+X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
+ ji13-20020a170907980d00b006d6f910513amr447634ejc.643.1648659537865; Wed, 30
+ Mar 2022 09:58:57 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 30 Mar 2022 16:33:09 +0100
-Message-ID: <CAHpNFcPYBVg53gm_P7yh29n6ZyT=C=MsLXB5p9KyNMfZMjjMKQ@mail.gmail.com>
-Subject: On the subject of PSP processors : Arm features include NEON2! Why
- not use this to our advantage? if safely potentiated! Every SiMD matters
- after all! RS
+Date:   Wed, 30 Mar 2022 17:58:53 +0100
+Message-ID: <CAHpNFcNLTDRtiLZ4sSTzWpOtX_UgdNOZUowgfKoMrTbJN44V8A@mail.gmail.com>
+Subject: (Security & Performance Profile : RS-PSPVita) +PSP ARM Features &
+ Secure DMA : headers cpufeatures: Sync with the kernel sources https://lkml.org/lkml/2022/3/30/1060
 To:     submissions@vialicensing.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PLING_QUERY,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,6 +59,14 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
+
+(Security & Performance Profile : RS-PSPVita) +PSP ARM Features &
+Secure DMA : headers cpufeatures: Sync with the kernel sources
+https://lkml.org/lkml/2022/3/30/1060
+
+So + Properties PSP & for simple reasons ARCH Basics By Creational A-Sym-metry
+
+RS
 
 On the subject of PSP processors : Arm features include NEON2!
 Why not use this to our advantage? if safely potentiated! Every SiMD
@@ -91,3 +98,5 @@ RS
 https://drive.google.com/drive/folders/1X5fUvsXkvBU6td78uq3EdEUJ_S6iUplA?usp=sharing
 
 https://lore.kernel.org/lkml/20220329164117.1449-1-mario.limonciello@amd.com/
+
+https://www.phoronix.com/scan.php?page=news_item&px=AMD-PSP-Sysfs-Expose
