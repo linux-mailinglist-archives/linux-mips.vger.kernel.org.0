@@ -2,124 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A454EC682
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Mar 2022 16:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599A54EC6D4
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Mar 2022 16:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245102AbiC3OaD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Mar 2022 10:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53236 "EHLO
+        id S1347070AbiC3Op0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Mar 2022 10:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234116AbiC3OaC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Mar 2022 10:30:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBD7E1C16C6
-        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 07:28:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648650494;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0MdzdhvbcfTH7B0x9nhddVD3XG1EagzEGRM2HvvMoaM=;
-        b=eH2T2cZaoD8Fq5sAoZ2OHcCnwRk438rwFvx+rElxE0GBbbr04iIh9BgAFEklvG4cLJP4R+
-        65GJ1N7uYxMYZ9Neray14V/GZz0mVUHRfHrtQR6Sr2npvGSRv2Z+1r1KHLrWx+FETL+7B/
-        5PC+uRadFqIZC/6XxpnqndQZCGX7I90=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-k56nrDVeP-qAj-lsxK2X7A-1; Wed, 30 Mar 2022 10:28:13 -0400
-X-MC-Unique: k56nrDVeP-qAj-lsxK2X7A-1
-Received: by mail-qk1-f197.google.com with SMTP id m23-20020a05620a221700b006809e1fa4fdso11259250qkh.6
-        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 07:28:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0MdzdhvbcfTH7B0x9nhddVD3XG1EagzEGRM2HvvMoaM=;
-        b=HH7Yc4VSPGxvLLS2JN5J/noWNsSqYpKK/alDhxX/RaoKqr9f9Z6woTVe6rUXFVi4Qx
-         FCXz+oFmQXI62j40SJQwcrqvkb31PUmQd3Dzok1cYuARZL34t46cKVODSIUGF5wA6Bm6
-         qLsk4txAcKjgR26JwDXQ8m1x35NQt/9IEE9lGWqE1+F2HUgRvc7CgUCmTvtMLYBuZDRy
-         5G/xoIwftwH9NBNr5oUmjOu7FBa+E75JFTEHCZ5Vdf27Cc4V6EvYfSbesYZjjpzFwswE
-         X2rQEHDtWEEv1KP87nX7YqFuQVr/fMGuK9g7wEeRa3A5jvdB8lFIPk4YjQtE3hNPA2C8
-         Es9w==
-X-Gm-Message-State: AOAM532uJ7hNG7+Ak5/7FRq8RL2o2dh6kNM/fM/nl7hPvH936DHJjZpP
-        dzTbPlb6UQa7+1QHxOyMpXd01NFffcaujiS0ud28j73TFTA6mrNhNiCQ+5QjJ32oxnG6ejTsok8
-        SQY9y4KU/Udi5UmltvoY62A==
-X-Received: by 2002:ac8:580d:0:b0:2e1:c641:8c21 with SMTP id g13-20020ac8580d000000b002e1c6418c21mr32693441qtg.677.1648650492834;
-        Wed, 30 Mar 2022 07:28:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxj9mfWzYsrvAU4I7K8iuYgWUFquDhfKr86ywKhvihB398kljxjsCy0kviStlHnrVX/SZQbLA==
-X-Received: by 2002:ac8:580d:0:b0:2e1:c641:8c21 with SMTP id g13-20020ac8580d000000b002e1c6418c21mr32693412qtg.677.1648650492602;
-        Wed, 30 Mar 2022 07:28:12 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id d12-20020a05620a158c00b00648ec3fcbdfsm10572195qkk.72.2022.03.30.07.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 07:28:12 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 10:28:10 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v2 05/26] KVM: x86/mmu: Rename shadow MMU functions that
- deal with shadow pages
-Message-ID: <YkRo+rJwYJoOmXmW@xz-m1.local>
-References: <20220311002528.2230172-1-dmatlack@google.com>
- <20220311002528.2230172-6-dmatlack@google.com>
- <YjBTtz6wo/zQEHCv@xz-m1.local>
- <CALzav=c0ccztDULiVMwR4K20iYc0WH53ApeOCorhjKwaMNL5Sg@mail.gmail.com>
+        with ESMTP id S1347040AbiC3OpZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Mar 2022 10:45:25 -0400
+Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00B055BD15;
+        Wed, 30 Mar 2022 07:43:34 -0700 (PDT)
+Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id A3A9216A6;
+        Wed, 30 Mar 2022 17:43:35 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru A3A9216A6
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 30 Mar 2022 17:43:31 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-clk@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/4] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
+Date:   Wed, 30 Mar 2022 17:43:16 +0300
+Message-ID: <20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALzav=c0ccztDULiVMwR4K20iYc0WH53ApeOCorhjKwaMNL5Sg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 02:35:25PM -0700, David Matlack wrote:
-> On Tue, Mar 15, 2022 at 1:52 AM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Fri, Mar 11, 2022 at 12:25:07AM +0000, David Matlack wrote:
-> > > Rename 3 functions:
-> > >
-> > >   kvm_mmu_get_page()   -> kvm_mmu_get_shadow_page()
-> > >   kvm_mmu_alloc_page() -> kvm_mmu_alloc_shadow_page()
-> > >   kvm_mmu_free_page()  -> kvm_mmu_free_shadow_page()
-> > >
-> > > This change makes it clear that these functions deal with shadow pages
-> > > rather than struct pages. Prefer "shadow_page" over the shorter "sp"
-> > > since these are core routines.
-> > >
-> > > Signed-off-by: David Matlack <dmatlack@google.com>
-> >
-> > Acked-by: Peter Xu <peterx@redhat.com>
-> 
-> What's the reason to use Acked-by for this patch but Reviewed-by for others?
+This patchset is an initial one in the series created in the framework
+of my Baikal-T1 PCIe/eDMA-related work:
 
-A weak version of r-b?  I normally don't do the rename when necessary (and
-I'm pretty poor at naming..), in this case I don't have a strong opinion.
-I should have left nothing then it's less confusing. :)
+[1: In-progress v1] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
+Link: https://lore.kernel.org/linux-pci/20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru/
+[2: In-progress v1] PCI: dwc: Various fixes and cleanups
+Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+[3: In-progress v1] PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
+Link: https://lore.kernel.org/linux-pci/20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru/
+[4: In-progress v1] dmaengine: dw-edma: Add RP/EP local DMA controllers support
+Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
+
+Since some of the patches in the later patchsets depend on the
+modifications introduced here, @Bjorn could you please merge this series
+through your PCIe subsystem repo? After getting all the required ack'es of
+course.
+
+Short summary regarding this patchset. A few more modifications are
+introduced here to finally finish the Baikal-T1 CCU unit support up and
+prepare the code before adding the Baikal-T1 PCIe/xGMAC support. First of
+all it turned out I specified wrong DW xGMAC PTP reference clock divider
+in my initial patches. It must be 8, not 10. Secondly I was wrong to add a
+joint xGMAC Ref and PTP clock instead of having them separately defined.
+The SoC manual describes these clocks as separate fixed clock wrappers.
+Finally in order to close the SoC clock/reset support up we need to add
+the DDR and PCIe interfaces reset controls support. It's done in two
+steps. First I've moved the reset-controls-related code into a dedicated
+module. Then the DDR/PCIe reset-control functionality is added.
+
+Link: https://lore.kernel.org/linux-pci/20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Resubmit the series with adding @Philipp to the list of recipients.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: "Krzysztof Wilczyński" <kw@linux.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (4):
+  clk: baikal-t1: Fix invalid xGMAC PTP clock divider
+  clk: baikal-t1: Define shared xGMAC ref/ptp clocks parent
+  clk: baikal-t1: Move reset-controls code into a dedicated module
+  clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+
+ drivers/clk/baikal-t1/Kconfig       |  12 +-
+ drivers/clk/baikal-t1/Makefile      |   1 +
+ drivers/clk/baikal-t1/ccu-div.c     |   1 +
+ drivers/clk/baikal-t1/ccu-div.h     |   6 +
+ drivers/clk/baikal-t1/ccu-rst.c     | 373 ++++++++++++++++++++++++++++
+ drivers/clk/baikal-t1/ccu-rst.h     |  64 +++++
+ drivers/clk/baikal-t1/clk-ccu-div.c | 102 ++------
+ include/dt-bindings/reset/bt1-ccu.h |   9 +
+ 8 files changed, 482 insertions(+), 86 deletions(-)
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
 
 -- 
-Peter Xu
+2.35.1
 
