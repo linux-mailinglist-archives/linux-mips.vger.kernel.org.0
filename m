@@ -2,55 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2159D4ECE2B
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Mar 2022 22:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D25C4ED2DD
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Mar 2022 06:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350988AbiC3UfX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Mar 2022 16:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S229694AbiCaEZB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 31 Mar 2022 00:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350993AbiC3UfW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Mar 2022 16:35:22 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8322C558C
-        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 13:33:31 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bq8so29909566ejb.10
-        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 13:33:31 -0700 (PDT)
+        with ESMTP id S229539AbiCaEYc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Mar 2022 00:24:32 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D831A18460C
+        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 21:13:40 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id p15so45440351ejc.7
+        for <linux-mips@vger.kernel.org>; Wed, 30 Mar 2022 21:13:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=eT9vDzjHW/FfFjL/ybLsrFbYukyfSiHXua+06jvkaok=;
-        b=SdK00kOdGLMNpNRGXAKju/gX1QDNAxsedO8Be9oSjbeBiwJWwYWruJXp8dtzLVugP3
-         vuYNQaCh0a4Rq/W1vHeldoAF3IxsvczavxPaduQY4P8bN3ABDk6BCcpde6cMMRO5CW5o
-         M6uB0iP9zpzxHLJSgaOXRS/lxEZyFbDsNKhvtp20e0wh2fBGfRbzQCk94jQjACvz7svJ
-         T6i3RTcWzrCg7ur65S7teGHwdVOM4AYnp0E91DhTZVIyoTI5N8WNy2DyOOuZCq8xrPdy
-         RcyWIZM54Wd9HRIjCmfnsCFk7OXzRxHhwv6JzXooB9ZnxkGv/jBnauBsQouqdFstugTL
-         mURA==
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=CCOr5pk3vSMtiJOP1fX/1K0uEtoSN1aksCDMiPaKahQ=;
+        b=Ueg4ZkwYkJ0tkpNw0LKEAblt0x6p54CxjXVs7FoB5sjQlgLEZdpQXRaSeaJeimFQMb
+         TrrbumdtViEGGH9ENKDeUK5QBBJB/ykDTDPjeVFgi3X1aeD0zzzplY/ZqJlcBTyimvXS
+         8hZ/HDwfoUk53eHJIaggw0+bt+N6160iiGOuOFb6waekJgSvIl4nihR9VJMEFi0JDYwy
+         qhu/RloE7TzbtZzmnuc2rY4nnFVNoskhMtDfyPDglQik0UEBp2s1ErOYV/10Lk9qDW02
+         Tbz53R1Y5SOPb0HkKzthjQf0J6gDcGHSyXoIqkf5eo7ox/QbfXcENHcQZLclzMFMSQrp
+         n2Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=eT9vDzjHW/FfFjL/ybLsrFbYukyfSiHXua+06jvkaok=;
-        b=m+RFUzemMpq3BSEgcMJOOYUgX2WJHaD5N81iOT6n+HVrKm/k8TfyEeJ9TSD8EuAOyq
-         IqM6kTpu+nJ847/HJblbSZjZcZc/yTMSvV3sl8aFKPPUWcCkx+P1zorAC9CjmVj/fUWo
-         Hlk1a8ohwv61lXKBzHLFSxnMa3pje+WFnp0PCJvdTtO6q1VQWNPT7N+mMLr2U7o0fzE/
-         +3C2cMAMgIb4ZWeKYYV0yGrZ52NvM8mpX0vvMvoD4N5hwUou2PKUWgZmOiUe6WMHOegj
-         DgkrrSDUf0/RbyZn/DtytRQH93o0RVxAfbxlywAYh+P7rZoZu9vIH158quOP8qOYqxVT
-         mydg==
-X-Gm-Message-State: AOAM530greF0URCghrTifCqA62JrSeYvpzX1vhRQzCddxTatseLWPB6z
-        W6vdmWUeBh/IO5N2SJzuXYbj9KJ2jiL4jlMaZJ8HrjrOpu+JsUWU
-X-Google-Smtp-Source: ABdhPJxQu+j0gzlsyl6qstIUfJJpxFEVJeyEgyZ7fwX3PXwXznQbMiWdMgLheok+0hjEE2jW6cOZ2+h35MGNtYrdr1k=
-X-Received: by 2002:a17:907:c0c:b0:6d1:8c46:6415 with SMTP id
- ga12-20020a1709070c0c00b006d18c466415mr1609240ejc.326.1648672409944; Wed, 30
- Mar 2022 13:33:29 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=CCOr5pk3vSMtiJOP1fX/1K0uEtoSN1aksCDMiPaKahQ=;
+        b=tBJ9qNy/FyHSheM0usxRRf60bdCzhyVV3/MRtGXACHrN/gdzf3xIGmS4twvp7KTXdh
+         Oqf71ZnS1N0UH4HTsUO7FDc/aBbFiuBhWfjvDtl5t60/IVwIH/n7bg/Ds1Ow/RQmy2Mk
+         QjU8VdDhxmLSR5Jz87AvmS9M7yiJBs0iCsM1wDidgS77eGgJ5vKp7Lg2FQxBbGqRrxH4
+         BY6tS4Q100CaS5ZmAdOBOLaOcVj2zcoWb81Upj6r57rA4+1Dr/MI+Tr9yXbbygVYzxgO
+         t+2t61B4113khE7guNfVSS+CYLzV1vNGq5MFtN7bP5kMpJ2ZG9GiRUWKBT49Qo0vUy09
+         6h0g==
+X-Gm-Message-State: AOAM530v7h0O4SAdhpXo0AjlTWBuc7rSXcoYNnpUpWR3G3lQ3cj3shs5
+        Cys9GbKnGA2a/zlxrkYw5b2QjPCqh9q5WltdpSg6DUO3NhoaurcU
+X-Google-Smtp-Source: ABdhPJy2HAc7r5WCokNQxGBfrf1K6XYqiIYpMJApgGKKmbQDWHng8FbzYO0QPdf8zefVZRLkP7rnMp+pr0YL/wFmhB8=
+X-Received: by 2002:a05:6402:1347:b0:41b:79bf:cf12 with SMTP id
+ y7-20020a056402134700b0041b79bfcf12mr1739801edw.195.1648695521732; Wed, 30
+ Mar 2022 19:58:41 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 30 Mar 2022 21:33:25 +0100
-Message-ID: <CAHpNFcPdVQ3N+SH6uJM5mhDcT-D_x1=8HJzTuEOjNrLpicWHHw@mail.gmail.com>
-Subject: #CryptoFASTintFL Polynomial ROOFLINING : In terms of Entropy pool Int
- & Timer collections Polynomial is a Cryptologic_Functiontion & should be A :
- Rooflined B : Streamlined & C : In Crypto_hash_function.h https://lkml.org/lkml/2022/3/30/1313
-To:     submissions@vialicensing.com
+Date:   Thu, 31 Mar 2022 03:58:38 +0100
+Message-ID: <CAHpNFcMKUp_b7bv-OE5d9_x-vUL-hSudQ1REstTHC27vMFs0Ew@mail.gmail.com>
+Subject: RISCV: implement cache-management : RISC Instructions : What do they
+ all mean ? Todays manuel BLTU : https://passlab.github.io/CSE564/notes/lecture08_RISCV_Impl.pdf
+To:     yan@oakland.edu
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -60,6 +62,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
+
+RISC Instructions : What do they all mean ? Todays manuel BLTU
+
+signed magnitude (BLT/BGE) or unsigned magnitude (BLTU/ BGEU) =E2=80=A2 12-=
+bit
+immediate encodes branch target address as a signed o=EF=AC=80set from PC, =
+in
+units of 16-bits (i.e., shiR leR by 1 then add to
+
+https://passlab.github.io/CSE564/notes/lecture08_RISCV_Impl.pdf
+
+#CryptoFASTintFL Polynomial ROOFLINING : In terms of Entropy pool Int
+& Timer collections Polynomial is a Cryptologic_Functiontion & should
+be A : Rooflined B : Streamlined & C : In Crypto_hash_function.h
+https://lkml.org/lkml/2022/3/30/1313
+
+https://lkml.org/lkml/2022/3/30/1565
+
+Rupert S
+*****
 
 Polynomial ROOFLINING : #CryptoFASTintFL
 
@@ -71,7 +93,8 @@ https://lkml.org/lkml/2022/3/30/1313
 
 **Reference**
 
-Multi Bit load operations for bitmap,Texture & Other tasks +ON+HighLowOP (c)RS
+Multi Bit load operations for bitmap,Texture & Other tasks +ON+HighLowOP (c=
+)RS
 May take higher or lower bit depth & precisions: Rupert S 2021
 
 MultiBit Serial & Parallel execution conversion inline of N*Bit -+
@@ -111,10 +134,11 @@ V3: Result
 NBit: Bit Depth
 
 4x16Bit operations in the same cycle >
-If Value = 16Bit = Store
-If Value = V3=Bit = Store * NBit
+If Value =3D 16Bit =3D Store
+If Value =3D V3=3DBit =3D Store * NBit
 
-Stored 128Bit RAM or if remainder = less > 4x16Bit -1-1-1 ; 16Bit Value Store
+Stored 128Bit RAM or if remainder =3D less > 4x16Bit -1-1-1 ; 16Bit Value S=
+tore
 
 *
 
@@ -125,7 +149,7 @@ https://pollinate.n-helix.com/
 (Rn1 *<>/ Rn2 *<>/ Rn3)
 
 -+
-VAR(+-) Var = Rn1 +- Rn8
+VAR(+-) Var =3D Rn1 +- Rn8
 
 (Rn5 *<>/ Rn6 *<>/ Rn7)
 
