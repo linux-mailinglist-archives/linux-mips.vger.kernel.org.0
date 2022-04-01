@@ -2,44 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21F04EEC7F
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 13:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A184EF158
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 16:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345578AbiDALrD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Apr 2022 07:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S1346694AbiDAOhX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Apr 2022 10:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345577AbiDALrB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 07:47:01 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4F89EEA72;
-        Fri,  1 Apr 2022 04:45:11 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1naFiG-0000xJ-00; Fri, 01 Apr 2022 13:45:08 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id B9B39C4DEF; Fri,  1 Apr 2022 12:03:09 +0200 (CEST)
-Date:   Fri, 1 Apr 2022 12:03:09 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] MIPS: crypto: Fix CRC32 code
-Message-ID: <20220401100309.GA6670@alpha.franken.de>
-References: <20220331164200.177015-1-paul@crapouillou.net>
+        with ESMTP id S1348220AbiDAOdu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 10:33:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A97A1EB83B;
+        Fri,  1 Apr 2022 07:31:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECE8961CD6;
+        Fri,  1 Apr 2022 14:31:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF67C36AE7;
+        Fri,  1 Apr 2022 14:31:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648823479;
+        bh=a3sH1FXWEsqzAR7EqetbE0Xg8y7tDvMLkEatyCxM4Ik=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tGYKVH1efYuLhUNqOSE/nKdXNq6LfpTjISDkLrh0+JgR8JTOeMY3HjoYaJpuGZTby
+         scG+oc91Bd40ngMPIpHEyzN5WvseBLaSGl/wx4fxoKEYA4806lJQ4qlDU/npsgPlvy
+         ycqPUeUEBfJta4riL+YmgAFWie7sV9XkGSEbVtXd5JsYvBis8cEpHq4IxYitNpD8Ej
+         00EYGBs6g4HsHSwS9U6WCzBHUBpiKSY4TavKFr6AM2J9Fu0ICJ1UvF5RXTejCl8CmB
+         rE8J5Bj9dlcYILFP/zcU+1AfVyrD5PAOI8JJHnayGwS7PIz0CNYR+JHmX2A8iQHnlu
+         nMAWaEH2gVg0w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hangyu Hua <hbh25y@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, john@phrozen.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 110/149] mips: ralink: fix a refcount leak in ill_acc_of_setup()
+Date:   Fri,  1 Apr 2022 10:24:57 -0400
+Message-Id: <20220401142536.1948161-110-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220401142536.1948161-1-sashal@kernel.org>
+References: <20220401142536.1948161-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331164200.177015-1-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,29 +57,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 05:42:00PM +0100, Paul Cercueil wrote:
-> Commit 67512a8cf5a7 ("MIPS: Avoid macro redefinitions") changed how the
-> MIPS register macros were defined, in order to allow the code to compile
-> under LLVM/Clang.
-> 
-> The MIPS CRC32 code however wasn't updated accordingly, causing a build
-> bug when using a MIPS32r6 toolchain without CRC support.
-> 
-> Update the CRC32 code to use the macros correctly, to fix the build
-> failures.
-> 
-> Fixes: 67512a8cf5a7 ("MIPS: Avoid macro redefinitions")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  arch/mips/crypto/crc32-mips.c | 46 ++++++++++++++++++++---------------
->  1 file changed, 26 insertions(+), 20 deletions(-)
+From: Hangyu Hua <hbh25y@gmail.com>
 
-applied to mips-next.
+[ Upstream commit 4a0a1436053b17e50b7c88858fb0824326641793 ]
 
-Thomas.
+of_node_put(np) needs to be called when pdev == NULL.
 
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/ralink/ill_acc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/mips/ralink/ill_acc.c b/arch/mips/ralink/ill_acc.c
+index 115a69fc20ca..f395ae218470 100644
+--- a/arch/mips/ralink/ill_acc.c
++++ b/arch/mips/ralink/ill_acc.c
+@@ -61,6 +61,7 @@ static int __init ill_acc_of_setup(void)
+ 	pdev = of_find_device_by_node(np);
+ 	if (!pdev) {
+ 		pr_err("%pOFn: failed to lookup pdev\n", np);
++		of_node_put(np);
+ 		return -EINVAL;
+ 	}
+ 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.34.1
+
