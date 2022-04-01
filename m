@@ -2,56 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA56E4EF947
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 19:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916144EF94B
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 19:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350680AbiDAR6J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Apr 2022 13:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S1350684AbiDAR6L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Apr 2022 13:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350673AbiDAR6I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 13:58:08 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C63A215469
-        for <linux-mips@vger.kernel.org>; Fri,  1 Apr 2022 10:56:18 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id u8-20020a170903124800b0015195a5826cso1818384plh.4
-        for <linux-mips@vger.kernel.org>; Fri, 01 Apr 2022 10:56:18 -0700 (PDT)
+        with ESMTP id S1350693AbiDAR6J (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 13:58:09 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0641C4E2A
+        for <linux-mips@vger.kernel.org>; Fri,  1 Apr 2022 10:56:19 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id q13-20020a638c4d000000b003821725ad66so1986223pgn.23
+        for <linux-mips@vger.kernel.org>; Fri, 01 Apr 2022 10:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=9irR3brB5K4k6kskWzWAbqG40+EEbVRaPIvCDPrQqZc=;
-        b=TTHccN07Kc2+dKX/CQM4O229WOCMUEIEZjrDqAkCum2pWRxXyep/RtD21aVHTzWJ0u
-         5Ur/7qOrscd0hKtzG7s1EiErU9Vn5N7nHtLcCGMtzTi3YMoFLmHW94dw6Gq8G0YshxYY
-         MXs/f+M/+N5rlpf0p71rU9X8qWgGkVAjsH0i1IRyHKq8aV01lhAROqIUxZdIBEdQ6Fn7
-         o/5H/YoPwviW5zcmK5mwsLjoCqpLLJwdhb4vCxGtiGEedukX7RGb51wslmYlEJfKZvrb
-         xua3zBzP8zwd6jU0yexNhL/1HTixfROGNf25yDDwoHh2EgdS6uv8nRoFcKEn2F6VBDv0
-         gMBw==
+        bh=W+wK5vxPR/QvP8f06+LL6qG83douEveyqaG4cfdgLaY=;
+        b=UlIX32ER5ckYEDHWAIcjYr1jnfgt+txi+GTB7aQ575YuSQEhVBgxyCUID6hNAgokFE
+         i76MKrGhcCti1IAqqtc8kmHq8LqNd7RHGUdhQj5N55jui7o41Er8H+t8k78BKld1GGlF
+         1VOlV5WFmwGA6KgQUp2Zp1tMkKdYXozagaTpFsbpYSaFotNIcx7eaEFtAXC+ZnpCROYq
+         ABsmzYy5wYQds//B5QF75M7rFYH+fy/3noPiqdzNNeN7P/vT017vKaxWsaHrKZktu0mv
+         qnRJyh8yDxMicnr56dYAjntxpQ2hWjBPYb0U8saUvcnyua7EEZ2oOdLzLWIpXm5jfysP
+         Is+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=9irR3brB5K4k6kskWzWAbqG40+EEbVRaPIvCDPrQqZc=;
-        b=lXBwLTN8BsyjnPp7wNZJMs/BJxtmb75jXfr1roWRRhvIL88jWf6Aq/c0Up3mDCDylZ
-         sKhrWgssSFTeKgzGmkBPWCbdjwKs1XZmO8lv7y9hJ7O07J/qMYsNksUZmiUMfMDKWeeE
-         sgZ65SsqMPHQPkIxCt244TDf+WrvSiHXttGA4AfdroDUI+PVmuIk3sMED9B6RILfi5Zl
-         qjf3Rcw21YCQwlx3d5l64B2a8TMZAnMvCbPJ+rk8U85i/iK67OO8SyynpPXN3Tv5Ua+X
-         Af9hFd8BgZ0xkCklQ1JLH7g1uz8sInNgt+TguHorNJ5jpKUaoxrOJUd8eWJgMTBDdK/a
-         9fbg==
-X-Gm-Message-State: AOAM533JSGgHtn9N5X2mqivzBqnvnTHFQQ3Zbel+joF35fF7jFryBIff
-        O0hQgxd1kH3Pwrr7FPqrnb00WuHaxIbJaQ==
-X-Google-Smtp-Source: ABdhPJxg+/Q/17NTgwHdrbJN0RELEFI4TA91YpU0RNqlmFBBNYRSy1Zgxz7Lu9EEyB4Z0QtTYObcl0Q0cVZDDA==
+        bh=W+wK5vxPR/QvP8f06+LL6qG83douEveyqaG4cfdgLaY=;
+        b=abohYD5rp5vG0rEYhBDJNRcK1NQTaEaNtTDywqUBNad1lv5KxbVdP58RJlbmDzZ+Y8
+         lvsNZxFt2d+99SiSRoHl94qj7MfO+T5n/4wHQY7YZ3TUg0y2YabPK6k9lqR+0ch1AzgE
+         xjqM6hJNfRnAd22epyEyB4V7hm6WTN8PRSZPTDonZC6G0Kkk74MEU4aohPOogHFrFBG7
+         eeqzzHVqzkf+6sn3qk/9PUwtFtnNFcqqgH8eB4vR143szrHJCLkh5LRDh6tRsGjDmFNq
+         wdk0jGTdBdqoilnSRedUudKASpm2VoLMEh1pROll5GHmUM7V+SSvVf153S64XUDeWsgF
+         VCNQ==
+X-Gm-Message-State: AOAM532L0Q8BYXi5H/oda4j07rmAro9QsiWhNY1F+S3m4ABymBTY00bf
+        kqO32ds9srVRhZVheyC8UbFNCbjKp6h3Tg==
+X-Google-Smtp-Source: ABdhPJxYuSmgflitVWDuHEX61iCJV7QQcSTVJ1SS0S3w86E/w3yONDjqYny6QBsz2LrR6va1k+Ws4RIi9FnL+w==
 X-Received: from dmatlack-heavy.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:19cd])
- (user=dmatlack job=sendgmr) by 2002:a17:90b:118c:b0:1ca:307:9b50 with SMTP id
- gk12-20020a17090b118c00b001ca03079b50mr13195653pjb.26.1648835777771; Fri, 01
- Apr 2022 10:56:17 -0700 (PDT)
-Date:   Fri,  1 Apr 2022 17:55:41 +0000
+ (user=dmatlack job=sendgmr) by 2002:a17:90b:4c84:b0:1c7:7769:3cc7 with SMTP
+ id my4-20020a17090b4c8400b001c777693cc7mr13054532pjb.73.1648835779185; Fri,
+ 01 Apr 2022 10:56:19 -0700 (PDT)
+Date:   Fri,  1 Apr 2022 17:55:42 +0000
 In-Reply-To: <20220401175554.1931568-1-dmatlack@google.com>
-Message-Id: <20220401175554.1931568-11-dmatlack@google.com>
+Message-Id: <20220401175554.1931568-12-dmatlack@google.com>
 Mime-Version: 1.0
 References: <20220401175554.1931568-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v3 10/23] KVM: x86/mmu: Use common code to free kvm_mmu_page structs
+Subject: [PATCH v3 11/23] KVM: x86/mmu: Use common code to allocate shadow
+ pages from vCPU caches
 From:   David Matlack <dmatlack@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
@@ -84,74 +85,65 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use a common function to free kvm_mmu_page structs in the TDP MMU and
-the shadow MMU. This reduces the amount of duplicate code and is needed
-in subsequent commits that allocate and free kvm_mmu_pages for eager
-page splitting. Keep tdp_mmu_free_sp() as a wrapper to mirror
-tdp_mmu_alloc_sp().
+Now that allocating shadow pages is isolated to a helper function, use
+it in the TDP MMU as well. Keep tdp_mmu_alloc_sp() to avoid hard-coding
+direct=true in multiple places.
 
 No functional change intended.
 
 Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c          | 8 ++++----
- arch/x86/kvm/mmu/mmu_internal.h | 2 ++
- arch/x86/kvm/mmu/tdp_mmu.c      | 3 +--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ arch/x86/kvm/mmu/mmu.c          | 3 +--
+ arch/x86/kvm/mmu/mmu_internal.h | 1 +
+ arch/x86/kvm/mmu/tdp_mmu.c      | 8 +-------
+ 3 files changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 657c2a906c12..27996fdb0e7e 100644
+index 27996fdb0e7e..37385835c399 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1669,11 +1669,8 @@ static inline void kvm_mod_used_mmu_pages(struct kvm *kvm, long nr)
- 	percpu_counter_add(&kvm_total_used_mmu_pages, nr);
+@@ -1704,8 +1704,7 @@ static void drop_parent_pte(struct kvm_mmu_page *sp,
+ 	mmu_spte_clear_no_track(parent_pte);
  }
  
--static void kvm_mmu_free_shadow_page(struct kvm_mmu_page *sp)
-+void kvm_mmu_free_shadow_page(struct kvm_mmu_page *sp)
+-static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm_vcpu *vcpu,
+-						      bool direct)
++struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm_vcpu *vcpu, bool direct)
  {
--	MMU_WARN_ON(!is_empty_shadow_page(sp->spt));
--	hlist_del(&sp->hash_link);
--	list_del(&sp->link);
- 	free_page((unsigned long)sp->spt);
- 	if (!sp->role.direct)
- 		free_page((unsigned long)sp->gfns);
-@@ -2518,6 +2515,9 @@ static void kvm_mmu_commit_zap_page(struct kvm *kvm,
+ 	struct kvm_mmu_page *sp;
  
- 	list_for_each_entry_safe(sp, nsp, invalid_list, link) {
- 		WARN_ON(!sp->role.invalid || sp->root_count);
-+		MMU_WARN_ON(!is_empty_shadow_page(sp->spt));
-+		hlist_del(&sp->hash_link);
-+		list_del(&sp->link);
- 		kvm_mmu_free_shadow_page(sp);
- 	}
- }
 diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-index a0648e7ddd33..5f91e4d07a95 100644
+index 5f91e4d07a95..d4e2de5f2a6d 100644
 --- a/arch/x86/kvm/mmu/mmu_internal.h
 +++ b/arch/x86/kvm/mmu/mmu_internal.h
-@@ -173,4 +173,6 @@ void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+@@ -173,6 +173,7 @@ void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
  
  struct kvm_mmu_page *kvm_mmu_alloc_direct_sp_for_split(bool locked);
  
-+void kvm_mmu_free_shadow_page(struct kvm_mmu_page *sp);
-+
++struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm_vcpu *vcpu, bool direct);
+ void kvm_mmu_free_shadow_page(struct kvm_mmu_page *sp);
+ 
  #endif /* __KVM_X86_MMU_INTERNAL_H */
 diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 34e581bcaaf6..8b00c868405b 100644
+index 8b00c868405b..f6201b89045b 100644
 --- a/arch/x86/kvm/mmu/tdp_mmu.c
 +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -64,8 +64,7 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
+@@ -269,13 +269,7 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
  
- static void tdp_mmu_free_sp(struct kvm_mmu_page *sp)
+ static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
  {
--	free_page((unsigned long)sp->spt);
--	kmem_cache_free(mmu_page_header_cache, sp);
-+	kvm_mmu_free_shadow_page(sp);
+-	struct kvm_mmu_page *sp;
+-
+-	sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
+-	sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
+-	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
+-
+-	return sp;
++	return kvm_mmu_alloc_shadow_page(vcpu, true);
  }
  
- /*
+ static void tdp_mmu_init_sp(struct kvm_mmu_page *sp, tdp_ptep_t sptep,
 -- 
 2.35.1.1094.g7c7d902a7c-goog
 
