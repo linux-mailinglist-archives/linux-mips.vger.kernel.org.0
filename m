@@ -2,46 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5584EF5B0
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 17:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358194EF5A0
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 17:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348603AbiDAPPp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Apr 2022 11:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
+        id S244589AbiDAPP1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Apr 2022 11:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349532AbiDAO4u (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 10:56:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E436104A4B;
-        Fri,  1 Apr 2022 07:44:13 -0700 (PDT)
+        with ESMTP id S1349623AbiDAO5F (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 10:57:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F11014F126;
+        Fri,  1 Apr 2022 07:44:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F418B8240E;
-        Fri,  1 Apr 2022 14:44:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A43BC3410F;
-        Fri,  1 Apr 2022 14:44:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB2D360AC0;
+        Fri,  1 Apr 2022 14:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50EE0C34111;
+        Fri,  1 Apr 2022 14:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648824251;
-        bh=bBgfaiHq9DDlp4RICw1qrqSBrX1tPZhB8fDd4fcZzNk=;
+        s=k20201202; t=1648824273;
+        bh=PZLAQEnn+wuNpSxOpC32AyHoR6yGvdJbQMEmEzy6G0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bj6t0VqtclwqpO/CZAeo0GVuLkn0IgxYbjalvKrJGJ+NmCMvlfR0PLBJOOeV+K9en
-         yj5kFCbPh03AkkLPeINdfCH9kNAazpwtMSD2ciXR0Wv5PKawyK/VwLCW5FXECZBUE3
-         CWzNhAF5BoEcVR79hCcH3CZuTR682qu1xsIfmXHgqLLqPo664MNfTD+gm6N2GBdFo5
-         xPrd3EHn4CXuPVUBGzMSxI1rgqxySJi4T2QJBfJXzf0mK1olRJu6v6/wGvEwHpRJ5B
-         BEH9nQ6eUMvMTtuZ+Ab4jpgrlnwehs/gcIGYycTrq75PVp0Fj/+f0GLLWMI9NyyNPy
-         I+i02U6cN1/1g==
+        b=u0GAGD//mAatliJqmvIMcE1M3DX4Ujapvw1OIW1lwxvaby0vYrO5rUQ6HDzkH9w/f
+         /2PtEs5v87KZSmtT50ptpn+C5lbMcIgreSNcLAZSuUiz505aRs0X007Itjv68MR6Ai
+         /02n1aMuoA5WEP1qhwPQKRpA7zny4o5kZPL4qO99S5OTbH/KLGQ1QEJ4c09KojSp0l
+         3lctK/N8YJsX578nM6uGixICA33Ijh+FRyskBXy//4cNWnw1l6oQ3xIp//c9N0gYK+
+         jpP7ibMjfp4KtOindYRgZhjAzKFmn/OSoSQKh73GwRKxGCofKhfn/AzpKjzi34zeh6
+         CQsr3F/z32/8A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexander Lobakin <alobakin@pm.me>,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Paul Cercueil <paul@crapouillou.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, dbueso@suse.de,
-        liam.howlett@oracle.com, david@redhat.com,
-        akpm@linux-foundation.org, ebiederm@xmission.com,
-        f.fainelli@gmail.com, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 50/65] MIPS: fix fortify panic when copying asm exception handlers
-Date:   Fri,  1 Apr 2022 10:41:51 -0400
-Message-Id: <20220401144206.1953700-50-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
+        krzk+dt@kernel.org, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 60/65] MIPS: ingenic: correct unit node address
+Date:   Fri,  1 Apr 2022 10:42:01 -0400
+Message-Id: <20220401144206.1953700-60-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220401144206.1953700-1-sashal@kernel.org>
 References: <20220401144206.1953700-1-sashal@kernel.org>
@@ -59,97 +59,35 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Alexander Lobakin <alobakin@pm.me>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit d17b66417308996e7e64b270a3c7f3c1fbd4cfc8 ]
+[ Upstream commit 8931ddd8d6a55fcefb20f44a38ba42bb746f0b62 ]
 
-With KCFLAGS="-O3", I was able to trigger a fortify-source
-memcpy() overflow panic on set_vi_srs_handler().
-Although O3 level is not supported in the mainline, under some
-conditions that may've happened with any optimization settings,
-it's just a matter of inlining luck. The panic itself is correct,
-more precisely, 50/50 false-positive and not at the same time.
-From the one side, no real overflow happens. Exception handler
-defined in asm just gets copied to some reserved places in the
-memory.
-But the reason behind is that C code refers to that exception
-handler declares it as `char`, i.e. something of 1 byte length.
-It's obvious that the asm function itself is way more than 1 byte,
-so fortify logics thought we are going to past the symbol declared.
-The standard way to refer to asm symbols from C code which is not
-supposed to be called from C is to declare them as
-`extern const u8[]`. This is fully correct from any point of view,
-as any code itself is just a bunch of bytes (including 0 as it is
-for syms like _stext/_etext/etc.), and the exact size is not known
-at the moment of compilation.
-Adjust the type of the except_vec_vi_*() and related variables.
-Make set_handler() take `const` as a second argument to avoid
-cast-away warnings and give a little more room for optimization.
+Unit node addresses should not have leading 0x:
 
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+  Warning (unit_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should not have leading "0x"
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/setup.h |  2 +-
- arch/mips/kernel/traps.c      | 22 +++++++++++-----------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/setup.h b/arch/mips/include/asm/setup.h
-index bb36a400203d..8c56b862fd9c 100644
---- a/arch/mips/include/asm/setup.h
-+++ b/arch/mips/include/asm/setup.h
-@@ -16,7 +16,7 @@ static inline void setup_8250_early_printk_port(unsigned long base,
- 	unsigned int reg_shift, unsigned int timeout) {}
- #endif
+diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+index dfb5a7e1bb21..830e5dd3550e 100644
+--- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+@@ -429,7 +429,7 @@ efuse: efuse@d0 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
  
--extern void set_handler(unsigned long offset, void *addr, unsigned long len);
-+void set_handler(unsigned long offset, const void *addr, unsigned long len);
- extern void set_uncached_handler(unsigned long offset, void *addr, unsigned long len);
- 
- typedef void (*vi_handler_t)(void);
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index e0352958e2f7..b1fe4518bd22 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -2097,19 +2097,19 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
- 		 * If no shadow set is selected then use the default handler
- 		 * that does normal register saving and standard interrupt exit
- 		 */
--		extern char except_vec_vi, except_vec_vi_lui;
--		extern char except_vec_vi_ori, except_vec_vi_end;
--		extern char rollback_except_vec_vi;
--		char *vec_start = using_rollback_handler() ?
--			&rollback_except_vec_vi : &except_vec_vi;
-+		extern const u8 except_vec_vi[], except_vec_vi_lui[];
-+		extern const u8 except_vec_vi_ori[], except_vec_vi_end[];
-+		extern const u8 rollback_except_vec_vi[];
-+		const u8 *vec_start = using_rollback_handler() ?
-+				      rollback_except_vec_vi : except_vec_vi;
- #if defined(CONFIG_CPU_MICROMIPS) || defined(CONFIG_CPU_BIG_ENDIAN)
--		const int lui_offset = &except_vec_vi_lui - vec_start + 2;
--		const int ori_offset = &except_vec_vi_ori - vec_start + 2;
-+		const int lui_offset = except_vec_vi_lui - vec_start + 2;
-+		const int ori_offset = except_vec_vi_ori - vec_start + 2;
- #else
--		const int lui_offset = &except_vec_vi_lui - vec_start;
--		const int ori_offset = &except_vec_vi_ori - vec_start;
-+		const int lui_offset = except_vec_vi_lui - vec_start;
-+		const int ori_offset = except_vec_vi_ori - vec_start;
- #endif
--		const int handler_len = &except_vec_vi_end - vec_start;
-+		const int handler_len = except_vec_vi_end - vec_start;
- 
- 		if (handler_len > VECTORSPACING) {
- 			/*
-@@ -2317,7 +2317,7 @@ void per_cpu_trap_init(bool is_boot_cpu)
- }
- 
- /* Install CPU exception handler */
--void set_handler(unsigned long offset, void *addr, unsigned long size)
-+void set_handler(unsigned long offset, const void *addr, unsigned long size)
- {
- #ifdef CONFIG_CPU_MICROMIPS
- 	memcpy((void *)(ebase + offset), ((unsigned char *)addr - 1), size);
+-			eth0_addr: eth-mac-addr@0x22 {
++			eth0_addr: eth-mac-addr@22 {
+ 				reg = <0x22 0x6>;
+ 			};
+ 		};
 -- 
 2.34.1
 
