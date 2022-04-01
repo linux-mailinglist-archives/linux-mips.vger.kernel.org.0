@@ -2,88 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DCA4EEA20
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 11:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E732A4EEACE
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 11:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344346AbiDAJLx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Apr 2022 05:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S1344839AbiDAJ7g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Apr 2022 05:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237887AbiDAJLx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 05:11:53 -0400
-Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D7C198EE3;
-        Fri,  1 Apr 2022 02:10:01 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 3F4EA20B0ADF
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v1] MIPS: ip22-gio: Add check for the return value of
- kzalloc()
-To:     unSimple <unsimple1993@163.com>
-CC:     <tsbogend@alpha.franken.de>, <linux-kernel@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <ralf@linux-mips.org>
-References: <1648454654-27200-1-git-send-email-unSimple1993@163.com>
- <6dd8bcf0-20a1-0bab-b48e-ec1bac5c15f0@omp.ru>
- <16aa9238.4bf6.17fd8fe37ad.Coremail.unsimple1993@163.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <4eb43887-44a4-4693-8488-4847d80b6bd8@omp.ru>
-Date:   Fri, 1 Apr 2022 12:09:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S1344833AbiDAJ7f (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 05:59:35 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212A926C557
+        for <linux-mips@vger.kernel.org>; Fri,  1 Apr 2022 02:57:45 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id k23so1288268ejd.3
+        for <linux-mips@vger.kernel.org>; Fri, 01 Apr 2022 02:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=ME1P1OVaPsxsLJKBK1FIyPVS66/NXOmvGf0UviNhLbo=;
+        b=cZtR0y8jMeMXwv5FoLYkHYt58MPIIrlf6/UGFp/l98ZgRdNjtji5SBaNs+fpKo39k1
+         nyqzkGOcThBJGJwCSNKd/3NAOb/h4Cp0m0hxewBCuCN9cYvfJksAWnQoqKAhgtJkbwAX
+         8efBlin0lI6meOfWc6AdaekWj2iiTwYOaRz0Kgz0nfsoRYcIR6qPLFgsQ/yM4qIoS0QQ
+         YuB2NE7RLxTHbV1Bc/tkip+G7U3hU+EDdqRLUbSNKAjuB/Jv4JxRqUM4tk0UcJkNtpYv
+         eJVf6eUcWTCiEM8BYe7bRfImPgZ08kFvKqHFHsS/1mNOxv5+Av+mCv8bKASzf6VPYhRx
+         OwmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=ME1P1OVaPsxsLJKBK1FIyPVS66/NXOmvGf0UviNhLbo=;
+        b=Ysuy0bSJ8u4WhSrzvYhtX/6fcCGncD6TTpchrVCM92aZgvZZhcbmBYRugUsfDP/guN
+         gN4SKdlrO9mAUk+ycD/9DNvbQThZ0cOPSx8aFKfyafJ4JwmzPPCECUVpMZpSX9gmrUVF
+         TVLy6oNLUhcHTwPOZEg7Rhu+TLC5kOuv7vukU9UlTqKTE+FK6RBI3vc+sSaVGl+iFVtR
+         4q995753elSB21Qp+wcdrijkyXW1dfriXgOxUNjneDQlBXe9XH7pMVgrP2r6xioo3VRG
+         sZ6KO0mr0Y5cVQ4SMcn3C3/kvsJ3rhZHz3RmyN9fo+GrB0iQAUTeBKZmszLWKZdddsjN
+         zcKg==
+X-Gm-Message-State: AOAM531JM9M8rNttaTu7QQBnFYAQNc+ZsHpBPWJF3GUrYBGApaFdGqay
+        k54R/hdVvVt/YEuV5nY/P7so15CgiuDEugdR5Ik=
+X-Google-Smtp-Source: ABdhPJwFSBf8pUatqD1Z+LtgdQEYw0B3SGfVWaBOFbuaVP42+s4nweKhdbd7IA9cIoJ9FAcgNuFoaupigz6lppEb+vc=
+X-Received: by 2002:a17:907:1b10:b0:6e4:bac5:f080 with SMTP id
+ mp16-20020a1709071b1000b006e4bac5f080mr4426872ejc.24.1648807063596; Fri, 01
+ Apr 2022 02:57:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <16aa9238.4bf6.17fd8fe37ad.Coremail.unsimple1993@163.com>
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Fri, 1 Apr 2022 10:57:42 +0100
+Message-ID: <CAHpNFcPmGicZpXCboh0PWfTsZRqxc-W-qA_cx2+vA+OWb0_A6w@mail.gmail.com>
+Subject: VecSR Firmware update 2022 For immediate implementation in all
+ operating systems, monitors, TV's & equipment such as Mouses, Audio Systems & Webcams
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 3/30/22 7:03 AM, unSimple wrote:
+Date: Fri, Apr 1, 2022 at 9:48 AM
 
-> OK, here is the new version.
+VecSR - Vector Standard Render
 
-   That won't do, your original patch description should be here.
-And it should be a fresh posting with [PATCH v2] in the subject.
+VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
+Consolas & other brilliant fonts : (c)RS
 
-> Signed-off-by: QintaoShen <unSimple1993@163.com>
-> ---
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
 
-   You need to describe what changes between v1 and v2 here...
+OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
+Mode & Desktop Rendering modes
 
->  arch/mips/sgi-ip22/ip22-gio.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/mips/sgi-ip22/ip22-gio.c b/arch/mips/sgi-ip22/ip22-gio.c
-> index dfc52f6..f94f58b 100644
-> --- a/arch/mips/sgi-ip22/ip22-gio.c
-> +++ b/arch/mips/sgi-ip22/ip22-gio.c
-> @@ -363,6 +363,10 @@ static void ip22_check_gio(int slotno, unsigned long addr, int irq)
->  printk(KERN_INFO "GIO: slot %d : %s (id %x)\n",
->         slotno, name, id);
->  gio_dev = kzalloc(sizeof *gio_dev, GFP_KERNEL);
-> +
+Improve Console & TV & BIOS & General Animated Render
 
-   No need for empty line here.
+Vector Display Standards with low relative CPU Weight
+SiMD Polygon Font Method Render
 
-> +if (!gio_dev)
-> +return;
+Default option point scaling (the space) : Metadata Vector Fonts with
+Curl mathematical vector :
 
-   Hm, the tabs were there but they got eaten when I replied.
-Your mail seems to be base64-encoded which I don't think is
-acceptable for patches -- they should be posted as plain text.
+16 Bit : SiMD 1 width
+32 Bit : SiMD Double Width
 
-[...]
+High precision for AVX 32Bit to 256Bit width precision.
 
-MBR, Sergey
+Vectoring with SiMD allows traditional CPU mastered VESA Emulation
+desktops & safe mode to be super fast & displays to conform to VESA
+render standards with little effort & a 1MB Table ROM.
+
+Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+bandwidth transport of and transformation of 3D & 2D graphics & fonts
+into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+
+Display Standards Vector Render : DSVR-SiMD Can and will be directly
+rendered to a Surface for visual element : SfVE-Vec
+
+As such transport of Vectors & transformation onto display (Monitor,
+3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
+
+Directly resolve The total graphics pipeline into high quality output
+or input & allow communication of almost infinite Floating point
+values for all rendered 3D & 2D Elements on a given surface (RAM
+Render Page or Surface)
+
+In high precision that is almost unbeatable & yet consumes many levels
+less RAM & Transport Protocol bandwidth,
+
+Further more can also render Vector 3D & 2D Audio & other elements
+though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
+Harmonic reproduction units for example Yamaha and Casio keyboards.
+
+(c)Rupert S
+
+https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+
+https://science.n-helix.com/2019/06/vulkan-stack.html
+
+https://science.n-helix.com/2019/06/kernel.html
+
+https://science.n-helix.com/2022/03/fsr-focal-length.html
+
+https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
+
+https://bit.ly/VESA_BT
+
+*
+
+*Application of SiMD Polygon Font Method Render
+*3D Render method with Console input DEMO : RS
+
+3D Display access to correct display of fonts at angles in games &
+apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
+font or shape. (c)Rupert S
+
+3rd dimensional access with vector fonts by a simple method:
+
+Render text to virtual screen layer AKA a fully rendered monochrome, 2
+colour or multi colour..
+
+Bitmap/Texture,
+
+Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
+
+Can be higher resolution & we can sub sample with closer view priority...
+
+We then rotate the texture on our output polygon & factor size differential.
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize
+
+Why ? Because rotating a polygon is harder than subtracting or adding
+width, Hight & direction to fully complex polygon Fonts & Polygon
+lines or curves...
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize.
+
+https://science.n-helix.com/2022/04/vecsr.html
