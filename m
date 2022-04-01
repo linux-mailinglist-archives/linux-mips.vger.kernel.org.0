@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806AC4EF93F
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 19:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128704EF944
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 19:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350651AbiDAR6D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Apr 2022 13:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
+        id S1350655AbiDAR6G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Apr 2022 13:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350643AbiDAR6C (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 13:58:02 -0400
+        with ESMTP id S1350671AbiDAR6F (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 13:58:05 -0400
 Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C909C4E2A
-        for <linux-mips@vger.kernel.org>; Fri,  1 Apr 2022 10:56:13 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id om8-20020a17090b3a8800b001c68e7ccd5fso4338607pjb.9
-        for <linux-mips@vger.kernel.org>; Fri, 01 Apr 2022 10:56:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571221834D4
+        for <linux-mips@vger.kernel.org>; Fri,  1 Apr 2022 10:56:15 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id n17-20020a17090ac69100b001c77ebd900fso1923371pjt.8
+        for <linux-mips@vger.kernel.org>; Fri, 01 Apr 2022 10:56:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=T6MU8k6cQbf3TkeoEFiVrn7xHGx6m7+aDUnGVn3gY9A=;
-        b=psRoNjQx06GKBw5vk1GEEdr6zd56BqsU6L5ZB+rOQfu2XH6HJb+EMCsMZX4hnwAonC
-         2qG5EnZHZ6vyxBjGbdz8b1ylt6lv4n/XYVsWPs5pHj7JFPfkrX1V4OyHPShUpqfk7GLA
-         d911moNr53YYCdp3FNox0tSzlA0Fh25LgD83E572TTJFC+Gdm06EViMmGs2KvtC8wZ6W
-         x17XSyEP01m5bqVgtCZ+WxHNdlHXdwqVUZvyOmLgdiN5Hlznx1jD+fC30Tj0tHOgwdXd
-         rQUzG3elXhJ5R145vXnIyE5klI/0eFbeDgab/AtBOOlKGNWRf4G056rfgCyinO9LPkIZ
-         +xCg==
+        bh=iIUi4j5dTF9zBg27X61yXEUlsha95IziaYqw02FJyl4=;
+        b=XUYkEsDRY+yxOCCR/ISvExrk4TUU/9GP5XtZIVgZZDgY9kQP/XNnlk8fvUiSOISjYK
+         R5m/JMOu+EmpXbr04dXRQa3x0NDxA+wEK3Kuz/EnkzaIX58tYbeh5VIO1ePqPEADkcP+
+         Bxr9baz/W/j0udZ76lWfRF8cYFvhRj3MFWoWUBcTG0gE/u6V6q5Pr6lM/mJiJpFcEG/M
+         Ypf+ihXzgburWCxjfnncvi45fUrEjlfc6Kk10teb6t1BFUYa7k9dsG5WHjomwRREcHD9
+         UGOO5aksD6e2p7VRKL8vpkBf9oXsHOu3bl1zFvbHF0S6ZiuWYOv4Gib1FOulsahDO063
+         e0wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=T6MU8k6cQbf3TkeoEFiVrn7xHGx6m7+aDUnGVn3gY9A=;
-        b=qtLMx/ZEPJiGFbqUZYCz2TRzay1HhF5hy/LQvnuhHr+kItWHaz7BPxamGU6gXDzcnE
-         O3RYV9EUZWzVgQt8+rF7Ncjpp5hWGmbmx0g7CKWe+YaBQEmafDkuxIuiOlb+HqhGBOp0
-         nT1+bW5aKc6abfJEYMa08qbRjHYL8qTEnOgCxxPEjNloODfn1xcBcCGwDxcVMbxgxL25
-         xKPJw2eLky4fehAK360OlaRRgeQ5PDyaRbaiONIODVQjULM+2MFRT7+6ZdA5fVub6h3N
-         MKxGKTWuuQezs3wkCH+hL/zUaPif9Xh0yXVRdPxzfoUQvagMHpZA5lND6FTIbX96HY+k
-         zSnw==
-X-Gm-Message-State: AOAM531lQBhYIpGuEIDpbXIdG1VfZKnKUmItuzvvLXpkSAkh+GfMN0Ea
-        bADDCzcRD6e1sMkk8qN9ukXnc0JXjCHr4Q==
-X-Google-Smtp-Source: ABdhPJxpf4Ryvjy4Xf0xw/2qrejO1ASWA3zDiH/Rc6IEicNMwrszz8mQR+qiF4YjulK0xOMtMCMyzDcI70BvKg==
+        bh=iIUi4j5dTF9zBg27X61yXEUlsha95IziaYqw02FJyl4=;
+        b=xud4C7KtKV0VuI7jigPU69y2d6OrXfDmvobipi4bnIQhw7vi8QIQH0oT5BTo6xDOYt
+         ufc+19lnWVNO4fgqLohhWQeZo3pVrWml2OKQH4Vjbf28XWsvKQqW7cz5rWS85W540Rr4
+         S0XK9mG5lm++qOTiIiX1qaBYzDg9/2SyXXpktNW6FRyVdERYGSiClVahiz7aYLNoXJ2u
+         QbU7HTIvrWXBN7xSDc0FXcGDzt0xgi4NAZkd9hOLwp+gmsN/S5Viv7atMmyLKofuiUML
+         EqNqMSWxwAt/QyBFkye9Ei8xJFIGl1C5kF/Nu+897l+zXQO7nDlwy4ZZect527EPXxQI
+         XvYg==
+X-Gm-Message-State: AOAM531qLFapEKYt2J9euxfA03L4CxutyKnaMO70vUAnriNUZolLv1el
+        Kwg92dFKmseLgKHVv4Paw9R8pa3cUJ2llw==
+X-Google-Smtp-Source: ABdhPJzO4HC0kF89hVPwzXPdQHYPWNvD/kUD++1/OnBDK4J5ailVX4fYbPj+olrmsSjzQDC0shWUbcvlHeR7vQ==
 X-Received: from dmatlack-heavy.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:19cd])
- (user=dmatlack job=sendgmr) by 2002:a05:6a00:995:b0:4fb:607d:444c with SMTP
- id u21-20020a056a00099500b004fb607d444cmr12098520pfg.69.1648835772682; Fri,
- 01 Apr 2022 10:56:12 -0700 (PDT)
-Date:   Fri,  1 Apr 2022 17:55:38 +0000
+ (user=dmatlack job=sendgmr) by 2002:a17:90b:e81:b0:1c6:5a9c:5afa with SMTP id
+ fv1-20020a17090b0e8100b001c65a9c5afamr587543pjb.1.1648835774239; Fri, 01 Apr
+ 2022 10:56:14 -0700 (PDT)
+Date:   Fri,  1 Apr 2022 17:55:39 +0000
 In-Reply-To: <20220401175554.1931568-1-dmatlack@google.com>
-Message-Id: <20220401175554.1931568-8-dmatlack@google.com>
+Message-Id: <20220401175554.1931568-9-dmatlack@google.com>
 Mime-Version: 1.0
 References: <20220401175554.1931568-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v3 07/23] KVM: x86/mmu: Separate shadow MMU sp allocation from initialization
+Subject: [PATCH v3 08/23] KVM: x86/mmu: Link spt to sp during allocation
 From:   David Matlack <dmatlack@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
@@ -84,93 +84,55 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Separate the code that allocates a new shadow page from the vCPU caches
-from the code that initializes it. This is in preparation for creating
-new shadow pages from VM ioctls for eager page splitting, where we do
-not have access to the vCPU caches.
+Link the shadow page table to the sp (via set_page_private()) during
+allocation rather than initialization. This is a more logical place to
+do it because allocation time is also where we do the reverse link
+(setting sp->spt).
+
+This creates one extra call to set_page_private(), but having multiple
+calls to set_page_private() is unavoidable anyway. We either do
+set_page_private() during allocation, which requires 1 per allocation
+function, or we do it during initialization, which requires 1 per
+initialization function.
 
 No functional change intended.
 
+Suggested-by: Ben Gardon <bgardon@google.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 38 ++++++++++++++++++--------------------
- 1 file changed, 18 insertions(+), 20 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index abfb3e5d1372..421fcbc97f9e 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1716,16 +1716,9 @@ static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm_vcpu *vcpu,
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index b3b6426725d4..17354e55735f 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -274,6 +274,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
+ 
+ 	sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
  	sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
- 	if (!direct)
- 		sp->gfns = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_gfn_array_cache);
-+
- 	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
++	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
  
--	/*
--	 * active_mmu_pages must be a FIFO list, as kvm_zap_obsolete_pages()
--	 * depends on valid pages being added to the head of the list.  See
--	 * comments in kvm_zap_obsolete_pages().
--	 */
--	sp->mmu_valid_gen = vcpu->kvm->arch.mmu_valid_gen;
--	list_add(&sp->link, &vcpu->kvm->arch.active_mmu_pages);
--	kvm_mod_used_mmu_pages(vcpu->kvm, +1);
  	return sp;
  }
- 
-@@ -2123,27 +2116,31 @@ static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm_vcpu *vcpu,
- 	return sp;
- }
- 
--static struct kvm_mmu_page *kvm_mmu_new_shadow_page(struct kvm_vcpu *vcpu,
--						    struct kvm_memory_slot *slot,
--						    gfn_t gfn,
--						    union kvm_mmu_page_role role)
-+static void init_shadow_page(struct kvm *kvm, struct kvm_mmu_page *sp,
-+			     struct kvm_memory_slot *slot, gfn_t gfn,
-+			     union kvm_mmu_page_role role)
+@@ -281,8 +282,6 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
+ static void tdp_mmu_init_sp(struct kvm_mmu_page *sp, tdp_ptep_t sptep,
+ 			    gfn_t gfn, union kvm_mmu_page_role role)
  {
--	struct kvm_mmu_page *sp;
- 	struct hlist_head *sp_list;
- 
--	++vcpu->kvm->stat.mmu_cache_miss;
-+	++kvm->stat.mmu_cache_miss;
- 
--	sp = kvm_mmu_alloc_shadow_page(vcpu, role.direct);
- 	sp->gfn = gfn;
- 	sp->role = role;
-+	sp->mmu_valid_gen = kvm->arch.mmu_valid_gen;
- 
--	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
-+	/*
-+	 * active_mmu_pages must be a FIFO list, as kvm_zap_obsolete_pages()
-+	 * depends on valid pages being added to the head of the list.  See
-+	 * comments in kvm_zap_obsolete_pages().
-+	 */
-+	list_add(&sp->link, &kvm->arch.active_mmu_pages);
-+	kvm_mod_used_mmu_pages(kvm, 1);
-+
-+	sp_list = &kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
- 	hlist_add_head(&sp->hash_link, sp_list);
- 
- 	if (!role.direct)
--		account_shadowed(vcpu->kvm, slot, sp);
+-	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
 -
--	return sp;
-+		account_shadowed(kvm, slot, sp);
- }
- 
- static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
-@@ -2158,7 +2155,8 @@ static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
- 	if (!sp) {
- 		created = true;
- 		slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
--		sp = kvm_mmu_new_shadow_page(vcpu, slot, gfn, role);
-+		sp = kvm_mmu_alloc_shadow_page(vcpu, role.direct);
-+		init_shadow_page(vcpu->kvm, sp, slot, gfn, role);
+ 	sp->role = role;
+ 	sp->gfn = gfn;
+ 	sp->ptep = sptep;
+@@ -1435,6 +1434,8 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+ 		return NULL;
  	}
  
- 	trace_kvm_mmu_get_page(sp, created);
++	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
++
+ 	return sp;
+ }
+ 
 -- 
 2.35.1.1094.g7c7d902a7c-goog
 
