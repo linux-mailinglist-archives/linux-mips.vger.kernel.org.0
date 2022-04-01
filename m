@@ -2,48 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E694EF5B1
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 17:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA994EF5B8
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Apr 2022 17:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348703AbiDAPPu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Apr 2022 11:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        id S1345304AbiDAPQO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Apr 2022 11:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350637AbiDAPAX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 11:00:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C1518545A;
-        Fri,  1 Apr 2022 07:48:15 -0700 (PDT)
+        with ESMTP id S1350682AbiDAPAZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 11:00:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9703B288;
+        Fri,  1 Apr 2022 07:48:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCCDFB8240E;
-        Fri,  1 Apr 2022 14:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D20BC2BBE4;
-        Fri,  1 Apr 2022 14:48:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF8D4B82500;
+        Fri,  1 Apr 2022 14:48:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E3DC340EE;
+        Fri,  1 Apr 2022 14:48:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648824492;
-        bh=UiVYWP+yq50r/sTqzdo77qM1WOWiNUF315E1f9WUSRg=;
+        s=k20201202; t=1648824535;
+        bh=SmZlnfHVwLVGkZeql5rP3TZ+c1QAJ1ZOpKQDWszarrM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=horz6GEqEYmUxtfZ+1XGQb/0r4tIvrWmmSHLvYbd3YuySYvy5kfHJ8ZEYAw0aB98n
-         w5Fjq6Nc09JqejA6QYzTdkspmPSmmiiiXWzrFvX2ASsym28MnEbWlKzNADNUNNzjo5
-         GG8fQ91xDd0O+EU/v4wefg/omvPJDsWmgWor85pMTO5kHJXsbekUsCxHdu0QKlPeMG
-         SBz7sHFDBsQWigwuWF0S9ugQHuJuTSwNpWhauw6dGjJaQmwh2yFzNzkHB7FDJkUS9Q
-         Xw2+yAY/3i8eSu0iP1g0KteYYH8snp9A5Mfe0TPkTVAo0uJ8nUDg9pvjBiCzeL2nd8
-         s2nxl+Gn1WuDA==
+        b=c8ZgI7qVUtjDfrq1cZiCCTLCHABqf945+fO1uKw615NaJ2rnWgbv1KpqKPLSnOa1r
+         R7f/SjEpm+ZmRiY24hXNnW0z+oG/tRs/qncELnRVrKoQm+CdrFY/s3XRZwHmK7Ra4I
+         HZjbpC6TmLxyGqgiKsQ/CTRIIjGaZvezuNwTygFNnAfZsPLVwiFFvIboG6KGsb+CnA
+         +5jDc43Sul4BvdAogUKJOvEwR4939TeXi69LqAatObS62Uyte0j5iuwDSfciXKbJ/C
+         t9WqdTcWaW6WmPBGm0pUVuQhI+UBExvVeRbfOSbSdHDmpqKGCw9xjOpzzRdS0J/F8U
+         1oKl1fZkEg4kQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alexander Lobakin <alobakin@pm.me>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, ebiederm@xmission.com,
-        akpm@linux-foundation.org, dbueso@suse.de, liam.howlett@oracle.com,
-        f.fainelli@gmail.com, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 16/22] MIPS: fix fortify panic when copying asm exception handlers
-Date:   Fri,  1 Apr 2022 10:47:23 -0400
-Message-Id: <20220401144729.1955554-16-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, liam.howlett@oracle.com,
+        dbueso@suse.de, f.fainelli@gmail.com, ldufour@linux.ibm.com,
+        ebiederm@xmission.com, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 11/16] MIPS: fix fortify panic when copying asm exception handlers
+Date:   Fri,  1 Apr 2022 10:48:22 -0400
+Message-Id: <20220401144827.1955845-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401144729.1955554-1-sashal@kernel.org>
-References: <20220401144729.1955554-1-sashal@kernel.org>
+In-Reply-To: <20220401144827.1955845-1-sashal@kernel.org>
+References: <20220401144827.1955845-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -94,10 +94,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/arch/mips/include/asm/setup.h b/arch/mips/include/asm/setup.h
-index d49d247d48a1..d48a5f18a267 100644
+index 4f5279a8308d..e301967fcffd 100644
 --- a/arch/mips/include/asm/setup.h
 +++ b/arch/mips/include/asm/setup.h
-@@ -14,7 +14,7 @@ static inline void setup_8250_early_printk_port(unsigned long base,
+@@ -13,7 +13,7 @@ static inline void setup_8250_early_printk_port(unsigned long base,
  	unsigned int reg_shift, unsigned int timeout) {}
  #endif
  
@@ -107,10 +107,10 @@ index d49d247d48a1..d48a5f18a267 100644
  
  typedef void (*vi_handler_t)(void);
 diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 4a23d89e251c..abbc64788008 100644
+index 5f717473d08e..278e81c9e614 100644
 --- a/arch/mips/kernel/traps.c
 +++ b/arch/mips/kernel/traps.c
-@@ -2017,19 +2017,19 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
+@@ -2019,19 +2019,19 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
  		 * If no shadow set is selected then use the default handler
  		 * that does normal register saving and standard interrupt exit
  		 */
@@ -140,7 +140,7 @@ index 4a23d89e251c..abbc64788008 100644
  
  		if (handler_len > VECTORSPACING) {
  			/*
-@@ -2249,7 +2249,7 @@ void per_cpu_trap_init(bool is_boot_cpu)
+@@ -2251,7 +2251,7 @@ void per_cpu_trap_init(bool is_boot_cpu)
  }
  
  /* Install CPU exception handler */
