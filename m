@@ -2,164 +2,197 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273424EFF3A
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 09:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF734EFFDF
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 11:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238459AbiDBHDn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 2 Apr 2022 03:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S237445AbiDBJFJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 Apr 2022 05:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238408AbiDBHDi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 03:03:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789BC1D915A
-        for <linux-mips@vger.kernel.org>; Sat,  2 Apr 2022 00:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648882907; x=1680418907;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5fQpfgHL+BcKJLXV9JlywPoB0By7fPM3sgcVDusgY2k=;
-  b=iGirB6rKI1bQ3Q27pODBJqQbBpNdhP+qojRwwT3ExyIRSIQfTcehAjJw
-   d58+G27MPiQf5zD+k9zV4hBh3XwCdlhCenLuneKktinN5awXb1sWy6c/u
-   Y/xKPhzZydkaVBcUl068TQgpz75UlNqBjhAgtRK5D9OiJ7Go1vGdhP0d3
-   HcSyzaRUXCnni5A/E+nM7IWVwk1cqIF/capJWjanPGpWk1d1d/s37wC8H
-   wM+S9tO9Phk5/7Un67DwrpHwL5r7bxBQGAMVwHe3CnCWQIkHXuv+gxw91
-   kGWaMnXgl8Iv3GlbuEPSumJUCtG5uhKWTVBtpNyPSUz1KfC61DjDXEToV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260270050"
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="260270050"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 00:01:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="845542078"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Apr 2022 00:01:41 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1naXlV-0001zS-6J;
-        Sat, 02 Apr 2022 07:01:41 +0000
-Date:   Sat, 2 Apr 2022 15:01:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH v3 16/23] KVM: x86/mmu: Cache the access bits of shadowed
- translations
-Message-ID: <202204021411.oOhP2vFP-lkp@intel.com>
-References: <20220401175554.1931568-17-dmatlack@google.com>
+        with ESMTP id S229984AbiDBJFJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 05:05:09 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEEA61697AF;
+        Sat,  2 Apr 2022 02:03:15 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:50516.2041797902
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id DB04C100277;
+        Sat,  2 Apr 2022 17:02:54 +0800 (CST)
+Received: from  ([172.27.8.53])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id e85ed5efb2a74dd7ad033a2856bea132 for mripard@kernel.org;
+        Sat, 02 Apr 2022 17:03:14 CST
+X-Transaction-ID: e85ed5efb2a74dd7ad033a2856bea132
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 172.27.8.53
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v15 0/6] drm/loongson: add drm driver for loongson display controller
+Date:   Sat,  2 Apr 2022 17:02:46 +0800
+Message-Id: <20220402090252.1700974-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401175554.1931568-17-dmatlack@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi David,
+There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+bridge chip, the display controller is a PCI device. It have two display
+pipes but with only one hardware cursor. Each way has a DVO interface
+which provide RGB888 signals, vertical & horizontal synchronisations,
+data enable and the pixel clock.
 
-Thank you for the patch! Perhaps something to improve:
+Each CRTC is able to drive a 1920x1080@60Hz monitor, the maxmium
+resolution is 2048x2048. Loongson display controllers are simple which
+require scanout buffers to be physically contiguous.
 
-[auto build test WARNING on 19164ad08bf668bca4f4bfbaacaa0a47c1b737a6]
+For LS7A1000 bridge chip, the DC is equipped with a dedicated video RAM
+which is typically 64MB or more. In this case, VRAM helper based driver
+is intended to be used even through the DC can scanout form system memory.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Matlack/KVM-Extend-Eager-Page-Splitting-to-the-shadow-MMU/20220402-015911
-base:   19164ad08bf668bca4f4bfbaacaa0a47c1b737a6
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220402/202204021411.oOhP2vFP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5f7a06676291033d880081035c2efae13702a0c4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Matlack/KVM-Extend-Eager-Page-Splitting-to-the-shadow-MMU/20220402-015911
-        git checkout 5f7a06676291033d880081035c2efae13702a0c4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+While LS2K1000 is a SoC which is a typically UMA device, only system
+memory is available. Therefore CMA helper based driver is intended to be
+used. It is possible to use VRAM helper based driver on LS2K1000 by
+carving out part of system memory as VRAM though.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+For LS7A1000, there are 4 dedicated GPIOs whose control registers is
+located at the DC register space, They are used to emulate two way i2c.
+One for DVO0, another for DVO1. LS2K1000 and LS2K0500 SoC don't have such
+GPIO hardwared, they grab i2c adapter from other module, either general
+purpose GPIO emulated i2c or hardware i2c adapter.
 
-All warnings (new ones prefixed by >>):
+    +------+            +-----------------------------------+
+    | DDR4 |            |  +-------------------+            |
+    +------+            |  | PCIe Root complex |   LS7A1000 |
+       || MC0           |  +--++---------++----+            |
+  +----------+  HT 3.0  |     ||         ||                 |
+  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+       || MC1           +---------------|--|----------------+
+    +------+                            |  |
+    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+                      +-------+                      +------+
 
->> arch/x86/kvm/mmu/mmu.c:766:8: warning: format specifies type 'unsigned long long' but the argument has type 'int' [-Wformat]
-                                      sp->role.access, access);
-                                      ^~~~~~~~~~~~~~~
-   include/linux/printk.h:654:45: note: expanded from macro 'pr_err_ratelimited'
-           printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                              ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:640:17: note: expanded from macro 'printk_ratelimited'
-                   printk(fmt, ##__VA_ARGS__);                             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
->> arch/x86/kvm/mmu/mmu.c:766:25: warning: format specifies type 'unsigned long long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
-                                      sp->role.access, access);
-                                                       ^~~~~~
-   include/linux/printk.h:654:45: note: expanded from macro 'pr_err_ratelimited'
-           printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                              ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:640:17: note: expanded from macro 'printk_ratelimited'
-                   printk(fmt, ##__VA_ARGS__);                             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   2 warnings generated.
+The above picture give a simple usage of LS7A1000, note that the encoder
+is not necessary adv7125 or tfp410, other candicates can be ch7034b,
+sil9022, ite66121 and lt8618 etc.
 
+Below is a brief introduction of loongson's CPU, bridge chip and SoC.
+LS2K1000 is a double core 1.0Ghz mips64r2 compatible SoC[1]. LS7A1000 is
+a bridge chip made by Loongson corporation which act as north and/or south
+bridge of loongson's desktop and server level processor. It is equivalent
+to AMD RS780E+SB710 or something like that. More details can be read from
+its user manual[2].
 
-vim +766 arch/x86/kvm/mmu/mmu.c
+This bridge chip is typically use with LS3A3000, LS3A4000 and LS3A5000 cpu.
+LS3A3000 is 4 core 1.45gHz mips64r2 compatible cpu.
+LS3A4000 is 4 core 1.8gHz mips64r5 compatible cpu[3].
+LS3A5000 is 4 core 2.5gHz loongarch cpu[4].
 
-   754	
-   755	static void kvm_mmu_page_set_access(struct kvm_mmu_page *sp, int index, u32 access)
-   756	{
-   757		if (!sp->role.direct) {
-   758			sp->shadowed_translation[index].access = access;
-   759			return;
-   760		}
-   761	
-   762		if (WARN_ON(access != sp->role.access))
-   763			pr_err_ratelimited("access mismatch under direct page %llx "
-   764					   "(expected %llx, got %llx)\n",
-   765					   kvm_mmu_page_get_gfn(sp, index),
- > 766					   sp->role.access, access);
-   767	}
-   768	
+Nearly all loongson cpu has the hardware maintain the cache coherency,
+this is the most distinct feature from other Mips cpu.
+
+[1] https://wiki.debian.org/InstallingDebianOn/Lemote/Loongson2K1000
+[2] https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN.html
+[3] https://ee-paper.com/loongson-3a4000-3b4000-motherboard-products-are-compatible-with-uos-system/
+[4] https://loongson.github.io/LoongArch-Documentation/Loongson-3A5000-usermanual-EN.html
+[5] https://github.com/loongson-community/pmon
+
+Sui Jingfeng (6):
+  MIPS: Loongson64: dts: update the display controller device node
+  MIPS: Loongson64: introduce board specific dts and add model property
+  dt-bindings: display: Add Loongson display controller
+  MIPS: Loongson64: defconfig: enable display bridge drivers
+  drm/loongson: add drm driver for loongson display controller
+  MAINTAINERS: add maintainers for DRM LOONGSON driver
+
+ .../loongson/loongson,display-controller.yaml | 289 +++++++++
+ MAINTAINERS                                   |   9 +
+ arch/mips/boot/dts/loongson/Makefile          |   4 +
+ arch/mips/boot/dts/loongson/lemote_a1901.dts  |  96 +++
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 +
+ .../boot/dts/loongson/ls2k1000_pai_udb.dts    | 107 ++++
+ .../boot/dts/loongson/ls3a4000_7a1000_evb.dts | 138 +++++
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |  22 +-
+ arch/mips/configs/loongson2k_defconfig        |   5 +
+ arch/mips/configs/loongson3_defconfig         |   5 +
+ drivers/gpu/drm/Kconfig                       |   2 +
+ drivers/gpu/drm/Makefile                      |   1 +
+ drivers/gpu/drm/loongson/Kconfig              |  25 +
+ drivers/gpu/drm/loongson/Makefile             |  16 +
+ drivers/gpu/drm/loongson/lsdc_crtc.c          | 400 ++++++++++++
+ drivers/gpu/drm/loongson/lsdc_debugfs.c       | 176 ++++++
+ drivers/gpu/drm/loongson/lsdc_debugfs.h       |  17 +
+ drivers/gpu/drm/loongson/lsdc_drv.c           | 413 +++++++++++++
+ drivers/gpu/drm/loongson/lsdc_drv.h           | 186 ++++++
+ drivers/gpu/drm/loongson/lsdc_i2c.c           | 268 ++++++++
+ drivers/gpu/drm/loongson/lsdc_i2c.h           |  38 ++
+ drivers/gpu/drm/loongson/lsdc_irq.c           |  57 ++
+ drivers/gpu/drm/loongson/lsdc_irq.h           |  17 +
+ drivers/gpu/drm/loongson/lsdc_output.c        | 261 ++++++++
+ drivers/gpu/drm/loongson/lsdc_output.h        |  21 +
+ drivers/gpu/drm/loongson/lsdc_pci_drv.c       | 342 +++++++++++
+ drivers/gpu/drm/loongson/lsdc_plane.c         | 436 +++++++++++++
+ drivers/gpu/drm/loongson/lsdc_pll.c           | 573 ++++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_pll.h           |  87 +++
+ drivers/gpu/drm/loongson/lsdc_regs.h          | 219 +++++++
+ 30 files changed, 4233 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+ create mode 100644 arch/mips/boot/dts/loongson/lemote_a1901.dts
+ create mode 100644 arch/mips/boot/dts/loongson/ls2k1000_pai_udb.dts
+ create mode 100644 arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+ create mode 100644 drivers/gpu/drm/loongson/Kconfig
+ create mode 100644 drivers/gpu/drm/loongson/Makefile
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pci_drv.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pll.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pll.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
