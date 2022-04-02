@@ -2,578 +2,272 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F584F03BD
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 16:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5FB4F03CA
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 16:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354989AbiDBOGb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 2 Apr 2022 10:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45290 "EHLO
+        id S243582AbiDBOKt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 Apr 2022 10:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiDBOGa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 10:06:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5E2FE401;
-        Sat,  2 Apr 2022 07:04:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09DCE61589;
-        Sat,  2 Apr 2022 14:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC32C34112;
-        Sat,  2 Apr 2022 14:04:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648908275;
-        bh=YrZEumvmfe+Rc1PEVXK79Ox+17SGUZZIAnpMZF00TsE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LWYEYdAN2KjSsAVw1poHGHpf/3PlV9ghDek1gDaYUZ+LW+RfnOExVkEfxSi+r3VFh
-         DEu3sspCy3nyGHKB460WYWnAyNeMXJtUKAi8cRAJf4NdXUTXBSUXgFCga/DaN4ty1w
-         BPU4xT0sekgeUNXchM88GB9qzk0IMB6cPQIHYTZeSyL5GtSjcmZXsUmWLqYPdGqOKy
-         /nGMvPcNLkqloZteYkAgimobfV/Ng4xD8iqcWGMjIFjgS28Wz4NSgauxnVqo1Ww/pS
-         oAKFbAuRv7B4mJRE6AjsntZWLsT6julIJnykCurQ5HmgCxjPjKWV0R7Fwr2nxOS0/g
-         efusHlm4X7F+Q==
-Received: by mail-vk1-f171.google.com with SMTP id b81so354903vkf.1;
-        Sat, 02 Apr 2022 07:04:35 -0700 (PDT)
-X-Gm-Message-State: AOAM532NmRVXT81wqZ6XU1o6XZMzUYmj77xzvo/8te405aOBC3v4JfQI
-        Mzw5gsx/KFiqdMwfYYcXPTp30hW4e2qINEh5uiU=
-X-Google-Smtp-Source: ABdhPJyCsdXLyczXXan4kiqYamq+QiZ92lSNccuT0oP09x3hoz2NpqwrmqsHiPBYRcfIiom+u5BatEdMGMPSpTbE7A0=
-X-Received: by 2002:a05:6122:2092:b0:344:2ed5:8c3e with SMTP id
- i18-20020a056122209200b003442ed58c3emr440377vkd.8.1648908273992; Sat, 02 Apr
- 2022 07:04:33 -0700 (PDT)
+        with ESMTP id S230301AbiDBOKs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 10:10:48 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A199113D52
+        for <linux-mips@vger.kernel.org>; Sat,  2 Apr 2022 07:08:54 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bh17so11295327ejb.8
+        for <linux-mips@vger.kernel.org>; Sat, 02 Apr 2022 07:08:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=wigNce4qvVmV3d7DkdJzc8BH1TPhQWRtN2hw97s9mNw=;
+        b=bEnc5Xu/f9tfdiQvw1VrBF2c4hTnQpn+nPJhfMCv6Uo62aLg32LRqUa/V0O8NyeDs+
+         oGzc7pjI8mfm90kVDggKmmPs9A+imFq05/mujxsbIUMNqlLFTOcdFzCTUa5Nvvs3+Qs7
+         gIJDnFn2L4mf0tmeGZuDBfKvJmYLTf0Us2u0sWZj5IO7e/MVBT8CuNo1UUhqYLdgmhpV
+         Ds6wFwqrrp0bo+/LzOcimtgax7LIiXXOzVLY/tsKcAOmX4spmFduBxYGXCuXkZWLeJvb
+         aPwHSmwOHbH4oTkp96PDay3Yl3mloYzwDHcYhlKTDrox8vTJDtbXEK36R6Icw0QGb03r
+         tLQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=wigNce4qvVmV3d7DkdJzc8BH1TPhQWRtN2hw97s9mNw=;
+        b=JfmCvmh9QkTDmfBgVDcNjDrGDse283NNxOaKO0xR+5ZMKw+H52vvS2QqUT/PZmPO0S
+         MOEZgdMqKvXfqZlUHcoVjiwmuXN2pv6FZMUCJnrBHAKyKMIxYxsDjyz+SXlCBe5y8qx5
+         tirUs75UNwBYk41L36pVz+qfemiw0TwTJdJSTV4FkqY2ajv5dYtmmISxLpFzIzD5lSpo
+         vhQ4V+oe44Au+ZonIMBm/EPMC1NWh/hDnQ8y3/tnLhAYsAGUbMjQFh5QP3c1wCgKtUih
+         h7y07gNGjBGx48LpxFM93LkhIoqxW5qWvrj1Cu/D291yfEnd5SIfrSOE4+BMzJAR6WT7
+         hcAw==
+X-Gm-Message-State: AOAM53366ZIK6w1nflH2sdSaPXeGYMXrtqA+9cNfT3HB0K74TMNrTLp6
+        0468Z0ovLM1VWYoKgQARgEq8IJNetVimmb/xjqM=
+X-Google-Smtp-Source: ABdhPJwbdc+fO0hy1xLt8T9rkKjD8XTsqwFzNGDzOaWO9aTsShzwErg/VRYPXMBWsyxM8Fp6u1qLzpwZ12jx9Xc4U3g=
+X-Received: by 2002:a17:906:1e94:b0:6cc:4382:f12e with SMTP id
+ e20-20020a1709061e9400b006cc4382f12emr3929722ejj.482.1648908533020; Sat, 02
+ Apr 2022 07:08:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220402135256.2691868-1-guoren@kernel.org>
-In-Reply-To: <20220402135256.2691868-1-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 2 Apr 2022 22:04:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTT1ndJLu8mbnfJExg3Hp_eDP6k8iwq8U_ucQdGGXBhew@mail.gmail.com>
-Message-ID: <CAJF2gTTT1ndJLu8mbnfJExg3Hp_eDP6k8iwq8U_ucQdGGXBhew@mail.gmail.com>
-Subject: Re: [PATCH V11 00/20] riscv: Add COMPAT mode support for rv64
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@linux.alibaba.com>
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Sat, 2 Apr 2022 15:08:55 +0100
+Message-ID: <CAHpNFcNSzf8OQfX0MEVyYrZxVpR23qBG-_FDqAyAfuySvtP__A@mail.gmail.com>
+Subject: VecSR Wins another global Feat - The font-palette CSS property -
+ font-palette and Custom @font-palette-values Palettes
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Palmer,
+VecSR Wins another global Feat - The font-palette CSS property -
+font-palette and Custom @font-palette-values Palettes
 
-Sorry for the late reply, I still want COMPAT to catch up at 5.18..
-I've pushed it into my next branch, and it would get in linux-next the
-next day. You could have a look at that. The repo is:
-https://github.com/c-sky/csky-linux/tree/linux-next
+https://science.n-helix.com/2022/04/vecsr.html
 
-We still need your sending pull request for COMPAT, thank you very much.
+font-palette and Custom @font-palette-values Palettes
 
-On Sat, Apr 2, 2022 at 9:53 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> s390, mips, sparc) have supported COMPAT mode. But they all have
-> history issues and can't use standard linux unistd.h. RISC-V would
-> be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> /unistd.h.
->
-> The patchset are based on v5.17-rc8, you can compare rv64-compat
-> v.s. rv32-native in qemu with following steps:
->
->  - Prepare rv32 rootfs & fw_jump.bin by buildroot.org
->    $ git clone git://git.busybox.net/buildroot
->    $ cd buildroot
->    $ make qemu_riscv32_virt_defconfig O=3Dqemu_riscv32_virt_defconfig
->    $ make -C qemu_riscv32_virt_defconfig
->    $ make qemu_riscv64_virt_defconfig O=3Dqemu_riscv64_virt_defconfig
->    $ make -C qemu_riscv64_virt_defconfig
->    (Got fw_jump.bin & rootfs.ext2 in qemu_riscvXX_virt_defconfig/images)
->
->  - Prepare Linux rv32 & rv64 Image
->    $ git clone git@github.com:c-sky/csky-linux.git -b riscv_compat_v11 li=
-nux
->    $ cd linux
->    $ echo "CONFIG_STRICT_KERNEL_RWX=3Dn" >> arch/riscv/configs/defconfig
->    $ echo "CONFIG_STRICT_MODULE_RWX=3Dn" >> arch/riscv/configs/defconfig
->    $ make ARCH=3Driscv CROSS_COMPILE=3Driscv32-buildroot-linux-gnu- O=3D.=
-./build-rv32/ rv32_defconfig
->    $ make ARCH=3Driscv CROSS_COMPILE=3Driscv32-buildroot-linux-gnu- O=3D.=
-./build-rv32/ Image
->    $ make ARCH=3Driscv CROSS_COMPILE=3Driscv64-buildroot-linux-gnu- O=3D.=
-./build-rv64/ defconfig
->    $ make ARCH=3Driscv CROSS_COMPILE=3Driscv64-buildroot-linux-gnu- O=3D.=
-./build-rv64/ Image
->
->  - Prepare Qemu:
->    $ git clone https://gitlab.com/qemu-project/qemu.git -b master linux
->    $ cd qemu
->    $ ./configure --target-list=3D"riscv64-softmmu riscv32-softmmu"
->    $ make
->
-> Now let's compare rv64-compat with rv32-native memory footprint with almo=
-st the same
-> defconfig, rootfs, opensbi in one qemu.
->
->  - Run rv64 with rv32 rootfs in compat mode:
->    $ ./build/qemu-system-riscv64 -cpu rv64 -M virt -m 64m -nographic -bio=
-s qemu_riscv64_virt_defconfig/images/fw_jump.bin -kernel build-rv64/Image -=
-drive file qemu_riscv32_virt_defconfig/images/rootfs.ext2,format=3Draw,id=
-=3Dhd0 -device virtio-blk-device,drive=3Dhd0 -append "rootwait root=3D/dev/=
-vda ro console=3DttyS0 earlycon=3Dsbi" -netdev user,id=3Dnet0 -device virti=
-o-net-device,netdev=3Dnet0
->
-> QEMU emulator version 6.2.50 (v6.2.0-29-g196d7182c8)
-> OpenSBI v0.9
-> [    0.000000] Linux version 5.16.0-rc6-00017-g750f87086bdd-dirty (guoren=
-@guoren-Z87-HD3) (riscv64-unknown-linux-gnu-gcc (GCC) 10.2.0, GNU ld (GNU B=
-inutils) 2.37) #96 SMP Tue Dec 28 21:01:55 CST 2021
-> [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
-> [    0.000000] Machine model: riscv-virtio,qemu
-> [    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
-> [    0.000000] printk: bootconsole [sbi0] enabled
-> [    0.000000] efi: UEFI not found.
-> [    0.000000] Zone ranges:
-> [    0.000000]   DMA32    [mem 0x0000000080200000-0x0000000083ffffff]
-> [    0.000000]   Normal   empty
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000080200000-0x0000000083ffffff]
-> [    0.000000] Initmem setup node 0 [mem 0x0000000080200000-0x0000000083f=
-fffff]
-> [    0.000000] SBI specification v0.2 detected
-> [    0.000000] SBI implementation ID=3D0x1 Version=3D0x9
-> [    0.000000] SBI TIME extension detected
-> [    0.000000] SBI IPI extension detected
-> [    0.000000] SBI RFENCE extension detected
-> [    0.000000] SBI v0.2 HSM extension detected
-> [    0.000000] riscv: ISA extensions acdfhimsu
-> [    0.000000] riscv: ELF capabilities acdfim
-> [    0.000000] percpu: Embedded 17 pages/cpu s30696 r8192 d30744 u69632
-> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 156=
-55
-> [    0.000000] Kernel command line: rootwait root=3D/dev/vda ro console=
-=3DttyS0 earlycon=3Dsbi
-> [    0.000000] Dentry cache hash table entries: 8192 (order: 4, 65536 byt=
-es, linear)
-> [    0.000000] Inode-cache hash table entries: 4096 (order: 3, 32768 byte=
-s, linear)
-> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-> [    0.000000] Virtual kernel memory layout:
-> [    0.000000]       fixmap : 0xffffffcefee00000 - 0xffffffceff000000   (=
-2048 kB)
-> [    0.000000]       pci io : 0xffffffceff000000 - 0xffffffcf00000000   (=
-  16 MB)
-> [    0.000000]      vmemmap : 0xffffffcf00000000 - 0xffffffcfffffffff   (=
-4095 MB)
-> [    0.000000]      vmalloc : 0xffffffd000000000 - 0xffffffdfffffffff   (=
-65535 MB)
-> [    0.000000]       lowmem : 0xffffffe000000000 - 0xffffffe003e00000   (=
-  62 MB)
-> [    0.000000]       kernel : 0xffffffff80000000 - 0xffffffffffffffff   (=
-2047 MB)
-> [    0.000000] Memory: 52788K/63488K available (6184K kernel code, 888K r=
-wdata, 1917K rodata, 294K init, 297K bss, 10700K reserved, 0K cma-reserved)
-> [    0.000000] SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=3D1,=
- Nodes=3D1
-> [    0.000000] rcu: Hierarchical RCU implementation.
-> [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=3D8 to nr_cpu_i=
-ds=3D1.
-> [    0.000000] rcu:     RCU debug extended QS entry/exit.
-> [    0.000000]  Tracing variant of Tasks RCU enabled.
-> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is=
- 25 jiffies.
-> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=3D16, nr_cpu_i=
-ds=3D1
-> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
-> [    0.000000] riscv-intc: 64 local interrupts mapped
-> [    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handlers f=
-or 2 contexts.
-> ...
-> Welcome to Buildroot
-> buildroot login: root
-> # cat /proc/cpuinfo
-> processor       : 0
-> hart            : 0
-> isa             : rv64imafdcsuh
-> mmu             : sv48
->
-> # file /bin/busybox
-> /bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 =
-(SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, =
-for GNU/Linux 5.15.0, stripped
-> # ca[   78.386630] random: fast init done
-> # cat /proc/meminfo
-> MemTotal:          53076 kB
-> MemFree:           40264 kB
-> MemAvailable:      40244 kB
-> Buffers:             236 kB
-> Cached:             1560 kB
-> SwapCached:            0 kB
-> Active:             1700 kB
-> Inactive:            516 kB
-> Active(anon):         40 kB
-> Inactive(anon):      424 kB
-> Active(file):       1660 kB
-> Inactive(file):       92 kB
-> Unevictable:           0 kB
-> Mlocked:               0 kB
-> SwapTotal:             0 kB
-> SwapFree:              0 kB
-> Dirty:                 0 kB
-> Writeback:             0 kB
-> AnonPages:           444 kB
-> Mapped:             1188 kB
-> Shmem:                44 kB
-> KReclaimable:        952 kB
-> Slab:               5744 kB
-> SReclaimable:        952 kB
-> SUnreclaim:         4792 kB
-> KernelStack:         624 kB
-> PageTables:          156 kB
-> NFS_Unstable:          0 kB
-> Bounce:                0 kB
-> WritebackTmp:          0 kB
-> CommitLimit:       26536 kB
-> Committed_AS:       1748 kB
-> VmallocTotal:   67108863 kB
-> VmallocUsed:         652 kB
-> VmallocChunk:          0 kB
-> Percpu:               80 kB
-> #
->
->  - Run rv32 with rv32 rootfs:
->    $ ./build/qemu-system-riscv32 -cpu rv32 -M virt -m 64m -nographic -bio=
-s qemu_riscv32_virt_defconfig/images/fw_jump.bin -kernel build-rv32/Image -=
-drive file qemu_riscv32_virt_defconfig/images/rootfs.ext2,format=3Draw,id=
-=3Dhd0 -device virtio-blk-device,drive=3Dhd0 -append "rootwait root=3D/dev/=
-vda ro console=3DttyS0 earlycon=3Dsbi" -netdev user,id=3Dnet0 -device virti=
-o-net-device,netdev=3Dnet0
->
-> QEMU emulator version 6.2.50 (v6.2.0-29-g196d7182c8)
-> OpenSBI v0.9
-> [    0.000000] Linux version 5.16.0-rc6-00017-g750f87086bdd-dirty (guoren=
-@guoren-Z87-HD3) (riscv32-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.1=
-1-201-g7600ca7960-dirty) 10.3.0, GNU ld (GNU Binutils) 2.36.1) #7 SMP Tue D=
-ec 28 21:02:21 CST 2021
-> [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80400000
-> [    0.000000] Machine model: riscv-virtio,qemu
-> [    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
-> [    0.000000] printk: bootconsole [sbi0] enabled
-> [    0.000000] efi: UEFI not found.
-> [    0.000000] Zone ranges:
-> [    0.000000]   Normal   [mem 0x0000000080400000-0x0000000083ffffff]
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000080400000-0x0000000083ffffff]
-> [    0.000000] Initmem setup node 0 [mem 0x0000000080400000-0x0000000083f=
-fffff]
-> [    0.000000] SBI specification v0.2 detected
-> [    0.000000] SBI implementation ID=3D0x1 Version=3D0x9
-> [    0.000000] SBI TIME extension detected
-> [    0.000000] SBI IPI extension detected
-> [    0.000000] SBI RFENCE extension detected
-> [    0.000000] SBI v0.2 HSM extension detected
-> [    0.000000] riscv: ISA extensions acdfhimsu
-> [    0.000000] riscv: ELF capabilities acdfim
-> [    0.000000] percpu: Embedded 12 pages/cpu s16600 r8192 d24360 u49152
-> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 152=
-40
-> [    0.000000] Kernel command line: rootwait root=3D/dev/vda ro console=
-=3DttyS0 earlycon=3Dsbi
-> [    0.000000] Dentry cache hash table entries: 8192 (order: 3, 32768 byt=
-es, linear)
-> [    0.000000] Inode-cache hash table entries: 4096 (order: 2, 16384 byte=
-s, linear)
-> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-> [    0.000000] Virtual kernel memory layout:
-> [    0.000000]       fixmap : 0x9dc00000 - 0x9e000000   (4096 kB)
-> [    0.000000]       pci io : 0x9e000000 - 0x9f000000   (  16 MB)
-> [    0.000000]      vmemmap : 0x9f000000 - 0x9fffffff   (  15 MB)
-> [    0.000000]      vmalloc : 0xa0000000 - 0xbfffffff   ( 511 MB)
-> [    0.000000]       lowmem : 0xc0000000 - 0xc3c00000   (  60 MB)
-> [    0.000000] Memory: 51924K/61440K available (6117K kernel code, 695K r=
-wdata, 1594K rodata, 255K init, 241K bss, 9516K reserved, 0K cma-reserved)
-> [    0.000000] SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=3D1,=
- Nodes=3D1
-> [    0.000000] rcu: Hierarchical RCU implementation.
-> [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=3D8 to nr_cpu_i=
-ds=3D1.
-> [    0.000000] rcu:     RCU debug extended QS entry/exit.
-> [    0.000000]  Tracing variant of Tasks RCU enabled.
-> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is=
- 25 jiffies.
-> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=3D16, nr_cpu_i=
-ds=3D1
-> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
-> [    0.000000] riscv-intc: 32 local interrupts mapped
-> [    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handlers f=
-or 2 contexts.
-> ...
-> Welcome to Buildroot
-> buildroot login: root
-> # cat /proc/cpuinfo
-> processor       : 0
-> hart            : 0
-> isa             : rv32imafdcsuh
-> mmu             : sv32
->
-> # file /bin/busybox
-> /bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 =
-(SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, =
-for GNU/Linux 5.15.0, stripped
-> [   79.320589] random: fast init done
-> # cat /proc/meminfo
-> MemTotal:          52176 kB
-> MemFree:           41012 kB
-> MemAvailable:      42176 kB
-> Buffers:             644 kB
-> Cached:             2724 kB
-> SwapCached:            0 kB
-> Active:             3128 kB
-> Inactive:            752 kB
-> Active(anon):         40 kB
-> Inactive(anon):      516 kB
-> Active(file):       3088 kB
-> Inactive(file):      236 kB
-> Unevictable:           0 kB
-> Mlocked:               0 kB
-> SwapTotal:             0 kB
-> SwapFree:              0 kB
-> Dirty:                 4 kB
-> Writeback:             0 kB
-> AnonPages:           556 kB
-> Mapped:             2172 kB
-> Shmem:                44 kB
-> KReclaimable:        656 kB
-> Slab:               3684 kB
-> SReclaimable:        656 kB
-> SUnreclaim:         3028 kB
-> KernelStack:         312 kB
-> PageTables:           88 kB
-> NFS_Unstable:          0 kB
-> Bounce:                0 kB
-> WritebackTmp:          0 kB
-> CommitLimit:       26088 kB
-> Committed_AS:       2088 kB
-> VmallocTotal:     524287 kB
-> VmallocUsed:          12 kB
-> VmallocChunk:          0 kB
-> Percpu:               60 kB
-> #
->
->  Some conclusions:
->  - kernel statics:
->    64: Memory: 52788K/63488K available (6184K kernel code, 888K rwdata, 1=
-917K rodata, 294K init, 297K bss, 10700K reserved)
->    32: Memory: 51924K/61440K available (6117K kernel code, 695K rwdata, 1=
-594K rodata, 255K init, 241K bss,  9516K reserved)
->    rv32 better than rv64:                  1%               22%          =
- 17%          13%        19%         11%
->    The code size is very similar, but data size rv32 would be better.
->
->  - rv32 kernel runtime KernelStack, Slab... are smaller,
->    rv64: MemTotal: 53076 kB,        MemFree: 40264 kB
->    rv32: MemTotal: 52176 + 2048 kB, MemFree: 41012  + 2048 kB
->    rv32 better than rv64:       2%                         6%
->
->    (Because opensbi problem, we could add another 2MB for rv32.)
->    Overall in 64MB memory situation, rv64-compat is 6% worse than rv32-na=
-tive
->    at memory footprint. If the userspace memory usage increases, I think
->    the gap will be further reduced.
->
-> Changes in v11:
->  - Using arch instead of kconfig for commit subject by Masahiro Yamada
->
-> Changes in v10:
->  - Fixup arm64 compile error with compat_statfs definition
->  - Fixup compat_sys_fadvise64_64 function arguments error cause ltp failu=
-re
->
-> Changes in v9:
->  - Fixup rv32 call rv64 segment fault
->  - Ready for 5.18
->
-> Changes in v8:
->  - Enhanced elf_check_arch with EI_CLASS
->  - Fixup SR_UXL doesn't exist in CONFIG_32BIT
->  - Add Tested-by with Heiko
->  - Update qemu compile tips with upstream repo
->
-> Changes in v7:
->  - Re-construct compat_vdso/Makefile
->  - Fixup disable COMPAT compile error by csr.h's macro.
->  - Optimize coding convention for lo/hi in compat.h
->
-> Changes in v6:
->  - Rebase on linux-5.17-rc5
->  - Optimize hw capability check for elf
->  - Optimize comment in thread_info.h
->  - Optimize start_thread with SR_UXL setting
->  - Optimize vdso.c with direct panic
->
-> Changes in v5:
->  - Rebase on linux-5.17-rc2
->  - Include consolidate the fcntl patches by Christoph Hellwig
->  - Remove F_GETLK64/F_SETLK64/F_SETLKW64 from asm/compat.h
->  - Change COMPAT_RLIM_INFINITY from 0x7fffffff to 0xffffffff
->  - Bring back "Add hw-cap detect in setup_arch patch" in v1
->
-> Changes in v4:
->  - Rebase on linux-5.17-rc1
->  - Optimize compat_sys_call_table implementation with Arnd's advice
->  - Add reviewed-by for Arnd. Thx :)
->  - Remove FIXME comment in elf.h
->  - Optimize Cleanup duplicate definitions in compat.h with Arnd's advice
->
-> Changes in v3:
->  - Rebase on newest master (pre linux-5.17-rc1)
->  - Using newest qemu version v7 for test
->  - Remove fcntl common modification
->  - Fixup SET_PERSONALITY in elf.h by Arnd
->  - Fixup KVM Kconfig
->  - Update Acked-by & Reviewed-by
->
-> Changes in v2:
->  - Add __ARCH_WANT_COMPAT_STAT suggested
->  - Cleanup fcntl compatduplicate definitions
->  - Cleanup compat.h
->  - Move rv32_defconfig into Makefile
->  - Fixup rv64 rootfs boot failed, remove hw_compat_mode_detect
->  - Move SYSVIPC_COMPAT into init/Kconfig
->  - Simplify compat_elf_check
->
-> Christoph Hellwig (3):
->   uapi: simplify __ARCH_FLOCK{,64}_PAD a little
->   uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
->   compat: consolidate the compat_flock{,64} definition
->
-> Guo Ren (17):
->   arch: Add SYSVIPC_COMPAT for all architectures
->   fs: stat: compat: Add __ARCH_WANT_COMPAT_STAT
->   asm-generic: compat: Cleanup duplicate definitions
->   syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
->   riscv: Fixup difference with defconfig
->   riscv: compat: Add basic compat data type implementation
->   riscv: compat: Support TASK_SIZE for compat mode
->   riscv: compat: syscall: Add compat_sys_call_table implementation
->   riscv: compat: syscall: Add entry.S implementation
->   riscv: compat: process: Add UXL_32 support in start_thread
->   riscv: compat: Add elf.h implementation
->   riscv: compat: Add hw capability check for elf
->   riscv: compat: vdso: Add COMPAT_VDSO base code implementation
->   riscv: compat: vdso: Add setup additional pages implementation
->   riscv: compat: signal: Add rt_frame implementation
->   riscv: compat: ptrace: Add compat_arch_ptrace implement
->   riscv: compat: Add COMPAT Kbuild skeletal support
->
->  arch/arm64/Kconfig                            |   4 -
->  arch/arm64/include/asm/compat.h               |  93 +------
->  arch/arm64/include/asm/unistd.h               |   1 +
->  arch/mips/Kconfig                             |   5 -
->  arch/mips/include/asm/compat.h                |  41 +--
->  arch/mips/include/asm/unistd.h                |   2 +
->  arch/mips/include/uapi/asm/fcntl.h            |  30 +--
->  arch/parisc/Kconfig                           |   4 -
->  arch/parisc/include/asm/compat.h              |  45 +---
->  arch/parisc/include/asm/unistd.h              |   1 +
->  arch/powerpc/Kconfig                          |   5 -
->  arch/powerpc/include/asm/compat.h             |  50 +---
->  arch/powerpc/include/asm/unistd.h             |   1 +
->  arch/riscv/Kconfig                            |  19 ++
->  arch/riscv/Makefile                           |   9 +
->  arch/riscv/configs/rv32_defconfig             | 135 ----------
->  arch/riscv/include/asm/compat.h               | 129 ++++++++++
->  arch/riscv/include/asm/csr.h                  |   7 +
->  arch/riscv/include/asm/elf.h                  |  50 +++-
->  arch/riscv/include/asm/mmu.h                  |   1 +
->  arch/riscv/include/asm/pgtable.h              |  13 +-
->  arch/riscv/include/asm/processor.h            |   6 +-
->  arch/riscv/include/asm/syscall.h              |   1 +
->  arch/riscv/include/asm/thread_info.h          |   1 +
->  arch/riscv/include/asm/unistd.h               |  11 +
->  arch/riscv/include/asm/vdso.h                 |   9 +
->  arch/riscv/include/uapi/asm/unistd.h          |   2 +-
->  arch/riscv/kernel/Makefile                    |   3 +
->  arch/riscv/kernel/compat_signal.c             | 243 ++++++++++++++++++
->  arch/riscv/kernel/compat_syscall_table.c      |  19 ++
->  arch/riscv/kernel/compat_vdso/.gitignore      |   2 +
->  arch/riscv/kernel/compat_vdso/Makefile        |  78 ++++++
->  arch/riscv/kernel/compat_vdso/compat_vdso.S   |   8 +
->  .../kernel/compat_vdso/compat_vdso.lds.S      |   3 +
->  arch/riscv/kernel/compat_vdso/flush_icache.S  |   3 +
->  .../compat_vdso/gen_compat_vdso_offsets.sh    |   5 +
->  arch/riscv/kernel/compat_vdso/getcpu.S        |   3 +
->  arch/riscv/kernel/compat_vdso/note.S          |   3 +
->  arch/riscv/kernel/compat_vdso/rt_sigreturn.S  |   3 +
->  arch/riscv/kernel/entry.S                     |  18 +-
->  arch/riscv/kernel/process.c                   |  37 +++
->  arch/riscv/kernel/ptrace.c                    |  87 ++++++-
->  arch/riscv/kernel/signal.c                    |  13 +-
->  arch/riscv/kernel/sys_riscv.c                 |   6 +-
->  arch/riscv/kernel/vdso.c                      | 105 +++++---
->  arch/riscv/kernel/vdso/vdso.S                 |   6 +-
->  arch/s390/Kconfig                             |   3 -
->  arch/s390/include/asm/compat.h                |  99 +------
->  arch/s390/include/asm/unistd.h                |   1 +
->  arch/sparc/Kconfig                            |   5 -
->  arch/sparc/include/asm/compat.h               |  61 ++---
->  arch/sparc/include/asm/unistd.h               |   1 +
->  arch/x86/Kconfig                              |   4 -
->  arch/x86/include/asm/compat.h                 | 104 ++------
->  arch/x86/include/asm/unistd.h                 |   1 +
->  fs/open.c                                     |  24 ++
->  fs/read_write.c                               |  16 ++
->  fs/stat.c                                     |   2 +-
->  fs/sync.c                                     |   9 +
->  include/asm-generic/compat.h                  | 113 ++++++++
->  include/linux/compat.h                        |  68 +++++
->  include/uapi/asm-generic/fcntl.h              |  23 +-
->  include/uapi/asm-generic/unistd.h             |   4 +-
->  init/Kconfig                                  |   4 +
->  mm/fadvise.c                                  |  11 +
->  mm/readahead.c                                |   7 +
->  tools/include/uapi/asm-generic/fcntl.h        |  21 +-
->  tools/include/uapi/asm-generic/unistd.h       |   4 +-
->  68 files changed, 1207 insertions(+), 698 deletions(-)
->  delete mode 100644 arch/riscv/configs/rv32_defconfig
->  create mode 100644 arch/riscv/include/asm/compat.h
->  create mode 100644 arch/riscv/kernel/compat_signal.c
->  create mode 100644 arch/riscv/kernel/compat_syscall_table.c
->  create mode 100644 arch/riscv/kernel/compat_vdso/.gitignore
->  create mode 100644 arch/riscv/kernel/compat_vdso/Makefile
->  create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.S
->  create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
->  create mode 100644 arch/riscv/kernel/compat_vdso/flush_icache.S
->  create mode 100755 arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets=
-.sh
->  create mode 100644 arch/riscv/kernel/compat_vdso/getcpu.S
->  create mode 100644 arch/riscv/kernel/compat_vdso/note.S
->  create mode 100644 arch/riscv/kernel/compat_vdso/rt_sigreturn.S
->
-> --
-> 2.25.1
->
+The font-palette CSS property allows selecting a palette from a color
+font. In combination with the @font-palette-values at-rule, custom
+palettes can be defined. This feature is useful in designs where an
+icon or emoji font is used with dark or light mode, or when using
+multi-colored icon fonts that use the font-palette to harmonize with
+the content's color scheme.
+
+hwb() CSS function
+
+HWB (short for 'hue whiteness blackness') is another method of
+specifying sRGB colors, similar to HSL, but often even easier for
+humans to work with. The hwb() function specifies HWB values in CSS.
+The function takes three arguments. The first, hue, specifies hue in
+degrees (not constrained to the range [0, 360]). The next two,
+whiteness and blackness, are specified as percentages.
+
+***
+
+VecSR - Vector Standard Render
+
+VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
+Consolas & other brilliant fonts : (c)RS
+
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+
+OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
+Mode & Desktop Rendering modes
+
+Improve Console & TV & BIOS & General Animated Render
+
+Vector Display Standards with low relative CPU Weight
+SiMD Polygon Font Method Render
+
+Default option point scaling (the space) : Metadata Vector Fonts with
+Curl mathematical vector :
+
+16 Bit : SiMD 1 width
+32 Bit : SiMD Double Width
+
+High precision for AVX 32Bit to 256Bit width precision.
+
+Vectoring with SiMD allows traditional CPU mastered VESA Emulation
+desktops & safe mode to be super fast & displays to conform to VESA
+render standards with little effort & a 1MB Table ROM.
+
+Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+bandwidth transport of and transformation of 3D & 2D graphics & fonts
+into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+
+Display Standards Vector Render : DSVR-SiMD Can and will be directly
+rendered to a Surface for visual element : SfVE-Vec
+
+As such transport of Vectors & transformation onto display (Monitor,
+3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
+
+Directly resolve The total graphics pipeline into high quality output
+or input & allow communication of almost infinite Floating point
+values for all rendered 3D & 2D Elements on a given surface (RAM
+Render Page or Surface)
+
+In high precision that is almost unbeatable & yet consumes many levels
+less RAM & Transport Protocol bandwidth,
+
+Further more can also render Vector 3D & 2D Audio & other elements
+though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
+Harmonic reproduction units for example Yamaha and Casio keyboards.
+
+(c)Rupert S
+
+https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+
+https://science.n-helix.com/2019/06/vulkan-stack.html
+
+https://science.n-helix.com/2019/06/kernel.html
+
+https://science.n-helix.com/2022/03/fsr-focal-length.html
+
+https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
+ml
+
+https://bit.ly/VESA_BT
+
+*
+
+*Application of SiMD Polygon Font Method Render
+*3D Render method with Console input DEMO : RS
+
+3D Display access to correct display of fonts at angles in games &
+apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
+font or shape. (c)Rupert S
+
+3rd dimensional access with vector fonts by a simple method:
+
+Render text to virtual screen layer AKA a fully rendered monochrome, 2
+colour or multi colour..
+
+Bitmap/Texture,
+
+Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
+
+Can be higher resolution & we can sub sample with closer view priority...
+
+We then rotate the texture on our output polygon & factor size differential=
+.
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize
+
+Why ? Because rotating a polygon is harder than subtracting or adding
+width, Hight & direction to fully complex polygon Fonts & Polygon
+lines or curves...
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize.
+
+*
+
+VecSR is really good for secondary loading of sprites & text; In these
+terms very good for pre loading on for example the X86, RISC, AMIGA &
+Famicon type devices,
+With appropriate loading into Sprite buffers or Emulated Secondaries
+(Special Animations) or Font Buffers.
+
+Although Large TT-SVG & OT-SVG fonts load well in 8MB Ram on the Amiga
+with Integer & Emulated Float (Library); Traditional BitMap fonts work
+well in a Set Size & can resize well if cached!
+
+The full process leads upto the terminal & how to optimise CON,
+We can & will need to exceed capacities of any system & To improve them!
+
+presenting: Dev-Con-VectorE=C2=B2
+Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
+Class VESA Console +
+
+With Console in VecSR you can 3DText & Audio,
+
+VecSR Firmware update 2022 For immediate implementation in all
+operating systems & ROM's
+
+Potential is fast & useful.
+
+*
+
+https://science.n-helix.com/2022/04/vecsr.html
 
 
---=20
-Best Regards
- Guo Ren
+**********
 
-ML: https://lore.kernel.org/linux-csky/
+Other Features in this Release
+
+AudioContext.outputLatency
+
+AudioContext.outputLatency property is an estimation in seconds of the
+interval between when the user agent requests a host system to play a
+buffer and when the first sample in the buffer is processed by the
+audio output device. For devices such as speakers or headphones that
+produce an acoustic signal, 'processed by the audio output device'
+refers to the time when a sample's sound is produced. This property
+helps developers compensate for the latency between the input and the
+output. It's also useful for synchronization of video and audio
+streams.
+
+This property is already implemented in Firefox.
+
+font-palette and Custom @font-palette-values Palettes
+
+The font-palette CSS property allows selecting a palette from a color
+font. In combination with the @font-palette-values at-rule, custom
+palettes can be defined. This feature is useful in designs where an
+icon or emoji font is used with dark or light mode, or when using
+multi-colored icon fonts that use the font-palette to harmonize with
+the content's color scheme.
+
+hwb() CSS function
+
+HWB (short for 'hue whiteness blackness') is another method of
+specifying sRGB colors, similar to HSL, but often even easier for
+humans to work with. The hwb() function specifies HWB values in CSS.
+The function takes three arguments. The first, hue, specifies hue in
+degrees (not constrained to the range [0, 360]). The next two,
+whiteness and blackness, are specified as percentages.
+
+Make Popup Argument for window.open() Evaluate to 'true'
+
+This feature follows a recent change to the spec for parsing the popup
+argument for window.open(). Previously, when popup was set equal to
+true, window.open() was interpreted to mean false. This is
+counterintuitive and confusing. This change makes boolean features
+easier to use and understand.
+
+MediaCapabilities API for WebRTC
+
+The MediaCapabilities API has been extended to support WebRTC streams.
+The MediaCapabilities API helps websites make informed decisions on
+what codec, resolution, etc. to use for video playback by indicating
+whether a configuration is supported and also whether the playback is
+expected to be smooth.
+Without this feature, web apps need to guess about suitable
+configurations. This can result in poor quality such as when an
+application uses low resolution or frame rates unnecessarily, or
+stuttering when the frame rate is too high.
