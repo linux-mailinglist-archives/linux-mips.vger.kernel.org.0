@@ -2,162 +2,170 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACED74EFDBC
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 03:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A95A4EFF11
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 07:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244552AbiDBBWI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Apr 2022 21:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
+        id S233513AbiDBFve (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 Apr 2022 01:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345214AbiDBBWH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Apr 2022 21:22:07 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842AD2DAB9
-        for <linux-mips@vger.kernel.org>; Fri,  1 Apr 2022 18:20:14 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id pv16so9371453ejb.0
-        for <linux-mips@vger.kernel.org>; Fri, 01 Apr 2022 18:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=IaS1hkvmveC5IBbs3iH06s2bJz4c3BLVqz2F+DTX2Y4=;
-        b=DkN2+IoGQRNVn9I3tQluJaEc0MtViO8LRtF2NJ4s7IaMBLZLmCvQWoKwHzIenK2Uvt
-         oM6wyR7cpVpw/DP2N18V03yoXgGRVrapdyCInNpevW5rlrzsyvf5gqZL4sA2Rw4B9ZJg
-         3UOY3d8SQ47sXetoK5U9iEEGwQTb8Ff0UQw5PtcJEam5PYMgJASsTyuSg/uaNe/g3fMz
-         yqwj0iiYgM3HaLEVT5o3TRcIIHaIQnbEZiSbYiR2x9jyWrHznvIUDRuJBO5JN4SX+MQD
-         8mzqNLGq4bG6euGysH79oPKXg+fJLacgaCYuRQu3I8s681Fy18Rz98Cx4bqbek74Luqn
-         hifw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=IaS1hkvmveC5IBbs3iH06s2bJz4c3BLVqz2F+DTX2Y4=;
-        b=kOn55uNX0nCwwPi3Ptgf3MzkO5PxD9G5hhGEnjIR9PbIt3r5fi/uNOUHkMJS5BLCRH
-         p7A0KSUknFnARI5I4U7TifRRuHu2X0OPGHTnJc1sN99JUi2gzEbsXksUoylh+2aNoLfC
-         aL63XbIkN7O5TGv9at9lPUB9KsOpQZgyXxZbJ+IRhYQvBMzL8V23PMKKD7AuB1lMhkzt
-         /CeRiVJuTJ620eaB1pg5l441Psk1o11iSKczosljxeKhmFjzKVywb7lBYfEngXKiLwDQ
-         UK/jOw7/mIDB9krPhOaMcZfsjKJCHsQ4jldVt+AwHDC8eNoNNN300KincSMbo03A350C
-         bVkA==
-X-Gm-Message-State: AOAM531sMnVpmvwGB9HH4lhW5MHd/3PXgl69uDLmjOwORnSMP59Isf5W
-        LTbob17xLpZOjDzQT6G5lXJefymCqSl7nsTmrYQ=
-X-Google-Smtp-Source: ABdhPJxdMQmVZLNF+7vq8tj4btDtW9ROcnQCx3SXwX2vXAT2C3lTN7xw3dnuRurNZE+ZiQItXzYYUylWjK6AIFqxWz8=
-X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
- sd6-20020a1709076e0600b006e4dae79574mr2172572ejc.540.1648862413069; Fri, 01
- Apr 2022 18:20:13 -0700 (PDT)
+        with ESMTP id S229714AbiDBFvc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 01:51:32 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B738EB68;
+        Fri,  1 Apr 2022 22:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648878581; x=1680414581;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TZGP2yFhIfg8kh6ZCxxoGQgrQRnyKJ7mHLD5XwA3Q/M=;
+  b=Ak1D2IxYLdvJ4VTDt77Ii5+l4vzUj/sXJDyHWQ2PHK6WvObOWfK1cQ0X
+   uqSJDZYdPU2qIVLGkM7mvtQxSpxS3CXCyPGfZov5R7FS4c1lkG3dIiiAu
+   +knDutS2Nkv8KB0d1sq+v3xcG/LfcKPh0ffw0ZaRR1uMx+XxCz8Mpjdg+
+   LA8a2zPGI0BigeEYm+IB8ZnUEo0Jv3jjgnQlB54Js5K4YrwMGTdTdn2WO
+   gXyhSEmAraQFMv2+fGbczXUjj3V1UJj6jEcjBdkqbTV2ng4wa+g2iMPyJ
+   0b609j/XJbHUvoOBj/3NPLx5wS8YH2T7n3C1ka+fWW4ow6iHhFx4y0SQg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="346718237"
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="346718237"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 22:49:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="696111634"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Apr 2022 22:49:35 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naWdj-0001m0-A8;
+        Sat, 02 Apr 2022 05:49:35 +0000
+Date:   Sat, 2 Apr 2022 13:49:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <error27@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v14 5/6] drm/loongson: add drm driver for loongson
+ display controller
+Message-ID: <202204021321.5sYDUPbx-lkp@intel.com>
+References: <20220401162251.1665081-6-15330273260@189.cn>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 02:20:14 +0100
-Message-ID: <CAHpNFcOpX0JwcqrPSQkP0oV10EFhJmCiMZOYKis+xSQO5C_rDg@mail.gmail.com>
-Subject: Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
- Class VESA Console + With Console in VecSR you can 3DText & Audio + VecSR
- Firmware update 2022 For immediate implementation in all operating systems & ROM's
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401162251.1665081-6-15330273260@189.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-VecSR Firmware update 2022 For immediate implementation in all
-operating systems, monitors, TV's & equipment such as Mouses, Audio
-Systems & Webcams
+Hi Sui,
 
-VecSR - Vector Standard Render
+Thank you for the patch! Yet something to improve:
 
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on robh/for-next linus/master v5.17 next-20220401]
+[cannot apply to mripard/sunxi/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-loongson-add-drm-driver-for-loongson-display-controller/20220402-003557
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: sparc-randconfig-r012-20220402 (https://download.01.org/0day-ci/archive/20220402/202204021321.5sYDUPbx-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b52cc469ed1a99a0803faef886f81607b1f7f5c0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sui-Jingfeng/drm-loongson-add-drm-driver-for-loongson-display-controller/20220402-003557
+        git checkout b52cc469ed1a99a0803faef886f81607b1f7f5c0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/gpu/drm/loongson/
 
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Improve Console & TV & BIOS & General Animated Render
+All errors (new ones prefixed by >>):
 
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
+   drivers/gpu/drm/loongson/lsdc_i2c.c: In function 'ls7a_gpio_i2c_set':
+>> drivers/gpu/drm/loongson/lsdc_i2c.c:37:23: error: implicit declaration of function 'readb' [-Werror=implicit-function-declaration]
+      37 |                 val = readb(li2c->dir_reg);
+         |                       ^~~~~
+>> drivers/gpu/drm/loongson/lsdc_i2c.c:39:17: error: implicit declaration of function 'writeb' [-Werror=implicit-function-declaration]
+      39 |                 writeb(val, li2c->dir_reg);
+         |                 ^~~~~~
+   cc1: some warnings being treated as errors
 
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
 
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
+vim +/readb +37 drivers/gpu/drm/loongson/lsdc_i2c.c
 
-High precision for AVX 32Bit to 256Bit width precision.
+    19	
+    20	/*
+    21	 * ls7a_gpio_i2c_set - set the state of a gpio pin, either high or low.
+    22	 * @mask: gpio pin mask indicate which pin to set
+    23	 */
+    24	static void ls7a_gpio_i2c_set(struct lsdc_i2c * const li2c, int mask, int state)
+    25	{
+    26		unsigned long flags;
+    27		u8 val;
+    28	
+    29		spin_lock_irqsave(&li2c->reglock, flags);
+    30	
+    31		if (state) {
+    32			/*
+    33			 * The high state is achieved by setting the direction as
+    34			 * input, because the GPIO is open drained with external
+    35			 * pull up resistance.
+    36			 */
+  > 37			val = readb(li2c->dir_reg);
+    38			val |= mask;
+  > 39			writeb(val, li2c->dir_reg);
+    40		} else {
+    41			/* First, set this pin as output */
+    42			val = readb(li2c->dir_reg);
+    43			val &= ~mask;
+    44			writeb(val, li2c->dir_reg);
+    45	
+    46			/* Then, set the state to it */
+    47			val = readb(li2c->dat_reg);
+    48			val &= ~mask;
+    49			writeb(val, li2c->dat_reg);
+    50		}
+    51	
+    52		spin_unlock_irqrestore(&li2c->reglock, flags);
+    53	}
+    54	
 
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
-
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
-
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
-
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
-
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
-
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
-
-(c)Rupert S
-
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
-
-https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
-
-https://bit.ly/VESA_BT
-
-*
-
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
-
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
-
-3rd dimensional access with vector fonts by a simple method:
-
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
-
-Bitmap/Texture,
-
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
-
-Can be higher resolution & we can sub sample with closer view priority...
-
-We then rotate the texture on our output polygon & factor size differential.
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
-
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
-
-https://science.n-helix.com/2022/04/vecsr.html
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
