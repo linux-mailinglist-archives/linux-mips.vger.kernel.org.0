@@ -2,91 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5FB4F03CA
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 16:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810CD4F0460
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 17:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243582AbiDBOKt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 2 Apr 2022 10:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S1355042AbiDBPZ7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 Apr 2022 11:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiDBOKs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 10:10:48 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A199113D52
-        for <linux-mips@vger.kernel.org>; Sat,  2 Apr 2022 07:08:54 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bh17so11295327ejb.8
-        for <linux-mips@vger.kernel.org>; Sat, 02 Apr 2022 07:08:54 -0700 (PDT)
+        with ESMTP id S1357290AbiDBPZ4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 11:25:56 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9621933A35
+        for <linux-mips@vger.kernel.org>; Sat,  2 Apr 2022 08:24:02 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id u26so6137904eda.12
+        for <linux-mips@vger.kernel.org>; Sat, 02 Apr 2022 08:24:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=wigNce4qvVmV3d7DkdJzc8BH1TPhQWRtN2hw97s9mNw=;
-        b=bEnc5Xu/f9tfdiQvw1VrBF2c4hTnQpn+nPJhfMCv6Uo62aLg32LRqUa/V0O8NyeDs+
-         oGzc7pjI8mfm90kVDggKmmPs9A+imFq05/mujxsbIUMNqlLFTOcdFzCTUa5Nvvs3+Qs7
-         gIJDnFn2L4mf0tmeGZuDBfKvJmYLTf0Us2u0sWZj5IO7e/MVBT8CuNo1UUhqYLdgmhpV
-         Ds6wFwqrrp0bo+/LzOcimtgax7LIiXXOzVLY/tsKcAOmX4spmFduBxYGXCuXkZWLeJvb
-         aPwHSmwOHbH4oTkp96PDay3Yl3mloYzwDHcYhlKTDrox8vTJDtbXEK36R6Icw0QGb03r
-         tLQQ==
+        bh=pR6BQtJb61in8LI2RFfYMWRuA6qssaKJHiA8Szyk98E=;
+        b=dZ6B0rmBbn6QRB2CGYnKiqt+A9OfjP0b9Jb+mdx5Mab9Pr83Xz22KmJlJg5iGhjeSJ
+         FPAmXXt7CqZ7Em9Azz3XvAHCuLPogY98MjzgGQosw8tedERX4o2r/q86H0MpYGCu2LTz
+         dBAKpzc404DUv66B57/Gj7sL8T25YCTSr6+aTvfytSgvSXYAlJticmMXCmICrWQE2W5q
+         YvdZiQfvaqPre0TPUbZXMgxcXrJyEt6blc35OU1IH4k0ymKi2BmzECb9sTYnbeAxPuTG
+         9wnLW+SYrRDLcqdP+oxwcFHqOKSQV1LWVLU55Z67H5kf1Cve/6zCw+c4A52w80Dmn0LH
+         ussA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=wigNce4qvVmV3d7DkdJzc8BH1TPhQWRtN2hw97s9mNw=;
-        b=JfmCvmh9QkTDmfBgVDcNjDrGDse283NNxOaKO0xR+5ZMKw+H52vvS2QqUT/PZmPO0S
-         MOEZgdMqKvXfqZlUHcoVjiwmuXN2pv6FZMUCJnrBHAKyKMIxYxsDjyz+SXlCBe5y8qx5
-         tirUs75UNwBYk41L36pVz+qfemiw0TwTJdJSTV4FkqY2ajv5dYtmmISxLpFzIzD5lSpo
-         vhQ4V+oe44Au+ZonIMBm/EPMC1NWh/hDnQ8y3/tnLhAYsAGUbMjQFh5QP3c1wCgKtUih
-         h7y07gNGjBGx48LpxFM93LkhIoqxW5qWvrj1Cu/D291yfEnd5SIfrSOE4+BMzJAR6WT7
-         hcAw==
-X-Gm-Message-State: AOAM53366ZIK6w1nflH2sdSaPXeGYMXrtqA+9cNfT3HB0K74TMNrTLp6
-        0468Z0ovLM1VWYoKgQARgEq8IJNetVimmb/xjqM=
-X-Google-Smtp-Source: ABdhPJwbdc+fO0hy1xLt8T9rkKjD8XTsqwFzNGDzOaWO9aTsShzwErg/VRYPXMBWsyxM8Fp6u1qLzpwZ12jx9Xc4U3g=
-X-Received: by 2002:a17:906:1e94:b0:6cc:4382:f12e with SMTP id
- e20-20020a1709061e9400b006cc4382f12emr3929722ejj.482.1648908533020; Sat, 02
- Apr 2022 07:08:53 -0700 (PDT)
+        bh=pR6BQtJb61in8LI2RFfYMWRuA6qssaKJHiA8Szyk98E=;
+        b=00RS2VrmmS1+II/lQdk/f66YliGSsG5EJ8hrq+Y52PXimiWNbh7NAII2qelhrTdFIh
+         OMMSnHkqUWbttKPlRtpudIU0peLHD489FMF04iXfbnnQfMkou8ee0bAFqs+JjsDq35v+
+         y8c9EKHOKDX955z2E31R4ENIjtai13boPKS65SZVIfniJblC/z4J0Hrf8ItLLSaAsBr3
+         Fs0x7TV76TCUwDNMYER//M/NzXPqwNWQfC/+i4ty8lRrIH2YpCVVLVmJSgtT1Axd761A
+         t7JAG4dVUkIvMld1k0HCqpjzioPbkqEL6F9WQZJCYXEjhPof7lFpWSjfdUzjQGgLGi9u
+         i4FA==
+X-Gm-Message-State: AOAM532hYpOuAg1y2i6+w6gHmY3xC5f3YDGZZtx8yDz1pSiWxdnUMlzz
+        lQsdn2blswLScZDhI0/LoLsfZA6E6piEAHxC7Ww=
+X-Google-Smtp-Source: ABdhPJzfpO9x/irXYPkJ+ByoIvEYWhB4lC8ADz0LH3KvLOarjg5u+B3PSgy9KA+2ojraLBe96jZg8Byr6KLOqqlpQQU=
+X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id
+ f11-20020a0564021e8b00b0041c59f62c26mr8136977edf.156.1648913040944; Sat, 02
+ Apr 2022 08:24:00 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 15:08:55 +0100
-Message-ID: <CAHpNFcNSzf8OQfX0MEVyYrZxVpR23qBG-_FDqAyAfuySvtP__A@mail.gmail.com>
-Subject: VecSR Wins another global Feat - The font-palette CSS property -
- font-palette and Custom @font-palette-values Palettes
+Date:   Sat, 2 Apr 2022 16:24:03 +0100
+Message-ID: <CAHpNFcM_1BnAzzSYbpQ1gX8H3u+FY_nLag3OY8+3CJ44N7tU8Q@mail.gmail.com>
+Subject: submit it for inclusion in the standard along with Vector Compression
+ VESA Standard Display protocol 3
 To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-VecSR Wins another global Feat - The font-palette CSS property -
-font-palette and Custom @font-palette-values Palettes
+is QFT a Zero compression or low level compression version of DSC
+1.2b? Maybe X-OR X=3D1 New Data & X=3D0 being not sent ? Therefore Masking
+The Frame Buffer!
 
-https://science.n-helix.com/2022/04/vecsr.html
+If not i dually submit it for inclusion in the standard along with
+Vector Compression VESA Standard Display protocol 3
+https://lkml.org/lkml/2022/4/2/295
 
-font-palette and Custom @font-palette-values Palettes
+"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
+latency=E2=80=9D, which is the amount of time between a frame being ready f=
+or
+transport in the GPU and that frame being completely displayed. This
+latency is the sum of the transport time through the source=E2=80=99s outpu=
+t
+circuits, the transport time across the interface, the processing of
+the video data in the display, and the painting of the screen with the
+new data. This overall latency affects the responsiveness of games:
+how long it appears between a button is pressed to the time at which
+the resultant action is observed on the screen.
 
-The font-palette CSS property allows selecting a palette from a color
-font. In combination with the @font-palette-values at-rule, custom
-palettes can be defined. This feature is useful in designs where an
-icon or emoji font is used with dark or light mode, or when using
-multi-colored icon fonts that use the font-palette to harmonize with
-the content's color scheme.
+While there are a lot of variables in this equation, not many are
+adjustable from an HDMI specification perspective. QFT operates on the
+transport portion of this equation by reducing the time it takes to
+send only the active video across the cable. This results in reduced
+display latency and increased responsiveness."
 
-hwb() CSS function
-
-HWB (short for 'hue whiteness blackness') is another method of
-specifying sRGB colors, similar to HSL, but often even easier for
-humans to work with. The hwb() function specifies HWB values in CSS.
-The function takes three arguments. The first, hue, specifies hue in
-degrees (not constrained to the range [0, 360]). The next two,
-whiteness and blackness, are specified as percentages.
-
-***
+*****
 
 VecSR - Vector Standard Render
 
@@ -214,60 +217,3 @@ Potential is fast & useful.
 *
 
 https://science.n-helix.com/2022/04/vecsr.html
-
-
-**********
-
-Other Features in this Release
-
-AudioContext.outputLatency
-
-AudioContext.outputLatency property is an estimation in seconds of the
-interval between when the user agent requests a host system to play a
-buffer and when the first sample in the buffer is processed by the
-audio output device. For devices such as speakers or headphones that
-produce an acoustic signal, 'processed by the audio output device'
-refers to the time when a sample's sound is produced. This property
-helps developers compensate for the latency between the input and the
-output. It's also useful for synchronization of video and audio
-streams.
-
-This property is already implemented in Firefox.
-
-font-palette and Custom @font-palette-values Palettes
-
-The font-palette CSS property allows selecting a palette from a color
-font. In combination with the @font-palette-values at-rule, custom
-palettes can be defined. This feature is useful in designs where an
-icon or emoji font is used with dark or light mode, or when using
-multi-colored icon fonts that use the font-palette to harmonize with
-the content's color scheme.
-
-hwb() CSS function
-
-HWB (short for 'hue whiteness blackness') is another method of
-specifying sRGB colors, similar to HSL, but often even easier for
-humans to work with. The hwb() function specifies HWB values in CSS.
-The function takes three arguments. The first, hue, specifies hue in
-degrees (not constrained to the range [0, 360]). The next two,
-whiteness and blackness, are specified as percentages.
-
-Make Popup Argument for window.open() Evaluate to 'true'
-
-This feature follows a recent change to the spec for parsing the popup
-argument for window.open(). Previously, when popup was set equal to
-true, window.open() was interpreted to mean false. This is
-counterintuitive and confusing. This change makes boolean features
-easier to use and understand.
-
-MediaCapabilities API for WebRTC
-
-The MediaCapabilities API has been extended to support WebRTC streams.
-The MediaCapabilities API helps websites make informed decisions on
-what codec, resolution, etc. to use for video playback by indicating
-whether a configuration is supported and also whether the playback is
-expected to be smooth.
-Without this feature, web apps need to guess about suitable
-configurations. This can result in poor quality such as when an
-application uses low resolution or frame rates unnecessarily, or
-stuttering when the frame rate is too high.
