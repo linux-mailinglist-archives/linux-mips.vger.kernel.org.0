@@ -2,57 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5699B4F05FE
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Apr 2022 22:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2C64F070F
+	for <lists+linux-mips@lfdr.de>; Sun,  3 Apr 2022 05:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344018AbiDBUC4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 2 Apr 2022 16:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S231368AbiDCDI6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 Apr 2022 23:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350387AbiDBUCw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 16:02:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453A9E0ED;
-        Sat,  2 Apr 2022 13:01:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F32D2B80A25;
-        Sat,  2 Apr 2022 20:00:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A28CBC3410F;
-        Sat,  2 Apr 2022 20:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648929657;
-        bh=GddKHp+FX06NWWUMBUhR907LRbVDTGpJVORHR8pyYPk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HgyDN+Ok1caHpmNLMyM70CtD+7+m4F/2cnolVM73UAYoQDqV+fpQaJQnudHrrvG2G
-         q3ft4PDJ316pCOeLhi/gCAdoBj5fhXUR9NgDYroK8l9xtkZBvuoono0ySZwDxiYnkO
-         FM5KyHe+FzGF41KSYTtzRqvDcLqx0tksR80F5bAE373HXq1gXPfbwZjW1pqbiORU02
-         eJUlBNjSxxvmQHHabV7DVC/GP9wwD9TP7v2xZMw1IrpfCc5oKSv7xUisJh2+x7nedQ
-         BPB1YMMVYOLTlmICuTnvVPiaVxhb0K9G7/lv3p4MYhcKOGaTIyxWlwDx2jBGNebL+k
-         YW0tj/ifLD1QA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90E0EEAC09B;
-        Sat,  2 Apr 2022 20:00:57 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes vor v5.18
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220402112719.GA5234@alpha.franken.de>
-References: <20220402112719.GA5234@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220402112719.GA5234@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.18_1
-X-PR-Tracked-Commit-Id: 41022eff9c2d21e658c7a6fcd31005bf514d28b7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0b0fa57a2772be5bcef199ae5e769295afec0de5
-Message-Id: <164892965758.29522.14434602391550083691.pr-tracker-bot@kernel.org>
-Date:   Sat, 02 Apr 2022 20:00:57 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        with ESMTP id S234482AbiDCDI4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Apr 2022 23:08:56 -0400
+X-Greylist: delayed 415 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Apr 2022 20:06:50 PDT
+Received: from mail.tintel.eu (mail.tintel.eu [51.83.127.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB97E38DAF;
+        Sat,  2 Apr 2022 20:06:50 -0700 (PDT)
+Received: from localhost (localhost [IPv6:::1])
+        by mail.tintel.eu (Postfix) with ESMTP id 93436443B963;
+        Sun,  3 Apr 2022 04:59:52 +0200 (CEST)
+Received: from mail.tintel.eu ([IPv6:::1])
+        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id CuXfQFQux2ea; Sun,  3 Apr 2022 04:59:52 +0200 (CEST)
+Received: from localhost (localhost [IPv6:::1])
+        by mail.tintel.eu (Postfix) with ESMTP id 1A5EC4407628;
+        Sun,  3 Apr 2022 04:59:52 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu 1A5EC4407628
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
+        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1648954792;
+        bh=NB63kV2iVRK0aO2l931FJgETcLzKN2fr5wWYFpZPrSc=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=kROjGDT/7E7FhZEkku8DfmNfFhQvb4rAgv50wdx5dEAuxonn8MOytFygXbZ9Io2nL
+         cPzXN3MJ0CcaDQBqMaMLPgN6hjkNPbFoRcIo92Be1rQV13aPXAfAvWgx1GgqHIJMvN
+         9197vEj+dUIha/mZH1cX0PZOouqxQQRlBTAXqoiQ=
+X-Virus-Scanned: amavisd-new at mail.tintel.eu
+Received: from mail.tintel.eu ([IPv6:::1])
+        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id YkEFaBaNcsiX; Sun,  3 Apr 2022 04:59:52 +0200 (CEST)
+Received: from taz.sof.bg.adlevio.net (unknown [IPv6:2001:67c:21bc:20::10])
+        by mail.tintel.eu (Postfix) with ESMTPS id BF5E0443A8BC;
+        Sun,  3 Apr 2022 04:59:51 +0200 (CEST)
+From:   Stijn Tintel <stijn@linux-ipv6.be>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, rdunlap@infradead.org,
         linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: [PATCH 1/2] MIPS: Octeon: fix CN6640 hang on XAUI init
+Date:   Sun,  3 Apr 2022 05:59:49 +0300
+Message-Id: <20220403025950.837085-1-stijn@linux-ipv6.be>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-Rspamd-Pre-Result: action=no action;
+        module=multimap;
+        Matched map: IP_WHITELIST
+X-Rspamd-Queue-Id: BF5E0443A8BC
+X-Rspamd-Pre-Result: action=no action;
+        module=multimap;
+        Matched map: IP_WHITELIST
+X-Spamd-Result: default: False [0.00 / 15.00];
+        IP_WHITELIST(0.00)[2001:67c:21bc:20::10];
+        ASN(0.00)[asn:200533, ipnet:2001:67c:21bc::/48, country:BG]
+X-Rspamd-Server: skulls
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,15 +69,33 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Sat, 2 Apr 2022 13:27:19 +0200:
+Some CN66XX series Octeon II chips seem to hang if a reset is issued on
+XAUI initialization. Avoid the hang by disabling the reset.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.18_1
+Tested on SNIC10E.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0b0fa57a2772be5bcef199ae5e769295afec0de5
+Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
+---
+ arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thank you!
+diff --git a/arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c b/arch/=
+mips/cavium-octeon/executive/cvmx-helper-xaui.c
+index fea71a85bb29..a92632223497 100644
+--- a/arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c
++++ b/arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c
+@@ -156,8 +156,9 @@ int __cvmx_helper_xaui_enable(int interface)
+ 	xauiCtl.u64 =3D cvmx_read_csr(CVMX_PCSXX_CONTROL1_REG(interface));
+ 	xauiCtl.s.lo_pwr =3D 0;
+=20
+-	/* Issuing a reset here seems to hang some CN68XX chips. */
+-	if (!OCTEON_IS_MODEL(OCTEON_CN68XX_PASS1_X) &&
++	/* Issuing a reset here seems to hang some CN66XX/CN68XX chips. */
++	if (!OCTEON_IS_MODEL(OCTEON_CN66XX) &&
++	    !OCTEON_IS_MODEL(OCTEON_CN68XX_PASS1_X) &&
+ 	    !OCTEON_IS_MODEL(OCTEON_CN68XX_PASS2_X))
+ 		xauiCtl.s.reset =3D 1;
+=20
+--=20
+2.35.1
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
