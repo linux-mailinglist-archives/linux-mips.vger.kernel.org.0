@@ -2,81 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDFF4F10FE
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Apr 2022 10:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3034F110F
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Apr 2022 10:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238846AbiDDIcg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Apr 2022 04:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S231540AbiDDIid (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Apr 2022 04:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238460AbiDDIc2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Apr 2022 04:32:28 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2F331937;
-        Mon,  4 Apr 2022 01:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649061030; x=1680597030;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=maSL2cxRqazwpa1HcB3zULcND5265JQwoKkKrstAzyI=;
-  b=XsgUyjLL7lS/rQA4FlMSwpHSUheSIGViHu6RFDBG5F1wlnnFSuTjt9mS
-   Qgaw/XR91l7XebFA3qP/B2+CGEBj/TaWqJKICwSA1n0syhYC0GAU5Dnur
-   lHnoADPBlFOpha9dgt4cZw8VP5ywNkr+UzWblpOos2q4FOcsVaYapbHE3
-   Q0cjTHYzZoR/9c/qta2ptn1hgcCn11KIV7xHCZFyZodJb7V4qfqA0t5z6
-   0no/Qm+Vd/TBzwbcXkAsL95TLQSO2aUHMpaaRSJ0C7YO37ik7W5KSI15R
-   HMaESRyhC5g3i/5Qk9SgHIWe23IBd5xID2Uc0lyySV9oodUch+4ay2ZME
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="241052980"
-X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="241052980"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 01:30:30 -0700
-X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="569293625"
-Received: from rhamza-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.211.126])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 01:30:20 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Johan Hovold <johan@kernel.org>, heiko@sntech.de,
-        giulio.benetti@micronovasrl.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-api@vger.kernel.org,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v2 08/12] serial: General support for multipoint addresses
-Date:   Mon,  4 Apr 2022 11:29:08 +0300
-Message-Id: <20220404082912.6885-9-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220404082912.6885-1-ilpo.jarvinen@linux.intel.com>
-References: <20220404082912.6885-1-ilpo.jarvinen@linux.intel.com>
+        with ESMTP id S231476AbiDDIid (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Apr 2022 04:38:33 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2111.outbound.protection.outlook.com [40.107.20.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D131F60E
+        for <linux-mips@vger.kernel.org>; Mon,  4 Apr 2022 01:36:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LTWqck7CGKSPURFiMkJD1YuDYuGaqU5o0wAlitPIsesT9cWftatFEmCFm6b4fUf1VNDEoUmiU6iaouYuP8htDQX9usx6U9n2qFcl1No7F++ekEIEFYMU8Vy5jy9usg60DhF/3lu6QIJsZeZSPpGho0ep0/cuqcA8h6NU/9dAwVSDxHA0ioDMY0DZbxrJnlIgHc6Zs6mInmoNPxumE5scq/pn08N6w1tp4dvk9epovCN6UtxspzLZc8dSHI1B3TYTOv10Jtrh/xcAdL0L4WJ/kbLozy/XxhOO/MN+2HLuE3anMnN57iBZsUGDL4sEYbi6zG2De0ET7jkkNCMQFrG2OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uuOXVpWml/EveXkWLqtXeNZ24RGijJgNnKP+PRI7BX0=;
+ b=H6MV64nQHAJLpZxpKW2ganDNursy06+UlzgbQ8WS9iXSrQrKRyfjNFnKZDrorMlMqE5yLX7MUC7u+t9zXU1YdeUBdYr7d/ZGU3sMU+ClfmPs802F46hcpSgUWX5XvesoXREPtOimuCTLeoA3qh7nHVeNtEv1VD8TvB5s+OdMvbrk8GDwYXQjk6Mv4HAMdvxL5aY7WZVZB48n4t0fi8/7XDUvzYspxhJEjhQbTtlC3gByIiXNFcTwUJE6/SBMtkdVANBkIfzUpAV2vX3dOO/WKGCIU8y8x9thIcJCAz3b3rqpaqbdo/JFXYSORTM61hzjggk5QsXk7/ZVlj7rHdggHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uuOXVpWml/EveXkWLqtXeNZ24RGijJgNnKP+PRI7BX0=;
+ b=ARXSZ02JxA7FPLN2mZFnBt98zjjWwhLjEJk1G6oiwYF2e1MjxYFCexqJQ5R5FyVgPSpQmygrRf/WG+HALWs623Z23HdUTvhcDCg6OykMlNRNSBogXMnXiXWwXbC/dmWhH+BoSgM6TmVSEglKfKlqyqCpgSMmw4PGr4P6vIw7T5Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from VI1PR0701MB3005.eurprd07.prod.outlook.com
+ (2603:10a6:800:87::19) by DB7PR07MB4732.eurprd07.prod.outlook.com
+ (2603:10a6:5:31::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.16; Mon, 4 Apr
+ 2022 08:36:35 +0000
+Received: from VI1PR0701MB3005.eurprd07.prod.outlook.com
+ ([fe80::e453:b545:128f:90a8]) by VI1PR0701MB3005.eurprd07.prod.outlook.com
+ ([fe80::e453:b545:128f:90a8%6]) with mapi id 15.20.5144.016; Mon, 4 Apr 2022
+ 08:36:34 +0000
+To:     linux-mips@vger.kernel.org
+From:   Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>
+Subject: [PATCH] mips: vdso: Allow passing build path options
+Message-ID: <23e2afda-630a-f6fc-e211-a464b29496f4@nokia.com>
+Date:   Mon, 4 Apr 2022 10:36:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HE1PR05CA0358.eurprd05.prod.outlook.com
+ (2603:10a6:7:94::17) To VI1PR0701MB3005.eurprd07.prod.outlook.com
+ (2603:10a6:800:87::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4edcc7bf-54a1-45eb-8945-08da16163a13
+X-MS-TrafficTypeDiagnostic: DB7PR07MB4732:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR07MB47320C2EF7412613089EA04BFFE59@DB7PR07MB4732.eurprd07.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ii/+SpYN3ksTH1KkEfNXZyrS7BD2ftOqMZhZmaeY4MtR/j5iJYZMhrd4ZnI5FjFAA1MWHzRaFmiBWryHL/2ocDwH5o+WO+BjLASSGBjt/Hiq4VeDxZ4ZpwBjVYLBNvljLPpiuRu6tgWkOn5Ot5Z1fNwpFxLAKHSOo+3Rpzquo7D6GXftfX25nF8ZUZgtdUFyAC9OpxZc2rSEmle3WT+Jl7o4NzfYKs7QauBA0LptC3k1JVktCd3Ib1jtAR4rnxcAekU2otzffhqIHKH7t7t+dgF2WcDCQl+0259ySdfbjGqU5gWNIvs2DsHw6s91Uo37Hx6slEJs6YclLmXKa/nbPFjfh8YX6CxYQyGUvbOZZXkaNMkpCP8p/t3JLAUSMdIsTVivLJczp3JmPv8V29ozai7t3PpEFQcSUkBxhBaJs+ncXqeoRcKccTHY4tO62iL2e7HMWhlldNJumO7u0dFjaF91HThcWmatVwzdP6QCeSrkLwaycrBcijdSbmxNur84/fbox1WwNBoUBjSsbCIz5jpPm6GgcepfIfuLEhYvzGWCS7t8UN11cUElHjiDmKgfY1Vv42SizFEf7xSVxdJGXYL8MW6O0myIgBYOJJbEG3ro7VpRwPdhXI2WoEDes3Hy8m0DZD6IiSmzNY7dPo5Du2rmwQj5jmsBOWdr6BVPZ1syVdvifBWf0yOzAxrMfzGvgvhnn6Mw3BebSn+MLt14gwdKAaxTHvh9Rfy8A/F7Yf3D5yzOIpmUcWnjrKcGT2Wd7eg9SDXLg4PBGF9ybYthmkcDneoNCVVVKCYKrE+NsCsVVVQvO/goWmqIMKfM0slT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0701MB3005.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6666004)(2616005)(26005)(186003)(6506007)(52116002)(2906002)(6512007)(38100700002)(38350700002)(6486002)(36756003)(8936002)(82960400001)(316002)(31696002)(86362001)(6916009)(83380400001)(508600001)(5660300002)(31686004)(8676002)(66556008)(66946007)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDZJdS9tc0h5dkkvMERwNTI0a2czWVc3UmJGYmdHbGZXZ3pNV0V2VjdTaXJx?=
+ =?utf-8?B?M2FwUmtsMTNsV0xOaDZBQmhkYzUyWmt5cmp2R0ROYTJGaWxSUkdZY1E5b1FB?=
+ =?utf-8?B?a1NrcnR0ajRkS1pnQlhBL0I4YmQzWTNsWG4rcGZsQmNaeE1tcklqRWoxTWNO?=
+ =?utf-8?B?SnBCbUNHWVJaSWtyTWNMZy95a2R6alk4d2p3V0FLWDdmaENwZVBabVJWWWk4?=
+ =?utf-8?B?N0tGRXhCNjJ5WGJud1hLeDduL21CTldmRGk0N3BPSlN0VGs4ZEtqTU8wYm8y?=
+ =?utf-8?B?SXpGWG1rU2VReDhzSWtWZ0lPU0ExT0NHZndSYU5hTFpCY0g2aHRkNGF0YWRC?=
+ =?utf-8?B?QnlhNDVhVmJWYzgxN0t0Y05yMDVpZkpISnoyUmFzd1M0bnIwNEpuOThlTStD?=
+ =?utf-8?B?R0tFekFwQ2xJRDFmZDV5dXFiTkxjL0szWTJNUkcxUG9JdDBDUGozUzdkdC9j?=
+ =?utf-8?B?RXdBYjhvd1I0dVYyMUdqSnVEWXU1bWUzMlN6MG0zMXJQQ2o1VE8xZ2ZheWk2?=
+ =?utf-8?B?emp0QzhaNENKR0RackFVUU1kUllTdnRpNGFqQ29mWkExcmFhMkVNZjJwdDhB?=
+ =?utf-8?B?MnkwRk9EampDYmdKaEFhT2RyTUFRVGhtR2wvNDYxVEl1YjJ3eU1VOTdyYnJT?=
+ =?utf-8?B?T3lWL2RFcGlaVkptblF5UEhtVG5JQllsR2NoanlhdDhic3kxeGpIbTl3bGFH?=
+ =?utf-8?B?ZGNlNjZKYUtZdW5oZE5vNkFOOEp1MklreVdDRWM0WG5GbGNlVjNRRTEyaDlL?=
+ =?utf-8?B?M2NzWkdJVlAwNnZycDcyUGhUbUVlWkFNN1g4M1ZHMWNmRE5Wbkt3SmxzaEM0?=
+ =?utf-8?B?TUcxNUlZWE9zaFY2NktEYktiZWJ1bStLRFAwYjFjYlZ0Y3BDbkdWeHMxcitY?=
+ =?utf-8?B?Y1ErS2N5TmRXakF5T1ZiZDZOUmd0b2ExMWQreTNZZHh6OGRUNGZEeE4vUkQy?=
+ =?utf-8?B?dlRLcUFVRHpIcFNKakc5eTdkMGh3b2thdS96bTZ4WThNbUJCdi9QOXBBcW1n?=
+ =?utf-8?B?TkdQWTNibzVyOVVsdi9PM2hZbk92QWNEYjljS0toSHdxUFRvQVNsUEZmK1Yz?=
+ =?utf-8?B?VWN2T3FqTWV2d1V5Z1lzMU1DK3Vsc1hyb1pUV2NtMmxmaVhLc211ZE9pWXIr?=
+ =?utf-8?B?ZVlhY2pqcTFreFhFNVBMSll4SWFsQk1iM1Y3Y2VGZk9hR2dZbGNJWlNIbWpM?=
+ =?utf-8?B?Z0hFam0wazJxUjJmZ2NIcVB3STdSaGFxY2M4VXZJY3oyU0dQM2VWdTRkSTha?=
+ =?utf-8?B?QWlSVzdGM2pRMWtmY1JIOTZIaitzV3gyZHhOTUcyYS9HcGxGcnB0ZW1yTzBZ?=
+ =?utf-8?B?ZHRTZVVuYm1CQXFwaE80RVhueXJ5bU1OTk1xcnlueEVrWjczU1pydTRQM1pX?=
+ =?utf-8?B?WVZ3QUFyNDgxWkkxdnBkMkFoT3Z4UzJpUW1DVEdXRml5OC9VOWwxUlFBczlH?=
+ =?utf-8?B?YWtUUGlmcWgweDlTbWVwRU16UjZZQWVVcmFWelhvYjVnM1B5NlZsdjgzRlAw?=
+ =?utf-8?B?bERIcUtrT2VSSkJuRWlxMHI1OENuOE1QVzg5YlRLaEM5WDkyNFM2OTBJdTdt?=
+ =?utf-8?B?ZDNsNG1neU93ZFplUjhzZnhjOXBHVWVRQWVMVFkxK0tsUHR0eEU3blVrK0s0?=
+ =?utf-8?B?b1VKSld3Y3FVNlFyd1NBaUJBbkxyNy9qdjdSUFlSTm5PRm9JaHg1QjZzWDJn?=
+ =?utf-8?B?clhZNStEOXdiOXlEK1c5STVoTmRVaUU2Tmowd3NRc25pWGpicStUT3FTeW9Y?=
+ =?utf-8?B?RVdJb1ZRcjNVN3lWdjYvNGhxa0dqNk9KSzB3emgwUnBrYVIvMDBTMUFodzlx?=
+ =?utf-8?B?WkNLZTZOeHQ0TFl4VjhXYUIrRWVNakZZMEVrV1FLVGF2dkw1QzZBaHY2VGtT?=
+ =?utf-8?B?UVZLS1lFUkp3UVpRT3lQWC9sbEMwM3VzMDBoVnFDTHc0SlJkTHYxeUM0ZnJV?=
+ =?utf-8?B?RGkvb29XM0lIOTUxaTdpQmVmbStNem5tOFJISm11MkhNR3lFb0w3UUdBMEdq?=
+ =?utf-8?B?UFR6K2RHN1Bsd0cyZyt2Y0Zpc2ZKRitWcUVYZ0lUN3czc2lwaGRlclI5T0RX?=
+ =?utf-8?B?T2sxa2pxd0N4MWY5ZWI3aXdzKzBwcXNBREJ4Zzg2LzBscGMyQTRHUzE1a1g4?=
+ =?utf-8?B?MUU3alc5d3ovNldoNlpaRHhLZ0RmS2hpYmFMRnZhWHE2MnhzV1JRRUNsZEE1?=
+ =?utf-8?B?TGsvWGxvSkc5Uk5VazI1ZmdyR0dIVVpaL2grR0VmZUFyUmZscU9ZcXVxVEtF?=
+ =?utf-8?B?L3pXWElTbzRGOVI4WlhJZlNQVmFybUNYUDFzNGlFUGRScG85RlFJSFBMSncx?=
+ =?utf-8?B?RXZWWkUzVmZ1ZWVEK0djZzFKSTVEUVlBTlRCR2JWSFVNdGtxTXZ5NkV4SFZY?=
+ =?utf-8?Q?4/yo26Br2v8U1glGTsDWBkcqrkgJBl0PQaRyIL/JyhZff?=
+X-MS-Exchange-AntiSpam-MessageData-1: L+jT9aunAyyHYg==
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4edcc7bf-54a1-45eb-8945-08da16163a13
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0701MB3005.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 08:36:34.7046
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0ED1aQ1hL8oGxGOxIX/3NwZYA716g3E5JuFV1tcJezSet0AEf5gJ2UcyRWn8OXN3ZmdIRp44ToZ/PnAkn9bbmWW/xruEHop+rkQZoOP1Ew4+ac6FhIYG7dgW0dgtRb8b
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR07MB4732
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,355 +125,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add generic support for serial multipoint addressing. Two new
-ioctls are added. TIOCSADDR is used to indicate the
-destination/receive address. TIOCGADDR returns the current
-address in use. The driver should implement set_addr and get_addr
-to support addressing mode.
+vdso image is not reproducible in different build directories as build
+path defines vdso image contents via .notes, build ID. Build ID is
+hashed across all sections (prior stripping), debug sections included.
+With debug sections containing build paths, hash is impacted. Finally
+vmlinux is not reproducible as it will differ in vdso_data.
 
-Adjust ADDRB clearing to happen only if driver does not provide
-set_addr (=the driver doesn't support address mode).
+For users wanting reproducible builds, irrespective of build path, it
+is unwanted behavior. Issue is sorted out by passing related options
+via KAFLAGS, KCFLAGS, however due to mips' picking out specific/subset
+options, these are not getting passed through.
 
-This change is necessary for supporting devices with RS485
-multipoint addressing [*]. A following patch in the patch series
-adds support for Synopsys Designware UART capable for 9th bit
-addressing mode. In this mode, 9th bit is used to indicate an
-address (byte) within the communication line. The 9th bit
-addressing mode is selected using ADDRB introduced by the
-previous patch.
+Allow related option to be taken if user specified them.
 
-Transmit addresses / receiver filter are specified by setting
-the flags SER_ADDR_DEST and/or SER_ADDR_RECV. When the user
-supplies the transmit address, in the 9bit addressing mode it is
-sent out immediately with the 9th bit set to 1. After that, the
-subsequent normal data bytes are sent with 9th bit as 0 and they
-are intended to the device with the given address. It is up to
-receiver to enforce the filter using SER_ADDR_RECV. When userspace
-has supplied the receive address, the driver is expected to handle
-the matching of the address and only data with that address is
-forwarded to the user. Both SER_ADDR_DEST and SER_ADDR_RECV can
-be given at the same time in a single call if the addresses are
-the same.
-
-The user can clear the receive filter with SER_ADDR_RECV_CLEAR.
-
-[*] Technically, RS485 is just an electronic spec and does not
-itself specify the 9th bit addressing mode but 9th bit seems
-at least "semi-standard" way to do addressing with RS485.
-
-Cc: linux-api@vger.kernel.org
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: linux-alpha@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-parisc@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: linux-sh@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: linux-xtensa@linux-xtensa.org
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>
 ---
- .../driver-api/serial/serial-rs485.rst        | 23 ++++++-
- arch/alpha/include/uapi/asm/ioctls.h          |  3 +
- arch/mips/include/uapi/asm/ioctls.h           |  3 +
- arch/parisc/include/uapi/asm/ioctls.h         |  3 +
- arch/powerpc/include/uapi/asm/ioctls.h        |  3 +
- arch/sh/include/uapi/asm/ioctls.h             |  3 +
- arch/sparc/include/uapi/asm/ioctls.h          |  3 +
- arch/xtensa/include/uapi/asm/ioctls.h         |  3 +
- drivers/tty/serial/8250/8250_core.c           |  2 +
- drivers/tty/serial/serial_core.c              | 62 ++++++++++++++++++-
- include/linux/serial_core.h                   |  6 ++
- include/uapi/asm-generic/ioctls.h             |  3 +
- include/uapi/linux/serial.h                   |  8 +++
- 13 files changed, 123 insertions(+), 2 deletions(-)
+ arch/mips/vdso/Makefile | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/serial/serial-rs485.rst b/Documentation/driver-api/serial/serial-rs485.rst
-index 6bc824f948f9..2f45f007fa5b 100644
---- a/Documentation/driver-api/serial/serial-rs485.rst
-+++ b/Documentation/driver-api/serial/serial-rs485.rst
-@@ -95,7 +95,28 @@ RS485 Serial Communications
- 		/* Error handling. See errno. */
- 	}
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index f72658b3a53f..b8296ef2bfcf 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -35,8 +35,12 @@ cflags-vdso := $(ccflags-vdso) \
+ 	-O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
+ 	-mrelax-pic-calls $(call cc-option, -mexplicit-relocs) \
+ 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+-	$(call cc-option, -fno-asynchronous-unwind-tables)
++	$(call cc-option, -fno-asynchronous-unwind-tables) \
++	$(filter -ffile-prefix-map%,$(KBUILD_CFLAGS)) \
++	$(filter -fmacro-prefix-map%,$(KBUILD_CFLAGS)) \
++	$(filter -fdebug-prefix-map%,$(KBUILD_CFLAGS))
+ aflags-vdso := $(ccflags-vdso) \
++	$(filter --debug-prefix-map%,$(KBUILD_AFLAGS)) \
+ 	-D__ASSEMBLY__ -Wa,-gdwarf-2
  
--5. References
-+5. Multipoint Addressing
-+========================
-+
-+   The Linux kernel provides serial_addr structure to handle addressing within
-+   multipoint serial communications line such as RS485. 9th bit addressiong mode
-+   is enabled by adding ADDRB flag in termios c_cflag.
-+
-+   Serial core calls device specific set/get_addr in response to TIOCSADDR and
-+   TIOCGADDR ioctls with a pointer to serial_addr. Destination and receive
-+   address can be specified using serial_addr flags field. Receive address may
-+   also be cleared using flags. Once an address is set, the communication
-+   can occur only with the particular device and other peers are filtered out.
-+   It is left up to the receiver side to enforce the filtering.
-+
-+   Address flags:
-+	- SER_ADDR_RECV: Receive (filter) address.
-+	- SER_ADDR_RECV_CLEAR: Clear receive filter (only for TIOCSADDR).
-+	- SER_ADDR_DEST: Destination address.
-+
-+   Note: not all devices supporting RS485 support multipoint addressing.
-+
-+6. References
- =============
- 
-  [1]	include/uapi/linux/serial.h
-diff --git a/arch/alpha/include/uapi/asm/ioctls.h b/arch/alpha/include/uapi/asm/ioctls.h
-index 971311605288..500cab3e1d6b 100644
---- a/arch/alpha/include/uapi/asm/ioctls.h
-+++ b/arch/alpha/include/uapi/asm/ioctls.h
-@@ -125,4 +125,7 @@
- #define TIOCMIWAIT	0x545C	/* wait for a change on serial input line(s) */
- #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
- 
-+#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
-+#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
-+
- #endif /* _ASM_ALPHA_IOCTLS_H */
-diff --git a/arch/mips/include/uapi/asm/ioctls.h b/arch/mips/include/uapi/asm/ioctls.h
-index 16aa8a766aec..3859dc46857e 100644
---- a/arch/mips/include/uapi/asm/ioctls.h
-+++ b/arch/mips/include/uapi/asm/ioctls.h
-@@ -96,6 +96,9 @@
- #define TIOCGISO7816	_IOR('T', 0x42, struct serial_iso7816)
- #define TIOCSISO7816	_IOWR('T', 0x43, struct serial_iso7816)
- 
-+#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
-+#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
-+
- /* I hope the range from 0x5480 on is free ... */
- #define TIOCSCTTY	0x5480		/* become controlling tty */
- #define TIOCGSOFTCAR	0x5481
-diff --git a/arch/parisc/include/uapi/asm/ioctls.h b/arch/parisc/include/uapi/asm/ioctls.h
-index 82d1148c6379..62337743db64 100644
---- a/arch/parisc/include/uapi/asm/ioctls.h
-+++ b/arch/parisc/include/uapi/asm/ioctls.h
-@@ -86,6 +86,9 @@
- #define TIOCSTOP	0x5462
- #define TIOCSLTC	0x5462
- 
-+#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
-+#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
-+
- /* Used for packet mode */
- #define TIOCPKT_DATA		 0
- #define TIOCPKT_FLUSHREAD	 1
-diff --git a/arch/powerpc/include/uapi/asm/ioctls.h b/arch/powerpc/include/uapi/asm/ioctls.h
-index 2c145da3b774..84fd69ac366a 100644
---- a/arch/powerpc/include/uapi/asm/ioctls.h
-+++ b/arch/powerpc/include/uapi/asm/ioctls.h
-@@ -120,4 +120,7 @@
- #define TIOCMIWAIT	0x545C	/* wait for a change on serial input line(s) */
- #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
- 
-+#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
-+#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
-+
- #endif	/* _ASM_POWERPC_IOCTLS_H */
-diff --git a/arch/sh/include/uapi/asm/ioctls.h b/arch/sh/include/uapi/asm/ioctls.h
-index 11866d4f60e1..f82966b7dba2 100644
---- a/arch/sh/include/uapi/asm/ioctls.h
-+++ b/arch/sh/include/uapi/asm/ioctls.h
-@@ -113,4 +113,7 @@
- #define TIOCMIWAIT	_IO('T', 92) /* 0x545C */	/* wait for a change on serial input line(s) */
- #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
- 
-+#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
-+#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
-+
- #endif /* __ASM_SH_IOCTLS_H */
-diff --git a/arch/sparc/include/uapi/asm/ioctls.h b/arch/sparc/include/uapi/asm/ioctls.h
-index 7fd2f5873c9e..e44624c67c79 100644
---- a/arch/sparc/include/uapi/asm/ioctls.h
-+++ b/arch/sparc/include/uapi/asm/ioctls.h
-@@ -125,6 +125,9 @@
- #define TIOCMIWAIT	0x545C /* Wait for change on serial input line(s) */
- #define TIOCGICOUNT	0x545D /* Read serial port inline interrupt counts */
- 
-+#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
-+#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
-+
- /* Kernel definitions */
- 
- /* Used for packet mode */
-diff --git a/arch/xtensa/include/uapi/asm/ioctls.h b/arch/xtensa/include/uapi/asm/ioctls.h
-index 6d4a87296c95..759ca9377f2a 100644
---- a/arch/xtensa/include/uapi/asm/ioctls.h
-+++ b/arch/xtensa/include/uapi/asm/ioctls.h
-@@ -127,4 +127,7 @@
- #define TIOCMIWAIT	_IO('T', 92) /* wait for a change on serial input line(s) */
- #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
- 
-+#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
-+#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
-+
- #endif /* _XTENSA_IOCTLS_H */
-diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index 01d30f6ed8fb..f67bc3b76f65 100644
---- a/drivers/tty/serial/8250/8250_core.c
-+++ b/drivers/tty/serial/8250/8250_core.c
-@@ -1008,6 +1008,8 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
- 		uart->port.rs485	= up->port.rs485;
- 		uart->rs485_start_tx	= up->rs485_start_tx;
- 		uart->rs485_stop_tx	= up->rs485_stop_tx;
-+		uart->port.set_addr	= up->port.set_addr;
-+		uart->port.get_addr	= up->port.get_addr;
- 		uart->dma		= up->dma;
- 
- 		/* Take tx_loadsz from fifosize if it wasn't set separately */
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index de198c2acefe..2cd129c78ef6 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -1350,6 +1350,56 @@ static int uart_set_iso7816_config(struct uart_port *port,
- 	return 0;
- }
- 
-+static int uart_set_addr(struct uart_port *port,
-+			 struct serial_addr __user *serial_addr_user)
-+{
-+	struct serial_addr addr;
-+	unsigned long flags;
-+	int ret;
-+
-+	if (!port->set_addr)
-+		return -ENOTTY;
-+
-+	if (copy_from_user(&addr, serial_addr_user, sizeof(*serial_addr_user)))
-+		return -EFAULT;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+	ret = port->set_addr(port, &addr);
-+	spin_unlock_irqrestore(&port->lock, flags);
-+	if (ret)
-+		return ret;
-+
-+	if (copy_to_user(serial_addr_user, &addr, sizeof(addr)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+static int uart_get_addr(struct uart_port *port,
-+			 struct serial_addr __user *serial_addr_user)
-+{
-+	struct serial_addr addr;
-+	unsigned long flags;
-+	int ret;
-+
-+	if (!port->get_addr)
-+		return -ENOTTY;
-+
-+	if (copy_from_user(&addr, serial_addr_user, sizeof(*serial_addr_user)))
-+		return -EFAULT;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+	ret = port->get_addr(port, &addr);
-+	spin_unlock_irqrestore(&port->lock, flags);
-+	if (ret)
-+		return ret;
-+
-+	if (copy_to_user(serial_addr_user, &addr, sizeof(addr)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
- /*
-  * Called via sys_ioctl.  We can use spin_lock_irq() here.
-  */
-@@ -1427,6 +1477,15 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
- 	case TIOCGISO7816:
- 		ret = uart_get_iso7816_config(state->uart_port, uarg);
- 		break;
-+
-+	case TIOCSADDR:
-+		ret = uart_set_addr(uport, uarg);
-+		break;
-+
-+	case TIOCGADDR:
-+		ret = uart_get_addr(uport, uarg);
-+		break;
-+
- 	default:
- 		if (uport->ops->ioctl)
- 			ret = uport->ops->ioctl(uport, cmd, arg);
-@@ -1493,7 +1552,8 @@ static void uart_set_termios(struct tty_struct *tty,
- 		goto out;
- 	}
- 
--	tty->termios.c_cflag &= ~ADDRB;
-+	if (!uport->set_addr)
-+		tty->termios.c_cflag &= ~ADDRB;
- 
- 	uart_change_speed(tty, state, old_termios);
- 	/* reload cflag from termios; port driver may have overridden flags */
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index 504d365e2803..a2efd3fe2635 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -135,6 +135,12 @@ struct uart_port {
- 						struct serial_rs485 *rs485);
- 	int			(*iso7816_config)(struct uart_port *,
- 						  struct serial_iso7816 *iso7816);
-+
-+	int			(*set_addr)(struct uart_port *p,
-+					    struct serial_addr *addr);
-+	int			(*get_addr)(struct uart_port *p,
-+					    struct serial_addr *addr);
-+
- 	unsigned int		irq;			/* irq number */
- 	unsigned long		irqflags;		/* irq flags  */
- 	unsigned int		uartclk;		/* base uart clock */
-diff --git a/include/uapi/asm-generic/ioctls.h b/include/uapi/asm-generic/ioctls.h
-index cdc9f4ca8c27..689743366091 100644
---- a/include/uapi/asm-generic/ioctls.h
-+++ b/include/uapi/asm-generic/ioctls.h
-@@ -106,6 +106,9 @@
- # define FIOQSIZE	0x5460
- #endif
- 
-+#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
-+#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
-+
- /* Used for packet mode */
- #define TIOCPKT_DATA		 0
- #define TIOCPKT_FLUSHREAD	 1
-diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
-index fa6b16e5fdd8..8cb785ea7087 100644
---- a/include/uapi/linux/serial.h
-+++ b/include/uapi/linux/serial.h
-@@ -149,4 +149,12 @@ struct serial_iso7816 {
- 	__u32	reserved[5];
- };
- 
-+struct serial_addr {
-+	__u32	flags;
-+#define SER_ADDR_RECV			(1 << 0)
-+#define SER_ADDR_RECV_CLEAR		(1 << 1)
-+#define SER_ADDR_DEST			(1 << 2)
-+	__u32	addr;
-+};
-+
- #endif /* _UAPI_LINUX_SERIAL_H */
+ ifneq ($(c-gettimeofday-y),)
 -- 
-2.30.2
-
+2.26.0
