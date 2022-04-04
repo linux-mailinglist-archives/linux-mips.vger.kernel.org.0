@@ -2,314 +2,417 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2E54F0FD5
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Apr 2022 09:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE94D4F10EE
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Apr 2022 10:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377617AbiDDHMN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Apr 2022 03:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S237664AbiDDIcR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Apr 2022 04:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377615AbiDDHMM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Apr 2022 03:12:12 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD403AA6F;
-        Mon,  4 Apr 2022 00:10:11 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2341piQn020990;
-        Mon, 4 Apr 2022 07:09:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=cfVaDeBc+xYAEJUW1i4rR6c2Eono9lckX0H6AxfZXuo=;
- b=wyJNA4OUMYbbD5pyPny9T8yboUMbbBU8QOK50WX/8TdkNg3oO1BVLlQS9FpExs/96jKt
- NNLu4pDCAq5PoYQJKQwYn3BqPcdB/ComU9DR0I5KCz5HdWEw+OTjGiXZdNvdhZZA6SJ8
- MNvUR6kYHQ45D3+JEca7eEhldX6WhmvhKblobm2kf2RoyLsymy/CRRA9ed1HCkxGKgES
- maVa3ZtmPWFCcW2djIpMxd3BDJUd4NWvP6p2f+ahicOFTDS6JVanxYo9mstaDwfilTZm
- dcUxeKfbO9HDQLYOpk6+P0os/9lTuXjjdJ/squV4xh85Wi/dzWj2FGB1NX14g7OcsMY8 jw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d92t95d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 04 Apr 2022 07:09:13 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23470ITt031697;
-        Mon, 4 Apr 2022 07:09:12 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f6cx1x32k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 04 Apr 2022 07:09:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O1wUASXnQl7ry1oF8Z6q3t3j3oqmFMXmP5h0sCJFECFMkmKgLagxF5DP1frmG8vp9cJtVOATy+ifDT7NqhFbkS03rWBz9snjHgcKe89zyyaAS+/Bjn36n1sExIj+MfyXv8eA4bywurk+WZIRXgeouJX8thRF3ryy9Z+FCbU4zd2X4D+2BPhXn4tExZmIETBikB2Th+f8zzhAgsRBshd5uR1t+obh8sOtqPS7wwxndHLOcOG/KDuHoXJtXRXCPANfCauveiajKAG94hQsgEqzdOysZFahMzb9zx9WA6PYhmGK/KLZyTrC7CVrcfwGv9DEeLZ+cF04tIsQsf00ZQFbRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cfVaDeBc+xYAEJUW1i4rR6c2Eono9lckX0H6AxfZXuo=;
- b=Iqit9bam3RE28mDD2RrOdX9GCjxVwaDJUgeUl3DA5imGwFetlS4EQVIkBiYv0C4ges/9SpEUCI7UKyUY/xc9ebDHvy4cjjtK819DKam8+8/kzWerdAsWO3EoBvnj9lRpoRBqdiczt51HHJClUU7mqKAc/BWVIhMqNr/KIooDaSBvGRIySAizGJtSKYdf85z1H1vYB+AdzdnjuYVvNP1bKwHJzNxG5pJ45qcNYlZir/rZmlOTB3xj1+lSr9GsEeCpQouHQ/Zm/Ng4HYWZCeWY+7nm/t/gaPQWeiewVHidP6fAQNvYrbrRPUx0OMPw4Be7kstWA4P9+qY0B1y+fT7PRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cfVaDeBc+xYAEJUW1i4rR6c2Eono9lckX0H6AxfZXuo=;
- b=N6HL3attkP/oERoO/RmZ4JOwAWTfXAcmLmRhA6Cte3umeVlxEeAWXiFSE7fMvgwn6sInCA73akxWsdWXra2U0jplJ5NOGSZ3YUiEug/tJgoWsyMMdVuv/W7sbK8M3ERMoYyrzK7WdQQgT6Bl/9NwWgm9KTlrlXkviyXc/eXbA1Q=
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
- by BN6PR1001MB2340.namprd10.prod.outlook.com (2603:10b6:405:30::36) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
- 2022 07:09:10 +0000
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::6c4e:65d8:4e2d:d942]) by BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::6c4e:65d8:4e2d:d942%7]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
- 07:09:10 +0000
-Subject: Re: [PATCH 12/15] swiotlb: provide swiotlb_init variants that remap
- the buffer
-To:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org
-Cc:     x86@kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
-        linux-pci@vger.kernel.org
-References: <20220404050559.132378-1-hch@lst.de>
- <20220404050559.132378-13-hch@lst.de>
-From:   Dongli Zhang <dongli.zhang@oracle.com>
-Message-ID: <54ec407f-eda2-6e28-90f9-eb48b2ec8763@oracle.com>
-Date:   Mon, 4 Apr 2022 00:09:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-In-Reply-To: <20220404050559.132378-13-hch@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0258.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::23) To BYAPR10MB2663.namprd10.prod.outlook.com
- (2603:10b6:a02:a9::20)
+        with ESMTP id S237592AbiDDIcQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Apr 2022 04:32:16 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3047325590;
+        Mon,  4 Apr 2022 01:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649061020; x=1680597020;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ABizxv2oeYO2wwl4Dd5x36/ryIakHx/dr6Yh5+l52KI=;
+  b=J91TomdTbrFgF+3NZ+k6Rqf9lTNSN9eW0jIXrPQlh9ytH5lXzaHai3mj
+   7v8u/DMKnrm9kJn/r3H6qhTyCcI7gX6CfOHN1VQY0ZIbgqL4UVUtzJSv+
+   EEDRQUwAl5Brg/8et5SHRuALN4fICWUlU0+g0Pn96mbRmm/VtDMYKN2Xn
+   21T7KYwR5cIDA7+VxKjuQV7RHqcVD36rJVVm84N9/QsrJkeVbaAXKGAjA
+   /UUqJYA/l3mN6SeQ3BaVMWa1VSDJhzcq8vq2f4SxRR4d19kS9j7FfXI26
+   NJS508qoMnesTz5LjYhirai0/iokO1kESF//ZUCFbpgh9YbBegWQT9cgc
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="323639795"
+X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
+   d="scan'208";a="323639795"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 01:30:19 -0700
+X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
+   d="scan'208";a="569293542"
+Received: from rhamza-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.211.126])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 01:30:10 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Johan Hovold <johan@kernel.org>, heiko@sntech.de,
+        giulio.benetti@micronovasrl.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-api@vger.kernel.org,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2 07/12] serial: termbits: ADDRB to indicate 9th bit addressing mode
+Date:   Mon,  4 Apr 2022 11:29:07 +0300
+Message-Id: <20220404082912.6885-8-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220404082912.6885-1-ilpo.jarvinen@linux.intel.com>
+References: <20220404082912.6885-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d850cdbc-933c-4a65-b2d0-08da160a0416
-X-MS-TrafficTypeDiagnostic: BN6PR1001MB2340:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR1001MB2340E896B177E99B615501CEF0E59@BN6PR1001MB2340.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aX8/C9LNeDD1ritQCp/1YZyln1l87AxIe7JjjwdthQ+0b9dJOdRmyiriJtHBUK/O4ZBWdVGy3C8TXqofsgyUpydVOWv37YtnkBqft59hdQayrZoBqx66U0KgK6Y1c/i3iOEdxkJxUgGUybB9vrPpmASWUx0DKjWim5Pv5L1IM5a1PpxFbzT+oI2PmTdKttl/GM6GfW3ubpnMm2SNHA0h4s/CVjWYHbWkUcJrBFpMSXUaeZHIfcpmrtMP4iGIxcvRt73UrgCI3Exk4VxfoG5hrG+S3LzD1F2jMfoGhq2ew7nrsiuI7s7Gcgq9RH81zsLEmapIBseYipeef0KltLjJCoyyt+rCFv4eEYHRZWThEzz+InY1SacscvD7DuRCoppdRu3q3ZhL558dSx0XFbYhwE+F6/3xpdbudUDX9enMTrQMHmvv9rZze/XXoPwPOEUT4bQQLKIcRo2/Mt37DPXxmh8f1kB/S3w5pEe1qMRBXKzvBLxY9+TMtC7DPYqf7eT3nudKeXBQrhYewWqf+DoaYpfN3lAnvn0IDvFdBEQWuuOGiX/739PxgUJ3TCiyOkzCM5cc7rPuM8Y6K3Ckn6vPGiqA228YFPTymozmWOiJPXXntqLPf8QNEOnQglqGPJseOj1/A1tawxs7Am12ni9PlGzgoXN7BOC/U5Dmf2rMgIeWyK/woRFewT5bqLcb4ooFpfpWgjuPy7ptgZu6vjkt8Zd7lY3HWU1aXbNz8KWqwfE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(86362001)(31696002)(53546011)(2906002)(6512007)(83380400001)(6506007)(8676002)(31686004)(66556008)(36756003)(4326008)(316002)(66476007)(66946007)(54906003)(7416002)(6486002)(508600001)(5660300002)(44832011)(8936002)(2616005)(186003)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ak9PRzROa1F2VVQxN3RkMDA2V2w3QjNmbnZGNWw5NW4vUXFTZWEwVmRJZmVZ?=
- =?utf-8?B?blRvQ2ZWTHZFN1BXUDZlSjFSbjJKZU8yRktYQTdCWms3dVc4eTRRWldNaGFQ?=
- =?utf-8?B?dk4yc01jbnV3a2xYTnp0NmxScjdsQUpUTGdDa25VOWNJdFZ1Ti9mWEJVL0Nj?=
- =?utf-8?B?N3dndWxEWHd2QWhBRVJ5Smt3aGZPQTVmRnVzYXE0SmlaRFdaUmpoSHBHT3Zx?=
- =?utf-8?B?MGxielBWYzhYclNRbUVxODJoYTR1OHV6WFNVVWNTKzFzU2J3cmNrYVdVZGNH?=
- =?utf-8?B?OUdGOGxuVFdlTy9vS0dWajJ4eGdXakFpNDhOMTJJeldHZ0RXemV3MmUrenY4?=
- =?utf-8?B?ZGdua2loQmhyN1pzeElWVmhwUXBkOXNCWUxicjZ1LzJldEhYNlpwTmZzMFFU?=
- =?utf-8?B?dytNT29YbTVCQ2N4eFl3dGszQWVNUW5qMGJTdXZoMGoyUGhCVXZVREZYc3Ri?=
- =?utf-8?B?d3VhZjhHRE8vMW1wZHQwMEpkVDk0cTB0UWgxTEpDVkp2WUJ2VlBRTmcxelBS?=
- =?utf-8?B?ZmRhaW1wMXp6N0Q4ZXB3UEZOQVllbi91M292TWl5SW9Hd3l6WDZ6ZnVJK2xV?=
- =?utf-8?B?Yk1nUzgycHFzYXdobjRKZVdkbXFkKzIwcGJFQlVqY2V2QnB6QjRobHhXMU0y?=
- =?utf-8?B?T09JTmlpSG9HUjBTL0R0Yk94SllpTW5iQjlWTTYrVHlXV0JaTTM4WkFnQzNq?=
- =?utf-8?B?U2hLNlRPc3Vld3BvRUZKQndZUEFUVG5ZeUpDaW10cmF5YkJOWjZjWFlJOXNG?=
- =?utf-8?B?N282REdaVTdNMVlYL3BWMHJZSE1QUXJvTVUrTURhK0tJK1UwK01OUlI1TXAx?=
- =?utf-8?B?dzljcFFzMkphZXBNNkt6Nmk4am9lc0FOelBHTGxtTDNiV282T3Z0YmNPaTRo?=
- =?utf-8?B?d01FQ3RNY2dsMnlMN3RaU1FYR3VNbE5kMVlFSGU4Q2l0aVgzODI1V3FhejFj?=
- =?utf-8?B?YmhMUDk1NmpSWVBlNzhIMmJLQ1ZpR0lDRkdoUUkwOTI5ZnhhVWJwZE5OZ2l1?=
- =?utf-8?B?Y05qMzdmcGVnN09KOTdRVjk2dlF2Z2xENGpaQ0xCOGJFRlZQaEJQNmVkZUwy?=
- =?utf-8?B?aVh4VzB6SmYzeElKR3B3cG1BWGkwaUtKSVpDemwxSDhFVlM5ckFOYktlSzdM?=
- =?utf-8?B?M0F2dXpzUkZuTTRlc1EzSkFkNDAyRnZKY1E3S0pRSHBEaDRKVTBwbGJGME5z?=
- =?utf-8?B?bzBOWEFhRDhoR1FBSzJ3TzBkL0lxeURUN3Z5Z0xtOEp4UlB6dkFKMk1jOW9o?=
- =?utf-8?B?a2p5SE5GUm8xSkRkQUxOUWtrYm5ZWWZqRGlYWXZUTzY5SGJUYm9jRGNuYTNY?=
- =?utf-8?B?Qlc3b3NSbno1N1lrY0o4eVN6Tm9jeTNiUlc3ZzhDeVFMRXQ3ay9rbTMzV1Zk?=
- =?utf-8?B?ZEtZMzNVMnhoY3ZLbkZpUEp6Tmpva1ZzNm1sZUtPVG9mTjlLZU9VNWVtdjBJ?=
- =?utf-8?B?YnIzNTh6d2p0ekdCY1ZzSlFubmg2c0daTEZNZEtuY052bFlWL0hNalJHSVRN?=
- =?utf-8?B?RzJEYVNhWDFmVlhHS0VLb1hXbWxDMW9lMlR3RmFOVjlSa1ArdGFVNFFzTUhT?=
- =?utf-8?B?c0FSa0M5Z0UvMVNOMkI5TjFlRk9YVVpBL1p6VHJOMGlBMXFaK3VmeUVvQmda?=
- =?utf-8?B?YTFSS2JGN003V0NsYStvMWV5YklTNCsxNldXN2gySjNsNDE0K2o3NWJxODFx?=
- =?utf-8?B?OUFjVEdBU1RSZGE5RVdTK1JLb3RJWGdPeHZxOFN4VTlTZFpzWHNSS2FCajMz?=
- =?utf-8?B?eWg5WjN6U0ZXQXNoYUI3c3FXZ0R1UmRJU2swSCtLQTZ3Zm83ai9PNlRqTnhu?=
- =?utf-8?B?U3dJSXk3b0JQWEdhbFJlZTZOV2d5SCt1Q2c5Y3psaE9kVzdvU0tUR3E4YXJI?=
- =?utf-8?B?SEJHT0xpWGN0VG0yVkJmMXAwb0FvT1hNbWxjUWhZTGU0R282Vld2WU1wOHNO?=
- =?utf-8?B?aDFVZC8yd3BYZ3V2Z3hPMTh1TWh3UW5NQU5uYjlUeTh0S21QL0ZCTnNCYXJX?=
- =?utf-8?B?a1YyY2tkNUNUMzI0V3ZlaWNHM203UGZRZlY5aHBlS09hTlhKVVJsTkJhcnJR?=
- =?utf-8?B?V0cxcG8zaWgvR2UyU2VwaFI4K2hhdy8rOEthVEtlYkF5UWZQNDlGSUhqNEVx?=
- =?utf-8?B?dWhkdDlMUUwzcHZYd3dFbnBSTnYrT0pNaG9HQjRjUzNIZngzS3Rteklaa1Z5?=
- =?utf-8?B?enZaWW5uamZaTE56V2xSQkVBNDNpbHJ4N0Eydi9EZDJyZk0vRXZDYlFSM3Fh?=
- =?utf-8?B?VjgzdnRnOWxiODc5UzY4Y2JUZkMrTWdjUjdTUGxJQVZSNk9lMDJWbXlZQTEr?=
- =?utf-8?B?VEszNENBazU5Z1JWTnhtTmlraDZadnBJVFF0b0JaM1NMSmVjV3k5clIva2ND?=
- =?utf-8?Q?NrVBx07mFvEL67XyezraO+YHCpa5MIlvMOAAk?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d850cdbc-933c-4a65-b2d0-08da160a0416
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 07:09:10.3239
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q6hB9PUkQroZregA5CgGo5ZUdZppcT2DmA+1CIUiOMJqsmmHEgss7AQSrF4z7Kh1q6JwXRnc1vlCCMTYxE7v5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1001MB2340
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
- definitions=2022-04-04_02:2022-03-30,2022-04-04 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 bulkscore=0
- adultscore=0 mlxscore=0 phishscore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204040042
-X-Proofpoint-ORIG-GUID: hxCO3FgQKWRWKinXDhtkSBFm1Q-03idM
-X-Proofpoint-GUID: hxCO3FgQKWRWKinXDhtkSBFm1Q-03idM
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Add ADDRB to termbits to indicate 9th bit addressing mode.
+This change is necessary for supporting devices with RS485
+multipoint addressing [*]. A later patch in the patch series
+adds support for Synopsys Designware UART capable for 9th bit
+addressing mode. In this mode, 9th bit is used to indicate an
+address (byte) within the communication line. The 9th bit
+addressing mode is selected using ADDRB introduced by an earlier
+patch.
 
+[*] Technically, RS485 is just an electronic spec and does not
+itself specify the 9th bit addressing mode but 9th bit seems
+at least "semi-standard" way to do addressing with RS485.
 
-On 4/3/22 10:05 PM, Christoph Hellwig wrote:
-> To shared more code between swiotlb and xen-swiotlb, offer a
-> swiotlb_init_remap interface and add a remap callback to
-> swiotlb_init_late that will allow Xen to remap the buffer the
-> buffer without duplicating much of the logic.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/x86/pci/sta2x11-fixup.c |  2 +-
->  include/linux/swiotlb.h      |  5 ++++-
->  kernel/dma/swiotlb.c         | 36 +++++++++++++++++++++++++++++++++---
->  3 files changed, 38 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/pci/sta2x11-fixup.c b/arch/x86/pci/sta2x11-fixup.c
-> index c7e6faf59a861..7368afc039987 100644
-> --- a/arch/x86/pci/sta2x11-fixup.c
-> +++ b/arch/x86/pci/sta2x11-fixup.c
-> @@ -57,7 +57,7 @@ static void sta2x11_new_instance(struct pci_dev *pdev)
->  		int size = STA2X11_SWIOTLB_SIZE;
->  		/* First instance: register your own swiotlb area */
->  		dev_info(&pdev->dev, "Using SWIOTLB (size %i)\n", size);
-> -		if (swiotlb_init_late(size, GFP_DMA))
-> +		if (swiotlb_init_late(size, GFP_DMA, NULL))
->  			dev_emerg(&pdev->dev, "init swiotlb failed\n");
->  	}
->  	list_add(&instance->list, &sta2x11_instance_list);
-> diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-> index ee655f2e4d28b..7b50c82f84ce9 100644
-> --- a/include/linux/swiotlb.h
-> +++ b/include/linux/swiotlb.h
-> @@ -36,8 +36,11 @@ struct scatterlist;
->  
->  int swiotlb_init_with_tbl(char *tlb, unsigned long nslabs, unsigned int flags);
->  unsigned long swiotlb_size_or_default(void);
-> +void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
-> +	int (*remap)(void *tlb, unsigned long nslabs));
-> +int swiotlb_init_late(size_t size, gfp_t gfp_mask,
-> +	int (*remap)(void *tlb, unsigned long nslabs));
->  extern int swiotlb_late_init_with_tbl(char *tlb, unsigned long nslabs);
-> -int swiotlb_init_late(size_t size, gfp_t gfp_mask);
->  extern void __init swiotlb_update_mem_attributes(void);
->  
->  phys_addr_t swiotlb_tbl_map_single(struct device *hwdev, phys_addr_t phys,
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index 119187afc65ec..d5fe8f5e08300 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
-> @@ -256,9 +256,11 @@ int __init swiotlb_init_with_tbl(char *tlb, unsigned long nslabs,
->   * Statically reserve bounce buffer space and initialize bounce buffer data
->   * structures for the software IO TLB used to implement the DMA API.
->   */
-> -void __init swiotlb_init(bool addressing_limit, unsigned int flags)
-> +void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
-> +		int (*remap)(void *tlb, unsigned long nslabs))
->  {
-> -	size_t bytes = PAGE_ALIGN(default_nslabs << IO_TLB_SHIFT);
-> +	unsigned long nslabs = default_nslabs;
-> +	size_t bytes;
->  	void *tlb;
->  
->  	if (!addressing_limit && !swiotlb_force_bounce)
-> @@ -271,12 +273,23 @@ void __init swiotlb_init(bool addressing_limit, unsigned int flags)
->  	 * allow to pick a location everywhere for hypervisors with guest
->  	 * memory encryption.
->  	 */
-> +retry:
-> +	bytes = PAGE_ALIGN(default_nslabs << IO_TLB_SHIFT);
->  	if (flags & SWIOTLB_ANY)
->  		tlb = memblock_alloc(bytes, PAGE_SIZE);
->  	else
->  		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
->  	if (!tlb)
->  		goto fail;
-> +	if (remap && remap(tlb, nslabs) < 0) {
-> +		memblock_free(tlb, PAGE_ALIGN(bytes));
-> +
-> +		nslabs = ALIGN(nslabs >> 1, IO_TLB_SEGSIZE);
-> +		if (nslabs < IO_TLB_MIN_SLABS)
-> +			panic("%s: Failed to remap %zu bytes\n",
-> +			      __func__, bytes);
-> +		goto retry;
-> +	}
->  	if (swiotlb_init_with_tbl(tlb, default_nslabs, flags))
->  		goto fail_free_mem;
->  	return;
-> @@ -287,12 +300,18 @@ void __init swiotlb_init(bool addressing_limit, unsigned int flags)
->  	pr_warn("Cannot allocate buffer");
->  }
->  
-> +void __init swiotlb_init(bool addressing_limit, unsigned int flags)
-> +{
-> +	return swiotlb_init_remap(addressing_limit, flags, NULL);
-> +}
-> +
->  /*
->   * Systems with larger DMA zones (those that don't support ISA) can
->   * initialize the swiotlb later using the slab allocator if needed.
->   * This should be just like above, but with some error catching.
->   */
-> -int swiotlb_init_late(size_t size, gfp_t gfp_mask)
-> +int swiotlb_init_late(size_t size, gfp_t gfp_mask,
-> +		int (*remap)(void *tlb, unsigned long nslabs))
->  {
->  	unsigned long nslabs = ALIGN(size >> IO_TLB_SHIFT, IO_TLB_SEGSIZE);
->  	unsigned long bytes;
-> @@ -303,6 +322,7 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask)
->  	if (swiotlb_force_disable)
->  		return 0;
->  
-> +retry:
->  	order = get_order(nslabs << IO_TLB_SHIFT);
->  	nslabs = SLABS_PER_PAGE << order;
->  	bytes = nslabs << IO_TLB_SHIFT;
-> @@ -323,6 +343,16 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask)
->  			(PAGE_SIZE << order) >> 20);
->  		nslabs = SLABS_PER_PAGE << order;
->  	}
-> +	if (remap)
-> +		rc = remap(vstart, nslabs);
-> +	if (rc) {
-> +		free_pages((unsigned long)vstart, order);
-> + 
+Cc: linux-api@vger.kernel.org
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: linux-alpha@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ arch/alpha/include/uapi/asm/termbits.h   | 1 +
+ arch/mips/include/uapi/asm/termbits.h    | 1 +
+ arch/parisc/include/uapi/asm/termbits.h  | 1 +
+ arch/powerpc/include/uapi/asm/termbits.h | 1 +
+ arch/sparc/include/uapi/asm/termbits.h   | 1 +
+ drivers/char/pcmcia/synclink_cs.c        | 2 ++
+ drivers/ipack/devices/ipoctal.c          | 2 ++
+ drivers/mmc/core/sdio_uart.c             | 2 ++
+ drivers/net/usb/hso.c                    | 3 ++-
+ drivers/s390/char/tty3270.c              | 3 +++
+ drivers/staging/greybus/uart.c           | 2 ++
+ drivers/tty/amiserial.c                  | 6 +++++-
+ drivers/tty/moxa.c                       | 1 +
+ drivers/tty/mxser.c                      | 1 +
+ drivers/tty/serial/serial_core.c         | 2 ++
+ drivers/tty/synclink_gt.c                | 2 ++
+ drivers/tty/tty_ioctl.c                  | 2 ++
+ drivers/usb/class/cdc-acm.c              | 2 ++
+ drivers/usb/serial/usb-serial.c          | 6 ++++--
+ include/uapi/asm-generic/termbits.h      | 1 +
+ net/bluetooth/rfcomm/tty.c               | 2 ++
+ 21 files changed, 40 insertions(+), 4 deletions(-)
 
-"warning: 1 line adds whitespace errors." above when I was applying the patch
-for test.
+diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
+index 4575ba34a0ea..285169c794ec 100644
+--- a/arch/alpha/include/uapi/asm/termbits.h
++++ b/arch/alpha/include/uapi/asm/termbits.h
+@@ -180,6 +180,7 @@ struct ktermios {
+ #define HUPCL	00040000
+ 
+ #define CLOCAL	00100000
++#define ADDRB	010000000		/* address bit */
+ #define CMSPAR	  010000000000		/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000		/* flow control */
+ 
+diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
+index dfeffba729b7..e7ea31cfec78 100644
+--- a/arch/mips/include/uapi/asm/termbits.h
++++ b/arch/mips/include/uapi/asm/termbits.h
+@@ -181,6 +181,7 @@ struct ktermios {
+ #define	 B3000000 0010015
+ #define	 B3500000 0010016
+ #define	 B4000000 0010017
++#define ADDRB	  0020000	/* address bit */
+ #define CIBAUD	  002003600000	/* input baud rate */
+ #define CMSPAR	  010000000000	/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000	/* flow control */
+diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
+index 40e920f8d683..629be061f5d5 100644
+--- a/arch/parisc/include/uapi/asm/termbits.h
++++ b/arch/parisc/include/uapi/asm/termbits.h
+@@ -158,6 +158,7 @@ struct ktermios {
+ #define  B3000000 0010015
+ #define  B3500000 0010016
+ #define  B4000000 0010017
++#define ADDRB	  0020000		/* address bit */
+ #define CIBAUD    002003600000		/* input baud rate */
+ #define CMSPAR    010000000000          /* mark or space (stick) parity */
+ #define CRTSCTS   020000000000          /* flow control */
+diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
+index ed18bc61f63d..1b778ac562a4 100644
+--- a/arch/powerpc/include/uapi/asm/termbits.h
++++ b/arch/powerpc/include/uapi/asm/termbits.h
+@@ -171,6 +171,7 @@ struct ktermios {
+ #define HUPCL	00040000
+ 
+ #define CLOCAL	00100000
++#define ADDRB	00200000		/* address bit */
+ #define CMSPAR	  010000000000		/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000		/* flow control */
+ 
+diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
+index ce5ad5d0f105..4ad60c4acf65 100644
+--- a/arch/sparc/include/uapi/asm/termbits.h
++++ b/arch/sparc/include/uapi/asm/termbits.h
+@@ -200,6 +200,7 @@ struct ktermios {
+ #define B3000000  0x00001011
+ #define B3500000  0x00001012
+ #define B4000000  0x00001013  */
++#define ADDRB	  0x00002000  /* address bit */
+ #define CIBAUD	  0x100f0000  /* input baud rate (not used) */
+ #define CMSPAR	  0x40000000  /* mark or space (stick) parity */
+ #define CRTSCTS	  0x80000000  /* flow control */
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index 78baba55a8b5..d179b9b57a25 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -2287,6 +2287,8 @@ static void mgslpc_set_termios(struct tty_struct *tty, struct ktermios *old_term
+ 		== RELEVANT_IFLAG(old_termios->c_iflag)))
+ 	  return;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	mgslpc_change_params(info, tty);
+ 
+ 	/* Handle transition to B0 status */
+diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
+index 20d2b9ec1227..d66cc9683ebc 100644
+--- a/drivers/ipack/devices/ipoctal.c
++++ b/drivers/ipack/devices/ipoctal.c
+@@ -506,6 +506,8 @@ static void ipoctal_set_termios(struct tty_struct *tty,
+ 	struct ipoctal_channel *channel = tty->driver_data;
+ 	speed_t baud;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	cflag = tty->termios.c_cflag;
+ 
+ 	/* Disable and reset everything before change the setup */
+diff --git a/drivers/mmc/core/sdio_uart.c b/drivers/mmc/core/sdio_uart.c
+index 04c0823e0359..7432b01379ef 100644
+--- a/drivers/mmc/core/sdio_uart.c
++++ b/drivers/mmc/core/sdio_uart.c
+@@ -880,6 +880,8 @@ static void sdio_uart_set_termios(struct tty_struct *tty,
+ 	if (sdio_uart_claim_func(port) != 0)
+ 		return;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	sdio_uart_change_speed(port, &tty->termios, old_termios);
+ 
+ 	/* Handle transition to B0 status */
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index f97813a4e8d1..b687327bc7b1 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -1099,7 +1099,8 @@ static void _hso_serial_set_termios(struct tty_struct *tty)
+ 		~(CSIZE		/* no size */
+ 		| PARENB	/* disable parity bit */
+ 		| CBAUD		/* clear current baud rate */
+-		| CBAUDEX);	/* clear current buad rate */
++		| CBAUDEX	/* clear current baud rate */
++		| ADDRB);	/* disable 9th (addr) bit */
+ 
+ 	tty->termios.c_cflag |= CS8;	/* character size 8 bits */
+ 
+diff --git a/drivers/s390/char/tty3270.c b/drivers/s390/char/tty3270.c
+index 5c83f71c1d0e..253d2997a1d3 100644
+--- a/drivers/s390/char/tty3270.c
++++ b/drivers/s390/char/tty3270.c
+@@ -1768,6 +1768,9 @@ tty3270_set_termios(struct tty_struct *tty, struct ktermios *old)
+ 	tp = tty->driver_data;
+ 	if (!tp)
+ 		return;
++
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	spin_lock_bh(&tp->view.lock);
+ 	if (L_ICANON(tty)) {
+ 		new = L_ECHO(tty) ? TF_INPUT: TF_INPUTN;
+diff --git a/drivers/staging/greybus/uart.c b/drivers/staging/greybus/uart.c
+index dc4ed0ff1ae2..83e73aefde0f 100644
+--- a/drivers/staging/greybus/uart.c
++++ b/drivers/staging/greybus/uart.c
+@@ -487,6 +487,8 @@ static void gb_tty_set_termios(struct tty_struct *tty,
+ 	struct ktermios *termios = &tty->termios;
+ 	u8 newctrl = gb_tty->ctrlout;
+ 
++	termios->c_cflag &= ~ADDRB;
++
+ 	newline.rate = cpu_to_le32(tty_get_baud_rate(tty));
+ 	newline.format = termios->c_cflag & CSTOPB ?
+ 				GB_SERIAL_2_STOP_BITS : GB_SERIAL_1_STOP_BITS;
+diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+index 533d02b38e02..3ca97007bd6e 100644
+--- a/drivers/tty/amiserial.c
++++ b/drivers/tty/amiserial.c
+@@ -1175,7 +1175,11 @@ static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
+ {
+ 	struct serial_state *info = tty->driver_data;
+ 	unsigned long flags;
+-	unsigned int cflag = tty->termios.c_cflag;
++	unsigned int cflag;
++
++	tty->termios.c_cflag &= ~ADDRB;
++
++	cflag = tty->termios.c_cflag;
+ 
+ 	change_speed(tty, info, old_termios);
+ 
+diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+index f3c72ab1476c..07cd88152d58 100644
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -2050,6 +2050,7 @@ static int MoxaPortSetTermio(struct moxa_port *port, struct ktermios *termio,
+ 
+ 	ofsAddr = port->tableAddr;
+ 
++	termio->c_cflag &= ~ADDRB;
+ 	mode = termio->c_cflag & CSIZE;
+ 	if (mode == CS5)
+ 		mode = MX_CS5;
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 836c9eca2946..220676363a07 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -577,6 +577,7 @@ static void mxser_change_speed(struct tty_struct *tty, struct ktermios *old_term
+ 	struct mxser_port *info = tty->driver_data;
+ 	unsigned cflag, cval;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
+ 	cflag = tty->termios.c_cflag;
+ 
+ 	if (mxser_set_baud(tty, tty_get_baud_rate(tty))) {
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index c6ac91033e38..de198c2acefe 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1493,6 +1493,8 @@ static void uart_set_termios(struct tty_struct *tty,
+ 		goto out;
+ 	}
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	uart_change_speed(tty, state, old_termios);
+ 	/* reload cflag from termios; port driver may have overridden flags */
+ 	cflag = tty->termios.c_cflag;
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 25c558e65ece..ee767cea18ed 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -714,6 +714,8 @@ static void set_termios(struct tty_struct *tty, struct ktermios *old_termios)
+ 
+ 	DBGINFO(("%s set_termios\n", tty->driver->name));
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	change_params(info);
+ 
+ 	/* Handle transition to B0 status */
+diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
+index 63181925ec1a..934037d78868 100644
+--- a/drivers/tty/tty_ioctl.c
++++ b/drivers/tty/tty_ioctl.c
+@@ -319,6 +319,8 @@ unsigned char tty_get_frame_size(unsigned int cflag)
+ 		bits++;
+ 	if (cflag & PARENB)
+ 		bits++;
++	if (cflag & ADDRB)
++		bits++;
+ 
+ 	return bits;
+ }
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 9b9aea24d58c..fd246ec70da8 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1056,6 +1056,8 @@ static void acm_tty_set_termios(struct tty_struct *tty,
+ 	struct usb_cdc_line_coding newline;
+ 	int newctrl = acm->ctrlout;
+ 
++	termios->c_cflag &= ~ADDRB;
++
+ 	newline.dwDTERate = cpu_to_le32(tty_get_baud_rate(tty));
+ 	newline.bCharFormat = termios->c_cflag & CSTOPB ? 2 : 0;
+ 	newline.bParityType = termios->c_cflag & PARENB ?
+diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
+index 24101bd7fcad..8d1d170eb7e6 100644
+--- a/drivers/usb/serial/usb-serial.c
++++ b/drivers/usb/serial/usb-serial.c
+@@ -525,10 +525,12 @@ static void serial_set_termios(struct tty_struct *tty, struct ktermios *old)
+ 
+ 	dev_dbg(&port->dev, "%s\n", __func__);
+ 
+-	if (port->serial->type->set_termios)
++	if (port->serial->type->set_termios) {
++		tty->termios.c_cflag &= ~ADDRB;
+ 		port->serial->type->set_termios(tty, port, old);
+-	else
++	} else {
+ 		tty_termios_copy_hw(&tty->termios, old);
++	}
+ }
+ 
+ static int serial_break(struct tty_struct *tty, int break_state)
+diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
+index 2fbaf9ae89dd..5f5228329d45 100644
+--- a/include/uapi/asm-generic/termbits.h
++++ b/include/uapi/asm-generic/termbits.h
+@@ -157,6 +157,7 @@ struct ktermios {
+ #define  B3000000 0010015
+ #define  B3500000 0010016
+ #define  B4000000 0010017
++#define ADDRB     0020000	/* address bit */
+ #define CIBAUD	  002003600000	/* input baud rate */
+ #define CMSPAR	  010000000000	/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000	/* flow control */
+diff --git a/net/bluetooth/rfcomm/tty.c b/net/bluetooth/rfcomm/tty.c
+index ebd78fdbd6e8..832e725f23ab 100644
+--- a/net/bluetooth/rfcomm/tty.c
++++ b/net/bluetooth/rfcomm/tty.c
+@@ -871,6 +871,8 @@ static void rfcomm_tty_set_termios(struct tty_struct *tty, struct ktermios *old)
+ 	if (!dev || !dev->dlc || !dev->dlc->session)
+ 		return;
+ 
++	new->c_cflag &= ~ADDRB;
++
+ 	/* Handle turning off CRTSCTS */
+ 	if ((old->c_cflag & CRTSCTS) && !(new->c_cflag & CRTSCTS))
+ 		BT_DBG("Turning off CRTSCTS unsupported");
+-- 
+2.30.2
 
-Dongli Zhang
-
-> +		nslabs = ALIGN(nslabs >> 1, IO_TLB_SEGSIZE);
-> +		if (nslabs < IO_TLB_MIN_SLABS)
-> +			return rc;
-> +		goto retry;
-> +	}
->  	rc = swiotlb_late_init_with_tbl(vstart, nslabs);
->  	if (rc)
->  		free_pages((unsigned long)vstart, order);
-> 
