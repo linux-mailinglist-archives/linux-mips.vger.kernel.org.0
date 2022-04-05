@@ -2,116 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76834F36F2
+	by mail.lfdr.de (Postfix) with ESMTP id F2DAA4F36F3
 	for <lists+linux-mips@lfdr.de>; Tue,  5 Apr 2022 16:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240616AbiDELJN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Apr 2022 07:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S240809AbiDELJR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Apr 2022 07:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358191AbiDEK2F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Apr 2022 06:28:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9653322C;
-        Tue,  5 Apr 2022 03:16:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33EA461777;
-        Tue,  5 Apr 2022 10:16:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0FFC385A1;
-        Tue,  5 Apr 2022 10:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153801;
-        bh=wWIyEUX8NHfXxKv2+lJj2WPl28YMSxmfK9FbYqJYans=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xyok1SV3qOfF0Ld0upZZa61D7buYdtXPWuV7xRbJxy6ExE4lHcXISythc68G7MK2F
-         VFVco/7jElARgSJ2ysRjOmhYDFA+4NxFzj+tKgYC+3YNb2nOBoMV/UMDX3J3CAV2WL
-         pjPajVsi0Y/EqH8YoxzEcB1sXAxO9Ge2165yNwrw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        with ESMTP id S1349186AbiDEJt1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Apr 2022 05:49:27 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DD0320181;
+        Tue,  5 Apr 2022 02:42:23 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 0518E92009D; Tue,  5 Apr 2022 11:42:21 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id F2E5592009B;
+        Tue,  5 Apr 2022 10:42:21 +0100 (BST)
+Date:   Tue, 5 Apr 2022 10:42:21 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Andrew Powers-Holmes <aholmes@omnom.net>
+cc:     yaliang.wang@windriver.com, rppt@kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Phil Sutter <n0-1@freewrt.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Daniel Walter <dwalter@google.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 352/599] MIPS: RB532: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:30:46 +0200
-Message-Id: <20220405070309.299846620@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
-User-Agent: quilt/0.66
+        huangpei@loongson.cn, Andrew Morton <akpm@linux-foundation.org>,
+        kumba@gentoo.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        anshuman.khandual@arm.com, penberg@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] MIPS: pgalloc: fix memory leak caused by pgd_free()
+In-Reply-To: <b273a9b7-82f7-5883-14d2-973dd005b005@omnom.net>
+Message-ID: <alpine.DEB.2.21.2204051027490.47162@angie.orcam.me.uk>
+References: <20220310113116.2068859-1-yaliang.wang@windriver.com> <alpine.DEB.2.21.2204021446370.47162@angie.orcam.me.uk> <9cc88b1c-8a8c-95ea-2cf7-31be3b771495@omnom.net> <alpine.DEB.2.21.2204031122020.47162@angie.orcam.me.uk>
+ <b273a9b7-82f7-5883-14d2-973dd005b005@omnom.net>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Mon, 4 Apr 2022, Andrew Powers-Holmes wrote:
 
-[ Upstream commit 8755d57ba1ff910666572fab9e32890e8cc6ed3b ]
+> Fair enough :) apologies, didn't mean to sound combative or ungrateful.
+> I know there's far more work to go around than people to do it,
+> everyone's doing the best they can, and I have nothing but appreciation
+> for all the work the kernel community does.
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from setup_kmac().
+ No offence taken; I just wanted to make it absolutely clear what the 
+situation currently is.
 
-Fixes: 9e21c7e40b7e ("MIPS: RB532: Replace parse_mac_addr() with mac_pton().")
-Fixes: 73b4390fb234 ("[MIPS] Routerboard 532: Support for base system")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-From: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Phil Sutter <n0-1@freewrt.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Daniel Walter <dwalter@google.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/rb532/devices.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> It's just surprising that this *could* go unnoticed for over a year -
+> though I suppose most of the MIPS64 systems out there are running on one
+> or another old vendor SDK kernel so won't have been affected...
 
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index dd34f1b32b79..0e3c8d761a45 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -310,11 +310,9 @@ static int __init plat_setup_devices(void)
- static int __init setup_kmac(char *s)
- {
- 	printk(KERN_INFO "korina mac = %s\n", s);
--	if (!mac_pton(s, korina_dev0_data.mac)) {
-+	if (!mac_pton(s, korina_dev0_data.mac))
- 		printk(KERN_ERR "Invalid mac\n");
--		return -EINVAL;
--	}
--	return 0;
-+	return 1;
- }
- 
- __setup("kmac=", setup_kmac);
--- 
-2.34.1
+ That's subject to the probability theory and depending on what people's 
+usage models are.
 
+> Would the best way to get this merged into 5.10/15 (and maybe .16 just
+> for good measure) be to email the stable team (since it's already in
+> Linus' tree)? Documentation/process/stable-kernel-rules seems to say
+> yes, but I'd like to avoid stepping on anyone's toes given that it's not
+> my patch.
 
+ You seem the most severely affected so far, so why not act in your best 
+interest?  I think option #2 applies here and seems quite straightforward 
+to follow, referring commit 2bc5bab9a763 and using your use case as the 
+justification.  It doesn't have to be the author to request a backport.
 
+ NB I think it has to be backported to all the stable branches made since 
+the original breakage; i.e. v5.9+ (I haven't kept track of what they are).
+
+  Maciej
