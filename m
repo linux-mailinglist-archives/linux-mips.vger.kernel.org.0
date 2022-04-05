@@ -2,166 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E9F4F249D
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Apr 2022 09:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D36E4F28FC
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Apr 2022 10:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbiDEHZG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Apr 2022 03:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S234326AbiDEIYw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Apr 2022 04:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiDEHZE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Apr 2022 03:25:04 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1783FF2
-        for <linux-mips@vger.kernel.org>; Tue,  5 Apr 2022 00:23:05 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id d10so9016201edj.0
-        for <linux-mips@vger.kernel.org>; Tue, 05 Apr 2022 00:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=+8o8z5eAjLzoYYRvcyTFAdvRMOxVZDs+vsqJse2i6K8=;
-        b=Y5/3UhaHntNXfB2TN4ZFHBeoH7NHgcGpTBvw1CDMino9u74zFb7p+n/AYkI5T3TzzM
-         c8IyXxav15nxKvzaW8lxlIeT2aWt7xmn50foWzvXIPsDm72fgvkEgutX2Fv7vuUWZLcK
-         2df8ytRflytA49ox9FZbr04iHoJWNC1JU0T3wJjPJM4MjnwSgTguSDSmfdgkGbRmkqQm
-         ITXlzLboQQMQ8CfG78FNhSqZFVQ8I3o1dT6NIEOdeynGDgcqNGuo01n1I0OYVmFzm/tM
-         5+50j0VZUFkKXUoLKI/86JPQfhUNOEcTrWa17daDZbrWiayeZDO5H5MFJaMsct7JUf4V
-         WSFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=+8o8z5eAjLzoYYRvcyTFAdvRMOxVZDs+vsqJse2i6K8=;
-        b=a8PJMuQ0rdr/vy1LW9tr14VJesQhXTL7w4iRbaaP1kdj9uR5QA5Scxj4daEWihkeNQ
-         sFqyW7CWb/KTekRmYD8k3HR5sZPhKxAnJCd2D329lGs2ZMgXv81JzU+lRzX0JBu99kxB
-         Ff6dJaJZZHpghwKC8rNJVh+W2+Bo8FToDmO4zpU4Q3HW2Wqup/6fC2TZF/b4xOjkxFsZ
-         hPvE8Rvak0eMHkjJ/fw6bQL5PXOLZslqjxhJ46SeTIUy7OgxAFqq0D3X9mEZtaZlFksD
-         tNZSFhrfk1HkNciAsfi9DC7CvgMsZyQWbuujOgMsqwuxM2b7zxEXtKzwiDn/LiGgonmr
-         /8RA==
-X-Gm-Message-State: AOAM532fXyqJgSTBushwRIOE+XtkGTErxp9sKLS+Vx4WASeyN+0URG/u
-        HpAMLKh1BySDOxKgmrE9XX3KNuLxG6H8hMOlj0k=
-X-Google-Smtp-Source: ABdhPJxszRfb4MAH+uRd8PDmlTXfLlXkLh3f6uRbdWkZbR4uEU9HGWYcTJVRXAETr72FGznghHf2knvK56APV21QgOw=
-X-Received: by 2002:a05:6402:4414:b0:419:28bc:55dc with SMTP id
- y20-20020a056402441400b0041928bc55dcmr2203578eda.130.1649143384192; Tue, 05
- Apr 2022 00:23:04 -0700 (PDT)
+        with ESMTP id S239007AbiDEITn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Apr 2022 04:19:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A0775E48;
+        Tue,  5 Apr 2022 01:09:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D54FB81A32;
+        Tue,  5 Apr 2022 08:09:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E71B2C385A0;
+        Tue,  5 Apr 2022 08:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649146196;
+        bh=GFaQBGiyHR7R9an96UR5qCvcpxgJaPDYRvgatno0VlQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V0Su4jU1fdW8e07F4LawMHr5lBp3eS1csO0CQAJ8fY+CGQbU2LOcvbnTdu8fCzKFQ
+         7pJePPV+mvk1zkoyV7Ju0mWj5VCzoRXkok+52ky6Urox2ZOfn8yn7vekR+BK6c3sC5
+         RyO0AHyYL7rmAVHOMUyB+WF30BGZ9ILj5oyDLcJU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0638/1126] mips: DEC: honor CONFIG_MIPS_FP_SUPPORT=n
+Date:   Tue,  5 Apr 2022 09:23:05 +0200
+Message-Id: <20220405070426.362237614@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 5 Apr 2022 08:22:53 +0100
-Message-ID: <CAHpNFcO+WoN1A1uHuoV2YhgiZnLkiddw3_D8nLA4LygTZWU7Gw@mail.gmail.com>
-Subject: Secure-Enable PSP + SGX + Initiator Security Virtualise 2022 : Self
- Tests & Thread control pages *Kernel Base L1:L2,L3:Cache MontiCarlos
- Processor Feature & Task Manger*
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Secure-Enable PSP + SGX + Initiator Security Virtualise 2022
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Proper initiation requires at least a basic permission statement
-before kernel load:RS
+[ Upstream commit 97bf0395c226907e1a9b908511a35192bf1e09bb ]
 
-<VMaWare Initiator>
-Firmware, bios load <init>1 }
-Boot Loader <init>2         } Enclave 1
-Kernel Jack on safe boot <init>3 : Enclave 2
-Core Modules <init>4 Enclave 3
-System <init><init><init><init><init>
+Include the DECstation interrupt handler in opting out of
+FPU support.
 
-(c)Rupert S https://bit.ly/VESA_BT
+Fixes a linker error:
 
-> > + * Some 'Enable PSP + SGX' functions require that no cached linear-to-physical address
-> > + * mappings are present before they can succeed. Collaborate with
-> > + * hardware via ENCLS[ETRACK] to ensure that all cached
-> > + * linear-to-physical address mappings belonging to all threads of
-> > + * the enclave are cleared. See sgx_encl_cpumask() for details.
+mips-linux-ld: arch/mips/dec/int-handler.o: in function `fpu':
+(.text+0x148): undefined reference to `handle_fpe_int'
 
-Cache Buffer can hide locations from direct attack! <VIRUALISE LOC>
-But do involve a potential page break if not aligned
+Fixes: 183b40f992c8 ("MIPS: Allow FP support to be disabled")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: linux-mips@vger.kernel.org
+Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/dec/int-handler.S | 6 +++---
+ arch/mips/dec/setup.c       | 3 ++-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> > + * Return valid permission fields from a secinfo structure provided by
-> > + * user space. The secinfo structure is required to only have bits in
-> > + * the permission fields set.
-
-Virtualise buffer can lazy IO & Lazy DMA #Thread mate DT
-
-> > + * Ensure enclave is ready for SGX2 functions. Readiness is checked
-> > + * by ensuring the hardware supports SGX2 and the enclave is initialized
-> > + * and thus able to handle requests to modify pages within it.
-
-Boot time check can validate SGX & PSP & YES Cache a relocatable table,
-Direct Read required INT & IO Activations & is not Cache permitted one
-presumes. DT
-
-> > Changes since V2:
-> > - Include the sgx_ioc_sgx2_ready() utility
-> >   that previously was in "x86/sgx: Support relaxing of enclave page
-> >   permissions" that is removed from the next version.
-> > - Few renames requested >
-
-Broken Alignment DT
-Separated BASE Code DT
-
-Strict Code Align =1
-Buffer RELOC = 1
-Security permission Buffer = 751
-
-Enable PSP + SGX
-
-https://lkml.org/lkml/2022/4/5/29
-https://lkml.org/lkml/2022/4/5/27
-https://lkml.org/lkml/2022/4/5/25
-
-https://lkml.org/lkml/2022/4/5/50
-
-https://lkml.org/lkml/2022/4/4/982
-
-Self Tests & Thread control pages *Kernel Base L1:L2,L3:Cache
-MontiCarlos Processor Feature & Task Manger* >> Reference :
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://lkml.org/lkml/2022/4/5/119
-https://lkml.org/lkml/2022/4/5/120
-https://lkml.org/lkml/2022/4/5/121
-https://lkml.org/lkml/2022/4/5/122
-https://lkml.org/lkml/2022/4/5/123
-https://lkml.org/lkml/2022/4/5/125
-https://lkml.org/lkml/2022/4/5/127
-https://lkml.org/lkml/2022/4/5/128
-https://lkml.org/lkml/2022/4/5/129
-https://lkml.org/lkml/2022/4/5/130
-
-<< Self Tests & Thread control pages *Kernel Base L1:L2,L3:Cache
-MontiCarlos Processor Feature & Task Manger*
-
-*
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+diff --git a/arch/mips/dec/int-handler.S b/arch/mips/dec/int-handler.S
+index ea5b5a83f1e1..011d1d678840 100644
+--- a/arch/mips/dec/int-handler.S
++++ b/arch/mips/dec/int-handler.S
+@@ -131,7 +131,7 @@
+ 		 */
+ 		mfc0	t0,CP0_CAUSE		# get pending interrupts
+ 		mfc0	t1,CP0_STATUS
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ 		lw	t2,cpu_fpu_mask
+ #endif
+ 		andi	t0,ST0_IM		# CAUSE.CE may be non-zero!
+@@ -139,7 +139,7 @@
+ 
+ 		beqz	t0,spurious
+ 
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ 		 and	t2,t0
+ 		bnez	t2,fpu			# handle FPU immediately
+ #endif
+@@ -280,7 +280,7 @@ handle_it:
+ 		j	dec_irq_dispatch
+ 		 nop
+ 
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ fpu:
+ 		lw	t0,fpu_kstat_irq
+ 		nop
+diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
+index a8a30bb1dee8..82b00e45ce50 100644
+--- a/arch/mips/dec/setup.c
++++ b/arch/mips/dec/setup.c
+@@ -746,7 +746,8 @@ void __init arch_init_irq(void)
+ 		dec_interrupt[DEC_IRQ_HALT] = -1;
+ 
+ 	/* Register board interrupts: FPU and cascade. */
+-	if (dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
++	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT) &&
++	    dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
+ 		struct irq_desc *desc_fpu;
+ 		int irq_fpu;
+ 
+-- 
+2.34.1
 
 
-Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
 
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-https://science.n-helix.com/2022/03/ice-ssrtp.html
-
-https://science.n-helix.com/2021/11/ihmtes.html
-
-https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-https://science.n-helix.com/2021/12/3d-audio-plugin.html
