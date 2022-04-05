@@ -2,58 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B594F21DD
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Apr 2022 06:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456A64F21C7
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Apr 2022 06:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiDECic (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Apr 2022 22:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
+        id S230105AbiDEDAq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Apr 2022 23:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiDECiN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Apr 2022 22:38:13 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A77B23D465
-        for <linux-mips@vger.kernel.org>; Mon,  4 Apr 2022 18:37:40 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id l26so7266889ejx.1
-        for <linux-mips@vger.kernel.org>; Mon, 04 Apr 2022 18:37:40 -0700 (PDT)
+        with ESMTP id S230319AbiDEDAf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Apr 2022 23:00:35 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF72B1E1109
+        for <linux-mips@vger.kernel.org>; Mon,  4 Apr 2022 19:12:28 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id t25so20633051lfg.7
+        for <linux-mips@vger.kernel.org>; Mon, 04 Apr 2022 19:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CWwE63Uj70Dz+evqLhQ44oFva+2asIsEVowZ5R1Hj4s=;
-        b=MTLi0SN2/CtQ9VsgDxb4iZw37Af+lcedVzKzwlt/rmiU3szSaf1Mv3N/u9xi3EjKW4
-         As58Mj2xb6L0b04HBhREhOF8LOwlWJtKm6vySkVCOclR11PWOC6bhMTYqgE05YJhtBdb
-         5OQ3jY3GywxxqaPBCQtQbevm0MzOCT72UjiWNZM4dmLvb5WJEN1gYU8dQ6hroNZA1ZCP
-         S8AMDnex+b44bPoRiKsyTACN7qHEPi1mkQP3F4JZWO4U0iSsQNR5wQRuyMUb73/7G4qF
-         n6uxWWdRtzpkW2SMWrnLG/oq95ZvLjK62GJT9FntZmFsCbAyqgHqvFNdWlyOAPhHY5mH
-         T0OA==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=P/touLBFbje11XznNDWx7VX2zR8LaBFmb8S0S5DQre4=;
+        b=SO13OPc0fPsKwO0ZIKHYM7Zm+tOstO2QdOw8WwSV99O/VyDJffuH15n/sDLG1WoUci
+         3ifOsWLOPxUqsVfoFOtP1XWi4AsMdG0JxsH0amuTz73yv4PczOCwtyr6ybuB704AiUZJ
+         Z+OvAjnb4XWveU4z38EC4syaBLjm6L4Fw9ffZNmmDTZ0WVhiHEY277E83ywMOMVtkEcX
+         gJtxgH5AU9obOg35AZ20Jy2jQKcFMQ6kk8VwqMH/Gb3XUmSzLWGXb30OMHCAmu5FoChl
+         K2eKbrufwGdUaMBCmT0rsrCUgAT2LrbgAeO04J7bFBwXIEX6MLLqPhCQJpPL0i+6ON3A
+         glsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CWwE63Uj70Dz+evqLhQ44oFva+2asIsEVowZ5R1Hj4s=;
-        b=gUqtJXSWmjvcVu8DEuGy+FNSF5DK1wS+C7FKI+1b2O2phCmoy5U6pniugrAttWHvZi
-         ykOY4gJjxLWl+YcYtVd/KcjHzpVojg0uh3mo2+3kZylv/p32lIror/PyAdWYMJHZAoH+
-         ujg01t8agCGKvsRCSXfGpbv/gseq6X0pmMQpDOS1gfEro5hwR9DLoahwyioTTP9vnMq5
-         y4vI8Sdim/HX99sc3zxW2bIaktqEjQRZAtObjIOLZLuycLDMQFagD7ZFBYbT8L4/+C/7
-         ndek6tT89SPnNLxuD6MTaxJ/bb1SaRBS/GOmPCjJ0nN9bnUAZxSPxJGPFwaiXGF6NBWE
-         pJRw==
-X-Gm-Message-State: AOAM5322DZA7DTX7TAic4Rr7wZqMMFH+/O4KBCW+BtCkGsRr/nAeV252
-        7Gevsl7JirXjIpUhww3luKiMyBesxjH5nAZJr2K81BYGkIFLf96B
-X-Google-Smtp-Source: ABdhPJzBsKO2j9MyoYnx+NlhM7baoEAm89DrhoHnN5DW27ua2r0tUJkiTippVbrs/IZPEpxjLGP1OVm7wmko/9JjohY=
-X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id
- el4-20020a056402360400b0041cc4e62988mr631649edb.157.1649115815748; Mon, 04
- Apr 2022 16:43:35 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=P/touLBFbje11XznNDWx7VX2zR8LaBFmb8S0S5DQre4=;
+        b=EZ9iUiGdIVB8d2SpfwrN4SmWbTvB2W2unv12n5nA7hJMBRuh8pssRf5uEii9JOypyh
+         x1N3oF1fgv9j03qUsLnezIk/g3N1TUlNqsJUfY5eoIaY3pzG5AC/5c/DG4XdncjkhrWH
+         og23oo0amVtgc9tRvJBED+mxUSkB9ekSosB8CNJkKCVmMtbmD0aGG2ZjnpURyv+B4+uz
+         y8S5R4BXXtyHe39QuGG/xGn72hY1md9tjjxQid2i8IeIryZo/1Ut6GC55p6YveZHowNb
+         eSbbcbDfbii8E22OA9bWb7Ch4RxSxqts1mnGAMCjRr3nMjNwuqVJjhDwBlKJnvy6+KA9
+         7hCQ==
+X-Gm-Message-State: AOAM5325NZSYzdsjZ1bEpbfiNsypby7zzyY5s/NaDJ6lH2RloyaQiTti
+        EkZkIuJdgWyVpkQM3yRaZfgcZIIRbrtu+BhUejdalZFfL8apHYmR
+X-Google-Smtp-Source: ABdhPJyjYND/2D4yJzqnD940Ja4ubNvUJ6/2cjcU9bQAbsFCYlo25MJ6zs6/GD+P6HCN9vpRwG+yIDiH5/y4ih1Yef0=
+X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id
+ f11-20020a0564021e8b00b0041c59f62c26mr797219edf.156.1649118049885; Mon, 04
+ Apr 2022 17:20:49 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 5 Apr 2022 00:43:24 +0100
-Message-ID: <CAHpNFcPWphMzXVYiPtkyUVBUQKWUc_cW4NkG4k4xeiGbUYBHhA@mail.gmail.com>
-Subject: Parallax Cryptographic Processing Unit: RS AES-CCM & AES-GCM & Other
- Cypher Modulus + CCM & GCM can be accelerated with a joint AES Crypto module
- : Modulus Dual Encrypt & Decrypt package : Processor feature
+Date:   Tue, 5 Apr 2022 01:20:36 +0100
+Message-ID: <CAHpNFcPeL6=b3+npcgQKJQ0xei6rZhQrbS1x0FMiBa1M_S6fCQ@mail.gmail.com>
+Subject: Hardware Dual Encrypt & Decrypt : Hardware Accelerators (indirect) -
+ Plan & method RS
 To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -63,52 +59,6 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
-
-Duke Abbaddon <duke.abbaddon@gmail.com>
-Mon, Apr 4, 10:41 AM (13 hours ago)
-to torvalds, bcc: heiko, bcc: guoren, bcc: atish.patra, bcc: hch, bcc:
-Anup, bcc: :, bcc: Dennis, bcc: ebiggers@kernel.org, bcc: Emil, bcc:
-jarkko@kernel.org, bcc: Jonathan, bcc: keyrings@vger.kernel.org, bcc:
-kvalo@kernel.org, bcc: linux-crypto@vger.kernel.org, bcc:
-linux-iio@vger.kernel.org, bcc: linux-integrity@vger.kernel.org, bcc:
-linux-kernel@vger.kernel.org, bcc: linux-mips@vger.kernel.org, bcc:
-linux-security-module@vger.kernel.org, bcc:
-linux-wireless@vger.kernel.org, bcc: luto@kernel.org, bcc: Nathan,
-bcc: netdev@vger.kernel.org, bcc: sultan@kerneltoast.com, bcc:
-ak@linux.intel.com, bcc: Andrew, bcc: Andy, bcc:
-development@linux.org, bcc: feedback@linux.org, bcc:
-geert@linux-m68k.org, bcc: Greg, bcc: hostmaster+ntp@linux-ia64.org,
-bcc: jejb@linux.ibm.com, bcc: kirill.shutemov@linux.intel.com, bcc:
-linus@linux.org, bcc: linux-m68k@lists.linux-m68k.org, bcc:
-linux-riscv@lists.infradead.org, bcc: linux@dominikbrodowski.net, bcc:
-Micha=C5=82, bcc: press@linux.org, bcc: Rasmus, bcc:
-sathyanarayanan.kuppuswamy@linux.intel.com, bcc: security@linux.org,
-bcc: support@linux.org, bcc: torvalds@linux-foundation.org, bcc:
-webmaster@linux.org, bcc: zohar@linux.ibm.com, bcc:
-info@vialicensing.com, bcc: corpcomm@qualcomm.com, bcc:
-rukikaire@un.org, bcc: virt-owner@lists.fedoraproject.org, bcc:
-martin@strongswan.org, bcc: security@microsoft.com, bcc:
-sotonino@un.org, bcc: security@ubuntu.com, bcc:
-opencode@microsoft.com, bcc: moses.osani@un.org, bcc:
-webmaster@playstation.com, bcc: webmaster@amazon.com, bcc:
-Corporate.Secretary@amd.com, bcc: haqf@un.org, bcc:
-Copyright_Agent@spe.sony.com, bcc: tremblay@un.org, bcc:
-webmaster@sony.com, bcc: dujarric@un.org, bcc: consul@ps.mofa.go.jp,
-bcc: press@eu.sony.com, bcc: agriculture@rusemb.org.uk, bcc:
-suzuki.poulose@arm.com, bcc: grovesn@un.org, bcc: kaneko@un.org, bcc:
-media.help@apple.com, bcc: security@asus.com, bcc:
-visa@egyptconsulate.co.uk, bcc: help.redhat.com, bcc:
-cirrus_logic@pr-tocs.co.jp, bcc: customercare@logitech.com, bcc: Logi,
-bcc: logitech@feverpr.com, bcc: logitech@vertigo6.nl, bcc:
-logitech@wellcom.fr, bcc: mediarelations@logitech.com, bcc:
-morchard@scottlogic.co.uk, bcc: samasaki@logitech.com, bcc:
-slan@logitech.com, bcc: support@logitech.com, bcc: pctech@realtek.com,
-bcc: press@google.com, bcc: Nintendo, bcc: tech.support@amd.com, bcc:
-Nvidia, bcc: security@intel.com, bcc: saporit@us.ibm.com, bcc:
-Gabriel.Kerneis@ssi.gouv.fr, bcc: hughsient@gmail.com, bcc:
-ksuzuki@polyphony.co.jp, bcc: uchimura@polyphony.co.jp, bcc:
-mario.limonciello@amd.com, bcc: thomas.lendacky@amd.com, bcc:
-john.allen@amd.com, bcc: herbert@gondor.apana.org.au
 
 Modulus Dual Encrypt & Decrypt package : Processor feature (c)RS
 
@@ -149,8 +99,11 @@ Return Encryption by using 2x 128Bit & a Processor Enciphered Nonce.
 
 *reference* https://bit.ly/VESA_BT
 
-Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Mode=
-s
+Dual Encrypt & Decrypt : Hardware Accelerators (indirect)
+https://lkml.org/lkml/2022/4/4/1153
+https://lore.kernel.org/linux-crypto/20220223080400.139367-1-gilad@benyossef.com/T/#u,
+
+Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Modes
 http://worldcomp-proceedings.com/proc/p2016/SAM9746.pdf
 
 Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
@@ -158,6 +111,7 @@ OCB, CCM, EAX, CWC, GCM, PCFB, CS
 https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
 
 *****
+
 ICE-SSRTP GEA Replacement 2022 + (c)RS
 
 "GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
@@ -179,8 +133,7 @@ IiCE-SSR for digital channel infrastructure can help heal GPRS+ 3G+ 4G+ 5G+
 
 Time NTP Protocols : is usable in 2G+ <> 5G+LTE Network SIM
 
-ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GE=
-A-2
+ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GEA-2
 'Ideal for USB Dongle & Radio' in Rust RS ' Ideal for Quality TPM
 Implementation'
 
@@ -188,20 +141,17 @@ Implementation'
 of GEA-1 with a higher amount of processing, and apparently not
 weakened) are bit-oriented stream ciphers."
 
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protoc=
-ol
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
 
 Interleaved signals help Isolate noise from a Signal Send & Receive ...
 
-Overlapping inverted waves are a profile for complex audio & FFT is the res=
-ult.
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
 
 Interleaved, Inverted & Compressed & a simple encryption?
 
 *
 
-Time differentiated : Interleave, Inversion & differentiating Elliptic curv=
-e.
+Time differentiated : Interleave, Inversion & differentiating Elliptic curve.
 
 We will be able to know and test the Cypher : PRINCIPLE OF INTENT TO TRUST
 
@@ -213,11 +163,10 @@ Interleaved pages of a cypher obfuscate : PAL CScam does this
 Timed : Theoretically unique to you in principle for imprecision, But
 we cannot really have imprecise in Crypto!
 
-But we can have a set time & in effect Elliptic curve a transient variable =
-T,
+But we can have a set time & in effect Elliptic curve a transient variable T,
 With this, Interleave the resulting pages (RAM Buffer Concept)
 
-Invert them over Time Var =3D T
+Invert them over Time Var = T
 
 We can do all & principally this is relatively simple.
 
@@ -242,8 +191,7 @@ Parallax Cryptographic Processing Unit: RS
 The capacity To Multiply decryption on specific hardware in situations
 such as lower Bit precision is to be implemented as follows:
 
-On AES-NI & ARM Cryptographic processors; In particular PSP+PPS(ARM+) & SiM=
-D ..
+On AES-NI & ARM Cryptographic processors; In particular PSP+PPS(ARM+) & SiMD ..
 
 The capacity to exploit the fact that the nonce is 16Bit to 64Bit &
 full float upto 128Bit for legal decryption (client) means there is a
@@ -265,8 +213,7 @@ Return Encryption by using 2x 128Bit & a Processor Enciphered Nonce.
 
 *reference*
 
-Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Mode=
-s
+Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Modes
 http://worldcomp-proceedings.com/proc/p2016/SAM9746.pdf
 
 Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
@@ -278,8 +225,7 @@ https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
 
 Example of use:
 
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade ma=
-rker
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade marker
 
 Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
 Interleaved channel BAND.
@@ -306,21 +252,18 @@ Presenting :  IiCE-SSR for digital channel infrastructure & cables
 So the question of interleaved Bands & or signal inversion is a simple
 question but we have,
 
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands hel=
-p us?
+SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
 
 In Audio inversion would be a strange way to hear! but the inversion
 does help alleviate ...
 
 Transistor emission fatigue...
 
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protoc=
-ol
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
 
 Interleaved signals help Isolate noise from a Signal Send & Receive ...
 
-Overlapping inverted waves are a profile for complex audio & FFT is the res=
-ult.
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
 
 Interleaved, Inverted & Compressed & a simple encryption?
 
@@ -341,8 +284,7 @@ https://science.n-helix.com/2022/02/interrupt-entropy.html
 
 https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
 
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
-tml
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
 
 
 Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
@@ -368,8 +310,7 @@ https://pollinate.n-helix.com
 
 ***** Dukes Of THRUST ******
 
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade ma=
-rkerz
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
 
 Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
 Interleaved channel BAND.
@@ -419,13 +360,9 @@ Rupert S https://science.n-helix.com/2022/02/interrupt-entropy.html
 
 TRNG Samples & Method DRAND Proud!
 
-https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=
-=3Ddrive_web
+https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
+https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
+https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
+https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
 
 https://github.com/P1sec/gea-implementation
