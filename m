@@ -2,98 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1644F5660
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Apr 2022 08:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFE74F5D18
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Apr 2022 14:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243685AbiDFDsO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Apr 2022 23:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S232064AbiDFMG2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Apr 2022 08:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573286AbiDESq5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Apr 2022 14:46:57 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340F580227
-        for <linux-mips@vger.kernel.org>; Tue,  5 Apr 2022 11:44:59 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id z16so294100pfh.3
-        for <linux-mips@vger.kernel.org>; Tue, 05 Apr 2022 11:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BSTfu4XeI/ClhpJnOxug8bNrs6bcd1vbhIByuk9Td5A=;
-        b=FZ7CzdGv5IqR9igsKF5aVHLB8MfCD2UE6mGhWdabuDVB/PY75CERc0oW45pyoiFFsx
-         HLCOiljgUTbziKvTX7wZRoZqJ+RJ1Dea8AguoZhgeta2AWxRKKUV2iRUL0l0yDbf+TTN
-         ZiAbWnMeeHTkwk1JvBEs7xviif99t4lQdP3rhF94xjjOWUyQ5IYn9ZUuKyguEbSTvM9X
-         MpsV3tSkSRKbWT/1P6uf6AhXj04ePeO0yF7csRuDTu6ucoAxMuJ3t81XHgVFCM4FFTG+
-         SjX4Baa/CoEtOFP/F5srI+LydtG/vNCqkGlkcYX/sxjcplhmbQiJkxNjpWBgFSDO+Pmx
-         Gc4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BSTfu4XeI/ClhpJnOxug8bNrs6bcd1vbhIByuk9Td5A=;
-        b=E7k35mfDyO+dTkiGcplKT0OzLV2BbK4gHJi5tm8ilBGoqT1y8c/vY23rntoQPjPcDr
-         i1P/v3WGBthEjn6Ls42+mL4kDsS1n7queq62BAOUtuoY8Vu3Tk190SAAnX+NwfmllCwf
-         v7WytbOavNpyrByQnOb5qQh+KQ0gz/Dmyk5p40pW4h5qdavRkOI6E8+KGCncKIzg8MlQ
-         pW63K+EcGKO7Wl4HpYR7w07U0USuxETiqVW7Y4d93TWIULVRYJYF1igtQEI5uD6j0Qcb
-         s5AJDQXw4vGZ0IL4FaAAKBJHekmLcFcxeJYCTOEvjmgLbitcNvVmbqfOyvQu/MbLyPvD
-         IskA==
-X-Gm-Message-State: AOAM532ihRjZfb0/yJ0boTVyg7RxUV4aLZNIOE6Fa21MEnGanMGQfW0P
-        KVPvOUYyOio2KSy3xsyJfUN05A==
-X-Google-Smtp-Source: ABdhPJxqBsHYYYQ3r6tsKfeQNVI4VssdMtHw5QBcT84h3Z9HkLEDAYYEQ3XVRsYGURacbMDknChXvg==
-X-Received: by 2002:a65:57ca:0:b0:381:ea8d:4d1f with SMTP id q10-20020a6557ca000000b00381ea8d4d1fmr4102933pgr.143.1649184298506;
-        Tue, 05 Apr 2022 11:44:58 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm13887990pge.49.2022.04.05.11.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 11:44:57 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 18:44:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, mizhang@google.com,
-        David Matlack <dmatlack@google.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 0/5] KVM: mm: count KVM page table pages in pagetable
- stats
-Message-ID: <YkyOJqTeGRUjtuX1@google.com>
-References: <20220404234154.1251388-1-yosryahmed@google.com>
+        with ESMTP id S232135AbiDFMFX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Apr 2022 08:05:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A3A47CDF2;
+        Wed,  6 Apr 2022 00:48:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B738B82140;
+        Wed,  6 Apr 2022 07:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07510C385A8;
+        Wed,  6 Apr 2022 07:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649231330;
+        bh=5kdeIYu08lrxcinXo/wn2rGDmkAPiaise7blEAq0ra8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=u5nFxI62qds5luCwfiabA3w51nPKdqqjIMBcDMinr/PHt+JWti3y2LkM+z89cdNFP
+         IYGef0xODvNkk/Ni/Fdlf++5AuKlIKNvd6egdZqdGWTy7N1Xv57DwKeWyJsZVlmuKS
+         wq8x0uZt/9WFgIcuo5V2nzIzlm+OqupK2uKxo5+vVcms9wGYqemQbIn72z91NEBQa1
+         jP5miy8EFXkaRB7WqSkWyNdJFDRtJFKFMA8pJ9Ov1VFMdRK7m/6SeeVogLeIidtAeO
+         +2qFGdy9YX9CB3xInHWLg5/11szsQVTLBU5G8yu2c1MARrRIDb2E9jAooM/g4zsNDw
+         Rz9d/EHKsWaRg==
+Received: by mail-wr1-f43.google.com with SMTP id r13so1863164wrr.9;
+        Wed, 06 Apr 2022 00:48:49 -0700 (PDT)
+X-Gm-Message-State: AOAM533pm8zTIRgXVpQoPw4+BO0J5m1I46SgmBLJ4mkdR8Ace9y7CVH4
+        /dPAHnJK2uDCU9vgAG2zUTrfvMCixxYnSzTevqA=
+X-Google-Smtp-Source: ABdhPJyT5POylyPh0xGqg/cwaHmEHQNuNvVWSCOrc2ZuVu++yjHmGBoQMupeKZkipi8ZB8yq6SetBZGxhL4xb51Ipy4=
+X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
+ y1-20020adfd081000000b001ef9378b7ccmr5643198wrh.407.1649231328236; Wed, 06
+ Apr 2022 00:48:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404234154.1251388-1-yosryahmed@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220406041548.643503-1-kuba@kernel.org>
+In-Reply-To: <20220406041548.643503-1-kuba@kernel.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 6 Apr 2022 09:48:32 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0N=Rn95T1jZCCcOcF4WiBsMkObw4FLjbZd91wbAi2zww@mail.gmail.com>
+Message-ID: <CAK8P3a0N=Rn95T1jZCCcOcF4WiBsMkObw4FLjbZd91wbAi2zww@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: wan: remove the lanmedia (lmc) driver
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>, pabeni@redhat.com,
+        Networking <netdev@vger.kernel.org>,
+        =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
+        Andrew Stanley-Jones <asj@cban.com>,
+        Rob Braun <bbraun@vix.com>, Michael Graff <explorer@vix.com>,
+        Matt Thomas <matt@3am-software.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 04, 2022, Yosry Ahmed wrote:
-> We keep track of several kernel memory stats (total kernel memory, page
-> tables, stack, vmalloc, etc) on multiple levels (global, per-node,
-> per-memcg, etc). These stats give insights to users to how much memory
-> is used by the kernel and for what purposes.
-> 
-> Currently, memory used by kvm for its page tables is not accounted in
-> the pagetable stats. This patch series accounts the memory pages used by
-> KVM for page tables in those stats.
+On Wed, Apr 6, 2022 at 6:15 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> The driver for LAN Media WAN interfaces spews build warnings on
+> microblaze. The virt_to_bus() calls discard the volatile keyword.
+> The right thing to do would be to migrate this driver to a modern
+> DMA API but it seems unlikely anyone is actually using it.
+> There had been no fixes or functional changes here since
+> the git era begun.
+>
+> Let's remove this driver, there isn't much changing in the APIs,
+> if users come forward we can apologize and revert.
+>
+> Link: https://lore.kernel.org/all/20220321144013.440d7fc0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com/
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-It's still not obvious to me that piggybacking NR_PAGETABLE is desirable, probably
-because I am quite clueless as to how these stats are used on the backend.  E.g.
-why not have a NR_SECONDARY_PAGETABLE entry to track pages used for secondary MMU
-page tables?
+Acked-by: Arnd Bergmann <arnd@arndb.de>
