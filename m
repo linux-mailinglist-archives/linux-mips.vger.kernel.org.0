@@ -2,73 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910CC4F81D3
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 16:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8F64F8702
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 20:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235661AbiDGOgR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Apr 2022 10:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
+        id S244084AbiDGSUL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Apr 2022 14:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344023AbiDGOgD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 10:36:03 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74851BFDF3
-        for <linux-mips@vger.kernel.org>; Thu,  7 Apr 2022 07:33:31 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bh17so11234408ejb.8
-        for <linux-mips@vger.kernel.org>; Thu, 07 Apr 2022 07:33:31 -0700 (PDT)
+        with ESMTP id S233337AbiDGSUL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 14:20:11 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C599EE4;
+        Thu,  7 Apr 2022 11:18:10 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id o20so5721600pla.13;
+        Thu, 07 Apr 2022 11:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1jOfGY2aWB6ytElc3A8TYe1lFhh8rzUDtI1qb0xPNWc=;
-        b=TN89JKEfl9AxOmTFv7RkLldl9yUqbqq288C1keYFmxd40sY3RW0quDl9ywjD9PjL/Y
-         agKVab8ZUTrbszOKkNKg0lLp7N1XEENxL7mQwobdcPRQWDAUn/BMg8H6vnBLFi0zAVRM
-         LuL0f61r0sFD0A6b342d469AsYsfbXat52/eg4TVEIEPcSjUASf0RGN5MKJbvFYzx2J1
-         aKEyTSaMoRX3nd1drizcBQmdzFo1CwC94A+zx2Bqbs/TWLG4UjhZheZInK/OV2U6ITE5
-         XfeN5zBiwOD1KP8k0tbu0ZL9VnJElePg/mY7wLl6+KOiea+vcus6rH/w807vQ2D/j/a+
-         fZIQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=xQii1eP+D129OOmmEFUPFi+428VvVe2npW0nOtHi0v8=;
+        b=WBsYEqJ7FltBHsC6oK/iY4SdWSX6yl+D4SwDFOBtZLxKw67+b4LuB50h908ertO7zg
+         Dcthrade36ld2as5TY3PkMw329X2qDnHvylK/N1Cm7ykcJ0GqY14WgfySksy1AbU3YEg
+         MIUV5fDNgM+qHqrcjk2DAQGR8aK8ykfQAnzRzMNSi5lB12PEpl88ZQQ+9+EYRgR0RRu2
+         h6S2Nsb+l9LAz89Ti8lc3kVHcyaGi+ODPZc3kby0R1R2bWeyY4ARzw3DPTQwAZdDDmPD
+         ZVzK3JEOi1ZtBUoP+TnwA5n6kS5WJNPYPbZJo11rKNyviTip8uEfe7fgqm5v/JQhYF1J
+         A4Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=1jOfGY2aWB6ytElc3A8TYe1lFhh8rzUDtI1qb0xPNWc=;
-        b=oS0+/bHUJPiJu+T19D6hzqPCAyqwKaX58Vn4KKxNiTReOxBmwxdWU1uON83OZ2BKi9
-         JRU1enGRY4UbK3XIcIk0QNexEHZ3dkFdNYY2dFpUiY5csv6VC6BWMvQGY0cM1ABVvMrQ
-         k8d7nGvT/G+Pu5ItwuIVrIWrnZdhBMDwvrNRXHBG00v5hWYxlRvi1UY2vNIXWrkaV3Rp
-         VTkA2pZAW4oHMsZxAkPOm1wSY2Dm8D8e6VnnIK9lIYNbdxXNf8IEsB3zHS4jW8TlofRX
-         C8oY9Hmu1bTuoAWzkM1/Z80ORn6vfcRV4m0BI6FWd7x2BreGpRRQWuOmNtqPbnGP7mjj
-         IWJw==
-X-Gm-Message-State: AOAM530wqXpIUqJCB29bkdGpYTa8LQnDtIHattBUJEQ6sVFMe2IBPLGy
-        iHgRsWSfQGORAao6kozrwYGIzjexgXAdW8Tl
-X-Google-Smtp-Source: ABdhPJw3RYZO7ZNQxKKRlLqoHhj3X3DBP2V/Sm5elqCPxW4lwfL1OHoBjDOdMAM81b2iiTLvHXEfmg==
-X-Received: by 2002:a17:906:7056:b0:6d6:dd99:f2a4 with SMTP id r22-20020a170906705600b006d6dd99f2a4mr13357831ejj.43.1649342010386;
-        Thu, 07 Apr 2022 07:33:30 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id do8-20020a170906c10800b006dfe4d1edc6sm7624054ejc.61.2022.04.07.07.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 07:33:29 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
+        bh=xQii1eP+D129OOmmEFUPFi+428VvVe2npW0nOtHi0v8=;
+        b=y2oMTYOY/h35qRgaP7W6tH8Pesx9+YszHj1HwcdXhQUzy3ctqxS0O32sKiKVdEu5fZ
+         4C9mJp3c09PVtcdtK+J9kBEL3xBFytKD2iLqSZzvqFQoJZrfc22vs8s5/GxfoFSdNpH0
+         W0J4s3OemM8YN/dA83HfET0OaLZTCd8ulnamJh2SBGZEnv/e2nCQmFA/y3/3U8L53AdZ
+         k5D9VKspoMeQtqyLwOdEjIGgn4whvgkbKO8/n5e8YxuWVOoeRWf2Jn6VvxMsAvOP7sfv
+         QODXvVizbNIEuNlqJLgLfcH3MalUtv/zvtnLUrrJHjAr9OfGquGRfxTzGBN1YpRE1Iek
+         mXpw==
+X-Gm-Message-State: AOAM533ZE3aTwHbv/R2TQybdHxltZdQpuQmlvOgWdi6VdhULu4vOObJK
+        Mv2QHcC8Z5wuwb3nmcAZvmvGYDCGMPU=
+X-Google-Smtp-Source: ABdhPJyXdHfHZMxDow5pG2bx+mSyl30fIzwXdgKyuiWLg9v6EURe8ej5jtVSOTdU4b4I9EDVWhfFEg==
+X-Received: by 2002:a17:903:41c3:b0:157:1e3b:ee66 with SMTP id u3-20020a17090341c300b001571e3bee66mr867050ple.41.1649355490155;
+        Thu, 07 Apr 2022 11:18:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm24726271pfu.202.2022.04.07.11.18.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 11:18:09 -0700 (PDT)
+Message-ID: <55800b61-bdb7-9e93-7d2c-b5a34c1e5cd0@gmail.com>
+Date:   Thu, 7 Apr 2022 11:18:06 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
-Date:   Thu,  7 Apr 2022 16:33:28 +0200
-Message-Id: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,96 +81,17 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The node names should be generic and SPI NOR dtschema expects "flash".
+On 4/7/22 07:33, Krzysztof Kozlowski wrote:
+> The node names should be generic and SPI NOR dtschema expects "flash".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/mips/boot/dts/brcm/bcm97358svmb.dts                   | 2 +-
+>   arch/mips/boot/dts/brcm/bcm97360svmb.dts                   | 2 +-
+>   arch/mips/boot/dts/brcm/bcm97425svmb.dts                   | 2 +-
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/mips/boot/dts/brcm/bcm97358svmb.dts                   | 2 +-
- arch/mips/boot/dts/brcm/bcm97360svmb.dts                   | 2 +-
- arch/mips/boot/dts/brcm/bcm97425svmb.dts                   | 2 +-
- arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts         | 2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts         | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+For the above:
 
-diff --git a/arch/mips/boot/dts/brcm/bcm97358svmb.dts b/arch/mips/boot/dts/brcm/bcm97358svmb.dts
-index 522f2c40d6e6..c17fc14d4899 100644
---- a/arch/mips/boot/dts/brcm/bcm97358svmb.dts
-+++ b/arch/mips/boot/dts/brcm/bcm97358svmb.dts
-@@ -78,7 +78,7 @@ &nand {
- &qspi {
- 	status = "okay";
- 
--	m25p80@0 {
-+	flash@0 {
- 		compatible = "m25p80";
- 		reg = <0>;
- 		spi-max-frequency = <40000000>;
-diff --git a/arch/mips/boot/dts/brcm/bcm97360svmb.dts b/arch/mips/boot/dts/brcm/bcm97360svmb.dts
-index 01f215b08dba..c9b76f41e7a6 100644
---- a/arch/mips/boot/dts/brcm/bcm97360svmb.dts
-+++ b/arch/mips/boot/dts/brcm/bcm97360svmb.dts
-@@ -81,7 +81,7 @@ &sdhci0 {
- &qspi {
- 	status = "okay";
- 
--	m25p80@0 {
-+	flash@0 {
- 		compatible = "m25p80";
- 		reg = <0>;
- 		spi-max-frequency = <40000000>;
-diff --git a/arch/mips/boot/dts/brcm/bcm97425svmb.dts b/arch/mips/boot/dts/brcm/bcm97425svmb.dts
-index f38934934349..289a57b912ef 100644
---- a/arch/mips/boot/dts/brcm/bcm97425svmb.dts
-+++ b/arch/mips/boot/dts/brcm/bcm97425svmb.dts
-@@ -116,7 +116,7 @@ &sdhci1 {
- &qspi {
- 	status = "okay";
- 
--	m25p80@0 {
-+	flash@0 {
- 		compatible = "m25p80";
- 		reg = <0>;
- 		spi-max-frequency = <40000000>;
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index 6069b33cf09f..826e91b840a3 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -129,7 +129,7 @@ &spi {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinmux_spi_spi>, <&pinmux_spi_cs1_cs>;
- 
--	m25p80@0 {
-+	flash@0 {
- 		compatible = "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <40000000>;
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 5892bcf71595..db961d61cfde 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -60,7 +60,7 @@ &sdhci {
- &spi0 {
- 	status = "okay";
- 
--	m25p80@0 {
-+	flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "jedec,spi-nor";
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index a7fce8de6147..224383a30ce3 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -44,7 +44,7 @@ &sdhci {
- &spi0 {
- 	status = "okay";
- 
--	m25p80@0 {
-+	flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "jedec,spi-nor";
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.32.0
-
+Florian
