@@ -2,47 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076384F7071
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 03:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E02A4F705F
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 03:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238663AbiDGBVh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Apr 2022 21:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
+        id S238419AbiDGBV3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Apr 2022 21:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240475AbiDGBUB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Apr 2022 21:20:01 -0400
+        with ESMTP id S240496AbiDGBUC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Apr 2022 21:20:02 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757FD182DA1;
-        Wed,  6 Apr 2022 18:16:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6900531359;
+        Wed,  6 Apr 2022 18:17:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DAAEB82690;
-        Thu,  7 Apr 2022 01:16:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7993C385A3;
-        Thu,  7 Apr 2022 01:16:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25251B81E79;
+        Thu,  7 Apr 2022 01:17:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A61FC385A3;
+        Thu,  7 Apr 2022 01:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649294194;
-        bh=k25EnSYBuBHACKjBV50Gd+fEfovRN5hpv6egPbQrWPY=;
+        s=k20201202; t=1649294254;
+        bh=dtq5FuBVkY2H3IbPkUyxFDs+51izOINGRqjrJWWyk6g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S/+dYpLqR2sQGWxsuruR4uTbN6Q/1Fj9jUdwn7/HoGmzKIJOEmCPiJbowLOgjQvWt
-         JMtn/fzoIPxwKL/TZcP+8zy0rk6i7ugASPGcam7IZHZuD1cdAxKpZcNv+LzvbGF6IH
-         Z3n2VH2FuEPeWJZfUSUFKAQbMv9QdPV7Enk54tZxk6+gWgRYMLWAW7ER4Ie8zUmIb3
-         zYJzq3hQ9Uk1WONICaYuWY13qlnEkqHeluTz95Usn8dC/SKhqn6RcyOhUhNcYuDI8a
-         xhvQF0SwUcQYS2bpZunOjdudkLthjPxMMPFMhlMBaKKp854sMpjImI0frr9oZKF3GN
-         p7Vs90OtRcQcw==
+        b=bvfZ9UHnPaqyebCS3tpUPXGpHVTigcCKBntXNG48Hx3kTssIC+h65POdr8DB9WRGn
+         3TCep4VVzg8yX7uh4IxA+WwgjkjlnrQs9uoIgqg7sI8Tw0zHbiEPeyiemTPc41mZVW
+         5noIfYKuWjJGFM3i/YW6cLYy/hpq23q7MMsQpwpGhUkD8YE57Wsy009kSY1wF173mZ
+         4DAOvC8+kyxYznuGlZVr8x1kV73acDww5EKlY8dZTb4B9vGayeG0+/nLFw1ccBsjfe
+         A2RJ4dIGyfz6wrw45HhlfHKDnI37GDK6DLv1gNf+DXerVvLR9diCwFrdaqp/Jms3t0
+         IkyOeGAvYnujw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Xiaoke Wang <xkernel.wang@foxmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, john@phrozen.org,
         wangborong@cdjrlc.com, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 07/11] MIPS: lantiq: check the return value of kzalloc()
-Date:   Wed,  6 Apr 2022 21:16:04 -0400
-Message-Id: <20220407011609.115258-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 6/8] MIPS: lantiq: check the return value of kzalloc()
+Date:   Wed,  6 Apr 2022 21:16:43 -0400
+Message-Id: <20220407011645.115412-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407011609.115258-1-sashal@kernel.org>
-References: <20220407011609.115258-1-sashal@kernel.org>
+In-Reply-To: <20220407011645.115412-1-sashal@kernel.org>
+References: <20220407011645.115412-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -102,7 +102,7 @@ index e304aabd6678..7d4081d67d61 100644
  	clk->cl.con_id = con;
  	clk->cl.clk = clk;
 diff --git a/arch/mips/lantiq/xway/sysctrl.c b/arch/mips/lantiq/xway/sysctrl.c
-index e0af39b33e28..293ebb833659 100644
+index c05bed624075..1b1142c7bb85 100644
 --- a/arch/mips/lantiq/xway/sysctrl.c
 +++ b/arch/mips/lantiq/xway/sysctrl.c
 @@ -313,6 +313,8 @@ static void clkdev_add_pmu(const char *dev, const char *con, bool deactivate,
