@@ -2,47 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DBD4F706D
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 03:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076384F7071
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 03:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238621AbiDGBVe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Apr 2022 21:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
+        id S238663AbiDGBVh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Apr 2022 21:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240381AbiDGBT6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Apr 2022 21:19:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BD9184B4A;
-        Wed,  6 Apr 2022 18:15:59 -0700 (PDT)
+        with ESMTP id S240475AbiDGBUB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Apr 2022 21:20:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757FD182DA1;
+        Wed,  6 Apr 2022 18:16:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D261561DA8;
-        Thu,  7 Apr 2022 01:15:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6653BC385A3;
-        Thu,  7 Apr 2022 01:15:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1DAAEB82690;
+        Thu,  7 Apr 2022 01:16:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7993C385A3;
+        Thu,  7 Apr 2022 01:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649294158;
-        bh=lsTQfPcjQ3GMPoVWgE/XB3ejk49g6YF+BtG3dlMGAVs=;
+        s=k20201202; t=1649294194;
+        bh=k25EnSYBuBHACKjBV50Gd+fEfovRN5hpv6egPbQrWPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lsJDXnW5UkbOa24PlNX3viMnmhIlXvnR3mX0yOeKhFtyxYWeF8o/hnT8H4BVq330m
-         a0mS5ipRgBHyAjGCdT3futPMKiUTWGGXcuxRuS7zS4i8rsh+8o/Y/6Uv+pLKOs05Jk
-         vwSKCO3AvbC57I9IEHn6LTbGOrHBXjJcTxuE1NM7ajXGkdq0GRPgQ7xL+ewPovHDT5
-         5BI39GzqFEiqZiouiOs1immHrT4yNC1oGuwEOWX1qxp/qy2e8JLJ1o6ie3CU20M1df
-         cCdAGgJzI1Yn4M/4rWx56qityP5WmTxKv0yVKa8z4kXYFRr5btol0rUE0RYWUv9q6t
-         MxGZ21A99WA+A==
+        b=S/+dYpLqR2sQGWxsuruR4uTbN6Q/1Fj9jUdwn7/HoGmzKIJOEmCPiJbowLOgjQvWt
+         JMtn/fzoIPxwKL/TZcP+8zy0rk6i7ugASPGcam7IZHZuD1cdAxKpZcNv+LzvbGF6IH
+         Z3n2VH2FuEPeWJZfUSUFKAQbMv9QdPV7Enk54tZxk6+gWgRYMLWAW7ER4Ie8zUmIb3
+         zYJzq3hQ9Uk1WONICaYuWY13qlnEkqHeluTz95Usn8dC/SKhqn6RcyOhUhNcYuDI8a
+         xhvQF0SwUcQYS2bpZunOjdudkLthjPxMMPFMhlMBaKKp854sMpjImI0frr9oZKF3GN
+         p7Vs90OtRcQcw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Xiaoke Wang <xkernel.wang@foxmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, john@phrozen.org,
         wangborong@cdjrlc.com, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 12/17] MIPS: lantiq: check the return value of kzalloc()
-Date:   Wed,  6 Apr 2022 21:15:16 -0400
-Message-Id: <20220407011521.115014-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 07/11] MIPS: lantiq: check the return value of kzalloc()
+Date:   Wed,  6 Apr 2022 21:16:04 -0400
+Message-Id: <20220407011609.115258-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407011521.115014-1-sashal@kernel.org>
-References: <20220407011521.115014-1-sashal@kernel.org>
+In-Reply-To: <20220407011609.115258-1-sashal@kernel.org>
+References: <20220407011609.115258-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -76,10 +76,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 34 insertions(+), 16 deletions(-)
 
 diff --git a/arch/mips/lantiq/falcon/sysctrl.c b/arch/mips/lantiq/falcon/sysctrl.c
-index 037b08f3257e..a2837a54d972 100644
+index 82bbd0e2e298..714d92659489 100644
 --- a/arch/mips/lantiq/falcon/sysctrl.c
 +++ b/arch/mips/lantiq/falcon/sysctrl.c
-@@ -167,6 +167,8 @@ static inline void clkdev_add_sys(const char *dev, unsigned int module,
+@@ -169,6 +169,8 @@ static inline void clkdev_add_sys(const char *dev, unsigned int module,
  {
  	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
  
@@ -89,10 +89,10 @@ index 037b08f3257e..a2837a54d972 100644
  	clk->cl.con_id = NULL;
  	clk->cl.clk = clk;
 diff --git a/arch/mips/lantiq/xway/gptu.c b/arch/mips/lantiq/xway/gptu.c
-index 3d5683e75cf1..200fe9ff641d 100644
+index e304aabd6678..7d4081d67d61 100644
 --- a/arch/mips/lantiq/xway/gptu.c
 +++ b/arch/mips/lantiq/xway/gptu.c
-@@ -122,6 +122,8 @@ static inline void clkdev_add_gptu(struct device *dev, const char *con,
+@@ -124,6 +124,8 @@ static inline void clkdev_add_gptu(struct device *dev, const char *con,
  {
  	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
  
@@ -102,10 +102,10 @@ index 3d5683e75cf1..200fe9ff641d 100644
  	clk->cl.con_id = con;
  	clk->cl.clk = clk;
 diff --git a/arch/mips/lantiq/xway/sysctrl.c b/arch/mips/lantiq/xway/sysctrl.c
-index 2ee68d6e8bb9..6c2d9779ac72 100644
+index e0af39b33e28..293ebb833659 100644
 --- a/arch/mips/lantiq/xway/sysctrl.c
 +++ b/arch/mips/lantiq/xway/sysctrl.c
-@@ -311,6 +311,8 @@ static void clkdev_add_pmu(const char *dev, const char *con, bool deactivate,
+@@ -313,6 +313,8 @@ static void clkdev_add_pmu(const char *dev, const char *con, bool deactivate,
  {
  	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
  
@@ -114,7 +114,7 @@ index 2ee68d6e8bb9..6c2d9779ac72 100644
  	clk->cl.dev_id = dev;
  	clk->cl.con_id = con;
  	clk->cl.clk = clk;
-@@ -334,6 +336,8 @@ static void clkdev_add_cgu(const char *dev, const char *con,
+@@ -336,6 +338,8 @@ static void clkdev_add_cgu(const char *dev, const char *con,
  {
  	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
  
@@ -123,7 +123,7 @@ index 2ee68d6e8bb9..6c2d9779ac72 100644
  	clk->cl.dev_id = dev;
  	clk->cl.con_id = con;
  	clk->cl.clk = clk;
-@@ -352,24 +356,28 @@ static void clkdev_add_pci(void)
+@@ -354,24 +358,28 @@ static void clkdev_add_pci(void)
  	struct clk *clk_ext = kzalloc(sizeof(struct clk), GFP_KERNEL);
  
  	/* main pci clock */
@@ -168,7 +168,7 @@ index 2ee68d6e8bb9..6c2d9779ac72 100644
  }
  
  /* xway socs can generate clocks on gpio pins */
-@@ -389,9 +397,15 @@ static void clkdev_add_clkout(void)
+@@ -391,9 +399,15 @@ static void clkdev_add_clkout(void)
  		char *name;
  
  		name = kzalloc(sizeof("clkout0"), GFP_KERNEL);
