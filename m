@@ -2,252 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA3F4F7EF1
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 14:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2B14F7F1A
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 14:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242226AbiDGM3s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Apr 2022 08:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S243025AbiDGMfC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Apr 2022 08:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245062AbiDGM3l (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 08:29:41 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3047245C
-        for <linux-mips@vger.kernel.org>; Thu,  7 Apr 2022 05:27:38 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b15so6222709edn.4
-        for <linux-mips@vger.kernel.org>; Thu, 07 Apr 2022 05:27:38 -0700 (PDT)
+        with ESMTP id S245249AbiDGMen (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 08:34:43 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA2C127BF4
+        for <linux-mips@vger.kernel.org>; Thu,  7 Apr 2022 05:32:42 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r13so7618380wrr.9
+        for <linux-mips@vger.kernel.org>; Thu, 07 Apr 2022 05:32:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=VRuoAIQ8VM7Z7lkjnKl30FJLKecdPI+AAj9EpsNSn2k=;
-        b=pjuzAXsmGUfimoqYqkuIDhQezqaFwxIutqB489Dv2Wm6p+bqikvsuLx0pRh5WRfKF0
-         xzqz+Rxa2d6UoA9YV2hYUMqzJ3rJ3BwpR5d10EhpJI7rMd0X3yRCj9H/XCPV26VohZyT
-         gXLwdemo1hExYlfRek+blr/0B9Sg02n87v+A/EtvANbahRzFqYdBVw3WLOFmLpMSh9ku
-         xczB7aP7A4m4WsvgbrY8y3z7yNpHX0ZNy4F/g5zZDmop9kvZF3DJkWtf8MLEFSzyLeWt
-         eKDpMnjYliQRoEEeNy0Xqzuv3TEAiYUXm3wORsCQynvBP1duaALpucL9HXfP7CSTIXLH
-         tFvA==
+        bh=mbTY3i1nofmXcsRX/gWf8gHaHdMCsSLf8JrecOEU+cw=;
+        b=2ONBB+sJjjO/yEH3LwBOk834Exd0XtoibKkng2qA6BQ7lQ5wM+bJCkSWcreG93DtqD
+         7VY4riYcTScTZSI4ldR9U7hBsMHA+cVPVUVVigKHU9Vjd0pFzsBOhIvdbS9dMBusG8jT
+         suE0KbgnAZL7POk29sM4LWxXBSO34C6CfhDdpF6OZUWlfLc4h616O8pIfMv+IRzXXK40
+         0LsNAxKmW2NgB3r7c0j7wcXi/d30ktU+3oiRoyOUFVbtrc4m1idz+VyMLgf/IAeITcsD
+         Ei7O4SwWlLOin231bi1PzwWAnWvAhsHcPBv30ocA13WN7F8Lv6gNZy29dcTEO2ECx8Ef
+         G0xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=VRuoAIQ8VM7Z7lkjnKl30FJLKecdPI+AAj9EpsNSn2k=;
-        b=C7AoJ/5TiA69FZXPPYY/gxix3PgSDguAtKVWOO0+mIwdp3NhVUPZK/ojCNBhmJXyUx
-         5Wb1apGiHsIyStNphtreqLZ3Aw0RiOCcynXlw5E99U6rJ13ReUshB6BO0ym41wStfvWr
-         phsfc04BYCyyoWkD2B2IWFRZ1YY/Xe6Hfa4a7cUkuvZoFpZL4FvWDuFQudIQWyEf5X23
-         jc7E4VL+Kj8jJY4t+Z7Xip7FGH7uXcfbGLzpQgNvggedI/Ki1taOAC3L7KDAI2cRwO12
-         vFbtMR+0nrjp6YTvdCJSfOCeFXjvqBXW5PkLRSuiVTiCSrqHub3uqremEP8oH9h5pf2m
-         FLfQ==
-X-Gm-Message-State: AOAM532VIyndmq9SkTWwP2RtDnd8syDqfpQxQI3aQJ8rFkmtJe8s9tDc
-        NoQRT3by90XXTkeNL97wNlacaAWmzAOlh3wPhv8=
-X-Google-Smtp-Source: ABdhPJw0Jqrrh7/d2QZPdCy+X/ZgkW51U3q/hqh4YEClrBeDkimwT6OirRgRyVtwDUG2wV87fTl/0HtTj+00K+kH6d4=
-X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id
- el4-20020a056402360400b0041cc4e62988mr13852621edb.157.1649334457045; Thu, 07
- Apr 2022 05:27:37 -0700 (PDT)
+        bh=mbTY3i1nofmXcsRX/gWf8gHaHdMCsSLf8JrecOEU+cw=;
+        b=mg5Z/nojIol79gQjnf7akdsQKCkfLYZi3E/DXqRfzkHVk8585jcLQEEeiafoqMAzvt
+         arIt2YH0FTyA76hCn+itq84aJwuy2k7qntxXVzKmObNG9hLUzYpRa+EsZzUiDLltxS/u
+         RoQ+NFrXWeC7ewmXI1MT7I8duNB2RQMS1FoWAIlmAuTmbIy3IH3o7nb4Z/ebEzzcwbbI
+         pbARJJfYqVkVYqX035ILXzoNZ+YC62BZ+rS5YKoAy9OnsVllbeKqPeUyXaiiGad+TLJS
+         osmvbGfdR9jB0fP/fGG5okydrhkg4ex9In+61ImMFzK5MnuTvuCCecfn6aqG/Qgc3NQY
+         O7ow==
+X-Gm-Message-State: AOAM531ee9jkbR9BdealIDyx9/7lF2XWdl1Gercj7aBcglAocSFq9CkP
+        fK428HRNPfwjHT3fJ/rt5Uti1A==
+X-Google-Smtp-Source: ABdhPJz4y5wp1HQZyoUslQOF0q12YchRb09PY0LcNzFEGXXYko9LlR/yXAwMxL4UXjQ/qYkKfGQXgg==
+X-Received: by 2002:a05:6000:1202:b0:206:1868:721f with SMTP id e2-20020a056000120200b002061868721fmr10847209wrx.292.1649334759373;
+        Thu, 07 Apr 2022 05:32:39 -0700 (PDT)
+Received: from [10.1.3.188] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id p1-20020a5d59a1000000b002078c8b6dabsm1257752wrr.9.2022.04.07.05.32.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 05:32:38 -0700 (PDT)
+Message-ID: <fb445c84-9d86-7ee8-c963-ae8d6fc31cf5@baylibre.com>
+Date:   Thu, 7 Apr 2022 14:32:37 +0200
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Thu, 7 Apr 2022 13:27:25 +0100
-Message-ID: <CAHpNFcM-uqvy7kTzdNjt9ipt4XVGKC4xyWbvxqGDYsxKORSsDQ@mail.gmail.com>
-Subject: Frame Buffer - Personally QFT  is a much more pleasurable experience
- than VRR at 2xFPS+ Stable FPS & X-OR Partial Frame Retention saving on compression.
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v18 1/3] drm/bridge: display-connector: add ddc-en gpio
+ support
+Content-Language: en-US
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Jonas Karlman <jonas@kwiboo.se>, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org
+References: <cover.1649330170.git.hns@goldelico.com>
+ <3607e924b7c0cf0be956c0d49894be1442dbda41.1649330171.git.hns@goldelico.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <3607e924b7c0cf0be956c0d49894be1442dbda41.1649330171.git.hns@goldelico.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-VecSR - Vector Standard Render
+On 07/04/2022 13:16, H. Nikolaus Schaller wrote:
+> "hdmi-connector.yaml" bindings defines an optional property
+> "ddc-en-gpios" for a single gpio to enable DDC operation.
+> 
+> Usually this controls +5V power on the HDMI connector.
+> This +5V may also be needed for HPD.
+> 
+> This was not reflected in code but is needed to make the CI20
+> board work.
+> 
+> Now, the driver activates the ddc gpio after probe and
+> deactivates after remove so it is "almost on".
+> 
+> But only if this driver is loaded (and not e.g. blacklisted
+> as module).
+> 
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>   drivers/gpu/drm/bridge/display-connector.c | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/bridge/display-connector.c b/drivers/gpu/drm/bridge/display-connector.c
+> index d24f5b90feabf..e4d52a7e31b71 100644
+> --- a/drivers/gpu/drm/bridge/display-connector.c
+> +++ b/drivers/gpu/drm/bridge/display-connector.c
+> @@ -24,6 +24,7 @@ struct display_connector {
+>   	int			hpd_irq;
+>   
+>   	struct regulator	*dp_pwr;
+> +	struct gpio_desc	*ddc_en;
+>   };
+>   
+>   static inline struct display_connector *
+> @@ -345,6 +346,17 @@ static int display_connector_probe(struct platform_device *pdev)
+>   		}
+>   	}
+>   
+> +	/* enable DDC */
+> +	if (type == DRM_MODE_CONNECTOR_HDMIA) {
+> +		conn->ddc_en = devm_gpiod_get_optional(&pdev->dev, "ddc-en",
+> +						       GPIOD_OUT_HIGH);
+> +
+> +		if (IS_ERR(conn->ddc_en)) {
+> +			dev_err(&pdev->dev, "Couldn't get ddc-en gpio\n");
+> +			return PTR_ERR(conn->ddc_en);
+> +		}
+> +	}
+> +
+>   	conn->bridge.funcs = &display_connector_bridge_funcs;
+>   	conn->bridge.of_node = pdev->dev.of_node;
+>   
+> @@ -373,6 +385,9 @@ static int display_connector_remove(struct platform_device *pdev)
+>   {
+>   	struct display_connector *conn = platform_get_drvdata(pdev);
+>   
+> +	if (conn->ddc_en)
+> +		gpiod_set_value(conn->ddc_en, 0);
+> +
+>   	if (conn->dp_pwr)
+>   		regulator_disable(conn->dp_pwr);
+>   
 
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
-
-Vector Compression VESA Standard Display protocol 3 : RS
-
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
-
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
-
-Improve Console & TV & BIOS & General Animated Render
-
-*
-Vector Compression VESA Standard Display protocol 3 +
-DSC : Zero compression or low level compression version of DSC
-1.2bc
-
-Frame by Frame compression with vector prediction.
-
-Personally QFT  is a much more pleasurable experience than VRR at 2xFPS+
-Stable FPS & X-OR Partial Frame Retention saving on compression.
-
-X-OR Frame Buffer Compression & Blank Space Compression:
-
-X-OR X=3D1 New Data & X=3D0 being not sent,
-Therefore Masking the frame buffer,
-
-A Frame buffer needs a cleared aria; A curve or ellipsoid for example,
-Draw the ellipsoid; This is the mask & can be in 3 levels:
-
-X-OR : Draw or not Draw Aria : Blitter XOR
-AND : Draw 1 Value & The other : Blitter Additive
-Variable Value Resistor : Draw 1 Value +- The other : Blitter + or - Modifi=
-er
-*
-
-Vector Compression VESA Standard Display protocol 3 : RS
-
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
-Improve Console & TV & BIOS & General Animated Render
-
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
-
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
-
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
-
-High precision for AVX 32Bit to 256Bit width precision.
-
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
-
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
-
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
-
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
-
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
-
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
-
-Personally QFT  is a much more pleasurable experience than VRR at 2xFPS+
-Stable FPS & X-OR Partial Frame Retention saving on compression.
-
-"QFT a Zero compression or low level compression version of DSC
-1.2bc
-
-X-OR Frame Buffer Compression & Blank Space Compression:
-Vector Compression VESA Standard Display protocol 3"
-
-"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
-latency=E2=80=9D, which is the amount of time between a frame being ready f=
-or
-transport in the GPU and that frame being completely displayed. This
-latency is the sum of the transport time through the source=E2=80=99s outpu=
-t
-circuits, the transport time across the interface, the processing of
-the video data in the display, and the painting of the screen with the
-new data. This overall latency affects the responsiveness of games:
-how long it appears between a button is pressed to the time at which
-the resultant action is observed on the screen.
-
-
-While there are a lot of variables in this equation, not many are
-adjustable from an HDMI specification perspective. QFT operates on the
-transport portion of this equation by reducing the time it takes to
-send only the active video across the cable. This results in reduced
-display latency and increased responsiveness."
-*
-
-(c)Rupert S
-
-Include vector today *important* RS
-https://vesa.org/vesa-display-compression-codecs/
-
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
-
-https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
-ml
-
-https://bit.ly/VESA_BT
-*
-
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
-
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
-
-3rd dimensional access with vector fonts by a simple method:
-
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
-
-Bitmap/Texture,
-
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
-
-Can be higher resolution & we can sub sample with closer view priority...
-
-We then rotate the texture on our output polygon & factor size differential=
-.
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
-
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
-
-*
-
-VecSR is really good for secondary loading of sprites & text; In these
-terms very good for pre loading on for example the X86, RISC, AMIGA &
-Famicon type devices,
-With appropriate loading into Sprite buffers or Emulated Secondaries
-(Special Animations) or Font Buffers.
-
-Although Large TT-SVG & OT-SVG fonts load well in 8MB Ram on the Amiga
-with Integer & Emulated Float (Library); Traditional BitMap fonts work
-well in a Set Size & can resize well if cached!
-
-The full process leads upto the terminal & how to optimise CON,
-We can & will need to exceed capacities of any system & To improve them!
-
-presenting: Dev-Con-VectorE=C2=B2
-Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
-Class VESA Console +
-
-With Console in VecSR you can 3DText & Audio,
-
-VecSR Firmware update 2022 For immediate implementation in all
-operating systems & ROM's
-
-Potential is fast & useful.
-
-*
-
-https://science.n-helix.com/2022/04/vecsr.html
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
