@@ -2,119 +2,493 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297BA4F79B0
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 10:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2D14F7CB8
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 12:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234233AbiDGIbU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Apr 2022 04:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S244249AbiDGK3c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Apr 2022 06:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242993AbiDGIbS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 04:31:18 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADD9C3375
-        for <linux-mips@vger.kernel.org>; Thu,  7 Apr 2022 01:29:19 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id z1so6716860wrg.4
-        for <linux-mips@vger.kernel.org>; Thu, 07 Apr 2022 01:29:19 -0700 (PDT)
+        with ESMTP id S244232AbiDGK3Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 06:29:24 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CF59AE67
+        for <linux-mips@vger.kernel.org>; Thu,  7 Apr 2022 03:27:21 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id b24so5822250edu.10
+        for <linux-mips@vger.kernel.org>; Thu, 07 Apr 2022 03:27:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=j2Kem2UHWwWtT1XQMF4+RRZCgeb8SiVpqswTkaM965I=;
-        b=n0zghx7LjA9vSgwDkHv9YFtBHCHIfhUd0NgVt5lYxOnkYFjorTyqyJwXm/AT84sjnL
-         DIH9ykBGaB6wwlsAGA8ZxmCrFA4RV6IPRlTV+GqLCBxRn8HDOEnJoFOnT82et5MKjC/Y
-         HjC1k9L/U6QmtgiKrZpT3yH/S2RCmTzn4rJD+BwqSIVdeAlhpo8sUkwK4eCnfucmcBfc
-         aUI6qH5wGJnM9XFv89z00qM6lsm8qKo+OpoeWG8QcxGi+X1MKH8dNzJ7gtvaqGfD8OXT
-         W70x9l5wSEeRvDqj2RmsbhiYb2gykMnHbTbTch5iVajXKe4o05du0XETljCqMthmXvjr
-         pVWQ==
+        bh=nCzDGoAAIWVuUNjHdyahcYIJjBTGEOu0CAiErPb7eZo=;
+        b=FTJlEqqxBDV64LIwPkvXBcoh9trQUUoRjT/D4FLXc0CRQIvjCyXGkj+b7F9UHxe4d1
+         cNkUActC2RJGsdazfex8QIIQUNZ1oQYpEIVojzwNimpGYp5PkONtQBzSs4oYFaBbxQHX
+         aNrcjt1373oh4kjOzi1XJLURIFzdcuJ7w8Vew2TgJ5iR3RE9FeUXjs2fM8r2cHqlne34
+         qANEnEj1ay/Q3MhgY0Yr4zRu3Ikctc8NRurX8RNDqmkQOVKUaRibR/TpOgM58vECD2L/
+         DFpj1nWhv4nXX5k3SDj9G7X8KkxNEQDrrT/dVZlhzAeGUZnrZRFFmHhGSoBTeQmHBs0+
+         unqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=j2Kem2UHWwWtT1XQMF4+RRZCgeb8SiVpqswTkaM965I=;
-        b=x3829daFvu4r6YCoENja7Vw7x9CGmFSRh2LQfQxKROGKNvZ9+zkVG9Kb2sDLqgQAdu
-         8RzUSxMD5iIfQBdtSZW3AErfDbzuYeJfzS+5eJFM8b3WjK1ruPjlaTgNW3gcsvObQ+Ys
-         ZJLhyq/c0yKcMmoSDS2soaQsaNadDjXDkpCE/h+cjDcWe+c14cbIOyp40r4Tos/ei5qA
-         as2FH6HZliCYudaOfgzObltlB7Vb8FMH0uXDt4MIFE+laIdCr3nVGKYHVWW0xcNSSJ/z
-         3yY3DtVvHJKl/GO4NfBpstNpcyNLyvMRMPC8KbBFlRJyzkLZZUpz4UwuLhm54Zx+bI24
-         yIbA==
-X-Gm-Message-State: AOAM532ONKg2ch2/a2kxlyfGvPrmgD3bBAJnEYrs3O/Qus7Q2l1OQnPP
-        Ezi2JbtqaokiL7Le9PKNkjjQhkTOZYkBFKSD
-X-Google-Smtp-Source: ABdhPJzslswTLBwz8bASq5ZhoM6pQ0HR0M0Q4WNO3dHYkVPWtR2YQYx66iDbjuqGaVINSGZvnlusVw==
-X-Received: by 2002:adf:d1c6:0:b0:205:dbfb:7892 with SMTP id b6-20020adfd1c6000000b00205dbfb7892mr9935170wrd.193.1649320157924;
-        Thu, 07 Apr 2022 01:29:17 -0700 (PDT)
-Received: from [10.1.3.188] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm16453043wre.22.2022.04.07.01.29.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 01:29:17 -0700 (PDT)
-Message-ID: <9d3f8bfb-74f7-cbd9-a6f5-1e8acae4c13b@baylibre.com>
-Date:   Thu, 7 Apr 2022 10:29:16 +0200
+        bh=nCzDGoAAIWVuUNjHdyahcYIJjBTGEOu0CAiErPb7eZo=;
+        b=pRdDjAv3J9C1DOJBSLXGsitBzpxF5AzD0aJfvKqecVtYRvPfyC7eNcUM/H8+dK2rnD
+         6agkTD6yBcUhaA5IM2VMJqA/Kuu1uDQqoTuAmkaR8BjG6d5KCTYrlGih3mJV8P4dRub1
+         EvbFkl0FPQiT8tbRilHsGSPNRow/hlT6O0kTbvC/VTNLP3WNHR0e0ChyNonaWuzAQL9y
+         21uP1yISlIuSwKUn6Xvd0JDd18+UumcGfeXqEN1+r9UG0fqnn2MHobeemw/xAmYS36Px
+         XwEIJCeqoLvhLKn0oxMRAlxyzzbDliAr1etJUBvp7hQqfpgT2URyfjnITodKV281a1We
+         jpsw==
+X-Gm-Message-State: AOAM530MRc0pFUIrA4cuebTaf9zzcqhRkXkMOkfEho7XHmgbFzza7/KT
+        73y2x6IK17Vn7JbSZ+OEnQBO9uQ7S6t49L9MrYM=
+X-Google-Smtp-Source: ABdhPJzhJm5G6h/1s8qVHgh0xyjNXtVFlMfjIEnaY70+LOKOo9Ha2HjJO8TEhwRk+ZG5QCT6FZxu83GxSr2RHLv5o5I=
+X-Received: by 2002:a05:6402:34d6:b0:419:4dc2:91c5 with SMTP id
+ w22-20020a05640234d600b004194dc291c5mr13599230edc.329.1649327239973; Thu, 07
+ Apr 2022 03:27:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v17 5/6] drm/bridge: dw-hdmi: add YCBCR formats only if
- CSC is available
-Content-Language: en-US
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     letux-kernel@openphoenux.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jonas Karlman <jonas@kwiboo.se>
-References: <cover.1649262368.git.hns@goldelico.com>
- <d5801eb7733a616df30fef1d192e88ad147afc1c.1649262368.git.hns@goldelico.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <d5801eb7733a616df30fef1d192e88ad147afc1c.1649262368.git.hns@goldelico.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Thu, 7 Apr 2022 11:27:07 +0100
+Message-ID: <CAHpNFcPcz0B9ohjoRDsuN1F_tac2mLrpdUn6N9NidvtGevkF8A@mail.gmail.com>
+Subject: Random : (Dynamic Elliptic Curve / T) * Factor Of T : problems for
+ Arm (32-bit), Motorola 68000 (M68k), Microblaze, SPARX32, Xtensa, and other
+ niche architectures.
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 06/04/2022 18:26, H. Nikolaus Schaller wrote:
-> otherwise they will produce a black HDMI screen.
-> 
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index b5a665c5e406e..ec40dd8865065 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -2628,10 +2628,12 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->   		output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
->   	}
->   
-> -	if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
-> +	if (hdmi->csc_available && hdmi->sink_is_hdmi &&
-> +	    (info->color_formats & DRM_COLOR_FORMAT_YCBCR422))
->   		output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
->   
-> -	if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-> +	if (hdmi->csc_available && hdmi->sink_is_hdmi &&
-> +	    (info->color_formats & DRM_COLOR_FORMAT_YCBCR444))
->   		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
->   
->   	/* Default 8bit RGB fallback */
+Random : (Dynamic Elliptic Curve / T) * Factor Of T :
 
-This patch shouldn't be needed anymore with proper filtering in patch 1.
+"Problems for Arm (32-bit), Motorola 68000 (M68k), Microblaze,
+SPARX32, Xtensa, and other niche architectures."
 
-Neil
+NoJitter - Initiating the dev/random ; Initiating Random with a SEED
+is the prospect I propose,
+My personal Time Crystal RNG is based upon the variable clock rate
+principle of Quartz clock crystals & could potentially sound too
+regular.
+
+However as we know very small variabilities in Super Stable Quartz
+crystals (Factory made) causes doubt,
+
+However in the 0.005 or smaller range & Especially with variable
+frequencies & power input levels to controlled crystals; Creative
+Chaos Exists,
+
+Particular market is motherboards that tweak frequencies to improve perform=
+ance!
+
+Clock rate variance is combined with a seed; As a Factoring agent &
+Again as a differentiator.
+
+What Is a Factoring Differentiator ? a Math that shifts values subtly
+& therefor shifts our results from predictable to unpredictable; Well
+hard to!
+
+The more effort we make; The harder it will be to see our Dynamic
+Elliptic Curve.
+
+Rupert S
+
+https://www.phoronix.com/scan.php?page=3Dnews_item&px=3DLinux-RNG-Opportuni=
+stic-urandom
+
+"Linux 5.19 To Try To Opportunistically Initialize /dev/urandom
+Written by Michael Larabel in Linux Security on 7 April 2022 at 05:44
+AM EDT. Add A Comment
+LINUX SECURITY -- Linux 5.18 is bringing many random/RNG improvements
+thanks to the work of kernel developer Jason Donenfeld. One of the
+changes though that had to be backed out during the merge window was
+trying to get /dev/random and /dev/urandom to behave exactly the same.
+While reverted for now with the 5.18 code, Donenfeld has prepared a
+change that should get it into good shape for major architectures with
+the next kernel cycle.
+
+That unifying of /dev/random and /dev/urandom work had to be backed
+out due to some CPU architectures not having enough source of
+randomness at boot and no jitter entropy. This was causing problems
+for Arm (32-bit), Motorola 68000 (M68k), Microblaze, SPARX32, Xtensa,
+and other niche architectures.
+
+With this patch now in the random.git development tree, it's trying to
+opportunistically initialize on /dev/urandom reads. For major,
+prominent architectures this should allow the same behavior as was
+desired with the Linux 5.18 RNG changes around urandom.
+In 6f98a4bfee72 ("random: block in /dev/urandom"), we tried to make a
+successful try_to_generate_entropy() call *required* if the RNG was
+not already initialized. Unfortunately, weird architectures and old
+userspaces combined in TCG test harnesses, making that change still
+not realistic, so it was reverted in 0313bc278dac ("Revert "random:
+block in /dev/urandom"").
+
+However, rather than making a successful try_to_generate_entropy()
+call *required*, we can instead make it *best-effort*.
+
+If try_to_generate_entropy() fails, it fails, and nothing changes from
+the current behavior. If it succeeds, then /dev/urandom becomes safe
+to use for free. This way, we don't risk the regression potential that
+led to us reverting the required-try_to_generate_entropy() call
+before.
+
+Practically speaking, this means that at least on x86, /dev/urandom
+becomes safe. Probably other architectures with working cycle counters
+will also become safe. And architectures with slow or broken cycle
+counters at least won't be affected at all by this change.
+
+So it may not be the glorious "all things are unified!" change we were
+hoping for initially, but practically speaking, it makes a positive
+impact.
+
+Assuming no further RNG issues uncovered with this work, you can
+expect to find this change appear in the Linux 5.19 kernel this
+summer."
+
+*****
+
+NT Interrupt counter Entropy : A counter theory : RS
+
+"more importantly, our
+distribution is not 2-monotone like NT's, because in addition to the
+cycle counter, we also include in those 4 words a register value, a
+return address, and an inverted jiffies. (Whether capturing anything
+beyond the cycle counter in the interrupt handler is even adding much of
+value is a question for a different time.)"
+
+NT Interrupt counter Entropy : A counter theory : RS
+
+To be clear interrupts are old fashioned (NT & Bios) : Points
+
+Network cards have offloading? Yes & why cannot we?
+
+Offloaded does not mean that a time differential matrix HASH AES of 32Bit w=
+ords,
+Cross pollinated though MMX, AVX , SiMD is plausible!
+
+Combined with even network latency timing & interrupt latency...
+
+Various system differentials can alternate line in our table per clock sync=
+!
+
+In this reference Quartz clock instability is not only counter acted by NTP=
+...
+But also utilized as a variable co-modifier.
+
+So why not also advantage ourselves of the clock frequency scaling
+effect to confuse odds again for Entropy (Random, Not Entropy)
+
+SSD does also have a write counter & a cleared state, not so boring as
+one thinks if per 32KB segment is hashed in 4Bit, 8,Bit 32Bit float!
+(remember we have DOT3 DOT 4 & INT8 in ML)
+
+We can utilize write cycle statistics & all hardware; Interrupts by
+themselves are rather Boring!
+
+Computed timings on processes multiplexed over 3 Threads per group in
+competition is also a potential complexifier of Random
+
+Rupert S
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
+tml
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+****
+
+PreSEED Poly Elliptic SiMD RAND : RS
+
+Preseed ; 3 Seeds with AES or Poly ChaCha or even 1 : 2 would be
+rather fast Init
+
+Blending them would make a rather paranoid Kernel developer feel safe! :D
+
+Like so List:
+
+3 seeds 32Bit or 64Bit :
+Examples :
+
+1 Seed : Pre seeded from CPU IRQ & Net 16Bit values each & merged
+2 & 3 from server https://pollinate.n-helix.com &or System TRNG
+
+4 Seed mix 128Bit Value
+
+Advantages :
+
+AVX & SiMD Mixxer is fast 'Byte Swap & Maths etcetera" & MultiThreaded
+AES Support is common :
+
+*
+HASH : RSA Source Cert C/TRNG : (c)RS
+
+Elliptic RSA : Cert Mixer : RSA 4096/2048/1024Temporal : 384/256/192
+ECC Temporal
+
+Centric Entropy HASH: Butterfly Effects
+
+Blake2
+ChaCha
+SM4
+SHA2
+SHA3
+
+Elliptic Encipher
+AES
+Poly ChaCha
+
+Elliptic : Time Variance : Tick Count Variance : On & Off Variance : IRQ
+
+*
+Time & Crystal : Quartz as a diffraction point fractal differentiator : RS
+
+RDTSC Variable bit differentiation & deviation of the quartz sub .0001
+Value combined with complexity of unique interplay with Alternative
+clocks such as Network cards, Audio cards & USB Sticks & Bluetooth
+radio clocks & Ultimately the NTP Pools themselves when required.
+
+(TIME Differential Float maths) TSC : RDTSC : RDTSCP : TCE supports
+single and half precision floating-point calculations
+
+Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+pge mca cmov pat pse36 clflush mmx fxsr sse sse2 htt pni ssse3 fma
+cx16 sse4_1 sse4_2 popcnt aes f16c syscall nx lm avx svm sse4a osvw
+ibs xop skinit wdt lwp fma4 tce tbm topx page1gb rdtscp bmi1
+
+*
+For RDTSCP =3D TValue TV1=3D16.0685 TV2=3D16.1432 TV3=3D15.1871
+When Processor Mzh =3D PV1 PV2 PV3
+RAND Source =3D Es1 Es2 Es3
+
+If Xt =3D 1.9 < then roll right
+
+((TV1 - TV2) * (PV1 - PV2)) / ((TV1 - TV3) * (PV1 - PV3)) =3D FractorXt(Xt)
+
+Es1 * Xt =3D Differential
+
+Es2 Es3
+
+(c) Rupert S
+
+Quartz as a diffraction point fractal differentiator : RS
+
+https://tches.iacr.org/index.php/TCHES/article/download/7274/6452
+https://perso.univ-rennes1.fr/david.lubicz/articles/gda.pdf
+https://patents.google.com/patent/US9335971
+*
+
+"Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
+is, in part, why we take trylocks instead. But apparently this still
+trips up various lock dependency analysers. That seems like a bug in the
+analyser's that should be fixed, rather than having to change things
+here.
+
+But maybe there's another reason to change things up: by deferring the
+crng pre-init loading to the worker, we can use the cryptographic hash
+function rather than xor, which is perhaps a meaningful difference when
+considering this data has only been through the relatively weak
+fast_mix() function.
+
+The biggest downside of this approach is that the pre-init loading is
+now deferred until later, which means things that need random numbers
+after interrupts are enabled, but before work-queues are running -- or
+before this particular worker manages to run -- are going to get into
+trouble. Hopefully in the real world, this window is rather small,
+especially since this code won't run until 64 interrupts have occurred."
+
+https://lore.kernel.org/lkml/Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net/T/
+
+Rupert S
+
+*
+
+Random : (Dynamic Elliptic Curve / T) * Factor Of T :
+
+"Problems for Arm (32-bit), Motorola 68000 (M68k), Microblaze,
+SPARX32, Xtensa, and other niche architectures."
+
+NoJitter - Initiating the dev/random ; Initiating Random with a SEED
+is the prospect I propose,
+My personal Time Crystal RNG is based upon the variable clock rate
+principle of Quartz clock crystals & could potentially sound too
+regular.
+
+However as we know very small variabilities in Super Stable Quartz
+crystals (Factory made) causes doubt,
+
+However in the 0.005 or smaller range & Especially with variable
+frequencies & power input levels to controlled crystals; Creative
+Chaos Exists,
+
+Particular market is motherboards that tweak frequencies to improve perform=
+ance!
+
+Clock rate variance is combined with a seed; As a Factoring agent &
+Again as a differentiator.
+
+What Is a Factoring Differentiator ? a Math that shifts values subtly
+& therefor shifts our results from predictable to unpredictable; Well
+hard to!
+
+The more effort we make; The harder it will be to see our Dynamic
+Elliptic Curve.
+
+Rupert S
+
+https://www.phoronix.com/scan.php?page=3Dnews_item&px=3DLinux-RNG-Opportuni=
+stic-urandom
+
+*****
+Serve C-TRNG QT Fractional Differentiator(c)RS
+
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
+
+SipHash: a fast short-input PRF
+
+Rotation Alignment : "The advantage of choosing such =E2=80=9Caligned=E2=80=
+=9D
+rotation counts is that aligned rotation counts are much faster than
+unaligned rotation counts on many non-64-bit architectures."
+
+http://cr.yp.to/siphash/siphash-20120918.pdf
+
+https://www.aumasson.jp/siphash/siphash.pdf
+
+"Choice of rotation counts. Finding really bad rotation counts for ARX
+algorithms turns out to be difficult. For example, randomly setting
+all rotations in
+BLAKE-512 or Skein to a value in {8, 16, 24, . . . , 56} may allow known at=
+tacks
+to reach slightly more rounds, but no dramatic improvement is expected.
+The advantage of choosing such =E2=80=9Caligned=E2=80=9D rotation counts is=
+ that
+aligned rotation counts are much faster than unaligned rotation counts
+on many non-64-bit
+architectures. Many 8-bit microcontrollers have only 1-bit shifts of bytes,=
+ so
+rotation by (e.g.) 3 bits is particularly expensive; implementing a rotatio=
+n by
+a mere permutation of bytes greatly speeds up ARX algorithms. Even 64-bit
+systems can benefit from alignment, when a sequence of shift-shift-xor can =
+be
+replaced by SSSE3=E2=80=99s pshufb byte-shuffling instruction. For comparis=
+on,
+implementing BLAKE-256=E2=80=99s 16- and 8-bit rotations with pshufb led to=
+ a
+20% speedup
+on Intel=E2=80=99s Nehalem microarchitecture."
+
+https://www.kernel.org/doc/html/latest/security/siphash.html
+
+https://en.wikipedia.org/wiki/SipHash
+
+Code SIP-HASH
+https://github.com/veorq/SipHash
+
+Serve C-TRNG QT Fractional Differentiator(c)RS
+
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
+
+As we see rotation may benefact from the addition of Quartz crystal
+alignment sync data from 4 cycles & aligning data blocks,
+
+Obviously we can pre share 4 64Bit blocks use use a pre seed AES/ChaCha Qua=
+d!
+Indeed we can have 16 64Bit pre Seeds & chose them by time sync for kernel
+
+Security bug; Solutions & explanation's (contains additional RANDOM
+Security Methods) :RS
+
+https://science.n-helix.com/2020/06/cryptoseed.html
+https://science.n-helix.com/2019/05/zombie-load.html
+https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
+
+Rupert S https://science.n-helix.com
+
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://aka.ms/win10rng
+*
+
+Encryption Methods:
+https://tools.ietf.org/id/?doc=3Dhash
+
+https://tools.ietf.org/id/?doc=3Dencrypt
+
+HASH :
+
+https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs
+
+https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
+
+https://tools.ietf.org/id/?doc=3Dsha
+
+https://tools.ietf.org/id/?doc=3Drsa
+
+Encryption Common Support:
+
+https://tools.ietf.org/id/?doc=3Dchacha
+
+https://tools.ietf.org/id/?doc=3Daes
+
+SM4e does seem a good possibility for C/T/RNG CORE HASH Functions!
+
+ARM Crypto Extensions Code (Maybe AES Extensions would work here)
+https://lkml.org/lkml/2022/3/15/324
+
+ARM Neon / SiMD / AVX Compatible (GPU is possible)
+https://lkml.org/lkml/2022/3/15/323
+
+*
+
+197 FIPS NIST Standards Specification C/T/RNG
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+Only a Neanderthal would approve a non additive source combination
+that is injected into the HASH & Re-HASHED ,
+
+One does not Procreate inadequate RANDOM from a simple bias KERNEL,
+Hardware RNG's added together may add around 450% Complexity!
+
+Hardware RNG devices MUST be able to Re-HASH to their 197 NIST
+Standards Specification, That is FINAL 2022 DT
+
+KEYS: trusted: allow use of kernel RNG for key material
+
+https://lkml.org/lkml/2022/3/16/598
+
+CAAM PRNG Reference : https://lkml.org/lkml/2022/3/16/649
