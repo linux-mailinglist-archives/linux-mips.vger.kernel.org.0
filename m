@@ -2,75 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B00A4F74E7
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 06:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D614F7780
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 09:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240755AbiDGEox (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Apr 2022 00:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S241808AbiDGHcx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Apr 2022 03:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240741AbiDGEov (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 00:44:51 -0400
-X-Greylist: delayed 929 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Apr 2022 21:42:47 PDT
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5717CAA028;
-        Wed,  6 Apr 2022 21:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=EfIKsaYvyjyauPGrMP
-        2ATwQhkAeB9k1V30Eckhc73WU=; b=QVvV7HlffafRhLjS6UzAS5PDgFj0i7qGpL
-        UPFo1p7UhSkojB7VTinJ82SltZDmmEbYziEbvYA7f0kRunqUELLOuUW3ebEIpkFg
-        JXL8afOpdqU5TE97QVJ4HVHDjVGoM4mC81uwyUWvw/uUrsaNmFdYIyCxaxHYmVpH
-        kWpYqL7Zw=
-Received: from localhost.localdomain (unknown [202.112.113.212])
-        by smtp2 (Coremail) with SMTP id GtxpCgCHNL0ZaE5iFqljAA--.8487S4;
-        Thu, 07 Apr 2022 12:27:15 +0800 (CST)
-From:   Yuanjun Gong <ruc_gongyuanjun@163.com>
-To:     Yuanjun Gong <ruc_gongyuanjun@163.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] mips: cpc: Fix refcount leak in mips_cpc_default_phys_base
-Date:   Thu,  7 Apr 2022 12:26:57 +0800
-Message-Id: <20220407042657.28614-1-ruc_gongyuanjun@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: GtxpCgCHNL0ZaE5iFqljAA--.8487S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWruw45tw15Zr4xtw1xKw45KFg_yoW3ArcEgF
-        1Iv34xArW5CF1vvFZ7Zw4Sgrn8Cw1rWrWSyw1v9FWUt3yYyr45Jan3Cr93Zws5uryakrs8
-        Gr4Yvasrta1xtjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sR_yxR3UUUUU==
-X-Originating-IP: [202.112.113.212]
-X-CM-SenderInfo: 5uxfsw5rqj53pdqm30i6rwjhhfrp/xtbB0APb5WEsp2TMPAAAsT
+        with ESMTP id S241814AbiDGHcv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 03:32:51 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8421C45AE8;
+        Thu,  7 Apr 2022 00:30:52 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 52E14499;
+        Thu,  7 Apr 2022 09:30:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1649316650;
+        bh=1eYFzMoK6H6YYEen2Elb5S6MFSJv6PvKrhbGFK6YAmQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CDNK07HLiQt8KNFejRu9SlEOiqnqmisrPh8vREkV5t2BWV3Ne7HUmKOhvOS+kiwRe
+         UVr59wrSJ7lKyu5DTFTkE8l9d62e65coFCQMDDmdsOANTjLbkkFgtY+d0vQ3xf4rZv
+         Dor/3DxdKtAjB5H95KydaMJWpt222kn0AuKAE1v4=
+Date:   Thu, 7 Apr 2022 10:30:46 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH v17 6/6] drm/bridge: display-connector: add ddc-en gpio
+ support
+Message-ID: <Yk6TJgdoSqthWUiz@pendragon.ideasonboard.com>
+References: <cover.1649262368.git.hns@goldelico.com>
+ <bf90de303a5dbc587517fe4a1bb437e198b90198.1649262368.git.hns@goldelico.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bf90de303a5dbc587517fe4a1bb437e198b90198.1649262368.git.hns@goldelico.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Gong Yuanjun <ruc_gongyuanjun@163.com>
+Hi Nikolaus,
 
-Add the missing of_node_put() to release the refcount incremented
-by of_find_compatible_node().
+Thank you for the patch.
 
-Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
----
- arch/mips/kernel/mips-cpc.c | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, Apr 06, 2022 at 06:26:08PM +0200, H. Nikolaus Schaller wrote:
+> "hdmi-connector.yaml" bindings defines an optional property
+> "ddc-en-gpios" for a single gpio to enable DDC operation.
+> 
+> Usually this controls +5V power on the HDMI connector.
+> This +5V may also be needed for HPD.
+> 
+> This was not reflected in code but is needed to make the CI20
+> board work.
+> 
+> Now, the driver activates the ddc gpio after probe and
+> deactivates after remove so it is "almost on".
+> 
+> But only if this driver is loaded (and not e.g. blacklisted
+> as module).
+> 
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 
-diff --git a/arch/mips/kernel/mips-cpc.c b/arch/mips/kernel/mips-cpc.c
-index 17aff13cd7ce..3e386f7e1545 100644
---- a/arch/mips/kernel/mips-cpc.c
-+++ b/arch/mips/kernel/mips-cpc.c
-@@ -28,6 +28,7 @@ phys_addr_t __weak mips_cpc_default_phys_base(void)
- 	cpc_node = of_find_compatible_node(of_root, NULL, "mti,mips-cpc");
- 	if (cpc_node) {
- 		err = of_address_to_resource(cpc_node, 0, &res);
-+		of_node_put(cpc_node);
- 		if (!err)
- 			return res.start;
- 	}
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/gpu/drm/bridge/display-connector.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/bridge/display-connector.c b/drivers/gpu/drm/bridge/display-connector.c
+> index d24f5b90feabf..e4d52a7e31b71 100644
+> --- a/drivers/gpu/drm/bridge/display-connector.c
+> +++ b/drivers/gpu/drm/bridge/display-connector.c
+> @@ -24,6 +24,7 @@ struct display_connector {
+>  	int			hpd_irq;
+>  
+>  	struct regulator	*dp_pwr;
+> +	struct gpio_desc	*ddc_en;
+>  };
+>  
+>  static inline struct display_connector *
+> @@ -345,6 +346,17 @@ static int display_connector_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +	/* enable DDC */
+> +	if (type == DRM_MODE_CONNECTOR_HDMIA) {
+> +		conn->ddc_en = devm_gpiod_get_optional(&pdev->dev, "ddc-en",
+> +						       GPIOD_OUT_HIGH);
+> +
+> +		if (IS_ERR(conn->ddc_en)) {
+> +			dev_err(&pdev->dev, "Couldn't get ddc-en gpio\n");
+> +			return PTR_ERR(conn->ddc_en);
+> +		}
+> +	}
+> +
+>  	conn->bridge.funcs = &display_connector_bridge_funcs;
+>  	conn->bridge.of_node = pdev->dev.of_node;
+>  
+> @@ -373,6 +385,9 @@ static int display_connector_remove(struct platform_device *pdev)
+>  {
+>  	struct display_connector *conn = platform_get_drvdata(pdev);
+>  
+> +	if (conn->ddc_en)
+> +		gpiod_set_value(conn->ddc_en, 0);
+> +
+>  	if (conn->dp_pwr)
+>  		regulator_disable(conn->dp_pwr);
+>  
+
 -- 
-2.17.1
+Regards,
 
+Laurent Pinchart
