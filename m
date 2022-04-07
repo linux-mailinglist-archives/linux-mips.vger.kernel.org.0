@@ -2,96 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8F64F8702
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 20:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D394F87B1
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Apr 2022 21:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244084AbiDGSUL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Apr 2022 14:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
+        id S1347100AbiDGTJV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Apr 2022 15:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233337AbiDGSUL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 14:20:11 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C599EE4;
-        Thu,  7 Apr 2022 11:18:10 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id o20so5721600pla.13;
-        Thu, 07 Apr 2022 11:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=xQii1eP+D129OOmmEFUPFi+428VvVe2npW0nOtHi0v8=;
-        b=WBsYEqJ7FltBHsC6oK/iY4SdWSX6yl+D4SwDFOBtZLxKw67+b4LuB50h908ertO7zg
-         Dcthrade36ld2as5TY3PkMw329X2qDnHvylK/N1Cm7ykcJ0GqY14WgfySksy1AbU3YEg
-         MIUV5fDNgM+qHqrcjk2DAQGR8aK8ykfQAnzRzMNSi5lB12PEpl88ZQQ+9+EYRgR0RRu2
-         h6S2Nsb+l9LAz89Ti8lc3kVHcyaGi+ODPZc3kby0R1R2bWeyY4ARzw3DPTQwAZdDDmPD
-         ZVzK3JEOi1ZtBUoP+TnwA5n6kS5WJNPYPbZJo11rKNyviTip8uEfe7fgqm5v/JQhYF1J
-         A4Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xQii1eP+D129OOmmEFUPFi+428VvVe2npW0nOtHi0v8=;
-        b=y2oMTYOY/h35qRgaP7W6tH8Pesx9+YszHj1HwcdXhQUzy3ctqxS0O32sKiKVdEu5fZ
-         4C9mJp3c09PVtcdtK+J9kBEL3xBFytKD2iLqSZzvqFQoJZrfc22vs8s5/GxfoFSdNpH0
-         W0J4s3OemM8YN/dA83HfET0OaLZTCd8ulnamJh2SBGZEnv/e2nCQmFA/y3/3U8L53AdZ
-         k5D9VKspoMeQtqyLwOdEjIGgn4whvgkbKO8/n5e8YxuWVOoeRWf2Jn6VvxMsAvOP7sfv
-         QODXvVizbNIEuNlqJLgLfcH3MalUtv/zvtnLUrrJHjAr9OfGquGRfxTzGBN1YpRE1Iek
-         mXpw==
-X-Gm-Message-State: AOAM533ZE3aTwHbv/R2TQybdHxltZdQpuQmlvOgWdi6VdhULu4vOObJK
-        Mv2QHcC8Z5wuwb3nmcAZvmvGYDCGMPU=
-X-Google-Smtp-Source: ABdhPJyXdHfHZMxDow5pG2bx+mSyl30fIzwXdgKyuiWLg9v6EURe8ej5jtVSOTdU4b4I9EDVWhfFEg==
-X-Received: by 2002:a17:903:41c3:b0:157:1e3b:ee66 with SMTP id u3-20020a17090341c300b001571e3bee66mr867050ple.41.1649355490155;
-        Thu, 07 Apr 2022 11:18:10 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm24726271pfu.202.2022.04.07.11.18.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:18:09 -0700 (PDT)
-Message-ID: <55800b61-bdb7-9e93-7d2c-b5a34c1e5cd0@gmail.com>
-Date:   Thu, 7 Apr 2022 11:18:06 -0700
+        with ESMTP id S1347097AbiDGTJT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Apr 2022 15:09:19 -0400
+Received: from out29-123.mail.aliyun.com (out29-123.mail.aliyun.com [115.124.29.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF978232115;
+        Thu,  7 Apr 2022 12:07:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436322|-1;BR=01201311R861S47rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0736733-7.86418e-05-0.926248;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047209;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.NM70KNl_1649358432;
+Received: from 192.168.30.128(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.NM70KNl_1649358432)
+          by smtp.aliyun-inc.com(33.40.73.199);
+          Fri, 08 Apr 2022 03:07:13 +0800
+Subject: Re: [PATCH v2] pinctrl: Ingenic: Add missing UART2 group C for
+ X1000/E
+To:     Yunian Yang <reimu@sudomaker.com>, linux-mips@vger.kernel.org
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
+From:   Zhou Yanjie <zhouyu@wanyeetech.com>
+Message-ID: <b04e92b4-e7c5-c3b2-54b1-c684012d81d2@wanyeetech.com>
+Date:   Fri, 8 Apr 2022 03:07:12 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
+In-Reply-To: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/7/22 07:33, Krzysztof Kozlowski wrote:
-> The node names should be generic and SPI NOR dtschema expects "flash".
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+On 2022/3/24 下午9:33, Yunian Yang wrote:
+> v2: Define PC31 pin only once, noted by Paul Cercueil <paul@crapouillou.net>
+>      Confirmed to work on hardware. Although the Ingenic folks did this twice
+>      in their 4.4 kernel fork; not sure why.
+>
+> X1000/E has a third UART2 pin group selection, which uses the TDI(G2) as RX
+> and TDO(G1) as TX. This configuration is becoming increasingly popular in
+> newer core boards, such as the Halley2 v4.1. This is done by enabling
+> function 1 of a "virtual pin" PC31. See section 19.3.3 of the X1000
+> Programming Manual for details.
+>
+> Signed-off-by: Yunian Yang <reimu@sudomaker.com>
+
+
+A similar situation exists on JZ4780, except that its virtual pin is PA31.
+
+
+
+Tested-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+
+
+Thanks and best regards!
+
+
 > ---
->   arch/mips/boot/dts/brcm/bcm97358svmb.dts                   | 2 +-
->   arch/mips/boot/dts/brcm/bcm97360svmb.dts                   | 2 +-
->   arch/mips/boot/dts/brcm/bcm97425svmb.dts                   | 2 +-
-
-For the above:
-
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+>   drivers/pinctrl/pinctrl-ingenic.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+> index 2712f51eb238..29709059d62b 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -1982,6 +1982,7 @@ static int x1000_uart1_data_a_pins[] = { 0x04, 0x05, };
+>   static int x1000_uart1_data_d_pins[] = { 0x62, 0x63, };
+>   static int x1000_uart1_hwflow_pins[] = { 0x64, 0x65, };
+>   static int x1000_uart2_data_a_pins[] = { 0x02, 0x03, };
+> +static int x1000_uart2_data_c_pins[] = { 0x5f, };
+>   static int x1000_uart2_data_d_pins[] = { 0x65, 0x64, };
+>   static int x1000_sfc_data_pins[] = { 0x1d, 0x1c, 0x1e, 0x1f, };
+>   static int x1000_sfc_clk_pins[] = { 0x1a, };
+> @@ -2058,6 +2059,7 @@ static const struct group_desc x1000_groups[] = {
+>          INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d, 1),
+>          INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow, 1),
+>          INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a, 2),
+> +       INGENIC_PIN_GROUP("uart2-data-c", x1000_uart2_data_c, 1),
+>          INGENIC_PIN_GROUP("uart2-data-d", x1000_uart2_data_d, 0),
+>          INGENIC_PIN_GROUP("sfc-data", x1000_sfc_data, 1),
+>          INGENIC_PIN_GROUP("sfc-clk", x1000_sfc_clk, 1),
+> @@ -2115,7 +2117,7 @@ static const char *x1000_uart0_groups[] = { "uart0-data", "uart0-hwflow", };
+>   static const char *x1000_uart1_groups[] = {
+>          "uart1-data-a", "uart1-data-d", "uart1-hwflow",
+>   };
+> -static const char *x1000_uart2_groups[] = { "uart2-data-a", "uart2-data-d", };
+> +static const char *x1000_uart2_groups[] = { "uart2-data-a", "uart2-data-c", "uart2-data-d", };
+>   static const char *x1000_sfc_groups[] = { "sfc-data", "sfc-clk", "sfc-ce", };
+>   static const char *x1000_ssi_groups[] = {
+>          "ssi-dt-a-22", "ssi-dt-a-29", "ssi-dt-d",
