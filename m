@@ -2,110 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A7D4F9D17
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Apr 2022 20:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168104F9F90
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 00:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236436AbiDHSnH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Apr 2022 14:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S232116AbiDHW0w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Apr 2022 18:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237887AbiDHSm2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 14:42:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7690190B77;
-        Fri,  8 Apr 2022 11:40:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F15360B4D;
-        Fri,  8 Apr 2022 18:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DAEC385A3;
-        Fri,  8 Apr 2022 18:40:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hw7ZM3DK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649443217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5p8HbWxOv/2pCcrFRIk5uy5GvnZxVWWqGCXEJeAr/VI=;
-        b=hw7ZM3DKXNV/PCbZ27tOsMmXRTiv/fRiwXtCpNB0Y95WzzR8bK+prKfASznhrt+sI6VYcP
-        JgT9H5GtkoA+jROggAq+JYownqGfREZ8MSGOuZKcJzf+CHaADipObRJFEs60xwyHJ1+hny
-        xsJ6FQ5svtLEpIhYOh3ZMRBXxb2C+BU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6baee431 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 8 Apr 2022 18:40:17 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 20:40:08 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        with ESMTP id S231282AbiDHW0v (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 18:26:51 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB438659E
+        for <linux-mips@vger.kernel.org>; Fri,  8 Apr 2022 15:24:45 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d15so9071092pll.10
+        for <linux-mips@vger.kernel.org>; Fri, 08 Apr 2022 15:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/0FksbS1i7ulxMgGYnF6XiHnLWr7ePceIKuisSyo3Ak=;
+        b=OEoUPnC5gNQ3dhRmcc481lEfIBc3oIHx3BTjx1mF0xUd4isjeAeBuO3yysBDUBMrK8
+         dTvP/x7d6j/DoOPUazsnvnDi+PwCdZuGldjDFA+eU979RSibIgLLG3iTfKcOD58cc0It
+         3af+Z4MPDsw58f45GNHtcALgC/iQGujdGSnJx/ladRiDrgpuQMaQWsEH7F7OOjo2Weoh
+         1UYqX4zwgUnwR81X+fQpnPnTCvih90oBVeXXqSMfSAogPwl5PRW7czLmhc2VeSv8w8J5
+         J1rxN75Dh8UCbkyLODBrUAFVFABUgTW7DSX56Ea8uPnLfRL7rK1QX4IpYaPLVRfkeCAc
+         ruAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/0FksbS1i7ulxMgGYnF6XiHnLWr7ePceIKuisSyo3Ak=;
+        b=DU2aVGPMbqardVm02oqKKpzLIqpyDJJYjBd4aEF6s/N9Xwr06xFIw/lwTXUG/MgzpH
+         qcHU6jTlPoi4n9TcexZb1eyaY9sv9JE6ZpST1Nho2b28TA5biByzg05LLQuCBfyOjbiZ
+         MBrhv8dETG41O3E217tVZ8zytuak3EfVP5Zj0zwRrNj25BxEK+hgBBgsZ2UiflSXgBQO
+         7tUM1Qlo3dZAEnWV7ZPuWU/x4kFX/I/31eHf+WWl8C5D+/9d47p0RtlrP+WKdFNYPiU2
+         IltVwG3btP8NTKBG9XWIF23miKCHHZuYtzDKbbemxxzTTDk86PZMrrvXuQ8ggRhwUb3v
+         7YBA==
+X-Gm-Message-State: AOAM530Gz4Sqhz9d5IL6vLTKR+kn7WrKUqlk3Cwzcg/YmZsKT16XVdTC
+        GGaJEjVCmG+nwyMGhH77of29og==
+X-Google-Smtp-Source: ABdhPJwZBIW4lzlXQsJiyPSV2mQuxg0MIyAyU81/+QDN4UuufbXwKD6BQfMpbFASsMasdDZht/coCA==
+X-Received: by 2002:a17:90b:17ca:b0:1c7:3010:5901 with SMTP id me10-20020a17090b17ca00b001c730105901mr24593680pjb.22.1649456685288;
+        Fri, 08 Apr 2022 15:24:45 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056a00238600b004fae79a3cbfsm28710274pfc.100.2022.04.08.15.24.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 15:24:44 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 22:24:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH RFC v1 07/10] arm64: use sched_clock() for
- random_get_entropy() instead of zero
-Message-ID: <YlCBiLIh5ZFqMr6X@zx2c4.com>
-References: <20220408182145.142506-1-Jason@zx2c4.com>
- <20220408182145.142506-8-Jason@zx2c4.com>
- <YlCAEaG4i/OuMKet@lakrids>
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v3 02/23] KVM: x86/mmu: Use a bool for direct
+Message-ID: <YlC2KMSltDRxCi06@google.com>
+References: <20220401175554.1931568-1-dmatlack@google.com>
+ <20220401175554.1931568-3-dmatlack@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlCAEaG4i/OuMKet@lakrids>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220401175554.1931568-3-dmatlack@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Mark,
-
-On Fri, Apr 08, 2022 at 07:33:53PM +0100, Mark Rutland wrote:
-> On Fri, Apr 08, 2022 at 08:21:42PM +0200, Jason A. Donenfeld wrote:
-> > In the event that random_get_entropy() can't access a cycle counter or
-> > similar, falling back to returning 0 is really not the best we can do.
-> > Instead, at least calling sched_clock() would be preferable, because
-> > that always needs to return _something_, even falling back to jiffies
-> > eventually. It's not as though sched_clock() is super high precision or
-> > guaranteed to be entropic, but basically anything that's not zero all
-> > the time is better than returning zero all the time.
-> > 
-> > If CONFIG_ARM_ARCH_TIMER=n, then get_cycles() will return 0, so we only
-> > need the fallback code for that case.
+On Fri, Apr 01, 2022, David Matlack wrote:
+> The parameter "direct" can either be true or false, and all of the
+> callers pass in a bool variable or true/false literal, so just use the
+> type bool.
 > 
-> In arch/arm64/Kconfig we unconditionally select CONFIG_ARM_ARCH_TIMER,
-> so that configuration shouldn't be possible, and I don't think this
-> patch is necessary.
+> No functional change intended.
 > 
-> On arm64 we depend on the architected timer in a bunch of places, so
-> anyone hacking that out has bigger problems.
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
 
-Thanks for the tip. I'll drop this patch from the series.
-
-Jason
+Reviewed-by: Sean Christopherson <seanjc@google.com>
