@@ -2,255 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88644F9221
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Apr 2022 11:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CDD4F9386
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Apr 2022 13:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiDHJk6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Apr 2022 05:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
+        id S232603AbiDHLMX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Apr 2022 07:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiDHJk5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 05:40:57 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18E013F2B;
-        Fri,  8 Apr 2022 02:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1649410729; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NrebAZrO+cMXZp6CaRNO+bsoFWQqrGGUkEnoihN5xWs=;
-        b=MQYgpLVvrULNIgrboUzg9K7r/BL1qhCJH2swSW53nukPGpWNhy0WYujcm5bZQlBIHbnG9T
-        w+LprBkTUAsdopa7B81SeZTwlDHLsMr5aCuAHFmEtZKIfjPG7CneBAucIygR/tVO4Avfly
-        /8j/0b+RpGf+2VwXoRSgIdrFa2S+KfQ=
-Date:   Fri, 08 Apr 2022 10:38:38 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v18 3/3] drm/ingenic: Add dw-hdmi driver specialization
- for jz4780
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        letux-kernel@openphoenux.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Message-Id: <EGL0AR.AQWZJ0LNDYJ63@crapouillou.net>
-In-Reply-To: <e5cdf9cd44bde52cce379cc830f2d6117ea15c32.1649330171.git.hns@goldelico.com>
-References: <cover.1649330170.git.hns@goldelico.com>
-        <e5cdf9cd44bde52cce379cc830f2d6117ea15c32.1649330171.git.hns@goldelico.com>
+        with ESMTP id S232562AbiDHLMX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 07:12:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BBD1AF3E;
+        Fri,  8 Apr 2022 04:10:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70A4561F70;
+        Fri,  8 Apr 2022 11:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C502AC385A1;
+        Fri,  8 Apr 2022 11:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649416218;
+        bh=U5QxndAG2nFRPxoNl+peZKZcg6U9u4gTa5L//g70nk4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bDAj3cTYKX3M+505jqnV3MZJc2Bu0wJHsLfzVepwBQFganBiB9SAaze2LlJMQQHC6
+         qA2vFOcb+d8lqGFzp7cn1uV9jdyJE4dux6r1Q1r+As2hm83EDDtJGXrLdznREGugoq
+         kHEj+ej41uBxTH86q38LMZYaxvlMKlDZwinLtiNzCr7BMLHCDy8cegAL7R1xsam/zZ
+         gaytSvb1iyyzaPFsizV0Yy7dafwwCVIFXJC+Ta75RfWCfJDt6tYuyRDBI/WzU16X57
+         3/ql2OpX7czuulfG26Pmeevu5P8th1K+et9imRsu+/AYisodT6n/Aq3Ftz6lOAtNpT
+         kDkv/MMtU96bA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9A31FE85BCB;
+        Fri,  8 Apr 2022 11:10:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: atm: remove the ambassador driver
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164941621862.19376.14956904760944872806.git-patchwork-notify@kernel.org>
+Date:   Fri, 08 Apr 2022 11:10:18 +0000
+References: <20220406041627.643617-1-kuba@kernel.org>
+In-Reply-To: <20220406041627.643617-1-kuba@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, pabeni@redhat.com, netdev@vger.kernel.org,
+        arnd@kernel.org, myxie@debian.org, jj@chaosbits.net,
+        dan.carpenter@oracle.com, 3chas3@gmail.com,
+        linux-atm-general@lists.sourceforge.net, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, p.zabel@pengutronix.de
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Hello:
 
-Le jeu., avril 7 2022 at 13:16:11 +0200, H. Nikolaus Schaller=20
-<hns@goldelico.com> a =E9crit :
-> From: Paul Boddie <paul@boddie.org.uk>
->=20
-> A specialisation of the generic Synopsys HDMI driver is employed for
-> JZ4780 HDMI support. This requires a new driver, plus device tree and
-> configuration modifications.
->=20
-> Here we add Kconfig DRM_INGENIC_DW_HDMI, Makefile and driver code.
->=20
-> Note that there is no hpd-gpio installed on the CI20 board HDMI
-> connector. Hence there is no hpd detection by the connector driver
-> and we have to enable polling in the dw-hdmi core driver.
->=20
-> For that we need to set .poll_enabled but that struct component
-> can only be accessed by core code. Hence we use the public
-> setter function drm_kms_helper_hotplug_event() introduced before.
->=20
-> Also note that we disable Color Space Conversion since it is not
-> working on jz4780.
->=20
-> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-The patch looks good, if I can get an ack/review (Neil?), I can merge=20
-the whole series.
+On Tue,  5 Apr 2022 21:16:27 -0700 you wrote:
+> The driver for ATM Ambassador devices spews build warnings on
+> microblaze. The virt_to_bus() calls discard the volatile keyword.
+> The right thing to do would be to migrate this driver to a modern
+> DMA API but it seems unlikely anyone is actually using it.
+> There had been no fixes or functional changes here since
+> the git era begun.
+> 
+> [...]
 
-Cheers,
--Paul
+Here is the summary with links:
+  - [net-next] net: atm: remove the ambassador driver
+    https://git.kernel.org/netdev/net-next/c/e05afd0848f8
 
-> ---
->  drivers/gpu/drm/ingenic/Kconfig           |   9 ++
->  drivers/gpu/drm/ingenic/Makefile          |   1 +
->  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 103=20
-> ++++++++++++++++++++++
->  3 files changed, 113 insertions(+)
->  create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
->=20
-> diff --git a/drivers/gpu/drm/ingenic/Kconfig=20
-> b/drivers/gpu/drm/ingenic/Kconfig
-> index 001f59fb06d56..090830bcbde7f 100644
-> --- a/drivers/gpu/drm/ingenic/Kconfig
-> +++ b/drivers/gpu/drm/ingenic/Kconfig
-> @@ -24,4 +24,13 @@ config DRM_INGENIC_IPU
->=20
->  	  The Image Processing Unit (IPU) will appear as a second primary=20
-> plane.
->=20
-> +config DRM_INGENIC_DW_HDMI
-> +	tristate "Ingenic specific support for Synopsys DW HDMI"
-> +	depends on MACH_JZ4780
-> +	select DRM_DW_HDMI
-> +	help
-> +	  Choose this option to enable Synopsys DesignWare HDMI based=20
-> driver.
-> +	  If you want to enable HDMI on Ingenic JZ4780 based SoC, you should
-> +	  select this option.
-> +
->  endif
-> diff --git a/drivers/gpu/drm/ingenic/Makefile=20
-> b/drivers/gpu/drm/ingenic/Makefile
-> index d313326bdddbb..f10cc1c5a5f22 100644
-> --- a/drivers/gpu/drm/ingenic/Makefile
-> +++ b/drivers/gpu/drm/ingenic/Makefile
-> @@ -1,3 +1,4 @@
->  obj-$(CONFIG_DRM_INGENIC) +=3D ingenic-drm.o
->  ingenic-drm-y =3D ingenic-drm-drv.o
->  ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) +=3D ingenic-ipu.o
-> +obj-$(CONFIG_DRM_INGENIC_DW_HDMI) +=3D ingenic-dw-hdmi.o
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c=20
-> b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> new file mode 100644
-> index 0000000000000..72f8b44998a51
-> --- /dev/null
-> +++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> @@ -0,0 +1,103 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
-> + * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
-> + *
-> + * Derived from dw_hdmi-imx.c with i.MX portions removed.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <drm/bridge/dw_hdmi.h>
-> +#include <drm/drm_of.h>
-> +#include <drm/drm_print.h>
-> +
-> +static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] =3D {
-> +	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2,=20
-> 0x0000 } } },
-> +	{ 92500000,  { { 0x0140, 0x0005 }, { 0x2141, 0x0005 }, { 0x4142,=20
-> 0x0005 } } },
-> +	{ 148500000, { { 0x00a0, 0x000a }, { 0x20a1, 0x000a }, { 0x40a2,=20
-> 0x000a } } },
-> +	{ 216000000, { { 0x00a0, 0x000a }, { 0x2001, 0x000f }, { 0x4002,=20
-> 0x000f } } },
-> +	{ ~0UL,      { { 0x0000, 0x0000 }, { 0x0000, 0x0000 }, { 0x0000,=20
-> 0x0000 } } }
-> +};
-> +
-> +static const struct dw_hdmi_curr_ctrl ingenic_cur_ctr[] =3D {
-> +	/*pixelclk     bpp8    bpp10   bpp12 */
-> +	{ 54000000,  { 0x091c, 0x091c, 0x06dc } },
-> +	{ 58400000,  { 0x091c, 0x06dc, 0x06dc } },
-> +	{ 72000000,  { 0x06dc, 0x06dc, 0x091c } },
-> +	{ 74250000,  { 0x06dc, 0x0b5c, 0x091c } },
-> +	{ 118800000, { 0x091c, 0x091c, 0x06dc } },
-> +	{ 216000000, { 0x06dc, 0x0b5c, 0x091c } },
-> +	{ ~0UL,      { 0x0000, 0x0000, 0x0000 } },
-> +};
-> +
-> +/*
-> + * Resistance term 133Ohm Cfg
-> + * PREEMP config 0.00
-> + * TX/CK level 10
-> + */
-> +static const struct dw_hdmi_phy_config ingenic_phy_config[] =3D {
-> +	/*pixelclk   symbol   term   vlev */
-> +	{ 216000000, 0x800d, 0x0005, 0x01ad},
-> +	{ ~0UL,      0x0000, 0x0000, 0x0000}
-> +};
-> +
-> +static enum drm_mode_status
-> +ingenic_dw_hdmi_mode_valid(struct dw_hdmi *hdmi, void *data,
-> +			   const struct drm_display_info *info,
-> +			   const struct drm_display_mode *mode)
-> +{
-> +	if (mode->clock < 13500)
-> +		return MODE_CLOCK_LOW;
-> +	/* FIXME: Hardware is capable of 270MHz, but setup data is missing.=20
-> */
-> +	if (mode->clock > 216000)
-> +		return MODE_CLOCK_HIGH;
-> +
-> +	return MODE_OK;
-> +}
-> +
-> +static struct dw_hdmi_plat_data ingenic_dw_hdmi_plat_data =3D {
-> +	.mpll_cfg   =3D ingenic_mpll_cfg,
-> +	.cur_ctr    =3D ingenic_cur_ctr,
-> +	.phy_config =3D ingenic_phy_config,
-> +	.mode_valid =3D ingenic_dw_hdmi_mode_valid,
-> +	.output_port	=3D 1,
-> +};
-> +
-> +static const struct of_device_id ingenic_dw_hdmi_dt_ids[] =3D {
-> +	{ .compatible =3D "ingenic,jz4780-dw-hdmi" },
-> +	{ /* Sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
-> +
-> +static void ingenic_dw_hdmi_cleanup(void *data)
-> +{
-> +	struct dw_hdmi *hdmi =3D (struct dw_hdmi *)data;
-> +
-> +	dw_hdmi_remove(hdmi);
-> +}
-> +
-> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
-> +{
-> +	struct dw_hdmi *hdmi;
-> +
-> +	hdmi =3D dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
-> +	if (IS_ERR(hdmi))
-> +		return PTR_ERR(hdmi);
-> +
-> +	return devm_add_action_or_reset(&pdev->dev,=20
-> ingenic_dw_hdmi_cleanup, hdmi);
-> +}
-> +
-> +static struct platform_driver ingenic_dw_hdmi_driver =3D {
-> +	.probe  =3D ingenic_dw_hdmi_probe,
-> +	.driver =3D {
-> +		.name =3D "dw-hdmi-ingenic",
-> +		.of_match_table =3D ingenic_dw_hdmi_dt_ids,
-> +	},
-> +};
-> +module_platform_driver(ingenic_dw_hdmi_driver);
-> +
-> +MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:dw-hdmi-ingenic");
-> --
-> 2.33.0
->=20
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
