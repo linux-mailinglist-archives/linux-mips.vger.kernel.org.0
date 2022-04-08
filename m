@@ -2,93 +2,255 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594F94F8FD4
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Apr 2022 09:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88644F9221
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Apr 2022 11:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiDHHwZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Apr 2022 03:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
+        id S230130AbiDHJk6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Apr 2022 05:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiDHHwY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 03:52:24 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E3A1E3E23;
-        Fri,  8 Apr 2022 00:50:21 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id bk12so4175855qkb.7;
-        Fri, 08 Apr 2022 00:50:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gd03FWWEZ6z3R9zHdDhplmx+tKByFE9yM+qWp1XkieA=;
-        b=GSCMFVnVaT8jJ12K90kWhi04C6d7kzAY9GLudaNvYwE1aM3WniSwE1EDlSIDYmXNcS
-         ZoskDnyt3oQ5cAYCeF2S04eLs3rPOCoRhu9JBt9sUaSEjVpc5tuHd1ujmf5O49UFC7JX
-         0gjbhcWIZOP2mzeshdWpef7I2g5vOMS9fT/+N+9SBLJuv7SKLAd3y0crQl/DKb4n2aF1
-         pIujdgV/QwGfUY/OzDEsNFv8V6xe0L/k1y/ouzPodjVnx8HbDqJ6hLss0MHdvuc2r4pb
-         BDP9O88Sz3kXLSluV7pm13h4ni2njDLD6wsg4D+ggcP3oMhRbVnX8LLCI2qIyPMddecN
-         7jsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gd03FWWEZ6z3R9zHdDhplmx+tKByFE9yM+qWp1XkieA=;
-        b=D8bGhL2dl84DvWX9Xi8+g0NooU7HkErALWFgCAA02axyig066Kz5DQXqu37JEPS9H5
-         KwhkrjPH7DG913WTl/JCnVbYnyLRs61nmMd1CMx/M6pEZM9ij7TNDGeK+kAcWtW2bRKp
-         Kj5vJ0BMuuQcFYhC/Xk3qQ79zOuxbYsPutZfEX66V+mT2HQ+fxPKXOcJ3Uuxz7UWb0zt
-         gYPQ/InmmVoDFclSqjGmG8ntSo+FAwWRvws9v2nhFdJ9PSICxjz7N4X/KYqL82alj+H6
-         tU++5KUEkhUtWhQOTSBkpz4aGiQHvdE44FAPA9iRcU4UPaTGiNU1SwVmxMgCGPYasM1O
-         KkKA==
-X-Gm-Message-State: AOAM533ZAsSuPPcEl9BGxYslAywSYZdw3ysS1a9Vt7hXPTOnAKj6WN0U
-        ujoEElMb8AMVmVbOKSStAvnTW8a2BtKLPM5gte0=
-X-Google-Smtp-Source: ABdhPJyVf/N0dZeSbLVCmVj1wUMk/MGaGOBT/OOoQXowI5Wkqped1Hq4ptNsGPdoDFZWsarHlb93LyG4RVHhq4yF5HY=
-X-Received: by 2002:a37:8d44:0:b0:69a:224a:dc27 with SMTP id
- p65-20020a378d44000000b0069a224adc27mr2598220qkd.563.1649404220992; Fri, 08
- Apr 2022 00:50:20 -0700 (PDT)
+        with ESMTP id S229825AbiDHJk5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 05:40:57 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18E013F2B;
+        Fri,  8 Apr 2022 02:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649410729; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NrebAZrO+cMXZp6CaRNO+bsoFWQqrGGUkEnoihN5xWs=;
+        b=MQYgpLVvrULNIgrboUzg9K7r/BL1qhCJH2swSW53nukPGpWNhy0WYujcm5bZQlBIHbnG9T
+        w+LprBkTUAsdopa7B81SeZTwlDHLsMr5aCuAHFmEtZKIfjPG7CneBAucIygR/tVO4Avfly
+        /8j/0b+RpGf+2VwXoRSgIdrFa2S+KfQ=
+Date:   Fri, 08 Apr 2022 10:38:38 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v18 3/3] drm/ingenic: Add dw-hdmi driver specialization
+ for jz4780
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        letux-kernel@openphoenux.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Message-Id: <EGL0AR.AQWZJ0LNDYJ63@crapouillou.net>
+In-Reply-To: <e5cdf9cd44bde52cce379cc830f2d6117ea15c32.1649330171.git.hns@goldelico.com>
+References: <cover.1649330170.git.hns@goldelico.com>
+        <e5cdf9cd44bde52cce379cc830f2d6117ea15c32.1649330171.git.hns@goldelico.com>
 MIME-Version: 1.0
-References: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 8 Apr 2022 09:50:10 +0200
-Message-ID: <CAMhs-H8Z=Q3vm6psjp4iqu7z4N4eUKokeJ8VM+_wCscypP1TLQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 4:33 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> The node names should be generic and SPI NOR dtschema expects "flash".
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
->  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts         | 2 +-
->  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts         | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
+Le jeu., avril 7 2022 at 13:16:11 +0200, H. Nikolaus Schaller=20
+<hns@goldelico.com> a =E9crit :
+> From: Paul Boddie <paul@boddie.org.uk>
+>=20
+> A specialisation of the generic Synopsys HDMI driver is employed for
+> JZ4780 HDMI support. This requires a new driver, plus device tree and
+> configuration modifications.
+>=20
+> Here we add Kconfig DRM_INGENIC_DW_HDMI, Makefile and driver code.
+>=20
+> Note that there is no hpd-gpio installed on the CI20 board HDMI
+> connector. Hence there is no hpd detection by the connector driver
+> and we have to enable polling in the dw-hdmi core driver.
+>=20
+> For that we need to set .poll_enabled but that struct component
+> can only be accessed by core code. Hence we use the public
+> setter function drm_kms_helper_hotplug_event() introduced before.
+>=20
+> Also note that we disable Color Space Conversion since it is not
+> working on jz4780.
+>=20
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+The patch looks good, if I can get an ack/review (Neil?), I can merge=20
+the whole series.
 
-Thanks,
-    Sergio Paracuellos
+Cheers,
+-Paul
+
+> ---
+>  drivers/gpu/drm/ingenic/Kconfig           |   9 ++
+>  drivers/gpu/drm/ingenic/Makefile          |   1 +
+>  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 103=20
+> ++++++++++++++++++++++
+>  3 files changed, 113 insertions(+)
+>  create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+>=20
+> diff --git a/drivers/gpu/drm/ingenic/Kconfig=20
+> b/drivers/gpu/drm/ingenic/Kconfig
+> index 001f59fb06d56..090830bcbde7f 100644
+> --- a/drivers/gpu/drm/ingenic/Kconfig
+> +++ b/drivers/gpu/drm/ingenic/Kconfig
+> @@ -24,4 +24,13 @@ config DRM_INGENIC_IPU
+>=20
+>  	  The Image Processing Unit (IPU) will appear as a second primary=20
+> plane.
+>=20
+> +config DRM_INGENIC_DW_HDMI
+> +	tristate "Ingenic specific support for Synopsys DW HDMI"
+> +	depends on MACH_JZ4780
+> +	select DRM_DW_HDMI
+> +	help
+> +	  Choose this option to enable Synopsys DesignWare HDMI based=20
+> driver.
+> +	  If you want to enable HDMI on Ingenic JZ4780 based SoC, you should
+> +	  select this option.
+> +
+>  endif
+> diff --git a/drivers/gpu/drm/ingenic/Makefile=20
+> b/drivers/gpu/drm/ingenic/Makefile
+> index d313326bdddbb..f10cc1c5a5f22 100644
+> --- a/drivers/gpu/drm/ingenic/Makefile
+> +++ b/drivers/gpu/drm/ingenic/Makefile
+> @@ -1,3 +1,4 @@
+>  obj-$(CONFIG_DRM_INGENIC) +=3D ingenic-drm.o
+>  ingenic-drm-y =3D ingenic-drm-drv.o
+>  ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) +=3D ingenic-ipu.o
+> +obj-$(CONFIG_DRM_INGENIC_DW_HDMI) +=3D ingenic-dw-hdmi.o
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c=20
+> b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> new file mode 100644
+> index 0000000000000..72f8b44998a51
+> --- /dev/null
+> +++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> @@ -0,0 +1,103 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
+> + * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
+> + *
+> + * Derived from dw_hdmi-imx.c with i.MX portions removed.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <drm/bridge/dw_hdmi.h>
+> +#include <drm/drm_of.h>
+> +#include <drm/drm_print.h>
+> +
+> +static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] =3D {
+> +	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2,=20
+> 0x0000 } } },
+> +	{ 92500000,  { { 0x0140, 0x0005 }, { 0x2141, 0x0005 }, { 0x4142,=20
+> 0x0005 } } },
+> +	{ 148500000, { { 0x00a0, 0x000a }, { 0x20a1, 0x000a }, { 0x40a2,=20
+> 0x000a } } },
+> +	{ 216000000, { { 0x00a0, 0x000a }, { 0x2001, 0x000f }, { 0x4002,=20
+> 0x000f } } },
+> +	{ ~0UL,      { { 0x0000, 0x0000 }, { 0x0000, 0x0000 }, { 0x0000,=20
+> 0x0000 } } }
+> +};
+> +
+> +static const struct dw_hdmi_curr_ctrl ingenic_cur_ctr[] =3D {
+> +	/*pixelclk     bpp8    bpp10   bpp12 */
+> +	{ 54000000,  { 0x091c, 0x091c, 0x06dc } },
+> +	{ 58400000,  { 0x091c, 0x06dc, 0x06dc } },
+> +	{ 72000000,  { 0x06dc, 0x06dc, 0x091c } },
+> +	{ 74250000,  { 0x06dc, 0x0b5c, 0x091c } },
+> +	{ 118800000, { 0x091c, 0x091c, 0x06dc } },
+> +	{ 216000000, { 0x06dc, 0x0b5c, 0x091c } },
+> +	{ ~0UL,      { 0x0000, 0x0000, 0x0000 } },
+> +};
+> +
+> +/*
+> + * Resistance term 133Ohm Cfg
+> + * PREEMP config 0.00
+> + * TX/CK level 10
+> + */
+> +static const struct dw_hdmi_phy_config ingenic_phy_config[] =3D {
+> +	/*pixelclk   symbol   term   vlev */
+> +	{ 216000000, 0x800d, 0x0005, 0x01ad},
+> +	{ ~0UL,      0x0000, 0x0000, 0x0000}
+> +};
+> +
+> +static enum drm_mode_status
+> +ingenic_dw_hdmi_mode_valid(struct dw_hdmi *hdmi, void *data,
+> +			   const struct drm_display_info *info,
+> +			   const struct drm_display_mode *mode)
+> +{
+> +	if (mode->clock < 13500)
+> +		return MODE_CLOCK_LOW;
+> +	/* FIXME: Hardware is capable of 270MHz, but setup data is missing.=20
+> */
+> +	if (mode->clock > 216000)
+> +		return MODE_CLOCK_HIGH;
+> +
+> +	return MODE_OK;
+> +}
+> +
+> +static struct dw_hdmi_plat_data ingenic_dw_hdmi_plat_data =3D {
+> +	.mpll_cfg   =3D ingenic_mpll_cfg,
+> +	.cur_ctr    =3D ingenic_cur_ctr,
+> +	.phy_config =3D ingenic_phy_config,
+> +	.mode_valid =3D ingenic_dw_hdmi_mode_valid,
+> +	.output_port	=3D 1,
+> +};
+> +
+> +static const struct of_device_id ingenic_dw_hdmi_dt_ids[] =3D {
+> +	{ .compatible =3D "ingenic,jz4780-dw-hdmi" },
+> +	{ /* Sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
+> +
+> +static void ingenic_dw_hdmi_cleanup(void *data)
+> +{
+> +	struct dw_hdmi *hdmi =3D (struct dw_hdmi *)data;
+> +
+> +	dw_hdmi_remove(hdmi);
+> +}
+> +
+> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
+> +{
+> +	struct dw_hdmi *hdmi;
+> +
+> +	hdmi =3D dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
+> +	if (IS_ERR(hdmi))
+> +		return PTR_ERR(hdmi);
+> +
+> +	return devm_add_action_or_reset(&pdev->dev,=20
+> ingenic_dw_hdmi_cleanup, hdmi);
+> +}
+> +
+> +static struct platform_driver ingenic_dw_hdmi_driver =3D {
+> +	.probe  =3D ingenic_dw_hdmi_probe,
+> +	.driver =3D {
+> +		.name =3D "dw-hdmi-ingenic",
+> +		.of_match_table =3D ingenic_dw_hdmi_dt_ids,
+> +	},
+> +};
+> +module_platform_driver(ingenic_dw_hdmi_driver);
+> +
+> +MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:dw-hdmi-ingenic");
+> --
+> 2.33.0
+>=20
+
+
