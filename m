@@ -2,125 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECE84FA80F
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 15:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A87E4FA813
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 15:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237170AbiDINOl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Apr 2022 09:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S239325AbiDINQG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Apr 2022 09:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235474AbiDINOk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 09:14:40 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1139090FDC;
-        Sat,  9 Apr 2022 06:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649509945;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=XvtUGNRZhAWCV7uaeLu1necoTWMAM/Z5ITGrnklPbrI=;
-    b=p23PV2Z/ZKxWK9UmZ5JM5cDAriuUqcT11VRadlWXtqnyRTwqlcLDGcHHmpvI63iJaI
-    wzrykKW3WVd/T9oVUyZdwkjbgjye6mma73gssSoXZPrl9magNZPafHeJV2qRt4JL7tJf
-    +705tIdo4f4bi+ExoRg1mCXvFDnZXAqYSDiZ8NR4cO30g2TJP4J6mf2zHHbfcRQclE3R
-    yZbQE6RVQKC2TAhOb5Jn4gZyGu22CmL/QTYkX26cscORtfo7cnKIa4BQ/jELrhZ0WPpe
-    O+zjbGkDo3zEssOrQvY0DvfmrbapyGl+jYf+Vqd4n9JGsEMgCXmkXgZpI4jALLNezl+Y
-    BmEA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDepmg=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy39DCPuUs
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sat, 9 Apr 2022 15:12:25 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 03/18] MIPS: DTS: jz4780: fix tcu timer as reported by
+        with ESMTP id S232779AbiDINQF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 09:16:05 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF2291AD2
+        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 06:13:58 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id l7so16852069ejn.2
+        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 06:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=d0410HLBP6KDAh1PJS07oAulungk6qL8Pp4HkxfBbq4=;
+        b=wdXpe2opIoSojVyd0Er2F1SBdOz1jlzcWmMpvT4AoYCiUCqrYlmMpVCyxzPAPKuC38
+         8FkGrIpMOfz57tTCHs76qi01VpoSYGdMU7OSxwn5ovDH5LLuT6CFp0aEuReP3gzDxExH
+         l4w8c8UfYVtSgifZCqC73FDjHA/iEIUYy39Sm3DICwklq8PPUCZlJ8/Pfp2WLjMKaJqD
+         LgoM6sGZR+Xr3ntcTHzmCkQFFOySfAZChAOWMLorhZxCEhd7ykQ6p21yMfzaDjjis4Fx
+         bBepaRxFCuQeNPkEVkU43CXpsoc4Hjm3rfB7hbHmf+31NmFZbMlBDdr7N60tXjJAdGGE
+         7jOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=d0410HLBP6KDAh1PJS07oAulungk6qL8Pp4HkxfBbq4=;
+        b=zebG2dKaswswMoc5/+EvYky+30Te1+vb9R5p1kjQoY8G0Cz/1tvzrOrXUBAGpqDzNz
+         HxHUPbAiJVWTTu22E6rqQu+pVbK6lj5cchfWmrdxUA/ezo3l46MazquYZMBAzCN4Uxqh
+         JgWNs5f3q2HPR9+GBkEYHA/GGjFcJ3dvgcbBZRqOodmpEcImVp75REmzp8ksOG7lxVIG
+         i5FurASklcsfA44ZdC0ZvEdXKS8VXyJ85VOKqoUXQbtKzG0wjsdDVxgrVMUKXR/f975/
+         RMbwhYsNRbs5lXPObEDoYlrh5z8qknAH+Jkbsf/hGg/BPO2XkC5ynP3+cAcUcDMzu3Sb
+         p8bw==
+X-Gm-Message-State: AOAM530nj5IzScDCzpHB/unKqJySzbatECs44xHRpxE8uT6B2Yo+RhYH
+        iVc7I14nJij8gu6n5uD2xDs99g==
+X-Google-Smtp-Source: ABdhPJynznWXeu0fS5zY5vii5EuYYK4aSuoB4bkjD9wMFfAG0g+7uTbOlL0pOjAniA4bC4Hq0NNc7A==
+X-Received: by 2002:a17:907:948c:b0:6e7:fe2b:68f0 with SMTP id dm12-20020a170907948c00b006e7fe2b68f0mr22510421ejc.749.1649510036643;
+        Sat, 09 Apr 2022 06:13:56 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id t12-20020a1709067c0c00b006e86db76851sm794137ejo.193.2022.04.09.06.13.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Apr 2022 06:13:56 -0700 (PDT)
+Message-ID: <c84b5ec0-0193-ab62-1985-25bc2baa9f05@linaro.org>
+Date:   Sat, 9 Apr 2022 15:13:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 05/18] MIPS: DTS: jz4780: fix pinctrl as reported by
  dtbscheck
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <a99d947d-418c-3f70-6b1a-a90d300604eb@linaro.org>
-Date:   Sat, 9 Apr 2022 15:12:25 +0200
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
+Content-Language: en-US
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A0FABB80-17D6-4163-9141-D0002C03581D@goldelico.com>
 References: <cover.1649443080.git.hns@goldelico.com>
- <c48277625f0ab5afc86d89deb1b87537e9c592f6.1649443080.git.hns@goldelico.com>
- <e5ea96d8-f8c9-b925-04ee-81e80e30a5d0@linaro.org>
- <1TN2AR.Q91IJNXMNNNA1@crapouillou.net>
- <a99d947d-418c-3f70-6b1a-a90d300604eb@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <1941bc4ed553b27f399ad00ea61ff2b0237d14e3.1649443080.git.hns@goldelico.com>
+ <e905896e-335d-a88a-1961-d17b92e46585@linaro.org>
+ <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 09/04/2022 15:04, H. Nikolaus Schaller wrote:
+> 
+> 
+>> Am 09.04.2022 um 13:13 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+>>
+>> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
+>>> arch/mips/boot/dts/ingenic/ci20.dtb: pin-controller@10010000: $nodename:0: 'pin-controller@10010000' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+>>> 	From schema: Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml
+>>>
+>>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>>> ---
+>>> arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+>>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> index 5f44cf004d473..b5299eaffb84a 100644
+>>> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> @@ -155,7 +155,7 @@ rtc_dev: rtc@10003000 {
+>>> 		clock-names = "rtc";
+>>> 	};
+>>>
+>>> -	pinctrl: pin-controller@10010000 {
+>>> +	pinctrl: pinctrl@10010000 {
+>>
+>> Do it once for all DTSes, not one file at a time. There are four more
+>> places with this.
+> 
+> Well, automation has no notion of "similarity" in this case to
+> merge several patches.
 
+What does that mean? One cannot create multiple patches and apply them?
 
-> Am 09.04.2022 um 14:38 schrieb Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org>:
->=20
-> On 09/04/2022 14:24, Paul Cercueil wrote:
->> Hi Krzysztof,
->>=20
->> Le sam., avril 9 2022 at 13:11:48 +0200, Krzysztof Kozlowski=20
->> <krzysztof.kozlowski@linaro.org> a =C3=A9crit :
->>> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
->>>> arch/mips/boot/dts/ingenic/ci20.dtb: timer@10002000: compatible:=20
->>>> 'oneOf' conditional failed, one must be fixed:
->>>> 	['ingenic,jz4780-tcu', 'ingenic,jz4770-tcu', 'simple-mfd'] is =
-too=20
->>>> long
->>>> 	'ingenic,jz4780-tcu' is not one of ['ingenic,jz4740-tcu',=20
->>>> 'ingenic,jz4725b-tcu', 'ingenic,jz4760-tcu', 'ingenic,x1000-tcu']
->>>> 	'simple-mfd' was expected
->>>> 	'ingenic,jz4760-tcu' was expected
->>>=20
->>> Trim it a bit...
->>>=20
->>>> 	=46rom schema:=20
->>>> Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
->>>=20
->>> You need to explain this. You're changing the effective compatible =
-of
->>> the device and doing so based only on schema warning does not look
->>> enough. Please write real reason instead of this fat warning, e.g.=20=
+> And they are not related. Every one is based on a different .yaml
+> schema file.
 
->>> that
->>> both devices are actually compatible and this has no real effect=20
->>> except
->>> schema checks.
->>=20
->> Well, if the schema says that it should use a particular fallback=20
->> string, then that's what the DTS should use, right?
->=20
-> Or the schema is wrong. :)
->=20
->> If making the DTS schema-compliant causes breakages, then that means=20=
+Which does not matter, because the name of the node does not matter. We
+enforce it in schema to makes things organized and easier in testing.
+This does not fix any real problem, just the problem we created by
+ourselves with schema.
 
->> the schema is wrong and should be fixed.
+> 
+> That in all cases the result looks similar comes from similar
+> requirements by the schemata and has no inherent connection.
 
-Well, in this case making the DTS fit the schema does not break.
-So why think or explain why the schema is right?
+All schemas will require it, won't they? The same for arm...
 
->=20
-> Exactly, so the commit needs a bit of explanation why one solution was
-> chosen over the other. BTW, I am not saying that schema or DTS is =
-wrong,
-> just that commit is not explained enough.
->=20
-> Best regards,
-> Krzysztof
-
+Best regards,
+Krzysztof
