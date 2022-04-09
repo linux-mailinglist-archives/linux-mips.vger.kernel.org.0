@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B8E4FA72B
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 13:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDD54FA72E
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 13:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241604AbiDILUZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Apr 2022 07:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S239866AbiDILVA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Apr 2022 07:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241599AbiDILUX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 07:20:23 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BAC3C481
-        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 04:18:15 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id q20so7072584wmq.1
-        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 04:18:15 -0700 (PDT)
+        with ESMTP id S231807AbiDILU7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 07:20:59 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC432AF3
+        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 04:18:52 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id c7so16502546wrd.0
+        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 04:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B0N+OwSXB4knXphkA3npowoH01kBKtCCzuJR6vseaEQ=;
-        b=U6LMLN8h8KPMYnFF90Ad+319fMHmZaNuu8dafLLpmL1o7WALiw1SspYwvoG5xUUnqx
-         sQnMBGfKrVV8hr6FT9DPGBaRzTR3v7g5/xIvaErTcvQp4GH+S+mB0fDkE1m3CbJcjVeU
-         46TGzZhNou7jtgS4g/V86Q5UUoiblIQs9T1/zqfpRfDgPedp4os7nP5IC5/HgIM+zttt
-         7vg2E8X3gRlVSOYNgGQoCr/2k4uS062764fOvpDIi9f1mUac/jSuSO2FI66lROMWRroO
-         qCZmMzgjh/FYzRdp6mSCkZ5/687En6YQPz1NaBUJ74yFVyWox9Y/ZLb8pM8DydSZXN+y
-         njMA==
+        bh=f/z45wIq/QdJwfG+0KT/Os2LMDAnKUavyQnArPNoU9I=;
+        b=G7NyFQkys+nt8S29UMcHhB9DNFlBtze2CGv9LztxDaDXZZQglmZnAgYT76fN1tf50J
+         lPNQx8mkBG1BC7b6GiG2/eWXGzkwVL6sTRQSvJomhU0NooVbYwu4y2s1meItzj+ctBEe
+         AcdYH8/ZvAsDX40rPuKNJpFJL8jBkw6SaN6S9f9tiFk/j4sWT7ecQQtl8fFyxNezupUF
+         6qEWZHLZ/EL+10UOMnKO/MiQpPWEzbdjT4onwYN2WyCeoLVxvhNXzHhgPKa2F+aMWp0l
+         0oaOOyAeOdVjEt0uCoSkf80oPuRWpuH8rAREizD6b/DIypPwptnIizN9/NWP7zOTRZAq
+         k7qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=B0N+OwSXB4knXphkA3npowoH01kBKtCCzuJR6vseaEQ=;
-        b=1ybnz7GdYRcaMDhgmgrlJJKL1GXjpf9HU+/jpZfIb/yNDiu+TUd1G2VefoVn7p5EgM
-         9QX9uj07I3+7Eck156y80BMUOfeWZ15u6HFAJ9TrK0Mw49568DqaAaMot34qPT/s5YJW
-         TKvlbLZhJSc70rEok3Ho8BeHCSeEQH2/eXo3SUunxigfoQGNqziY5c1CtLADw3Sx4qwW
-         IYjjvDAc52fKR8QrsFP7ljhzqHPWwJCE+7bdwCUb+nYgEvr7FSzIYj1qxbAv7a3e+h0l
-         Z2Hxl3q+2EpaxlomG4SOkP3MAQRYK/CXML1Nq2y1SF5MUwLYs77P9Z26QqSQCRdhAHKl
-         bM9w==
-X-Gm-Message-State: AOAM533c/fu3UnEm9Y98ryKc2kKHKj10TMB3l4Jzabs5euqc08ceJmH2
-        CRpJCTbIXVQrnZJNbGHVwRdaZChA7AK7TAxK
-X-Google-Smtp-Source: ABdhPJwKRHMCNsGjq9T8m+T0mzvnY0pzB7roLlQWrdLdsg3ui2lnN0aVZwlrelYEpzHTFOk9WSgnng==
-X-Received: by 2002:a7b:cb0d:0:b0:38e:aaf3:b08f with SMTP id u13-20020a7bcb0d000000b0038eaaf3b08fmr4981786wmj.12.1649503094236;
-        Sat, 09 Apr 2022 04:18:14 -0700 (PDT)
+        bh=f/z45wIq/QdJwfG+0KT/Os2LMDAnKUavyQnArPNoU9I=;
+        b=CNC0QbiBJyVjr3kqX2HmsRJREjz2mXcB3FsEOvmjmYu3kR+/EAIxHc00f/vW26ATod
+         U3QnYXZJ0raF72g0dqg7SYr3956sM2hZUgklY7c37YQ5G0w7rfP7DGDCwHtz5WM+dMMr
+         Pr7oB+fCKiAG8bjdhJrGDUz2/Agsj6NfJ7sFkFwlUmWp73Pg/5qkS7+zxPDYe1Jz363q
+         syGFE2rpzsC7z3z4CLGy1Jy8/DYmoahoTiSbxoj0/2pmqxgdItntNw9i/UB1kz1fDzNU
+         hSJQbQmj3lebS5xHnVceY9dcJYIpxGTWUjfoxT0l1vor9alrZapVayQmKCBj+co8b/6B
+         MZRA==
+X-Gm-Message-State: AOAM533cdhUx9TiVk/wH8br/rZijdm2yi7yCenPU9L/a+kXrjbAvViyy
+        kFjEKsjvWQlROXqXy3+JrnO0Zg==
+X-Google-Smtp-Source: ABdhPJyOznpQ2/2yJAJ3R2KKPkRcEogaYqNMi8E+rE4dubxvyyI3ivBs6jhbVQ8E3FqzBX5y+yB72w==
+X-Received: by 2002:adf:ebd0:0:b0:1e3:f9b:7b77 with SMTP id v16-20020adfebd0000000b001e30f9b7b77mr17511554wrn.691.1649503130913;
+        Sat, 09 Apr 2022 04:18:50 -0700 (PDT)
 Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id p17-20020adfc391000000b002079f14979dsm1168578wrf.13.2022.04.09.04.18.13
+        by smtp.gmail.com with ESMTPSA id a11-20020a5d456b000000b0020406ce0e06sm21207664wrc.94.2022.04.09.04.18.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 04:18:13 -0700 (PDT)
-Message-ID: <a7a46736-e917-7274-1593-147ed36a2a68@linaro.org>
-Date:   Sat, 9 Apr 2022 13:18:12 +0200
+        Sat, 09 Apr 2022 04:18:50 -0700 (PDT)
+Message-ID: <7e986851-bb2b-f2f5-3bf4-8c26801d6ce3@linaro.org>
+Date:   Sat, 9 Apr 2022 13:18:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 10/18] MIPS: DTS: jz4780: fix uart dmas as reported by
- dtbscheck
+Subject: Re: [PATCH 12/18] MIPS: DTS: jz4780: fix nemc memory controller as
+ reported by dtbscheck
 Content-Language: en-US
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -63,9 +63,9 @@ To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
 References: <cover.1649443080.git.hns@goldelico.com>
- <00ec9d965cac78b252e14444deed8c93f5116bca.1649443080.git.hns@goldelico.com>
+ <995a8977d6ecc5798bf6139811698f3493b71249.1649443080.git.hns@goldelico.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <00ec9d965cac78b252e14444deed8c93f5116bca.1649443080.git.hns@goldelico.com>
+In-Reply-To: <995a8977d6ecc5798bf6139811698f3493b71249.1649443080.git.hns@goldelico.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,29 +79,17 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10030000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10030000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10031000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10031000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10032000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10032000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10033000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10033000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10034000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10034000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: i2c@10050000: 'dmas' is a required property
+> arch/mips/boot/dts/ingenic/ci20.dtb: nemc@13410000: $nodename:0: 'nemc@13410000' does not match '^memory-controller@[0-9a-f]+$'
+> 	From schema: Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
+> 
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-All these warnings are the same two warnings...
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,
