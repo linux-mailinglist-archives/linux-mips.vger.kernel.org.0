@@ -2,53 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3C74FA066
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 02:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C9C4FA0BD
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 02:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240121AbiDIAEi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Apr 2022 20:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        id S237195AbiDIAmN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Apr 2022 20:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233045AbiDIAEi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 20:04:38 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80162350E76
-        for <linux-mips@vger.kernel.org>; Fri,  8 Apr 2022 17:02:32 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id w7so9744679pfu.11
-        for <linux-mips@vger.kernel.org>; Fri, 08 Apr 2022 17:02:32 -0700 (PDT)
+        with ESMTP id S233821AbiDIAmG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 20:42:06 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3045C6F17
+        for <linux-mips@vger.kernel.org>; Fri,  8 Apr 2022 17:40:00 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id z16so9841218pfh.3
+        for <linux-mips@vger.kernel.org>; Fri, 08 Apr 2022 17:40:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=e2UFjk4BMnk+zP4UK0Oe7cRWvUTvvv2vQZFG2iTsfwM=;
-        b=mdX7iP5bZ0QKDVpxEfl6JaRv0SNJilcGM7Go8YYeEz4gRMixSlW3qkCfkPK79y6RlU
-         7/F17ratHj7AGZmESWeAsvGLabxpVpOu8N2tikaIOw7/UAqJv+g+iG30qnes71/NujAQ
-         2zz/5YDsD9xVfIKxApF2cVw8CAb0LCjXj33B5MetmlMhp5ZSZSLnwuW8PIsjywbaqicX
-         Rlo7KwTT7w36OlXkiyh4WBwIjEEgEopDHnOLsTV9NwPjmYV2cZXzlD/ilmsX/IHdjQmw
-         3gV/E7Z8D+MjQVn04swpk/fD42Z0WN0IvoNmshVAofDlSGfpwESdiI3owTY0tkT8NFLA
-         G0YQ==
+         :content-disposition:in-reply-to;
+        bh=VZz44nmQ769NskmU1+rSj1kgQ7eEgmL84RyrglKPKlU=;
+        b=hDG6N87X2mOxxCOCXXKUWOcaI826FpS5EoPhQJZu2dORSprAcsRFAElLaAchgm9JOc
+         6aWNWoTK0riqGAg5yhneIUYXDrCc+fGj3H7kK7mXEHIlpTFzEJW/uo/BmtZGNeswC4nd
+         PbmESxnPTnEseYvaH22WEqAMzyjNqP7va9Cy/08YzQ+8Zp7oRhZV7H2uOAWtwOJwR64j
+         C1XpU2RhBAmDNFKLPpLhftnPQdVrdTUUBk5NAt0Csjzufq0YZ246p/rCAHmwpT6hnZDF
+         gCIIkrVBCCM0ekFXDZVmyYk5Ax0gSZAvTp7mqghQynS+ToMez9bXma7soou9cwqLW7g0
+         3GkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=e2UFjk4BMnk+zP4UK0Oe7cRWvUTvvv2vQZFG2iTsfwM=;
-        b=U72Td9CUOfOUs2rpnkF6RUEPj2DIQ6WCie8/WCnkjYXNQLPNhPBaNeZLscUj3Xfeks
-         S3jim8xUvyPjx3IyVN6XjEDvJ9pxMQMyeNUVtOkz8omGlsPqGGnvea9kLOXDRvwVwyzI
-         lDdIn6MrXjHrtyuYQDKgwUfKpz7Eb+bfmX4qN4rvReekWBdYIfZ7s6xecmybS9CZRDiP
-         sGlVXv/OiH/FRyjW35nyzCZlGyNsJdg7ra/Tq04MxkZ3E/o92FvLqACJ4sIhMlK+3MuH
-         OpBX28VFZyiSqMwQ6zfOha/SLczZuSDekM45dilpskpvHRDixbEzGjw+zmqwJx/UDoqi
-         nQ8w==
-X-Gm-Message-State: AOAM5336wBu7jYGjqribnkLqabf0NdWDl3f3SVP4GNJ3G3VqlD8FRIsH
-        pWt9iNl7btgE7gtF7S/A8IQRGg==
-X-Google-Smtp-Source: ABdhPJz2NQbeCFpFKvK/llHsQ85xKlEatkwNAY/T4PMI36jEC0CY8gsBFafanPSUhYPrIUBR0RTv+g==
-X-Received: by 2002:a05:6a00:1a10:b0:4fa:ed5a:6697 with SMTP id g16-20020a056a001a1000b004faed5a6697mr22026865pfv.81.1649462551487;
-        Fri, 08 Apr 2022 17:02:31 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=VZz44nmQ769NskmU1+rSj1kgQ7eEgmL84RyrglKPKlU=;
+        b=OEeKl7lAxBT6qfBL5Ccr8Alh1HTTZjhr6bw9UTfnswPX2nT18y/u77itYfKIRtrhcq
+         dFm1/YdXPpBf56j3dC7l2jvzDKl+EI4GffbSlpnIDpMM8fyuq/2HjFR57i12caZAURp8
+         rfJAesKR1gY+p0BGrO3qq5pIRD+8IATmrAxaa0VCGyT5skCQDfS9b6JMUWqHaYQVNdLj
+         alqiYu1nk3lUYEsCt4yet6x/lrRd5RJ+KshFasnTSUKydP1p/E/Ef5OGb5rgLoGbpkBx
+         QwEs0LDesmD160LpwmrneRuTNntn+K3IoZR20FxYPoeRF+nvVS61N1YOTndTbEKA06JU
+         30qQ==
+X-Gm-Message-State: AOAM531kI0YDMD3Qq/av7BuO/C+ngc1+eALlN+mRH1zAvfma+UytEp/4
+        SScG5p0BgP0JMcvdia1oKE7wEA==
+X-Google-Smtp-Source: ABdhPJy9qpY4+K63QvK5VhUfvYFRHJk9uYqLUbpgv47CS1Vcvf2kVPQru+XKAuYVywEBn/XAV7z39w==
+X-Received: by 2002:a63:5520:0:b0:399:8cd:5f62 with SMTP id j32-20020a635520000000b0039908cd5f62mr17547409pgb.12.1649464800133;
+        Fri, 08 Apr 2022 17:40:00 -0700 (PDT)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id v4-20020a622f04000000b005057a24d478sm3641759pfv.121.2022.04.08.17.02.30
+        by smtp.gmail.com with ESMTPSA id m8-20020a056a00080800b004faa4e113bfsm28586836pfk.154.2022.04.08.17.39.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 17:02:30 -0700 (PDT)
-Date:   Sat, 9 Apr 2022 00:02:27 +0000
+        Fri, 08 Apr 2022 17:39:59 -0700 (PDT)
+Date:   Sat, 9 Apr 2022 00:39:55 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
@@ -69,16 +68,15 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         <kvm@vger.kernel.org>,
         "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
         <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v3 16/23] KVM: x86/mmu: Cache the access bits of shadowed
- translations
-Message-ID: <YlDNE55k9DNf/v2+@google.com>
+Subject: Re: [PATCH v3 22/23] KVM: x86/mmu: Support Eager Page Splitting in
+ the shadow MMU
+Message-ID: <YlDV27ediz+rBuLd@google.com>
 References: <20220401175554.1931568-1-dmatlack@google.com>
- <20220401175554.1931568-17-dmatlack@google.com>
+ <20220401175554.1931568-23-dmatlack@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220401175554.1931568-17-dmatlack@google.com>
+In-Reply-To: <20220401175554.1931568-23-dmatlack@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -91,176 +89,62 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Fri, Apr 01, 2022, David Matlack wrote:
-> @@ -733,7 +733,7 @@ static void mmu_free_pte_list_desc(struct pte_list_desc *pte_list_desc)
->  static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)
->  {
->  	if (!sp->role.direct)
-> -		return sp->gfns[index];
-> +		return sp->shadowed_translation[index].gfn;
->  
->  	return sp->gfn + (index << ((sp->role.level - 1) * PT64_LEVEL_BITS));
->  }
-> @@ -741,7 +741,7 @@ static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)
->  static void kvm_mmu_page_set_gfn(struct kvm_mmu_page *sp, int index, gfn_t gfn)
+> Add support for Eager Page Splitting pages that are mapped by the shadow
+> MMU. Walk through the rmap first splitting all 1GiB pages to 2MiB pages,
+> and then splitting all 2MiB pages to 4KiB pages.
+> 
+> Splitting huge pages mapped by the shadow MMU requries dealing with some
+> extra complexity beyond that of the TDP MMU:
+> 
+> (1) The shadow MMU has a limit on the number of shadow pages that are
+>     allowed to be allocated. So, as a policy, Eager Page Splitting
+>     refuses to split if there are KVM_MIN_FREE_MMU_PAGES or fewer
+>     pages available.
+> 
+> (2) Huge pages may be mapped by indirect shadow pages which have the
+>     possibility of being unsync. As a policy we opt not to split such
+>     pages as their translation may no longer be valid.
 
-This should be replaced with a single helper to set the gfn+access.  Under no
-circumstance should _just_ the gfn change, and that will allow us to optimize
-writing the entry.  More below.
+This shouldn't be possible, shadow pages whose role is > 4k are always write-protected
+and not allowed to become unsync.
 
->  {
->  	if (!sp->role.direct) {
-> -		sp->gfns[index] = gfn;
-> +		sp->shadowed_translation[index].gfn = gfn;
->  		return;
->  	}
->  
-> @@ -752,6 +752,47 @@ static void kvm_mmu_page_set_gfn(struct kvm_mmu_page *sp, int index, gfn_t gfn)
->  				   kvm_mmu_page_get_gfn(sp, index), gfn);
->  }
->  
-> +static void kvm_mmu_page_set_access(struct kvm_mmu_page *sp, int index, u32 access)
-> +{
-> +	if (!sp->role.direct) {
-> +		sp->shadowed_translation[index].access = access;
-> +		return;
-> +	}
-> +
-> +	if (WARN_ON(access != sp->role.access))
-> +		pr_err_ratelimited("access mismatch under direct page %llx "
-
-LOL, I realize this is not your code, but ratelimiting under a WARN ain't gonna
-help much :-)
-
-This also generates a warning and fails to compile with KVM_WERROR=y, though I
-believe the test bots already reported that.
-
-
-arch/x86/kvm/mmu/mmu.c: In function ‘kvm_mmu_page_set_access’:
-include/linux/kern_levels.h:5:25: error: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 3 has type ‘int’ [-Werror=format=]
-    5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-      |                         ^~~~~~
-include/linux/printk.h:418:25: note: in definition of macro ‘printk_index_wrap’
-  418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-      |                         ^~~~
-include/linux/printk.h:640:17: note: in expansion of macro ‘printk’
-  640 |                 printk(fmt, ##__VA_ARGS__);                             \
-      |                 ^~~~~~
-include/linux/printk.h:654:9: note: in expansion of macro ‘printk_ratelimited’
-  654 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~~~~~~~
-include/linux/kern_levels.h:11:25: note: in expansion of macro ‘KERN_SOH’
-   11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
-      |                         ^~~~~~~~
-include/linux/printk.h:654:28: note: in expansion of macro ‘KERN_ERR’
-  654 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-      |                            ^~~~~~~~
-arch/x86/kvm/mmu/mmu.c:763:17: note: in expansion of macro ‘pr_err_ratelimited’
-  763 |                 pr_err_ratelimited("access mismatch under direct page %llx "
-      |                 ^~~~~~~~~~~~~~~~~~
-
-
-> +				   "(expected %llx, got %llx)\n",
-> +				   kvm_mmu_page_get_gfn(sp, index),
-> +				   sp->role.access, access);
-> +}
-> +
-> +/*
-> + * For leaf SPTEs, fetch the *guest* access permissions being shadowed. Note
-> + * that the SPTE itself may have a more constrained access permissions that
-> + * what the guest enforces. For example, a guest may create an executable
-> + * huge PTE but KVM may disallow execution to mitigate iTLB multihit.
-> + */
-> +static u32 kvm_mmu_page_get_access(struct kvm_mmu_page *sp, int index)
-> +{
-> +	if (!sp->role.direct)
-> +		return sp->shadowed_translation[index].access;
-> +
-> +	/*
-> +	 * For direct MMUs (e.g. TDP or non-paging guests) there are no *guest*
-> +	 * access permissions being shadowed. So we can just return ACC_ALL
-> +	 * here.
-> +	 *
-> +	 * For indirect MMUs (shadow paging), direct shadow pages exist when KVM
-> +	 * is shadowing a guest huge page with smaller pages, since the guest
-> +	 * huge page is being directly mapped. In this case the guest access
-> +	 * permissions being shadowed are the access permissions of the huge
-> +	 * page.
-> +	 *
-> +	 * In both cases, sp->role.access contains exactly what we want.
-> +	 */
-> +	return sp->role.access;
-> +}
+> 
+> (3) Splitting a huge page may end up re-using an existing lower level
+>     shadow page tables. This is unlike the TDP MMU which always allocates
+>     new shadow page tables when splitting.
 
 ...
 
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index b6e22ba9c654..3f76f4c1ae59 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -32,6 +32,18 @@ extern bool dbg;
->  
->  typedef u64 __rcu *tdp_ptep_t;
->  
-> +/*
-> + * Stores the result of the guest translation being shadowed by an SPTE. KVM
-> + * shadows two types of guest translations: nGPA -> GPA (shadow EPT/NPT) and
-> + * GVA -> GPA (traditional shadow paging). In both cases the result of the
-> + * translation is a GPA and a set of access constraints.
-> + */
-> +struct shadowed_translation_entry {
-> +	/* Note, GFNs can have at most 64 - PAGE_SHIFT = 52 bits. */
-> +	u64 gfn:52;
-> +	u64 access:3;
+> +static void kvm_mmu_split_huge_page(struct kvm *kvm,
+> +				    const struct kvm_memory_slot *slot,
+> +				    u64 *huge_sptep, struct kvm_mmu_page **spp)
+> +
+> +{
+> +	struct kvm_mmu_memory_cache *cache = &kvm->arch.huge_page_split_desc_cache;
+> +	u64 huge_spte = READ_ONCE(*huge_sptep);
+> +	struct kvm_mmu_page *sp;
+> +	bool flush = false;
+> +	u64 *sptep, spte;
+> +	gfn_t gfn;
+> +	int index;
+> +
+> +	sp = kvm_mmu_get_sp_for_split(kvm, slot, huge_sptep, spp);
+> +
+> +	for (index = 0; index < PT64_ENT_PER_PAGE; index++) {
+> +		sptep = &sp->spt[index];
+> +		gfn = kvm_mmu_page_get_gfn(sp, index);
+> +
+> +		/*
+> +		 * sp may have populated page table entries, e.g. if this huge
+> +		 * page is aliased by multiple sptes with the same access
+> +		 * permissions. We know the sptes will be mapping the same
+> +		 * gfn-to-pfn translation since sp is direct. However, a given
+> +		 * spte may point to an even lower level page table. We don't
+> +		 * know if that lower level page table is completely filled in,
+> +		 * i.e. we may be effectively unmapping a region of memory, so
+> +		 * we must flush the TLB.
 
-A bitfield is completely unnecessary and generates bad code.  As is, it generates
-_really_ bad code because extracting and setting requires non-standard 64-bit value
-masks, multiple operations, and accesses to unaligned data.  The generated code can
-be made slightly less awful by using a fully byte for access and 64 bits for GFN,
-but it still sucks compared to what we can hand generate.
-
-The other aspect of this is that retrieving the GFN is a frequent operation,
-whereas the access is almost never read.  I.e. we should bias for reading the GFN
-above all else.
-
-The simple and obvious thing is to not reinvent the wheel.  GFN = (GPA >> PAGE_SHIFT),
-and ignoring NX, access lives in the lower 12 bits of a PTE.  Then reading the GFN is
-a simple SHR, and reading access info is a simple AND.
-
-We might also be able to optimize FNAME(sync_page), but I don't care much about
-that, it's rarely used for nested TDP.
-
-So, keep translation_entry a gfn_t *, then do:
-
-static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)
-{
-	if (!sp->role.direct)
-		return sp->shadowed_translation[index] >> PAGE_SHIFT;
-
-	return sp->gfn + (index << ((sp->role.level - 1) * PT64_LEVEL_BITS));
-}
-
-static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
-					 gfn_t gfn, unsigned int access)
-{
-	if (!sp->role.direct) {
-		sp->shadowed_translation[index] = (gfn << PAGE_SHIFT) | access;
-		return;
-	}
-
-	if (WARN_ON(gfn != kvm_mmu_page_get_gfn(sp, index)))
-		pr_err_ratelimited("gfn mismatch under direct page %llx "
-				   "(expected %llx, got %llx)\n",
-				   sp->gfn,
-				   kvm_mmu_page_get_gfn(sp, index), gfn);
-}
-
-static void kvm_mmu_page_set_access(struct kvm_mmu_page *sp, int index,
-				    unsigned int access)
-{
-	if (sp->role.direct)
-		return;
-
-	sp->shadowed_translation[index] &= PAGE_MASK;
-	sp->shadowed_translation[index] |= access;
-}
-
+Random side topic, please avoid "we" and other pronouns in comments and changelogs,
+it gets real easy to lose track of what a pronoun is referring to, especially in
+changelogs where "we" might be KVM, might be the kernel, might be the team that's
+using the patch, might be an author that's prone to illeism, etc...
