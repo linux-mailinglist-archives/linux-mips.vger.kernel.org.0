@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D304FA825
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 15:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165714FA830
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 15:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241948AbiDINUg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Apr 2022 09:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S241863AbiDINYP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Apr 2022 09:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241960AbiDINUd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 09:20:33 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AFD3DDF4
-        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 06:18:26 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id dr20so22198110ejc.6
-        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 06:18:26 -0700 (PDT)
+        with ESMTP id S241781AbiDINYO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 09:24:14 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A73A97B95
+        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 06:22:06 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id l7so16877882ejn.2
+        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 06:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TIvV9HUS6U5uZnee53C8qefZW/ieHFeAYqZWIX5PS5Y=;
-        b=SzRXWvWDjWrGNzjafa7OdZ7o4vH48igNd7Ks1ce5EJ7N6I4dXV5MDU1qtLQ2jzFovL
-         ITZxvtYVCEWld541IVMPomLfM7UzhLXw82SzeUPQnhw4WGEsRDV9ynC/d7wOvDiSXJL1
-         6jWU5rE5JqUyBNCOGagVZAOxv/7xgYkhbgIhc2wsa+5ndvp2bQHfNZvryIrFBmfygBKi
-         zkwOQ21EPtH3azxG3YsXTBM08W7eBDA/ho0x6AFGZtYQlBQMuR6pbVJOwTW4c/OXpzke
-         X8yuVBwVlsTBhY50urMq1+Js4wjTcDwbXW3/4yv9CApFeW+n0Qmc7RDDK1Eyym7GsGeQ
-         LrZQ==
+        bh=P6um4RkZU+3YK1ClK/l8evJQFx9Q56DgMAMk+g3BYMo=;
+        b=OGgu5KZXQS2d0rYOkLEhFI1xIXcHBtZhLcjG4a4EnL54togwh5ElZW9Xvzm1H9cszr
+         6nQhFjfyysNcmwVgnR0I63238xdS83deIgu0TqwAURV3OFF6brWNbJhoZfmRlA+gvRKC
+         +CWbYjnceqndMmyC6JZsdjfaC+EHZxHRjFtCj9plIh1qlQxEqJN4g5aho2gy8TNJt8XZ
+         d7RKo9ts52GdKFX+eyKIkFBYmrMoBqCHxxpjFEDregB1lpnkwvKIqpWn7r3LnJzWadSs
+         6SdadbEM4KBwz9LBl/qbmbsO5U5tiL3lhmVyhWb//jKBEpNKg8oeqw28yhmqDrlQDTua
+         SVxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TIvV9HUS6U5uZnee53C8qefZW/ieHFeAYqZWIX5PS5Y=;
-        b=KP/ahSRYQ++i+G+84z45RfJZFJDCDUqAGj2phYkuiBvJzOs8qDwqnnUfsYaWirCOIy
-         P0uu2cEQ76FFbLo/z00NCgzhjwElANCm+kLse5X4XP1wxXOLZlLELmiJfTKaEIh59c2/
-         xaVp1ehrX+3BQlIa1Vh/ngMRf/oABmr0yejt8U695Kl8Nwq4/TrsRjoXS4W/NB1H6JTz
-         zU4+CpGYPh4D+KQi7xTEBtI/afGDnPlYCQ/6rU7Z2Nx5mzRd+DYaOkV5nPi2rseFhRp3
-         Rr2dN/vC5j+z1IAlrRiRdDlOHPJqCAiJEzir3NNVtiut7stN9bVoogKcHbJlu/c0DCnL
-         Gb+A==
-X-Gm-Message-State: AOAM531h3QFb2wicXfm75adkn2xDKIzy0Qk8ZogHusuml/3A1Cm6R+gv
-        6IvmSCkuR8fYddElRto6LbumTA==
-X-Google-Smtp-Source: ABdhPJyMTC2qnmHi/0NCn+YqVeHeFQKswOIEzO1b2qZlKMPsJ8Q1z+DgYVKcFcBzrX/UfC7asrFiuw==
-X-Received: by 2002:a17:906:d924:b0:6e8:6a04:c1bc with SMTP id rn4-20020a170906d92400b006e86a04c1bcmr4257899ejb.720.1649510304986;
-        Sat, 09 Apr 2022 06:18:24 -0700 (PDT)
+        bh=P6um4RkZU+3YK1ClK/l8evJQFx9Q56DgMAMk+g3BYMo=;
+        b=OdIPrv37ihbR5yZMNsLeI0Pe7U2fQJ43DoP/NFdJu0ylCebBcd8cU3eOHOWSFZxhdU
+         HNKZEAYuHh1pJAfyZyOPFcnPzg2xRjZrcYZmwmnZktBlDO/FvRE/3qc1UqaOkh/Xj2l4
+         l8Mv5GuMKhJUpG1RaSpkySJtkAGIlYvbiE4oOCNQ7UYJnGtwv37Q8fIwSmuFf4AwinRG
+         VhCACK5cwZ35ShJtUqKFyfiYrOPMGgz+6l7GtCU37P0g6KNGgLG0sWNAPZMqdNe6UwPY
+         4I5Aqo7PhRfvHZ93vQ9uUkakb0DhjpNhFP5ZzJmDqKloX+o4ZFcqNOyDT085VuALtvGb
+         +Hlw==
+X-Gm-Message-State: AOAM530IUlU1r+q03PZcZ/INbUeYTO8w/lUgnaj70/p7KunXm4g4bqz9
+        zVvh9KwQt/sE40Xjq9ncqQKt+A==
+X-Google-Smtp-Source: ABdhPJz28Jp1rgzh1wNFzMt+TUSzLUlO8hYZl1h7iOxZAQ577C3+gK+6Nr8PgjyGdkwCZcPkGN7QoA==
+X-Received: by 2002:a17:907:7da8:b0:6e0:5b94:5ed8 with SMTP id oz40-20020a1709077da800b006e05b945ed8mr21641512ejc.312.1649510524958;
+        Sat, 09 Apr 2022 06:22:04 -0700 (PDT)
 Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id sh31-20020a1709076e9f00b006e8289e5836sm3550229ejc.117.2022.04.09.06.18.23
+        by smtp.gmail.com with ESMTPSA id wn20-20020a170907069400b006e7f3d0c90esm6360589ejb.137.2022.04.09.06.22.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 06:18:24 -0700 (PDT)
-Message-ID: <99a97b0f-19a5-136d-9160-c9fde6f3548c@linaro.org>
-Date:   Sat, 9 Apr 2022 15:18:23 +0200
+        Sat, 09 Apr 2022 06:22:04 -0700 (PDT)
+Message-ID: <2729b85b-1c54-d446-baf4-2c41bb04b3b2@linaro.org>
+Date:   Sat, 9 Apr 2022 15:22:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 13/18] dt-bindings: fix jz4780-nemc issue as reported by
+Subject: Re: [PATCH 03/18] MIPS: DTS: jz4780: fix tcu timer as reported by
  dtbscheck
 Content-Language: en-US
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
@@ -63,11 +63,13 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
 References: <cover.1649443080.git.hns@goldelico.com>
- <84adfe6237cd4cfd52cb9723416f69926e556e55.1649443080.git.hns@goldelico.com>
- <036b66b2-c221-6e9e-6a56-510e7a0d20d3@linaro.org>
- <B9FD64FE-82B0-4DC2-B4C3-BE266DAB28A0@goldelico.com>
+ <c48277625f0ab5afc86d89deb1b87537e9c592f6.1649443080.git.hns@goldelico.com>
+ <e5ea96d8-f8c9-b925-04ee-81e80e30a5d0@linaro.org>
+ <A023438A-B8A8-4F91-BA25-7BE9A76C6730@goldelico.com>
+ <ef1674e5-2347-fbb4-52c8-5170faa84690@linaro.org>
+ <9BE666F8-123E-4062-88F8-D266CCCAC43B@goldelico.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <B9FD64FE-82B0-4DC2-B4C3-BE266DAB28A0@goldelico.com>
+In-Reply-To: <9BE666F8-123E-4062-88F8-D266CCCAC43B@goldelico.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,54 +82,35 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/04/2022 15:09, H. Nikolaus Schaller wrote:
+On 09/04/2022 15:18, H. Nikolaus Schaller wrote:
 > 
-> 
->> Am 09.04.2022 um 13:26 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
->>
->> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
->>> jz4780-nemc needs to be compatible to simple-mfd as well or we get
->>>
->>> arch/mips/boot/dts/ingenic/ci20.dtb: memory-controller@13410000: compatible: 'oneOf' conditional failed, one must be fixed:
->>> 	['ingenic,jz4780-nemc', 'simple-mfd'] is too long
->>> 	'ingenic,jz4725b-nemc' was expected
->>> 	'ingenic,jz4740-nemc' was expected
->>> 	From schema: Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
->>>
->>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>> ---
->>> .../devicetree/bindings/memory-controllers/ingenic,nemc.yaml    | 2 +-
->>> 1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml b/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
->>> index 24f9e19820282..3b1116588de3d 100644
->>> --- a/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
->>> +++ b/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
->>> @@ -17,7 +17,7 @@ properties:
->>>     oneOf:
->>>       - enum:
->>>           - 
->>> -          - ingenic,jz4780-nemc
->>> +          - [ , simple-mfd ]
->>
->> This is not correct representation. If you really need simple-mfd, then
->> this should be a separate item below oneOf.
-> 
-> Well, it is valid YAML syntax and seems to be accepted by dtbscheck.
+> Well, again, my assumption is that bindings and .yaml files formally describe the actual
+> hardware components. And they have been reviewed.
 
-It's not how we code it. Please do not introduce inconsistent - even if
-valid - blocks.
+The bindings try to describe it. They are pretty often incomplete or
+might have mistakes. The true reason of doing a change is not that some
+tool tells you "do like this". The true reason is because the change
+properly describes hardware.
 
 > 
->> The true question is whether you need simple-mfd. Isn't the binding (and
->> the driver) expected to instantiate its children?
-> 
-> I had expected that but current ingenic,jz4780-nemc code doesn't.
+> So they have a higher level of authority than any current driver or .dts implementation.
+> Unless there is evidence that the bindings are wrong.
 
-Paul provided good reason for the simple-mfd. Use this one instead of dt
-check warning. DT check warning means nothing, does not bring the actual
-answer to "why", because it is artificial tool. The answer to "why" is
-in what Paul wrote.
+This is just a tool, not an authority.
+
+> I.e. if the bindings feel right why is there a need to argue for that?
+
+Because doing things "just because bindings told me" hides the true
+explanation and makes the code review, code management more difficult.
+Later person will look at this and wonder why this was done like this.
+If you write "because some tool me" this is not a good help. But if you
+write "because hardware is like this exactly" this is proper comment.
+
+> 
+> It is like test-driven development model. There you have to write code that passes
+> the tests. Not argue against the tests.
+
+Again, don't focus on the tool... Tool is just a tool...
 
 Best regards,
 Krzysztof
