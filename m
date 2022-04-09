@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEC74FA7B6
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 14:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0112E4FA7C0
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 14:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241774AbiDIMkx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Apr 2022 08:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
+        id S241233AbiDIMtd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Apr 2022 08:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241745AbiDIMkw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 08:40:52 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0EA26C3
-        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 05:38:42 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id dr20so22070289ejc.6
-        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 05:38:42 -0700 (PDT)
+        with ESMTP id S237602AbiDIMtd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 08:49:33 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184B22A03D3
+        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 05:47:26 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bh17so22160644ejb.8
+        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 05:47:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RpLyscpqKBQEV+cmacPi/7pfMk8oHHCQkm4XjyfCevc=;
-        b=RdCyKrtrX2Rcr0qXPucOkWoOPqrteWZ8e1231DTVEXDqieB9W/gDLDJKLBw4F+h+7e
-         qblKAIqF5cpaPgjJEcsA6h/SNBLKYmq+lzQhbuc+haicD80IIFipzBgPmwyivFaM1k4K
-         VuFLCB6lOCo5CYZEpk9gNVUfsCFzNgFgjzcJls3Uxn+JWf2ke6tJpSYg1TX1Th31QT9o
-         gT8oEUou3QzvIGveuZEdafwbaZ/Vto+BDGH/U3AxtwLMJCsMvlsFvjdnPmIV+KOU8fH2
-         rrpgPDDVZAUdLYVr2Mx5MvdIYEvT1kMhxuuKtLcH4bKHez1mrH8cF5xlHrBqIQVBk7ju
-         Hf4g==
+        bh=RYkFt3jpACagbux2jezQDt+Hlb4Mllg2F+Pvo9I6yg8=;
+        b=Iy2/plpTG2l4eGMzjWcPnr0DLlDOGCDFhQbyb2f9WLFdecVumS74oVVqskMl9HG/F/
+         dNCj1CG/S8UwtpnjIwEOINnE4ftiBnlv5qieaG3Ak7C7Bnao40qskHKyHlzYLvNabUYi
+         tpNQgk8mESb86xGcxLHzgL49y5Ial5x1Ux6jKVNfdn9sC4GOoiIie4HRegfCoB+ohBb8
+         9QTCx4Hl4nmk1MMLkg3YlNdWFa/kA2ynDkNahRNYu+EZA8PwVV4rEhkvlS8F1y24zXwS
+         TByvKQVsxGyK2thUArKffFYbGPpqlduoamI7Fh5OdV4rLV4vgKeLob2tFZl1+aM37p8Q
+         0esg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=RpLyscpqKBQEV+cmacPi/7pfMk8oHHCQkm4XjyfCevc=;
-        b=Fey1ONL6sdr+2JVtcP+tTtEthgMZGTOjOmIKKKHiBEMsFPVGSg7ZvcrgzEyaxMg8Fg
-         nLqFy+/UazewSMKZ0snMfF14U70Bd8tonlxXeDXau9RD89Lrnwl/W9Ih3KcsCAWDKzE3
-         FURoz79bljil8o7VJyR4F5psvS22vdEhHSF4uVS4dADBPZDxUxwlTCmkAVUDUuJmFE7m
-         a0eXNiQJrNGDTlTrp+rpXUlAWZZD5W1qLfS3y5pxbusbgUCVQQpHRYaDESpTiESTzCxV
-         tPS17lQkeRQ/6J6llrI5ahwxVJPDQ1rFsvytrMPU01Dgy82aiOhnRJdkBQWj5/6ZllzK
-         MYHQ==
-X-Gm-Message-State: AOAM5302goOJ977WuFXVuz5xCPHSiR7yXjTVGWZDrCanxilXlV9+OP+D
-        gfiYEAx4OkJJe1qPXQHccpRHOg==
-X-Google-Smtp-Source: ABdhPJzY77DKPWSpLOfOBDiyAdMZSgLaeO04wDaxNJN64pBlaiA5gtbKwhFYaFWLNIZOU2Xlrgr92A==
-X-Received: by 2002:a17:906:6a15:b0:6e8:8b:bead with SMTP id qw21-20020a1709066a1500b006e8008bbeadmr23445325ejc.650.1649507921203;
-        Sat, 09 Apr 2022 05:38:41 -0700 (PDT)
+        bh=RYkFt3jpACagbux2jezQDt+Hlb4Mllg2F+Pvo9I6yg8=;
+        b=OIBsY35nN6PX7oKjbIrx42QXnjeFYc7go4ud1Vz+ypotZSaae0HcKl/hMfHVcQwA9U
+         ERY2H7vI+AapyMe1hZ8qlRAKPBJe6GZNoUC24/I6XuvX2GJXg3xz/n7UotYOnE5fPiWZ
+         OV6bbNYy79mDVanZrVq0b8JRCQgR6sAG1i/mR0iGzlG6KxLCkT/g6SP1c9PI+b6+N7WX
+         MBymLyp1spQlPEIF2g4G261x6Ee/keVsTicUGK9hJaUByjpO0+kiWxlDyAq4JLrpn3Zm
+         yE9NzxrDajtDKjdi28sjZyJO7xXy0o5xp/ivofXZ+erqM7kfy9LM6IbKuk8bzYL5XjqN
+         OP9Q==
+X-Gm-Message-State: AOAM533U/rlJjw0IhY9AyFObDcK3HRICS8mWZq5wzN1XNZoZ2kSQ+taX
+        gytBAeN+NI1rqc0PTJd+vFzl1A==
+X-Google-Smtp-Source: ABdhPJyHbFNq9sjIttDPtopX84JitwYlNirupvNY03oGBfQPZkHlb0YESQGDm3byfy/d13g9cZRmyw==
+X-Received: by 2002:a17:907:629c:b0:6e1:6ad:5dd8 with SMTP id nd28-20020a170907629c00b006e106ad5dd8mr21620810ejc.641.1649508444649;
+        Sat, 09 Apr 2022 05:47:24 -0700 (PDT)
 Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id d1-20020a50fe81000000b004197f2ecdc2sm11671603edt.89.2022.04.09.05.38.39
+        by smtp.gmail.com with ESMTPSA id q17-20020a17090622d100b006e87bcf7ae7sm151041eja.208.2022.04.09.05.47.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 05:38:40 -0700 (PDT)
-Message-ID: <a99d947d-418c-3f70-6b1a-a90d300604eb@linaro.org>
-Date:   Sat, 9 Apr 2022 14:38:39 +0200
+        Sat, 09 Apr 2022 05:47:24 -0700 (PDT)
+Message-ID: <2e1495ab-2773-a3bb-0ad2-4af607cccc11@linaro.org>
+Date:   Sat, 9 Apr 2022 14:47:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 03/18] MIPS: DTS: jz4780: fix tcu timer as reported by
+Subject: Re: [PATCH 13/18] dt-bindings: fix jz4780-nemc issue as reported by
  dtbscheck
 Content-Language: en-US
 To:     Paul Cercueil <paul@crapouillou.net>
@@ -63,13 +63,13 @@ Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
 References: <cover.1649443080.git.hns@goldelico.com>
- <c48277625f0ab5afc86d89deb1b87537e9c592f6.1649443080.git.hns@goldelico.com>
- <e5ea96d8-f8c9-b925-04ee-81e80e30a5d0@linaro.org>
- <1TN2AR.Q91IJNXMNNNA1@crapouillou.net>
+ <84adfe6237cd4cfd52cb9723416f69926e556e55.1649443080.git.hns@goldelico.com>
+ <036b66b2-c221-6e9e-6a56-510e7a0d20d3@linaro.org>
+ <VDO2AR.XO9112UD3KYT3@crapouillou.net>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1TN2AR.Q91IJNXMNNNA1@crapouillou.net>
+In-Reply-To: <VDO2AR.XO9112UD3KYT3@crapouillou.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -80,45 +80,21 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/04/2022 14:24, Paul Cercueil wrote:
-> Hi Krzysztof,
+On 09/04/2022 14:37, Paul Cercueil wrote:
+>> The true question is whether you need simple-mfd. Isn't the binding 
+>> (and
+>> the driver) expected to instantiate its children?
 > 
-> Le sam., avril 9 2022 at 13:11:48 +0200, Krzysztof Kozlowski 
-> <krzysztof.kozlowski@linaro.org> a écrit :
->> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
->>>  arch/mips/boot/dts/ingenic/ci20.dtb: timer@10002000: compatible: 
->>> 'oneOf' conditional failed, one must be fixed:
->>>  	['ingenic,jz4780-tcu', 'ingenic,jz4770-tcu', 'simple-mfd'] is too 
->>> long
->>>  	'ingenic,jz4780-tcu' is not one of ['ingenic,jz4740-tcu', 
->>> 'ingenic,jz4725b-tcu', 'ingenic,jz4760-tcu', 'ingenic,x1000-tcu']
->>>  	'simple-mfd' was expected
->>>  	'ingenic,jz4760-tcu' was expected
->>
->> Trim it a bit...
->>
->>>  	From schema: 
->>> Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
->>
->> You need to explain this. You're changing the effective compatible of
->> the device and doing so based only on schema warning does not look
->> enough. Please write real reason instead of this fat warning, e.g. 
->> that
->> both devices are actually compatible and this has no real effect 
->> except
->> schema checks.
-> 
-> Well, if the schema says that it should use a particular fallback 
-> string, then that's what the DTS should use, right?
+> I can explain that one. There is the EFUSE controller located inside 
+> the nemc's memory area, and the two are pretty much unrelated, hence 
+> the "simple-mfd" compatible string.
 
-Or the schema is wrong. :)
+I saw the efuse children and that's why I asked who is expected to
+populate them. You said that simple-mfd is required for this, I say no.
+It should work without simple-mfd...
 
-> If making the DTS schema-compliant causes breakages, then that means 
-> the schema is wrong and should be fixed.
-
-Exactly, so the commit needs a bit of explanation why one solution was
-chosen over the other. BTW, I am not saying that schema or DTS is wrong,
-just that commit is not explained enough.
+I am kind of repeating myself but I really do not see the need of
+simple-mfd in the bindings.
 
 Best regards,
 Krzysztof
