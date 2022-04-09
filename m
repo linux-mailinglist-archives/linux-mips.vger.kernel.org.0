@@ -2,145 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389774FA8E5
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 16:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828BA4FAB1D
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Apr 2022 01:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236475AbiDIOIN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Apr 2022 10:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S232790AbiDIXbp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Apr 2022 19:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbiDIOIM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 10:08:12 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358A22274F3;
-        Sat,  9 Apr 2022 07:06:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649513161;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=AobUghhpQ3ekLNHOG9d7IDWN4zF0yDIKYAaL0zaeRNg=;
-    b=l2WNtM2nz5Agjaw+9H/XkXINfOWW1gZxdJXjllnmybTTYgZzpLx3kH9JDmGwVFiNiS
-    bbVWy5bgzrU0tK4Lh/tTZFzhynSYELdVKQopCbfMQOzx7/b3lhYdMfnDLqVlioQ45d0i
-    1c/YJlS0AG9Kk/lb64OJUCYOZD6AyPRh1wwTCYNu7jUP8/4zDLuMOlr0WzUQLr9kBnJ/
-    2TP7Vkkngr6aOGmDMt+KXAEjgQIXWC2poaptIWXM1o9/iY03bS+6qGt4xBUv5NYeF/sK
-    As43ColaTv2bBXpLZTlUslorW+yCdaQaDPzg6CvI7KcgcpOH5PmYO5XFVBzaKxoTeDNd
-    EF4g==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDepmg=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy39E60ud3
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sat, 9 Apr 2022 16:06:00 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 05/18] MIPS: DTS: jz4780: fix pinctrl as reported by
- dtbscheck
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <7a2e986f-708b-ae4f-e877-6cdc1607626a@linaro.org>
-Date:   Sat, 9 Apr 2022 16:06:00 +0200
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
+        with ESMTP id S231228AbiDIXbo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 19:31:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEDCDEE;
+        Sat,  9 Apr 2022 16:29:36 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649546972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ht/BjZKfEwbNRvmZyePyMT+aylBpF12k4dVD0rKNtw8=;
+        b=AuRq0wCtYXKcm0ryJ67Fp/GBt6cO3SpVd7CkUPfzGNUT87YnBYIl6wooRCxo0V2LKVufAe
+        WruAMWs3kz06ZmLlyY2BfPNF+Mn3kMGDmBnqUAIeDdyFzC3xXyK9l5c1+wSdGQ03tVQfPJ
+        RV4AhVLGmS0YZcCYNSYMlG1vu/XcNd7tscR4pyhRiCZYkA/IYnCAHheqwKo1LRtrkVRuS0
+        9WKJUAPO4GRrNkF5PYwAo6aRPKyz3ID7dl7/kd4fGzDwHM3O+aAEkPYVddEU86X1kEeGN7
+        ochLJcl/0cW+kNW7GARWG+dZDnaeEFAyMnCOj52aFtVrAyVaSbB6B5xsdlKXaQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649546972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ht/BjZKfEwbNRvmZyePyMT+aylBpF12k4dVD0rKNtw8=;
+        b=vUyIxyQVS1fiHfbV4PIICFMXMOmWDlpsE1+vbv1Qj49gakWkhrvZAc3R+9XH7ZlvihGyvm
+        qbHedOcHogR2iNAA==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        arnd@arndb.de
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <318AA65F-A6DD-46F7-9BFA-7283EF0FFE94@goldelico.com>
-References: <cover.1649443080.git.hns@goldelico.com>
- <1941bc4ed553b27f399ad00ea61ff2b0237d14e3.1649443080.git.hns@goldelico.com>
- <e905896e-335d-a88a-1961-d17b92e46585@linaro.org>
- <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
- <c84b5ec0-0193-ab62-1985-25bc2baa9f05@linaro.org>
- <B5EB5983-DA9F-4631-B737-2B1417CF9054@goldelico.com>
- <f40e1a00-be4d-11c7-6a7c-6b50635a2960@linaro.org>
- <499848FD-3F64-4B5D-9259-5C9E1ED4E8AB@goldelico.com>
- <fb521d87-2d52-c15c-83c0-1b62bf1b1cc4@linaro.org>
- <F0C0E942-BA61-4C74-860B-93D57C3D0F9A@goldelico.com>
- <7a2e986f-708b-ae4f-e877-6cdc1607626a@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH RFC v1 00/10] archs/random: fallback to using
+ sched_clock() if no cycle counter
+In-Reply-To: <20220408182145.142506-1-Jason@zx2c4.com>
+References: <20220408182145.142506-1-Jason@zx2c4.com>
+Date:   Sun, 10 Apr 2022 01:29:32 +0200
+Message-ID: <87wnfxhm3n.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Jason,
+
+On Fri, Apr 08 2022 at 20:21, Jason A. Donenfeld wrote:
+> Sometimes the next best thing is architecture-defined. For example,
+> really old MIPS has the CP0 random register, which isn't a cycle
+> counter, but is at least something. However, some platforms don't even
+> have an architecture-defined fallback. In that case, what are we left
+> with?
+>
+> By my first guess, we have ktime_get_boottime_ns(), jiffies, and
+> sched_clock(). It seems like sched_clock() has already done a lot of
+> work in being always available with some incrementing value, falling
+> back to jiffies as necessary. So this series goes with that as a
+> fallback, for when the architecture doesn't define random_get_entropy in
+> its own way and when there's no working cycle counter.
+
+sched_clock() is a halfways sane option, but yes as Arnd pointed out:
+
+> Another option would be falling back to different things on different
+> platforms. For example, Arnd mentioned to me that on m68k,
+> ktime_get_ns() might be better than sched_clock(), because it doesn't
+> use CONFIG_GENERIC_SCHED_CLOCK and therefore is only as good as
+> jiffies.
+
+ktime_get_ns() or the slightly faster variant ktime_get_mono_fast_ns()
+are usable. In the worst case they are jiffies driven too, but systems
+with jiffies clocksource are pretty much museum pieces.
+
+It's slightly slower than get_cycles() and a get_cyles() based
+sched_clock(), but you get the most granular clock of the platform
+automatically, which has it's charm too :)
+
+The bad news is that depending on the clocksource frequency the lower
+bits might never change. Always true for clocksource jiffies.
+sched_clock() has the same issue.
+
+But the below uncompiled hack gives you access to the 'best' clocksource
+of a machine, i.e. the one which the platform decided to be the one
+which is giving the best resolution. The minimal bitwidth of that is
+AFAICT 20 bits. In the jiffies case this will at least advance every
+tick.
+
+The price, e.g. on x86 would be that RDTSC would be invoked via an
+indirect function call. Not the end of the world...
+
+Thanks,
+
+        tglx
+---
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -646,6 +646,11 @@ static void halt_fast_timekeeper(const s
+ 	update_fast_timekeeper(&tkr_dummy, &tk_fast_raw);
+ }
+ 
++u32 ktime_read_raw_clock(void)
++{
++	return tk_clock_read(&tk_core.timekeeper.tkr_mono);
++}
++
+ static RAW_NOTIFIER_HEAD(pvclock_gtod_chain);
+ 
+ static void update_pvclock_gtod(struct timekeeper *tk, bool was_set)
 
 
-> Am 09.04.2022 um 16:00 schrieb Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org>:
->=20
-> On 09/04/2022 15:57, H. Nikolaus Schaller wrote:
->>=20
->>=20
->>> Am 09.04.2022 um 15:46 schrieb Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org>:
->>>=20
->>> On 09/04/2022 15:41, H. Nikolaus Schaller wrote:
->>>>>=20
->>>>> No. I ask you to fix all pin-controller cases, for entire MIPS, =
-not just
->>>>> one.
->>>>=20
->>>> Oops. Nope. I am a volunteer and neither your employee nor slave.
->>>=20
->>> No one thinks differently and I am sorry that you felt it. Please =
-accept
->>> my apologies, if you get different impression. You understand though =
-the
->>> meaning of word "ask for something" and "order something" (the =
-latter
->>> which I did not use).
->>>=20
->>> I just asked.
->>=20
->> Ok. Maybe english is not our mother language and we sometimes don't
->> get the nuances right. Sorry if I understood that wrongly.
->>=20
->> At least I now understand what you did suggest.
->=20
-> Yeah, probably I did not express my thoughts correctly.
->=20
-> I would like to state that I appreciate your work and I think it is
-> important, even if I do not express it correctly. Please accept my
-> apologies if I am bit harsh or impolite. That's not my intention.
 
-I also was a little harsh in my response. Sorry again.
 
->=20
->>=20
->> Doing the same change for treewide MIPS is beyond my capabilities =
-since
->> I can't easily test any compile setup. So far I only compile for CI20 =
-and
->> as far as I know every machine still needs its own config for MIPS=20
->> (haven't checked recently). So I am not even sure if dtbscheck tells =
-me
->> all locations.
->=20
->=20
-> OK, fair enough.
->=20
->=20
-> Best regards,
-> Krzysztof
-
-Anyways thank you very much for your reviews and sharing comments.
-
-As far as I see there are only the jz4780-nemc/simple-mfd and the =
-snps,dwc2/jz4780-otg
-issues really unsolved while the others are more cosmetics.
-
-Let's see how these settle.
-
-BR and thanks,
-Nikolaus
 
