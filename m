@@ -2,149 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C9C4FA0BD
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 02:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39F14FA6FF
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 13:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237195AbiDIAmN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Apr 2022 20:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S241473AbiDILJL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Apr 2022 07:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233821AbiDIAmG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Apr 2022 20:42:06 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3045C6F17
-        for <linux-mips@vger.kernel.org>; Fri,  8 Apr 2022 17:40:00 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id z16so9841218pfh.3
-        for <linux-mips@vger.kernel.org>; Fri, 08 Apr 2022 17:40:00 -0700 (PDT)
+        with ESMTP id S230162AbiDILJK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 07:09:10 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DDE60F1
+        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 04:07:03 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z12so110844edl.2
+        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 04:07:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VZz44nmQ769NskmU1+rSj1kgQ7eEgmL84RyrglKPKlU=;
-        b=hDG6N87X2mOxxCOCXXKUWOcaI826FpS5EoPhQJZu2dORSprAcsRFAElLaAchgm9JOc
-         6aWNWoTK0riqGAg5yhneIUYXDrCc+fGj3H7kK7mXEHIlpTFzEJW/uo/BmtZGNeswC4nd
-         PbmESxnPTnEseYvaH22WEqAMzyjNqP7va9Cy/08YzQ+8Zp7oRhZV7H2uOAWtwOJwR64j
-         C1XpU2RhBAmDNFKLPpLhftnPQdVrdTUUBk5NAt0Csjzufq0YZ246p/rCAHmwpT6hnZDF
-         gCIIkrVBCCM0ekFXDZVmyYk5Ax0gSZAvTp7mqghQynS+ToMez9bXma7soou9cwqLW7g0
-         3GkA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=l6b232XJ/ETd8wzGneSDA700wdN5rsSRSQ2Qey5y8b4=;
+        b=jl4r2uwFPz3djX6fCfWHW76QRmZMdCiVtjFzyb5Z7NIqwjWPZJq47/DBNi3gOGGBMI
+         3p4aztYhcBawvI9NgXc4ilz/tfoeg3/Tpg1CeG3T1ZXlr7nMJvJOTfG89cdUL/+v6Vsn
+         AsjAwYj2mv+oIQyCxMmvSC9071V21rn713Y3NsHHS8uRNShPkoZIEkHtwTD8TVzG8WKQ
+         eazHPIrFwZIvXTkICFTh4BxKpw5VocUE1zI0iy6duKk35eWSba6zfuUJQs2FxvbkPgJO
+         uhpFo5Ot7Xd+ifLOrCSOFx3ebFlVI2jailEvqC9UdPQrOThomIQXksIgz3DMNImKq7O9
+         +9xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VZz44nmQ769NskmU1+rSj1kgQ7eEgmL84RyrglKPKlU=;
-        b=OEeKl7lAxBT6qfBL5Ccr8Alh1HTTZjhr6bw9UTfnswPX2nT18y/u77itYfKIRtrhcq
-         dFm1/YdXPpBf56j3dC7l2jvzDKl+EI4GffbSlpnIDpMM8fyuq/2HjFR57i12caZAURp8
-         rfJAesKR1gY+p0BGrO3qq5pIRD+8IATmrAxaa0VCGyT5skCQDfS9b6JMUWqHaYQVNdLj
-         alqiYu1nk3lUYEsCt4yet6x/lrRd5RJ+KshFasnTSUKydP1p/E/Ef5OGb5rgLoGbpkBx
-         QwEs0LDesmD160LpwmrneRuTNntn+K3IoZR20FxYPoeRF+nvVS61N1YOTndTbEKA06JU
-         30qQ==
-X-Gm-Message-State: AOAM531kI0YDMD3Qq/av7BuO/C+ngc1+eALlN+mRH1zAvfma+UytEp/4
-        SScG5p0BgP0JMcvdia1oKE7wEA==
-X-Google-Smtp-Source: ABdhPJy9qpY4+K63QvK5VhUfvYFRHJk9uYqLUbpgv47CS1Vcvf2kVPQru+XKAuYVywEBn/XAV7z39w==
-X-Received: by 2002:a63:5520:0:b0:399:8cd:5f62 with SMTP id j32-20020a635520000000b0039908cd5f62mr17547409pgb.12.1649464800133;
-        Fri, 08 Apr 2022 17:40:00 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m8-20020a056a00080800b004faa4e113bfsm28586836pfk.154.2022.04.08.17.39.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 17:39:59 -0700 (PDT)
-Date:   Sat, 9 Apr 2022 00:39:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v3 22/23] KVM: x86/mmu: Support Eager Page Splitting in
- the shadow MMU
-Message-ID: <YlDV27ediz+rBuLd@google.com>
-References: <20220401175554.1931568-1-dmatlack@google.com>
- <20220401175554.1931568-23-dmatlack@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=l6b232XJ/ETd8wzGneSDA700wdN5rsSRSQ2Qey5y8b4=;
+        b=nW+TB8mmFUzmdnyHuKs9s3o0ewolLT/Ou3JT4j6WOLraruK11B7hbtAt96b3vOtcxZ
+         Z9Ws5J3RBmRLpHv/PZkJm6jmPedMA5+cDYirGBTENHvoLr7QSC31wZs60+BQS0WoPSab
+         UQgBUkmGNAqRXStYzJEVYt3GhNKbnVsom47RGnE+5BmiM18omGGqjTqEu1CBqxOxVqET
+         ylqtQUhy8KIz+a+1DKbPDKsfZ/pqLyWb4C3ifNX4i8KYf2M+RkC/QuSeUhXcIc6b/IEo
+         o74dIYTm1IItGubOXMf4062Te7jMOCmnpy0D6m623KkXWhCgJIk5A+xRcjde6PJ7l2vH
+         +TWg==
+X-Gm-Message-State: AOAM530vgLfhR4XDjo6pcfVClhAWWykvhxggnM/GpcA1Av1aEHKdpnqU
+        zMIOG8Bap/zx8cRSNAtuTR3KOg==
+X-Google-Smtp-Source: ABdhPJz1LYVYa04OUQ25X5GnoJ7HFdzl3dqTRD+eP5uDEdNDPzNRIOp8nXp5jdyf5mcQ0xV/N1JM8A==
+X-Received: by 2002:a05:6402:2682:b0:41d:2f74:7269 with SMTP id w2-20020a056402268200b0041d2f747269mr6693021edd.255.1649502421757;
+        Sat, 09 Apr 2022 04:07:01 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id kw5-20020a170907770500b006db075e5358sm9397755ejc.66.2022.04.09.04.07.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Apr 2022 04:07:01 -0700 (PDT)
+Message-ID: <0a0cb08a-3992-7e20-61ca-7856ce273005@linaro.org>
+Date:   Sat, 9 Apr 2022 13:07:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401175554.1931568-23-dmatlack@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 01/18] MIPS: DTS: jz4780: remove cpu clock-names as
+ reported by dtbscheck
+Content-Language: en-US
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+References: <cover.1649443080.git.hns@goldelico.com>
+ <064a1f029a82ea3895109efe8fb1f472581d4581.1649443080.git.hns@goldelico.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <064a1f029a82ea3895109efe8fb1f472581d4581.1649443080.git.hns@goldelico.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 01, 2022, David Matlack wrote:
-> Add support for Eager Page Splitting pages that are mapped by the shadow
-> MMU. Walk through the rmap first splitting all 1GiB pages to 2MiB pages,
-> and then splitting all 2MiB pages to 4KiB pages.
-> 
-> Splitting huge pages mapped by the shadow MMU requries dealing with some
-> extra complexity beyond that of the TDP MMU:
-> 
-> (1) The shadow MMU has a limit on the number of shadow pages that are
->     allowed to be allocated. So, as a policy, Eager Page Splitting
->     refuses to split if there are KVM_MIN_FREE_MMU_PAGES or fewer
->     pages available.
-> 
-> (2) Huge pages may be mapped by indirect shadow pages which have the
->     possibility of being unsync. As a policy we opt not to split such
->     pages as their translation may no longer be valid.
+On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
+> arch/mips/boot/dts/ingenic/ci20.dtb: cpu@0: clock-names does not match any of the regexes: pinctrl-[0-9]+
+> 	From schema: Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+> arch/mips/boot/dts/ingenic/ci20.dtb: cpu@1: clock-names does not match any of the regexes: pinctrl-[0-9]+
+> 	From schema: Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
 
-This shouldn't be possible, shadow pages whose role is > 4k are always write-protected
-and not allowed to become unsync.
+No need to put the same warning twice (cpu index really does not
+matter). One warning is enough.
 
-> 
-> (3) Splitting a huge page may end up re-using an existing lower level
->     shadow page tables. This is unlike the TDP MMU which always allocates
->     new shadow page tables when splitting.
+Fixing warnings is good, but what if the property should be there and
+the bindings are not correct? If you know the answer, please add it to
+the commit msg.
 
-...
+This applies to all your patches. Blind fixing of DTS warnings my
+produce incorrect results. :(
 
-> +static void kvm_mmu_split_huge_page(struct kvm *kvm,
-> +				    const struct kvm_memory_slot *slot,
-> +				    u64 *huge_sptep, struct kvm_mmu_page **spp)
-> +
-> +{
-> +	struct kvm_mmu_memory_cache *cache = &kvm->arch.huge_page_split_desc_cache;
-> +	u64 huge_spte = READ_ONCE(*huge_sptep);
-> +	struct kvm_mmu_page *sp;
-> +	bool flush = false;
-> +	u64 *sptep, spte;
-> +	gfn_t gfn;
-> +	int index;
-> +
-> +	sp = kvm_mmu_get_sp_for_split(kvm, slot, huge_sptep, spp);
-> +
-> +	for (index = 0; index < PT64_ENT_PER_PAGE; index++) {
-> +		sptep = &sp->spt[index];
-> +		gfn = kvm_mmu_page_get_gfn(sp, index);
-> +
-> +		/*
-> +		 * sp may have populated page table entries, e.g. if this huge
-> +		 * page is aliased by multiple sptes with the same access
-> +		 * permissions. We know the sptes will be mapping the same
-> +		 * gfn-to-pfn translation since sp is direct. However, a given
-> +		 * spte may point to an even lower level page table. We don't
-> +		 * know if that lower level page table is completely filled in,
-> +		 * i.e. we may be effectively unmapping a region of memory, so
-> +		 * we must flush the TLB.
 
-Random side topic, please avoid "we" and other pronouns in comments and changelogs,
-it gets real easy to lose track of what a pronoun is referring to, especially in
-changelogs where "we" might be KVM, might be the kernel, might be the team that's
-using the patch, might be an author that's prone to illeism, etc...
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
