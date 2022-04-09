@@ -2,101 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2E54FA8B5
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 15:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430744FA8C8
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Apr 2022 15:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242246AbiDINso (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Apr 2022 09:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S242254AbiDINzp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Apr 2022 09:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237101AbiDINsn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 09:48:43 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F43F3A71C
-        for <linux-mips@vger.kernel.org>; Sat,  9 Apr 2022 06:46:36 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bg10so22408964ejb.4
-        for <linux-mips@vger.kernel.org>; Sat, 09 Apr 2022 06:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+XyNRW/l0jJ+Y/IrKpe8HRBR60t3UvVTtiQLW83IWfE=;
-        b=hCviDOktJ9lpvcQpltWvA475M8EZ6J2NXrExnyy2qisTizDTA5x/R4rJQK7hO1XCgK
-         qWLKRIL0HzNxwslxcTUzfM2OdqazMNmtWr7hEKGawKsNQCtoWGKBZuxgl/iQzu43OpmV
-         wwzSG6XAnnFjBJoFrZZNTGm9RoPHr1R7W6YmwUXbjCmSKHltM05z8auSkqlFWvAVTGdT
-         woUk04dRHCg8JNrDaCxekT385wMWOAVaKGdCGyO7x29yqwCyuGjTfQ3AJukJXitP43xM
-         cDDhB6ETTM2eaiokXuyoddP3UlsxKYfJdGB7ex2CXqdy1Dp9bf37OhiFALrHIdLs6tos
-         CS2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+XyNRW/l0jJ+Y/IrKpe8HRBR60t3UvVTtiQLW83IWfE=;
-        b=0uYB9WhIUNm09ybsQ2zG8UL1/zIoR0H0tn6HrZXJg64pUHgxum5EID72kCvPcTFH2q
-         GhHpYlo9SHwezM8wP22w19KKLUUCYnIU6OC0VOf4PG9lQCtdseqzckvtEgomNkNf4ri4
-         R4UUvGahlmWDozGRjmFv30pzpolQsSq49FuNXsMQvR5xjt/t+dV7eswkXe6H2MwRjsr/
-         i2u6XE2H+3UNk56awjbN0UVjNcf0fnFHFaNPth9ufp/p+sVISVrP5AkV4anyX13EuPIb
-         dOr4nMjo8G9iKRLGJfp9JPgA6safrKkHQLQm5swHrefkaLqgD5yi1w20LEW4N4wkWORh
-         rRtw==
-X-Gm-Message-State: AOAM530xXpSL4vp8G9q1POGEA0Q0dYgdruBDy1uj1UOJAqebWMF3hIOz
-        th5kU+/c7va3abDpDqzizieOwA==
-X-Google-Smtp-Source: ABdhPJwJqM+CUyXCktrnrGvmubRDadUfAc+cYtxqSZq03ERzhKQq1EUXTh+eLhuYObcundzB4YaeUw==
-X-Received: by 2002:a17:906:2991:b0:6cd:ac19:ce34 with SMTP id x17-20020a170906299100b006cdac19ce34mr22810415eje.746.1649511995079;
-        Sat, 09 Apr 2022 06:46:35 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id a18-20020a1709063e9200b006e0527baa77sm9760255ejj.92.2022.04.09.06.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 06:46:34 -0700 (PDT)
-Message-ID: <fb521d87-2d52-c15c-83c0-1b62bf1b1cc4@linaro.org>
-Date:   Sat, 9 Apr 2022 15:46:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 05/18] MIPS: DTS: jz4780: fix pinctrl as reported by
+        with ESMTP id S236446AbiDINzo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 09:55:44 -0400
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236B524F0E;
+        Sat,  9 Apr 2022 06:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649512412;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=CYw/FJtxLxlQ35sT/iRo/KpPpPLeHTC5koRoiEsPsSI=;
+    b=Hilq00r/Mxd3ZvhVxcAua7rrlBRd4Y5q+IB6upZZZnFioBZXCDb4B0gkQuzD5a++G8
+    +HHsVwLXSMAVgwqFS1HIGWWhcQKX5uMcKYY1vkFHyWf8fk2Xrlubxzx8pjtPtSnk0Dvf
+    2gr4EOWdZrhbF5Jj6dF/mvQPamyyNkPPHLLR5g7ZBwoooi6sbX0BAaOeFy/tukwEHrpY
+    mar9qHGTqMohCBdidGX/uJxOc/UGyc0A0DXz7pdeiy4oIRoE5U1wxPf1346FJlb9Ml8e
+    hyiOfsyYC0Pr6kKGr27RJXMrZGjyLWqs81M5OdbzNdyh/Txj+ANznjzjfSR2E3SBiUGp
+    MDNA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDepmg=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy39DrVua4
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Sat, 9 Apr 2022 15:53:31 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
  dtbscheck
-Content-Language: en-US
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <3e95f567-03f5-bf9c-1856-9fe602e9b025@linaro.org>
+Date:   Sat, 9 Apr 2022 15:53:31 +0200
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Paul Cercueil <paul@crapouillou.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <81BA49E3-AFDE-4DFD-BB77-2B03488C727B@goldelico.com>
 References: <cover.1649443080.git.hns@goldelico.com>
- <1941bc4ed553b27f399ad00ea61ff2b0237d14e3.1649443080.git.hns@goldelico.com>
- <e905896e-335d-a88a-1961-d17b92e46585@linaro.org>
- <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
- <c84b5ec0-0193-ab62-1985-25bc2baa9f05@linaro.org>
- <B5EB5983-DA9F-4631-B737-2B1417CF9054@goldelico.com>
- <f40e1a00-be4d-11c7-6a7c-6b50635a2960@linaro.org>
- <499848FD-3F64-4B5D-9259-5C9E1ED4E8AB@goldelico.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <499848FD-3F64-4B5D-9259-5C9E1ED4E8AB@goldelico.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
+ <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
+ <822182F3-5429-4731-9FA1-8F18C5D95DEC@goldelico.com>
+ <535e3eab-a28e-46f3-2a7e-f1ffd1913470@linaro.org>
+ <7B66AC66-EF73-4F75-A775-589A4F98BEFC@goldelico.com>
+ <3e95f567-03f5-bf9c-1856-9fe602e9b025@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?utf-8?B?IuWRqOeQsOadsCAoWmhvdSBZYW5qaWUpIg==?= 
+        <zhouyanjie@wanyeetech.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/04/2022 15:41, H. Nikolaus Schaller wrote:
->>
->> No. I ask you to fix all pin-controller cases, for entire MIPS, not just
->> one.
-> 
-> Oops. Nope. I am a volunteer and neither your employee nor slave.
 
-No one thinks differently and I am sorry that you felt it. Please accept
-my apologies, if you get different impression. You understand though the
-meaning of word "ask for something" and "order something" (the latter
-which I did not use).
 
-I just asked.
+> Am 09.04.2022 um 15:44 schrieb Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org>:
+>=20
+> On 09/04/2022 15:32, H. Nikolaus Schaller wrote:
+>>=20
+>>=20
+>>> Am 09.04.2022 um 15:15 schrieb Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org>:
+>>>=20
+>>> On 09/04/2022 15:05, H. Nikolaus Schaller wrote:
+>>>>>=20
+>>>>> This looks wrong, the block usually should have a specific =
+compatible.
+>>>>> Please mention why it does not.
+>>>>=20
+>>>> Well, I did not even have that idea that it could need an =
+explanation.
+>>>>=20
+>>>> There is no "ingenic,jz4780-otg" and none is needed here to make it =
+work.
+>>>=20
+>>> Make it work in what terms? We talk about hardware description, =
+right?
+>>=20
+>> Yes.
+>>=20
+>>>=20
+>>>>=20
+>>>> Therefore the generic "snps,dwc2" is sufficient.
+>>>=20
+>>> No, you are mixing now driver behavior (is sufficient) with hardware
+>>> description.
+>>=20
+>> No. "snps,dwc2" is a hardware description for a licensed block.
+>> Not a driver behavior.
+>=20
+> snps,dwc2 matches the original block, not necessarily this
+> implementation. Unless you are sure?
 
-Best regards,
-Krzysztof
+I assume. Nobody has reported an issue without having any specific =
+jz4780 driver in place.
+Well, that is only evidence, not bullet proof.
+
+>=20
+>>=20
+>>> Most of licensed blocks require the specific compatible to
+>>> differentiate it.
+>>=20
+>> If there is a need to differentiate.
+>=20
+> No, regardless whether there is a need currently, most of them have
+> specific compatibles, because there are some minor differences. Even =
+if
+> difference is not visible from programming model or wiring, it might
+> justify it's own specific compatible. For example because maybe once
+> that tiny difference will require some changes.
+>=20
+> Someone added the ingenic compatible, so why do you assume that one =
+tool
+> (bindings) is correct but other piece of code (using specific
+> compatible) is not? You use the argument "bindings warning" which is =
+not
+> enough. Argument that blocks are 100% same, is good enough, if you are
+> sure. Just use it in commit msg. But are you sure that these are the
+> same? Same pins, same programming model (entire model, not used by =
+Linux)?
+
+The compatible ingenic,jz4780-otg was introduced in =
+158c774d3c64859e84dd20e04d5fb18c8d3d318e.
+Hence I have added Yanjie for clarification why he added it in the .dts =
+and not in the bindings.
+
+BR and thanks,
+Nikolaus
+
+
