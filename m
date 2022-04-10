@@ -2,125 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9884FB023
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Apr 2022 22:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EBB4FB043
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Apr 2022 22:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243935AbiDJUej (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Apr 2022 16:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
+        id S242361AbiDJU7W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Apr 2022 16:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243925AbiDJUee (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Apr 2022 16:34:34 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70EB36339;
-        Sun, 10 Apr 2022 13:32:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649622731; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=gIHrux1Qx6cY6Pyu4y77mzgZzBjZyceD7oDM7YFkR/mKow87bN1DefCaocxDQfjgqeimJ/WAQS33ic0N0V8cu0nJh9im/KZsru1pPLA4fbe2J8cUiF+mvZ4OXHqCrgIGoYDBDpV+xRr7HbHy0Ywdm1+so3iL+pSIdcJNCeQsqqA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649622731; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=/MOMK34Z6z6C4CqZb8rLYQ4jYbrhj9LEWEwpaErwP4o=; 
-        b=XLiSQj5h+xt2fR9KFl/aQJnOAIAJH+F8JK+SPP7MoDqFEYvcnPop1m2C1o3N2+iYxxJa2k1JbcAx74taP/ufzMq7A2Bra2HOJvj93VbKwxioUT/VtSP73P1OU63gWrcIExksd+Ibv3yY21/4BIDQLwSdR6ttmnHiYRJDBZzOnh4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649622731;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=/MOMK34Z6z6C4CqZb8rLYQ4jYbrhj9LEWEwpaErwP4o=;
-        b=IEqd05QgWct3oxoPxsxQmyqf/6IlDq+nbX7nej93sqGJqCJiJxW00t9S3XUwi+m+
-        K3ZWJHZfC3+l7SXb2VCkjmtO0+Zl/VcWAf91U+Tme95kJe+LFtoI23zC5yI3OMnjv21
-        6wo149RY6tWIXTSm7xg1V8aSycanXsH/CpHehsvg=
-Received: from arinc9-PC.localdomain (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649622730691527.6330187658422; Sun, 10 Apr 2022 13:32:10 -0700 (PDT)
-From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        with ESMTP id S242351AbiDJU7U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Apr 2022 16:59:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BFF11C2D;
+        Sun, 10 Apr 2022 13:57:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649624223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hE+Xcw0JizEU8Wnq0ZP70KLvw79L4CjFSDQ+JeFdg1E=;
+        b=wcxdyIRUujqol7xM6/jNUaTiJK9LjQ2TxNswzkFqW9IdoCXdLl06LKnKcZu+/PhgcujoFD
+        4BL6UvqV2KyZxKcXAHyaYhKgWh+hW7kmtVsrR50bN2kEyItTRS4qenN4xdW+pqDVD/EBQJ
+        FRBUDZAXAnKdCAGLESQsbxyitf9btYLvPr88J6g6SWQULeVv1+BpRryz8V4vlo0Sxn5A1B
+        B7jn62NOZrsua6pLpW1KUXCpCdbVHaodhuhDNbeQMQoqpedjr6x5wCT5mekwEWTjKpLkBQ
+        ZhVOGqfjVtVh2uqjxiB4TKZirCwCtL5e55pMSWAO2Ry+8zKLnyd7j8EtVVFiMg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649624223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hE+Xcw0JizEU8Wnq0ZP70KLvw79L4CjFSDQ+JeFdg1E=;
+        b=WYkLY0CPXnB/0QIxOUzf7pdAwpOuVx9Tljat/8ZOy+GrRKgqIku37SjusWmBW3We4uxu9x
+        QGtzsFUk86/12iAg==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-Subject: [PATCH 3/3] mips: dts: mt7621: remove binding for defining gpio function for pin groups
-Date:   Sun, 10 Apr 2022 23:31:38 +0300
-Message-Id: <20220410203138.22513-3-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220410203138.22513-1-arinc.unal@arinc9.com>
-References: <20220410203138.22513-1-arinc.unal@arinc9.com>
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH RFC v1 00/10] archs/random: fallback to using
+ sched_clock() if no cycle counter
+In-Reply-To: <YlLo8JVOS6FDmWUM@zx2c4.com>
+References: <20220408182145.142506-1-Jason@zx2c4.com> <87wnfxhm3n.ffs@tglx>
+ <YlLo8JVOS6FDmWUM@zx2c4.com>
+Date:   Sun, 10 Apr 2022 22:57:02 +0200
+Message-ID: <877d7whd29.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-All pin groups function as gpio unless set otherwise. Therefore, remove
-this unnecessary binding.
+Jason,
 
-Tested on UniElec U7621-06-16M on OpenWrt.
+On Sun, Apr 10 2022 at 16:25, Jason A. Donenfeld wrote:
+> On Sun, Apr 10, 2022 at 01:29:32AM +0200, Thomas Gleixner wrote:
+>> But the below uncompiled hack gives you access to the 'best' clocksource
+>> of a machine, i.e. the one which the platform decided to be the one
+>> which is giving the best resolution. The minimal bitwidth of that is
+>> AFAICT 20 bits. In the jiffies case this will at least advance every
+>> tick.
+>
+> Oh, huh, that's pretty cool. I can try to make a commit out of that. Are
+> you suggesting I use this as the fallback for all platforms that
+> currently return zero, or just for m68k per Arnd's suggestion, and then
+> use sched_clock() for the others? It sounds to me like you're saying
+> this would be best for all of them. If so, that'd be quite nice.
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts | 12 ------------
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts | 12 ------------
- 2 files changed, 24 deletions(-)
+It's the best in terms of timekeeping. Not the fastest :)
 
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 75f3b0425487..c307a0edb91f 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -97,18 +97,6 @@ &pcie {
- 	status = "okay";
- };
- 
--&pinctrl {
--	pinctrl-names = "default";
--	pinctrl-0 = <&state_default>;
--
--	state_default: state-default {
--		gpio-pinmux {
--			groups = "uart3", "wdt";
--			function = "gpio";
--		};
--	};
--};
--
- &gmac1 {
- 	status = "okay";
- 	phy-handle = <&ethphy4>;
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index b427ae9e081f..8268d738e74f 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -81,18 +81,6 @@ &pcie {
- 	status = "okay";
- };
- 
--&pinctrl {
--	pinctrl-names = "default";
--	pinctrl-0 = <&state_default>;
--
--	state_default: state-default {
--		gpio-pinmux {
--			groups = "wdt";
--			function = "gpio";
--		};
--	};
--};
--
- &gmac1 {
- 	status = "okay";
- 	phy-handle = <&ethphy7>;
--- 
-2.25.1
+>> The price, e.g. on x86 would be that RDTSC would be invoked via an
+>> indirect function call. Not the end of the world...
+>
+> Well on x86, random_get_entropy() is overridden in the arch/ code to
+> call get_cycles(). So this would really just be for 486 and for other
+> architectures with no cycle counter that are currently returning zero.
+> However, this brings up a good point: if your proposed
+> ktime_read_raw_clock() function really is so nice, should it be used
+> everywhere unconditionally with no arch-specific overrides? On x86, is
+> it really guaranteed to be RDTSC, and not, say, some off-core HPET
+> situation? And is this acceptable to call from the hard irq handler?
 
+No, that's the sad part. On system where TSC is unstable (for whatever
+reason) this might fallback to some off-core clock (HPET, PMTIMER).
+The good news is that this is mostly affecting older systems. After 20+
+years of complaining the hardware people seem to have figured out that a
+fast accessible and realiable clocksource is something useful. :)
+
+> Not yet having too much knowledge, I'm tentatively leaning toward the
+> safe side, of just using ktime_read_raw_clock() in the current places
+> that return zero all the time -- that is, for the purpose this patchset
+> has.
+
+That's probably a good approach and it's init/runtime discoverable.
+
+Thanks,
+
+        tglx
