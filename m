@@ -2,43 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828BA4FAB1D
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Apr 2022 01:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC934FAE3A
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Apr 2022 16:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiDIXbp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Apr 2022 19:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S237446AbiDJO23 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Apr 2022 10:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiDIXbo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Apr 2022 19:31:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEDCDEE;
-        Sat,  9 Apr 2022 16:29:36 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649546972;
+        with ESMTP id S234968AbiDJO2Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Apr 2022 10:28:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7879C25C75;
+        Sun, 10 Apr 2022 07:26:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2081B80B73;
+        Sun, 10 Apr 2022 14:26:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1C7C385A4;
+        Sun, 10 Apr 2022 14:26:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Xd0Enayl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649600764;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Ht/BjZKfEwbNRvmZyePyMT+aylBpF12k4dVD0rKNtw8=;
-        b=AuRq0wCtYXKcm0ryJ67Fp/GBt6cO3SpVd7CkUPfzGNUT87YnBYIl6wooRCxo0V2LKVufAe
-        WruAMWs3kz06ZmLlyY2BfPNF+Mn3kMGDmBnqUAIeDdyFzC3xXyK9l5c1+wSdGQ03tVQfPJ
-        RV4AhVLGmS0YZcCYNSYMlG1vu/XcNd7tscR4pyhRiCZYkA/IYnCAHheqwKo1LRtrkVRuS0
-        9WKJUAPO4GRrNkF5PYwAo6aRPKyz3ID7dl7/kd4fGzDwHM3O+aAEkPYVddEU86X1kEeGN7
-        ochLJcl/0cW+kNW7GARWG+dZDnaeEFAyMnCOj52aFtVrAyVaSbB6B5xsdlKXaQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649546972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ht/BjZKfEwbNRvmZyePyMT+aylBpF12k4dVD0rKNtw8=;
-        b=vUyIxyQVS1fiHfbV4PIICFMXMOmWDlpsE1+vbv1Qj49gakWkhrvZAc3R+9XH7ZlvihGyvm
-        qbHedOcHogR2iNAA==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        arnd@arndb.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
+        bh=ACW34jCdChesB8O9mr3A3gFQd+fZkgemUpW2KIQGTs8=;
+        b=Xd0Enayl8UdMOLK8hb+p9ElFGR/nkOk182JQ3t/5PAWGrTN3GF03N95qlf3rrZl/Mt+RZI
+        7g+OoLToQKHdL9+kdXKajZ1a3hsadEW5sVaIiDYC9L5V8y9LrnjV28ZvqwgrOh6rFPazES
+        NrUCO3Ev2CsBJg7e3SN1A3lzDB/MMQU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8a808d78 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 10 Apr 2022 14:26:04 +0000 (UTC)
+Date:   Sun, 10 Apr 2022 16:25:52 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -65,87 +65,54 @@ Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         linux-xtensa@linux-xtensa.org
 Subject: Re: [PATCH RFC v1 00/10] archs/random: fallback to using
  sched_clock() if no cycle counter
-In-Reply-To: <20220408182145.142506-1-Jason@zx2c4.com>
+Message-ID: <YlLo8JVOS6FDmWUM@zx2c4.com>
 References: <20220408182145.142506-1-Jason@zx2c4.com>
-Date:   Sun, 10 Apr 2022 01:29:32 +0200
-Message-ID: <87wnfxhm3n.ffs@tglx>
+ <87wnfxhm3n.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87wnfxhm3n.ffs@tglx>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Jason,
+Hi Thomas,
 
-On Fri, Apr 08 2022 at 20:21, Jason A. Donenfeld wrote:
-> Sometimes the next best thing is architecture-defined. For example,
-> really old MIPS has the CP0 random register, which isn't a cycle
-> counter, but is at least something. However, some platforms don't even
-> have an architecture-defined fallback. In that case, what are we left
-> with?
->
-> By my first guess, we have ktime_get_boottime_ns(), jiffies, and
-> sched_clock(). It seems like sched_clock() has already done a lot of
-> work in being always available with some incrementing value, falling
-> back to jiffies as necessary. So this series goes with that as a
-> fallback, for when the architecture doesn't define random_get_entropy in
-> its own way and when there's no working cycle counter.
+On Sun, Apr 10, 2022 at 01:29:32AM +0200, Thomas Gleixner wrote:
+> But the below uncompiled hack gives you access to the 'best' clocksource
+> of a machine, i.e. the one which the platform decided to be the one
+> which is giving the best resolution. The minimal bitwidth of that is
+> AFAICT 20 bits. In the jiffies case this will at least advance every
+> tick.
 
-sched_clock() is a halfways sane option, but yes as Arnd pointed out:
-
-> Another option would be falling back to different things on different
-> platforms. For example, Arnd mentioned to me that on m68k,
-> ktime_get_ns() might be better than sched_clock(), because it doesn't
-> use CONFIG_GENERIC_SCHED_CLOCK and therefore is only as good as
-> jiffies.
-
-ktime_get_ns() or the slightly faster variant ktime_get_mono_fast_ns()
-are usable. In the worst case they are jiffies driven too, but systems
-with jiffies clocksource are pretty much museum pieces.
-
-It's slightly slower than get_cycles() and a get_cyles() based
-sched_clock(), but you get the most granular clock of the platform
-automatically, which has it's charm too :)
-
-The bad news is that depending on the clocksource frequency the lower
-bits might never change. Always true for clocksource jiffies.
-sched_clock() has the same issue.
-
-But the below uncompiled hack gives you access to the 'best' clocksource
-of a machine, i.e. the one which the platform decided to be the one
-which is giving the best resolution. The minimal bitwidth of that is
-AFAICT 20 bits. In the jiffies case this will at least advance every
-tick.
-
-The price, e.g. on x86 would be that RDTSC would be invoked via an
-indirect function call. Not the end of the world...
-
-Thanks,
-
-        tglx
----
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -646,6 +646,11 @@ static void halt_fast_timekeeper(const s
- 	update_fast_timekeeper(&tkr_dummy, &tk_fast_raw);
- }
- 
-+u32 ktime_read_raw_clock(void)
-+{
-+	return tk_clock_read(&tk_core.timekeeper.tkr_mono);
-+}
-+
- static RAW_NOTIFIER_HEAD(pvclock_gtod_chain);
- 
- static void update_pvclock_gtod(struct timekeeper *tk, bool was_set)
+Oh, huh, that's pretty cool. I can try to make a commit out of that. Are
+you suggesting I use this as the fallback for all platforms that
+currently return zero, or just for m68k per Arnd's suggestion, and then
+use sched_clock() for the others? It sounds to me like you're saying
+this would be best for all of them. If so, that'd be quite nice.
 
 
+> The price, e.g. on x86 would be that RDTSC would be invoked via an
+> indirect function call. Not the end of the world...
 
+Well on x86, random_get_entropy() is overridden in the arch/ code to
+call get_cycles(). So this would really just be for 486 and for other
+architectures with no cycle counter that are currently returning zero.
+However, this brings up a good point: if your proposed
+ktime_read_raw_clock() function really is so nice, should it be used
+everywhere unconditionally with no arch-specific overrides? On x86, is
+it really guaranteed to be RDTSC, and not, say, some off-core HPET
+situation? And is this acceptable to call from the hard irq handler?
 
+Not yet having too much knowledge, I'm tentatively leaning toward the
+safe side, of just using ktime_read_raw_clock() in the current places
+that return zero all the time -- that is, for the purpose this patchset
+has.
 
+Jason
