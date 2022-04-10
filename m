@@ -2,78 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C80C4FAE85
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Apr 2022 17:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565584FAEEF
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Apr 2022 18:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242299AbiDJPiO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Apr 2022 11:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S243687AbiDJQej (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Apr 2022 12:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237457AbiDJPiL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Apr 2022 11:38:11 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80D721809
-        for <linux-mips@vger.kernel.org>; Sun, 10 Apr 2022 08:35:58 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id lc2so5637700ejb.12
-        for <linux-mips@vger.kernel.org>; Sun, 10 Apr 2022 08:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=Ymd6ZB8X+RwTwj7uy0xGRMmhXHvaYLUxYMCOqaKXCEw=;
-        b=q4Bwc/sQ9eh7WrqSPQwLuUvKn+WnDSv2ZFIIv/MuoTBPXfda+uMW82lCo3xaOEkflX
-         6pmv0q0AHQOgD837jusI6OwhlrFVUEYHL0dljBFQdBNE/1ZPnOk+M3zO8YqwgZ37mQxe
-         VU7sruwKrS3dPobB8x3xlPfbGgMajrUFtJxaOFPyPt/dluJmmcqkUq8XGK7hR+hDHv7M
-         ZNabGDcgM8mIyblJbBRGqXFCKLV9nQX+1dL6jVVFY/KuP4Z5Y3LQ5i32S2Yi2TBpwaN0
-         FWfD8L6P9OmQoXLD0F0AexsccH08kvl2XuRP+44fG1Tdtusm81i9jioBNS5Id5tYaeyh
-         Y6cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=Ymd6ZB8X+RwTwj7uy0xGRMmhXHvaYLUxYMCOqaKXCEw=;
-        b=g6VqGj4dLo16WkQDT8vmlVB5E77ePf7q4vb2T/lG7haT+wtghmr1QoWOKCpIe4SGC1
-         2190Vr53kGdoo2ew53KDGJH3DXNXGJM131BaFjdx6CdS/iarbe26y/PE1KgQrbU8iqgL
-         2pFC+3TzPjJoJRIbMHv8/JVXwa1ZZ9y+N8Bc6fde0i+6pW/H/JfRq8VjBevB4q3vekjq
-         SGDULI4pxcSJqEcITZWEAOUUEChJSxgqZltTctIv/tSRSn3H6+Y3mGuNzH04hahhkcls
-         RuYek4ynGuFTmjtbVEwULWNHwmkP/RF6+GhdwZfaJSgNp4od+W9pkQ1woTIrttRfaw1m
-         fpIw==
-X-Gm-Message-State: AOAM5317NIkRj4UEPqLXjsObL3NhOGbvn+dAaQ8nAuRaHSNJ3NdbEUQt
-        RnIyH3ZWbNAkKqR1vBRV46V1qQ==
-X-Google-Smtp-Source: ABdhPJwFU0Aib2QRHEDKy7VYoKmZqoimt6/xyHAjy+BiRfsUtU4TzhgV65xTCH8QCvvNp6ATpXOm+g==
-X-Received: by 2002:a17:907:3e0a:b0:6e8:8d91:48bb with SMTP id hp10-20020a1709073e0a00b006e88d9148bbmr1964405ejc.237.1649604957362;
-        Sun, 10 Apr 2022 08:35:57 -0700 (PDT)
-Received: from [192.168.0.189] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id jv20-20020a170907769400b006e7f859e683sm7386652ejc.19.2022.04.10.08.35.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 08:35:56 -0700 (PDT)
-Message-ID: <e10f0291-8252-fd12-5bba-f25f472cd605@linaro.org>
-Date:   Sun, 10 Apr 2022 17:35:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 13/18] dt-bindings: fix jz4780-nemc issue as reported by
+        with ESMTP id S243639AbiDJQe3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Apr 2022 12:34:29 -0400
+Received: from out28-50.mail.aliyun.com (out28-50.mail.aliyun.com [115.124.28.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E1E192B8;
+        Sun, 10 Apr 2022 09:32:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07502633|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.094111-0.000410477-0.905478;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.NNs1TPY_1649608329;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NNs1TPY_1649608329)
+          by smtp.aliyun-inc.com(33.37.77.208);
+          Mon, 11 Apr 2022 00:32:10 +0800
+Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
  dtbscheck
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Paul Cercueil <paul@crapouillou.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
 References: <cover.1649443080.git.hns@goldelico.com>
- <84adfe6237cd4cfd52cb9723416f69926e556e55.1649443080.git.hns@goldelico.com>
- <036b66b2-c221-6e9e-6a56-510e7a0d20d3@linaro.org>
- <B9FD64FE-82B0-4DC2-B4C3-BE266DAB28A0@goldelico.com>
- <99a97b0f-19a5-136d-9160-c9fde6f3548c@linaro.org>
-In-Reply-To: <99a97b0f-19a5-136d-9160-c9fde6f3548c@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+ <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
+ <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
+ <822182F3-5429-4731-9FA1-8F18C5D95DEC@goldelico.com>
+ <535e3eab-a28e-46f3-2a7e-f1ffd1913470@linaro.org>
+ <7B66AC66-EF73-4F75-A775-589A4F98BEFC@goldelico.com>
+ <3e95f567-03f5-bf9c-1856-9fe602e9b025@linaro.org>
+ <81BA49E3-AFDE-4DFD-BB77-2B03488C727B@goldelico.com>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <b6090a27-12b7-0c01-6d33-ae32b31b4b74@wanyeetech.com>
+Date:   Mon, 11 Apr 2022 00:32:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <81BA49E3-AFDE-4DFD-BB77-2B03488C727B@goldelico.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,41 +55,66 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/04/2022 15:18, Krzysztof Kozlowski wrote:
-> On 09/04/2022 15:09, H. Nikolaus Schaller wrote:
+Hi folks,
 
-(...)
-
->>>> @@ -17,7 +17,7 @@ properties:
->>>>     oneOf:
->>>>       - enum:
->>>>           - 
->>>> -          - ingenic,jz4780-nemc
->>>> +          - [ , simple-mfd ]
->>>
->>> This is not correct representation. If you really need simple-mfd, then
->>> this should be a separate item below oneOf.
+On 2022/4/9 下午9:53, H. Nikolaus Schaller wrote:
+>
+>> Am 09.04.2022 um 15:44 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
 >>
->> Well, it is valid YAML syntax and seems to be accepted by dtbscheck.
+>> On 09/04/2022 15:32, H. Nikolaus Schaller wrote:
+>>>
+>>>> Am 09.04.2022 um 15:15 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+>>>>
+>>>> On 09/04/2022 15:05, H. Nikolaus Schaller wrote:
+>>>>>> This looks wrong, the block usually should have a specific compatible.
+>>>>>> Please mention why it does not.
+>>>>> Well, I did not even have that idea that it could need an explanation.
+>>>>>
+>>>>> There is no "ingenic,jz4780-otg" and none is needed here to make it work.
+>>>> Make it work in what terms? We talk about hardware description, right?
+>>> Yes.
+>>>
+>>>>> Therefore the generic "snps,dwc2" is sufficient.
+>>>> No, you are mixing now driver behavior (is sufficient) with hardware
+>>>> description.
+>>> No. "snps,dwc2" is a hardware description for a licensed block.
+>>> Not a driver behavior.
+>> snps,dwc2 matches the original block, not necessarily this
+>> implementation. Unless you are sure?
+> I assume. Nobody has reported an issue without having any specific jz4780 driver in place.
+> Well, that is only evidence, not bullet proof.
+>
+>>>> Most of licensed blocks require the specific compatible to
+>>>> differentiate it.
+>>> If there is a need to differentiate.
+>> No, regardless whether there is a need currently, most of them have
+>> specific compatibles, because there are some minor differences. Even if
+>> difference is not visible from programming model or wiring, it might
+>> justify it's own specific compatible. For example because maybe once
+>> that tiny difference will require some changes.
+>>
+>> Someone added the ingenic compatible, so why do you assume that one tool
+>> (bindings) is correct but other piece of code (using specific
+>> compatible) is not? You use the argument "bindings warning" which is not
+>> enough. Argument that blocks are 100% same, is good enough, if you are
+>> sure. Just use it in commit msg. But are you sure that these are the
+>> same? Same pins, same programming model (entire model, not used by Linux)?
+> The compatible ingenic,jz4780-otg was introduced in 158c774d3c64859e84dd20e04d5fb18c8d3d318e.
+> Hence I have added Yanjie for clarification why he added it in the .dts and not in the bindings.
 
-Minor update:
-Well, it is not a valid schema. Rob's checker now confirmed. If you run
-dt_bindings_check by yourself you will see the error:
 
-   properties:compatible:oneOf:0:enum:1: ['ingenic', 'jz4780-nemc',
-'simple-mfd'] is not of type 'string'
+It's my fault, last year I made an OTG driver for Ingenic SoCs and sent it
+to the mailing list, and then I received some revision comments, but for
+some personal reasons I didn't continue to improve it.
 
-Probably because enum expects string, not another enum (so enum inside
-enum is not correct).
-
-If you do not see the error, you might be missing some packages
-(mentioned in writing-schema + yamllint for a different issue) or your
-dtschema is old.
-
-> 
-> It's not how we code it. Please do not introduce inconsistent - even if
-> valid - blocks.
+I'll finish these modifications as soon as possible and send them out.
+Then after they merge into the mainline, this problem will be solved.
 
 
-Best regards,
-Krzysztof
+Thanks and best regards!
+
+
+>
+> BR and thanks,
+> Nikolaus
+>
