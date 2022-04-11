@@ -2,196 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125B64FC27E
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 18:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2254FC2B3
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 18:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348593AbiDKQiu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Apr 2022 12:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S1348695AbiDKQvp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 12:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348290AbiDKQis (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 12:38:48 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431E62DAB8;
-        Mon, 11 Apr 2022 09:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1649694991; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JKIdiPCa6AdKy3aeZWJmLncBvmV88ceUe5XNIR3UBxQ=;
-        b=pzqHrTBTxMmTIZ2GuBCvRERJgNhDuydhqoWEJh9pjC/YFx/WdQ2znC6qX+HJ4MkXnZdJQJ
-        /7Tnsvmm9KSay0Z3MifEH9QGPldSI3yD30YYVDzv4N/mXkxXRA6/ld2KpqKHfMybdo9XWa
-        bDvgPhryvUsMzLNiOkoSikXrus7yb10=
-Date:   Mon, 11 Apr 2022 17:36:21 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
- SoCs
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Message-Id: <LSO6AR.0DFDW2C6UEWT@crapouillou.net>
-In-Reply-To: <YlRSiUkdFkNoPMaH@localhost>
-References: <20220411154241.50834-1-aidanmacdonald.0x0@gmail.com>
-        <20220411154241.50834-3-aidanmacdonald.0x0@gmail.com>
-        <FKM6AR.T3U5W4W42W2R3@crapouillou.net> <YlRSiUkdFkNoPMaH@localhost>
+        with ESMTP id S1348692AbiDKQvm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 12:51:42 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D5AB3525E
+        for <linux-mips@vger.kernel.org>; Mon, 11 Apr 2022 09:49:27 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 7488592009C; Mon, 11 Apr 2022 18:49:26 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 6E34A92009B;
+        Mon, 11 Apr 2022 17:49:26 +0100 (BST)
+Date:   Mon, 11 Apr 2022 17:49:26 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Feiyang Chen <chenfeiyang@loongson.cn>, chenhuacai@kernel.org,
+        jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Fix inline assembly in uaccess.h
+In-Reply-To: <19656f7bfbc17f90ca4e2f2d576171d7151d6684.1648178000.git.chenfeiyang@loongson.cn>
+Message-ID: <alpine.DEB.2.21.2204061051320.47162@angie.orcam.me.uk>
+References: <19656f7bfbc17f90ca4e2f2d576171d7151d6684.1648178000.git.chenfeiyang@loongson.cn>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aidan,
+On Fri, 25 Mar 2022, Feiyang Chen wrote:
 
-Le lun., avril 11 2022 at 17:08:41 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> On Mon, Apr 11, 2022 at 04:48:15PM +0100, Paul Cercueil wrote:
->>  Hi Aidan,
->>=20
->>  Le lun., avril 11 2022 at 16:42:41 +0100, Aidan MacDonald
->>  <aidanmacdonald.0x0@gmail.com> a =E9crit :
->>  > The TCU clock gate on X1000 wasn't requested by the driver and=20
->> could
->>  > be gated automatically later on in boot, which prevents timers=20
->> from
->>  > running and breaks PWM.
->>  >
->>  > Add a workaround to support old device trees that don't specify=20
->> the
->>  > "tcu" clock gate. In this case the kernel will print a warning and
->>  > attempt to continue without the clock, which is wrong, but it=20
->> could
->>  > work if "clk_ignore_unused" is in the kernel arguments.
->>  >
->>  > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->>  > ---
->>  >  drivers/clk/ingenic/tcu.c | 38=20
->> ++++++++++++++++++++++++++------------
->>  >  1 file changed, 26 insertions(+), 12 deletions(-)
->>  >
->>  > diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
->>  > index 77acfbeb4830..ce8c768db997 100644
->>  > --- a/drivers/clk/ingenic/tcu.c
->>  > +++ b/drivers/clk/ingenic/tcu.c
->>  > @@ -31,6 +31,7 @@ struct ingenic_soc_info {
->>  >  	unsigned int num_channels;
->>  >  	bool has_ost;
->>  >  	bool has_tcu_clk;
->>  > +	bool allow_missing_tcu_clk;
->>  >  };
->>  >
->>  >  struct ingenic_tcu_clk_info {
->>  > @@ -320,7 +321,8 @@ static const struct ingenic_soc_info
->>  > jz4770_soc_info =3D {
->>  >  static const struct ingenic_soc_info x1000_soc_info =3D {
->>  >  	.num_channels =3D 8,
->>  >  	.has_ost =3D false, /* X1000 has OST, but it not belong TCU */
->>  > -	.has_tcu_clk =3D false,
->>  > +	.has_tcu_clk =3D true,
->>  > +	.allow_missing_tcu_clk =3D true,
->>  >  };
->>  >
->>  >  static const struct of_device_id __maybe_unused
->>  > ingenic_tcu_of_match[] __initconst =3D {
->>  > @@ -354,15 +356,27 @@ static int __init ingenic_tcu_probe(struct
->>  > device_node *np)
->>  >  	if (tcu->soc_info->has_tcu_clk) {
->>  >  		tcu->clk =3D of_clk_get_by_name(np, "tcu");
->>  >  		if (IS_ERR(tcu->clk)) {
->>  > -			ret =3D PTR_ERR(tcu->clk);
->>  > -			pr_crit("Cannot get TCU clock\n");
->>  > -			goto err_free_tcu;
->>  > -		}
->>  > -
->>  > -		ret =3D clk_prepare_enable(tcu->clk);
->>  > -		if (ret) {
->>  > -			pr_crit("Unable to enable TCU clock\n");
->>  > -			goto err_put_clk;
->>  > +			/*
->>  > +			 * Old device trees for some SoCs did not include the
->>  > +			 * TCU clock because this driver (incorrectly) didn't
->>  > +			 * use it. In this case we complain loudly and attempt
->>  > +			 * to continue without the clock, which might work if
->>  > +			 * booting with workarounds like "clk_ignore_unused".
->>  > +			 */
->>=20
->>  Why not unconditionally enable it instead? Then it would boot=20
->> without
->>  clk_ignore_unused.
->>=20
->>  Cheers,
->>  -Paul
->=20
-> I could, but why add essentially dead code to the kernel? Maintaining=20
-> the
-> old behavior has the "advantage" that it remains broken in the same=20
-> way as
-> before, so any workarounds anyone was using will continue to work the=20
-> same.
-> And if they were not using workarounds and got a broken kernel, this=20
-> patch
-> will not make anything *more* broken, in fact it will not cause any=20
-> change
-> in behavior in that case (aside from the warning message).
+> The inline assembly of __put_data_asm() and __put_data_asm_ll32()
+> treat memory addresses to be written as input operands, which may
+> cause the compiler to incorrectly optimize.
 
-OK.
+ This part of the change seems conceptually right and qualifies as a bug 
+fix.
 
--Paul
+> Treat these addresses as output operands. BTW, rewrite the inline
+> assembly to improve readability.
 
-> But if you think it's best to just enable the clock anyway, let me=20
-> know
-> and I'll send a new patch.
->=20
-> Regards,
-> Aidan
->=20
->>=20
->>  > +			if (tcu->soc_info->allow_missing_tcu_clk &&
->>  > +			    PTR_ERR(tcu->clk) =3D=3D -EINVAL) {
->>  > +				pr_warn("TCU clock missing from device tree, please update=20
->> your
->>  > device tree\n");
->>  > +				tcu->clk =3D NULL;
->>  > +			} else {
->>  > +				pr_crit("Cannot get TCU clock from device tree\n");
->>  > +				goto err_free_tcu;
->>  > +			}
->>  > +		} else {
->>  > +			ret =3D clk_prepare_enable(tcu->clk);
->>  > +			if (ret) {
->>  > +				pr_crit("Unable to enable TCU clock\n");
->>  > +				goto err_put_clk;
->>  > +			}
->>  >  		}
->>  >  	}
->>  >
->>  > @@ -432,10 +446,10 @@ static int __init ingenic_tcu_probe(struct
->>  > device_node *np)
->>  >  			clk_hw_unregister(tcu->clocks->hws[i]);
->>  >  	kfree(tcu->clocks);
->>  >  err_clk_disable:
->>  > -	if (tcu->soc_info->has_tcu_clk)
->>  > +	if (tcu->clk)
->>  >  		clk_disable_unprepare(tcu->clk);
->>  >  err_put_clk:
->>  > -	if (tcu->soc_info->has_tcu_clk)
->>  > +	if (tcu->clk)
->>  >  		clk_put(tcu->clk);
->>  >  err_free_tcu:
->>  >  	kfree(tcu);
->>  > --
->>  > 2.35.1
->>  >
->>=20
->>=20
+ However combining it with improvements or clean-ups makes it impossible 
+to accept.  We require that changes are self-contained and made one at a 
+time.  So if you'd like to move forward with your proposal, then you need 
+to split it into individual changes and post them as a patch series, with 
+the bug fix first (so that it can be possibly backported as it is) with 
+clean-ups following.
 
+ Please have a look through Documentation/process/submitting-patches.rst 
+for further details.
 
+> diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+> index c0cede273c7c..dc5bca09f39a 100644
+> --- a/arch/mips/include/asm/uaccess.h
+> +++ b/arch/mips/include/asm/uaccess.h
+> @@ -207,19 +207,19 @@ struct __large_struct { unsigned long buf[100]; };
+>  	long __gu_tmp;							\
+>  									\
+>  	__asm__ __volatile__(						\
+> -	"1:	"insn("%1", "%3")"				\n"	\
+> +	"1:	"insn("%1", "%2")"				\n"	\
+>  	"2:							\n"	\
+>  	"	.insn						\n"	\
+>  	"	.section .fixup,\"ax\"				\n"	\
+> -	"3:	li	%0, %4					\n"	\
+> +	"3:	li	%0, %3					\n"	\
+>  	"	move	%1, $0					\n"	\
+>  	"	j	2b					\n"	\
+>  	"	.previous					\n"	\
+>  	"	.section __ex_table,\"a\"			\n"	\
+>  	"	"__UA_ADDR "\t1b, 3b				\n"	\
+>  	"	.previous					\n"	\
+> -	: "=r" (__gu_err), "=r" (__gu_tmp)				\
+> -	: "0" (0), "o" (__m(addr)), "i" (-EFAULT));			\
+> +	: "+r" (__gu_err), "=r" (__gu_tmp)				\
+> +	: "m" (__m(addr)), "i" (-EFAULT));				\
+
+ For example you remove input operand #2 by making operand #0 input/output 
+one, which is just a syntactic change.  Many years ago GCC had issues with 
+input/output operands, which is why we have a separate input and output 
+operand here.  I am fairly sure we do not support versions of GCC anymore 
+that had those issues, so it is a clean-up perhaps worth making, but such 
+a change has to be made with a separate patch.
+
+ You also change the `o' constraint here into `m'.  This actually changes 
+the semantics, by permitting any memory reference to be used with `insn'.  
+This change is probably invalid, as it could turn `insn' into an assembly 
+macro.  Consequently the exception table won't work anymore as there will 
+be no entry for the instruction at `1:', which could be a LUI in 32-bit 
+code.
+
+ However the use of the `o' constraint here isn't completely safe here 
+either, because with the MIPS target it doesn't guarantee an assembly 
+instruction will be used that produces a single machine instruction.  The 
+reason for using `o' regardless is again GCC, which used not to provide 
+better means or they were buggy.
+
+ What we ought to use nowadays is `R' if non-EVA, and more problematically 
+GCC doesn't actually provide a suitable constraint for the EVA case (where 
+a 9-bit only offset is used in the regular MIPS instruction encoding; for 
+microMIPS code `ZC would do), so we'd have to resort to a hack there until 
+GCC has been improved.  Obviously our code has worked by chance and I find 
+it rather interesting that nobody has noticed the lack of a suitable 
+constraint for EVA operations in many years now.
+
+ Overall given that these accesses, and certainly the user ones, will be 
+made via pointers I think that for safety the change needs to go in the 
+opposite direction and code the memory reference with an explicit base and 
+offset like in `__get_data_asm_ll32'.
+
+  Maciej
