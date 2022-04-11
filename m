@@ -2,55 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11BD4FB47C
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 09:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6124FB488
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 09:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241434AbiDKHV0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Apr 2022 03:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S237017AbiDKHXE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 03:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234453AbiDKHVZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 03:21:25 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C751765F5;
-        Mon, 11 Apr 2022 00:19:11 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id t2so15539707qtw.9;
-        Mon, 11 Apr 2022 00:19:11 -0700 (PDT)
+        with ESMTP id S245298AbiDKHXA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 03:23:00 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6D733880;
+        Mon, 11 Apr 2022 00:20:47 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id bk12so9928797qkb.7;
+        Mon, 11 Apr 2022 00:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=uvgV1BY+rIPRMf+tZuNXq+JhBBxIhG+vco4o8o6aSBw=;
-        b=mWOtVNkFDzMdiNlXsUeyEC2ncDj4Ap7ulhZdoJRfh3ABVy6LbMdz2sEJLbKkWnS48l
-         oauHFy/UxsrKpQk4vd6soiizLr14hjnR+ApN1mmQST0tOFNi8+0Kx435q30Y4KBEkizT
-         LWfvSG0/Qq537aV9QFOSz5A+LjuimqF1Hu95cCB/B9y6Xad2KNXnsrJBci6FRQqhXhWt
-         2Qj1Y9PK+PVOidciSGQlIeuNDF09dvUi1yBWB3L106+13u3I3rAzNcX0qF9ewme1Pepe
-         9/MYacEHNNXoe03+vMPWENFdOz6lIEx03hITkzOeYfM/O+bNrZRwCqDV5MWvV3hDoW3G
-         J28A==
+        bh=q6vyTc8/oFhCp1GfrwTsSBr2He1wLigdJcEnNoAKosg=;
+        b=kwCqakyaFMN+byP2t+Fi2f2Y8uhWZmz9S0Ct/eCDBkoFz8Dnogv9u9+TeMdc0/32Pg
+         3D6ewWycN2/q5Bzsntz6u0B464UNJ/O7UcTzdIIO1QvYSlQXWIeghFKDaB5j0fnEylfJ
+         hpWhEX7nMtY9rmJ7oTdcerfZByrIetauv2buhWp/sXb4oK/v172PdHAqWedr1p9vvvmJ
+         INAswljoglFGcyD08cUgw1s+6dvMqNamizvEgk1qff0LHYEHY9WkLc38TE0oyX4p4xWS
+         SUxq0e+9z+VU/Q3yQN3/j6bJwwp6V0xIbsuMaw9/wv4iV8yr8ozPz78Eq8bJ933WcEeM
+         iksQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uvgV1BY+rIPRMf+tZuNXq+JhBBxIhG+vco4o8o6aSBw=;
-        b=YugNP7Xx7769pr/4pJZvJ3BMh3mv97vZdYIDLnVX5+50Bo2a9FcmxfRrqhMCqsuWlv
-         fiOmml+FhoBIp2uC9QERIkq+sxYA5DR54V2OAz2pebjaBVPmlH31EKSwxu8aBXnwcbli
-         4aCSPvyOK81lxfr70FGusC/ytQIE/cOZpXncYBFMp0ujsSy4d0kYlJ1/9xcj866kyM7j
-         5kmDhK/yb+gMu0tPQjPUd6EBJ3oyJMmNB9Io9DPE88IEkShRwjoRu6Qnwya7jqSJEDdD
-         tFr/2akCVikgmtZknAHH7izNgs6HTVUaIz+WIk/bVLdTo7z4t/+ARk0ZC8gnoboBipSu
-         WA7A==
-X-Gm-Message-State: AOAM533wCzJ1d2Xme9nARkzaQXnv04h+9Rpn0DHbY/5MxlPDpcKNga4U
-        LYWh4ybpJECTzeIXSXKw8j6+3iHFdyy1y9VDBfqNTVAh
-X-Google-Smtp-Source: ABdhPJySdwKqOUwuJc4UxhKp3iYsvAFTJ6rHdh1IeEv+ZV+V9wOJqdT5lSwvct1LEYKzySv1xmuLv5MNkexC7ELCjgY=
-X-Received: by 2002:ac8:7c46:0:b0:2e1:d6c2:2b15 with SMTP id
- o6-20020ac87c46000000b002e1d6c22b15mr24649120qtv.405.1649661551017; Mon, 11
- Apr 2022 00:19:11 -0700 (PDT)
+        bh=q6vyTc8/oFhCp1GfrwTsSBr2He1wLigdJcEnNoAKosg=;
+        b=DSe26mI+Tq1k6qg8IvkpxOWed0OkcM1vgUQmH7/UKSAyz9JB/QOa8CU18IC4UhSQS8
+         Duf7vuGqLwNSirMLUmwRGdJdvaF6OpzTzPfrwJ5Kh5lbge3l3cWO457jOvgpP2UyXlQv
+         9DI+5U9P2Q95PeiCqkBSTB93TW8iqXsxt3kyvOjsGuASpSz5sQOktkIgrJ9yCoBwSimp
+         s3isbMRMheo9prbVI6BXB+0B6BIIF0P+lPxCsbhTbfyoCqwlxnZ9N37HK4UA0NM7gRkm
+         bMqDMHIcLAlJWjGn6Eikg6DXyW5UnbyUhZR68UWsKNFc2LYfcezLQQ3rVBbc1XGx2HBv
+         kINA==
+X-Gm-Message-State: AOAM5319t2A6PW8PtiSAgTH852I2GDaGPeGSjZsJUf/pY8Tkd0qAEeSf
+        L6NPTSYZnlUTKhCSQOGmSZCNFjfGU/ObtlCMOgY=
+X-Google-Smtp-Source: ABdhPJy7b/4YKAfADpzu2413Pe5i9Ft/m1HUzLmUGqxmdCWzkWDl2RhjuZg0gzWj7i3qjJUq9TRPuqm5259eUn7bhtI=
+X-Received: by 2002:a05:620a:bd5:b0:67d:15ed:2fcd with SMTP id
+ s21-20020a05620a0bd500b0067d15ed2fcdmr21094484qki.81.1649661647007; Mon, 11
+ Apr 2022 00:20:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220410203138.22513-1-arinc.unal@arinc9.com>
-In-Reply-To: <20220410203138.22513-1-arinc.unal@arinc9.com>
+References: <20220410203138.22513-1-arinc.unal@arinc9.com> <20220410203138.22513-2-arinc.unal@arinc9.com>
+In-Reply-To: <20220410203138.22513-2-arinc.unal@arinc9.com>
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 11 Apr 2022 09:19:00 +0200
-Message-ID: <CAMhs-H8kho3wySRzkdnauJwcscUVLjcnQiKbOOw52amxmWtH0A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mips: dts: mt7621: add mdio label to mdio-bus
+Date:   Mon, 11 Apr 2022 09:20:36 +0200
+Message-ID: <CAMhs-H8Jheq4wttOXbdHsspkQtZvOauKiK5kxezz7sDDC_Zdhw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mips: dts: mt7621: mux phy4 to gmac1 for GB-PC1
 To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -77,15 +77,13 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On Sun, Apr 10, 2022 at 10:32 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
 c9.com> wrote:
 >
-> Add mdio label to the mdio-bus node to easily refer to it.
->
-> Use the newly created label on the GB-PC2 devicetree.
+> Mux the MT7530 switch's phy4 to the SoC's gmac1 on the GB-PC1 devicetree.
+> This achieves 2 Gbps total bandwidth to the CPU using the second RGMII.
 >
 > Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 > ---
->  .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts   | 18 ++++++++----------
->  arch/mips/boot/dts/ralink/mt7621.dtsi          |  2 +-
->  2 files changed, 9 insertions(+), 11 deletions(-)
+>  .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts   | 18 ++++++++++--------
+>  1 file changed, 10 insertions(+), 8 deletions(-)
 
 Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
