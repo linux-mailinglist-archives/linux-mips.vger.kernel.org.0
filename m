@@ -2,70 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F404FC15F
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 17:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CE54FC169
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 17:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiDKPst (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Apr 2022 11:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
+        id S1348242AbiDKPul (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 11:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348211AbiDKPsr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 11:48:47 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8166B3B02B;
-        Mon, 11 Apr 2022 08:46:29 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id i20so10547419wrb.13;
-        Mon, 11 Apr 2022 08:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=PZNKQo2SMpTLuF/HCFLVZDh+KD8HhgUzI1E+iyuY28I=;
-        b=bXS+dS02vEsXF+Q1cnBUZsCHWHeL9Sh7sGdy6Dm3r0Te6wZQax7/tK9oCv6IiNHpsG
-         DFAKcPbuZFq9jVyWOU5FZLKUZrl+3cm3RdzJH7MtyUe1HyAvmaVGPdTDBdDYTjuStcyb
-         IUsUxIO93l/7j2Pc+y7I1+FSL55Cbq1L8zxgChDYcPXfBUWs4CHAk1Nj4wBfSB8Univ5
-         stFlVCyl2HMCXEYPg65a+UD6gnWZsf7ImTij7Dixm8XxWwwvC56rcll+J0MBYkQSNu+K
-         N8gzZzGKJgdHIapXevBGQfKlc66H/hFej2vpPzl81hHyCOplC7BVs/4JbxbGM6k+sWOS
-         dKHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PZNKQo2SMpTLuF/HCFLVZDh+KD8HhgUzI1E+iyuY28I=;
-        b=OeCOggZbpz8qeu4JH+BnhItMXVn9NTze6xexIBFnNl+GOcU3Nh9EKVnfa33i0Q2vfR
-         l9Rp5v6cmEPZnbzXINHB+dwzmY5Y57O4EYVrVuQLXXa2txALQlg/XrCg0JIwTPH4qUht
-         adp5koy/CiOCMS4bTa+/lmZgLMQUxLFlmjUPzN6cnGVpjiWA16TPDTMLcIRRcy8ZH5ZJ
-         T17hLmOrDc5+AnMJPLyDtS13TwRs8chavwRMTngMjZMGj/qhEUzsPUxPQ8qbUZX8TCS+
-         szJaqtz0IqX0hXiu/ziDgiDCrpEswt4JNMdXyT7GOKCV4z6l6ArhO8CvLCu2zadBTJ+u
-         G/DA==
-X-Gm-Message-State: AOAM533XLgusYE1AQiuFBPSMoESkwEgAMkzCA469i4RB804wFz+RufEl
-        LUR7dycpW8krefiHgabBg7w=
-X-Google-Smtp-Source: ABdhPJy3L75SohiHlUZyctIqdH1tptcfYZRli0ILyyMM2zn0SdVVrK7HaM3/dAMYkL46guFeOj2hsQ==
-X-Received: by 2002:adf:ef10:0:b0:205:ce51:743e with SMTP id e16-20020adfef10000000b00205ce51743emr25707328wro.522.1649691988094;
-        Mon, 11 Apr 2022 08:46:28 -0700 (PDT)
-Received: from localhost (92.40.202.92.threembb.co.uk. [92.40.202.92])
-        by smtp.gmail.com with ESMTPSA id i31-20020adf90a2000000b00205ad559c87sm26483885wri.21.2022.04.11.08.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:46:27 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 16:47:15 +0100
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Zhou Yanjie <zhouyu@wanyeetech.com>
-Cc:     devicetree@vger.kernel.org, krzk+dt@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        paul@crapouillou.net, robh+dt@kernel.org
-Subject: Re: [PATCH] mips: dts: ingenic: x1000: Add PWM device tree node
-Message-ID: <YlRNgyc6eMTgFjdH@localhost>
-References: <20220411100139.15672-1-aidanmacdonald.0x0@gmail.com>
- <8a3f88d8-3e94-1388-b1c6-b0f71d59f34c@wanyeetech.com>
+        with ESMTP id S1348253AbiDKPuk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 11:50:40 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134591095;
+        Mon, 11 Apr 2022 08:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649692104; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GzjHsbs/7qSGCFYQ88nDQNONwndE9IJBOq5MtVE7Jlo=;
+        b=irfY+Heo0qgVl8mNgMTOU2axOiNWNKuRMRb/+sWiWaLMzJwfwhs+65I5d6M1ZJmuOz6tql
+        39cMYxC7n28Du/Zoaza/rFV4gW3YnalhCRIwhjNaEwx2bdvJeXOtGI+Dmd7XDxGC9LwdTx
+        DjW3EOz13xmp+KuFgT8Mws9T4gAJI/o=
+Date:   Mon, 11 Apr 2022 16:48:15 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
+ SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Message-Id: <FKM6AR.T3U5W4W42W2R3@crapouillou.net>
+In-Reply-To: <20220411154241.50834-3-aidanmacdonald.0x0@gmail.com>
+References: <20220411154241.50834-1-aidanmacdonald.0x0@gmail.com>
+        <20220411154241.50834-3-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8a3f88d8-3e94-1388-b1c6-b0f71d59f34c@wanyeetech.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,65 +49,110 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 08:41:26PM +0800, Zhou Yanjie wrote:
-> Hi Aidan,
-> 
-> On 2022/4/11 下午6:01, Aidan MacDonald wrote:
-> > Copied from the jz4740 devicetree and trimmed to 5 timers, which
-> > is what the hardware supports.
-> >
-> > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> > ---
-> >   arch/mips/boot/dts/ingenic/x1000.dtsi | 13 +++++++++++++
-> >   1 file changed, 13 insertions(+)
-> >
-> > diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> > index 8bd27edef216..0dcf37527c8e 100644
-> > --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-> > +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> > @@ -127,6 +127,19 @@ wdt: watchdog@0 {
-> >   			clocks = <&tcu TCU_CLK_WDT>;
-> >   			clock-names = "wdt";
-> >   		};
-> > +
-> > +		pwm: pwm@40 {
-> > +			compatible = "ingenic,x1000-pwm";
-> > +			reg = <0x40 0x80>;
-> 
-> 
-> It seems more reasonable to use "reg = <0x40 0x80>" since the
-> X1000 has only 5 PWM channels.
+Hi Aidan,
 
-I think you mean "reg = <0x40 0x60>" but I'll do that, thanks!
+Le lun., avril 11 2022 at 16:42:41 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The TCU clock gate on X1000 wasn't requested by the driver and could
+> be gated automatically later on in boot, which prevents timers from
+> running and breaks PWM.
+>=20
+> Add a workaround to support old device trees that don't specify the
+> "tcu" clock gate. In this case the kernel will print a warning and
+> attempt to continue without the clock, which is wrong, but it could
+> work if "clk_ignore_unused" is in the kernel arguments.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  drivers/clk/ingenic/tcu.c | 38 ++++++++++++++++++++++++++------------
+>  1 file changed, 26 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
+> index 77acfbeb4830..ce8c768db997 100644
+> --- a/drivers/clk/ingenic/tcu.c
+> +++ b/drivers/clk/ingenic/tcu.c
+> @@ -31,6 +31,7 @@ struct ingenic_soc_info {
+>  	unsigned int num_channels;
+>  	bool has_ost;
+>  	bool has_tcu_clk;
+> +	bool allow_missing_tcu_clk;
+>  };
+>=20
+>  struct ingenic_tcu_clk_info {
+> @@ -320,7 +321,8 @@ static const struct ingenic_soc_info=20
+> jz4770_soc_info =3D {
+>  static const struct ingenic_soc_info x1000_soc_info =3D {
+>  	.num_channels =3D 8,
+>  	.has_ost =3D false, /* X1000 has OST, but it not belong TCU */
+> -	.has_tcu_clk =3D false,
+> +	.has_tcu_clk =3D true,
+> +	.allow_missing_tcu_clk =3D true,
+>  };
+>=20
+>  static const struct of_device_id __maybe_unused=20
+> ingenic_tcu_of_match[] __initconst =3D {
+> @@ -354,15 +356,27 @@ static int __init ingenic_tcu_probe(struct=20
+> device_node *np)
+>  	if (tcu->soc_info->has_tcu_clk) {
+>  		tcu->clk =3D of_clk_get_by_name(np, "tcu");
+>  		if (IS_ERR(tcu->clk)) {
+> -			ret =3D PTR_ERR(tcu->clk);
+> -			pr_crit("Cannot get TCU clock\n");
+> -			goto err_free_tcu;
+> -		}
+> -
+> -		ret =3D clk_prepare_enable(tcu->clk);
+> -		if (ret) {
+> -			pr_crit("Unable to enable TCU clock\n");
+> -			goto err_put_clk;
+> +			/*
+> +			 * Old device trees for some SoCs did not include the
+> +			 * TCU clock because this driver (incorrectly) didn't
+> +			 * use it. In this case we complain loudly and attempt
+> +			 * to continue without the clock, which might work if
+> +			 * booting with workarounds like "clk_ignore_unused".
+> +			 */
 
-> > +
-> > +			#pwm-cells = <3>;
-> > +
-> > +			clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
-> > +				 <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_TIMER3>,
-> > +				 <&tcu TCU_CLK_TIMER4>;
-> > +			clock-names = "timer0", "timer1", "timer2",
-> > +				      "timer3", "timer4";
-> 
-> 
-> One line is now allowed to hold at most 100 characters,
-> so it is possible to use only one line like:
-> 
->          clock-names = "timer0", "timer1", "timer2", "timer3", "timer4";
-> 
-> to reduce the number of lines in the dtsi file.
+Why not unconditionally enable it instead? Then it would boot without=20
+clk_ignore_unused.
 
-Sounds good to me.
+Cheers,
+-Paul
 
-> 
-> 
-> Thanks and best regards!
-> 
-> 
-> > +		};
-> >   	};
-> >   
-> >   	rtc: rtc@10003000 {
+> +			if (tcu->soc_info->allow_missing_tcu_clk &&
+> +			    PTR_ERR(tcu->clk) =3D=3D -EINVAL) {
+> +				pr_warn("TCU clock missing from device tree, please update your=20
+> device tree\n");
+> +				tcu->clk =3D NULL;
+> +			} else {
+> +				pr_crit("Cannot get TCU clock from device tree\n");
+> +				goto err_free_tcu;
+> +			}
+> +		} else {
+> +			ret =3D clk_prepare_enable(tcu->clk);
+> +			if (ret) {
+> +				pr_crit("Unable to enable TCU clock\n");
+> +				goto err_put_clk;
+> +			}
+>  		}
+>  	}
+>=20
+> @@ -432,10 +446,10 @@ static int __init ingenic_tcu_probe(struct=20
+> device_node *np)
+>  			clk_hw_unregister(tcu->clocks->hws[i]);
+>  	kfree(tcu->clocks);
+>  err_clk_disable:
+> -	if (tcu->soc_info->has_tcu_clk)
+> +	if (tcu->clk)
+>  		clk_disable_unprepare(tcu->clk);
+>  err_put_clk:
+> -	if (tcu->soc_info->has_tcu_clk)
+> +	if (tcu->clk)
+>  		clk_put(tcu->clk);
+>  err_free_tcu:
+>  	kfree(tcu);
+> --
+> 2.35.1
+>=20
 
-Regards,
-Aidan
+
