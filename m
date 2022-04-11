@@ -2,89 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183714FB0CF
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 01:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11BD4FB47C
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 09:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244107AbiDJXcC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Apr 2022 19:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S241434AbiDKHV0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 03:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244097AbiDJXb6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Apr 2022 19:31:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C777388A;
-        Sun, 10 Apr 2022 16:29:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24292B80ED0;
-        Sun, 10 Apr 2022 23:29:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EE0C385AF;
-        Sun, 10 Apr 2022 23:29:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="T+/wTaHc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649633377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xT3So0usAoJxQ304XiPl75pb1sVc2oURXduYIBIz2jE=;
-        b=T+/wTaHckzJ1yi9n18/aTKAeLDhUWcDKUUUzZZOIGQxb4DDVniAS+idsrm7lbhQI/7eA6P
-        J5QGkKn2LtWrfmW3EoarbonYr3SYC8tOSo/9LeG3rCsjZKd8Bc6qUh6p3IRxIr2nvx6uAE
-        mgYvVTuC2Hwwa1x7HaPwVOOujBO2LwI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 738dd6de (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 10 Apr 2022 23:29:37 +0000 (UTC)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2ebf3746f87so53227687b3.6;
-        Sun, 10 Apr 2022 16:29:36 -0700 (PDT)
-X-Gm-Message-State: AOAM5325qp1FTjGUo9P2tsv3GDdWU9h5X1GXf2+l1QkWgIBAD4AZe84r
-        ghHXSrQG2U7VSQ9vWFFfH9QjBmFpLfZpS0yw9is=
-X-Google-Smtp-Source: ABdhPJyBO6AKhupquz7e2wxSHr1eLUo0K1GhDFMIDJNkDGyTIn23DuFzdaauI+vZ7nL7liNEn+igem8NUaNiYqzOtLk=
-X-Received: by 2002:a81:1e81:0:b0:2eb:cdd3:20ee with SMTP id
- e123-20020a811e81000000b002ebcdd320eemr14046908ywe.396.1649633374899; Sun, 10
- Apr 2022 16:29:34 -0700 (PDT)
+        with ESMTP id S234453AbiDKHVZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 03:21:25 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C751765F5;
+        Mon, 11 Apr 2022 00:19:11 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id t2so15539707qtw.9;
+        Mon, 11 Apr 2022 00:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uvgV1BY+rIPRMf+tZuNXq+JhBBxIhG+vco4o8o6aSBw=;
+        b=mWOtVNkFDzMdiNlXsUeyEC2ncDj4Ap7ulhZdoJRfh3ABVy6LbMdz2sEJLbKkWnS48l
+         oauHFy/UxsrKpQk4vd6soiizLr14hjnR+ApN1mmQST0tOFNi8+0Kx435q30Y4KBEkizT
+         LWfvSG0/Qq537aV9QFOSz5A+LjuimqF1Hu95cCB/B9y6Xad2KNXnsrJBci6FRQqhXhWt
+         2Qj1Y9PK+PVOidciSGQlIeuNDF09dvUi1yBWB3L106+13u3I3rAzNcX0qF9ewme1Pepe
+         9/MYacEHNNXoe03+vMPWENFdOz6lIEx03hITkzOeYfM/O+bNrZRwCqDV5MWvV3hDoW3G
+         J28A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uvgV1BY+rIPRMf+tZuNXq+JhBBxIhG+vco4o8o6aSBw=;
+        b=YugNP7Xx7769pr/4pJZvJ3BMh3mv97vZdYIDLnVX5+50Bo2a9FcmxfRrqhMCqsuWlv
+         fiOmml+FhoBIp2uC9QERIkq+sxYA5DR54V2OAz2pebjaBVPmlH31EKSwxu8aBXnwcbli
+         4aCSPvyOK81lxfr70FGusC/ytQIE/cOZpXncYBFMp0ujsSy4d0kYlJ1/9xcj866kyM7j
+         5kmDhK/yb+gMu0tPQjPUd6EBJ3oyJMmNB9Io9DPE88IEkShRwjoRu6Qnwya7jqSJEDdD
+         tFr/2akCVikgmtZknAHH7izNgs6HTVUaIz+WIk/bVLdTo7z4t/+ARk0ZC8gnoboBipSu
+         WA7A==
+X-Gm-Message-State: AOAM533wCzJ1d2Xme9nARkzaQXnv04h+9Rpn0DHbY/5MxlPDpcKNga4U
+        LYWh4ybpJECTzeIXSXKw8j6+3iHFdyy1y9VDBfqNTVAh
+X-Google-Smtp-Source: ABdhPJySdwKqOUwuJc4UxhKp3iYsvAFTJ6rHdh1IeEv+ZV+V9wOJqdT5lSwvct1LEYKzySv1xmuLv5MNkexC7ELCjgY=
+X-Received: by 2002:ac8:7c46:0:b0:2e1:d6c2:2b15 with SMTP id
+ o6-20020ac87c46000000b002e1d6c22b15mr24649120qtv.405.1649661551017; Mon, 11
+ Apr 2022 00:19:11 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7110:a28:b0:173:f33c:dee9 with HTTP; Sun, 10 Apr 2022
- 16:29:34 -0700 (PDT)
-In-Reply-To: <YlNiOunUd5xfQiSL@sol.localdomain>
-References: <20220408182145.142506-1-Jason@zx2c4.com> <YlNiOunUd5xfQiSL@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 11 Apr 2022 01:29:34 +0200
-X-Gmail-Original-Message-ID: <CAHmME9quorveHN-z=n4r_gfj8ShEfprXcTvsc7bYj9_caxx7sg@mail.gmail.com>
-Message-ID: <CAHmME9quorveHN-z=n4r_gfj8ShEfprXcTvsc7bYj9_caxx7sg@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 00/10] archs/random: fallback to using
- sched_clock() if no cycle counter
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        arnd@arndb.de, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+References: <20220410203138.22513-1-arinc.unal@arinc9.com>
+In-Reply-To: <20220410203138.22513-1-arinc.unal@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 11 Apr 2022 09:19:00 +0200
+Message-ID: <CAMhs-H8kho3wySRzkdnauJwcscUVLjcnQiKbOOw52amxmWtH0A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mips: dts: mt7621: add mdio label to mdio-bus
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,54 +74,20 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Eric,
+On Sun, Apr 10, 2022 at 10:32 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
+c9.com> wrote:
+>
+> Add mdio label to the mdio-bus node to easily refer to it.
+>
+> Use the newly created label on the GB-PC2 devicetree.
+>
+> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> ---
+>  .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts   | 18 ++++++++----------
+>  arch/mips/boot/dts/ralink/mt7621.dtsi          |  2 +-
+>  2 files changed, 9 insertions(+), 11 deletions(-)
 
-On 4/11/22, Eric Biggers <ebiggers@kernel.org> wrote:
-> On Fri, Apr 08, 2022 at 08:21:35PM +0200, Jason A. Donenfeld wrote:
->> By my first guess, we have ktime_get_boottime_ns(), jiffies, and
->> sched_clock(). It seems like sched_clock() has already done a lot of
->> work in being always available with some incrementing value, falling
->> back to jiffies as necessary. So this series goes with that as a
->> fallback, for when the architecture doesn't define random_get_entropy in
->> its own way and when there's no working cycle counter.
->
-> Won't this interact badly with how try_to_generate_entropy() (a.k.a. the
-> "Linus
-> Jitter Dance") detects the presence of an appropriate timer currently?
->
->         stack.cycles = random_get_entropy();
->
->         /* Slow counter - or none. Don't even bother */
->         if (stack.cycles == random_get_entropy())
->                 return;
->
-> So if random_get_entropy() always returns 0, then try_to_generate_entropy()
-> won't run.  However, if random_get_entropy() is even just a low-precision
-> timer,
-> then try_to_generate_entropy() will have a chance of running, since the
-> timer
-> might change between the two calls to random_get_entropy().  And if
-> try_to_generate_entropy() does run, then it credits 1 bit of entropy for
-> every
-> iteration, regardless of the timer's precision.
->
-> This is an existing problem, but this patchset will make it worse, as it
-> changes
-> a lot of cases from "no timer" to "low precision timer".
->
-> Perhaps try_to_generate_entropy() should check the timer at least 3 times
-> and
-> verify that it changed each time?
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-What you've identified is actually already the case for platforms
-where the cycle counter is already just slow (and there are a few such
-platforms; my odroid C2 even exhibits this). As you identified, the
-cycle counter might already be too slow, yet we get [un]lucky and
-reach this code right on the cusp or a change.
-
-So the problem isn't new here, per say, for this patchset. But indeed
-perhaps we should consider adjusting the heuristics for that a bit in
-a separate patch. Your check three times idea seems like a good
-starting point, if you want to send a patch and we can poke at it.
-
-Jason
+Thanks,
+    Sergio Paracuellos
