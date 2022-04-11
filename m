@@ -2,67 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35364FB935
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 12:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B504FBACC
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 13:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345204AbiDKKQs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Apr 2022 06:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S244650AbiDKLXo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 07:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345196AbiDKKQl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 06:16:41 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B78715FD2;
-        Mon, 11 Apr 2022 03:14:24 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id u3so22273392wrg.3;
-        Mon, 11 Apr 2022 03:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JuNqfwwfmDk9L2CQQ3VU8TN8eMid01qpUgPNixDf+K8=;
-        b=Iy3fSeXx0MN7XJCELrXJsvxmHJ0LhFizYONSxzzJbzQu0vWzYDIDJ3KYg8Wha+T7jD
-         GHrs/9jDJfBqStMy27xn/39+pXYGiuuhDuUuDn1rOB7mr1qEQ3a+oohXspfyW1uVE1NR
-         yRlMrqTKTrdkkFa0d8UcOa97rbRf4BGCTyKSu6LdCokWL/MtqOUNnZwfWf/AkUPeJfoJ
-         mDGtUoar0/ibW4jYDPtTUm0UCobHFB3b/0raoAD/zrCFSuFOKfCCd7B0iP768q8+eZ/H
-         HGX3fhBu1sXBJTuxnfT4LhMQvpCA6mTp65MAgxoE6rymeVqcrYhL30DUlg51NTp6538t
-         trDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JuNqfwwfmDk9L2CQQ3VU8TN8eMid01qpUgPNixDf+K8=;
-        b=zVkU68GIyg0HZ9RpjweQTAk0aWyrwjdtqIIufqfxZTKpOI5R0gN4bvOISxJcyI9wDa
-         buH9GXdKhtt5RkTB1jKrT+Ijg4oN1Qucu9KqUEv5orDVXuwuBGqTP3OJ3L6d0xT7+2T8
-         n8ufQch2zX+fxN3qcZ8+p8TVZy6+DVJf1QiNe+vm6fN1USX2y5Zo+MQD5fF28as3Isgl
-         6qUIwwh2u7LtdBIg3SoA8DaCLt/xXHV15cFNpw+P1PGByajfUdb/48Jr2sve2csuLgw4
-         xH0O8/0vmmlwe7xjG5p9GYKwDNMYNx6F41pgoDYvEwqO2X4+jOD0znrMpqdwh9rpJ15e
-         a7oA==
-X-Gm-Message-State: AOAM530yoOlduwzpWbKOZEoxroPhtCnSVuLx+P2zDnDuTBLgnr9eDTUl
-        uz4m57VF4iLXUAk/rTOIT+Q=
-X-Google-Smtp-Source: ABdhPJxcxPlV2yHZJgEQYvsTeDWo0pgjofleztmJhQXrzkwsT4bJIbpttARF0YD14oq+ZdymHnsp5w==
-X-Received: by 2002:a5d:48cc:0:b0:206:d17:10aa with SMTP id p12-20020a5d48cc000000b002060d1710aamr24464232wrs.460.1649672063197;
-        Mon, 11 Apr 2022 03:14:23 -0700 (PDT)
-Received: from localhost (92.40.202.18.threembb.co.uk. [92.40.202.18])
-        by smtp.gmail.com with ESMTPSA id g16-20020a05600c4ed000b0038ceb0b21b4sm20526369wmq.24.2022.04.11.03.14.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 03:14:22 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, paulburton@kernel.org,
-        tsbogend@alpha.franken.de, mturquette@baylibre.com,
-        sboyd@kernel.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [RESEND PATCH 3/3] mips: ingenic: Do not manually reference the CPU clock
-Date:   Mon, 11 Apr 2022 11:14:41 +0100
-Message-Id: <20220411101441.17020-4-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220411101441.17020-1-aidanmacdonald.0x0@gmail.com>
-References: <20220411101441.17020-1-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S243208AbiDKLXn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 07:23:43 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC1042A02;
+        Mon, 11 Apr 2022 04:21:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1649676061; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=KvjB4g1IY7b+mOzCYMJW/0qOEEaSLHuB8PIAAUq+B535WJjBOM4sOytUNsn29TxcSSRzuN7x66P1b0SOsP3J6zO8ExXJbsU0sj6GWZw4ZoQcfRGAJkiBV8MFNj5VRU+Y56ztdKHOjai6ZwkZRrkEVbUYkhbxj6gS42Yu/Lxx8Nw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1649676061; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=l8Cw8EpJJ1aRQC34dDhV085dThpqu+42RlTKhEGAu3M=; 
+        b=nZW1pgR/jcjvxgdSndzs/NZ0YSwAFaiEJ+yjr4QDjE56faYNEqZ83RGM884Lat+ATmDuodBemnoGLmXJM4BUnaqW7wEGdNiQTsLvJDZhffOYGyxwY+acdXV2m48hgzW59QwIIJNR7Z3yEuakrr/oJ7X60AgcQ/jrCS9TnLAfif8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649676061;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+        bh=l8Cw8EpJJ1aRQC34dDhV085dThpqu+42RlTKhEGAu3M=;
+        b=JdK5Ifnqu04wR5Ou6N6ptEw0Ow4YTZqEucw9xrjLwe+WhAdgJH6BmTCTyJ6nPZ5T
+        TEfnmgvcFc+U9crdLHxegC2BAMEcpYOulMd+cdhddfOJBNFOh74wYiMTNGN2oDBkOVl
+        3Nfp/P5wdB8Va4q9dIu13xY1Mnu8lkyFnsOyNj6U=
+Received: from arinc9-PC.localdomain (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1649676058761238.78642786378032; Mon, 11 Apr 2022 04:20:58 -0700 (PDT)
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH v2 1/3] mips: dts: ralink: mt7621: add mdio label to mdio-bus
+Date:   Mon, 11 Apr 2022 14:20:47 +0300
+Message-Id: <20220411112049.18001-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,58 +62,63 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-It isn't necessary to manually walk the device tree and enable
-the CPU clock anymore. The CPU and other necessary clocks are
-now flagged as critical in the clock driver, which accomplishes
-the same thing in a more declarative fashion.
+Add mdio label to the mdio-bus node to easily refer to it.
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Use the newly created label on the GB-PC2 devicetree.
+
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- arch/mips/generic/board-ingenic.c | 26 --------------------------
- 1 file changed, 26 deletions(-)
+v2: add "ralink:" to the commit summary
 
-diff --git a/arch/mips/generic/board-ingenic.c b/arch/mips/generic/board-ingenic.c
-index 3f44f14bdb33..c422bbc890ed 100644
---- a/arch/mips/generic/board-ingenic.c
-+++ b/arch/mips/generic/board-ingenic.c
-@@ -131,36 +131,10 @@ static const struct platform_suspend_ops ingenic_pm_ops __maybe_unused = {
+---
+ .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts   | 18 ++++++++----------
+ arch/mips/boot/dts/ralink/mt7621.dtsi          |  2 +-
+ 2 files changed, 9 insertions(+), 11 deletions(-)
+
+diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
+index a7fce8de6147..b427ae9e081f 100644
+--- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
++++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
+@@ -93,17 +93,15 @@ gpio-pinmux {
+ 	};
+ };
  
- static int __init ingenic_pm_init(void)
- {
--	struct device_node *cpu_node;
--	struct clk *cpu0_clk;
--	int ret;
--
- 	if (boot_cpu_type() == CPU_XBURST) {
- 		if (IS_ENABLED(CONFIG_PM_SLEEP))
- 			suspend_set_ops(&ingenic_pm_ops);
- 		_machine_halt = ingenic_halt;
--
--		/*
--		 * Unconditionally enable the clock for the first CPU.
--		 * This makes sure that the PLL that feeds the CPU won't be
--		 * stopped while the kernel is running.
--		 */
--		cpu_node = of_get_cpu_node(0, NULL);
--		if (!cpu_node) {
--			pr_err("Unable to get CPU node\n");
--		} else {
--			cpu0_clk = of_clk_get(cpu_node, 0);
--			if (IS_ERR(cpu0_clk)) {
--				pr_err("Unable to get CPU0 clock\n");
--				return PTR_ERR(cpu0_clk);
--			}
--
--			ret = clk_prepare_enable(cpu0_clk);
--			if (ret) {
--				pr_err("Unable to enable CPU0 clock\n");
--				return ret;
--			}
--		}
- 	}
+-&ethernet {
+-	gmac1: mac@1 {
+-		status = "okay";
+-		phy-handle = <&ethphy7>;
+-	};
++&gmac1 {
++	status = "okay";
++	phy-handle = <&ethphy7>;
++};
  
- 	return 0;
+-	mdio-bus {
+-		ethphy7: ethernet-phy@7 {
+-			reg = <7>;
+-			phy-mode = "rgmii-rxid";
+-		};
++&mdio {
++	ethphy7: ethernet-phy@7 {
++		reg = <7>;
++		phy-mode = "rgmii-rxid";
+ 	};
+ };
+ 
+diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+index 3222684915ac..40d0f28446ca 100644
+--- a/arch/mips/boot/dts/ralink/mt7621.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+@@ -342,7 +342,7 @@ gmac1: mac@1 {
+ 			phy-mode = "rgmii-rxid";
+ 		};
+ 
+-		mdio-bus {
++		mdio: mdio-bus {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 
 -- 
-2.35.1
+2.25.1
 
