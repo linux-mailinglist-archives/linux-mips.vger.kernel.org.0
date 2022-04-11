@@ -2,87 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545094FC45E
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 20:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451F94FC4C0
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 21:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244981AbiDKSwg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Apr 2022 14:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S240257AbiDKTK1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 15:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231283AbiDKSwf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 14:52:35 -0400
-Received: from out28-220.mail.aliyun.com (out28-220.mail.aliyun.com [115.124.28.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85D0A1B7;
-        Mon, 11 Apr 2022 11:50:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08682281|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.033697-0.000638791-0.965664;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.NOg3L5G_1649703014;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NOg3L5G_1649703014)
-          by smtp.aliyun-inc.com(33.40.23.6);
-          Tue, 12 Apr 2022 02:50:15 +0800
-Subject: Re: [PATCH v2] mips: dts: ingenic: x1000: Add PWM device tree node
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, robh+dt@kernel.org,
-        krzk+dt@kernel.org
-Cc:     paul@crapouillou.net, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220411155315.51769-1-aidanmacdonald.0x0@gmail.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <3ff9ad6b-1437-3789-c180-f7f1c0ab4eab@wanyeetech.com>
-Date:   Tue, 12 Apr 2022 02:50:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S1349557AbiDKTKU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 15:10:20 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B0A3668E;
+        Mon, 11 Apr 2022 12:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649704071; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vqJQvLBob9o2FSeSd5l4KE87w/nznL23PCavGWCmLcY=;
+        b=Tnw7mi0ee7C6wrqRmY65oHIMegDslwW6B7ivLNzIusGwCfYUDUWGcorfx2sz0Yf6QwusBE
+        ekLNxKMlDUoHWDf2PoPj9v77GYhrVkO5pDeRWrHmNj900U7aW3uBRYGDljyhBBQuxcADuN
+        PrKmHnA5BWYHaeZHDxPNs8UMPUupZfE=
+Date:   Mon, 11 Apr 2022 20:07:38 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 1/2] mips: dts: ingenic: Add TCU clock to x1000/x1830
+ tcu device node
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Message-Id: <QSV6AR.PLRNTAMVY5PA3@crapouillou.net>
+In-Reply-To: <20220411154241.50834-2-aidanmacdonald.0x0@gmail.com>
+References: <20220411154241.50834-1-aidanmacdonald.0x0@gmail.com>
+        <20220411154241.50834-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220411155315.51769-1-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aidan,
+Hi,
 
-On 2022/4/11 下午11:53, Aidan MacDonald wrote:
-> Copied from the jz4740 devicetree and trimmed to 5 timers, which
-> is what the hardware supports.
->
+Le lun., avril 11 2022 at 16:42:40 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> This clock is a gate for the TCU hardware block on these SoCs, but
+> it wasn't included in the device tree since the ingenic-tcu driver
+> erroneously did not request it.
+>=20
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-Tested-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-
+Cheers,
+-Paul
 
 > ---
-> v2: Reduce regmap length since only the first 5 timers need to be accessed,
->      and don't wrap the clock-names at 80 columns.
->
->   arch/mips/boot/dts/ingenic/x1000.dtsi | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
->
-> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> index 8bd27edef216..c2cdbf947264 100644
+>  arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+>  arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> index 8bd27edef216..c69df8eb158e 100644
 > --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
 > +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> @@ -127,6 +127,18 @@ wdt: watchdog@0 {
->   			clocks = <&tcu TCU_CLK_WDT>;
->   			clock-names = "wdt";
->   		};
-> +
-> +		pwm: pwm@40 {
-> +			compatible = "ingenic,x1000-pwm";
-> +			reg = <0x40 0x50>;
-> +
-> +			#pwm-cells = <3>;
-> +
-> +			clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
-> +				 <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_TIMER3>,
-> +				 <&tcu TCU_CLK_TIMER4>;
-> +			clock-names = "timer0", "timer1", "timer2", "timer3", "timer4";
-> +		};
->   	};
->   
->   	rtc: rtc@10003000 {
+> @@ -111,8 +111,9 @@ tcu: timer@10002000 {
+>=20
+>  		clocks =3D <&cgu X1000_CLK_RTCLK>,
+>  			 <&cgu X1000_CLK_EXCLK>,
+> -			 <&cgu X1000_CLK_PCLK>;
+> -		clock-names =3D "rtc", "ext", "pclk";
+> +			 <&cgu X1000_CLK_PCLK>,
+> +			 <&cgu X1000_CLK_TCU>;
+> +		clock-names =3D "rtc", "ext", "pclk", "tcu";
+>=20
+>  		interrupt-controller;
+>  		#interrupt-cells =3D <1>;
+> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> index 2595df8671c7..4408df24ca98 100644
+> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> @@ -104,8 +104,9 @@ tcu: timer@10002000 {
+>=20
+>  		clocks =3D <&cgu X1830_CLK_RTCLK>,
+>  			 <&cgu X1830_CLK_EXCLK>,
+> -			 <&cgu X1830_CLK_PCLK>;
+> -		clock-names =3D "rtc", "ext", "pclk";
+> +			 <&cgu X1830_CLK_PCLK>,
+> +			 <&cgu X1830_CLK_TCU>;
+> +		clock-names =3D "rtc", "ext", "pclk", "tcu";
+>=20
+>  		interrupt-controller;
+>  		#interrupt-cells =3D <1>;
+> --
+> 2.35.1
+>=20
+
+
