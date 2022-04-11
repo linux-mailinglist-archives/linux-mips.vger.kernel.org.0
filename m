@@ -2,129 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439FF4FBAC9
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 13:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDB04FBC4C
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 14:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243464AbiDKLXo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Apr 2022 07:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S1346192AbiDKMnv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 08:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236445AbiDKLXn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 07:23:43 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD6642A06;
-        Mon, 11 Apr 2022 04:21:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649676065; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=CNOTXYv8Sx8j1g4oPY7guZ7x8Y+9W4nAWbaAtTVJaGAEjnPEbPURRROrxlPeiVlexU6os8+D6poyT2IuNj2J3ppdiMFrLipTTRI+g4xaKxkfras9goVVn4eCqKi38bpQXE4TWQT+f3qfvaVRnMivOWrnPw3BD4dmpR4c6ssNcGY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649676065; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=5/jbDAF5X5kezjSRAK51Yoit+uFd9VQLdmTmKwAwHMY=; 
-        b=dseB4UyKiR9WxMIcSnQZDK6jMcO05AtaGhRY3jPfFS0Sx/OyeGOIJIL4tzjRqdsbZbrl78erto5C6VVuxy6xe0izsgYnKSoAXnwopNMFrERtKAOG1tXJ5cFzWPE8PYJ7gXIm81ImfN/alB6R6WWX6c2UeGWybjlwlqwzlOMIz2k=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649676065;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=5/jbDAF5X5kezjSRAK51Yoit+uFd9VQLdmTmKwAwHMY=;
-        b=I8/9xBIsYdFV55onKD8dTdAAGKHxevBRAhV0IDExLNV+mCSXvemhUwqNJ3ODxduz
-        sT78ypYJCINSDizM9Sd6RSB8pUcgbHTsuwmkN2QxsxRuUgusBcvkMIvV09qKSx+TrNz
-        dr2ZBB5PcMAdPYxEt8YlxzAt7Kib3DozynGuReBg=
-Received: from arinc9-PC.localdomain (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649676064932643.1336824950525; Mon, 11 Apr 2022 04:21:04 -0700 (PDT)
-From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-Subject: [PATCH v2 3/3] mips: dts: ralink: mt7621: remove defining gpio function for pin groups
-Date:   Mon, 11 Apr 2022 14:20:49 +0300
-Message-Id: <20220411112049.18001-3-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220411112049.18001-1-arinc.unal@arinc9.com>
-References: <20220411112049.18001-1-arinc.unal@arinc9.com>
+        with ESMTP id S1346187AbiDKMnp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 08:43:45 -0400
+Received: from out29-196.mail.aliyun.com (out29-196.mail.aliyun.com [115.124.29.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305254132C;
+        Mon, 11 Apr 2022 05:41:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08153398|-1;BR=01201311R771S34rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0990518-0.001919-0.899029;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.NOW40yE_1649680886;
+Received: from 192.168.30.128(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.NOW40yE_1649680886)
+          by smtp.aliyun-inc.com(33.40.85.40);
+          Mon, 11 Apr 2022 20:41:27 +0800
+Subject: Re: [PATCH] mips: dts: ingenic: x1000: Add PWM device tree node
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     paul@crapouillou.net, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220411100139.15672-1-aidanmacdonald.0x0@gmail.com>
+From:   Zhou Yanjie <zhouyu@wanyeetech.com>
+Message-ID: <8a3f88d8-3e94-1388-b1c6-b0f71d59f34c@wanyeetech.com>
+Date:   Mon, 11 Apr 2022 20:41:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220411100139.15672-1-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-All pin groups function as gpio unless set otherwise. Therefore, remove
-this unnecessary binding.
+Hi Aidan,
 
-Tested on UniElec U7621-06-16M on OpenWrt.
+On 2022/4/11 下午6:01, Aidan MacDonald wrote:
+> Copied from the jz4740 devicetree and trimmed to 5 timers, which
+> is what the hardware supports.
+>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>   arch/mips/boot/dts/ingenic/x1000.dtsi | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
+>
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> index 8bd27edef216..0dcf37527c8e 100644
+> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> @@ -127,6 +127,19 @@ wdt: watchdog@0 {
+>   			clocks = <&tcu TCU_CLK_WDT>;
+>   			clock-names = "wdt";
+>   		};
+> +
+> +		pwm: pwm@40 {
+> +			compatible = "ingenic,x1000-pwm";
+> +			reg = <0x40 0x80>;
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
-v2: add "ralink:" to the commit summary
 
----
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts | 12 ------------
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts | 12 ------------
- 2 files changed, 24 deletions(-)
+It seems more reasonable to use "reg = <0x40 0x80>" since the
+X1000 has only 5 PWM channels.
 
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 75f3b0425487..c307a0edb91f 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -97,18 +97,6 @@ &pcie {
- 	status = "okay";
- };
- 
--&pinctrl {
--	pinctrl-names = "default";
--	pinctrl-0 = <&state_default>;
--
--	state_default: state-default {
--		gpio-pinmux {
--			groups = "uart3", "wdt";
--			function = "gpio";
--		};
--	};
--};
--
- &gmac1 {
- 	status = "okay";
- 	phy-handle = <&ethphy4>;
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index b427ae9e081f..8268d738e74f 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -81,18 +81,6 @@ &pcie {
- 	status = "okay";
- };
- 
--&pinctrl {
--	pinctrl-names = "default";
--	pinctrl-0 = <&state_default>;
--
--	state_default: state-default {
--		gpio-pinmux {
--			groups = "wdt";
--			function = "gpio";
--		};
--	};
--};
--
- &gmac1 {
- 	status = "okay";
- 	phy-handle = <&ethphy7>;
--- 
-2.25.1
 
+> +
+> +			#pwm-cells = <3>;
+> +
+> +			clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
+> +				 <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_TIMER3>,
+> +				 <&tcu TCU_CLK_TIMER4>;
+> +			clock-names = "timer0", "timer1", "timer2",
+> +				      "timer3", "timer4";
+
+
+One line is now allowed to hold at most 100 characters,
+so it is possible to use only one line like:
+
+         clock-names = "timer0", "timer1", "timer2", "timer3", "timer4";
+
+to reduce the number of lines in the dtsi file.
+
+
+Thanks and best regards!
+
+
+> +		};
+>   	};
+>   
+>   	rtc: rtc@10003000 {
