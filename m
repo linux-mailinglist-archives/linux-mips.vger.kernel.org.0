@@ -2,94 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5074FB48B
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 09:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09124FB5CE
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 10:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241583AbiDKHYX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Apr 2022 03:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S243303AbiDKIUr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 04:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiDKHYW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 03:24:22 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB27038BFF;
-        Mon, 11 Apr 2022 00:22:08 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id 75so7108329qkk.8;
-        Mon, 11 Apr 2022 00:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Cle8K5S6vVtn1JXrhhTeWuHVXYaRfpQzQC3UXOxjSXQ=;
-        b=Y6h0WBWvhdDrbLDKkIlt6BolxlUasB2v7HT2X+21KUGqBKjhk1WZuiBYUSN8BfVhOp
-         GaqIaIM8k3tsr4V0pLaDITzBcEuIq6aCgmETg4vEt4ivazuNeB+lGHrgekpApesOOFQy
-         NnMjkWHqqW05oMFKsnFutvWZD9q9T0JZi9YDUFddgGk7h2L4teMediK1sFIGpXJqguLH
-         Jp9V/NxmQ5x4HfvZrjzL6RsyKWVBLjZKmA5vbu2uDu9eyUkKNP84a8XhyW2JBv0vIS8M
-         3/l4Qvg9LXXmyZayEaK0PH9PiN1+OUGeei5LRrVjGw2kYr9S1vXTIlMB59DTEokwdXw+
-         brbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Cle8K5S6vVtn1JXrhhTeWuHVXYaRfpQzQC3UXOxjSXQ=;
-        b=jSgeqyNcm9zP7OuHgHakvr1s0M9B1g7AR0JbPTd08/j/J6ulUrC48QmruoR6KoNMDX
-         rCzBxKIQnHEb+uyizraiFa0P/6hH5LD50/jcMOHBW659+LbaMuOclL5QtsYCQCp8FApj
-         yfcV5AeXOCSM0j3N6noW32rpDXw46cRBIHyL4YH99FFdNq0snmDgL+8vWa5u8XEMEtyV
-         38I+WvOnTDC6KRskOwO9vvRXqnXB5ZfgHrS9eMsFGxaocQnY+z3fLsG5cAmOchMqAmAt
-         qOoDq7whxX7j5u2PNCDDBPh8buwAGNNCF5mpYZjE/sgXeWRy1J9nG3o5kJEkpwJUYOXp
-         1vkg==
-X-Gm-Message-State: AOAM532s/L1gkcO1rFAvi/zBpBEDwC3E/zrTP5s6S/bXhupmfHPZCJUY
-        qY/m705HZav6FDv2H/ldO7sGqAV8CJx3T04xQNI=
-X-Google-Smtp-Source: ABdhPJxLRWIxX+ylSeHh5gNn/W0febTp1WSbgiRGPMA2M0haLGbHDuacQuJmqW/SsTB2vLUtNxHD7kryu35rr91PuUU=
-X-Received: by 2002:a05:620a:bd5:b0:67d:15ed:2fcd with SMTP id
- s21-20020a05620a0bd500b0067d15ed2fcdmr21096563qki.81.1649661728137; Mon, 11
- Apr 2022 00:22:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220410203138.22513-1-arinc.unal@arinc9.com> <20220410203138.22513-3-arinc.unal@arinc9.com>
-In-Reply-To: <20220410203138.22513-3-arinc.unal@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 11 Apr 2022 09:21:57 +0200
-Message-ID: <CAMhs-H9yu-DS_7jHitHg4=0qQusQMN0LqA++k0nJFt0q7z-GzA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] mips: dts: mt7621: remove binding for defining gpio
- function for pin groups
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        with ESMTP id S1343669AbiDKIUq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 04:20:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D931A33A10;
+        Mon, 11 Apr 2022 01:18:32 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649665111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xjhhzRNcm78JGgGtLG6mgwaGj8Cww0Tlt26NaB6GyE8=;
+        b=bQRUSKc6DEfWq2JW4zBYVX9dk6BAlFAOz8ziZI1nuAr8ThUSn9e4Pp4TH0bz7ykDdAbytZ
+        7E1JFmxLLPSA9yL/pLdV+Narb8ojwoUuHfRpcDWF7RSs/XNw8NP/mtP12PhEDKsDgxWdwX
+        vj1X7Tk9jubTJlEIAMDexIL70/zM+Ev13+w45xEIm/Pg10UwmbczcL33LQfaYjkFbjCAwR
+        nWRv8uLzxf0uwY7wWrnhC9hKJv5hsVxGhFPLc//BILYIvle9sl9xbz+4/B2WaiAREmOlO7
+        QMeWCwYxU6fvIGepcveLrvpqjGJJ/UVr5H5Gu5FcUTDSJ2ZLo6XAuABFlQLZ3A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649665111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xjhhzRNcm78JGgGtLG6mgwaGj8Cww0Tlt26NaB6GyE8=;
+        b=dYt2Xa6X2UETGYKSaI3sFGG38t3wto/bY9ksZnmh+Jh5QgkWcPQfA5MzFrnWyF0a21HHlJ
+        MeANaRegf0On2MDw==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        arnd@arndb.de
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v2 03/11] m68k: use ktime_read_raw_clock() for
+ random_get_entropy() instead of zero
+In-Reply-To: <20220410214951.55294-4-Jason@zx2c4.com>
+References: <20220410214951.55294-1-Jason@zx2c4.com>
+ <20220410214951.55294-4-Jason@zx2c4.com>
+Date:   Mon, 11 Apr 2022 10:18:30 +0200
+Message-ID: <87sfqkf2y1.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 10:32 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
-c9.com> wrote:
->
-> All pin groups function as gpio unless set otherwise. Therefore, remove
-> this unnecessary binding.
->
-> Tested on UniElec U7621-06-16M on OpenWrt.
->
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> ---
->  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts | 12 ------------
->  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts | 12 ------------
->  2 files changed, 24 deletions(-)
+On Sun, Apr 10 2022 at 23:49, Jason A. Donenfeld wrote:
 
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> In the event that random_get_entropy() can't access a cycle counter or
+> similar, falling back to returning 0 is really not the best we can do.
+> Instead, at least calling ktime_read_raw_clock() would be preferable,
+> because that always needs to return _something_, even falling back to
+> jiffies eventually. It's not as though ktime_read_raw_clock() is super
+> high precision or guaranteed to be entropic, but basically anything
+> that's not zero all the time is better than returning zero all the time.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  arch/m68k/include/asm/timex.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/m68k/include/asm/timex.h b/arch/m68k/include/asm/timex.h
+> index 6a21d9358280..5351b10e1b18 100644
+> --- a/arch/m68k/include/asm/timex.h
+> +++ b/arch/m68k/include/asm/timex.h
+> @@ -35,7 +35,7 @@ static inline unsigned long random_get_entropy(void)
+>  {
+>  	if (mach_random_get_entropy)
+>  		return mach_random_get_entropy();
+> -	return 0;
+> +	return ktime_read_raw_clock();
+
+I'd rather do something like this in a common header:
+
+unsigned long random_get_entropy_fallback(void);
+
+and use random_get_entropy_fallback() in the architecture specific
+files.
+
+That way you can encapsulate the fallback implementation in the random
+code and if it turns out that ktime_read_raw_clock() is a stupid idea or
+someone has a better idea then you have to change exactly one place and
+not patch the whole tree again.
 
 Thanks,
-   Sergio Paracuellos
+
+        tglx
