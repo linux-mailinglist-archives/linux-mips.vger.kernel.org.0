@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CB54FC0FC
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 17:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B929A4FC101
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Apr 2022 17:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348031AbiDKPiq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Apr 2022 11:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S243702AbiDKPjx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Apr 2022 11:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348032AbiDKPip (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 11:38:45 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123053A5E7;
-        Mon, 11 Apr 2022 08:36:31 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so181707wmb.1;
-        Mon, 11 Apr 2022 08:36:30 -0700 (PDT)
+        with ESMTP id S240237AbiDKPjw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Apr 2022 11:39:52 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3A33A5E7;
+        Mon, 11 Apr 2022 08:37:38 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id t1so5918923wra.4;
+        Mon, 11 Apr 2022 08:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=SLNLIgAztxFLrjX98bBOPpDCgmeIBOw+sPwS1eWryvU=;
-        b=UOph7iwMAPryYJQM5t3httN8DjoAflSeCVstrwCvqUO6d7fjB9VplSFa6NFvbOzPpr
-         QLa/vpR5z6HKRgKYelEPmwdQ7cccpfROAOpDA3XkSj/Sl5A8T9Hoq8XcVaPQTR/ndlaY
-         fJg5/SdXmHJOGiGqIXBe+RljbcnYFoHkYbXl6SgcbnpgnZXoBWeNIQoDYOQ9qfkiqIpv
-         sVw1nx/1SL5InqcKHO9VF3Z9mm8vhqUyuGpdOuH2FUrSmE0R+rKcB5y42+LL8fuAwC8X
-         GdAcRbYhWsGkNAGIZAVhvPzqVnL4sBj9qTPhBTitpGHNHCr57/PPksimidd76wfMJmPa
-         irXw==
+        bh=XynkJF5/tDNj210GbAEuyHTgO4xrEQFboF9g0CngvhM=;
+        b=TcdFyn/pxbgxLWoLfzplhGxofZcbi77a7AxnJibbvUBt1UEVyiq8LXH9CG3JwId/LX
+         WThRwMHCCAyhOOe13ysUxfQ7HQ9frbJ+Iw+dJ34dg5y/DeG9uvvs/DV0KKPr+onQolJB
+         0CZ6rW+r/cU/0t6fZQT/qpvLqMgW27hGGQiTMHwvj32zdDfHfxM7jymPfxR1saawoydy
+         d+hsB+UNcLjpTdJhUVLlhcwpdNvCgV8SbPwPcfwSjoBq+299/UaTsqKitZKw/3AB4qZ+
+         dC0h8RfPGBjUavNzXr0rjqw9yYZaw32O5P95plikhJACrw4m6Xm1NNTUnEiO13tWSzGl
+         e1tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=SLNLIgAztxFLrjX98bBOPpDCgmeIBOw+sPwS1eWryvU=;
-        b=62La/llz2/4u5ywz4EK1/Ds59azRxGj+iPD+qlQPq6BmF7ERwGzD2T+BJFdel220Bm
-         csnrp2pzP17PgJIVI/m55eWMzkECBG04gER5KEkVmC+1lxFxtXPRCqeza66tT2wU88pX
-         eQl9liduulV9Eg69obRQK9bX+6l6b4iLmdRhZ6h9w8FVJNpZaQSZNY/94ahLAwaF4KWP
-         YahzKmaD6tCxI/WwKkRdOpr/kIMniKkVT6bPTGWspI3reN/7vEnH7Z2+4xD2e9bpGCI9
-         EvurmB+q7fTICS3N/e7Ew+u4W3CCVB+eiBUpTwT3imGZclDYh+ulA06Lg42k5KEl04VB
-         6MBA==
-X-Gm-Message-State: AOAM530qEGeWyVTyY2/Jp8VD/eyQNoSu1XPh0JvV5hUFxjPOaTPBWfC1
-        J6KB8G5JPEZqRAJPRIN9qoM=
-X-Google-Smtp-Source: ABdhPJy2WtwqxmlMvBMosTiNoX/M+q/nLamP1ovzSDcok06XmYlFBZIDDLcyooBH1QPqt+ZF2Wdy0w==
-X-Received: by 2002:a1c:44c5:0:b0:38e:abd1:d894 with SMTP id r188-20020a1c44c5000000b0038eabd1d894mr13177203wma.40.1649691389591;
-        Mon, 11 Apr 2022 08:36:29 -0700 (PDT)
+        bh=XynkJF5/tDNj210GbAEuyHTgO4xrEQFboF9g0CngvhM=;
+        b=1oW0JhuJFby0cyn4I64SDcZl/ZTL2tUOL+iHaHJPcG838Vb0VorhO+k6kBANEsRlyq
+         4WDTk+mQijqWHL9Uujsc3MghXannWqB7u1oCYUljH5ibGvUq8TohgO9bonPqhNj8dEV2
+         QQimfM2Q0KPX/SSifQHxtCOHr/Oqr+tU1UDmac4/BJExEG1INycNOynoVeRdWXdcFRN5
+         jlCJqmrvBN4nfxOkUeEtXj3SUlbKl2P7byFfvUcTyT8b1i6g0Wvfoc/m7HG1qjcun9LT
+         0M8QmlVvCvN1dKqcuK4t/X3Kj6DVzF/FkWj4ZwDZlzLFs2nX8mf153/4MGjlysnImlML
+         ayqg==
+X-Gm-Message-State: AOAM531HGHNfiiD1/youGYWaWbMkHoVH7uuHMPwrRzl4wEmTnKYi3NuW
+        Te9YKFbdLQaRECOsaZqfVq2n4vssyn/taw==
+X-Google-Smtp-Source: ABdhPJxwzNG+yEG+/rRMEfyd4DjC9tcEcRWRocqOeFgwph6rD5rmPMhBWfDXRqvYq61H6lCjVh4nCw==
+X-Received: by 2002:a5d:4306:0:b0:207:9e49:a1d3 with SMTP id h6-20020a5d4306000000b002079e49a1d3mr9748738wrq.188.1649691456762;
+        Mon, 11 Apr 2022 08:37:36 -0700 (PDT)
 Received: from localhost (92.40.202.92.threembb.co.uk. [92.40.202.92])
-        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm26232868wrt.115.2022.04.11.08.36.27
+        by smtp.gmail.com with ESMTPSA id bs12-20020a056000070c00b00207a2c698b1sm4831432wrb.40.2022.04.11.08.37.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:36:29 -0700 (PDT)
+        Mon, 11 Apr 2022 08:37:36 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, vkoul@kernel.org
-Cc:     linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
+To:     paul@crapouillou.net, ulf.hansson@linaro.org
+Cc:     linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: jz4780: set DMA maximum segment size
-Date:   Mon, 11 Apr 2022 16:36:18 +0100
-Message-Id: <20220411153618.49876-1-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH] mmc: jz4740: Apply DMA engine limits to maximum segment size
+Date:   Mon, 11 Apr 2022 16:37:53 +0100
+Message-Id: <20220411153753.50443-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -66,49 +66,80 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Set the maximum segment size, since the hardware can do transfers larger
-than the default 64 KiB returned by dma_get_max_seg_size().
+Do what is done in other DMA-enabled MMC host drivers (cf. host/mmci.c) and
+limit the maximum segment size based on the DMA engine's capabilities. This
+is needed to avoid warnings like the following with CONFIG_DMA_API_DEBUG=y.
 
-The maximum segment size is limited by the 24-bit transfer count field
-in DMA descriptors. The number of bytes is equal to the transfer count
-times the transfer size unit, which is selected by the driver based on
-the DMA buffer address and length of the transfer. The size unit can be
-as small as 1 byte, so set the maximum segment size to 2^24-1 bytes to
-ensure the transfer count will not overflow regardless of the size unit
-selected by the driver.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 21 at kernel/dma/debug.c:1162 debug_dma_map_sg+0x2f4/0x39c
+DMA-API: jz4780-dma 13420000.dma-controller: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+CPU: 0 PID: 21 Comm: kworker/0:1H Not tainted 5.18.0-rc1 #19
+Workqueue: kblockd blk_mq_run_work_fn
+Stack : 81575aec 00000004 80620000 80620000 80620000 805e7358 00000009 801537ac
+        814c832c 806276e3 806e34b4 80620000 81575aec 00000001 81575ab8 09291444
+        00000000 00000000 805e7358 81575958 ffffffea 8157596c 00000000 636f6c62
+        6220646b 80387a70 0000000f 6d5f6b6c 80620000 00000000 81575ba4 00000009
+        805e170c 80896640 00000001 00010000 00000000 00000000 00006098 806e0000
+        ...
+Call Trace:
+[<80107670>] show_stack+0x84/0x120
+[<80528cd8>] __warn+0xb8/0xec
+[<80528d78>] warn_slowpath_fmt+0x6c/0xb8
+[<8016f1d4>] debug_dma_map_sg+0x2f4/0x39c
+[<80169d4c>] __dma_map_sg_attrs+0xf0/0x118
+[<8016a27c>] dma_map_sg_attrs+0x14/0x28
+[<804f66b4>] jz4740_mmc_prepare_dma_data+0x74/0xa4
+[<804f6714>] jz4740_mmc_pre_request+0x30/0x54
+[<804f4ff4>] mmc_blk_mq_issue_rq+0x6e0/0x7bc
+[<804f5590>] mmc_mq_queue_rq+0x220/0x2d4
+[<8038b2c0>] blk_mq_dispatch_rq_list+0x480/0x664
+[<80391040>] blk_mq_do_dispatch_sched+0x2dc/0x370
+[<80391468>] __blk_mq_sched_dispatch_requests+0xec/0x164
+[<80391540>] blk_mq_sched_dispatch_requests+0x44/0x94
+[<80387900>] __blk_mq_run_hw_queue+0xb0/0xcc
+[<80134c14>] process_one_work+0x1b8/0x264
+[<80134ff8>] worker_thread+0x2ec/0x3b8
+[<8013b13c>] kthread+0x104/0x10c
+[<80101dcc>] ret_from_kernel_thread+0x14/0x1c
+
+---[ end trace 0000000000000000 ]---
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/dma/dma-jz4780.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/mmc/host/jz4740_mmc.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-index fc513eb2b289..e2ec540e6519 100644
---- a/drivers/dma/dma-jz4780.c
-+++ b/drivers/dma/dma-jz4780.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/clk.h>
- #include <linux/dmapool.h>
-+#include <linux/dma-mapping.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
-@@ -911,6 +912,14 @@ static int jz4780_dma_probe(struct platform_device *pdev)
- 
- 	dd = &jzdma->dma_device;
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index 7ab1b38a7be5..b1d563b2ed1b 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -247,6 +247,26 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
+ 		return PTR_ERR(host->dma_rx);
+ 	}
  
 +	/*
-+	 * The real segment size limit is dependent on the size unit selected
-+	 * for the transfer. Because the size unit is selected automatically
-+	 * and may be as small as 1 byte, use a safe limit of 2^24-1 bytes to
-+	 * ensure the 24-bit transfer count in the descriptor cannot overflow.
++	 * Limit the maximum segment size in any SG entry according to
++	 * the parameters of the DMA engine device.
 +	 */
-+	dma_set_max_seg_size(dev, 0xffffff);
++	if (host->dma_tx) {
++		struct device *dev = host->dma_tx->device->dev;
++		unsigned int max_seg_size = dma_get_max_seg_size(dev);
 +
- 	dma_cap_set(DMA_MEMCPY, dd->cap_mask);
- 	dma_cap_set(DMA_SLAVE, dd->cap_mask);
- 	dma_cap_set(DMA_CYCLIC, dd->cap_mask);
++		if (max_seg_size < host->mmc->max_seg_size)
++			host->mmc->max_seg_size = max_seg_size;
++	}
++
++	if (host->dma_rx) {
++		struct device *dev = host->dma_rx->device->dev;
++		unsigned int max_seg_size = dma_get_max_seg_size(dev);
++
++		if (max_seg_size < host->mmc->max_seg_size)
++			host->mmc->max_seg_size = max_seg_size;
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.35.1
 
