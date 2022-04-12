@@ -2,113 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C034FEADD
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 01:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B744FEA78
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 01:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiDLXWS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Apr 2022 19:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
+        id S229809AbiDLX1D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Apr 2022 19:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiDLXV7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 19:21:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822BB644A;
-        Tue, 12 Apr 2022 15:52:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A70C661CBA;
-        Tue, 12 Apr 2022 21:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84EE1C385AE;
-        Tue, 12 Apr 2022 21:17:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Y38jE8bb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649798238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        with ESMTP id S230072AbiDLX00 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 19:26:26 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217155E16F;
+        Tue, 12 Apr 2022 15:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649803132; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7RYqiP9nhX0rKf7m7FCUHmIMWi5HqXJa2wb5GRUCRN4=;
-        b=Y38jE8bbwXnFadm3bSadxYJs0QKXhDjO8XeYq55V9FobkrYVUHtCltO8FbQ6ymeqNiU6sv
-        4YirHaGCd68zWGnn9f3QSQlI+ccFB49iW2Qf2Va1404DwU3ctZ6ljDbPgEVcbkaDMLm42a
-        UyuzHmfK7dQiDEDzUbSQKNSvKXXGO+I=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b1bb241b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 12 Apr 2022 21:17:18 +0000 (UTC)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2ec04a2ebadso1618747b3.12;
-        Tue, 12 Apr 2022 14:17:18 -0700 (PDT)
-X-Gm-Message-State: AOAM532drnYdp8Qvg9jDGBZC15qEdJXZSoHu6LHauDX4pOllbvZ+bpk1
-        yWqCcA3drBNybhsyLR1K7+3ktG1a7E0lwNIiAGo=
-X-Google-Smtp-Source: ABdhPJyzoWPsFnF8ik/yAzlm3KPNzdj5Txo6RqIWYvjdGUg1ERYyQK8PArA04S/85l5pbLiU/ZXjCNxyEog+/ToSU0U=
-X-Received: by 2002:a81:4a55:0:b0:2ef:3ef1:def7 with SMTP id
- x82-20020a814a55000000b002ef3ef1def7mr1543639ywa.2.1649798234768; Tue, 12 Apr
- 2022 14:17:14 -0700 (PDT)
+        bh=xNAG0SZZHvrLl10xQGGWue13a4HRKmHPzD7hJXX4nXw=;
+        b=JrCsWn2rWIljaUBYBbe4lfE1WQfRTPty5lP17RS5P46896a7F0Klgi9OrmOXuP9gLhIkNH
+        SG1EzrVTvrFCtbI+6rPgdFfNjm3BNfEQ+cz4GyEfA1e0Fs3s8MWOnmdedVoks84rkkFpKu
+        qVg9d2d/TTBZq+Y0afxP2tEHOqRfv08=
+Date:   Tue, 12 Apr 2022 23:38:42 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v5 1/2] mips: dts: ingenic: Add TCU clock to x1000/x1830
+ tcu device node
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        dan.carpenter@oracle.com
+Message-Id: <I809AR.0C3UZTFR7V5I1@crapouillou.net>
+In-Reply-To: <20220412122750.279058-2-aidanmacdonald.0x0@gmail.com>
+References: <20220412122750.279058-1-aidanmacdonald.0x0@gmail.com>
+        <20220412122750.279058-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-References: <20220412172754.149498-1-Jason@zx2c4.com> <20220412172754.149498-2-Jason@zx2c4.com>
- <87bkx6f29b.ffs@tglx>
-In-Reply-To: <87bkx6f29b.ffs@tglx>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 12 Apr 2022 23:17:03 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pVhO24V8V3YdeHfz6q1nmSgqXocUtn=+zu5Wh-OWrSRA@mail.gmail.com>
-Message-ID: <CAHmME9pVhO24V8V3YdeHfz6q1nmSgqXocUtn=+zu5Wh-OWrSRA@mail.gmail.com>
-Subject: Re: [PATCH v3 01/10] timekeeping: add raw clock fallback for random_get_entropy()
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+Hi,
 
-On Tue, Apr 12, 2022 at 10:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Tue, Apr 12 2022 at 19:27, Jason A. Donenfeld wrote:
-> > +/**
-> > + * random_get_entropy_fallback - Returns the raw clock source value,
-> > + * used by random.c for platforms with no valid random_get_entropy().
-> > + */
-> > +unsigned long random_get_entropy_fallback(void)
-> > +{
-> > +     return tk_clock_read(&tk_core.timekeeper.tkr_mono);
-> > +}
-> > +EXPORT_SYMBOL(random_get_entropy_fallback);
->
-> EXPORT_SYMBOL_GPL() please.
+Le mar., avril 12 2022 at 13:27:49 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> This clock is a gate for the TCU hardware block on these SoCs, but
+> it wasn't included in the device tree since the ingenic-tcu driver
+> erroneously did not request it.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-Okay, will do.
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-Jason
+Cheers,
+-Paul
+
+> ---
+>  arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+>  arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> index 8bd27edef216..c69df8eb158e 100644
+> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> @@ -111,8 +111,9 @@ tcu: timer@10002000 {
+>=20
+>  		clocks =3D <&cgu X1000_CLK_RTCLK>,
+>  			 <&cgu X1000_CLK_EXCLK>,
+> -			 <&cgu X1000_CLK_PCLK>;
+> -		clock-names =3D "rtc", "ext", "pclk";
+> +			 <&cgu X1000_CLK_PCLK>,
+> +			 <&cgu X1000_CLK_TCU>;
+> +		clock-names =3D "rtc", "ext", "pclk", "tcu";
+>=20
+>  		interrupt-controller;
+>  		#interrupt-cells =3D <1>;
+> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> index 2595df8671c7..4408df24ca98 100644
+> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> @@ -104,8 +104,9 @@ tcu: timer@10002000 {
+>=20
+>  		clocks =3D <&cgu X1830_CLK_RTCLK>,
+>  			 <&cgu X1830_CLK_EXCLK>,
+> -			 <&cgu X1830_CLK_PCLK>;
+> -		clock-names =3D "rtc", "ext", "pclk";
+> +			 <&cgu X1830_CLK_PCLK>,
+> +			 <&cgu X1830_CLK_TCU>;
+> +		clock-names =3D "rtc", "ext", "pclk", "tcu";
+>=20
+>  		interrupt-controller;
+>  		#interrupt-cells =3D <1>;
+> --
+> 2.35.1
+>=20
+
+
