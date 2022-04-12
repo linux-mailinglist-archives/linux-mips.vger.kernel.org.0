@@ -2,43 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DEC4FEA1E
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 00:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C034FEADD
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 01:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiDLW3r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Apr 2022 18:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S229743AbiDLXWS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Apr 2022 19:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiDLW3X (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 18:29:23 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D9A19EC62;
-        Tue, 12 Apr 2022 14:15:11 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649797072;
+        with ESMTP id S229793AbiDLXV7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 19:21:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822BB644A;
+        Tue, 12 Apr 2022 15:52:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A70C661CBA;
+        Tue, 12 Apr 2022 21:17:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84EE1C385AE;
+        Tue, 12 Apr 2022 21:17:25 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Y38jE8bb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649798238;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=w642aWN42zYFGGZD2a2O5goJFKRbh1eHda8TK6sp2vE=;
-        b=ladY7lhIHrXI2k9D7th0Z6+5ep54BOrI0BnbuW//bOpbOmNiY0uhc/fJhnRb6rfFB8G9mY
-        Ze+v0e45IIqUQmchHM6c7WZqQJWMrwLiB6AsoMq3kdFtdXc0H1UEwbXiPHu+zOKLNlV+Rr
-        kBWtTurIIXE+P0wft+z6TjNPM4Fwpx+nPAjOHNCrw2/kzz68fZCYtxlIeP27GP/ppLAWyo
-        sIZ3nWfYuU1N5plsp4tFWAWj5rC4sh75NhHIe9NfkiNN9zP2OWOoPLdXFlzyqHWcUx87xH
-        UeAyFlZEfxHIkB8v/DuJFxXKev9B+PXimtGyFvdnTlAM8lziorbNeXpm0yMh4Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649797072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w642aWN42zYFGGZD2a2O5goJFKRbh1eHda8TK6sp2vE=;
-        b=97p7ujeYtp/JNITBvGjRAaEaYf/IylcEWqaaB0wlEKegNLYjFko3yLj6d/iRtEo3osYpqD
-        YjBvQAAGxYMpj8Cg==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        arnd@arndb.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
+        bh=7RYqiP9nhX0rKf7m7FCUHmIMWi5HqXJa2wb5GRUCRN4=;
+        b=Y38jE8bbwXnFadm3bSadxYJs0QKXhDjO8XeYq55V9FobkrYVUHtCltO8FbQ6ymeqNiU6sv
+        4YirHaGCd68zWGnn9f3QSQlI+ccFB49iW2Qf2Va1404DwU3ctZ6ljDbPgEVcbkaDMLm42a
+        UyuzHmfK7dQiDEDzUbSQKNSvKXXGO+I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b1bb241b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 12 Apr 2022 21:17:18 +0000 (UTC)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2ec04a2ebadso1618747b3.12;
+        Tue, 12 Apr 2022 14:17:18 -0700 (PDT)
+X-Gm-Message-State: AOAM532drnYdp8Qvg9jDGBZC15qEdJXZSoHu6LHauDX4pOllbvZ+bpk1
+        yWqCcA3drBNybhsyLR1K7+3ktG1a7E0lwNIiAGo=
+X-Google-Smtp-Source: ABdhPJyzoWPsFnF8ik/yAzlm3KPNzdj5Txo6RqIWYvjdGUg1ERYyQK8PArA04S/85l5pbLiU/ZXjCNxyEog+/ToSU0U=
+X-Received: by 2002:a81:4a55:0:b0:2ef:3ef1:def7 with SMTP id
+ x82-20020a814a55000000b002ef3ef1def7mr1543639ywa.2.1649798234768; Tue, 12 Apr
+ 2022 14:17:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220412172754.149498-1-Jason@zx2c4.com> <20220412172754.149498-2-Jason@zx2c4.com>
+ <87bkx6f29b.ffs@tglx>
+In-Reply-To: <87bkx6f29b.ffs@tglx>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 12 Apr 2022 23:17:03 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pVhO24V8V3YdeHfz6q1nmSgqXocUtn=+zu5Wh-OWrSRA@mail.gmail.com>
+Message-ID: <CAHmME9pVhO24V8V3YdeHfz6q1nmSgqXocUtn=+zu5Wh-OWrSRA@mail.gmail.com>
+Subject: Re: [PATCH v3 01/10] timekeeping: add raw clock fallback for random_get_entropy()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -59,43 +75,40 @@ Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         John Stultz <john.stultz@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v3 01/10] timekeeping: add raw clock fallback for
- random_get_entropy()
-In-Reply-To: <20220412172754.149498-2-Jason@zx2c4.com>
-References: <20220412172754.149498-1-Jason@zx2c4.com>
- <20220412172754.149498-2-Jason@zx2c4.com>
-Date:   Tue, 12 Apr 2022 22:57:52 +0200
-Message-ID: <87bkx6f29b.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 12 2022 at 19:27, Jason A. Donenfeld wrote:
-> +/**
-> + * random_get_entropy_fallback - Returns the raw clock source value,
-> + * used by random.c for platforms with no valid random_get_entropy().
-> + */
-> +unsigned long random_get_entropy_fallback(void)
-> +{
-> +	return tk_clock_read(&tk_core.timekeeper.tkr_mono);
-> +}
-> +EXPORT_SYMBOL(random_get_entropy_fallback);
+Hi Thomas,
 
-EXPORT_SYMBOL_GPL() please.
+On Tue, Apr 12, 2022 at 10:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Tue, Apr 12 2022 at 19:27, Jason A. Donenfeld wrote:
+> > +/**
+> > + * random_get_entropy_fallback - Returns the raw clock source value,
+> > + * used by random.c for platforms with no valid random_get_entropy().
+> > + */
+> > +unsigned long random_get_entropy_fallback(void)
+> > +{
+> > +     return tk_clock_read(&tk_core.timekeeper.tkr_mono);
+> > +}
+> > +EXPORT_SYMBOL(random_get_entropy_fallback);
+>
+> EXPORT_SYMBOL_GPL() please.
 
-Thanks,
+Okay, will do.
 
-        tglx
+Jason
