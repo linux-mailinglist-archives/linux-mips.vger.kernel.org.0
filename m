@@ -2,82 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462C54FE64A
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Apr 2022 18:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BAB4FE6E0
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Apr 2022 19:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357864AbiDLQxO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Apr 2022 12:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
+        id S1358196AbiDLRcF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Apr 2022 13:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347569AbiDLQwZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 12:52:25 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1394B57B24
-        for <linux-mips@vger.kernel.org>; Tue, 12 Apr 2022 09:50:06 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id u7so16136523lfs.8
-        for <linux-mips@vger.kernel.org>; Tue, 12 Apr 2022 09:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ylLxyVGKqebDetHyuC2Bc6fDpbbFFhb/7aJqORMHVTY=;
-        b=BeeBZYfEZZenHq+VZz3ZtQTJRvLWQlIUvc/hc1brOcgm5kce8lGlmzNx5yqIvOhgUc
-         UDCq+4RZxw0MT8gEV/iUosNBbjwK5H7Zu2KRvhnmmK4yGV/2DliGjVpqM19h4PjeX0qX
-         q1jpS5mG4Oo4uFkrlUJBZsLj7lHX2j/uSqZepLYxTj4Bwl+wILljvKH1NuMb+PcTL/Dw
-         K6DaFHGqo13SN/DmRnQjImAdgE8QQACgkaL5RaJpFFp3lNzLS5t/Bdf0+vjgfpGN15QS
-         V0Km+PY4CEHdd2J4zjah3arKKvk9P4JDe90QEqKiwiH4KfrjfGJuSkiscGDAxWwdtaRe
-         mjCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ylLxyVGKqebDetHyuC2Bc6fDpbbFFhb/7aJqORMHVTY=;
-        b=m6xKaKhZuor2ruTcaRsj1CW6yUI9JJqIL75FcDfZdh4bW96VLs2DZMWC2pROHp7e3E
-         JJlzb3XokIwrUMYxZT/1QJKwTf5TBMmrIOK81UWb99/znEka96UrzFRV4v+Xvw+WnXBv
-         EPkdHTRRZdyzKzyVY5g1NlB5vPc1qISuehQ9Ec9Ftn2MxAttxagEndkbiWedsDeIh2fP
-         UR9gkgt9wa1GSGHvPXiCfoxrOTizmA9Qwafbrq9ZkQYQBWDUJPhfyAcS2NRKKgo+1SWK
-         qz+sAO7WKjQ7hBsaNvbB/NZK5AGODZIVOlVlpVu5243T3mAZMMpDFMA1FxQG1ZKFAWBH
-         z+/A==
-X-Gm-Message-State: AOAM531bMnYZzf3m8jGuadZnX9KMkrH9kmXBCNCmrqwosNjls9aDRc/M
-        VS9xWotwH8UR+TI5xDmHiBXqq5h2db+krIX9sINyMTfzhbaA+g==
-X-Google-Smtp-Source: ABdhPJxTRKFjPYmnEA5dSZRqS1mYFeUSvf19B6M+jy1KqTK4lzVK4HG6VgeaW5aaLHlSI/Za1/SRULYrkD+BRWtDQo8=
-X-Received: by 2002:a19:674c:0:b0:448:3f49:e6d5 with SMTP id
- e12-20020a19674c000000b004483f49e6d5mr26383484lfj.518.1649782204083; Tue, 12
- Apr 2022 09:50:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220401175554.1931568-1-dmatlack@google.com> <YlRhiF1O71TWQr5r@google.com>
- <CALzav=f_WY7xH_MV8-gJPAVmj1KjE_LvXupL7aA5n-vCjTETNw@mail.gmail.com>
- <YlSLuZphElMyF2sG@google.com> <CALzav=fGucZOZjbVE2+9PZVf1p+jP7GBYDpPph5PoU552LELsw@mail.gmail.com>
- <YlTKQz8HVPtyfwKe@google.com>
-In-Reply-To: <YlTKQz8HVPtyfwKe@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 12 Apr 2022 09:49:37 -0700
-Message-ID: <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/23] KVM: Extend Eager Page Splitting to the shadow MMU
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
+        with ESMTP id S229464AbiDLRbu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 13:31:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C02100E;
+        Tue, 12 Apr 2022 10:29:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42748619D7;
+        Tue, 12 Apr 2022 17:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2DAC385A5;
+        Tue, 12 Apr 2022 17:29:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZbW8euRP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649784544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4VTpQMB6FPkc9MfFhDmCuhLparbR0CcHVnNxwSqiAkQ=;
+        b=ZbW8euRPWSiaKBuJacJ8+ZTX0gthq1mBuxj+4d079R3slGuBehd1GNvnixSfFTw+9RRV8/
+        Lf8UmDxB2StOfSrsXmpDuV5zTO+YGC1PywJ+SHTMEnuJSZMy6SLJiTOfO/heSCdbnRWlO+
+        zgjakwT8Hd8n3HcHvqKdq54xw1mF2wg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c1694ffd (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 12 Apr 2022 17:29:03 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, arnd@arndb.de
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: [PATCH v3 00/10] archs/random: fallback to best raw ktime when no cycle counter
+Date:   Tue, 12 Apr 2022 19:27:44 +0200
+Message-Id: <20220412172754.149498-1-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,112 +79,132 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 5:39 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Apr 11, 2022, David Matlack wrote:
-> >
-> > One thing that would be helpful is if you can explain in a bit more
-> > specifically what you'd like to see. Part of the reason why I prefer
-> > to sequence your proposal after eager page splitting is that I do not
-> > fully understand what you're proposing, and how complex it would be.
-> > e.g. Forking FNAME(fetch), FNAME(page_fault), and kvm_mmu_get_page()
-> > for nested MMUs does not sound like less churn.
->
-> Oh, it's most definitely not less code, and probably more churn.  But, it's churn
-> that pushes us in a more favorable direction and that is desirable long term.  I
-> don't mind churning code, but I want the churn to make future life easier, not
-> harder.  Details below.
+Hi folks,
 
-Of course. Let's make sure we're on the same page about what churn
-introduced by this series will make future life harder that we hope to
-avoid. If I understand you correctly, it's the following 2 changes:
+The RNG uses a function called random_get_entropy() basically anytime
+that it needs to timestamp an event. For example, an interrupt comes in,
+and we mix a random_get_entropy() into the entropy pool somehow.
+Somebody mashes their keyboard or moves their mouse around? We mix a
+random_get_entropy() into the entropy pool. It's one of the main
+varieties of input.
 
- (a.) Using separate functions to allocate SPs and initialize SPs.
- (b.) Separating kvm_mmu_find_shadow_page() from __kvm_mmu_find_shadow_page().
+Unfortunately, it's always 0 on a few platforms. The RNG has accumulated
+various hacks to deal with this, but in general it's not great. Surely
+we can do better than 0. In fact, *anything* that's not the same exact
+value all the time would be better than 0. Even a counter that
+increments once per hour would be better than 0! I think you get the
+idea.
 
-(a.) stems from the fact that SP allocation during eager page
-splitting is made directly rather than through kvm_mmu_memory_caches,
-which was what you pushed for in the TDP MMU implementation. We could
-instead use kvm_mmu_memory_caches for the shadow MMU eager page
-splitting to eliminate (a.). But otherwise (a.) is necessary
-complexity of eager page splitting because it needs to allocate SPs
-differently from the vCPU fault path.
+On most platforms, random_get_entropy() is aliased to get_cycles(),
+which makes sense for platforms where get_cycles() is defined. RDTSC,
+for example, has all the characteristics we care about for this
+function: it's fast to acquire (i.e. acceptable in an irq handler),
+pretty high precision, available, forms a 2-monotone distribution, etc.
+But for platforms without that, what is the next best thing?
 
-As for (b.), see below...
+Sometimes the next best thing is architecture-defined. For example,
+really old MIPS has the CP0 random register, which isn't a cycle
+counter, but is at least something. However, some platforms don't even
+have an architecture-defined fallback.
 
->
-> > From my perspective, this series is a net improvement to the
-> > readability and maintainability of existing code, while adding a
-> > performance improvement (eager page splitting). All of the changes you
-> > are proposing can still be implemented on top if
->
-> They can be implemented on top, but I want to avoid inhireting complexity we
-> don't actually want/need, unsync support being the most notable.
->
-> What I mean by "fork" is that after the cleanups that make sense irrespective of
-> eager page splitting, we make a copy of FNAME(page_fault) and add FNAME(get_shadow_page),
-> extracting common logic where we can and probably doing something fancy to avoid
-> having multiple copies of FNAME(get_shadow_page).  Looking again at the code, it's
-> probably best to keep FNAME(fetch), at least for now, as it's only the single unsync
-> check that we can purge at this point.
->
-> That gives us e.g. FNAME(nested_page_fault) that support EPT and 64-bit NPT, and
-> a nested TDP specific get_shadow_page().
->
-> Then we rip out the unsync stuff for nested MMUs, which is quite clean because we
-> can key off of tdp_enabled.  It'll leave dead code for 32-bit hosts running nested
-> VMs, but I highly doubt anyone will notice the perf hit.
->
-> At that point, dissect kvm_nested_mmu_get_page() for eager page splitting and
-> continue on.
->
-> It's not drastically different than what you have now, but it avoids the nastiness
-> around unsync pages, e.g. I'm pretty sure kvm_mmu_alloc_shadow_page() can be reused
-> as I proposed and the "find" becomes something like:
->
-> static struct kvm_mmu_page *kvm_mmu_nested_tdp_find_sp(struct kvm_vcpu *vcpu,
->                                                        gfn_t gfn,
->                                                        unsigned int gfn_hash,
->                                                        union kvm_mmu_page_role role)
-> {
->         struct hlist_head *sp_list = &kvm->arch.mmu_page_hash[gfn_hash];
->         struct kvm_mmu_page *sp;
->
->         for_each_valid_sp(kvm, sp, sp_list) {
->                 if (sp->gfn != gfn || sp->role.word != role.word)
->                         continue;
->
->                 __clear_sp_write_flooding_count(sp);
->                 return sp;
->         }
->
->         return NULL;
-> }
+Fortunately, the timekeeping subsystem has already solved this problem
+of trying to determine what the least bad clock is on constrained
+systems, falling back to jiffies in the worst case. By exporting the raw
+clock, we can get a decent fallback function for when there's no cycle
+counter or architecture-specific function.
 
-IIUC all of this would be to avoid separating
-kvm_mmu_find_shadow_page() from __kvm_mmu_find_shadow_page() correct?
-i.e. Nested MMUs would have their own "find" function, which is called
-by eager page splitting, and thus no separate
-__kvm_mmu_find_shadow_page().
+This series makes the RNG more useful on: m68k, RISC-V, MIPS, ARM32,
+NIOS II, SPARC32, Xtensa, and Usermode Linux. Previously these platforms
+would, in certain circumstances, but out of luck with regards to having
+any type of event timestamping source in the RNG.
 
-But __kvm_mmu_find_shadow_page(), as implemented in this series, is
-about 90% similar to what you proposed for
-kvm_mmu_nested_tdp_find_sp(). And in fact it would work correctly to
-use __kvm_mmu_find_shadow_page() for nested MMUs, since we know the
-sp->unsync condition would just be skipped.
+Finally, note that this series isn't about "jitter entropy" or other
+ways of initializing the RNG. That's a different topic for a different
+thread. Please don't let this discussion veer off into that. Here, I'm
+just trying to find a good fallback counter/timer for platforms without
+get_cycles(), a question with limited scope.
 
-So even if we did everything you proposed (which seems like an awful
-lot just to avoid __kvm_mmu_find_shadow_page()), there's a chance we
-would still end up with the exact same code. i.e.
-kvm_mmu_nested_tdp_find_sp() would be implemented by calling
-__kvm_mmu_find_shadow_page(), because it would be a waste to
-re-implement an almost identical function?
+If this (or a future revision) looks good to you all and receives the
+requisite acks, my plan was to take these through the random.git tree
+for 5.19, so that I can then build on top of it. Alternatively, maybe
+Thomas wants to take it through his timekeeping tree? Or something else.
+If anybody has strong preferences, please pipe up.
 
->
-> Having the separate page fault and get_shadow_page(), without the baggage of unsync
-> in particular, sets us up for switching to taking mmu_lock for read, and in the
-> distant future, implementing whatever new scheme someone concocts for shadowing
-> nested TDP.
+Thanks,
+Jason
 
-Taking MMU read lock with per-root spinlocks for nested MMUs is a
-great idea btw. I think it would be a great improvement.
+Changes v2->v3:
+- Name the fallback function random_get_entropy_fallback(), so that it
+  can be changed out as needed.
+- Include header with prototype in timekeeping.c to avoid compiler
+  warning.
+- Export fallback function symbol.
+
+Changes v1->v2:
+- Use ktime_read_raw_clock() instead of sched_clock(), per Thomas'
+  suggestion.
+- Drop arm64 change.
+- Cleanup header inclusion ordering problem.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: H. Peter Anvin <hpa@zytor.com>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: John Stultz <john.stultz@linaro.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-um@lists.infradead.org
+Cc: x86@kernel.org
+Cc: linux-xtensa@linux-xtensa.org
+
+Jason A. Donenfeld (10):
+  timekeeping: add raw clock fallback for random_get_entropy()
+  m68k: use fallback for random_get_entropy() instead of zero
+  riscv: use fallback for random_get_entropy() instead of zero
+  mips: use fallback for random_get_entropy() instead of zero
+  arm: use fallback for random_get_entropy() instead of zero
+  nios2: use fallback for random_get_entropy() instead of zero
+  x86: use fallback for random_get_entropy() instead of zero
+  um: use fallback for random_get_entropy() instead of zero
+  sparc: use fallback for random_get_entropy() instead of zero
+  xtensa: use fallback for random_get_entropy() instead of zero
+
+ arch/arm/include/asm/timex.h      |  1 +
+ arch/m68k/include/asm/timex.h     |  2 +-
+ arch/mips/include/asm/timex.h     |  2 +-
+ arch/nios2/include/asm/timex.h    |  2 ++
+ arch/riscv/include/asm/timex.h    |  2 +-
+ arch/sparc/include/asm/timex_32.h |  4 +---
+ arch/um/include/asm/timex.h       |  9 ++-------
+ arch/x86/include/asm/tsc.h        | 10 ++++++++++
+ arch/xtensa/include/asm/timex.h   |  6 ++----
+ include/linux/timex.h             |  8 ++++++++
+ kernel/time/timekeeping.c         | 10 ++++++++++
+ 11 files changed, 39 insertions(+), 17 deletions(-)
+
+-- 
+2.35.1
+
