@@ -2,106 +2,195 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41EFD4FE636
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Apr 2022 18:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462C54FE64A
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Apr 2022 18:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357858AbiDLQr5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Apr 2022 12:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S1357864AbiDLQxO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Apr 2022 12:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357903AbiDLQrx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 12:47:53 -0400
-Received: from out28-145.mail.aliyun.com (out28-145.mail.aliyun.com [115.124.28.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07AA49930;
-        Tue, 12 Apr 2022 09:45:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09321077|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0642605-0.00489878-0.930841;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NPL4wXj_1649781929;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NPL4wXj_1649781929)
-          by smtp.aliyun-inc.com(33.37.67.126);
-          Wed, 13 Apr 2022 00:45:30 +0800
-Subject: Re: [PATCH 2/2] USB: dwc2: Add OTG support for Ingenic SoCs.
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, hminas@synopsys.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
-        =?UTF-8?Q?Dragan_=c4=8ce=c4=8davac?= <dragancecavac@yahoo.com>
-References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1627116521-124612-3-git-send-email-zhouyanjie@wanyeetech.com>
- <IQWQWQ.9EAMZ76IPL892@crapouillou.net>
- <e4f7897a-6b70-d936-a968-e66556382851@wanyeetech.com>
- <8735s37slq.fsf@kernel.org>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <021ece97-5e62-c07f-bb6d-b69c93d73b31@wanyeetech.com>
-Date:   Wed, 13 Apr 2022 00:45:29 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S1347569AbiDLQwZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 12:52:25 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1394B57B24
+        for <linux-mips@vger.kernel.org>; Tue, 12 Apr 2022 09:50:06 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id u7so16136523lfs.8
+        for <linux-mips@vger.kernel.org>; Tue, 12 Apr 2022 09:50:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ylLxyVGKqebDetHyuC2Bc6fDpbbFFhb/7aJqORMHVTY=;
+        b=BeeBZYfEZZenHq+VZz3ZtQTJRvLWQlIUvc/hc1brOcgm5kce8lGlmzNx5yqIvOhgUc
+         UDCq+4RZxw0MT8gEV/iUosNBbjwK5H7Zu2KRvhnmmK4yGV/2DliGjVpqM19h4PjeX0qX
+         q1jpS5mG4Oo4uFkrlUJBZsLj7lHX2j/uSqZepLYxTj4Bwl+wILljvKH1NuMb+PcTL/Dw
+         K6DaFHGqo13SN/DmRnQjImAdgE8QQACgkaL5RaJpFFp3lNzLS5t/Bdf0+vjgfpGN15QS
+         V0Km+PY4CEHdd2J4zjah3arKKvk9P4JDe90QEqKiwiH4KfrjfGJuSkiscGDAxWwdtaRe
+         mjCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ylLxyVGKqebDetHyuC2Bc6fDpbbFFhb/7aJqORMHVTY=;
+        b=m6xKaKhZuor2ruTcaRsj1CW6yUI9JJqIL75FcDfZdh4bW96VLs2DZMWC2pROHp7e3E
+         JJlzb3XokIwrUMYxZT/1QJKwTf5TBMmrIOK81UWb99/znEka96UrzFRV4v+Xvw+WnXBv
+         EPkdHTRRZdyzKzyVY5g1NlB5vPc1qISuehQ9Ec9Ftn2MxAttxagEndkbiWedsDeIh2fP
+         UR9gkgt9wa1GSGHvPXiCfoxrOTizmA9Qwafbrq9ZkQYQBWDUJPhfyAcS2NRKKgo+1SWK
+         qz+sAO7WKjQ7hBsaNvbB/NZK5AGODZIVOlVlpVu5243T3mAZMMpDFMA1FxQG1ZKFAWBH
+         z+/A==
+X-Gm-Message-State: AOAM531bMnYZzf3m8jGuadZnX9KMkrH9kmXBCNCmrqwosNjls9aDRc/M
+        VS9xWotwH8UR+TI5xDmHiBXqq5h2db+krIX9sINyMTfzhbaA+g==
+X-Google-Smtp-Source: ABdhPJxTRKFjPYmnEA5dSZRqS1mYFeUSvf19B6M+jy1KqTK4lzVK4HG6VgeaW5aaLHlSI/Za1/SRULYrkD+BRWtDQo8=
+X-Received: by 2002:a19:674c:0:b0:448:3f49:e6d5 with SMTP id
+ e12-20020a19674c000000b004483f49e6d5mr26383484lfj.518.1649782204083; Tue, 12
+ Apr 2022 09:50:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <8735s37slq.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220401175554.1931568-1-dmatlack@google.com> <YlRhiF1O71TWQr5r@google.com>
+ <CALzav=f_WY7xH_MV8-gJPAVmj1KjE_LvXupL7aA5n-vCjTETNw@mail.gmail.com>
+ <YlSLuZphElMyF2sG@google.com> <CALzav=fGucZOZjbVE2+9PZVf1p+jP7GBYDpPph5PoU552LELsw@mail.gmail.com>
+ <YlTKQz8HVPtyfwKe@google.com>
+In-Reply-To: <YlTKQz8HVPtyfwKe@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 12 Apr 2022 09:49:37 -0700
+Message-ID: <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/23] KVM: Extend Eager Page Splitting to the shadow MMU
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Felipe,
-
-On 2021/7/24 下午9:24, Felipe Balbi wrote:
-> Hi Zhou,
+On Mon, Apr 11, 2022 at 5:39 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> Zhou Yanjie writes:
->>>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
->>>> index 67c5eb1..a7a1b50 100644
->>>> --- a/drivers/usb/dwc2/params.c
->>>> +++ b/drivers/usb/dwc2/params.c
->>>> @@ -71,6 +71,47 @@ static void dwc2_set_his_params(struct
->>>> dwc2_hsotg *hsotg)
->>>>       p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
->>>>   }
->>>>
->>>> +static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
->>>> +{
->>>> +    struct dwc2_core_params *p = &hsotg->params;
->>>> +
->>>> +    p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
->>>> +    p->speed = DWC2_SPEED_PARAM_HIGH;
->>>> +    p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
->>>> +    p->phy_utmi_width = 16;
->>>> +    p->deactivate_ingenic_overcurrent_detection =
->>>> +        device_property_read_bool(hsotg->dev, "disable-over-current");
->>> That device property was not documented in the previous patch. Also
->>> this probably should be "ingenic,disable-over-current".
->>>
->> This device property already exists (it has been used in the
->> "dwc2_get_device_properties()" function below).
->>
->> Under normal circumstances, after using this device attribute, it
->> should be possible to turn off the overcurrent
->>
->> detection, but on the Ingenic processors, somehow it did not take
->> effect normally, and we must operate the
->>
->> "VBVALOEN" bit and "VBVALOVAL" bit of "GOTGCTL" register to make it normal.
-> I believe what Paul is suggesting is that this property lacks
-> documentation under Documentation/devicetree/bindings/. If that's the
-> case, you could take the opportunity to document the property and,
-> perhaps, add the missing prefix.
+> On Mon, Apr 11, 2022, David Matlack wrote:
+> >
+> > One thing that would be helpful is if you can explain in a bit more
+> > specifically what you'd like to see. Part of the reason why I prefer
+> > to sequence your proposal after eager page splitting is that I do not
+> > fully understand what you're proposing, and how complex it would be.
+> > e.g. Forking FNAME(fetch), FNAME(page_fault), and kvm_mmu_get_page()
+> > for nested MMUs does not sound like less churn.
+>
+> Oh, it's most definitely not less code, and probably more churn.  But, it's churn
+> that pushes us in a more favorable direction and that is desirable long term.  I
+> don't mind churning code, but I want the churn to make future life easier, not
+> harder.  Details below.
 
+Of course. Let's make sure we're on the same page about what churn
+introduced by this series will make future life harder that we hope to
+avoid. If I understand you correctly, it's the following 2 changes:
 
-Sorry for the long time delay.
+ (a.) Using separate functions to allocate SPs and initialize SPs.
+ (b.) Separating kvm_mmu_find_shadow_page() from __kvm_mmu_find_shadow_page().
 
-Looks like Krzysztof has done the job, I will send v2 soon.
+(a.) stems from the fact that SP allocation during eager page
+splitting is made directly rather than through kvm_mmu_memory_caches,
+which was what you pushed for in the TDP MMU implementation. We could
+instead use kvm_mmu_memory_caches for the shadow MMU eager page
+splitting to eliminate (a.). But otherwise (a.) is necessary
+complexity of eager page splitting because it needs to allocate SPs
+differently from the vCPU fault path.
 
+As for (b.), see below...
 
-Thanks and best regards!
+>
+> > From my perspective, this series is a net improvement to the
+> > readability and maintainability of existing code, while adding a
+> > performance improvement (eager page splitting). All of the changes you
+> > are proposing can still be implemented on top if
+>
+> They can be implemented on top, but I want to avoid inhireting complexity we
+> don't actually want/need, unsync support being the most notable.
+>
+> What I mean by "fork" is that after the cleanups that make sense irrespective of
+> eager page splitting, we make a copy of FNAME(page_fault) and add FNAME(get_shadow_page),
+> extracting common logic where we can and probably doing something fancy to avoid
+> having multiple copies of FNAME(get_shadow_page).  Looking again at the code, it's
+> probably best to keep FNAME(fetch), at least for now, as it's only the single unsync
+> check that we can purge at this point.
+>
+> That gives us e.g. FNAME(nested_page_fault) that support EPT and 64-bit NPT, and
+> a nested TDP specific get_shadow_page().
+>
+> Then we rip out the unsync stuff for nested MMUs, which is quite clean because we
+> can key off of tdp_enabled.  It'll leave dead code for 32-bit hosts running nested
+> VMs, but I highly doubt anyone will notice the perf hit.
+>
+> At that point, dissect kvm_nested_mmu_get_page() for eager page splitting and
+> continue on.
+>
+> It's not drastically different than what you have now, but it avoids the nastiness
+> around unsync pages, e.g. I'm pretty sure kvm_mmu_alloc_shadow_page() can be reused
+> as I proposed and the "find" becomes something like:
+>
+> static struct kvm_mmu_page *kvm_mmu_nested_tdp_find_sp(struct kvm_vcpu *vcpu,
+>                                                        gfn_t gfn,
+>                                                        unsigned int gfn_hash,
+>                                                        union kvm_mmu_page_role role)
+> {
+>         struct hlist_head *sp_list = &kvm->arch.mmu_page_hash[gfn_hash];
+>         struct kvm_mmu_page *sp;
+>
+>         for_each_valid_sp(kvm, sp, sp_list) {
+>                 if (sp->gfn != gfn || sp->role.word != role.word)
+>                         continue;
+>
+>                 __clear_sp_write_flooding_count(sp);
+>                 return sp;
+>         }
+>
+>         return NULL;
+> }
 
+IIUC all of this would be to avoid separating
+kvm_mmu_find_shadow_page() from __kvm_mmu_find_shadow_page() correct?
+i.e. Nested MMUs would have their own "find" function, which is called
+by eager page splitting, and thus no separate
+__kvm_mmu_find_shadow_page().
 
+But __kvm_mmu_find_shadow_page(), as implemented in this series, is
+about 90% similar to what you proposed for
+kvm_mmu_nested_tdp_find_sp(). And in fact it would work correctly to
+use __kvm_mmu_find_shadow_page() for nested MMUs, since we know the
+sp->unsync condition would just be skipped.
+
+So even if we did everything you proposed (which seems like an awful
+lot just to avoid __kvm_mmu_find_shadow_page()), there's a chance we
+would still end up with the exact same code. i.e.
+kvm_mmu_nested_tdp_find_sp() would be implemented by calling
+__kvm_mmu_find_shadow_page(), because it would be a waste to
+re-implement an almost identical function?
+
+>
+> Having the separate page fault and get_shadow_page(), without the baggage of unsync
+> in particular, sets us up for switching to taking mmu_lock for read, and in the
+> distant future, implementing whatever new scheme someone concocts for shadowing
+> nested TDP.
+
+Taking MMU read lock with per-root spinlocks for nested MMUs is a
+great idea btw. I think it would be a great improvement.
