@@ -2,103 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EEE4FDFED
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Apr 2022 14:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715034FDF91
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Apr 2022 14:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353157AbiDLMPx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Apr 2022 08:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
+        id S1345325AbiDLM0k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Apr 2022 08:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344427AbiDLMON (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 08:14:13 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B2485BCA;
-        Tue, 12 Apr 2022 04:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649762107;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=LAJfLx6J2WmZC4bb1+JwTUQAf3iNcvFDt6K/GjnBeyo=;
-    b=i1+808ypX8DaCa2FQHHrzR2cUPVWbCJQbQR37xzwCqFyRjK/hyEo+6sZb3nZbBAR9I
-    S3qa/W9a4pw1J1Sb5tcBB+l0KYkq+bu4/plZytXmxSiGshI6lN9a2dFx/cCnu8aZr/Hw
-    UV6WTx4PW7VFDGAsK3oQpg36h6j0abq7DUaFCBBctI9z1Ff4gjFSpEP5sZx8SRaROiTk
-    R8VUnKVbnWHkrgXMd6HRHrvbsQ1zMRkBvMzNbVuQeMXtE61uEkPcbWaDqUbxRsqJ3Deu
-    0bXI/lwiAJypVETla80H5TAoHy6x9nj7n7XrSxr2ntn98rafoycluCFUw6TyUmunFTPw
-    lbzQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3iKs="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy3CBF74I3
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 12 Apr 2022 13:15:07 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
- dtbscheck
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <3e088e18-5df9-bf50-0070-b24b8a3c5f41@wanyeetech.com>
-Date:   Tue, 12 Apr 2022 13:15:06 +0200
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3649C5AE-FDE3-49B4-9A70-431506F78AB7@goldelico.com>
-References: <cover.1649443080.git.hns@goldelico.com>
- <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
- <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
- <822182F3-5429-4731-9FA1-8F18C5D95DEC@goldelico.com>
- <535e3eab-a28e-46f3-2a7e-f1ffd1913470@linaro.org>
- <7B66AC66-EF73-4F75-A775-589A4F98BEFC@goldelico.com>
- <3e95f567-03f5-bf9c-1856-9fe602e9b025@linaro.org>
- <81BA49E3-AFDE-4DFD-BB77-2B03488C727B@goldelico.com>
- <b6090a27-12b7-0c01-6d33-ae32b31b4b74@wanyeetech.com>
- <8FA36CE4-CD39-4767-B49E-D112E4313036@goldelico.com>
- <3e088e18-5df9-bf50-0070-b24b8a3c5f41@wanyeetech.com>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S239826AbiDLM0K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 08:26:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAAA7306F;
+        Tue, 12 Apr 2022 04:32:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649763176; x=1681299176;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SKjITbPb7i0r99ypkNUGhZ8LVM6D2ZzpcpXODGPohDQ=;
+  b=iWnMgIoq6Bw5QWZzPswk2qF7N6k6KAU4+yyBV5oiZsYteKk1VHgjF4nR
+   qtV/kpSp/v8Am/2IrOQRZNMUIajc78x7a1GDda9tbxlCnyV9WdjXOqo9G
+   RAHZePTnaFv3PQpSWa/vd/rdATqFZBu2dCEST35rfVubtrUAZq1DdyBpV
+   NV79jP0Q1tXLVeE94x33XtFsM/xl06c3sm5E23yesu44EX9SBVXPKEEA1
+   b0ifPts5Z91vhvSEJNw2P68uK7jhaDo8Yafo8XDanBKoqj/gG+a9mDOx0
+   k7RQ7MVoM5babXcaRfqjCRe9RApq9gulrbiNUe+AVq/8/Wy3og4DmFsHR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262534791"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="262534791"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:32:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="655072819"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Apr 2022 04:32:54 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 260E212C; Tue, 12 Apr 2022 14:32:53 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Allen Pais <apais@linux.microsoft.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 1/1] firmware: tee_bnxt: Use UUID API for exporting the UUID
+Date:   Tue, 12 Apr 2022 14:32:50 +0300
+Message-Id: <20220412113250.57997-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Yanjie,
+There is export_uuid() function which exports uuid_t to the u8 array.
+Use it instead of open coding variant.
 
-> Am 12.04.2022 um 11:49 schrieb Zhou Yanjie =
-<zhouyanjie@wanyeetech.com>:
->=20
-> Hi Nikolaus,
->=20
-> On 2022/4/11 =E4=B8=8A=E5=8D=883:13, H. Nikolaus Schaller wrote:
->> Hi,
->>=20
->>=20
->> If you agree I can add "ingenic,jz4780-otg" to the schema file and =
-keep
->> the .dts in the v2 of my series.
->=20
->=20
-> Sure.
->=20
-> Or you can wait a bit, I plan to send out new patches later today, it =
-contains "ingenic,jz4780-otg".
+This allows to hide the uuid_t internals.
 
-Would be fine! I think you will be faster than me :)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3: rebased on the latest vanilla, added Andrew since it has no move for 1y+
+ drivers/firmware/broadcom/tee_bnxt_fw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So I'll check with your patch and drop mine from my v2 series.
-
-BR and thanks,
-Nikolaus
+diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
+index a5bf4c3f6dc7..40e3183a3d11 100644
+--- a/drivers/firmware/broadcom/tee_bnxt_fw.c
++++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
+@@ -197,7 +197,7 @@ static int tee_bnxt_fw_probe(struct device *dev)
+ 		return -ENODEV;
+ 
+ 	/* Open session with Bnxt load Trusted App */
+-	memcpy(sess_arg.uuid, bnxt_device->id.uuid.b, TEE_IOCTL_UUID_LEN);
++	export_uuid(sess_arg.uuid, &bnxt_device->id.uuid);
+ 	sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+ 	sess_arg.num_params = 0;
+ 
+-- 
+2.35.1
 
