@@ -2,63 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72BAC4FF38D
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 11:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752744FF206
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 10:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiDMJed (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 05:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
+        id S231149AbiDMIik (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 04:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiDMJed (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 05:34:33 -0400
-X-Greylist: delayed 3300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Apr 2022 02:32:12 PDT
-Received: from mail.growthmindset24.pl (mail.growthmindset24.pl [212.237.36.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF8A53E31
-        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 02:32:12 -0700 (PDT)
-Received: by mail.growthmindset24.pl (Postfix, from userid 1001)
-        id 0615588A04; Wed, 13 Apr 2022 08:41:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=growthmindset24.pl;
-        s=mail; t=1649835767;
-        bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
-        h=Date:From:To:Subject:From;
-        b=XclgH+rMSM1XqrG02PEMEvec4LHajBoFkUk3s3LaaqDFmw4sFHfAbsqPIOrZcSyxB
-         RIZOBod7iJ64Tabm5SpkweXbofXKnXCaw8iN6/Z5MkChienqvolQ3HirqgvgQ31I+e
-         EifADLVM8dNoi0BpZGvmzFbfAwA2zKblj3lESBm91qZbEmAE7Tfjdcl8sKO4/N0QcX
-         VArXuVs3xWx35njoXGaoEmEcI6rZ8YHJf4blJnHt0nOh6sAmwLkGxg/6s09qhzM7oM
-         SFiaTV8U1Exwl2hhX0N4ZWREXgZudD9hluNWu6IR+L/4JcL/KhOncvPl6xm0J+q9xf
-         e5ZNp0WC0EgEA==
-Received: by mail.growthmindset24.pl for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 07:40:10 GMT
-Message-ID: <20220413074502-0.1.2x.dtz8.0.3r1h7a297p@growthmindset24.pl>
-Date:   Wed, 13 Apr 2022 07:40:10 GMT
-From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
-        <przemyslaw.wroblewski@growthmindset24.pl>
-To:     <linux-mips@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.growthmindset24.pl
-MIME-Version: 1.0
+        with ESMTP id S229987AbiDMIij (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 04:38:39 -0400
+X-Greylist: delayed 379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Apr 2022 01:36:19 PDT
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FD962D3
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 01:36:19 -0700 (PDT)
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay13.hostedemail.com (Postfix) with ESMTP id E6D7960B0F;
+        Wed, 13 Apr 2022 08:29:57 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id D72BC1D;
+        Wed, 13 Apr 2022 08:29:54 +0000 (UTC)
+Message-ID: <d0ed8518dfb93e6f2bbbaf4aac3436dd20369c00.camel@perches.com>
+Subject: Re: [PATCH 08/14] MAINTAINERS: add Ralink pinctrl driver
+From:   Joe Perches <joe@perches.com>
+To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Date:   Wed, 13 Apr 2022 01:29:53 -0700
+In-Reply-To: <20220413060729.27639-9-arinc.unal@arinc9.com>
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+         <20220413060729.27639-9-arinc.unal@arinc9.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.40.4-1ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: zhuoxxoync4pzqz7sdbq39i3jeft38mk
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: D72BC1D
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18hGnWBYKAheXpW4IDdjP9YcLGcKeoboe4=
+X-HE-Tag: 1649838594-350832
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Wed, 2022-04-13 at 09:07 +0300, Arınç ÜNAL wrote:
+> Add a new section for the Ralink pinctrl driver and add me and Sergio as
+> the maintainers.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+It's unusual for a last name to be completely capitalized.
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> @@ -16502,6 +16502,13 @@ L:	linux-mips@vger.kernel.org
+>  S:	Maintained
+>  F:	arch/mips/boot/dts/ralink/mt7621*
+>  
+> +RALINK PINCTRL DRIVER
+> +M:	Arınç ÜNAL <arinc.unal@arinc9.com>
+> +M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> +L:	linux-mips@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/pinctrl/ralink/*
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Typically this is just the directory.
+
+F:	drivers/pinctrl/ralink/
+
+as this covers any file in the directory as well as
+any possible subdirectories and files.
+
+Using
+
+F:	drivers/pinctrl/ralink/*
+
+excludes any possible subdirectories and files within those
+possible subdirectories.
 
 
-Pozdrawiam,
-Przemys=C5=82aw Wr=C3=B3blewski
