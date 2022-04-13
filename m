@@ -2,180 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540C14FEC04
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 03:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BA54FEF60
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 08:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiDMBFQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Apr 2022 21:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        id S232978AbiDMGLF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 02:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiDMBFP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 21:05:15 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467F52252A
-        for <linux-mips@vger.kernel.org>; Tue, 12 Apr 2022 18:02:56 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so488608pja.0
-        for <linux-mips@vger.kernel.org>; Tue, 12 Apr 2022 18:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KpI1kD5PS40ibZjM0D35TPH/+b7l2YUJ66VT/gr7+3I=;
-        b=WvEr5jNVtGCO3BZPBqZt3WRaH+qJWPUJ+rs93IIEG+K2bJ3Wt/blAxXxD+jg+m5RUd
-         TKEh9acGqoMAwNFo/iZwvIT5HN4JBY8N+7CjG7PADEvLKuwA8OkFZizB3FEZf7bSUB9c
-         pDy6TeJW1lmjYQVuQgzprHZjF33F23Uxgf7eet+9mnWnnNU+07ay7Xt0N2XugKQicXBn
-         0oRF6f4P7vgwCQUFUaISNiAsixKYit0+u3RnL3LPTCuqshubEKBTALKRCw1KW2xXv6q5
-         MOcm9G3pHpI14zHTQSGUsvZX7EdvBv3Jtt+s0+q/WG6iUlZy5LWzj1/478x87JFi9F3b
-         S0Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KpI1kD5PS40ibZjM0D35TPH/+b7l2YUJ66VT/gr7+3I=;
-        b=cMNgWAet3QRHUaSzvVPRcc+JeV7qrZRtYZkL4gOUbPWklBQevKAKDEtJkqH57izi/y
-         NMljkaGvKyw9xxedfNjFeNTzM5AGj6D17faw212BpSyJaMPJk6QT+UngYQtqPC0XBr8j
-         oOP7/pzqPXGPqCEyK+KMVAjsP5HQP0AV1hX8sO7/VDvpOVAJEfLecsmyLJ2ywAZi4AJx
-         0CK3u7ZstU7hMp+qW6QpCQuU/sDppOU8dNn+ioLFa1UhXEl+6hQhP4aOZoG5JHwJkyg2
-         HQXkBdgsJDocTPqtRp5kxUeRsxmi5LfWVYtV3iuxNgHYAhy3WlHWjVUBYpoa9ahXCuB0
-         Bxvw==
-X-Gm-Message-State: AOAM530WxeVmNDoWcO70rLXihc9t4WLXsLImMNHuVmYlyCXVVdIjRzjJ
-        U0e/eCQ24OMwGBFNWQrw/LT/fQ==
-X-Google-Smtp-Source: ABdhPJxqWTBWdRVUHoEHytrydpTb+wgHLkf9yECQ7JPXA9VzNZCYKDHBFO/AL7hpNzLdXs6Wd+6Akw==
-X-Received: by 2002:a17:90a:a509:b0:1ca:c48e:a795 with SMTP id a9-20020a17090aa50900b001cac48ea795mr7872866pjq.165.1649811775498;
-        Tue, 12 Apr 2022 18:02:55 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h19-20020a632113000000b0039d9c5be7c8sm3135296pgh.21.2022.04.12.18.02.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 18:02:54 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 01:02:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v3 00/23] KVM: Extend Eager Page Splitting to the shadow
- MMU
-Message-ID: <YlYhO7GvjKY1cwHr@google.com>
-References: <20220401175554.1931568-1-dmatlack@google.com>
- <YlRhiF1O71TWQr5r@google.com>
- <CALzav=f_WY7xH_MV8-gJPAVmj1KjE_LvXupL7aA5n-vCjTETNw@mail.gmail.com>
- <YlSLuZphElMyF2sG@google.com>
- <CALzav=fGucZOZjbVE2+9PZVf1p+jP7GBYDpPph5PoU552LELsw@mail.gmail.com>
- <YlTKQz8HVPtyfwKe@google.com>
- <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
+        with ESMTP id S232955AbiDMGLC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 02:11:02 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A152335DD1;
+        Tue, 12 Apr 2022 23:08:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1649830075; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Gu0uUdc3EcM/n0HpwKvQvAOp/8WfUysFN5FxNMMCbn+opt8Vh3ENekl76HPlW1kuHJBWdV0P3s8nE0r4QcctIIFLtg1i05XeZ9qT6Iw74hP/xBwDAwotFYrmS7hgbZnu23gH0pfS4IqmUuVcTSrpU65MYXwHKT8oqqajLWHo5jQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1649830075; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=1GLD2yVhpnmtg9MYSN1hVevZ7/889ED0UFX13MyyOP0=; 
+        b=E9FRlUMY9xM30pRoLXtZhpYHzQjvBhMR609PnD8jboqVFrW56zYNbJ5pFFAe8A3Nja0ng9vaky4vjkJ/Yllih9PIk3olsVtrEg9c0H4KnOF3QcZZEH91rH7s2dmm566Tmi/zmjzUDa1N7X1RUwNPMwrpq7Fvr7yDyMEmzKn6fUE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649830075;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+        bh=1GLD2yVhpnmtg9MYSN1hVevZ7/889ED0UFX13MyyOP0=;
+        b=DC/fV5Ae6Y4c5yCfrCs096yh+1z8q4uS2Cc0uyt9UdebKAWMnS9HvsmFBCP/lF0c
+        lODU9vVn758SVw6XkOsiE+ypVcQyp6EOCTTTWm6xmXo36sXTWJM/4TXns3MGfd1LW6Z
+        3t2JPdbS3yC8nL6IAh8rIs5MKhx7i1D/9iVA9sik=
+Received: from arinc9-PC.localdomain (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1649830073203273.4772973442915; Tue, 12 Apr 2022 23:07:53 -0700 (PDT)
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     erkin.bozoglu@xeront.com,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 0/14] Refactor Ralink Pinctrl and Add Documentation
+Date:   Wed, 13 Apr 2022 09:07:15 +0300
+Message-Id: <20220413060729.27639-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 12, 2022, David Matlack wrote:
-> On Mon, Apr 11, 2022 at 5:39 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, Apr 11, 2022, David Matlack wrote:
-> > >
-> > > One thing that would be helpful is if you can explain in a bit more
-> > > specifically what you'd like to see. Part of the reason why I prefer
-> > > to sequence your proposal after eager page splitting is that I do not
-> > > fully understand what you're proposing, and how complex it would be.
-> > > e.g. Forking FNAME(fetch), FNAME(page_fault), and kvm_mmu_get_page()
-> > > for nested MMUs does not sound like less churn.
-> >
-> > Oh, it's most definitely not less code, and probably more churn.  But, it's churn
-> > that pushes us in a more favorable direction and that is desirable long term.  I
-> > don't mind churning code, but I want the churn to make future life easier, not
-> > harder.  Details below.
-> 
-> Of course. Let's make sure we're on the same page about what churn
-> introduced by this series will make future life harder that we hope to
-> avoid. If I understand you correctly, it's the following 2 changes:
-> 
->  (a.) Using separate functions to allocate SPs and initialize SPs.
->  (b.) Separating kvm_mmu_find_shadow_page() from __kvm_mmu_find_shadow_page().
-> 
-> (a.) stems from the fact that SP allocation during eager page
-> splitting is made directly rather than through kvm_mmu_memory_caches,
-> which was what you pushed for in the TDP MMU implementation. We could
-> instead use kvm_mmu_memory_caches for the shadow MMU eager page
+Hey everyone.
 
-...
+This patch series brings complete refactoring to the Ralink pinctrl driver
+and its subdrivers.
 
-> So even if we did everything you proposed (which seems like an awful
-> lot just to avoid __kvm_mmu_find_shadow_page()), there's a chance we
-> would still end up with the exact same code. i.e.
-> kvm_mmu_nested_tdp_find_sp() would be implemented by calling
-> __kvm_mmu_find_shadow_page(), because it would be a waste to
-> re-implement an almost identical function?
+The mt7620 pinctrl subdriver supports MT7628 and MT7688 SoCs along with
+MT7620. These two share the same pin layout. The code used for MT7628 and
+MT7688 is renamed from MT7628/mt7628an to MT76X8.
 
-I went far enough down this path to know that my idea isn't completely awful,
-and wouldn't actually need to fork FNAME(page_fault) at this time, but sadly I
-still dislike the end result.
+Ralink pinctrl driver is called rt2880 which is the name of the Ralink
+RT2880 SoC. A subdriver for the Ralink RT2880 SoC is called rt288x. Rename
+rt2880 to ralink.
 
-Your assessment that the we'd still end up with very similar (if not quite exact)
-code is spot on.  Ditto for your other assertion in (a) about using the caches.
+Rename code from pinmux to pinctrl for where the operation is not about the
+muxing of pins.
 
-My vote for this series is to go the cache route, e.g. wrap kvm_mmu_memory_caches
-in a struct and pass that into kvm_mmu_get_page().  I still think it was the right
-call to ignore the caches for the TDP MMU, it gives the TDP MMU more flexibility
-and it was trivial to bypass the caches since the TDP MMU was doing its own thing
-anyways.
+Rename rt288x pinctrl subdriver for the RT2880 SoC to rt2880.
 
-But for the shadow MMU, IMO the cons outweigh the pros.  E.g. in addition to
-ending up with two similar but subtly different "get page" flows, passing around
-"struct kvm_mmu_page **spp" is a bit unpleasant.  Ditto for having a partially
-initialized kvm_mmu_page.  The split code also ends up in a wierd state where it
-uses the caches for the pte_list, but not the other allocations.
+Variables for functions include "grp" on the Ralink MT7620 and MT7621
+subdrivers. Rename them to "func" instead as they define the functions for
+the pin groups. This is already the case for the other 3 subdrivers;
+RT2880, RT305x, RT3883.
 
-There will be one wart due to unsync pages needing @vcpu, but we can pass in NULL
-for the split case and assert that @vcpu is non-null since all of the children
-should be direct.
+Fix Kconfig to call the subdrivers, well, subdrivers.
 
-		if (sp->unsync) {
-			if (WARN_ON_ONCE(!vcpu)) {
-				kvm_mmu_prepare_zap_page(kvm, sp,
-							 &invalid_list);
-				continue;
-			}
+Add new compatible strings for each subdriver and update DT binding
+accordingly.
 
-			/*
-			 * The page is good, but is stale.  kvm_sync_page does
-			 * get the latest guest state, but (unlike mmu_unsync_children)
-			 * it doesn't write-protect the page or mark it synchronized!
-			 * This way the validity of the mapping is ensured, but the
-			 * overhead of write protection is not incurred until the
-			 * guest invalidates the TLB mapping.  This allows multiple
-			 * SPs for a single gfn to be unsync.
-			 *
-			 * If the sync fails, the page is zapped.  If so, break
-			 * in order to rebuild it.
-			 */
-			if (!kvm_sync_page(vcpu, sp, &invalid_list))
-				break;
+Add Ralink pinctrl driver to MAINTAINERS and add me and Sergio as the
+maintainers.
 
-			WARN_ON(!list_empty(&invalid_list));
-			kvm_flush_remote_tlbs(kvm);
-		}
+Finally, fix the current rt2880 documentation and add binding for all of
+the subdrivers.
+
+I have the patches here should anyone prefer to read them there:
+https://github.com/arinc9/linux/commits/ralink-pinctrl-refactor
+
+Ralink pinctrl driver and the subdrivers were compile tested.
+MT7621 pinctrl subdriver was tested on a private mt7621 board.
+YAML bindings checked with:
+ARCH=mips CROSS_COMPILE=mips-linux-gnu- make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/pinctrl/ -j$(nproc)
+
+Arınç ÜNAL (14):
+  pinctrl: ralink: rename MT7628(an) functions to MT76X8
+  pinctrl: ralink: rename pinctrl-rt2880 to pinctrl-ralink
+  pinctrl: ralink: rename pinmux functions to pinctrl
+  pinctrl: ralink: rename pinctrl-rt288x to pinctrl-rt2880
+  pinctrl: ralink: rename variable names for functions on MT7620 and MT7621
+  pinctrl: ralink: rename driver names to subdrivers
+  pinctrl: ralink: add new compatible strings for each pinctrl subdriver
+  MAINTAINERS: add Ralink pinctrl driver
+  mips: dts: ralink: mt7621: use the new compatible string for MT7621 pinctrl
+  dt-bindings: pinctrl: rt2880: fix binding name, pin groups and functions
+  dt-bindings: pinctrl: add binding for Ralink MT7620 pinctrl
+  dt-bindings: pinctrl: add binding for Ralink MT7621 pinctrl
+  dt-bindings: pinctrl: add binding for Ralink RT305X pinctrl
+  dt-bindings: pinctrl: add binding for Ralink RT3883 pinctrl
+
+ Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml   |  87 ++++++++
+ .../pinctrl/{ralink,rt2880-pinmux.yaml => ralink,mt7621-pinctrl.yaml}  |  25 ++-
+ Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml   |  68 ++++++
+ Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml   |  89 ++++++++
+ Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml   |  69 ++++++
+ MAINTAINERS                                                            |   7 +
+ arch/mips/boot/dts/ralink/mt7621.dtsi                                  |   2 +-
+ drivers/pinctrl/ralink/Kconfig                                         |  28 +--
+ drivers/pinctrl/ralink/Makefile                                        |   4 +-
+ drivers/pinctrl/ralink/pinctrl-mt7620.c                                | 302 ++++++++++++-------------
+ drivers/pinctrl/ralink/pinctrl-mt7621.c                                |  76 +++----
+ drivers/pinctrl/ralink/pinctrl-ralink.c                                | 349 +++++++++++++++++++++++++++++
+ drivers/pinctrl/ralink/{pinmux.h => pinctrl-ralink.h}                  |  16 +-
+ drivers/pinctrl/ralink/pinctrl-rt2880.c                                | 381 ++++----------------------------
+ drivers/pinctrl/ralink/pinctrl-rt288x.c                                |  60 -----
+ drivers/pinctrl/ralink/pinctrl-rt305x.c                                |  66 +++---
+ drivers/pinctrl/ralink/pinctrl-rt3883.c                                |  50 ++---
+ 17 files changed, 998 insertions(+), 681 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+ rename Documentation/devicetree/bindings/pinctrl/{ralink,rt2880-pinmux.yaml => ralink,mt7621-pinctrl.yaml} (63%)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/ralink/pinctrl-ralink.c
+ rename drivers/pinctrl/ralink/{pinmux.h => pinctrl-ralink.h} (75%)
+ delete mode 100644 drivers/pinctrl/ralink/pinctrl-rt288x.c
+
+
