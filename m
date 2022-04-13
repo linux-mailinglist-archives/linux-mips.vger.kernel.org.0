@@ -2,169 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98404FEFE8
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 08:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E6F4FF083
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 09:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbiDMGim (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 02:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S233322AbiDMHZr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 03:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbiDMGim (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 02:38:42 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418AF3A73E;
-        Tue, 12 Apr 2022 23:36:21 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id j6so689337qkp.9;
-        Tue, 12 Apr 2022 23:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lVlNuAo9+0LRFp48WRzrOf1tdSb0zAURerrByRaHWQ4=;
-        b=RWm0KbOUQ8Kubcw7iCvGa7dVVMQnn8DHJxM8rtgcot3Nef+WP3ZwU1lw2U7COdgDid
-         G+kl/vGL1ZCSpKyycigFMRZiLQBc0A5xXI7QJFybMLtfXHBPL7H0CW09PSI5FKLGMIBj
-         sZzgTw6eVx4AgBYyA9Aaxegl0QQcg4l4uGQ2GN2YynTKhKYa0c1L4vqw1U+a4OdameKX
-         NJX5YHKKKyXTNGstljKTZGBDY+fIOnj87/jamYoW1CZVdUdweDfdHj32UyaJ5RDTyN9B
-         xHvfj+MB7PLHPuWmGhjYLQe4K8FoqsYUPXpDxvA9K07Wf+zm330XLVA0z3hjrS50cIPa
-         EGRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lVlNuAo9+0LRFp48WRzrOf1tdSb0zAURerrByRaHWQ4=;
-        b=jVjbAwxw6cQWfzOBatL8PDJzyJabE5x9caTACEpfwZzET3v271cyA/1sYghQwX318N
-         4D9FQ7nEBIN5TU0e5mQETMFP/rLhOkoILyRcB8wkFOj9D+adtZ1SCWI4vo17rDC95X/c
-         xvE0lA46MLeB3OuhRnH5AmFtqPXUOKNToEYqptz7NxmBfAjYvtVJR1Ao5NTsKKZF2eJ0
-         JQbuHY9V+8TPU1xNkX1LMhCI8u8jnxp7AVtveTEIrVPJVa0DhQxVvTuC0rwkLhdA6l9W
-         xjk4gJLtzG1w3rtbhc5j3rNO3hEQ116yK6PiVsGvj2f+1BhoDUQKbM2cLyFmYl7ZrpQ2
-         6ESg==
-X-Gm-Message-State: AOAM530dSw+2GDkZR3ahJU756sw98MpC7cEqitQJMd2wtNQlGZQ5frOz
-        f2DczF4/R4t5kk9CSFVEbJJjv38b6KX+xl5QYWs=
-X-Google-Smtp-Source: ABdhPJy3AaKsu44Yp4UCtsi1PArOwoGqRvhviTP5hjJuZ9/J2xvjSNLZDqzHNMxdw18SPpRJjGR6tsX20Muox56KDQo=
-X-Received: by 2002:a05:620a:4308:b0:67b:487e:e02a with SMTP id
- u8-20020a05620a430800b0067b487ee02amr5722093qko.696.1649831780406; Tue, 12
- Apr 2022 23:36:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
-In-Reply-To: <20220413060729.27639-1-arinc.unal@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 13 Apr 2022 08:36:09 +0200
-Message-ID: <CAMhs-H_oRzpeqJY8Oe+7Su5v-4B1WPwzOfhrvBC08FVi-O6fVA@mail.gmail.com>
-Subject: Re: [PATCH 0/14] Refactor Ralink Pinctrl and Add Documentation
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        erkin.bozoglu@xeront.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S233319AbiDMHZo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 03:25:44 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F864EF5B;
+        Wed, 13 Apr 2022 00:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649834576;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=jSef++PqlCRC5a4E7G9ko+rR3cG0lpZnUPx+3xD3i7k=;
+    b=MiFx7X19KcZviO8N1lBrrnZQxFqdpVnskMF7uzqQgRP/aJm+jDz2EM+ReZG3FMkR5v
+    JdYIVJZzej7TkIId6fWcDIni7CLtCBG9UGi0/kPPjn4TZ6CeqPKlF9q9iqr3wv6s4+k7
+    Tz0eSNte16z2hyyaXk0SB3UP4ym/Jdr5XGXjLP2mMS2fJqvMe+OrN32QNsghhrpo2WBe
+    R60work5jkLFacohwDMRmCtDdfPWaSS4E56DF762marMk6BUmQpfVSd+n+KkoPYLoC7L
+    Jc+D0HRXsRjoRhFKBPZjttEZZGcvs7R6zY9G0Mi6skCLwoZtATU6BlU9mAGFD0BkLI6b
+    slsw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4nvnQ=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy3D7Mt7tg
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 13 Apr 2022 09:22:55 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
+ SoCs.
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
+Date:   Wed, 13 Apr 2022 09:22:54 +0200
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        hminas@synopsys.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dragancecavac@yahoo.com, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
+References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
+To:     =?utf-8?B?IuWRqOeQsOadsCAoWmhvdSBZYW5qaWUpIg==?= 
+        <zhouyanjie@wanyeetech.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arin=C3=A7,
+Hi,
 
-On Wed, Apr 13, 2022 at 8:08 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
-9.com> wrote:
->
-> Hey everyone.
->
-> This patch series brings complete refactoring to the Ralink pinctrl drive=
-r
-> and its subdrivers.
->
-> The mt7620 pinctrl subdriver supports MT7628 and MT7688 SoCs along with
-> MT7620. These two share the same pin layout. The code used for MT7628 and
-> MT7688 is renamed from MT7628/mt7628an to MT76X8.
->
-> Ralink pinctrl driver is called rt2880 which is the name of the Ralink
-> RT2880 SoC. A subdriver for the Ralink RT2880 SoC is called rt288x. Renam=
-e
-> rt2880 to ralink.
->
-> Rename code from pinmux to pinctrl for where the operation is not about t=
-he
-> muxing of pins.
->
-> Rename rt288x pinctrl subdriver for the RT2880 SoC to rt2880.
->
-> Variables for functions include "grp" on the Ralink MT7620 and MT7621
-> subdrivers. Rename them to "func" instead as they define the functions fo=
-r
-> the pin groups. This is already the case for the other 3 subdrivers;
-> RT2880, RT305x, RT3883.
->
-> Fix Kconfig to call the subdrivers, well, subdrivers.
->
-> Add new compatible strings for each subdriver and update DT binding
-> accordingly.
->
-> Add Ralink pinctrl driver to MAINTAINERS and add me and Sergio as the
-> maintainers.
->
-> Finally, fix the current rt2880 documentation and add binding for all of
-> the subdrivers.
->
-> I have the patches here should anyone prefer to read them there:
-> https://github.com/arinc9/linux/commits/ralink-pinctrl-refactor
->
-> Ralink pinctrl driver and the subdrivers were compile tested.
-> MT7621 pinctrl subdriver was tested on a private mt7621 board.
-> YAML bindings checked with:
-> ARCH=3Dmips CROSS_COMPILE=3Dmips-linux-gnu- make dt_binding_check DT_SCHE=
-MA_FILES=3DDocumentation/devicetree/bindings/pinctrl/ -j$(nproc)
->
-> Ar=C4=B1n=C3=A7 =C3=9CNAL (14):
->   pinctrl: ralink: rename MT7628(an) functions to MT76X8
->   pinctrl: ralink: rename pinctrl-rt2880 to pinctrl-ralink
->   pinctrl: ralink: rename pinmux functions to pinctrl
->   pinctrl: ralink: rename pinctrl-rt288x to pinctrl-rt2880
->   pinctrl: ralink: rename variable names for functions on MT7620 and MT76=
-21
->   pinctrl: ralink: rename driver names to subdrivers
->   MAINTAINERS: add Ralink pinctrl driver
+> Am 12.04.2022 um 20:30 schrieb =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou =
+Yanjie) <zhouyanjie@wanyeetech.com>:
+>=20
+> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
+> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
+> from Ingenic.
+>=20
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) =
+<zhouyanjie@wanyeetech.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>=20
+> Notes:
+>    v1->v2:
+>    Add Rob Herring's Acked-by.
+>=20
+> Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
+> 1 file changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml =
+b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> index 4cebce6..c6e8c0b 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> @@ -17,6 +17,13 @@ properties:
+>     oneOf:
+>       - const: brcm,bcm2835-usb
+>       - const: hisilicon,hi6220-usb
+> +      - const: ingenic,jz4775-otg
+> +      - const: ingenic,jz4780-otg
+> +      - const: ingenic,x1000-otg
+> +      - const: ingenic,x1600-otg
+> +      - const: ingenic,x1700-otg
+> +      - const: ingenic,x1830-otg
+> +      - const: ingenic,x2000-otg
 
-For all these rename stuff and MAINTAINERS change:
+I have merged it with my recently proposed removal of
+ingenic,jz4780-otg in jz4780.dtsi but there was no dtbscheck
+complaint about missing snps,dwc2.
 
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+So I think should it be:
 
->   pinctrl: ralink: add new compatible strings for each pinctrl subdriver
->   mips: dts: ralink: mt7621: use the new compatible string for MT7621 pin=
-ctrl
->   dt-bindings: pinctrl: rt2880: fix binding name, pin groups and function=
-s
->   dt-bindings: pinctrl: add binding for Ralink MT7620 pinctrl
->   dt-bindings: pinctrl: add binding for Ralink MT7621 pinctrl
->   dt-bindings: pinctrl: add binding for Ralink RT305X pinctrl
->   dt-bindings: pinctrl: add binding for Ralink RT3883 pinctrl
+      - items:
+          - enum:
+              - const: ingenic,jz4775-otg
+              - const: ingenic,jz4780-otg
+              - const: ingenic,x1000-otg
+              - const: ingenic,x1600-otg
+              - const: ingenic,x1700-otg
+              - const: ingenic,x1830-otg
+              - const: ingenic,x2000-otg
+          - const: snps,dwc2
 
-I think you cannot change compatible strings because you have to be
-compatible with previous stuff. That is the reason why when I
-refactored all of this stuff from 'arch/mips/ralink' into
-'drivers/pinctrl' I maintained the same for all of them and only
-created one binding for all. I know that these SoCs are mostly used in
-openWRT and the way of doing things there is that when a new version
-is released a new dtb is also compiled so I understand the motivation
-of the change itself. In any case, Rob has the last word here, not me
-:).
+similar to the entry for amlogic?
 
-Thanks for doing this.
+>       - items:
+>           - const: rockchip,rk3066-usb
+>           - const: snps,dwc2
+> --=20
+> 2.7.4
+>=20
 
-Best regards,
-    Sergio Paracuellos
+BR and thanks,
+Nikolaus=
