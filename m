@@ -2,174 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B61E4FFF8E
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 21:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D04500119
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 23:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238471AbiDMTpK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 15:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S234223AbiDMVZg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 17:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238462AbiDMTpA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 15:45:00 -0400
-Received: from out28-196.mail.aliyun.com (out28-196.mail.aliyun.com [115.124.28.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E7979389;
-        Wed, 13 Apr 2022 12:42:36 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07527822|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0857127-0.00646813-0.907819;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NQ7bWa9_1649878951;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NQ7bWa9_1649878951)
-          by smtp.aliyun-inc.com(33.37.2.29);
-          Thu, 14 Apr 2022 03:42:33 +0800
-Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
- SoCs.
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hminas@synopsys.com, Rob Herring <robh+dt@kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>, dragancecavac@yahoo.com,
-        dongsheng.qiu@ingenic.com, qipengzhen <aric.pzqi@ingenic.com>,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
- <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
- <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
- <0AE74BF9-46F1-44EC-8E5F-40EA12851AD0@goldelico.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <56cf73fc-1a7d-831d-b8a4-ff077d260c1c@wanyeetech.com>
-Date:   Thu, 14 Apr 2022 03:42:31 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S237680AbiDMVZf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 17:25:35 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4461D6C919
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 14:23:12 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id p10so5759683lfa.12
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 14:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dYAKe9Fpp2p080RFNVrX8nvH48ftci+REg/42hZxgoc=;
+        b=nwDnkOa38P1VoIYbkttIE0rGKyT3F3PN9ICR23k5xZJPv7udw9nzhaXDpU2MeS+Q6R
+         G7n4BMgGJrU+SgepxYg2qU/L3zAcZp/BR8O7GBZue2XuSjQWbNC5WpD71CukDXO7VS47
+         slPyPyCa6ui4Ed2YfQAaCRKSHrWb9O2FF4Ct0wgIMqLCkC9AB0qfeiqL5UIBu1n1nP9g
+         2gQgXKMoBYcAVFhLVRXIM8v4hv/fuIDBB7gKVHnxZOuRPz9Xz7i1RNFgQf2/Y824xVNP
+         WuIhkLkB31k0g5V7iKS+GKCreRt5g5K0vSauR8kYpYufkFG+dbjlKaP/BJLDeM2L0ZIf
+         uBoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dYAKe9Fpp2p080RFNVrX8nvH48ftci+REg/42hZxgoc=;
+        b=x7m9MvTWd8AGedE+BEh/IPUPDn75kS3B3Zx9Yp54Rk4kJpdsQ66oTes3UWCwgjCeh+
+         v2wUCXn3IltntDuFz6nUpc6jD5Vvb8ixOCNMVH5VEQyAKHVQ4b/sIdzGNjzny1CooRLS
+         Sopm1PgVf96juv/c99FltdiFcJ2mIzKBFSts74Qvg2fv8DLyhw8FXcOEb3z4ZBp6OYZn
+         j+Phxeg8l1/G8tQKoBoi4FVVQzgo23zwqeDXBm+tOyBoqP8bpba14XVlOm5mSFak/9ut
+         IT9DejowfKJXmmLQaYi/9yB+w6y1dehuQFmE/Z6SxCMb5soxfVN6Tt7q9nl2618Y3wx2
+         o8vA==
+X-Gm-Message-State: AOAM532JnFXQXbd290K1bzycxpLTPX4zvFm3kI05gjvA7+vEm2kr/jlX
+        9PHaOudfke/HAJ+YJlnpy3jsZ5rw0Cafr4LCJlZHwA==
+X-Google-Smtp-Source: ABdhPJzr3FVsm7oEAVBg9PQFhteEP/ns+lhODUER5Jh8hvabbPpL5e0XXIARvqMywuPMVxDtDEKCm0Sos0EVpgJ0wu4=
+X-Received: by 2002:a05:6512:21cd:b0:46b:b89e:186c with SMTP id
+ d13-20020a05651221cd00b0046bb89e186cmr7223606lft.250.1649884990280; Wed, 13
+ Apr 2022 14:23:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <0AE74BF9-46F1-44EC-8E5F-40EA12851AD0@goldelico.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220401175554.1931568-1-dmatlack@google.com> <YlRhiF1O71TWQr5r@google.com>
+ <CALzav=f_WY7xH_MV8-gJPAVmj1KjE_LvXupL7aA5n-vCjTETNw@mail.gmail.com>
+ <YlSLuZphElMyF2sG@google.com> <CALzav=fGucZOZjbVE2+9PZVf1p+jP7GBYDpPph5PoU552LELsw@mail.gmail.com>
+ <YlTKQz8HVPtyfwKe@google.com> <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
+ <YlYhO7GvjKY1cwHr@google.com> <YlcPIYJ0CB2qnfpT@google.com> <YlcWP5Z3osvUg0Ia@google.com>
+In-Reply-To: <YlcWP5Z3osvUg0Ia@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Wed, 13 Apr 2022 14:22:43 -0700
+Message-ID: <CALzav=cg32bxLwCJKG0vBfgKRSXoHmeRnA-NOYC0Px7BsMgfGw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/23] KVM: Extend Eager Page Splitting to the shadow MMU
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus,
+On Wed, Apr 13, 2022 at 11:28 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Apr 13, 2022, David Matlack wrote:
+> > On Wed, Apr 13, 2022 at 01:02:51AM +0000, Sean Christopherson wrote:
+> > > There will be one wart due to unsync pages needing @vcpu, but we can pass in NULL
+> > > for the split case and assert that @vcpu is non-null since all of the children
+> > > should be direct.
+> >
+> > The NULL vcpu check will be a little gross,
+>
+> Yeah, I would even call it a lot gross :-)
+>
+> > but it should never trigger in practice since eager page splitting always
+> > requests direct SPs. My preference has been to enforce that in code by
+> > splitting out
+>
+> It still is enforced in code, just at different points.  The split version WARNs
+> and continues after finding a page, the below WARNs and rejects _while_ finding
+> the page.
+>
+> Speaking of WARNs, that reminds me... it might be worth adding a WARN in
+> kvm_mmu_get_child_sp() to document (and detect, but more to document) that @direct
+> should never encounter an page with unsync or unsync_children, e.g.
+>
+>         union kvm_mmu_page_role role;
+>         struct kvm_mmu_page *sp;
+>
+>         role = kvm_mmu_child_role(sptep, direct, access);
+>         sp = kvm_mmu_get_page(vcpu, gfn, role);
+>
+>         /* Comment goes here about direct pages in shadow MMUs? */
+>         WARN_ON(direct && (sp->unsync || sp->unsync_children));
+>         return sp;
+>
+> The indirect walk of FNAME(fetch)() handles unsync_children, but none of the other
+> callers do.  Obviously shouldn't happen, but especially in the huge page split
+> case it took me a second to understand exactly why it can't happen.
 
-On 2022/4/14 上午3:30, H. Nikolaus Schaller wrote:
-> Hi,
->
->
->> Am 13.04.2022 um 20:55 schrieb Zhou Yanjie <zhouyanjie@wanyeetech.com>:
->>
->> Hi Nikolaus,
->>
->> On 2022/4/13 下午3:22, H. Nikolaus Schaller wrote:
->>> Hi,
->>>
->>>
->>>> Am 12.04.2022 um 20:30 schrieb 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->>>> :
->>>>
->>>> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
->>>> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
->>>> from Ingenic.
->>>>
->>>> Signed-off-by: 周琰杰 (Zhou Yanjie)
->>>> <zhouyanjie@wanyeetech.com>
->>>>
->>>> Acked-by: Rob Herring
->>>> <robh@kernel.org>
->>>>
->>>> ---
->>>>
->>>> Notes:
->>>>     v1->v2:
->>>>     Add Rob Herring's Acked-by.
->>>>
->>>> Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
->>>> 1 file changed, 7 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
->>>> index 4cebce6..c6e8c0b 100644
->>>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
->>>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
->>>> @@ -17,6 +17,13 @@ properties:
->>>>      oneOf:
->>>>        - const: brcm,bcm2835-usb
->>>>        - const: hisilicon,hi6220-usb
->>>> +      - const: ingenic,jz4775-otg
->>>> +      - const: ingenic,jz4780-otg
->>>> +      - const: ingenic,x1000-otg
->>>> +      - const: ingenic,x1600-otg
->>>> +      - const: ingenic,x1700-otg
->>>> +      - const: ingenic,x1830-otg
->>>> +      - const: ingenic,x2000-otg
->>>>
->>> I have merged it with my recently proposed removal of
->>> ingenic,jz4780-otg in jz4780.dtsi but there was no dtbscheck
->>> complaint about missing snps,dwc2.
->>>
->>> So I think should it be:
->>>
->>>        - items:
->>>            - enum:
->>>                - const: ingenic,jz4775-otg
->>>                - const: ingenic,jz4780-otg
->>>                - const: ingenic,x1000-otg
->>>                - const: ingenic,x1600-otg
->>>                - const: ingenic,x1700-otg
->>>                - const: ingenic,x1830-otg
->>>                - const: ingenic,x2000-otg
->>>
-> PS: the const: above should be removed (I hadn't run it through the compiler).
->
->>>            - const: snps,dwc2
-> here it is needed.
->
->>> similar to the entry for amlogic?
->>>
->>
->> Or we can just remove the "snps,dwc2" from jz4780.dtsi?
-> Well, my recent proposal to fix dtbscheck was the other way round:
-> remove "ingenic,jz4780-otg" from jz4780.dtsi and leave it out here.
->
->> I'm not too sure, but since we already have a dedicated "ingenic, jz4780-otg", it seems "snps,dwc2" is redundant.
-> As far as I see there is no driver specialization compatible to
-> "ingenic,jz4780-otg". `grep ingenic,jz4780-otg *` only shows the .dtsi (and the new .yaml).
->
-> So we need "snps,dwc2" to get any driver match and I thought the "ingenic,jz4780-otg" is redundant.
->
-> But maintainers convinced me to keep it as a dummy compatible in the .dtsi for potential future
-> specialization (which does not exist and seems not to be necessary). Unless I can convince them
-> that this is never ever needed. Which is beyond my knowledge and almost everyone.
->
-> So we can't remove the "snps,dwc2" here.
->
-> Well, we can with more work elsewhere.
-> You have to extend the dwc2_of_match_table to include all ingenic devices.
->
-> Therefore we now know 3 potential solutions:
-> a) remove "ingenic,jz4780-otg" from jz4780.dtsi (my proposal)
-> b) add "ingenic,jz4780-otg" to dwc2.yaml together with "snps,dwc2" (your proposal + my suggestion here)
-> c) add only "ingenic,jz4780-otg" to dwc2.yaml and extend the match table in drivers//usb/dwc2/params.c (new proposals)
->
->  From consistency point of view I think variant b) is the right one. a) was rejected and c) only adds redundant code.
+Will do.
 
-
-You are probably right, I forgot that the OTG driver only exists in my local
-repository and is not merged into the mainline. If we remove "snps,dwc2",
-the OTG of the JZ4780 in the current version will not work properly.
-
-I will send v3 tomorrow.
-
-
-Thanks and best regards!
-
-
-> I am open to anything as long as the dtbscheck doesn't complain any more.
 >
-> BR an thanks,
-> Nikolaus
+> > but I can see the advantage of your proposal is that eager page splitting and
+> > faults will go through the exact same code path to get a kvm_mmu_page.
+> > __kvm_mmu_find_shadow_page(), but I can see the advantage of your
+> > proposal is that eager page splitting and faults will go through the
+> > exact same code path to get a kvm_mmu_page.
+> >
+> > >
+> > >             if (sp->unsync) {
+> > >                     if (WARN_ON_ONCE(!vcpu)) {
+> > >                             kvm_mmu_prepare_zap_page(kvm, sp,
+> > >                                                      &invalid_list);
+> > >                             continue;
+> > >                     }
+> > >
+> > >                     /*
+> > >                      * The page is good, but is stale.  kvm_sync_page does
+> > >                      * get the latest guest state, but (unlike mmu_unsync_children)
+> > >                      * it doesn't write-protect the page or mark it synchronized!
+> > >                      * This way the validity of the mapping is ensured, but the
+> > >                      * overhead of write protection is not incurred until the
+> > >                      * guest invalidates the TLB mapping.  This allows multiple
+> > >                      * SPs for a single gfn to be unsync.
+> > >                      *
+> > >                      * If the sync fails, the page is zapped.  If so, break
+> > >                      * in order to rebuild it.
+> > >                      */
+> > >                     if (!kvm_sync_page(vcpu, sp, &invalid_list))
+> > >                             break;
+> > >
+> > >                     WARN_ON(!list_empty(&invalid_list));
+> > >                     kvm_flush_remote_tlbs(kvm);
+> > >             }
