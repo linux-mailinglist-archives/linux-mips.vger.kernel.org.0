@@ -2,54 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43BD4FFD3F
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 19:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5024FFDC7
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 20:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbiDMSA4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 14:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S236307AbiDMSat (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 14:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237431AbiDMSAx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 14:00:53 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799606E344
-        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 10:57:58 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q12so2447054pgj.13
-        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 10:57:58 -0700 (PDT)
+        with ESMTP id S235824AbiDMSan (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 14:30:43 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A53A50E3B
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 11:28:21 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 125so2530430pgc.11
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 11:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=lKms+iLPtRUk5y/Weofi/PdQuKMWfU/nQ1UEwvdazkA=;
-        b=VI7NuhMtE5n6hcf5o1lr6t8ZOQB244gh3vPkDR8/4kX00bX5l/+t/BORMexz0C9Bes
-         3/+VhI2JSDj1pSNs/rZcBt0kNZ98jay4OW7PQUswSDsPYsmnplbhDAHnhd9ccPcL6HA2
-         bmQOUc2THBOrC9SUGbSR2lqw2odxZDJZBefY1TRssGH1I4LZ8vvR6ruCc7lvPL5RlvII
-         LTAGGfs1JLlpoJv12ISZimfV9ZbLvQbvTrNZ4H1zfbHsUo8c/G1DqsWrHyTwkajk0J0G
-         iIIowf/+Gcy5EtdtVbGaFH9naZWCoETckHHj0fmkmEmVfd0vxoBEUQ+/kc+iYioZP19n
-         /ajg==
+        bh=bpeKB101GiB4lxea+Vei5KAP2vPrN2mAl+5Iy4JIo1Y=;
+        b=hSS+V6AJRz170U3P+2UqpwQ5nmzP1chGiCMEpvco/3ng23jK7nkez9K1F+P4cRXQjO
+         YSsOdRh0ob/PxY68/0Y/VELl5VQowOxyFpT9XPmnxFvhgOMwtKOeko/YZwR12NjPm/AN
+         rztaKQwC/WhmgPfRgIg3aarP/B37AhZS6JUH1dW7S9ZCTAhfmLAt52in0ht8+hzQwrdb
+         cuqY1xSpSWScCLE+3OLpp0PfmNkLXJw+2W4WH8WJPkgIpiPFD9LktmKo59tCfPclJ4gv
+         aIsOm9E4RLexPhl6n3Rg/6l3RvqmNX5LuUt+M+Evoer+5fHEseA6lLSYh4fIXsahLxbx
+         191w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=lKms+iLPtRUk5y/Weofi/PdQuKMWfU/nQ1UEwvdazkA=;
-        b=cPhLkVU9DvdtzRBCkxMQkZ5Soiw4crwndUwD924Y/fOLvpnsMrw1J+k1y058IJmuho
-         +O37TtRJ2co82GmkoxgXIqvyQwEC2wDkmXZxP+kPJWI4AiIxSV6zk2CbE6NkIKRGKzmN
-         v0K/D9RhsMU7L+mGpaMqlXIojpAp9rD81DGFG8VSLNmoxupV5XEyKNt9T3h89eteX9uO
-         jCzIR4+V0OYdGB/YKgXLbx7aiqvEmjG6W4YvRJ7fG4W9IehCAUmRo5Sx/LoC9B0LA5WG
-         x9G5tnsu/3TMvZGu44dlUKal+LCUl5vdUfUZIhLGChHMJsWtYYGJVcIzleHzt5GVw1vo
-         rwzA==
-X-Gm-Message-State: AOAM530U36pQm/+bH44oUjssX0dUYRGZjt5gTqvqyOkUD7yWX4gvNSnM
-        m4q4DkEft2tFuIJIc0nKVIXLXw==
-X-Google-Smtp-Source: ABdhPJzRyu8tHffHYzAcQVAnebPL6Cv2V5j7/xAO3BnBL9wlRay5v7Pxg+Hg4uOSbzo7Xo6auY8Wfg==
-X-Received: by 2002:a63:4862:0:b0:385:fb1d:fc54 with SMTP id x34-20020a634862000000b00385fb1dfc54mr36295792pgk.57.1649872677704;
-        Wed, 13 Apr 2022 10:57:57 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id br10-20020a17090b0f0a00b001cd4fb89d38sm3170813pjb.9.2022.04.13.10.57.56
+        bh=bpeKB101GiB4lxea+Vei5KAP2vPrN2mAl+5Iy4JIo1Y=;
+        b=XORkWboW8rfLdyFo5S0mEBKz5wV777t8AsJaEtRXp6NhS3pO0/T3MlO6mpcGkB0mfI
+         tHco0SZoiEk3rDY2F6wcSYkIvAJRTwfueqtk+C4jYTcZZDkFW91I6tdzSldh8ItMCSxC
+         hZrxIZQF4rFT/b1fuQbPhXB+KNZTvNH2a4M74nEv/DzYTHrHPLg8dHM9D6jQ+VsxMDPC
+         GoK0P2ROk8Tww6dO5oNoAOK4E+a/L6Iipil09Z18rPM24be8g4QB9i2KRWrb2EYR1k7I
+         UbFT40FG3/gNA3ZauKqOro8iFNXv26W97QCQFoeb9FCwHm9hyYUT7zBlOncmBu4cxgC4
+         hqlw==
+X-Gm-Message-State: AOAM531GoylX9Kfov4kOllCGZTod8Gfw15dx/z11PcYs3xm2CnzUHh4D
+        LWxSrG9GJoxM+Q5yNwNNIhwbeA==
+X-Google-Smtp-Source: ABdhPJwVoOa8Dj+YAhZ33kjw7NtyqOGLBfa4tCRI9XDyKQYayiKcuB3O+jKCPUAV/nNuh3GKhHrCig==
+X-Received: by 2002:a65:560e:0:b0:39d:7613:94cf with SMTP id l14-20020a65560e000000b0039d761394cfmr10974179pgs.196.1649874500603;
+        Wed, 13 Apr 2022 11:28:20 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n19-20020a62e513000000b005048eef5827sm24973743pff.142.2022.04.13.11.28.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 10:57:56 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 17:57:53 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
+        Wed, 13 Apr 2022 11:28:19 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 18:28:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -70,7 +70,7 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
 Subject: Re: [PATCH v3 00/23] KVM: Extend Eager Page Splitting to the shadow
  MMU
-Message-ID: <YlcPIYJ0CB2qnfpT@google.com>
+Message-ID: <YlcWP5Z3osvUg0Ia@google.com>
 References: <20220401175554.1931568-1-dmatlack@google.com>
  <YlRhiF1O71TWQr5r@google.com>
  <CALzav=f_WY7xH_MV8-gJPAVmj1KjE_LvXupL7aA5n-vCjTETNw@mail.gmail.com>
@@ -79,126 +79,87 @@ References: <20220401175554.1931568-1-dmatlack@google.com>
  <YlTKQz8HVPtyfwKe@google.com>
  <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
  <YlYhO7GvjKY1cwHr@google.com>
+ <YlcPIYJ0CB2qnfpT@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlYhO7GvjKY1cwHr@google.com>
+In-Reply-To: <YlcPIYJ0CB2qnfpT@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 01:02:51AM +0000, Sean Christopherson wrote:
-> On Tue, Apr 12, 2022, David Matlack wrote:
-> > On Mon, Apr 11, 2022 at 5:39 PM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Mon, Apr 11, 2022, David Matlack wrote:
-> > > >
-> > > > One thing that would be helpful is if you can explain in a bit more
-> > > > specifically what you'd like to see. Part of the reason why I prefer
-> > > > to sequence your proposal after eager page splitting is that I do not
-> > > > fully understand what you're proposing, and how complex it would be.
-> > > > e.g. Forking FNAME(fetch), FNAME(page_fault), and kvm_mmu_get_page()
-> > > > for nested MMUs does not sound like less churn.
-> > >
-> > > Oh, it's most definitely not less code, and probably more churn.  But, it's churn
-> > > that pushes us in a more favorable direction and that is desirable long term.  I
-> > > don't mind churning code, but I want the churn to make future life easier, not
-> > > harder.  Details below.
+On Wed, Apr 13, 2022, David Matlack wrote:
+> On Wed, Apr 13, 2022 at 01:02:51AM +0000, Sean Christopherson wrote:
+> > There will be one wart due to unsync pages needing @vcpu, but we can pass in NULL
+> > for the split case and assert that @vcpu is non-null since all of the children
+> > should be direct.
+> 
+> The NULL vcpu check will be a little gross,
+
+Yeah, I would even call it a lot gross :-)
+
+> but it should never trigger in practice since eager page splitting always
+> requests direct SPs. My preference has been to enforce that in code by
+> splitting out
+
+It still is enforced in code, just at different points.  The split version WARNs
+and continues after finding a page, the below WARNs and rejects _while_ finding
+the page.
+
+Speaking of WARNs, that reminds me... it might be worth adding a WARN in
+kvm_mmu_get_child_sp() to document (and detect, but more to document) that @direct
+should never encounter an page with unsync or unsync_children, e.g. 
+
+	union kvm_mmu_page_role role;
+	struct kvm_mmu_page *sp;
+
+	role = kvm_mmu_child_role(sptep, direct, access);
+	sp = kvm_mmu_get_page(vcpu, gfn, role);
+
+	/* Comment goes here about direct pages in shadow MMUs? */
+	WARN_ON(direct && (sp->unsync || sp->unsync_children));
+	return sp;
+
+The indirect walk of FNAME(fetch)() handles unsync_children, but none of the other
+callers do.  Obviously shouldn't happen, but especially in the huge page split
+case it took me a second to understand exactly why it can't happen.
+
+> but I can see the advantage of your proposal is that eager page splitting and
+> faults will go through the exact same code path to get a kvm_mmu_page.
+> __kvm_mmu_find_shadow_page(), but I can see the advantage of your
+> proposal is that eager page splitting and faults will go through the
+> exact same code path to get a kvm_mmu_page.
+> 
 > > 
-> > Of course. Let's make sure we're on the same page about what churn
-> > introduced by this series will make future life harder that we hope to
-> > avoid. If I understand you correctly, it's the following 2 changes:
+> > 		if (sp->unsync) {
+> > 			if (WARN_ON_ONCE(!vcpu)) {
+> > 				kvm_mmu_prepare_zap_page(kvm, sp,
+> > 							 &invalid_list);
+> > 				continue;
+> > 			}
 > > 
-> >  (a.) Using separate functions to allocate SPs and initialize SPs.
-> >  (b.) Separating kvm_mmu_find_shadow_page() from __kvm_mmu_find_shadow_page().
+> > 			/*
+> > 			 * The page is good, but is stale.  kvm_sync_page does
+> > 			 * get the latest guest state, but (unlike mmu_unsync_children)
+> > 			 * it doesn't write-protect the page or mark it synchronized!
+> > 			 * This way the validity of the mapping is ensured, but the
+> > 			 * overhead of write protection is not incurred until the
+> > 			 * guest invalidates the TLB mapping.  This allows multiple
+> > 			 * SPs for a single gfn to be unsync.
+> > 			 *
+> > 			 * If the sync fails, the page is zapped.  If so, break
+> > 			 * in order to rebuild it.
+> > 			 */
+> > 			if (!kvm_sync_page(vcpu, sp, &invalid_list))
+> > 				break;
 > > 
-> > (a.) stems from the fact that SP allocation during eager page
-> > splitting is made directly rather than through kvm_mmu_memory_caches,
-> > which was what you pushed for in the TDP MMU implementation. We could
-> > instead use kvm_mmu_memory_caches for the shadow MMU eager page
-> 
-> ...
-> 
-> > So even if we did everything you proposed (which seems like an awful
-> > lot just to avoid __kvm_mmu_find_shadow_page()), there's a chance we
-> > would still end up with the exact same code. i.e.
-> > kvm_mmu_nested_tdp_find_sp() would be implemented by calling
-> > __kvm_mmu_find_shadow_page(), because it would be a waste to
-> > re-implement an almost identical function?
-> 
-> I went far enough down this path to know that my idea isn't completely awful,
-> and wouldn't actually need to fork FNAME(page_fault) at this time, but sadly I
-> still dislike the end result.
-
-Thanks for looking into it so quickly so we could figure out a path
-forward.
-
-> 
-> Your assessment that the we'd still end up with very similar (if not quite exact)
-> code is spot on.  Ditto for your other assertion in (a) about using the caches.
-> 
-> My vote for this series is to go the cache route, e.g. wrap kvm_mmu_memory_caches
-> in a struct and pass that into kvm_mmu_get_page().  I still think it was the right
-> call to ignore the caches for the TDP MMU, it gives the TDP MMU more flexibility
-> and it was trivial to bypass the caches since the TDP MMU was doing its own thing
-> anyways.
-> 
-> But for the shadow MMU, IMO the cons outweigh the pros.  E.g. in addition to
-> ending up with two similar but subtly different "get page" flows, passing around
-> "struct kvm_mmu_page **spp" is a bit unpleasant.  Ditto for having a partially
-> initialized kvm_mmu_page.  The split code also ends up in a wierd state where it
-> uses the caches for the pte_list, but not the other allocations.
-
-Sounds good. I will rework the series to use kvm_mmu_memory_cache
-structs for the SP allocation during eager page splitting. That will
-eliminate the separate allocation and initialization which will be a
-nice cleanup. And it will be great to get rid of the spp crud.
-
-And per your earlier feedback, I will also limit eager page splitting to
-nested MMUs.
-
-> 
-> There will be one wart due to unsync pages needing @vcpu, but we can pass in NULL
-> for the split case and assert that @vcpu is non-null since all of the children
-> should be direct.
-
-The NULL vcpu check will be a little gross, but it should never trigger
-in practice since eager page splitting always requests direct SPs. My
-preference has been to enforce that in code by splitting out
-__kvm_mmu_find_shadow_page(), but I can see the advantage of your
-proposal is that eager page splitting and faults will go through the
-exact same code path to get a kvm_mmu_page.
-
-> 
-> 		if (sp->unsync) {
-> 			if (WARN_ON_ONCE(!vcpu)) {
-> 				kvm_mmu_prepare_zap_page(kvm, sp,
-> 							 &invalid_list);
-> 				continue;
-> 			}
-> 
-> 			/*
-> 			 * The page is good, but is stale.  kvm_sync_page does
-> 			 * get the latest guest state, but (unlike mmu_unsync_children)
-> 			 * it doesn't write-protect the page or mark it synchronized!
-> 			 * This way the validity of the mapping is ensured, but the
-> 			 * overhead of write protection is not incurred until the
-> 			 * guest invalidates the TLB mapping.  This allows multiple
-> 			 * SPs for a single gfn to be unsync.
-> 			 *
-> 			 * If the sync fails, the page is zapped.  If so, break
-> 			 * in order to rebuild it.
-> 			 */
-> 			if (!kvm_sync_page(vcpu, sp, &invalid_list))
-> 				break;
-> 
-> 			WARN_ON(!list_empty(&invalid_list));
-> 			kvm_flush_remote_tlbs(kvm);
-> 		}
+> > 			WARN_ON(!list_empty(&invalid_list));
+> > 			kvm_flush_remote_tlbs(kvm);
+> > 		}
