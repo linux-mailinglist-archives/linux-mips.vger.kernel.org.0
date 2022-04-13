@@ -2,156 +2,198 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C496E4FFE26
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 20:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BA84FFF52
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 21:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237814AbiDMSuz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 14:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
+        id S234627AbiDMTdK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 15:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiDMSuy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 14:50:54 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A75DA0F;
-        Wed, 13 Apr 2022 11:48:32 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2ec04a2ebadso32319057b3.12;
-        Wed, 13 Apr 2022 11:48:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J1rErWVySlUxlEFN2u18NGS5Qm0qvXYHGlMsYpGhhEY=;
-        b=o889vKxSZtxv8BEV2OoNHeUSIVSxACJe8n0x+KvpxDr0kg3lDSg1g8LoUE9Bu4dAAe
-         I0iUyDRgqQM+YxT7ev9JMk18DB7xCsm0NBYY0yKziHMpPBVYhoEIuHPE0y3+tOiIghU0
-         QHrGU+pFLYAbtd6x535V+cs7nmE3stGixEEx91f8SUrxCGmEZ0B4NPXCTsEfdbCexJso
-         vN1rL0p+hRNdjj6uBwjtVnohxcEFxd7GQNFhlNHOO2UF1hIvohxjUdbrpOBY+8T8/y0d
-         BY3aa+4w9VV3v6CY9Vt8NvvoNMllq5JBLzAtEZiZR4w9pAAAbivq/5mzW1QjjZn3A3Ob
-         eqpg==
-X-Gm-Message-State: AOAM532UuvfMXcYmQn930+JWT3B73Q7VMEmbT5Qiq10V4IGHVmHDg4AO
-        YQUeiVjdulu07zQKtE0HLZsgtYUCjcWXGlEgZG4=
-X-Google-Smtp-Source: ABdhPJz9BfsA7QIGi43YRDlzzrWhVjbeGEMJOs01j9nA3vXXWXOOPKhq5d8EhdtGHqqQ5dYXQmK91VGL/RQnfnI1jKs=
-X-Received: by 2002:a81:7c45:0:b0:2eb:4759:cc32 with SMTP id
- x66-20020a817c45000000b002eb4759cc32mr224284ywc.515.1649875711933; Wed, 13
- Apr 2022 11:48:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220411233832.391817-1-dmitry.osipenko@collabora.com> <20220411233832.391817-4-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220411233832.391817-4-dmitry.osipenko@collabora.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 20:48:20 +0200
-Message-ID: <CAJZ5v0gf1J+yPW14TAdLGLGfO+-2s=r0DDP7d+Rgop3=dB0gaQ@mail.gmail.com>
-Subject: Re: [PATCH v7 03/20] reboot: Print error message if restart handler
- has duplicated priority
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        with ESMTP id S238565AbiDMTdH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 15:33:07 -0400
+X-Greylist: delayed 43642 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Apr 2022 12:30:44 PDT
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7CB23167;
+        Wed, 13 Apr 2022 12:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649878220;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=XizD8wLk7RPr/MmlqEKaUWzpG6m4WiqeZdBPHS0La8o=;
+    b=E29x+v4cnWoYTOOQZ3tOrcqmGRKwpSCBnpTnlNCdcRSrJK4MG4pih2yeqnzzhn/Je/
+    GY5tNEepJQbAnarKOqlWgt+zkI1gXNmoEqImr0yfLX0ThgyXg8FLVidTZWqdKx7Q+8MJ
+    BYWYh/+X8qnxM4I2W2dat1/9XcgH1Mh36gT0NcC3ibY6LoJRve5A6FfUdHQVfPXy12gy
+    U9vVtxjeohA/2w/bgtLPEaod1jTKE9SSd7r4uXmp3R5d5P3gB+2bKe3D82joLMQf57d+
+    mXQsSdvz5wDkdwzk0U+d90/mUmGXfnT3bis+Qq5TyblENzOpMk6kpoD3zfK+96K+gL6a
+    jAyg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4nvnQ=="
+X-RZG-CLASS-ID: mo00
+Received: from mbp-13-nikolaus.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy3DJUJAlv
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 13 Apr 2022 21:30:19 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
+ SoCs.
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
+Date:   Wed, 13 Apr 2022 21:30:18 +0200
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        hminas@synopsys.com, Rob Herring <robh+dt@kernel.org>,
+        linux-usb@vger.kernel.org, linux-mips <linux-mips@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>, dragancecavac@yahoo.com,
+        dongsheng.qiu@ingenic.com, qipengzhen <aric.pzqi@ingenic.com>,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0AE74BF9-46F1-44EC-8E5F-40EA12851AD0@goldelico.com>
+References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
+ <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 1:39 AM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> Add sanity check which ensures that there are no two restart handlers
-> registered using the same priority. This requirement will become mandatory
-> once all drivers will be converted to the new API and such errors will be
-> fixed.
->
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Hi,
 
-The first two patches in the series are fine with me and there's only
-one minor nit regarding this one (below).
 
-> ---
->  kernel/reboot.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/kernel/reboot.c b/kernel/reboot.c
-> index ed4e6dfb7d44..acdae4e95061 100644
-> --- a/kernel/reboot.c
-> +++ b/kernel/reboot.c
-> @@ -182,6 +182,21 @@ static ATOMIC_NOTIFIER_HEAD(restart_handler_list);
->   */
->  int register_restart_handler(struct notifier_block *nb)
->  {
-> +       int ret;
-> +
-> +       ret = atomic_notifier_chain_register_unique_prio(&restart_handler_list, nb);
-> +       if (ret != -EBUSY)
-> +               return ret;
-> +
-> +       /*
-> +        * Handler must have unique priority. Otherwise call order is
-> +        * determined by registration order, which is unreliable.
-> +        *
-> +        * This requirement will become mandatory once all drivers
-> +        * will be converted to use new sys-off API.
-> +        */
-> +       pr_err("failed to register restart handler using unique priority\n");
+> Am 13.04.2022 um 20:55 schrieb Zhou Yanjie =
+<zhouyanjie@wanyeetech.com>:
+>=20
+> Hi Nikolaus,
+>=20
+> On 2022/4/13 =E4=B8=8B=E5=8D=883:22, H. Nikolaus Schaller wrote:
+>> Hi,
+>>=20
+>>=20
+>>> Am 12.04.2022 um 20:30 schrieb =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou =
+Yanjie) <zhouyanjie@wanyeetech.com>
+>>> :
+>>>=20
+>>> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
+>>> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
+>>> from Ingenic.
+>>>=20
+>>> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)=20
+>>> <zhouyanjie@wanyeetech.com>
+>>>=20
+>>> Acked-by: Rob Herring=20
+>>> <robh@kernel.org>
+>>>=20
+>>> ---
+>>>=20
+>>> Notes:
+>>>    v1->v2:
+>>>    Add Rob Herring's Acked-by.
+>>>=20
+>>> Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
+>>> 1 file changed, 7 insertions(+)
+>>>=20
+>>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml =
+b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>> index 4cebce6..c6e8c0b 100644
+>>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>> @@ -17,6 +17,13 @@ properties:
+>>>     oneOf:
+>>>       - const: brcm,bcm2835-usb
+>>>       - const: hisilicon,hi6220-usb
+>>> +      - const: ingenic,jz4775-otg
+>>> +      - const: ingenic,jz4780-otg
+>>> +      - const: ingenic,x1000-otg
+>>> +      - const: ingenic,x1600-otg
+>>> +      - const: ingenic,x1700-otg
+>>> +      - const: ingenic,x1830-otg
+>>> +      - const: ingenic,x2000-otg
+>>>=20
+>> I have merged it with my recently proposed removal of
+>> ingenic,jz4780-otg in jz4780.dtsi but there was no dtbscheck
+>> complaint about missing snps,dwc2.
+>>=20
+>> So I think should it be:
+>>=20
+>>       - items:
+>>           - enum:
+>>               - const: ingenic,jz4775-otg
+>>               - const: ingenic,jz4780-otg
+>>               - const: ingenic,x1000-otg
+>>               - const: ingenic,x1600-otg
+>>               - const: ingenic,x1700-otg
+>>               - const: ingenic,x1830-otg
+>>               - const: ingenic,x2000-otg
+>>=20
 
-I would use pr_info() here, because this is not a substantial error AFAICS.
+PS: the const: above should be removed (I hadn't run it through the =
+compiler).
 
-> +
->         return atomic_notifier_chain_register(&restart_handler_list, nb);
->  }
->  EXPORT_SYMBOL(register_restart_handler);
-> --
+>>           - const: snps,dwc2
+
+here it is needed.
+
+>>=20
+>> similar to the entry for amlogic?
+>>=20
+>=20
+>=20
+> Or we can just remove the "snps,dwc2" from jz4780.dtsi?
+
+Well, my recent proposal to fix dtbscheck was the other way round:
+remove "ingenic,jz4780-otg" from jz4780.dtsi and leave it out here.
+
+> I'm not too sure, but since we already have a dedicated "ingenic, =
+jz4780-otg", it seems "snps,dwc2" is redundant.
+
+As far as I see there is no driver specialization compatible to
+"ingenic,jz4780-otg". `grep ingenic,jz4780-otg *` only shows the .dtsi =
+(and the new .yaml).
+
+So we need "snps,dwc2" to get any driver match and I thought the =
+"ingenic,jz4780-otg" is redundant.
+
+But maintainers convinced me to keep it as a dummy compatible in the =
+.dtsi for potential future
+specialization (which does not exist and seems not to be necessary). =
+Unless I can convince them=20
+that this is never ever needed. Which is beyond my knowledge and almost =
+everyone.
+
+So we can't remove the "snps,dwc2" here.
+
+Well, we can with more work elsewhere.
+You have to extend the dwc2_of_match_table to include all ingenic =
+devices.
+
+Therefore we now know 3 potential solutions:
+a) remove "ingenic,jz4780-otg" from jz4780.dtsi (my proposal)
+b) add "ingenic,jz4780-otg" to dwc2.yaml together with "snps,dwc2" (your =
+proposal + my suggestion here)
+c) add only "ingenic,jz4780-otg" to dwc2.yaml and extend the match table =
+in drivers//usb/dwc2/params.c (new proposals)
+
+=46rom consistency point of view I think variant b) is the right one. a) =
+was rejected and c) only adds redundant code.
+
+I am open to anything as long as the dtbscheck doesn't complain any =
+more.
+
+BR an thanks,
+Nikolaus
+
