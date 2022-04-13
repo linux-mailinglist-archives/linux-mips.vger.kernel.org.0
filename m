@@ -2,155 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3537A4FEA68
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 01:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540C14FEC04
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 03:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiDLX0e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Apr 2022 19:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S230139AbiDMBFQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Apr 2022 21:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiDLX0Q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 19:26:16 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D083DE7F69;
-        Tue, 12 Apr 2022 15:40:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1649803201; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V1gGyPRrzq2+IYxEgFqW+9RQDsjKShTJNXfR19CIx0I=;
-        b=2YZwLXLEOWmPN8AG89OD4NVqzNK4VfhnQx7xlDnTY9/fpGKt2Obems9m9WNsIiHrvzDcSk
-        NNWm/rrmyH825SKRrCZa7iZnBkYHm234qRt83tCCnE/uRiz0xYyKZGaWJHx9yd6CaQkwDl
-        nR9cViVY9zzy4XSyG1brnH8GxMYFB8k=
-Date:   Tue, 12 Apr 2022 23:39:50 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v5 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
- SoCs
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        dan.carpenter@oracle.com
-Message-Id: <EA09AR.6F7SVEL62WAI1@crapouillou.net>
-In-Reply-To: <20220412122750.279058-3-aidanmacdonald.0x0@gmail.com>
-References: <20220412122750.279058-1-aidanmacdonald.0x0@gmail.com>
-        <20220412122750.279058-3-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S229935AbiDMBFP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Apr 2022 21:05:15 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467F52252A
+        for <linux-mips@vger.kernel.org>; Tue, 12 Apr 2022 18:02:56 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so488608pja.0
+        for <linux-mips@vger.kernel.org>; Tue, 12 Apr 2022 18:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KpI1kD5PS40ibZjM0D35TPH/+b7l2YUJ66VT/gr7+3I=;
+        b=WvEr5jNVtGCO3BZPBqZt3WRaH+qJWPUJ+rs93IIEG+K2bJ3Wt/blAxXxD+jg+m5RUd
+         TKEh9acGqoMAwNFo/iZwvIT5HN4JBY8N+7CjG7PADEvLKuwA8OkFZizB3FEZf7bSUB9c
+         pDy6TeJW1lmjYQVuQgzprHZjF33F23Uxgf7eet+9mnWnnNU+07ay7Xt0N2XugKQicXBn
+         0oRF6f4P7vgwCQUFUaISNiAsixKYit0+u3RnL3LPTCuqshubEKBTALKRCw1KW2xXv6q5
+         MOcm9G3pHpI14zHTQSGUsvZX7EdvBv3Jtt+s0+q/WG6iUlZy5LWzj1/478x87JFi9F3b
+         S0Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KpI1kD5PS40ibZjM0D35TPH/+b7l2YUJ66VT/gr7+3I=;
+        b=cMNgWAet3QRHUaSzvVPRcc+JeV7qrZRtYZkL4gOUbPWklBQevKAKDEtJkqH57izi/y
+         NMljkaGvKyw9xxedfNjFeNTzM5AGj6D17faw212BpSyJaMPJk6QT+UngYQtqPC0XBr8j
+         oOP7/pzqPXGPqCEyK+KMVAjsP5HQP0AV1hX8sO7/VDvpOVAJEfLecsmyLJ2ywAZi4AJx
+         0CK3u7ZstU7hMp+qW6QpCQuU/sDppOU8dNn+ioLFa1UhXEl+6hQhP4aOZoG5JHwJkyg2
+         HQXkBdgsJDocTPqtRp5kxUeRsxmi5LfWVYtV3iuxNgHYAhy3WlHWjVUBYpoa9ahXCuB0
+         Bxvw==
+X-Gm-Message-State: AOAM530WxeVmNDoWcO70rLXihc9t4WLXsLImMNHuVmYlyCXVVdIjRzjJ
+        U0e/eCQ24OMwGBFNWQrw/LT/fQ==
+X-Google-Smtp-Source: ABdhPJxqWTBWdRVUHoEHytrydpTb+wgHLkf9yECQ7JPXA9VzNZCYKDHBFO/AL7hpNzLdXs6Wd+6Akw==
+X-Received: by 2002:a17:90a:a509:b0:1ca:c48e:a795 with SMTP id a9-20020a17090aa50900b001cac48ea795mr7872866pjq.165.1649811775498;
+        Tue, 12 Apr 2022 18:02:55 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h19-20020a632113000000b0039d9c5be7c8sm3135296pgh.21.2022.04.12.18.02.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 18:02:54 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 01:02:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v3 00/23] KVM: Extend Eager Page Splitting to the shadow
+ MMU
+Message-ID: <YlYhO7GvjKY1cwHr@google.com>
+References: <20220401175554.1931568-1-dmatlack@google.com>
+ <YlRhiF1O71TWQr5r@google.com>
+ <CALzav=f_WY7xH_MV8-gJPAVmj1KjE_LvXupL7aA5n-vCjTETNw@mail.gmail.com>
+ <YlSLuZphElMyF2sG@google.com>
+ <CALzav=fGucZOZjbVE2+9PZVf1p+jP7GBYDpPph5PoU552LELsw@mail.gmail.com>
+ <YlTKQz8HVPtyfwKe@google.com>
+ <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Tue, Apr 12, 2022, David Matlack wrote:
+> On Mon, Apr 11, 2022 at 5:39 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Mon, Apr 11, 2022, David Matlack wrote:
+> > >
+> > > One thing that would be helpful is if you can explain in a bit more
+> > > specifically what you'd like to see. Part of the reason why I prefer
+> > > to sequence your proposal after eager page splitting is that I do not
+> > > fully understand what you're proposing, and how complex it would be.
+> > > e.g. Forking FNAME(fetch), FNAME(page_fault), and kvm_mmu_get_page()
+> > > for nested MMUs does not sound like less churn.
+> >
+> > Oh, it's most definitely not less code, and probably more churn.  But, it's churn
+> > that pushes us in a more favorable direction and that is desirable long term.  I
+> > don't mind churning code, but I want the churn to make future life easier, not
+> > harder.  Details below.
+> 
+> Of course. Let's make sure we're on the same page about what churn
+> introduced by this series will make future life harder that we hope to
+> avoid. If I understand you correctly, it's the following 2 changes:
+> 
+>  (a.) Using separate functions to allocate SPs and initialize SPs.
+>  (b.) Separating kvm_mmu_find_shadow_page() from __kvm_mmu_find_shadow_page().
+> 
+> (a.) stems from the fact that SP allocation during eager page
+> splitting is made directly rather than through kvm_mmu_memory_caches,
+> which was what you pushed for in the TDP MMU implementation. We could
+> instead use kvm_mmu_memory_caches for the shadow MMU eager page
 
-Le mar., avril 12 2022 at 13:27:50 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> The TCU clock gate on X1000 wasn't requested by the driver and could
-> be gated automatically later on in boot, which prevents timers from
-> running and breaks PWM.
->=20
-> Add a workaround to support old device trees that don't specify the
-> "tcu" clock gate. In this case the kernel will print a warning and
-> attempt to continue without the clock, which is wrong, but it could
-> work if "clk_ignore_unused" is in the kernel arguments.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+...
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+> So even if we did everything you proposed (which seems like an awful
+> lot just to avoid __kvm_mmu_find_shadow_page()), there's a chance we
+> would still end up with the exact same code. i.e.
+> kvm_mmu_nested_tdp_find_sp() would be implemented by calling
+> __kvm_mmu_find_shadow_page(), because it would be a waste to
+> re-implement an almost identical function?
 
-Cheers,
--Paul
+I went far enough down this path to know that my idea isn't completely awful,
+and wouldn't actually need to fork FNAME(page_fault) at this time, but sadly I
+still dislike the end result.
 
-> ---
->  drivers/clk/ingenic/tcu.c | 35 +++++++++++++++++++++++++----------
->  1 file changed, 25 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-> index 77acfbeb4830..201bf6e6b6e0 100644
-> --- a/drivers/clk/ingenic/tcu.c
-> +++ b/drivers/clk/ingenic/tcu.c
-> @@ -31,6 +31,7 @@ struct ingenic_soc_info {
->  	unsigned int num_channels;
->  	bool has_ost;
->  	bool has_tcu_clk;
-> +	bool allow_missing_tcu_clk;
->  };
->=20
->  struct ingenic_tcu_clk_info {
-> @@ -320,7 +321,8 @@ static const struct ingenic_soc_info=20
-> jz4770_soc_info =3D {
->  static const struct ingenic_soc_info x1000_soc_info =3D {
->  	.num_channels =3D 8,
->  	.has_ost =3D false, /* X1000 has OST, but it not belong TCU */
-> -	.has_tcu_clk =3D false,
-> +	.has_tcu_clk =3D true,
-> +	.allow_missing_tcu_clk =3D true,
->  };
->=20
->  static const struct of_device_id __maybe_unused=20
-> ingenic_tcu_of_match[] __initconst =3D {
-> @@ -355,14 +357,27 @@ static int __init ingenic_tcu_probe(struct=20
-> device_node *np)
->  		tcu->clk =3D of_clk_get_by_name(np, "tcu");
->  		if (IS_ERR(tcu->clk)) {
->  			ret =3D PTR_ERR(tcu->clk);
-> -			pr_crit("Cannot get TCU clock\n");
-> -			goto err_free_tcu;
-> -		}
->=20
-> -		ret =3D clk_prepare_enable(tcu->clk);
-> -		if (ret) {
-> -			pr_crit("Unable to enable TCU clock\n");
-> -			goto err_put_clk;
-> +			/*
-> +			 * Old device trees for some SoCs did not include the
-> +			 * TCU clock because this driver (incorrectly) didn't
-> +			 * use it. In this case we complain loudly and attempt
-> +			 * to continue without the clock, which might work if
-> +			 * booting with workarounds like "clk_ignore_unused".
-> +			 */
-> +			if (tcu->soc_info->allow_missing_tcu_clk && ret =3D=3D -EINVAL) {
-> +				pr_warn("TCU clock missing from device tree, please update your=20
-> device tree\n");
-> +				tcu->clk =3D NULL;
-> +			} else {
-> +				pr_crit("Cannot get TCU clock from device tree\n");
-> +				goto err_free_tcu;
-> +			}
-> +		} else {
-> +			ret =3D clk_prepare_enable(tcu->clk);
-> +			if (ret) {
-> +				pr_crit("Unable to enable TCU clock\n");
-> +				goto err_put_clk;
-> +			}
->  		}
->  	}
->=20
-> @@ -432,10 +447,10 @@ static int __init ingenic_tcu_probe(struct=20
-> device_node *np)
->  			clk_hw_unregister(tcu->clocks->hws[i]);
->  	kfree(tcu->clocks);
->  err_clk_disable:
-> -	if (tcu->soc_info->has_tcu_clk)
-> +	if (tcu->clk)
->  		clk_disable_unprepare(tcu->clk);
->  err_put_clk:
-> -	if (tcu->soc_info->has_tcu_clk)
-> +	if (tcu->clk)
->  		clk_put(tcu->clk);
->  err_free_tcu:
->  	kfree(tcu);
-> --
-> 2.35.1
->=20
+Your assessment that the we'd still end up with very similar (if not quite exact)
+code is spot on.  Ditto for your other assertion in (a) about using the caches.
 
+My vote for this series is to go the cache route, e.g. wrap kvm_mmu_memory_caches
+in a struct and pass that into kvm_mmu_get_page().  I still think it was the right
+call to ignore the caches for the TDP MMU, it gives the TDP MMU more flexibility
+and it was trivial to bypass the caches since the TDP MMU was doing its own thing
+anyways.
 
+But for the shadow MMU, IMO the cons outweigh the pros.  E.g. in addition to
+ending up with two similar but subtly different "get page" flows, passing around
+"struct kvm_mmu_page **spp" is a bit unpleasant.  Ditto for having a partially
+initialized kvm_mmu_page.  The split code also ends up in a wierd state where it
+uses the caches for the pte_list, but not the other allocations.
+
+There will be one wart due to unsync pages needing @vcpu, but we can pass in NULL
+for the split case and assert that @vcpu is non-null since all of the children
+should be direct.
+
+		if (sp->unsync) {
+			if (WARN_ON_ONCE(!vcpu)) {
+				kvm_mmu_prepare_zap_page(kvm, sp,
+							 &invalid_list);
+				continue;
+			}
+
+			/*
+			 * The page is good, but is stale.  kvm_sync_page does
+			 * get the latest guest state, but (unlike mmu_unsync_children)
+			 * it doesn't write-protect the page or mark it synchronized!
+			 * This way the validity of the mapping is ensured, but the
+			 * overhead of write protection is not incurred until the
+			 * guest invalidates the TLB mapping.  This allows multiple
+			 * SPs for a single gfn to be unsync.
+			 *
+			 * If the sync fails, the page is zapped.  If so, break
+			 * in order to rebuild it.
+			 */
+			if (!kvm_sync_page(vcpu, sp, &invalid_list))
+				break;
+
+			WARN_ON(!list_empty(&invalid_list));
+			kvm_flush_remote_tlbs(kvm);
+		}
