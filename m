@@ -2,82 +2,203 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A484FFBDE
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 18:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43BD4FFD3F
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 19:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiDMQ6I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 12:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S235013AbiDMSA4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 14:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbiDMQ6G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 12:58:06 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0295069704;
-        Wed, 13 Apr 2022 09:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649868945; x=1681404945;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+nqYzv4g8eqFem8dbdxen/mrdhveQU0Ba+F0FwPncek=;
-  b=gUbi0K5wOepAlSIlJKSFxNejT+G5Irn8npykzM8ADfGpGxOwKd+HgSjS
-   rd2NpPPSXXmypXS4Pa8+FN21n2dL1f60lglRcbls3NRAKYWuCdCza7lub
-   4I1mauxsX5h99SVimZPxRJAtZs0vHVmOxJTxGkNZxBWyL5Sf4umaYXy9K
-   LhrLZHLP9BnzjSeP1xRImAgXBlKgD8DkPBty7CE3DiN25wdXMkN1GTSZD
-   ucffIRsVOBD5NsRCbkPa1XpfD/+XDcPBKOakQc2PmhDsXcIExGsy5EB+F
-   gnvCU0uqJBZ0t+cSkdPoJywmn89rYTLZbeTVoZPoqCiMro2bLZdeNiZWp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262159522"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="262159522"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:55:44 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="590824572"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:55:43 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1negDs-001vud-Dz;
-        Wed, 13 Apr 2022 19:52:04 +0300
-Date:   Wed, 13 Apr 2022 19:52:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Allen Pais <apais@linux.microsoft.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 1/1] firmware: tee_bnxt: Use UUID API for exporting
- the UUID
-Message-ID: <Ylb/tJKaPbskV1L8@smile.fi.intel.com>
-References: <20220412113250.57997-1-andriy.shevchenko@linux.intel.com>
- <20220413164319.GA31604@lst.de>
+        with ESMTP id S237431AbiDMSAx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 14:00:53 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799606E344
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 10:57:58 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id q12so2447054pgj.13
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 10:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lKms+iLPtRUk5y/Weofi/PdQuKMWfU/nQ1UEwvdazkA=;
+        b=VI7NuhMtE5n6hcf5o1lr6t8ZOQB244gh3vPkDR8/4kX00bX5l/+t/BORMexz0C9Bes
+         3/+VhI2JSDj1pSNs/rZcBt0kNZ98jay4OW7PQUswSDsPYsmnplbhDAHnhd9ccPcL6HA2
+         bmQOUc2THBOrC9SUGbSR2lqw2odxZDJZBefY1TRssGH1I4LZ8vvR6ruCc7lvPL5RlvII
+         LTAGGfs1JLlpoJv12ISZimfV9ZbLvQbvTrNZ4H1zfbHsUo8c/G1DqsWrHyTwkajk0J0G
+         iIIowf/+Gcy5EtdtVbGaFH9naZWCoETckHHj0fmkmEmVfd0vxoBEUQ+/kc+iYioZP19n
+         /ajg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lKms+iLPtRUk5y/Weofi/PdQuKMWfU/nQ1UEwvdazkA=;
+        b=cPhLkVU9DvdtzRBCkxMQkZ5Soiw4crwndUwD924Y/fOLvpnsMrw1J+k1y058IJmuho
+         +O37TtRJ2co82GmkoxgXIqvyQwEC2wDkmXZxP+kPJWI4AiIxSV6zk2CbE6NkIKRGKzmN
+         v0K/D9RhsMU7L+mGpaMqlXIojpAp9rD81DGFG8VSLNmoxupV5XEyKNt9T3h89eteX9uO
+         jCzIR4+V0OYdGB/YKgXLbx7aiqvEmjG6W4YvRJ7fG4W9IehCAUmRo5Sx/LoC9B0LA5WG
+         x9G5tnsu/3TMvZGu44dlUKal+LCUl5vdUfUZIhLGChHMJsWtYYGJVcIzleHzt5GVw1vo
+         rwzA==
+X-Gm-Message-State: AOAM530U36pQm/+bH44oUjssX0dUYRGZjt5gTqvqyOkUD7yWX4gvNSnM
+        m4q4DkEft2tFuIJIc0nKVIXLXw==
+X-Google-Smtp-Source: ABdhPJzRyu8tHffHYzAcQVAnebPL6Cv2V5j7/xAO3BnBL9wlRay5v7Pxg+Hg4uOSbzo7Xo6auY8Wfg==
+X-Received: by 2002:a63:4862:0:b0:385:fb1d:fc54 with SMTP id x34-20020a634862000000b00385fb1dfc54mr36295792pgk.57.1649872677704;
+        Wed, 13 Apr 2022 10:57:57 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id br10-20020a17090b0f0a00b001cd4fb89d38sm3170813pjb.9.2022.04.13.10.57.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 10:57:56 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 17:57:53 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v3 00/23] KVM: Extend Eager Page Splitting to the shadow
+ MMU
+Message-ID: <YlcPIYJ0CB2qnfpT@google.com>
+References: <20220401175554.1931568-1-dmatlack@google.com>
+ <YlRhiF1O71TWQr5r@google.com>
+ <CALzav=f_WY7xH_MV8-gJPAVmj1KjE_LvXupL7aA5n-vCjTETNw@mail.gmail.com>
+ <YlSLuZphElMyF2sG@google.com>
+ <CALzav=fGucZOZjbVE2+9PZVf1p+jP7GBYDpPph5PoU552LELsw@mail.gmail.com>
+ <YlTKQz8HVPtyfwKe@google.com>
+ <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
+ <YlYhO7GvjKY1cwHr@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220413164319.GA31604@lst.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YlYhO7GvjKY1cwHr@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 06:43:19PM +0200, Christoph Hellwig wrote:
-> On Tue, Apr 12, 2022 at 02:32:50PM +0300, Andy Shevchenko wrote:
+On Wed, Apr 13, 2022 at 01:02:51AM +0000, Sean Christopherson wrote:
+> On Tue, Apr 12, 2022, David Matlack wrote:
+> > On Mon, Apr 11, 2022 at 5:39 PM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > On Mon, Apr 11, 2022, David Matlack wrote:
+> > > >
+> > > > One thing that would be helpful is if you can explain in a bit more
+> > > > specifically what you'd like to see. Part of the reason why I prefer
+> > > > to sequence your proposal after eager page splitting is that I do not
+> > > > fully understand what you're proposing, and how complex it would be.
+> > > > e.g. Forking FNAME(fetch), FNAME(page_fault), and kvm_mmu_get_page()
+> > > > for nested MMUs does not sound like less churn.
+> > >
+> > > Oh, it's most definitely not less code, and probably more churn.  But, it's churn
+> > > that pushes us in a more favorable direction and that is desirable long term.  I
+> > > don't mind churning code, but I want the churn to make future life easier, not
+> > > harder.  Details below.
+> > 
+> > Of course. Let's make sure we're on the same page about what churn
+> > introduced by this series will make future life harder that we hope to
+> > avoid. If I understand you correctly, it's the following 2 changes:
+> > 
+> >  (a.) Using separate functions to allocate SPs and initialize SPs.
+> >  (b.) Separating kvm_mmu_find_shadow_page() from __kvm_mmu_find_shadow_page().
+> > 
+> > (a.) stems from the fact that SP allocation during eager page
+> > splitting is made directly rather than through kvm_mmu_memory_caches,
+> > which was what you pushed for in the TDP MMU implementation. We could
+> > instead use kvm_mmu_memory_caches for the shadow MMU eager page
+> 
+> ...
+> 
+> > So even if we did everything you proposed (which seems like an awful
+> > lot just to avoid __kvm_mmu_find_shadow_page()), there's a chance we
+> > would still end up with the exact same code. i.e.
+> > kvm_mmu_nested_tdp_find_sp() would be implemented by calling
+> > __kvm_mmu_find_shadow_page(), because it would be a waste to
+> > re-implement an almost identical function?
+> 
+> I went far enough down this path to know that my idea isn't completely awful,
+> and wouldn't actually need to fork FNAME(page_fault) at this time, but sadly I
+> still dislike the end result.
 
-...
+Thanks for looking into it so quickly so we could figure out a path
+forward.
 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> 
+> Your assessment that the we'd still end up with very similar (if not quite exact)
+> code is spot on.  Ditto for your other assertion in (a) about using the caches.
+> 
+> My vote for this series is to go the cache route, e.g. wrap kvm_mmu_memory_caches
+> in a struct and pass that into kvm_mmu_get_page().  I still think it was the right
+> call to ignore the caches for the TDP MMU, it gives the TDP MMU more flexibility
+> and it was trivial to bypass the caches since the TDP MMU was doing its own thing
+> anyways.
+> 
+> But for the shadow MMU, IMO the cons outweigh the pros.  E.g. in addition to
+> ending up with two similar but subtly different "get page" flows, passing around
+> "struct kvm_mmu_page **spp" is a bit unpleasant.  Ditto for having a partially
+> initialized kvm_mmu_page.  The split code also ends up in a wierd state where it
+> uses the caches for the pte_list, but not the other allocations.
 
-Thanks!
+Sounds good. I will rework the series to use kvm_mmu_memory_cache
+structs for the SP allocation during eager page splitting. That will
+eliminate the separate allocation and initialization which will be a
+nice cleanup. And it will be great to get rid of the spp crud.
 
--- 
-With Best Regards,
-Andy Shevchenko
+And per your earlier feedback, I will also limit eager page splitting to
+nested MMUs.
 
+> 
+> There will be one wart due to unsync pages needing @vcpu, but we can pass in NULL
+> for the split case and assert that @vcpu is non-null since all of the children
+> should be direct.
 
+The NULL vcpu check will be a little gross, but it should never trigger
+in practice since eager page splitting always requests direct SPs. My
+preference has been to enforce that in code by splitting out
+__kvm_mmu_find_shadow_page(), but I can see the advantage of your
+proposal is that eager page splitting and faults will go through the
+exact same code path to get a kvm_mmu_page.
+
+> 
+> 		if (sp->unsync) {
+> 			if (WARN_ON_ONCE(!vcpu)) {
+> 				kvm_mmu_prepare_zap_page(kvm, sp,
+> 							 &invalid_list);
+> 				continue;
+> 			}
+> 
+> 			/*
+> 			 * The page is good, but is stale.  kvm_sync_page does
+> 			 * get the latest guest state, but (unlike mmu_unsync_children)
+> 			 * it doesn't write-protect the page or mark it synchronized!
+> 			 * This way the validity of the mapping is ensured, but the
+> 			 * overhead of write protection is not incurred until the
+> 			 * guest invalidates the TLB mapping.  This allows multiple
+> 			 * SPs for a single gfn to be unsync.
+> 			 *
+> 			 * If the sync fails, the page is zapped.  If so, break
+> 			 * in order to rebuild it.
+> 			 */
+> 			if (!kvm_sync_page(vcpu, sp, &invalid_list))
+> 				break;
+> 
+> 			WARN_ON(!list_empty(&invalid_list));
+> 			kvm_flush_remote_tlbs(kvm);
+> 		}
