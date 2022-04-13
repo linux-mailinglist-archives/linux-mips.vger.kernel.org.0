@@ -2,27 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7FE4FF6CD
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 14:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FC64FF70E
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 14:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbiDMM3o (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 08:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S233258AbiDMMsw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 08:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235525AbiDMM3n (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 08:29:43 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6911F5DA67;
-        Wed, 13 Apr 2022 05:27:20 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nec5a-0004a6-00; Wed, 13 Apr 2022 14:27:14 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 1A3DEC0183; Wed, 13 Apr 2022 14:25:46 +0200 (CEST)
-Date:   Wed, 13 Apr 2022 14:25:46 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        with ESMTP id S231896AbiDMMsv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 08:48:51 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A08B31EAF3;
+        Wed, 13 Apr 2022 05:46:30 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 3F3EF92009C; Wed, 13 Apr 2022 14:46:29 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 2EF4892009B;
+        Wed, 13 Apr 2022 13:46:29 +0100 (BST)
+Date:   Wed, 13 Apr 2022 13:46:29 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         tglx@linutronix.de, arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Russell King <linux@armlinux.org.uk>,
@@ -50,59 +51,50 @@ Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-xtensa@linux-xtensa.org
 Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
  instead of zero
-Message-ID: <20220413122546.GA11860@alpha.franken.de>
-References: <20220413115411.21489-1-Jason@zx2c4.com>
- <20220413115411.21489-5-Jason@zx2c4.com>
+In-Reply-To: <20220413122546.GA11860@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
+References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com> <20220413122546.GA11860@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413115411.21489-5-Jason@zx2c4.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 01:54:04PM +0200, Jason A. Donenfeld wrote:
-> In the event that random_get_entropy() can't access a cycle counter or
-> similar, falling back to returning 0 is really not the best we can do.
-> Instead, at least calling random_get_entropy_fallback() would be
-> preferable, because that always needs to return _something_, even
-> falling back to jiffies eventually. It's not as though
-> random_get_entropy_fallback() is super high precision or guaranteed to
-> be entropic, but basically anything that's not zero all the time is
-> better than returning zero all the time.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  arch/mips/include/asm/timex.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/include/asm/timex.h b/arch/mips/include/asm/timex.h
-> index b05bb70a2e46..abc60a6395e3 100644
-> --- a/arch/mips/include/asm/timex.h
-> +++ b/arch/mips/include/asm/timex.h
-> @@ -94,7 +94,7 @@ static inline unsigned long random_get_entropy(void)
->  	else if (likely(imp != PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
->  		return read_c0_random();
->  	else
-> -		return 0;	/* no usable register */
-> +		return random_get_entropy_fallback();	/* no usable register */
->  }
->  #define random_get_entropy random_get_entropy
->  
-> -- 
-> 2.35.1
+On Wed, 13 Apr 2022, Thomas Bogendoerfer wrote:
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > diff --git a/arch/mips/include/asm/timex.h b/arch/mips/include/asm/timex.h
+> > index b05bb70a2e46..abc60a6395e3 100644
+> > --- a/arch/mips/include/asm/timex.h
+> > +++ b/arch/mips/include/asm/timex.h
+> > @@ -94,7 +94,7 @@ static inline unsigned long random_get_entropy(void)
+> >  	else if (likely(imp != PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
+> >  		return read_c0_random();
+> >  	else
+> > -		return 0;	/* no usable register */
+> > +		return random_get_entropy_fallback();	/* no usable register */
+> >  }
+> >  #define random_get_entropy random_get_entropy
+> >  
+> > -- 
+> > 2.35.1
+> 
+> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+ Or we could drop the PRID_IMP_R6000/A check and the final `else' clause 
+entirely, as we don't even pretend to support the R6k at all anymore, and 
+this is the final reference remaining.  For one we no longer handle the 
+CPU in `cpu_probe_legacy' so any attempt to boot on such a CPU would 
+inevitably fail as no CPU options would be set (we probably should have a 
+`panic' or suchlike as the default case for the switch statement there).
+
+ Therefore I'm all for removing this piece instead, complementing commit 
+3b2db173f012 ("MIPS: Remove unused R6000 support"), where it should have 
+really happened.
+
+  Maciej
