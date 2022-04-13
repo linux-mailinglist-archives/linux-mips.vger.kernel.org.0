@@ -2,155 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415B44FEF9D
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 08:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EBA4FEFB6
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 08:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiDMGMs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 02:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        id S232212AbiDMGXE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 02:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbiDMGLc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 02:11:32 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFD651E67;
-        Tue, 12 Apr 2022 23:09:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649830134; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=avtSYMatMQJTrvfdxH9tcMztEPmn8u2zb4O7F+3j+jyn7fN+YJ+hUKHj62tjFqaBwVG9RBXaSBPETmVn8m++fw5RabDjKwAzIXW/cHJ7Aemgj1Bwc79/uKU8Dq9MokCsK7DAgL69YYudAc8n1b24ISEiNAUFeoyHWNguyd4iOfU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649830134; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=vTUK5pF/zz+MqI8xc+MhrlHhkZm8+zGbv4qzWp+bAOE=; 
-        b=NhDgpIiMVBktiDlGV/krs0IHM+bqOylp/Al5kOTSrW0I8AbVInNxMNnwjziWm/4PcdUSjFnxZ9Nk0ipfowPLsMBmELrrqdZdSl57zL8INo4GYcpmXNOEowOj4ei21DYJBith5K0Y7dlbeuc/x53A5sl5JeZrx2Xgf8mwPCrdKFs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649830134;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=vTUK5pF/zz+MqI8xc+MhrlHhkZm8+zGbv4qzWp+bAOE=;
-        b=ejk/5EvrqsknZXlaLdvQGYU93zbCdTKVMlIZ4j8DpZkISNRrzojLACKDOitPIi5c
-        L06j4w4zK9iwD3VF03Y9CMTmMWY97rHnxPpV43b+Szwce/LmhbrZ66u+L+AD9lhl7NO
-        X9NGzPIuZvHT1HFCCnt0/Ftsm6RSh4wzqFg9DJZU=
-Received: from arinc9-PC.localdomain (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649830132114573.9252729984381; Tue, 12 Apr 2022 23:08:52 -0700 (PDT)
-From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     erkin.bozoglu@xeront.com,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        with ESMTP id S232154AbiDMGXC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 02:23:02 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44B24551D;
+        Tue, 12 Apr 2022 23:20:42 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 5281E68B05; Wed, 13 Apr 2022 08:20:37 +0200 (CEST)
+Date:   Wed, 13 Apr 2022 08:20:37 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     iommu@lists.linux-foundation.org
+Cc:     x86@kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 14/14] dt-bindings: pinctrl: add binding for Ralink RT3883 pinctrl
-Date:   Wed, 13 Apr 2022 09:07:29 +0300
-Message-Id: <20220413060729.27639-15-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220413060729.27639-1-arinc.unal@arinc9.com>
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org
+Subject: Re: cleanup swiotlb initialization v8
+Message-ID: <20220413062037.GA450@lst.de>
+References: <20220404050559.132378-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404050559.132378-1-hch@lst.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add binding for the Ralink RT3883 pin controller for RT3883 SoC.
+On Mon, Apr 04, 2022 at 07:05:44AM +0200, Christoph Hellwig wrote:
+> Hi all,
+> 
+> this series tries to clean up the swiotlb initialization, including
+> that of swiotlb-xen.  To get there is also removes the x86 iommu table
+> infrastructure that massively obsfucates the initialization path.
+> 
+> Git tree:
+> 
+>     git://git.infradead.org/users/hch/misc.git swiotlb-init-cleanup
+> 
+> Gitweb:
+> 
+>     http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/swiotlb-init-cleanup
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- .../pinctrl/ralink,rt3883-pinctrl.yaml        | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
-
-diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
-new file mode 100644
-index 000000000000..583efc0ad51c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/ralink,rt3883-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Ralink RT3883 Pin Controller
-+
-+maintainers:
-+  - Arınç ÜNAL <arinc.unal@arinc9.com>
-+  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+
-+description:
-+  Ralink RT3883 pin controller for RT3883 SoC.
-+  The pin controller can only set the muxing of pin groups. Muxing indiviual pins
-+  is not supported. There is no pinconf support.
-+
-+properties:
-+  compatible:
-+    const: ralink,rt3883-pinctrl
-+
-+patternProperties:
-+  '-pins$':
-+    type: object
-+    patternProperties:
-+      '^(.*-)?pinmux$':
-+        type: object
-+        description: node for pinctrl.
-+        $ref: pinmux-node.yaml#
-+
-+        properties:
-+          groups:
-+            description: The pin group to select.
-+            enum: [ge1, ge2, i2c, jtag, lna a, lna g, mdio, pci, spi, uartf, uartlite]
-+
-+          function:
-+            description: The mux function to select.
-+            enum: [ge1, ge2, gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, lna a, lna g, mdio, pci-dev,
-+                   pci-fnc, pci-host1, pci-host2, pcm gpio, pcm i2s, pcm uartf, spi, uartf, uartlite]
-+
-+        required:
-+          - groups
-+          - function
-+
-+        additionalProperties: false
-+
-+    additionalProperties: false
-+
-+allOf:
-+  - $ref: "pinctrl.yaml#"
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  # Pinmux controller node
-+  - |
-+    pinctrl {
-+      compatible = "ralink,rt3883-pinctrl";
-+
-+      i2c_pins: i2c0-pins {
-+        pinmux {
-+          groups = "i2c";
-+          function = "i2c";
-+        };
-+      };
-+    };
--- 
-2.25.1
-
+I've updated the git tree above with the commit message nitpicks and
+received reviews.  I plan to pull the patches into the dma-mapping
+tree after -rc3 is released, so if any involved maintainer is not happy
+with the result, please speak up now.
