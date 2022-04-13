@@ -2,88 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736164FF91F
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 16:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3654FFA09
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 17:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236167AbiDMOms (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 10:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
+        id S234858AbiDMP1z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 11:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbiDMOmr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 10:42:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175271ADA4;
-        Wed, 13 Apr 2022 07:40:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA78B61C44;
-        Wed, 13 Apr 2022 14:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14502C385A9;
-        Wed, 13 Apr 2022 14:40:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649860825;
-        bh=78m64rXl3BqnnR/vfXtui5J5LLZFfkI1NSRN1fS+Ck0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D54WqGsxh9YBnBgVmvFtiH5xy6s421ODtURwwd50VnkQ1mXHYGJ+2NWNkXVfQZun6
-         Um89dJ+0wbeFbHd3sSL9OoZB6/ZY5yarddaEataYCkikYsyn8eI7/xeCzq+VRRV8xe
-         BZGcLMcKA8UBjiGbU0QRPsb6ObofS55dzwMzW99Oi0rFBFu1zhfvS81FAMTyxhutkG
-         NKI0fhh2MqANm0VuID9wzWfkhT536p0LR4pZOQgULlpV4jISPYbXfl5zWUTcwNZh7f
-         b9siyKpl0nHPTnRLdyWkhzMGHOp3r3auUj1pWuEHuj45bmaIeTgj3nYkCxjnDipmbN
-         iVdUdXACq3mCA==
-Received: by mail-il1-f171.google.com with SMTP id y16so1234114ilc.7;
-        Wed, 13 Apr 2022 07:40:25 -0700 (PDT)
-X-Gm-Message-State: AOAM531EOR2kz6q0YaDoaGbVTC2RSx2qodFFyndjP6XyMJaALgSAbcfn
-        60f5ghnAPpBgUajB4CwVsfJSbi9WjB4q9LE2og==
-X-Google-Smtp-Source: ABdhPJwPF0VHE9D8w/oeESIlTTrvwO1gVXfb+xfx+0hNhkJEN+zqgaOI+EWicwhkoM5T8fMAkoGBIRO6Tom03sqTu+o=
-X-Received: by 2002:a92:dd86:0:b0:2bc:805c:23c7 with SMTP id
- g6-20020a92dd86000000b002bc805c23c7mr17523118iln.279.1649860824300; Wed, 13
- Apr 2022 07:40:24 -0700 (PDT)
+        with ESMTP id S231797AbiDMP1y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 11:27:54 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD205D670
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 08:25:33 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id bv19so4688467ejb.6
+        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 08:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=E/KosFpseT7IWJRZQCnSiS447R6ssnKcrthoESTGiCY=;
+        b=Vh4Nsq/68C5HjeI3A+yT1TCrzlxkKT0sfz8S3WArS7wXqU2HMY1kjSoZ15QEZmFtM6
+         OFYv1iWTnr+tlMIiILChInAOK+egjDR+MtIwNLJlFgSPS0IaHvcSB/B8FcrmDr+ZyIDg
+         IiiQB3pNO94TEGvLWtXS/CjPEk0O7T7J0MsTPVtfkCt+WO4kRbnT4evsF7X3kPB8ayF4
+         5J/XJAFVO/Wopdl0EmW8QilO0Iz/XWwoNMkPhoQJPNm2KavV8w9DXemGntKKxv+uKR1E
+         Mxe3ylpT7zTGScy4KM865rbxBZMJ4K0dj47qLEXSEyh6zUTCCLXrC6xnjkDTbvcgjPHW
+         96/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=E/KosFpseT7IWJRZQCnSiS447R6ssnKcrthoESTGiCY=;
+        b=sAu+Q20RnzggIF9c55d6bnjSEuXNfmqqDSMZGZwAXnw+bFrxwOr5FrHVPQwsYFxmWo
+         G7TKyvEoEErAWiQHx7rJnlQIsn087A3VJy6eUx1nymoLmyVwfMrT93x65innI2uprshx
+         72M/XXTbsuW7qr+MSUSLDvg9oBuOVybU0Iw4pY1z7xFMWht95iXA+0zUuCJSyawEJLiR
+         mwitn4Veq+K4Nyvh1guOdFF7+512/PWfIURqW5i4sj7VxzkjD8sKA/mNm8lJ4UJOQgU9
+         9EfGKw8AZpG1TfxOsEdVjOp7X+vEEjMHmGufcKmmz0yVHES/d3cK7qMfysjlzKA5EL2d
+         Jxyg==
+X-Gm-Message-State: AOAM532GLteKcf/dt3vyh8AZpkwYBaY488PJrBMVDI4h+MyusE82z63i
+        Jz5pmoa+8VR1c5jKU1lGXyp1Yw==
+X-Google-Smtp-Source: ABdhPJy/Caleobpyz0qcwl3NnfHCSIKGS22hcXQsHSSVLfDURXci+05UMvKVZOUGgl9LtMNCuV3Fuw==
+X-Received: by 2002:a17:907:2d27:b0:6e8:3ea6:7645 with SMTP id gs39-20020a1709072d2700b006e83ea67645mr28970048ejc.727.1649863531801;
+        Wed, 13 Apr 2022 08:25:31 -0700 (PDT)
+Received: from [192.168.0.205] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id h7-20020a1709060f4700b006e8d0746969sm83440ejj.222.2022.04.13.08.25.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 08:25:30 -0700 (PDT)
+Message-ID: <ba7cd13f-d216-0ac6-97e1-6c13f1e15f38@linaro.org>
+Date:   Wed, 13 Apr 2022 17:25:08 +0200
 MIME-Version: 1.0
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-4-Jason@zx2c4.com>
-In-Reply-To: <20220413115411.21489-4-Jason@zx2c4.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 13 Apr 2022 09:40:13 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ86vZKZQO+9_Kva-EbZrRPMbcgDm+UvjJdnR=GL-qHSw@mail.gmail.com>
-Message-ID: <CAL_JsqJ86vZKZQO+9_Kva-EbZrRPMbcgDm+UvjJdnR=GL-qHSw@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] riscv: use fallback for random_get_entropy()
- instead of zero
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 10/14] dt-bindings: pinctrl: rt2880: fix binding name, pin
+ groups and functions
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+ <20220413060729.27639-11-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220413060729.27639-11-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,45 +84,86 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 6:56 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> In the event that random_get_entropy() can't access a cycle counter or
-> similar, falling back to returning 0 is really not the best we can do.
-> Instead, at least calling random_get_entropy_fallback() would be
-> preferable, because that always needs to return _something_, even
-> falling back to jiffies eventually. It's not as though
-> random_get_entropy_fallback() is super high precision or guaranteed to
-> be entropic, but basically anything that's not zero all the time is
-> better than returning zero all the time.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+On 13/04/2022 08:07, Arınç ÜNAL wrote:
+> Change binding name from ralink,rt2880-pinmux to ralink,rt2880-pinctrl.
+> This is the binding for the Ralink RT2880 pinctrl subdriver.
+
+What I don't see here is why you are doing this. pinmux/pinctrl have the
+same meaning, I guess?
+
+> 
+> Current pin group and function bindings are for MT7621. Put bindings for
+> RT2880 instead.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
->  arch/riscv/include/asm/timex.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/include/asm/timex.h b/arch/riscv/include/asm/timex.h
-> index 507cae273bc6..d6a7428f6248 100644
-> --- a/arch/riscv/include/asm/timex.h
-> +++ b/arch/riscv/include/asm/timex.h
-> @@ -41,7 +41,7 @@ static inline u32 get_cycles_hi(void)
->  static inline unsigned long random_get_entropy(void)
->  {
->         if (unlikely(clint_time_val == NULL))
+>  ...pinmux.yaml => ralink,rt2880-pinctrl.yaml} | 24 +++++++++----------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+>  rename Documentation/devicetree/bindings/pinctrl/{ralink,rt2880-pinmux.yaml => ralink,rt2880-pinctrl.yaml} (56%)
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+> similarity index 56%
+> rename from Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
+> rename to Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+> index 9de8b0c075e2..c657bbf9fdda 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+> @@ -1,21 +1,23 @@
+>  # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>  %YAML 1.2
+>  ---
+> -$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinmux.yaml#
+> +$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinctrl.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Ralink rt2880 pinmux controller
+> +title: Ralink RT2880 Pin Controller
+>  
+>  maintainers:
+> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
 
-Moving this check to get_cycles() implementation would eliminate the
-RiscV implementation of random_get_entropy() if you follow my other
-suggestion.
+Mention this in commit msg.
 
-I guess there's some advantage to skipping a NULL check every time for
-get_cycles(), but really the register read time will be much slower
-than an added check.
+>    - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>  
+>  description:
+> -  The rt2880 pinmux can only set the muxing of pin groups. Muxing indiviual pins
+> +  Ralink RT2880 pin controller for RT2880 SoC.
+> +  The pin controller can only set the muxing of pin groups. Muxing indiviual pins
+>    is not supported. There is no pinconf support.
+>  
+>  properties:
+>    compatible:
+> -    const: ralink,rt2880-pinmux
+> +    const: ralink,rt2880-pinctrl
 
-> -               return 0;
-> +               return random_get_entropy_fallback();
->         return get_cycles();
->  }
->  #define random_get_entropy()   random_get_entropy()
+you need to deprecate old property and add a new one.
+
+
+>  
+>  patternProperties:
+>    '-pins$':
+> @@ -28,14 +30,12 @@ patternProperties:
+>  
+>          properties:
+>            groups:
+> -            description: Name of the pin group to use for the functions.
+> -            enum: [i2c, jtag, mdio, pcie, rgmii1, rgmii2, sdhci, spi,
+> -                   uart1, uart2, uart3, wdt]
+> +            description: The pin group to select.
+> +            enum: [i2c, spi, uartlite, jtag, mdio, sdram, pci]
+> +
+>            function:
+> -            description: The mux function to select
+> -            enum: [gpio, i2c, i2s, jtag, mdio, nand1, nand2, pcie refclk,
+> -                   pcie rst, pcm, rgmii1, rgmii2, sdhci, spdif2, spdif3,
+> -                   spi, uart1, uart2, uart3, wdt refclk, wdt rst]
+> +            description: The mux function to select.
+> +            enum: [gpio, i2c, spi, uartlite, jtag, mdio, sdram, pci]
+>  
+
+These were all incorrect for rt2880, I understand?
+
+
+Best regards,
+Krzysztof
