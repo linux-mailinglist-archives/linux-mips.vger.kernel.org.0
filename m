@@ -2,55 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069D24FEFCE
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 08:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98404FEFE8
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 08:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbiDMGaX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 02:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S232815AbiDMGim (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 02:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiDMGaW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 02:30:22 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3A44093C;
-        Tue, 12 Apr 2022 23:28:02 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id j6so679007qkp.9;
-        Tue, 12 Apr 2022 23:28:02 -0700 (PDT)
+        with ESMTP id S232791AbiDMGim (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 02:38:42 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418AF3A73E;
+        Tue, 12 Apr 2022 23:36:21 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id j6so689337qkp.9;
+        Tue, 12 Apr 2022 23:36:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=IQXd2jV2y0H/jmnC3zsa4bcZYEpr7db5gHWElQ3LxHo=;
-        b=AvEuQTFPadwF9B77e3hFm5DnRzYyP8mYjU5oKInOTekImMPQ9N1mTIms5cmjhh5hfX
-         LkSFJbC8gnLmJpgwY9zA4JI9A+RTpDk5xxPfFD0tF0qxtIC1rK0grKMt/tLDK8cS23fT
-         RulFwQP5jljqMXD5I54GLeZedam6rTu20H2OlNPRx5/9V/Vn8nf/+xNxosavSCJY/SCu
-         +poIEZNxeCdfOF4HvSyXtg1difDMot4a7EYKqtr2rJrY4OKZ+FFp5sutGw0baRndzwRM
-         OmTkbR4cyxBWSnly8W0CvNAabWt3/+9Tr+h92US8UHNUlCwCRzxn0emaPr/vkcSVEKYA
-         vplw==
+        bh=lVlNuAo9+0LRFp48WRzrOf1tdSb0zAURerrByRaHWQ4=;
+        b=RWm0KbOUQ8Kubcw7iCvGa7dVVMQnn8DHJxM8rtgcot3Nef+WP3ZwU1lw2U7COdgDid
+         G+kl/vGL1ZCSpKyycigFMRZiLQBc0A5xXI7QJFybMLtfXHBPL7H0CW09PSI5FKLGMIBj
+         sZzgTw6eVx4AgBYyA9Aaxegl0QQcg4l4uGQ2GN2YynTKhKYa0c1L4vqw1U+a4OdameKX
+         NJX5YHKKKyXTNGstljKTZGBDY+fIOnj87/jamYoW1CZVdUdweDfdHj32UyaJ5RDTyN9B
+         xHvfj+MB7PLHPuWmGhjYLQe4K8FoqsYUPXpDxvA9K07Wf+zm330XLVA0z3hjrS50cIPa
+         EGRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IQXd2jV2y0H/jmnC3zsa4bcZYEpr7db5gHWElQ3LxHo=;
-        b=AYLwmWLEH7leIN+QHqPkA7KzuyvuCxzrza3+nt0Pd2p7QYs8PlGyAENd0jPNES52kk
-         PSf/jgL0814QywtGZpaFRgx3WcpdcNKLpCpIGWR8s0TzdGRNRdKATPAiTt/tXk0onavd
-         XfqecNxVD2/I8qlccAYPR9WnhiKEbgFj2ygg+0/APjJdx17qeE7VBx2UntBTw/JJN37Q
-         skSqNqXbMCfYG55+PNhnkpxsykEHhGHXN7ORBTlh8I362puPJ6DacnifEvDSLb5BuQwX
-         kRtz3MbMDG7DFpttoDhx4HR2i1dbHXa6olQRobv1BeGxRc4JYKZVPpSVUe5/HY02LqGG
-         C5Yw==
-X-Gm-Message-State: AOAM530x+RX0BKWTDc4HkVuVE5e9B2LTjBg095e6p7YbGwBwIlsdrOCL
-        6lgTVOtJu+/djetZHpJ6UGToUO4N6dku5ilm64Y=
-X-Google-Smtp-Source: ABdhPJxSAul1DQiuip/zXWO7y/5rdjzwToJfLdrqCdPR32d03sINv0FlPWqCmtrCOu+ed1zUDp0D9fKwELAyHXivy54=
-X-Received: by 2002:a05:620a:bd5:b0:67d:15ed:2fcd with SMTP id
- s21-20020a05620a0bd500b0067d15ed2fcdmr5870340qki.81.1649831281235; Tue, 12
- Apr 2022 23:28:01 -0700 (PDT)
+        bh=lVlNuAo9+0LRFp48WRzrOf1tdSb0zAURerrByRaHWQ4=;
+        b=jVjbAwxw6cQWfzOBatL8PDJzyJabE5x9caTACEpfwZzET3v271cyA/1sYghQwX318N
+         4D9FQ7nEBIN5TU0e5mQETMFP/rLhOkoILyRcB8wkFOj9D+adtZ1SCWI4vo17rDC95X/c
+         xvE0lA46MLeB3OuhRnH5AmFtqPXUOKNToEYqptz7NxmBfAjYvtVJR1Ao5NTsKKZF2eJ0
+         JQbuHY9V+8TPU1xNkX1LMhCI8u8jnxp7AVtveTEIrVPJVa0DhQxVvTuC0rwkLhdA6l9W
+         xjk4gJLtzG1w3rtbhc5j3rNO3hEQ116yK6PiVsGvj2f+1BhoDUQKbM2cLyFmYl7ZrpQ2
+         6ESg==
+X-Gm-Message-State: AOAM530dSw+2GDkZR3ahJU756sw98MpC7cEqitQJMd2wtNQlGZQ5frOz
+        f2DczF4/R4t5kk9CSFVEbJJjv38b6KX+xl5QYWs=
+X-Google-Smtp-Source: ABdhPJy3AaKsu44Yp4UCtsi1PArOwoGqRvhviTP5hjJuZ9/J2xvjSNLZDqzHNMxdw18SPpRJjGR6tsX20Muox56KDQo=
+X-Received: by 2002:a05:620a:4308:b0:67b:487e:e02a with SMTP id
+ u8-20020a05620a430800b0067b487ee02amr5722093qko.696.1649831780406; Tue, 12
+ Apr 2022 23:36:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220413060729.27639-1-arinc.unal@arinc9.com> <20220413060729.27639-9-arinc.unal@arinc9.com>
-In-Reply-To: <20220413060729.27639-9-arinc.unal@arinc9.com>
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+In-Reply-To: <20220413060729.27639-1-arinc.unal@arinc9.com>
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 13 Apr 2022 08:27:50 +0200
-Message-ID: <CAMhs-H8W990kGWPtVkLLXj4wr0+v8aEgv42K6Ffh+k=misYvGQ@mail.gmail.com>
-Subject: Re: [PATCH 08/14] MAINTAINERS: add Ralink pinctrl driver
+Date:   Wed, 13 Apr 2022 08:36:09 +0200
+Message-ID: <CAMhs-H_oRzpeqJY8Oe+7Su5v-4B1WPwzOfhrvBC08FVi-O6fVA@mail.gmail.com>
+Subject: Re: [PATCH 0/14] Refactor Ralink Pinctrl and Add Documentation
 To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 Cc:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -78,33 +78,93 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Arin=C3=A7,
+
 On Wed, Apr 13, 2022 at 8:08 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
 9.com> wrote:
 >
-> Add a new section for the Ralink pinctrl driver and add me and Sergio as
-> the maintainers.
+> Hey everyone.
 >
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> ---
->  MAINTAINERS | 7 +++++++
->  1 file changed, 7 insertions(+)
+> This patch series brings complete refactoring to the Ralink pinctrl drive=
+r
+> and its subdrivers.
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fd768d43e048..cbd0c3e180bf 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16502,6 +16502,13 @@ L:     linux-mips@vger.kernel.org
->  S:     Maintained
->  F:     arch/mips/boot/dts/ralink/mt7621*
+> The mt7620 pinctrl subdriver supports MT7628 and MT7688 SoCs along with
+> MT7620. These two share the same pin layout. The code used for MT7628 and
+> MT7688 is renamed from MT7628/mt7628an to MT76X8.
 >
-> +RALINK PINCTRL DRIVER
-> +M:     Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> +M:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> +L:     linux-mips@vger.kernel.org
-> +S:     Maintained
-> +F:     drivers/pinctrl/ralink/*
+> Ralink pinctrl driver is called rt2880 which is the name of the Ralink
+> RT2880 SoC. A subdriver for the Ralink RT2880 SoC is called rt288x. Renam=
+e
+> rt2880 to ralink.
+>
+> Rename code from pinmux to pinctrl for where the operation is not about t=
+he
+> muxing of pins.
+>
+> Rename rt288x pinctrl subdriver for the RT2880 SoC to rt2880.
+>
+> Variables for functions include "grp" on the Ralink MT7620 and MT7621
+> subdrivers. Rename them to "func" instead as they define the functions fo=
+r
+> the pin groups. This is already the case for the other 3 subdrivers;
+> RT2880, RT305x, RT3883.
+>
+> Fix Kconfig to call the subdrivers, well, subdrivers.
+>
+> Add new compatible strings for each subdriver and update DT binding
+> accordingly.
+>
+> Add Ralink pinctrl driver to MAINTAINERS and add me and Sergio as the
+> maintainers.
+>
+> Finally, fix the current rt2880 documentation and add binding for all of
+> the subdrivers.
+>
+> I have the patches here should anyone prefer to read them there:
+> https://github.com/arinc9/linux/commits/ralink-pinctrl-refactor
+>
+> Ralink pinctrl driver and the subdrivers were compile tested.
+> MT7621 pinctrl subdriver was tested on a private mt7621 board.
+> YAML bindings checked with:
+> ARCH=3Dmips CROSS_COMPILE=3Dmips-linux-gnu- make dt_binding_check DT_SCHE=
+MA_FILES=3DDocumentation/devicetree/bindings/pinctrl/ -j$(nproc)
+>
+> Ar=C4=B1n=C3=A7 =C3=9CNAL (14):
+>   pinctrl: ralink: rename MT7628(an) functions to MT76X8
+>   pinctrl: ralink: rename pinctrl-rt2880 to pinctrl-ralink
+>   pinctrl: ralink: rename pinmux functions to pinctrl
+>   pinctrl: ralink: rename pinctrl-rt288x to pinctrl-rt2880
+>   pinctrl: ralink: rename variable names for functions on MT7620 and MT76=
+21
+>   pinctrl: ralink: rename driver names to subdrivers
+>   MAINTAINERS: add Ralink pinctrl driver
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+For all these rename stuff and MAINTAINERS change:
 
-Thanks,
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+
+>   pinctrl: ralink: add new compatible strings for each pinctrl subdriver
+>   mips: dts: ralink: mt7621: use the new compatible string for MT7621 pin=
+ctrl
+>   dt-bindings: pinctrl: rt2880: fix binding name, pin groups and function=
+s
+>   dt-bindings: pinctrl: add binding for Ralink MT7620 pinctrl
+>   dt-bindings: pinctrl: add binding for Ralink MT7621 pinctrl
+>   dt-bindings: pinctrl: add binding for Ralink RT305X pinctrl
+>   dt-bindings: pinctrl: add binding for Ralink RT3883 pinctrl
+
+I think you cannot change compatible strings because you have to be
+compatible with previous stuff. That is the reason why when I
+refactored all of this stuff from 'arch/mips/ralink' into
+'drivers/pinctrl' I maintained the same for all of them and only
+created one binding for all. I know that these SoCs are mostly used in
+openWRT and the way of doing things there is that when a new version
+is released a new dtb is also compiled so I understand the motivation
+of the change itself. In any case, Rob has the last word here, not me
+:).
+
+Thanks for doing this.
+
+Best regards,
     Sergio Paracuellos
