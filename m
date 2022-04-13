@@ -2,164 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5024FFDC7
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 20:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C496E4FFE26
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Apr 2022 20:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236307AbiDMSat (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 14:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S237814AbiDMSuz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 14:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235824AbiDMSan (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 14:30:43 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A53A50E3B
-        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 11:28:21 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 125so2530430pgc.11
-        for <linux-mips@vger.kernel.org>; Wed, 13 Apr 2022 11:28:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bpeKB101GiB4lxea+Vei5KAP2vPrN2mAl+5Iy4JIo1Y=;
-        b=hSS+V6AJRz170U3P+2UqpwQ5nmzP1chGiCMEpvco/3ng23jK7nkez9K1F+P4cRXQjO
-         YSsOdRh0ob/PxY68/0Y/VELl5VQowOxyFpT9XPmnxFvhgOMwtKOeko/YZwR12NjPm/AN
-         rztaKQwC/WhmgPfRgIg3aarP/B37AhZS6JUH1dW7S9ZCTAhfmLAt52in0ht8+hzQwrdb
-         cuqY1xSpSWScCLE+3OLpp0PfmNkLXJw+2W4WH8WJPkgIpiPFD9LktmKo59tCfPclJ4gv
-         aIsOm9E4RLexPhl6n3Rg/6l3RvqmNX5LuUt+M+Evoer+5fHEseA6lLSYh4fIXsahLxbx
-         191w==
+        with ESMTP id S231590AbiDMSuy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 14:50:54 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A75DA0F;
+        Wed, 13 Apr 2022 11:48:32 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2ec04a2ebadso32319057b3.12;
+        Wed, 13 Apr 2022 11:48:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bpeKB101GiB4lxea+Vei5KAP2vPrN2mAl+5Iy4JIo1Y=;
-        b=XORkWboW8rfLdyFo5S0mEBKz5wV777t8AsJaEtRXp6NhS3pO0/T3MlO6mpcGkB0mfI
-         tHco0SZoiEk3rDY2F6wcSYkIvAJRTwfueqtk+C4jYTcZZDkFW91I6tdzSldh8ItMCSxC
-         hZrxIZQF4rFT/b1fuQbPhXB+KNZTvNH2a4M74nEv/DzYTHrHPLg8dHM9D6jQ+VsxMDPC
-         GoK0P2ROk8Tww6dO5oNoAOK4E+a/L6Iipil09Z18rPM24be8g4QB9i2KRWrb2EYR1k7I
-         UbFT40FG3/gNA3ZauKqOro8iFNXv26W97QCQFoeb9FCwHm9hyYUT7zBlOncmBu4cxgC4
-         hqlw==
-X-Gm-Message-State: AOAM531GoylX9Kfov4kOllCGZTod8Gfw15dx/z11PcYs3xm2CnzUHh4D
-        LWxSrG9GJoxM+Q5yNwNNIhwbeA==
-X-Google-Smtp-Source: ABdhPJwVoOa8Dj+YAhZ33kjw7NtyqOGLBfa4tCRI9XDyKQYayiKcuB3O+jKCPUAV/nNuh3GKhHrCig==
-X-Received: by 2002:a65:560e:0:b0:39d:7613:94cf with SMTP id l14-20020a65560e000000b0039d761394cfmr10974179pgs.196.1649874500603;
-        Wed, 13 Apr 2022 11:28:20 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id n19-20020a62e513000000b005048eef5827sm24973743pff.142.2022.04.13.11.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 11:28:19 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 18:28:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J1rErWVySlUxlEFN2u18NGS5Qm0qvXYHGlMsYpGhhEY=;
+        b=o889vKxSZtxv8BEV2OoNHeUSIVSxACJe8n0x+KvpxDr0kg3lDSg1g8LoUE9Bu4dAAe
+         I0iUyDRgqQM+YxT7ev9JMk18DB7xCsm0NBYY0yKziHMpPBVYhoEIuHPE0y3+tOiIghU0
+         QHrGU+pFLYAbtd6x535V+cs7nmE3stGixEEx91f8SUrxCGmEZ0B4NPXCTsEfdbCexJso
+         vN1rL0p+hRNdjj6uBwjtVnohxcEFxd7GQNFhlNHOO2UF1hIvohxjUdbrpOBY+8T8/y0d
+         BY3aa+4w9VV3v6CY9Vt8NvvoNMllq5JBLzAtEZiZR4w9pAAAbivq/5mzW1QjjZn3A3Ob
+         eqpg==
+X-Gm-Message-State: AOAM532UuvfMXcYmQn930+JWT3B73Q7VMEmbT5Qiq10V4IGHVmHDg4AO
+        YQUeiVjdulu07zQKtE0HLZsgtYUCjcWXGlEgZG4=
+X-Google-Smtp-Source: ABdhPJz9BfsA7QIGi43YRDlzzrWhVjbeGEMJOs01j9nA3vXXWXOOPKhq5d8EhdtGHqqQ5dYXQmK91VGL/RQnfnI1jKs=
+X-Received: by 2002:a81:7c45:0:b0:2eb:4759:cc32 with SMTP id
+ x66-20020a817c45000000b002eb4759cc32mr224284ywc.515.1649875711933; Wed, 13
+ Apr 2022 11:48:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com> <20220411233832.391817-4-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220411233832.391817-4-dmitry.osipenko@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 20:48:20 +0200
+Message-ID: <CAJZ5v0gf1J+yPW14TAdLGLGfO+-2s=r0DDP7d+Rgop3=dB0gaQ@mail.gmail.com>
+Subject: Re: [PATCH v7 03/20] reboot: Print error message if restart handler
+ has duplicated priority
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v3 00/23] KVM: Extend Eager Page Splitting to the shadow
- MMU
-Message-ID: <YlcWP5Z3osvUg0Ia@google.com>
-References: <20220401175554.1931568-1-dmatlack@google.com>
- <YlRhiF1O71TWQr5r@google.com>
- <CALzav=f_WY7xH_MV8-gJPAVmj1KjE_LvXupL7aA5n-vCjTETNw@mail.gmail.com>
- <YlSLuZphElMyF2sG@google.com>
- <CALzav=fGucZOZjbVE2+9PZVf1p+jP7GBYDpPph5PoU552LELsw@mail.gmail.com>
- <YlTKQz8HVPtyfwKe@google.com>
- <CALzav=dz8rSK6bs8pJ9Vv02Z7aWO+yZ5jAA8+nmLAtJe3SMAsA@mail.gmail.com>
- <YlYhO7GvjKY1cwHr@google.com>
- <YlcPIYJ0CB2qnfpT@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlcPIYJ0CB2qnfpT@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 13, 2022, David Matlack wrote:
-> On Wed, Apr 13, 2022 at 01:02:51AM +0000, Sean Christopherson wrote:
-> > There will be one wart due to unsync pages needing @vcpu, but we can pass in NULL
-> > for the split case and assert that @vcpu is non-null since all of the children
-> > should be direct.
-> 
-> The NULL vcpu check will be a little gross,
+On Tue, Apr 12, 2022 at 1:39 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> Add sanity check which ensures that there are no two restart handlers
+> registered using the same priority. This requirement will become mandatory
+> once all drivers will be converted to the new API and such errors will be
+> fixed.
+>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-Yeah, I would even call it a lot gross :-)
+The first two patches in the series are fine with me and there's only
+one minor nit regarding this one (below).
 
-> but it should never trigger in practice since eager page splitting always
-> requests direct SPs. My preference has been to enforce that in code by
-> splitting out
+> ---
+>  kernel/reboot.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index ed4e6dfb7d44..acdae4e95061 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -182,6 +182,21 @@ static ATOMIC_NOTIFIER_HEAD(restart_handler_list);
+>   */
+>  int register_restart_handler(struct notifier_block *nb)
+>  {
+> +       int ret;
+> +
+> +       ret = atomic_notifier_chain_register_unique_prio(&restart_handler_list, nb);
+> +       if (ret != -EBUSY)
+> +               return ret;
+> +
+> +       /*
+> +        * Handler must have unique priority. Otherwise call order is
+> +        * determined by registration order, which is unreliable.
+> +        *
+> +        * This requirement will become mandatory once all drivers
+> +        * will be converted to use new sys-off API.
+> +        */
+> +       pr_err("failed to register restart handler using unique priority\n");
 
-It still is enforced in code, just at different points.  The split version WARNs
-and continues after finding a page, the below WARNs and rejects _while_ finding
-the page.
+I would use pr_info() here, because this is not a substantial error AFAICS.
 
-Speaking of WARNs, that reminds me... it might be worth adding a WARN in
-kvm_mmu_get_child_sp() to document (and detect, but more to document) that @direct
-should never encounter an page with unsync or unsync_children, e.g. 
-
-	union kvm_mmu_page_role role;
-	struct kvm_mmu_page *sp;
-
-	role = kvm_mmu_child_role(sptep, direct, access);
-	sp = kvm_mmu_get_page(vcpu, gfn, role);
-
-	/* Comment goes here about direct pages in shadow MMUs? */
-	WARN_ON(direct && (sp->unsync || sp->unsync_children));
-	return sp;
-
-The indirect walk of FNAME(fetch)() handles unsync_children, but none of the other
-callers do.  Obviously shouldn't happen, but especially in the huge page split
-case it took me a second to understand exactly why it can't happen.
-
-> but I can see the advantage of your proposal is that eager page splitting and
-> faults will go through the exact same code path to get a kvm_mmu_page.
-> __kvm_mmu_find_shadow_page(), but I can see the advantage of your
-> proposal is that eager page splitting and faults will go through the
-> exact same code path to get a kvm_mmu_page.
-> 
-> > 
-> > 		if (sp->unsync) {
-> > 			if (WARN_ON_ONCE(!vcpu)) {
-> > 				kvm_mmu_prepare_zap_page(kvm, sp,
-> > 							 &invalid_list);
-> > 				continue;
-> > 			}
-> > 
-> > 			/*
-> > 			 * The page is good, but is stale.  kvm_sync_page does
-> > 			 * get the latest guest state, but (unlike mmu_unsync_children)
-> > 			 * it doesn't write-protect the page or mark it synchronized!
-> > 			 * This way the validity of the mapping is ensured, but the
-> > 			 * overhead of write protection is not incurred until the
-> > 			 * guest invalidates the TLB mapping.  This allows multiple
-> > 			 * SPs for a single gfn to be unsync.
-> > 			 *
-> > 			 * If the sync fails, the page is zapped.  If so, break
-> > 			 * in order to rebuild it.
-> > 			 */
-> > 			if (!kvm_sync_page(vcpu, sp, &invalid_list))
-> > 				break;
-> > 
-> > 			WARN_ON(!list_empty(&invalid_list));
-> > 			kvm_flush_remote_tlbs(kvm);
-> > 		}
+> +
+>         return atomic_notifier_chain_register(&restart_handler_list, nb);
+>  }
+>  EXPORT_SYMBOL(register_restart_handler);
+> --
