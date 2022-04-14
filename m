@@ -2,44 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BA45011B3
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 17:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0483650115B
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 16:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbiDNOQc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Apr 2022 10:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S236479AbiDNOQF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Apr 2022 10:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343732AbiDNNn4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 09:43:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EF924951;
-        Thu, 14 Apr 2022 06:39:42 -0700 (PDT)
+        with ESMTP id S1344609AbiDNNo1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 09:44:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AFE340EA;
+        Thu, 14 Apr 2022 06:39:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB5BCB829A3;
-        Thu, 14 Apr 2022 13:39:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14B8BC385A1;
-        Thu, 14 Apr 2022 13:39:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6736CB8298F;
+        Thu, 14 Apr 2022 13:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77BF3C385A1;
+        Thu, 14 Apr 2022 13:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943579;
-        bh=zFT/33gx2QpYPbSY/7LiF+3Gf+gZx34HbhjPo3288vU=;
+        s=korg; t=1649943596;
+        bh=Pmy95jZn5haKEEuYNU6AqIskvTvgmt4/onvmm2150WI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0fycYHmxKEGO7vSXZXojet09xcnCwlemQ4LOrF0X8ENpR9QJT2G8WrU4QpshPLXjP
-         ZAKyr6tCAN2hOxce0Dr4f4weIsXIhQmvy5nA7mUhXtYvbYLJ7X/rCmF/OGzB1UNQTD
-         VCaavw3ItC9ibwLGkcZEJSZsF4ANeX000Zj3bQEQ=
+        b=x9OIPpxSW9o1dRR9re3OmigQGZrRw6RCj6yFB3t59yNi5zMFkw/bUaVhKrH3ChlHs
+         L2waA+WSlhIZTw8LkzPZgWOUdoZUoXcFmdOGeOiM+rc/pNDsPQnO37Z4kaTkS65Nw9
+         W9b7tYbgj+4OMQ5aPasrm7QYOZU0C8jWKLDCUWwE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Paul Burton <paulburton@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 205/475] mips: DEC: honor CONFIG_MIPS_FP_SUPPORT=n
-Date:   Thu, 14 Apr 2022 15:09:50 +0200
-Message-Id: <20220414110900.865986588@linuxfoundation.org>
+        linux-mips@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Phil Sutter <n0-1@freewrt.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Daniel Walter <dwalter@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 211/475] MIPS: RB532: fix return value of __setup handler
+Date:   Thu, 14 Apr 2022 15:09:56 +0200
+Message-Id: <20220414110901.031621999@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -59,76 +63,53 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 97bf0395c226907e1a9b908511a35192bf1e09bb ]
+[ Upstream commit 8755d57ba1ff910666572fab9e32890e8cc6ed3b ]
 
-Include the DECstation interrupt handler in opting out of
-FPU support.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings. Also, error return codes don't mean anything to
+obsolete_checksetup() -- only non-zero (usually 1) or zero.
+So return 1 from setup_kmac().
 
-Fixes a linker error:
-
-mips-linux-ld: arch/mips/dec/int-handler.o: in function `fpu':
-(.text+0x148): undefined reference to `handle_fpe_int'
-
-Fixes: 183b40f992c8 ("MIPS: Allow FP support to be disabled")
+Fixes: 9e21c7e40b7e ("MIPS: RB532: Replace parse_mac_addr() with mac_pton().")
+Fixes: 73b4390fb234 ("[MIPS] Routerboard 532: Support for base system")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Paul Burton <paulburton@kernel.org>
+From: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Maciej W. Rozycki <macro@orcam.me.uk>
 Cc: linux-mips@vger.kernel.org
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Phil Sutter <n0-1@freewrt.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Daniel Walter <dwalter@google.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/dec/int-handler.S | 6 +++---
- arch/mips/dec/setup.c       | 3 ++-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ arch/mips/rb532/devices.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/dec/int-handler.S b/arch/mips/dec/int-handler.S
-index a25ef822e725..5ed38e618019 100644
---- a/arch/mips/dec/int-handler.S
-+++ b/arch/mips/dec/int-handler.S
-@@ -131,7 +131,7 @@
- 		 */
- 		mfc0	t0,CP0_CAUSE		# get pending interrupts
- 		mfc0	t1,CP0_STATUS
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- 		lw	t2,cpu_fpu_mask
- #endif
- 		andi	t0,ST0_IM		# CAUSE.CE may be non-zero!
-@@ -139,7 +139,7 @@
+diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
+index c9ecf17f8660..74808619fefe 100644
+--- a/arch/mips/rb532/devices.c
++++ b/arch/mips/rb532/devices.c
+@@ -310,11 +310,9 @@ static int __init plat_setup_devices(void)
+ static int __init setup_kmac(char *s)
+ {
+ 	printk(KERN_INFO "korina mac = %s\n", s);
+-	if (!mac_pton(s, korina_dev0_data.mac)) {
++	if (!mac_pton(s, korina_dev0_data.mac))
+ 		printk(KERN_ERR "Invalid mac\n");
+-		return -EINVAL;
+-	}
+-	return 0;
++	return 1;
+ }
  
- 		beqz	t0,spurious
- 
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- 		 and	t2,t0
- 		bnez	t2,fpu			# handle FPU immediately
- #endif
-@@ -280,7 +280,7 @@ handle_it:
- 		j	dec_irq_dispatch
- 		 nop
- 
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- fpu:
- 		lw	t0,fpu_kstat_irq
- 		nop
-diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
-index 1fc8dffa8d1d..649b50ae5b1e 100644
---- a/arch/mips/dec/setup.c
-+++ b/arch/mips/dec/setup.c
-@@ -766,7 +766,8 @@ void __init arch_init_irq(void)
- 		dec_interrupt[DEC_IRQ_HALT] = -1;
- 
- 	/* Register board interrupts: FPU and cascade. */
--	if (dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
-+	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT) &&
-+	    dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
- 		struct irq_desc *desc_fpu;
- 		int irq_fpu;
- 
+ __setup("kmac=", setup_kmac);
 -- 
 2.34.1
 
