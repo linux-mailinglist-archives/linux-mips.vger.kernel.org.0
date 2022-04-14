@@ -2,68 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF275001F8
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 00:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D7E500382
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 03:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236614AbiDMWnD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 18:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S239328AbiDNBSn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 21:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiDMWnC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 18:43:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADF2424A4;
-        Wed, 13 Apr 2022 15:40:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB81661F79;
-        Wed, 13 Apr 2022 22:40:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF43C385AB;
-        Wed, 13 Apr 2022 22:40:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X2vIIC5X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649889633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sy2u2tLdcOJ2AL1/09I7fdj8Xfid/ZIpX9etCksgmJY=;
-        b=X2vIIC5X5BNTLZ5C7Wvfq18MIDx14rBDEXQJ5CNKZohjyA25cLabSRtIVUXNp/E9n0aZJF
-        HbDFAQ9UULWgJQGkOOj+2Vm+BMPZl0Jilk5jrdNWW1OwylavnULQ+IFrlD/vmsU43QZq2X
-        sK+i91xBixVvcioXqPZkDSglQEpU3N4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fd4406c1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 13 Apr 2022 22:40:33 +0000 (UTC)
-Received: by mail-yb1-f169.google.com with SMTP id g34so6395422ybj.1;
-        Wed, 13 Apr 2022 15:40:31 -0700 (PDT)
-X-Gm-Message-State: AOAM530GdCMdU6mTJpDFEDaaKGkzLrLlQdpIz88J1ROSpPo61JFji3Nk
-        peJQFwoT2EbFQIrci0FOvJHHerWkmFm+XOnVUgg=
-X-Google-Smtp-Source: ABdhPJx9INm5zW7sTrV4774xD6IRq7PzslZw6I75g3UsN7iIIGechqL3/0SrrUeqYX9XZja0QUvWBULi93OT13Yuj6E=
-X-Received: by 2002:a5b:6cf:0:b0:61e:1371:3cda with SMTP id
- r15-20020a5b06cf000000b0061e13713cdamr955062ybq.235.1649889630599; Wed, 13
- Apr 2022 15:40:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-4-Jason@zx2c4.com>
- <CAL_JsqJ86vZKZQO+9_Kva-EbZrRPMbcgDm+UvjJdnR=GL-qHSw@mail.gmail.com>
-In-Reply-To: <CAL_JsqJ86vZKZQO+9_Kva-EbZrRPMbcgDm+UvjJdnR=GL-qHSw@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 14 Apr 2022 00:40:19 +0200
-X-Gmail-Original-Message-ID: <CAHmME9qGzW1+dWLvObjQ4ofGcCU1tOwTB+qJTVs2ufEmAEhbrA@mail.gmail.com>
-Message-ID: <CAHmME9qGzW1+dWLvObjQ4ofGcCU1tOwTB+qJTVs2ufEmAEhbrA@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] riscv: use fallback for random_get_entropy()
- instead of zero
-To:     Rob Herring <robh@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
+        with ESMTP id S235222AbiDNBSn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 21:18:43 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48DF74E38E;
+        Wed, 13 Apr 2022 18:16:20 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id D411B92009C; Thu, 14 Apr 2022 03:16:18 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id C508F92009B;
+        Thu, 14 Apr 2022 02:16:18 +0100 (BST)
+Date:   Thu, 14 Apr 2022 02:16:18 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
+        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -80,31 +48,65 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Dinh Nguyen <dinguyen@kernel.org>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
+ instead of zero
+In-Reply-To: <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
+References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com> <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
+ <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
+Hi Jason,
 
-On Wed, Apr 13, 2022 at 4:40 PM Rob Herring <robh@kernel.org> wrote:
-> Moving this check to get_cycles() implementation would eliminate the
-> RiscV implementation of random_get_entropy() if you follow my other
-> suggestion.
+> However, one thing that I've been thinking about is that the c0 random
+> register is actually kind of garbage. In my fuzzy decade-old memory of
+> MIPS, I believe the c0 random register starts at the maximum number of
+> TLB entries (16?), and then counts down cyclically, decrementing once
+> per CPU cycle. Is that right?
 
-Not an option. random_get_entropy() != get_cycles(). Sometimes these
-are different functions. Returning random_get_entropy_fallback() from
-get_cycles(), for example, wouldn't make any sense.
+ Yes, for the relevant CPUs the range is 63-8 << 8 for R3k machines and 
+47-0 (the lower bound can be higher if wired entries are used, which I 
+think we occasionally do) for R4k machines with a buggy CP0 counter.  So 
+there are either 56 or up to 48 distinct CP0 Random register values.
 
-Jason
+> If it is, there are some real pros and cons here to consider:
+> - Pro: decrementing each CPU cycle means pretty good granularity
+> - Con: wrapping at, like, 16 or something really is very limited, to
+> the point of being almost bad
+> 
+> Meanwhile, on systems without the c0 cycles counter, what is the
+> actual resolution of random_get_entropy_fallback()? Is this just
+> falling back to jiffies?
+
+ It depends on the exact system.  Some have a 32-bit high-resolution 
+counter in the chipset (arch/mips/kernel/csrc-ioasic.c) giving like 25MHz 
+resolution, some have nothing but jiffies.
+
+> IF (a) the fallback is jiffies AND (b) c0 wraps at 16, then actually,
+> what would be really nice would be something like:
+> 
+>     return (jiffies << 4) | read_c0_random();
+> 
+> It seems like that would give us something somewhat more ideal than
+> the status quo. Still crap, of course, but undoubtedly better.
+
+ It seems like a reasonable idea to me, but the details would have to be 
+sorted out, because where a chipset high-resolution counter is available 
+we want to factor it in, and otherwise we need to extract the right bits 
+from the CP0 Random register, either 13:8 for the R3k or 5:0 for the R4k.
+
+  Maciej
