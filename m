@@ -2,71 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B75500AAD
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 12:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42989500ACB
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 12:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235628AbiDNKDS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Apr 2022 06:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
+        id S230462AbiDNKPK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Apr 2022 06:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiDNKDS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 06:03:18 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EC05371A;
-        Thu, 14 Apr 2022 03:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649930428;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=O31Nl5AOFehQyennzN1A7CJVxZkiGCjpOxp+mKyaQqQ=;
-    b=cKMhA4eQW+Q4/4zC1E0t2dwtAM5SZoN/60wUkjOv9fFu3m+QW1uxfp8782zUExFeT+
-    4HbcuQGT7hVv6Miam3Rf6va5V3WqEntk1/Ihi8HNvExecrbKqqKOzL9q23fLAqTFp5+N
-    flH1/PD4Og8XRUO537v/McciufamFtm8suLgGLsDmtIAY0X517GdUx63xz++S+s1F14G
-    a+QgiYzupO3o0tThqiei2QdMRZnGh6ATY/zvS3EPI/Bfne+QvqB8YP3b9I/iEYg0pSF5
-    i2IiTI7wQpt4SHLIKBhXKlAfR2palHO/QvMI9MxaYOc1IslGybkYNvMo1WAng/LfNDgr
-    vdrw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw47uAiI="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy3EA0RDiZ
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 14 Apr 2022 12:00:27 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
- SoCs.
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <76ea346b-0645-97b5-f8fb-5b46b4bcc80b@linaro.org>
-Date:   Thu, 14 Apr 2022 12:00:27 +0200
-Cc:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hminas@synopsys.com, Rob Herring <robh+dt@kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>, dragancecavac@yahoo.com,
-        dongsheng.qiu@ingenic.com, qipengzhen <aric.pzqi@ingenic.com>,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F6929BAA-D552-4C34-B392-33AEA263F0C9@goldelico.com>
-References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
- <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
- <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
- <0AE74BF9-46F1-44EC-8E5F-40EA12851AD0@goldelico.com>
- <76ea346b-0645-97b5-f8fb-5b46b4bcc80b@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: Apple Mail (2.3445.104.21)
+        with ESMTP id S230019AbiDNKPJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 06:15:09 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66886C927;
+        Thu, 14 Apr 2022 03:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=upqcvBN0c/2twwWoHUne//eX4ki0XQTMtmfsi6ArAXU=; b=HjGPsWLJY1Ur/Qd9SaLg0YiKnR
+        95tjp26+YgI/HwEOdRqvSlAROO2sO63Z/uXu1t6/V5/PtASP1IW3k8kj55+7tgoHxaUyNfpLnuymj
+        G+Nuireb4o2uAs9tgNLn8PCnmIvfeYm/3imhJXibehEvAyy2bcpTUxyuVWUQ0H1lRVoogDYJt+XGn
+        +JXGGLKSFLPO1NgiG/h6Ou0ERgDMxxK3z39Afa9Ihp7G2oki6nDRlwzM4i7qfs+r/iBEJYNjoTAgZ
+        nYexjH0hGr4I1XQ6yy/K0FsGtjU27thDPBNsh2vJZf5a5imdfgQbx4As5XreqUcbwl+Pi+VE00syg
+        bbEnVKOQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58256)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1newSp-0004M9-DZ; Thu, 14 Apr 2022 11:12:35 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1newSh-0004Du-6v; Thu, 14 Apr 2022 11:12:27 +0100
+Date:   Thu, 14 Apr 2022 11:12:27 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v4 01/11] timekeeping: add raw clock fallback for
+ random_get_entropy()
+Message-ID: <Ylfzi1lNWTH1wjLA@shell.armlinux.org.uk>
+References: <20220413115411.21489-1-Jason@zx2c4.com>
+ <20220413115411.21489-2-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413115411.21489-2-Jason@zx2c4.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,58 +82,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Apr 13, 2022 at 01:54:01PM +0200, Jason A. Donenfeld wrote:
+> The addition of random_get_entropy_fallback() provides access to
+> whichever time source has the highest frequency, which is useful for
+> gathering entropy on platforms without available cycle counters. It's
+> not necessarily as good as being able to quickly access a cycle counter
+> that the CPU has, but it's still something, even when it falls back to
+> being jiffies-based.
+> 
+> In the event that a given arch does not define get_cycles(), falling
+> back to the get_cycles() default implementation that returns 0 is really
+> not the best we can do. Instead, at least calling
+> random_get_entropy_fallback() would be preferable, because that always
+> needs to return _something_, even falling back to jiffies eventually.
+> It's not as though random_get_entropy_fallback() is super high precision
+> or guaranteed to be entropic, but basically anything that's not zero all
+> the time is better than returning zero all the time.
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  include/linux/timex.h     |  8 ++++++++
+>  kernel/time/timekeeping.c | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/include/linux/timex.h b/include/linux/timex.h
+> index 5745c90c8800..fbbe34226044 100644
+> --- a/include/linux/timex.h
+> +++ b/include/linux/timex.h
+> @@ -62,6 +62,8 @@
+>  #include <linux/types.h>
+>  #include <linux/param.h>
+>  
+> +extern unsigned long random_get_entropy_fallback(void);
 
+Hi
 
-> Am 14.04.2022 um 09:32 schrieb Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org>:
->=20
-> On 13/04/2022 21:30, H. Nikolaus Schaller wrote:
->> So we need "snps,dwc2" to get any driver match and I thought the =
-"ingenic,jz4780-otg" is redundant.
->>=20
->> But maintainers convinced me to keep it as a dummy compatible in the =
-.dtsi for potential future
->> specialization (which does not exist and seems not to be necessary).=20=
+I'm surprised this didn't trigger checkpatch to warn. From
+coding-style:
 
->=20
-> Isn't exactly the next patch 2/2 using such specialization?
->=20
->> Unless I can convince them=20
->> that this is never ever needed. Which is beyond my knowledge and =
-almost everyone.
->>=20
->> So we can't remove the "snps,dwc2" here.
->>=20
->> Well, we can with more work elsewhere.
->> You have to extend the dwc2_of_match_table to include all ingenic =
-devices.
->>=20
->> Therefore we now know 3 potential solutions:
->> a) remove "ingenic,jz4780-otg" from jz4780.dtsi (my proposal)
->> b) add "ingenic,jz4780-otg" to dwc2.yaml together with "snps,dwc2" =
-(your proposal + my suggestion here)
->> c) add only "ingenic,jz4780-otg" to dwc2.yaml and extend the match =
-table in drivers//usb/dwc2/params.c (new proposals)
->>=20
->> =46rom consistency point of view I think variant b) is the right one. =
-a) was rejected and c) only adds redundant code.
->=20
-> c) was already proposed by Zhou, so if you think the code is not =
-correct
-> (the params for jz4780) maybe nack it there, so we will know that =
-driver
-> needs fixes.
+6.1) Function prototypes
+Do not use the ``extern`` keyword with function declarations as this makes
+lines longer and isn't strictly necessary.
 
-Ah, ok. Now I see. I was just focussed on this patch and related =
-dtbscheck
-messages and did not read patch 2/2.
+Thanks!
 
-Yes, looking at both, they are variant c). Sorry that I didn't see it =
-earlier.
-
-As said: I am open to anything as long as the dtbscheck doesn't complain =
-any more.
-
-BR and sorry for the confusion,
-Nikolaus
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
