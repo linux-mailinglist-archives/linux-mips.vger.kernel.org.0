@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0483650115B
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 16:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD18B501046
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 16:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236479AbiDNOQF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Apr 2022 10:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
+        id S244853AbiDNNgN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Apr 2022 09:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344609AbiDNNo1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 09:44:27 -0400
+        with ESMTP id S244946AbiDNN2V (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 09:28:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AFE340EA;
-        Thu, 14 Apr 2022 06:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DBE92D21;
+        Thu, 14 Apr 2022 06:21:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6736CB8298F;
-        Thu, 14 Apr 2022 13:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77BF3C385A1;
-        Thu, 14 Apr 2022 13:39:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 102BFB82910;
+        Thu, 14 Apr 2022 13:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6BCC385A5;
+        Thu, 14 Apr 2022 13:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943596;
-        bh=Pmy95jZn5haKEEuYNU6AqIskvTvgmt4/onvmm2150WI=;
+        s=korg; t=1649942479;
+        bh=l7d66aP+CP5ElLEDAcENCaR7JrvXmzpPHGCIoregqro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x9OIPpxSW9o1dRR9re3OmigQGZrRw6RCj6yFB3t59yNi5zMFkw/bUaVhKrH3ChlHs
-         L2waA+WSlhIZTw8LkzPZgWOUdoZUoXcFmdOGeOiM+rc/pNDsPQnO37Z4kaTkS65Nw9
-         W9b7tYbgj+4OMQ5aPasrm7QYOZU0C8jWKLDCUWwE=
+        b=gk9lVol0HIQdqB7789naBQeST194xertex+2jFQBh9a1X5wV5LT/bG8q4oRZxV1OW
+         F2Yr/cMbUMn6lnRXrD6lZrmLm34LIvXBb1oWEsRvTL5Q0XKS6Rg78tOq7cGPqKGIj5
+         CCMfP4KKDp5V8VOb8XuWtU6hqbTgj8O7vJnBJCko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,12 +41,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Daniel Walter <dwalter@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 211/475] MIPS: RB532: fix return value of __setup handler
-Date:   Thu, 14 Apr 2022 15:09:56 +0200
-Message-Id: <20220414110901.031621999@linuxfoundation.org>
+Subject: [PATCH 4.19 149/338] MIPS: RB532: fix return value of __setup handler
+Date:   Thu, 14 Apr 2022 15:10:52 +0200
+Message-Id: <20220414110843.144141518@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -93,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index c9ecf17f8660..74808619fefe 100644
+index 354d258396ff..6624fe15839a 100644
 --- a/arch/mips/rb532/devices.c
 +++ b/arch/mips/rb532/devices.c
-@@ -310,11 +310,9 @@ static int __init plat_setup_devices(void)
+@@ -315,11 +315,9 @@ static int __init plat_setup_devices(void)
  static int __init setup_kmac(char *s)
  {
  	printk(KERN_INFO "korina mac = %s\n", s);
