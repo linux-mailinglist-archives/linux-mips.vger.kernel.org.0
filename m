@@ -2,111 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D7E500382
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 03:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D975003D6
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 03:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239328AbiDNBSn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Apr 2022 21:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S239490AbiDNBzq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Apr 2022 21:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235222AbiDNBSn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 21:18:43 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48DF74E38E;
-        Wed, 13 Apr 2022 18:16:20 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id D411B92009C; Thu, 14 Apr 2022 03:16:18 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id C508F92009B;
-        Thu, 14 Apr 2022 02:16:18 +0100 (BST)
-Date:   Thu, 14 Apr 2022 02:16:18 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
- instead of zero
-In-Reply-To: <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com> <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
- <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S239305AbiDNBzp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Apr 2022 21:55:45 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21310222AD;
+        Wed, 13 Apr 2022 18:53:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1649901172; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=bHZeQVx3jN/0wqWfKct9TVkWDEcH+rjxGHeM8N+jHNXvYp6dZCkiYT+4xsgi/M6zk2/5/F8Gbb8iGtqVcnoS7QlRKYBbCk8EcHk7iMo3k5Q/F+SNWrWf8E5Mxk9baVJYgmvz02mx2FzV4oWRYLo/bSk01LYObJsfkq3qjcRxrTg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1649901172; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=0xSGVUhPZgbHPwFpu89X2W24g/jYetTI1SnOG7J0k5Q=; 
+        b=ILB/ySvWfxHiIPL83uUkzbN8L/mTJgBOejD3WRxH3mJN3jVDzNnv/VWUdXP+HquPTa5qleBfxgX6rW7KHijHVxh/3jeddiw9NqTNhl1YrLC3KwxhINwMBflnbI8sbyCEdUwm6AjItoCOQvnxlRktb3nxmk2LKFkMwHlvpm72oc8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649901172;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=0xSGVUhPZgbHPwFpu89X2W24g/jYetTI1SnOG7J0k5Q=;
+        b=YUrfkzFvJtEXiXaFmuqIesisz2N7XAQ47Y8mWmLX0uNtY6ey2bE5ketmWQrjAmsg
+        BS913aoLOTbtOLVY73+hsdm+aD+ihx/W3yFSch0hfxqFIfTVPKQ3yCOMzOPMBsCtivx
+        UUbfiHkTr7wtIXKp0l415ajJXf8zHBP/TxyYFa+A=
+Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1649901171025892.4263236824818; Wed, 13 Apr 2022 18:52:51 -0700 (PDT)
+Message-ID: <0dd1da16-232b-d634-3146-bf91e58c9543@arinc9.com>
+Date:   Thu, 14 Apr 2022 04:52:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 11/14] dt-bindings: pinctrl: add binding for Ralink MT7620
+ pinctrl
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+ <20220413060729.27639-12-arinc.unal@arinc9.com>
+ <41fa58ee-728b-7f0d-eea7-448c59641d85@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <41fa58ee-728b-7f0d-eea7-448c59641d85@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jason,
-
-> However, one thing that I've been thinking about is that the c0 random
-> register is actually kind of garbage. In my fuzzy decade-old memory of
-> MIPS, I believe the c0 random register starts at the maximum number of
-> TLB entries (16?), and then counts down cyclically, decrementing once
-> per CPU cycle. Is that right?
-
- Yes, for the relevant CPUs the range is 63-8 << 8 for R3k machines and 
-47-0 (the lower bound can be higher if wired entries are used, which I 
-think we occasionally do) for R4k machines with a buggy CP0 counter.  So 
-there are either 56 or up to 48 distinct CP0 Random register values.
-
-> If it is, there are some real pros and cons here to consider:
-> - Pro: decrementing each CPU cycle means pretty good granularity
-> - Con: wrapping at, like, 16 or something really is very limited, to
-> the point of being almost bad
+On 13/04/2022 18:37, Krzysztof Kozlowski wrote:
+> On 13/04/2022 08:07, Arınç ÜNAL wrote:
+>> Add binding for the Ralink MT7620 pin controller for MT7620, MT7628 and
+>> MT7688 SoCs.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../pinctrl/ralink,mt7620-pinctrl.yaml        | 87 +++++++++++++++++++
+>>   1 file changed, 87 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> new file mode 100644
+>> index 000000000000..01578b8aa277
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> @@ -0,0 +1,87 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/pinctrl/ralink,mt7620-pinctrl.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Ralink MT7620 Pin Controller
+>> +
+>> +maintainers:
+>> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
+>> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>> +
+>> +description:
+>> +  Ralink MT7620 pin controller for MT7620, MT7628 and MT7688 SoCs.
+>> +  The pin controller can only set the muxing of pin groups. Muxing indiviual pins
 > 
-> Meanwhile, on systems without the c0 cycles counter, what is the
-> actual resolution of random_get_entropy_fallback()? Is this just
-> falling back to jiffies?
+> Run spellcheck on original bindings, don't copy same typos.
 
- It depends on the exact system.  Some have a 32-bit high-resolution 
-counter in the chipset (arch/mips/kernel/csrc-ioasic.c) giving like 25MHz 
-resolution, some have nothing but jiffies.
+Will address, thanks!
 
-> IF (a) the fallback is jiffies AND (b) c0 wraps at 16, then actually,
-> what would be really nice would be something like:
 > 
->     return (jiffies << 4) | read_c0_random();
+>> +  is not supported. There is no pinconf support.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: ralink,mt7620-pinctrl
+>> +
+>> +patternProperties:
+>> +  '-pins$':
+>> +    type: object
+>> +    patternProperties:
+>> +      '^(.*-)?pinmux$':
 > 
-> It seems like that would give us something somewhat more ideal than
-> the status quo. Still crap, of course, but undoubtedly better.
+> Why do you have two levels here? pins->pinmux->actual pin configuration?
 
- It seems like a reasonable idea to me, but the details would have to be 
-sorted out, because where a chipset high-resolution counter is available 
-we want to factor it in, and otherwise we need to extract the right bits 
-from the CP0 Random register, either 13:8 for the R3k or 5:0 for the R4k.
+Yes, pins->pinmux->pin-configuration is currently how it's done.
 
-  Maciej
+> Cannot be something like brcm,bcm636x has?
+
+Dunno, I'll take a look.
+
+> 
+>> +        type: object
+>> +        description: node for pinctrl.
+>> +        $ref: pinmux-node.yaml#
+>> +
+>> +        properties:
+>> +          groups:
+>> +            description: The pin group to select.
+> 
+> I wonder where do you configure particular pins because these are
+> groups... It's a bit confusing to configure "i2c" group into "i2c" -
+> looks obvious.
+
+We don't configure each pin particularly. Ralink driver only supports 
+muxing certain functions for certain pin groups as hinted on the binding 
+description.
+
+> 
+>> +            enum: [
+>> +              # For MT7620 SoC
+>> +              ephy, i2c, mdio, nd_sd, pa, pcie, rgmii1, rgmii2, spi, spi refclk, uartf, uartlite, wdt, wled,
+>> +
+>> +              # For MT7628 and MT7688 SoCs
+>> +              gpio, i2c, i2s, p0led_an, p0led_kn, p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an,
+>> +              p3led_kn, p4led_an, p4led_kn, perst, pwm0, pwm1, refclk, sdmode, spi, spi cs1, spis, uart0,
+>> +              uart1, uart2, wdt, wled_an, wled_kn,
+>> +            ]
+>> +
+>> +          function:
+>> +            description: The mux function to select.
+>> +            enum: [
+>> +              # For MT7620 SoC
+>> +              ephy, gpio, gpio i2s, gpio uartf, i2c, i2s uartf, mdio, nand, pa, pcie refclk, pcie rst,
+>> +              pcm gpio, pcm i2s, pcm uartf, refclk, rgmii1, rgmii2, sd, spi, spi refclk, uartf, uartlite,
+>> +              wdt refclk, wdt rst, wled,
+>> +
+>> +              # For MT7628 and MT7688 SoCs
+>> +              antenna, debug, gpio, i2c, i2s, jtag, p0led_an, p0led_kn, p1led_an, p1led_kn, p2led_an,
+>> +              p2led_kn, p3led_an, p3led_kn, p4led_an, p4led_kn, pcie, pcm, perst, pwm, pwm0, pwm1,
+>> +              pwm_uart2, refclk, rsvd, sdxc, sdxc d5 d4, sdxc d6, sdxc d7, spi, spi cs1, spis, sw_r, uart0,
+>> +              uart1, uart2, utif, wdt, wled_an, wled_kn, -,
+> 
+> All these lines do not fit in 80-character limit. Linux coding style
+> still expects this in most of cases.
+
+Ok, dt_binding_check warns after 110 characters so I made it fit that. 
+I'll update to 80.
+
+Arınç
