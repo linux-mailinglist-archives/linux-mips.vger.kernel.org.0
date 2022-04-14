@@ -2,116 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD18B501046
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 16:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA00501901
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 18:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244853AbiDNNgN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Apr 2022 09:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
+        id S235332AbiDNQuM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Apr 2022 12:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244946AbiDNN2V (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 09:28:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DBE92D21;
-        Thu, 14 Apr 2022 06:21:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 102BFB82910;
-        Thu, 14 Apr 2022 13:21:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6BCC385A5;
-        Thu, 14 Apr 2022 13:21:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942479;
-        bh=l7d66aP+CP5ElLEDAcENCaR7JrvXmzpPHGCIoregqro=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gk9lVol0HIQdqB7789naBQeST194xertex+2jFQBh9a1X5wV5LT/bG8q4oRZxV1OW
-         F2Yr/cMbUMn6lnRXrD6lZrmLm34LIvXBb1oWEsRvTL5Q0XKS6Rg78tOq7cGPqKGIj5
-         CCMfP4KKDp5V8VOb8XuWtU6hqbTgj8O7vJnBJCko=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        with ESMTP id S240379AbiDNQuA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 12:50:00 -0400
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C27012F6EB;
+        Thu, 14 Apr 2022 09:17:31 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id c24-20020a9d6c98000000b005e6b7c0a8a8so3731820otr.2;
+        Thu, 14 Apr 2022 09:17:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=+dYyu7y5UVTMexCQcf0EtUHGOdwuv57lNmgQ07q4u5Y=;
+        b=3Jcz9zwGBF4OJpsQLzmGDyXF7Plri6Hb/uE02e38s+nci0gQas3LJZ66a6rL+3uqro
+         fsojxbVNXSxyEPlu8WhGjzyqL24loPCEa/M4RaBycbetBBczgxiqhh/bZZvHbv5wVx7k
+         ho7rnU7i7rAdaaSfgp2IlXgfE3OYqBy3tvSWJy9EBcW4V4ia53sVitmsRAYxwKSCa9Kn
+         ymg4KVO8fs7mnCXNycCgRUIn8WV7XDdjDwWqEptI6lapGbEGQcIQ/AIuH4PjbQbXPeGt
+         yJrQJSKrLQhDb/LQoze0D3wdjIcTZiP2NBqbJUQ8MYYmxeNJIfDrh7TEpzbK90LgjEsK
+         11fA==
+X-Gm-Message-State: AOAM53095RAJHAsRlemlRg7ljjly4qO+VjGicLe27QxFIR+rDmbr3moL
+        c14qUbh3olDEmEXTdBs5Ig==
+X-Google-Smtp-Source: ABdhPJzm1hyipOam0Bbm1/ZIUN7HVSh8anI4Sp0p0Vi30YCcZ20K4EDM6Ws/WU/LJosQ8gdb9KAMKQ==
+X-Received: by 2002:a9d:75cc:0:b0:5cd:9f3a:6ee6 with SMTP id c12-20020a9d75cc000000b005cd9f3a6ee6mr1186806otl.10.1649953050470;
+        Thu, 14 Apr 2022 09:17:30 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t6-20020a056870f20600b000e2a451bcaesm874137oao.17.2022.04.14.09.17.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 09:17:30 -0700 (PDT)
+Received: (nullmailer pid 2164706 invoked by uid 1000);
+        Thu, 14 Apr 2022 16:17:29 -0000
+Date:   Thu, 14 Apr 2022 11:17:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Phil Sutter <n0-1@freewrt.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Daniel Walter <dwalter@google.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 149/338] MIPS: RB532: fix return value of __setup handler
-Date:   Thu, 14 Apr 2022 15:10:52 +0200
-Message-Id: <20220414110843.144141518@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 10/14] dt-bindings: pinctrl: rt2880: fix binding name,
+ pin groups and functions
+Message-ID: <YlhJGerakzbsXwnv@robh.at.kernel.org>
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+ <20220413060729.27639-11-arinc.unal@arinc9.com>
+ <ba7cd13f-d216-0ac6-97e1-6c13f1e15f38@linaro.org>
+ <550b20f2-098e-0f25-ad9f-3ff523879cb7@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <550b20f2-098e-0f25-ad9f-3ff523879cb7@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Thu, Apr 14, 2022 at 11:34:31AM +0300, Arınç ÜNAL wrote:
+> On 13/04/2022 18:25, Krzysztof Kozlowski wrote:
+> > On 13/04/2022 08:07, Arınç ÜNAL wrote:
+> > > Change binding name from ralink,rt2880-pinmux to ralink,rt2880-pinctrl.
+> > > This is the binding for the Ralink RT2880 pinctrl subdriver.
+> > 
+> > What I don't see here is why you are doing this. pinmux/pinctrl have the
+> > same meaning, I guess?
+> 
+> What I understand is pinmux is rather a specific term for the muxing of pins
+> or pin groups. Pinctrl is what we prefer here since the term is more
+> inclusive of what the subdriver does: controlling pins. Any mediatek
+> driver/subdriver is called pinctrl so I'm not doing something uncommon.
 
-[ Upstream commit 8755d57ba1ff910666572fab9e32890e8cc6ed3b ]
+The correct name is really whatever the h/w block is called, not 
+whatever we've come up with for some class of devices.
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from setup_kmac().
+> 
+> > 
+> > > 
+> > > Current pin group and function bindings are for MT7621. Put bindings for
+> > > RT2880 instead.
+> > > 
+> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> > > ---
+> > >   ...pinmux.yaml => ralink,rt2880-pinctrl.yaml} | 24 +++++++++----------
+> > >   1 file changed, 12 insertions(+), 12 deletions(-)
+> > >   rename Documentation/devicetree/bindings/pinctrl/{ralink,rt2880-pinmux.yaml => ralink,rt2880-pinctrl.yaml} (56%)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+> > > similarity index 56%
+> > > rename from Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
+> > > rename to Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+> > > index 9de8b0c075e2..c657bbf9fdda 100644
+> > > --- a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
+> > > +++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+> > > @@ -1,21 +1,23 @@
+> > >   # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > >   %YAML 1.2
+> > >   ---
+> > > -$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinmux.yaml#
+> > > +$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinctrl.yaml#
+> > >   $schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > -title: Ralink rt2880 pinmux controller
+> > > +title: Ralink RT2880 Pin Controller
+> > >   maintainers:
+> > > +  - Arınç ÜNAL <arinc.unal@arinc9.com>
+> > 
+> > Mention this in commit msg.
+> 
+> Will do.
+> 
+> > 
+> > >     - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > >   description:
+> > > -  The rt2880 pinmux can only set the muxing of pin groups. Muxing indiviual pins
+> > > +  Ralink RT2880 pin controller for RT2880 SoC.
+> > > +  The pin controller can only set the muxing of pin groups. Muxing indiviual pins
+> > >     is not supported. There is no pinconf support.
+> > >   properties:
+> > >     compatible:
+> > > -    const: ralink,rt2880-pinmux
+> > > +    const: ralink,rt2880-pinctrl
+> > 
+> > you need to deprecate old property and add a new one.
+> 
+> Do we really have to? That property name was inaccurate from the start. I
+> don't see a reason to keep it being referred to on the binding.
 
-Fixes: 9e21c7e40b7e ("MIPS: RB532: Replace parse_mac_addr() with mac_pton().")
-Fixes: 73b4390fb234 ("[MIPS] Routerboard 532: Support for base system")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-From: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Phil Sutter <n0-1@freewrt.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Daniel Walter <dwalter@google.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/rb532/devices.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+It's an ABI. There are exceptions, but you've got to spell out the 
+reasoning in the commit message.
 
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index 354d258396ff..6624fe15839a 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -315,11 +315,9 @@ static int __init plat_setup_devices(void)
- static int __init setup_kmac(char *s)
- {
- 	printk(KERN_INFO "korina mac = %s\n", s);
--	if (!mac_pton(s, korina_dev0_data.mac)) {
-+	if (!mac_pton(s, korina_dev0_data.mac))
- 		printk(KERN_ERR "Invalid mac\n");
--		return -EINVAL;
--	}
--	return 0;
-+	return 1;
- }
- 
- __setup("kmac=", setup_kmac);
--- 
-2.34.1
+Really, who cares. It's just a unique identifier. Unless you also had a 
+h/w block called 'pinmux' in addition to a 'pinctrl' block it doesn't 
+matter. We could use just GUIDs instead.
 
-
-
+Rob
