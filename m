@@ -2,110 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CAA50087D
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 10:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB5A5009C0
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Apr 2022 11:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236975AbiDNIlS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Apr 2022 04:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S237154AbiDNJaB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Apr 2022 05:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233337AbiDNIlR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 04:41:17 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172E664706;
-        Thu, 14 Apr 2022 01:38:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649925521; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=NvD+He9LTHj4iPrpnA0nshq/DhpIAe2/QeIQIih2Va3vqj5AZCXdwggyysDWJF195Jcz4EizJ0tJlP2G/qLtn/OSOeFol1tRye3EDPEcbBboRd/hbQ5Oz8EU9AkZ7Zx8D90l7bB4zg4sYNnBhSd0jP9GhnI6gGMvkdKwNnWUH+s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649925521; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=YYffcehGFoYVVT+n2RAolMjOhDAqqdJAaaNaFG5yQqU=; 
-        b=ZLJ4342N5Q9Y4GPwgmzX2YMiWc2c4O8QTVwobaJN0dnZ6YgMJzyq2D9iCFpWqrThViLJp/jgnS9VKSpHVODVB74iI1b9ITvhSK+cHTg4cmlQXMIHRWy3L6UB9Edu8QCnJjPh3ZKE/ueSmZ0SyRWPSohw/E3rBRW4I6gevYm2v/Y=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649925521;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=YYffcehGFoYVVT+n2RAolMjOhDAqqdJAaaNaFG5yQqU=;
-        b=J0GqQTvciMcJUvBhIOBR9sw9kTm2fxjym5o68F4guSg+XqOUesLPNJSQXA1Em2VQ
-        mn5dZwh+e6q6uOFVmIb56Qv7EU6Dn2/9mfNQSTH8rRtG2hq2pDLYJNzRSLvv6oV3vIV
-        KU1B6Tzuem1YRfp35dZtFgBP3vUl8WEUiha9HsdU=
-Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649925519751170.1146785751522; Thu, 14 Apr 2022 01:38:39 -0700 (PDT)
-Message-ID: <8eb29967-83ca-97c5-d6b9-808cf3ddeb16@arinc9.com>
-Date:   Thu, 14 Apr 2022 11:38:33 +0300
+        with ESMTP id S229733AbiDNJ37 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Apr 2022 05:29:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EAD50E2A;
+        Thu, 14 Apr 2022 02:27:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F56861CB7;
+        Thu, 14 Apr 2022 09:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F941C385A1;
+        Thu, 14 Apr 2022 09:27:29 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="iCKw8U+B"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649928448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jitaCCQ2e/PpJGSBhLHWsevtZEgEekS1b3Wk73klyKA=;
+        b=iCKw8U+BX0unZDHdCqu1WEQPpDnLVael4IDVYgWvfW7w0XcoPFz96Q+X7Oh/HXcBDfoQgf
+        relkkKJiqLUs0hWWbJBeLDEdKmFO5iYlsrmp12SxDsveaByJUqA4gI9QfV6k/NrhryczGl
+        YX1t4UDjk8/egPtL7ZCNgWMOfE4aDFg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ff3c9dc5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 14 Apr 2022 09:27:27 +0000 (UTC)
+Date:   Thu, 14 Apr 2022 11:27:22 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
+ instead of zero
+Message-ID: <YlfoeGRM6w2O+eXA@zx2c4.com>
+References: <20220413115411.21489-1-Jason@zx2c4.com>
+ <20220413115411.21489-5-Jason@zx2c4.com>
+ <20220413122546.GA11860@alpha.franken.de>
+ <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
+ <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
+ <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 09/14] mips: dts: ralink: mt7621: use the new compatible
- string for MT7621 pinctrl
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
- <20220413060729.27639-10-arinc.unal@arinc9.com>
- <b415523c-34e3-28a1-bcce-4682e7c67e77@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <b415523c-34e3-28a1-bcce-4682e7c67e77@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Maciej,
 
+On Thu, Apr 14, 2022 at 02:16:18AM +0100, Maciej W. Rozycki wrote:
+>  Yes, for the relevant CPUs the range is 63-8 << 8 for R3k machines and 
+> 47-0 (the lower bound can be higher if wired entries are used, which I 
+> think we occasionally do) for R4k machines with a buggy CP0 counter.  So 
+> there are either 56 or up to 48 distinct CP0 Random register values.
 
-On 13/04/2022 18:27, Krzysztof Kozlowski wrote:
-> On 13/04/2022 08:07, Arınç ÜNAL wrote:
->> Use the new compatible string "ralink,mt7621-pinctrl" for the Ralink MT7621
->> pinctrl subdriver on mt7621.dtsi.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
->>   arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
->> index 3222684915ac..ee2ec78c8952 100644
->> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
->> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
->> @@ -151,7 +151,7 @@ spi0: spi@b00 {
->>   	};
->>   
->>   	pinctrl: pinctrl {
->> -		compatible = "ralink,rt2880-pinmux";
->> +		compatible = "ralink,mt7621-pinctrl";
-> 
-> The change is non-bisectable and causes issues all other users of DT
-> (other projects, systems etc). This is discouraged in general, so you
-> should describe it. The commit msg lacks answer to the main question:
-> Why? You focused only on what you are doing, but why you are doing is
-> actually more important for such change.
+Ahh interesting, so it varies a bit, but it remains rather small.
 
-As it's seen on any other pinctrl subdriver that calls code from a main 
-driver, each subdriver needs to have a different compatible string. We 
-don't want the same compatible string to match a different subdriver's 
-pinmux data as it's not for our SoC.
+>  It depends on the exact system.  Some have a 32-bit high-resolution 
+> counter in the chipset (arch/mips/kernel/csrc-ioasic.c) giving like 25MHz 
+> resolution, some have nothing but jiffies.
 
-I'll add what I typed above to the commit log.
+Alright, so there _are_ machines with no c0 cycles but with a good
+clock. Yet, 25MHz is still less than the cpu cycle, so this c0 random
+ORing trick remains useful perhaps.
 
-Arınç
+>  It seems like a reasonable idea to me, but the details would have to be 
+> sorted out, because where a chipset high-resolution counter is available 
+> we want to factor it in, and otherwise we need to extract the right bits 
+> from the CP0 Random register, either 13:8 for the R3k or 5:0 for the R4k.
+
+One thing we could do here that would seemingly cover all the cases
+without losing _that_ much would be:
+
+    return (random_get_entropy_fallback() << 13) | ((1<<13) - read_c0_random());
+
+Or in case the 13 turns out to be wrong on some hardware, we could
+mitigate the effect with:
+
+    return (random_get_entropy_fallback() << 13) ^ ((1<<13) - read_c0_random());
+
+As mentioned in the 1/xx patch of this series,
+random_get_entropy_fallback() should call the highest resolution thing.
+We then shave off the least-changing bits and stuff in the
+faster-changing bits from read_c0_random(). Then, in order to keep it
+counting up instead of down, we do the subtraction there.
+
+What do you think of this plan?
+
+Jason
