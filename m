@@ -2,42 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9307E502C4D
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Apr 2022 17:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D075D502C59
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Apr 2022 17:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237174AbiDOPHD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Apr 2022 11:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S1354860AbiDOPJ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Apr 2022 11:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiDOPHB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Apr 2022 11:07:01 -0400
+        with ESMTP id S1354841AbiDOPJu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Apr 2022 11:09:50 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6655415838;
-        Fri, 15 Apr 2022 08:04:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8E9CF4B0;
+        Fri, 15 Apr 2022 08:07:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1650035066; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1650035240; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XRWVXKW+RZN7vxEYxFynwfobJo7XniIQKD+eb2wTdOc=;
-        b=o+MOZCEA+EYYqJcDDf9v+gfNQWTX15W/ct4ImD4k2t4pcDD/fftevnqeK4QRv0jcSQ3vcv
-        5o5nxEqFodGTaJD1WKhzcOU0uuk/zSmLToMZJJf6jBt30cz29mMAmbAPmK6N2XCmZhGQkW
-        pFWBhJ3cTDeDpVYAzaz0Ysvq0juJLRo=
-Date:   Fri, 15 Apr 2022 16:04:16 +0100
+        bh=/NRTmVUFKuE8CMESQAm4DH0fvEVp7eM4RIJTXRaTSSI=;
+        b=dbSqEuCyvoj2avoBIOZeoZYeD+m6qVjmB80MGk1eLm/4t3/fU5GFQR8WuXRw7lD2s6WQy/
+        wAZEF5D4gXqpcsazI8DHZ6rVHCCAP8B36cybPL8cS0/1dQPRuAfZxSlFRY/u9V6iCTDexR
+        eyRWsGoDHy22VKQHGyZmYhESb3boylQ=
+Date:   Fri, 15 Apr 2022 16:07:08 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 3/3] SPI: Ingenic: Add support for new Ingenic SoCs.
+Subject: Re: [PATCH v3 3/3] MIPS: Ingenic: Refresh USB nodes to match driver
+ changes.
 To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
+Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        contact@artur-rojek.eu, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
-Message-Id: <47ZDAR.RKPJNNUQZQO22@crapouillou.net>
-In-Reply-To: <1650032528-118220-4-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1650032528-118220-4-git-send-email-zhouyanjie@wanyeetech.com>
+        dragancecavac@yahoo.com, hns@goldelico.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Message-Id: <WBZDAR.1ZU7BOCJE9S11@crapouillou.net>
+In-Reply-To: <1649964337-114337-4-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1649964337-114337-4-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -50,175 +53,80 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Zhou,
 
 
-Le ven., avril 15 2022 at 22:22:08 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
+Le ven., avril 15 2022 at 03:25:37 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
  Yanjie)=20
 <zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> 1.Since it would be dangerous to specify a newer SoC's compatible
->   string as the fallback of an older SoC's compatible string, we
->   add support for the "ingenic,jz4775-spi" compatible string in
->   the driver.
->=20
->   This will permit to support the JZ4775 by having:
->   compatible =3D "ingenic,jz4775-spi";
->=20
->   Instead of doing:
->   compatible =3D "ingenic,jz4775-spi", "ingenic,jz4780-spi";
->=20
-> 2.Add support for probing the spi-ingenic driver on the X1000 SoC
->   from Ingenic. From the X1000 SoC onwards, the maximum frequency
->   allowed by the SSI module of Ingenic SoCs has been changed from
->   54MHz to 50MHz. So "max_speed_hz" is introduced in "jz_soc_info"
->   to set different maximum frequency values.
->=20
-> 3.Add support for probing the spi-ingenic driver on the X2000 SoC
->   from Ingenic. The X2000 SoC has only one native chip select line,
->   so "max_native_cs" is introduced in "jz_soc_info" to set different
->   maximum number of native chip select lines.
->=20
-> 4.Because of the introduction of support for the X-series SoCs, the
->   current driver is not only applicable to the JZ-series SoCs, so
->   the description texts has been modified to avoid misunderstanding.
+> Refresh USB nodes in the jz4780.dtsi, x1000.dtsi, and x1830.dtsi=20
+> files.
 >=20
 > Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
 eetech.com>
+> ---
+>=20
+> Notes:
+>     v3:
+>     New patch.
+>=20
+>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+>  arch/mips/boot/dts/ingenic/x1000.dtsi  | 2 +-
+>  arch/mips/boot/dts/ingenic/x1830.dtsi  | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi=20
+> b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+> index b998301..c182a65 100644
+> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+> @@ -577,7 +577,7 @@
+>  	};
+>=20
+>  	otg: usb@13500000 {
+> -		compatible =3D "ingenic,jz4780-otg", "snps,dwc2";
+> +		compatible =3D "ingenic,jz4780-otg";
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Could you refresh my memory - why are the "snps,dwc2" fallback strings=20
+removed?
+
+To me it seems like they should be here, since the OTG IP in Ingenic=20
+SoCs is derived from the DWC2 IP.
 
 Cheers,
 -Paul
 
-> ---
->  drivers/spi/Kconfig       |  4 ++--
->  drivers/spi/spi-ingenic.c | 42=20
-> +++++++++++++++++++++++++++++++++++++-----
->  2 files changed, 39 insertions(+), 7 deletions(-)
+>  		reg =3D <0x13500000 0x40000>;
 >=20
-> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index d2815eb..cca92a8 100644
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -419,10 +419,10 @@ config SPI_IMX
->  	  This enables support for the Freescale i.MX SPI controllers.
+>  		interrupt-parent =3D <&intc>;
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> index 8bd27ede..343818a2 100644
+> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> @@ -366,7 +366,7 @@
+>  	};
 >=20
->  config SPI_INGENIC
-> -	tristate "Ingenic JZ47xx SoCs SPI controller"
-> +	tristate "Ingenic SoCs SPI controller"
->  	depends on MACH_INGENIC || COMPILE_TEST
->  	help
-> -	  This enables support for the Ingenic JZ47xx SoCs SPI controller.
-> +	  This enables support for the Ingenic SoCs SPI controller.
+>  	otg: usb@13500000 {
+> -		compatible =3D "ingenic,x1000-otg", "snps,dwc2";
+> +		compatible =3D "ingenic,x1000-otg";
+>  		reg =3D <0x13500000 0x40000>;
 >=20
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called spi-ingenic.
-> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
-> index 672e4ed..ff507c8 100644
-> --- a/drivers/spi/spi-ingenic.c
-> +++ b/drivers/spi/spi-ingenic.c
-> @@ -1,8 +1,9 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * SPI bus driver for the Ingenic JZ47xx SoCs
-> + * SPI bus driver for the Ingenic SoCs
->   * Copyright (c) 2017-2021 Artur Rojek <contact@artur-rojek.eu>
->   * Copyright (c) 2017-2021 Paul Cercueil <paul@crapouillou.net>
-> + * Copyright (c) 2022 =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)=20
-> <zhouyanjie@wanyeetech.com>
->   */
+>  		interrupt-parent =3D <&intc>;
+> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> index 2595df8..6aff19f 100644
+> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> @@ -355,7 +355,7 @@
+>  	};
 >=20
->  #include <linux/clk.h>
-> @@ -52,6 +53,9 @@ struct jz_soc_info {
->  	u32 bits_per_word_mask;
->  	struct reg_field flen_field;
->  	bool has_trendian;
-> +
-> +	unsigned int max_speed_hz;
-> +	unsigned int max_native_cs;
->  };
+>  	otg: usb@13500000 {
+> -		compatible =3D "ingenic,x1830-otg", "snps,dwc2";
+> +		compatible =3D "ingenic,x1830-otg";
+>  		reg =3D <0x13500000 0x40000>;
 >=20
->  struct ingenic_spi {
-> @@ -418,7 +422,7 @@ static int spi_ingenic_probe(struct=20
-> platform_device *pdev)
->=20
->  	if (of_property_read_u32(dev->of_node, "num-cs", &num_cs)) {
->  		dev_warn(dev, "Number of chip select lines not specified.\n");
-> -		num_cs =3D 2;
-> +		num_cs =3D pdata->max_native_cs;
->  	}
->=20
->  	platform_set_drvdata(pdev, ctlr);
-> @@ -433,9 +437,9 @@ static int spi_ingenic_probe(struct=20
-> platform_device *pdev)
->  	ctlr->max_dma_len =3D SPI_INGENIC_FIFO_SIZE;
->  	ctlr->bits_per_word_mask =3D pdata->bits_per_word_mask;
->  	ctlr->min_speed_hz =3D 7200;
-> -	ctlr->max_speed_hz =3D 54000000;
-> +	ctlr->max_speed_hz =3D pdata->max_speed_hz;
->  	ctlr->use_gpio_descriptors =3D true;
-> -	ctlr->max_native_cs =3D 2;
-> +	ctlr->max_native_cs =3D pdata->max_native_cs;
->  	ctlr->num_chipselect =3D num_cs;
->  	ctlr->dev.of_node =3D pdev->dev.of_node;
->=20
-> @@ -459,17 +463,44 @@ static const struct jz_soc_info jz4750_soc_info=20
-> =3D {
->  	.bits_per_word_mask =3D SPI_BPW_RANGE_MASK(2, 17),
->  	.flen_field =3D REG_FIELD(REG_SSICR1, 4, 7),
->  	.has_trendian =3D false,
-> +
-> +	.max_speed_hz =3D 54000000,
-> +	.max_native_cs =3D 2,
->  };
->=20
->  static const struct jz_soc_info jz4780_soc_info =3D {
->  	.bits_per_word_mask =3D SPI_BPW_RANGE_MASK(2, 32),
->  	.flen_field =3D REG_FIELD(REG_SSICR1, 3, 7),
->  	.has_trendian =3D true,
-> +
-> +	.max_speed_hz =3D 54000000,
-> +	.max_native_cs =3D 2,
-> +};
-> +
-> +static const struct jz_soc_info x1000_soc_info =3D {
-> +	.bits_per_word_mask =3D SPI_BPW_RANGE_MASK(2, 32),
-> +	.flen_field =3D REG_FIELD(REG_SSICR1, 3, 7),
-> +	.has_trendian =3D true,
-> +
-> +	.max_speed_hz =3D 50000000,
-> +	.max_native_cs =3D 2,
-> +};
-> +
-> +static const struct jz_soc_info x2000_soc_info =3D {
-> +	.bits_per_word_mask =3D SPI_BPW_RANGE_MASK(2, 32),
-> +	.flen_field =3D REG_FIELD(REG_SSICR1, 3, 7),
-> +	.has_trendian =3D true,
-> +
-> +	.max_speed_hz =3D 50000000,
-> +	.max_native_cs =3D 1,
->  };
->=20
->  static const struct of_device_id spi_ingenic_of_match[] =3D {
->  	{ .compatible =3D "ingenic,jz4750-spi", .data =3D &jz4750_soc_info },
-> +	{ .compatible =3D "ingenic,jz4775-spi", .data =3D &jz4780_soc_info },
->  	{ .compatible =3D "ingenic,jz4780-spi", .data =3D &jz4780_soc_info },
-> +	{ .compatible =3D "ingenic,x1000-spi", .data =3D &x1000_soc_info },
-> +	{ .compatible =3D "ingenic,x2000-spi", .data =3D &x2000_soc_info },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, spi_ingenic_of_match);
-> @@ -483,7 +514,8 @@ static struct platform_driver spi_ingenic_driver=20
-> =3D {
->  };
->=20
->  module_platform_driver(spi_ingenic_driver);
-> -MODULE_DESCRIPTION("SPI bus driver for the Ingenic JZ47xx SoCs");
-> +MODULE_DESCRIPTION("SPI bus driver for the Ingenic SoCs");
->  MODULE_AUTHOR("Artur Rojek <contact@artur-rojek.eu>");
->  MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
-> +MODULE_AUTHOR("=E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wan=
-yeetech.com>");
->  MODULE_LICENSE("GPL");
+>  		interrupt-parent =3D <&intc>;
 > --
 > 2.7.4
 >=20
