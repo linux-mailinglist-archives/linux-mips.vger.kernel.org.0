@@ -2,141 +2,235 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1ED503793
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Apr 2022 18:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86365045BB
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Apr 2022 00:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbiDPQjf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Apr 2022 12:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S233087AbiDPW5l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 Apr 2022 18:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiDPQje (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Apr 2022 12:39:34 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EBF24BC9;
-        Sat, 16 Apr 2022 09:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1650127019; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        with ESMTP id S233086AbiDPW5i (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Apr 2022 18:57:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36056140F1;
+        Sat, 16 Apr 2022 15:55:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFF65B809E3;
+        Sat, 16 Apr 2022 22:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED602C385A1;
+        Sat, 16 Apr 2022 22:54:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ke3CzabD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650149696;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GOs8EDSW2bsL9lE0rcV1/MuXh3hhz7eHcwmtxCp09zs=;
-        b=cbfkAgnS3dIK4kJ6GEnjn92hMqnz3+Db7aqlrIvquJR9vonVKdmCmhL6F91J4/bFLPcCbS
-        cMXGL0TRittcZx33/SRzM/FfCNNcm9Q9DFZrYAAw/RMN1hm49zsa3C6eyLLofKZRPKNyyJ
-        ycvkfoj/oYoEIkRfpOx5dlxk3fgY1Es=
-Date:   Sat, 16 Apr 2022 17:36:46 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/3] SPI: Ingenic: Add support for use GPIO as chip select
- line.
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        contact@artur-rojek.eu, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
-Message-Id: <A5YFAR.5U5RNX82OXJY1@crapouillou.net>
-In-Reply-To: <d7926a1d-c5e3-6519-6a52-1bd3ca3cf773@wanyeetech.com>
-References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1650032528-118220-2-git-send-email-zhouyanjie@wanyeetech.com>
-        <61ZDAR.SD20HFTWMIBH3@crapouillou.net>
-        <d7926a1d-c5e3-6519-6a52-1bd3ca3cf773@wanyeetech.com>
+        bh=+2nP+VdPEpPNPoKQqSrgbL4ZK7I/c4P/cLhbUMeqeEs=;
+        b=Ke3CzabDCTCN7z1X+blAnwmP5mSkY04Aqwf/G5fDtQU6WM6tPriviP3rwnh0y2BbiEiSI5
+        kxvqYG3bXaLOy2oV1jIUlAv1SxvW/krAz60U3oZjY/ozmULtrXkPvuBaIxrnDhhjiRe7WK
+        DiZ/+FwTFNQXboYw4FOs1PNDoMoDXRw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cef1d983 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 16 Apr 2022 22:54:56 +0000 (UTC)
+Date:   Sun, 17 Apr 2022 00:54:49 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
+ instead of zero
+Message-ID: <YltJOfEylRC0rhKv@zx2c4.com>
+References: <20220413115411.21489-1-Jason@zx2c4.com>
+ <20220413115411.21489-5-Jason@zx2c4.com>
+ <20220413122546.GA11860@alpha.franken.de>
+ <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
+ <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
+ <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
+ <YlfoeGRM6w2O+eXA@zx2c4.com>
+ <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk>
+ <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
+ <alpine.DEB.2.21.2204161533420.9383@angie.orcam.me.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <alpine.DEB.2.21.2204161533420.9383@angie.orcam.me.uk>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
+Hi Maciej,
 
-Le sam., avril 16 2022 at 19:55:13 +0800, Zhou Yanjie=20
-<zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> Hi Paul,
->=20
-> On 2022/4/15 =E4=B8=8B=E5=8D=8811:00, Paul Cercueil wrote:
->> Hi Zhou,
->>=20
->> Le ven., avril 15 2022 at 22:22:06 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Z=
-hou Yanjie)=20
->> =7F<zhouyanjie@wanyeetech.com> a =C3=A9crit :
->>> Add support for using GPIOs as chip select lines on Ingenic SoCs.
->>>=20
->>> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wa=
-nyeetech.com>
->>> ---
->>>  drivers/spi/spi-ingenic.c | 11 +++++++++--
->>>  1 file changed, 9 insertions(+), 2 deletions(-)
->>>=20
->>> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
->>> index 03077a7..672e4ed 100644
->>> --- a/drivers/spi/spi-ingenic.c
->>> +++ b/drivers/spi/spi-ingenic.c
->>> @@ -380,7 +380,7 @@ static int spi_ingenic_probe(struct=20
->>> =7F=7Fplatform_device *pdev)
->>>      struct spi_controller *ctlr;
->>>      struct ingenic_spi *priv;
->>>      void __iomem *base;
->>> -    int ret;
->>> +    int num_cs, ret;
->>>=20
->>>      pdata =3D of_device_get_match_data(dev);
->>>      if (!pdata) {
->>> @@ -416,6 +416,11 @@ static int spi_ingenic_probe(struct=20
->>> =7F=7Fplatform_device *pdev)
->>>      if (IS_ERR(priv->flen_field))
->>>          return PTR_ERR(priv->flen_field);
->>>=20
->>> +    if (of_property_read_u32(dev->of_node, "num-cs", &num_cs)) {
->>> +        dev_warn(dev, "Number of chip select lines not=20
->>> specified.\n");
->>> +        num_cs =3D 2;
->>> +    }
->>> +
->>>      platform_set_drvdata(pdev, ctlr);
->>>=20
->>>      ctlr->prepare_transfer_hardware =3D spi_ingenic_prepare_hardware;
->>> @@ -429,7 +434,9 @@ static int spi_ingenic_probe(struct=20
->>> =7F=7Fplatform_device *pdev)
->>>      ctlr->bits_per_word_mask =3D pdata->bits_per_word_mask;
->>>      ctlr->min_speed_hz =3D 7200;
->>>      ctlr->max_speed_hz =3D 54000000;
->>> -    ctlr->num_chipselect =3D 2;
->>> +    ctlr->use_gpio_descriptors =3D true;
->>=20
->> I wonder if this should be set conditionally instead. Maybe set it=20
->> to =7F"true" if the "num-cs" property exists?
->>=20
->=20
-> I'm not too sure, but it seems some other drivers like "spi-sun6i.c",=20
-> "spi-stm32.c", "spi-s3c64xx.c", "spi-pic32.c", etc. set it=20
-> unconditionally.
+On Sat, Apr 16, 2022 at 03:44:53PM +0100, Maciej W. Rozycki wrote:
+> > Okay, I can give this a shot, but this certainly isn't my forté. It
+> > may ultimately wind up being simpler for you to just send some code of
+> > what you envision for this, but if I understand your idea correctly,
+> > what you're saying is something like:
+> > 
+> > static inline unsigned long random_get_entropy(void)
+> > {
+> >         unsigned int prid = read_c0_prid();
+> >         unsigned int imp = prid & PRID_IMP_MASK;
+> >         unsigned int c0_random;
+> > 
+> >         if (can_use_mips_counter(prid))
+> >                 return read_c0_count();
+> > 
+> >         if (cpu_has_3kex)
+> >                 c0_random = (read_c0_random() >> 8) & 0x3f;
+> >         else
+> >                 c0_random = read_c0_random() & 0x3f;
+> >         return (random_get_entropy_fallback() << 6) | (0x3f - c0_random);
+> > }
+> > 
+> > What do you think of that? Some tweak I'm missing?
+> 
+>  It certainly looks good to me.  Do you have a way I could verify how this 
+> function performs?  If so, then I could put it through my systems as I can 
+> cover all the cases handled here.
 
-Ok, maybe Mark can enlighten us here.
+Oh, awesome about the test rig. Below is a little patch that adds some
+printf code to init, calling the above sequence 70 times in a busy loop
+and then 30 times after that with a scheduler 1 ms delay in there,
+printing lots of various about the above calculation. Hopefully that's
+enough information that it'll be possible to notice if something looks
+really off when we squint at it.
 
-Cheers,
--Paul
+Jason
 
+-------------------8<-----------------------------------------------------
 
->> The rest looks good to me.
->>=20
->> Cheers,
->> -Paul
->>=20
->>> +    ctlr->max_native_cs =3D 2;
->>> +    ctlr->num_chipselect =3D num_cs;
->>>      ctlr->dev.of_node =3D pdev->dev.of_node;
->>>=20
->>>      if (spi_ingenic_request_dma(ctlr, dev))
->>> --
->>> 2.7.4
->>>=20
->>=20
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 3a293f919af9..0b32203aa47f 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -48,6 +48,7 @@
+ #include <linux/ptrace.h>
+ #include <linux/workqueue.h>
+ #include <linux/irq.h>
++#include <linux/delay.h>
+ #include <linux/ratelimit.h>
+ #include <linux/syscalls.h>
+ #include <linux/completion.h>
+@@ -1781,6 +1782,26 @@ static struct ctl_table random_table[] = {
+  */
+ static int __init random_sysctls_init(void)
+ {
++
++	int i;
++	for (i = 0; i < 100; ++i) {
++		if (can_use_mips_counter(read_c0_prid()))
++			pr_err("SARU %d c0 count: %08x\n", i, read_c0_count());
++		else {
++			unsigned int c0_random = read_c0_random(), c0_random_mask;
++			unsigned long fallback = random_get_entropy_fallback(), out;
++			if (cpu_has_3kex)
++				c0_random_mask = (c0_random >> 8) & 0x3f;
++			else
++				c0_random_mask = c0_random & 0x3f;
++			out = (fallback << 6) | (0x3f - c0_random_mask);
++			pr_err("SARU: %d (%08x >> n) & 0x3f = %08x, inverted = %08x, fallback = %08lx, fallback << 6 = %08lx, combined = %08lx\n",
++			       i, c0_random, c0_random_mask, 0x3f - c0_random_mask, fallback, fallback << 6, out);
++		}
++		if (i > 70)
++			msleep(1);
++	}
++
+ 	register_sysctl_init("kernel/random", random_table);
+ 	return 0;
+ }
+diff --git a/include/linux/timex.h b/include/linux/timex.h
+index 5745c90c8800..3871b06bd302 100644
+--- a/include/linux/timex.h
++++ b/include/linux/timex.h
+@@ -62,6 +62,8 @@
+ #include <linux/types.h>
+ #include <linux/param.h>
 
++unsigned long random_get_entropy_fallback(void);
++
+ #include <asm/timex.h>
+
+ #ifndef random_get_entropy
+@@ -74,8 +76,14 @@
+  *
+  * By default we use get_cycles() for this purpose, but individual
+  * architectures may override this in their asm/timex.h header file.
++ * If a given arch does not have get_cycles(), then we fallback to
++ * using random_get_entropy_fallback().
+  */
++#ifdef get_cycles
+ #define random_get_entropy()	((unsigned long)get_cycles())
++#else
++#define random_get_entropy()	random_get_entropy_fallback()
++#endif
+ #endif
+
+ /*
+diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+index dcdcb85121e4..7cd2ec239cae 100644
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -17,6 +17,7 @@
+ #include <linux/clocksource.h>
+ #include <linux/jiffies.h>
+ #include <linux/time.h>
++#include <linux/timex.h>
+ #include <linux/tick.h>
+ #include <linux/stop_machine.h>
+ #include <linux/pvclock_gtod.h>
+@@ -2380,6 +2381,15 @@ static int timekeeping_validate_timex(const struct __kernel_timex *txc)
+ 	return 0;
+ }
+
++/**
++ * random_get_entropy_fallback - Returns the raw clock source value,
++ * used by random.c for platforms with no valid random_get_entropy().
++ */
++unsigned long random_get_entropy_fallback(void)
++{
++	return tk_clock_read(&tk_core.timekeeper.tkr_mono);
++}
++EXPORT_SYMBOL_GPL(random_get_entropy_fallback);
+
+ /**
+  * do_adjtimex() - Accessor function to NTP __do_adjtimex function
 
