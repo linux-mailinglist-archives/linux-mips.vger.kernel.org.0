@@ -2,129 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CCD503728
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Apr 2022 16:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DCE50378C
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Apr 2022 18:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbiDPOr3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Apr 2022 10:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S232571AbiDPQhX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 Apr 2022 12:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbiDPOr2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Apr 2022 10:47:28 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6E1516598;
-        Sat, 16 Apr 2022 07:44:55 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id EDBF792009E; Sat, 16 Apr 2022 16:44:53 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id E02D092009C;
-        Sat, 16 Apr 2022 15:44:53 +0100 (BST)
-Date:   Sat, 16 Apr 2022 15:44:53 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
- instead of zero
-In-Reply-To: <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2204161533420.9383@angie.orcam.me.uk>
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com> <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk> <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
- <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk> <YlfoeGRM6w2O+eXA@zx2c4.com> <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk> <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S232556AbiDPQhR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Apr 2022 12:37:17 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A5DF0A;
+        Sat, 16 Apr 2022 09:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1650126882; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w9/FAC8Z5gAmmI9gbu3oEtXUZTvFVNJbIuuy5fMe1ds=;
+        b=Q87IUL2WHqAgSNCHIRolTQ15nDpeBxyLuTY4MpL0/tMalB7nYJiiPJ0dWOHZeBGy/YEgId
+        f70Cj1on4xPfg/xT6mn3X+B83cxSp1ZJpnbdB+QGy3KauXGTj/NfEG3qREOQwiisoIgoxW
+        ollpzdJyBI460j1Fssn0R6QMsv9m0b8=
+Date:   Sat, 16 Apr 2022 17:34:31 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v3 1/3] dt-bindings: dwc2: Add bindings for new Ingenic
+ SoCs.
+To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dragancecavac@yahoo.com, hns@goldelico.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Message-Id: <J1YFAR.2881WOMSYUZM2@crapouillou.net>
+In-Reply-To: <1649964337-114337-2-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1649964337-114337-2-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jason,
+Hi Zhou,
 
-> >  There are two variants only of the CP0 Random register that we can ever
-> > encounter, as it's been de-facto standardised in early 1990s already and
-> > then written down in the MIPSr1 architecture specification ~2000.  So I
-> > think it may make sense to actually handle them both explictitly with
-> > individual calculations, possibly conditionalised on a CONFIG setting or
-> > `cpu_has_3kex', because kernels that support the two variants of the MMU
-> > architecture are mutually incompatible.
-> 
-> Okay, I can give this a shot, but this certainly isn't my forté. It
-> may ultimately wind up being simpler for you to just send some code of
-> what you envision for this, but if I understand your idea correctly,
-> what you're saying is something like:
-> 
-> static inline unsigned long random_get_entropy(void)
-> {
->         unsigned int prid = read_c0_prid();
->         unsigned int imp = prid & PRID_IMP_MASK;
->         unsigned int c0_random;
-> 
->         if (can_use_mips_counter(prid))
->                 return read_c0_count();
-> 
->         if (cpu_has_3kex)
->                 c0_random = (read_c0_random() >> 8) & 0x3f;
->         else
->                 c0_random = read_c0_random() & 0x3f;
->         return (random_get_entropy_fallback() << 6) | (0x3f - c0_random);
-> }
-> 
-> What do you think of that? Some tweak I'm missing?
+Le ven., avril 15 2022 at 03:25:35 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
+ Yanjie)=20
+<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
+> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
+> from Ingenic.
+>=20
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>=20
+> Notes:
+>     v1->v2:
+>     Add Rob Herring's Acked-by.
+>=20
+>     v2->v3:
+>     No change.
+>=20
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml=20
+> b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> index 4cebce6..c6e8c0b 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> @@ -17,6 +17,13 @@ properties:
+>      oneOf:
+>        - const: brcm,bcm2835-usb
+>        - const: hisilicon,hi6220-usb
+> +      - const: ingenic,jz4775-otg
+> +      - const: ingenic,jz4780-otg
+> +      - const: ingenic,x1000-otg
 
- It certainly looks good to me.  Do you have a way I could verify how this 
-function performs?  If so, then I could put it through my systems as I can 
-cover all the cases handled here.
+The driver handles the JZ4775, JZ4780 and X1000 the exact same way.=20
+Maybe the latter two should use the JZ4775 string as the fallback? Do=20
+you know if the IP cores are any different?
 
- Any improvements I previously discussed can then be made locally in the 
-MIPS port as follow-up changes.
+> +      - const: ingenic,x1600-otg
+> +      - const: ingenic,x1700-otg
+> +      - const: ingenic,x1830-otg
 
-> >  Isn't it going to be an issue for an entropy source that the distribution
-> > of values obtained from the CP0 Random bit-field is not even, that is some
-> > values from the 6-bit range will never appear?
-> 
-> It's the same situation without inverting the order: instead of some
-> bits on the top never happening, some bits on the bottom never happen
-> instead. In general, counters don't form uniform distributions anyway,
-> since the lower bits change faster, and neither are they independent,
-> since one sample in large part depends on the previous. This is just
-> sort of the nature of the beast, and the code that calls
-> random_get_entropy() deals with this appropriately (by, at the moment,
-> just hashing all the bits).
+Same here (and btw, first time I hear about the X1600 and X1700 ;))
 
- OK then, thanks for your clarification.
+Cheers,
+-Paul
 
-  Maciej
+> +      - const: ingenic,x2000-otg
+>        - items:
+>            - const: rockchip,rk3066-usb
+>            - const: snps,dwc2
+> --
+> 2.7.4
+>=20
+
+
