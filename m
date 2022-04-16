@@ -2,46 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5EF50367D
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Apr 2022 14:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F01E503691
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Apr 2022 14:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbiDPL5w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Apr 2022 07:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S231941AbiDPMYW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 Apr 2022 08:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiDPL5w (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Apr 2022 07:57:52 -0400
-Received: from out28-169.mail.aliyun.com (out28-169.mail.aliyun.com [115.124.28.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D78433A26;
-        Sat, 16 Apr 2022 04:55:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0743753|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0592862-0.00168624-0.939028;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.NRpv9hL_1650110114;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NRpv9hL_1650110114)
-          by smtp.aliyun-inc.com(33.40.31.76);
-          Sat, 16 Apr 2022 19:55:16 +0800
-Subject: Re: [PATCH 1/3] SPI: Ingenic: Add support for use GPIO as chip select
- line.
+        with ESMTP id S231932AbiDPMYW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Apr 2022 08:24:22 -0400
+Received: from out28-145.mail.aliyun.com (out28-145.mail.aliyun.com [115.124.28.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CBBD7602;
+        Sat, 16 Apr 2022 05:21:48 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07487685|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.233801-0.00141502-0.764784;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.NRqD5fz_1650111394;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NRqD5fz_1650111394)
+          by smtp.aliyun-inc.com(33.45.69.145);
+          Sat, 16 Apr 2022 20:16:36 +0800
+Subject: Re: [PATCH v3 3/3] MIPS: Ingenic: Refresh USB nodes to match driver
+ changes.
 To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
+Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        contact@artur-rojek.eu, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1650032528-118220-2-git-send-email-zhouyanjie@wanyeetech.com>
- <61ZDAR.SD20HFTWMIBH3@crapouillou.net>
+        dragancecavac@yahoo.com, hns@goldelico.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1649964337-114337-4-git-send-email-zhouyanjie@wanyeetech.com>
+ <WBZDAR.1ZU7BOCJE9S11@crapouillou.net>
 From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <d7926a1d-c5e3-6519-6a52-1bd3ca3cf773@wanyeetech.com>
-Date:   Sat, 16 Apr 2022 19:55:13 +0800
+Message-ID: <16eb34cf-508b-b387-b255-4b0a778bf53f@wanyeetech.com>
+Date:   Sat, 16 Apr 2022 20:16:33 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <61ZDAR.SD20HFTWMIBH3@crapouillou.net>
+In-Reply-To: <WBZDAR.1ZU7BOCJE9S11@crapouillou.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
 X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,71 +54,91 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Paul,
 
-On 2022/4/15 下午11:00, Paul Cercueil wrote:
+On 2022/4/15 下午11:07, Paul Cercueil wrote:
 > Hi Zhou,
 >
-> Le ven., avril 15 2022 at 22:22:06 +0800, 周琰杰 (Zhou Yanjie) 
+>
+> Le ven., avril 15 2022 at 03:25:37 +0800, 周琰杰 (Zhou Yanjie) 
 > <zhouyanjie@wanyeetech.com> a écrit :
->> Add support for using GPIOs as chip select lines on Ingenic SoCs.
+>> Refresh USB nodes in the jz4780.dtsi, x1000.dtsi, and x1830.dtsi files.
 >>
 >> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 >> ---
->>  drivers/spi/spi-ingenic.c | 11 +++++++++--
->>  1 file changed, 9 insertions(+), 2 deletions(-)
 >>
->> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
->> index 03077a7..672e4ed 100644
->> --- a/drivers/spi/spi-ingenic.c
->> +++ b/drivers/spi/spi-ingenic.c
->> @@ -380,7 +380,7 @@ static int spi_ingenic_probe(struct 
->> platform_device *pdev)
->>      struct spi_controller *ctlr;
->>      struct ingenic_spi *priv;
->>      void __iomem *base;
->> -    int ret;
->> +    int num_cs, ret;
+>> Notes:
+>>     v3:
+>>     New patch.
 >>
->>      pdata = of_device_get_match_data(dev);
->>      if (!pdata) {
->> @@ -416,6 +416,11 @@ static int spi_ingenic_probe(struct 
->> platform_device *pdev)
->>      if (IS_ERR(priv->flen_field))
->>          return PTR_ERR(priv->flen_field);
+>>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+>>  arch/mips/boot/dts/ingenic/x1000.dtsi  | 2 +-
+>>  arch/mips/boot/dts/ingenic/x1830.dtsi  | 2 +-
+>>  3 files changed, 3 insertions(+), 3 deletions(-)
 >>
->> +    if (of_property_read_u32(dev->of_node, "num-cs", &num_cs)) {
->> +        dev_warn(dev, "Number of chip select lines not specified.\n");
->> +        num_cs = 2;
->> +    }
->> +
->>      platform_set_drvdata(pdev, ctlr);
+>> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi 
+>> b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>> index b998301..c182a65 100644
+>> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>> @@ -577,7 +577,7 @@
+>>      };
 >>
->>      ctlr->prepare_transfer_hardware = spi_ingenic_prepare_hardware;
->> @@ -429,7 +434,9 @@ static int spi_ingenic_probe(struct 
->> platform_device *pdev)
->>      ctlr->bits_per_word_mask = pdata->bits_per_word_mask;
->>      ctlr->min_speed_hz = 7200;
->>      ctlr->max_speed_hz = 54000000;
->> -    ctlr->num_chipselect = 2;
->> +    ctlr->use_gpio_descriptors = true;
+>>      otg: usb@13500000 {
+>> -        compatible = "ingenic,jz4780-otg", "snps,dwc2";
+>> +        compatible = "ingenic,jz4780-otg";
 >
-> I wonder if this should be set conditionally instead. Maybe set it to 
-> "true" if the "num-cs" property exists?
+> Could you refresh my memory - why are the "snps,dwc2" fallback strings 
+> removed?
 >
+> To me it seems like they should be here, since the OTG IP in Ingenic 
+> SoCs is derived from the DWC2 IP.
 
-I'm not too sure, but it seems some other drivers like "spi-sun6i.c", 
-"spi-stm32.c", "spi-s3c64xx.c", "spi-pic32.c", etc. set it unconditionally.
+
+The reason is that Nikolaus found that the current jz4780.dtsi will cause
+dtbscheck to complain. After discussion, Nikolaus concluded three feasible
+solutions, see here:
+https://lkml.org/lkml/2022/4/13/1097
+
+And it seems that Krzysztof prefers the c) option.
 
 
-> The rest looks good to me.
+Thanks and best regards!
+
+
 >
 > Cheers,
 > -Paul
 >
->> +    ctlr->max_native_cs = 2;
->> +    ctlr->num_chipselect = num_cs;
->>      ctlr->dev.of_node = pdev->dev.of_node;
+>>          reg = <0x13500000 0x40000>;
 >>
->>      if (spi_ingenic_request_dma(ctlr, dev))
+>>          interrupt-parent = <&intc>;
+>> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi 
+>> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>> index 8bd27ede..343818a2 100644
+>> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+>> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>> @@ -366,7 +366,7 @@
+>>      };
+>>
+>>      otg: usb@13500000 {
+>> -        compatible = "ingenic,x1000-otg", "snps,dwc2";
+>> +        compatible = "ingenic,x1000-otg";
+>>          reg = <0x13500000 0x40000>;
+>>
+>>          interrupt-parent = <&intc>;
+>> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi 
+>> b/arch/mips/boot/dts/ingenic/x1830.dtsi
+>> index 2595df8..6aff19f 100644
+>> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+>> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+>> @@ -355,7 +355,7 @@
+>>      };
+>>
+>>      otg: usb@13500000 {
+>> -        compatible = "ingenic,x1830-otg", "snps,dwc2";
+>> +        compatible = "ingenic,x1830-otg";
+>>          reg = <0x13500000 0x40000>;
+>>
+>>          interrupt-parent = <&intc>;
 >> -- 
 >> 2.7.4
 >>
