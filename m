@@ -2,161 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D2050363A
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Apr 2022 13:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5EF50367D
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Apr 2022 14:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbiDPLMX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Apr 2022 07:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S231849AbiDPL5w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 Apr 2022 07:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiDPLMW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Apr 2022 07:12:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C0213E39;
-        Sat, 16 Apr 2022 04:09:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23DBFB81CF6;
-        Sat, 16 Apr 2022 11:09:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D0CFC385A1;
-        Sat, 16 Apr 2022 11:09:44 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="USvjSmaf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650107378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BWpDj5fGUy3iYp41L7HbRmBg65jO9i+zxCcxvQs/HHk=;
-        b=USvjSmaf62xWI4Mu+SjeA+l/EdDg6mkMGtOkrJ5IuGMc8Ak4z74cOnCaVNUG4iuc/5T5ri
-        EYyJCvrxgHowkyOAZITSJXGOJjpMyM7Xzd5IWCIL6tDicEpJGjOn3PmZsj56+RDfHRoa7a
-        MBB8v+5KJQeVMnoJRIWq/D/sjWbXTT4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e09da8c6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 16 Apr 2022 11:09:38 +0000 (UTC)
-Received: by mail-yb1-f172.google.com with SMTP id h8so18152485ybj.11;
-        Sat, 16 Apr 2022 04:09:37 -0700 (PDT)
-X-Gm-Message-State: AOAM53210w7fHEMYiI9J/AfuVVnbCCngkl8/AkMcSUM5lLJFc9aZuaBR
-        wpV6a9x9sqRi15Y0XGCgn2I/JVJ5b7eaAX8wOeQ=
-X-Google-Smtp-Source: ABdhPJyAY5xi4OGR681ypI25l7Liwu41MbRbYQFXrT4jbAkvhI1v7BitiVeDW4TLYpgWqNVatNZXdBjODAZ+DfSqjbM=
-X-Received: by 2002:a5b:782:0:b0:634:683f:310e with SMTP id
- b2-20020a5b0782000000b00634683f310emr2707608ybq.398.1650107375189; Sat, 16
- Apr 2022 04:09:35 -0700 (PDT)
+        with ESMTP id S230085AbiDPL5w (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Apr 2022 07:57:52 -0400
+Received: from out28-169.mail.aliyun.com (out28-169.mail.aliyun.com [115.124.28.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D78433A26;
+        Sat, 16 Apr 2022 04:55:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0743753|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0592862-0.00168624-0.939028;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.NRpv9hL_1650110114;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NRpv9hL_1650110114)
+          by smtp.aliyun-inc.com(33.40.31.76);
+          Sat, 16 Apr 2022 19:55:16 +0800
+Subject: Re: [PATCH 1/3] SPI: Ingenic: Add support for use GPIO as chip select
+ line.
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        contact@artur-rojek.eu, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
+References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1650032528-118220-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <61ZDAR.SD20HFTWMIBH3@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <d7926a1d-c5e3-6519-6a52-1bd3ca3cf773@wanyeetech.com>
+Date:   Sat, 16 Apr 2022 19:55:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com>
- <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
- <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
- <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk> <YlfoeGRM6w2O+eXA@zx2c4.com>
- <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sat, 16 Apr 2022 13:09:24 +0200
-X-Gmail-Original-Message-ID: <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
-Message-ID: <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
-Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
- instead of zero
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <61ZDAR.SD20HFTWMIBH3@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Maciej,
+Hi Paul,
 
-On Fri, Apr 15, 2022 at 2:26 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote=
-:
->     return (random_get_entropy_fallback() << 14) | ((1<<14) - read_c0_ran=
-dom());
+On 2022/4/15 下午11:00, Paul Cercueil wrote:
+> Hi Zhou,
 >
-> of course, as bit 13 is still one of the active ones in the R3k CP0 Rando=
-m
-> register.
+> Le ven., avril 15 2022 at 22:22:06 +0800, 周琰杰 (Zhou Yanjie) 
+> <zhouyanjie@wanyeetech.com> a écrit :
+>> Add support for using GPIOs as chip select lines on Ingenic SoCs.
+>>
+>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>> ---
+>>  drivers/spi/spi-ingenic.c | 11 +++++++++--
+>>  1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
+>> index 03077a7..672e4ed 100644
+>> --- a/drivers/spi/spi-ingenic.c
+>> +++ b/drivers/spi/spi-ingenic.c
+>> @@ -380,7 +380,7 @@ static int spi_ingenic_probe(struct 
+>> platform_device *pdev)
+>>      struct spi_controller *ctlr;
+>>      struct ingenic_spi *priv;
+>>      void __iomem *base;
+>> -    int ret;
+>> +    int num_cs, ret;
+>>
+>>      pdata = of_device_get_match_data(dev);
+>>      if (!pdata) {
+>> @@ -416,6 +416,11 @@ static int spi_ingenic_probe(struct 
+>> platform_device *pdev)
+>>      if (IS_ERR(priv->flen_field))
+>>          return PTR_ERR(priv->flen_field);
+>>
+>> +    if (of_property_read_u32(dev->of_node, "num-cs", &num_cs)) {
+>> +        dev_warn(dev, "Number of chip select lines not specified.\n");
+>> +        num_cs = 2;
+>> +    }
+>> +
+>>      platform_set_drvdata(pdev, ctlr);
+>>
+>>      ctlr->prepare_transfer_hardware = spi_ingenic_prepare_hardware;
+>> @@ -429,7 +434,9 @@ static int spi_ingenic_probe(struct 
+>> platform_device *pdev)
+>>      ctlr->bits_per_word_mask = pdata->bits_per_word_mask;
+>>      ctlr->min_speed_hz = 7200;
+>>      ctlr->max_speed_hz = 54000000;
+>> -    ctlr->num_chipselect = 2;
+>> +    ctlr->use_gpio_descriptors = true;
+>
+> I wonder if this should be set conditionally instead. Maybe set it to 
+> "true" if the "num-cs" property exists?
+>
 
-Ah, thanks, will do that.
+I'm not too sure, but it seems some other drivers like "spi-sun6i.c", 
+"spi-stm32.c", "spi-s3c64xx.c", "spi-pic32.c", etc. set it unconditionally.
 
->  There are two variants only of the CP0 Random register that we can ever
-> encounter, as it's been de-facto standardised in early 1990s already and
-> then written down in the MIPSr1 architecture specification ~2000.  So I
-> think it may make sense to actually handle them both explictitly with
-> individual calculations, possibly conditionalised on a CONFIG setting or
-> `cpu_has_3kex', because kernels that support the two variants of the MMU
-> architecture are mutually incompatible.
 
-Okay, I can give this a shot, but this certainly isn't my fort=C3=A9. It
-may ultimately wind up being simpler for you to just send some code of
-what you envision for this, but if I understand your idea correctly,
-what you're saying is something like:
-
-static inline unsigned long random_get_entropy(void)
-{
-        unsigned int prid =3D read_c0_prid();
-        unsigned int imp =3D prid & PRID_IMP_MASK;
-        unsigned int c0_random;
-
-        if (can_use_mips_counter(prid))
-                return read_c0_count();
-
-        if (cpu_has_3kex)
-                c0_random =3D (read_c0_random() >> 8) & 0x3f;
-        else
-                c0_random =3D read_c0_random() & 0x3f;
-        return (random_get_entropy_fallback() << 6) | (0x3f - c0_random);
-}
-
-What do you think of that? Some tweak I'm missing?
-
->  Isn't it going to be an issue for an entropy source that the distributio=
-n
-> of values obtained from the CP0 Random bit-field is not even, that is som=
-e
-> values from the 6-bit range will never appear?
-
-It's the same situation without inverting the order: instead of some
-bits on the top never happening, some bits on the bottom never happen
-instead. In general, counters don't form uniform distributions anyway,
-since the lower bits change faster, and neither are they independent,
-since one sample in large part depends on the previous. This is just
-sort of the nature of the beast, and the code that calls
-random_get_entropy() deals with this appropriately (by, at the moment,
-just hashing all the bits).
-
-Jason
+> The rest looks good to me.
+>
+> Cheers,
+> -Paul
+>
+>> +    ctlr->max_native_cs = 2;
+>> +    ctlr->num_chipselect = num_cs;
+>>      ctlr->dev.of_node = pdev->dev.of_node;
+>>
+>>      if (spi_ingenic_request_dma(ctlr, dev))
+>> -- 
+>> 2.7.4
+>>
+>
