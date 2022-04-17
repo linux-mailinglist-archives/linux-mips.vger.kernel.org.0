@@ -2,49 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661E0504765
-	for <lists+linux-mips@lfdr.de>; Sun, 17 Apr 2022 11:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE353504A1B
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Apr 2022 01:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbiDQJaR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 Apr 2022 05:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S235398AbiDQXoU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 Apr 2022 19:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbiDQJaR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Apr 2022 05:30:17 -0400
-Received: from out28-101.mail.aliyun.com (out28-101.mail.aliyun.com [115.124.28.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D65A387A1;
-        Sun, 17 Apr 2022 02:27:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09126422|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0227706-0.0250717-0.952158;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.NSFwFyR_1650187655;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NSFwFyR_1650187655)
-          by smtp.aliyun-inc.com(33.37.71.29);
-          Sun, 17 Apr 2022 17:27:36 +0800
-Subject: Re: [PATCH v3 1/3] dt-bindings: dwc2: Add bindings for new Ingenic
- SoCs.
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dragancecavac@yahoo.com, hns@goldelico.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1649964337-114337-2-git-send-email-zhouyanjie@wanyeetech.com>
- <J1YFAR.2881WOMSYUZM2@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <62d961c6-6c3e-393e-2348-cb874320316e@wanyeetech.com>
-Date:   Sun, 17 Apr 2022 17:27:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S231395AbiDQXoU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Apr 2022 19:44:20 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8294E0D5
+        for <linux-mips@vger.kernel.org>; Sun, 17 Apr 2022 16:41:42 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2ec42eae76bso126368157b3.10
+        for <linux-mips@vger.kernel.org>; Sun, 17 Apr 2022 16:41:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kBWZvPDWX8dbAUSP9kssP0OC5V7ojEsXZQypRCglwc8=;
+        b=Qx+qxtMoZeSgNogDFYJh5SF2f0K6X0VV9WKxQUJkvnKGJu91Fi4w4niV6q1HQvbgc9
+         vLxUpuLsvc64PfYVJ3cE7EBA53R/mMWzFtZKpkBLSRmXr/+UwWySzfBkA/NRif55VCMz
+         3Ho1pXKRfbkFn9kvX+zzWzEKg5f2fiJfKbrQk74Nvi2kJtw2B82iUK6SA8BWf5lQ/Eef
+         wOsecoWRiuPK4xJJrzFK8gDSNKO6btFmnIpk0A9BZmE+OVuu0wfWsML4kAudfkohS20k
+         JHg1qWc1FW52TCVttj1tUGqO8PaqM0Osdjj6nLzFppzmlnEUz1Cxn5dshpbK4wGPgz1g
+         4vrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kBWZvPDWX8dbAUSP9kssP0OC5V7ojEsXZQypRCglwc8=;
+        b=MPWjJj7SbRtiJpSS55pZS3XkGx7dX+wPShd4mAqD3bLiKx0F5sr9lKbVwombDPfEgC
+         gtJEcD9xVYG7WNiWxiTnxZszCxir1ymNaWl/ovfIF+2qMJKjTpaygxJjwg27+dGT2DqI
+         RdOxKc/A5pxK/z9mUOjDnWnoYmLEFUwtKyRES9EkVS4draKpgiI0DdkFMkqVmmrPTdOI
+         p1VUCK0K9Jh4/zxPOVLaJVldytydW9WV6k/OqI0dqTQ1n/+3re7ZMCdNZMuIUdBUPaB7
+         wR00kXoCaH0OUjTMn/CrqqjNituB7+hfPnMeBp03oTKLIjp6degK+9S6gJStAH+lbywd
+         J+Bg==
+X-Gm-Message-State: AOAM532ALJKh7P8OoODl+ZOlc1TJpAbL0e3fl0EhtRq1H2x4lX1UEb9r
+        H8L1YtGTXakV0p3hFzj1eJ+u+eNe7wdNsxxIIDZ6zg==
+X-Google-Smtp-Source: ABdhPJzJDVt2Bv5XZp3mPzI0kj0ziWyK55YlE1BNID97fc+BtketIWe7wHtz5A5WteeOs/qIagWPMO5U3Gueu3b3KMI=
+X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
+ d69-20020a811d48000000b002f18ebf25f3mr2363390ywd.118.1650238901925; Sun, 17
+ Apr 2022 16:41:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <J1YFAR.2881WOMSYUZM2@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <20220319204628.1759635-1-michael@walle.cc> <20220319204628.1759635-7-michael@walle.cc>
+In-Reply-To: <20220319204628.1759635-7-michael@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 18 Apr 2022 01:41:30 +0200
+Message-ID: <CACRpkdbrw7Hjt9mB9pr_iNsGi71g_d8BGhpT_ih1RVgKJ5U0qQ@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] dt-bindings: pinctrl: convert ocelot-pinctrl to
+ YAML format
+To:     Michael Walle <michael@walle.cc>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,109 +79,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Sat, Mar 19, 2022 at 9:47 PM Michael Walle <michael@walle.cc> wrote:
 
-On 2022/4/17 上午12:34, Paul Cercueil wrote:
-> Hi Zhou,
+> Convert the ocelot-pinctrl device tree binding to the new YAML format.
 >
-> Le ven., avril 15 2022 at 03:25:35 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
->> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
->> from Ingenic.
->>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> Acked-by: Rob Herring <robh@kernel.org>
->> ---
->>
->> Notes:
->>     v1->v2:
->>     Add Rob Herring's Acked-by.
->>
->>     v2->v3:
->>     No change.
->>
->>  Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml 
->> b/Documentation/devicetree/bindings/usb/dwc2.yaml
->> index 4cebce6..c6e8c0b 100644
->> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
->> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
->> @@ -17,6 +17,13 @@ properties:
->>      oneOf:
->>        - const: brcm,bcm2835-usb
->>        - const: hisilicon,hi6220-usb
->> +      - const: ingenic,jz4775-otg
->> +      - const: ingenic,jz4780-otg
->> +      - const: ingenic,x1000-otg
+> Additionally to the original binding documentation, add interrupt
+> properties which are optional and already used on several SoCs like
+> SparX-5, Luton, Ocelot and LAN966x but were not documented before.
 >
-> The driver handles the JZ4775, JZ4780 and X1000 the exact same way. 
-> Maybe the latter two should use the JZ4775 string as the fallback? Do 
-> you know if the IP cores are any different?
+> Also, on the sparx5 and the lan966x SoCs there are two items for the
+> reg property.
 >
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
- From the manual, it seems that JZ4775 and JZ4780 should have the same 
-specifications,
-but in fact, the behavior of JZ4775 and JZ4780 is different, especially 
-if the JZ4780
-does not turn off overcurrent detection, there will be a high 
-probability of affecting
-the use, while the JZ4775 does not have this problem, so I think they 
-should actually
-be different.
+So is this single patch something I should apply to the pin control tree?
+If you want to merge it all through ARM SoC go ahead:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-The manual of X1000 shows that it has only 8 endpoints, which is 
-different from JZ4775
-and JZ4780.
-
- From the experimental results, it seems that the three of them can use 
-the same set of
-parameters, but in order to avoid hidden dangers that have not been 
-found for the time
-being, I think it seems necessary to keep three independent compatible 
-strings.
-
-
->> +      - const: ingenic,x1600-otg
->> +      - const: ingenic,x1700-otg
->> +      - const: ingenic,x1830-otg
->
-> Same here (and btw, first time I hear about the X1600 and X1700 ;))
-
-
-The OTG of X1600 and X1700 seem to be the same, I will remove the 
-compatibility string
-of X1700 in the next version, but the device tree of X1830 in Ingenic 
-SDK is configured
-with different parameters from X1600/X1700, so I believe the X1830 
-should be a little
-different from the X1600/X1700, so although the experimental results 
-show that the three
-of them seem to be able to use the same parameters, it seems that it is 
-more appropriate
-to keep the compatibe string of X1830.
-
-I also heard about the X1600 and X1700 not long ago. From the existing 
-information, the
-X1600 should be the only SoC with CAN in the known models of Ingenic. 
-And the X1700 is
-more like an SoC that focuses on display applications.
-
-
-Thanks and best regards!
-
-
->
-> Cheers,
-> -Paul
->
->> +      - const: ingenic,x2000-otg
->>        - items:
->>            - const: rockchip,rk3066-usb
->>            - const: snps,dwc2
->> -- 
->> 2.7.4
->>
->
+Yours,
+Linus Walleij
