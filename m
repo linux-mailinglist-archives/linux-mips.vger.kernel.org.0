@@ -2,93 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9CD505161
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Apr 2022 14:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0AB505E0F
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Apr 2022 20:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239135AbiDRMed (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Apr 2022 08:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S1347462AbiDRSwl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Apr 2022 14:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239821AbiDRMda (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Apr 2022 08:33:30 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A171BE96
-        for <linux-mips@vger.kernel.org>; Mon, 18 Apr 2022 05:26:50 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ck12so5035279ejb.4
-        for <linux-mips@vger.kernel.org>; Mon, 18 Apr 2022 05:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=I3d5udvKIjqAWucjjIKmuyn7gYiBA99VwyV2DIv8hOs=;
-        b=O6i40JuKQXOyvwtn8Dy33ZqEQOG5EHZzXGoOpqZzNZ9ieOhuYgUKLhfzpGxvbXiAfC
-         Vwf80nHGzunG0NFoscB2CnQZ0JQu4sPahErZnIz5NgO6On1mSrWR8+eqgUYGkK04Z/cm
-         am6eYB6HIbNfNKmvh6CfzcqdjEqDMZklnqPh2wvAj+hoM7Z/WC2jzgm+/aKNM463g1jw
-         g7uQ/8uHdj6HIoospz4Bv4O6YviYZPMRyTqevmkLEkrfzf/jDuJ6B+t56CgXYgzMzeUH
-         zqzjkk8aXXXyzV9RR8CD0OyiQVQF/FlvxcK4hkfLOu+q4NO8TFovZ3kQgN5AmwmO6rfZ
-         2wEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=I3d5udvKIjqAWucjjIKmuyn7gYiBA99VwyV2DIv8hOs=;
-        b=GoAdEiE3WicUk332HPy2ZmMvoJdGZeykSxQQMEelNkdHjnYOuny0sOseGd7nBxZEEM
-         dhqjN/dmcSyynHs5mxWOlg07bgk8KMMKLayaI7ySC1hzy9EjLC30OrRcnuyaZUCjvpfS
-         6TwF1saz9Cw1XlF0aD1TJXbX4NzptSA54WW1iP4TnPgGuYSJqDp8825pfQNdBZ05Q4ee
-         FSvRBf9oNDDQ963/P99yEiV+UqOzisvTWlSQxqOnY4eWgKSPlEvDxKNH7EDtvH+Z2F3B
-         bqn4MqC11x6TzgXdzxfP3bT+ZyI/G1WF8KbRDXHt8WxTG4Pn+RGPiDINzEhgU1gR3/Jc
-         cCVA==
-X-Gm-Message-State: AOAM531tEmqwWhCnNxTsKO8GsLZpGC16YdchZmf0AGlv0JGh8kE05kRB
-        nzehp5BcRxeWhPYAnTeX5x6CsA==
-X-Google-Smtp-Source: ABdhPJw1EAebv52D0fGCecrKQNHXpvA1WtVaDZlB3PXnrtrkiLQTkMClotu0rgBrzw31XDzOlJMw2A==
-X-Received: by 2002:a17:906:7a51:b0:6e8:8e6c:f182 with SMTP id i17-20020a1709067a5100b006e88e6cf182mr8740413ejo.506.1650284808614;
-        Mon, 18 Apr 2022 05:26:48 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gj3-20020a170906e10300b006e8ac161bcfsm4539377ejb.203.2022.04.18.05.26.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 05:26:47 -0700 (PDT)
-Message-ID: <a81e72f0-f01f-723e-fb0e-7667b2d3ff3f@linaro.org>
-Date:   Mon, 18 Apr 2022 14:26:46 +0200
+        with ESMTP id S234453AbiDRSwk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Apr 2022 14:52:40 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F23815822;
+        Mon, 18 Apr 2022 11:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1650307794; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=2BK97mq3stH76aJyLSl7KHfmMsGVZ7tU/h6VhW5taF0=;
+        b=nOyKHM7B/LETcMj/yQAveTcBM1y06m8Yczonn72LiAHOMiSSm0PFfAgzTrimXV0v3eC2TV
+        qyQRIocOWoXQR4ScIFGeIYT+AV8XB2rsLEdllrhy9gCga0noK2JD/wHkBvkApj4ZT6yGC+
+        Z8zJg5ej1Xrgn9f9QllAgnZEh2CXksE=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     list@opendingux.net, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/5] rtc: ingenic: various updates
+Date:   Mon, 18 Apr 2022 19:49:28 +0100
+Message-Id: <20220418184933.13172-1-paul@crapouillou.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add bindings for new Ingenic SoCs.
-Content-Language: en-US
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        paul@crapouillou.net, contact@artur-rojek.eu,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1650032528-118220-3-git-send-email-zhouyanjie@wanyeetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1650032528-118220-3-git-send-email-zhouyanjie@wanyeetech.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 15/04/2022 16:22, 周琰杰 (Zhou Yanjie) wrote:
-> Add the SPI bindings for the JZ4775 SoC, the X1000 SoC,
-> and the X2000 SoC from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+Hi,
 
+Here's a set of patches for the Ingenic RTC driver (jz4740-rtc).
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Patch [1/5] and [4/5] update the DT binding documentation and update the
+driver to support the CLK32K pin. This pin optionally supplies a 32 kHz
+clock, which is required on the MIPS CI20 board for the WiFi/Bluetooth
+chip to work.
 
+Patch [2/5] is a code cleanup. Patch [3/5] fixes the RTC time yielding
+an impossible value after a power loss.
 
-Best regards,
-Krzysztof
+Finally, patch [5/5] is *RFC*. I do not know if it works, as I have
+absolutely no idea about how to test it.
+
+Cheers,
+-Paul
+
+Paul Cercueil (5):
+  dt-bindings: rtc: Rework compatible strings and add #clock-cells
+  rtc: jz4740: Use readl_poll_timeout
+  rtc: jz4740: Reset scratchpad register on power loss
+  rtc: jz4740: Register clock provider for the CLK32K pin
+  rtc: jz4740: Support for fine-tuning the RTC clock
+
+ .../devicetree/bindings/rtc/ingenic,rtc.yaml  |   7 +-
+ drivers/rtc/rtc-jz4740.c                      | 137 +++++++++++++++---
+ 2 files changed, 125 insertions(+), 19 deletions(-)
+
+-- 
+2.35.1
+
