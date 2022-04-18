@@ -2,126 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2983504FAE
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Apr 2022 14:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1CA5055F6
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Apr 2022 15:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237969AbiDRMG6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Apr 2022 08:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S241015AbiDRNb1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Apr 2022 09:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237968AbiDRMG5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Apr 2022 08:06:57 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5011B15FDA;
-        Mon, 18 Apr 2022 05:04:18 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        with ESMTP id S243248AbiDRN2y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Apr 2022 09:28:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A71B3EF21;
+        Mon, 18 Apr 2022 05:53:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 34DB422175;
-        Mon, 18 Apr 2022 14:04:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650283456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OOruPXULnAoAti7zK9CIqg2Yvot+7zRgvmQ60wa4z+o=;
-        b=M8C4AIhWHlFgBT/ZWxIY6IFRlmKw7xBLhdPb0w5dc/BusXwRU1ZVXxb4Gj+J9buPd/VjEg
-        DbSwmcgcwAGOmjlASvzxAgodj/RSp7+Re4q4xX5bDsGWAwrc1rbW3Ivf1CBiIuvitgjM95
-        aZfqXyrmJ0sXVfw0TuuzGdlwXhjyJhQ=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 18 Apr 2022 14:04:16 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCB25B80EC4;
+        Mon, 18 Apr 2022 12:53:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DF7C385A7;
+        Mon, 18 Apr 2022 12:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650286405;
+        bh=DcPWKimP2nKFdM65JXj5+qicVGDcOZTEpLHjeMZqV/4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=L7eTaX2M3t899zZy+RTlcnp2wD1wUqmLBDmZoBRhPAwDIHM7vsk5U2nlAT5Ortliq
+         WkGHq7HYW4YEXk4wka4fIqgFWI122VIqX0nK+v6Zs5EvuhHnAxGA8BEDciPaAnCvRR
+         G6srAtb1lHPC6VLG7VWwuayfMVwfY9tJLwX0ztOE=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] dt-bindings: pinctrl: convert ocelot-pinctrl to
- YAML format
-In-Reply-To: <de9b0114-23b5-04b4-86b3-0d393441a267@kernel.org>
-References: <20220319204628.1759635-1-michael@walle.cc>
- <20220319204628.1759635-7-michael@walle.cc>
- <CACRpkdbrw7Hjt9mB9pr_iNsGi71g_d8BGhpT_ih1RVgKJ5U0qQ@mail.gmail.com>
- <e02e22920ffe23b49237c0c1379e888b@walle.cc>
- <de9b0114-23b5-04b4-86b3-0d393441a267@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <735863d6476605e4ff72032d8971ac0d@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        linux-mips@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Phil Sutter <n0-1@freewrt.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Daniel Walter <dwalter@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 122/284] MIPS: RB532: fix return value of __setup handler
+Date:   Mon, 18 Apr 2022 14:11:43 +0200
+Message-Id: <20220418121214.611944116@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Am 2022-04-18 13:13, schrieb Krzysztof Kozlowski:
-> On 18/04/2022 10:19, Michael Walle wrote:
->> [resend, use Krysztof's new email address]
->> 
->> Am 2022-04-18 01:41, schrieb Linus Walleij:
->>> On Sat, Mar 19, 2022 at 9:47 PM Michael Walle <michael@walle.cc> 
->>> wrote:
->>> 
->>>> Convert the ocelot-pinctrl device tree binding to the new YAML 
->>>> format.
->>>> 
->>>> Additionally to the original binding documentation, add interrupt
->>>> properties which are optional and already used on several SoCs like
->>>> SparX-5, Luton, Ocelot and LAN966x but were not documented before.
->>>> 
->>>> Also, on the sparx5 and the lan966x SoCs there are two items for the
->>>> reg property.
->>>> 
->>>> Signed-off-by: Michael Walle <michael@walle.cc>
->>> 
->>> So is this single patch something I should apply to the pin control
->>> tree?
->> 
->> The first five patches will fix the validation errrors once the
->> binding is converted to the YAML format. So, do they need to go
->> through the same tree?
->> 
->> Also as mentioned, there is this pending series [1] which is the
->> reason I've converted the binding to YAML in the first place. So
->> at least the first patch of this series will have to go through
->> the same tree as the YAML conversion patch.
->> 
->> How can we move forward here? Krzysztof, maybe all of the dt
->> bindings patches can go through your tree and I'll reposting
->> the second patch of [1] afterwards?
-> 
-> I think you got all necessary acks for this pinctrl bindings change and
-> the dependency ("add reset property"), so both can go via Linus' tree.
-> That's preferred.
-> 
-> DTS patches goes through your SoC maintainer tree.
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Ah, ok, I wasn't aware of that. Then yes, please go ahead and
-pick this and the first patch of [1] up, Linus.
+[ Upstream commit 8755d57ba1ff910666572fab9e32890e8cc6ed3b ]
 
-Of course if you like you can pick the second patch of [1],
-too. But I can also repost it without the RFC tag if that is
-preferred.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings. Also, error return codes don't mean anything to
+obsolete_checksetup() -- only non-zero (usually 1) or zero.
+So return 1 from setup_kmac().
 
--michael
+Fixes: 9e21c7e40b7e ("MIPS: RB532: Replace parse_mac_addr() with mac_pton().")
+Fixes: 73b4390fb234 ("[MIPS] Routerboard 532: Support for base system")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+From: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Phil Sutter <n0-1@freewrt.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Daniel Walter <dwalter@google.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/rb532/devices.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-[1] 
-https://lore.kernel.org/linux-gpio/20220313154640.63813-1-michael@walle.cc/
+diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
+index 32ea3e6731d6..ea500873f023 100644
+--- a/arch/mips/rb532/devices.c
++++ b/arch/mips/rb532/devices.c
+@@ -313,11 +313,9 @@ static int __init plat_setup_devices(void)
+ static int __init setup_kmac(char *s)
+ {
+ 	printk(KERN_INFO "korina mac = %s\n", s);
+-	if (!mac_pton(s, korina_dev0_data.mac)) {
++	if (!mac_pton(s, korina_dev0_data.mac))
+ 		printk(KERN_ERR "Invalid mac\n");
+-		return -EINVAL;
+-	}
+-	return 0;
++	return 1;
+ }
+ 
+ __setup("kmac=", setup_kmac);
+-- 
+2.34.1
+
+
+
