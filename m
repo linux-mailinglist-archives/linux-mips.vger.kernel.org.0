@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1CA5055F6
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Apr 2022 15:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A5E505803
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Apr 2022 15:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241015AbiDRNb1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Apr 2022 09:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        id S244284AbiDRN7W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Apr 2022 09:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243248AbiDRN2y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Apr 2022 09:28:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A71B3EF21;
-        Mon, 18 Apr 2022 05:53:28 -0700 (PDT)
+        with ESMTP id S241917AbiDRN5O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Apr 2022 09:57:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30562AE15;
+        Mon, 18 Apr 2022 06:07:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCB25B80EC4;
-        Mon, 18 Apr 2022 12:53:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DF7C385A7;
-        Mon, 18 Apr 2022 12:53:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8643460EFC;
+        Mon, 18 Apr 2022 13:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63381C385A1;
+        Mon, 18 Apr 2022 13:07:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286405;
-        bh=DcPWKimP2nKFdM65JXj5+qicVGDcOZTEpLHjeMZqV/4=;
+        s=korg; t=1650287234;
+        bh=uKM1IrRUnR0at9+BarVT8h1V2qi4LheOzIpIvXhYmuU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L7eTaX2M3t899zZy+RTlcnp2wD1wUqmLBDmZoBRhPAwDIHM7vsk5U2nlAT5Ortliq
-         WkGHq7HYW4YEXk4wka4fIqgFWI122VIqX0nK+v6Zs5EvuhHnAxGA8BEDciPaAnCvRR
-         G6srAtb1lHPC6VLG7VWwuayfMVwfY9tJLwX0ztOE=
+        b=itfihk6X6yneFH0jn76tKD7EdmebPL4VjWoNN9AsnV0M7hkZO/tZj0foA7VypbeLZ
+         DPRxH/VA39C7DH05iOnR8yYtCOHfkj6Afcnuy8M0We5k0FpAQeo38vgw4e9LbCvGWv
+         UyETD6Pj5GOvwvuatrUBoXCoGQWW+uXKz6iMje1g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,12 +41,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Daniel Walter <dwalter@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 122/284] MIPS: RB532: fix return value of __setup handler
-Date:   Mon, 18 Apr 2022 14:11:43 +0200
-Message-Id: <20220418121214.611944116@linuxfoundation.org>
+Subject: [PATCH 4.9 098/218] MIPS: RB532: fix return value of __setup handler
+Date:   Mon, 18 Apr 2022 14:12:44 +0200
+Message-Id: <20220418121202.408882383@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -93,7 +93,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index 32ea3e6731d6..ea500873f023 100644
+index 0966adccf520..ed921f7b4364 100644
 --- a/arch/mips/rb532/devices.c
 +++ b/arch/mips/rb532/devices.c
 @@ -313,11 +313,9 @@ static int __init plat_setup_devices(void)
