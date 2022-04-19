@@ -2,66 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BC0506405
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 07:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EA15064B2
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 08:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348700AbiDSFsN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 01:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S1348769AbiDSGoo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 02:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbiDSFsM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 01:48:12 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6B7275D5;
-        Mon, 18 Apr 2022 22:45:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650347131; x=1681883131;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+vev6gjgEbwCGFpCPTJ0Me7AodsncIvTd07Czu7YvlQ=;
-  b=HOQHrNbXyy5a3csRDeLw69ZtDSsIBcCn6K3rLzNQn8gyf0tGnbCZqYg2
-   wUgMo7j232W90FuNqU9EDoKRNpBM47nyoyDo6qN8Q+2BnwdUjfow+Zfxn
-   TeLKyBSbiF5Wf/IXBYunbOjqHrPn9SYoiGzCAYSCcAVGvu6Nl8AL5zTtj
-   JY+wACehM8o0G0Wqga06WwFs2vg7G0+myQl9FS9s77H10PRXGif0Jc3zl
-   ptmVy9njwDBDnutJykYs9cOtkoFYdru6RWUks5aBSh8Hozq++XprtkSnu
-   J1wD5IapX7vQWiSGJTslQHQfl+JwYV1rVl8rZMGygjIzuyHdCFuXmqyk+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261285285"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="261285285"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 22:45:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="592654739"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 18 Apr 2022 22:45:27 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nggg3-0005Ok-AS;
-        Tue, 19 Apr 2022 05:45:27 +0000
-Date:   Tue, 19 Apr 2022 13:45:22 +0800
-From:   kernel test robot <lkp@intel.com>
+        with ESMTP id S238054AbiDSGoo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 02:44:44 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F4A2AE2D
+        for <linux-mips@vger.kernel.org>; Mon, 18 Apr 2022 23:42:00 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b15so19979519edn.4
+        for <linux-mips@vger.kernel.org>; Mon, 18 Apr 2022 23:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=crADoU7TuQHIvNUCkN3bftpXZTQCbbgAEyPuKyFnosA=;
+        b=kAxwmtbFjL2vIdyOc0SJTzQ1jRxFAwAUqZgQ5ZkF1NnHm/Blxgwz0k4NqRpDIYYQ78
+         xhSPQgOzkY9gQf99yy3p41mmtlzDPDmiYI52EsDiF+zGA+55HjVgUpusGGDgep56zcNq
+         bUtdQi87v1F95EInqQD+8T4uTWUmj2yzlZu6IWdrpAQCptuo+9OTisBgR0v3WQy/VraS
+         RrxbA/RZxjNO1u8ZrFuYuENtRVtEjLz3ninsRhxtlVNMfTB7+tnBfzxAUWAJvTHO+k7a
+         QPNNa95lLWCrzTe18SxlB0kCZGLXQ4g87upZCMEyWRVcJr0ZmDYEoSVnsq9HjMb7VAZN
+         ZxpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=crADoU7TuQHIvNUCkN3bftpXZTQCbbgAEyPuKyFnosA=;
+        b=m9SWG7gw26nPGoJUF2lFTiMTpCijqF8iSCXL4lq9i5Kyra4oKMXCljGWDHKjK/RtnQ
+         lTHlsXCQPs3mWLmMHk8kiTyvdQury4VFCoq1IrnjEAXMnAeC3cWcbiY4oIV7XmFuI2pb
+         n7mrO86UYWiT+WpGLd8KgHBAXdd4YUEmIFVU0/WNejiM5RxSESq2dNrNRBCrBCil6CMc
+         Diab3VhFQovN3dVa6fRtaH8FKIRqRSXhd5ltvL2JCWx7sacrYkdASDbSiszTd+vDyy/U
+         GPTHzDCJflvwqZIULpeQ842k1rKrDIK1CqXUtd2+cX+it9fqaczKko9fpxQD5sPgyPww
+         Bo4g==
+X-Gm-Message-State: AOAM533G7cYhEl91f+tLWuKFRSnctDP51YAuL+QWeyeOgz6H+kyztKu5
+        lcnv71Cq73aOvDY4BKzwvHs7Vg==
+X-Google-Smtp-Source: ABdhPJwzHBRz4mz5yTbCzi/y8+W/yiUPkQ8vl23P9aHgnApQ8eiW8ymYJ0xHpdkdGZF7fZE8OTCANQ==
+X-Received: by 2002:a05:6402:909:b0:415:cdbf:4748 with SMTP id g9-20020a056402090900b00415cdbf4748mr15663935edz.395.1650350518753;
+        Mon, 18 Apr 2022 23:41:58 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090622ce00b006e898c912e5sm5303190eja.217.2022.04.18.23.41.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 23:41:58 -0700 (PDT)
+Message-ID: <1e9bf9d6-cd5a-6a47-f0d7-5a4bc6e6d2f0@linaro.org>
+Date:   Tue, 19 Apr 2022 08:41:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/5] dt-bindings: rtc: Rework compatible strings and add
+ #clock-cells
+Content-Language: en-US
 To:     Paul Cercueil <paul@crapouillou.net>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, list@opendingux.net,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 4/5] rtc: jz4740: Register clock provider for the CLK32K
- pin
-Message-ID: <202204191348.uUoPjD9I-lkp@intel.com>
-References: <20220418184933.13172-5-paul@crapouillou.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418184933.13172-5-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Cc:     list@opendingux.net, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220418184933.13172-1-paul@crapouillou.net>
+ <20220418184933.13172-2-paul@crapouillou.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220418184933.13172-2-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,54 +79,63 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On 18/04/2022 20:49, Paul Cercueil wrote:
+> The RTC in the JZ4770 is compatible with the JZ4760, but has an extra
+> register that permits to configure the behaviour of the CLK32K pin. The
+> same goes for the RTC in the JZ4780.
+> 
+> Therefore, the ingenic,jz4770-rtc and ingenic,jz4780-rtc strings do not
+> fall back anymore to ingenic,jz4760-rtc. The ingenic,jz4780-rtc string
+> now falls back to the ingenic,jz4770-rtc string.
+> 
+> Additionally, since the RTCs in the JZ4770 and JZ4780 support outputting
+> the input oscillator's clock to the CLK32K pin, the RTC node is now also
+> a clock provider on these SoCs, so a #clock-cells property is added.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
+> index b235b2441997..57393c3ac724 100644
+> --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
+> @@ -18,14 +18,14 @@ properties:
+>        - enum:
+>            - ingenic,jz4740-rtc
+>            - ingenic,jz4760-rtc
+> +          - ingenic,jz4770-rtc
+>        - items:
+>            - const: ingenic,jz4725b-rtc
+>            - const: ingenic,jz4740-rtc
+>        - items:
+>            - enum:
+> -              - ingenic,jz4770-rtc
+>                - ingenic,jz4780-rtc
+> -          - const: ingenic,jz4760-rtc
+> +          - const: ingenic,jz4770-rtc
+>  
+>    reg:
+>      maxItems: 1
+> @@ -39,6 +39,9 @@ properties:
+>    clock-names:
+>      const: rtc
+>  
+> +  "#clock-cells":
+> +    const: 0
+> +
+>    system-power-controller:
+>      description: |
+>        Indicates that the RTC is responsible for powering OFF
 
-I love your patch! Yet something to improve:
+Inside allOf:if:then:, please add a constraint which compatible cannot
+have clock-cells (or maybe better which can?).
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on v5.18-rc3 next-20220414]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Some modification of:
+https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/media/renesas,vsp1.yaml#L53
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-config: hexagon-randconfig-r041-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191348.uUoPjD9I-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a8eada718214bc34ea29f8ff353228abacc0bfb9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
-        git checkout a8eada718214bc34ea29f8ff353228abacc0bfb9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: devm_clk_hw_register
-   >>> referenced by rtc-jz4740.c
-   >>> rtc/rtc-jz4740.o:(jz4740_rtc_probe) in archive drivers/built-in.a
-   >>> referenced by rtc-jz4740.c
-   >>> rtc/rtc-jz4740.o:(jz4740_rtc_probe) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: of_clk_hw_simple_get
-   >>> referenced by rtc-jz4740.c
-   >>> rtc/rtc-jz4740.o:(jz4740_rtc_probe) in archive drivers/built-in.a
-   >>> referenced by rtc-jz4740.c
-   >>> rtc/rtc-jz4740.o:(jz4740_rtc_probe) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: of_clk_add_hw_provider
-   >>> referenced by rtc-jz4740.c
-   >>> rtc/rtc-jz4740.o:(jz4740_rtc_probe) in archive drivers/built-in.a
-   >>> referenced by rtc-jz4740.c
-   >>> rtc/rtc-jz4740.o:(jz4740_rtc_probe) in archive drivers/built-in.a
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof
