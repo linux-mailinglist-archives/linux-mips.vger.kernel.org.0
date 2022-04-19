@@ -2,106 +2,236 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAFD507C98
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Apr 2022 00:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB949507D6F
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Apr 2022 01:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358216AbiDSWgI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 18:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
+        id S1354847AbiDSX6j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 19:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358214AbiDSWgH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 18:36:07 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B802CE06
-        for <linux-mips@vger.kernel.org>; Tue, 19 Apr 2022 15:33:22 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2eba37104a2so637637b3.0
-        for <linux-mips@vger.kernel.org>; Tue, 19 Apr 2022 15:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dPwL7aoaZ2Tj5IbNCnFua5KEAaAGPpZL6+FzfhVJ9DU=;
-        b=cppk+mUylJYCtCcjAdZD6my1QeB78RbGeqdSursZUtBQwAgnkzDQSyNxHh9jUrfO1/
-         VcGN3c6MOgC0vv8hXaLxWUtzzLnU5txIxFDqJx0Az/dSn2JE+mF+8BWUn6Dm6NRcmGye
-         uH9sM6+tReaXvghSDyxsnzzDW2JBNBjI130ZfjLy+Sq63vdWjZBf8U7lYXLu5ul38FRZ
-         lnhqmAONa0USuN0S8HcQoJ4uy71e64Gp8pka1ow38wc/uon7Cy1o2bsDiK+56FiVhU2H
-         guvG0T3lpuOqjHOOgfEUaAtnGTkrP9QRxQv58sqgQ3ikJD3W7TSs/0pyGLVsA5PMN273
-         hhRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dPwL7aoaZ2Tj5IbNCnFua5KEAaAGPpZL6+FzfhVJ9DU=;
-        b=s/1sg2O58imLUNkui3rPy2sxyzPLszimQKR0zuIf9GSNimUDwgBjUN4TbPfE7kAQGy
-         V0w0AIQlcWCJuLxQm79ko3TuVF4IyENzVF7PYWpDlz3/B+C/E7AZgCECJoM0RlRZqobg
-         wBXqzMW/kaEPLLsqZ/UR+Cy/kIIvfUAL6vg+jjo3VA+8851/Z25eONdL2QMYtOlzhh5P
-         NKEaToOyydpHmz5C63LPFHw8EaGmOJJD5u9IS27rqbUUxktY+aRIlxtpjKtb/pdjyylS
-         qr8BsgdtEAbLkNdysvIyguQsMMD/3Bv6no7r55U8Ku+igsMICOeceX5Yot1MuMFj2zJe
-         YXVQ==
-X-Gm-Message-State: AOAM533HF6ud9fbIJNuH316P/9AR9y4K3NCbvQrBwEzkpTzMu/EEYPUK
-        Jo4LBxlRE2lrWnuu3PGwVPUz0m1yrPQnPFKLYdpeHQ==
-X-Google-Smtp-Source: ABdhPJz+yFRgMHBw2zE3OHuucGEP8amS/hvIwE6uRi+tci2ORv8kQIih2dHhwvp5wJLJbquzoJV0llSzHo0T9RhKEsk=
-X-Received: by 2002:a81:b50d:0:b0:2e5:b653:7e97 with SMTP id
- t13-20020a81b50d000000b002e5b6537e97mr19457673ywh.140.1650407602056; Tue, 19
- Apr 2022 15:33:22 -0700 (PDT)
+        with ESMTP id S1356548AbiDSX6h (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 19:58:37 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F33C1DA46
+        for <linux-mips@vger.kernel.org>; Tue, 19 Apr 2022 16:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1650412552; x=1681948552;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KKbVILJHDOZ2N6m0wCdUFAHCkLkQrMH0aZI7ADXChcU=;
+  b=nWTqx1ztrGlNWIrpiha6K8WdQyClz2j3o2OetN2CN/x1ItqXjRoiINYc
+   +8H7OMKxRHHsKLnaHO8hiZGlSt6M76RdI3BZn8/Tuj6EyYomKlvcszW4v
+   Ny+iXg7IDiZcRhvURjvQejo7jttQSeoqxTuheqmF5QdolSW8ayXjUFfAU
+   l0P8lKJGR2vh3ZJ/++km8tUEx75j7XiSC81EhI9+Je7SRRYMrJBcYnGSg
+   UFcWOe4Q/H7NsgDIOSF6XoURETG11ficKHx9hT1VxEitn3s+XMqA5KudO
+   tg9fHp64TwgQBcj9NCD+Wp9Gbx23sOZ8JnZASv+KghQl8vBBCkcBwtAJg
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,274,1643644800"; 
+   d="scan'208";a="302502784"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 20 Apr 2022 07:55:51 +0800
+IronPort-SDR: GD7tuXhrr31wCr91psR+s2cbYhfZyooGvo2gLThp/svB4dtb/pWNUG3+jiUD4qHHd7FI1Jyk8Y
+ HIlOynnqIAkbUy1c9D7ow76/VBd28Gyj7MrSkxNtrdfTDptA7QFMMSE+zphWPuyEjK/jsgQJAs
+ VmUn3FFUQtzE7rh/Nm/iG9G5Qr2MSJLRTMSy5xqBNHGprG1kx6vXS5CK+wbXRZwaV0SA0R1ZSU
+ ggINKTKr7/Z6tT8CaOWWDo7kg7TjGwsC9MVu+urT4Cg3LjDlvIoVVtdVtBDLhK5Ev3/55B+F7F
+ NmhudxjUiVOKnJxQ8rMY1FLd
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Apr 2022 16:26:56 -0700
+IronPort-SDR: nd9GscyZwmZINfvdF5txC1Dxu21HEFeGilkxG6w7C0oG5sYBr31Ru22JGlbxw2VMc/dLCu82pT
+ rK9jqbzJ+8TdIRO4ep5rcKiCB6g5uUUySFsijElMsSV8V42v2mPfIZUF17w4Wwsj1SzJfLxvf1
+ 8TV7YZR47SbRlQ5P+pcszH2apyKO/5hCQwmLi/sTgCeKS7ajBzpgpZTnny0pXPi8HTyu4Ct9wk
+ lhNbioM/e1H86ZnhcA9MEHVH2/6kAVh4JGZqq1hdRigOXfIQgsh8hcoaT9kVrWJagi5unEZar3
+ wK0=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Apr 2022 16:55:50 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kjgfs1X8dz1SVp1
+        for <linux-mips@vger.kernel.org>; Tue, 19 Apr 2022 16:55:49 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1650412547; x=1653004548; bh=KKbVILJHDOZ2N6m0wCdUFAHCkLkQrMH0aZI
+        7ADXChcU=; b=pFEW/uKhXn3SfKmBfD64EaWuvMe7q26hm0k6TE+sEECnehlEu2k
+        JZAKUTdSLIdvQPzDDwtNqieDCFKd2/3AA3HEfr3lw+Tt7zTtPlgqTH805PaZ9XLD
+        n2opLUpjSgtWeer+jG8ad83PPxpRHyOjx3VND3Khq7b+4tkh4xQ3tsW5cXs4Bj1u
+        UKso+W9DyS/Uj+2QDbToc8oCKHbH/6ajijlj8CjOmKZM6k/TNCLhlNGRgLgQk8pd
+        uNG6OCX78fB8zacum/KgbiC3Fm+jyvMirDIzk6aJ6Kmcj1OyXgl+Baraf9/cqoR6
+        86SqXEgXg9GFmxkX6LSna5otrW2oTbdEDwQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kqAWqkqyNw6c for <linux-mips@vger.kernel.org>;
+        Tue, 19 Apr 2022 16:55:47 -0700 (PDT)
+Received: from [10.225.163.14] (unknown [10.225.163.14])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kjgff0k5zz1Rvlx;
+        Tue, 19 Apr 2022 16:55:37 -0700 (PDT)
+Message-ID: <56f889d7-2305-ba7a-42af-9580d8f7df93@opensource.wdc.com>
+Date:   Wed, 20 Apr 2022 08:55:36 +0900
 MIME-Version: 1.0
-References: <20220319204628.1759635-1-michael@walle.cc> <20220319204628.1759635-7-michael@walle.cc>
- <CACRpkdbrw7Hjt9mB9pr_iNsGi71g_d8BGhpT_ih1RVgKJ5U0qQ@mail.gmail.com>
- <e02e22920ffe23b49237c0c1379e888b@walle.cc> <de9b0114-23b5-04b4-86b3-0d393441a267@kernel.org>
- <735863d6476605e4ff72032d8971ac0d@walle.cc>
-In-Reply-To: <735863d6476605e4ff72032d8971ac0d@walle.cc>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 20 Apr 2022 00:33:10 +0200
-Message-ID: <CACRpkdbxmN+SWt95aGHjA2ZGnN61aWaA7c5S4PaG+WePAj=htg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] dt-bindings: pinctrl: convert ocelot-pinctrl to
- YAML format
-To:     Michael Walle <michael@walle.cc>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 13/48] ARM: pxa: use pdev resource for palmld mmio
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, robert.jarzmik@free.fr,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        alsa-devel@alsa-project.org, Jens Axboe <axboe@kernel.dk>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220419163810.2118169-14-arnd@kernel.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220419163810.2118169-14-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 2:04 PM Michael Walle <michael@walle.cc> wrote:
-> Am 2022-04-18 13:13, schrieb Krzysztof Kozlowski:
+On 4/20/22 01:37, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The palmld header is almost unused in drivers, the only
+> remaining thing now is the PATA device address, which should
+> really be passed as a resource.
+> 
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: linux-ide@vger.kernel.org
+> Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+> Acked-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-pxa/palmld-pcmcia.c             |  3 ++-
+>  arch/arm/mach-pxa/palmld.c                    | 12 +++++++++---
+>  arch/arm/mach-pxa/{include/mach => }/palmld.h |  2 +-
+>  drivers/ata/pata_palmld.c                     |  3 +--
+>  4 files changed, 13 insertions(+), 7 deletions(-)
+>  rename arch/arm/mach-pxa/{include/mach => }/palmld.h (98%)
+> 
+> diff --git a/arch/arm/mach-pxa/palmld-pcmcia.c b/arch/arm/mach-pxa/palmld-pcmcia.c
+> index 07e0f7438db1..720294a50864 100644
+> --- a/arch/arm/mach-pxa/palmld-pcmcia.c
+> +++ b/arch/arm/mach-pxa/palmld-pcmcia.c
+> @@ -13,9 +13,10 @@
+>  #include <linux/gpio.h>
+>  
+>  #include <asm/mach-types.h>
+> -#include <mach/palmld.h>
+>  #include <pcmcia/soc_common.h>
+>  
+> +#include "palmld.h"
+> +
+>  static struct gpio palmld_pcmcia_gpios[] = {
+>  	{ GPIO_NR_PALMLD_PCMCIA_POWER,	GPIOF_INIT_LOW,	"PCMCIA Power" },
+>  	{ GPIO_NR_PALMLD_PCMCIA_RESET,	GPIOF_INIT_HIGH,"PCMCIA Reset" },
+> diff --git a/arch/arm/mach-pxa/palmld.c b/arch/arm/mach-pxa/palmld.c
+> index d85146957004..d821606ce0b5 100644
+> --- a/arch/arm/mach-pxa/palmld.c
+> +++ b/arch/arm/mach-pxa/palmld.c
+> @@ -29,8 +29,8 @@
+>  #include <asm/mach/map.h>
+>  
+>  #include "pxa27x.h"
+> +#include "palmld.h"
+>  #include <linux/platform_data/asoc-pxa.h>
+> -#include <mach/palmld.h>
+>  #include <linux/platform_data/mmc-pxamci.h>
+>  #include <linux/platform_data/video-pxafb.h>
+>  #include <linux/platform_data/irda-pxaficp.h>
+> @@ -279,9 +279,15 @@ static inline void palmld_leds_init(void) {}
+>   * HDD
+>   ******************************************************************************/
+>  #if defined(CONFIG_PATA_PALMLD) || defined(CONFIG_PATA_PALMLD_MODULE)
+> +static struct resource palmld_ide_resources[] = {
+> +	DEFINE_RES_MEM(PALMLD_IDE_PHYS, 0x1000),
+> +};
+> +
+>  static struct platform_device palmld_ide_device = {
+> -	.name	= "pata_palmld",
+> -	.id	= -1,
+> +	.name		= "pata_palmld",
+> +	.id		= -1,
+> +	.resource	= palmld_ide_resources,
+> +	.num_resources	= ARRAY_SIZE(palmld_ide_resources),
+>  };
+>  
+>  static struct gpiod_lookup_table palmld_ide_gpio_table = {
+> diff --git a/arch/arm/mach-pxa/include/mach/palmld.h b/arch/arm/mach-pxa/palmld.h
+> similarity index 98%
+> rename from arch/arm/mach-pxa/include/mach/palmld.h
+> rename to arch/arm/mach-pxa/palmld.h
+> index 99a6d8b3a1e3..ee3bc15b71a2 100644
+> --- a/arch/arm/mach-pxa/include/mach/palmld.h
+> +++ b/arch/arm/mach-pxa/palmld.h
+> @@ -9,7 +9,7 @@
+>  #ifndef _INCLUDE_PALMLD_H_
+>  #define _INCLUDE_PALMLD_H_
+>  
+> -#include "irqs.h" /* PXA_GPIO_TO_IRQ */
+> +#include <mach/irqs.h> /* PXA_GPIO_TO_IRQ */
+>  
+>  /** HERE ARE GPIOs **/
+>  
+> diff --git a/drivers/ata/pata_palmld.c b/drivers/ata/pata_palmld.c
+> index 2448441571ed..400e65190904 100644
+> --- a/drivers/ata/pata_palmld.c
+> +++ b/drivers/ata/pata_palmld.c
+> @@ -25,7 +25,6 @@
+>  #include <linux/gpio/consumer.h>
+>  
+>  #include <scsi/scsi_host.h>
+> -#include <mach/palmld.h>
+>  
+>  #define DRV_NAME "pata_palmld"
+>  
+> @@ -63,7 +62,7 @@ static int palmld_pata_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	/* remap drive's physical memory address */
+> -	mem = devm_ioremap(dev, PALMLD_IDE_PHYS, 0x1000);
+> +	mem = devm_platform_ioremap_resource(pdev, 0);
+>  	if (!mem)
+>  		return -ENOMEM;
+>  
 
-> > I think you got all necessary acks for this pinctrl bindings change and
-> > the dependency ("add reset property"), so both can go via Linus' tree.
-> > That's preferred.
-> >
-> > DTS patches goes through your SoC maintainer tree.
->
-> Ah, ok, I wasn't aware of that. Then yes, please go ahead and
-> pick this and the first patch of [1] up, Linus.
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-I picked up this patch but:
-
-> [1]
-> https://lore.kernel.org/linux-gpio/20220313154640.63813-1-michael@walle.cc/
-
-These patches don't apply to my tree. Please rebase on
-the pinctrl "devel" branch and resend!
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
-
-Yours,
-Linus Walleij
+-- 
+Damien Le Moal
+Western Digital Research
