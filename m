@@ -2,129 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CC25075DD
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 19:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F295075F2
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 19:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355476AbiDSRF6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 13:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S1355701AbiDSRHI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 13:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355714AbiDSRFS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 13:05:18 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06604667D;
-        Tue, 19 Apr 2022 09:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1650387354; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UgJ9M4e77rm4vWgeDfc7h63C2dpPAutbcuRpKjGD9n4=;
-        b=MmVauPxwx0Nc5F0BBmh8Ky18fFoRb3dvEkVCAGHNSiRWRImQwFNHbMGqb4r9bdw39GxCJ1
-        fnzknse0G3i983UeNAOSfGnI5Vxp+M/C2ZeTJsExp2iufMyfMXnM+LK1eKsmsWJuKVlAyf
-        desO9uA4S62Zkl7y1Bet11f2kYDyn/k=
-Date:   Tue, 19 Apr 2022 17:55:44 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/5] dt-bindings: rtc: Rework compatible strings and add
- #clock-cells
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        list@opendingux.net, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Message-Id: <W0JLAR.RV6VQW59K8X3@crapouillou.net>
-In-Reply-To: <1e9bf9d6-cd5a-6a47-f0d7-5a4bc6e6d2f0@linaro.org>
-References: <20220418184933.13172-1-paul@crapouillou.net>
-        <20220418184933.13172-2-paul@crapouillou.net>
-        <1e9bf9d6-cd5a-6a47-f0d7-5a4bc6e6d2f0@linaro.org>
+        with ESMTP id S1355729AbiDSRGz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 13:06:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD3513CC5;
+        Tue, 19 Apr 2022 10:00:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0116EB81C0E;
+        Tue, 19 Apr 2022 17:00:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922D3C385A7;
+        Tue, 19 Apr 2022 17:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650387647;
+        bh=8IybAGIoEFhxdFIoViUdHi9R1OLP0LV7n7ET52ewC2Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qdjUxUzOK47L0cZIifXSz7UsJ/T7pNWT1lav0S4UTA8SkRPMr6OdjuoKmjjzSRWfJ
+         c3Xc1N3dEddrAcMeEEi8qeX5V5sR4mj5H2pl/GqHbzIrg/5uen4eHooQ7QK27CxD93
+         /bgTlksGlnGhbtU2K/wLZ1TtfMwjR2bY2Me8a/6EsoJHYJe7AmE3j9jK687/wZjmYG
+         FwBmVqne5WOPD1xmA8Jr7ZwOKbe2EMNx954jbcxWcC/YLLogTiVNzqEv5qZ5QH87AW
+         0EyiQAOimaazn0wf9dDUIUWArgmFqwLHtciNhvT+xOtcx+skhmwvBV8+TgAnsie9I7
+         dQNvu8BfrMzDA==
+Date:   Tue, 19 Apr 2022 18:00:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Zhou Yanjie <zhouyanjie@wanyeetech.com>, robh+dt@kernel.org,
+        krzk+dt@kernel.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, contact@artur-rojek.eu,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Subject: Re: [PATCH 1/3] SPI: Ingenic: Add support for use GPIO as chip
+ select line.
+Message-ID: <Yl7quUXmEEPHfTfC@sirena.org.uk>
+References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1650032528-118220-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <61ZDAR.SD20HFTWMIBH3@crapouillou.net>
+ <d7926a1d-c5e3-6519-6a52-1bd3ca3cf773@wanyeetech.com>
+ <A5YFAR.5U5RNX82OXJY1@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TPbCuVtMSsnBjIIh"
+Content-Disposition: inline
+In-Reply-To: <A5YFAR.5U5RNX82OXJY1@crapouillou.net>
+X-Cookie: That's what she said.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Krzysztof,
 
-Le mar., avril 19 2022 at 08:41:56 +0200, Krzysztof Kozlowski=20
-<krzysztof.kozlowski@linaro.org> a =E9crit :
-> On 18/04/2022 20:49, Paul Cercueil wrote:
->>  The RTC in the JZ4770 is compatible with the JZ4760, but has an=20
->> extra
->>  register that permits to configure the behaviour of the CLK32K pin.=20
->> The
->>  same goes for the RTC in the JZ4780.
->>=20
->>  Therefore, the ingenic,jz4770-rtc and ingenic,jz4780-rtc strings do=20
->> not
->>  fall back anymore to ingenic,jz4760-rtc. The ingenic,jz4780-rtc=20
->> string
->>  now falls back to the ingenic,jz4770-rtc string.
->>=20
->>  Additionally, since the RTCs in the JZ4770 and JZ4780 support=20
->> outputting
->>  the input oscillator's clock to the CLK32K pin, the RTC node is now=20
->> also
->>  a clock provider on these SoCs, so a #clock-cells property is added.
->>=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  Cc: Rob Herring <robh+dt@kernel.org>
->>  Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
->>  ---
->>   Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml | 7 +++++--
->>   1 file changed, 5 insertions(+), 2 deletions(-)
->>=20
->>  diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml=20
->> b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
->>  index b235b2441997..57393c3ac724 100644
->>  --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
->>  +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
->>  @@ -18,14 +18,14 @@ properties:
->>         - enum:
->>             - ingenic,jz4740-rtc
->>             - ingenic,jz4760-rtc
->>  +          - ingenic,jz4770-rtc
->>         - items:
->>             - const: ingenic,jz4725b-rtc
->>             - const: ingenic,jz4740-rtc
->>         - items:
->>             - enum:
->>  -              - ingenic,jz4770-rtc
->>                 - ingenic,jz4780-rtc
->>  -          - const: ingenic,jz4760-rtc
->>  +          - const: ingenic,jz4770-rtc
->>=20
->>     reg:
->>       maxItems: 1
->>  @@ -39,6 +39,9 @@ properties:
->>     clock-names:
->>       const: rtc
->>=20
->>  +  "#clock-cells":
->>  +    const: 0
->>  +
->>     system-power-controller:
->>       description: |
->>         Indicates that the RTC is responsible for powering OFF
->=20
-> Inside allOf:if:then:, please add a constraint which compatible cannot
-> have clock-cells (or maybe better which can?).
->=20
-> Some modification of:
-> https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetre=
-e/bindings/media/renesas,vsp1.yaml#L53
+--TPbCuVtMSsnBjIIh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure.
+On Sat, Apr 16, 2022 at 05:36:46PM +0100, Paul Cercueil wrote:
+> Le sam., avril 16 2022 at 19:55:13 +0800, Zhou Yanjie
+> > On 2022/4/15 =E4=B8=8B=E5=8D=8811:00, Paul Cercueil wrote:
 
-Cheers,
--Paul
+> > > > -    ctlr->num_chipselect =3D 2;
+> > > > +    ctlr->use_gpio_descriptors =3D true;
 
+> > > I wonder if this should be set conditionally instead. Maybe set it
+> > > to =7F"true" if the "num-cs" property exists?
 
+> > I'm not too sure, but it seems some other drivers like "spi-sun6i.c",
+> > "spi-stm32.c", "spi-s3c64xx.c", "spi-pic32.c", etc. set it
+> > unconditionally.
+
+> Ok, maybe Mark can enlighten us here.
+
+use_gpio_descriptions is just selecting which version of the GPIO APIs
+we should use if we're handling GPIOs rather than if we should handle
+them.  We've got one last driver using the numerical GPIO APIs, once
+that one is converted we should just be able to drop the flag since
+everything will be using descriptors.
+
+--TPbCuVtMSsnBjIIh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJe6rgACgkQJNaLcl1U
+h9AHLwf9E2iqsfV37dO0NFH186Odz4Z0j8xceQsmNj3PyljXnw7Lbtdei5aoZuwM
+sZXNQuwleO6VDzrjN5Wo7SapZyL520L0HOXQPZG+hMk97RiHFMO5olCkJyOZet6S
+Ypu4loL1Qh+HZp1OWU824dxjQqthLJoCDMHdH0PVPqIAceXjX3MFw64eQrQy+MG8
++EPD7uM0Zlun8NJ2h/i/7ufTnblDAXvxGb4XJah8Pl1KBTvHGy8C8Agiv6fKJxZW
+v+4qI1x+OP/DczQ3JK2TGW9q3a7QiekvFpFoMgx7GEl/c2UEYd9VvhGJF2biZRD+
+720Kf278lwoaPdTexlUFU91unE2XuQ==
+=syA4
+-----END PGP SIGNATURE-----
+
+--TPbCuVtMSsnBjIIh--
