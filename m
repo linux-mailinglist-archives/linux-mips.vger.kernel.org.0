@@ -2,118 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722D75078AE
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 20:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EEA507900
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 20:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343792AbiDSSZx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 14:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S1357192AbiDSSi2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 14:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357640AbiDSSXf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 14:23:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12D73F322;
-        Tue, 19 Apr 2022 11:16:42 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b5839329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:5839:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F71F1EC056A;
-        Tue, 19 Apr 2022 20:16:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650392195;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UoJkiPpVHwxIF95pounRIe0Bw7VF4LrYgBjTdnaLh4M=;
-        b=TSOc8IYhoBaLvKhqpez3H0jtLDK8Eseo4q06zwIlkbjmkVhCwgTpQznSaGHr4tJI5mPOVm
-        DtWKis1fu5W+gNxL/sbpwYLcLQW53nl+zraOpDLEzLeassVwhpGIPTCrFfe75/3S+78kjs
-        hPtr3FvTE+KH1mPoULDw9muY288aKXQ=
-Date:   Tue, 19 Apr 2022 20:16:32 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        tglx@linutronix.de, arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v5 07/11] x86: use fallback for random_get_entropy()
- instead of zero
-Message-ID: <Yl78gLLcSb3EHv0B@zn.tnic>
-References: <20220419111650.1582274-1-Jason@zx2c4.com>
- <20220419111650.1582274-8-Jason@zx2c4.com>
+        with ESMTP id S1357689AbiDSSh7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 14:37:59 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733561F60C;
+        Tue, 19 Apr 2022 11:33:50 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso2747662pjj.3;
+        Tue, 19 Apr 2022 11:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CKt7NnL2WCnYF3IJkaP6ANmOKulqn9UJ42AVdgrbYZM=;
+        b=ELQufKHWhcQ7POnzX5e2nsQYuOrNbCdzc4rlKefQO1wspKrz9BRzgKAtklOBFDuWHg
+         gKQLR1L38bDUzbqpEsJ/851NmgDP/C0XkUCBCutyErpI+ILrrYdHSKU35BLxuHBZe4n5
+         eIN+6QZk5flzABfB5OBaOJnnc6daZRDC8pEkQJkob4JzIQVdzoxtaMjYx1cj/B0oceV0
+         BQQZ7QH2uv1gJ14izA68jXC/CXq5elJJfEOsSk8u2+rlUVUVpp/nKxWqLvLIJpkhLs2E
+         fB5X5ZS68dHa1kVGjH+z3pYEcwYPYy2XhL2odWjd52sjnjAyGOTgVlsECW3ZxpHnSaEG
+         VahQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CKt7NnL2WCnYF3IJkaP6ANmOKulqn9UJ42AVdgrbYZM=;
+        b=7q1FXZuonjhckfRfick1gGNHHWtl/vHcQ5a/p/StiUtLbloZBrkYcz/fzq6JiXxx6o
+         IDmiJroUEnYGIP/430k5xvvkJyK1Zy/oz/cDUZqcyulsNa6QdGII9euhD+cISUVjDAq6
+         30ezZV44ojXicXcoojze6hoHO3P4lo4vMHMMw2twqRYSN4aV3kEo+IgWNGOYN/idqZDO
+         hubMwlqPl/wtfChTKAtAeJLFHV69pqo5c4ldDR3wxPDFFD+lMVL4IsAvDaApdJnAnja8
+         gv62S7LuSQ0nNXUOvec8TqpoW/DsKNzsLrIqXNYKkQvemgx+jaBHV2VWk6yvs098SloX
+         LDAA==
+X-Gm-Message-State: AOAM531E5sch/D8sd/NpG3Jr0I67fHv/25q9i3TNXW/r/YZRJBrZoGGO
+        uNBPUAuX0BwxKKJ+Eezh1mY=
+X-Google-Smtp-Source: ABdhPJyK+JBVMlycoxvLkKXqa1o8rQ1mr2VI/izO1bCtrLEYx5oYkb8TO/1X3t5D1i0FmVRl8mgDRw==
+X-Received: by 2002:a17:90a:1b02:b0:1cb:a256:c0a7 with SMTP id q2-20020a17090a1b0200b001cba256c0a7mr19733587pjq.185.1650393229989;
+        Tue, 19 Apr 2022 11:33:49 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id n19-20020a62e513000000b005048eef5827sm17963074pff.142.2022.04.19.11.33.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 11:33:49 -0700 (PDT)
+Message-ID: <f8d78967-8842-57de-9464-4e281de2e7d7@gmail.com>
+Date:   Tue, 19 Apr 2022 11:33:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220419111650.1582274-8-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1] soc: bcm: Check for NULL return of devm_kzalloc()
+Content-Language: en-US
+To:     QintaoShen <unSimple1993@163.com>, f.fainelli@gmail.com
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 01:16:46PM +0200, Jason A. Donenfeld wrote:
-> In the event that random_get_entropy() can't access a cycle counter or
-> similar, falling back to returning 0 is really not the best we can do.
-> Instead, at least calling random_get_entropy_fallback() would be
-> preferable, because that always needs to return _something_, even
-> falling back to jiffies eventually. It's not as though
-> random_get_entropy_fallback() is super high precision or guaranteed to
-> be entropic, but basically anything that's not zero all the time is
-> better than returning zero all the time.
-> 
-> If CONFIG_X86_TSC=n, then it's possible that we're running on a 486 with
-> no RDTSC, so we only need the fallback code for that case.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: x86@kernel.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  arch/x86/include/asm/timex.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/timex.h b/arch/x86/include/asm/timex.h
-> index a4a8b1b16c0c..fac180359693 100644
-> --- a/arch/x86/include/asm/timex.h
-> +++ b/arch/x86/include/asm/timex.h
-> @@ -5,6 +5,16 @@
->  #include <asm/processor.h>
->  #include <asm/tsc.h>
->  
-> +static inline unsigned long random_get_entropy(void)
-> +{
-> +#ifndef CONFIG_X86_TSC
-> +	if (!boot_cpu_has(X86_FEATURE_TSC))
 
-cpu_feature_enabled() pls.
 
+On 3/24/2022 1:35 AM, QintaoShen wrote:
+> As the potential failuer of allocation, devm_kzalloc() may return NULL.
+> Then the 'pd->pmb' and the follow lines of code may bring null pointer dereference.
+> 
+> Therefore, it is better to check the return value of devm_kzalloc() to avoid this confusion.
+> 
+> Signed-off-by: QintaoShen <unSimple1993@163.com>
+
+Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, 
+thanks!
+
+I modified your patch to have a Fixes: tag as replied, and follow 
+Sergey's style recommendation.
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Florian
