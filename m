@@ -2,87 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95698507711
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 20:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722D75078AE
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 20:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356188AbiDSSJ0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 14:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S1343792AbiDSSZx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 14:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356181AbiDSSJZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 14:09:25 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B7D3CA4E;
-        Tue, 19 Apr 2022 11:06:42 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id t15so11324320oie.1;
-        Tue, 19 Apr 2022 11:06:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=NogA4FJZbtSCeI8+16U8rTBVRGQdHqkH+cpZLhz0hdw=;
-        b=pu0KIzJjb7uSRDSnQ1Pvc8cDzpiw5CYsBll9Sr+HwX9MHi4WUBeASeSzVQtzHxrjOK
-         5wGW0x1ZEQ+ARTbuAO9qKeVwWNm/da3dnHG5tgegMFqVjwW1Vaix3H2kzsq0Hikbc1n3
-         ZQvv/Ijon4N2Dn7jgYtX19Le580td6mXX+6LTkHT7atZf4HiNyl3p+EiPdGfPutjcD1b
-         6u1qeZ01qsZTqmpNx20GNyYvt4YS/3tjY1lKGKdvNuVbLDqlFgbnYFQTwhOsJqyqO5ei
-         vL5PUxs2N3SV9DyO0Pz1+GTxx0ETjBYhCKpNdav/b6O9NJIGLa5TV8lUghhrXblB7sKT
-         uK1A==
-X-Gm-Message-State: AOAM533qG1ifednwCSPefVW3XCWh9KxSDpUE+rFU5PJgCrAyg37HXp67
-        N5Oyoooef7LobgtOu6klIQ==
-X-Google-Smtp-Source: ABdhPJznkadX4VcGahV0tlYTHvdwn0UVoyP9HpXdmVeY58eg7G177LR5W+fg7x9LlsEeDaf/B9ZX9A==
-X-Received: by 2002:a05:6808:150c:b0:322:88d3:74aa with SMTP id u12-20020a056808150c00b0032288d374aamr5211548oiw.245.1650391600207;
-        Tue, 19 Apr 2022 11:06:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k14-20020a0568080e8e00b003224d35c729sm4531755oil.3.2022.04.19.11.06.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 11:06:39 -0700 (PDT)
-Received: (nullmailer pid 3071252 invoked by uid 1000);
-        Tue, 19 Apr 2022 18:06:38 -0000
-Date:   Tue, 19 Apr 2022 13:06:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Joe Perches <joe@perches.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        erkin.bozoglu@xeront.com, Rob Herring <robh+dt@kernel.org>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-gpio@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH v2 14/14] dt-bindings: pinctrl: add binding for Ralink
- RT3883 pinctrl
-Message-ID: <Yl76LnVX8sNd1Bxj@robh.at.kernel.org>
-References: <20220414173916.5552-1-arinc.unal@arinc9.com>
- <20220414173916.5552-15-arinc.unal@arinc9.com>
+        with ESMTP id S1357640AbiDSSXf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 14:23:35 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12D73F322;
+        Tue, 19 Apr 2022 11:16:42 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b5839329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:5839:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F71F1EC056A;
+        Tue, 19 Apr 2022 20:16:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650392195;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UoJkiPpVHwxIF95pounRIe0Bw7VF4LrYgBjTdnaLh4M=;
+        b=TSOc8IYhoBaLvKhqpez3H0jtLDK8Eseo4q06zwIlkbjmkVhCwgTpQznSaGHr4tJI5mPOVm
+        DtWKis1fu5W+gNxL/sbpwYLcLQW53nl+zraOpDLEzLeassVwhpGIPTCrFfe75/3S+78kjs
+        hPtr3FvTE+KH1mPoULDw9muY288aKXQ=
+Date:   Tue, 19 Apr 2022 20:16:32 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v5 07/11] x86: use fallback for random_get_entropy()
+ instead of zero
+Message-ID: <Yl78gLLcSb3EHv0B@zn.tnic>
+References: <20220419111650.1582274-1-Jason@zx2c4.com>
+ <20220419111650.1582274-8-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220414173916.5552-15-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220419111650.1582274-8-Jason@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 14 Apr 2022 20:39:16 +0300, Arınç ÜNAL wrote:
-> Add binding for the Ralink RT3883 pin controller for RT3883 SoC.
+On Tue, Apr 19, 2022 at 01:16:46PM +0200, Jason A. Donenfeld wrote:
+> In the event that random_get_entropy() can't access a cycle counter or
+> similar, falling back to returning 0 is really not the best we can do.
+> Instead, at least calling random_get_entropy_fallback() would be
+> preferable, because that always needs to return _something_, even
+> falling back to jiffies eventually. It's not as though
+> random_get_entropy_fallback() is super high precision or guaranteed to
+> be entropic, but basically anything that's not zero all the time is
+> better than returning zero all the time.
 > 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> If CONFIG_X86_TSC=n, then it's possible that we're running on a 486 with
+> no RDTSC, so we only need the fallback code for that case.
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: x86@kernel.org
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
->  .../pinctrl/ralink,rt3883-pinctrl.yaml        | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
+>  arch/x86/include/asm/timex.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
+> diff --git a/arch/x86/include/asm/timex.h b/arch/x86/include/asm/timex.h
+> index a4a8b1b16c0c..fac180359693 100644
+> --- a/arch/x86/include/asm/timex.h
+> +++ b/arch/x86/include/asm/timex.h
+> @@ -5,6 +5,16 @@
+>  #include <asm/processor.h>
+>  #include <asm/tsc.h>
+>  
+> +static inline unsigned long random_get_entropy(void)
+> +{
+> +#ifndef CONFIG_X86_TSC
+> +	if (!boot_cpu_has(X86_FEATURE_TSC))
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+cpu_feature_enabled() pls.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
