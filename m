@@ -2,46 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E5450633E
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 06:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 384AC506359
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 06:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348249AbiDSEdJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 00:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S1348282AbiDSEgL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 00:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348244AbiDSEdI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 00:33:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF703220CE;
-        Mon, 18 Apr 2022 21:30:27 -0700 (PDT)
+        with ESMTP id S1348274AbiDSEgL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 00:36:11 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC95122BE5;
+        Mon, 18 Apr 2022 21:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650342627; x=1681878627;
+  t=1650342809; x=1681878809;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=52jRYIsgk/Pqgtn5x/D1TRnNFy5xBM8vIsx91EWTXOg=;
-  b=Q4AN0uBLrjOcsHKhcNoL1iZwSF2Ivevu0ezP6PnZBrTKPubCFqUjx9Of
-   9G5NOuhyCa3o0pC2U6R40x9g5KlFTTBCC6Ce/WFBLzYdkeb2ve2ElXbWx
-   jbCUkFbxK7g/7nggVC9gFDLYbVGvSTDk+SVT1dwM+PhojrPv53YC/uxFV
-   yehJDz8koJQAforSKYdHXJ38OOcLTrbBHuGnVtA8SmxLM/GcoxnkOXYPE
-   +EiQ/a2XdTMk55+DAj6ogBihKvdpjJ32jX0q0Ri5zn7szqP6TReaF+jKL
-   dJxPRYT/+ByW3kSNKE0L3DEQltqaZXkQX1qZCOKMvnPqEfvYmT1McKPrt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="243604053"
+  bh=OPOfSS2uDyN/dVKScHcoTabGQVho8Vlfn+KbkTmz7eY=;
+  b=gtKb7TAXgqcVKeRTPBw369lk82iKf9bfi91hsmfEiLiScnllyBsTnYXC
+   F80/McEcaQ8QQx8Gq6Lzt2AoQdvln9vdnVMkx03Bxqet4WaoOlnFX9Sla
+   92E607CuEBMrd1/t2IUGNG5wvUH5+jS8HJTwQdTlpQAoiTHSVs1M5SiuK
+   yGbXe3VCnqO1FTkGoLuyP4xbGCmco1WNRx+s/07QjNeEknWhe2Am3Dz0f
+   o3WdlncHINpl9GhGktOIWLNlqudaZVJ+jY5M5OcGFkoOCNWV/JPtcs3/Q
+   qjmIn23mfBpx3gYbhQBgkS3rigdK0WfhGDV5Urp3Wo+qwpHYCxV9tjmC8
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="244256897"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="243604053"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:30:26 -0700
+   d="scan'208";a="244256897"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:33:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="561574119"
+   d="scan'208";a="665771758"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2022 21:30:24 -0700
+  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 21:33:24 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1ngfVP-0005LD-Os;
-        Tue, 19 Apr 2022 04:30:23 +0000
-Date:   Tue, 19 Apr 2022 12:30:05 +0800
+        id 1ngfYJ-0005Lb-UD;
+        Tue, 19 Apr 2022 04:33:23 +0000
+Date:   Tue, 19 Apr 2022 12:32:37 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Paul Cercueil <paul@crapouillou.net>,
         Alessandro Zummo <a.zummo@towertech.it>,
@@ -50,18 +50,17 @@ Cc:     kbuild-all@lists.01.org, list@opendingux.net,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 4/5] rtc: jz4740: Register clock provider for the CLK32K
- pin
-Message-ID: <202204191107.MvgmbaHZ-lkp@intel.com>
-References: <20220418184933.13172-5-paul@crapouillou.net>
+Subject: Re: [PATCH 5/5] rtc: jz4740: Support for fine-tuning the RTC clock
+Message-ID: <202204191251.t9r8gFyI-lkp@intel.com>
+References: <20220418184933.13172-6-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220418184933.13172-5-paul@crapouillou.net>
+In-Reply-To: <20220418184933.13172-6-paul@crapouillou.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,27 +80,67 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-config: parisc-randconfig-r022-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191107.MvgmbaHZ-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
+config: sparc64-randconfig-r024-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191251.t9r8gFyI-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a8eada718214bc34ea29f8ff353228abacc0bfb9
+        # https://github.com/intel-lab-lkp/linux/commit/ba459adc8c83dbdc469d0c6b5d57fd95d834513a
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
-        git checkout a8eada718214bc34ea29f8ff353228abacc0bfb9
+        git checkout ba459adc8c83dbdc469d0c6b5d57fd95d834513a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "of_clk_add_hw_provider" [drivers/rtc/rtc-jz4740.ko] undefined!
->> ERROR: modpost: "devm_clk_hw_register" [drivers/rtc/rtc-jz4740.ko] undefined!
->> ERROR: modpost: "of_clk_hw_simple_get" [drivers/rtc/rtc-jz4740.ko] undefined!
+   In file included from <command-line>:
+   drivers/rtc/rtc-jz4740.c: In function 'jz4740_rtc_set_offset':
+>> include/linux/compiler_types.h:346:45: error: call to '__compiletime_assert_229' declared with attribute error: FIELD_PREP: value too large for the field
+     346 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:327:25: note: in definition of macro '__compiletime_assert'
+     327 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:346:9: note: in expansion of macro '_compiletime_assert'
+     346 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      65 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:111:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     111 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/rtc/rtc-jz4740.c:261:17: note: in expansion of macro 'FIELD_PREP'
+     261 |         nc1hz = FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK, nc1hz);
+         |                 ^~~~~~~~~~
+
+
+vim +/__compiletime_assert_229 +346 include/linux/compiler_types.h
+
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  332  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  333  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  334  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  335  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  336  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  337   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  338   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  339   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  340   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  341   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  342   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  343   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  344   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  345  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @346  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  347  
 
 -- 
 0-DAY CI Kernel Test Service
