@@ -2,172 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4985063C6
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 07:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616E65063F4
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 07:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiDSFOK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 01:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S232971AbiDSFot (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 01:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiDSFOJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 01:14:09 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21DE21E21;
-        Mon, 18 Apr 2022 22:11:27 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id d19so4841854qko.3;
-        Mon, 18 Apr 2022 22:11:27 -0700 (PDT)
+        with ESMTP id S232202AbiDSFos (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 01:44:48 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEEC21E1D;
+        Mon, 18 Apr 2022 22:42:06 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id j6so12727843qkp.9;
+        Mon, 18 Apr 2022 22:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JXEZ5C8fYOz+un4E/+M4H7uOYX0LQVxNU9wzlCZQgnI=;
-        b=eII8IdHoWLxjcKl0Sg+2eT49DZP+AhiUxs7TAqxbXeF/yiv5sjwIDUKREFQEKWxzn4
-         kSnJJ1XwNvrRRwdX5GOzB9qaejlo8q7L5vi9bmG0ntRIXlvZpwIfyMCQJpGcgl92Pe69
-         DF5QLpTFc6wX8ijdI2lRKhCKS4VGlrKh2vFFnWSwPK2hA8iLfbAkaKvuSUxFenLECl0P
-         qzmXCo7ex0FCiLKn4X0oTUyBNPzczXwDlJstIk7jlj3UMuG9qnDF7lh+B/IQm+HZALNU
-         ZAPq5xhYHdKN8cptiEwAg/wXKel1AWBE//GqQ88X+fX8w7DYzE1E9pTcz/OEDtyuqgSv
-         Trhg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Y4WqiyPBrPuq3t0GzG/KyMaIv9tuXpL8sDYJ09oaLlc=;
+        b=b3g0keK+mJDMBV75bc1md4gO+XLUzYDcKtwNdefPSiZa1uEPauzb7UUpnC5UOrRAgU
+         yj4s4c6cB/PnbUD5k8trcbR99/91u3tmwfL1LsrfvoRQGAmerDe1uZV9JSZXy0xjacpZ
+         nMSgEEZOgtzh6udr1hAZrKthALYqZmXW7wPyEnD8IumG+B0XGNNjYRE8xeIlBXX+1nFc
+         LRCNVEKccJhj0fW3wGkeyCPUMUFOv/wnrpQA1oI/AHUNVgtCbYH61hHYzRbUQeV2HLPy
+         zgtJ1jAXvt1T8rCZ6K1VBGtTr/bx9Eifo/OUTjeFkgNAyfn5AR8H47zEdlTj+2jj1hVq
+         TCRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JXEZ5C8fYOz+un4E/+M4H7uOYX0LQVxNU9wzlCZQgnI=;
-        b=mDnGX4q1KPobaDjBilkf82pg6P3F72xG+fgcCMYmDiBYJVgz9hhb+G10GA2h+nCIaw
-         eTWXigXB3FcWpEGqFjqhPUUjJ5kC9epwozgSuDPXAXXJiCGL20A/giBSeREQSxnyjA8u
-         DvF6mkat6MDfOt1A7mFEkp37DF76eOygcLaU9rSd06Nks2dp2QgnYbiqZMBS6vDJdIzo
-         Qfmwqx7sJ3/CIh4zsTFjVyhUT4vq+Soz73JUT09BBzAXkrqpP/SQCiKdh3y3/vZdC8s5
-         G6irql30l5iOu/wLxtP3OGtL5yh2cW7wI2qTrQGEp/fzj21vOuiC+KkThJb+ryOpo/xL
-         bXIQ==
-X-Gm-Message-State: AOAM533L897+uI3pNDuj0U0GTGNFjHw2DNRT52FUD9oFfeuoE81C2haZ
-        ZY5fbB0+viZHs5/p0NjzrL92AC9407s=
-X-Google-Smtp-Source: ABdhPJwxG8YlmBr7Dtj1KIGOFk9rucVNbIgI/EDbWfI/FxwsK8Eu2be6DFUis7xFz986aFYem0hfKw==
-X-Received: by 2002:a37:a196:0:b0:69e:b207:16ee with SMTP id k144-20020a37a196000000b0069eb20716eemr3051364qke.321.1650345086571;
-        Mon, 18 Apr 2022 22:11:26 -0700 (PDT)
-Received: from godwin.fios-router.home (pool-108-18-137-133.washdc.fios.verizon.net. [108.18.137.133])
-        by smtp.gmail.com with ESMTPSA id y85-20020a376458000000b0069e64801b7dsm5327222qkb.62.2022.04.18.22.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 22:11:26 -0700 (PDT)
-From:   Sean Anderson <seanga2@gmail.com>
-To:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Du Huanpeng <dhu@hodcarrier.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Yang Ling <gnaygnil@gmail.com>,
-        Sean Anderson <seanga2@gmail.com>
-Subject: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
-Date:   Tue, 19 Apr 2022 01:11:14 -0400
-Message-Id: <20220419051114.1569291-1-seanga2@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Y4WqiyPBrPuq3t0GzG/KyMaIv9tuXpL8sDYJ09oaLlc=;
+        b=x76NW+sUWIfVoypT6QKcPn+miZwcu81MB2RdbNm5kPnCum4kWhzplMmLwC7rAbpPx7
+         qDUwU07RGTwEaWvdHbkKk8SVjLOQROJk/h9wWPpk5xhPp8q11PuYtI7YALw6M5ri62Ef
+         BkqkoJYsooWVKH26uQGaqZJ1QnD9kCkcI7WQIrmV3OvyHDByfyXtQS7nr7PBk8M43KE6
+         ATviTq+BSQhxMH6gakMfce+W++crhBfxj3GbQX68w5Dio0uTEZoSsGWX5UW0qxVRxuIR
+         okqSHKCOGH1NoR2GYXtl7e4z80fuqJhUDrKe2WT44uDb1vGizbR1To5jh4dOLzM8o1at
+         6DZQ==
+X-Gm-Message-State: AOAM532eltR/1QzegKBq+1h8mRJQdNBHviEprE3gJ49KGFlp09uYCJO0
+        /ys2cy7C/cQUaS4JZEzmShhTl0S7q0Bv04dM6PI+ssm0
+X-Google-Smtp-Source: ABdhPJzDm6c7z7Z8nfJx8bLY6Q65M8wsTvC2SNRYrmONjssNXsMgNlxplno3NUOkHvtNiBmyKAF1Rv/3nxQYp13A5Uo=
+X-Received: by 2002:a05:620a:4308:b0:67b:487e:e02a with SMTP id
+ u8-20020a05620a430800b0067b487ee02amr8723387qko.696.1650346925402; Mon, 18
+ Apr 2022 22:42:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220414173916.5552-1-arinc.unal@arinc9.com>
+In-Reply-To: <20220414173916.5552-1-arinc.unal@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 19 Apr 2022 07:41:54 +0200
+Message-ID: <CAMhs-H9sdyEEmauW=Wx__+ydj46HTftjjzmJ8D3SwBkvWi_YMg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] Refactor Ralink Pinctrl and Add Documentation
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Joe Perches <joe@perches.com>, erkin.bozoglu@xeront.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
-noticed the following calculation, which is copied from
-drivers/clk/loongson1/clk-loongson1c.c:
+Hi Arin=C3=A7,
 
-ulong ls1c300_pll_get_rate(struct clk *clk)
-{
-	unsigned int mult;
-	long long parent_rate;
-	void *base;
-	unsigned int val;
+On Thu, Apr 14, 2022 at 7:40 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
+9.com> wrote:
+>
+> Hey everyone.
+>
+> This patch series brings complete refactoring to the Ralink pinctrl drive=
+r
+> and its subdrivers.
+>
+> The mt7620 pinctrl subdriver supports MT7628 and MT7688 SoCs along with
+> MT7620. These two share the same pin layout. The code used for MT7628 and
+> MT7688 is renamed from MT7628/mt7628an to MT76X8.
+>
+> Ralink pinctrl driver is called rt2880 which is the name of the Ralink
+> RT2880 SoC. A subdriver for the Ralink RT2880 SoC is called rt288x. Renam=
+e
+> rt2880 to ralink.
+>
+> Rename code from pinmux to pinctrl for where the operation is not about t=
+he
+> muxing of pins.
+>
+> Rename rt288x pinctrl subdriver for the RT2880 SoC to rt2880.
+>
+> Variables for functions include "grp" on the Ralink MT7620 and MT7621
+> subdrivers. Rename them to "func" instead as they define the functions fo=
+r
+> the pin groups. This is already the case for the other 3 subdrivers;
+> RT2880, RT305x, RT3883.
+>
+> Fix Kconfig to call the subdrivers, well, subdrivers.
+>
+> Add new compatible strings for each subdriver and update DT binding
+> accordingly.
+>
+> Add Ralink pinctrl driver to MAINTAINERS and add me and Sergio as the
+> maintainers.
+>
+> Finally, fix the current rt2880 documentation and add binding for all of
+> the subdrivers.
+>
+> I have the patches here should anyone prefer to read them there:
+> https://github.com/arinc9/linux/commits/ralink-pinctrl-refactor
+>
+> Ralink pinctrl driver and the subdrivers were compile tested.
+> MT7621 pinctrl subdriver was tested on a private mt7621 board.
+> YAML bindings checked with:
+> ARCH=3Dmips CROSS_COMPILE=3Dmips-linux-gnu- make dt_binding_check DT_SCHE=
+MA_FILES=3DDocumentation/devicetree/bindings/pinctrl/ -j$(nproc)
+>
+> v2:
+> - Add Sergio=E2=80=99s Reviewed-by: tag to where it's given.
+> - Properly explain the addition of the new compatible strings.
+> - Remove asterisk on MAINTAINERS commit.
+> - Properly explain the compatible string change for the rt2880 binding.
+> - Mention adding myself as a maintainer to rt2880 binding.
+> - Fix typo "indiviual" on YAML bindings. Limit lines to 80 characters.
+>
+> Ar=C4=B1n=C3=A7 =C3=9CNAL (14):
+>   pinctrl: ralink: rename MT7628(an) functions to MT76X8
+>   pinctrl: ralink: rename pinctrl-rt2880 to pinctrl-ralink
+>   pinctrl: ralink: rename pinmux functions to pinctrl
+>   pinctrl: ralink: rename pinctrl-rt288x to pinctrl-rt2880
+>   pinctrl: ralink: rename variable names for functions on MT7620 and MT76=
+21
+>   pinctrl: ralink: rename driver names to subdrivers
+>   pinctrl: ralink: add new compatible strings for each pinctrl subdriver
+>   MAINTAINERS: add Ralink pinctrl driver
+>   mips: dts: ralink: mt7621: use the new compatible string for MT7621 pin=
+ctrl
+>   dt-bindings: pinctrl: rt2880: fix binding name, pin groups and function=
+s
+>   dt-bindings: pinctrl: add binding for Ralink MT7620 pinctrl
+>   dt-bindings: pinctrl: add binding for Ralink MT7621 pinctrl
+>   dt-bindings: pinctrl: add binding for Ralink RT305X pinctrl
+>   dt-bindings: pinctrl: add binding for Ralink RT3883 pinctrl
 
-	parent_rate = clk_get_parent_rate(clk);
-	base = (void *)clk->data;
+I am ok with having different bindings for each single SoC if finally
+is the correct way to go. I am also ok in being listed as a maintainer
+in all of them. So, for the whole series:
 
-	val = readl(base + START_FREQ);
-	mult = FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
-	return (mult * parent_rate) / 4;
-}
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-I would like to examine the use of M_PLL and FRAC_N to calculate the multiplier
-for the PLL. The datasheet has the following to say:
-
-START_FREQ 位    缺省值      描述
-========== ===== =========== ====================================
-FRAC_N     23:16 0           PLL 倍频系数的小数部分
-
-                 由          PLL 倍频系数的整数部分
-M_PLL      15:8  NAND_D[3:0] (理论可以达到 255，建议不要超过 100)
-                 配置
-
-which according to google translate means
-
-START_FREQ Bits  Default       Description
-========== ===== ============= ================================================
-FRAC_N     23:16 0             Fractional part of the PLL multiplication factor
-
-                 Depends on    Integer part of PLL multiplication factor
-M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it is
-                 configuration  recommended not to exceed 100)
-
-So just based on this description, I would expect that the formula to be
-something like
-
-	rate = parent * (255 * M_PLL + FRAC_N) / 255 / 4
-
-However, the datasheet also gives the following formula:
-
-	rate = parent * (M_PLL + FRAC_N) / 4
-
-which is what the Linux driver has implemented. I find this very unusual.
-First, the datasheet specifically says that these fields are the integer and
-fractional parts of the multiplier. Second, I think such a construct does not
-easily map to traditional PLL building blocks. Implementing this formula in
-hardware would likely require an adder, just to then set the threshold of a
-clock divider.
-
-I think it is much more likely that the first formula is correct. The author of
-the datasheet may think of a multiplier of (say) 3.14 as
-
-	M_PLL = 3
-	FRAC_N = 0.14
-
-which together sum to the correct multiplier, even though the actual value
-stored in FRAC_N would be 36.
-
-I suspect that this has slipped by unnoticed because when FRAC_N is 0, there is
-no difference in the formulae. The following patch is untested, but I suspect
-it will fix this issue. I would appreciate if anyone with access to the
-hardware could measure the output of the PLL (or one of its derived clocks) and
-determine the correct formula.
-
-[1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.org/T/#u
-
-Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-Signed-off-by: Sean Anderson <seanga2@gmail.com>
----
-
- drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-index 703f87622cf5..2b98a116c1ea 100644
---- a/drivers/clk/loongson1/clk-loongson1c.c
-+++ b/drivers/clk/loongson1/clk-loongson1c.c
-@@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
- 	u32 pll, rate;
- 
- 	pll = __raw_readl(LS1X_CLK_PLL_FREQ);
--	rate = ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
-+	rate = (pll & 0xff00) + ((pll >> 16) & 0xff);
- 	rate *= OSC;
--	rate >>= 2;
-+	rate >>= 10;
- 
- 	return rate;
- }
--- 
-2.35.1
-
+Thanks,
+    Sergio Paracuellos
