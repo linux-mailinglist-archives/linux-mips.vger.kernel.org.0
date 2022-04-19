@@ -2,146 +2,172 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384AC506359
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 06:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4985063C6
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 07:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348282AbiDSEgL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 00:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
+        id S229694AbiDSFOK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 01:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348274AbiDSEgL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 00:36:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC95122BE5;
-        Mon, 18 Apr 2022 21:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650342809; x=1681878809;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OPOfSS2uDyN/dVKScHcoTabGQVho8Vlfn+KbkTmz7eY=;
-  b=gtKb7TAXgqcVKeRTPBw369lk82iKf9bfi91hsmfEiLiScnllyBsTnYXC
-   F80/McEcaQ8QQx8Gq6Lzt2AoQdvln9vdnVMkx03Bxqet4WaoOlnFX9Sla
-   92E607CuEBMrd1/t2IUGNG5wvUH5+jS8HJTwQdTlpQAoiTHSVs1M5SiuK
-   yGbXe3VCnqO1FTkGoLuyP4xbGCmco1WNRx+s/07QjNeEknWhe2Am3Dz0f
-   o3WdlncHINpl9GhGktOIWLNlqudaZVJ+jY5M5OcGFkoOCNWV/JPtcs3/Q
-   qjmIn23mfBpx3gYbhQBgkS3rigdK0WfhGDV5Urp3Wo+qwpHYCxV9tjmC8
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="244256897"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="244256897"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:33:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="665771758"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 21:33:24 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngfYJ-0005Lb-UD;
-        Tue, 19 Apr 2022 04:33:23 +0000
-Date:   Tue, 19 Apr 2022 12:32:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     kbuild-all@lists.01.org, list@opendingux.net,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 5/5] rtc: jz4740: Support for fine-tuning the RTC clock
-Message-ID: <202204191251.t9r8gFyI-lkp@intel.com>
-References: <20220418184933.13172-6-paul@crapouillou.net>
+        with ESMTP id S229545AbiDSFOJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 01:14:09 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21DE21E21;
+        Mon, 18 Apr 2022 22:11:27 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id d19so4841854qko.3;
+        Mon, 18 Apr 2022 22:11:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JXEZ5C8fYOz+un4E/+M4H7uOYX0LQVxNU9wzlCZQgnI=;
+        b=eII8IdHoWLxjcKl0Sg+2eT49DZP+AhiUxs7TAqxbXeF/yiv5sjwIDUKREFQEKWxzn4
+         kSnJJ1XwNvrRRwdX5GOzB9qaejlo8q7L5vi9bmG0ntRIXlvZpwIfyMCQJpGcgl92Pe69
+         DF5QLpTFc6wX8ijdI2lRKhCKS4VGlrKh2vFFnWSwPK2hA8iLfbAkaKvuSUxFenLECl0P
+         qzmXCo7ex0FCiLKn4X0oTUyBNPzczXwDlJstIk7jlj3UMuG9qnDF7lh+B/IQm+HZALNU
+         ZAPq5xhYHdKN8cptiEwAg/wXKel1AWBE//GqQ88X+fX8w7DYzE1E9pTcz/OEDtyuqgSv
+         Trhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JXEZ5C8fYOz+un4E/+M4H7uOYX0LQVxNU9wzlCZQgnI=;
+        b=mDnGX4q1KPobaDjBilkf82pg6P3F72xG+fgcCMYmDiBYJVgz9hhb+G10GA2h+nCIaw
+         eTWXigXB3FcWpEGqFjqhPUUjJ5kC9epwozgSuDPXAXXJiCGL20A/giBSeREQSxnyjA8u
+         DvF6mkat6MDfOt1A7mFEkp37DF76eOygcLaU9rSd06Nks2dp2QgnYbiqZMBS6vDJdIzo
+         Qfmwqx7sJ3/CIh4zsTFjVyhUT4vq+Soz73JUT09BBzAXkrqpP/SQCiKdh3y3/vZdC8s5
+         G6irql30l5iOu/wLxtP3OGtL5yh2cW7wI2qTrQGEp/fzj21vOuiC+KkThJb+ryOpo/xL
+         bXIQ==
+X-Gm-Message-State: AOAM533L897+uI3pNDuj0U0GTGNFjHw2DNRT52FUD9oFfeuoE81C2haZ
+        ZY5fbB0+viZHs5/p0NjzrL92AC9407s=
+X-Google-Smtp-Source: ABdhPJwxG8YlmBr7Dtj1KIGOFk9rucVNbIgI/EDbWfI/FxwsK8Eu2be6DFUis7xFz986aFYem0hfKw==
+X-Received: by 2002:a37:a196:0:b0:69e:b207:16ee with SMTP id k144-20020a37a196000000b0069eb20716eemr3051364qke.321.1650345086571;
+        Mon, 18 Apr 2022 22:11:26 -0700 (PDT)
+Received: from godwin.fios-router.home (pool-108-18-137-133.washdc.fios.verizon.net. [108.18.137.133])
+        by smtp.gmail.com with ESMTPSA id y85-20020a376458000000b0069e64801b7dsm5327222qkb.62.2022.04.18.22.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 22:11:26 -0700 (PDT)
+From:   Sean Anderson <seanga2@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Du Huanpeng <dhu@hodcarrier.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Yang Ling <gnaygnil@gmail.com>,
+        Sean Anderson <seanga2@gmail.com>
+Subject: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
+Date:   Tue, 19 Apr 2022 01:11:14 -0400
+Message-Id: <20220419051114.1569291-1-seanga2@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418184933.13172-6-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
+noticed the following calculation, which is copied from
+drivers/clk/loongson1/clk-loongson1c.c:
 
-I love your patch! Yet something to improve:
+ulong ls1c300_pll_get_rate(struct clk *clk)
+{
+	unsigned int mult;
+	long long parent_rate;
+	void *base;
+	unsigned int val;
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on v5.18-rc3 next-20220414]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+	parent_rate = clk_get_parent_rate(clk);
+	base = (void *)clk->data;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-config: sparc64-randconfig-r024-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191251.t9r8gFyI-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ba459adc8c83dbdc469d0c6b5d57fd95d834513a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
-        git checkout ba459adc8c83dbdc469d0c6b5d57fd95d834513a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/
+	val = readl(base + START_FREQ);
+	mult = FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
+	return (mult * parent_rate) / 4;
+}
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I would like to examine the use of M_PLL and FRAC_N to calculate the multiplier
+for the PLL. The datasheet has the following to say:
 
-All errors (new ones prefixed by >>):
+START_FREQ 位    缺省值      描述
+========== ===== =========== ====================================
+FRAC_N     23:16 0           PLL 倍频系数的小数部分
 
-   In file included from <command-line>:
-   drivers/rtc/rtc-jz4740.c: In function 'jz4740_rtc_set_offset':
->> include/linux/compiler_types.h:346:45: error: call to '__compiletime_assert_229' declared with attribute error: FIELD_PREP: value too large for the field
-     346 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:327:25: note: in definition of macro '__compiletime_assert'
-     327 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:346:9: note: in expansion of macro '_compiletime_assert'
-     346 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      65 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:111:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     111 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/rtc/rtc-jz4740.c:261:17: note: in expansion of macro 'FIELD_PREP'
-     261 |         nc1hz = FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK, nc1hz);
-         |                 ^~~~~~~~~~
+                 由          PLL 倍频系数的整数部分
+M_PLL      15:8  NAND_D[3:0] (理论可以达到 255，建议不要超过 100)
+                 配置
 
+which according to google translate means
 
-vim +/__compiletime_assert_229 +346 include/linux/compiler_types.h
+START_FREQ Bits  Default       Description
+========== ===== ============= ================================================
+FRAC_N     23:16 0             Fractional part of the PLL multiplication factor
 
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  332  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  333  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  334  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  335  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  336  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  337   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  338   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  339   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  340   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  341   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  342   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  343   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  344   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  345  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @346  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  347  
+                 Depends on    Integer part of PLL multiplication factor
+M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it is
+                 configuration  recommended not to exceed 100)
 
+So just based on this description, I would expect that the formula to be
+something like
+
+	rate = parent * (255 * M_PLL + FRAC_N) / 255 / 4
+
+However, the datasheet also gives the following formula:
+
+	rate = parent * (M_PLL + FRAC_N) / 4
+
+which is what the Linux driver has implemented. I find this very unusual.
+First, the datasheet specifically says that these fields are the integer and
+fractional parts of the multiplier. Second, I think such a construct does not
+easily map to traditional PLL building blocks. Implementing this formula in
+hardware would likely require an adder, just to then set the threshold of a
+clock divider.
+
+I think it is much more likely that the first formula is correct. The author of
+the datasheet may think of a multiplier of (say) 3.14 as
+
+	M_PLL = 3
+	FRAC_N = 0.14
+
+which together sum to the correct multiplier, even though the actual value
+stored in FRAC_N would be 36.
+
+I suspect that this has slipped by unnoticed because when FRAC_N is 0, there is
+no difference in the formulae. The following patch is untested, but I suspect
+it will fix this issue. I would appreciate if anyone with access to the
+hardware could measure the output of the PLL (or one of its derived clocks) and
+determine the correct formula.
+
+[1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.org/T/#u
+
+Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+---
+
+ drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
+index 703f87622cf5..2b98a116c1ea 100644
+--- a/drivers/clk/loongson1/clk-loongson1c.c
++++ b/drivers/clk/loongson1/clk-loongson1c.c
+@@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
+ 	u32 pll, rate;
+ 
+ 	pll = __raw_readl(LS1X_CLK_PLL_FREQ);
+-	rate = ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
++	rate = (pll & 0xff00) + ((pll >> 16) & 0xff);
+ 	rate *= OSC;
+-	rate >>= 2;
++	rate >>= 10;
+ 
+ 	return rate;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
