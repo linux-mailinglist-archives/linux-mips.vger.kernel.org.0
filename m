@@ -2,148 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4101F505E25
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Apr 2022 20:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E5450633E
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Apr 2022 06:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235160AbiDRSyY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Apr 2022 14:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
+        id S1348249AbiDSEdJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Apr 2022 00:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347541AbiDRSxV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Apr 2022 14:53:21 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6502409F;
-        Mon, 18 Apr 2022 11:50:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1650307798; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c/CT07nqqL/kRUfaHG3whhK5ysTGqgD0sA53BitiVSo=;
-        b=P/2SAq3V8XLIIw3N33ms4X7AHzfiKEDhTzzLbmZEhHIdJ5TuaQtBKB5nHUqwJ4DzEbNcuJ
-        HPKn1kEAJ7i0umFwILtCLvi7LEi1dQfpguqWX680yq5mBPy11xljkr8+zlonLjRze+5l42
-        mPQIc9Sh3Q5jiz7f4MM+HBUI9MHgWUU=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S1348244AbiDSEdI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 00:33:08 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF703220CE;
+        Mon, 18 Apr 2022 21:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650342627; x=1681878627;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=52jRYIsgk/Pqgtn5x/D1TRnNFy5xBM8vIsx91EWTXOg=;
+  b=Q4AN0uBLrjOcsHKhcNoL1iZwSF2Ivevu0ezP6PnZBrTKPubCFqUjx9Of
+   9G5NOuhyCa3o0pC2U6R40x9g5KlFTTBCC6Ce/WFBLzYdkeb2ve2ElXbWx
+   jbCUkFbxK7g/7nggVC9gFDLYbVGvSTDk+SVT1dwM+PhojrPv53YC/uxFV
+   yehJDz8koJQAforSKYdHXJ38OOcLTrbBHuGnVtA8SmxLM/GcoxnkOXYPE
+   +EiQ/a2XdTMk55+DAj6ogBihKvdpjJ32jX0q0Ri5zn7szqP6TReaF+jKL
+   dJxPRYT/+ByW3kSNKE0L3DEQltqaZXkQX1qZCOKMvnPqEfvYmT1McKPrt
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="243604053"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="243604053"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:30:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="561574119"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2022 21:30:24 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngfVP-0005LD-Os;
+        Tue, 19 Apr 2022 04:30:23 +0000
+Date:   Tue, 19 Apr 2022 12:30:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     list@opendingux.net, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 5/5] rtc: jz4740: Support for fine-tuning the RTC clock
-Date:   Mon, 18 Apr 2022 19:49:33 +0100
-Message-Id: <20220418184933.13172-6-paul@crapouillou.net>
-In-Reply-To: <20220418184933.13172-1-paul@crapouillou.net>
-References: <20220418184933.13172-1-paul@crapouillou.net>
+Cc:     kbuild-all@lists.01.org, list@opendingux.net,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 4/5] rtc: jz4740: Register clock provider for the CLK32K
+ pin
+Message-ID: <202204191107.MvgmbaHZ-lkp@intel.com>
+References: <20220418184933.13172-5-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418184933.13172-5-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Write the NC1HZ and ADJC register fields, which allow to tweak the
-frequency of the RTC clock, so that it can run as accurately as
-possible.
+Hi Paul,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/rtc/rtc-jz4740.c | 45 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+I love your patch! Yet something to improve:
 
-diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index f4c9b6058f07..f275e58a9cea 100644
---- a/drivers/rtc/rtc-jz4740.c
-+++ b/drivers/rtc/rtc-jz4740.c
-@@ -5,6 +5,7 @@
-  *	 JZ4740 SoC RTC driver
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/io.h>
-@@ -41,6 +42,9 @@
- #define JZ_RTC_CTRL_AE		BIT(2)
- #define JZ_RTC_CTRL_ENABLE	BIT(0)
- 
-+#define JZ_RTC_REGULATOR_NC1HZ_MASK	GENMASK(15, 0)
-+#define JZ_RTC_REGULATOR_ADJC_MASK	GENMASK(25, 16)
-+
- /* Magic value to enable writes on jz4780 */
- #define JZ_RTC_WENR_MAGIC	0xA55A
- 
-@@ -64,6 +68,7 @@ struct jz4740_rtc {
- 	enum jz4740_rtc_type type;
- 
- 	struct rtc_device *rtc;
-+	struct clk *clk;
- 
- 	struct clk_hw clk32k;
- 
-@@ -222,12 +227,51 @@ static int jz4740_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
- 	return jz4740_rtc_ctrl_set_bits(rtc, JZ_RTC_CTRL_AF_IRQ, enable);
- }
- 
-+static int jz4740_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
-+	long rate = clk_get_rate(rtc->clk);
-+	s32 nc1hz, adjc, offset1k;
-+	u32 reg;
-+
-+	reg = jz4740_rtc_reg_read(rtc, JZ_REG_RTC_REGULATOR);
-+	nc1hz = FIELD_GET(JZ_RTC_REGULATOR_NC1HZ_MASK, reg);
-+	adjc = FIELD_GET(JZ_RTC_REGULATOR_ADJC_MASK, reg);
-+
-+	offset1k = (nc1hz - rate + 1) * 1024L + adjc;
-+	*offset = offset1k * 1000000L / (rate * 1024L);
-+
-+	return 0;
-+}
-+
-+static int jz4740_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
-+	long rate = clk_get_rate(rtc->clk);
-+	s32 offset1k, adjc, nc1hz;
-+
-+	offset1k = div_s64_rem(offset * rate * 1024LL, 1000000LL, &adjc);
-+	nc1hz = rate - 1 + offset1k / 1024L;
-+
-+	if (adjc < 0) {
-+		nc1hz--;
-+		adjc += 1024;
-+	}
-+
-+	nc1hz = FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK, nc1hz);
-+	adjc = FIELD_PREP(JZ_RTC_REGULATOR_ADJC_MASK, adjc);
-+
-+	return jz4740_rtc_reg_write(rtc, JZ_REG_RTC_REGULATOR, nc1hz | adjc);
-+}
-+
- static const struct rtc_class_ops jz4740_rtc_ops = {
- 	.read_time	= jz4740_rtc_read_time,
- 	.set_time	= jz4740_rtc_set_time,
- 	.read_alarm	= jz4740_rtc_read_alarm,
- 	.set_alarm	= jz4740_rtc_set_alarm,
- 	.alarm_irq_enable = jz4740_rtc_alarm_irq_enable,
-+	.read_offset	= jz4740_rtc_read_offset,
-+	.set_offset	= jz4740_rtc_set_offset,
- };
- 
- static irqreturn_t jz4740_rtc_irq(int irq, void *data)
-@@ -378,6 +422,7 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
- 
- 	spin_lock_init(&rtc->lock);
- 
-+	rtc->clk = clk;
- 	platform_set_drvdata(pdev, rtc);
- 
- 	device_init_wakeup(dev, 1);
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on v5.18-rc3 next-20220414]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+config: parisc-randconfig-r022-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191107.MvgmbaHZ-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a8eada718214bc34ea29f8ff353228abacc0bfb9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
+        git checkout a8eada718214bc34ea29f8ff353228abacc0bfb9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "of_clk_add_hw_provider" [drivers/rtc/rtc-jz4740.ko] undefined!
+>> ERROR: modpost: "devm_clk_hw_register" [drivers/rtc/rtc-jz4740.ko] undefined!
+>> ERROR: modpost: "of_clk_hw_simple_get" [drivers/rtc/rtc-jz4740.ko] undefined!
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
