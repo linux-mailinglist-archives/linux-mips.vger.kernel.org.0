@@ -2,102 +2,195 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC855089BF
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Apr 2022 15:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E08508E9E
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Apr 2022 19:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379188AbiDTNv1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Apr 2022 09:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S1381223AbiDTRjX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Apr 2022 13:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234412AbiDTNv0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Apr 2022 09:51:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A58543493;
-        Wed, 20 Apr 2022 06:48:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03ECBB81F18;
-        Wed, 20 Apr 2022 13:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3157C385B0;
-        Wed, 20 Apr 2022 13:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650462517;
-        bh=r5gIACVwFwXfu+L0SjHY63rmQTmlBYIcuCScaOsuAjk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E8Em2MQWztm+C2EmlV1FQe3I0FTSV2DiJcyK2iihaFQo51NM0DFE/rYOIE+wyx1wp
-         /VWN0/71ZwssYkNVh129T8UpZm6AUkLIGuMiY6fzJStQ7ZZZzsLu+YfHMjswZ9W7YM
-         mjdK3DJxHlIkGZPSUsh/8dFkbBcT5Jm8E77pDoGNiEZG4/4EPstw+51gVak16za2ga
-         dhu7kZkcOynk9SMtnhYtXUgL6zQdymwzczZfSDpnrDpvJEhYxBXYfvKUUxyNISj4vp
-         /lSN3yrqnyEcDKHRIhkxeNkjouxpUUs1/5w5lM+l5Iw8Csip1eFb3F0IQ3ctyogPeM
-         5m+eazxPFDoqg==
-Received: by mail-wr1-f44.google.com with SMTP id p18so2362232wru.5;
-        Wed, 20 Apr 2022 06:48:37 -0700 (PDT)
-X-Gm-Message-State: AOAM5314VcoKSUO2df9/UV2WWtZ74zAVJ6/84WF1Vw3vWjbKXqaEVb8b
-        SEDqrsFliZOFpFCpdAgMviERW/E84s9t8n1stW8=
-X-Google-Smtp-Source: ABdhPJwSpIclw+ZwqVR57edT/aQRpFn5BaY64Phs17aAgIE6n54XF3PED3yv14Fv9AL2uDPz7qCh2GbTzsHglUZV1DA=
-X-Received: by 2002:a5d:6389:0:b0:207:a7d8:2b64 with SMTP id
- p9-20020a5d6389000000b00207a7d82b64mr15595597wru.12.1650462515957; Wed, 20
- Apr 2022 06:48:35 -0700 (PDT)
+        with ESMTP id S235570AbiDTRjW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Apr 2022 13:39:22 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02291EC74;
+        Wed, 20 Apr 2022 10:36:35 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2ef4a241cc5so26269767b3.2;
+        Wed, 20 Apr 2022 10:36:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aSRYCi9Gu592mc1yy2JGCfSHyy3Om8/ZMl9fXbJ4VAk=;
+        b=ryiG9d/g0nAi1suycm097/0o0XNUzQhQjQg2vmNWQnRIOguh9XoKKkRSiJfbsSG5tc
+         vQCNo0+01j4eJ/mQfLJcTDSnBGx0HESqEoorumqIjkHocbCnSVc5AO2hUQaKCxpHJfD2
+         s2KMfwrawC2ufC8pAbxBn3W72mUZ9NI9d2oRXgGfz3PXSI7erLu0Q5MD0XOYyaXX78Sx
+         fg4hKI+bEsO3JvRcsXv0Sn1ykDteglvIOY2N+CC+1I/iYweTYb6H0HU6WcExdZlSZYJ7
+         l1WkMOsOj3TKNwSoKoqzcdVgM+5SFmr28Y80vxOn2DL/VKlgEYe2TJ7csyQhLyEt5Bjs
+         x9DA==
+X-Gm-Message-State: AOAM5303P3RyWlc6t0fECgadJ9ipaqrwLxeq39r1vXCOuBSgSkxTb02D
+        kFvVqgxkjJt2E26sxkyIsRmjrANlGzBEx4znGxY=
+X-Google-Smtp-Source: ABdhPJzNeFf91aJ2AcO4HxwsyceUmkMGZe3BT/sKo5s3TT3nCPguaeHFtXhd48Duxnk7AG97fF2bO/GqS3ZkGsIQMYE=
+X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
+ m10-20020a81260a000000b002f4ca82a42fmr1985644ywm.149.1650476194968; Wed, 20
+ Apr 2022 10:36:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-41-arnd@kernel.org>
- <20220420134305.fq7pc3fsz5fxkryj@mercury.elektranox.org>
-In-Reply-To: <20220420134305.fq7pc3fsz5fxkryj@mercury.elektranox.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 20 Apr 2022 15:48:19 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Mv-gUoc3hpqvCa1tzvEEwHN6wXDxmy8K5rN8sULQnMw@mail.gmail.com>
-Message-ID: <CAK8P3a2Mv-gUoc3hpqvCa1tzvEEwHN6wXDxmy8K5rN8sULQnMw@mail.gmail.com>
-Subject: Re: [PATCH 40/48] ARM: pxa: tosa: use gpio lookup for battery
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+ <20220411233832.391817-4-dmitry.osipenko@collabora.com> <CAJZ5v0gf1J+yPW14TAdLGLGfO+-2s=r0DDP7d+Rgop3=dB0gaQ@mail.gmail.com>
+ <af51d9d0-26ba-fc66-05f1-d92ef7172730@collabora.com> <CAJZ5v0jFQi1x1Fnfk04n+HTTirz19-_xW2NgJtpOYyPgVh3Afw@mail.gmail.com>
+ <fa20ae2f-e265-c713-493d-5b2ebcdf7f0a@collabora.com>
+In-Reply-To: <fa20ae2f-e265-c713-493d-5b2ebcdf7f0a@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 20 Apr 2022 19:36:23 +0200
+Message-ID: <CAJZ5v0iA6St_J5C6+Efygu25g9g-_tLBPc0qQoHbFqfrdT6azQ@mail.gmail.com>
+Subject: Re: [PATCH v7 03/20] reboot: Print error message if restart handler
+ has duplicated priority
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 3:43 PM Sebastian Reichel <sre@kernel.org> wrote:
-> > @@ -15,11 +15,16 @@
-> >  #include <linux/gpio.h>
+On Mon, Apr 18, 2022 at 3:29 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
 >
-> This should be <linux/gpio/consumer.h> now.
+> On 4/14/22 14:19, Rafael J. Wysocki wrote:
+> > On Thu, Apr 14, 2022 at 12:24 AM Dmitry Osipenko
+> > <dmitry.osipenko@collabora.com> wrote:
+> >>
+> >> On 4/13/22 21:48, Rafael J. Wysocki wrote:
+> >>> On Tue, Apr 12, 2022 at 1:39 AM Dmitry Osipenko
+> >>> <dmitry.osipenko@collabora.com> wrote:
+> >>>>
+> >>>> Add sanity check which ensures that there are no two restart handlers
+> >>>> registered using the same priority. This requirement will become mandatory
+> >>>> once all drivers will be converted to the new API and such errors will be
+> >>>> fixed.
+> >>>>
+> >>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> >>>
+> >>> The first two patches in the series are fine with me and there's only
+> >>> one minor nit regarding this one (below).
+> >>>
+> >>>> ---
+> >>>>  kernel/reboot.c | 15 +++++++++++++++
+> >>>>  1 file changed, 15 insertions(+)
+> >>>>
+> >>>> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> >>>> index ed4e6dfb7d44..acdae4e95061 100644
+> >>>> --- a/kernel/reboot.c
+> >>>> +++ b/kernel/reboot.c
+> >>>> @@ -182,6 +182,21 @@ static ATOMIC_NOTIFIER_HEAD(restart_handler_list);
+> >>>>   */
+> >>>>  int register_restart_handler(struct notifier_block *nb)
+> >>>>  {
+> >>>> +       int ret;
+> >>>> +
+> >>>> +       ret = atomic_notifier_chain_register_unique_prio(&restart_handler_list, nb);
+> >>>> +       if (ret != -EBUSY)
+> >>>> +               return ret;
+> >>>> +
+> >>>> +       /*
+> >>>> +        * Handler must have unique priority. Otherwise call order is
+> >>>> +        * determined by registration order, which is unreliable.
+> >>>> +        *
+> >>>> +        * This requirement will become mandatory once all drivers
+> >>>> +        * will be converted to use new sys-off API.
+> >>>> +        */
+> >>>> +       pr_err("failed to register restart handler using unique priority\n");
+> >>>
+> >>> I would use pr_info() here, because this is not a substantial error AFAICS.
+> >>
+> >> It's indeed not a substantial error so far, but it will become
+> >> substantial later on once only unique priorities will be allowed. The
+> >> pr_warn() could be a good compromise here, pr_info() is too mild, IMO.
+> >
+> > Well, I'm still unconvinced about requiring all of the users of this
+> > interface to use unique priorities.
+> >
+> > Arguably, there are some of them who don't really care about the
+> > ordering, so could there be an option for them to specify the lack of
+> > care by, say, passing 0 as the priority that would be regarded as a
+> > special case?
+> >
+> > IOW, if you pass 0, you'll be run along the others who've also passed
+> > 0, but if you pass anything different from 0, it must be unique.  What
+> > do you think?
 >
-Fixed now, thanks!
+> There are indeed cases where ordering is unimportant. Like a case of
+> PMIC and watchdog restart handlers for example, both handlers will
+> produce equal effect from a user's perspective. Perhaps indeed it's more
+> practical to have at least one shared level.
+>
+> In this patchset the level 0 is specified as an alias to the default
+> level 128. If one user registers handler using unique level 128 and the
+> other user uses non-unique level 0, then we have ambiguity.
+>
+> One potential option is to make the whole default level 128 non-unique.
+> This will allow users to not care about the uniqueness by default like
+> they always did it previously, but it will hide potential problems for
+> users who actually need unique level and don't know about it yet due to
+> a lucky registration ordering that they have today. Are you okay with
+> this option?
 
-     Arnd
+Yes, I am.
