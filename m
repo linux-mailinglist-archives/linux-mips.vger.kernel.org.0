@@ -2,95 +2,178 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552BF509311
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Apr 2022 00:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685635093A1
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Apr 2022 01:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382942AbiDTWpN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Apr 2022 18:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
+        id S1356889AbiDTXfn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Apr 2022 19:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382974AbiDTWpL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Apr 2022 18:45:11 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255713CFC5
-        for <linux-mips@vger.kernel.org>; Wed, 20 Apr 2022 15:42:10 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id m132so5549096ybm.4
-        for <linux-mips@vger.kernel.org>; Wed, 20 Apr 2022 15:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xvgHYkX1gitxHFx0lp3h64Eqoa6L9VIgehho/WG25qA=;
-        b=ckup5OEW1GScLDsBEVcIf+nm/kcNKdSSnHfUQ7P60qBEKfYhFMJaCZ9GuX+nKS9/yZ
-         9aJPXnvNZ0xmjpDEi6vLws7Ox3DT34yjdg3ydpUd+c0PxZZ90uq0GV7lZYicNFed7N9g
-         JlkkmUQ3SxoxBFByZIgqHAAMZM7vJJLW+SPWEvg/+vYBAgYCb+fJ9lF45CXAqu/1kjQ3
-         a9saqasBRiwkkbFcFfEF81WRcYVv5in3/egOqp0JEFxPMLBAokK1XXxmwjUuZuaOFsuV
-         087g+K3gzhJsfhrpWxI/4DnTZnuoBSleXpOdWjZRC4Q+1rWtL1nt8v+Vx2ns0IL9l3Cx
-         eHCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xvgHYkX1gitxHFx0lp3h64Eqoa6L9VIgehho/WG25qA=;
-        b=2m1y0MCIzlGhU/Rr/9ZYxgki9WAlEsgy8ilsRn7rjt8NhSugV9xC07aeJrDaZdMdFO
-         C5fkUN7O+h6tD0B5EIQi1nFNpDS4o4XQkup0Cgo2Cs5MPoLZxtMP5BsCkV+ECiQaAaCt
-         0jahnT2OBWA4VzH2geYPmAv+aQhnfu9oZLdaahF6N2GE1iTZccnp+k6bwbXl6zcuahWN
-         pw481TLaGYI0wnlUTDrUTPb03tvq0vpB6JB6ybjUR9m3psT3bfL1dVV1eQNQ4E5ZoVTw
-         gTM5rncEg/UJTK9+1vO/a+3eT6HSpKK8LkeVaedNaXtmTcmO7G2mcoykouHqBWqRv2jc
-         El0Q==
-X-Gm-Message-State: AOAM531MyIMJCwndE2LmsIha6n4XtIExk7Z+fHT26w2UngBDqRHfvsYw
-        BImLZhaLHVQhpFZHML95ZlLYYNyuF4yN5gV4TG9mEbONFr0=
-X-Google-Smtp-Source: ABdhPJzEECoSw57FBizByjTYMqQYVDek90inKa5zx9AxvgyUzaHj0vkksZUgsx5Ylv+ZOjZ6jwguCMe2X12RIRGZthg=
-X-Received: by 2002:a25:4e82:0:b0:633:68d7:b864 with SMTP id
- c124-20020a254e82000000b0063368d7b864mr23162602ybb.514.1650494525070; Wed, 20
- Apr 2022 15:42:05 -0700 (PDT)
+        with ESMTP id S244412AbiDTXfm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Apr 2022 19:35:42 -0400
+X-Greylist: delayed 135 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Apr 2022 16:32:54 PDT
+Received: from p3plsmtpa11-10.prod.phx3.secureserver.net (p3plsmtpa11-10.prod.phx3.secureserver.net [68.178.252.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3982FFEA
+        for <linux-mips@vger.kernel.org>; Wed, 20 Apr 2022 16:32:54 -0700 (PDT)
+Received: from black ([209.234.248.132])
+        by :SMTPAUTH: with ESMTPSA
+        id hJmNn85L8pmFVhJmPn5OZs; Wed, 20 Apr 2022 16:30:39 -0700
+X-CMAE-Analysis: v=2.4 cv=f82NuM+M c=1 sm=1 tr=0 ts=6260979f
+ a=QYjdx1n8fnJJ/8JFsBbjTg==:117 a=QYjdx1n8fnJJ/8JFsBbjTg==:17
+ a=IkcTkHD0fZMA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=_twTT5zqAAAA:8
+ a=pGLkceISAAAA:8 a=VrlHBnlMTWxngOB4VMsA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22 a=ILoXdGDbYT3DTB7Z0gVI:22
+X-SECURESERVER-ACCT: dhu@hodcarrier.org
+Date:   Thu, 21 Apr 2022 07:30:34 +0800
+From:   Du Huanpeng <dhu@hodcarrier.org>
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Yang Ling <gnaygnil@gmail.com>
+Subject: Re: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
+Message-ID: <20220420233034.GA5694@black>
+References: <20220419051114.1569291-1-seanga2@gmail.com>
 MIME-Version: 1.0
-References: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
-In-Reply-To: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 21 Apr 2022 00:41:53 +0200
-Message-ID: <CACRpkdZXhy3zkwg8UQj=+-4cqooUYhceEwQEcv1MyM-RLwvoLQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pinctrl: Ingenic: Add missing UART2 group C for X1000/E
-To:     Yunian Yang <reimu@sudomaker.com>
-Cc:     linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220419051114.1569291-1-seanga2@gmail.com>
+X-CMAE-Envelope: MS4xfPEYo7+TzSzfoE9wr4Xt4tpOgDEJytkfrpg2EqyGeYHbHaYWP6bKmr5LO4CKiw1emz9MS9a9tONXOH3zWVOOolpKx9DPH65StwNnh8Rboe7/Jnfq0SSO
+ 2SobRlNcKtY82aUuVQD41sNEEIATrrPb1Xk17EJfGQzc++4JjxLGe9009S0nXdWcsDB+23TZJwf43bA2zglMg9irWhYhiuZXQHerNQ9yf+c7oVPob8sIUnZ4
+ bEILzOcC1rLn1hbO8mt5sV/dKh8E1wjOm8UgWsyNiMf6/SGPAT7C9x9xmq4ombpsd8kJ6Y0lKnU2id+n9dTkifRR/coD1neFSW1LttSoO9cwZW1zsMx9QNbE
+ XwqyhtPJBHnB6vlDaxZElhYb7t8Y3VL1sJjKm9NdAcSWJOjEQuM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 2:32 PM Yunian Yang <reimu@sudomaker.com> wrote:
+On Tue, Apr 19, 2022 at 01:11:14AM -0400, Sean Anderson wrote:
+> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
+> noticed the following calculation, which is copied from
+> drivers/clk/loongson1/clk-loongson1c.c:
+Hi, the calculate method is based on Loongson's manual(龙芯 1C300
+处理器用户手册 1.4)in page 35.
+| 注： PLL 的分频系数 N 固定为 4， PLL 的频率计算公式如下：
+| Freq_PLL = XIN *(M_PLL + FRAC_N)/4
 
-> v2: Define PC31 pin only once, noted by Paul Cercueil <paul@crapouillou.net>
->     Confirmed to work on hardware. Although the Ingenic folks did this twice
->     in their 4.4 kernel fork; not sure why.
+I aslo made a tool to set pll rate and generate asm code at the same
+time, I also put the formulae from the manual in code:
 
-Put the changelog after the commit text at least please.
+the tool:
+[1]. https://github.com/hodcarrier/ls1c300_bsp/blob/master/clk-ls1c300.xlsx
 
-> X1000/E has a third UART2 pin group selection, which uses the TDI(G2) as RX
-> and TDO(G1) as TX. This configuration is becoming increasingly popular in
-> newer core boards, such as the Halley2 v4.1. This is done by enabling
-> function 1 of a "virtual pin" PC31. See section 19.3.3 of the X1000
-> Programming Manual for details.
->
-> Signed-off-by: Yunian Yang <reimu@sudomaker.com>
+lowlevel_init.S:
+[2]. https://github.com/hodcarrier/u-boot/blob/lsmips/ls1c300b/arch/mips/mach-lsmips/ls1c300/lowlevel_init.S#L48
+|/* Document:
+| * Freq_PLL = XIN *(M_PLL + FRAC_N)/4
+| */
 
-> @@ -2058,6 +2059,7 @@ static const struct group_desc x1000_groups[] = {
->         INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d, 1),
->         INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow, 1),
->         INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a, 2),
-> +       INGENIC_PIN_GROUP("uart2-data-c", x1000_uart2_data_c, 1),
+The my v1 patch was using magic number for initialize pll, because I
+use this tool to generate the code.
 
-This doesn't apply to the current mainline kernel, which doesn't
-even have the uart2-data-a designation.
+Set FRAC_N to 0, the pll can be adjust by step 6MHz. I noticed this
+issues, you can see I always set the FRAC_N to 0 in the tool[1].
+this will lost some pricise, but avoid to do the adventure...
 
-Clearly this patch depend on something that I haven't
-yet applied? Something I missed?
-
-Yours,
-Linus Walleij
+> 
+> ulong ls1c300_pll_get_rate(struct clk *clk)
+> {
+> 	unsigned int mult;
+> 	long long parent_rate;
+> 	void *base;
+> 	unsigned int val;
+> 
+> 	parent_rate = clk_get_parent_rate(clk);
+> 	base = (void *)clk->data;
+> 
+> 	val = readl(base + START_FREQ);
+> 	mult = FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
+> 	return (mult * parent_rate) / 4;
+> }
+> 
+> I would like to examine the use of M_PLL and FRAC_N to calculate the multiplier
+> for the PLL. The datasheet has the following to say:
+> 
+> START_FREQ 位    缺省值      描述
+> ========== ===== =========== ====================================
+> FRAC_N     23:16 0           PLL 倍频系数的小数部分
+> 
+>                  由          PLL 倍频系数的整数部分
+> M_PLL      15:8  NAND_D[3:0] (理论可以达到 255，建议不要超过 100)
+>                  配置
+> 
+> which according to google translate means
+> 
+> START_FREQ Bits  Default       Description
+> ========== ===== ============= ================================================
+> FRAC_N     23:16 0             Fractional part of the PLL multiplication factor
+> 
+>                  Depends on    Integer part of PLL multiplication factor
+> M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it is
+>                  configuration  recommended not to exceed 100)
+> 
+> So just based on this description, I would expect that the formula to be
+> something like
+> 
+> 	rate = parent * (255 * M_PLL + FRAC_N) / 255 / 4
+> 
+> However, the datasheet also gives the following formula:
+> 
+> 	rate = parent * (M_PLL + FRAC_N) / 4
+> 
+> which is what the Linux driver has implemented. I find this very unusual.
+> First, the datasheet specifically says that these fields are the integer and
+> fractional parts of the multiplier. Second, I think such a construct does not
+> easily map to traditional PLL building blocks. Implementing this formula in
+> hardware would likely require an adder, just to then set the threshold of a
+> clock divider.
+> 
+> I think it is much more likely that the first formula is correct. The author of
+> the datasheet may think of a multiplier of (say) 3.14 as
+> 
+> 	M_PLL = 3
+> 	FRAC_N = 0.14
+> 
+> which together sum to the correct multiplier, even though the actual value
+> stored in FRAC_N would be 36.
+> 
+> I suspect that this has slipped by unnoticed because when FRAC_N is 0, there is
+> no difference in the formulae. The following patch is untested, but I suspect
+> it will fix this issue. I would appreciate if anyone with access to the
+> hardware could measure the output of the PLL (or one of its derived clocks) and
+> determine the correct formula.
+> 
+> [1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.org/T/#u
+> 
+> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
+> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+> ---
+> 
+>  drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
+> index 703f87622cf5..2b98a116c1ea 100644
+> --- a/drivers/clk/loongson1/clk-loongson1c.c
+> +++ b/drivers/clk/loongson1/clk-loongson1c.c
+> @@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
+>  	u32 pll, rate;
+>  
+>  	pll = __raw_readl(LS1X_CLK_PLL_FREQ);
+> -	rate = ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
+> +	rate = (pll & 0xff00) + ((pll >> 16) & 0xff);
+>  	rate *= OSC;
+> -	rate >>= 2;
+> +	rate >>= 10;
+>  
+>  	return rate;
+>  }
+> -- 
+> 2.35.1
+> 
