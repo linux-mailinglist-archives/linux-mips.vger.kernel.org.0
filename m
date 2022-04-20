@@ -2,236 +2,405 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB949507D6F
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Apr 2022 01:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D728D508677
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Apr 2022 12:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354847AbiDSX6j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Apr 2022 19:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S1377850AbiDTK6q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Apr 2022 06:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356548AbiDSX6h (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Apr 2022 19:58:37 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F33C1DA46
-        for <linux-mips@vger.kernel.org>; Tue, 19 Apr 2022 16:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1650412552; x=1681948552;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KKbVILJHDOZ2N6m0wCdUFAHCkLkQrMH0aZI7ADXChcU=;
-  b=nWTqx1ztrGlNWIrpiha6K8WdQyClz2j3o2OetN2CN/x1ItqXjRoiINYc
-   +8H7OMKxRHHsKLnaHO8hiZGlSt6M76RdI3BZn8/Tuj6EyYomKlvcszW4v
-   Ny+iXg7IDiZcRhvURjvQejo7jttQSeoqxTuheqmF5QdolSW8ayXjUFfAU
-   l0P8lKJGR2vh3ZJ/++km8tUEx75j7XiSC81EhI9+Je7SRRYMrJBcYnGSg
-   UFcWOe4Q/H7NsgDIOSF6XoURETG11ficKHx9hT1VxEitn3s+XMqA5KudO
-   tg9fHp64TwgQBcj9NCD+Wp9Gbx23sOZ8JnZASv+KghQl8vBBCkcBwtAJg
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,274,1643644800"; 
-   d="scan'208";a="302502784"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 20 Apr 2022 07:55:51 +0800
-IronPort-SDR: GD7tuXhrr31wCr91psR+s2cbYhfZyooGvo2gLThp/svB4dtb/pWNUG3+jiUD4qHHd7FI1Jyk8Y
- HIlOynnqIAkbUy1c9D7ow76/VBd28Gyj7MrSkxNtrdfTDptA7QFMMSE+zphWPuyEjK/jsgQJAs
- VmUn3FFUQtzE7rh/Nm/iG9G5Qr2MSJLRTMSy5xqBNHGprG1kx6vXS5CK+wbXRZwaV0SA0R1ZSU
- ggINKTKr7/Z6tT8CaOWWDo7kg7TjGwsC9MVu+urT4Cg3LjDlvIoVVtdVtBDLhK5Ev3/55B+F7F
- NmhudxjUiVOKnJxQ8rMY1FLd
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Apr 2022 16:26:56 -0700
-IronPort-SDR: nd9GscyZwmZINfvdF5txC1Dxu21HEFeGilkxG6w7C0oG5sYBr31Ru22JGlbxw2VMc/dLCu82pT
- rK9jqbzJ+8TdIRO4ep5rcKiCB6g5uUUySFsijElMsSV8V42v2mPfIZUF17w4Wwsj1SzJfLxvf1
- 8TV7YZR47SbRlQ5P+pcszH2apyKO/5hCQwmLi/sTgCeKS7ajBzpgpZTnny0pXPi8HTyu4Ct9wk
- lhNbioM/e1H86ZnhcA9MEHVH2/6kAVh4JGZqq1hdRigOXfIQgsh8hcoaT9kVrWJagi5unEZar3
- wK0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Apr 2022 16:55:50 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kjgfs1X8dz1SVp1
-        for <linux-mips@vger.kernel.org>; Tue, 19 Apr 2022 16:55:49 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1650412547; x=1653004548; bh=KKbVILJHDOZ2N6m0wCdUFAHCkLkQrMH0aZI
-        7ADXChcU=; b=pFEW/uKhXn3SfKmBfD64EaWuvMe7q26hm0k6TE+sEECnehlEu2k
-        JZAKUTdSLIdvQPzDDwtNqieDCFKd2/3AA3HEfr3lw+Tt7zTtPlgqTH805PaZ9XLD
-        n2opLUpjSgtWeer+jG8ad83PPxpRHyOjx3VND3Khq7b+4tkh4xQ3tsW5cXs4Bj1u
-        UKso+W9DyS/Uj+2QDbToc8oCKHbH/6ajijlj8CjOmKZM6k/TNCLhlNGRgLgQk8pd
-        uNG6OCX78fB8zacum/KgbiC3Fm+jyvMirDIzk6aJ6Kmcj1OyXgl+Baraf9/cqoR6
-        86SqXEgXg9GFmxkX6LSna5otrW2oTbdEDwQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kqAWqkqyNw6c for <linux-mips@vger.kernel.org>;
-        Tue, 19 Apr 2022 16:55:47 -0700 (PDT)
-Received: from [10.225.163.14] (unknown [10.225.163.14])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kjgff0k5zz1Rvlx;
-        Tue, 19 Apr 2022 16:55:37 -0700 (PDT)
-Message-ID: <56f889d7-2305-ba7a-42af-9580d8f7df93@opensource.wdc.com>
-Date:   Wed, 20 Apr 2022 08:55:36 +0900
+        with ESMTP id S233018AbiDTK6p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Apr 2022 06:58:45 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC3F28980
+        for <linux-mips@vger.kernel.org>; Wed, 20 Apr 2022 03:55:58 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso3389727wme.5
+        for <linux-mips@vger.kernel.org>; Wed, 20 Apr 2022 03:55:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xFXSoDNZKB5JzmesuQFZyUZUSyoURgEytWmZjeW2Ois=;
+        b=R5XQP+zqKvDZWUUp8VJx0ejWpT3rKsf3+AlLW0TyFHhVMNUCQG7NU9UFGy2R/ZlyPA
+         xQpqsw3RjYXOAFrgzzqYRLMlwgQtMfy71Ad6FfWibmVamgHfJ1oRJsz6h26Bzo+sgsi4
+         JKt7A7F3DrgcFV2qCLT+gDRwMks3S1kxzXcIVncvEBsCCGZYrct1/wj41tEuvCEi4COn
+         EC3o0Lp967A0KM8AcIDzWKEPcA5hgBx7LedJBYEbtx8yiyOWHux/dK2Er2rjX+kDAtRv
+         uqW+vJI0+KKMB1ZbeIdrgdLPwU7pNVgvyW9NSglWjW3bm+ROZb3tiQ3U/nRZSlRoSEhZ
+         sAuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xFXSoDNZKB5JzmesuQFZyUZUSyoURgEytWmZjeW2Ois=;
+        b=vOiCE90b8GbaAEc/n4YNURlDr1TGFE6cyuffR2hbv0RqnRBbxYheiP6iujrJGbaYjd
+         vZFuxDwH8c0oD+dl38RDkhsogK2NrIMpXqtRaSdgMY4sty7Q5L1X5DGedFMShAvvcg5T
+         Co0iE+OjfeQQcmLqJTvx+oWebdBDu4F+s2zw2mmXWntr3ERAc6TiWWaAk7w0l8Di8Ihf
+         YTNJVaivC/h3D7UbHKe8NyRPSPP/odzLDYye00XWRywTTAOuINeZQE0ffbLCy6S/V6fE
+         x9S7vF9111VEenVG4ApkYZbNg0fN0g62Ryo+7ML+UQ/tEQf6b1zHK8PWKAL1bw0KsV0D
+         /5rA==
+X-Gm-Message-State: AOAM533Pn7S7BtpLz1GSndvTCBUsCM+TLIPglnpGe5E+B144FlllXgBj
+        F1XBK2/UxhgwaNgvXC1eVPUiIo+0sFW5fHCvN1rUOg==
+X-Google-Smtp-Source: ABdhPJyespdTciFCCPylGn+26pI3Plhlm1SBuoVhToWE8GBtCrEWPYQ1gRnsNkXDHEot/LjUIT+lr4uOa5CgxKTXL4A=
+X-Received: by 2002:a05:600c:1d12:b0:391:3cf6:243e with SMTP id
+ l18-20020a05600c1d1200b003913cf6243emr3054109wms.137.1650452156482; Wed, 20
+ Apr 2022 03:55:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 13/48] ARM: pxa: use pdev resource for palmld mmio
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, robert.jarzmik@free.fr,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org, Jens Axboe <axboe@kernel.dk>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <20220419163810.2118169-1-arnd@kernel.org>
- <20220419163810.2118169-14-arnd@kernel.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220419163810.2118169-14-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220401175554.1931568-1-dmatlack@google.com> <20220401175554.1931568-21-dmatlack@google.com>
+In-Reply-To: <20220401175554.1931568-21-dmatlack@google.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 20 Apr 2022 16:25:43 +0530
+Message-ID: <CAAhSdy1JAHkPEoy7+bNNABrOzTw2gZZSCftuhimiXom3OrLFmw@mail.gmail.com>
+Subject: Re: [PATCH v3 20/23] KVM: Allow for different capacities in
+ kvm_mmu_memory_cache structs
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/20/22 01:37, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The palmld header is almost unused in drivers, the only
-> remaining thing now is the PATA device address, which should
-> really be passed as a resource.
-> 
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: linux-ide@vger.kernel.org
-> Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-> Acked-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Apr 1, 2022 at 11:26 PM David Matlack <dmatlack@google.com> wrote:
+>
+> Allow the capacity of the kvm_mmu_memory_cache struct to be chosen at
+> declaration time rather than being fixed for all declarations. This will
+> be used in a follow-up commit to declare an cache in x86 with a capacity
+> of 512+ objects without having to increase the capacity of all caches in
+> KVM.
+>
+> This change requires each cache now specify its capacity at runtime,
+> since the cache struct itself no longer has a fixed capacity known at
+> compile time. To protect against someone accidentally defining a
+> kvm_mmu_memory_cache struct directly (without the extra storage), this
+> commit includes a WARN_ON() in kvm_mmu_topup_memory_cache().
+>
+> This change, unfortunately, adds some grottiness to
+> kvm_phys_addr_ioremap() in arm64, which uses a function-local (i.e.
+> stack-allocated) kvm_mmu_memory_cache struct. Since C does not allow
+> anonymous structs in functions, the new wrapper struct that contains
+> kvm_mmu_memory_cache and the objects pointer array, must be named, which
+> means dealing with an outer and inner struct. The outer struct can't be
+> dropped since then there would be no guarantee the kvm_mmu_memory_cache
+> struct and objects array would be laid out consecutively on the stack.
+>
+> No functional change intended.
+>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+
+Looks good to me.
+
+For KVM RISC-V:
+Acked-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup
+
 > ---
->  arch/arm/mach-pxa/palmld-pcmcia.c             |  3 ++-
->  arch/arm/mach-pxa/palmld.c                    | 12 +++++++++---
->  arch/arm/mach-pxa/{include/mach => }/palmld.h |  2 +-
->  drivers/ata/pata_palmld.c                     |  3 +--
->  4 files changed, 13 insertions(+), 7 deletions(-)
->  rename arch/arm/mach-pxa/{include/mach => }/palmld.h (98%)
-> 
-> diff --git a/arch/arm/mach-pxa/palmld-pcmcia.c b/arch/arm/mach-pxa/palmld-pcmcia.c
-> index 07e0f7438db1..720294a50864 100644
-> --- a/arch/arm/mach-pxa/palmld-pcmcia.c
-> +++ b/arch/arm/mach-pxa/palmld-pcmcia.c
-> @@ -13,9 +13,10 @@
->  #include <linux/gpio.h>
->  
->  #include <asm/mach-types.h>
-> -#include <mach/palmld.h>
->  #include <pcmcia/soc_common.h>
->  
-> +#include "palmld.h"
+>  arch/arm64/include/asm/kvm_host.h |  2 +-
+>  arch/arm64/kvm/arm.c              |  1 +
+>  arch/arm64/kvm/mmu.c              | 13 +++++++++----
+>  arch/mips/include/asm/kvm_host.h  |  2 +-
+>  arch/mips/kvm/mips.c              |  2 ++
+>  arch/riscv/include/asm/kvm_host.h |  2 +-
+>  arch/riscv/kvm/mmu.c              | 17 ++++++++++-------
+>  arch/riscv/kvm/vcpu.c             |  1 +
+>  arch/x86/include/asm/kvm_host.h   |  8 ++++----
+>  arch/x86/kvm/mmu/mmu.c            |  9 +++++++++
+>  include/linux/kvm_types.h         | 19 +++++++++++++++++--
+>  virt/kvm/kvm_main.c               | 10 +++++++++-
+>  12 files changed, 65 insertions(+), 21 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 0e96087885fe..4670491899de 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -362,7 +362,7 @@ struct kvm_vcpu_arch {
+>         bool pause;
+>
+>         /* Cache some mmu pages needed inside spinlock regions */
+> -       struct kvm_mmu_memory_cache mmu_page_cache;
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(mmu_page_cache);
+>
+>         /* Target CPU and feature flags */
+>         int target;
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index ba9165e84396..af4d8a490af5 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -320,6 +320,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>         vcpu->arch.target = -1;
+>         bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
+>
+> +       vcpu->arch.mmu_page_cache.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>         vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+>
+>         /* Set up the timer */
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 0d19259454d8..01e15bcb7be2 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -764,7 +764,12 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+>  {
+>         phys_addr_t addr;
+>         int ret = 0;
+> -       struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(cache) page_cache = {
+> +               .cache = {
+> +                       .gfp_zero = __GFP_ZERO,
+> +                       .capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE,
+> +               },
+> +       };
+>         struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+>         enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
+>                                      KVM_PGTABLE_PROT_R |
+> @@ -777,14 +782,14 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+>         guest_ipa &= PAGE_MASK;
+>
+>         for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
+> -               ret = kvm_mmu_topup_memory_cache(&cache,
+> +               ret = kvm_mmu_topup_memory_cache(&page_cache.cache,
+>                                                  kvm_mmu_cache_min_pages(kvm));
+>                 if (ret)
+>                         break;
+>
+>                 write_lock(&kvm->mmu_lock);
+>                 ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
+> -                                            &cache);
+> +                                            &page_cache.cache);
+>                 write_unlock(&kvm->mmu_lock);
+>                 if (ret)
+>                         break;
+> @@ -792,7 +797,7 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+>                 pa += PAGE_SIZE;
+>         }
+>
+> -       kvm_mmu_free_memory_cache(&cache);
+> +       kvm_mmu_free_memory_cache(&page_cache.cache);
+>         return ret;
+>  }
+>
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 717716cc51c5..935511d7fc3a 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -347,7 +347,7 @@ struct kvm_vcpu_arch {
+>         unsigned long pending_exceptions_clr;
+>
+>         /* Cache some mmu pages needed inside spinlock regions */
+> -       struct kvm_mmu_memory_cache mmu_page_cache;
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(mmu_page_cache);
+>
+>         /* vcpu's vzguestid is different on each host cpu in an smp system */
+>         u32 vzguestid[NR_CPUS];
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index a25e0b73ee70..45c7179144dc 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -387,6 +387,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>         if (err)
+>                 goto out_free_gebase;
+>
+> +       vcpu->arch.mmu_page_cache.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
 > +
->  static struct gpio palmld_pcmcia_gpios[] = {
->  	{ GPIO_NR_PALMLD_PCMCIA_POWER,	GPIOF_INIT_LOW,	"PCMCIA Power" },
->  	{ GPIO_NR_PALMLD_PCMCIA_RESET,	GPIOF_INIT_HIGH,"PCMCIA Reset" },
-> diff --git a/arch/arm/mach-pxa/palmld.c b/arch/arm/mach-pxa/palmld.c
-> index d85146957004..d821606ce0b5 100644
-> --- a/arch/arm/mach-pxa/palmld.c
-> +++ b/arch/arm/mach-pxa/palmld.c
-> @@ -29,8 +29,8 @@
->  #include <asm/mach/map.h>
->  
->  #include "pxa27x.h"
-> +#include "palmld.h"
->  #include <linux/platform_data/asoc-pxa.h>
-> -#include <mach/palmld.h>
->  #include <linux/platform_data/mmc-pxamci.h>
->  #include <linux/platform_data/video-pxafb.h>
->  #include <linux/platform_data/irda-pxaficp.h>
-> @@ -279,9 +279,15 @@ static inline void palmld_leds_init(void) {}
->   * HDD
->   ******************************************************************************/
->  #if defined(CONFIG_PATA_PALMLD) || defined(CONFIG_PATA_PALMLD_MODULE)
-> +static struct resource palmld_ide_resources[] = {
-> +	DEFINE_RES_MEM(PALMLD_IDE_PHYS, 0x1000),
-> +};
+>         return 0;
+>
+>  out_free_gebase:
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> index 78da839657e5..4ec0b7a3d515 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -186,7 +186,7 @@ struct kvm_vcpu_arch {
+>         struct kvm_sbi_context sbi_context;
+>
+>         /* Cache pages needed to program page tables with spinlock held */
+> -       struct kvm_mmu_memory_cache mmu_page_cache;
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(mmu_page_cache);
+>
+>         /* VCPU power-off state */
+>         bool power_off;
+> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> index f80a34fbf102..5ffd164a5aeb 100644
+> --- a/arch/riscv/kvm/mmu.c
+> +++ b/arch/riscv/kvm/mmu.c
+> @@ -347,10 +347,12 @@ static int stage2_ioremap(struct kvm *kvm, gpa_t gpa, phys_addr_t hpa,
+>         int ret = 0;
+>         unsigned long pfn;
+>         phys_addr_t addr, end;
+> -       struct kvm_mmu_memory_cache pcache;
+> -
+> -       memset(&pcache, 0, sizeof(pcache));
+> -       pcache.gfp_zero = __GFP_ZERO;
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(cache) page_cache = {
+> +               .cache = {
+> +                       .gfp_zero = __GFP_ZERO,
+> +                       .capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE,
+> +               },
+> +       };
+>
+>         end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
+>         pfn = __phys_to_pfn(hpa);
+> @@ -361,12 +363,13 @@ static int stage2_ioremap(struct kvm *kvm, gpa_t gpa, phys_addr_t hpa,
+>                 if (!writable)
+>                         pte = pte_wrprotect(pte);
+>
+> -               ret = kvm_mmu_topup_memory_cache(&pcache, stage2_pgd_levels);
+> +               ret = kvm_mmu_topup_memory_cache(&page_cache.cache,
+> +                                                stage2_pgd_levels);
+>                 if (ret)
+>                         goto out;
+>
+>                 spin_lock(&kvm->mmu_lock);
+> -               ret = stage2_set_pte(kvm, 0, &pcache, addr, &pte);
+> +               ret = stage2_set_pte(kvm, 0, &page_cache.cache, addr, &pte);
+>                 spin_unlock(&kvm->mmu_lock);
+>                 if (ret)
+>                         goto out;
+> @@ -375,7 +378,7 @@ static int stage2_ioremap(struct kvm *kvm, gpa_t gpa, phys_addr_t hpa,
+>         }
+>
+>  out:
+> -       kvm_mmu_free_memory_cache(&pcache);
+> +       kvm_mmu_free_memory_cache(&page_cache.cache);
+>         return ret;
+>  }
+>
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 624166004e36..6a5f5aa45bac 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -94,6 +94,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>
+>         /* Mark this VCPU never ran */
+>         vcpu->arch.ran_atleast_once = false;
+> +       vcpu->arch.mmu_page_cache.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>         vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+>
+>         /* Setup ISA features available to VCPU */
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index be4349c9ffea..ffb2b99f3a60 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -694,10 +694,10 @@ struct kvm_vcpu_arch {
+>          */
+>         struct kvm_mmu *walk_mmu;
+>
+> -       struct kvm_mmu_memory_cache mmu_pte_list_desc_cache;
+> -       struct kvm_mmu_memory_cache mmu_shadow_page_cache;
+> -       struct kvm_mmu_memory_cache mmu_shadowed_info_cache;
+> -       struct kvm_mmu_memory_cache mmu_page_header_cache;
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(mmu_pte_list_desc_cache);
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(mmu_shadow_page_cache);
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(mmu_shadowed_info_cache);
+> +       DEFINE_KVM_MMU_MEMORY_CACHE(mmu_page_header_cache);
+>
+>         /*
+>          * QEMU userspace and the guest each have their own FPU state.
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index f058f28909ea..a8200b3f8782 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5800,12 +5800,21 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+>  {
+>         int ret;
+>
+> +       vcpu->arch.mmu_pte_list_desc_cache.capacity =
+> +               KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>         vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
+>         vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
+>
+> +       vcpu->arch.mmu_page_header_cache.capacity =
+> +               KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>         vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+>         vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+>
+> +       vcpu->arch.mmu_shadowed_info_cache.capacity =
+> +               KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
 > +
->  static struct platform_device palmld_ide_device = {
-> -	.name	= "pata_palmld",
-> -	.id	= -1,
-> +	.name		= "pata_palmld",
-> +	.id		= -1,
-> +	.resource	= palmld_ide_resources,
-> +	.num_resources	= ARRAY_SIZE(palmld_ide_resources),
+> +       vcpu->arch.mmu_shadow_page_cache.capacity =
+> +               KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>         vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+>
+>         vcpu->arch.mmu = &vcpu->arch.root_mmu;
+> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> index ac1ebb37a0ff..579cf39986ec 100644
+> --- a/include/linux/kvm_types.h
+> +++ b/include/linux/kvm_types.h
+> @@ -83,14 +83,29 @@ struct gfn_to_pfn_cache {
+>   * MMU flows is problematic, as is triggering reclaim, I/O, etc... while
+>   * holding MMU locks.  Note, these caches act more like prefetch buffers than
+>   * classical caches, i.e. objects are not returned to the cache on being freed.
+> + *
+> + * The storage for the cache object pointers is laid out after the struct, to
+> + * allow different declarations to choose different capacities. The capacity
+> + * field defines the number of object pointers available after the struct.
+>   */
+>  struct kvm_mmu_memory_cache {
+>         int nobjs;
+> +       int capacity;
+>         gfp_t gfp_zero;
+>         struct kmem_cache *kmem_cache;
+> -       void *objects[KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE];
+> +       void *objects[];
 >  };
->  
->  static struct gpiod_lookup_table palmld_ide_gpio_table = {
-> diff --git a/arch/arm/mach-pxa/include/mach/palmld.h b/arch/arm/mach-pxa/palmld.h
-> similarity index 98%
-> rename from arch/arm/mach-pxa/include/mach/palmld.h
-> rename to arch/arm/mach-pxa/palmld.h
-> index 99a6d8b3a1e3..ee3bc15b71a2 100644
-> --- a/arch/arm/mach-pxa/include/mach/palmld.h
-> +++ b/arch/arm/mach-pxa/palmld.h
-> @@ -9,7 +9,7 @@
->  #ifndef _INCLUDE_PALMLD_H_
->  #define _INCLUDE_PALMLD_H_
->  
-> -#include "irqs.h" /* PXA_GPIO_TO_IRQ */
-> +#include <mach/irqs.h> /* PXA_GPIO_TO_IRQ */
->  
->  /** HERE ARE GPIOs **/
->  
-> diff --git a/drivers/ata/pata_palmld.c b/drivers/ata/pata_palmld.c
-> index 2448441571ed..400e65190904 100644
-> --- a/drivers/ata/pata_palmld.c
-> +++ b/drivers/ata/pata_palmld.c
-> @@ -25,7 +25,6 @@
->  #include <linux/gpio/consumer.h>
->  
->  #include <scsi/scsi_host.h>
-> -#include <mach/palmld.h>
->  
->  #define DRV_NAME "pata_palmld"
->  
-> @@ -63,7 +62,7 @@ static int palmld_pata_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	/* remap drive's physical memory address */
-> -	mem = devm_ioremap(dev, PALMLD_IDE_PHYS, 0x1000);
-> +	mem = devm_platform_ioremap_resource(pdev, 0);
->  	if (!mem)
->  		return -ENOMEM;
->  
-
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
--- 
-Damien Le Moal
-Western Digital Research
+> -#endif
+> +
+> +#define __DEFINE_KVM_MMU_MEMORY_CACHE(_name, _capacity)                \
+> +       struct {                                                \
+> +               struct kvm_mmu_memory_cache _name;              \
+> +               void *_name##_objects[_capacity];               \
+> +       }
+> +
+> +#define DEFINE_KVM_MMU_MEMORY_CACHE(_name) \
+> +       __DEFINE_KVM_MMU_MEMORY_CACHE(_name, KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE)
+> +
+> +#endif /* KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE */
+>
+>  #define HALT_POLL_HIST_COUNT                   32
+>
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 70e05af5ebea..c4cac4195f4a 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -373,9 +373,17 @@ int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+>  {
+>         void *obj;
+>
+> +       /*
+> +        * The capacity fieldmust be initialized since the storage for the
+> +        * objects pointer array is laid out after the kvm_mmu_memory_cache
+> +        * struct and not known at compile time.
+> +        */
+> +       if (WARN_ON(mc->capacity == 0))
+> +               return -EINVAL;
+> +
+>         if (mc->nobjs >= min)
+>                 return 0;
+> -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> +       while (mc->nobjs < mc->capacity) {
+>                 obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+>                 if (!obj)
+>                         return mc->nobjs >= min ? 0 : -ENOMEM;
+> --
+> 2.35.1.1094.g7c7d902a7c-goog
+>
