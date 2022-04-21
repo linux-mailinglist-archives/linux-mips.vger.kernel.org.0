@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F058450A143
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Apr 2022 15:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE18450A1EE
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Apr 2022 16:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387966AbiDUN5s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Apr 2022 09:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        id S1389065AbiDUOSr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Apr 2022 10:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386982AbiDUN5q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Apr 2022 09:57:46 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DEA25CF
-        for <linux-mips@vger.kernel.org>; Thu, 21 Apr 2022 06:54:55 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id w19so8818573lfu.11
-        for <linux-mips@vger.kernel.org>; Thu, 21 Apr 2022 06:54:55 -0700 (PDT)
+        with ESMTP id S1385799AbiDUOSq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Apr 2022 10:18:46 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11901EADA
+        for <linux-mips@vger.kernel.org>; Thu, 21 Apr 2022 07:15:55 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id j2so9040437ybu.0
+        for <linux-mips@vger.kernel.org>; Thu, 21 Apr 2022 07:15:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kWBtjZ/u41ciVQ8eqRCZfXpmvt0679NfHMhFgpCEUzs=;
-        b=DrQFE5Ue2oD2fxauVOiZjO38io8f/v9u+jZfZKC3DiT6Yio76/QDFFy1r54tpiCKLU
-         Bae9C0+AEwzoqhKVPBCK+f1FurOag5SZMFfXfdcnyGTdIQgetZtHZvWsnhuArW/lQzj8
-         iLe5SO5aZU7Mbbt7NvcFhtSITQq3ccbZRcuClitErSEXhvL9K0JsDbHWtil4IqmO2Jxz
-         2TGrTY6+AQBZW000oXexntBGLo6jFLA0c5ElqwS5gen/ZnoVNmu1kP9WJfq4tDq1SnS3
-         b2vZJrqq0U+ZUEhU4kWzTMd7AxkNDG4MME6dh3vdC6kt2hdaBMoqHlr2pUJ5inzKKfar
-         ZSCw==
+        bh=mdhV5xJb3yTPG4IXlt4NbO27rLVO/vJmiWIV9V5oqiQ=;
+        b=QwIlmWUpQAd4v0AjUgLjg4oebC7z6SlfN1pzB8lJ2uZzt9wKTBXmNQNnf2wTFBzaf1
+         8QXh+7UYxlZXMu+6u2wZfndNkIgETSoRrX/QSAOx1E/EfpLAi1npmM714RsC8Xzp2+r+
+         J5CbgX7HFziZZmxDNZYbWRhNQqIbi1hpqrcia56Ez8AeKzRHLhM0HnfGNYRTkGBf9DL8
+         UVOnY/dOuT7Q8lQqakFBFBRAcpokcWTWFa0HF0M+uvq9dAdKKeauC4STq6WqmVoYawks
+         ePZ0/fkpos8Nz4LpXQ3tJA0IbRBWxrk2cju/hmkKzTZ/jaBz8N303f0JEq9jfnBPBS1J
+         dvNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kWBtjZ/u41ciVQ8eqRCZfXpmvt0679NfHMhFgpCEUzs=;
-        b=dPPPldOBURKQ96lbCNFKyq9vy0pUvtw8ngpvXFYwzPOgCM+ejxxxfqBhI4I6NR0xr/
-         LY4B5LL7rskObxIbluboqRo2B0G4qji9C4O8qzwUBPOE0Ud8XpRCOTdtDLiNAjJ16/Hv
-         gIod02ijLyHZPDZ0aHg/MpRt7IknqrfeBAlO6tEYciI2IJrJjoM8eLK87ZFIcfa003QN
-         pZUOFDf8KvGXqyr74/OVIdDvQz2O/0mXDSCezqk6MJH5VbJiu3KCRUt+iwyTf7PkImKT
-         KNZCbyZD5B9tGFHhFZo6KMeAVSrIqEBD9smXoZBV6qzOCiXx+PXkQgmHQXU4AzTRX/jN
-         6jIQ==
-X-Gm-Message-State: AOAM5304PVdjYzZQoE9HGu/UPfyyXVUQuRetBtQvumVitiF4PEm2aPaW
-        BVrQ1jgJCo3oy5ffpVxph0x6wHL2sOaoSvTaG4ThQQ==
-X-Google-Smtp-Source: ABdhPJyPHSxcjMeoCqMPg/92niGB+5z9ocJsA4qd+sVPE7MSHNmj+16//1nBcKkS1oBD5MwwcxOtT5be7Js74qB5Lc0=
-X-Received: by 2002:a19:505d:0:b0:46d:167e:b9df with SMTP id
- z29-20020a19505d000000b0046d167eb9dfmr18737298lfj.184.1650549293450; Thu, 21
- Apr 2022 06:54:53 -0700 (PDT)
+        bh=mdhV5xJb3yTPG4IXlt4NbO27rLVO/vJmiWIV9V5oqiQ=;
+        b=RnMNq9loGDXRm++xWgQRK0zH0rAgBYoUJdaQUQwg5BD2kFnNHF3JhWer162zSKtiqj
+         NI6IPyYqTJL/ANepr4Od2po9g+x3BdO21zWVqdi1AzeyZY66dkkc9+3h16t4aYf1TPFv
+         HWibTHMiSrJDbdlocVh9BW3m6ra0qO5HgXBPwjsWXc7kD/zR2U8mBumxy+h4oIGr3HJ+
+         hWW8cw/7QUFl/TvI6PW17OL5SyroNCDmzs6oHXdljZENvRgBBWoaG8wSUqI+V3GtZrL2
+         wwjczGcYBrgf6GVsIF5pBiB8J/xmBGmSXS6cyhVYw3o7kNu0xoj3/S1cIe+GOIv+jHx9
+         mLJw==
+X-Gm-Message-State: AOAM530TxXhD9mBwrjAbwV4TYyT9R1ONtb/p6TxTfI2fjonbvrRhbYj2
+        T7uRYqRLklRmfLRZgV2PL1DPxqRnklu1NtbUmJw4WOXnZCQ=
+X-Google-Smtp-Source: ABdhPJy2/9TEWKOJgrsxEaZAHrf6O4u8qAdfriJlxVUrx8dcunjMApUx6rLwWisom0mmM9vfeNhIq1T4qtZQHMmo8ZQ=
+X-Received: by 2002:a5b:dc5:0:b0:624:f16d:7069 with SMTP id
+ t5-20020a5b0dc5000000b00624f16d7069mr25169549ybr.295.1650550555204; Thu, 21
+ Apr 2022 07:15:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220411153753.50443-1-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220411153753.50443-1-aidanmacdonald.0x0@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 21 Apr 2022 15:54:16 +0200
-Message-ID: <CAPDyKFpuD1m68SRuCYj0q+KU2Ua1Jt+f3upbLavs8x4HS0-szA@mail.gmail.com>
-Subject: Re: [PATCH] mmc: jz4740: Apply DMA engine limits to maximum segment size
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     paul@crapouillou.net, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220412162218.32509-1-paul@crapouillou.net>
+In-Reply-To: <20220412162218.32509-1-paul@crapouillou.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 21 Apr 2022 16:15:44 +0200
+Message-ID: <CACRpkdY2L78n5_SB7tLNdyyxrYq9Thx=P4V4e=JmqGA91wqqww@mail.gmail.com>
+Subject: Re: [PATCH v2] pinctrl: ingenic: Garbage-collect code paths for SoCs
+ disabled by config
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     od@opendingux.net, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -65,90 +66,19 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 11 Apr 2022 at 17:37, Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
->
-> Do what is done in other DMA-enabled MMC host drivers (cf. host/mmci.c) and
-> limit the maximum segment size based on the DMA engine's capabilities. This
-> is needed to avoid warnings like the following with CONFIG_DMA_API_DEBUG=y.
->
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 21 at kernel/dma/debug.c:1162 debug_dma_map_sg+0x2f4/0x39c
-> DMA-API: jz4780-dma 13420000.dma-controller: mapping sg segment longer than device claims to support [len=98304] [max=65536]
-> CPU: 0 PID: 21 Comm: kworker/0:1H Not tainted 5.18.0-rc1 #19
-> Workqueue: kblockd blk_mq_run_work_fn
-> Stack : 81575aec 00000004 80620000 80620000 80620000 805e7358 00000009 801537ac
->         814c832c 806276e3 806e34b4 80620000 81575aec 00000001 81575ab8 09291444
->         00000000 00000000 805e7358 81575958 ffffffea 8157596c 00000000 636f6c62
->         6220646b 80387a70 0000000f 6d5f6b6c 80620000 00000000 81575ba4 00000009
->         805e170c 80896640 00000001 00010000 00000000 00000000 00006098 806e0000
->         ...
-> Call Trace:
-> [<80107670>] show_stack+0x84/0x120
-> [<80528cd8>] __warn+0xb8/0xec
-> [<80528d78>] warn_slowpath_fmt+0x6c/0xb8
-> [<8016f1d4>] debug_dma_map_sg+0x2f4/0x39c
-> [<80169d4c>] __dma_map_sg_attrs+0xf0/0x118
-> [<8016a27c>] dma_map_sg_attrs+0x14/0x28
-> [<804f66b4>] jz4740_mmc_prepare_dma_data+0x74/0xa4
-> [<804f6714>] jz4740_mmc_pre_request+0x30/0x54
-> [<804f4ff4>] mmc_blk_mq_issue_rq+0x6e0/0x7bc
-> [<804f5590>] mmc_mq_queue_rq+0x220/0x2d4
-> [<8038b2c0>] blk_mq_dispatch_rq_list+0x480/0x664
-> [<80391040>] blk_mq_do_dispatch_sched+0x2dc/0x370
-> [<80391468>] __blk_mq_sched_dispatch_requests+0xec/0x164
-> [<80391540>] blk_mq_sched_dispatch_requests+0x44/0x94
-> [<80387900>] __blk_mq_run_hw_queue+0xb0/0xcc
-> [<80134c14>] process_one_work+0x1b8/0x264
-> [<80134ff8>] worker_thread+0x2ec/0x3b8
-> [<8013b13c>] kthread+0x104/0x10c
-> [<80101dcc>] ret_from_kernel_thread+0x14/0x1c
->
-> ---[ end trace 0000000000000000 ]---
->
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+On Tue, Apr 12, 2022 at 6:22 PM Paul Cercueil <paul@crapouillou.net> wrote:
 
-Applied for next, thanks!
+> By being a bit smarter about how the SoC version checks are performed,
+> it is possible to have all the code paths that correspond to SoCs
+> disabled in the kernel config automatically marked as dead code by the
+> compiler, and therefore garbage-collected.
+>
+> With this patch, when compiling a kernel that only targets the JZ4760
+> for instance, the driver is now about 4.5 KiB smaller.
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Kind regards
-Uffe
+Patch applied.
 
-
-> ---
->  drivers/mmc/host/jz4740_mmc.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->
-> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-> index 7ab1b38a7be5..b1d563b2ed1b 100644
-> --- a/drivers/mmc/host/jz4740_mmc.c
-> +++ b/drivers/mmc/host/jz4740_mmc.c
-> @@ -247,6 +247,26 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
->                 return PTR_ERR(host->dma_rx);
->         }
->
-> +       /*
-> +        * Limit the maximum segment size in any SG entry according to
-> +        * the parameters of the DMA engine device.
-> +        */
-> +       if (host->dma_tx) {
-> +               struct device *dev = host->dma_tx->device->dev;
-> +               unsigned int max_seg_size = dma_get_max_seg_size(dev);
-> +
-> +               if (max_seg_size < host->mmc->max_seg_size)
-> +                       host->mmc->max_seg_size = max_seg_size;
-> +       }
-> +
-> +       if (host->dma_rx) {
-> +               struct device *dev = host->dma_rx->device->dev;
-> +               unsigned int max_seg_size = dma_get_max_seg_size(dev);
-> +
-> +               if (max_seg_size < host->mmc->max_seg_size)
-> +                       host->mmc->max_seg_size = max_seg_size;
-> +       }
-> +
->         return 0;
->  }
->
-> --
-> 2.35.1
->
+Yours,
+Linus Walleij
