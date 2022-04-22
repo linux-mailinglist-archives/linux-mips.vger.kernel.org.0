@@ -2,57 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A5150C37F
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Apr 2022 01:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2966850C2A6
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Apr 2022 01:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbiDVWPv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Apr 2022 18:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S231648AbiDVWPs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Apr 2022 18:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbiDVWP1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 18:15:27 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1442822405D
-        for <linux-mips@vger.kernel.org>; Fri, 22 Apr 2022 14:05:51 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id b6-20020a5b0b46000000b006457d921729so4320847ybr.23
-        for <linux-mips@vger.kernel.org>; Fri, 22 Apr 2022 14:05:51 -0700 (PDT)
+        with ESMTP id S232252AbiDVWPa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 18:15:30 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AD3241A94
+        for <linux-mips@vger.kernel.org>; Fri, 22 Apr 2022 14:05:52 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id u3-20020a632343000000b0039cac94652aso5659970pgm.11
+        for <linux-mips@vger.kernel.org>; Fri, 22 Apr 2022 14:05:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ktDpzPoEdSrcrUnITrmIICEFHz35bcwHx2m+itC59DQ=;
-        b=NuUyT27h7C++sSsmxph7YDVnlVq9JEo2qNd/NHlqu/pFwe1ZaK/DqFkIUFejxWDZ+L
-         HCFTyNkmdUQQpAdlAE2EkZPO7+NrKCh3q/AAd7bXPDPhOya7e3i6fTvDCMG8t6hQE5Nd
-         LlAD1nOHAruz6us2mg92VCm+qVkIiLQazVDQ+39JAk9pvNX4s290hmOx785CWQUF5t8l
-         A5vwsOA/rpOEPfHSx7Z1ShpIwVYbjqEzdgZPGBXOf3vJFRbopVHdJd29zqqqJTdtpec3
-         qba+yk3xoqB4ftlQhK5uXzW3eBe511TeE4WQjoUUhYWhQBZEwMZ0EgCcCM4XOXGcpVi/
-         6mZw==
+        bh=zNWYQ7iy7Yr89sIEde3cCb/Lt3WEldLKJ8vXDlDeSiQ=;
+        b=Ppu58rFHVoI6iW5s1gyFZJw/q+6CTvIq3bwkrX6Bfha1v9ELmxlhB6kBdaxuhU8ALA
+         oZJOS2zzPK79Cbz2PaFtDvWjGOXqa3Vag3MWGfOPw2XmGt9fNogG4PyBnIzfzwu0Cr2Z
+         Z9Yd3xVeeD1MsLLmQbE33yT6gDJNnLmzjIhiqgCNEusUBTkk2ljA7jNZeivTms/fsolS
+         8ruvMsny7ijFMPJnejhTGx2b5qhO8OcB3N+OLEFjJPIKmS4RB11u8nQzg8mef19nDz4C
+         hY7FnXWyO5/aoBz1LUQ06kXu09Mes4okVgaK01vet3BEhu0IBB9fZXiQPVzHWDrd/mUO
+         dnWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ktDpzPoEdSrcrUnITrmIICEFHz35bcwHx2m+itC59DQ=;
-        b=HB3dsX4vE/DLxH2aYENrXk34/z60fTNQtB/DI+eE9K0lMsxJeZLbwbeOKAbzy+7ToD
-         6vcvIW6lZGJ6E3jlKSsaKT/Gc7KJxwhS/dymlX5xOBxLAvhiML8Zdw4/79g5JHrfGr/I
-         CwEMOCB/6ABW9gBifFFw1/QCpHTVRqbDtDxEBwWDd8i7+2IX0tcWEAnRNiHVgpNyuXS6
-         aqR6fw1394DSFiLJYutn5VmUv9ErXVT+6wlGeEYxQ6u/KkxLXhWCxioQYa6Z3mNmK6Lu
-         G9UCpOmZ2SY7oZU7Vhy+2FeRiBl9b5naDg9oAah1BMzag4DGzOJC5RXhtkjv4fWti6qS
-         UQXQ==
-X-Gm-Message-State: AOAM532mWAwX55kURPSOdCVvC0FXxAHKQbWSF5eZDkx2c4GdgK0GDYTy
-        Yv3obT3NuJ2jG6tFRH+UOfhyypzP4FpH2w==
-X-Google-Smtp-Source: ABdhPJznlbTfpPgBcQWgSKtg2XkP7301qyrPyti3UXIeeQDW4BgY3Xl7oEU2Sfv4r0Q1kAkWzLGJ5G98i8gXew==
+        bh=zNWYQ7iy7Yr89sIEde3cCb/Lt3WEldLKJ8vXDlDeSiQ=;
+        b=sgF9EjuYJiz4xJJDwv8vSu0kJVPHCkBm3MIsz51Ad1ZfFq1aBHe+fVp5fBbAPpImvL
+         itQuKsl838n9SAKi03U/BV0m8NcJOASt1m0hto6c0GskH+1/ffqK4aPtjuH/Ty2BJon9
+         bV306bVciito5MZAGjnJRij4gLpEoMUY8Vyb2keE81/SZysPqUXt8D/KXyLDeLkDzfyA
+         N7zO9Ph1DWcCihIzhTFDuCsmW7+tIwpVZJiXk/F20dhseDpaFuAoXPXXpaH0KaIyWzlB
+         opMMZWb58VSrL3Q8Ekq80yZpSVc09YxYakFrQ5k4kAr9NP7GxAD3NzuikAjFDpIgosLC
+         8wrA==
+X-Gm-Message-State: AOAM532pBEuIX8yL9BwrhtRqF7M2wFJLrG0RLsgEBqmX8lNnlqN5gZCk
+        EGSlX1CUZec+lnlMRmLSHhLAq2WIIUQsKA==
+X-Google-Smtp-Source: ABdhPJyWKXLx2/uwe0ElKVg7hOGiMwOVxhtzWi1NrbfYjD0XJGhsQ6VUWZmhsGO7iXcdNSRimP+xg/0T9I02hg==
 X-Received: from dmatlack-heavy.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:19cd])
- (user=dmatlack job=sendgmr) by 2002:a25:bb4a:0:b0:633:92a6:c35 with SMTP id
- b10-20020a25bb4a000000b0063392a60c35mr6239899ybk.121.1650661550035; Fri, 22
- Apr 2022 14:05:50 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 21:05:27 +0000
+ (user=dmatlack job=sendgmr) by 2002:a17:903:18f:b0:15a:d3e:1e47 with SMTP id
+ z15-20020a170903018f00b0015a0d3e1e47mr6631600plg.54.1650661551615; Fri, 22
+ Apr 2022 14:05:51 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 21:05:28 +0000
 In-Reply-To: <20220422210546.458943-1-dmatlack@google.com>
-Message-Id: <20220422210546.458943-2-dmatlack@google.com>
+Message-Id: <20220422210546.458943-3-dmatlack@google.com>
 Mime-Version: 1.0
 References: <20220422210546.458943-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v4 01/20] KVM: x86/mmu: Optimize MMU page cache lookup for all
- direct SPs
+Subject: [PATCH v4 02/20] KVM: x86/mmu: Use a bool for direct
 From:   David Matlack <dmatlack@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
@@ -85,51 +84,40 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit fb58a9c345f6 ("KVM: x86/mmu: Optimize MMU page cache lookup for
-fully direct MMUs") skipped the unsync checks and write flood clearing
-for full direct MMUs. We can extend this further to skip the checks for
-all direct shadow pages. Direct shadow pages in indirect MMUs (i.e.
-shadow paging) are used when shadowing a guest huge page with smaller
-pages. Such direct shadow pages, like their counterparts in fully direct
-MMUs, are never marked unsynced or have a non-zero write-flooding count.
-
-Checking sp->role.direct also generates better code than checking
-direct_map because, due to register pressure, direct_map has to get
-shoved onto the stack and then pulled back off.
+The parameter "direct" can either be true or false, and all of the
+callers pass in a bool variable or true/false literal, so just use the
+type bool.
 
 No functional change intended.
 
 Reviewed-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
  arch/x86/kvm/mmu/mmu.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 69a30d6d1e2b..3de4cce317e4 100644
+index 3de4cce317e4..dc20eccd6a77 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2028,7 +2028,6 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
- 					     int direct,
+@@ -1703,7 +1703,7 @@ static void drop_parent_pte(struct kvm_mmu_page *sp,
+ 	mmu_spte_clear_no_track(parent_pte);
+ }
+ 
+-static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct)
++static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, bool direct)
+ {
+ 	struct kvm_mmu_page *sp;
+ 
+@@ -2025,7 +2025,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
+ 					     gfn_t gfn,
+ 					     gva_t gaddr,
+ 					     unsigned level,
+-					     int direct,
++					     bool direct,
  					     unsigned int access)
  {
--	bool direct_mmu = vcpu->arch.mmu->root_role.direct;
  	union kvm_mmu_page_role role;
- 	struct hlist_head *sp_list;
- 	unsigned quadrant;
-@@ -2070,7 +2069,8 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
- 			continue;
- 		}
- 
--		if (direct_mmu)
-+		/* unsync and write-flooding only apply to indirect SPs. */
-+		if (sp->role.direct)
- 			goto trace_get_page;
- 
- 		if (sp->unsync) {
-
-base-commit: 150866cd0ec871c765181d145aa0912628289c8a
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 
