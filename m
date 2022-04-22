@@ -2,84 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2141750B2EE
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 10:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0079650B794
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 14:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445424AbiDVIds (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Apr 2022 04:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
+        id S1447631AbiDVMsA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Apr 2022 08:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445358AbiDVIdn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 04:33:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B116F43ACA;
-        Fri, 22 Apr 2022 01:30:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58435B82AF4;
-        Fri, 22 Apr 2022 08:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB77C385AA;
-        Fri, 22 Apr 2022 08:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650616248;
-        bh=v3qc3Jp8/D1KnStL7QppBc+djqqkmTre4elQmmoX9dk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wG8Tp+cMXh78xXaf5MC4tyFse6a+IKwY/1RwifYCWRmxv9nFiASkHaBkA/VGFEio9
-         8gxfJgdvvxwLQ36q3hxwXK5RzMpNsYBbF8nM0fBNGoiTbpT5bL2D2MGYCKaP7hZ3nQ
-         WYjtkoW6H0+g2w/lUTy1LpUrZmUvGoDbxaotgh9Q=
-Date:   Fri, 22 Apr 2022 10:30:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     hminas@synopsys.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        tsbogend@alpha.franken.de, paul@crapouillou.net,
+        with ESMTP id S231286AbiDVMsA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 08:48:00 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFD81A394;
+        Fri, 22 Apr 2022 05:45:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1650631501; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gAoD2y0Qvn4mZ56K12HLHvmWzPEXxA7h9UsTynmvszw=;
+        b=F0CU+FRxy3btZ6gcjitq6iZG4oWkaNqUcvbPKniuxJoYPFNt3NnBb0Y02Xl4tz0ZBQfL8u
+        C6hQwMBEdabTwOntELojvjWGjmPLzWcTXhLQ/QK5pTmDYXKV6JXREOsxuGuGIu0+j8ln5C
+        MB9Fd8rsZ/Xaht9Zad+Hzw2TaxNDVMM=
+Date:   Fri, 22 Apr 2022 13:44:50 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 1/3] dt-bindings: dwc2: Add bindings for new Ingenic
+ SoCs.
+To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
         linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
         rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
         zhenwenjin@gmail.com, reimu@sudomaker.com
-Subject: Re: [PATCH v4 0/3] Add OTG support for Ingenic SoCs.
-Message-ID: <YmJntZ7RYpPVaxhm@kroah.com>
+Message-Id: <QERQAR.SQYC38Q7CE0Z2@crapouillou.net>
+In-Reply-To: <1650561308-54704-2-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1650561308-54704-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1650561308-54704-2-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1650561308-54704-1-git-send-email-zhouyanjie@wanyeetech.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 01:15:05AM +0800, 周琰杰 (Zhou Yanjie) wrote:
-> 1.Add OTG support for the JZ4775 SoC, the JZ4780 SoC, the X1000
->   SoC, the X1600 SoC, the X1830 SoC, and the X2000 SoC.
-> 2.Introduce support for disable Ingenic overcurrent detection,
->   once selected it enables GOTGCTL register bits VbvalidOvEn
->   and VbvalidOvVal to disable the VBUS overcurrent detection.
-> 
-> v1->v2:
-> 1.Add Rob Herring's Acked-by.
-> 2.Add Minas Harutyunyan's Acked-by.
-> 3.Use "activate_ingenic_overcurrent_detection" instead
->   "deactivate_ingenic_overcurrent_detection" as Greg's suggestion.
-> 
-> v2->v3:
-> Refresh USB nodes in device tree files, remove "snps,dwc2" since
-> it is nolonger needed.
-> 
-> v3->v4:
-> Remove the compatible string of X1700 since it could use the X1600
-> string　as the fallback.
+Hi Zhou,
 
-I already applied v3, so can you just provide a fixup patch for the
-difference between v3 and v4?
+Le ven., avril 22 2022 at 01:15:06 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
+ Yanjie)=20
+<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000=20
+> SoC,
+> the X1600 SoC, the X1830 SoC, and the X2000 SoC from Ingenic.
+>=20
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>=20
+> Notes:
+>     v1->v2:
+>     Add Rob Herring's Acked-by.
+>=20
+>     v2->v3:
+>     No change.
+>=20
+>     v3->v4:
+>     Remove the compatible string of X1700 since it could use the=20
+> X1600 string
+>     as the fallback.
+>=20
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml=20
+> b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> index 4cebce6..2218df8 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> @@ -17,6 +17,12 @@ properties:
+>      oneOf:
+>        - const: brcm,bcm2835-usb
+>        - const: hisilicon,hi6220-usb
+> +      - const: ingenic,jz4775-otg
+> +      - const: ingenic,jz4780-otg
+> +      - const: ingenic,x1000-otg
+> +      - const: ingenic,x1600-otg
+> +      - const: ingenic,x1830-otg
+> +      - const: ingenic,x2000-otg
 
-thanks,
+You should probably also add:
+- items:
+    - const: ingenic,x1700-otg
+    - const: ingenic,x1600-otg
 
-greg k-h
+As discussed in your v3.
+
+Cheers,
+-Paul
+
+>        - items:
+>            - const: rockchip,rk3066-usb
+>            - const: snps,dwc2
+> --
+> 2.7.4
+>=20
+
+
