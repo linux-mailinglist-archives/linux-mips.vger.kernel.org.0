@@ -2,219 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A13D50BDE2
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 19:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E9550BF6E
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 20:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384158AbiDVRIb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Apr 2022 13:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S230175AbiDVSIF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Apr 2022 14:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355052AbiDVRI3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 13:08:29 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED99079387;
-        Fri, 22 Apr 2022 10:05:34 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5e433d66dso9249190fac.5;
-        Fri, 22 Apr 2022 10:05:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mY0tGuFElI+pBCvZypa+uhiwZDGlD+rd5RyfMzCDiwY=;
-        b=WZlDhNUU9Bv3cLd9+2BUj8PQ0W0vdOUPUmbjOUjWVaDfQ++uQetdgsjMFfM5tQA3nH
-         sCDuOGgcoexnVdriYT7wSzZfCJbgMRVjzS/zY0sm9eBjtSMplJnXlCozOQSUZuZt/R/s
-         bd/r4UiG41dF4YE96ThOOaTA0KtRp/dsKV/PzUOQiC8g8n5LxQWGIXxcSy6NwpEaGeZd
-         8B/yftIZJl8x1Gt9EJXz5WpTY43u/pqfRC5abtUKCtKu1leMlOXnw6fNpSNlvPScI5gf
-         mdiun0U49jszbERlNzo3xDzRuqVbk/oT44mXcwf5hBePbqplV9DIZqHZjSAqPA09ahwa
-         M3kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=mY0tGuFElI+pBCvZypa+uhiwZDGlD+rd5RyfMzCDiwY=;
-        b=fAbTxITYL11oPwN049xVLEy0Ti/ZUFMhOBuJUa3k/KMxZhY254oUtzxyAxnnqu3Ujf
-         SmFrGnC7WKYziqCCfB0+YYWV5PcdFTwHLT1SwmawXQCgXUb1KKmwc564QS4TGSudGpBU
-         OY8Zaz/73rB2GdpMMY38r0yuSsDisiQuuzYkC8GlJi99Hxy2ej6ji8fYF3MmawGx2kjz
-         6Z7PwVlRrcvfFsY2sAEA/7EkRxKCHnT85g0BLoIDgsNNEkjyo8N7I/dwW/qwVW4K656c
-         A2CpTZINZJHcdoxnDgAh3kIQqcOYvj8iSlPU2duh8L86RLeHirb6iQvT2N6+I0smq4B5
-         u6iQ==
-X-Gm-Message-State: AOAM530yej6Nm4zuZOoPRTeDNJMpfu2tlv6tIcRAMqT/l6i0rCo1lhrg
-        xt9MzYTAzX0Rfxss0QNd3iI=
-X-Google-Smtp-Source: ABdhPJwyV4g1eWudYtD/hcz6EJxOYDu09EkjJlhrgLVZDzcFDGxflUVQ6LGY40Te5XJPDjVadkCTWg==
-X-Received: by 2002:a05:6870:1607:b0:de:984:496d with SMTP id b7-20020a056870160700b000de0984496dmr6469615oae.253.1650647133866;
-        Fri, 22 Apr 2022 10:05:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm971770oig.6.2022.04.22.10.05.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 10:05:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 22 Apr 2022 10:05:30 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-Message-ID: <20220422170530.GA2338209@roeck-us.net>
-References: <20220419163810.2118169-1-arnd@kernel.org>
+        with ESMTP id S234265AbiDVSF7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 14:05:59 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A921183B0;
+        Fri, 22 Apr 2022 11:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1650650029; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=36SBTaNp7dcTwurtvjqe7McQ+kB/vBW59yh6tlX/7i8=;
+        b=BPNDxQt/o50fWYfoDGVkwMu81csPM+9pmWJwPV3spGu9npSLkECl3pJuHungufYWLRFOC7
+        5Nrr0lLYcWZUeG4e+7vJR9j1YAGDLBrQ9UG1WEGQiiMjBhUN7BGGOEV/cwIpPYvSAXhIZV
+        CQWPYwr4aCSh1qE2gE3q4eszxbJPM8Y=
+Date:   Fri, 22 Apr 2022 18:53:39 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 2/2] mips: dts: ingenic: x1000: Add PWM device tree
+ node
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Message-Id: <FP5RAR.CXCRD56PL7G72@crapouillou.net>
+In-Reply-To: <YmLT1VA8ZL57CQkO@orome>
+References: <20220224234133.15708-1-aidanmacdonald.0x0@gmail.com>
+        <20220224234133.15708-2-aidanmacdonald.0x0@gmail.com>
+        <YmLT1VA8ZL57CQkO@orome>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419163810.2118169-1-arnd@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 06:37:22PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> This revisits a series I sent a few years ago:
-> 
-> https://lore.kernel.org/lkml/20191018154052.1276506-1-arnd@arndb.de/
-> 
-> All the other ARMv5 conversions are under way now, with
-> OMAP1 being the only one still not in linux-next yet,
-> and PXA completing the set.
-> 
-> Most of the patches are unchanged from before, furtunately
-> the PXA code is fairly stable. I addressed Robert's comments,
-> pulled in two patches from Dmitry, and added the last a the
-> final four patches to finish off the multiplatform conversion.
-> 
-> I hope someone is left to test these on PXA: if this works,
-> I'd like to merge it for 5.19. A git tree with these is avaialable
-> for testing at
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=pxa-multiplatform-5.18
-> 
+Hi Thierry,
 
-Unfortunately that crashes for me when trying to boot from ide.
-Bisect points to the last patch of the series.
+Le ven., avril 22 2022 at 18:12:05 +0200, Thierry Reding=20
+<thierry.reding@gmail.com> a =E9crit :
+> On Thu, Feb 24, 2022 at 11:41:34PM +0000, Aidan MacDonald wrote:
+>>  Copied from the jz4740 devicetree and trimmed to 5 timers, which
+>>  is what the hardware supports.
+>>=20
+>>  Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>>  ---
+>>   arch/mips/boot/dts/ingenic/x1000.dtsi | 13 +++++++++++++
+>>   1 file changed, 13 insertions(+)
+>=20
+> However I don't see this upstream yet, neither in Linus' tree nor in
+> linux-next. Paul, do you still have this on your radar?
 
-Guenter
+I don't have a tree so that would be a patch for Thomas (Cc'd) to go=20
+through the linux-mips tree.
+(Note to Thomas: patch 1 is already applied in the pwm tree)
 
----
-[    1.403715] 8<--- cut here ---
-[    1.403848] Unable to handle kernel paging request at virtual address feeb000e
-[    1.404097] [feeb000e] *pgd=00000000
-[    1.404400] Internal error: Oops: 805 [#1] PREEMPT ARM
-[    1.404648] Modules linked in:
-[    1.404890] CPU: 0 PID: 22 Comm: pccardd Not tainted 5.18.0-rc3-next-20220422 #1
-[    1.405159] Hardware name: SHARP Borzoi
-[    1.405319] PC is at pcmcia_init_one+0xf8/0x27c
-[    1.405476] LR is at devres_add+0x40/0x6c
-[    1.405611] pc : [<c04bdea0>]    lr : [<c044d808>]    psr: a0000113
-[    1.405846] sp : c48a5d00  ip : c15f4220  fp : 60000113
-[    1.406026] r10: 00000000  r9 : c48b000e  r8 : c48b0000
-[    1.406195] r7 : feeb0000  r6 : feeb000e  r5 : c15ec090  r4 : c15ec020
-[    1.406395] r3 : 00000002  r2 : 00000000  r1 : c15f4200  r0 : feeb000e
-[    1.406615] Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-[    1.406847] Control: 00007977  Table: a0004000  DAC: 00000071
-[    1.407042] Register r0 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
-[    1.407453] Register r1 information: slab
-[    1.407721] Register r2 information: NULL pointer
-[    1.407885] Register r3 information: non-paged memory
-[    1.408047] Register r4 information: slab
-[    1.408179] Register r5 information: slab
-[    1.408310] Register r6 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
-[    1.408622] Register r7 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
-[    1.408941] Register r8 information: 0-page vmalloc region starting at 0xc48b0000 allocated at soc_pcmcia_add_one+0xf0/0x370
-[    1.409291] Register r9 information: 0-page vmalloc region starting at 0xc48b0000 allocated at soc_pcmcia_add_one+0xf0/0x370
-[    1.409617] Register r10 information: NULL pointer
-[    1.409768] Register r11 information: non-paged memory
-[    1.409924] Register r12 information: slab
-[    1.410066] Process pccardd (pid: 22, stack limit = 0x(ptrval))
-[    1.410268] Stack: (0xc48a5d00 to 0xc48a6000)
-[    1.410448] 5d00: c15ebb78 00000000 0000001a 00000110 00000000 c0ad702c ff00051a c15ec090
-[    1.410694] 5d20: c0b713ec c0b713ec c12f6048 c0b644fc 00000000 00000000 60000113 c053f6bc
-[    1.410938] 5d40: c16b3bf0 c15efa88 c09d4e48 00000001 00000007 00000200 0000000f 00000000
-[    1.411174] 5d60: 00000000 00000000 c0b71300 c0ad702c c0b644fc 00000000 c15ec090 c0b713ec
-[    1.411410] 5d80: c0b9f980 c04491a8 c15ec090 00000000 60000113 c15ec090 c0b713ec c15ec090
-[    1.411644] 5da0: 00000003 c0449530 c078a988 c0399c90 ffffff08 c0be4d7c c0b713ec c15ec090
-[    1.411882] 5dc0: 00000003 c0b644fc 00000000 00000000 60000113 c04496e0 00000001 c0b713ec
-[    1.412117] 5de0: c48a5e2c c15ec090 c0b644fc c0449aa0 00000000 c48a5e2c c04499fc c0be4d50
-[    1.412352] 5e00: c0b644fc c044702c 00000000 c12f407c c16b3bd4 c0ad702c c15ec090 00000001
-[    1.412587] 5e20: c15ec0d4 c0449030 c15ec090 c15ec090 00000001 c0ad702c c15ec090 c15ec090
-[    1.412827] 5e40: c0b77a9c c0448044 c15ec090 00000000 c12f5030 c04458bc 00000001 c009c720
-[    1.413065] 5e60: c15ec090 c04590e4 c15ec090 00000002 c12f6048 c12f6150 c15ec088 c0ad702c
-[    1.413307] 5e80: c15ec090 c15ec020 c12f6150 c12f6048 c12f6150 c15ec088 c15ec090 c12f6160
-[    1.413551] 5ea0: 60000113 c0540820 00000000 c12f6048 c12f6150 ffffffe4 c12f6178 c12f6900
-[    1.413804] 5ec0: c0bb6828 c05409e8 00000000 00000011 c12f6048 00000000 c12f6150 c0ba35c8
-[    1.414050] 5ee0: c12f6178 c12f6900 c0bb6828 c074c3a8 c48a5f04 c0ad702c c48a5f10 c074c44c
-[    1.414294] 5f00: c098de10 c09acdc0 c12f4fa0 c48a5f1c 000031d0 c0ad702c c12f6048 c12f6048
-[    1.414538] 5f20: 00000000 c12f6150 c0ba35c8 c0540af8 c12f6048 00000000 c12f6150 c053dcd4
-[    1.414791] 5f40: c12f6048 00000000 00000080 c12f6144 c12f6900 c053e704 00000000 c12f6178
-[    1.415037] 5f60: 000030d0 c0ad702c c12f6900 c12f4fe0 c12f21a0 c053e36c c12f6048 c12f6900
-[    1.415282] 5f80: c4809cc0 00000000 00000000 c004d67c c12f4fe0 c004d5a0 00000000 00000000
-[    1.415531] 5fa0: 00000000 00000000 00000000 c0008368 00000000 00000000 00000000 00000000
-[    1.415780] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    1.416025] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
-[    1.416643]  pcmcia_init_one from pcmcia_device_probe+0xe4/0x2a0
-[    1.416882]  pcmcia_device_probe from really_probe+0xc8/0x3b4
-[    1.417070]  really_probe from __driver_probe_device+0x9c/0x214
-[    1.417255]  __driver_probe_device from driver_probe_device+0x38/0xe0
-[    1.417454]  driver_probe_device from __device_attach_driver+0xa4/0x11c
-[    1.417657]  __device_attach_driver from bus_for_each_drv+0x88/0xd8
-[    1.417864]  bus_for_each_drv from __device_attach+0xf4/0x194
-[    1.418047]  __device_attach from bus_probe_device+0x8c/0x94
-[    1.418224]  bus_probe_device from device_add+0x3d0/0x894
-[    1.418395]  device_add from pcmcia_device_add+0x2ec/0x3e0
-[    1.418568]  pcmcia_device_add from pcmcia_card_add+0xd4/0x1a0
-[    1.418756]  pcmcia_card_add from pcmcia_bus_add+0x44/0x4c
-[    1.418930]  pcmcia_bus_add from socket_insert+0x12c/0x150
-[    1.419103]  socket_insert from pccardd+0x398/0x44c
-[    1.419257]  pccardd from kthread+0xdc/0x114
-[    1.419400]  kthread from ret_from_fork+0x14/0x2c
-[    1.419569] Exception stack(0xc48a5fb0 to 0xc48a5ff8)
-[    1.419735] 5fa0:                                     00000000 00000000 00000000 00000000
-[    1.419979] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    1.420222] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    1.420501] Code: 13570000 e1a06000 0a000043 e3a03002 (e5c03000)
-[    1.420874] ---[ end trace 0000000000000000 ]---
+The changes look good though, so:
 
----
-# bad: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
-# good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
-git bisect start 'HEAD' 'v5.18-rc1'
-# good: [9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d] ARM: pxa: mainstone-wm97xx: use gpio lookup table
-git bisect good 9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d
-# good: [764063eee7620ea9abb940068a7ad0e7f9efa1b6] cpufreq: pxa3: move clk register access to clk driver
-git bisect good 764063eee7620ea9abb940068a7ad0e7f9efa1b6
-# good: [5153474f0a4388b7ddb59add4be73bfb42b2007f] ARM: mmp: remove tavorevb board support
-git bisect good 5153474f0a4388b7ddb59add4be73bfb42b2007f
-# good: [2746f7c78b428c8b01b691a29a972c08101ae343] ARM: PXA: fix multi-cpu build of xsc3
-git bisect good 2746f7c78b428c8b01b691a29a972c08101ae343
-# good: [73d5106e9489464eac84362705e93bcf3b376123] ARM: pxa: remove support for MTD_XIP
-git bisect good 73d5106e9489464eac84362705e93bcf3b376123
-# first bad commit: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+>=20
+> Thierry
+>=20
+>>=20
+>>  diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
+>> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>  index 8bd27edef216..0dcf37527c8e 100644
+>>  --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>  +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>  @@ -127,6 +127,19 @@ wdt: watchdog@0 {
+>>   			clocks =3D <&tcu TCU_CLK_WDT>;
+>>   			clock-names =3D "wdt";
+>>   		};
+>>  +
+>>  +		pwm: pwm@40 {
+>>  +			compatible =3D "ingenic,x1000-pwm";
+>>  +			reg =3D <0x40 0x80>;
+>>  +
+>>  +			#pwm-cells =3D <3>;
+>>  +
+>>  +			clocks =3D <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
+>>  +				 <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_TIMER3>,
+>>  +				 <&tcu TCU_CLK_TIMER4>;
+>>  +			clock-names =3D "timer0", "timer1", "timer2",
+>>  +				      "timer3", "timer4";
+>>  +		};
+>>   	};
+>>=20
+>>   	rtc: rtc@10003000 {
+>>  --
+>>  2.34.1
+>>=20
+
+
