@@ -2,53 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388DF50C508
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Apr 2022 01:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D09450C4DE
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Apr 2022 01:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiDVXfg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Apr 2022 19:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S230197AbiDVXou (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Apr 2022 19:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiDVXf0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 19:35:26 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB6E1D83BA;
-        Fri, 22 Apr 2022 16:18:40 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id i3-20020a056830010300b00605468119c3so6494407otp.11;
-        Fri, 22 Apr 2022 16:18:40 -0700 (PDT)
+        with ESMTP id S229899AbiDVXos (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 19:44:48 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFA06FF5E;
+        Fri, 22 Apr 2022 16:41:53 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-e656032735so8963847fac.0;
+        Fri, 22 Apr 2022 16:41:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=KoWXKICOXrLwboX1KRSR8wabyc5tj+p6lrbCOGJNsB0=;
-        b=WfyERyMX7R5AXo/rMMIl6y8nSXixykdVRLEdinY/MomqcCB5r5ZQbLs3BCON1JbJid
-         SYBch1vH11Gbyyr7uHnb4uKt0rpEYLwWG6jPVzGB/6YTjnfP6B6nc9E72CRX17Qo8Nv0
-         hqL9sBFF2f0anLzd4y4fWfHceVS7UFZj4OgGcGq3zFsQ1W26Ro4FtkgUsgVmFt6FTodv
-         WJhhQLAQTlQE5ybgDgtXzSu4H0hkfGnY/mdPQk846Y0PZFkSuevMtu2SOCSNLfL6QGeG
-         2/n/ZJOa7dCF4cmxGePvIEuDB/dkYth22mYrBof0ZAwoE1ogpw42s8W4hmZGYwun6WYu
-         NaHA==
+        bh=vXMx7OeCBZiIeZrs0uT2oDD68NpfAYuJIOJDA5UqsVw=;
+        b=OE+X+9KI+J3rDIF1JCA5QGO/m7/xfFwF2sxGgwIVvBiiJHzRiywUg/fAcqzx0YWiJI
+         eh8IapCSFTaVXeWf+ZvDrR2+BrHHjFGTAfKIdJh2sb0tIGaCJgQyR9/pN5/yEtx010Yl
+         4OYNQeWUC/ZrIOHPVnMz7XJjKJqjuvA05ydXM6CXgYlWOskKHs4B7XuiIrFGYXXhbOb/
+         BG5emwoOMdYDm95oQ5PHJbcZQjKJCGdgulxHS59A2rkRJQtlgLmpBIlWDLRGtKc1APUl
+         IDdSv6jkJKINjLMsVNTPOVLI5j/vmC/UyfxOhE1zqnXY+nEXUgliUWLv7mvcIM0rld3T
+         wIOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=KoWXKICOXrLwboX1KRSR8wabyc5tj+p6lrbCOGJNsB0=;
-        b=0udM59OXTkX0qBnWg3+GL73fGaVxcVrRra3MiwovoCuQzxxCnuxt4rnE5fI87cJDSJ
-         5hJ2UtZRWZ9W0jRioEmY5Ehh4Gf3AZBrpWIuFjHTuTFEc2xY0CX13Mf95XBRpjYlbnST
-         GkOFlxxsWcRCHAwWo6NyNK5h4jIiUqU2CR9ac3QPbe8dvA3RAEucqq/PkaiInJx4nD3I
-         ad9eXdjUG6GoAVuUbilyT2ogorPZnCF8S5+wDMt9nB6wZyAULb5gUbsJuhxq6NN5OMjK
-         ZzZq9gBkRqsf1v1hHQwuEVbNrB7VXAl3fIzvpEalEqAbVUoilveIzYT5QHw5TBPKhng0
-         w2Ew==
-X-Gm-Message-State: AOAM5339xlY6pD+0oHKGHNb0Dm+jKfiKy3vE2bynMOUsa/eiVWOva+Il
-        rRsE3wldGCT8V/5DLez8bjg=
-X-Google-Smtp-Source: ABdhPJwKkrwKpAYwt9fhjngX1DM/06254YDKfs9CDiPU2Hx7eNlH3p/K4fmqYt8gQFcOM67kG0jDEA==
-X-Received: by 2002:a05:6830:14cd:b0:605:4e77:6472 with SMTP id t13-20020a05683014cd00b006054e776472mr2672213otq.94.1650669519778;
-        Fri, 22 Apr 2022 16:18:39 -0700 (PDT)
+        bh=vXMx7OeCBZiIeZrs0uT2oDD68NpfAYuJIOJDA5UqsVw=;
+        b=TWcqLC1iH2fFmv3GXNRzoBUTzp+aQrXH0nEcWsg9oAJrnhMfmE9F+3y2Lu0GHHTGBg
+         hNdqe1Ah/wDkqK7sxgh0xJYn888zUXO6oadjsF4/0ooAGC21uM0b7JHETvUPrbxFTP/w
+         09OWJCVCXJhT8vby/piA6b6h7vDHM2vlw58TTya8a24XXEMLsZNtzPFRUSQESoJA7WVC
+         3+r1KOIVeQwpRnqCxuBnWinFvKGEa0lq3E+Qj/lT+i0Z08KogQgs3buaE59hYL5yEGZc
+         xLeElhg3I4K4ESH54DIuE9PC0VbpXzmOt0BQIJ6Ksptoi6qdYCZittbAvXcmrtGpWMTX
+         BLPw==
+X-Gm-Message-State: AOAM533QBSYEXhL+jVLSOhQ5Q1qQNSXgep/byUbuv3Bnhzyp31F52rYv
+        iuEIepMQapcqq6jO5P7t60+qto8f30Y=
+X-Google-Smtp-Source: ABdhPJyscCRuk9Ea7h4lpY7o125V/lHv8txlEhwT9ckOWkPAGsKVkDIX2wFpL7GtQIz+VTOwStMu1g==
+X-Received: by 2002:a05:6870:2404:b0:e2:8913:98d7 with SMTP id n4-20020a056870240400b000e2891398d7mr6986276oap.16.1650670913075;
+        Fri, 22 Apr 2022 16:41:53 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f15-20020a9d5f0f000000b005e6b67945a3sm1256410oti.15.2022.04.22.16.18.38
+        by smtp.gmail.com with ESMTPSA id g16-20020a4a9250000000b0033a7783dda8sm1373161ooh.48.2022.04.22.16.41.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 16:18:38 -0700 (PDT)
+        Fri, 22 Apr 2022 16:41:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 22 Apr 2022 16:18:36 -0700
+Date:   Fri, 22 Apr 2022 16:41:50 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
@@ -85,7 +85,7 @@ Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         ALSA Development Mailing List <alsa-devel@alsa-project.org>
 Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-Message-ID: <20220422231836.GA3202260@roeck-us.net>
+Message-ID: <20220422234150.GA3442771@roeck-us.net>
 References: <20220419163810.2118169-1-arnd@kernel.org>
  <20220422170530.GA2338209@roeck-us.net>
  <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
@@ -137,12 +137,38 @@ On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
 > > I'll do another round of bisects.
 > 
 
-So ... z2 bisect points to the same patch, but the error is different.
-As mentioned, it does not recognize the initrd. Oddly enough, booting
-from initrd works for the other platforms.
-
-The sx1 boot failure seems to be unrelated to your patch series. It boots
-fine if built from the tip of your branch, but fails to boot in -next.
-That will require a bisect from -next.
+Here is the bisect for the sx1 boot failure.
 
 Guenter
+
+---
+# bad: [e7d6987e09a328d4a949701db40ef63fbb970670] Add linux-next specific files for 20220422
+# good: [b2d229d4ddb17db541098b83524d901257e93845] Linux 5.18-rc3
+git bisect start 'HEAD' 'v5.18-rc3'
+# bad: [479506a21bd2df998017a00f4fe0ea893039d9d0] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
+git bisect bad 479506a21bd2df998017a00f4fe0ea893039d9d0
+# bad: [84fdc506ff63f3f8eb7feaac87821c39bf1dbdfd] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git
+git bisect bad 84fdc506ff63f3f8eb7feaac87821c39bf1dbdfd
+# bad: [0318e72d28be01b99056a7e66572423682eae2bb] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
+git bisect bad 0318e72d28be01b99056a7e66572423682eae2bb
+# good: [813d98e2e26d3f418d925263a82d72d1454b326e] Merge branch 'zstd-linus' of https://github.com/terrelln/linux.git
+git bisect good 813d98e2e26d3f418d925263a82d72d1454b326e
+# bad: [5e87f91cfe6e938eccb88a992687e2ac52eec2a7] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+git bisect bad 5e87f91cfe6e938eccb88a992687e2ac52eec2a7
+# bad: [ac4b03d5ad6b887558eb94943f0f2834661dee45] Merge branch 'pxa-multiplatform-5.18' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc into arm/multiplatform-late
+git bisect bad ac4b03d5ad6b887558eb94943f0f2834661dee45
+# good: [6eab9bfd712f63c0977f2d38a45f321816030707] Merge branch 'omap1/multiplatform-prep' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc into arm/multiplatform
+git bisect good 6eab9bfd712f63c0977f2d38a45f321816030707
+# good: [ac571609a9fab9b94bbd8e634ba20e2ab672e32d] input: touchscreen: mainstone: sync with zylonite driver
+git bisect good ac571609a9fab9b94bbd8e634ba20e2ab672e32d
+# good: [77b9aeb6e3cd4de6b320d3a9be5d692594159f9e] ARM: pxa: remove unused mach/bitfield.h
+git bisect good 77b9aeb6e3cd4de6b320d3a9be5d692594159f9e
+# good: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
+git bisect good 7643a9ca9f8e08f71e15f89dd74863635e981e03
+# good: [bdfb692acfa98c3e8135ab44bc8366636443590a] [MERGED] ASoC: ti: osk5912: Make it CCF clk API compatible
+git bisect good bdfb692acfa98c3e8135ab44bc8366636443590a
+# bad: [b59e8a5fd321fe44bdabd38908b4f899f933cf0f] [TO BE REBASED] ARM: omap1: enable multiplatform
+git bisect bad b59e8a5fd321fe44bdabd38908b4f899f933cf0f
+# good: [4c4467ac74299b14b8cf74406722af8090aa7766] [TO BE REBASED] ARM: OMAP1: clock: Convert to CCF
+git bisect good 4c4467ac74299b14b8cf74406722af8090aa7766
+# first bad commit: [b59e8a5fd321fe44bdabd38908b4f899f933cf0f] [TO BE REBASED] ARM: omap1: enable multiplatform
