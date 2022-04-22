@@ -2,135 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D7D50AA74
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Apr 2022 23:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4E050ADCD
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 04:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441797AbiDUVJD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Apr 2022 17:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S1443412AbiDVCgz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Apr 2022 22:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239054AbiDUVJC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Apr 2022 17:09:02 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E17447AE4;
-        Thu, 21 Apr 2022 14:06:11 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nhe01-0007Hb-00; Thu, 21 Apr 2022 23:06:01 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 79792C01A0; Thu, 21 Apr 2022 23:05:25 +0200 (CEST)
-Date:   Thu, 21 Apr 2022 23:05:25 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        tglx@linutronix.de, arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>
-Subject: Re: [PATCH v5 04/11] mips: use fallback for random_get_entropy()
- instead of just c0 random
-Message-ID: <20220421210525.GA16228@alpha.franken.de>
-References: <20220419111650.1582274-1-Jason@zx2c4.com>
- <20220419111650.1582274-5-Jason@zx2c4.com>
+        with ESMTP id S1386192AbiDVCgx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Apr 2022 22:36:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CAF4B412;
+        Thu, 21 Apr 2022 19:34:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D10B6B82A18;
+        Fri, 22 Apr 2022 02:34:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E8FC385A8;
+        Fri, 22 Apr 2022 02:33:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650594839;
+        bh=uSHrkLY+dZ+wKF/t6k1olPqi38KWpu6Mopr6O6CB9PE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=YSv6iuKjih2OATi0FEAB6NTD3yg8Uiz50zars69ikIxL9k7591IqZeT0kqu8oF+20
+         WCczCSeDEZfVxUPVmjoqPOQ4l/CZ1mAQXk5OUsRwAXR3nCGmNxtjbWEanZdbhXCDwr
+         eBf+gR4MADAa6NYKBiiPZtUTqiKWw8uEqdAR6oTFCCtqLcJbD0y26ZCt2kPiTiDWe1
+         akoK0pDf9OmXbSDnGd7DMyLHOgUu9SnNUncCjY8K2mWW7UuxsC3tqVm78S/2S9ihdm
+         mdOkbwqtBNs04Oh1xEqmXEFRLBZS1+wIvHJ8XDHgZHMZioGE0k0tRF+blwIwTpO139
+         zFoZ+ahClPsBQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419111650.1582274-5-Jason@zx2c4.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220411101441.17020-3-aidanmacdonald.0x0@gmail.com>
+References: <20220411101441.17020-1-aidanmacdonald.0x0@gmail.com> <20220411101441.17020-3-aidanmacdonald.0x0@gmail.com>
+Subject: Re: [RESEND PATCH 2/3] clk: ingenic: Mark critical clocks in Ingenic SoCs
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        mturquette@baylibre.com, paul@crapouillou.net,
+        paulburton@kernel.org, tsbogend@alpha.franken.de
+Date:   Thu, 21 Apr 2022 19:33:57 -0700
+User-Agent: alot/0.10
+Message-Id: <20220422023359.87E8FC385A8@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 01:16:43PM +0200, Jason A. Donenfeld wrote:
-> For situations in which we don't have a c0 counter register available,
-> we've been falling back to reading the c0 "random" register, which is
-> usually bounded by the amount of TLB entries and changes every other
-> cycle or so. This means it wraps extremely often. We can do better by
-> combining this fast-changing counter with a potentially slower-changing
-> counter from random_get_entropy_fallback() in the more significant bits.
-> This commit combines the two, taking into account that the changing bits
-> are in a different bit position depending on the CPU model. In addition,
-> we previously were falling back to 0 for ancient CPUs that Linux does
-> not support anyway; remove that dead path entirely.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Maciej W. Rozycki <macro@orcam.me.uk>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Quoting Aidan MacDonald (2022-04-11 03:14:40)
+> Consider the CPU, L2 cache, and memory as critical to ensure they
+> are not disabled.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 > ---
-> ThomasB - I dropped your Ack from v4, because this is pretty different
-> from v4 now.
-> 
-> Maciej - you mentioned you had a test rig. Think you could provide a
-> "Tested-by" if this approach works?
-> 
->  arch/mips/include/asm/timex.h | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/timex.h b/arch/mips/include/asm/timex.h
-> index b05bb70a2e46..e3f5460a923b 100644
-> --- a/arch/mips/include/asm/timex.h
-> +++ b/arch/mips/include/asm/timex.h
-> @@ -80,21 +80,19 @@ static inline cycles_t get_cycles(void)
->  /*
->   * Like get_cycles - but where c0_count is not available we desperately
->   * use c0_random in an attempt to get at least a little bit of entropy.
-> - *
-> - * R6000 and R6000A neither have a count register nor a random register.
-> - * That leaves no entropy source in the CPU itself.
->   */
->  static inline unsigned long random_get_entropy(void)
->  {
-> -	unsigned int prid = read_c0_prid();
-> -	unsigned int imp = prid & PRID_IMP_MASK;
-> +	unsigned int c0_random;
->  
-> -	if (can_use_mips_counter(prid))
-> +	if (can_use_mips_counter(read_c0_prid()))
->  		return read_c0_count();
-> -	else if (likely(imp != PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
-> -		return read_c0_random();
-> +
-> +	if (cpu_has_3kex)
-> +		c0_random = (read_c0_random() >> 8) & 0x3f;
->  	else
-> -		return 0;	/* no usable register */
-> +		c0_random = read_c0_random() & 0x3f;
-> +	return (random_get_entropy_fallback() << 6) | (0x3f - c0_random);
->  }
->  #define random_get_entropy random_get_entropy
->  
-> -- 
-> 2.35.1
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+General comment, please add a comment around CLK_IS_CRITICAL usage if it
+isn't very clear why such a clk shouldn't be turned off. Second, is
+there any point in describing these clks in the kernel and using memory
+to do that if they're just going to always be on? Wouldn't a dummy clk
+returned from clk_get() work just as well if anything is grabbing a
+reference with clk_get()?
