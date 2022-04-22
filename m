@@ -2,70 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4E050ADCD
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 04:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C6D50AF87
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 07:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443412AbiDVCgz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Apr 2022 22:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S229700AbiDVFjf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Apr 2022 01:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386192AbiDVCgx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Apr 2022 22:36:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CAF4B412;
-        Thu, 21 Apr 2022 19:34:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D10B6B82A18;
-        Fri, 22 Apr 2022 02:34:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E8FC385A8;
-        Fri, 22 Apr 2022 02:33:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650594839;
-        bh=uSHrkLY+dZ+wKF/t6k1olPqi38KWpu6Mopr6O6CB9PE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=YSv6iuKjih2OATi0FEAB6NTD3yg8Uiz50zars69ikIxL9k7591IqZeT0kqu8oF+20
-         WCczCSeDEZfVxUPVmjoqPOQ4l/CZ1mAQXk5OUsRwAXR3nCGmNxtjbWEanZdbhXCDwr
-         eBf+gR4MADAa6NYKBiiPZtUTqiKWw8uEqdAR6oTFCCtqLcJbD0y26ZCt2kPiTiDWe1
-         akoK0pDf9OmXbSDnGd7DMyLHOgUu9SnNUncCjY8K2mWW7UuxsC3tqVm78S/2S9ihdm
-         mdOkbwqtBNs04Oh1xEqmXEFRLBZS1+wIvHJ8XDHgZHMZioGE0k0tRF+blwIwTpO139
-         zFoZ+ahClPsBQ==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232306AbiDVFYn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 01:24:43 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933954F442;
+        Thu, 21 Apr 2022 22:21:49 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id kc12so117073qvb.0;
+        Thu, 21 Apr 2022 22:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hL4RE3KhpgsczmHCd82s+GTL+VM0PpuQ4vRV61iW2so=;
+        b=oPZH6cT4eFog/QoZgdRzBGjRtrP5yokMOG7gimEQZYOF7B251XF9oEC/ehKdXpeV7r
+         zuMYbACCZhfqN61KvP1Wp39J8ZIJo2B98SXecewmZsXgjiwGEto+p5mHd4V6Sln7eClG
+         AxsThV3BEZYUACZQL8eELE8ilrKOuG/WIkPz+jI/bjspk6PdlfmUBxnpkgrLznGnz2BF
+         v+MPPtX6MDBsK/W1UKQNU4Q0T/HQUvrdsHKqvmbj2C67mK+dCE6ubv46ZMaWr2M0YFTB
+         qWo8b9Anc495wTdv+1IkBVNMe1d4eLZK11PsqP1czTCeFj7PadIFsssut8OWcMJlJz2L
+         LWnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hL4RE3KhpgsczmHCd82s+GTL+VM0PpuQ4vRV61iW2so=;
+        b=ZLWFGvhwqfKO9aVLHPZse68DSkAKMMpYqB6aTy5RF/Z+jmuJmbHdfEvJ2yDeqcBthh
+         EdvhFDxkefzhVlF9iaQuCt4tYBnWigUTzcbEn4ZWsWqXcFr2UM2YnFdKQ+3SQF2QhqYw
+         51l3I7lI7FqciEwZ7/lh4z1H/LLTHWyrprzIQoYMXJjvzgv/kxhX0S8NAT+x7DkEBBxA
+         pwRHry2iMtUZx3HSSrVtmOdxYil4LfADxWQLUDjGavTAS7eQh3q4AO/ZeHSBoa7+BMZy
+         EhATigMOKvKfG/Wp1kWq8ZrwAMxTk+SFNwVaBdU2SJTytUENBio9f8PgRciH+yOoIGaB
+         Kw9Q==
+X-Gm-Message-State: AOAM530ZXB8epIYeWjs+IxRDaXXzgEITbaPqIHW5/qkMWzvJyOSVCN1o
+        HsBGugcfYe6LFYl9SW31zNrf4X2YvynF9Ovf/AQ=
+X-Google-Smtp-Source: ABdhPJyN3psO4kSFD8fbsmu96H/8mfECMCXljvl609zKdqflOH2NZhqDBoliBbIsFDfFk1+o+6RwvksmzjIoHhXMH/I=
+X-Received: by 2002:a05:6214:d0e:b0:446:716a:fff2 with SMTP id
+ 14-20020a0562140d0e00b00446716afff2mr2099927qvh.38.1650604908751; Thu, 21 Apr
+ 2022 22:21:48 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220413060729.27639-1-arinc.unal@arinc9.com> <CACRpkdbbMFYNNjAKwhysKpu1JVh2JSB-N=Y8QMx1JvMhCPBpwg@mail.gmail.com>
+ <26418320-64e0-3ed2-c792-7f72878b7592@arinc9.com>
+In-Reply-To: <26418320-64e0-3ed2-c792-7f72878b7592@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 22 Apr 2022 07:21:38 +0200
+Message-ID: <CAMhs-H_d8jUa4=4eVjQxo+h-XeRgiMYC1H_xYtPLb8jHDVYL2Q@mail.gmail.com>
+Subject: Re: [PATCH 0/14] Refactor Ralink Pinctrl and Add Documentation
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        erkin.bozoglu@xeront.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220411101441.17020-3-aidanmacdonald.0x0@gmail.com>
-References: <20220411101441.17020-1-aidanmacdonald.0x0@gmail.com> <20220411101441.17020-3-aidanmacdonald.0x0@gmail.com>
-Subject: Re: [RESEND PATCH 2/3] clk: ingenic: Mark critical clocks in Ingenic SoCs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        mturquette@baylibre.com, paul@crapouillou.net,
-        paulburton@kernel.org, tsbogend@alpha.franken.de
-Date:   Thu, 21 Apr 2022 19:33:57 -0700
-User-Agent: alot/0.10
-Message-Id: <20220422023359.87E8FC385A8@smtp.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Aidan MacDonald (2022-04-11 03:14:40)
-> Consider the CPU, L2 cache, and memory as critical to ensure they
-> are not disabled.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-> ---
+Hi Arin=C3=A7,
 
-General comment, please add a comment around CLK_IS_CRITICAL usage if it
-isn't very clear why such a clk shouldn't be turned off. Second, is
-there any point in describing these clks in the kernel and using memory
-to do that if they're just going to always be on? Wouldn't a dummy clk
-returned from clk_get() work just as well if anything is grabbing a
-reference with clk_get()?
+On Thu, Apr 21, 2022 at 4:44 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
+9.com> wrote:
+>
+> On 21/04/2022 17:27, Linus Walleij wrote:
+> > On Wed, Apr 13, 2022 at 8:08 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@a=
+rinc9.com> wrote:
+> >
+> >> This patch series brings complete refactoring to the Ralink pinctrl dr=
+iver
+> >> and its subdrivers.
+> >
+> > I just merged all the patches, the comments seem minor and any further
+> > fixes can certainly be done on top of this. Anyone interested in ralink
+> > working nicely is likely in the thread and we mostly care about that th=
+is
+> > works for OpenWrt, and if it works for them we are happy.
+> >
+> >>    mips: dts: ralink: mt7621: use the new compatible string for MT7621=
+ pinctrl
+> >
+> > This was a bit scary since we usually take these through the respective
+> > SoC tree, but I just applied it anyway, it makes logical sense in the
+> > series.
+> >
+> > I hope it will not lead to conflicts.
+> >
+> > Good work with this series!
+>
+> Thanks. There is a v2 of this series which has been waiting for a week,
+> I hope that was the one you applied as you replied under v1 (I'm not
+> sure which repository you applied this so I can't check myself).
+
+Linus adds patches through the linux-pinctrl tree as pinctrl maintainer. Ch=
+eck:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/lo=
+g/?h=3Ddevel
+
+Best regards,
+    Sergio Paracuellos
+>
+> https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=3D6323=
+70
+>
+> Ar=C4=B1n=C3=A7
