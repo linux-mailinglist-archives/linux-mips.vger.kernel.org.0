@@ -2,86 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EBF50BC55
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 17:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6C150BCA7
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 18:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449630AbiDVQAs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Apr 2022 12:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S1358276AbiDVQPF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Apr 2022 12:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449622AbiDVQAr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 12:00:47 -0400
-Received: from out28-220.mail.aliyun.com (out28-220.mail.aliyun.com [115.124.28.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4AA5DA7A;
-        Fri, 22 Apr 2022 08:57:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2959096|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0197065-0.00421785-0.976076;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047202;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NVuYnRb_1650643065;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NVuYnRb_1650643065)
-          by smtp.aliyun-inc.com(33.32.41.12);
-          Fri, 22 Apr 2022 23:57:46 +0800
-Subject: Re: [PATCH v4 0/3] Add OTG support for Ingenic SoCs.
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     hminas@synopsys.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        tsbogend@alpha.franken.de, paul@crapouillou.net,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1650561308-54704-1-git-send-email-zhouyanjie@wanyeetech.com>
- <YmJntZ7RYpPVaxhm@kroah.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <8e2472c8-39d1-065f-4cfb-41359af435f2@wanyeetech.com>
-Date:   Fri, 22 Apr 2022 23:57:44 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S1357434AbiDVQPE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 12:15:04 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1735C85D;
+        Fri, 22 Apr 2022 09:12:10 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id bu29so15173604lfb.0;
+        Fri, 22 Apr 2022 09:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tUo95tRg9oswGTOGs7YDeTbiPQNo1Vj+yujmZ07iNkE=;
+        b=FLa3FV0MSiyAgF2qyUNtURfbCSQxRppSlJuyLPRYJCUhCKwdEJcbnUznBjJaW5PmFQ
+         clVb3BnSlvpBRd7Un9kv49I0jweeB9Q+IEw2idcC1n8H5og+XR/wZJ0ke4iZ3czRD5tQ
+         cuMBls+ZtSi1BD4F4tL4AkioVEUE3qE/D0CIJLegjKlvgqlxGcltFPj3pqPEjdi+/tml
+         vMM3PrkJKFsB8PNhcyCvgoZHcyQdBlmxb4xDmB+90ryGui/OoiYFKVi+XzrwMr/ypgJd
+         z3dorO1J1uzxWOUJVO8+h15OWXkq5DN91Bt6+XYRmK/SD7vUICWns9iF64rBHwU2gXDk
+         OTxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tUo95tRg9oswGTOGs7YDeTbiPQNo1Vj+yujmZ07iNkE=;
+        b=tygrQht4ELLDHJpMOrtrGKUPXLNvUXFid2hEee1NTk8rDXdKeakaL02tiujtbc8RHO
+         JJX5EkYregSlsFiVC+Szy6U6AYbu9YSX8x05cPf+mX5IzVeYY8ty4/pjQboQ3fAy4kkn
+         +d9BeajuyU2iHEPkAyuR7lM0wD1OaItMix7KqHsECE0xiVsLv/oW/kDQqHcf5faO/A0d
+         9OzhKESA9WDPJY33Ca07Ugp/QjvvQiTqfc3qguozau0JtmFPr/7Xjp/Ob/2ZRxV96Mfe
+         l6AaNABp/sJvrg8YnbMhzlobSz/+nEzvOh4e0/HB4Xb14RArs8W52DxM1ifmNJqe6sbD
+         XeAg==
+X-Gm-Message-State: AOAM533Vt4Bdol/14jIT3aOrV8ZjNg2SK+wpbefLKsWpBecsCaeCT6+f
+        zanEtTbRHmVfKTqUt06IGm1sditgADM=
+X-Google-Smtp-Source: ABdhPJyqLOH8nj96lV9crARCF1zTsrgpxWcFrXkyn1Y7RcoQRDIU1n10tbVDioOk+9ho+Nz5J1f6Ag==
+X-Received: by 2002:a05:6512:34da:b0:46b:b7fd:1eca with SMTP id w26-20020a05651234da00b0046bb7fd1ecamr3619901lfr.481.1650643929213;
+        Fri, 22 Apr 2022 09:12:09 -0700 (PDT)
+Received: from orome ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id s8-20020a2e9c08000000b0024af06d6674sm254891lji.61.2022.04.22.09.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 09:12:08 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 18:12:05 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        paul@crapouillou.net
+Cc:     robh+dt@kernel.org, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] mips: dts: ingenic: x1000: Add PWM device tree
+ node
+Message-ID: <YmLT1VA8ZL57CQkO@orome>
+References: <20220224234133.15708-1-aidanmacdonald.0x0@gmail.com>
+ <20220224234133.15708-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YmJntZ7RYpPVaxhm@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oqekWBq8aThw7qyZ"
+Content-Disposition: inline
+In-Reply-To: <20220224234133.15708-2-aidanmacdonald.0x0@gmail.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Greg,
 
-On 2022/4/22 下午4:30, Greg KH wrote:
-> On Fri, Apr 22, 2022 at 01:15:05AM +0800, 周琰杰 (Zhou Yanjie) wrote:
->> 1.Add OTG support for the JZ4775 SoC, the JZ4780 SoC, the X1000
->>    SoC, the X1600 SoC, the X1830 SoC, and the X2000 SoC.
->> 2.Introduce support for disable Ingenic overcurrent detection,
->>    once selected it enables GOTGCTL register bits VbvalidOvEn
->>    and VbvalidOvVal to disable the VBUS overcurrent detection.
->>
->> v1->v2:
->> 1.Add Rob Herring's Acked-by.
->> 2.Add Minas Harutyunyan's Acked-by.
->> 3.Use "activate_ingenic_overcurrent_detection" instead
->>    "deactivate_ingenic_overcurrent_detection" as Greg's suggestion.
->>
->> v2->v3:
->> Refresh USB nodes in device tree files, remove "snps,dwc2" since
->> it is nolonger needed.
->>
->> v3->v4:
->> Remove the compatible string of X1700 since it could use the X1600
->> string　as the fallback.
-> I already applied v3, so can you just provide a fixup patch for the
-> difference between v3 and v4?
+--oqekWBq8aThw7qyZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Feb 24, 2022 at 11:41:34PM +0000, Aidan MacDonald wrote:
+> Copied from the jz4740 devicetree and trimmed to 5 timers, which
+> is what the hardware supports.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  arch/mips/boot/dts/ingenic/x1000.dtsi | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 
-Sure.
+However I don't see this upstream yet, neither in Linus' tree nor in
+linux-next. Paul, do you still have this on your radar?
 
+Thierry
 
-Thanks and best regards!
+>=20
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/i=
+ngenic/x1000.dtsi
+> index 8bd27edef216..0dcf37527c8e 100644
+> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> @@ -127,6 +127,19 @@ wdt: watchdog@0 {
+>  			clocks =3D <&tcu TCU_CLK_WDT>;
+>  			clock-names =3D "wdt";
+>  		};
+> +
+> +		pwm: pwm@40 {
+> +			compatible =3D "ingenic,x1000-pwm";
+> +			reg =3D <0x40 0x80>;
+> +
+> +			#pwm-cells =3D <3>;
+> +
+> +			clocks =3D <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
+> +				 <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_TIMER3>,
+> +				 <&tcu TCU_CLK_TIMER4>;
+> +			clock-names =3D "timer0", "timer1", "timer2",
+> +				      "timer3", "timer4";
+> +		};
+>  	};
+> =20
+>  	rtc: rtc@10003000 {
+> --=20
+> 2.34.1
+>=20
 
+--oqekWBq8aThw7qyZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
->
-> thanks,
->
-> greg k-h
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJi09MACgkQ3SOs138+
+s6FFpRAAuH7U4JXdUlpL70pOW1ieMwEBCfi6FD7Ek1vDFOOMpYKWTmbckzoBi3JW
+nAbs6B3aKDgnopG7nui6lyS7XYosRXjgnvn05FIFdKApcAkE929MplQAG7x8JOuC
+pCHfLXuTkh3pngiZtyvVpqJ4ymT1e2Z1IV7is215b8SmUhotOtAPFS1gpbRXQLWR
+bTqfdaoxYHpmTHU5lcoZAzU3cqzAP28Ae/xhMoiSK+6ZaPpDGimC7MszBkGgJQZi
+VQ2PvhbIthFk7tAaBekRj9pQiD6pdk2IA+bctSpOcUoVp9NRvudgmm5rBEEKPuOf
+Sr7VNVd9/HNWGAiMtEGb3SbbUbBxzVXNxEWRz+NtO9Y6R4h8IpWmMIH/SMoR7fYy
++Ea3HdylX2TENnuH+wonQAdNqJ0t5w2hlkjltJLDJUOqgF3KkugdMylzhWMpv3Dj
+anltpfr9KWN48c2N8VsBuUSfVlU0SZB6cV7dHq+8JTpucva/YtD+0gdwofl4cERF
+czY9p20Bzw1vlfCIDaeH1qLv/e5e5jGlJVmF8GFAA6CyyhNWit/5uWO57GATvSqE
+inSRdtOdmJkfnB91+bu2mpeirRIe5lM+8FfIW22OT4W0OXHSXC3ViLbLAa6w1zjm
+oIJroWw1T0nFvfsz9+PRPGVIqfD1KllKDrj8awyEtowT5wDC2Wg=
+=9GL8
+-----END PGP SIGNATURE-----
+
+--oqekWBq8aThw7qyZ--
