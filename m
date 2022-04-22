@@ -2,57 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C6D50AF87
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 07:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9F450B050
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Apr 2022 08:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiDVFjf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Apr 2022 01:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S1444050AbiDVGRW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Apr 2022 02:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbiDVFYn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 01:24:43 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933954F442;
-        Thu, 21 Apr 2022 22:21:49 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id kc12so117073qvb.0;
-        Thu, 21 Apr 2022 22:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hL4RE3KhpgsczmHCd82s+GTL+VM0PpuQ4vRV61iW2so=;
-        b=oPZH6cT4eFog/QoZgdRzBGjRtrP5yokMOG7gimEQZYOF7B251XF9oEC/ehKdXpeV7r
-         zuMYbACCZhfqN61KvP1Wp39J8ZIJo2B98SXecewmZsXgjiwGEto+p5mHd4V6Sln7eClG
-         AxsThV3BEZYUACZQL8eELE8ilrKOuG/WIkPz+jI/bjspk6PdlfmUBxnpkgrLznGnz2BF
-         v+MPPtX6MDBsK/W1UKQNU4Q0T/HQUvrdsHKqvmbj2C67mK+dCE6ubv46ZMaWr2M0YFTB
-         qWo8b9Anc495wTdv+1IkBVNMe1d4eLZK11PsqP1czTCeFj7PadIFsssut8OWcMJlJz2L
-         LWnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hL4RE3KhpgsczmHCd82s+GTL+VM0PpuQ4vRV61iW2so=;
-        b=ZLWFGvhwqfKO9aVLHPZse68DSkAKMMpYqB6aTy5RF/Z+jmuJmbHdfEvJ2yDeqcBthh
-         EdvhFDxkefzhVlF9iaQuCt4tYBnWigUTzcbEn4ZWsWqXcFr2UM2YnFdKQ+3SQF2QhqYw
-         51l3I7lI7FqciEwZ7/lh4z1H/LLTHWyrprzIQoYMXJjvzgv/kxhX0S8NAT+x7DkEBBxA
-         pwRHry2iMtUZx3HSSrVtmOdxYil4LfADxWQLUDjGavTAS7eQh3q4AO/ZeHSBoa7+BMZy
-         EhATigMOKvKfG/Wp1kWq8ZrwAMxTk+SFNwVaBdU2SJTytUENBio9f8PgRciH+yOoIGaB
-         Kw9Q==
-X-Gm-Message-State: AOAM530ZXB8epIYeWjs+IxRDaXXzgEITbaPqIHW5/qkMWzvJyOSVCN1o
-        HsBGugcfYe6LFYl9SW31zNrf4X2YvynF9Ovf/AQ=
-X-Google-Smtp-Source: ABdhPJyN3psO4kSFD8fbsmu96H/8mfECMCXljvl609zKdqflOH2NZhqDBoliBbIsFDfFk1+o+6RwvksmzjIoHhXMH/I=
-X-Received: by 2002:a05:6214:d0e:b0:446:716a:fff2 with SMTP id
- 14-20020a0562140d0e00b00446716afff2mr2099927qvh.38.1650604908751; Thu, 21 Apr
- 2022 22:21:48 -0700 (PDT)
+        with ESMTP id S1442942AbiDVGRV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 02:17:21 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716B25046F;
+        Thu, 21 Apr 2022 23:14:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1650608037; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Upc29wFEZbY9EpRHZYitREhkrRXSEoAPDtx8gDCsqYwhKkJNleVA5Fm4X91oEzQuYjB/8+Peb6ZTQLcub1fM3CiTv2KxB8Svg+igpE3DNeIc7BDu9BbhW2A0sUyRjzw/JZx26VqggDaF46jej7IGF4Y/lDzGmA/zFipRv9C5J3I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1650608037; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=UFvld06qgXbqQi+xJzwXOyVaCMSC9MrrcLtY4RAgqNI=; 
+        b=FfqMs5rwPZedfIDvP5jj+A32qjrU7nt89H46DUvNMa/vwrzj2jMNwbsj/4WeERRRX8cID6b+2fn0+Jny5wZe383wv34fq9+YrkznEULl0mppOhVEiYSL4iwTUA/kcZYig3/stDaP4uzPeUKHw9iAtKBNmW6ZlbwDHTgjvMp0LcY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1650608037;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=UFvld06qgXbqQi+xJzwXOyVaCMSC9MrrcLtY4RAgqNI=;
+        b=WfNpEQFRk5/DPSn8YyQZnbOY1qy0b5Ub/T9xf0jbigszz5Aipcm4k81w6k/txiz2
+        xhD+WXL4Z3NLjJ8sy4UzEIjCndqiJ+gIbYrA/S81g9mgbV/M5woDGiFw6GijzyrsTHB
+        c8W44JeyWq3sT0KWGLPoMZzDn5P6Gc+B3saEqbOs=
+Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1650608035654467.1535935949838; Thu, 21 Apr 2022 23:13:55 -0700 (PDT)
+Message-ID: <6cdec3bc-4715-29c8-f4a1-df1408940a75@arinc9.com>
+Date:   Fri, 22 Apr 2022 09:13:50 +0300
 MIME-Version: 1.0
-References: <20220413060729.27639-1-arinc.unal@arinc9.com> <CACRpkdbbMFYNNjAKwhysKpu1JVh2JSB-N=Y8QMx1JvMhCPBpwg@mail.gmail.com>
- <26418320-64e0-3ed2-c792-7f72878b7592@arinc9.com>
-In-Reply-To: <26418320-64e0-3ed2-c792-7f72878b7592@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 22 Apr 2022 07:21:38 +0200
-Message-ID: <CAMhs-H_d8jUa4=4eVjQxo+h-XeRgiMYC1H_xYtPLb8jHDVYL2Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
 Subject: Re: [PATCH 0/14] Refactor Ralink Pinctrl and Add Documentation
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Luiz Angelo Daros de Luca <luizluca@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -67,62 +56,58 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         <linux-mediatek@lists.infradead.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+ <CACRpkdbbMFYNNjAKwhysKpu1JVh2JSB-N=Y8QMx1JvMhCPBpwg@mail.gmail.com>
+ <26418320-64e0-3ed2-c792-7f72878b7592@arinc9.com>
+ <CAMhs-H_d8jUa4=4eVjQxo+h-XeRgiMYC1H_xYtPLb8jHDVYL2Q@mail.gmail.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <CAMhs-H_d8jUa4=4eVjQxo+h-XeRgiMYC1H_xYtPLb8jHDVYL2Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arin=C3=A7,
+On 22/04/2022 08:21, Sergio Paracuellos wrote:
+> Hi Arinç,
+> 
+> On Thu, Apr 21, 2022 at 4:44 PM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+>>
+>> On 21/04/2022 17:27, Linus Walleij wrote:
+>>> On Wed, Apr 13, 2022 at 8:08 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+>>>
+>>>> This patch series brings complete refactoring to the Ralink pinctrl driver
+>>>> and its subdrivers.
+>>>
+>>> I just merged all the patches, the comments seem minor and any further
+>>> fixes can certainly be done on top of this. Anyone interested in ralink
+>>> working nicely is likely in the thread and we mostly care about that this
+>>> works for OpenWrt, and if it works for them we are happy.
+>>>
+>>>>     mips: dts: ralink: mt7621: use the new compatible string for MT7621 pinctrl
+>>>
+>>> This was a bit scary since we usually take these through the respective
+>>> SoC tree, but I just applied it anyway, it makes logical sense in the
+>>> series.
+>>>
+>>> I hope it will not lead to conflicts.
+>>>
+>>> Good work with this series!
+>>
+>> Thanks. There is a v2 of this series which has been waiting for a week,
+>> I hope that was the one you applied as you replied under v1 (I'm not
+>> sure which repository you applied this so I can't check myself).
+> 
+> Linus adds patches through the linux-pinctrl tree as pinctrl maintainer. Check:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
 
-On Thu, Apr 21, 2022 at 4:44 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
-9.com> wrote:
->
-> On 21/04/2022 17:27, Linus Walleij wrote:
-> > On Wed, Apr 13, 2022 at 8:08 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@a=
-rinc9.com> wrote:
-> >
-> >> This patch series brings complete refactoring to the Ralink pinctrl dr=
-iver
-> >> and its subdrivers.
-> >
-> > I just merged all the patches, the comments seem minor and any further
-> > fixes can certainly be done on top of this. Anyone interested in ralink
-> > working nicely is likely in the thread and we mostly care about that th=
-is
-> > works for OpenWrt, and if it works for them we are happy.
-> >
-> >>    mips: dts: ralink: mt7621: use the new compatible string for MT7621=
- pinctrl
-> >
-> > This was a bit scary since we usually take these through the respective
-> > SoC tree, but I just applied it anyway, it makes logical sense in the
-> > series.
-> >
-> > I hope it will not lead to conflicts.
-> >
-> > Good work with this series!
->
-> Thanks. There is a v2 of this series which has been waiting for a week,
-> I hope that was the one you applied as you replied under v1 (I'm not
-> sure which repository you applied this so I can't check myself).
+Thanks Sergio. I see v1 was applied, oops. What to do?
 
-Linus adds patches through the linux-pinctrl tree as pinctrl maintainer. Ch=
-eck:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/lo=
-g/?h=3Ddevel
-
-Best regards,
-    Sergio Paracuellos
->
-> https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=3D6323=
-70
->
-> Ar=C4=B1n=C3=A7
+Arınç
