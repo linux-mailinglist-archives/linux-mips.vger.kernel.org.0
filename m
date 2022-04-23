@@ -2,103 +2,169 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E51D50C689
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Apr 2022 04:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BF950C833
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Apr 2022 10:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiDWC1T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Apr 2022 22:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
+        id S234166AbiDWIMO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Apr 2022 04:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiDWC1S (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Apr 2022 22:27:18 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5F61B5302;
-        Fri, 22 Apr 2022 19:24:22 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id y20so19569047eju.7;
-        Fri, 22 Apr 2022 19:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qqZdE0u9CYPlQ6MQcqOeN4oZEKzgzl5ZlEVKxJ+FAHk=;
-        b=OE7s3CPe37nMb1dGmVaIey7JbUtRJ7f6vav2gncQroL5ziOpNrqKAczdsVbRdftZTp
-         lvDGoua7DfR0a3ih2mXvBGp/pr8YIwFWvJ7rYtm1KItJ7lzb7bsnCbr0XO6Al/bLSqmY
-         wShQ3Q4PeDbaGhthAQmvyUaYMWSIREyHdWzLfIHLlO4xqjeROrsWMsY/13vozvUovkD1
-         TOAKaEV8j7EP/9ImivPEP7f9+9yBUR0jy0QdxfQqm1cDoP57+Iq+yV30nc+nepkuJNn4
-         1e6bTF9LZV27/+Lsu7KDZ5aSI6QmdhEq2BG3Q9STkKqaymG9HXWUrXc+hO38EBpNkLCd
-         yQnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qqZdE0u9CYPlQ6MQcqOeN4oZEKzgzl5ZlEVKxJ+FAHk=;
-        b=J6Pp8w0xhTdRSm1ODUYS0bBxI8ISFH88psRrVam2XqS+LkPWGfpXKHd5K2dFAdKd2v
-         7we1UD+5/mB0Y0CnDS8toO21KkSkeAf1KWLA+r0ydF+7j0I6jV/fkOU1xcAohKxUOLR8
-         CPLrtNCvLQd2j25PZGF7ueoPm6o0rLNbMaMetKeAjp/O12zgyEnXVDCCdbRIavjSbjyH
-         jE+XTazQlpY5zj4mjOByNFBwJNYyZbWNQBTURnGNi1WqnHnBnKqndcwHXGNN881Jxws6
-         EmFnKY1rr1cl3vIf7wPqGKodaQlVEekxhjdT8rgKJoh5V00l8z0+egYIfgVP9e6gbxzP
-         nYRQ==
-X-Gm-Message-State: AOAM530UQbATXHrDDldaYNK8a5OgaaijVwJIaNMuZsFY6LL7IOOZCxpU
-        nbBTIZR01ISWvkCk5lfDMXY8P9mtN4C48XyWud0=
-X-Google-Smtp-Source: ABdhPJzcIFiqsw8tqvA51BF/kojpRX8faca/GR9O0BKNi3Ttrspe1sgBeJ1OHPMIBfTzzBlAO8IBPBsJXGKx+2s4Z5Y=
-X-Received: by 2002:a17:906:d108:b0:6e8:7765:a70b with SMTP id
- b8-20020a170906d10800b006e87765a70bmr6585155ejz.436.1650680660905; Fri, 22
- Apr 2022 19:24:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220419111650.1582274-1-Jason@zx2c4.com> <20220419111650.1582274-12-Jason@zx2c4.com>
-In-Reply-To: <20220419111650.1582274-12-Jason@zx2c4.com>
-From:   Sandy Harris <sandyinchina@gmail.com>
-Date:   Sat, 23 Apr 2022 10:24:07 +0800
-Message-ID: <CACXcFmksd3cw+xa-c2gEdd4=96PO8GCCMF6q2d6JHnJum2LjiA@mail.gmail.com>
-Subject: Re: [PATCH v5 11/11] random: insist on random_get_entropy() existing
- in order to simplify
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        with ESMTP id S230032AbiDWIML (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Apr 2022 04:12:11 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C26E1CB25
+        for <linux-mips@vger.kernel.org>; Sat, 23 Apr 2022 01:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650701355; x=1682237355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FFxlNihVEolpriYnsSloMndObmA0fWh9gsMeNYrdUkg=;
+  b=eE3RLMHvtL2rTKyDG+lVzypw4/g/bGVsXBdwfVmCHaQdLcSk8uAyO677
+   7d9VmwHy1BOFU7q+i+W9Kj3Sm02fqbzEN+AGgFO/GC/tBtrtExWztq8rw
+   +Hwn0HdCV2DB/oLBZrzqVZNuZfX9snxLSKKmoPRItiSdZiP2SLFUg1FK9
+   hFyY1LLbVk1AtwQvVAMMDqoAqhlPoAIJFwKkETDxo3spYwpltUfMrjdOl
+   +VDf++GFA0zDa51OncO5b6Df1g89+yB4/YImnEp1fHyO+isCLWoOAjJBG
+   oQgHSIlspF4TNgOSvgcXysXylWXKb8ou5t9obWAZl5/X4txgfck/S2fGF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351315745"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="351315745"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 01:09:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="648956790"
+Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Apr 2022 01:09:10 -0700
+Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niApJ-00003n-TL;
+        Sat, 23 Apr 2022 08:09:10 +0000
+Date:   Sat, 23 Apr 2022 16:08:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kbuild-all@lists.01.org, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v4 19/20] KVM: Allow for different capacities in
+ kvm_mmu_memory_cache structs
+Message-ID: <202204231516.bclimUe4-lkp@intel.com>
+References: <20220422210546.458943-20-dmatlack@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422210546.458943-20-dmatlack@google.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 6:37 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> All platforms are now guaranteed to provide some value for
-> random_get_entropy(). In case some bug leads to this not being so, we
-> print a warning, ...
+Hi David,
 
-Would it make sense to test at compile time? If there is no hardware
-RNG nor a cycle counter, then the kernel should be compiled with
-the gcc latent entropy plugin. Generate a warning suggesting that,
-or even an error insisting on it.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on 150866cd0ec871c765181d145aa0912628289c8a]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Matlack/KVM-Extend-Eager-Page-Splitting-to-the-shadow-MMU/20220423-062108
+base:   150866cd0ec871c765181d145aa0912628289c8a
+config: riscv-randconfig-r005-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231516.bclimUe4-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/871c5afc76a6f414c03f433d06bacfd928910b1b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Matlack/KVM-Extend-Eager-Page-Splitting-to-the-shadow-MMU/20220423-062108
+        git checkout 871c5afc76a6f414c03f433d06bacfd928910b1b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   arch/riscv/kvm/mmu.c: In function 'stage2_ioremap':
+>> arch/riscv/kvm/mmu.c:364:56: error: 'struct kvm_mmu_memory_cache' has no member named 'cache'
+     364 |                 ret = kvm_mmu_topup_memory_cache(&cache.cache, stage2_pgd_levels);
+         |                                                        ^
+   arch/riscv/kvm/mmu.c:369:52: error: 'struct kvm_mmu_memory_cache' has no member named 'cache'
+     369 |                 ret = stage2_set_pte(kvm, 0, &cache.cache, addr, &pte);
+         |                                                    ^
+   arch/riscv/kvm/mmu.c:378:41: error: 'struct kvm_mmu_memory_cache' has no member named 'cache'
+     378 |         kvm_mmu_free_memory_cache(&cache.cache);
+         |                                         ^
+>> arch/riscv/kvm/mmu.c:350:37: warning: variable 'cache' set but not used [-Wunused-but-set-variable]
+     350 |         struct kvm_mmu_memory_cache cache = {
+         |                                     ^~~~~
+
+
+vim +364 arch/riscv/kvm/mmu.c
+
+   342	
+   343	static int stage2_ioremap(struct kvm *kvm, gpa_t gpa, phys_addr_t hpa,
+   344				  unsigned long size, bool writable)
+   345	{
+   346		pte_t pte;
+   347		int ret = 0;
+   348		unsigned long pfn;
+   349		phys_addr_t addr, end;
+ > 350		struct kvm_mmu_memory_cache cache = {
+   351			.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE,
+   352			.gfp_zero = __GFP_ZERO,
+   353		};
+   354	
+   355		end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
+   356		pfn = __phys_to_pfn(hpa);
+   357	
+   358		for (addr = gpa; addr < end; addr += PAGE_SIZE) {
+   359			pte = pfn_pte(pfn, PAGE_KERNEL);
+   360	
+   361			if (!writable)
+   362				pte = pte_wrprotect(pte);
+   363	
+ > 364			ret = kvm_mmu_topup_memory_cache(&cache.cache, stage2_pgd_levels);
+   365			if (ret)
+   366				goto out;
+   367	
+   368			spin_lock(&kvm->mmu_lock);
+   369			ret = stage2_set_pte(kvm, 0, &cache.cache, addr, &pte);
+   370			spin_unlock(&kvm->mmu_lock);
+   371			if (ret)
+   372				goto out;
+   373	
+   374			pfn++;
+   375		}
+   376	
+   377	out:
+   378		kvm_mmu_free_memory_cache(&cache.cache);
+   379		return ret;
+   380	}
+   381	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
