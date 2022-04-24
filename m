@@ -2,169 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE4850D2CB
-	for <lists+linux-mips@lfdr.de>; Sun, 24 Apr 2022 17:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1629E50D2CA
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Apr 2022 17:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiDXPg7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 24 Apr 2022 11:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S230141AbiDXPg5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 24 Apr 2022 11:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240058AbiDXPYs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 Apr 2022 11:24:48 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9BA39B81
-        for <linux-mips@vger.kernel.org>; Sun, 24 Apr 2022 08:21:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650813708; x=1682349708;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eIHnhfDbluDI+XDea6eH7Q41SXR8SjqhHXj2rb5GifQ=;
-  b=WUbwrZ49NnErsKBOnifotus72l0aaGaE4HqunF0B0lIfQQNHCvaXFgi5
-   alqZfkcT1vUetMVK8QrPXe/X6xr8UL42tewoTGdXo6fYiyFprMqcghyT4
-   ltQBnaoJqoHZlYnUC8C4B52eAdocI5SSl92M41fp9/BSxhok+n+cP/ZPF
-   D9+Wf56o9KZ0VLaVlVT32ZNTthSHA1L6nz+tNNIVA+11jjELYYQ9AJayM
-   MAGcPPuYbA6r7Hdb37uVJi7Qvq1Q8ZicRGyXu2TdAJulBSZmCfKR2+bOx
-   YiH5ZGMt8MJdmYiGKjHYlL1/4jgRI03AGlyWZgvr4vR4MTkkDsTm5Gu8X
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="325530418"
-X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="325530418"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 08:21:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="616149527"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Apr 2022 08:21:43 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nie3T-0001Yh-9I;
-        Sun, 24 Apr 2022 15:21:43 +0000
-Date:   Sun, 24 Apr 2022 23:21:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH v4 19/20] KVM: Allow for different capacities in
- kvm_mmu_memory_cache structs
-Message-ID: <202204242355.T1SzNT9S-lkp@intel.com>
-References: <20220422210546.458943-20-dmatlack@google.com>
+        with ESMTP id S240462AbiDXPb1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 Apr 2022 11:31:27 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98985171C04;
+        Sun, 24 Apr 2022 08:28:25 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id e4so14578216oif.2;
+        Sun, 24 Apr 2022 08:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=yr0/AkbMMu8pn1dkU35YlQmF7na7yjrNnK/horRQvq8=;
+        b=YTsJBncPwlsdJoy0clMDPkRYsap010NbelrrDwP4gT2p8VkAeOwyCadOMVg4EkLC3g
+         BU6v4rcHRP7TcChruJdux/6WqtJmUToOWUlOimc0ldD0p/STL+v6YSxQqTz/SiEj3JGk
+         6SfYzDXOC60C+Zk6YtFsjMz2c7gYsvaefbEF/eKAM03STJHCFm25OuC/Z0YH/2cfNqkA
+         U538FM4O480tv4oZ6rwPTTcYDvIV4RyyrEvA6n7gY5KKJPB4B+s22HrjImpN8j9osv2G
+         SEdJ9k63zxNOgRDgM+KmfcxMquHhbq8CJJjUKerT4sEDujG7ogRPrwOnyNIjdLCE9lFh
+         BU0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=yr0/AkbMMu8pn1dkU35YlQmF7na7yjrNnK/horRQvq8=;
+        b=6vnD+8dQFmxyCIkjIp2rzinoLopet/bOToKxMnl2YtHOByGo/3uzEEWghB5ivZYWCi
+         +rlylgSvpddSCP7L/jowhR+EY8PKx8gmUpaAklTLvOnGzBu+KsO0K5sZma/VxYfD+8O7
+         cY1obNpFAKSpXcqX/vynqo70JQqRpH2fX6OJ/az/sdloBzVT1Hlbsy0t+ISTk9eja4i2
+         NPP0370RoYz/QRrb9fuISYcH3nGQX0swBEPrmTAqQY3CW47NEd9aiH8cBNciV3kMxAg/
+         0HhL+B10ELgesmaEYtrPaSpDfQrPLH0USQ0+qkRh8SEWZ8FsnZoU4Bz5k5H7i2AYbXQ+
+         GfoA==
+X-Gm-Message-State: AOAM533aS0heWnGx1qtXYFFuC/rH9r8ilEPuKVhXK6t5ZIQox5cSnKAm
+        JAmIERVQLb6nkLj0Rfc7TIQ=
+X-Google-Smtp-Source: ABdhPJy+gDyQI+jYYZai2x5URiEV01l+fMZDWT8YjU8/GgIriEk0FB5ZVdkvpb6NfVQx+IMk0aUfQA==
+X-Received: by 2002:aca:f286:0:b0:2da:58ba:c578 with SMTP id q128-20020acaf286000000b002da58bac578mr6576017oih.127.1650814104777;
+        Sun, 24 Apr 2022 08:28:24 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w8-20020a056830410800b00605b48122eesm53063ott.14.2022.04.24.08.28.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 08:28:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
+Date:   Sun, 24 Apr 2022 08:28:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422210546.458943-20-dmatlack@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
+ <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net>
+ <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+ <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+In-Reply-To: <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi David,
+On 4/24/22 01:52, Arnd Bergmann wrote:
+> On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On 4/23/22 12:55, Arnd Bergmann wrote:
+>>> On Sat, Apr 23, 2022 at 1:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>> On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
+>>>
+>>> Odd, I can't reproduce this at all. Do you get any console output at
+>>> all for this?
+>>>
+>>> Is this the plain omap1_defconfig, or something else?
+>>>
+>>
+>> No, it is my own sx1 specific configuration.
+>>
+>> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/qemu_sx1_defconfig
+>>
+>> I don't recall where I got it from but ...
+> 
+> Ok, that explains it, thanks!
+> 
+> I fixed all the defconfig files that come with the kernel, but for your own
+> ones you have to add
+> 
+> # CONFIG_ARCH_MULTI_V7 is not set
+> 
+> into the defconfig file, otherwise the multiplatform target defaults to
+> an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
+> you also need to enable CONFIG_ARCH_MULTI_V4T.
+> 
+> This is slightly unfortunate, but I don't see any way to avoid it, and the
+> modified defconfig will still work fine with older kernel trees.
+> 
 
-Thank you for the patch! Yet something to improve:
+Yes, that works. I changed it in my configuration.
 
-[auto build test ERROR on 150866cd0ec871c765181d145aa0912628289c8a]
+>>> One thing I keep having to apply myself is this snippet:
+>>>
+>>> diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
+>>> index 0bfad62ea858..87c695703580 100644
+>>> --- a/arch/arm/mm/proc-arm925.S
+>>> +++ b/arch/arm/mm/proc-arm925.S
+>>> @@ -441,7 +441,6 @@ __arm925_setup:
+>>>
+>>>    #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
+>>>           mov     r0, #4                          @ disable write-back
+>>> on caches explicitly
+>>> -       mcr     p15, 7, r0, c15, c0, 0
+>>>    #endif
+>>
+>> it does not have CONFIG_CPU_DCACHE_WRITETHROUGH enabled.
+> 
+> Maybe it was disabled explicitly for the sx1_defconfig because of this
+> bug. I would think that this is required for actual sx1 hardware because the
+> option is default-enabled for ARM925T, and that CPU core is exclusively
+> used in OMAP15xx.
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Matlack/KVM-Extend-Eager-Page-Splitting-to-the-shadow-MMU/20220423-062108
-base:   150866cd0ec871c765181d145aa0912628289c8a
-config: riscv-randconfig-r016-20220424 (https://download.01.org/0day-ci/archive/20220424/202204242355.T1SzNT9S-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/871c5afc76a6f414c03f433d06bacfd928910b1b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Matlack/KVM-Extend-Eager-Page-Splitting-to-the-shadow-MMU/20220423-062108
-        git checkout 871c5afc76a6f414c03f433d06bacfd928910b1b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+That looks like a bug in qemu. ARM925T instruction support is limited to V4T
+instructions. qemu doesn't have explicit 5T support. It is either V4T
+or V5.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/riscv/kvm/mmu.c:364:43: error: no member named 'cache' in 'struct kvm_mmu_memory_cache'
-                   ret = kvm_mmu_topup_memory_cache(&cache.cache, stage2_pgd_levels);
-                                                     ~~~~~ ^
-   arch/riscv/kvm/mmu.c:369:39: error: no member named 'cache' in 'struct kvm_mmu_memory_cache'
-                   ret = stage2_set_pte(kvm, 0, &cache.cache, addr, &pte);
-                                                 ~~~~~ ^
-   arch/riscv/kvm/mmu.c:378:35: error: no member named 'cache' in 'struct kvm_mmu_memory_cache'
-           kvm_mmu_free_memory_cache(&cache.cache);
-                                      ~~~~~ ^
-   3 errors generated.
-
-
-vim +364 arch/riscv/kvm/mmu.c
-
-   342	
-   343	static int stage2_ioremap(struct kvm *kvm, gpa_t gpa, phys_addr_t hpa,
-   344				  unsigned long size, bool writable)
-   345	{
-   346		pte_t pte;
-   347		int ret = 0;
-   348		unsigned long pfn;
-   349		phys_addr_t addr, end;
-   350		struct kvm_mmu_memory_cache cache = {
-   351			.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE,
-   352			.gfp_zero = __GFP_ZERO,
-   353		};
-   354	
-   355		end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
-   356		pfn = __phys_to_pfn(hpa);
-   357	
-   358		for (addr = gpa; addr < end; addr += PAGE_SIZE) {
-   359			pte = pfn_pte(pfn, PAGE_KERNEL);
-   360	
-   361			if (!writable)
-   362				pte = pte_wrprotect(pte);
-   363	
- > 364			ret = kvm_mmu_topup_memory_cache(&cache.cache, stage2_pgd_levels);
-   365			if (ret)
-   366				goto out;
-   367	
-   368			spin_lock(&kvm->mmu_lock);
-   369			ret = stage2_set_pte(kvm, 0, &cache.cache, addr, &pte);
-   370			spin_unlock(&kvm->mmu_lock);
-   371			if (ret)
-   372				goto out;
-   373	
-   374			pfn++;
-   375		}
-   376	
-   377	out:
-   378		kvm_mmu_free_memory_cache(&cache.cache);
-   379		return ret;
-   380	}
-   381	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter
