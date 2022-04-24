@@ -2,130 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE3850CE7D
-	for <lists+linux-mips@lfdr.de>; Sun, 24 Apr 2022 04:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32FF50D06D
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Apr 2022 10:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235794AbiDXCif (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Apr 2022 22:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S238631AbiDXISR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 24 Apr 2022 04:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237658AbiDXCid (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Apr 2022 22:38:33 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 036962B1BB
-        for <linux-mips@vger.kernel.org>; Sat, 23 Apr 2022 19:35:31 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxjxBrt2RidRIvAA--.30985S4;
-        Sun, 24 Apr 2022 10:35:28 +0800 (CST)
-From:   Hui Li <lihui@loongson.cn>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v2 2/2] kexec-tools: mips: Add initrd parameter to cmdline
-Date:   Sun, 24 Apr 2022 10:35:23 +0800
-Message-Id: <20220424023523.16869-3-lihui@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220424023523.16869-1-lihui@loongson.cn>
-References: <20220424023523.16869-1-lihui@loongson.cn>
+        with ESMTP id S236121AbiDXISP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 Apr 2022 04:18:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70B464731;
+        Sun, 24 Apr 2022 01:15:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E028B80E00;
+        Sun, 24 Apr 2022 08:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B901C385A9;
+        Sun, 24 Apr 2022 08:15:08 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QQ7PQLbi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650788106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zz5BWAECMqgYeyzIQatgn1YdaIX48xI6Btjx4R/QQM8=;
+        b=QQ7PQLbiv6h5RMKfyhPz+0uFS/QEk6cKxIFEdT/4w1vomvJYaek1ix2z1YnXUltNn4JNWs
+        ns72gMmUvnu2yAgEipWd73LYk7yThx0ACLC9UkoUd4mMs7onmV4qUH+mMgtRSeZCBhTJ5t
+        iZcOlpmCAAcVo/uGzHHPVJkmoTKoYzY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a4e3a24b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 24 Apr 2022 08:15:06 +0000 (UTC)
+Date:   Sun, 24 Apr 2022 10:15:00 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
+ instead of zero
+Message-ID: <YmUHBKPC0bAbs4Vj@zx2c4.com>
+References: <20220413115411.21489-1-Jason@zx2c4.com>
+ <20220413115411.21489-5-Jason@zx2c4.com>
+ <20220413122546.GA11860@alpha.franken.de>
+ <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
+ <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
+ <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
+ <YlfoeGRM6w2O+eXA@zx2c4.com>
+ <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk>
+ <20220418071005.GA4075@alpha.franken.de>
+ <alpine.DEB.2.21.2204220029590.9383@angie.orcam.me.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxjxBrt2RidRIvAA--.30985S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw1fuF1fWr18ur45ZFyUAwb_yoW8urWrpa
-        y2y3Z8Gw15Aw47tr1fAFs8W3y3Wwn3XwnrZayag3yDJ3WDtr1kt3yfXF1YvryDJ3y0vF1j
-        krZ8trykuayxZw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2
-        jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_Gr1l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUgUDGDUUUU
-X-CM-SenderInfo: 5olk3xo6or00hjvr0hdfq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2204220029590.9383@angie.orcam.me.uk>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Loongson platform obtain the initrd parameter through cmdline in kernel.
-But kexec-tools pass the initrd through DTB.So add initrd parameter
-to cmdline in order to compatible with some platforms.It is still
-to pass the initrd parameter via command line.
+On Sun, Apr 24, 2022 at 12:33:44AM +0100, Maciej W. Rozycki wrote:
+> unconditionally.  I think this discovery asks for code optimisation, which 
+> I'll try to cook up sometime.
 
-Signed-off-by: Hui Li <lihui@loongson.cn>
----
- kexec/arch/mips/kexec-elf-mips.c | 43 ++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+At some point too, by the way, we might also consider putting that into
+a .c file rather than a static inline in the .h, since that function is
+starting to get sort of big.
 
-diff --git a/kexec/arch/mips/kexec-elf-mips.c b/kexec/arch/mips/kexec-elf-mips.c
-index a2d11fc..1de418e 100644
---- a/kexec/arch/mips/kexec-elf-mips.c
-+++ b/kexec/arch/mips/kexec-elf-mips.c
-@@ -40,6 +40,44 @@ static const int probe_debug = 0;
- #define CMDLINE_PREFIX "kexec "
- static char cmdline_buf[COMMAND_LINE_SIZE] = CMDLINE_PREFIX;
- 
-+/* Converts unsigned long to ascii string. */
-+static void ultoa(unsigned long i, char *str)
-+{
-+	int j = 0, k;
-+	char tmp;
-+
-+	do {
-+		str[j++] = i % 10 + '0';
-+	} while ((i /= 10) > 0);
-+	str[j] = '\0';
-+	/* Reverse the string. */
-+	for (j = 0, k = strlen(str) - 1; j < k; j++, k--) {
-+		tmp = str[k];
-+		str[k] = str[j];
-+		str[j] = tmp;
-+	}
-+}
-+
-+/* Adds initrd parameters to command line. */
-+static int cmdline_add_initrd(char *cmdline, unsigned long addr, char *new_para)
-+{
-+	int cmdlen, len;
-+	char str[30], *ptr;
-+
-+	ptr = str;
-+	strcpy(str, new_para);
-+	ptr += strlen(str);
-+	ultoa(addr, ptr);
-+	len = strlen(str);
-+	cmdlen = strlen(cmdline) + len;
-+	if (cmdlen > (COMMAND_LINE_SIZE - 1))
-+		die("Command line overflow\n");
-+	strcat(cmdline, str);
-+
-+	return 0;
-+}
-+
-+
- int elf_mips_probe(const char *buf, off_t len)
- {
- 	struct mem_ehdr ehdr;
-@@ -171,6 +209,11 @@ int elf_mips_load(int argc, char **argv, const char *buf, off_t len,
- 		/* Now that the buffer for initrd is prepared, update the dtb
- 		 * with an appropriate location */
- 		dtb_set_initrd(&dtb_buf, &dtb_length, initrd_base, initrd_base + initrd_size);
-+
-+		/* Add the initrd parameters to cmdline */
-+		cmdline_add_initrd(cmdline_buf, PAGE_OFFSET + initrd_base, " rd_start=");
-+		cmdline_add_initrd(cmdline_buf, initrd_size, " rd_size=");
-+
- 	}
- 
- 
--- 
-2.20.1
-
+Jason
