@@ -2,46 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97A85105FF
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Apr 2022 19:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0A7510600
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Apr 2022 19:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349046AbiDZR6C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Apr 2022 13:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S1349297AbiDZR6E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Apr 2022 13:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346698AbiDZR6A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Apr 2022 13:58:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A956369C3;
-        Tue, 26 Apr 2022 10:54:49 -0700 (PDT)
+        with ESMTP id S1348677AbiDZR6C (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Apr 2022 13:58:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA83236B5C;
+        Tue, 26 Apr 2022 10:54:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D43A6B8219F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3280FB8219D;
+        Tue, 26 Apr 2022 17:54:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71593C385B1;
         Tue, 26 Apr 2022 17:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A03C385AD;
-        Tue, 26 Apr 2022 17:54:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650995686;
-        bh=SBsXBz5jDGAGU2aolO1E0QpxNaFtaVAjkbBUOaqc30o=;
+        s=k20201202; t=1650995687;
+        bh=g0nFar7cz1XfkYCKPO5Tf0dFFJCxDQNhIY774Pd99Cs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vIeZNckiccvjpaWI4gp4VtAph9O1JWy5Oqe/aFlltt2kFnoO+1xFaAflD6ohQEgyo
-         UwHQ+3r0k+26ciZh+EUQSeQGY1+DPlu0m7lVDkzMgEks5U6fFaDmSkO48dFmHQu449
-         vlggWLZXhLZgXR/DtE+gI2e9ChdRpmCN762Il6J3id9bpjixSXuFDI6PJli+9NnlGa
-         cKukDKoNuNgVzL0GsN+Rwgo9dBUKTxjt/r9DtWcFR1z0NnjUVTIaE0S7YOVoPDJoFI
-         1rxdybOLZFSXcZ0OO4C3cBHXp3X1T9u0RGKgxZGVfKJTriCnluV71aBvjIL7YK8omr
-         XLsLr2b90jQ+g==
+        b=b/7cL/7zR9+e3UyX/cV+Q9THNUcJiWzlwy6DsWcVgerESGdadAY+S1hvq+vbtD+Zi
+         aVp/t6S7+1R55qkG6iHdYM1Wk4zjhSKQtQzwVsRzjh453irs02ZzPUUSrcOqOkeLKy
+         uvycWxxB4Z3HVHQcW+fRKw82Cs+34SfG04OZLuEqjbOLdjELY57J7BCDbYRhwgwY7l
+         Oyx6SymF/6jBOfFvLxRgoIgMq7xXWqTWFI4o5fmsvDnu0z+KqzPc17lzZKWDGuryak
+         V2+NN9VH41grnDsaKIuJmHNQtMFv/KfKTAeyfzXps8QW3c7hQm/9qxXaDzR4hH+ign
+         VQ0NVLIEiZnag==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net, pabeni@redhat.com
 Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
         Chas Williams <3chas3@gmail.com>,
         linux-atm-general@lists.sourceforge.net,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, arnd@arndb.de
-Subject: [PATCH net-next 1/6] net: atm: remove support for Fujitsu FireStream ATM devices
-Date:   Tue, 26 Apr 2022 10:54:31 -0700
-Message-Id: <20220426175436.417283-2-kuba@kernel.org>
+Subject: [PATCH net-next 3/6] net: atm: remove support for ZeitNet ZN122x ATM devices
+Date:   Tue, 26 Apr 2022 10:54:33 -0700
+Message-Id: <20220426175436.417283-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220426175436.417283-1-kuba@kernel.org>
 References: <20220426175436.417283-1-kuba@kernel.org>
@@ -56,13 +55,12 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This driver received nothing but automated fixes (mostly spelling
-and compiler warnings) since git era begun. Since it's using
-virt_to_bus it's unlikely to be used on any modern platform.
+This driver received nothing but automated fixes in the last 15 years.
+Since it's using virt_to_bus it's unlikely to be used on any modern
+platform.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-CC: Thomas Gleixner <tglx@linutronix.de>
 CC: Chas Williams <3chas3@gmail.com>
 CC: linux-atm-general@lists.sourceforge.net
 CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
@@ -71,98 +69,789 @@ CC: arnd@arndb.de
 ---
  arch/mips/configs/gpr_defconfig  |    1 -
  arch/mips/configs/mtx1_defconfig |    1 -
- drivers/atm/Kconfig              |   10 -
+ drivers/atm/Kconfig              |   20 -
  drivers/atm/Makefile             |    1 -
- drivers/atm/firestream.c         | 2057 ------------------------------
- drivers/atm/firestream.h         |  502 --------
- 6 files changed, 2572 deletions(-)
- delete mode 100644 drivers/atm/firestream.c
- delete mode 100644 drivers/atm/firestream.h
+ drivers/atm/uPD98401.h           |  293 ------
+ drivers/atm/uPD98402.c           |  266 -----
+ drivers/atm/uPD98402.h           |  107 --
+ drivers/atm/zatm.c               | 1652 ------------------------------
+ drivers/atm/zatm.h               |  104 --
+ include/uapi/linux/atm_zatm.h    |   47 -
+ 10 files changed, 2492 deletions(-)
+ delete mode 100644 drivers/atm/uPD98401.h
+ delete mode 100644 drivers/atm/uPD98402.c
+ delete mode 100644 drivers/atm/uPD98402.h
+ delete mode 100644 drivers/atm/zatm.c
+ delete mode 100644 drivers/atm/zatm.h
+ delete mode 100644 include/uapi/linux/atm_zatm.h
 
 diff --git a/arch/mips/configs/gpr_defconfig b/arch/mips/configs/gpr_defconfig
-index b0489437621a..605e778dff74 100644
+index 7ed202db9ef0..d82f4ebf687f 100644
 --- a/arch/mips/configs/gpr_defconfig
 +++ b/arch/mips/configs/gpr_defconfig
 @@ -178,7 +178,6 @@ CONFIG_NETCONSOLE=m
  CONFIG_ATM_TCP=m
  CONFIG_ATM_LANAI=m
  CONFIG_ATM_ENI=m
--CONFIG_ATM_FIRESTREAM=m
- CONFIG_ATM_ZATM=m
+-CONFIG_ATM_ZATM=m
  CONFIG_ATM_NICSTAR=m
  CONFIG_ATM_IDT77252=m
+ CONFIG_ATM_IA=m
 diff --git a/arch/mips/configs/mtx1_defconfig b/arch/mips/configs/mtx1_defconfig
-index c98099f0b354..de95e7fe5a77 100644
+index f46ad2e294fa..0cb4d9aa14d1 100644
 --- a/arch/mips/configs/mtx1_defconfig
 +++ b/arch/mips/configs/mtx1_defconfig
 @@ -255,7 +255,6 @@ CONFIG_ARCNET_COM20020_CS=m
  CONFIG_ATM_TCP=m
  CONFIG_ATM_LANAI=m
  CONFIG_ATM_ENI=m
--CONFIG_ATM_FIRESTREAM=m
- CONFIG_ATM_ZATM=m
+-CONFIG_ATM_ZATM=m
  CONFIG_ATM_NICSTAR=m
  CONFIG_ATM_IDT77252=m
+ CONFIG_ATM_IA=m
 diff --git a/drivers/atm/Kconfig b/drivers/atm/Kconfig
-index 7be08e24955c..360c98ad29eb 100644
+index 9c778308722a..63cdb46a3439 100644
 --- a/drivers/atm/Kconfig
 +++ b/drivers/atm/Kconfig
-@@ -146,16 +146,6 @@ config ATM_ENI_BURST_RX_2W
+@@ -146,26 +146,6 @@ config ATM_ENI_BURST_RX_2W
  	  try this if you have disabled 4W and 8W bursts. Enabling 2W if 4W or
  	  8W are also set may or may not improve throughput.
  
--config ATM_FIRESTREAM
--	tristate "Fujitsu FireStream (FS50/FS155) "
+-config ATM_ZATM
+-	tristate "ZeitNet ZN1221/ZN1225"
 -	depends on PCI && VIRT_TO_BUS
 -	help
--	  Driver for the Fujitsu FireStream 155 (MB86697) and
--	  FireStream 50 (MB86695) ATM PCI chips.
+-	  Driver for the ZeitNet ZN1221 (MMF) and ZN1225 (UTP-5) 155 Mbps ATM
+-	  adapters.
 -
 -	  To compile this driver as a module, choose M here: the module will
--	  be called firestream.
+-	  be called zatm.
 -
- config ATM_ZATM
- 	tristate "ZeitNet ZN1221/ZN1225"
- 	depends on PCI && VIRT_TO_BUS
+-config ATM_ZATM_DEBUG
+-	bool "Enable extended debugging"
+-	depends on ATM_ZATM
+-	help
+-	  Extended debugging records various events and displays that list
+-	  when an inconsistency is detected. This mechanism is faster than
+-	  generally using printks, but still has some impact on performance.
+-	  Note that extended debugging may create certain race conditions
+-	  itself. Enable this ONLY if you suspect problems with the driver.
+-
+ config ATM_NICSTAR
+ 	tristate "IDT 77201 (NICStAR) (ForeRunnerLE)"
+ 	depends on PCI
 diff --git a/drivers/atm/Makefile b/drivers/atm/Makefile
-index 99ecbc280643..7d38fdaddd09 100644
+index 1b6a8ddaf007..c9eade92019b 100644
 --- a/drivers/atm/Makefile
 +++ b/drivers/atm/Makefile
-@@ -26,7 +26,6 @@ endif
+@@ -5,7 +5,6 @@
  
- obj-$(CONFIG_ATM_DUMMY)		+= adummy.o
- obj-$(CONFIG_ATM_TCP)		+= atmtcp.o
--obj-$(CONFIG_ATM_FIRESTREAM)	+= firestream.o
- obj-$(CONFIG_ATM_LANAI)		+= lanai.o
+ fore_200e-y	:= fore200e.o
  
- obj-$(CONFIG_ATM_HE)		+= he.o
-diff --git a/drivers/atm/firestream.c b/drivers/atm/firestream.c
+-obj-$(CONFIG_ATM_ZATM)		+= zatm.o uPD98402.o
+ obj-$(CONFIG_ATM_NICSTAR)	+= nicstar.o
+ obj-$(CONFIG_ATM_IA)		+= iphase.o suni.o
+ obj-$(CONFIG_ATM_FORE200E)	+= fore_200e.o
+diff --git a/drivers/atm/uPD98401.h b/drivers/atm/uPD98401.h
 deleted file mode 100644
-index 4f67404fe64c..000000000000
---- a/drivers/atm/firestream.c
+index f766a5ef0c5d..000000000000
+--- a/drivers/atm/uPD98401.h
 +++ /dev/null
-@@ -1,2057 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--
--/* drivers/atm/firestream.c - FireStream 155 (MB86697) and
-- *                            FireStream  50 (MB86695) device driver 
-- */
+@@ -1,293 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/* drivers/atm/uPD98401.h - NEC uPD98401 (SAR) declarations */
 - 
--/* Written & (C) 2000 by R.E.Wolff@BitWizard.nl 
-- * Copied snippets from zatm.c by Werner Almesberger, EPFL LRC/ICA 
-- * and ambassador.c Copyright (C) 1995-1999  Madge Networks Ltd 
-- */
+-/* Written 1995 by Werner Almesberger, EPFL LRC */
+- 
+-
+-#ifndef DRIVERS_ATM_uPD98401_H
+-#define DRIVERS_ATM_uPD98401_H
+-
+-
+-#define MAX_CRAM_SIZE	(1 << 18)	/* 2^18 words */
+-#define RAM_INCREMENT	1024		/* check in 4 kB increments */
+-
+-#define uPD98401_PORTS	0x24		/* probably more ? */
+-
 -
 -/*
--*/
+- * Commands
+- */
+-
+-#define uPD98401_OPEN_CHAN	0x20000000 /* open channel */
+-#define uPD98401_CHAN_ADDR	0x0003fff8 /*	channel address */
+-#define uPD98401_CHAN_ADDR_SHIFT 3
+-#define uPD98401_CLOSE_CHAN	0x24000000 /* close channel */
+-#define uPD98401_CHAN_RT	0x02000000 /*	RX/TX (0 TX, 1 RX) */
+-#define uPD98401_DEACT_CHAN	0x28000000 /* deactivate channel */
+-#define uPD98401_TX_READY	0x30000000 /* TX ready */
+-#define uPD98401_ADD_BAT	0x34000000 /* add batches */
+-#define uPD98401_POOL		0x000f0000 /* pool number */
+-#define uPD98401_POOL_SHIFT	16
+-#define uPD98401_POOL_NUMBAT	0x0000ffff /* number of batches */
+-#define uPD98401_NOP		0x3f000000 /* NOP */
+-#define uPD98401_IND_ACC	0x00000000 /* Indirect Access */
+-#define uPD98401_IA_RW		0x10000000 /*	Read/Write (0 W, 1 R) */
+-#define uPD98401_IA_B3		0x08000000 /*	Byte select, 1 enable */
+-#define uPD98401_IA_B2		0x04000000
+-#define uPD98401_IA_B1		0x02000000
+-#define uPD98401_IA_B0		0x01000000
+-#define uPD98401_IA_BALL	0x0f000000 /*   whole longword */
+-#define uPD98401_IA_TGT		0x000c0000 /*	Target */
+-#define uPD98401_IA_TGT_SHIFT	18
+-#define uPD98401_IA_TGT_CM	0	   /*	- Control Memory */
+-#define uPD98401_IA_TGT_SAR	1	   /*	- uPD98401 registers */
+-#define uPD98401_IA_TGT_PHY	3	   /*   - PHY device */
+-#define uPD98401_IA_ADDR	0x0003ffff
+-
+-/*
+- * Command Register Status
+- */
+-
+-#define uPD98401_BUSY		0x80000000 /* SAR is busy */
+-#define uPD98401_LOCKED		0x40000000 /* SAR is locked by other CPU */
+-
+-/*
+- * Indications
+- */
+-
+-/* Normal (AAL5) Receive Indication */
+-#define uPD98401_AAL5_UINFO	0xffff0000 /* user-supplied information */
+-#define uPD98401_AAL5_UINFO_SHIFT 16
+-#define uPD98401_AAL5_SIZE	0x0000ffff /* PDU size (in _CELLS_ !!) */
+-#define uPD98401_AAL5_CHAN	0x7fff0000 /* Channel number */
+-#define uPD98401_AAL5_CHAN_SHIFT	16
+-#define uPD98401_AAL5_ERR	0x00008000 /* Error indication */
+-#define uPD98401_AAL5_CI	0x00004000 /* Congestion Indication */
+-#define uPD98401_AAL5_CLP	0x00002000 /* CLP (>= 1 cell had CLP=1) */
+-#define uPD98401_AAL5_ES	0x00000f00 /* Error Status */
+-#define uPD98401_AAL5_ES_SHIFT	8
+-#define uPD98401_AAL5_ES_NONE	0	   /*	No error */
+-#define uPD98401_AAL5_ES_FREE	1	   /*	Receiver free buf underflow */
+-#define uPD98401_AAL5_ES_FIFO	2	   /*	Receiver FIFO overrun */
+-#define uPD98401_AAL5_ES_TOOBIG	3	   /*	Maximum length violation */
+-#define uPD98401_AAL5_ES_CRC	4	   /*	CRC error */
+-#define uPD98401_AAL5_ES_ABORT	5	   /*	User abort */
+-#define uPD98401_AAL5_ES_LENGTH	6	   /*   Length violation */
+-#define uPD98401_AAL5_ES_T1	7	   /*	T1 error (timeout) */
+-#define uPD98401_AAL5_ES_DEACT	8	   /*	Deactivated with DEACT_CHAN */
+-#define uPD98401_AAL5_POOL	0x0000001f /* Free buffer pool number */
+-
+-/* Raw Cell Indication */
+-#define uPD98401_RAW_UINFO	uPD98401_AAL5_UINFO
+-#define uPD98401_RAW_UINFO_SHIFT uPD98401_AAL5_UINFO_SHIFT
+-#define uPD98401_RAW_HEC	0x000000ff /* HEC */
+-#define uPD98401_RAW_CHAN	uPD98401_AAL5_CHAN
+-#define uPD98401_RAW_CHAN_SHIFT uPD98401_AAL5_CHAN_SHIFT
+-
+-/* Transmit Indication */
+-#define uPD98401_TXI_CONN	0x7fff0000 /* Connection Number */
+-#define uPD98401_TXI_CONN_SHIFT	16
+-#define uPD98401_TXI_ACTIVE	0x00008000 /* Channel remains active */
+-#define uPD98401_TXI_PQP	0x00007fff /* Packet Queue Pointer */
+-
+-/*
+- * Directly Addressable Registers
+- */
+-
+-#define uPD98401_GMR	0x00	/* General Mode Register */
+-#define uPD98401_GSR	0x01	/* General Status Register */
+-#define uPD98401_IMR	0x02	/* Interrupt Mask Register */
+-#define uPD98401_RQU	0x03	/* Receive Queue Underrun */
+-#define uPD98401_RQA	0x04	/* Receive Queue Alert */
+-#define uPD98401_ADDR	0x05	/* Last Burst Address */
+-#define uPD98401_VER	0x06	/* Version Number */
+-#define uPD98401_SWR	0x07	/* Software Reset */
+-#define uPD98401_CMR	0x08	/* Command Register */
+-#define uPD98401_CMR_L	0x09	/* Command Register and Lock/Unlock */
+-#define uPD98401_CER	0x0a	/* Command Extension Register */
+-#define uPD98401_CER_L	0x0b	/* Command Ext Reg and Lock/Unlock */
+-
+-#define uPD98401_MSH(n) (0x10+(n))	/* Mailbox n Start Address High */
+-#define uPD98401_MSL(n) (0x14+(n))	/* Mailbox n Start Address High */
+-#define uPD98401_MBA(n) (0x18+(n))	/* Mailbox n Bottom Address */
+-#define uPD98401_MTA(n) (0x1c+(n))	/* Mailbox n Tail Address */
+-#define uPD98401_MWA(n) (0x20+(n))	/* Mailbox n Write Address */
+-
+-/* GMR is at 0x00 */
+-#define uPD98401_GMR_ONE	0x80000000 /* Must be set to one */
+-#define uPD98401_GMR_SLM	0x40000000 /* Address mode (0 word, 1 byte) */
+-#define uPD98401_GMR_CPE	0x00008000 /* Control Memory Parity Enable */
+-#define uPD98401_GMR_LP		0x00004000 /* Loopback */
+-#define uPD98401_GMR_WA		0x00002000 /* Early Bus Write Abort/RDY */
+-#define uPD98401_GMR_RA		0x00001000 /* Early Read Abort/RDY */
+-#define uPD98401_GMR_SZ		0x00000f00 /* Burst Size Enable */
+-#define uPD98401_BURST16	0x00000800 /*	16-word burst */
+-#define uPD98401_BURST8		0x00000400 /*	 8-word burst */
+-#define uPD98401_BURST4		0x00000200 /*	 4-word burst */
+-#define uPD98401_BURST2		0x00000100 /*	 2-word burst */
+-#define uPD98401_GMR_AD		0x00000080 /* Address (burst resolution) Disable */
+-#define uPD98401_GMR_BO		0x00000040 /* Byte Order (0 little, 1 big) */
+-#define uPD98401_GMR_PM		0x00000020 /* Bus Parity Mode (0 byte, 1 word)*/
+-#define uPD98401_GMR_PC		0x00000010 /* Bus Parity Control (0even,1odd) */
+-#define uPD98401_GMR_BPE	0x00000008 /* Bus Parity Enable */
+-#define uPD98401_GMR_DR		0x00000004 /* Receive Drop Mode (0drop,1don't)*/
+-#define uPD98401_GMR_SE		0x00000002 /* Shapers Enable */
+-#define uPD98401_GMR_RE		0x00000001 /* Receiver Enable */
+-
+-/* GSR is at 0x01, IMR is at 0x02 */
+-#define uPD98401_INT_PI		0x80000000 /* PHY interrupt */
+-#define uPD98401_INT_RQA	0x40000000 /* Receive Queue Alert */
+-#define uPD98401_INT_RQU	0x20000000 /* Receive Queue Underrun */
+-#define uPD98401_INT_RD		0x10000000 /* Receiver Deactivated */
+-#define uPD98401_INT_SPE	0x08000000 /* System Parity Error */
+-#define uPD98401_INT_CPE	0x04000000 /* Control Memory Parity Error */
+-#define uPD98401_INT_SBE	0x02000000 /* System Bus Error */
+-#define uPD98401_INT_IND	0x01000000 /* Initialization Done */
+-#define uPD98401_INT_RCR	0x0000ff00 /* Raw Cell Received */
+-#define uPD98401_INT_RCR_SHIFT	8
+-#define uPD98401_INT_MF		0x000000f0 /* Mailbox Full */
+-#define uPD98401_INT_MF_SHIFT	4
+-#define uPD98401_INT_MM		0x0000000f /* Mailbox Modified */
+-
+-/* VER is at 0x06 */
+-#define uPD98401_MAJOR		0x0000ff00 /* Major revision */
+-#define uPD98401_MAJOR_SHIFT	8
+-#define uPD98401_MINOR		0x000000ff /* Minor revision */
+-
+-/*
+- * Indirectly Addressable Registers
+- */
+-
+-#define uPD98401_IM(n)	(0x40000+(n))	/* Scheduler n I and M */
+-#define uPD98401_X(n)	(0x40010+(n))	/* Scheduler n X */
+-#define uPD98401_Y(n)	(0x40020+(n))	/* Scheduler n Y */
+-#define uPD98401_PC(n)	(0x40030+(n))	/* Scheduler n P, C, p and c */
+-#define uPD98401_PS(n)	(0x40040+(n))	/* Scheduler n priority and status */
+-
+-/* IM contents */
+-#define uPD98401_IM_I		0xff000000 /* I */
+-#define uPD98401_IM_I_SHIFT	24
+-#define uPD98401_IM_M		0x00ffffff /* M */
+-
+-/* PC contents */
+-#define uPD98401_PC_P		0xff000000 /* P */
+-#define uPD98401_PC_P_SHIFT	24
+-#define uPD98401_PC_C		0x00ff0000 /* C */
+-#define uPD98401_PC_C_SHIFT	16
+-#define uPD98401_PC_p		0x0000ff00 /* p */
+-#define uPD98401_PC_p_SHIFT	8
+-#define uPD98401_PC_c		0x000000ff /* c */
+-
+-/* PS contents */
+-#define uPD98401_PS_PRIO	0xf0	/* Priority level (0 high, 15 low) */
+-#define uPD98401_PS_PRIO_SHIFT	4
+-#define uPD98401_PS_S		0x08	/* Scan - must be 0 (internal) */
+-#define uPD98401_PS_R		0x04	/* Round Robin (internal) */
+-#define uPD98401_PS_A		0x02	/* Active (internal) */
+-#define uPD98401_PS_E		0x01	/* Enabled */
+-
+-#define uPD98401_TOS	0x40100	/* Top of Stack Control Memory Address */
+-#define uPD98401_SMA	0x40200	/* Shapers Control Memory Start Address */
+-#define uPD98401_PMA	0x40201	/* Receive Pool Control Memory Start Address */
+-#define uPD98401_T1R	0x40300	/* T1 Register */
+-#define uPD98401_VRR	0x40301	/* VPI/VCI Reduction Register/Recv. Shutdown */
+-#define uPD98401_TSR	0x40302	/* Time-Stamp Register */
+-
+-/* VRR is at 0x40301 */
+-#define uPD98401_VRR_SDM	0x80000000 /* Shutdown Mode */
+-#define uPD98401_VRR_SHIFT	0x000f0000 /* VPI/VCI Shift */
+-#define uPD98401_VRR_SHIFT_SHIFT 16
+-#define uPD98401_VRR_MASK	0x0000ffff /* VPI/VCI mask */
+-
+-/*
+- * TX packet descriptor
+- */
+-
+-#define uPD98401_TXPD_SIZE	16	   /* descriptor size (in bytes) */
+-
+-#define uPD98401_TXPD_V		0x80000000 /* Valid bit */
+-#define uPD98401_TXPD_DP	0x40000000 /* Descriptor (1) or Pointer (0) */
+-#define uPD98401_TXPD_SM	0x20000000 /* Single (1) or Multiple (0) */
+-#define uPD98401_TXPD_CLPM	0x18000000 /* CLP mode */
+-#define uPD98401_CLPM_0		0	   /*	00 CLP = 0 */
+-#define uPD98401_CLPM_1		3	   /*	11 CLP = 1 */
+-#define uPD98401_CLPM_LAST	1	   /*	01 CLP unless last cell */
+-#define uPD98401_TXPD_CLPM_SHIFT 27
+-#define uPD98401_TXPD_PTI	0x07000000 /* PTI pattern */
+-#define uPD98401_TXPD_PTI_SHIFT	24
+-#define uPD98401_TXPD_GFC	0x00f00000 /* GFC pattern */
+-#define uPD98401_TXPD_GFC_SHIFT	20
+-#define uPD98401_TXPD_C10	0x00040000 /* insert CRC-10 */
+-#define uPD98401_TXPD_AAL5	0x00020000 /* AAL5 processing */
+-#define uPD98401_TXPD_MB	0x00010000 /* TX mailbox number */
+-#define uPD98401_TXPD_UU	0x0000ff00 /* CPCS-UU */
+-#define uPD98401_TXPD_UU_SHIFT	8
+-#define uPD98401_TXPD_CPI	0x000000ff /* CPI */
+-
+-/*
+- * TX buffer descriptor
+- */
+-
+-#define uPD98401_TXBD_SIZE	8	   /* descriptor size (in bytes) */
+-
+-#define uPD98401_TXBD_LAST	0x80000000 /* last buffer in packet */
+-
+-/*
+- * TX VC table
+- */
+-
+-/* 1st word has the same structure as in a TX packet descriptor */
+-#define uPD98401_TXVC_L		0x80000000 /* last buffer */
+-#define uPD98401_TXVC_SHP	0x0f000000 /* shaper number */
+-#define uPD98401_TXVC_SHP_SHIFT	24
+-#define uPD98401_TXVC_VPI	0x00ff0000 /* VPI */
+-#define uPD98401_TXVC_VPI_SHIFT	16
+-#define uPD98401_TXVC_VCI	0x0000ffff /* VCI */
+-#define uPD98401_TXVC_QRP	6	   /* Queue Read Pointer is in word 6 */
+-
+-/*
+- * RX free buffer pools descriptor
+- */
+-
+-#define uPD98401_RXFP_ALERT	0x70000000 /* low water mark */
+-#define uPD98401_RXFP_ALERT_SHIFT 28
+-#define uPD98401_RXFP_BFSZ	0x0f000000 /* buffer size, 64*2^n */
+-#define uPD98401_RXFP_BFSZ_SHIFT 24
+-#define uPD98401_RXFP_BTSZ	0x00ff0000 /* batch size, n+1 */
+-#define uPD98401_RXFP_BTSZ_SHIFT 16
+-#define uPD98401_RXFP_REMAIN	0x0000ffff /* remaining batches in pool */
+-
+-/*
+- * RX VC table
+- */
+-
+-#define uPD98401_RXVC_BTSZ	0xff000000 /* remaining free buffers in batch */
+-#define uPD98401_RXVC_BTSZ_SHIFT 24
+-#define uPD98401_RXVC_MB	0x00200000 /* RX mailbox number */
+-#define uPD98401_RXVC_POOL	0x001f0000 /* free buffer pool number */
+-#define uPD98401_RXVC_POOL_SHIFT 16
+-#define uPD98401_RXVC_UINFO	0x0000ffff /* user-supplied information */
+-#define uPD98401_RXVC_T1	0xffff0000 /* T1 timestamp */
+-#define uPD98401_RXVC_T1_SHIFT	16
+-#define uPD98401_RXVC_PR	0x00008000 /* Packet Reception, 1 if busy */
+-#define uPD98401_RXVC_DR	0x00004000 /* FIFO Drop */
+-#define uPD98401_RXVC_OD	0x00001000 /* Drop OAM cells */
+-#define uPD98401_RXVC_AR	0x00000800 /* AAL5 or raw cell; 1 if AAL5 */
+-#define uPD98401_RXVC_MAXSEG	0x000007ff /* max number of segments per PDU */
+-#define uPD98401_RXVC_REM	0xfffe0000 /* remaining words in curr buffer */
+-#define uPD98401_RXVC_REM_SHIFT	17
+-#define uPD98401_RXVC_CLP	0x00010000 /* CLP received */
+-#define uPD98401_RXVC_BFA	0x00008000 /* Buffer Assigned */
+-#define uPD98401_RXVC_BTA	0x00004000 /* Batch Assigned */
+-#define uPD98401_RXVC_CI	0x00002000 /* Congestion Indication */
+-#define uPD98401_RXVC_DD	0x00001000 /* Dropping incoming cells */
+-#define uPD98401_RXVC_DP	0x00000800 /* like PR ? */
+-#define uPD98401_RXVC_CURSEG	0x000007ff /* Current Segment count */
+-
+-/*
+- * RX lookup table
+- */
+-
+-#define uPD98401_RXLT_ENBL	0x8000	   /* Enable */
+-
+-#endif
+diff --git a/drivers/atm/uPD98402.c b/drivers/atm/uPD98402.c
+deleted file mode 100644
+index 239852d85558..000000000000
+--- a/drivers/atm/uPD98402.c
++++ /dev/null
+@@ -1,266 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* drivers/atm/uPD98402.c - NEC uPD98402 (PHY) declarations */
+- 
+-/* Written 1995-2000 by Werner Almesberger, EPFL LRC/ICA */
+- 
+-
+-#include <linux/module.h>
+-#include <linux/mm.h>
+-#include <linux/errno.h>
+-#include <linux/atmdev.h>
+-#include <linux/sonet.h>
+-#include <linux/init.h>
+-#include <linux/slab.h>
+-#include <linux/uaccess.h>
+-#include <linux/atomic.h>
+-
+-#include "uPD98402.h"
+-
+-
+-#if 0
+-#define DPRINTK(format,args...) printk(KERN_DEBUG format,##args)
+-#else
+-#define DPRINTK(format,args...)
+-#endif
+-
+-
+-struct uPD98402_priv {
+-	struct k_sonet_stats sonet_stats;/* link diagnostics */
+-	unsigned char framing;		/* SONET/SDH framing */
+-	int loop_mode;			/* loopback mode */
+-	spinlock_t lock;
+-};
+-
+-
+-#define PRIV(dev) ((struct uPD98402_priv *) dev->phy_data)
+-
+-#define PUT(val,reg) dev->ops->phy_put(dev,val,uPD98402_##reg)
+-#define GET(reg) dev->ops->phy_get(dev,uPD98402_##reg)
+-
+-
+-static int fetch_stats(struct atm_dev *dev,struct sonet_stats __user *arg,int zero)
+-{
+-	struct sonet_stats tmp;
+- 	int error = 0;
+-
+-	atomic_add(GET(HECCT),&PRIV(dev)->sonet_stats.uncorr_hcs);
+-	sonet_copy_stats(&PRIV(dev)->sonet_stats,&tmp);
+-	if (arg) error = copy_to_user(arg,&tmp,sizeof(tmp));
+-	if (zero && !error) {
+-		/* unused fields are reported as -1, but we must not "adjust"
+-		   them */
+-		tmp.corr_hcs = tmp.tx_cells = tmp.rx_cells = 0;
+-		sonet_subtract_stats(&PRIV(dev)->sonet_stats,&tmp);
+-	}
+-	return error ? -EFAULT : 0;
+-}
+-
+-
+-static int set_framing(struct atm_dev *dev,unsigned char framing)
+-{
+-	static const unsigned char sonet[] = { 1,2,3,0 };
+-	static const unsigned char sdh[] = { 1,0,0,2 };
+-	const char *set;
+-	unsigned long flags;
+- 
+-	switch (framing) {
+-		case SONET_FRAME_SONET:
+-			set = sonet;
+-			break;
+-		case SONET_FRAME_SDH:
+-			set = sdh;
+-			break;
+-		default:
+-			return -EINVAL;
+-	}
+-	spin_lock_irqsave(&PRIV(dev)->lock, flags);
+-	PUT(set[0],C11T);
+-	PUT(set[1],C12T);
+-	PUT(set[2],C13T);
+-	PUT((GET(MDR) & ~uPD98402_MDR_SS_MASK) | (set[3] <<
+-	    uPD98402_MDR_SS_SHIFT),MDR);
+-	spin_unlock_irqrestore(&PRIV(dev)->lock, flags);
+-	return 0;
+-}
+-
+-
+-static int get_sense(struct atm_dev *dev,u8 __user *arg)
+-{
+-	unsigned long flags;
+-	unsigned char s[3];
+-
+-	spin_lock_irqsave(&PRIV(dev)->lock, flags);
+-	s[0] = GET(C11R);
+-	s[1] = GET(C12R);
+-	s[2] = GET(C13R);
+-	spin_unlock_irqrestore(&PRIV(dev)->lock, flags);
+-	return (put_user(s[0], arg) || put_user(s[1], arg+1) ||
+-	    put_user(s[2], arg+2) || put_user(0xff, arg+3) ||
+-	    put_user(0xff, arg+4) || put_user(0xff, arg+5)) ? -EFAULT : 0;
+-}
+-
+-
+-static int set_loopback(struct atm_dev *dev,int mode)
+-{
+-	unsigned char mode_reg;
+-
+-	mode_reg = GET(MDR) & ~(uPD98402_MDR_TPLP | uPD98402_MDR_ALP |
+-	    uPD98402_MDR_RPLP);
+-	switch (__ATM_LM_XTLOC(mode)) {
+-		case __ATM_LM_NONE:
+-			break;
+-		case __ATM_LM_PHY:
+-			mode_reg |= uPD98402_MDR_TPLP;
+-			break;
+-		case __ATM_LM_ATM:
+-			mode_reg |= uPD98402_MDR_ALP;
+-			break;
+-		default:
+-			return -EINVAL;
+-	}
+-	switch (__ATM_LM_XTRMT(mode)) {
+-		case __ATM_LM_NONE:
+-			break;
+-		case __ATM_LM_PHY:
+-			mode_reg |= uPD98402_MDR_RPLP;
+-			break;
+-		default:
+-			return -EINVAL;
+-	}
+-	PUT(mode_reg,MDR);
+-	PRIV(dev)->loop_mode = mode;
+-	return 0;
+-}
+-
+-
+-static int uPD98402_ioctl(struct atm_dev *dev,unsigned int cmd,void __user *arg)
+-{
+-	switch (cmd) {
+-
+-		case SONET_GETSTATZ:
+-                case SONET_GETSTAT:
+-			return fetch_stats(dev,arg, cmd == SONET_GETSTATZ);
+-		case SONET_SETFRAMING:
+-			return set_framing(dev, (int)(unsigned long)arg);
+-		case SONET_GETFRAMING:
+-			return put_user(PRIV(dev)->framing,(int __user *)arg) ?
+-			    -EFAULT : 0;
+-		case SONET_GETFRSENSE:
+-			return get_sense(dev,arg);
+-		case ATM_SETLOOP:
+-			return set_loopback(dev, (int)(unsigned long)arg);
+-		case ATM_GETLOOP:
+-			return put_user(PRIV(dev)->loop_mode,(int __user *)arg) ?
+-			    -EFAULT : 0;
+-		case ATM_QUERYLOOP:
+-			return put_user(ATM_LM_LOC_PHY | ATM_LM_LOC_ATM |
+-			    ATM_LM_RMT_PHY,(int __user *)arg) ? -EFAULT : 0;
+-		default:
+-			return -ENOIOCTLCMD;
+-	}
+-}
+-
+-
+-#define ADD_LIMITED(s,v) \
+-    { atomic_add(GET(v),&PRIV(dev)->sonet_stats.s); \
+-    if (atomic_read(&PRIV(dev)->sonet_stats.s) < 0) \
+-	atomic_set(&PRIV(dev)->sonet_stats.s,INT_MAX); }
+-
+-
+-static void stat_event(struct atm_dev *dev)
+-{
+-	unsigned char events;
+-
+-	events = GET(PCR);
+-	if (events & uPD98402_PFM_PFEB) ADD_LIMITED(path_febe,PFECB);
+-	if (events & uPD98402_PFM_LFEB) ADD_LIMITED(line_febe,LECCT);
+-	if (events & uPD98402_PFM_B3E) ADD_LIMITED(path_bip,B3ECT);
+-	if (events & uPD98402_PFM_B2E) ADD_LIMITED(line_bip,B2ECT);
+-	if (events & uPD98402_PFM_B1E) ADD_LIMITED(section_bip,B1ECT);
+-}
+-
+-
+-#undef ADD_LIMITED
+-
+-
+-static void uPD98402_int(struct atm_dev *dev)
+-{
+-	static unsigned long silence = 0;
+-	unsigned char reason;
+-
+-	while ((reason = GET(PICR))) {
+-		if (reason & uPD98402_INT_LOS)
+-			printk(KERN_NOTICE "%s(itf %d): signal lost\n",
+-			    dev->type,dev->number);
+-		if (reason & uPD98402_INT_PFM) stat_event(dev);
+-		if (reason & uPD98402_INT_PCO) {
+-			(void) GET(PCOCR); /* clear interrupt cause */
+-			atomic_add(GET(HECCT),
+-			    &PRIV(dev)->sonet_stats.uncorr_hcs);
+-		}
+-		if ((reason & uPD98402_INT_RFO) && 
+-		    (time_after(jiffies, silence) || silence == 0)) {
+-			printk(KERN_WARNING "%s(itf %d): uPD98402 receive "
+-			    "FIFO overflow\n",dev->type,dev->number);
+-			silence = (jiffies+HZ/2)|1;
+-		}
+-	}
+-}
+-
+-
+-static int uPD98402_start(struct atm_dev *dev)
+-{
+-	DPRINTK("phy_start\n");
+-	if (!(dev->phy_data = kmalloc(sizeof(struct uPD98402_priv),GFP_KERNEL)))
+-		return -ENOMEM;
+-	spin_lock_init(&PRIV(dev)->lock);
+-	memset(&PRIV(dev)->sonet_stats,0,sizeof(struct k_sonet_stats));
+-	(void) GET(PCR); /* clear performance events */
+-	PUT(uPD98402_PFM_FJ,PCMR); /* ignore frequency adj */
+-	(void) GET(PCOCR); /* clear overflows */
+-	PUT(~uPD98402_PCO_HECC,PCOMR);
+-	(void) GET(PICR); /* clear interrupts */
+-	PUT(~(uPD98402_INT_PFM | uPD98402_INT_ALM | uPD98402_INT_RFO |
+-	  uPD98402_INT_LOS),PIMR); /* enable them */
+-	(void) fetch_stats(dev,NULL,1); /* clear kernel counters */
+-	atomic_set(&PRIV(dev)->sonet_stats.corr_hcs,-1);
+-	atomic_set(&PRIV(dev)->sonet_stats.tx_cells,-1);
+-	atomic_set(&PRIV(dev)->sonet_stats.rx_cells,-1);
+-	return 0;
+-}
+-
+-
+-static int uPD98402_stop(struct atm_dev *dev)
+-{
+-	/* let SAR driver worry about stopping interrupts */
+-	kfree(PRIV(dev));
+-	return 0;
+-}
+-
+-
+-static const struct atmphy_ops uPD98402_ops = {
+-	.start		= uPD98402_start,
+-	.ioctl		= uPD98402_ioctl,
+-	.interrupt	= uPD98402_int,
+-	.stop		= uPD98402_stop,
+-};
+-
+-
+-int uPD98402_init(struct atm_dev *dev)
+-{
+-DPRINTK("phy_init\n");
+-	dev->phy = &uPD98402_ops;
+-	return 0;
+-}
+-
+-
+-MODULE_LICENSE("GPL");
+-
+-EXPORT_SYMBOL(uPD98402_init);
+-
+-static __init int uPD98402_module_init(void)
+-{
+-	return 0;
+-}
+-module_init(uPD98402_module_init);
+-/* module_exit not defined so not unloadable */
+diff --git a/drivers/atm/uPD98402.h b/drivers/atm/uPD98402.h
+deleted file mode 100644
+index 437cfaa20c96..000000000000
+--- a/drivers/atm/uPD98402.h
++++ /dev/null
+@@ -1,107 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/* drivers/atm/uPD98402.h - NEC uPD98402 (PHY) declarations */
+- 
+-/* Written 1995 by Werner Almesberger, EPFL LRC */
+-
+-
+-#ifndef DRIVERS_ATM_uPD98402_H
+-#define DRIVERS_ATM_uPD98402_H
+-
+-/*
+- * Registers
+- */
+-
+-#define uPD98402_CMR		0x00	/* Command Register */
+-#define uPD98402_MDR		0x01	/* Mode Register */
+-#define uPD98402_PICR		0x02	/* PHY Interrupt Cause Register */
+-#define uPD98402_PIMR		0x03	/* PHY Interrupt Mask Register */
+-#define uPD98402_ACR		0x04	/* Alarm Cause Register */
+-#define uPD98402_ACMR		0x05	/* Alarm Cause Mask Register */
+-#define uPD98402_PCR		0x06	/* Performance Cause Register */
+-#define uPD98402_PCMR		0x07	/* Performance Cause Mask Register */
+-#define uPD98402_IACM		0x08	/* Internal Alarm Cause Mask Register */
+-#define uPD98402_B1ECT		0x09	/* B1 Error Count Register */
+-#define uPD98402_B2ECT		0x0a	/* B2 Error Count Register */
+-#define uPD98402_B3ECT		0x0b	/* B3 Error Count Regster */
+-#define uPD98402_PFECB		0x0c	/* Path FEBE Count Register */
+-#define uPD98402_LECCT		0x0d	/* Line FEBE Count Register */
+-#define uPD98402_HECCT		0x0e	/* HEC Error Count Register */
+-#define uPD98402_FJCT		0x0f	/* Frequence Justification Count Reg */
+-#define uPD98402_PCOCR		0x10	/* Perf. Counter Overflow Cause Reg */
+-#define uPD98402_PCOMR		0x11	/* Perf. Counter Overflow Mask Reg */
+-#define uPD98402_C11T		0x20	/* C11T Data Register */
+-#define uPD98402_C12T		0x21	/* C12T Data Register */
+-#define uPD98402_C13T		0x22	/* C13T Data Register */
+-#define uPD98402_F1T		0x23	/* F1T Data Register */
+-#define uPD98402_K2T		0x25	/* K2T Data Register */
+-#define uPD98402_C2T		0x26	/* C2T Data Register */
+-#define uPD98402_F2T		0x27	/* F2T Data Register */
+-#define uPD98402_C11R		0x30	/* C11T Data Register */
+-#define uPD98402_C12R		0x31	/* C12T Data Register */
+-#define uPD98402_C13R		0x32	/* C13T Data Register */
+-#define uPD98402_F1R		0x33	/* F1T Data Register */
+-#define uPD98402_K2R		0x35	/* K2T Data Register */
+-#define uPD98402_C2R		0x36	/* C2T Data Register */
+-#define uPD98402_F2R		0x37	/* F2T Data Register */
+-
+-/* CMR is at 0x00 */
+-#define uPD98402_CMR_PFRF	0x01	/* Send path FERF */
+-#define uPD98402_CMR_LFRF	0x02	/* Send line FERF */
+-#define uPD98402_CMR_PAIS	0x04	/* Send path AIS */
+-#define uPD98402_CMR_LAIS	0x08	/* Send line AIS */
+-
+-/* MDR is at 0x01 */
+-#define uPD98402_MDR_ALP	0x01	/* ATM layer loopback */
+-#define uPD98402_MDR_TPLP	0x02	/* PMD loopback, to host */
+-#define uPD98402_MDR_RPLP	0x04	/* PMD loopback, to network */
+-#define uPD98402_MDR_SS0	0x08	/* SS0 */
+-#define uPD98402_MDR_SS1	0x10	/* SS1 */
+-#define uPD98402_MDR_SS_MASK	0x18	/* mask */
+-#define uPD98402_MDR_SS_SHIFT	3	/* shift */
+-#define uPD98402_MDR_HEC	0x20	/* disable HEC inbound processing */
+-#define uPD98402_MDR_FSR	0x40	/* disable frame scrambler */
+-#define uPD98402_MDR_CSR	0x80	/* disable cell scrambler */
+-
+-/* PICR is at 0x02, PIMR is at 0x03 */
+-#define uPD98402_INT_PFM	0x01	/* performance counter has changed */
+-#define uPD98402_INT_ALM	0x02	/* line fault */
+-#define uPD98402_INT_RFO	0x04	/* receive FIFO overflow */
+-#define uPD98402_INT_PCO	0x08	/* performance counter overflow */
+-#define uPD98402_INT_OTD	0x20	/* OTD has occurred */
+-#define uPD98402_INT_LOS	0x40	/* Loss Of Signal */
+-#define uPD98402_INT_LOF	0x80	/* Loss Of Frame */
+-
+-/* ACR is as 0x04, ACMR is at 0x05 */
+-#define uPD98402_ALM_PFRF	0x01	/* path FERF */
+-#define uPD98402_ALM_LFRF	0x02	/* line FERF */
+-#define uPD98402_ALM_PAIS	0x04	/* path AIS */
+-#define uPD98402_ALM_LAIS	0x08	/* line AIS */
+-#define uPD98402_ALM_LOD	0x10	/* loss of delineation */
+-#define uPD98402_ALM_LOP	0x20	/* loss of pointer */
+-#define uPD98402_ALM_OOF	0x40	/* out of frame */
+-
+-/* PCR is at 0x06, PCMR is at 0x07 */
+-#define uPD98402_PFM_PFEB	0x01	/* path FEBE */
+-#define uPD98402_PFM_LFEB	0x02	/* line FEBE */
+-#define uPD98402_PFM_B3E	0x04	/* B3 error */
+-#define uPD98402_PFM_B2E	0x08	/* B2 error */
+-#define uPD98402_PFM_B1E	0x10	/* B1 error */
+-#define uPD98402_PFM_FJ		0x20	/* frequency justification */
+-
+-/* IACM is at 0x08 */
+-#define uPD98402_IACM_PFRF	0x01	/* don't generate path FERF */
+-#define uPD98402_IACM_LFRF	0x02	/* don't generate line FERF */
+-
+-/* PCOCR is at 0x010, PCOMR is at 0x11 */
+-#define uPD98402_PCO_B1EC	0x01	/* B1ECT overflow */
+-#define uPD98402_PCO_B2EC	0x02	/* B2ECT overflow */
+-#define uPD98402_PCO_B3EC	0x04	/* B3ECT overflow */
+-#define uPD98402_PCO_PFBC	0x08	/* PFEBC overflow */
+-#define uPD98402_PCO_LFBC	0x10	/* LFEVC overflow */
+-#define uPD98402_PCO_HECC	0x20	/* HECCT overflow */
+-#define uPD98402_PCO_FJC	0x40	/* FJCT overflow */
+-
+-
+-int uPD98402_init(struct atm_dev *dev);
+-
+-#endif
+diff --git a/drivers/atm/zatm.c b/drivers/atm/zatm.c
+deleted file mode 100644
+index cf5fffcf98a1..000000000000
+--- a/drivers/atm/zatm.c
++++ /dev/null
+@@ -1,1652 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* drivers/atm/zatm.c - ZeitNet ZN122x device driver */
+- 
+-/* Written 1995-2000 by Werner Almesberger, EPFL LRC/ICA */
 -
 -
 -#include <linux/module.h>
--#include <linux/sched.h>
 -#include <linux/kernel.h>
 -#include <linux/mm.h>
 -#include <linux/pci.h>
--#include <linux/poison.h>
 -#include <linux/errno.h>
 -#include <linux/atm.h>
 -#include <linux/atmdev.h>
@@ -170,2543 +859,1804 @@ index 4f67404fe64c..000000000000
 -#include <linux/skbuff.h>
 -#include <linux/netdevice.h>
 -#include <linux/delay.h>
--#include <linux/ioport.h> /* for request_region */
 -#include <linux/uio.h>
 -#include <linux/init.h>
 -#include <linux/interrupt.h>
+-#include <linux/dma-mapping.h>
+-#include <linux/atm_zatm.h>
 -#include <linux/capability.h>
 -#include <linux/bitops.h>
+-#include <linux/wait.h>
 -#include <linux/slab.h>
 -#include <asm/byteorder.h>
 -#include <asm/string.h>
 -#include <asm/io.h>
 -#include <linux/atomic.h>
 -#include <linux/uaccess.h>
--#include <linux/wait.h>
+-#include <linux/nospec.h>
 -
--#include "firestream.h"
+-#include "uPD98401.h"
+-#include "uPD98402.h"
+-#include "zeprom.h"
+-#include "zatm.h"
 -
--static int loopback = 0;
--static int num=0x5a;
 -
--/* According to measurements (but they look suspicious to me!) done in
-- * '97, 37% of the packets are one cell in size. So it pays to have
-- * buffers allocated at that size. A large jump in percentage of
-- * packets occurs at packets around 536 bytes in length. So it also
-- * pays to have those pre-allocated. Unfortunately, we can't fully
-- * take advantage of this as the majority of the packets is likely to
-- * be TCP/IP (As where obviously the measurement comes from) There the
-- * link would be opened with say a 1500 byte MTU, and we can't handle
-- * smaller buffers more efficiently than the larger ones. -- REW
+-/*
+- * TODO:
+- *
+- * Minor features
+- *  - support 64 kB SDUs (will have to use multibuffer batches then :-( )
+- *  - proper use of CDV, credit = max(1,CDVT*PCR)
+- *  - AAL0
+- *  - better receive timestamps
+- *  - OAM
 - */
 -
--/* Due to the way Linux memory management works, specifying "576" as
-- * an allocation size here isn't going to help. They are allocated
-- * from 1024-byte regions anyway. With the size of the sk_buffs (quite
-- * large), it doesn't pay to allocate the smallest size (64) -- REW */
--
--/* This is all guesswork. Hard numbers to back this up or disprove this, 
-- * are appreciated. -- REW */
--
--/* The last entry should be about 64k. However, the "buffer size" is
-- * passed to the chip in a 16 bit field. I don't know how "65536"
-- * would be interpreted. -- REW */
--
--#define NP FS_NR_FREE_POOLS
--static int rx_buf_sizes[NP]  = {128,  256,  512, 1024, 2048, 4096, 16384, 65520};
--/* log2:                 7     8     9    10    11    12    14     16 */
+-#define ZATM_COPPER	1
 -
 -#if 0
--static int rx_pool_sizes[NP] = {1024, 1024, 512, 256,  128,  64,   32,    32};
+-#define DPRINTK(format,args...) printk(KERN_DEBUG format,##args)
 -#else
--/* debug */
--static int rx_pool_sizes[NP] = {128,  128,  128, 64,   64,   64,   32,    32};
+-#define DPRINTK(format,args...)
 -#endif
--/* log2:                 10    10    9    8     7     6     5      5  */
--/* sumlog2:              17    18    18   18    18    18    19     21 */
--/* mem allocated:        128k  256k  256k 256k  256k  256k  512k   2M */
--/* tot mem: almost 4M */
 -
--/* NP is shorter, so that it fits on a single line. */
--#undef NP
+-#ifndef CONFIG_ATM_ZATM_DEBUG
 -
 -
--/* Small hardware gotcha:
+-#define NULLCHECK(x)
 -
--   The FS50 CAM (VP/VC match registers) always take the lowest channel
--   number that matches. This is not a problem.
--
--   However, they also ignore whether the channel is enabled or
--   not. This means that if you allocate channel 0 to 1.2 and then
--   channel 1 to 0.0, then disabeling channel 0 and writing 0 to the
--   match channel for channel 0 will "steal" the traffic from channel
--   1, even if you correctly disable channel 0.
--
--   Workaround: 
--
--   - When disabling channels, write an invalid VP/VC value to the
--   match register. (We use 0xffffffff, which in the worst case 
--   matches VP/VC = <maxVP>/<maxVC>, but I expect it not to match
--   anything as some "when not in use, program to 0" bits are now
--   programmed to 1...)
--
--   - Don't initialize the match registers to 0, as 0.0 is a valid
--   channel.
--*/
+-#define EVENT(s,a,b)
 -
 -
--/* Optimization hints and tips.
--
--   The FireStream chips are very capable of reducing the amount of
--   "interrupt-traffic" for the CPU. This driver requests an interrupt on EVERY
--   action. You could try to minimize this a bit. 
--
--   Besides that, the userspace->kernel copy and the PCI bus are the
--   performance limiting issues for this driver.
--
--   You could queue up a bunch of outgoing packets without telling the
--   FireStream. I'm not sure that's going to win you much though. The
--   Linux layer won't tell us in advance when it's not going to give us
--   any more packets in a while. So this is tricky to implement right without
--   introducing extra delays. 
--  
--   -- REW
-- */
+-static void event_dump(void)
+-{
+-}
 -
 -
+-#else
 -
--
--/* The strings that define what the RX queue entry is all about. */
--/* Fujitsu: Please tell me which ones can have a pointer to a 
--   freepool descriptor! */
--static char *res_strings[] = {
--	"RX OK: streaming not EOP", 
--	"RX OK: streaming EOP", 
--	"RX OK: Single buffer packet", 
--	"RX OK: packet mode", 
--	"RX OK: F4 OAM (end to end)", 
--	"RX OK: F4 OAM (Segment)", 
--	"RX OK: F5 OAM (end to end)", 
--	"RX OK: F5 OAM (Segment)", 
--	"RX OK: RM cell", 
--	"RX OK: TRANSP cell", 
--	"RX OK: TRANSPC cell", 
--	"Unmatched cell", 
--	"reserved 12", 
--	"reserved 13", 
--	"reserved 14", 
--	"Unrecognized cell", 
--	"reserved 16", 
--	"reassembly abort: AAL5 abort", 
--	"packet purged", 
--	"packet ageing timeout", 
--	"channel ageing timeout", 
--	"calculated length error", 
--	"programmed length limit error", 
--	"aal5 crc32 error", 
--	"oam transp or transpc crc10 error", 
--	"reserved 25", 
--	"reserved 26", 
--	"reserved 27", 
--	"reserved 28", 
--	"reserved 29", 
--	"reserved 30", /* FIXME: The strings between 30-40 might be wrong. */
--	"reassembly abort: no buffers", 
--	"receive buffer overflow", 
--	"change in GFC", 
--	"receive buffer full", 
--	"low priority discard - no receive descriptor", 
--	"low priority discard - missing end of packet", 
--	"reserved 37",
--	"reserved 38",
--	"reserved 39",
--	"reserved 40",
--	"reserved 41", 
--	"reserved 42", 
--	"reserved 43", 
--	"reserved 44", 
--	"reserved 45", 
--	"reserved 46", 
--	"reserved 47", 
--	"reserved 48", 
--	"reserved 49", 
--	"reserved 50", 
--	"reserved 51", 
--	"reserved 52", 
--	"reserved 53", 
--	"reserved 54", 
--	"reserved 55", 
--	"reserved 56", 
--	"reserved 57", 
--	"reserved 58", 
--	"reserved 59", 
--	"reserved 60", 
--	"reserved 61", 
--	"reserved 62", 
--	"reserved 63", 
--};  
--
--static char *irq_bitname[] = {
--	"LPCO",
--	"DPCO",
--	"RBRQ0_W",
--	"RBRQ1_W",
--	"RBRQ2_W",
--	"RBRQ3_W",
--	"RBRQ0_NF",
--	"RBRQ1_NF",
--	"RBRQ2_NF",
--	"RBRQ3_NF",
--	"BFP_SC",
--	"INIT",
--	"INIT_ERR",
--	"USCEO",
--	"UPEC0",
--	"VPFCO",
--	"CRCCO",
--	"HECO",
--	"TBRQ_W",
--	"TBRQ_NF",
--	"CTPQ_E",
--	"GFC_C0",
--	"PCI_FTL",
--	"CSQ_W",
--	"CSQ_NF",
--	"EXT_INT",
--	"RXDMA_S"
--};
--
--
--#define PHY_EOF -1
--#define PHY_CLEARALL -2
--
--struct reginit_item {
--	int reg, val;
--};
--
--
--static struct reginit_item PHY_NTC_INIT[] = {
--	{ PHY_CLEARALL, 0x40 }, 
--	{ 0x12,  0x0001 },
--	{ 0x13,  0x7605 },
--	{ 0x1A,  0x0001 },
--	{ 0x1B,  0x0005 },
--	{ 0x38,  0x0003 },
--	{ 0x39,  0x0006 },   /* changed here to make loopback */
--	{ 0x01,  0x5262 },
--	{ 0x15,  0x0213 },
--	{ 0x00,  0x0003 },
--	{ PHY_EOF, 0},    /* -1 signals end of list */
--};
--
--
--/* Safetyfeature: If the card interrupts more than this number of times
--   in a jiffy (1/100th of a second) then we just disable the interrupt and
--   print a message. This prevents the system from hanging. 
--
--   150000 packets per second is close to the limit a PC is going to have
--   anyway. We therefore have to disable this for production. -- REW */
--#undef IRQ_RATE_LIMIT // 100
--
--/* Interrupts work now. Unlike serial cards, ATM cards don't work all
--   that great without interrupts. -- REW */
--#undef FS_POLL_FREQ // 100
 -
 -/* 
--   This driver can spew a whole lot of debugging output at you. If you
--   need maximum performance, you should disable the DEBUG define. To
--   aid in debugging in the field, I'm leaving the compile-time debug
--   features enabled, and disable them "runtime". That allows me to
--   instruct people with problems to enable debugging without requiring
--   them to recompile... -- REW
--*/
--#define DEBUG
--
--#ifdef DEBUG
--#define fs_dprintk(f, str...) if (fs_debug & f) printk (str)
--#else
--#define fs_dprintk(f, str...) /* nothing */
--#endif
--
--
--static int fs_keystream = 0;
--
--#ifdef DEBUG
--/* I didn't forget to set this to zero before shipping. Hit me with a stick 
--   if you get this with the debug default not set to zero again. -- REW */
--static int fs_debug = 0;
--#else
--#define fs_debug 0
--#endif
--
--#ifdef MODULE
--#ifdef DEBUG 
--module_param(fs_debug, int, 0644);
--#endif
--module_param(loopback, int, 0);
--module_param(num, int, 0);
--module_param(fs_keystream, int, 0);
--/* XXX Add rx_buf_sizes, and rx_pool_sizes As per request Amar. -- REW */
--#endif
--
--
--#define FS_DEBUG_FLOW    0x00000001
--#define FS_DEBUG_OPEN    0x00000002
--#define FS_DEBUG_QUEUE   0x00000004
--#define FS_DEBUG_IRQ     0x00000008
--#define FS_DEBUG_INIT    0x00000010
--#define FS_DEBUG_SEND    0x00000020
--#define FS_DEBUG_PHY     0x00000040
--#define FS_DEBUG_CLEANUP 0x00000080
--#define FS_DEBUG_QOS     0x00000100
--#define FS_DEBUG_TXQ     0x00000200
--#define FS_DEBUG_ALLOC   0x00000400
--#define FS_DEBUG_TXMEM   0x00000800
--#define FS_DEBUG_QSIZE   0x00001000
--
--
--#define func_enter() fs_dprintk(FS_DEBUG_FLOW, "fs: enter %s\n", __func__)
--#define func_exit()  fs_dprintk(FS_DEBUG_FLOW, "fs: exit  %s\n", __func__)
--
--
--static struct fs_dev *fs_boards = NULL;
--
--#ifdef DEBUG
--
--static void my_hd (void *addr, int len)
--{
--	int j, ch;
--	unsigned char *ptr = addr;
--
--	while (len > 0) {
--		printk ("%p ", ptr);
--		for (j=0;j < ((len < 16)?len:16);j++) {
--			printk ("%02x %s", ptr[j], (j==7)?" ":"");
--		}
--		for (  ;j < 16;j++) {
--			printk ("   %s", (j==7)?" ":"");
--		}
--		for (j=0;j < ((len < 16)?len:16);j++) {
--			ch = ptr[j];
--			printk ("%c", (ch < 0x20)?'.':((ch > 0x7f)?'.':ch));
--		}
--		printk ("\n");
--		ptr += 16;
--		len -= 16;
--	}
--}
--#else /* DEBUG */
--static void my_hd (void *addr, int len){}
--#endif /* DEBUG */
--
--/********** free an skb (as per ATM device driver documentation) **********/
--
--/* Hmm. If this is ATM specific, why isn't there an ATM routine for this?
-- * I copied it over from the ambassador driver. -- REW */
--
--static inline void fs_kfree_skb (struct sk_buff * skb) 
--{
--	if (ATM_SKB(skb)->vcc->pop)
--		ATM_SKB(skb)->vcc->pop (ATM_SKB(skb)->vcc, skb);
--	else
--		dev_kfree_skb_any (skb);
--}
--
--
--
--
--/* It seems the ATM forum recommends this horribly complicated 16bit
-- * floating point format. Turns out the Ambassador uses the exact same
-- * encoding. I just copied it over. If Mitch agrees, I'll move it over
-- * to the atm_misc file or something like that. (and remove it from 
-- * here and the ambassador driver) -- REW
+- * NULL pointer checking
 - */
 -
--/* The good thing about this format is that it is monotonic. So, 
--   a conversion routine need not be very complicated. To be able to
--   round "nearest" we need to take along a few extra bits. Lets
--   put these after 16 bits, so that we can just return the top 16
--   bits of the 32bit number as the result:
+-#define NULLCHECK(x) \
+-  if ((unsigned long) (x) < 0x30) printk(KERN_CRIT #x "==0x%x\n", (int) (x))
 -
--   int mr (unsigned int rate, int r) 
--     {
--     int e = 16+9;
--     static int round[4]={0, 0, 0xffff, 0x8000};
--     if (!rate) return 0;
--     while (rate & 0xfc000000) {
--       rate >>= 1;
--       e++;
--     }
--     while (! (rate & 0xfe000000)) {
--       rate <<= 1;
--       e--;
--     }
+-/*
+- * Very extensive activity logging. Greatly improves bug detection speed but
+- * costs a few Mbps if enabled.
+- */
 -
--// Now the mantissa is in positions bit 16-25. Excepf for the "hidden 1" that's in bit 26.
--     rate &= ~0x02000000;
--// Next add in the exponent
--     rate |= e << (16+9);
--// And perform the rounding:
--     return (rate + round[r]) >> 16;
--   }
+-#define EV 64
 -
--   14 lines-of-code. Compare that with the 120 that the Ambassador
--   guys needed. (would be 8 lines shorter if I'd try to really reduce
--   the number of lines:
--
--   int mr (unsigned int rate, int r) 
--   {
--     int e = 16+9;
--     static int round[4]={0, 0, 0xffff, 0x8000};
--     if (!rate) return 0;
--     for (;  rate & 0xfc000000 ;rate >>= 1, e++);
--     for (;!(rate & 0xfe000000);rate <<= 1, e--);
--     return ((rate & ~0x02000000) | (e << (16+9)) + round[r]) >> 16;
--   }
--
--   Exercise for the reader: Remove one more line-of-code, without
--   cheating. (Just joining two lines is cheating). (I know it's
--   possible, don't think you've beat me if you found it... If you
--   manage to lose two lines or more, keep me updated! ;-)
--
--   -- REW */
+-static const char *ev[EV];
+-static unsigned long ev_a[EV],ev_b[EV];
+-static int ec = 0;
 -
 -
--#define ROUND_UP      1
--#define ROUND_DOWN    2
--#define ROUND_NEAREST 3
--/********** make rate (not quite as much fun as Horizon) **********/
--
--static int make_rate(unsigned int rate, int r,
--		      u16 *bits, unsigned int *actual)
+-static void EVENT(const char *s,unsigned long a,unsigned long b)
 -{
--	unsigned char exp = -1; /* hush gcc */
--	unsigned int man = -1;  /* hush gcc */
--  
--	fs_dprintk (FS_DEBUG_QOS, "make_rate %u", rate);
--  
--	/* rates in cells per second, ITU format (nasty 16-bit floating-point)
--	   given 5-bit e and 9-bit m:
--	   rate = EITHER (1+m/2^9)*2^e    OR 0
--	   bits = EITHER 1<<14 | e<<9 | m OR 0
--	   (bit 15 is "reserved", bit 14 "non-zero")
--	   smallest rate is 0 (special representation)
--	   largest rate is (1+511/512)*2^31 = 4290772992 (< 2^32-1)
--	   smallest non-zero rate is (1+0/512)*2^0 = 1 (> 0)
--	   simple algorithm:
--	   find position of top bit, this gives e
--	   remove top bit and shift (rounding if feeling clever) by 9-e
--	*/
--	/* Ambassador ucode bug: please don't set bit 14! so 0 rate not
--	   representable. // This should move into the ambassador driver
--	   when properly merged. -- REW */
--  
--	if (rate > 0xffc00000U) {
--		/* larger than largest representable rate */
--    
--		if (r == ROUND_UP) {
--			return -EINVAL;
--		} else {
--			exp = 31;
--			man = 511;
--		}
--    
--	} else if (rate) {
--		/* representable rate */
--    
--		exp = 31;
--		man = rate;
--    
--		/* invariant: rate = man*2^(exp-31) */
--		while (!(man & (1<<31))) {
--			exp = exp - 1;
--			man = man<<1;
--		}
--    
--		/* man has top bit set
--		   rate = (2^31+(man-2^31))*2^(exp-31)
--		   rate = (1+(man-2^31)/2^31)*2^exp 
--		*/
--		man = man<<1;
--		man &= 0xffffffffU; /* a nop on 32-bit systems */
--		/* rate = (1+man/2^32)*2^exp
--    
--		   exp is in the range 0 to 31, man is in the range 0 to 2^32-1
--		   time to lose significance... we want m in the range 0 to 2^9-1
--		   rounding presents a minor problem... we first decide which way
--		   we are rounding (based on given rounding direction and possibly
--		   the bits of the mantissa that are to be discarded).
--		*/
+-	ev[ec] = s; 
+-	ev_a[ec] = a;
+-	ev_b[ec] = b;
+-	ec = (ec+1) % EV;
+-}
 -
--		switch (r) {
--		case ROUND_DOWN: {
--			/* just truncate */
--			man = man>>(32-9);
--			break;
--		}
--		case ROUND_UP: {
--			/* check all bits that we are discarding */
--			if (man & (~0U>>9)) {
--				man = (man>>(32-9)) + 1;
--				if (man == (1<<9)) {
--					/* no need to check for round up outside of range */
--					man = 0;
--					exp += 1;
--				}
--			} else {
--				man = (man>>(32-9));
--			}
--			break;
--		}
--		case ROUND_NEAREST: {
--			/* check msb that we are discarding */
--			if (man & (1<<(32-9-1))) {
--				man = (man>>(32-9)) + 1;
--				if (man == (1<<9)) {
--					/* no need to check for round up outside of range */
--					man = 0;
--					exp += 1;
--				}
--			} else {
--				man = (man>>(32-9));
--			}
--			break;
--		}
--		}
--    
--	} else {
--		/* zero rate - not representable */
--    
--		if (r == ROUND_DOWN) {
--			return -EINVAL;
--		} else {
--			exp = 0;
--			man = 0;
--		}
+-
+-static void event_dump(void)
+-{
+-	int n,i;
+-
+-	printk(KERN_NOTICE "----- event dump follows -----\n");
+-	for (n = 0; n < EV; n++) {
+-		i = (ec+n) % EV;
+-		printk(KERN_NOTICE);
+-		printk(ev[i] ? ev[i] : "(null)",ev_a[i],ev_b[i]);
 -	}
--  
--	fs_dprintk (FS_DEBUG_QOS, "rate: man=%u, exp=%hu", man, exp);
--  
--	if (bits)
--		*bits = /* (1<<14) | */ (exp<<9) | man;
--  
--	if (actual)
--		*actual = (exp >= 9)
--			? (1 << exp) + (man << (exp-9))
--			: (1 << exp) + ((man + (1<<(9-exp-1))) >> (9-exp));
--  
--	return 0;
+-	printk(KERN_NOTICE "----- event dump ends here -----\n");
 -}
 -
 -
+-#endif /* CONFIG_ATM_ZATM_DEBUG */
 -
 -
--/* FireStream access routines */
--/* For DEEP-DOWN debugging these can be rigged to intercept accesses to
--   certain registers or to just log all accesses. */
+-#define RING_BUSY	1	/* indication from do_tx that PDU has to be
+-				   backlogged */
 -
--static inline void write_fs (struct fs_dev *dev, int offset, u32 val)
+-static struct atm_dev *zatm_boards = NULL;
+-static unsigned long dummy[2] = {0,0};
+-
+-
+-#define zin_n(r) inl(zatm_dev->base+r*4)
+-#define zin(r) inl(zatm_dev->base+uPD98401_##r*4)
+-#define zout(v,r) outl(v,zatm_dev->base+uPD98401_##r*4)
+-#define zwait() do {} while (zin(CMR) & uPD98401_BUSY)
+-
+-/* RX0, RX1, TX0, TX1 */
+-static const int mbx_entries[NR_MBX] = { 1024,1024,1024,1024 };
+-static const int mbx_esize[NR_MBX] = { 16,16,4,4 }; /* entry size in bytes */
+-
+-#define MBX_SIZE(i) (mbx_entries[i]*mbx_esize[i])
+-
+-
+-/*-------------------------------- utilities --------------------------------*/
+-
+-
+-static void zpokel(struct zatm_dev *zatm_dev,u32 value,u32 addr)
 -{
--	writel (val, dev->base + offset);
+-	zwait();
+-	zout(value,CER);
+-	zout(uPD98401_IND_ACC | uPD98401_IA_BALL |
+-	    (uPD98401_IA_TGT_CM << uPD98401_IA_TGT_SHIFT) | addr,CMR);
 -}
 -
 -
--static inline u32  read_fs (struct fs_dev *dev, int offset)
+-static u32 zpeekl(struct zatm_dev *zatm_dev,u32 addr)
 -{
--	return readl (dev->base + offset);
+-	zwait();
+-	zout(uPD98401_IND_ACC | uPD98401_IA_BALL | uPD98401_IA_RW |
+-	  (uPD98401_IA_TGT_CM << uPD98401_IA_TGT_SHIFT) | addr,CMR);
+-	zwait();
+-	return zin(CER);
 -}
 -
 -
--
--static inline struct FS_QENTRY *get_qentry (struct fs_dev *dev, struct queue *q)
--{
--	return bus_to_virt (read_fs (dev, Q_WP(q->offset)) & Q_ADDR_MASK);
--}
--
--
--static void submit_qentry (struct fs_dev *dev, struct queue *q, struct FS_QENTRY *qe)
--{
--	u32 wp;
--	struct FS_QENTRY *cqe;
--
--	/* XXX Sanity check: the write pointer can be checked to be 
--	   still the same as the value passed as qe... -- REW */
--	/*  udelay (5); */
--	while ((wp = read_fs (dev, Q_WP (q->offset))) & Q_FULL) {
--		fs_dprintk (FS_DEBUG_TXQ, "Found queue at %x full. Waiting.\n", 
--			    q->offset);
--		schedule ();
--	}
--
--	wp &= ~0xf;
--	cqe = bus_to_virt (wp);
--	if (qe != cqe) {
--		fs_dprintk (FS_DEBUG_TXQ, "q mismatch! %p %p\n", qe, cqe);
--	}
--
--	write_fs (dev, Q_WP(q->offset), Q_INCWRAP);
--
--	{
--		static int c;
--		if (!(c++ % 100))
--			{
--				int rp, wp;
--				rp =  read_fs (dev, Q_RP(q->offset));
--				wp =  read_fs (dev, Q_WP(q->offset));
--				fs_dprintk (FS_DEBUG_TXQ, "q at %d: %x-%x: %x entries.\n", 
--					    q->offset, rp, wp, wp-rp);
--			}
--	}
--}
--
--#ifdef DEBUG_EXTRA
--static struct FS_QENTRY pq[60];
--static int qp;
--
--static struct FS_BPENTRY dq[60];
--static int qd;
--static void *da[60];
--#endif 
--
--static void submit_queue (struct fs_dev *dev, struct queue *q, 
--			  u32 cmd, u32 p1, u32 p2, u32 p3)
--{
--	struct FS_QENTRY *qe;
--
--	qe = get_qentry (dev, q);
--	qe->cmd = cmd;
--	qe->p0 = p1;
--	qe->p1 = p2;
--	qe->p2 = p3;
--	submit_qentry (dev,  q, qe);
--
--#ifdef DEBUG_EXTRA
--	pq[qp].cmd = cmd;
--	pq[qp].p0 = p1;
--	pq[qp].p1 = p2;
--	pq[qp].p2 = p3;
--	qp++;
--	if (qp >= 60) qp = 0;
--#endif
--}
--
--/* Test the "other" way one day... -- REW */
--#if 1
--#define submit_command submit_queue
--#else
--
--static void submit_command (struct fs_dev *dev, struct queue *q, 
--			    u32 cmd, u32 p1, u32 p2, u32 p3)
--{
--	write_fs (dev, CMDR0, cmd);
--	write_fs (dev, CMDR1, p1);
--	write_fs (dev, CMDR2, p2);
--	write_fs (dev, CMDR3, p3);
--}
--#endif
--
--
--
--static void process_return_queue (struct fs_dev *dev, struct queue *q)
--{
--	long rq;
--	struct FS_QENTRY *qe;
--	void *tc;
--  
--	while (!((rq = read_fs (dev, Q_RP(q->offset))) & Q_EMPTY)) {
--		fs_dprintk (FS_DEBUG_QUEUE, "reaping return queue entry at %lx\n", rq); 
--		qe = bus_to_virt (rq);
--    
--		fs_dprintk (FS_DEBUG_QUEUE, "queue entry: %08x %08x %08x %08x. (%d)\n", 
--			    qe->cmd, qe->p0, qe->p1, qe->p2, STATUS_CODE (qe));
--
--		switch (STATUS_CODE (qe)) {
--		case 5:
--			tc = bus_to_virt (qe->p0);
--			fs_dprintk (FS_DEBUG_ALLOC, "Free tc: %p\n", tc);
--			kfree (tc);
--			break;
--		}
--    
--		write_fs (dev, Q_RP(q->offset), Q_INCWRAP);
--	}
--}
--
--
--static void process_txdone_queue (struct fs_dev *dev, struct queue *q)
--{
--	long rq;
--	long tmp;
--	struct FS_QENTRY *qe;
--	struct sk_buff *skb;
--	struct FS_BPENTRY *td;
--
--	while (!((rq = read_fs (dev, Q_RP(q->offset))) & Q_EMPTY)) {
--		fs_dprintk (FS_DEBUG_QUEUE, "reaping txdone entry at %lx\n", rq); 
--		qe = bus_to_virt (rq);
--    
--		fs_dprintk (FS_DEBUG_QUEUE, "queue entry: %08x %08x %08x %08x: %d\n", 
--			    qe->cmd, qe->p0, qe->p1, qe->p2, STATUS_CODE (qe));
--
--		if (STATUS_CODE (qe) != 2)
--			fs_dprintk (FS_DEBUG_TXMEM, "queue entry: %08x %08x %08x %08x: %d\n", 
--				    qe->cmd, qe->p0, qe->p1, qe->p2, STATUS_CODE (qe));
--
--
--		switch (STATUS_CODE (qe)) {
--		case 0x01: /* This is for AAL0 where we put the chip in streaming mode */
--			fallthrough;
--		case 0x02:
--			/* Process a real txdone entry. */
--			tmp = qe->p0;
--			if (tmp & 0x0f)
--				printk (KERN_WARNING "td not aligned: %ld\n", tmp);
--			tmp &= ~0x0f;
--			td = bus_to_virt (tmp);
--
--			fs_dprintk (FS_DEBUG_QUEUE, "Pool entry: %08x %08x %08x %08x %p.\n", 
--				    td->flags, td->next, td->bsa, td->aal_bufsize, td->skb );
--      
--			skb = td->skb;
--			if (skb == FS_VCC (ATM_SKB(skb)->vcc)->last_skb) {
--				FS_VCC (ATM_SKB(skb)->vcc)->last_skb = NULL;
--				wake_up_interruptible (& FS_VCC (ATM_SKB(skb)->vcc)->close_wait);
--			}
--			td->dev->ntxpckts--;
--
--			{
--				static int c=0;
--	
--				if (!(c++ % 100)) {
--					fs_dprintk (FS_DEBUG_QSIZE, "[%d]", td->dev->ntxpckts);
--				}
--			}
--
--			atomic_inc(&ATM_SKB(skb)->vcc->stats->tx);
--
--			fs_dprintk (FS_DEBUG_TXMEM, "i");
--			fs_dprintk (FS_DEBUG_ALLOC, "Free t-skb: %p\n", skb);
--			fs_kfree_skb (skb);
--
--			fs_dprintk (FS_DEBUG_ALLOC, "Free trans-d: %p\n", td); 
--			memset (td, ATM_POISON_FREE, sizeof(struct FS_BPENTRY));
--			kfree (td);
--			break;
--		default:
--			/* Here we get the tx purge inhibit command ... */
--			/* Action, I believe, is "don't do anything". -- REW */
--			;
--		}
--    
--		write_fs (dev, Q_RP(q->offset), Q_INCWRAP);
--	}
--}
--
--
--static void process_incoming (struct fs_dev *dev, struct queue *q)
--{
--	long rq;
--	struct FS_QENTRY *qe;
--	struct FS_BPENTRY *pe;    
--	struct sk_buff *skb;
--	unsigned int channo;
--	struct atm_vcc *atm_vcc;
--
--	while (!((rq = read_fs (dev, Q_RP(q->offset))) & Q_EMPTY)) {
--		fs_dprintk (FS_DEBUG_QUEUE, "reaping incoming queue entry at %lx\n", rq); 
--		qe = bus_to_virt (rq);
--    
--		fs_dprintk (FS_DEBUG_QUEUE, "queue entry: %08x %08x %08x %08x.  ", 
--			    qe->cmd, qe->p0, qe->p1, qe->p2);
--
--		fs_dprintk (FS_DEBUG_QUEUE, "-> %x: %s\n", 
--			    STATUS_CODE (qe), 
--			    res_strings[STATUS_CODE(qe)]);
--
--		pe = bus_to_virt (qe->p0);
--		fs_dprintk (FS_DEBUG_QUEUE, "Pool entry: %08x %08x %08x %08x %p %p.\n", 
--			    pe->flags, pe->next, pe->bsa, pe->aal_bufsize, 
--			    pe->skb, pe->fp);
--      
--		channo = qe->cmd & 0xffff;
--
--		if (channo < dev->nchannels)
--			atm_vcc = dev->atm_vccs[channo];
--		else
--			atm_vcc = NULL;
--
--		/* Single buffer packet */
--		switch (STATUS_CODE (qe)) {
--		case 0x1:
--			/* Fall through for streaming mode */
--			fallthrough;
--		case 0x2:/* Packet received OK.... */
--			if (atm_vcc) {
--				skb = pe->skb;
--				pe->fp->n--;
--#if 0
--				fs_dprintk (FS_DEBUG_QUEUE, "Got skb: %p\n", skb);
--				if (FS_DEBUG_QUEUE & fs_debug) my_hd (bus_to_virt (pe->bsa), 0x20);
--#endif
--				skb_put (skb, qe->p1 & 0xffff); 
--				ATM_SKB(skb)->vcc = atm_vcc;
--				atomic_inc(&atm_vcc->stats->rx);
--				__net_timestamp(skb);
--				fs_dprintk (FS_DEBUG_ALLOC, "Free rec-skb: %p (pushed)\n", skb);
--				atm_vcc->push (atm_vcc, skb);
--				fs_dprintk (FS_DEBUG_ALLOC, "Free rec-d: %p\n", pe);
--				kfree (pe);
--			} else {
--				printk (KERN_ERR "Got a receive on a non-open channel %d.\n", channo);
--			}
--			break;
--		case 0x17:/* AAL 5 CRC32 error. IFF the length field is nonzero, a buffer
--			     has been consumed and needs to be processed. -- REW */
--			if (qe->p1 & 0xffff) {
--				pe = bus_to_virt (qe->p0);
--				pe->fp->n--;
--				fs_dprintk (FS_DEBUG_ALLOC, "Free rec-skb: %p\n", pe->skb);
--				dev_kfree_skb_any (pe->skb);
--				fs_dprintk (FS_DEBUG_ALLOC, "Free rec-d: %p\n", pe);
--				kfree (pe);
--			}
--			if (atm_vcc)
--				atomic_inc(&atm_vcc->stats->rx_drop);
--			break;
--		case 0x1f: /*  Reassembly abort: no buffers. */
--			/* Silently increment error counter. */
--			if (atm_vcc)
--				atomic_inc(&atm_vcc->stats->rx_drop);
--			break;
--		default: /* Hmm. Haven't written the code to handle the others yet... -- REW */
--			printk (KERN_WARNING "Don't know what to do with RX status %x: %s.\n", 
--				STATUS_CODE(qe), res_strings[STATUS_CODE (qe)]);
--		}
--		write_fs (dev, Q_RP(q->offset), Q_INCWRAP);
--	}
--}
--
--
--
--#define DO_DIRECTION(tp) ((tp)->traffic_class != ATM_NONE)
--
--static int fs_open(struct atm_vcc *atm_vcc)
--{
--	struct fs_dev *dev;
--	struct fs_vcc *vcc;
--	struct fs_transmit_config *tc;
--	struct atm_trafprm * txtp;
--	struct atm_trafprm * rxtp;
--	/*  struct fs_receive_config *rc;*/
--	/*  struct FS_QENTRY *qe; */
--	int error;
--	int bfp;
--	int to;
--	unsigned short tmc0;
--	short vpi = atm_vcc->vpi;
--	int vci = atm_vcc->vci;
--
--	func_enter ();
--
--	dev = FS_DEV(atm_vcc->dev);
--	fs_dprintk (FS_DEBUG_OPEN, "fs: open on dev: %p, vcc at %p\n", 
--		    dev, atm_vcc);
--
--	if (vci != ATM_VPI_UNSPEC && vpi != ATM_VCI_UNSPEC)
--		set_bit(ATM_VF_ADDR, &atm_vcc->flags);
--
--	if ((atm_vcc->qos.aal != ATM_AAL5) &&
--	    (atm_vcc->qos.aal != ATM_AAL2))
--	  return -EINVAL; /* XXX AAL0 */
--
--	fs_dprintk (FS_DEBUG_OPEN, "fs: (itf %d): open %d.%d\n", 
--		    atm_vcc->dev->number, atm_vcc->vpi, atm_vcc->vci);	
--
--	/* XXX handle qos parameters (rate limiting) ? */
--
--	vcc = kmalloc(sizeof(struct fs_vcc), GFP_KERNEL);
--	fs_dprintk (FS_DEBUG_ALLOC, "Alloc VCC: %p(%zd)\n", vcc, sizeof(struct fs_vcc));
--	if (!vcc) {
--		clear_bit(ATM_VF_ADDR, &atm_vcc->flags);
--		return -ENOMEM;
--	}
--  
--	atm_vcc->dev_data = vcc;
--	vcc->last_skb = NULL;
--
--	init_waitqueue_head (&vcc->close_wait);
--
--	txtp = &atm_vcc->qos.txtp;
--	rxtp = &atm_vcc->qos.rxtp;
--
--	if (!test_bit(ATM_VF_PARTIAL, &atm_vcc->flags)) {
--		if (IS_FS50(dev)) {
--			/* Increment the channel numer: take a free one next time.  */
--			for (to=33;to;to--, dev->channo++) {
--				/* We only have 32 channels */
--				if (dev->channo >= 32)
--					dev->channo = 0;
--				/* If we need to do RX, AND the RX is inuse, try the next */
--				if (DO_DIRECTION(rxtp) && dev->atm_vccs[dev->channo])
--					continue;
--				/* If we need to do TX, AND the TX is inuse, try the next */
--				if (DO_DIRECTION(txtp) && test_bit (dev->channo, dev->tx_inuse))
--					continue;
--				/* Ok, both are free! (or not needed) */
--				break;
--			}
--			if (!to) {
--				printk ("No more free channels for FS50..\n");
--				kfree(vcc);
--				return -EBUSY;
--			}
--			vcc->channo = dev->channo;
--			dev->channo &= dev->channel_mask;
--      
--		} else {
--			vcc->channo = (vpi << FS155_VCI_BITS) | (vci);
--			if (((DO_DIRECTION(rxtp) && dev->atm_vccs[vcc->channo])) ||
--			    ( DO_DIRECTION(txtp) && test_bit (vcc->channo, dev->tx_inuse))) {
--				printk ("Channel is in use for FS155.\n");
--				kfree(vcc);
--				return -EBUSY;
--			}
--		}
--		fs_dprintk (FS_DEBUG_OPEN, "OK. Allocated channel %x(%d).\n", 
--			    vcc->channo, vcc->channo);
--	}
--
--	if (DO_DIRECTION (txtp)) {
--		tc = kmalloc (sizeof (struct fs_transmit_config), GFP_KERNEL);
--		fs_dprintk (FS_DEBUG_ALLOC, "Alloc tc: %p(%zd)\n",
--			    tc, sizeof (struct fs_transmit_config));
--		if (!tc) {
--			fs_dprintk (FS_DEBUG_OPEN, "fs: can't alloc transmit_config.\n");
--			kfree(vcc);
--			return -ENOMEM;
--		}
--
--		/* Allocate the "open" entry from the high priority txq. This makes
--		   it most likely that the chip will notice it. It also prevents us
--		   from having to wait for completion. On the other hand, we may
--		   need to wait for completion anyway, to see if it completed
--		   successfully. */
--
--		switch (atm_vcc->qos.aal) {
--		case ATM_AAL2:
--		case ATM_AAL0:
--		  tc->flags = 0
--		    | TC_FLAGS_TRANSPARENT_PAYLOAD
--		    | TC_FLAGS_PACKET
--		    | (1 << 28)
--		    | TC_FLAGS_TYPE_UBR /* XXX Change to VBR -- PVDL */
--		    | TC_FLAGS_CAL0;
--		  break;
--		case ATM_AAL5:
--		  tc->flags = 0
--			| TC_FLAGS_AAL5
--			| TC_FLAGS_PACKET  /* ??? */
--			| TC_FLAGS_TYPE_CBR
--			| TC_FLAGS_CAL0;
--		  break;
--		default:
--			printk ("Unknown aal: %d\n", atm_vcc->qos.aal);
--			tc->flags = 0;
--		}
--		/* Docs are vague about this atm_hdr field. By the way, the FS
--		 * chip makes odd errors if lower bits are set.... -- REW */
--		tc->atm_hdr =  (vpi << 20) | (vci << 4); 
--		tmc0 = 0;
--		{
--			int pcr = atm_pcr_goal (txtp);
--
--			fs_dprintk (FS_DEBUG_OPEN, "pcr = %d.\n", pcr);
--
--			/* XXX Hmm. officially we're only allowed to do this if rounding 
--			   is round_down -- REW */
--			if (IS_FS50(dev)) {
--				if (pcr > 51840000/53/8)  pcr = 51840000/53/8;
--			} else {
--				if (pcr > 155520000/53/8) pcr = 155520000/53/8;
--			}
--			if (!pcr) {
--				/* no rate cap */
--				tmc0 = IS_FS50(dev)?0x61BE:0x64c9; /* Just copied over the bits from Fujitsu -- REW */
--			} else {
--				int r;
--				if (pcr < 0) {
--					r = ROUND_DOWN;
--					pcr = -pcr;
--				} else {
--					r = ROUND_UP;
--				}
--				error = make_rate (pcr, r, &tmc0, NULL);
--				if (error) {
--					kfree(tc);
--					kfree(vcc);
--					return error;
--				}
--			}
--			fs_dprintk (FS_DEBUG_OPEN, "pcr = %d.\n", pcr);
--		}
--      
--		tc->TMC[0] = tmc0 | 0x4000;
--		tc->TMC[1] = 0; /* Unused */
--		tc->TMC[2] = 0; /* Unused */
--		tc->TMC[3] = 0; /* Unused */
--    
--		tc->spec = 0;    /* UTOPIA address, UDF, HEC: Unused -> 0 */
--		tc->rtag[0] = 0; /* What should I do with routing tags??? 
--				    -- Not used -- AS -- Thanks -- REW*/
--		tc->rtag[1] = 0;
--		tc->rtag[2] = 0;
--
--		if (fs_debug & FS_DEBUG_OPEN) {
--			fs_dprintk (FS_DEBUG_OPEN, "TX config record:\n");
--			my_hd (tc, sizeof (*tc));
--		}
--
--		/* We now use the "submit_command" function to submit commands to
--		   the firestream. There is a define up near the definition of
--		   that routine that switches this routine between immediate write
--		   to the immediate command registers and queuing the commands in
--		   the HPTXQ for execution. This last technique might be more
--		   efficient if we know we're going to submit a whole lot of
--		   commands in one go, but this driver is not setup to be able to
--		   use such a construct. So it probably doen't matter much right
--		   now. -- REW */
--    
--		/* The command is IMMediate and INQueue. The parameters are out-of-line.. */
--		submit_command (dev, &dev->hp_txq, 
--				QE_CMD_CONFIG_TX | QE_CMD_IMM_INQ | vcc->channo,
--				virt_to_bus (tc), 0, 0);
--
--		submit_command (dev, &dev->hp_txq, 
--				QE_CMD_TX_EN | QE_CMD_IMM_INQ | vcc->channo,
--				0, 0, 0);
--		set_bit (vcc->channo, dev->tx_inuse);
--	}
--
--	if (DO_DIRECTION (rxtp)) {
--		dev->atm_vccs[vcc->channo] = atm_vcc;
--
--		for (bfp = 0;bfp < FS_NR_FREE_POOLS; bfp++)
--			if (atm_vcc->qos.rxtp.max_sdu <= dev->rx_fp[bfp].bufsize) break;
--		if (bfp >= FS_NR_FREE_POOLS) {
--			fs_dprintk (FS_DEBUG_OPEN, "No free pool fits sdu: %d.\n", 
--				    atm_vcc->qos.rxtp.max_sdu);
--			/* XXX Cleanup? -- Would just calling fs_close work??? -- REW */
--
--			/* XXX clear tx inuse. Close TX part? */
--			dev->atm_vccs[vcc->channo] = NULL;
--			kfree (vcc);
--			return -EINVAL;
--		}
--
--		switch (atm_vcc->qos.aal) {
--		case ATM_AAL0:
--		case ATM_AAL2:
--			submit_command (dev, &dev->hp_txq,
--					QE_CMD_CONFIG_RX | QE_CMD_IMM_INQ | vcc->channo,
--					RC_FLAGS_TRANSP |
--					RC_FLAGS_BFPS_BFP * bfp |
--					RC_FLAGS_RXBM_PSB, 0, 0);
--			break;
--		case ATM_AAL5:
--			submit_command (dev, &dev->hp_txq,
--					QE_CMD_CONFIG_RX | QE_CMD_IMM_INQ | vcc->channo,
--					RC_FLAGS_AAL5 |
--					RC_FLAGS_BFPS_BFP * bfp |
--					RC_FLAGS_RXBM_PSB, 0, 0);
--			break;
--		}
--		if (IS_FS50 (dev)) {
--			submit_command (dev, &dev->hp_txq, 
--					QE_CMD_REG_WR | QE_CMD_IMM_INQ,
--					0x80 + vcc->channo,
--					(vpi << 16) | vci, 0 ); /* XXX -- Use defines. */
--		}
--		submit_command (dev, &dev->hp_txq, 
--				QE_CMD_RX_EN | QE_CMD_IMM_INQ | vcc->channo,
--				0, 0, 0);
--	}
--    
--	/* Indicate we're done! */
--	set_bit(ATM_VF_READY, &atm_vcc->flags);
--
--	func_exit ();
--	return 0;
--}
--
--
--static void fs_close(struct atm_vcc *atm_vcc)
--{
--	struct fs_dev *dev = FS_DEV (atm_vcc->dev);
--	struct fs_vcc *vcc = FS_VCC (atm_vcc);
--	struct atm_trafprm * txtp;
--	struct atm_trafprm * rxtp;
--
--	func_enter ();
--
--	clear_bit(ATM_VF_READY, &atm_vcc->flags);
--
--	fs_dprintk (FS_DEBUG_QSIZE, "--==**[%d]**==--", dev->ntxpckts);
--	if (vcc->last_skb) {
--		fs_dprintk (FS_DEBUG_QUEUE, "Waiting for skb %p to be sent.\n", 
--			    vcc->last_skb);
--		/* We're going to wait for the last packet to get sent on this VC. It would
--		   be impolite not to send them don't you think? 
--		   XXX
--		   We don't know which packets didn't get sent. So if we get interrupted in 
--		   this sleep_on, we'll lose any reference to these packets. Memory leak!
--		   On the other hand, it's awfully convenient that we can abort a "close" that
--		   is taking too long. Maybe just use non-interruptible sleep on? -- REW */
--		wait_event_interruptible(vcc->close_wait, !vcc->last_skb);
--	}
--
--	txtp = &atm_vcc->qos.txtp;
--	rxtp = &atm_vcc->qos.rxtp;
--  
--
--	/* See App note XXX (Unpublished as of now) for the reason for the 
--	   removal of the "CMD_IMM_INQ" part of the TX_PURGE_INH... -- REW */
--
--	if (DO_DIRECTION (txtp)) {
--		submit_command (dev,  &dev->hp_txq,
--				QE_CMD_TX_PURGE_INH | /*QE_CMD_IMM_INQ|*/ vcc->channo, 0,0,0);
--		clear_bit (vcc->channo, dev->tx_inuse);
--	}
--
--	if (DO_DIRECTION (rxtp)) {
--		submit_command (dev,  &dev->hp_txq,
--				QE_CMD_RX_PURGE_INH | QE_CMD_IMM_INQ | vcc->channo, 0,0,0);
--		dev->atm_vccs [vcc->channo] = NULL;
--  
--		/* This means that this is configured as a receive channel */
--		if (IS_FS50 (dev)) {
--			/* Disable the receive filter. Is 0/0 indeed an invalid receive
--			   channel? -- REW.  Yes it is. -- Hang. Ok. I'll use -1
--			   (0xfff...) -- REW */
--			submit_command (dev, &dev->hp_txq, 
--					QE_CMD_REG_WR | QE_CMD_IMM_INQ,
--					0x80 + vcc->channo, -1, 0 ); 
--		}
--	}
--
--	fs_dprintk (FS_DEBUG_ALLOC, "Free vcc: %p\n", vcc);
--	kfree (vcc);
--
--	func_exit ();
--}
--
--
--static int fs_send (struct atm_vcc *atm_vcc, struct sk_buff *skb)
--{
--	struct fs_dev *dev = FS_DEV (atm_vcc->dev);
--	struct fs_vcc *vcc = FS_VCC (atm_vcc);
--	struct FS_BPENTRY *td;
--
--	func_enter ();
--
--	fs_dprintk (FS_DEBUG_TXMEM, "I");
--	fs_dprintk (FS_DEBUG_SEND, "Send: atm_vcc %p skb %p vcc %p dev %p\n", 
--		    atm_vcc, skb, vcc, dev);
--
--	fs_dprintk (FS_DEBUG_ALLOC, "Alloc t-skb: %p (atm_send)\n", skb);
--
--	ATM_SKB(skb)->vcc = atm_vcc;
--
--	vcc->last_skb = skb;
--
--	td = kmalloc (sizeof (struct FS_BPENTRY), GFP_ATOMIC);
--	fs_dprintk (FS_DEBUG_ALLOC, "Alloc transd: %p(%zd)\n", td, sizeof (struct FS_BPENTRY));
--	if (!td) {
--		/* Oops out of mem */
--		return -ENOMEM;
--	}
--
--	fs_dprintk (FS_DEBUG_SEND, "first word in buffer: %x\n", 
--		    *(int *) skb->data);
--
--	td->flags =  TD_EPI | TD_DATA | skb->len;
--	td->next = 0;
--	td->bsa  = virt_to_bus (skb->data);
--	td->skb = skb;
--	td->dev = dev;
--	dev->ntxpckts++;
--
--#ifdef DEBUG_EXTRA
--	da[qd] = td;
--	dq[qd].flags = td->flags;
--	dq[qd].next  = td->next;
--	dq[qd].bsa   = td->bsa;
--	dq[qd].skb   = td->skb;
--	dq[qd].dev   = td->dev;
--	qd++;
--	if (qd >= 60) qd = 0;
--#endif
--
--	submit_queue (dev, &dev->hp_txq, 
--		      QE_TRANSMIT_DE | vcc->channo,
--		      virt_to_bus (td), 0, 
--		      virt_to_bus (td));
--
--	fs_dprintk (FS_DEBUG_QUEUE, "in send: txq %d txrq %d\n", 
--		    read_fs (dev, Q_EA (dev->hp_txq.offset)) -
--		    read_fs (dev, Q_SA (dev->hp_txq.offset)),
--		    read_fs (dev, Q_EA (dev->tx_relq.offset)) -
--		    read_fs (dev, Q_SA (dev->tx_relq.offset)));
--
--	func_exit ();
--	return 0;
--}
--
--
--/* Some function placeholders for functions we don't yet support. */
--
--#if 0
--static int fs_ioctl(struct atm_dev *dev,unsigned int cmd,void __user *arg)
--{
--	func_enter ();
--	func_exit ();
--	return -ENOIOCTLCMD;
--}
--
--
--static int fs_getsockopt(struct atm_vcc *vcc,int level,int optname,
--			 void __user *optval,int optlen)
--{
--	func_enter ();
--	func_exit ();
--	return 0;
--}
--
--
--static int fs_setsockopt(struct atm_vcc *vcc,int level,int optname,
--			 void __user *optval,unsigned int optlen)
--{
--	func_enter ();
--	func_exit ();
--	return 0;
--}
--
--
--static void fs_phy_put(struct atm_dev *dev,unsigned char value,
--		       unsigned long addr)
--{
--	func_enter ();
--	func_exit ();
--}
--
--
--static unsigned char fs_phy_get(struct atm_dev *dev,unsigned long addr)
--{
--	func_enter ();
--	func_exit ();
--	return 0;
--}
--
--
--static int fs_change_qos(struct atm_vcc *vcc,struct atm_qos *qos,int flags)
--{
--	func_enter ();
--	func_exit ();
--	return 0;
+-/*------------------------------- free lists --------------------------------*/
+-
+-
+-/*
+- * Free buffer head structure:
+- *   [0] pointer to buffer (for SAR)
+- *   [1] buffer descr link pointer (for SAR)
+- *   [2] back pointer to skb (for poll_rx)
+- *   [3] data
+- *   ...
+- */
+-
+-struct rx_buffer_head {
+-	u32		buffer;	/* pointer to buffer (for SAR) */
+-	u32		link;	/* buffer descriptor link pointer (for SAR) */
+-	struct sk_buff	*skb;	/* back pointer to skb (for poll_rx) */
 -};
 -
+-
+-static void refill_pool(struct atm_dev *dev,int pool)
+-{
+-	struct zatm_dev *zatm_dev;
+-	struct sk_buff *skb;
+-	struct rx_buffer_head *first;
+-	unsigned long flags;
+-	int align,offset,free,count,size;
+-
+-	EVENT("refill_pool\n",0,0);
+-	zatm_dev = ZATM_DEV(dev);
+-	size = (64 << (pool <= ZATM_AAL5_POOL_BASE ? 0 :
+-	    pool-ZATM_AAL5_POOL_BASE))+sizeof(struct rx_buffer_head);
+-	if (size < PAGE_SIZE) {
+-		align = 32; /* for 32 byte alignment */
+-		offset = sizeof(struct rx_buffer_head);
+-	}
+-	else {
+-		align = 4096;
+-		offset = zatm_dev->pool_info[pool].offset+
+-		    sizeof(struct rx_buffer_head);
+-	}
+-	size += align;
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	free = zpeekl(zatm_dev,zatm_dev->pool_base+2*pool) &
+-	    uPD98401_RXFP_REMAIN;
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	if (free >= zatm_dev->pool_info[pool].low_water) return;
+-	EVENT("starting ... POOL: 0x%x, 0x%x\n",
+-	    zpeekl(zatm_dev,zatm_dev->pool_base+2*pool),
+-	    zpeekl(zatm_dev,zatm_dev->pool_base+2*pool+1));
+-	EVENT("dummy: 0x%08lx, 0x%08lx\n",dummy[0],dummy[1]);
+-	count = 0;
+-	first = NULL;
+-	while (free < zatm_dev->pool_info[pool].high_water) {
+-		struct rx_buffer_head *head;
+-
+-		skb = alloc_skb(size,GFP_ATOMIC);
+-		if (!skb) {
+-			printk(KERN_WARNING DEV_LABEL "(Itf %d): got no new "
+-			    "skb (%d) with %d free\n",dev->number,size,free);
+-			break;
+-		}
+-		skb_reserve(skb,(unsigned char *) ((((unsigned long) skb->data+
+-		    align+offset-1) & ~(unsigned long) (align-1))-offset)-
+-		    skb->data);
+-		head = (struct rx_buffer_head *) skb->data;
+-		skb_reserve(skb,sizeof(struct rx_buffer_head));
+-		if (!first) first = head;
+-		count++;
+-		head->buffer = virt_to_bus(skb->data);
+-		head->link = 0;
+-		head->skb = skb;
+-		EVENT("enq skb 0x%08lx/0x%08lx\n",(unsigned long) skb,
+-		    (unsigned long) head);
+-		spin_lock_irqsave(&zatm_dev->lock, flags);
+-		if (zatm_dev->last_free[pool])
+-			((struct rx_buffer_head *) (zatm_dev->last_free[pool]->
+-			    data))[-1].link = virt_to_bus(head);
+-		zatm_dev->last_free[pool] = skb;
+-		skb_queue_tail(&zatm_dev->pool[pool],skb);
+-		spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-		free++;
+-	}
+-	if (first) {
+-		spin_lock_irqsave(&zatm_dev->lock, flags);
+-		zwait();
+-		zout(virt_to_bus(first),CER);
+-		zout(uPD98401_ADD_BAT | (pool << uPD98401_POOL_SHIFT) | count,
+-		    CMR);
+-		spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-		EVENT ("POOL: 0x%x, 0x%x\n",
+-		    zpeekl(zatm_dev,zatm_dev->pool_base+2*pool),
+-		    zpeekl(zatm_dev,zatm_dev->pool_base+2*pool+1));
+-		EVENT("dummy: 0x%08lx, 0x%08lx\n",dummy[0],dummy[1]);
+-	}
+-}
+-
+-
+-static void drain_free(struct atm_dev *dev,int pool)
+-{
+-	skb_queue_purge(&ZATM_DEV(dev)->pool[pool]);
+-}
+-
+-
+-static int pool_index(int max_pdu)
+-{
+-	int i;
+-
+-	if (max_pdu % ATM_CELL_PAYLOAD)
+-		printk(KERN_ERR DEV_LABEL ": driver error in pool_index: "
+-		    "max_pdu is %d\n",max_pdu);
+-	if (max_pdu > 65536) return -1;
+-	for (i = 0; (64 << i) < max_pdu; i++);
+-	return i+ZATM_AAL5_POOL_BASE;
+-}
+-
+-
+-/* use_pool isn't reentrant */
+-
+-
+-static void use_pool(struct atm_dev *dev,int pool)
+-{
+-	struct zatm_dev *zatm_dev;
+-	unsigned long flags;
+-	int size;
+-
+-	zatm_dev = ZATM_DEV(dev);
+-	if (!(zatm_dev->pool_info[pool].ref_count++)) {
+-		skb_queue_head_init(&zatm_dev->pool[pool]);
+-		size = pool-ZATM_AAL5_POOL_BASE;
+-		if (size < 0) size = 0; /* 64B... */
+-		else if (size > 10) size = 10; /* ... 64kB */
+-		spin_lock_irqsave(&zatm_dev->lock, flags);
+-		zpokel(zatm_dev,((zatm_dev->pool_info[pool].low_water/4) <<
+-		    uPD98401_RXFP_ALERT_SHIFT) |
+-		    (1 << uPD98401_RXFP_BTSZ_SHIFT) |
+-		    (size << uPD98401_RXFP_BFSZ_SHIFT),
+-		    zatm_dev->pool_base+pool*2);
+-		zpokel(zatm_dev,(unsigned long) dummy,zatm_dev->pool_base+
+-		    pool*2+1);
+-		spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-		zatm_dev->last_free[pool] = NULL;
+-		refill_pool(dev,pool);
+-	}
+-	DPRINTK("pool %d: %d\n",pool,zatm_dev->pool_info[pool].ref_count);
+-}
+-
+-
+-static void unuse_pool(struct atm_dev *dev,int pool)
+-{
+-	if (!(--ZATM_DEV(dev)->pool_info[pool].ref_count))
+-		drain_free(dev,pool);
+-}
+-
+-/*----------------------------------- RX ------------------------------------*/
+-
+-
+-#if 0
+-static void exception(struct atm_vcc *vcc)
+-{
+-   static int count = 0;
+-   struct zatm_dev *zatm_dev = ZATM_DEV(vcc->dev);
+-   struct zatm_vcc *zatm_vcc = ZATM_VCC(vcc);
+-   unsigned long *qrp;
+-   int i;
+-
+-   if (count++ > 2) return;
+-   for (i = 0; i < 8; i++)
+-	printk("TX%d: 0x%08lx\n",i,
+-	  zpeekl(zatm_dev,zatm_vcc->tx_chan*VC_SIZE/4+i));
+-   for (i = 0; i < 5; i++)
+-	printk("SH%d: 0x%08lx\n",i,
+-	  zpeekl(zatm_dev,uPD98401_IM(zatm_vcc->shaper)+16*i));
+-   qrp = (unsigned long *) zpeekl(zatm_dev,zatm_vcc->tx_chan*VC_SIZE/4+
+-     uPD98401_TXVC_QRP);
+-   printk("qrp=0x%08lx\n",(unsigned long) qrp);
+-   for (i = 0; i < 4; i++) printk("QRP[%d]: 0x%08lx",i,qrp[i]);
+-}
 -#endif
+-
+-
+-static const char *err_txt[] = {
+-	"No error",
+-	"RX buf underflow",
+-	"RX FIFO overrun",
+-	"Maximum len violation",
+-	"CRC error",
+-	"User abort",
+-	"Length violation",
+-	"T1 error",
+-	"Deactivated",
+-	"???",
+-	"???",
+-	"???",
+-	"???",
+-	"???",
+-	"???",
+-	"???"
+-};
+-
+-
+-static void poll_rx(struct atm_dev *dev,int mbx)
+-{
+-	struct zatm_dev *zatm_dev;
+-	unsigned long pos;
+-	u32 x;
+-	int error;
+-
+-	EVENT("poll_rx\n",0,0);
+-	zatm_dev = ZATM_DEV(dev);
+-	pos = (zatm_dev->mbx_start[mbx] & ~0xffffUL) | zin(MTA(mbx));
+-	while (x = zin(MWA(mbx)), (pos & 0xffff) != x) {
+-		u32 *here;
+-		struct sk_buff *skb;
+-		struct atm_vcc *vcc;
+-		int cells,size,chan;
+-
+-		EVENT("MBX: host 0x%lx, nic 0x%x\n",pos,x);
+-		here = (u32 *) pos;
+-		if (((pos += 16) & 0xffff) == zatm_dev->mbx_end[mbx])
+-			pos = zatm_dev->mbx_start[mbx];
+-		cells = here[0] & uPD98401_AAL5_SIZE;
+-#if 0
+-printk("RX IND: 0x%x, 0x%x, 0x%x, 0x%x\n",here[0],here[1],here[2],here[3]);
+-{
+-unsigned long *x;
+-		printk("POOL: 0x%08x, 0x%08x\n",zpeekl(zatm_dev,
+-		      zatm_dev->pool_base),
+-		      zpeekl(zatm_dev,zatm_dev->pool_base+1));
+-		x = (unsigned long *) here[2];
+-		printk("[0..3] = 0x%08lx, 0x%08lx, 0x%08lx, 0x%08lx\n",
+-		    x[0],x[1],x[2],x[3]);
+-}
+-#endif
+-		error = 0;
+-		if (here[3] & uPD98401_AAL5_ERR) {
+-			error = (here[3] & uPD98401_AAL5_ES) >>
+-			    uPD98401_AAL5_ES_SHIFT;
+-			if (error == uPD98401_AAL5_ES_DEACT ||
+-			    error == uPD98401_AAL5_ES_FREE) continue;
+-		}
+-EVENT("error code 0x%x/0x%x\n",(here[3] & uPD98401_AAL5_ES) >>
+-  uPD98401_AAL5_ES_SHIFT,error);
+-		skb = ((struct rx_buffer_head *) bus_to_virt(here[2]))->skb;
+-		__net_timestamp(skb);
+-#if 0
+-printk("[-3..0] 0x%08lx 0x%08lx 0x%08lx 0x%08lx\n",((unsigned *) skb->data)[-3],
+-  ((unsigned *) skb->data)[-2],((unsigned *) skb->data)[-1],
+-  ((unsigned *) skb->data)[0]);
+-#endif
+-		EVENT("skb 0x%lx, here 0x%lx\n",(unsigned long) skb,
+-		    (unsigned long) here);
+-#if 0
+-printk("dummy: 0x%08lx, 0x%08lx\n",dummy[0],dummy[1]);
+-#endif
+-		size = error ? 0 : ntohs(((__be16 *) skb->data)[cells*
+-		    ATM_CELL_PAYLOAD/sizeof(u16)-3]);
+-		EVENT("got skb 0x%lx, size %d\n",(unsigned long) skb,size);
+-		chan = (here[3] & uPD98401_AAL5_CHAN) >>
+-		    uPD98401_AAL5_CHAN_SHIFT;
+-		if (chan < zatm_dev->chans && zatm_dev->rx_map[chan]) {
+-			int pos;
+-			vcc = zatm_dev->rx_map[chan];
+-			pos = ZATM_VCC(vcc)->pool;
+-			if (skb == zatm_dev->last_free[pos])
+-				zatm_dev->last_free[pos] = NULL;
+-			skb_unlink(skb, zatm_dev->pool + pos);
+-		}
+-		else {
+-			printk(KERN_ERR DEV_LABEL "(itf %d): RX indication "
+-			    "for non-existing channel\n",dev->number);
+-			size = 0;
+-			vcc = NULL;
+-			event_dump();
+-		}
+-		if (error) {
+-			static unsigned long silence = 0;
+-			static int last_error = 0;
+-
+-			if (error != last_error ||
+-			    time_after(jiffies, silence)  || silence == 0){
+-				printk(KERN_WARNING DEV_LABEL "(itf %d): "
+-				    "chan %d error %s\n",dev->number,chan,
+-				    err_txt[error]);
+-				last_error = error;
+-				silence = (jiffies+2*HZ)|1;
+-			}
+-			size = 0;
+-		}
+-		if (size && (size > cells*ATM_CELL_PAYLOAD-ATM_AAL5_TRAILER ||
+-		    size <= (cells-1)*ATM_CELL_PAYLOAD-ATM_AAL5_TRAILER)) {
+-			printk(KERN_ERR DEV_LABEL "(itf %d): size %d with %d "
+-			    "cells\n",dev->number,size,cells);
+-			size = 0;
+-			event_dump();
+-		}
+-		if (size > ATM_MAX_AAL5_PDU) {
+-			printk(KERN_ERR DEV_LABEL "(itf %d): size too big "
+-			    "(%d)\n",dev->number,size);
+-			size = 0;
+-			event_dump();
+-		}
+-		if (!size) {
+-			dev_kfree_skb_irq(skb);
+-			if (vcc) atomic_inc(&vcc->stats->rx_err);
+-			continue;
+-		}
+-		if (!atm_charge(vcc,skb->truesize)) {
+-			dev_kfree_skb_irq(skb);
+-			continue;
+-		}
+-		skb->len = size;
+-		ATM_SKB(skb)->vcc = vcc;
+-		vcc->push(vcc,skb);
+-		atomic_inc(&vcc->stats->rx);
+-	}
+-	zout(pos & 0xffff,MTA(mbx));
+-#if 0 /* probably a stupid idea */
+-	refill_pool(dev,zatm_vcc->pool);
+-		/* maybe this saves us a few interrupts */
+-#endif
+-}
+-
+-
+-static int open_rx_first(struct atm_vcc *vcc)
+-{
+-	struct zatm_dev *zatm_dev;
+-	struct zatm_vcc *zatm_vcc;
+-	unsigned long flags;
+-	unsigned short chan;
+-	int cells;
+-
+-	DPRINTK("open_rx_first (0x%x)\n",inb_p(0xc053));
+-	zatm_dev = ZATM_DEV(vcc->dev);
+-	zatm_vcc = ZATM_VCC(vcc);
+-	zatm_vcc->rx_chan = 0;
+-	if (vcc->qos.rxtp.traffic_class == ATM_NONE) return 0;
+-	if (vcc->qos.aal == ATM_AAL5) {
+-		if (vcc->qos.rxtp.max_sdu > 65464)
+-			vcc->qos.rxtp.max_sdu = 65464;
+-			/* fix this - we may want to receive 64kB SDUs
+-			   later */
+-		cells = DIV_ROUND_UP(vcc->qos.rxtp.max_sdu + ATM_AAL5_TRAILER,
+-				ATM_CELL_PAYLOAD);
+-		zatm_vcc->pool = pool_index(cells*ATM_CELL_PAYLOAD);
+-	}
+-	else {
+-		cells = 1;
+-		zatm_vcc->pool = ZATM_AAL0_POOL;
+-	}
+-	if (zatm_vcc->pool < 0) return -EMSGSIZE;
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	zwait();
+-	zout(uPD98401_OPEN_CHAN,CMR);
+-	zwait();
+-	DPRINTK("0x%x 0x%x\n",zin(CMR),zin(CER));
+-	chan = (zin(CMR) & uPD98401_CHAN_ADDR) >> uPD98401_CHAN_ADDR_SHIFT;
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	DPRINTK("chan is %d\n",chan);
+-	if (!chan) return -EAGAIN;
+-	use_pool(vcc->dev,zatm_vcc->pool);
+-	DPRINTK("pool %d\n",zatm_vcc->pool);
+-	/* set up VC descriptor */
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	zpokel(zatm_dev,zatm_vcc->pool << uPD98401_RXVC_POOL_SHIFT,
+-	    chan*VC_SIZE/4);
+-	zpokel(zatm_dev,uPD98401_RXVC_OD | (vcc->qos.aal == ATM_AAL5 ?
+-	    uPD98401_RXVC_AR : 0) | cells,chan*VC_SIZE/4+1);
+-	zpokel(zatm_dev,0,chan*VC_SIZE/4+2);
+-	zatm_vcc->rx_chan = chan;
+-	zatm_dev->rx_map[chan] = vcc;
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	return 0;
+-}
+-
+-
+-static int open_rx_second(struct atm_vcc *vcc)
+-{
+-	struct zatm_dev *zatm_dev;
+-	struct zatm_vcc *zatm_vcc;
+-	unsigned long flags;
+-	int pos,shift;
+-
+-	DPRINTK("open_rx_second (0x%x)\n",inb_p(0xc053));
+-	zatm_dev = ZATM_DEV(vcc->dev);
+-	zatm_vcc = ZATM_VCC(vcc);
+-	if (!zatm_vcc->rx_chan) return 0;
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	/* should also handle VPI @@@ */
+-	pos = vcc->vci >> 1;
+-	shift = (1-(vcc->vci & 1)) << 4;
+-	zpokel(zatm_dev,(zpeekl(zatm_dev,pos) & ~(0xffff << shift)) |
+-	    ((zatm_vcc->rx_chan | uPD98401_RXLT_ENBL) << shift),pos);
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	return 0;
+-}
+-
+-
+-static void close_rx(struct atm_vcc *vcc)
+-{
+-	struct zatm_dev *zatm_dev;
+-	struct zatm_vcc *zatm_vcc;
+-	unsigned long flags;
+-	int pos,shift;
+-
+-	zatm_vcc = ZATM_VCC(vcc);
+-	zatm_dev = ZATM_DEV(vcc->dev);
+-	if (!zatm_vcc->rx_chan) return;
+-	DPRINTK("close_rx\n");
+-	/* disable receiver */
+-	if (vcc->vpi != ATM_VPI_UNSPEC && vcc->vci != ATM_VCI_UNSPEC) {
+-		spin_lock_irqsave(&zatm_dev->lock, flags);
+-		pos = vcc->vci >> 1;
+-		shift = (1-(vcc->vci & 1)) << 4;
+-		zpokel(zatm_dev,zpeekl(zatm_dev,pos) & ~(0xffff << shift),pos);
+-		zwait();
+-		zout(uPD98401_NOP,CMR);
+-		zwait();
+-		zout(uPD98401_NOP,CMR);
+-		spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	}
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	zwait();
+-	zout(uPD98401_DEACT_CHAN | uPD98401_CHAN_RT | (zatm_vcc->rx_chan <<
+-	    uPD98401_CHAN_ADDR_SHIFT),CMR);
+-	zwait();
+-	udelay(10); /* why oh why ... ? */
+-	zout(uPD98401_CLOSE_CHAN | uPD98401_CHAN_RT | (zatm_vcc->rx_chan <<
+-	    uPD98401_CHAN_ADDR_SHIFT),CMR);
+-	zwait();
+-	if (!(zin(CMR) & uPD98401_CHAN_ADDR))
+-		printk(KERN_CRIT DEV_LABEL "(itf %d): can't close RX channel "
+-		    "%d\n",vcc->dev->number,zatm_vcc->rx_chan);
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	zatm_dev->rx_map[zatm_vcc->rx_chan] = NULL;
+-	zatm_vcc->rx_chan = 0;
+-	unuse_pool(vcc->dev,zatm_vcc->pool);
+-}
+-
+-
+-static int start_rx(struct atm_dev *dev)
+-{
+-	struct zatm_dev *zatm_dev;
+-	int i;
+-
+-	DPRINTK("start_rx\n");
+-	zatm_dev = ZATM_DEV(dev);
+-	zatm_dev->rx_map = kcalloc(zatm_dev->chans,
+-				   sizeof(*zatm_dev->rx_map),
+-				   GFP_KERNEL);
+-	if (!zatm_dev->rx_map) return -ENOMEM;
+-	/* set VPI/VCI split (use all VCIs and give what's left to VPIs) */
+-	zpokel(zatm_dev,(1 << dev->ci_range.vci_bits)-1,uPD98401_VRR);
+-	/* prepare free buffer pools */
+-	for (i = 0; i <= ZATM_LAST_POOL; i++) {
+-		zatm_dev->pool_info[i].ref_count = 0;
+-		zatm_dev->pool_info[i].rqa_count = 0;
+-		zatm_dev->pool_info[i].rqu_count = 0;
+-		zatm_dev->pool_info[i].low_water = LOW_MARK;
+-		zatm_dev->pool_info[i].high_water = HIGH_MARK;
+-		zatm_dev->pool_info[i].offset = 0;
+-		zatm_dev->pool_info[i].next_off = 0;
+-		zatm_dev->pool_info[i].next_cnt = 0;
+-		zatm_dev->pool_info[i].next_thres = OFF_CNG_THRES;
+-	}
+-	return 0;
+-}
+-
+-
+-/*----------------------------------- TX ------------------------------------*/
+-
+-
+-static int do_tx(struct sk_buff *skb)
+-{
+-	struct atm_vcc *vcc;
+-	struct zatm_dev *zatm_dev;
+-	struct zatm_vcc *zatm_vcc;
+-	u32 *dsc;
+-	unsigned long flags;
+-
+-	EVENT("do_tx\n",0,0);
+-	DPRINTK("sending skb %p\n",skb);
+-	vcc = ATM_SKB(skb)->vcc;
+-	zatm_dev = ZATM_DEV(vcc->dev);
+-	zatm_vcc = ZATM_VCC(vcc);
+-	EVENT("iovcnt=%d\n",skb_shinfo(skb)->nr_frags,0);
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	if (!skb_shinfo(skb)->nr_frags) {
+-		if (zatm_vcc->txing == RING_ENTRIES-1) {
+-			spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-			return RING_BUSY;
+-		}
+-		zatm_vcc->txing++;
+-		dsc = zatm_vcc->ring+zatm_vcc->ring_curr;
+-		zatm_vcc->ring_curr = (zatm_vcc->ring_curr+RING_WORDS) &
+-		    (RING_ENTRIES*RING_WORDS-1);
+-		dsc[1] = 0;
+-		dsc[2] = skb->len;
+-		dsc[3] = virt_to_bus(skb->data);
+-		mb();
+-		dsc[0] = uPD98401_TXPD_V | uPD98401_TXPD_DP | uPD98401_TXPD_SM
+-		    | (vcc->qos.aal == ATM_AAL5 ? uPD98401_TXPD_AAL5 : 0 |
+-		    (ATM_SKB(skb)->atm_options & ATM_ATMOPT_CLP ?
+-		    uPD98401_CLPM_1 : uPD98401_CLPM_0));
+-		EVENT("dsc (0x%lx)\n",(unsigned long) dsc,0);
+-	}
+-	else {
+-printk("NONONONOO!!!!\n");
+-		dsc = NULL;
+-#if 0
+-		u32 *put;
+-		int i;
+-
+-		dsc = kmalloc(uPD98401_TXPD_SIZE * 2 +
+-			uPD98401_TXBD_SIZE * ATM_SKB(skb)->iovcnt, GFP_ATOMIC);
+-		if (!dsc) {
+-			if (vcc->pop)
+-				vcc->pop(vcc, skb);
+-			else
+-				dev_kfree_skb_irq(skb);
+-			return -EAGAIN;
+-		}
+-		/* @@@ should check alignment */
+-		put = dsc+8;
+-		dsc[0] = uPD98401_TXPD_V | uPD98401_TXPD_DP |
+-		    (vcc->aal == ATM_AAL5 ? uPD98401_TXPD_AAL5 : 0 |
+-		    (ATM_SKB(skb)->atm_options & ATM_ATMOPT_CLP ?
+-		    uPD98401_CLPM_1 : uPD98401_CLPM_0));
+-		dsc[1] = 0;
+-		dsc[2] = ATM_SKB(skb)->iovcnt * uPD98401_TXBD_SIZE;
+-		dsc[3] = virt_to_bus(put);
+-		for (i = 0; i < ATM_SKB(skb)->iovcnt; i++) {
+-			*put++ = ((struct iovec *) skb->data)[i].iov_len;
+-			*put++ = virt_to_bus(((struct iovec *)
+-			    skb->data)[i].iov_base);
+-		}
+-		put[-2] |= uPD98401_TXBD_LAST;
+-#endif
+-	}
+-	ZATM_PRV_DSC(skb) = dsc;
+-	skb_queue_tail(&zatm_vcc->tx_queue,skb);
+-	DPRINTK("QRP=0x%08lx\n",zpeekl(zatm_dev,zatm_vcc->tx_chan*VC_SIZE/4+
+-	  uPD98401_TXVC_QRP));
+-	zwait();
+-	zout(uPD98401_TX_READY | (zatm_vcc->tx_chan <<
+-	    uPD98401_CHAN_ADDR_SHIFT),CMR);
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	EVENT("done\n",0,0);
+-	return 0;
+-}
+-
+-
+-static inline void dequeue_tx(struct atm_vcc *vcc)
+-{
+-	struct zatm_vcc *zatm_vcc;
+-	struct sk_buff *skb;
+-
+-	EVENT("dequeue_tx\n",0,0);
+-	zatm_vcc = ZATM_VCC(vcc);
+-	skb = skb_dequeue(&zatm_vcc->tx_queue);
+-	if (!skb) {
+-		printk(KERN_CRIT DEV_LABEL "(itf %d): dequeue_tx but not "
+-		    "txing\n",vcc->dev->number);
+-		return;
+-	}
+-#if 0 /* @@@ would fail on CLP */
+-if (*ZATM_PRV_DSC(skb) != (uPD98401_TXPD_V | uPD98401_TXPD_DP |
+-  uPD98401_TXPD_SM | uPD98401_TXPD_AAL5)) printk("@#*$!!!!  (%08x)\n",
+-  *ZATM_PRV_DSC(skb));
+-#endif
+-	*ZATM_PRV_DSC(skb) = 0; /* mark as invalid */
+-	zatm_vcc->txing--;
+-	if (vcc->pop) vcc->pop(vcc,skb);
+-	else dev_kfree_skb_irq(skb);
+-	while ((skb = skb_dequeue(&zatm_vcc->backlog)))
+-		if (do_tx(skb) == RING_BUSY) {
+-			skb_queue_head(&zatm_vcc->backlog,skb);
+-			break;
+-		}
+-	atomic_inc(&vcc->stats->tx);
+-	wake_up(&zatm_vcc->tx_wait);
+-}
+-
+-
+-static void poll_tx(struct atm_dev *dev,int mbx)
+-{
+-	struct zatm_dev *zatm_dev;
+-	unsigned long pos;
+-	u32 x;
+-
+-	EVENT("poll_tx\n",0,0);
+-	zatm_dev = ZATM_DEV(dev);
+-	pos = (zatm_dev->mbx_start[mbx] & ~0xffffUL) | zin(MTA(mbx));
+-	while (x = zin(MWA(mbx)), (pos & 0xffff) != x) {
+-		int chan;
+-
+-#if 1
+-		u32 data,*addr;
+-
+-		EVENT("MBX: host 0x%lx, nic 0x%x\n",pos,x);
+-		addr = (u32 *) pos;
+-		data = *addr;
+-		chan = (data & uPD98401_TXI_CONN) >> uPD98401_TXI_CONN_SHIFT;
+-		EVENT("addr = 0x%lx, data = 0x%08x,",(unsigned long) addr,
+-		    data);
+-		EVENT("chan = %d\n",chan,0);
+-#else
+-NO !
+-		chan = (zatm_dev->mbx_start[mbx][pos >> 2] & uPD98401_TXI_CONN)
+-		>> uPD98401_TXI_CONN_SHIFT;
+-#endif
+-		if (chan < zatm_dev->chans && zatm_dev->tx_map[chan])
+-			dequeue_tx(zatm_dev->tx_map[chan]);
+-		else {
+-			printk(KERN_CRIT DEV_LABEL "(itf %d): TX indication "
+-			    "for non-existing channel %d\n",dev->number,chan);
+-			event_dump();
+-		}
+-		if (((pos += 4) & 0xffff) == zatm_dev->mbx_end[mbx])
+-			pos = zatm_dev->mbx_start[mbx];
+-	}
+-	zout(pos & 0xffff,MTA(mbx));
+-}
+-
+-
+-/*
+- * BUG BUG BUG: Doesn't handle "new-style" rate specification yet.
+- */
+-
+-static int alloc_shaper(struct atm_dev *dev,int *pcr,int min,int max,int ubr)
+-{
+-	struct zatm_dev *zatm_dev;
+-	unsigned long flags;
+-	unsigned long i,m,c;
+-	int shaper;
+-
+-	DPRINTK("alloc_shaper (min = %d, max = %d)\n",min,max);
+-	zatm_dev = ZATM_DEV(dev);
+-	if (!zatm_dev->free_shapers) return -EAGAIN;
+-	for (shaper = 0; !((zatm_dev->free_shapers >> shaper) & 1); shaper++);
+-	zatm_dev->free_shapers &= ~1 << shaper;
+-	if (ubr) {
+-		c = 5;
+-		i = m = 1;
+-		zatm_dev->ubr_ref_cnt++;
+-		zatm_dev->ubr = shaper;
+-		*pcr = 0;
+-	}
+-	else {
+-		if (min) {
+-			if (min <= 255) {
+-				i = min;
+-				m = ATM_OC3_PCR;
+-			}
+-			else {
+-				i = 255;
+-				m = ATM_OC3_PCR*255/min;
+-			}
+-		}
+-		else {
+-			if (max > zatm_dev->tx_bw) max = zatm_dev->tx_bw;
+-			if (max <= 255) {
+-				i = max;
+-				m = ATM_OC3_PCR;
+-			}
+-			else {
+-				i = 255;
+-				m = DIV_ROUND_UP(ATM_OC3_PCR*255, max);
+-			}
+-		}
+-		if (i > m) {
+-			printk(KERN_CRIT DEV_LABEL "shaper algorithm botched "
+-			    "[%d,%d] -> i=%ld,m=%ld\n",min,max,i,m);
+-			m = i;
+-		}
+-		*pcr = i*ATM_OC3_PCR/m;
+-		c = 20; /* @@@ should use max_cdv ! */
+-		if ((min && *pcr < min) || (max && *pcr > max)) return -EINVAL;
+-		if (zatm_dev->tx_bw < *pcr) return -EAGAIN;
+-		zatm_dev->tx_bw -= *pcr;
+-	}
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	DPRINTK("i = %d, m = %d, PCR = %d\n",i,m,*pcr);
+-	zpokel(zatm_dev,(i << uPD98401_IM_I_SHIFT) | m,uPD98401_IM(shaper));
+-	zpokel(zatm_dev,c << uPD98401_PC_C_SHIFT,uPD98401_PC(shaper));
+-	zpokel(zatm_dev,0,uPD98401_X(shaper));
+-	zpokel(zatm_dev,0,uPD98401_Y(shaper));
+-	zpokel(zatm_dev,uPD98401_PS_E,uPD98401_PS(shaper));
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	return shaper;
+-}
+-
+-
+-static void dealloc_shaper(struct atm_dev *dev,int shaper)
+-{
+-	struct zatm_dev *zatm_dev;
+-	unsigned long flags;
+-
+-	zatm_dev = ZATM_DEV(dev);
+-	if (shaper == zatm_dev->ubr) {
+-		if (--zatm_dev->ubr_ref_cnt) return;
+-		zatm_dev->ubr = -1;
+-	}
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	zpokel(zatm_dev,zpeekl(zatm_dev,uPD98401_PS(shaper)) & ~uPD98401_PS_E,
+-	    uPD98401_PS(shaper));
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	zatm_dev->free_shapers |= 1 << shaper;
+-}
+-
+-
+-static void close_tx(struct atm_vcc *vcc)
+-{
+-	struct zatm_dev *zatm_dev;
+-	struct zatm_vcc *zatm_vcc;
+-	unsigned long flags;
+-	int chan;
+-
+-	zatm_vcc = ZATM_VCC(vcc);
+-	zatm_dev = ZATM_DEV(vcc->dev);
+-	chan = zatm_vcc->tx_chan;
+-	if (!chan) return;
+-	DPRINTK("close_tx\n");
+-	if (skb_peek(&zatm_vcc->backlog)) {
+-		printk("waiting for backlog to drain ...\n");
+-		event_dump();
+-		wait_event(zatm_vcc->tx_wait, !skb_peek(&zatm_vcc->backlog));
+-	}
+-	if (skb_peek(&zatm_vcc->tx_queue)) {
+-		printk("waiting for TX queue to drain ...\n");
+-		event_dump();
+-		wait_event(zatm_vcc->tx_wait, !skb_peek(&zatm_vcc->tx_queue));
+-	}
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-#if 0
+-	zwait();
+-	zout(uPD98401_DEACT_CHAN | (chan << uPD98401_CHAN_ADDR_SHIFT),CMR);
+-#endif
+-	zwait();
+-	zout(uPD98401_CLOSE_CHAN | (chan << uPD98401_CHAN_ADDR_SHIFT),CMR);
+-	zwait();
+-	if (!(zin(CMR) & uPD98401_CHAN_ADDR))
+-		printk(KERN_CRIT DEV_LABEL "(itf %d): can't close TX channel "
+-		    "%d\n",vcc->dev->number,chan);
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	zatm_vcc->tx_chan = 0;
+-	zatm_dev->tx_map[chan] = NULL;
+-	if (zatm_vcc->shaper != zatm_dev->ubr) {
+-		zatm_dev->tx_bw += vcc->qos.txtp.min_pcr;
+-		dealloc_shaper(vcc->dev,zatm_vcc->shaper);
+-	}
+-	kfree(zatm_vcc->ring);
+-}
+-
+-
+-static int open_tx_first(struct atm_vcc *vcc)
+-{
+-	struct zatm_dev *zatm_dev;
+-	struct zatm_vcc *zatm_vcc;
+-	unsigned long flags;
+-	u32 *loop;
+-	unsigned short chan;
+-	int unlimited;
+-
+-	DPRINTK("open_tx_first\n");
+-	zatm_dev = ZATM_DEV(vcc->dev);
+-	zatm_vcc = ZATM_VCC(vcc);
+-	zatm_vcc->tx_chan = 0;
+-	if (vcc->qos.txtp.traffic_class == ATM_NONE) return 0;
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	zwait();
+-	zout(uPD98401_OPEN_CHAN,CMR);
+-	zwait();
+-	DPRINTK("0x%x 0x%x\n",zin(CMR),zin(CER));
+-	chan = (zin(CMR) & uPD98401_CHAN_ADDR) >> uPD98401_CHAN_ADDR_SHIFT;
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	DPRINTK("chan is %d\n",chan);
+-	if (!chan) return -EAGAIN;
+-	unlimited = vcc->qos.txtp.traffic_class == ATM_UBR &&
+-	    (!vcc->qos.txtp.max_pcr || vcc->qos.txtp.max_pcr == ATM_MAX_PCR ||
+-	    vcc->qos.txtp.max_pcr >= ATM_OC3_PCR);
+-	if (unlimited && zatm_dev->ubr != -1) zatm_vcc->shaper = zatm_dev->ubr;
+-	else {
+-		int pcr;
+-
+-		if (unlimited) vcc->qos.txtp.max_sdu = ATM_MAX_AAL5_PDU;
+-		if ((zatm_vcc->shaper = alloc_shaper(vcc->dev,&pcr,
+-		    vcc->qos.txtp.min_pcr,vcc->qos.txtp.max_pcr,unlimited))
+-		    < 0) {
+-			close_tx(vcc);
+-			return zatm_vcc->shaper;
+-		}
+-		if (pcr > ATM_OC3_PCR) pcr = ATM_OC3_PCR;
+-		vcc->qos.txtp.min_pcr = vcc->qos.txtp.max_pcr = pcr;
+-	}
+-	zatm_vcc->tx_chan = chan;
+-	skb_queue_head_init(&zatm_vcc->tx_queue);
+-	init_waitqueue_head(&zatm_vcc->tx_wait);
+-	/* initialize ring */
+-	zatm_vcc->ring = kzalloc(RING_SIZE,GFP_KERNEL);
+-	if (!zatm_vcc->ring) return -ENOMEM;
+-	loop = zatm_vcc->ring+RING_ENTRIES*RING_WORDS;
+-	loop[0] = uPD98401_TXPD_V;
+-	loop[1] = loop[2] = 0;
+-	loop[3] = virt_to_bus(zatm_vcc->ring);
+-	zatm_vcc->ring_curr = 0;
+-	zatm_vcc->txing = 0;
+-	skb_queue_head_init(&zatm_vcc->backlog);
+-	zpokel(zatm_dev,virt_to_bus(zatm_vcc->ring),
+-	    chan*VC_SIZE/4+uPD98401_TXVC_QRP);
+-	return 0;
+-}
+-
+-
+-static int open_tx_second(struct atm_vcc *vcc)
+-{
+-	struct zatm_dev *zatm_dev;
+-	struct zatm_vcc *zatm_vcc;
+-	unsigned long flags;
+-
+-	DPRINTK("open_tx_second\n");
+-	zatm_dev = ZATM_DEV(vcc->dev);
+-	zatm_vcc = ZATM_VCC(vcc);
+-	if (!zatm_vcc->tx_chan) return 0;
+-	/* set up VC descriptor */
+-	spin_lock_irqsave(&zatm_dev->lock, flags);
+-	zpokel(zatm_dev,0,zatm_vcc->tx_chan*VC_SIZE/4);
+-	zpokel(zatm_dev,uPD98401_TXVC_L | (zatm_vcc->shaper <<
+-	    uPD98401_TXVC_SHP_SHIFT) | (vcc->vpi << uPD98401_TXVC_VPI_SHIFT) |
+-	    vcc->vci,zatm_vcc->tx_chan*VC_SIZE/4+1);
+-	zpokel(zatm_dev,0,zatm_vcc->tx_chan*VC_SIZE/4+2);
+-	spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	zatm_dev->tx_map[zatm_vcc->tx_chan] = vcc;
+-	return 0;
+-}
+-
+-
+-static int start_tx(struct atm_dev *dev)
+-{
+-	struct zatm_dev *zatm_dev;
+-	int i;
+-
+-	DPRINTK("start_tx\n");
+-	zatm_dev = ZATM_DEV(dev);
+-	zatm_dev->tx_map = kmalloc_array(zatm_dev->chans,
+-					 sizeof(*zatm_dev->tx_map),
+-					 GFP_KERNEL);
+-	if (!zatm_dev->tx_map) return -ENOMEM;
+-	zatm_dev->tx_bw = ATM_OC3_PCR;
+-	zatm_dev->free_shapers = (1 << NR_SHAPERS)-1;
+-	zatm_dev->ubr = -1;
+-	zatm_dev->ubr_ref_cnt = 0;
+-	/* initialize shapers */
+-	for (i = 0; i < NR_SHAPERS; i++) zpokel(zatm_dev,0,uPD98401_PS(i));
+-	return 0;
+-}
+-
+-
+-/*------------------------------- interrupts --------------------------------*/
+-
+-
+-static irqreturn_t zatm_int(int irq,void *dev_id)
+-{
+-	struct atm_dev *dev;
+-	struct zatm_dev *zatm_dev;
+-	u32 reason;
+-	int handled = 0;
+-
+-	dev = dev_id;
+-	zatm_dev = ZATM_DEV(dev);
+-	while ((reason = zin(GSR))) {
+-		handled = 1;
+-		EVENT("reason 0x%x\n",reason,0);
+-		if (reason & uPD98401_INT_PI) {
+-			EVENT("PHY int\n",0,0);
+-			dev->phy->interrupt(dev);
+-		}
+-		if (reason & uPD98401_INT_RQA) {
+-			unsigned long pools;
+-			int i;
+-
+-			pools = zin(RQA);
+-			EVENT("RQA (0x%08x)\n",pools,0);
+-			for (i = 0; pools; i++) {
+-				if (pools & 1) {
+-					refill_pool(dev,i);
+-					zatm_dev->pool_info[i].rqa_count++;
+-				}
+-				pools >>= 1;
+-			}
+-		}
+-		if (reason & uPD98401_INT_RQU) {
+-			unsigned long pools;
+-			int i;
+-			pools = zin(RQU);
+-			printk(KERN_WARNING DEV_LABEL "(itf %d): RQU 0x%08lx\n",
+-			    dev->number,pools);
+-			event_dump();
+-			for (i = 0; pools; i++) {
+-				if (pools & 1) {
+-					refill_pool(dev,i);
+-					zatm_dev->pool_info[i].rqu_count++;
+-				}
+-				pools >>= 1;
+-			}
+-		}
+-		/* don't handle RD */
+-		if (reason & uPD98401_INT_SPE)
+-			printk(KERN_ALERT DEV_LABEL "(itf %d): system parity "
+-			    "error at 0x%08x\n",dev->number,zin(ADDR));
+-		if (reason & uPD98401_INT_CPE)
+-			printk(KERN_ALERT DEV_LABEL "(itf %d): control memory "
+-			    "parity error at 0x%08x\n",dev->number,zin(ADDR));
+-		if (reason & uPD98401_INT_SBE) {
+-			printk(KERN_ALERT DEV_LABEL "(itf %d): system bus "
+-			    "error at 0x%08x\n",dev->number,zin(ADDR));
+-			event_dump();
+-		}
+-		/* don't handle IND */
+-		if (reason & uPD98401_INT_MF) {
+-			printk(KERN_CRIT DEV_LABEL "(itf %d): mailbox full "
+-			    "(0x%x)\n",dev->number,(reason & uPD98401_INT_MF)
+-			    >> uPD98401_INT_MF_SHIFT);
+-			event_dump();
+-			    /* @@@ should try to recover */
+-		}
+-		if (reason & uPD98401_INT_MM) {
+-			if (reason & 1) poll_rx(dev,0);
+-			if (reason & 2) poll_rx(dev,1);
+-			if (reason & 4) poll_tx(dev,2);
+-			if (reason & 8) poll_tx(dev,3);
+-		}
+-		/* @@@ handle RCRn */
+-	}
+-	return IRQ_RETVAL(handled);
+-}
+-
+-
+-/*----------------------------- (E)EPROM access -----------------------------*/
+-
+-
+-static void eprom_set(struct zatm_dev *zatm_dev, unsigned long value,
+-		      unsigned short cmd)
+-{
+-	int error;
+-
+-	if ((error = pci_write_config_dword(zatm_dev->pci_dev,cmd,value)))
+-		printk(KERN_ERR DEV_LABEL ": PCI write failed (0x%02x)\n",
+-		    error);
+-}
+-
+-
+-static unsigned long eprom_get(struct zatm_dev *zatm_dev, unsigned short cmd)
+-{
+-	unsigned int value;
+-	int error;
+-
+-	if ((error = pci_read_config_dword(zatm_dev->pci_dev,cmd,&value)))
+-		printk(KERN_ERR DEV_LABEL ": PCI read failed (0x%02x)\n",
+-		    error);
+-	return value;
+-}
+-
+-
+-static void eprom_put_bits(struct zatm_dev *zatm_dev, unsigned long data,
+-			   int bits, unsigned short cmd)
+-{
+-	unsigned long value;
+-	int i;
+-
+-	for (i = bits-1; i >= 0; i--) {
+-		value = ZEPROM_CS | (((data >> i) & 1) ? ZEPROM_DI : 0);
+-		eprom_set(zatm_dev,value,cmd);
+-		eprom_set(zatm_dev,value | ZEPROM_SK,cmd);
+-		eprom_set(zatm_dev,value,cmd);
+-	}
+-}
+-
+-
+-static void eprom_get_byte(struct zatm_dev *zatm_dev, unsigned char *byte,
+-			   unsigned short cmd)
+-{
+-	int i;
+-
+-	*byte = 0;
+-	for (i = 8; i; i--) {
+-		eprom_set(zatm_dev,ZEPROM_CS,cmd);
+-		eprom_set(zatm_dev,ZEPROM_CS | ZEPROM_SK,cmd);
+-		*byte <<= 1;
+-		if (eprom_get(zatm_dev,cmd) & ZEPROM_DO) *byte |= 1;
+-		eprom_set(zatm_dev,ZEPROM_CS,cmd);
+-	}
+-}
+-
+-
+-static int eprom_try_esi(struct atm_dev *dev, unsigned short cmd, int offset,
+-			 int swap)
+-{
+-	unsigned char buf[ZEPROM_SIZE];
+-	struct zatm_dev *zatm_dev;
+-	int i;
+-
+-	zatm_dev = ZATM_DEV(dev);
+-	for (i = 0; i < ZEPROM_SIZE; i += 2) {
+-		eprom_set(zatm_dev,ZEPROM_CS,cmd); /* select EPROM */
+-		eprom_put_bits(zatm_dev,ZEPROM_CMD_READ,ZEPROM_CMD_LEN,cmd);
+-		eprom_put_bits(zatm_dev,i >> 1,ZEPROM_ADDR_LEN,cmd);
+-		eprom_get_byte(zatm_dev,buf+i+swap,cmd);
+-		eprom_get_byte(zatm_dev,buf+i+1-swap,cmd);
+-		eprom_set(zatm_dev,0,cmd); /* deselect EPROM */
+-	}
+-	memcpy(dev->esi,buf+offset,ESI_LEN);
+-	return memcmp(dev->esi,"\0\0\0\0\0",ESI_LEN); /* assumes ESI_LEN == 6 */
+-}
+-
+-
+-static void eprom_get_esi(struct atm_dev *dev)
+-{
+-	if (eprom_try_esi(dev,ZEPROM_V1_REG,ZEPROM_V1_ESI_OFF,1)) return;
+-	(void) eprom_try_esi(dev,ZEPROM_V2_REG,ZEPROM_V2_ESI_OFF,0);
+-}
+-
+-
+-/*--------------------------------- entries ---------------------------------*/
+-
+-
+-static int zatm_init(struct atm_dev *dev)
+-{
+-	struct zatm_dev *zatm_dev;
+-	struct pci_dev *pci_dev;
+-	unsigned short command;
+-	int error,i,last;
+-	unsigned long t0,t1,t2;
+-
+-	DPRINTK(">zatm_init\n");
+-	zatm_dev = ZATM_DEV(dev);
+-	spin_lock_init(&zatm_dev->lock);
+-	pci_dev = zatm_dev->pci_dev;
+-	zatm_dev->base = pci_resource_start(pci_dev, 0);
+-	zatm_dev->irq = pci_dev->irq;
+-	if ((error = pci_read_config_word(pci_dev,PCI_COMMAND,&command))) {
+-		printk(KERN_ERR DEV_LABEL "(itf %d): init error 0x%02x\n",
+-		    dev->number,error);
+-		return -EINVAL;
+-	}
+-	if ((error = pci_write_config_word(pci_dev,PCI_COMMAND,
+-	    command | PCI_COMMAND_IO | PCI_COMMAND_MASTER))) {
+-		printk(KERN_ERR DEV_LABEL "(itf %d): can't enable IO (0x%02x)"
+-		    "\n",dev->number,error);
+-		return -EIO;
+-	}
+-	eprom_get_esi(dev);
+-	printk(KERN_NOTICE DEV_LABEL "(itf %d): rev.%d,base=0x%x,irq=%d,",
+-	    dev->number,pci_dev->revision,zatm_dev->base,zatm_dev->irq);
+-	/* reset uPD98401 */
+-	zout(0,SWR);
+-	while (!(zin(GSR) & uPD98401_INT_IND));
+-	zout(uPD98401_GMR_ONE /*uPD98401_BURST4*/,GMR);
+-	last = MAX_CRAM_SIZE;
+-	for (i = last-RAM_INCREMENT; i >= 0; i -= RAM_INCREMENT) {
+-		zpokel(zatm_dev,0x55555555,i);
+-		if (zpeekl(zatm_dev,i) != 0x55555555) last = i;
+-		else {
+-			zpokel(zatm_dev,0xAAAAAAAA,i);
+-			if (zpeekl(zatm_dev,i) != 0xAAAAAAAA) last = i;
+-			else zpokel(zatm_dev,i,i);
+-		}
+-	}
+-	for (i = 0; i < last; i += RAM_INCREMENT)
+-		if (zpeekl(zatm_dev,i) != i) break;
+-	zatm_dev->mem = i << 2;
+-	while (i) zpokel(zatm_dev,0,--i);
+-	/* reset again to rebuild memory pointers */
+-	zout(0,SWR);
+-	while (!(zin(GSR) & uPD98401_INT_IND));
+-	zout(uPD98401_GMR_ONE | uPD98401_BURST8 | uPD98401_BURST4 |
+-	    uPD98401_BURST2 | uPD98401_GMR_PM | uPD98401_GMR_DR,GMR);
+-	/* TODO: should shrink allocation now */
+-	printk("mem=%dkB,%s (",zatm_dev->mem >> 10,zatm_dev->copper ? "UTP" :
+-	    "MMF");
+-	for (i = 0; i < ESI_LEN; i++)
+-		printk("%02X%s",dev->esi[i],i == ESI_LEN-1 ? ")\n" : "-");
+-	do {
+-		unsigned long flags;
+-
+-		spin_lock_irqsave(&zatm_dev->lock, flags);
+-		t0 = zpeekl(zatm_dev,uPD98401_TSR);
+-		udelay(10);
+-		t1 = zpeekl(zatm_dev,uPD98401_TSR);
+-		udelay(1010);
+-		t2 = zpeekl(zatm_dev,uPD98401_TSR);
+-		spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-	}
+-	while (t0 > t1 || t1 > t2); /* loop if wrapping ... */
+-	zatm_dev->khz = t2-2*t1+t0;
+-	printk(KERN_NOTICE DEV_LABEL "(itf %d): uPD98401 %d.%d at %d.%03d "
+-	    "MHz\n",dev->number,
+-	    (zin(VER) & uPD98401_MAJOR) >> uPD98401_MAJOR_SHIFT,
+-            zin(VER) & uPD98401_MINOR,zatm_dev->khz/1000,zatm_dev->khz % 1000);
+-	return uPD98402_init(dev);
+-}
+-
+-
+-static int zatm_start(struct atm_dev *dev)
+-{
+-	struct zatm_dev *zatm_dev = ZATM_DEV(dev);
+-	struct pci_dev *pdev = zatm_dev->pci_dev;
+-	unsigned long curr;
+-	int pools,vccs,rx;
+-	int error, i, ld;
+-
+-	DPRINTK("zatm_start\n");
+-	zatm_dev->rx_map = zatm_dev->tx_map = NULL;
+- 	for (i = 0; i < NR_MBX; i++)
+- 		zatm_dev->mbx_start[i] = 0;
+- 	error = request_irq(zatm_dev->irq, zatm_int, IRQF_SHARED, DEV_LABEL, dev);
+-	if (error < 0) {
+- 		printk(KERN_ERR DEV_LABEL "(itf %d): IRQ%d is already in use\n",
+- 		    dev->number,zatm_dev->irq);
+-		goto done;
+-	}
+-	/* define memory regions */
+-	pools = NR_POOLS;
+-	if (NR_SHAPERS*SHAPER_SIZE > pools*POOL_SIZE)
+-		pools = NR_SHAPERS*SHAPER_SIZE/POOL_SIZE;
+-	vccs = (zatm_dev->mem-NR_SHAPERS*SHAPER_SIZE-pools*POOL_SIZE)/
+-	    (2*VC_SIZE+RX_SIZE);
+-	ld = -1;
+-	for (rx = 1; rx < vccs; rx <<= 1) ld++;
+-	dev->ci_range.vpi_bits = 0; /* @@@ no VPI for now */
+-	dev->ci_range.vci_bits = ld;
+-	dev->link_rate = ATM_OC3_PCR;
+-	zatm_dev->chans = vccs; /* ??? */
+-	curr = rx*RX_SIZE/4;
+-	DPRINTK("RX pool 0x%08lx\n",curr);
+-	zpokel(zatm_dev,curr,uPD98401_PMA); /* receive pool */
+-	zatm_dev->pool_base = curr;
+-	curr += pools*POOL_SIZE/4;
+-	DPRINTK("Shapers 0x%08lx\n",curr);
+-	zpokel(zatm_dev,curr,uPD98401_SMA); /* shapers */
+-	curr += NR_SHAPERS*SHAPER_SIZE/4;
+-	DPRINTK("Free    0x%08lx\n",curr);
+-	zpokel(zatm_dev,curr,uPD98401_TOS); /* free pool */
+-	printk(KERN_INFO DEV_LABEL "(itf %d): %d shapers, %d pools, %d RX, "
+-	    "%ld VCs\n",dev->number,NR_SHAPERS,pools,rx,
+-	    (zatm_dev->mem-curr*4)/VC_SIZE);
+-	/* create mailboxes */
+-	for (i = 0; i < NR_MBX; i++) {
+-		void *mbx;
+-		dma_addr_t mbx_dma;
+-
+-		if (!mbx_entries[i])
+-			continue;
+-		mbx = dma_alloc_coherent(&pdev->dev,
+-					 2 * MBX_SIZE(i), &mbx_dma, GFP_KERNEL);
+-		if (!mbx) {
+-			error = -ENOMEM;
+-			goto out;
+-		}
+-		/*
+-		 * Alignment provided by dma_alloc_coherent() isn't enough
+-		 * for this device.
+-		 */
+-		if (((unsigned long)mbx ^ mbx_dma) & 0xffff) {
+-			printk(KERN_ERR DEV_LABEL "(itf %d): system "
+-			       "bus incompatible with driver\n", dev->number);
+-			dma_free_coherent(&pdev->dev, 2*MBX_SIZE(i), mbx, mbx_dma);
+-			error = -ENODEV;
+-			goto out;
+-		}
+-		DPRINTK("mbx@0x%08lx-0x%08lx\n", mbx, mbx + MBX_SIZE(i));
+-		zatm_dev->mbx_start[i] = (unsigned long)mbx;
+-		zatm_dev->mbx_dma[i] = mbx_dma;
+-		zatm_dev->mbx_end[i] = (zatm_dev->mbx_start[i] + MBX_SIZE(i)) &
+-					0xffff;
+-		zout(mbx_dma >> 16, MSH(i));
+-		zout(mbx_dma, MSL(i));
+-		zout(zatm_dev->mbx_end[i], MBA(i));
+-		zout((unsigned long)mbx & 0xffff, MTA(i));
+-		zout((unsigned long)mbx & 0xffff, MWA(i));
+-	}
+-	error = start_tx(dev);
+-	if (error)
+-		goto out;
+-	error = start_rx(dev);
+-	if (error)
+-		goto out_tx;
+-	error = dev->phy->start(dev);
+-	if (error)
+-		goto out_rx;
+-	zout(0xffffffff,IMR); /* enable interrupts */
+-	/* enable TX & RX */
+-	zout(zin(GMR) | uPD98401_GMR_SE | uPD98401_GMR_RE,GMR);
+-done:
+-	return error;
+-
+-out_rx:
+-	kfree(zatm_dev->rx_map);
+-out_tx:
+-	kfree(zatm_dev->tx_map);
+-out:
+-	while (i-- > 0) {
+-		dma_free_coherent(&pdev->dev, 2 * MBX_SIZE(i),
+-				  (void *)zatm_dev->mbx_start[i],
+-				  zatm_dev->mbx_dma[i]);
+-	}
+-	free_irq(zatm_dev->irq, dev);
+-	goto done;
+-}
+-
+-
+-static void zatm_close(struct atm_vcc *vcc)
+-{
+-        DPRINTK(">zatm_close\n");
+-        if (!ZATM_VCC(vcc)) return;
+-	clear_bit(ATM_VF_READY,&vcc->flags);
+-        close_rx(vcc);
+-	EVENT("close_tx\n",0,0);
+-        close_tx(vcc);
+-        DPRINTK("zatm_close: done waiting\n");
+-        /* deallocate memory */
+-        kfree(ZATM_VCC(vcc));
+-	vcc->dev_data = NULL;
+-	clear_bit(ATM_VF_ADDR,&vcc->flags);
+-}
+-
+-
+-static int zatm_open(struct atm_vcc *vcc)
+-{
+-	struct zatm_vcc *zatm_vcc;
+-	short vpi = vcc->vpi;
+-	int vci = vcc->vci;
+-	int error;
+-
+-	DPRINTK(">zatm_open\n");
+-	if (!test_bit(ATM_VF_PARTIAL,&vcc->flags))
+-		vcc->dev_data = NULL;
+-	if (vci != ATM_VPI_UNSPEC && vpi != ATM_VCI_UNSPEC)
+-		set_bit(ATM_VF_ADDR,&vcc->flags);
+-	if (vcc->qos.aal != ATM_AAL5) return -EINVAL; /* @@@ AAL0 */
+-	DPRINTK(DEV_LABEL "(itf %d): open %d.%d\n",vcc->dev->number,vcc->vpi,
+-	    vcc->vci);
+-	if (!test_bit(ATM_VF_PARTIAL,&vcc->flags)) {
+-		zatm_vcc = kmalloc(sizeof(*zatm_vcc), GFP_KERNEL);
+-		if (!zatm_vcc) {
+-			clear_bit(ATM_VF_ADDR,&vcc->flags);
+-			return -ENOMEM;
+-		}
+-		vcc->dev_data = zatm_vcc;
+-		ZATM_VCC(vcc)->tx_chan = 0; /* for zatm_close after open_rx */
+-		if ((error = open_rx_first(vcc))) {
+-	                zatm_close(vcc);
+-	                return error;
+-	        }
+-		if ((error = open_tx_first(vcc))) {
+-			zatm_close(vcc);
+-			return error;
+-	        }
+-	}
+-	if (vci == ATM_VPI_UNSPEC || vpi == ATM_VCI_UNSPEC) return 0;
+-	if ((error = open_rx_second(vcc))) {
+-		zatm_close(vcc);
+-		return error;
+-        }
+-	if ((error = open_tx_second(vcc))) {
+-		zatm_close(vcc);
+-		return error;
+-        }
+-	set_bit(ATM_VF_READY,&vcc->flags);
+-        return 0;
+-}
+-
+-
+-static int zatm_change_qos(struct atm_vcc *vcc,struct atm_qos *qos,int flags)
+-{
+-	printk("Not yet implemented\n");
+-	return -ENOSYS;
+-	/* @@@ */
+-}
+-
+-
+-static int zatm_ioctl(struct atm_dev *dev,unsigned int cmd,void __user *arg)
+-{
+-	struct zatm_dev *zatm_dev;
+-	unsigned long flags;
+-
+-	zatm_dev = ZATM_DEV(dev);
+-	switch (cmd) {
+-		case ZATM_GETPOOLZ:
+-			if (!capable(CAP_NET_ADMIN)) return -EPERM;
+-			fallthrough;
+-		case ZATM_GETPOOL:
+-			{
+-				struct zatm_pool_info info;
+-				int pool;
+-
+-				if (get_user(pool,
+-				    &((struct zatm_pool_req __user *) arg)->pool_num))
+-					return -EFAULT;
+-				if (pool < 0 || pool > ZATM_LAST_POOL)
+-					return -EINVAL;
+-				pool = array_index_nospec(pool,
+-							  ZATM_LAST_POOL + 1);
+-				spin_lock_irqsave(&zatm_dev->lock, flags);
+-				info = zatm_dev->pool_info[pool];
+-				if (cmd == ZATM_GETPOOLZ) {
+-					zatm_dev->pool_info[pool].rqa_count = 0;
+-					zatm_dev->pool_info[pool].rqu_count = 0;
+-				}
+-				spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-				return copy_to_user(
+-				    &((struct zatm_pool_req __user *) arg)->info,
+-				    &info,sizeof(info)) ? -EFAULT : 0;
+-			}
+-		case ZATM_SETPOOL:
+-			{
+-				struct zatm_pool_info info;
+-				int pool;
+-
+-				if (!capable(CAP_NET_ADMIN)) return -EPERM;
+-				if (get_user(pool,
+-				    &((struct zatm_pool_req __user *) arg)->pool_num))
+-					return -EFAULT;
+-				if (pool < 0 || pool > ZATM_LAST_POOL)
+-					return -EINVAL;
+-				pool = array_index_nospec(pool,
+-							  ZATM_LAST_POOL + 1);
+-				if (copy_from_user(&info,
+-				    &((struct zatm_pool_req __user *) arg)->info,
+-				    sizeof(info))) return -EFAULT;
+-				if (!info.low_water)
+-					info.low_water = zatm_dev->
+-					    pool_info[pool].low_water;
+-				if (!info.high_water)
+-					info.high_water = zatm_dev->
+-					    pool_info[pool].high_water;
+-				if (!info.next_thres)
+-					info.next_thres = zatm_dev->
+-					    pool_info[pool].next_thres;
+-				if (info.low_water >= info.high_water ||
+-				    info.low_water < 0)
+-					return -EINVAL;
+-				spin_lock_irqsave(&zatm_dev->lock, flags);
+-				zatm_dev->pool_info[pool].low_water =
+-				    info.low_water;
+-				zatm_dev->pool_info[pool].high_water =
+-				    info.high_water;
+-				zatm_dev->pool_info[pool].next_thres =
+-				    info.next_thres;
+-				spin_unlock_irqrestore(&zatm_dev->lock, flags);
+-				return 0;
+-			}
+-		default:
+-        		if (!dev->phy->ioctl) return -ENOIOCTLCMD;
+-		        return dev->phy->ioctl(dev,cmd,arg);
+-	}
+-}
+-
+-static int zatm_send(struct atm_vcc *vcc,struct sk_buff *skb)
+-{
+-	int error;
+-
+-	EVENT(">zatm_send 0x%lx\n",(unsigned long) skb,0);
+-	if (!ZATM_VCC(vcc)->tx_chan || !test_bit(ATM_VF_READY,&vcc->flags)) {
+-		if (vcc->pop) vcc->pop(vcc,skb);
+-		else dev_kfree_skb(skb);
+-		return -EINVAL;
+-	}
+-	if (!skb) {
+-		printk(KERN_CRIT "!skb in zatm_send ?\n");
+-		if (vcc->pop) vcc->pop(vcc,skb);
+-		return -EINVAL;
+-	}
+-	ATM_SKB(skb)->vcc = vcc;
+-	error = do_tx(skb);
+-	if (error != RING_BUSY) return error;
+-	skb_queue_tail(&ZATM_VCC(vcc)->backlog,skb);
+-	return 0;
+-}
+-
+-
+-static void zatm_phy_put(struct atm_dev *dev,unsigned char value,
+-    unsigned long addr)
+-{
+-	struct zatm_dev *zatm_dev;
+-
+-	zatm_dev = ZATM_DEV(dev);
+-	zwait();
+-	zout(value,CER);
+-	zout(uPD98401_IND_ACC | uPD98401_IA_B0 |
+-	    (uPD98401_IA_TGT_PHY << uPD98401_IA_TGT_SHIFT) | addr,CMR);
+-}
+-
+-
+-static unsigned char zatm_phy_get(struct atm_dev *dev,unsigned long addr)
+-{
+-	struct zatm_dev *zatm_dev;
+-
+-	zatm_dev = ZATM_DEV(dev);
+-	zwait();
+-	zout(uPD98401_IND_ACC | uPD98401_IA_B0 | uPD98401_IA_RW |
+-	  (uPD98401_IA_TGT_PHY << uPD98401_IA_TGT_SHIFT) | addr,CMR);
+-	zwait();
+-	return zin(CER) & 0xff;
+-}
 -
 -
 -static const struct atmdev_ops ops = {
--	.open =         fs_open,
--	.close =        fs_close,
--	.send =         fs_send,
--	.owner =        THIS_MODULE,
--	/* ioctl:          fs_ioctl, */
--	/* change_qos:     fs_change_qos, */
--
--	/* For now implement these internally here... */  
--	/* phy_put:        fs_phy_put, */
--	/* phy_get:        fs_phy_get, */
+-	.open		= zatm_open,
+-	.close		= zatm_close,
+-	.ioctl		= zatm_ioctl,
+-	.send		= zatm_send,
+-	.phy_put	= zatm_phy_put,
+-	.phy_get	= zatm_phy_get,
+-	.change_qos	= zatm_change_qos,
 -};
 -
--
--static void undocumented_pci_fix(struct pci_dev *pdev)
+-static int zatm_init_one(struct pci_dev *pci_dev,
+-			 const struct pci_device_id *ent)
 -{
--	u32 tint;
+-	struct atm_dev *dev;
+-	struct zatm_dev *zatm_dev;
+-	int ret = -ENOMEM;
 -
--	/* The Windows driver says: */
--	/* Switch off FireStream Retry Limit Threshold 
--	 */
--
--	/* The register at 0x28 is documented as "reserved", no further
--	   comments. */
--
--	pci_read_config_dword (pdev, 0x28, &tint);
--	if (tint != 0x80) {
--		tint = 0x80;
--		pci_write_config_dword (pdev, 0x28, tint);
+-	zatm_dev = kmalloc(sizeof(*zatm_dev), GFP_KERNEL);
+-	if (!zatm_dev) {
+-		printk(KERN_EMERG "%s: memory shortage\n", DEV_LABEL);
+-		goto out;
 -	}
+-
+-	dev = atm_dev_register(DEV_LABEL, &pci_dev->dev, &ops, -1, NULL);
+-	if (!dev)
+-		goto out_free;
+-
+-	ret = pci_enable_device(pci_dev);
+-	if (ret < 0)
+-		goto out_deregister;
+-
+-	ret = pci_request_regions(pci_dev, DEV_LABEL);
+-	if (ret < 0)
+-		goto out_disable;
+-
+-	ret = dma_set_mask_and_coherent(&pci_dev->dev, DMA_BIT_MASK(32));
+-	if (ret < 0)
+-		goto out_release;
+-
+-	zatm_dev->pci_dev = pci_dev;
+-	dev->dev_data = zatm_dev;
+-	zatm_dev->copper = (int)ent->driver_data;
+-	if ((ret = zatm_init(dev)) || (ret = zatm_start(dev)))
+-		goto out_release;
+-
+-	pci_set_drvdata(pci_dev, dev);
+-	zatm_dev->more = zatm_boards;
+-	zatm_boards = dev;
+-	ret = 0;
+-out:
+-	return ret;
+-
+-out_release:
+-	pci_release_regions(pci_dev);
+-out_disable:
+-	pci_disable_device(pci_dev);
+-out_deregister:
+-	atm_dev_deregister(dev);
+-out_free:
+-	kfree(zatm_dev);
+-	goto out;
 -}
 -
--
--
--/**************************************************************************
-- *                              PHY routines                              *
-- **************************************************************************/
--
--static void write_phy(struct fs_dev *dev, int regnum, int val)
--{
--	submit_command (dev,  &dev->hp_txq, QE_CMD_PRP_WR | QE_CMD_IMM_INQ,
--			regnum, val, 0);
--}
--
--static int init_phy(struct fs_dev *dev, struct reginit_item *reginit)
--{
--	int i;
--
--	func_enter ();
--	while (reginit->reg != PHY_EOF) {
--		if (reginit->reg == PHY_CLEARALL) {
--			/* "PHY_CLEARALL means clear all registers. Numregisters is in "val". */
--			for (i=0;i<reginit->val;i++) {
--				write_phy (dev, i, 0);
--			}
--		} else {
--			write_phy (dev, reginit->reg, reginit->val);
--		}
--		reginit++;
--	}
--	func_exit ();
--	return 0;
--}
--
--static void reset_chip (struct fs_dev *dev)
--{
--	int i;
--
--	write_fs (dev, SARMODE0, SARMODE0_SRTS0);
--
--	/* Undocumented delay */
--	udelay (128);
--
--	/* The "internal registers are documented to all reset to zero, but 
--	   comments & code in the Windows driver indicates that the pools are
--	   NOT reset. */
--	for (i=0;i < FS_NR_FREE_POOLS;i++) {
--		write_fs (dev, FP_CNF (RXB_FP(i)), 0);
--		write_fs (dev, FP_SA  (RXB_FP(i)), 0);
--		write_fs (dev, FP_EA  (RXB_FP(i)), 0);
--		write_fs (dev, FP_CNT (RXB_FP(i)), 0);
--		write_fs (dev, FP_CTU (RXB_FP(i)), 0);
--	}
--
--	/* The same goes for the match channel registers, although those are
--	   NOT documented that way in the Windows driver. -- REW */
--	/* The Windows driver DOES write 0 to these registers somewhere in
--	   the init sequence. However, a small hardware-feature, will
--	   prevent reception of data on VPI/VCI = 0/0 (Unless the channel
--	   allocated happens to have no disabled channels that have a lower
--	   number. -- REW */
--
--	/* Clear the match channel registers. */
--	if (IS_FS50 (dev)) {
--		for (i=0;i<FS50_NR_CHANNELS;i++) {
--			write_fs (dev, 0x200 + i * 4, -1);
--		}
--	}
--}
--
--static void *aligned_kmalloc(int size, gfp_t flags, int alignment)
--{
--	void  *t;
--
--	if (alignment <= 0x10) {
--		t = kmalloc (size, flags);
--		if ((unsigned long)t & (alignment-1)) {
--			printk ("Kmalloc doesn't align things correctly! %p\n", t);
--			kfree (t);
--			return aligned_kmalloc (size, flags, alignment * 4);
--		}
--		return t;
--	}
--	printk (KERN_ERR "Request for > 0x10 alignment not yet implemented (hard!)\n");
--	return NULL;
--}
--
--static int init_q(struct fs_dev *dev, struct queue *txq, int queue,
--		  int nentries, int is_rq)
--{
--	int sz = nentries * sizeof (struct FS_QENTRY);
--	struct FS_QENTRY *p;
--
--	func_enter ();
--
--	fs_dprintk (FS_DEBUG_INIT, "Initializing queue at %x: %d entries:\n",
--		    queue, nentries);
--
--	p = aligned_kmalloc (sz, GFP_KERNEL, 0x10);
--	fs_dprintk (FS_DEBUG_ALLOC, "Alloc queue: %p(%d)\n", p, sz);
--
--	if (!p) return 0;
--
--	write_fs (dev, Q_SA(queue), virt_to_bus(p));
--	write_fs (dev, Q_EA(queue), virt_to_bus(p+nentries-1));
--	write_fs (dev, Q_WP(queue), virt_to_bus(p));
--	write_fs (dev, Q_RP(queue), virt_to_bus(p));
--	if (is_rq) {
--		/* Configuration for the receive queue: 0: interrupt immediately,
--		   no pre-warning to empty queues: We do our best to keep the
--		   queue filled anyway. */
--		write_fs (dev, Q_CNF(queue), 0 ); 
--	}
--
--	txq->sa = p;
--	txq->ea = p;
--	txq->offset = queue; 
--
--	func_exit ();
--	return 1;
--}
--
--
--static int init_fp(struct fs_dev *dev, struct freepool *fp, int queue,
--		   int bufsize, int nr_buffers)
--{
--	func_enter ();
--
--	fs_dprintk (FS_DEBUG_INIT, "Initializing free pool at %x:\n", queue);
--
--	write_fs (dev, FP_CNF(queue), (bufsize * RBFP_RBS) | RBFP_RBSVAL | RBFP_CME);
--	write_fs (dev, FP_SA(queue),  0);
--	write_fs (dev, FP_EA(queue),  0);
--	write_fs (dev, FP_CTU(queue), 0);
--	write_fs (dev, FP_CNT(queue), 0);
--
--	fp->offset = queue; 
--	fp->bufsize = bufsize;
--	fp->nr_buffers = nr_buffers;
--
--	func_exit ();
--	return 1;
--}
--
--
--static inline int nr_buffers_in_freepool (struct fs_dev *dev, struct freepool *fp)
--{
--#if 0
--	/* This seems to be unreliable.... */
--	return read_fs (dev, FP_CNT (fp->offset));
--#else
--	return fp->n;
--#endif
--}
--
--
--/* Check if this gets going again if a pool ever runs out.  -- Yes, it
--   does. I've seen "receive abort: no buffers" and things started
--   working again after that...  -- REW */
--
--static void top_off_fp (struct fs_dev *dev, struct freepool *fp,
--			gfp_t gfp_flags)
--{
--	struct FS_BPENTRY *qe, *ne;
--	struct sk_buff *skb;
--	int n = 0;
--	u32 qe_tmp;
--
--	fs_dprintk (FS_DEBUG_QUEUE, "Topping off queue at %x (%d-%d/%d)\n", 
--		    fp->offset, read_fs (dev, FP_CNT (fp->offset)), fp->n, 
--		    fp->nr_buffers);
--	while (nr_buffers_in_freepool(dev, fp) < fp->nr_buffers) {
--
--		skb = alloc_skb (fp->bufsize, gfp_flags);
--		fs_dprintk (FS_DEBUG_ALLOC, "Alloc rec-skb: %p(%d)\n", skb, fp->bufsize);
--		if (!skb) break;
--		ne = kmalloc (sizeof (struct FS_BPENTRY), gfp_flags);
--		fs_dprintk (FS_DEBUG_ALLOC, "Alloc rec-d: %p(%zd)\n", ne, sizeof (struct FS_BPENTRY));
--		if (!ne) {
--			fs_dprintk (FS_DEBUG_ALLOC, "Free rec-skb: %p\n", skb);
--			dev_kfree_skb_any (skb);
--			break;
--		}
--
--		fs_dprintk (FS_DEBUG_QUEUE, "Adding skb %p desc %p -> %p(%p) ", 
--			    skb, ne, skb->data, skb->head);
--		n++;
--		ne->flags = FP_FLAGS_EPI | fp->bufsize;
--		ne->next  = virt_to_bus (NULL);
--		ne->bsa   = virt_to_bus (skb->data);
--		ne->aal_bufsize = fp->bufsize;
--		ne->skb = skb;
--		ne->fp = fp;
--
--		/*
--		 * FIXME: following code encodes and decodes
--		 * machine pointers (could be 64-bit) into a
--		 * 32-bit register.
--		 */
--
--		qe_tmp = read_fs (dev, FP_EA(fp->offset));
--		fs_dprintk (FS_DEBUG_QUEUE, "link at %x\n", qe_tmp);
--		if (qe_tmp) {
--			qe = bus_to_virt ((long) qe_tmp);
--			qe->next = virt_to_bus(ne);
--			qe->flags &= ~FP_FLAGS_EPI;
--		} else
--			write_fs (dev, FP_SA(fp->offset), virt_to_bus(ne));
--
--		write_fs (dev, FP_EA(fp->offset), virt_to_bus (ne));
--		fp->n++;   /* XXX Atomic_inc? */
--		write_fs (dev, FP_CTU(fp->offset), 1);
--	}
--
--	fs_dprintk (FS_DEBUG_QUEUE, "Added %d entries. \n", n);
--}
--
--static void free_queue(struct fs_dev *dev, struct queue *txq)
--{
--	func_enter ();
--
--	write_fs (dev, Q_SA(txq->offset), 0);
--	write_fs (dev, Q_EA(txq->offset), 0);
--	write_fs (dev, Q_RP(txq->offset), 0);
--	write_fs (dev, Q_WP(txq->offset), 0);
--	/* Configuration ? */
--
--	fs_dprintk (FS_DEBUG_ALLOC, "Free queue: %p\n", txq->sa);
--	kfree (txq->sa);
--
--	func_exit ();
--}
--
--static void free_freepool(struct fs_dev *dev, struct freepool *fp)
--{
--	func_enter ();
--
--	write_fs (dev, FP_CNF(fp->offset), 0);
--	write_fs (dev, FP_SA (fp->offset), 0);
--	write_fs (dev, FP_EA (fp->offset), 0);
--	write_fs (dev, FP_CNT(fp->offset), 0);
--	write_fs (dev, FP_CTU(fp->offset), 0);
--
--	func_exit ();
--}
--
--
--
--static irqreturn_t fs_irq (int irq, void *dev_id) 
--{
--	int i;
--	u32 status;
--	struct fs_dev *dev = dev_id;
--
--	status = read_fs (dev, ISR);
--	if (!status)
--		return IRQ_NONE;
--
--	func_enter ();
--
--#ifdef IRQ_RATE_LIMIT
--	/* Aaargh! I'm ashamed. This costs more lines-of-code than the actual 
--	   interrupt routine!. (Well, used to when I wrote that comment) -- REW */
--	{
--		static int lastjif;
--		static int nintr=0;
--    
--		if (lastjif == jiffies) {
--			if (++nintr > IRQ_RATE_LIMIT) {
--				free_irq (dev->irq, dev_id);
--				printk (KERN_ERR "fs: Too many interrupts. Turning off interrupt %d.\n", 
--					dev->irq);
--			}
--		} else {
--			lastjif = jiffies;
--			nintr = 0;
--		}
--	}
--#endif
--	fs_dprintk (FS_DEBUG_QUEUE, "in intr: txq %d txrq %d\n", 
--		    read_fs (dev, Q_EA (dev->hp_txq.offset)) -
--		    read_fs (dev, Q_SA (dev->hp_txq.offset)),
--		    read_fs (dev, Q_EA (dev->tx_relq.offset)) -
--		    read_fs (dev, Q_SA (dev->tx_relq.offset)));
--
--	/* print the bits in the ISR register. */
--	if (fs_debug & FS_DEBUG_IRQ) {
--		/* The FS_DEBUG things are unnecessary here. But this way it is
--		   clear for grep that these are debug prints. */
--		fs_dprintk (FS_DEBUG_IRQ,  "IRQ status:");
--		for (i=0;i<27;i++) 
--			if (status & (1 << i)) 
--				fs_dprintk (FS_DEBUG_IRQ, " %s", irq_bitname[i]);
--		fs_dprintk (FS_DEBUG_IRQ, "\n");
--	}
--  
--	if (status & ISR_RBRQ0_W) {
--		fs_dprintk (FS_DEBUG_IRQ, "Iiiin-coming (0)!!!!\n");
--		process_incoming (dev, &dev->rx_rq[0]);
--		/* items mentioned on RBRQ0 are from FP 0 or 1. */
--		top_off_fp (dev, &dev->rx_fp[0], GFP_ATOMIC);
--		top_off_fp (dev, &dev->rx_fp[1], GFP_ATOMIC);
--	}
--
--	if (status & ISR_RBRQ1_W) {
--		fs_dprintk (FS_DEBUG_IRQ, "Iiiin-coming (1)!!!!\n");
--		process_incoming (dev, &dev->rx_rq[1]);
--		top_off_fp (dev, &dev->rx_fp[2], GFP_ATOMIC);
--		top_off_fp (dev, &dev->rx_fp[3], GFP_ATOMIC);
--	}
--
--	if (status & ISR_RBRQ2_W) {
--		fs_dprintk (FS_DEBUG_IRQ, "Iiiin-coming (2)!!!!\n");
--		process_incoming (dev, &dev->rx_rq[2]);
--		top_off_fp (dev, &dev->rx_fp[4], GFP_ATOMIC);
--		top_off_fp (dev, &dev->rx_fp[5], GFP_ATOMIC);
--	}
--
--	if (status & ISR_RBRQ3_W) {
--		fs_dprintk (FS_DEBUG_IRQ, "Iiiin-coming (3)!!!!\n");
--		process_incoming (dev, &dev->rx_rq[3]);
--		top_off_fp (dev, &dev->rx_fp[6], GFP_ATOMIC);
--		top_off_fp (dev, &dev->rx_fp[7], GFP_ATOMIC);
--	}
--
--	if (status & ISR_CSQ_W) {
--		fs_dprintk (FS_DEBUG_IRQ, "Command executed ok!\n");
--		process_return_queue (dev, &dev->st_q);
--	}
--
--	if (status & ISR_TBRQ_W) {
--		fs_dprintk (FS_DEBUG_IRQ, "Data transmitted!\n");
--		process_txdone_queue (dev, &dev->tx_relq);
--	}
--
--	func_exit ();
--	return IRQ_HANDLED;
--}
--
--
--#ifdef FS_POLL_FREQ
--static void fs_poll (struct timer_list *t)
--{
--	struct fs_dev *dev = from_timer(dev, t, timer);
--  
--	fs_irq (0, dev);
--	dev->timer.expires = jiffies + FS_POLL_FREQ;
--	add_timer (&dev->timer);
--}
--#endif
--
--static int fs_init(struct fs_dev *dev)
--{
--	struct pci_dev  *pci_dev;
--	int isr, to;
--	int i;
--
--	func_enter ();
--	pci_dev = dev->pci_dev;
--
--	printk (KERN_INFO "found a FireStream %d card, base %16llx, irq%d.\n",
--		IS_FS50(dev)?50:155,
--		(unsigned long long)pci_resource_start(pci_dev, 0),
--		dev->pci_dev->irq);
--
--	if (fs_debug & FS_DEBUG_INIT)
--		my_hd ((unsigned char *) dev, sizeof (*dev));
--
--	undocumented_pci_fix (pci_dev);
--
--	dev->hw_base = pci_resource_start(pci_dev, 0);
--
--	dev->base = ioremap(dev->hw_base, 0x1000);
--	if (!dev->base)
--		return 1;
--
--	reset_chip (dev);
--  
--	write_fs (dev, SARMODE0, 0 
--		  | (0 * SARMODE0_SHADEN) /* We don't use shadow registers. */
--		  | (1 * SARMODE0_INTMODE_READCLEAR)
--		  | (1 * SARMODE0_CWRE)
--		  | (IS_FS50(dev) ? SARMODE0_PRPWT_FS50_5:
--			  SARMODE0_PRPWT_FS155_3)
--		  | (1 * SARMODE0_CALSUP_1)
--		  | (IS_FS50(dev) ? (0
--				   | SARMODE0_RXVCS_32
--				   | SARMODE0_ABRVCS_32 
--				   | SARMODE0_TXVCS_32):
--		                  (0
--				   | SARMODE0_RXVCS_1k
--				   | SARMODE0_ABRVCS_1k 
--				   | SARMODE0_TXVCS_1k)));
--
--	/* 10ms * 100 is 1 second. That should be enough, as AN3:9 says it takes
--	   1ms. */
--	to = 100;
--	while (--to) {
--		isr = read_fs (dev, ISR);
--
--		/* This bit is documented as "RESERVED" */
--		if (isr & ISR_INIT_ERR) {
--			printk (KERN_ERR "Error initializing the FS... \n");
--			goto unmap;
--		}
--		if (isr & ISR_INIT) {
--			fs_dprintk (FS_DEBUG_INIT, "Ha! Initialized OK!\n");
--			break;
--		}
--
--		/* Try again after 10ms. */
--		msleep(10);
--	}
--
--	if (!to) {
--		printk (KERN_ERR "timeout initializing the FS... \n");
--		goto unmap;
--	}
--
--	/* XXX fix for fs155 */
--	dev->channel_mask = 0x1f; 
--	dev->channo = 0;
--
--	/* AN3: 10 */
--	write_fs (dev, SARMODE1, 0 
--		  | (fs_keystream * SARMODE1_DEFHEC) /* XXX PHY */
--		  | ((loopback == 1) * SARMODE1_TSTLP) /* XXX Loopback mode enable... */
--		  | (1 * SARMODE1_DCRM)
--		  | (1 * SARMODE1_DCOAM)
--		  | (0 * SARMODE1_OAMCRC)
--		  | (0 * SARMODE1_DUMPE)
--		  | (0 * SARMODE1_GPLEN) 
--		  | (0 * SARMODE1_GNAM)
--		  | (0 * SARMODE1_GVAS)
--		  | (0 * SARMODE1_GPAS)
--		  | (1 * SARMODE1_GPRI)
--		  | (0 * SARMODE1_PMS)
--		  | (0 * SARMODE1_GFCR)
--		  | (1 * SARMODE1_HECM2)
--		  | (1 * SARMODE1_HECM1)
--		  | (1 * SARMODE1_HECM0)
--		  | (1 << 12) /* That's what hang's driver does. Program to 0 */
--		  | (0 * 0xff) /* XXX FS155 */);
--
--
--	/* Cal prescale etc */
--
--	/* AN3: 11 */
--	write_fs (dev, TMCONF, 0x0000000f);
--	write_fs (dev, CALPRESCALE, 0x01010101 * num);
--	write_fs (dev, 0x80, 0x000F00E4);
--
--	/* AN3: 12 */
--	write_fs (dev, CELLOSCONF, 0
--		  | (   0 * CELLOSCONF_CEN)
--		  | (       CELLOSCONF_SC1)
--		  | (0x80 * CELLOSCONF_COBS)
--		  | (num  * CELLOSCONF_COPK)  /* Changed from 0xff to 0x5a */
--		  | (num  * CELLOSCONF_COST));/* after a hint from Hang. 
--					       * performance jumped 50->70... */
--
--	/* Magic value by Hang */
--	write_fs (dev, CELLOSCONF_COST, 0x0B809191);
--
--	if (IS_FS50 (dev)) {
--		write_fs (dev, RAS0, RAS0_DCD_XHLT);
--		dev->atm_dev->ci_range.vpi_bits = 12;
--		dev->atm_dev->ci_range.vci_bits = 16;
--		dev->nchannels = FS50_NR_CHANNELS;
--	} else {
--		write_fs (dev, RAS0, RAS0_DCD_XHLT 
--			  | (((1 << FS155_VPI_BITS) - 1) * RAS0_VPSEL)
--			  | (((1 << FS155_VCI_BITS) - 1) * RAS0_VCSEL));
--		/* We can chose the split arbitrarily. We might be able to 
--		   support more. Whatever. This should do for now. */
--		dev->atm_dev->ci_range.vpi_bits = FS155_VPI_BITS;
--		dev->atm_dev->ci_range.vci_bits = FS155_VCI_BITS;
--    
--		/* Address bits we can't use should be compared to 0. */
--		write_fs (dev, RAC, 0);
--
--		/* Manual (AN9, page 6) says ASF1=0 means compare Utopia address
--		 * too.  I can't find ASF1 anywhere. Anyway, we AND with just the
--		 * other bits, then compare with 0, which is exactly what we
--		 * want. */
--		write_fs (dev, RAM, (1 << (28 - FS155_VPI_BITS - FS155_VCI_BITS)) - 1);
--		dev->nchannels = FS155_NR_CHANNELS;
--	}
--	dev->atm_vccs = kcalloc (dev->nchannels, sizeof (struct atm_vcc *),
--				 GFP_KERNEL);
--	fs_dprintk (FS_DEBUG_ALLOC, "Alloc atmvccs: %p(%zd)\n",
--		    dev->atm_vccs, dev->nchannels * sizeof (struct atm_vcc *));
--
--	if (!dev->atm_vccs) {
--		printk (KERN_WARNING "Couldn't allocate memory for VCC buffers. Woops!\n");
--		/* XXX Clean up..... */
--		goto unmap;
--	}
--
--	dev->tx_inuse = kzalloc (dev->nchannels / 8 /* bits/byte */ , GFP_KERNEL);
--	fs_dprintk (FS_DEBUG_ALLOC, "Alloc tx_inuse: %p(%d)\n", 
--		    dev->atm_vccs, dev->nchannels / 8);
--
--	if (!dev->tx_inuse) {
--		printk (KERN_WARNING "Couldn't allocate memory for tx_inuse bits!\n");
--		/* XXX Clean up..... */
--		goto unmap;
--	}
--	/* -- RAS1 : FS155 and 50 differ. Default (0) should be OK for both */
--	/* -- RAS2 : FS50 only: Default is OK. */
--
--	/* DMAMODE, default should be OK. -- REW */
--	write_fs (dev, DMAMR, DMAMR_TX_MODE_FULL);
--
--	init_q (dev, &dev->hp_txq, TX_PQ(TXQ_HP), TXQ_NENTRIES, 0);
--	init_q (dev, &dev->lp_txq, TX_PQ(TXQ_LP), TXQ_NENTRIES, 0);
--	init_q (dev, &dev->tx_relq, TXB_RQ, TXQ_NENTRIES, 1);
--	init_q (dev, &dev->st_q, ST_Q, TXQ_NENTRIES, 1);
--
--	for (i=0;i < FS_NR_FREE_POOLS;i++) {
--		init_fp (dev, &dev->rx_fp[i], RXB_FP(i), 
--			 rx_buf_sizes[i], rx_pool_sizes[i]);
--		top_off_fp (dev, &dev->rx_fp[i], GFP_KERNEL);
--	}
--
--
--	for (i=0;i < FS_NR_RX_QUEUES;i++)
--		init_q (dev, &dev->rx_rq[i], RXB_RQ(i), RXRQ_NENTRIES, 1);
--
--	dev->irq = pci_dev->irq;
--	if (request_irq (dev->irq, fs_irq, IRQF_SHARED, "firestream", dev)) {
--		printk (KERN_WARNING "couldn't get irq %d for firestream.\n", pci_dev->irq);
--		/* XXX undo all previous stuff... */
--		goto unmap;
--	}
--	fs_dprintk (FS_DEBUG_INIT, "Grabbed irq %d for dev at %p.\n", dev->irq, dev);
--  
--	/* We want to be notified of most things. Just the statistics count
--	   overflows are not interesting */
--	write_fs (dev, IMR, 0
--		  | ISR_RBRQ0_W 
--		  | ISR_RBRQ1_W 
--		  | ISR_RBRQ2_W 
--		  | ISR_RBRQ3_W 
--		  | ISR_TBRQ_W
--		  | ISR_CSQ_W);
--
--	write_fs (dev, SARMODE0, 0 
--		  | (0 * SARMODE0_SHADEN) /* We don't use shadow registers. */
--		  | (1 * SARMODE0_GINT)
--		  | (1 * SARMODE0_INTMODE_READCLEAR)
--		  | (0 * SARMODE0_CWRE)
--		  | (IS_FS50(dev)?SARMODE0_PRPWT_FS50_5: 
--		                  SARMODE0_PRPWT_FS155_3)
--		  | (1 * SARMODE0_CALSUP_1)
--		  | (IS_FS50 (dev)?(0
--				    | SARMODE0_RXVCS_32
--				    | SARMODE0_ABRVCS_32 
--				    | SARMODE0_TXVCS_32):
--		                   (0
--				    | SARMODE0_RXVCS_1k
--				    | SARMODE0_ABRVCS_1k 
--				    | SARMODE0_TXVCS_1k))
--		  | (1 * SARMODE0_RUN));
--
--	init_phy (dev, PHY_NTC_INIT);
--
--	if (loopback == 2) {
--		write_phy (dev, 0x39, 0x000e);
--	}
--
--#ifdef FS_POLL_FREQ
--	timer_setup(&dev->timer, fs_poll, 0);
--	dev->timer.expires = jiffies + FS_POLL_FREQ;
--	add_timer (&dev->timer);
--#endif
--
--	dev->atm_dev->dev_data = dev;
--  
--	func_exit ();
--	return 0;
--unmap:
--	iounmap(dev->base);
--	return 1;
--}
--
--static int firestream_init_one(struct pci_dev *pci_dev,
--			       const struct pci_device_id *ent)
--{
--	struct atm_dev *atm_dev;
--	struct fs_dev *fs_dev;
--	
--	if (pci_enable_device(pci_dev)) 
--		goto err_out;
--
--	fs_dev = kzalloc (sizeof (struct fs_dev), GFP_KERNEL);
--	fs_dprintk (FS_DEBUG_ALLOC, "Alloc fs-dev: %p(%zd)\n",
--		    fs_dev, sizeof (struct fs_dev));
--	if (!fs_dev)
--		goto err_out;
--	atm_dev = atm_dev_register("fs", &pci_dev->dev, &ops, -1, NULL);
--	if (!atm_dev)
--		goto err_out_free_fs_dev;
--  
--	fs_dev->pci_dev = pci_dev;
--	fs_dev->atm_dev = atm_dev;
--	fs_dev->flags = ent->driver_data;
--
--	if (fs_init(fs_dev))
--		goto err_out_free_atm_dev;
--
--	fs_dev->next = fs_boards;
--	fs_boards = fs_dev;
--	return 0;
--
-- err_out_free_atm_dev:
--	atm_dev_deregister(atm_dev);
-- err_out_free_fs_dev:
-- 	kfree(fs_dev);
-- err_out:
--	return -ENODEV;
--}
--
--static void firestream_remove_one(struct pci_dev *pdev)
--{
--	int i;
--	struct fs_dev *dev, *nxtdev;
--	struct fs_vcc *vcc;
--	struct FS_BPENTRY *fp, *nxt;
--  
--	func_enter ();
--
--#if 0
--	printk ("hptxq:\n");
--	for (i=0;i<60;i++) {
--		printk ("%d: %08x %08x %08x %08x \n", 
--			i, pq[qp].cmd, pq[qp].p0, pq[qp].p1, pq[qp].p2);
--		qp++;
--		if (qp >= 60) qp = 0;
--	}
--
--	printk ("descriptors:\n");
--	for (i=0;i<60;i++) {
--		printk ("%d: %p: %08x %08x %p %p\n", 
--			i, da[qd], dq[qd].flags, dq[qd].bsa, dq[qd].skb, dq[qd].dev);
--		qd++;
--		if (qd >= 60) qd = 0;
--	}
--#endif
--
--	for (dev = fs_boards;dev != NULL;dev=nxtdev) {
--		fs_dprintk (FS_DEBUG_CLEANUP, "Releasing resources for dev at %p.\n", dev);
--
--		/* XXX Hit all the tx channels too! */
--
--		for (i=0;i < dev->nchannels;i++) {
--			if (dev->atm_vccs[i]) {
--				vcc = FS_VCC (dev->atm_vccs[i]);
--				submit_command (dev,  &dev->hp_txq,
--						QE_CMD_TX_PURGE_INH | QE_CMD_IMM_INQ | vcc->channo, 0,0,0);
--				submit_command (dev,  &dev->hp_txq,
--						QE_CMD_RX_PURGE_INH | QE_CMD_IMM_INQ | vcc->channo, 0,0,0);
--
--			}
--		}
--
--		/* XXX Wait a while for the chip to release all buffers. */
--
--		for (i=0;i < FS_NR_FREE_POOLS;i++) {
--			for (fp=bus_to_virt (read_fs (dev, FP_SA(dev->rx_fp[i].offset)));
--			     !(fp->flags & FP_FLAGS_EPI);fp = nxt) {
--				fs_dprintk (FS_DEBUG_ALLOC, "Free rec-skb: %p\n", fp->skb);
--				dev_kfree_skb_any (fp->skb);
--				nxt = bus_to_virt (fp->next);
--				fs_dprintk (FS_DEBUG_ALLOC, "Free rec-d: %p\n", fp);
--				kfree (fp);
--			}
--			fs_dprintk (FS_DEBUG_ALLOC, "Free rec-skb: %p\n", fp->skb);
--			dev_kfree_skb_any (fp->skb);
--			fs_dprintk (FS_DEBUG_ALLOC, "Free rec-d: %p\n", fp);
--			kfree (fp);
--		}
--
--		/* Hang the chip in "reset", prevent it clobbering memory that is
--		   no longer ours. */
--		reset_chip (dev);
--
--		fs_dprintk (FS_DEBUG_CLEANUP, "Freeing irq%d.\n", dev->irq);
--		free_irq (dev->irq, dev);
--		del_timer_sync (&dev->timer);
--
--		atm_dev_deregister(dev->atm_dev);
--		free_queue (dev, &dev->hp_txq);
--		free_queue (dev, &dev->lp_txq);
--		free_queue (dev, &dev->tx_relq);
--		free_queue (dev, &dev->st_q);
--
--		fs_dprintk (FS_DEBUG_ALLOC, "Free atmvccs: %p\n", dev->atm_vccs);
--		kfree (dev->atm_vccs);
--
--		for (i=0;i< FS_NR_FREE_POOLS;i++)
--			free_freepool (dev, &dev->rx_fp[i]);
--    
--		for (i=0;i < FS_NR_RX_QUEUES;i++)
--			free_queue (dev, &dev->rx_rq[i]);
--
--		iounmap(dev->base);
--		fs_dprintk (FS_DEBUG_ALLOC, "Free fs-dev: %p\n", dev);
--		nxtdev = dev->next;
--		kfree (dev);
--	}
--
--	func_exit ();
--}
--
--static const struct pci_device_id firestream_pci_tbl[] = {
--	{ PCI_VDEVICE(FUJITSU_ME, PCI_DEVICE_ID_FUJITSU_FS50), FS_IS50},
--	{ PCI_VDEVICE(FUJITSU_ME, PCI_DEVICE_ID_FUJITSU_FS155), FS_IS155},
--	{ 0, }
--};
--
--MODULE_DEVICE_TABLE(pci, firestream_pci_tbl);
--
--static struct pci_driver firestream_driver = {
--	.name		= "firestream",
--	.id_table	= firestream_pci_tbl,
--	.probe		= firestream_init_one,
--	.remove		= firestream_remove_one,
--};
--
--static int __init firestream_init_module (void)
--{
--	int error;
--
--	func_enter ();
--	error = pci_register_driver(&firestream_driver);
--	func_exit ();
--	return error;
--}
--
--static void __exit firestream_cleanup_module(void)
--{
--	pci_unregister_driver(&firestream_driver);
--}
--
--module_init(firestream_init_module);
--module_exit(firestream_cleanup_module);
 -
 -MODULE_LICENSE("GPL");
 -
+-static const struct pci_device_id zatm_pci_tbl[] = {
+-	{ PCI_VDEVICE(ZEITNET, PCI_DEVICE_ID_ZEITNET_1221), ZATM_COPPER },
+-	{ PCI_VDEVICE(ZEITNET, PCI_DEVICE_ID_ZEITNET_1225), 0 },
+-	{ 0, }
+-};
+-MODULE_DEVICE_TABLE(pci, zatm_pci_tbl);
 -
+-static struct pci_driver zatm_driver = {
+-	.name =		DEV_LABEL,
+-	.id_table =	zatm_pci_tbl,
+-	.probe =	zatm_init_one,
+-};
 -
-diff --git a/drivers/atm/firestream.h b/drivers/atm/firestream.h
+-static int __init zatm_init_module(void)
+-{
+-	return pci_register_driver(&zatm_driver);
+-}
+-
+-module_init(zatm_init_module);
+-/* module_exit not defined so not unloadable */
+diff --git a/drivers/atm/zatm.h b/drivers/atm/zatm.h
 deleted file mode 100644
-index 6d684160808d..000000000000
---- a/drivers/atm/firestream.h
+index 8204369fe825..000000000000
+--- a/drivers/atm/zatm.h
 +++ /dev/null
-@@ -1,502 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/* drivers/atm/firestream.h - FireStream 155 (MB86697) and
-- *                            FireStream  50 (MB86695) device driver 
-- */
-- 
--/* Written & (C) 2000 by R.E.Wolff@BitWizard.nl 
-- * Copied snippets from zatm.c by Werner Almesberger, EPFL LRC/ICA 
-- * and ambassador.c Copyright (C) 1995-1999  Madge Networks Ltd 
-- */
+@@ -1,104 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/* drivers/atm/zatm.h - ZeitNet ZN122x device driver declarations */
+-
+-/* Written 1995-1998 by Werner Almesberger, EPFL LRC/ICA */
+-
+-
+-#ifndef DRIVER_ATM_ZATM_H
+-#define DRIVER_ATM_ZATM_H
+-
+-#include <linux/skbuff.h>
+-#include <linux/atm.h>
+-#include <linux/atmdev.h>
+-#include <linux/sonet.h>
+-#include <linux/pci.h>
+-
+-
+-#define DEV_LABEL	"zatm"
+-
+-#define MAX_AAL5_PDU	10240	/* allocate for AAL5 PDUs of this size */
+-#define MAX_RX_SIZE_LD	14	/* ceil(log2((MAX_AAL5_PDU+47)/48)) */
+-
+-#define LOW_MARK	12	/* start adding new buffers if less than 12 */
+-#define HIGH_MARK	30	/* stop adding buffers after reaching 30 */
+-#define OFF_CNG_THRES	5	/* threshold for offset changes */
+-
+-#define RX_SIZE		2	/* RX lookup entry size (in bytes) */
+-#define NR_POOLS	32	/* number of free buffer pointers */
+-#define POOL_SIZE	8	/* buffer entry size (in bytes) */
+-#define NR_SHAPERS	16	/* number of shapers */
+-#define SHAPER_SIZE	4	/* shaper entry size (in bytes) */
+-#define VC_SIZE		32	/* VC dsc (TX or RX) size (in bytes) */
+-
+-#define RING_ENTRIES	32	/* ring entries (without back pointer) */
+-#define RING_WORDS	4	/* ring element size */
+-#define RING_SIZE	(sizeof(unsigned long)*(RING_ENTRIES+1)*RING_WORDS)
+-
+-#define NR_MBX		4	/* four mailboxes */
+-#define MBX_RX_0	0	/* mailbox indices */
+-#define MBX_RX_1	1
+-#define MBX_TX_0	2
+-#define MBX_TX_1	3
+-
+-struct zatm_vcc {
+-	/*-------------------------------- RX part */
+-	int rx_chan;			/* RX channel, 0 if none */
+-	int pool;			/* free buffer pool */
+-	/*-------------------------------- TX part */
+-	int tx_chan;			/* TX channel, 0 if none */
+-	int shaper;			/* shaper, <0 if none */
+-	struct sk_buff_head tx_queue;	/* list of buffers in transit */
+-	wait_queue_head_t tx_wait;	/* for close */
+-	u32 *ring;			/* transmit ring */
+-	int ring_curr;			/* current write position */
+-	int txing;			/* number of transmits in progress */
+-	struct sk_buff_head backlog;	/* list of buffers waiting for ring */
+-};
+-
+-struct zatm_dev {
+-	/*-------------------------------- TX part */
+-	int tx_bw;			/* remaining bandwidth */
+-	u32 free_shapers;		/* bit set */
+-	int ubr;			/* UBR shaper; -1 if none */
+-	int ubr_ref_cnt;		/* number of VCs using UBR shaper */
+-	/*-------------------------------- RX part */
+-	int pool_ref[NR_POOLS];		/* free buffer pool usage counters */
+-	volatile struct sk_buff *last_free[NR_POOLS];
+-					/* last entry in respective pool */
+-	struct sk_buff_head pool[NR_POOLS];/* free buffer pools */
+-	struct zatm_pool_info pool_info[NR_POOLS]; /* pool information */
+-	/*-------------------------------- maps */
+-	struct atm_vcc **tx_map;	/* TX VCCs */
+-	struct atm_vcc **rx_map;	/* RX VCCs */
+-	int chans;			/* map size, must be 2^n */
+-	/*-------------------------------- mailboxes */
+-	unsigned long mbx_start[NR_MBX];/* start addresses */
+-	dma_addr_t mbx_dma[NR_MBX];
+-	u16 mbx_end[NR_MBX];		/* end offset (in bytes) */
+-	/*-------------------------------- other pointers */
+-	u32 pool_base;			/* Free buffer pool dsc (word addr) */
+-	/*-------------------------------- ZATM links */
+-	struct atm_dev *more;		/* other ZATM devices */
+-	/*-------------------------------- general information */
+-	int mem;			/* RAM on board (in bytes) */
+-	int khz;			/* timer clock */
+-	int copper;			/* PHY type */
+-	unsigned char irq;		/* IRQ */
+-	unsigned int base;		/* IO base address */
+-	struct pci_dev *pci_dev;	/* PCI stuff */
+-	spinlock_t lock;
+-};
+-
+-
+-#define ZATM_DEV(d) ((struct zatm_dev *) (d)->dev_data)
+-#define ZATM_VCC(d) ((struct zatm_vcc *) (d)->dev_data)
+-
+-
+-struct zatm_skb_prv {
+-	struct atm_skb_data _;		/* reserved */
+-	u32 *dsc;			/* pointer to skb's descriptor */
+-};
+-
+-#define ZATM_PRV_DSC(skb) (((struct zatm_skb_prv *) (skb)->cb)->dsc)
+-
+-#endif
+diff --git a/include/uapi/linux/atm_zatm.h b/include/uapi/linux/atm_zatm.h
+deleted file mode 100644
+index 5135027b93c1..000000000000
+--- a/include/uapi/linux/atm_zatm.h
++++ /dev/null
+@@ -1,47 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-/* atm_zatm.h - Driver-specific declarations of the ZATM driver (for use by
+-		driver-specific utilities) */
+-
+-/* Written 1995-1999 by Werner Almesberger, EPFL LRC/ICA */
+-
+-
+-#ifndef LINUX_ATM_ZATM_H
+-#define LINUX_ATM_ZATM_H
 -
 -/*
--*/
--
--
--/***********************************************************************
-- *                  first the defines for the chip.                    *
-- ***********************************************************************/
--
--
--/********************* General chip parameters. ************************/
--
--#define FS_NR_FREE_POOLS   8
--#define FS_NR_RX_QUEUES    4
--
--
--/********************* queues and queue access macros ******************/
--
--
--/* A queue entry. */
--struct FS_QENTRY {
--	u32 cmd;
--	u32 p0, p1, p2;
--};
--
--
--/* A freepool entry. */
--struct FS_BPENTRY {
--	u32 flags;
--	u32 next;
--	u32 bsa;
--	u32 aal_bufsize;
--
--	/* The hardware doesn't look at this, but we need the SKB somewhere... */
--	struct sk_buff *skb;
--	struct freepool *fp;
--	struct fs_dev *dev;
--};
--
--
--#define STATUS_CODE(qe)  ((qe->cmd >> 22) & 0x3f)
--
--
--/* OFFSETS against the base of a QUEUE... */
--#define QSA     0x00
--#define QEA     0x04
--#define QRP     0x08
--#define QWP     0x0c
--#define QCNF    0x10   /* Only for Release queues! */
--/* Not for the transmit pending queue. */
--
--
--/* OFFSETS against the base of a FREE POOL... */
--#define FPCNF   0x00
--#define FPSA    0x04
--#define FPEA    0x08
--#define FPCNT   0x0c
--#define FPCTU   0x10
--
--#define Q_SA(b)     (b + QSA )
--#define Q_EA(b)     (b + QEA )
--#define Q_RP(b)     (b + QRP )
--#define Q_WP(b)     (b + QWP )
--#define Q_CNF(b)    (b + QCNF)
--
--#define FP_CNF(b)   (b + FPCNF)
--#define FP_SA(b)    (b + FPSA)
--#define FP_EA(b)    (b + FPEA)
--#define FP_CNT(b)   (b + FPCNT)
--#define FP_CTU(b)   (b + FPCTU)
--
--/* bits in a queue register. */
--#define Q_FULL      0x1
--#define Q_EMPTY     0x2
--#define Q_INCWRAP   0x4
--#define Q_ADDR_MASK 0xfffffff0
--
--/* bits in a FreePool config register */
--#define RBFP_RBS    (0x1 << 16)
--#define RBFP_RBSVAL (0x1 << 15)
--#define RBFP_CME    (0x1 << 12)
--#define RBFP_DLP    (0x1 << 11)
--#define RBFP_BFPWT  (0x1 <<  0)
--
--
--
--
--/* FireStream commands. */
--#define QE_CMD_NULL             (0x00 << 22)
--#define QE_CMD_REG_RD           (0x01 << 22)
--#define QE_CMD_REG_RDM          (0x02 << 22)
--#define QE_CMD_REG_WR           (0x03 << 22)
--#define QE_CMD_REG_WRM          (0x04 << 22)
--#define QE_CMD_CONFIG_TX        (0x05 << 22)
--#define QE_CMD_CONFIG_RX        (0x06 << 22)
--#define QE_CMD_PRP_RD           (0x07 << 22)
--#define QE_CMD_PRP_RDM          (0x2a << 22)
--#define QE_CMD_PRP_WR           (0x09 << 22)
--#define QE_CMD_PRP_WRM          (0x2b << 22)
--#define QE_CMD_RX_EN            (0x0a << 22)
--#define QE_CMD_RX_PURGE         (0x0b << 22)
--#define QE_CMD_RX_PURGE_INH     (0x0c << 22)
--#define QE_CMD_TX_EN            (0x0d << 22)
--#define QE_CMD_TX_PURGE         (0x0e << 22)
--#define QE_CMD_TX_PURGE_INH     (0x0f << 22)
--#define QE_CMD_RST_CG           (0x10 << 22)
--#define QE_CMD_SET_CG           (0x11 << 22)
--#define QE_CMD_RST_CLP          (0x12 << 22)
--#define QE_CMD_SET_CLP          (0x13 << 22)
--#define QE_CMD_OVERRIDE         (0x14 << 22)
--#define QE_CMD_ADD_BFP          (0x15 << 22)
--#define QE_CMD_DUMP_TX          (0x16 << 22)
--#define QE_CMD_DUMP_RX          (0x17 << 22)
--#define QE_CMD_LRAM_RD          (0x18 << 22)
--#define QE_CMD_LRAM_RDM         (0x28 << 22)
--#define QE_CMD_LRAM_WR          (0x19 << 22)
--#define QE_CMD_LRAM_WRM         (0x29 << 22)
--#define QE_CMD_LRAM_BSET        (0x1a << 22)
--#define QE_CMD_LRAM_BCLR        (0x1b << 22)
--#define QE_CMD_CONFIG_SEGM      (0x1c << 22)
--#define QE_CMD_READ_SEGM        (0x1d << 22)
--#define QE_CMD_CONFIG_ROUT      (0x1e << 22)
--#define QE_CMD_READ_ROUT        (0x1f << 22)
--#define QE_CMD_CONFIG_TM        (0x20 << 22)
--#define QE_CMD_READ_TM          (0x21 << 22)
--#define QE_CMD_CONFIG_TXBM      (0x22 << 22)
--#define QE_CMD_READ_TXBM        (0x23 << 22)
--#define QE_CMD_CONFIG_RXBM      (0x24 << 22)
--#define QE_CMD_READ_RXBM        (0x25 << 22)
--#define QE_CMD_CONFIG_REAS      (0x26 << 22)
--#define QE_CMD_READ_REAS        (0x27 << 22)
--
--#define QE_TRANSMIT_DE          (0x0 << 30)
--#define QE_CMD_LINKED           (0x1 << 30)
--#define QE_CMD_IMM              (0x2 << 30)
--#define QE_CMD_IMM_INQ          (0x3 << 30)
--
--#define TD_EPI                  (0x1 << 27)
--#define TD_COMMAND              (0x1 << 28)
--
--#define TD_DATA                 (0x0 << 29)
--#define TD_RM_CELL              (0x1 << 29)
--#define TD_OAM_CELL             (0x2 << 29)
--#define TD_OAM_CELL_SEGMENT     (0x3 << 29)
--
--#define TD_BPI                  (0x1 << 20)
--
--#define FP_FLAGS_EPI            (0x1 << 27)
--
--
--#define TX_PQ(i)  (0x00  + (i) * 0x10)
--#define TXB_RQ    (0x20)
--#define ST_Q      (0x48)
--#define RXB_FP(i) (0x90  + (i) * 0x14)
--#define RXB_RQ(i) (0x134 + (i) * 0x14)
--
--
--#define TXQ_HP 0
--#define TXQ_LP 1
--
--/* Phew. You don't want to know how many revisions these simple queue
-- * address macros went through before I got them nice and compact as
-- * they are now. -- REW
+- * Note: non-kernel programs including this file must also include
+- * sys/types.h for struct timeval
 - */
 -
+-#include <linux/atmapi.h>
+-#include <linux/atmioc.h>
 -
--/* And now for something completely different: 
-- * The rest of the registers... */
+-#define ZATM_GETPOOL	_IOW('a',ATMIOC_SARPRV+1,struct atmif_sioc)
+-						/* get pool statistics */
+-#define ZATM_GETPOOLZ	_IOW('a',ATMIOC_SARPRV+2,struct atmif_sioc)
+-						/* get statistics and zero */
+-#define ZATM_SETPOOL	_IOW('a',ATMIOC_SARPRV+3,struct atmif_sioc)
+-						/* set pool parameters */
 -
--
--#define CMDR0 0x34
--#define CMDR1 0x38
--#define CMDR2 0x3c
--#define CMDR3 0x40
--
--
--#define SARMODE0     0x5c
--
--#define SARMODE0_TXVCS_0    (0x0 << 0)
--#define SARMODE0_TXVCS_1k   (0x1 << 0)
--#define SARMODE0_TXVCS_2k   (0x2 << 0)
--#define SARMODE0_TXVCS_4k   (0x3 << 0)
--#define SARMODE0_TXVCS_8k   (0x4 << 0)
--#define SARMODE0_TXVCS_16k  (0x5 << 0)
--#define SARMODE0_TXVCS_32k  (0x6 << 0)
--#define SARMODE0_TXVCS_64k  (0x7 << 0)
--#define SARMODE0_TXVCS_32   (0x8 << 0)
--
--#define SARMODE0_ABRVCS_0   (0x0 << 4)
--#define SARMODE0_ABRVCS_512 (0x1 << 4)
--#define SARMODE0_ABRVCS_1k  (0x2 << 4)
--#define SARMODE0_ABRVCS_2k  (0x3 << 4)
--#define SARMODE0_ABRVCS_4k  (0x4 << 4)
--#define SARMODE0_ABRVCS_8k  (0x5 << 4)
--#define SARMODE0_ABRVCS_16k (0x6 << 4)
--#define SARMODE0_ABRVCS_32k (0x7 << 4)
--#define SARMODE0_ABRVCS_32  (0x9 << 4) /* The others are "8", this one really has to 
--					  be 9. Tell me you don't believe me. -- REW */
--
--#define SARMODE0_RXVCS_0    (0x0 << 8)
--#define SARMODE0_RXVCS_1k   (0x1 << 8)
--#define SARMODE0_RXVCS_2k   (0x2 << 8)
--#define SARMODE0_RXVCS_4k   (0x3 << 8)
--#define SARMODE0_RXVCS_8k   (0x4 << 8)
--#define SARMODE0_RXVCS_16k  (0x5 << 8)
--#define SARMODE0_RXVCS_32k  (0x6 << 8)
--#define SARMODE0_RXVCS_64k  (0x7 << 8)
--#define SARMODE0_RXVCS_32   (0x8 << 8) 
--
--#define SARMODE0_CALSUP_1  (0x0 << 12)
--#define SARMODE0_CALSUP_2  (0x1 << 12)
--#define SARMODE0_CALSUP_3  (0x2 << 12)
--#define SARMODE0_CALSUP_4  (0x3 << 12)
--
--#define SARMODE0_PRPWT_FS50_0  (0x0 << 14)
--#define SARMODE0_PRPWT_FS50_2  (0x1 << 14)
--#define SARMODE0_PRPWT_FS50_5  (0x2 << 14)
--#define SARMODE0_PRPWT_FS50_11 (0x3 << 14)
--
--#define SARMODE0_PRPWT_FS155_0 (0x0 << 14)
--#define SARMODE0_PRPWT_FS155_1 (0x1 << 14)
--#define SARMODE0_PRPWT_FS155_2 (0x2 << 14)
--#define SARMODE0_PRPWT_FS155_3 (0x3 << 14)
--
--#define SARMODE0_SRTS0     (0x1 << 23)
--#define SARMODE0_SRTS1     (0x1 << 24)
--
--#define SARMODE0_RUN       (0x1 << 25)
--
--#define SARMODE0_UNLOCK    (0x1 << 26)
--#define SARMODE0_CWRE      (0x1 << 27)
--
--
--#define SARMODE0_INTMODE_READCLEAR          (0x0 << 28)
--#define SARMODE0_INTMODE_READNOCLEAR        (0x1 << 28)
--#define SARMODE0_INTMODE_READNOCLEARINHIBIT (0x2 << 28)
--#define SARMODE0_INTMODE_READCLEARINHIBIT   (0x3 << 28)  /* Tell me you don't believe me. */
--
--#define SARMODE0_GINT      (0x1 << 30)
--#define SARMODE0_SHADEN    (0x1 << 31)
--
--
--#define SARMODE1     0x60
--
--
--#define SARMODE1_TRTL_SHIFT 0   /* Program to 0 */
--#define SARMODE1_RRTL_SHIFT 4   /* Program to 0 */
--
--#define SARMODE1_TAGM       (0x1 <<  8)  /* Program to 0 */
--
--#define SARMODE1_HECM0      (0x1 <<  9)
--#define SARMODE1_HECM1      (0x1 << 10)
--#define SARMODE1_HECM2      (0x1 << 11)
--
--#define SARMODE1_GFCE       (0x1 << 14)
--#define SARMODE1_GFCR       (0x1 << 15)
--#define SARMODE1_PMS        (0x1 << 18)
--#define SARMODE1_GPRI       (0x1 << 19)
--#define SARMODE1_GPAS       (0x1 << 20)
--#define SARMODE1_GVAS       (0x1 << 21)
--#define SARMODE1_GNAM       (0x1 << 22)
--#define SARMODE1_GPLEN      (0x1 << 23)
--#define SARMODE1_DUMPE      (0x1 << 24)
--#define SARMODE1_OAMCRC     (0x1 << 25)
--#define SARMODE1_DCOAM      (0x1 << 26)
--#define SARMODE1_DCRM       (0x1 << 27)
--#define SARMODE1_TSTLP      (0x1 << 28)
--#define SARMODE1_DEFHEC     (0x1 << 29)
--
--
--#define ISR      0x64
--#define IUSR     0x68
--#define IMR      0x6c
--
--#define ISR_LPCO          (0x1 <<  0)
--#define ISR_DPCO          (0x1 <<  1)
--#define ISR_RBRQ0_W       (0x1 <<  2)
--#define ISR_RBRQ1_W       (0x1 <<  3)
--#define ISR_RBRQ2_W       (0x1 <<  4)
--#define ISR_RBRQ3_W       (0x1 <<  5)
--#define ISR_RBRQ0_NF      (0x1 <<  6)
--#define ISR_RBRQ1_NF      (0x1 <<  7)
--#define ISR_RBRQ2_NF      (0x1 <<  8)
--#define ISR_RBRQ3_NF      (0x1 <<  9)
--#define ISR_BFP_SC        (0x1 << 10)
--#define ISR_INIT          (0x1 << 11)
--#define ISR_INIT_ERR      (0x1 << 12) /* Documented as "reserved" */
--#define ISR_USCEO         (0x1 << 13)
--#define ISR_UPEC0         (0x1 << 14)
--#define ISR_VPFCO         (0x1 << 15)
--#define ISR_CRCCO         (0x1 << 16)
--#define ISR_HECO          (0x1 << 17)
--#define ISR_TBRQ_W        (0x1 << 18)
--#define ISR_TBRQ_NF       (0x1 << 19)
--#define ISR_CTPQ_E        (0x1 << 20)
--#define ISR_GFC_C0        (0x1 << 21)
--#define ISR_PCI_FTL       (0x1 << 22)
--#define ISR_CSQ_W         (0x1 << 23)
--#define ISR_CSQ_NF        (0x1 << 24)
--#define ISR_EXT_INT       (0x1 << 25)
--#define ISR_RXDMA_S       (0x1 << 26)
--
--
--#define TMCONF 0x78
--/* Bits? */
--
--
--#define CALPRESCALE 0x7c
--/* Bits? */
--
--#define CELLOSCONF 0x84
--#define CELLOSCONF_COTS   (0x1 << 28)
--#define CELLOSCONF_CEN    (0x1 << 27)
--#define CELLOSCONF_SC8    (0x3 << 24)
--#define CELLOSCONF_SC4    (0x2 << 24)
--#define CELLOSCONF_SC2    (0x1 << 24)
--#define CELLOSCONF_SC1    (0x0 << 24)
--
--#define CELLOSCONF_COBS   (0x1 << 16)
--#define CELLOSCONF_COPK   (0x1 <<  8)
--#define CELLOSCONF_COST   (0x1 <<  0)
--/* Bits? */
--
--#define RAS0 0x1bc
--#define RAS0_DCD_XHLT (0x1 << 31)
--
--#define RAS0_VPSEL    (0x1 << 16)
--#define RAS0_VCSEL    (0x1 <<  0)
--
--#define RAS1 0x1c0
--#define RAS1_UTREG    (0x1 << 5)
--
--
--#define DMAMR 0x1cc
--#define DMAMR_TX_MODE_FULL (0x0 << 0)
--#define DMAMR_TX_MODE_PART (0x1 << 0)
--#define DMAMR_TX_MODE_NONE (0x2 << 0) /* And 3 */
--
--
--
--#define RAS2 0x280
--
--#define RAS2_NNI  (0x1 << 0)
--#define RAS2_USEL (0x1 << 1)
--#define RAS2_UBS  (0x1 << 2)
--
--
--
--struct fs_transmit_config {
--	u32 flags;
--	u32 atm_hdr;
--	u32 TMC[4];
--	u32 spec;
--	u32 rtag[3];
+-struct zatm_pool_info {
+-	int ref_count;			/* free buffer pool usage counters */
+-	int low_water,high_water;	/* refill parameters */
+-	int rqa_count,rqu_count;	/* queue condition counters */
+-	int offset,next_off;		/* alignment optimizations: offset */
+-	int next_cnt,next_thres;	/* repetition counter and threshold */
 -};
 -
--#define TC_FLAGS_AAL5      (0x0 << 29)
--#define TC_FLAGS_TRANSPARENT_PAYLOAD (0x1 << 29)
--#define TC_FLAGS_TRANSPARENT_CELL    (0x2 << 29)
--#define TC_FLAGS_STREAMING (0x1 << 28)
--#define TC_FLAGS_PACKET    (0x0) 
--#define TC_FLAGS_TYPE_ABR  (0x0 << 22)
--#define TC_FLAGS_TYPE_CBR  (0x1 << 22)
--#define TC_FLAGS_TYPE_VBR  (0x2 << 22)
--#define TC_FLAGS_TYPE_UBR  (0x3 << 22)
--#define TC_FLAGS_CAL0      (0x0 << 20)
--#define TC_FLAGS_CAL1      (0x1 << 20)
--#define TC_FLAGS_CAL2      (0x2 << 20)
--#define TC_FLAGS_CAL3      (0x3 << 20)
--
--
--#define RC_FLAGS_NAM        (0x1 << 13)
--#define RC_FLAGS_RXBM_PSB   (0x0 << 14)
--#define RC_FLAGS_RXBM_CIF   (0x1 << 14)
--#define RC_FLAGS_RXBM_PMB   (0x2 << 14)
--#define RC_FLAGS_RXBM_STR   (0x4 << 14)
--#define RC_FLAGS_RXBM_SAF   (0x6 << 14)
--#define RC_FLAGS_RXBM_POS   (0x6 << 14)
--#define RC_FLAGS_BFPS       (0x1 << 17)
--
--#define RC_FLAGS_BFPS_BFP   (0x1 << 17)
--
--#define RC_FLAGS_BFPS_BFP0  (0x0 << 17)
--#define RC_FLAGS_BFPS_BFP1  (0x1 << 17)
--#define RC_FLAGS_BFPS_BFP2  (0x2 << 17)
--#define RC_FLAGS_BFPS_BFP3  (0x3 << 17)
--#define RC_FLAGS_BFPS_BFP4  (0x4 << 17)
--#define RC_FLAGS_BFPS_BFP5  (0x5 << 17)
--#define RC_FLAGS_BFPS_BFP6  (0x6 << 17)
--#define RC_FLAGS_BFPS_BFP7  (0x7 << 17)
--#define RC_FLAGS_BFPS_BFP01 (0x8 << 17)
--#define RC_FLAGS_BFPS_BFP23 (0x9 << 17)
--#define RC_FLAGS_BFPS_BFP45 (0xa << 17)
--#define RC_FLAGS_BFPS_BFP67 (0xb << 17)
--#define RC_FLAGS_BFPS_BFP07 (0xc << 17)
--#define RC_FLAGS_BFPS_BFP27 (0xd << 17)
--#define RC_FLAGS_BFPS_BFP47 (0xe << 17)
--
--#define RC_FLAGS_BFPP       (0x1 << 21)
--#define RC_FLAGS_TEVC       (0x1 << 22)
--#define RC_FLAGS_TEP        (0x1 << 23)
--#define RC_FLAGS_AAL5       (0x0 << 24)
--#define RC_FLAGS_TRANSP     (0x1 << 24)
--#define RC_FLAGS_TRANSC     (0x2 << 24)
--#define RC_FLAGS_ML         (0x1 << 27)
--#define RC_FLAGS_TRBRM      (0x1 << 28)
--#define RC_FLAGS_PRI        (0x1 << 29)
--#define RC_FLAGS_HOAM       (0x1 << 30)
--#define RC_FLAGS_CRC10      (0x1 << 31)
--
--
--#define RAC 0x1c8
--#define RAM 0x1c4
--
--
--
--/************************************************************************
-- *         Then the datastructures that the DRIVER uses.                *
-- ************************************************************************/
--
--#define TXQ_NENTRIES  32
--#define RXRQ_NENTRIES 1024
--
--
--struct fs_vcc {
--	int channo;
--	wait_queue_head_t close_wait;
--	struct sk_buff *last_skb;
+-struct zatm_pool_req {
+-	int pool_num;			/* pool number */
+-	struct zatm_pool_info info;	/* actual information */
 -};
 -
+-#define ZATM_OAM_POOL		0	/* free buffer pool for OAM cells */
+-#define ZATM_AAL0_POOL		1	/* free buffer pool for AAL0 cells */
+-#define ZATM_AAL5_POOL_BASE	2	/* first AAL5 free buffer pool */
+-#define ZATM_LAST_POOL	ZATM_AAL5_POOL_BASE+10 /* max. 64 kB */
 -
--struct queue {
--	struct FS_QENTRY *sa, *ea;  
--	int offset;
--};
+-#define ZATM_TIMER_HISTORY_SIZE	16	/* number of timer adjustments to
+-					   record; must be 2^n */
 -
--struct freepool {
--	int offset;
--	int bufsize;
--	int nr_buffers;
--	int n;
--};
--
--
--struct fs_dev {
--	struct fs_dev *next;		/* other FS devices */
--	int flags;
--
--	unsigned char irq;		/* IRQ */
--	struct pci_dev *pci_dev;	/* PCI stuff */
--	struct atm_dev *atm_dev;
--	struct timer_list timer;
--
--	unsigned long hw_base;		/* mem base address */
--	void __iomem *base;             /* Mapping of base address */
--	int channo;
--	unsigned long channel_mask;
--
--	struct queue    hp_txq, lp_txq, tx_relq, st_q;
--	struct freepool rx_fp[FS_NR_FREE_POOLS];
--	struct queue    rx_rq[FS_NR_RX_QUEUES];
--
--	int nchannels;
--	struct atm_vcc **atm_vccs;
--	void *tx_inuse;
--	int ntxpckts;
--};
--
--
--
--
--/* Number of channesl that the FS50 supports. */
--#define FS50_CHANNEL_BITS  5
--#define FS50_NR_CHANNELS      (1 << FS50_CHANNEL_BITS)
--
--         
--#define FS_DEV(atm_dev) ((struct fs_dev *) (atm_dev)->dev_data)
--#define FS_VCC(atm_vcc) ((struct fs_vcc *) (atm_vcc)->dev_data)
--
--
--#define FS_IS50  0x1
--#define FS_IS155 0x2
--
--#define IS_FS50(dev)  (dev->flags & FS_IS50)
--#define IS_FS155(dev) (dev->flags & FS_IS155)
-- 
--/* Within limits this is user-configurable. */
--/* Note: Currently the sum (10 -> 1k channels) is hardcoded in the driver. */
--#define FS155_VPI_BITS 4
--#define FS155_VCI_BITS 6
--
--#define FS155_CHANNEL_BITS  (FS155_VPI_BITS + FS155_VCI_BITS)
--#define FS155_NR_CHANNELS   (1 << FS155_CHANNEL_BITS)
+-#endif
 -- 
 2.34.1
 
