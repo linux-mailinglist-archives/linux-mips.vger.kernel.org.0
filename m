@@ -2,103 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CDB50F2EA
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Apr 2022 09:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD1D50F66A
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Apr 2022 10:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344242AbiDZHtp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Apr 2022 03:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S1345270AbiDZInO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Apr 2022 04:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343895AbiDZHto (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Apr 2022 03:49:44 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BA719292
-        for <linux-mips@vger.kernel.org>; Tue, 26 Apr 2022 00:46:37 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id kq17so11164716ejb.4
-        for <linux-mips@vger.kernel.org>; Tue, 26 Apr 2022 00:46:37 -0700 (PDT)
+        with ESMTP id S1345526AbiDZIl6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Apr 2022 04:41:58 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24CE158F85;
+        Tue, 26 Apr 2022 01:33:08 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id a11so6094040pff.1;
+        Tue, 26 Apr 2022 01:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=ezxJuL1TpZoaBmP6iCyLpD7vPvVZKAVuVG915ZT25Ws=;
-        b=lS6TkHfh9FtrzI9J2kmQCv8AkGGhN56OT3UPhhiiIxqrD+5vKMTakURwAbi3fk9EbM
-         H758YL8lFt/hHuXtJWMVGqy/D6haABwshBsTctrMBT9hHhueGyfv/tFiZ6SGhPNpSgPK
-         IcUtunAtEwGrI1slOb18kSk1H0qmXqXOhd/ntrye7E21wJZkuJ75MrwupUpvNLuW5lsL
-         fCkbdG5cjgcxdrSZBHDykpK5q5rXlPFeHUxbF/UXDwI1S3knJ0jbmipGs2TUJAGHgf/f
-         y69IKsvRL55ka9NzsED9XneTV1rczSFpqVMT+ayH66veplxiClL9OsdXz6Opr+DJmQje
-         9ecg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XPCJZevhs8brMYhtAZr8BdWat46UoHpJViKaKdpMRuU=;
+        b=c7vbIQntGD0977Uznsb+oxAGZUTT0lMxHbhYk9ny8G4wzPWoOrh53GXQ7s4xzFZ01f
+         eV0kK1RejcGO0tYo7DEZ52ThTAGY9v/Rn7YkIOOjjb+l4n/m4yXBHk+i2OSF6CJOE05j
+         AP6sQcmEG+dNc5HAV+8T/fhQ04peAYAEmXUtGXR2sFsqht4dGf6d2hvFcP57oLDKrHtF
+         ypxCGEdR4zAJtJ2XsdqDsaxHSk8NB7yXLSvEXdabkat45dZjVGA7w3zbhnUhc0pAc/ue
+         3xOx5leNCKMNmR4tX0M/m9umZl8/caTns2y5uwlnCP8z6sBZhZcZ1cnrjoFBw7+tX/xJ
+         i3eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ezxJuL1TpZoaBmP6iCyLpD7vPvVZKAVuVG915ZT25Ws=;
-        b=JutolQY6gDg5VT5rBw7q+rI+L81UgzYhJE45fS9ZZLMEzQnutInF5dI16J7l7JrTGS
-         WUOjMiK+L0dxu3N27EToXWqehcEitLtnr/fr7o9TFEiOT98Oj72NTv8LbJ8ajhs3LuaX
-         DTn2lMZq9fO5ILucVnOlGPlN1i9Id1h/TQ63z+dQ0d9+HNTy2KS3/KQAwb0EnjXxdd4V
-         hmVnj5YDCoRjP3hypLTkEahe9AXXD0OmoQyVSlZchCqxUm4Ks/fs4ECmedUmCOntZc2K
-         VPlesztUqG3BlSqwGT62mfrK/T5+w6B8pbXKEZ5srgEPeJjESHAJQl5afDQdIN0DLvu/
-         5Qcg==
-X-Gm-Message-State: AOAM531a7c+SemmM+CLnG2hWUwITRn43eut1qmUX1kFuZl+95N35m9/b
-        lWZJlNlItYEiBTuf1z8FHxGz7g==
-X-Google-Smtp-Source: ABdhPJwyp+ZjbOklEGjVs751JofkT6sqkmEF/aEvP0lIBBfvcjqzl170va0NRjxD4Sf6JSmSEHbxrA==
-X-Received: by 2002:a17:907:7ea4:b0:6f0:1205:fea9 with SMTP id qb36-20020a1709077ea400b006f01205fea9mr20196265ejc.534.1650959195200;
-        Tue, 26 Apr 2022 00:46:35 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z21-20020a170906435500b006e8669fae36sm4476781ejm.189.2022.04.26.00.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 00:46:34 -0700 (PDT)
-Message-ID: <249f6136-6dd6-0c03-df86-7da02a1b17f0@linaro.org>
-Date:   Tue, 26 Apr 2022 09:46:33 +0200
+        bh=XPCJZevhs8brMYhtAZr8BdWat46UoHpJViKaKdpMRuU=;
+        b=5TPBfeZOtYn3Pa5rmID0KaDinKVJU0+LiDcqz0s9oWdPrLqNYcBBZ+uN/p4QIgvp/k
+         ryis3OzA7QC0Lzt8L51LBgm5kJy9gW0UGu72IdpSxLKBxlW+JPUpyOFTe3nfiHDFO0pw
+         +wFwi3/NUmkNLmfsV62BSDOsGEGOzFiV8SKgcz4v85dTTKy1SufD6M6i8rHCtmFvuEjs
+         88nSk9rVeSUrGc8AXkfwg/qQ+Vjih9cMISEgb25822dZmX7VSGxQzlvrD0rZnivGd2Ht
+         ezewvs5Ua0hl2AGRgRYtaaj5Be9FBNGYDcdg0XWK97vyNsIkLeXVKWQMExkB+AWFBH4p
+         T7PQ==
+X-Gm-Message-State: AOAM530v5y2M2gQN9HFwBHOl9uSeADMIkbPAKPu0MJ3iU6zXdGuCiTJi
+        +RFptWlvad6FP9AwkKu9o1E=
+X-Google-Smtp-Source: ABdhPJwD7n+yUCkn32g7caIxVGOr7/fDkuZD+briKdFO0oetqszHzCrrrJwMEBKW3GVoFDHbDd5kWw==
+X-Received: by 2002:a05:6a00:1687:b0:4e1:45d:3ded with SMTP id k7-20020a056a00168700b004e1045d3dedmr23359483pfc.0.1650961988373;
+        Tue, 26 Apr 2022 01:33:08 -0700 (PDT)
+Received: from localhost.localdomain ([103.197.71.140])
+        by smtp.gmail.com with ESMTPSA id f187-20020a6251c4000000b005058e59604csm14317884pfb.217.2022.04.26.01.33.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 01:33:07 -0700 (PDT)
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+To:     tsbogend@alpha.franken.de, liam.howlett@oracle.com,
+        ebiederm@xmission.com, dbueso@suse.de, alobakin@pm.me,
+        f.fainelli@gmail.com
+Cc:     zhangshida@kylinos.cn, starzhangzsd@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH] arch/mips/kernel/traps: add CONFIG_MIPS_FP_SUPPORT when using handle_fpe
+Date:   Tue, 26 Apr 2022 16:32:59 +0800
+Message-Id: <20220426083259.526685-1-starzhangzsd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07/04/2022 16:33, Krzysztof Kozlowski wrote:
-> The node names should be generic and SPI NOR dtschema expects "flash".
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/mips/boot/dts/brcm/bcm97358svmb.dts                   | 2 +-
->  arch/mips/boot/dts/brcm/bcm97360svmb.dts                   | 2 +-
->  arch/mips/boot/dts/brcm/bcm97425svmb.dts                   | 2 +-
->  arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
->  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts         | 2 +-
->  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts         | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
+From: Shida Zhang <zhangshida@kylinos.cn>
 
-Hi all,
+handle_fpe gets defined when CONFIG_MIPS_FP_SUPPORT is defined. So add
+CONFIG_MIPS_FP_SUPPORT when using handle_fpe.
 
-Anyone from MIPS folks willing to take it? I got three acks, so maybe
-that means I should handle it?
+Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+---
+ arch/mips/kernel/traps.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+index 246c6a6b0261..ef9792261f91 100644
+--- a/arch/mips/kernel/traps.c
++++ b/arch/mips/kernel/traps.c
+@@ -90,7 +90,9 @@ extern asmlinkage void handle_cpu(void);
+ extern asmlinkage void handle_ov(void);
+ extern asmlinkage void handle_tr(void);
+ extern asmlinkage void handle_msa_fpe(void);
++#ifdef CONFIG_MIPS_FP_SUPPORT
+ extern asmlinkage void handle_fpe(void);
++#endif
+ extern asmlinkage void handle_ftlb(void);
+ extern asmlinkage void handle_gsexc(void);
+ extern asmlinkage void handle_msa(void);
+@@ -2489,8 +2491,10 @@ void __init trap_init(void)
+ 	if (board_nmi_handler_setup)
+ 		board_nmi_handler_setup();
+ 
++#ifdef CONFIG_MIPS_FP_SUPPORT
+ 	if (cpu_has_fpu && !cpu_has_nofpuex)
+ 		set_except_vector(EXCCODE_FPE, handle_fpe);
++#endif
+ 
+ 	if (cpu_has_ftlbparex)
+ 		set_except_vector(MIPS_EXCCODE_TLBPAR, handle_ftlb);
+-- 
+2.30.2
 
-Best regards,
-Krzysztof
