@@ -2,42 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CC3511428
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Apr 2022 11:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 552BB511421
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Apr 2022 11:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbiD0JNT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Apr 2022 05:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S234917AbiD0JNV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Apr 2022 05:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233690AbiD0JNL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Apr 2022 05:13:11 -0400
+        with ESMTP id S234031AbiD0JNN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Apr 2022 05:13:13 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20C29939B4;
-        Wed, 27 Apr 2022 02:09:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 576BBCFB81;
+        Wed, 27 Apr 2022 02:09:56 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1njdfk-0000Hv-00; Wed, 27 Apr 2022 11:09:20 +0200
+        id 1njdfk-0000Hv-01; Wed, 27 Apr 2022 11:09:20 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E3A75C01C7; Wed, 27 Apr 2022 10:59:14 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 10:59:14 +0200
+        id AB05AC01C9; Wed, 27 Apr 2022 10:59:29 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 10:59:29 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] mips: dts: ralink: mt7621: add mdio label to
- mdio-bus
-Message-ID: <20220427085914.GA8404@alpha.franken.de>
-References: <20220411112049.18001-1-arinc.unal@arinc9.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, paul@crapouillou.net,
+        zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mips: dts: ingenic: x1000: Add PWM device tree node
+Message-ID: <20220427085929.GB8404@alpha.franken.de>
+References: <20220411155315.51769-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220411112049.18001-1-arinc.unal@arinc9.com>
+In-Reply-To: <20220411155315.51769-1-aidanmacdonald.0x0@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -47,22 +41,19 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 02:20:47PM +0300, Arınç ÜNAL wrote:
-> Add mdio label to the mdio-bus node to easily refer to it.
+On Mon, Apr 11, 2022 at 04:53:15PM +0100, Aidan MacDonald wrote:
+> Copied from the jz4740 devicetree and trimmed to 5 timers, which
+> is what the hardware supports.
 > 
-> Use the newly created label on the GB-PC2 devicetree.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
-> v2: add "ralink:" to the commit summary
+> v2: Reduce regmap length since only the first 5 timers need to be accessed,
+>     and don't wrap the clock-names at 80 columns.
 > 
-> ---
->  .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts   | 18 ++++++++----------
->  arch/mips/boot/dts/ralink/mt7621.dtsi          |  2 +-
->  2 files changed, 9 insertions(+), 11 deletions(-)
+>  arch/mips/boot/dts/ingenic/x1000.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 
-series applied to mips-next.
+applied to mips-next.
 
 Thomas.
 
