@@ -2,65 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67F6511427
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Apr 2022 11:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B4E51156A
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Apr 2022 13:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234668AbiD0JNU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Apr 2022 05:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S232137AbiD0LGD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Apr 2022 07:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234048AbiD0JNP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Apr 2022 05:13:15 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2102711D94B;
-        Wed, 27 Apr 2022 02:09:54 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1njdfk-0000Hv-02; Wed, 27 Apr 2022 11:09:20 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 05C4EC01C9; Wed, 27 Apr 2022 11:00:50 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 11:00:50 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] MIPS: mscc: jaguar2: rename pinctrl nodes
-Message-ID: <20220427090050.GC8404@alpha.franken.de>
-References: <20220420195018.3417053-1-michael@walle.cc>
+        with ESMTP id S231948AbiD0LFw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Apr 2022 07:05:52 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEE08D17EB;
+        Wed, 27 Apr 2022 03:57:36 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id E291E92009C; Wed, 27 Apr 2022 12:57:35 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id DE67292009B;
+        Wed, 27 Apr 2022 11:57:35 +0100 (BST)
+Date:   Wed, 27 Apr 2022 11:57:35 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Stephen Zhang <starzhangzsd@gmail.com>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        liam.howlett@oracle.com, ebiederm@xmission.com, dbueso@suse.de,
+        alobakin@pm.me, f.fainelli@gmail.com,
+        zhangshida <zhangshida@kylinos.cn>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH] arch/mips/kernel/traps: add CONFIG_MIPS_FP_SUPPORT when
+ using handle_fpe
+In-Reply-To: <CANubcdWwHXqC4gUztNseoConYHp+G4nUSYFaO-Te3jFVqT=1sw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2204271156190.9383@angie.orcam.me.uk>
+References: <20220426083259.526685-1-starzhangzsd@gmail.com> <alpine.DEB.2.21.2204270130210.9383@angie.orcam.me.uk> <CANubcdWwHXqC4gUztNseoConYHp+G4nUSYFaO-Te3jFVqT=1sw@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420195018.3417053-1-michael@walle.cc>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 09:50:16PM +0200, Michael Walle wrote:
-> The pinctrl device tree binding will be converted to YAML format. Rename
-> the pin nodes so they end with "-pins" to match the schema.
+On Wed, 27 Apr 2022, Stephen Zhang wrote:
+
+> Thanks for your comment. Do you mean  the following code:
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> The YAML conversion patch is alread in
-> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
+>  if (0 && !0)
+>     set_except_vector(15, handle_fpe);
 > 
->  arch/mips/boot/dts/mscc/jaguar2_pcb110.dts | 10 +++++-----
->  arch/mips/boot/dts/mscc/jaguar2_pcb111.dts | 10 +++++-----
->  arch/mips/boot/dts/mscc/jaguar2_pcb118.dts |  6 +++---
->  3 files changed, 13 insertions(+), 13 deletions(-)
+> will be optimised away if !CONFIG_MIPS_FP_SUPPORT?
 
-series applied to mips-next.
+ Yes.  Or more specifically the LHS of the conditional expression will be
+0 then, as shown above, and the whole statement will be gone.
 
-Thomas.
+> But we did get “undefined reference to `handle_fpe”  error when compiled with
+> !CONFIG_MIPS_FP_SUPPORT.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+ Please send me .config causing it and tell me what compiler and version
+you have seen this error with.  We rely on things being optimised away
+heavily throughout the Linux kernel, so this is certainly something to
+investigate.  I have built such a config just fine, but maybe there's a
+bug somewhere my setup does not trigger.
+
+  Maciej
