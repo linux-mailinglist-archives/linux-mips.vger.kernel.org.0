@@ -2,36 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552BB511421
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Apr 2022 11:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67F6511427
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Apr 2022 11:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234917AbiD0JNV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Apr 2022 05:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S234668AbiD0JNU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Apr 2022 05:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbiD0JNN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Apr 2022 05:13:13 -0400
+        with ESMTP id S234048AbiD0JNP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Apr 2022 05:13:15 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 576BBCFB81;
-        Wed, 27 Apr 2022 02:09:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2102711D94B;
+        Wed, 27 Apr 2022 02:09:54 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1njdfk-0000Hv-01; Wed, 27 Apr 2022 11:09:20 +0200
+        id 1njdfk-0000Hv-02; Wed, 27 Apr 2022 11:09:20 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id AB05AC01C9; Wed, 27 Apr 2022 10:59:29 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 10:59:29 +0200
+        id 05C4EC01C9; Wed, 27 Apr 2022 11:00:50 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 11:00:50 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, paul@crapouillou.net,
-        zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mips: dts: ingenic: x1000: Add PWM device tree node
-Message-ID: <20220427085929.GB8404@alpha.franken.de>
-References: <20220411155315.51769-1-aidanmacdonald.0x0@gmail.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] MIPS: mscc: jaguar2: rename pinctrl nodes
+Message-ID: <20220427090050.GC8404@alpha.franken.de>
+References: <20220420195018.3417053-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411155315.51769-1-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220420195018.3417053-1-michael@walle.cc>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -41,19 +43,21 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:53:15PM +0100, Aidan MacDonald wrote:
-> Copied from the jz4740 devicetree and trimmed to 5 timers, which
-> is what the hardware supports.
+On Wed, Apr 20, 2022 at 09:50:16PM +0200, Michael Walle wrote:
+> The pinctrl device tree binding will be converted to YAML format. Rename
+> the pin nodes so they end with "-pins" to match the schema.
 > 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
-> v2: Reduce regmap length since only the first 5 timers need to be accessed,
->     and don't wrap the clock-names at 80 columns.
+> The YAML conversion patch is alread in
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
 > 
->  arch/mips/boot/dts/ingenic/x1000.dtsi | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  arch/mips/boot/dts/mscc/jaguar2_pcb110.dts | 10 +++++-----
+>  arch/mips/boot/dts/mscc/jaguar2_pcb111.dts | 10 +++++-----
+>  arch/mips/boot/dts/mscc/jaguar2_pcb118.dts |  6 +++---
+>  3 files changed, 13 insertions(+), 13 deletions(-)
 
-applied to mips-next.
+series applied to mips-next.
 
 Thomas.
 
