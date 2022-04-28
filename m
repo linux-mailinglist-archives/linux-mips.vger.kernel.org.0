@@ -2,78 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97282512866
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Apr 2022 03:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B176E5128C2
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Apr 2022 03:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239944AbiD1BEh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Apr 2022 21:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S240515AbiD1Bat (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Apr 2022 21:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiD1BEd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Apr 2022 21:04:33 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3747A13DC0;
-        Wed, 27 Apr 2022 18:01:18 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kpcgf1MZfzGpMl;
-        Thu, 28 Apr 2022 08:58:38 +0800 (CST)
-Received: from [10.67.110.83] (10.67.110.83) by canpemm500006.china.huawei.com
- (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
- 2022 09:01:14 +0800
-Subject: Re: [PATCH 18/30] notifier: Show function names on notifier routines
- if DEBUG_NOTIFIERS is set
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        <akpm@linux-foundation.org>, <bhe@redhat.com>, <pmladek@suse.com>,
-        <kexec@lists.infradead.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <coresight@lists.linaro.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-alpha@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
-        <linux-leds@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-parisc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-s390@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-um@lists.infradead.org>,
-        <linux-xtensa@linux-xtensa.org>, <netdev@vger.kernel.org>,
-        <openipmi-developer@lists.sourceforge.net>, <rcu@vger.kernel.org>,
-        <sparclinux@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
-        <x86@kernel.org>, <kernel-dev@igalia.com>, <kernel@gpiccoli.net>,
-        <halves@canonical.com>, <fabiomirmar@gmail.com>,
-        <alejandro.j.jimenez@oracle.com>,
-        <andriy.shevchenko@linux.intel.com>, <arnd@arndb.de>,
-        <bp@alien8.de>, <corbet@lwn.net>, <d.hatayama@jp.fujitsu.com>,
-        <dave.hansen@linux.intel.com>, <dyoung@redhat.com>,
-        <feng.tang@intel.com>, <gregkh@linuxfoundation.org>,
-        <mikelley@microsoft.com>, <hidehiro.kawai.ez@hitachi.com>,
-        <jgross@suse.com>, <john.ogness@linutronix.de>,
-        <keescook@chromium.org>, <luto@kernel.org>, <mhiramat@kernel.org>,
-        <mingo@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
-        <rostedt@goodmis.org>, <senozhatsky@chromium.org>,
-        <stern@rowland.harvard.edu>, <tglx@linutronix.de>,
-        <vgoyal@redhat.com>, <vkuznets@redhat.com>, <will@kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-19-gpiccoli@igalia.com>
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-Message-ID: <9f44aae6-ec00-7ede-ec19-6e67ceb74510@huawei.com>
-Date:   Thu, 28 Apr 2022 09:01:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0.1
+        with ESMTP id S240368AbiD1Bap (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Apr 2022 21:30:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E1872471;
+        Wed, 27 Apr 2022 18:27:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5614961F4C;
+        Thu, 28 Apr 2022 01:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B7AC385A7;
+        Thu, 28 Apr 2022 01:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651109251;
+        bh=5dLrCbyI9dL25gLCPU2lKXEykc++03SFd32wMmRhRMY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=koKAxCKdTDd8Xos0qjF/PfaziMK1H7iXllHu4DOFfT+tReZ2slA19GSEMY1NlrAXx
+         VCl18ElprtpHwUe4m65SdEsv1lGqWR3skTPCIuYj/AcvueZmK3CfpzJW38Oe9aW1zU
+         niSCpJJrh/1kho5qWUQ0hxDz49tTwAxQmRAVgyHOutEFpbyFTQT+0/n0f2LPwPcn1R
+         +Dx77zrHy1TrRK6QnZ774j01Ivr9AWwFEgJu1KMLXjMZHmBX7IyZ29UEvIk2CTFpUy
+         L/bxWFE2CanErRZcRufMiQgOIsSO8CHUEukTRo4tKbwzfo1NiCLAjsYKkuz+oVQVEq
+         ZQkANYmzOu1Zg==
+Message-ID: <bde14dfc-d1ea-ca1f-5074-01e13eef3cab@kernel.org>
+Date:   Wed, 27 Apr 2022 19:27:26 -0600
 MIME-Version: 1.0
-In-Reply-To: <20220427224924.592546-19-gpiccoli@igalia.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH net-next v3] net: SO_RCVMARK socket option for SO_MARK
+ with recvmsg()
+Content-Language: en-US
+To:     Erin MacNeil <lnx.erin@gmail.com>
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Martynas Pumputis <m@lambda.lt>,
+        Akhmat Karakotov <hmukos@yandex-team.ru>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wei Wang <weiwan@google.com>, Yangbo Lu <yangbo.lu@nxp.com>,
+        Florian Westphal <fw@strlen.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Palethorpe <rpalethorpe@suse.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Richard Sanger <rsanger@wand.net.nz>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-wpan@vger.kernel.org,
+        linux-sctp@vger.kernel.org
+References: <202204270907.nUUrw3dS-lkp@intel.com>
+ <20220427200259.2564-1-lnx.erin@gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220427200259.2564-1-lnx.erin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.83]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,152 +104,15 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022/4/28 6:49, Guilherme G. Piccoli wrote:
-> Currently we have a debug infrastructure in the notifiers file, but
-> it's very simple/limited. This patch extends it by:
+On 4/27/22 2:02 PM, Erin MacNeil wrote:
+> Adding a new socket option, SO_RCVMARK, to indicate that SO_MARK
+> should be included in the ancillary data returned by recvmsg().
 > 
-> (a) Showing all registered/unregistered notifiers' callback names;
+> Renamed the sock_recv_ts_and_drops() function to sock_recv_cmsgs().
 > 
-> (b) Adding a dynamic debug tuning to allow showing called notifiers'
-> function names. Notice that this should be guarded as a tunable since
-> it can flood the kernel log buffer.
-> 
-> Cc: Arjan van de Ven <arjan@linux.intel.com>
-> Cc: Cong Wang <xiyou.wangcong@gmail.com>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Xiaoming Ni <nixiaoming@huawei.com>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
 > ---
-> 
-> We have some design decisions that worth discussing here:
-> 
-> (a) First of call, using C99 helps a lot to write clear and concise code, but
-> due to commit 4d94f910e79a ("Kbuild: use -Wdeclaration-after-statement") we
-> have a warning if mixing variable declarations with code. For this patch though,
-> doing that makes the code way clear, so decision was to add the debug code
-> inside brackets whenever this warning pops up. We can change that, but that'll
-> cause more ifdefs in the same function.
-> 
-> (b) In the symbol lookup helper function, we modify the parameter passed but
-> even more, we return it as well! This is unusual and seems unnecessary, but was
-> the strategy taken to allow embedding such function in the pr_debug() call.
-> 
-> Not doing that would likely requiring 3 symbol_name variables to avoid
-> concurrency (registering notifier A while calling notifier B) - we rely in
-> local variables as a serialization mechanism.
-> 
-> We're open for suggestions in case this design is not appropriate;
-> thanks in advance!
-> 
->   kernel/notifier.c | 48 +++++++++++++++++++++++++++++++++++++++++++++--
->   1 file changed, 46 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/notifier.c b/kernel/notifier.c
-> index ba005ebf4730..21032ebcde57 100644
-> --- a/kernel/notifier.c
-> +++ b/kernel/notifier.c
-> @@ -7,6 +7,22 @@
->   #include <linux/vmalloc.h>
->   #include <linux/reboot.h>
->   
-> +#ifdef CONFIG_DEBUG_NOTIFIERS
-> +#include <linux/kallsyms.h>
-> +
-> +/*
-> + *	Helper to get symbol names in case DEBUG_NOTIFIERS is set.
-> + *	Return the modified parameter is a strategy used to achieve
-> + *	the pr_debug() functionality - with this, function is only
-> + *	executed if the dynamic debug tuning is effectively set.
-> + */
-> +static inline char *notifier_name(struct notifier_block *nb, char *sym_name)
-> +{
-> +	lookup_symbol_name((unsigned long)(nb->notifier_call), sym_name);
-> +	return sym_name;
-> +}
-> +#endif
-> +
->   /*
->    *	Notifier list for kernel code which wants to be called
->    *	at shutdown. This is used to stop any idling DMA operations
-> @@ -34,20 +50,41 @@ static int notifier_chain_register(struct notifier_block **nl,
->   	}
->   	n->next = *nl;
->   	rcu_assign_pointer(*nl, n);
-> +
-> +#ifdef CONFIG_DEBUG_NOTIFIERS
-> +	{
-> +		char sym_name[KSYM_NAME_LEN];
-> +
-> +		pr_info("notifiers: registered %s()\n",
-> +			notifier_name(n, sym_name));
-> +	}
-
-Duplicate Code.
-
-Is it better to use __func__ and %pS?
-
-pr_info("%s: %pS\n", __func__, n->notifier_call);
 
 
-> +#endif
->   	return 0;
->   }
->   
->   static int notifier_chain_unregister(struct notifier_block **nl,
->   		struct notifier_block *n)
->   {
-> +	int ret = -ENOENT;
-> +
->   	while ((*nl) != NULL) {
->   		if ((*nl) == n) {
->   			rcu_assign_pointer(*nl, n->next);
-> -			return 0;
-> +			ret = 0;
-> +			break;
->   		}
->   		nl = &((*nl)->next);
->   	}
-> -	return -ENOENT;
-> +
-> +#ifdef CONFIG_DEBUG_NOTIFIERS
-> +	if (!ret) {
-> +		char sym_name[KSYM_NAME_LEN];
-> +
-> +		pr_info("notifiers: unregistered %s()\n",
-> +			notifier_name(n, sym_name));
-> +	}
-Duplicate Code.
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-Is it better to use __func__ and %pS?
-
-pr_info("%s: %pS\n", __func__, n->notifier_call);
-> +#endif
-> +	return ret;
->   }
->   
->   /**
-> @@ -80,6 +117,13 @@ static int notifier_call_chain(struct notifier_block **nl,
->   			nb = next_nb;
->   			continue;
->   		}
-> +
-Is the "#ifdef" missing here?
-> +		{
-> +			char sym_name[KSYM_NAME_LEN];
-> +
-> +			pr_debug("notifiers: calling %s()\n",
-> +				 notifier_name(nb, sym_name));
-Duplicate Code.
-
-Is it better to use __func__ and %pS?
-
-pr_info("%s: %pS\n", __func__, n->notifier_call);
-> +		}
->   #endif
->   		ret = nb->notifier_call(nb, val, v);
->   
-> 
-
-Thanks
-Xiaoming Ni
