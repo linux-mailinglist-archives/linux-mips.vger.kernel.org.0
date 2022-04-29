@@ -2,85 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FA3514EC6
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Apr 2022 17:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2CD514F26
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Apr 2022 17:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377676AbiD2PO7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Apr 2022 11:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S1378320AbiD2PXM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Apr 2022 11:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378115AbiD2PO6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Apr 2022 11:14:58 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B163ED4477;
-        Fri, 29 Apr 2022 08:11:39 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id C540B92009C; Fri, 29 Apr 2022 17:11:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id BEEC492009B;
-        Fri, 29 Apr 2022 16:11:38 +0100 (BST)
-Date:   Fri, 29 Apr 2022 16:11:38 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Stephen Zhang <starzhangzsd@gmail.com>, liam.howlett@oracle.com,
-        ebiederm@xmission.com, alobakin@pm.me, f.fainelli@gmail.com,
-        paul@crapouillou.net, linux@roeck-us.net, anemo@mba.ocn.ne.jp,
-        zhangshida@kylinos.cn, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: undefine and redefine cpu_has_fpu when it is
- overrided
-In-Reply-To: <20220429095104.GA11365@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2204291559490.9383@angie.orcam.me.uk>
-References: <20220429032621.674865-1-starzhangzsd@gmail.com> <20220429095104.GA11365@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S1378305AbiD2PXJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Apr 2022 11:23:09 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984A4D4CBB;
+        Fri, 29 Apr 2022 08:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PkGMRtr7ZOpuAUYdkK5YcnBWQgNByIkM+TF/PhPSt00=; b=McsgIEmWszU/NtZ864aphbd05/
+        AA+Hs7uyIJtJtMr4867fKRnrcDZ/B0ve7meILjRDqPYrpj2SCcZq87R4becMzN/EmmpSkGxa2bXfq
+        pUhMsFJRA7hiMl/hulL8uwaQ3NgTviAzyrP9F3cuPytnlSXUcQgJY1SVDx/EfT4PyEI3blubrtgBl
+        Y/qFy6eJFuUH765RC4uiwWYgWdDuIIe2xttNarhTtSLeO0f5vFGPmxPe8sb1rSPH9MLQ8MhCgLKVk
+        8Yh9XWbluokYf/vW7/yQXLp3HdC2BoK3CBL6+DlGPNeddie6sMCK3FiVbeA/PpCZCA2PeX8k9qatt
+        P0Tqe4Tg==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkSOj-000BaQ-FP; Fri, 29 Apr 2022 17:19:09 +0200
+Message-ID: <31248811-d3ed-63dd-e255-c3be07fb1434@igalia.com>
+Date:   Fri, 29 Apr 2022 12:18:29 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
+Content-Language: en-US
+To:     minyard@acm.org, elder@ieee.org, Alex Elder <elder@kernel.org>,
+        cminyard@mvista.com
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        James Morse <james.morse@arm.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Richard Weinberger <richard@nod.at>,
+        Robert Richter <rric@kernel.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-22-gpiccoli@igalia.com>
+ <20220428162616.GE442787@minyard.net>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220428162616.GE442787@minyard.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 29 Apr 2022, Thomas Bogendoerfer wrote:
-
-> > diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
-> > index de8cb2ccb781..38eb469008b6 100644
-> > --- a/arch/mips/include/asm/cpu-features.h
-> > +++ b/arch/mips/include/asm/cpu-features.h
-> > @@ -134,6 +134,10 @@
-> >  # endif
-> >  #else
-> >  # define raw_cpu_has_fpu	cpu_has_fpu
-> > +# ifndef CONFIG_MIPS_FP_SUPPORT
-> > +#  undef cpu_has_fpu
-> > +#  define cpu_has_fpu		0
-> > +# endif
-> >  #endif
-> >  #ifndef cpu_has_32fpr
-> >  #define cpu_has_32fpr		__isa_ge_or_opt(1, MIPS_CPU_32FPR)
-> > -- 
-> > 2.30.2
+On 28/04/2022 13:26, Corey Minyard wrote:
+> [...]
 > 
-> I prefer just removing the #defines from ip27/ip30 cpu-feasture-overrides.h. 
-> Or isn't that enough for fixing the problem ?
+> For the IPMI portion:
+> 
+> Acked-by: Corey Minyard <cminyard@mvista.com>
 
- That's what I've meant, and I have now posted fixes, successfully 
-build-tested.
+Thanks Alex and Corey for the ACKs!
 
- Additionally I've thought of adding something like:
+> 
+> Note that the IPMI panic_event() should always return, but it may take
+> some time, especially if the IPMI controller is no longer functional.
+> So the risk of a long delay is there and it makes sense to move it very
+> late.
+> 
 
-#if cpu_has_fpu
-# undef cpu_has_fpu
-#endif
+Thanks, I agree - the patch moves it to the (latest - 1) position, since
+some arch code might run as the latest and effectively stops the machine.
+Cheers,
 
-or maybe even:
 
-#if cpu_has_fpu
-# error "Forcing `cpu_has_fpu' to non-zero is not supported"
-#endif
-
-to arch/mips/include/asm/cpu-features.h, but maybe that's an overkill.
-
-  Maciej
+Guilherme
