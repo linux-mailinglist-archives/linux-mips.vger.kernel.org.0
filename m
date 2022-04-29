@@ -2,114 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B8C51574C
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Apr 2022 23:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 986EB515782
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Apr 2022 23:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239340AbiD2Vuc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Apr 2022 17:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S1377522AbiD2WAg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Apr 2022 18:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238812AbiD2Vua (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Apr 2022 17:50:30 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4AF66224;
-        Fri, 29 Apr 2022 14:47:10 -0700 (PDT)
-Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mna0x-1oAIQr2BZF-00jYkX; Fri, 29 Apr 2022 23:47:08 +0200
-Received: by mail-yb1-f172.google.com with SMTP id j2so16794830ybu.0;
-        Fri, 29 Apr 2022 14:47:07 -0700 (PDT)
-X-Gm-Message-State: AOAM530xFvgaS6E7YleebaxYuHKbztMb8/4ph6JAKkapt9mvY51Aq0Ot
-        ghcHJQm/ZtGSH1zgWh+MyICM7xk9gzphi+BehZs=
-X-Google-Smtp-Source: ABdhPJwtcBUeQCwBE/wHCTNSMt9GmZKG8b0zElf3XSRBB+ltEsvmy5fENkUQ3EnsgyBJ9WDIgobY6XmBd5vZorZaAUk=
-X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
- e185-20020a25d3c2000000b0064574dff43dmr1535991ybf.394.1651268826333; Fri, 29
- Apr 2022 14:47:06 -0700 (PDT)
+        with ESMTP id S1359568AbiD2WAd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Apr 2022 18:00:33 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4E8DC594;
+        Fri, 29 Apr 2022 14:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=eS25PhwvZQoNO/vrdkaYeu8w1J4I4bLwd4ZTs99JyTA=; b=ECdoj8MPrPw94rqNJkzG67Xg6u
+        5w3+r9FZKL3W6Sz5zRa77JB5F86agKTzGYxwlLLEiZXrXTSk2m+k2FuOzlO52C0njkoCAxgy+FOi4
+        NbVcSL4Lztxu2l4Ffp2YNwJJ/Y8NKCykCEJYOFD8NTX9U/x1OlE0AF3cSiTkk6ArLGAdmnn9RzvKe
+        +YDGf9dxyEhvGPz5vqubLFDl4xc7G7O1n7kxIDUk0ceOUg9ZGVixjcU3/TKND9q/DVjCWl1sG0kaE
+        cUjiBbJ/0Gd+0GoqtFAQ2G5bnqvlp008GZC0sOTWOBCZAoUh5dk2HlkdBig7SM6f3egXphVF+FJ+M
+        iEBg1fYA==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkYbf-00026w-BA; Fri, 29 Apr 2022 23:56:55 +0200
+Message-ID: <32495ca6-d79a-a932-a8e3-19ef54c44c48@igalia.com>
+Date:   Fri, 29 Apr 2022 18:56:24 -0300
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
-In-Reply-To: <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 29 Apr 2022 23:46:50 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
-Message-ID: <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:aUt4162Q8o+llL/MljFLEZxLfqetFKE837pmri7fn06Ux+pHE2E
- HUT40C4ROecFrWGMuh7FZHUctHZLox8PPsZXleJUgvy9mYBXJ8pKhdYxSRIruSY/aMB/RDF
- U1BEI7N5/2VG8u6N+C3m4+nlZOlEtD7a52T70wiK6/at/danyT6j0f35GJC0igmu+zlPp3o
- hPSAJrfl8wT08SeKcbKDw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:B6AOKPVl318=:2wVX5LiQoMRiBhVxLqNc5a
- 6bfir268MD5gQH7DLEuFEsI6WBBc1Y0Ecs6EnhuRsx1K24LuPMh07aYEIpKkcwNAAZfYMwflw
- pGzfeN1TqZ/DZE0Y6jB9FtL7K+04AeCNHTMZ//8xkL4V0xYBxZAP9BTVlcnEyvTsUYwS2Btg4
- vlnJGv66VRl18T+sqQf7xxVhibK8Wq70YGqiM+Po4/0hQXeq8MB/INm4yKnqmNUInDxTfWLHT
- +mmUB0ji5qRvID6/tQH6xrbVdNsZo18KfNLKu/B1CiwzBdT/gKJkj4pXgPVXoMq36ig2Ctu3M
- adeEof/gPY3eELgS/LtY8Tbwxt40i+enALDiuH+GuPG8sIJGRQ0u8jm4WbQbxpqtQReV/BoN/
- /0RaUvbG5bCVJ2ZEbQ75GA30AyoYlAIl5/wde1yMLwwVxBXeLmxlq3y/5eFktLuUskS6GspAY
- H1p4xOJbdwpqwlZHG7GYDtZtFwFoQe2yR7IlaVupWMwQ5kJ/5ARJKy1MGSNGWNv9ynnIW+16q
- 3r268R/MBM52lW3YHXF62SBnvoquSaaU0AJxZ9zbLVABj6pPn6KV9tk5Ri1US3zrFLmBPLvvv
- Pd2lciRs/sx2sA+uA6qqK5g0AxTGPfqYDnIHsA76v0M12oIDEVwlBMOnEAJdPKnF+gy/ZbI0Y
- CtrOeY8EtfkkI4G1vJ1cBEfVKh2jeGqkGpPNTOEJVIAhIn/1s31hjRkhpC7US2ZEOj5g=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 02/30] ARM: kexec: Disable IRQs/FIQs also on crash CPUs
+ shutdown path
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        hidehiro.kawai.ez@hitachi.com, jgross@suse.com,
+        john.ogness@linutronix.de, keescook@chromium.org, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-3-gpiccoli@igalia.com> <87mtg392fm.wl-maz@kernel.org>
+ <71d829c4-b280-7d6e-647d-79a1baf9408b@igalia.com>
+ <Ymxcaqy6DwhoQrZT@shell.armlinux.org.uk>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Ymxcaqy6DwhoQrZT@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 4/29/22 10:48, Guenter Roeck wrote:
-> >
-> > I tried the pxa-multiplatform-5.18 branch. Its failures match
-> > those in v5.18-rc1.
-> >
->
-> Uuh, wait, the build wasn't complete. There are still some
-> failures. I'll report later.
+On 29/04/2022 18:45, Russell King (Oracle) wrote:
+> [...]
+>> Marc, I did some investigation in the code (and tried/failed in the ARM
+>> documentation as well heh), but this is still not 100% clear for me.
+>>
+>> You're saying IPI calls disable IRQs/FIQs by default in the the target
+>> CPUs? Where does it happen? I'm a bit confused if this a processor
+>> mechanism, or it's in code.
+> 
+> When we taken an IRQ, IRQs will be masked, FIQs will not. IPIs are
+> themselves interrupts, so IRQs will be masked while the IPI is being
+> processed. Therefore, there should be no need to re-disable the
+> already disabled interrupts.
+> 
+>> But crash_smp_send_stop() is different, it seems to IPI the other CPUs
+>> with the flag IPI_CALL_FUNC, which leads to calling
+>> generic_smp_call_function_interrupt() - does it disable interrupts/FIQs
+>> as well? I couldn't find it.
+> 
+> It's buried in the architecture behaviour. When the CPU takes an
+> interrupt and jumps to the interrupt vector in the vectors page, it is
+> architecturally defined that interrupts will be disabled. If they
+> weren't architecturally disabled at this point, then as soon as the
+> first instruction is processed (at the interrupt vector, likely a
+> branch) the CPU would immediately take another jump to the interrupt
+> vector, and this process would continue indefinitely, making interrupt
+> handling utterly useless.
+> 
+> So, you won't find an explicit instruction in the code path from the
+> vectors to the IPI handler that disables interrupts - because it's
+> written into the architecture that this is what must happen.
+> 
+> IRQs are a lower priority than FIQs, so FIQs remain unmasked.
+> 
 
-Sorry about the breakage, I got a few more reports about minor build errors
-and warnings, the newly uploaded branches should address all of the ones
-I got reports for.
+Thanks a lot for the *great* explanation Russell, much appreciated.
+So, this leads to the both following questions:
 
-        Arnd
+a) Shall we then change the patch to only disable FIQs, since it's panic
+path and we don't want secondary CPUs getting interrupted, but only
+spinning quietly "forever"?
+
+b) How about cleaning ipi_cpu_stop() then, by dropping the call to
+local_irq_disable() there, to avoid the double IRQ disabling?
+
+Thanks,
+
+
+Guilherme
