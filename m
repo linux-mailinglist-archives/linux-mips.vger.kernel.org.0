@@ -2,34 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD57514E92
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Apr 2022 16:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FA3514EC6
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Apr 2022 17:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377307AbiD2PBB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Apr 2022 11:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S1377676AbiD2PO7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Apr 2022 11:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377444AbiD2PBB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Apr 2022 11:01:01 -0400
+        with ESMTP id S1378115AbiD2PO6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Apr 2022 11:14:58 -0400
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65BFDB647F;
-        Fri, 29 Apr 2022 07:57:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B163ED4477;
+        Fri, 29 Apr 2022 08:11:39 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id C597E92009C; Fri, 29 Apr 2022 16:57:42 +0200 (CEST)
+        id C540B92009C; Fri, 29 Apr 2022 17:11:38 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id C093192009B;
-        Fri, 29 Apr 2022 15:57:42 +0100 (BST)
-Date:   Fri, 29 Apr 2022 15:57:42 +0100 (BST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id BEEC492009B;
+        Fri, 29 Apr 2022 16:11:38 +0100 (BST)
+Date:   Fri, 29 Apr 2022 16:11:38 +0100 (BST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Joshua Kinard <kumba@gentoo.org>,
-        Stephen Zhang <starzhangzsd@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] MIPS: IP30: Remove incorrect `cpu_has_fpu' override
-In-Reply-To: <alpine.DEB.2.21.2204291523460.9383@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2204291539220.9383@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2204291523460.9383@angie.orcam.me.uk>
+cc:     Stephen Zhang <starzhangzsd@gmail.com>, liam.howlett@oracle.com,
+        ebiederm@xmission.com, alobakin@pm.me, f.fainelli@gmail.com,
+        paul@crapouillou.net, linux@roeck-us.net, anemo@mba.ocn.ne.jp,
+        zhangshida@kylinos.cn, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: undefine and redefine cpu_has_fpu when it is
+ overrided
+In-Reply-To: <20220429095104.GA11365@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2204291559490.9383@angie.orcam.me.uk>
+References: <20220429032621.674865-1-starzhangzsd@gmail.com> <20220429095104.GA11365@alpha.franken.de>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -41,33 +43,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu' 
-kernel parameter non-functional, and also causes a link error:
+On Fri, 29 Apr 2022, Thomas Bogendoerfer wrote:
 
-ld: arch/mips/kernel/traps.o: in function `trap_init':
-./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
+> > diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
+> > index de8cb2ccb781..38eb469008b6 100644
+> > --- a/arch/mips/include/asm/cpu-features.h
+> > +++ b/arch/mips/include/asm/cpu-features.h
+> > @@ -134,6 +134,10 @@
+> >  # endif
+> >  #else
+> >  # define raw_cpu_has_fpu	cpu_has_fpu
+> > +# ifndef CONFIG_MIPS_FP_SUPPORT
+> > +#  undef cpu_has_fpu
+> > +#  define cpu_has_fpu		0
+> > +# endif
+> >  #endif
+> >  #ifndef cpu_has_32fpr
+> >  #define cpu_has_32fpr		__isa_ge_or_opt(1, MIPS_CPU_32FPR)
+> > -- 
+> > 2.30.2
+> 
+> I prefer just removing the #defines from ip27/ip30 cpu-feasture-overrides.h. 
+> Or isn't that enough for fixing the problem ?
 
-where the CONFIG_MIPS_FP_SUPPORT configuration option has been chosen.
+ That's what I've meant, and I have now posted fixes, successfully 
+build-tested.
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Fixes: 7505576d1c1a ("MIPS: add support for SGI Octane (IP30)")
-Cc: stable@vger.kernel.org # v5.5+
----
- arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h |    1 -
- 1 file changed, 1 deletion(-)
+ Additionally I've thought of adding something like:
 
-linux-mips-ip30-cpu-has-fpu.diff
-Index: linux-macro/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-===================================================================
---- linux-macro.orig/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-+++ linux-macro/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-@@ -28,7 +28,6 @@
- #define cpu_has_4kex			1
- #define cpu_has_3k_cache		0
- #define cpu_has_4k_cache		1
--#define cpu_has_fpu			1
- #define cpu_has_nofpuex			0
- #define cpu_has_32fpr			1
- #define cpu_has_counter			1
+#if cpu_has_fpu
+# undef cpu_has_fpu
+#endif
+
+or maybe even:
+
+#if cpu_has_fpu
+# error "Forcing `cpu_has_fpu' to non-zero is not supported"
+#endif
+
+to arch/mips/include/asm/cpu-features.h, but maybe that's an overkill.
+
+  Maciej
