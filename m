@@ -2,62 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275B9515A2E
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Apr 2022 05:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025FC515A9E
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Apr 2022 07:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240648AbiD3DkW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Apr 2022 23:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S241149AbiD3FiJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 Apr 2022 01:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiD3DkV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Apr 2022 23:40:21 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1367E8165B;
-        Fri, 29 Apr 2022 20:37:01 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id gh6so18724892ejb.0;
-        Fri, 29 Apr 2022 20:37:01 -0700 (PDT)
+        with ESMTP id S234582AbiD3FiI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 Apr 2022 01:38:08 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD7391342;
+        Fri, 29 Apr 2022 22:34:47 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id y3so18836413ejo.12;
+        Fri, 29 Apr 2022 22:34:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=kT+smoqxUUOo2Ktb3O9J5lGl3PYg+G58BG/KvkNJLgY=;
-        b=dOOyVJ1DSf5EiPM0yEiLtTWcQTVfi5wciGDnyaADIduC2+gcdvYlI5tRYQTCHnDhSr
-         LXM7EkzvctBcMF1FminCCFJCS8vCeJtg89aARu0QtQuzx4LOFhqFXLU3eLjm4dWCYU6Q
-         uhQeXljguvxrXhdWkrdjYoGZv31V4VjbY/1d3A/L1tEHt/0l3qyF5jRzpaRh9yUqh2eE
-         kwpPGEpbRyu2V/jHmgUw1VNKSlc9yqC2a5stheuULoxj29pfhDmB6iO7y+p2zYWWYpz6
-         rYvifEr9NB8PQ9rBL5phInZwyTaiEOYcwb+u5YXNMLX0pXqm2BHHny8hO9UKg7ZEJjd5
-         u3Og==
+        bh=kUvoGB2vDTB7zKqGhOjlw+/YLAVmdFV6vFxR9oHDumk=;
+        b=Y/CaqPLaYXggxB+HrGYzO7DYWHg3xIBTYE6gTohBSr24E+9+SSwfDI2+FnDZ6TfSg1
+         okaEsqqoJeeCVH9PyFvuo0gvbnHUx4CgBGXyhaDdWWcjHVAURoSgKd/5s032HLo9QKc1
+         B11PKT0d0LqfcQGeHZO/oBF8CTIg3P6obmOPqZtwmVTo/XoFhUL5sRFJ5Y+krsYzl/9i
+         86R2aV0R7wUbnEz8+vDRG8mHjBBl+seU/KoTPRHPFIwNxuDGVMYTgELYIZAHjwKwrIvS
+         qYu1EAgmJuHTa50STjEs/nr99cuK+N1D660qT19/JiqUHDK4XncR15GnlD0faTEy5sda
+         7T+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kT+smoqxUUOo2Ktb3O9J5lGl3PYg+G58BG/KvkNJLgY=;
-        b=p6kNj4EolSZ8O2yUel6FfMdvb8z3IuLrydGVsnO+fEMJ+YZ/8eFDb4p8WvZpEbkRPu
-         CdvZ2idaN4nMPYRLQx2dX+U7lf/5YMHLeqrGao83U4Q3j4wFwNAKNfZrS7z2rItlxjjS
-         +IkLpSfwYxgOK1wn5f88ol1CNx6fh/lws1VK/ttOlfiIWA1VRjbzXWzVOw+wuaB4WUbZ
-         4QpmOagUU77JmsbU6kZiTMQEq3/dcUbGORMVttVIJeaBksIez2COi7cwQHuNCGh1flyS
-         gJnAbSWmzjXqGzPADFGcaxyuM9k+RIMnPsN5rP9eJypvu1oB4u8NRbSVezfV4lhTHzdC
-         Fn5w==
-X-Gm-Message-State: AOAM532GiVcUJriZwP99A1SryzprePkR60+bREjZ0/WejsiaNkJLCvRN
-        +LODXshzJz539K68TJ3nN888Il1DPuhwQ7v0E7g=
-X-Google-Smtp-Source: ABdhPJxSwa0ZvThB2y7U1qXJuytrsR3sAUODm38c/6umMoXT+nuUmT29GgsL+afa8y+EZwJlI96akhGnLOunEcy24Ng=
-X-Received: by 2002:a17:906:6a0d:b0:6f3:b341:3b94 with SMTP id
- qw13-20020a1709066a0d00b006f3b3413b94mr2262811ejc.31.1651289819573; Fri, 29
- Apr 2022 20:36:59 -0700 (PDT)
+        bh=kUvoGB2vDTB7zKqGhOjlw+/YLAVmdFV6vFxR9oHDumk=;
+        b=hCFCgDPu+Zr7ftosoR0CTAMcMk9jsjTYpBblX+scx0OQ1YNQufPV6HmtMrzVLCf7gb
+         QAbEAEKF9b8C/GllPISCJf1GuGRA79NLg9R7xW91yUsIrC/HwdxBr4eMSQ6/xAovZS51
+         N2hYP/Fqn21cOk8WbDfCcAnQyJIdAggs2NxmXeQsnwiLf41wKuO0b8vfVAcKkXXVEV/B
+         iUIh+OlVnQDKO2Iv01Wo6w526cdIpxBLI/x+jTnOaPPN1UGbNeCXnEFwW/mugWaB0Q9k
+         1ne1iFwG5itAgPPObDP4MLf7Mkb8SQdHHfC91nHgXUn3hrtuIHSp4HnkDAOauX0DDK0n
+         AnWA==
+X-Gm-Message-State: AOAM5322xVEaTTV/b2J0X5cS+OpFgjVNcqETYmC2KIQhl19mqU1DbZfF
+        eHmq00BKgwu5Fn8xw5Ny109/z+SKPaIOZD52rT0=
+X-Google-Smtp-Source: ABdhPJxJAqEg8V6/D8YvyXFayXOvq3GMvJ6PyyBNRoA02ey3oD+yuHLfj8B3ddpA4jtSUXAQfVw16aQHi10JmJ3gVv0=
+X-Received: by 2002:a17:906:974e:b0:6bb:4f90:a6ae with SMTP id
+ o14-20020a170906974e00b006bb4f90a6aemr2597805ejy.452.1651296886177; Fri, 29
+ Apr 2022 22:34:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429032621.674865-1-starzhangzsd@gmail.com>
- <20220429095104.GA11365@alpha.franken.de> <alpine.DEB.2.21.2204291559490.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204291559490.9383@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2204291523460.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204291529070.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204291529070.9383@angie.orcam.me.uk>
 From:   Stephen Zhang <starzhangzsd@gmail.com>
-Date:   Sat, 30 Apr 2022 11:36:23 +0800
-Message-ID: <CANubcdWykz0j5BaGNhYMW16wX9UbfgsLdEs-ebNWCWP+p1OKWw@mail.gmail.com>
-Subject: Re: [PATCH v2] MIPS: undefine and redefine cpu_has_fpu when it is overrided
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     liam.howlett@oracle.com, ebiederm@xmission.com, alobakin@pm.me,
-        f.fainelli@gmail.com, paul@crapouillou.net, linux@roeck-us.net,
-        anemo@mba.ocn.ne.jp, zhangshida <zhangshida@kylinos.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Date:   Sat, 30 Apr 2022 13:34:08 +0800
+Message-ID: <CANubcdU99rke6AM4bQEyPNTkJbk1kMit1UVyDggTwTciTUeQMA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: IP27: Remove incorrect `cpu_has_fpu' override
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Joshua Kinard <kumba@gentoo.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,38 +68,27 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 Maciej W. Rozycki <macro@orcam.me.uk> =E4=BA=8E2022=E5=B9=B44=E6=9C=8829=E6=
-=97=A5=E5=91=A8=E4=BA=94 23:11=E5=86=99=E9=81=93=EF=BC=9A
+=97=A5=E5=91=A8=E4=BA=94 22:57=E5=86=99=E9=81=93=EF=BC=9A
 >
->  Additionally I've thought of adding something like:
+> Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
+> kernel parameter non-functional, and also causes a link error:
 >
-> #if cpu_has_fpu
-> # undef cpu_has_fpu
-> #endif
+> ld: arch/mips/kernel/traps.o: in function `trap_init':
+> ./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to =
+`handle_fpe'
+> ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference=
+ to `handle_fpe'
+> ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference=
+ to `handle_fpe'
 >
-> or maybe even:
+> where the CONFIG_MIPS_FP_SUPPORT configuration option has been chosen.
 >
-> #if cpu_has_fpu
-> # error "Forcing `cpu_has_fpu' to non-zero is not supported"
-> #endif
->
-> to arch/mips/include/asm/cpu-features.h, but maybe that's an overkill.
->
->   Maciej
 
-Yeah, but why do you think that's an overkill? There is a great chance
-people will ignore the note of 'cpu_has_fpu', and it did happen. When
-that happens, there should exist a way to point out  or fix that.
+Sorry, but I have a question. From the code in
+arch/mips/kernel/genex.S:567, 'handle_fpe=E2=80=99=E2=80=98s
+ definition is controlled by CONFIG_MIPS_FP_SUPPORT. Then how can it
+still report such
+error when the CONFIG_MIPS_FP_SUPPORT configuration option has been chosen.
 
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> =E4=BA=8E2022=E5=B9=B44=E6=
-=9C=8829=E6=97=A5=E5=91=A8=E4=BA=94 18:01=E5=86=99=E9=81=93=EF=BC=9A
->
-> I prefer just removing the #defines from ip27/ip30 cpu-feasture-overrides=
-.h.
-> Or isn't that enough for fixing the problem ?
->
-> Thomas.
-
-So maybe that's  why I don't think just removing the #defines from
-ip27/ip30 cpu-feasture-overrides.h. is enough for fixing the problem.
 
 Stephen.
