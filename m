@@ -2,29 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D43515D9A
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Apr 2022 15:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32689515E4B
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Apr 2022 16:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382767AbiD3Nfw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 30 Apr 2022 09:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
+        id S242317AbiD3Oql (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 Apr 2022 10:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345995AbiD3Nfu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 Apr 2022 09:35:50 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D66A94DF;
-        Sat, 30 Apr 2022 06:32:28 -0700 (PDT)
-Received: from mail-yw1-f169.google.com ([209.85.128.169]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M3lLh-1nl4Bt3v99-000pQ0; Sat, 30 Apr 2022 15:32:27 +0200
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f83983782fso110504427b3.6;
-        Sat, 30 Apr 2022 06:32:25 -0700 (PDT)
-X-Gm-Message-State: AOAM532+Srrgfiw+FMH9tlUhJmPawAp7fSUOMuowkUD0m+2hzILf+VGA
-        3SX9eAJFkKXpTnIP2py6rcLslPlJiNft3XmNYKw=
-X-Google-Smtp-Source: ABdhPJyQsAuOXuwqNSnE+0RumiMVY+a1YoHyKhCVHMghGQo3frV3I1QOJWPIvakdR8DFKer+m5ZGRHZJ5RFDwaJx/vI=
-X-Received: by 2002:a81:1dd1:0:b0:2ea:c38b:65a8 with SMTP id
- d200-20020a811dd1000000b002eac38b65a8mr3834670ywd.135.1651325544544; Sat, 30
- Apr 2022 06:32:24 -0700 (PDT)
+        with ESMTP id S231355AbiD3Oqj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 Apr 2022 10:46:39 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85B161295;
+        Sat, 30 Apr 2022 07:43:16 -0700 (PDT)
+Received: from mail-ot1-f42.google.com ([209.85.210.42]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mn2eN-1oAYcv3eXX-00kApA; Sat, 30 Apr 2022 16:43:15 +0200
+Received: by mail-ot1-f42.google.com with SMTP id w8-20020a9d5388000000b006060c4a9ee3so483894otg.10;
+        Sat, 30 Apr 2022 07:43:13 -0700 (PDT)
+X-Gm-Message-State: AOAM530lJLjGIGkDDyrzz26RBeTaJulD941ict7DOulu0ByeoygDj/K8
+        6EElQtNwsRwKvdAYHK7cp/6ch1znfnysExWofiY=
+X-Google-Smtp-Source: ABdhPJyu1oLM1IRKTqR+eQdQ1rsYTJoLMnuBV/FFpB8y5vKEh5sII8e/hMlA25PDcp1w4A+thLzVKyWiU6hDO089+bw=
+X-Received: by 2002:a0d:d804:0:b0:2f4:e47d:1c2c with SMTP id
+ a4-20020a0dd804000000b002f4e47d1c2cmr4143200ywe.320.1651328616903; Sat, 30
+ Apr 2022 07:23:36 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
  <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
@@ -36,15 +36,15 @@ References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209
  <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
  <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
  <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net> <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
- <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
-In-Reply-To: <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
+ <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net> <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Apr 2022 15:32:08 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
-Message-ID: <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
+Date:   Sat, 30 Apr 2022 16:23:20 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
+Message-ID: <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
 Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Daniel Mack <daniel@zonque.org>,
@@ -78,48 +78,70 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         ALSA Development Mailing List <alsa-devel@alsa-project.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:6ozNYDqoMexS7pdW43hedMtqIfcc4hU1ADSq42DWDp+Xgq1NNm2
- FSEQTiSyd0J98c4LVD7VXFQz1yk3PEhqiSyZtjRAPSFG2O75JYZMaxEiq6NQ0W+f2ozEs8u
- ovYliqNX06/xtOt91Mr/MQrvYWigJrVoOnR2IQxMG4T/GHpL8lDY9Eo4TtYCC4WcZiN5jDK
- FJ7BFUPWjwygAAJjoRsXQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nH0TOiOvIm8=:K4+xRin4M7FvWVCctlGgzj
- tieVqWIZ40XKn48G7IIChifQHzDcJsTFhNOy3acd3dRNGPrU/f9uoxu+c/xUTWHKz1Ttlx7xn
- 3HB+4HoNTYGE9BCaw383DjD0ZEsPXepdJz6iJMer9KWcXVYfVKJY20m6/pE0vIokXPUJHsMo+
- fwk4HyQji4KDyMAl0voLVenJnQkYFjW84VZNJrq/BXuaxVF/jyvk4WSQR+rHP3renkmKGivmU
- cAX8aabd7wiC7KvIe+8w8SjrGyzFbR6KNDFyfiYnAvpTlVQkdsl3ImaVbMY1gvXr1Q0Znm4+v
- 3C1FTGhqa3RB/ebkPhV8XHcf+n2+aHvCj41AlkyzIq6+Lldm0VVas+92BcWKpU5zQQTi3zhQP
- bPBt3p4paoWviZ9sQ+I6mpGJss0XR4a3XKh4yZ9AvbdLXQk0gIixsYmsT2jofEwM5wJEEuqIr
- 9HtxDuhA08c0WzhP5Z4CvD50MKxVeaYQ+PiTTUI+HS2EoZ9Dda84lF6K7pbwhjRxUXOCDI2Nb
- uahtYWfPKeFEj2el//jJx1JLYW/Fsc8q4DsiTD+vt7CcCdIZ4vVArfKPNP+Z/PCrbw4hwM5qQ
- IQIsRv56KNOykk+fxppJDSvGXkhYCLa5SpdlfjtA74XREnR4haTnrje2G3CAce4sC4xYrK8mW
- +OTl9s6A5iciP15nGEdl//QglsVNujFeFQC9VHIDyVuxQrQQG4tnQg/Bv69Bmm3fXnQwMyuCT
- EMALR1JT9/6m8FRd+mtzNKyILyupr9g6HkAoIlE5gkkCptkuVe51uTWuMnIB5uSbpmIIIuNXA
- jernuKbbiwnLgYwzABjQNdT9rokW3DOBC6sPuHDFF3jKRzYREQ=
+X-Provags-ID: V03:K1:H6IJBEz+ZpomKcFiPidyhkUxEF5w0DLXHe/vMZwISX/BHUEDMJn
+ 8j/HagrzkYpHjm2t/x9VBIXKuZQV3AqFInnFiSwWiMPGzFWgqdFaN5rcXKOnBegblTTz6EE
+ uMjlCJwhQjwp4SwKefBkyCGNKMB/lV4MYEcHOR/J4MeULTPINTxBzZPO8P1uDY4R9JHxRtP
+ 0MMFl3XheI0bnuRT/Sk3Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VPedLqT9np0=:7zewjiKp3tbI7dQZ8xe6nI
+ U8UyWjOB5sNHgwM5+P1UxSMkme5dnGMow4JYAXQQ+TyLo6IlRzottshuhG0lTTHDzwK9hQrlY
+ WYvK6HHh957URL/wUs3GqBxThWlKzULBdPhuatwg4rNa6ER5kWaDoomIGdUoaPtFyRGQlv/TI
+ 1THH6UeYG//B659nk9K8vn932sLO3QESSnVOErCi1lAtUnazuP71bmCtdQ9NFdeps5CgcKWd3
+ 1snKB2ECaTsCBZ4myNVW/ycvuSPkDjdAS+0HiSyY6BsCWQcWR3KQXJkVI53uYv8iZvCeYHYWk
+ LAoLR8GYSoqGu0Ogm6H3riBYXyT6TWPbLw3n8s9bF0eA1UeKPSMhmcNhAeP5cHaYDPebkOuMF
+ iAoQ4UQqc5wSQRxeOEbTatJd+YoZzPf1eRftohhpaGfZswgOUEkty3hzYs7Dy2YzMErRkARB0
+ 2t/42VQiWjkml54rDgbucXTDT2nqxnASsJfyCVnBC4r8MYeqQACR8cJpHNXkPEa9rj8iYwsP8
+ azvt6us6rZIC6gpX2nXLnNRBi4FqMELPeKL0pY7lskwIZKw6UnbHe5uOUOeKuUkwNsuxJNodk
+ m+0P6Io3MXrOI3z/mHHUgs52ZL/DSK+5dnEj0ajN29iX2nYVMlV5rsNwhO+YEDK0xm0hl451K
+ QG2G8hAuzwVzXeUY4LHg5uUFifmMYEhKR49z3K60I6J0brkvufGKlMgjl3pfD3/H65u1slhxb
+ xkRJqjsZLimrMAQQM5VL0URHZgEoVMI6lTiza95jjdhehR2zvCmXW7h88TViDEodkWXvCu2PE
+ mtOr5S65VuWBVzrJV26tfgq81fvr+wRRe+GnTvbKD3PrbnwkmQ=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 2:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 4/30/22 01:04, Arnd Bergmann wrote:
-> > and concluded that it must have done this for a long time. In my own qemu
-> > instance, I see a crash from iWMMXt, but that works fine on your machine.
-> > OTOH, your failed instances all look like they either time out or
-> > failed to find a
-> > rootfs. I tried passing an MMC device as root, and that works here.
-> >
+On Sat, Apr 30, 2022 at 3:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Booting from mmc works for me as well. Booting from pcmcia worked before,
-> so I assume that there must be some regression.
+> On Sat, Apr 30, 2022 at 2:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On 4/30/22 01:04, Arnd Bergmann wrote:
+> > > and concluded that it must have done this for a long time. In my own qemu
+> > > instance, I see a crash from iWMMXt, but that works fine on your machine.
+> > > OTOH, your failed instances all look like they either time out or
+> > > failed to find a
+> > > rootfs. I tried passing an MMC device as root, and that works here.
+> > >
+> >
+> > Booting from mmc works for me as well. Booting from pcmcia worked before,
+> > so I assume that there must be some regression.
+>
+> Ok, got it, and managed to reproduce the hang now. My "ARM: pxa/sa1100: move
+> I/O space to PCI_IOBASE" patch managed to get it to the point of detecting
+> the pcmcia device instead of crashing, so I assumed it was enough when it
+> clearly was not. Before that patch, it still works, afterwards it hangs with
+> "pata_pcmcia: probe of 0.0 failed with error -12" as mentioned above. I'll
+> have another look.
 
-Ok, got it, and managed to reproduce the hang now. My "ARM: pxa/sa1100: move
-I/O space to PCI_IOBASE" patch managed to get it to the point of detecting
-the pcmcia device instead of crashing, so I assumed it was enough when it
-clearly was not. Before that patch, it still works, afterwards it hangs with
-"pata_pcmcia: probe of 0.0 failed with error -12" as mentioned above. I'll
-have another look.
+Got it: as the PCMCIA bus on this machine is the only thing with an I/O space,
+I assigned it port number range 0-0x1000, with an io_offset of 0, but this
+was apparently unexpected and triggered this sanity check:
 
-       Arnd
+static int static_find_io(struct pcmcia_socket *s, unsigned int attr,
+                        unsigned int *base, unsigned int num,
+                        unsigned int align, struct resource **parent)
+{
+      if (!s->io_offset)
+              return -EINVAL;
+      ...
+      return 0;
+}
+
+I moved the devices around now, giving zeus/viper I/O space an offset of
+zero, and moving PCMCIA to offset 0x10000 and 0x11000 for the two slots,
+which now works because the io_offset is nonzero. I've regenerated the
+branches again, and confirmed the for-next branch still boots from pcmcia.
+
+        Arnd
