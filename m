@@ -2,38 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6453B515E95
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Apr 2022 17:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921B7515ED1
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Apr 2022 17:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242644AbiD3PMs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 30 Apr 2022 11:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S242874AbiD3Plq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 Apr 2022 11:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242596AbiD3PMq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 Apr 2022 11:12:46 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E44EB49CB0;
-        Sat, 30 Apr 2022 08:09:24 -0700 (PDT)
+        with ESMTP id S1382994AbiD3Plh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 Apr 2022 11:41:37 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DBDFA2049;
+        Sat, 30 Apr 2022 08:38:09 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 2EDE592009C; Sat, 30 Apr 2022 17:09:24 +0200 (CEST)
+        id 2B1B89200BF; Sat, 30 Apr 2022 17:38:08 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 2799B92009B;
-        Sat, 30 Apr 2022 16:09:24 +0100 (BST)
-Date:   Sat, 30 Apr 2022 16:09:24 +0100 (BST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 24B0A9200B3;
+        Sat, 30 Apr 2022 16:38:08 +0100 (BST)
+Date:   Sat, 30 Apr 2022 16:38:08 +0100 (BST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Stephen Zhang <starzhangzsd@gmail.com>
 cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Joshua Kinard <kumba@gentoo.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] MIPS: IP27: Remove incorrect `cpu_has_fpu'
- override
-In-Reply-To: <CANubcdU99rke6AM4bQEyPNTkJbk1kMit1UVyDggTwTciTUeQMA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2204301607380.9383@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2204291523460.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204291529070.9383@angie.orcam.me.uk> <CANubcdU99rke6AM4bQEyPNTkJbk1kMit1UVyDggTwTciTUeQMA@mail.gmail.com>
+        liam.howlett@oracle.com, ebiederm@xmission.com, alobakin@pm.me,
+        f.fainelli@gmail.com, paul@crapouillou.net, linux@roeck-us.net,
+        anemo@mba.ocn.ne.jp, zhangshida <zhangshida@kylinos.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: undefine and redefine cpu_has_fpu when it is
+ overrided
+In-Reply-To: <CANubcdWykz0j5BaGNhYMW16wX9UbfgsLdEs-ebNWCWP+p1OKWw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2204301609310.9383@angie.orcam.me.uk>
+References: <20220429032621.674865-1-starzhangzsd@gmail.com> <20220429095104.GA11365@alpha.franken.de> <alpine.DEB.2.21.2204291559490.9383@angie.orcam.me.uk> <CANubcdWykz0j5BaGNhYMW16wX9UbfgsLdEs-ebNWCWP+p1OKWw@mail.gmail.com>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -44,25 +45,62 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Sat, 30 Apr 2022, Stephen Zhang wrote:
 
-> > Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
-> > kernel parameter non-functional, and also causes a link error:
+> >  Additionally I've thought of adding something like:
 > >
-> > ld: arch/mips/kernel/traps.o: in function `trap_init':
-> > ./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
-> > ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
-> > ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
+> > #if cpu_has_fpu
+> > # undef cpu_has_fpu
+> > #endif
 > >
-> > where the CONFIG_MIPS_FP_SUPPORT configuration option has been chosen.
+> > or maybe even:
 > >
+> > #if cpu_has_fpu
+> > # error "Forcing `cpu_has_fpu' to non-zero is not supported"
+> > #endif
+> >
+> > to arch/mips/include/asm/cpu-features.h, but maybe that's an overkill.
 > 
-> Sorry, but I have a question. From the code in
-> arch/mips/kernel/genex.S:567, 'handle_fpe’‘s
->  definition is controlled by CONFIG_MIPS_FP_SUPPORT. Then how can it
-> still report such
-> error when the CONFIG_MIPS_FP_SUPPORT configuration option has been chosen.
+> Yeah, but why do you think that's an overkill? There is a great chance
+> people will ignore the note of 'cpu_has_fpu', and it did happen. When
+> that happens, there should exist a way to point out  or fix that.
 
- Good catch, thanks!  For some reason I inverted the condition in my mind 
-as I wrote the change description.  I have now posted v2 with the mistake 
-corrected.
+ Maybe it's the language, but my intent has been to express my uncertainty 
+here rather than asserting that indeed it is an overkill.
+
+ People do make mistakes from time to time, both code writers and 
+reviewers do.  It's not clear to me where to draw the line for safety 
+checks though.
+
+ Here `cpu_has_fpu' is a bit unusual in that unlike with the other feature 
+override macros we don't want it to expand to a non-zero constant.  The 
+comment didn't work twice, though I suspect both cpu-feature-overrides.h 
+files may have been written before the comment went in (I'm fairly sure 
+the IP30 port lived outside the tree for a while).  But I have only added 
+the comment in the first place when I tripped over the `nofpu' option not 
+working for the machine I needed to run FPU emulator verification with, 
+and several platforms were fixed alongside.
+
+ Given these circumstances it probably makes sense to have such a safety 
+check after all.
+
+> > I prefer just removing the #defines from ip27/ip30 cpu-feasture-overrides.h.
+> > Or isn't that enough for fixing the problem ?
+> >
+> > Thomas.
+> 
+> So maybe that's  why I don't think just removing the #defines from
+> ip27/ip30 cpu-feasture-overrides.h. is enough for fixing the problem.
+
+ Well, that *is* the fix for the problem at hand, as this macro is not 
+supposed to be defined such as to expand to a non-zero constant.
+
+ Adding a safety check would be a separate improvement.  Please feel free 
+to submit one.
+
+ We need to keep fixes and improvements as separate changes.  For one 
+fixes can be candidates for backporting while improvements are never 
+backported; cf. Documentation/process/stable-kernel-rules.rst.
+
+ I hope this clears your concerns.  Let me know if you have further 
+questions.
 
   Maciej
