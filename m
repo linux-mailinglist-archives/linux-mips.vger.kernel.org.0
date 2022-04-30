@@ -2,105 +2,163 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE64515B3D
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Apr 2022 10:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFAA515B52
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Apr 2022 10:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382341AbiD3IEO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 30 Apr 2022 04:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S1382358AbiD3IIe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 Apr 2022 04:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350868AbiD3IEI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 Apr 2022 04:04:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC7523BD6;
-        Sat, 30 Apr 2022 01:00:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDE52B81CEB;
-        Sat, 30 Apr 2022 08:00:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 85970C385AA;
-        Sat, 30 Apr 2022 08:00:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651305641;
-        bh=pe08Mdjqla3FNT96mNNuQXP8ILn0+/mHR01kJNYaDic=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kpvXG6gAXQ7u8p7VNWhLHi8OioRjTUEMNeyaytnu64Tlm3WDc+9G65aHyH17I6Diz
-         5jBIXhCOYaE9MWPbblLVP34glVbcEXDFadZeC1m/ozWT0DtLOuk2lY2OLQTqEZxjcv
-         UF1SUB7qrKBQNqJGV7DS+LErHbW5e24ev50IE4aqZ37tG1QD6bYzt2wRvMtP19xyET
-         kb+hm3gSIlqoDwVSbGXCbAfFHb5+Fm+WKfhA6RRKW2aw3Bc5cVLkCO390GaRHqO0JS
-         QYcBYGc+38fsaLliNEJEjp8cr1wYSjcYriu5X5/AHsphXMh14EX8ojqfJUpVrlLxY1
-         S/K+3C67aDB6Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DB96E8DBDA;
-        Sat, 30 Apr 2022 08:00:41 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230511AbiD3IIc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 Apr 2022 04:08:32 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADA81F601;
+        Sat, 30 Apr 2022 01:05:08 -0700 (PDT)
+Received: from mail-yw1-f179.google.com ([209.85.128.179]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MHX7f-1ngZDn1G89-00DXMm; Sat, 30 Apr 2022 10:05:06 +0200
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso105925027b3.5;
+        Sat, 30 Apr 2022 01:05:04 -0700 (PDT)
+X-Gm-Message-State: AOAM533xqCo+pqTgEdk3t68FdBEfQCR1LcHYhjkFQWze4r6WRwPe/SKf
+        djy1ZfzlVfSGf7Cty2LlR1MqsdZ6atlEV7pEziI=
+X-Google-Smtp-Source: ABdhPJxIMDnLMjNypqGxsmgcfR7ZUL75Dsm3yzSBDwMin5TKOLRH68mEJhbPriu8EYo0bqonSau57unAkS8+mfbVn7s=
+X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
+ m125-20020a0dfc83000000b002e5b0f4c125mr3009265ywf.347.1651305903889; Sat, 30
+ Apr 2022 01:05:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3] net: SO_RCVMARK socket option for SO_MARK with
- recvmsg()
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <165130564137.32506.12098247313333350008.git-patchwork-notify@kernel.org>
-Date:   Sat, 30 Apr 2022 08:00:41 +0000
-References: <20220427200259.2564-1-lnx.erin@gmail.com>
-In-Reply-To: <20220427200259.2564-1-lnx.erin@gmail.com>
-To:     Erin MacNeil <lnx.erin@gmail.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, arnd@arndb.de, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        socketcan@hartkopp.net, mkl@pengutronix.de, robin@protonic.nl,
-        linux@rempel-privat.de, kernel@pengutronix.de,
-        alex.aring@gmail.com, stefan@datenfreihafen.org,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        jk@codeconstruct.com.au, matt@codeconstruct.com.au,
-        vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, edumazet@google.com, lmb@cloudflare.com,
-        ptikhomirov@virtuozzo.com, m@lambda.lt, hmukos@yandex-team.ru,
-        sfr@canb.auug.org.au, weiwan@google.com, yangbo.lu@nxp.com,
-        fw@strlen.de, tglx@linutronix.de, rpalethorpe@suse.com,
-        willemb@google.com, liuhangbin@gmail.com, pablo@netfilter.org,
-        rsanger@wand.net.nz, yajun.deng@linux.dev,
-        jiapeng.chong@linux.alibaba.com, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+ <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com> <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
+In-Reply-To: <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 30 Apr 2022 10:04:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+Message-ID: <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:6ELo6aWZ/AVT/h2IKTPL1/oF3s8PLFtinj2cmsv3MhMMbc5hjot
+ hLyyhifXaK+a6ahQyyWy1km/IWQxSq3MLQ0ISIDZNjnHBeGaFURioUFgLw+WjNYxKuw5EVS
+ dimLcxr+iyF1IKTlkTu/NvMwHi0G+6LLreUrPUSYPAx+Hh/aFHCg9q0MRcjevaEZnfEfp7/
+ CFqGylxWC7n4sP9ADC09g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:KdWF3kDIRlY=:U6mK5dyEyj/AbvznimN/C3
+ Ts0726ANLRkytNW2iGPeTTb3UDc2gTD9XQrqQ6M2mcIIHr2fwn5llpqh2MPqiFnO/wevWwbm1
+ U9SHSgo4duBCZCv7iDkGmHeAIfWFyJ29KEgJKNddc96IC3ISz36PmQTIQ6mgCP9NM53g5IDrh
+ HD8pSbzqX7srB94lmmCy6h1CnPJ/A1f6OPnMXai3ddugX/eRFpsknp7O+YgzYth9dH2KhGWhe
+ 2ISBVhjgGvBVkK991IYW4EOOTYDLSNgehunxyDxOiia8WaSTuHbHn4Q2yP6M8Trg8mgoAbtFD
+ Oilf4QNYgJJkgJRNVfYhZmooyltnz0ebcpKUfTX/pcHLognokKq0PkmeHBPdBLXcQuLR4JAWg
+ DpFM2DU7O6/Z3IN9sQOwYJVm3k1PkgIBOEhTXeOEi6E/VmDMKOvohKdCxnLDW6L6HFUKxmjnD
+ kwZTQgy4VZD+uVXm+Wcoyog8ULwuE4TqhjJ3URUvzZfX2nzN1t1Rd+YIKMlDAl15NfKTcxFAB
+ sw32bWvqXoa7We/cN9kIvFc4rOmZyu+hbClBZMjep/QjwB5aXOoLVCclqsgvNPoyx7S73aYuh
+ ORyBsz2YkCDXDpYrFcR8aki4b0lOAMo+NR7rj71DVR4jVJGVu6PijUylsX5pSZNau1+SCU32P
+ Zq80V50uf8PbyozzcFXQfkuSmXj9VCsKB2COSp5fNhvLY9LEY5kq3MlMFDIapn/0SGjfEyTwJ
+ rSqd7cqtK8k891zj+D8VJhKOSxsLbpUW2R+dB7w5tEiuFV7ta6e/aWpRwDtbDgaJ5pQVUttvM
+ A75m099WaHVuaoYkbgtarYJh/WtWNVgeo1oP1Ga3MpX+ESVqfA=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello:
+On Sat, Apr 30, 2022 at 1:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 4/29/22 14:46, Arnd Bergmann wrote:
+> > On Fri, Apr 29, 2022 at 10:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >> On 4/29/22 10:48, Guenter Roeck wrote:
+> >>>
+> >>> I tried the pxa-multiplatform-5.18 branch. Its failures match
+> >>> those in v5.18-rc1.
+> >>>
+> >>
+> >> Uuh, wait, the build wasn't complete. There are still some
+> >> failures. I'll report later.
+> >
+> > Sorry about the breakage, I got a few more reports about minor build errors
+> > and warnings, the newly uploaded branches should address all of the ones
+> > I got reports for.
+> >
+>
+> Unless I am missing something the failures are the same as before. See
+> https://kerneltests.org/builders/qemu-arm-testing/builds/74/steps/qemubuildcommand/logs/stdio
+>
+> This is with v5.18-rc1-49-ge8ab9a9a2745 which is the tip of
+> soc/pxa-multiplatform-5.18.
+>
+> Should I check a different branch ?
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+I only addressed the pcmcia probe failure that you reported for the
+final pxa patch, which
+previously caused a NULL pointer reference here:
 
-On Wed, 27 Apr 2022 16:02:37 -0400 you wrote:
-> Adding a new socket option, SO_RCVMARK, to indicate that SO_MARK
-> should be included in the ancillary data returned by recvmsg().
-> 
-> Renamed the sock_recv_ts_and_drops() function to sock_recv_cmsgs().
-> 
-> Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
-> 
-> [...]
+[    1.405319] PC is at pcmcia_init_one+0xf8/0x27c
+[    1.405476] LR is at devres_add+0x40/0x6c
+[    1.405611] pc : [<c04bdea0>]    lr : [<c044d808>]    psr: a0000113
+[    1.405846] sp : c48a5d00  ip : c15f4220  fp : 60000113
+[    1.406026] r10: 00000000  r9 : c48b000e  r8 : c48b0000
+[    1.406195] r7 : feeb0000  r6 : feeb000e  r5 : c15ec090  r4 : c15ec020
+[    1.406395] r3 : 00000002  r2 : 00000000  r1 : c15f4200  r0 : feeb000e
 
-Here is the summary with links:
-  - [net-next,v3] net: SO_RCVMARK socket option for SO_MARK with recvmsg()
-    https://git.kernel.org/bluetooth/bluetooth-next/c/6fd1d51cfa25
+This now seems to work:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[    1.435846] pcmcia_socket pcmcia_socket1: pccard: PCMCIA card
+inserted into slot 1
+[    1.456350] pcmcia_socket pcmcia_socket0: pccard: PCMCIA card
+inserted into slot 0
+[    1.457489] pcmcia 0.0: pcmcia: registering new device pcmcia0.0 (IRQ: 217)
+[    1.460275] pata_pcmcia: probe of 0.0 failed with error -12
 
+So it sounds like there are additional bugs that I have to look at. I
+probably won't
+be able to do that in time for the merge window. The logs contain a number of
+warnings, but I have no idea which ones of those are preexisting issue. I had
+a look at
 
+[    0.689982] pxa-dma pxa-dma.0: error -ENXIO: IRQ index 1 not found
+
+and concluded that it must have done this for a long time. In my own qemu
+instance, I see a crash from iWMMXt, but that works fine on your machine.
+OTOH, your failed instances all look like they either time out or
+failed to find a
+rootfs. I tried passing an MMC device as root, and that works here.
+
+         Arnd
