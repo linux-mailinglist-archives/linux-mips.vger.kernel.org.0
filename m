@@ -2,34 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7721E51689D
-	for <lists+linux-mips@lfdr.de>; Mon,  2 May 2022 00:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B1B5168B8
+	for <lists+linux-mips@lfdr.de>; Mon,  2 May 2022 00:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378506AbiEAWRz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 May 2022 18:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        id S230199AbiEAWoJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 May 2022 18:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378175AbiEAWRw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 May 2022 18:17:52 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F8D42DFC;
-        Sun,  1 May 2022 15:14:23 -0700 (PDT)
+        with ESMTP id S234297AbiEAWoH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 May 2022 18:44:07 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94C3C14023;
+        Sun,  1 May 2022 15:40:40 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id C187592009E; Mon,  2 May 2022 00:14:22 +0200 (CEST)
+        id 2E01592009C; Mon,  2 May 2022 00:40:39 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id BB3CB92009B;
-        Sun,  1 May 2022 23:14:22 +0100 (BST)
-Date:   Sun, 1 May 2022 23:14:22 +0100 (BST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 2645D92009B;
+        Sun,  1 May 2022 23:40:39 +0100 (BST)
+Date:   Sun, 1 May 2022 23:40:39 +0100 (BST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Joshua Kinard <kumba@gentoo.org>,
-        Stephen Zhang <starzhangzsd@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v3 2/2] MIPS: IP30: Remove incorrect `cpu_has_fpu' override
-In-Reply-To: <alpine.DEB.2.21.2205012307310.9383@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2205012311470.9383@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2205012307310.9383@angie.orcam.me.uk>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+In-Reply-To: <20220429135108.2781579-2-schnelle@linux.ibm.com>
+Message-ID: <alpine.DEB.2.21.2205012335020.9383@angie.orcam.me.uk>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com> <20220429135108.2781579-2-schnelle@linux.ibm.com>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -42,42 +76,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu' 
-kernel parameter non-functional, and also causes a link error:
+On Fri, 29 Apr 2022, Niklas Schnelle wrote:
 
-ld: arch/mips/kernel/traps.o: in function `trap_init':
-./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
+> We introduce a new HAS_IOPORT Kconfig option to indicate support for
+> I/O Port access. In a future patch HAS_IOPORT=n will disable compilation
+> of the I/O accessor functions inb()/outb() and friends on architectures
+> which can not meaningfully support legacy I/O spaces such as s390 or
+> where such support is optional. The "depends on" relations on HAS_IOPORT
+> in drivers as well as ifdefs for HAS_IOPORT specific sections will be
+> added in subsequent patches on a per subsystem basis.
+[...]
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index de3b32a507d2..4c55df08d6f1 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -47,6 +47,7 @@ config MIPS
+>  	select GENERIC_SMP_IDLE_THREAD
+>  	select GENERIC_TIME_VSYSCALL
+>  	select GUP_GET_PTE_LOW_HIGH if CPU_MIPS32 && PHYS_ADDR_T_64BIT
+> +	select HAS_IOPORT
+>  	select HAVE_ARCH_COMPILER_H
+>  	select HAVE_ARCH_JUMP_LABEL
+>  	select HAVE_ARCH_KGDB if MIPS_FP_SUPPORT
 
-where the CONFIG_MIPS_FP_SUPPORT configuration option has been disabled.
+ NAK, not all MIPS systems have the port I/O space, and we have it already 
+handled via the NO_IOPORT_MAP option.  We'll need to have HAS_IOPORT set 
+to !NO_IOPORT_MAP (or vice versa) for the MIPS architecture.
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Reported-by: Stephen Zhang <starzhangzsd@gmail.com>
-Fixes: 7505576d1c1a ("MIPS: add support for SGI Octane (IP30)")
-Cc: stable@vger.kernel.org # v5.5+
----
-Changes from v2:
-
-- Give credit to Stephen for reporting the issue.
-
-Changes from v1:
-
-- s/chosen/disabled/ in the change description.
----
- arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h |    1 -
- 1 file changed, 1 deletion(-)
-
-linux-mips-ip30-cpu-has-fpu.diff
-Index: linux-macro/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-===================================================================
---- linux-macro.orig/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-+++ linux-macro/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-@@ -28,7 +28,6 @@
- #define cpu_has_4kex			1
- #define cpu_has_3k_cache		0
- #define cpu_has_4k_cache		1
--#define cpu_has_fpu			1
- #define cpu_has_nofpuex			0
- #define cpu_has_32fpr			1
- #define cpu_has_counter			1
+  Maciej
