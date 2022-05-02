@@ -2,98 +2,221 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD90E516B25
-	for <lists+linux-mips@lfdr.de>; Mon,  2 May 2022 09:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3998516C70
+	for <lists+linux-mips@lfdr.de>; Mon,  2 May 2022 10:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353623AbiEBHRx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 May 2022 03:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
+        id S1359553AbiEBIwc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 2 May 2022 04:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbiEBHRx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 May 2022 03:17:53 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9124B843
-        for <linux-mips@vger.kernel.org>; Mon,  2 May 2022 00:14:21 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:194e:5782:c420:7f87])
-        by andre.telenet-ops.be with bizsmtp
-        id RjEK2700a28fWK501jEKBR; Mon, 02 May 2022 09:14:20 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nlQGB-002lJZ-99; Mon, 02 May 2022 09:14:19 +0200
-Date:   Mon, 2 May 2022 09:14:19 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
+        with ESMTP id S231454AbiEBIwb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 May 2022 04:52:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C83E2654E
+        for <linux-mips@vger.kernel.org>; Mon,  2 May 2022 01:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651481342;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=g1EGMUSX4uhdpumN1AqArSCJZUMcx2qk+SIJN7jkMXI=;
+        b=R200hlisoA5GgcTQu43l+PIwa36cGpcqSHJpA8hWYupIDl55WTqiRBahErCJjjgvBrqZvz
+        aYiRElhf6dZhG6kZrEQM4f6Migga5+TeZ4DjZjDgk/EUmGsLpgX/lcC85tumb7z09Lq8k8
+        dk+wOUrNNdlrbH1jkBCB27k6oR5l0ls=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-567-mugfJ6BUND6XsoeV1bt-uQ-1; Mon, 02 May 2022 04:49:01 -0400
+X-MC-Unique: mugfJ6BUND6XsoeV1bt-uQ-1
+Received: by mail-wm1-f71.google.com with SMTP id t184-20020a1c46c1000000b00394209f54f1so2418242wma.4
+        for <linux-mips@vger.kernel.org>; Mon, 02 May 2022 01:49:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g1EGMUSX4uhdpumN1AqArSCJZUMcx2qk+SIJN7jkMXI=;
+        b=gufrC3hguDtoYOygDUphmhXoiHpjz+JDLeSZM4cUEZXvYnYDJ7msb4GhqO7gh10vd/
+         S+AhsCahqdKmGu3uYnewC0yo6g3f89WpUOwwABYMdw3vY6NE+hTDlYkujqVsvnhXHbta
+         BrLJfuytQLPYtS61caeMEW0zXgWasdvoRmtcqbrsXj10bRCCM5CzgDRRStb2HqJdD0HW
+         ZW/l0piGFk8b/2N7WDTjSd4NbsgDuToD5bDx0Ldmd6XoPMovNGxAn2w0iwfCBxnejFWa
+         cvj23uAkdewI1StIGiDuO/0jjXrCCf2cR0u7DrbkB6vtFsfT0ZxxGwLR7hNRIDdlK+3z
+         e3dw==
+X-Gm-Message-State: AOAM5337r7yLzy3qiHAIED/8bG5ZmiumCH7ZwlEzMCWwmZ/NP0WFpuuQ
+        hH3cF2rM/DOvNj9euYlUSTF/bb7DYs5XgYvBr8wcpaoTAODSCFktm+Ca4qYgrv9+sn4fSZzCfD9
+        CIsevtU2ygWY6pohfrRVrWA==
+X-Received: by 2002:a1c:7512:0:b0:394:16ee:ab9b with SMTP id o18-20020a1c7512000000b0039416eeab9bmr9917226wmc.176.1651481339932;
+        Mon, 02 May 2022 01:48:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz1HDOH0L0J59jWzQqe8OCc8OrGCpxEDekTc2b0ViBR9lVxUT3tRNZw5Yfr7Gkyc9Gu0hnOLg==
+X-Received: by 2002:a1c:7512:0:b0:394:16ee:ab9b with SMTP id o18-20020a1c7512000000b0039416eeab9bmr9917168wmc.176.1651481339590;
+        Mon, 02 May 2022 01:48:59 -0700 (PDT)
+Received: from minerva.. ([90.167.94.74])
+        by smtp.gmail.com with ESMTPSA id i14-20020adfa50e000000b0020c5253d8c6sm8032307wrb.18.2022.05.02.01.48.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 01:48:59 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
-cc:     Arnd Bergmann <arnd@arndb.de>, linux-sh@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-rdma@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: Build regressions/improvements in v5.18-rc5
-In-Reply-To: <20220502065353.2658957-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2205020912140.658493@ramsan.of.borg>
-References: <CAHk-=wjUhfhaes6_hMYDQFTbGjkmA-j2ZSeXZ32H66ufRfYrmQ@mail.gmail.com> <20220502065353.2658957-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Alison Wang <alison.wang@nxp.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Chen-Yu Tsai <wens@csie.org>, Chia-I Wu <olvaffe@gmail.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Evan Quan <evan.quan@amd.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Joel Stanley <joel@jms.id.au>,
+        John Stultz <john.stultz@linaro.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Marek Vasut <marex@denx.de>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Nirmoy Das <nirmoy.das@amd.com>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Solomon Chiu <solomon.chiu@amd.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Yong Wu <yong.wu@mediatek.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, spice-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH 0/3] drm: Allow simpledrm to setup its emulated FB as firmware provided
+Date:   Mon,  2 May 2022 10:48:27 +0200
+Message-Id: <20220502084830.285639-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 2 May 2022, Geert Uytterhoeven wrote:
-> JFYI, when comparing v5.18-rc5[1] to v5.18-rc4[3], the summaries are:
->  - build errors: +6/-21
+Hello,
 
-6 error regressions:
-   + /kisskb/src/arch/sh/kernel/machvec.c: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]:  => 105:33
+This series contain patches suggested by Thomas Zimmermannas a feedback for
+"[RFC PATCH v4 00/11] Fix some race between sysfb device registration and
+drivers probe" [0].
 
-sh4-gcc11/se7750_defconfig
-sh4-gcc11/sh-defconfig
-sh4-gcc11/se7619_defconfig
-sh4-gcc11/sh-allmodconfig
-sh4-gcc11/sh-allyesconfig
-sh4-gcc11/sh-allnoconfig
+Since other changes in [0] were more controversial, I decided to just split
+this part in a new patch-set and revisit the rest of the patches later.
 
-gcc-11 fallout
+Patch #1 is just a cleanup since when working on this noticed that some DRM
+drivers were passing as preferred bits per pixel to drm_fbdev_generic_setup()
+the value that is the default anyways.
 
-   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size':  => 88:22
-   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]:  => 89:1
-   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]:  => 100:2
+Patch #2 renames the 'preferred_bpp' drm_fbdev_generic_setup() parameter to
+'options', and make this a multi field parameter so that it can be extended
+later to pass other options as well.
 
-um-x86_64/um-all{yes,no}config
+Patch #3 finally adds the new DRM_FB_FW option and makes simpledrm to use it
+so that the registered framebuffer device is also marked as firmware provided.
 
-   + /kisskb/src/include/linux/sh_intc.h: error: division 'sizeof (void *) / sizeof (void)' does not compute the number of array elements [-Werror=sizeof-pointer-div]:  => 100:63
+[0]: https://lore.kernel.org/lkml/20220429084253.1085911-1-javierm@redhat.com/
 
-v5.18-rc5/sh4-gcc11/se7750_defconfig
-v5.18-rc5/sh4-gcc11/sh-defconfig
-v5.18-rc5/sh4-gcc11/se7619_defconfig
-v5.18-rc5/sh4-gcc11/sh-allmodconfig
-v5.18-rc5/sh4-gcc11/sh-allyesconfig
-v5.18-rc5/sh4-gcc11/sh-allnoconfig
 
-gcc-10/11 fallout, seen before for sh4-gcc10/se7750_defconfig and sh4-gcc10/se7619_defconfig
+Javier Martinez Canillas (3):
+  drm: Remove superfluous arg when calling to drm_fbdev_generic_setup()
+  drm/fb-helper: Rename preferred_bpp drm_fbdev_generic_setup()
+    parameter
+  drm: Allow simpledrm to setup its emulated FB as firmware provided
 
-   + {standard input}: Error: branch to a symbol in another ISA mode:  => 1295
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  6 +++--
+ drivers/gpu/drm/arm/hdlcd_drv.c               |  2 +-
+ drivers/gpu/drm/arm/malidp_drv.c              |  2 +-
+ drivers/gpu/drm/aspeed/aspeed_gfx_drv.c       |  2 +-
+ drivers/gpu/drm/ast/ast_drv.c                 |  2 +-
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  |  2 +-
+ drivers/gpu/drm/drm_drv.c                     |  2 +-
+ drivers/gpu/drm/drm_fb_helper.c               | 25 ++++++++++++++++---
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c     |  2 +-
+ .../gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c   |  2 +-
+ .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  2 +-
+ drivers/gpu/drm/imx/dcss/dcss-kms.c           |  2 +-
+ drivers/gpu/drm/imx/imx-drm-core.c            |  2 +-
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  2 +-
+ drivers/gpu/drm/mcde/mcde_drv.c               |  2 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  2 +-
+ drivers/gpu/drm/meson/meson_drv.c             |  2 +-
+ drivers/gpu/drm/mxsfb/mxsfb_drv.c             |  2 +-
+ drivers/gpu/drm/pl111/pl111_drv.c             |  2 +-
+ drivers/gpu/drm/qxl/qxl_drv.c                 |  2 +-
+ drivers/gpu/drm/rcar-du/rcar_du_drv.c         |  2 +-
+ drivers/gpu/drm/sti/sti_drv.c                 |  2 +-
+ drivers/gpu/drm/stm/drv.c                     |  2 +-
+ drivers/gpu/drm/sun4i/sun4i_drv.c             |  2 +-
+ drivers/gpu/drm/tidss/tidss_drv.c             |  2 +-
+ drivers/gpu/drm/tilcdc/tilcdc_drv.c           |  2 +-
+ drivers/gpu/drm/tiny/arcpgu.c                 |  2 +-
+ drivers/gpu/drm/tiny/bochs.c                  |  2 +-
+ drivers/gpu/drm/tiny/cirrus.c                 |  2 +-
+ drivers/gpu/drm/tiny/simpledrm.c              |  2 +-
+ drivers/gpu/drm/tve200/tve200_drv.c           |  2 +-
+ drivers/gpu/drm/vboxvideo/vbox_drv.c          |  2 +-
+ drivers/gpu/drm/vc4/vc4_drv.c                 |  2 +-
+ drivers/gpu/drm/virtio/virtgpu_drv.c          |  2 +-
+ drivers/gpu/drm/xlnx/zynqmp_dpsub.c           |  2 +-
+ include/drm/drm_fb_helper.h                   | 22 ++++++++++++++++
+ 36 files changed, 80 insertions(+), 39 deletions(-)
 
-mips-gcc11/micro32r2_defconfig
-mips-gcc11/micro32r2el_defconfig
+-- 
+2.35.1
 
-gcc-11 fallout
-
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/672c0c5173427e6b3e2a9bbb7be51ceeec78093a/ (all 138 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/af2d861d4cd2a4da5137f795ee3509e6f944a25b/ (96 out of 138 configs)
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
