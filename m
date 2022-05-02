@@ -2,136 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E75751752E
-	for <lists+linux-mips@lfdr.de>; Mon,  2 May 2022 18:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B112517751
+	for <lists+linux-mips@lfdr.de>; Mon,  2 May 2022 21:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242965AbiEBRAj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 May 2022 13:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S1387090AbiEBTY6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 2 May 2022 15:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236543AbiEBRAi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 May 2022 13:00:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51BBB312
-        for <linux-mips@vger.kernel.org>; Mon,  2 May 2022 09:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651510628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K0Gq4g+r6nSFFN2UMiOU7agj8frQhJOC3wt5ScKN4WI=;
-        b=EuaI6+8mGao7a8l+K63gjGBTuhOaz9qc/BGKNFHMEg40mW5WtgLZIF9RjoeRcIZLAO04Rc
-        5ZZmOh/tLkWmcpODSmYsqbE8j4iiDhq94ej36Wb0yZoAEft7kIIF9nW+S/54yO3gxlN4Hf
-        uJl/Syqb7aElGuowD8ShM8d+LnU7+rU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-50-CmhNm6gQPFGJVj4nblSQaw-1; Mon, 02 May 2022 12:57:07 -0400
-X-MC-Unique: CmhNm6gQPFGJVj4nblSQaw-1
-Received: by mail-wr1-f69.google.com with SMTP id t17-20020adfa2d1000000b0020ac519c222so5468605wra.4
-        for <linux-mips@vger.kernel.org>; Mon, 02 May 2022 09:57:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K0Gq4g+r6nSFFN2UMiOU7agj8frQhJOC3wt5ScKN4WI=;
-        b=ngTRywbNw0nZn560eqFTf7o+k3jjb7gbzlCNYNYTE8oWEp7UYQJY82BEtPNZ+fEGQP
-         IUw5i5vWv7kVnTTosusBJmpf+sqqUXDNDz0w+OQhzzYp2KiJQ5gfk4q5cMz7rZn+cGxf
-         IhO7zPh+53Y4BD1hm7wOcBu6XY9LSe7GysEeNqNazqMt3fcpeJtKBpSXSoedyycIbdvw
-         Q3NlsdsqggyxaIUb9j+rEQPeigB2/Eh3KHj1Byd7snplVJJTXaw8EZr+oA8IgPhFyzrG
-         FHBIMFVPrXf6Hj7+aULnQ8LEvjjpPpzflcURI73xK4+CLySR50g1OfBpLbURWlPyzPGt
-         8LMA==
-X-Gm-Message-State: AOAM531tC6vWROh1egEArbZRf/KYA9Dn0Ajr1K26nETfEKkdA0j0YE5t
-        7PJbJWgKoAtEyXkFr+ppAosgCvoSiSiuuhmPGF3SJVG3grTi5oaxK8WwxlpTdJKHdf73ad4x27H
-        a3Fg/caDdt3jwztc5VpEKyQ==
-X-Received: by 2002:a05:600c:4f08:b0:391:fe3c:40e6 with SMTP id l8-20020a05600c4f0800b00391fe3c40e6mr78537wmq.34.1651510626174;
-        Mon, 02 May 2022 09:57:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzBR5y6TmCRfu+8hzM0SQTGA4cZrpN3ZhuFriWyFUH2mb/ZbNn3olE2yOJI8bAuj+96a04yXQ==
-X-Received: by 2002:a05:600c:4f08:b0:391:fe3c:40e6 with SMTP id l8-20020a05600c4f0800b00391fe3c40e6mr78523wmq.34.1651510625948;
-        Mon, 02 May 2022 09:57:05 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id r20-20020adfa154000000b0020c5253d8c7sm7273243wrr.19.2022.05.02.09.57.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 09:57:05 -0700 (PDT)
-Message-ID: <ac202e93-cde2-99fa-5aca-abdc1cf6a3bf@redhat.com>
-Date:   Mon, 2 May 2022 18:57:04 +0200
+        with ESMTP id S233034AbiEBTY5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 May 2022 15:24:57 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D55F7C;
+        Mon,  2 May 2022 12:21:26 -0700 (PDT)
+Received: from mail-yw1-f182.google.com ([209.85.128.182]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MxE1Q-1o1DiO25O4-00xb47; Mon, 02 May 2022 21:21:24 +0200
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2ec42eae76bso158737117b3.10;
+        Mon, 02 May 2022 12:21:23 -0700 (PDT)
+X-Gm-Message-State: AOAM532dexJ22ra+J/GQiTXBV9KGVIFRF7Vg4bUMZYJMFJ7qK4mz/9yz
+        b9U2gbk8Ia7hVOXAcuTbhHdwawHZSC3RAHe0a9o=
+X-Google-Smtp-Source: ABdhPJwUfMAOks7BnV4AzKQEtr1EDQTOee83IkNCHoU3D+nfieXOKuWmJ4Tp85gou+YPOwWYc3gRkPoRLjpjhxYBTNE=
+X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
+ 206-20020a810ad7000000b002e684de3223mr12927652ywk.209.1651519282261; Mon, 02
+ May 2022 12:21:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 2/3] drm/fb-helper: Rename preferred_bpp
- drm_fbdev_generic_setup() parameter
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, spice-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20220502153900.408522-1-javierm@redhat.com>
- <20220502153900.408522-3-javierm@redhat.com>
- <YnABz/4haOHe66Do@pendragon.ideasonboard.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YnABz/4haOHe66Do@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422234150.GA3442771@roeck-us.net>
+ <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+ <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+ <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net> <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+ <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net> <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
+ <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com> <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
+In-Reply-To: <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 2 May 2022 21:21:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
+Message-ID: <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:LSvvD9ealIOnZB+N8uP6cECWasA2Jd3X8iq0Cc9U/iVYsnBKg9o
+ ytWvTRMzIQZCGD0e1i7o1EpHdePM1NG9xgkirUzKNRG6DSfKxic3mGGZTfGFL1U7ldQBAtb
+ wZn+CIpiZcMaiJxAbFO8IcYLfu9Ti5wj+O+27MhczGNb74PleKViT5c7M7wD+VsSs1l36KF
+ rLwC2CFIQOhBN9KmrpHoQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fbjVa8gY3qo=:Gwe5l2mvYrqeN0P6ZafGZX
+ oSrefPBFecdfxw+f2yj2mmY/LNx/cpo7UkhFA7eG9/WUJjjyAjSQUz+mL0/OLnp5lOAILv+rL
+ wZJbWfmd2byNsZvHnyZ6D5nRZ9KFAfpxvn1a4TBEFQ2s6dROZbMe9Z6w690de8hT7BEqQ8k+s
+ 2bjXyLFsN8Lw+n44zSR1HGla2yhwhqOQHrKMmcfLR0GbieiOL0Z45Hx8rP9m3k7YGdbArZBKJ
+ gE91irW27MSLEy8/RxVLsPwOx7ErZb6Dh/Jwf33SIqPA/tH2GKjHxro5Afx1pz6CyXFh8S0Bm
+ q+g6PuJlDIXiAG/IhRohR8uQM0G8Qy5vvnkeo2ejvxHQpHuSbP5kjX9vUZJckhnDgEtxImPJp
+ +GnTaCuQjlnSHZteZWplbiaHTDCmszD6xNYQGYWhMuttlCO+btnl4MwI/OXOedY8xdJf3RzpQ
+ sHkSX3XL5lLbnPreGSdIsT7mNybINie0NBh/J7jj8Ghl+KZJvFnfTEGdoAxOBf/mffcyQ+mTW
+ MMmnnIdw8pdSTWgXXDsu+rgJhFZH9CSMCIMUJjFpGaFZkZdfOctv6bVjTzxFgLZP6p/QGZpRv
+ xcMjPjwUGouwAtJDc+IwqidtHZsi+5+VWNyxGpo/aSdufJFzWEiXxcN2szr+Ne1ePoobkPQ6W
+ INOTn8vgyN3/Kfge/OT/t5/jjqKuyputjRD3BtqSfG7QOKmIoUj4uxQCxtpiVS9zq/sHII562
+ S0gInb219DnDLHdLByJXGuuihG0d/ry6f2WJyeNaw7HHKivck2Il58WyKzkeKHJ9xp3zsW+Yq
+ ZZ2wJiLLtye20JCTyQ5nrKv8EToRmeSZd8QIQexpc0p+nhZshM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/2/22 18:07, Laurent Pinchart wrote:
-> Hi Javier,
-> 
-> Thank you for the patch.
-> 
-> On Mon, May 02, 2022 at 05:38:59PM +0200, Javier Martinez Canillas wrote:
->> By default the bits per pixel for the emulated framebuffer device is set
->> to dev->mode_config.preferred_depth, but some devices need another value.
->>
->> Since this second parameter is only used by a few drivers, and to allow
->> drivers to use it for passing other configurations when registering the
->> fbdev, rename @preferred_bpp to @options and make it a multi-field param.
->>
->> The DRM_FB_OPTION() and DRM_FB_GET_OPTION() macros are provided to drivers
->> for computing options bitfield values and getting the values respectively
->>
->> For now, only the DRM_FB_BPP option exists but other options can be added.
->>
->> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
->> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
->> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->> ---
->>
->> Changes in v2:
->> - Rename DRM_FB_SET_OPTION() to DRM_FB_SET() and make more clear in the
-> 
-> I assume you meant DRM_FB_OPTION() here, not DRM_FB_SET().
-> 
->>   kernel-doc what this macro does (Laurent Pinchart).
->>
+On Mon, May 2, 2022 at 6:26 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> With v5.18-rc1-49-gcb813018b5c1, I still get:
+>
+> [    0.797668] RAMDISK: Couldn't find valid RAM disk image starting at 0.
+> [    0.805262] /dev/root: Can't open blockdev
+> [    0.805487] VFS: Cannot open root device "(null)" or unknown-block(0,0): error -6
+> [    0.805674] Please append a correct "root=" boot option; here are the available partitions:
+>
+> when trying to boot z2 from initrd.
+>
+> The other problems are gone.
 
-Right, that's a typo. The patch description and content are correct though.
+Ok, progress!
 
-I'll fix the patch history log in v3.
+What is your qemu command line? I see that z2 has no pcmcia device, so
+I tried booting
+from MMC, but this already fails with 5.18-rc1 without any of my
+patches, giving me
 
--- 
-Best regards,
+[    0.697481] Creating 3 MTD partitions on "physmap-flash":
+[    0.698161] 0x000000000000-0x000000040000 : "U-Boot Bootloader"
+[    0.702815] 0x000000040000-0x000000060000 : "U-Boot Environment"
+[    0.706541] 0x000000060000-0x000000800000 : "Flash"
+[    0.718066] pxa2xx-mci pxa2xx-mci.0: incomplete constraints, dummy
+supplies not allowed
+[    0.718501] pxa2xx-mci pxa2xx-mci.0: incomplete constraints, dummy
+supplies not allowed
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+Do  you have MMC or some other rootfs working without my patch series?
 
+     Arnd
