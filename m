@@ -2,142 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1394151704E
-	for <lists+linux-mips@lfdr.de>; Mon,  2 May 2022 15:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E523517133
+	for <lists+linux-mips@lfdr.de>; Mon,  2 May 2022 16:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385271AbiEBNcC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 May 2022 09:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S240159AbiEBOIk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 2 May 2022 10:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385267AbiEBNcB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 May 2022 09:32:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3557512AD8
-        for <linux-mips@vger.kernel.org>; Mon,  2 May 2022 06:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651498112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2zV+k9kqlgz67AfOxcNykb0h39cTNVnn0WXnNEGgjk4=;
-        b=M/bOdoL2S3N0JICWRmvfdoNBvP4iNrDAP1wSgx/MeZZQL2CSowHRGcH3mF5Gt1s8xHPhCN
-        SX7OFMMemNWaKzv/qjEmY3I630B0PmkjWeVJZ+08PF/1KgZ0hh5grd8LMv9v5B3qjzJc7d
-        UaFePn/FknHIegcRpdvjKAe8qaTrvR4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-zmNoGPIFNWeuEJhonujwMA-1; Mon, 02 May 2022 09:28:31 -0400
-X-MC-Unique: zmNoGPIFNWeuEJhonujwMA-1
-Received: by mail-wr1-f69.google.com with SMTP id s14-20020adfa28e000000b0020ac7532f08so5299448wra.15
-        for <linux-mips@vger.kernel.org>; Mon, 02 May 2022 06:28:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2zV+k9kqlgz67AfOxcNykb0h39cTNVnn0WXnNEGgjk4=;
-        b=ImbVfwB+dfvAZ/7YNZ17rXx66FrLqfCKQ69agsshzr5aE+mX2J9ws5ZF6HOFjQiwTH
-         B//KFwzKjiWO1p7gN0OJD3ucD3TiPkUfDABZKz28g/E+vy0RpeqMjvOejVIDm6z096H7
-         Yq8/oj0Cw08Z8+cjVgSWgRCqrxnkyLDwa53b3eMh1tavUzrROMkZi84Sef5bZ6/VqMvl
-         6TKTNPA2+crp5yQV/hbQRjGq1hHoMiXv12ZWa0yQ/+Ia+b8+Tj9Vva3bZ91IssySQaIo
-         Eku6sCVl/CTjiXhCjC10zJ1ORr3cAIoX1sFv9fY14DitGFUDE3AMlpJMPBY33my4K5uC
-         jkdA==
-X-Gm-Message-State: AOAM5339yw9261JrOLSD5JukBboRSBWtF0jzlSR+GbL2cYYGxKgQNKV2
-        PtQjoz/7kgQnTts1bLL4N+ikEASPfGLEpHBA/xAk0Yd40fHMS+MLTAvfGZqeiI7Exy6KEWGNHtY
-        lsS6agdcBuYLmC8QYR0gn7A==
-X-Received: by 2002:a05:600c:1c20:b0:394:25cb:1404 with SMTP id j32-20020a05600c1c2000b0039425cb1404mr12244404wms.52.1651498109824;
-        Mon, 02 May 2022 06:28:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzu2jM2LG+DX+dIVzq45o/V1TxQWIpFsCwnWfT+RmC19xyv+UYhuI/wi7PI/5TDnuN7eFlQ9w==
-X-Received: by 2002:a05:600c:1c20:b0:394:25cb:1404 with SMTP id j32-20020a05600c1c2000b0039425cb1404mr12244330wms.52.1651498109516;
-        Mon, 02 May 2022 06:28:29 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l3-20020adfa383000000b0020c5253d8bcsm6985850wrb.8.2022.05.02.06.28.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 06:28:29 -0700 (PDT)
-Message-ID: <c0703a8c-3263-6dde-07e4-9f03680c6726@redhat.com>
-Date:   Mon, 2 May 2022 15:28:25 +0200
+        with ESMTP id S236925AbiEBOIj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 May 2022 10:08:39 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA275F97;
+        Mon,  2 May 2022 07:05:09 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242E1xes006582;
+        Mon, 2 May 2022 14:02:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=pa3Y8njUgOpmxlb35vPiYLCiL63dwiQj0l9BRN8zD7Y=;
+ b=pz2TcaKG09iPWvjb8QT+j50Yq/fjYuV2BbisWIzf7sFeQmk7HocWYItceAG6H8sh3g6q
+ AdlRZxpsr5YFu38WbvzT5fbiz17a9xGPu8DBT9NVpih8czdyQc8Hm4CUtEEqAHfU500I
+ J2kCZOXOiUxe6p8q9zLw026UfSKfc+DUStFqbOskx2R93/+fhQimCCv8zsOHnCy+RXuS
+ YaymiLl/K0xslk0P57DJIhR4Yf9ZbNo+lzQgataaunD6lWOoYZVfWwXYbMWCuAJ4Gx7X
+ Iuz/AT5jsuC/dXuUtr6gZLh318HoWCyXwiYFAvjNLLzRIGDZ78c/I03oBs7qIq6pryDU 4w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ftgq400qe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 14:02:42 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 242E2GTs007491;
+        Mon, 2 May 2022 14:02:41 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ftgq400pg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 14:02:41 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 242DwVPB016037;
+        Mon, 2 May 2022 14:02:39 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3frvr8t992-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 14:02:39 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 242E2bdp26476826
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 May 2022 14:02:38 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D2B9A4051;
+        Mon,  2 May 2022 14:02:36 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4016A4040;
+        Mon,  2 May 2022 14:02:34 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.50.173])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Mon,  2 May 2022 14:02:34 +0000 (GMT)
+Date:   Mon, 2 May 2022 16:02:32 +0200
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
+Message-ID: <20220502160232.589a6111@thinkpad>
+In-Reply-To: <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+        <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
+        <20220429220214.4cfc5539@thinkpad>
+        <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/3] drm/fb-helper: Rename preferred_bpp
- drm_fbdev_generic_setup() parameter
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Emma Anholt <emma@anholt.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Marek Vasut <marex@denx.de>, Hao Fang <fanghao11@huawei.com>,
-        linux-aspeed@lists.ozlabs.org,
-        Samuel Holland <samuel@sholland.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>, Joel Stanley <joel@jms.id.au>,
-        Dave Airlie <airlied@redhat.com>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        virtualization@lists.linux-foundation.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Alison Wang <alison.wang@nxp.com>, linux-mips@vger.kernel.org,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-amlogic@lists.infradead.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Yong Wu <yong.wu@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-sunxi@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Solomon Chiu <solomon.chiu@amd.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        spice-devel@lists.freedesktop.org, Jyri Sarha <jyri.sarha@iki.fi>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220502084830.285639-1-javierm@redhat.com>
- <20220502084830.285639-3-javierm@redhat.com>
- <Ym/BtOM3OlPoE+nr@pendragon.ideasonboard.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Ym/BtOM3OlPoE+nr@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XuufQO1q4HTBDbV5Aeg2IfsJiDYUZ4kF
+X-Proofpoint-ORIG-GUID: wX4sYDOGP4Gb-gqEiz4w3Jylk1LdzAUv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-02_04,2022-05-02_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 bulkscore=0 spamscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 clxscore=1015 mlxscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205020110
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -145,61 +106,85 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Laurent,
+On Sat, 30 Apr 2022 11:22:33 +0800
+Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
 
-On 5/2/22 13:34, Laurent Pinchart wrote:
-> Hi Javier,
 > 
-> Thank you for the patch.
 > 
-
-Thanks a lot for your feedback.
-
-[snip]
-
->> +++ b/drivers/gpu/drm/drm_fb_helper.c
->> @@ -2501,8 +2501,16 @@ static const struct drm_client_funcs drm_fbdev_client_funcs = {
->>  /**
->>   * drm_fbdev_generic_setup() - Setup generic fbdev emulation
->>   * @dev: DRM device
->> - * @preferred_bpp: Preferred bits per pixel for the device.
->> - *                 @dev->mode_config.preferred_depth is used if this is zero.
->> + * @options: options for the registered framebuffer.
->> + *
->> + * The @options parameter is a multi-field parameter that can contain
->> + * different options for the emulated framebuffer device registered.
->> + *
->> + * The options must be set using DRM_FB_SET_OPTION() and obtained using
->> + * DRM_FB_GET_OPTION(). The options field are the following:
->> + *
->> + * * DRM_FB_BPP: bits per pixel for the device. If the field is not set,
->> + *               @dev->mode_config.preferred_depth is used instead.
+> On 4/30/2022 4:02 AM, Gerald Schaefer wrote:
+> > On Fri, 29 Apr 2022 16:14:43 +0800
+> > Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> > 
+> >> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> >> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+> >> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+> >> size specified.
+> >>
+> >> When unmapping a hugetlb page, we will get the relevant page table
+> >> entry by huge_pte_offset() only once to nuke it. This is correct
+> >> for PMD or PUD size hugetlb, since they always contain only one
+> >> pmd entry or pud entry in the page table.
+> >>
+> >> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+> >> since they can contain several continuous pte or pmd entry with
+> >> same page table attributes, so we will nuke only one pte or pmd
+> >> entry for this CONT-PTE/PMD size hugetlb page.
+> >>
+> >> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
+> >> which means now we will unmap only one pte entry for a CONT-PTE or
+> >> CONT-PMD size poisoned hugetlb page, and we can still access other
+> >> subpages of a CONT-PTE or CONT-PMD size poisoned hugetlb page,
+> >> which will cause serious issues possibly.
+> >>
+> >> So we should change to use huge_ptep_clear_flush() to nuke the
+> >> hugetlb page table to fix this issue, which already considered
+> >> CONT-PTE and CONT-PMD size hugetlb.
+> >>
+> >> Note we've already used set_huge_swap_pte_at() to set a poisoned
+> >> swap entry for a poisoned hugetlb page.
+> >>
+> >> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> >> ---
+> >>   mm/rmap.c | 34 +++++++++++++++++-----------------
+> >>   1 file changed, 17 insertions(+), 17 deletions(-)
+> >>
+> >> diff --git a/mm/rmap.c b/mm/rmap.c
+> >> index 7cf2408..1e168d7 100644
+> >> --- a/mm/rmap.c
+> >> +++ b/mm/rmap.c
+> >> @@ -1564,28 +1564,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+> >>   					break;
+> >>   				}
+> >>   			}
+> >> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+> > 
+> > Unlike in your patch 2/3, I do not see that this (huge) pteval would later
+> > be used again with set_huge_pte_at() instead of set_pte_at(). Not sure if
+> > this (huge) pteval could end up at a set_pte_at() later, but if yes, then
+> > this would be broken on s390, and you'd need to use set_huge_pte_at()
+> > instead of set_pte_at() like in your patch 2/3.
 > 
-> Do I assume correctly that a driver that would need to set multiple
-> options would do something like
+> IIUC, As I said in the commit message, we will only unmap a poisoned 
+> hugetlb page by try_to_unmap(), and the poisoned hugetlb page will be 
+> remapped with a poisoned entry by set_huge_swap_pte_at() in 
+> try_to_unmap_one(). So I think no need change to use set_huge_pte_at() 
+> instead of set_pte_at() for other cases, since the hugetlb page will not 
+> hit other cases.
 > 
-> 	drm_fbdev_generic_setup(dev, DRM_FB_SET_OPTION(DRM_FB_BPP, 32) |
-> 				DRM_FB_SET_OPTION(DRM_FB_FW, 1));
->
-
-That's correct, yes.
- 
-> ? If so, I would rename DRM_FB_SET_OPTION() to DRM_FB_OPTION() as it's
-> computing the value of the option bitfield, it doesn't actually set it.
-> Apart from that,
->
-
-Right. I'll rename it.
- 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
+> 	pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+> 	if (folio_test_hugetlb(folio)) {
+> 		hugetlb_count_sub(folio_nr_pages(folio), mm);
+> 		set_huge_swap_pte_at(mm, address, pvmw.pte, pteval,
+> 				     vma_mmu_pagesize(vma));
+> 	} else {
+> 		dec_mm_counter(mm, mm_counter(&folio->page));
+> 		set_pte_at(mm, address, pvmw.pte, pteval);
+> 	}
 > 
+> }
 
-Thanks!
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+OK, but wouldn't the pteval be overwritten here with
+pteval = swp_entry_to_pte(make_hwpoison_entry(subpage))?
+IOW, what sense does it make to save the returned pteval from
+huge_ptep_clear_flush(), when it is never being used anywhere?
