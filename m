@@ -2,155 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EDA517BE1
-	for <lists+linux-mips@lfdr.de>; Tue,  3 May 2022 04:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B74517C16
+	for <lists+linux-mips@lfdr.de>; Tue,  3 May 2022 04:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiECCWm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 May 2022 22:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S230284AbiECC7L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 2 May 2022 22:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiECCWl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 May 2022 22:22:41 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECEA23BF6;
-        Mon,  2 May 2022 19:19:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VC4Od8S_1651544341;
-Received: from 30.39.210.51(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VC4Od8S_1651544341)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 03 May 2022 10:19:03 +0800
-Message-ID: <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
-Date:   Tue, 3 May 2022 10:19:46 +0800
+        with ESMTP id S230257AbiECC7K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 May 2022 22:59:10 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AA2BCB;
+        Mon,  2 May 2022 19:55:39 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id e189so17022318oia.8;
+        Mon, 02 May 2022 19:55:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=ML+ALf4muC9UINFB1D+jUSUaT6Yc1q590//LqncXPBg=;
+        b=i7O9COFXjCPh9mubsfg4ugisxlHT5wiyH0MXCmkS/E9xJKUh9gtudd7mJOdt/lRU5s
+         XviWqp4uUxdnstDiOc3faSUjpvZagNsoavB45X1ONbSZGvYwKqCS3Q4EtrJCw38BFSTy
+         GfNBd7eRD5cCXw35f/BALZfCm/WuBWvrvy8CHiiL2yrOPGPoRYnxiuE92NR59Xn+HZB5
+         KmWN9JXFhIw1dIK45cEVSlCPHBcxANoVGaomRAUVkCZ8j7FysnRmKK/nqDi0QqiAU5qN
+         jRYD07RpfwKLRhTaIOHoyPVauNdPj2DaFQwX8xWbJUP/uVrx5krbwy8PAtKyqKnZh5Fk
+         0gYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=ML+ALf4muC9UINFB1D+jUSUaT6Yc1q590//LqncXPBg=;
+        b=AScAAAfQBs5jsGUnRtMO/HXUdbYQCM4L4yz1STlLCOHqWzq8GhLjJj0QEtr+mHwZzC
+         UR1hGujcZmtfqB50KWZgDd3N8rcbx+rhLdM1Nsax+a7HdWyOaVsSYEmxKSW4ZyIGJlBE
+         1XoW7E5Q+/Ft6MK2sdqL96H0vQTLq9QuhiX4g7Pgh3cx1FPTowE47zfEf8Hh7ycIxROO
+         D9eL5Cs63VjeA/iZfkGd0nMYrMkshj2LXcuI5XeGbWjxVREGgkFBNyafTbeSze4rVa0d
+         qy8Wzda0Yby76G5FfylPPaP2eq00jPzZIMzKC6/DQcZdk5a+Zd0BFk+cEUKojzPgqBLy
+         2Nww==
+X-Gm-Message-State: AOAM5317zaNYQN8hD2cFd2BVU8Nmj/xVpO+LojrlUdYdHny8dK/KzJh9
+        g/g1lqIKcw5nP91qVU3wmT8=
+X-Google-Smtp-Source: ABdhPJznbXpW7jRNt5UM7xwEtyewbcsNlzza6ofH1kXi3NQqMh/99I9VMArk+DRpxcBP+PFc4iZ78A==
+X-Received: by 2002:a05:6808:1115:b0:2ec:e78e:3fc0 with SMTP id e21-20020a056808111500b002ece78e3fc0mr978131oih.207.1651546539238;
+        Mon, 02 May 2022 19:55:39 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m17-20020a9d7e91000000b006060322126csm1564658otp.60.2022.05.02.19.55.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 19:55:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <04840b4f-5b9d-b29a-62f7-e5148d415313@roeck-us.net>
+Date:   Mon, 2 May 2022 19:55:34 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- unmapping
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
- <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
- <20220429220214.4cfc5539@thinkpad>
- <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
- <20220502160232.589a6111@thinkpad>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220502160232.589a6111@thinkpad>
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
+ <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
+ <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+ <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+ <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
+ <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+ <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
+ <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
+ <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
+ <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
+ <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
+ <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net>
+ <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+In-Reply-To: <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
-> On Sat, 30 Apr 2022 11:22:33 +0800
-> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->>
->>
->> On 4/30/2022 4:02 AM, Gerald Schaefer wrote:
->>> On Fri, 29 Apr 2022 16:14:43 +0800
->>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+On 5/2/22 14:03, Arnd Bergmann wrote:
+> On Mon, May 2, 2022 at 10:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On 5/2/22 12:21, Arnd Bergmann wrote:
 >>>
->>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
->>>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
->>>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
->>>> size specified.
->>>>
->>>> When unmapping a hugetlb page, we will get the relevant page table
->>>> entry by huge_pte_offset() only once to nuke it. This is correct
->>>> for PMD or PUD size hugetlb, since they always contain only one
->>>> pmd entry or pud entry in the page table.
->>>>
->>>> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
->>>> since they can contain several continuous pte or pmd entry with
->>>> same page table attributes, so we will nuke only one pte or pmd
->>>> entry for this CONT-PTE/PMD size hugetlb page.
->>>>
->>>> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
->>>> which means now we will unmap only one pte entry for a CONT-PTE or
->>>> CONT-PMD size poisoned hugetlb page, and we can still access other
->>>> subpages of a CONT-PTE or CONT-PMD size poisoned hugetlb page,
->>>> which will cause serious issues possibly.
->>>>
->>>> So we should change to use huge_ptep_clear_flush() to nuke the
->>>> hugetlb page table to fix this issue, which already considered
->>>> CONT-PTE and CONT-PMD size hugetlb.
->>>>
->>>> Note we've already used set_huge_swap_pte_at() to set a poisoned
->>>> swap entry for a poisoned hugetlb page.
->>>>
->>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>> ---
->>>>    mm/rmap.c | 34 +++++++++++++++++-----------------
->>>>    1 file changed, 17 insertions(+), 17 deletions(-)
->>>>
->>>> diff --git a/mm/rmap.c b/mm/rmap.c
->>>> index 7cf2408..1e168d7 100644
->>>> --- a/mm/rmap.c
->>>> +++ b/mm/rmap.c
->>>> @@ -1564,28 +1564,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->>>>    					break;
->>>>    				}
->>>>    			}
->>>> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
->>>
->>> Unlike in your patch 2/3, I do not see that this (huge) pteval would later
->>> be used again with set_huge_pte_at() instead of set_pte_at(). Not sure if
->>> this (huge) pteval could end up at a set_pte_at() later, but if yes, then
->>> this would be broken on s390, and you'd need to use set_huge_pte_at()
->>> instead of set_pte_at() like in your patch 2/3.
 >>
->> IIUC, As I said in the commit message, we will only unmap a poisoned
->> hugetlb page by try_to_unmap(), and the poisoned hugetlb page will be
->> remapped with a poisoned entry by set_huge_swap_pte_at() in
->> try_to_unmap_one(). So I think no need change to use set_huge_pte_at()
->> instead of set_pte_at() for other cases, since the hugetlb page will not
->> hit other cases.
+>> To boot from initrd:
 >>
->> if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
->> 	pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
->> 	if (folio_test_hugetlb(folio)) {
->> 		hugetlb_count_sub(folio_nr_pages(folio), mm);
->> 		set_huge_swap_pte_at(mm, address, pvmw.pte, pteval,
->> 				     vma_mmu_pagesize(vma));
->> 	} else {
->> 		dec_mm_counter(mm, mm_counter(&folio->page));
->> 		set_pte_at(mm, address, pvmw.pte, pteval);
->> 	}
+>> qemu-system-arm -M z2 -kernel \
+>>        arch/arm/boot/zImage -no-reboot -initrd \
+>>        rootfs-armv5.cpio --append \
+>>        "panic=-1 slub_debug=FZPUA rdinit=/sbin/init console=ttyS0" -nographic \
+>>        -monitor null -serial stdio
 >>
->> }
+>> where rootfs-armv5.cpio is from my repository at github.com.
+>>
+>> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/rootfs-armv5.cpio.gz
+>>
 > 
-> OK, but wouldn't the pteval be overwritten here with
-> pteval = swp_entry_to_pte(make_hwpoison_entry(subpage))?
-> IOW, what sense does it make to save the returned pteval from
-> huge_ptep_clear_flush(), when it is never being used anywhere?
+> Ok, that works here with any configuration, I don't see a regression.
+> Could this be a problem with the size increase? The machine only has
+> 32MB of RAM, so it's possible that the multiplatform-enabled kernel
+> with DT support etc pushes it over the edge, especially with an initramfs.
+> 
 
-Please see previous code, we'll use the original pte value to check if 
-it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs 
-is set noop_dirty_folio().
+qemu puts initrd in the middle of available memory. With the image size
+being ~1MB larger than with v5.18-rc, this is too much, and the kernel
+overwrites part of initrd. This causes it to be corrupted.
 
-pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
+It looks like that would have happened eventually, your patch series just
+made it happen now. The kernel is just getting too large to run on such small
+systems. I worked around the problem in my version of qemu by loading initrd
+at the end of the (small) RAM. With that, I no longer see the boot failure.
 
-/* Set the dirty flag on the folio now the pte is gone. */
-if (pte_dirty(pteval))
-	folio_mark_dirty(folio);
+Guenter
