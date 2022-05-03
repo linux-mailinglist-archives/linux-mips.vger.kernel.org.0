@@ -2,101 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8450A517E94
-	for <lists+linux-mips@lfdr.de>; Tue,  3 May 2022 09:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F065518203
+	for <lists+linux-mips@lfdr.de>; Tue,  3 May 2022 12:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiECHVr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 May 2022 03:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
+        id S234058AbiECKIm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 May 2022 06:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiECHVW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 May 2022 03:21:22 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FEA393D4;
-        Tue,  3 May 2022 00:17:40 -0700 (PDT)
-Received: from mail-yb1-f181.google.com ([209.85.219.181]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MwQGj-1o4Y5v28NZ-00sKu1; Tue, 03 May 2022 09:17:38 +0200
-Received: by mail-yb1-f181.google.com with SMTP id m128so29711496ybm.5;
-        Tue, 03 May 2022 00:17:37 -0700 (PDT)
-X-Gm-Message-State: AOAM530ac8FQ+e8bk0f0/Xn4zgo2T5XODBgBL4nzIrlzyyER6M7QCQsf
-        9N54883iJJ+z0CX6Go0spAlXoXPyuvUPt15MEZ0=
-X-Google-Smtp-Source: ABdhPJxCVe3OWFLSxYuaWnZW2jE5tiG+RIFx0DlFR531d1DfX2PVw0Rn1+OoRgTZrm5UkwICv0JqKul27jNY+A9f6J8=
-X-Received: by 2002:a25:c604:0:b0:645:d969:97a7 with SMTP id
- k4-20020a25c604000000b00645d96997a7mr12300750ybf.134.1651562256127; Tue, 03
- May 2022 00:17:36 -0700 (PDT)
+        with ESMTP id S232077AbiECKIk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 May 2022 06:08:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A382337A14;
+        Tue,  3 May 2022 03:05:07 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2439Huei015493;
+        Tue, 3 May 2022 10:03:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HjtbuUEJ0/ZOlcQ3ufnF7LffEr7p00FRRLGE0m3GQmI=;
+ b=bCNiQRVYJ0UtJ/P6wwlt+FxTWqgWKs/XNm3CA1W/s3Fj9VvL8Q4WSDIP+68Sa969QX1W
+ yW7FRxTEsNiKJwAN9JFJG2YDdhch7vIfoB1daQ0D1iW4v4zxe2TjCu6lipYVkySJWUMU
+ I+fPcPK3B7o9kboRbYNrfEWIxo2AYtBHQhPdZPnBeTCKtFP7Aibqvn3LGllXmJwv4E3u
+ HkUl1qh9qoP3kc6/6MF3SkUgO0AorSuTurSD097OWTyD+88Rs1GK6y+CTL/mKiEjTxm2
+ lxrvPDCsi4kz/ZqWslXBDo2B0ICLy7AhnLngCvsSn3DJnn8cp4c2rYiKYvA7H/jNO7lc Ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu1mx8nf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 10:03:52 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 243A0EYM002520;
+        Tue, 3 May 2022 10:03:51 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu1mx8nek-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 10:03:51 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2439wHgD022505;
+        Tue, 3 May 2022 10:03:49 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3frvr8u79v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 10:03:49 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 243A3k3X26411316
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 May 2022 10:03:46 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C36DAE057;
+        Tue,  3 May 2022 10:03:46 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 25EF4AE053;
+        Tue,  3 May 2022 10:03:45 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.25.226])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue,  3 May 2022 10:03:45 +0000 (GMT)
+Date:   Tue, 3 May 2022 12:03:43 +0200
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
+Message-ID: <20220503120343.6264e126@thinkpad>
+In-Reply-To: <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+        <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
+        <20220429220214.4cfc5539@thinkpad>
+        <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
+        <20220502160232.589a6111@thinkpad>
+        <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
- <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
- <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
- <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net> <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
- <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net> <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
- <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
- <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net> <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
- <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net> <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
- <04840b4f-5b9d-b29a-62f7-e5148d415313@roeck-us.net>
-In-Reply-To: <04840b4f-5b9d-b29a-62f7-e5148d415313@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 3 May 2022 09:17:20 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a39oiWyDwp=BHuCsBVwfzyZ802-NwL9G9r-t6X8KSr6nA@mail.gmail.com>
-Message-ID: <CAK8P3a39oiWyDwp=BHuCsBVwfzyZ802-NwL9G9r-t6X8KSr6nA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:FMzsgWqwV+5A3vF2F+NmVabemxm0c086701qqBK1iJ49eZSURqN
- xPj+RXTf/Nz3+i8FvbYCQB7Db9uIAh7dxjHjWVdHRRJM+n8I9VNfLTNvK29tc3dMS3XwFlP
- edT5+EpDEG6xeXgx6SauaFl7Oy/uDeARG+6oyhCC77qymUOA3Ei/UWMpfCv+p1j4n7vrv+G
- vzNhtWmjBIFpRl/q+pJMw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:y9+PRathUfw=:P04xd6FUI2drJc7Dg5HxSc
- lUH5LqPZ9ERWB2UaEVoYmELLlK8A6+EFJ56CaFrd/okMBOn6EApJ7kVPHG1LOI0A5sPh4MAkb
- JzyTcjsl4WuDSs8AxbSmABltJc0aUAD5oRFet3fhBhAjotbJdxYz71HIJy7mFzE2eXVu2sofg
- PideLortlpfnbgtbtv8PHebkan8dJ17/XKbUYiHfO7C55KSTkuqtILldaRJ3busyU1qlGrAvL
- nidJZDzJEHCzM7u/BXOU+rnRj6HcA1TpGIRT4deDZEvTLpbMZU5BiHvHvkL72vDMWohTPHkCd
- OXzJWLF5S4jHfRzNw4HfvWvctaDGIqdP1wFfvcZAOakn3j0cb4QLeWP/jjhRT0shu9q665A+d
- lt1s9fpVlN04IXzy9aa/xJzOGMEPtLzSadBpJfPkKv4drlTSPqL4Y3vLk/RKwT88Gzx6wumQc
- ne0c1bB5v9Eopo0tOQCa1VAgR9GMq7J74EoPW30/foU0ivvQ2hbrzTpAXARJXz42j7zNBj1UZ
- qA2m/hjrhp7SmxUgbDqkgovHF532o9oGCK6Qa9msalFg4xauk7dYzhXcUXdGtndSA5hf4Aapd
- e1/pV+yt2OP6pLmGhLs2U7sj4LfWD2cbugX2q74y15Q+FVbQ9bq2H9RmMPhSkA7HAuVGWba7A
- 2RT0ZZS6t6OTA26S6RDG3vIChw5KGbHow/pvZzMIgYYNPSen3r+Ez7DFAqNfcYp0f6WSkIggw
- bAjsGJM+Du4B8Y5SNq5OlQCv2s4j+m8AFlUngHiCAEplNCptnYwnCC7NcXlcuf25xZfA4Qx1N
- 5+ZOKQArg0Fst6clEov4EcNI4HoFtoDtT0IOR06O2rYjE1YNW4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Vqe6Y27bbncJ_7Ur6Jm01zeitq883Jn7
+X-Proofpoint-ORIG-GUID: UMZQHcP4UgI5USN1f2T3MDEwggwnF1jW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-03_03,2022-05-02_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ suspectscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
+ clxscore=1015 phishscore=0 priorityscore=1501 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205030076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,31 +108,119 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 3, 2022 at 4:55 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 5/2/22 14:03, Arnd Bergmann wrote:
-> > On Mon, May 2, 2022 at 10:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >> On 5/2/22 12:21, Arnd Bergmann wrote:
->
-> qemu puts initrd in the middle of available memory. With the image size
-> being ~1MB larger than with v5.18-rc, this is too much, and the kernel
-> overwrites part of initrd. This causes it to be corrupted.
->
-> It looks like that would have happened eventually, your patch series just
-> made it happen now. The kernel is just getting too large to run on such small
-> systems. I worked around the problem in my version of qemu by loading initrd
-> at the end of the (small) RAM. With that, I no longer see the boot failure.
+On Tue, 3 May 2022 10:19:46 +0800
+Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
 
-Ok, thanks for confirming. If it's just the image size that changed,
-then I think
-we can live with it. Having the kernel image grow by 1MB seems excessive
-though, I'd like to understand better where that increase comes from.
+> 
+> 
+> On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
+> > On Sat, 30 Apr 2022 11:22:33 +0800
+> > Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> > 
+> >>
+> >>
+> >> On 4/30/2022 4:02 AM, Gerald Schaefer wrote:
+> >>> On Fri, 29 Apr 2022 16:14:43 +0800
+> >>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> >>>
+> >>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> >>>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+> >>>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+> >>>> size specified.
+> >>>>
+> >>>> When unmapping a hugetlb page, we will get the relevant page table
+> >>>> entry by huge_pte_offset() only once to nuke it. This is correct
+> >>>> for PMD or PUD size hugetlb, since they always contain only one
+> >>>> pmd entry or pud entry in the page table.
+> >>>>
+> >>>> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+> >>>> since they can contain several continuous pte or pmd entry with
+> >>>> same page table attributes, so we will nuke only one pte or pmd
+> >>>> entry for this CONT-PTE/PMD size hugetlb page.
+> >>>>
+> >>>> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
+> >>>> which means now we will unmap only one pte entry for a CONT-PTE or
+> >>>> CONT-PMD size poisoned hugetlb page, and we can still access other
+> >>>> subpages of a CONT-PTE or CONT-PMD size poisoned hugetlb page,
+> >>>> which will cause serious issues possibly.
+> >>>>
+> >>>> So we should change to use huge_ptep_clear_flush() to nuke the
+> >>>> hugetlb page table to fix this issue, which already considered
+> >>>> CONT-PTE and CONT-PMD size hugetlb.
+> >>>>
+> >>>> Note we've already used set_huge_swap_pte_at() to set a poisoned
+> >>>> swap entry for a poisoned hugetlb page.
+> >>>>
+> >>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> >>>> ---
+> >>>>    mm/rmap.c | 34 +++++++++++++++++-----------------
+> >>>>    1 file changed, 17 insertions(+), 17 deletions(-)
+> >>>>
+> >>>> diff --git a/mm/rmap.c b/mm/rmap.c
+> >>>> index 7cf2408..1e168d7 100644
+> >>>> --- a/mm/rmap.c
+> >>>> +++ b/mm/rmap.c
+> >>>> @@ -1564,28 +1564,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+> >>>>    					break;
+> >>>>    				}
+> >>>>    			}
+> >>>> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+> >>>
+> >>> Unlike in your patch 2/3, I do not see that this (huge) pteval would later
+> >>> be used again with set_huge_pte_at() instead of set_pte_at(). Not sure if
+> >>> this (huge) pteval could end up at a set_pte_at() later, but if yes, then
+> >>> this would be broken on s390, and you'd need to use set_huge_pte_at()
+> >>> instead of set_pte_at() like in your patch 2/3.
+> >>
+> >> IIUC, As I said in the commit message, we will only unmap a poisoned
+> >> hugetlb page by try_to_unmap(), and the poisoned hugetlb page will be
+> >> remapped with a poisoned entry by set_huge_swap_pte_at() in
+> >> try_to_unmap_one(). So I think no need change to use set_huge_pte_at()
+> >> instead of set_pte_at() for other cases, since the hugetlb page will not
+> >> hit other cases.
+> >>
+> >> if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
+> >> 	pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+> >> 	if (folio_test_hugetlb(folio)) {
+> >> 		hugetlb_count_sub(folio_nr_pages(folio), mm);
+> >> 		set_huge_swap_pte_at(mm, address, pvmw.pte, pteval,
+> >> 				     vma_mmu_pagesize(vma));
+> >> 	} else {
+> >> 		dec_mm_counter(mm, mm_counter(&folio->page));
+> >> 		set_pte_at(mm, address, pvmw.pte, pteval);
+> >> 	}
+> >>
+> >> }
+> > 
+> > OK, but wouldn't the pteval be overwritten here with
+> > pteval = swp_entry_to_pte(make_hwpoison_entry(subpage))?
+> > IOW, what sense does it make to save the returned pteval from
+> > huge_ptep_clear_flush(), when it is never being used anywhere?
+> 
+> Please see previous code, we'll use the original pte value to check if 
+> it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs 
+> is set noop_dirty_folio().
+> 
+> pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
 
-Starting out from pxa_defconfig, I see a 40KB increase from the final patch
-that moves to multiplatform support, which I think is fine.
+Uh, ok, that wouldn't work on s390, but we also don't have
+CONFIG_PTE_MARKER_UFFD_WP / HAVE_ARCH_USERFAULTFD_WP set, so
+I guess we will be fine (for now).
 
-If you have a z2 specific config, that would probably not enable CONFIG_OF,
-which is always turned on for multiplatform, but again that only adds around
-250KB in my builds (using gcc-11). This is more than I'd like it to be, but
-still much less than 1MB.
+Still, I find it a bit unsettling that pte_install_uffd_wp_if_needed()
+would work on a potential hugetlb *pte, directly de-referencing it
+instead of using huge_ptep_get().
 
-        Arnd
+The !pte_none(*pte) check at the beginning would be broken in the
+hugetlb case for s390 (not sure about other archs, but I think s390
+might be the only exception strictly requiring huge_ptep_get()
+for de-referencing hugetlb *pte pointers).
+
+> 
+> /* Set the dirty flag on the folio now the pte is gone. */
+> if (pte_dirty(pteval))
+> 	folio_mark_dirty(folio);
+
+Ok, that should work fine, huge_ptep_clear_flush() will return
+a pteval properly de-referenced and converted with huge_ptep_get(),
+and that would contain the hugetlb pmd/pud dirty information.
