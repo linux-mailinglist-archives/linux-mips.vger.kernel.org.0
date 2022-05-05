@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC2B51CB9E
-	for <lists+linux-mips@lfdr.de>; Thu,  5 May 2022 23:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F6651CBB9
+	for <lists+linux-mips@lfdr.de>; Thu,  5 May 2022 23:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245503AbiEEVyR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 May 2022 17:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S1380512AbiEEWCi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 May 2022 18:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352840AbiEEVyO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 17:54:14 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6185370E
-        for <linux-mips@vger.kernel.org>; Thu,  5 May 2022 14:50:33 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d17so5653283plg.0
-        for <linux-mips@vger.kernel.org>; Thu, 05 May 2022 14:50:33 -0700 (PDT)
+        with ESMTP id S233742AbiEEWCh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 18:02:37 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98F55C748
+        for <linux-mips@vger.kernel.org>; Thu,  5 May 2022 14:58:56 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id w17-20020a17090a529100b001db302efed6so5257540pjh.4
+        for <linux-mips@vger.kernel.org>; Thu, 05 May 2022 14:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=5X8TLlvge+LlB3alZPLbCxAz6Qe4vYldwHlV49dkSrM=;
-        b=r8TOD7zULp1YAmzdclvxd/BQo4hCWS743mscDf9VA3a5LGYWcHp8Z6o/3lyCM0ndFR
-         zdkOM/1GUpGXCslbckxlZXCC73zZZtGuBQ4VpCWkgcnp34jpf4u/rwj4w9sRIWAldLcT
-         I9Xg22FzOAjQwaOk2OPkWJK/TM/Tqrx2VQ7V8qx/YRikOLesgtu+1jWwD4XqSIogRxXu
-         cAAEjok7Wz6EwTStG758pdT83nrKy5IJ+oFgzHnXyZjhe4bIt5fmDWtClnd1PtpH+ld7
-         6GbQcg0yOqdvGBE3DpRFyUNyBZJTZ5g99gJpCVlLwrJPJLQ/L3Pvtpx8yQJTOeYI8qEh
-         SZQg==
+        bh=eAKJ/icQ2pJarmVikk6ugi8Bvpa8Rc3R9Y/ObEeqjH8=;
+        b=M3ZzJgDT9ekyNJ96FH0MMSzeB14ns1BDlk016eZT1S0ep/cD4p1f1RTvih2cYmfuI6
+         vFHrqU+9vIndYuNNK3AH4Dgm7kuFxZWZJkhyzMR4YOGjxZkYm1Z0EMXaLClIa8P7IVwL
+         QtyC+BFeYTLUFomnyGMTCsLedrWhZCqZ/iU5JEbvABbUYTbxAczSe3AxtOSaTXAdovrL
+         gXSYBjiw/rhbl7qw1z1JlCdnFZNzo1cOnflppFA0mTKn0HVdVUWqg4ori73GbSGNuRUY
+         Q0QxlbRs+rt1HWOWCDy8/jExhZUX/p+D3mWU5Dz1V6JSaLpCcsd9QEMbSyHxxECeDk4v
+         uA6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=5X8TLlvge+LlB3alZPLbCxAz6Qe4vYldwHlV49dkSrM=;
-        b=jJBhL+3YmZlKGLAHLwDP4qkCTdMg3Lqsxr1lGvfOB8pDkmVVM9D2xnw+nALr+9BfZq
-         /uUKETCpqIKmQovDAYKrNFW4BMZTdZQWlnD8pT39IIqRtddr2g3LLl+i48AOEmLgcK4K
-         PJ9KRSpVIZtHda4upg4PTPf2vLb7qMWa7sJpMc6L6XK39gv3+aev/jyQgtDC1DySbraD
-         IuXc75HEtmPS8TEBu4KQgZwaKzjXSQ8QZ4QuC/rwWoqPirisxGn+u3sRkH7VN6pzD0hM
-         LQ6AQEp44mg9y9AwOCdWYwn8JY28I8Q1CbsNt52KOCeHoT7r41OsC5PYOE3QxKei0syI
-         AHbw==
-X-Gm-Message-State: AOAM5328HFWZzDmrbnsRqhphoC8dZbT79Rd0hMPPqXAqp3gFZQn2L09G
-        6R0GEc2vUpQlkyvVeQdEdQGATg==
-X-Google-Smtp-Source: ABdhPJwuRDiJVYHYkKhPttO59afzh31uDobhndG7CuDNtKzk9Wtkasqz2Nx2N6J5qXiiYr9Q7ipMyQ==
-X-Received: by 2002:a17:903:228d:b0:15e:a2aa:2c55 with SMTP id b13-20020a170903228d00b0015ea2aa2c55mr323986plh.121.1651787432627;
-        Thu, 05 May 2022 14:50:32 -0700 (PDT)
+        bh=eAKJ/icQ2pJarmVikk6ugi8Bvpa8Rc3R9Y/ObEeqjH8=;
+        b=O7PviHSwVAfZmZYbpWP/kdfni7MhSZbV5OKcSAWhwIlP/jPeCbA9039Hz975OP7x7+
+         nBJ6DYevE0+8BQQwhIK3oq5s/LH7anS8fbFpcZJnJrVLFZH6ftMpMlxPJAZqcQJ2jldy
+         6gYtGKYlC6BslW25OzxP03YK3dmZflHl7TMmgOqkABwGxwrm3wvy9r7/HcsmItRjYjwK
+         MEG5Uvih/glyfvbbQuoAZ4mqpLwC9SShzbt6IbUw/FzLN78cfkYsfuRsWhF05YF+0BVo
+         Kyh5Z8UHQ5s1opEvswuAnKEN5Y2fwZQVKAnZVWUIIugW5FVGFINb4ef7414biUXFILkO
+         iJxQ==
+X-Gm-Message-State: AOAM533AS0UP5+TcWB2BveEiiefOnrUW1Azrgxufv3oIiED92s3zPYDR
+        lWdmfMw/FRkhxETlJBke/C5ioA==
+X-Google-Smtp-Source: ABdhPJy4viwkpqIW9TUUZ8Fu3CuE6qIgT5lnM973mXUD1A/F1HkwRsjvVk5v2hTKHhjIcHpWlHRYYQ==
+X-Received: by 2002:a17:902:cf05:b0:156:8445:ce0f with SMTP id i5-20020a170902cf0500b001568445ce0fmr178549plg.99.1651787936011;
+        Thu, 05 May 2022 14:58:56 -0700 (PDT)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id c17-20020a63ef51000000b003c2f9540127sm1782118pgk.93.2022.05.05.14.50.32
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902900300b0015e8d4eb1e7sm128177plp.49.2022.05.05.14.58.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 14:50:32 -0700 (PDT)
-Date:   Thu, 5 May 2022 21:50:28 +0000
+        Thu, 05 May 2022 14:58:55 -0700 (PDT)
+Date:   Thu, 5 May 2022 21:58:52 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
@@ -68,15 +68,15 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         <kvm@vger.kernel.org>,
         "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
         <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v4 03/20] KVM: x86/mmu: Derive shadow MMU page role from
- parent
-Message-ID: <YnRGpDa/kG+9h7Jd@google.com>
+Subject: Re: [PATCH v4 04/20] KVM: x86/mmu: Decompose kvm_mmu_get_page() into
+ separate functions
+Message-ID: <YnRInPVAd7BEBpk6@google.com>
 References: <20220422210546.458943-1-dmatlack@google.com>
- <20220422210546.458943-4-dmatlack@google.com>
+ <20220422210546.458943-5-dmatlack@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422210546.458943-4-dmatlack@google.com>
+In-Reply-To: <20220422210546.458943-5-dmatlack@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -89,223 +89,27 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Fri, Apr 22, 2022, David Matlack wrote:
-> Instead of computing the shadow page role from scratch for every new
-> page, derive most of the information from the parent shadow page.  This
-> avoids redundant calculations and reduces the number of parameters to
-> kvm_mmu_get_page().
+> Decompose kvm_mmu_get_page() into separate helper functions to increase
+> readability and prepare for allocating shadow pages without a vcpu
+> pointer.
 > 
-> Preemptively split out the role calculation to a separate function for
-> use in a following commit.
+> Specifically, pull the guts of kvm_mmu_get_page() into 2 helper
+> functions:
+> 
+> kvm_mmu_find_shadow_page() -
+>   Walks the page hash checking for any existing mmu pages that match the
+>   given gfn and role.
+> 
+> kvm_mmu_alloc_shadow_page()
+>   Allocates and initializes an entirely new kvm_mmu_page. This currently
+>   requries a vcpu pointer for allocation and looking up the memslot but
+>   that will be removed in a future commit.
 > 
 > No functional change intended.
 > 
-> Reviewed-by: Peter Xu <peterx@redhat.com>
 > Signed-off-by: David Matlack <dmatlack@google.com>
 > ---
->  arch/x86/kvm/mmu/mmu.c         | 96 +++++++++++++++++++++++-----------
->  arch/x86/kvm/mmu/paging_tmpl.h |  9 ++--
->  2 files changed, 71 insertions(+), 34 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index dc20eccd6a77..4249a771818b 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2021,31 +2021,15 @@ static void clear_sp_write_flooding_count(u64 *spte)
->  	__clear_sp_write_flooding_count(sptep_to_sp(spte));
->  }
->  
-> -static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
-> -					     gfn_t gfn,
-> -					     gva_t gaddr,
-> -					     unsigned level,
-> -					     bool direct,
-> -					     unsigned int access)
-> +static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
-> +					     union kvm_mmu_page_role role)
->  {
-> -	union kvm_mmu_page_role role;
->  	struct hlist_head *sp_list;
-> -	unsigned quadrant;
->  	struct kvm_mmu_page *sp;
->  	int ret;
->  	int collisions = 0;
->  	LIST_HEAD(invalid_list);
->  
-> -	role = vcpu->arch.mmu->root_role;
-> -	role.level = level;
-> -	role.direct = direct;
-> -	role.access = access;
-> -	if (role.has_4_byte_gpte) {
-> -		quadrant = gaddr >> (PAGE_SHIFT + (PT64_PT_BITS * level));
-> -		quadrant &= (1 << ((PT32_PT_BITS - PT64_PT_BITS) * level)) - 1;
-> -		role.quadrant = quadrant;
-> -	}
-> -
 
-When you rebase to kvm/queue, the helper will need to deal with
+Nice!
 
-	if (level <= vcpu->arch.mmu->cpu_role.base.level)
-		role.passthrough = 0;
-
-KVM should never create a passthrough huge page, so I believe it's just a matter
-of adding yet another boolean param to kvm_mmu_child_role().
-
-
->  	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
->  	for_each_valid_sp(vcpu->kvm, sp, sp_list) {
->  		if (sp->gfn != gfn) {
-> @@ -2063,7 +2047,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
->  			 * Unsync pages must not be left as is, because the new
->  			 * upper-level page will be write-protected.
->  			 */
-> -			if (level > PG_LEVEL_4K && sp->unsync)
-> +			if (role.level > PG_LEVEL_4K && sp->unsync)
->  				kvm_mmu_prepare_zap_page(vcpu->kvm, sp,
->  							 &invalid_list);
->  			continue;
-
-...
-
-> @@ -3310,12 +3338,21 @@ static int mmu_check_root(struct kvm_vcpu *vcpu, gfn_t root_gfn)
->  	return ret;
->  }
->  
-> -static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, gva_t gva,
-> +static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
->  			    u8 level, bool direct)
->  {
-> +	union kvm_mmu_page_role role;
->  	struct kvm_mmu_page *sp;
->  
-> -	sp = kvm_mmu_get_page(vcpu, gfn, gva, level, direct, ACC_ALL);
-> +	role = vcpu->arch.mmu->root_role;
-> +	role.level = level;
-> +	role.direct = direct;
-> +	role.access = ACC_ALL;
-> +
-> +	if (role.has_4_byte_gpte)
-> +		role.quadrant = quadrant;
-
-Maybe add a comment explaining the PAE and 32-bit paging paths share a call for
-allocating PDPTEs?  Otherwise it looks like passing a non-zero quadrant when the
-guest doesn't have 4-byte PTEs should be a bug.
-
-Hmm, even better, if the check is moved to the caller, then this can be:
-
-	role.level = level;
-	role.direct = direct;
-	role.access = ACC_ALL;
-	role.quadrant = quadrant;
-
-	WARN_ON_ONCE(quadrant && !role.has_4_byte_gpte));
-	WARN_ON_ONCE(direct && role.has_4_byte_gpte));
-
-and no comment is necessary.
-
-> +
-> +	sp = kvm_mmu_get_page(vcpu, gfn, role);
->  	++sp->root_count;
->  
->  	return __pa(sp->spt);
-> @@ -3349,8 +3386,8 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
->  		for (i = 0; i < 4; ++i) {
->  			WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
->  
-> -			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT),
-> -					      i << 30, PT32_ROOT_LEVEL, true);
-> +			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), i,
-
-The @quadrant here can be hardcoded to '0', has_4_byte_gpte is guaranteed to be
-false if the MMU is direct.  And then in the indirect path, set gva (and then
-quadrant) based on 'i' iff the guest is using 32-bit paging.
-
-Probably worth making it a separate patch just in case I'm forgetting something.
-Lightly tested...
-
---
-From: Sean Christopherson <seanjc@google.com>
-Date: Thu, 5 May 2022 14:19:35 -0700
-Subject: [PATCH] KVM: x86/mmu: Pass '0' for @gva when allocating root with
- 8-byte gpte
-
-Pass '0' instead of the "real" gva when allocating a direct PAE root,
-a.k.a. a direct PDPTE, and when allocating indirect roots that shadow
-64-bit / 8-byte GPTEs.
-
-Thee @gva is only needed if the root is shadowing 32-bit paging in the
-guest, in which case KVM needs to use different shadow pages for each of
-the two 4-byte GPTEs covered by KVM's 8-byte PAE SPTE.
-
-For direct MMUs, there's obviously no shadowing, and for indirect MMU
-
-In anticipation of moving the quadrant logic into mmu_alloc_root(), WARN
-if a non-zero @gva is passed for !4-byte GPTEs, and WARN if 4-byte GPTEs
-are ever combined with a direct root (there's no shadowing, so TDP roots
-should ignore the GPTE size).
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index dc20eccd6a77..6dfa3cfa8394 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3313,8 +3313,12 @@ static int mmu_check_root(struct kvm_vcpu *vcpu, gfn_t root_gfn)
- static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, gva_t gva,
- 			    u8 level, bool direct)
- {
-+	union kvm_mmu_page_role role = vcpu->arch.mmu->root_role;
- 	struct kvm_mmu_page *sp;
-
-+	WARN_ON_ONCE(gva && !role.has_4_byte_gpte);
-+	WARN_ON_ONCE(direct && role.has_4_byte_gpte);
-+
- 	sp = kvm_mmu_get_page(vcpu, gfn, gva, level, direct, ACC_ALL);
- 	++sp->root_count;
-
-@@ -3349,8 +3353,8 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
- 		for (i = 0; i < 4; ++i) {
- 			WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
-
--			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT),
--					      i << 30, PT32_ROOT_LEVEL, true);
-+			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), 0,
-+					      PT32_ROOT_LEVEL, true);
- 			mmu->pae_root[i] = root | PT_PRESENT_MASK |
- 					   shadow_me_mask;
- 		}
-@@ -3435,6 +3439,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
- 	u64 pdptrs[4], pm_mask;
- 	gfn_t root_gfn, root_pgd;
- 	hpa_t root;
-+	gva_t gva;
- 	unsigned i;
- 	int r;
-
-@@ -3508,6 +3513,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
- 		}
- 	}
-
-+	gva = 0;
- 	for (i = 0; i < 4; ++i) {
- 		WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
-
-@@ -3517,9 +3523,11 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
- 				continue;
- 			}
- 			root_gfn = pdptrs[i] >> PAGE_SHIFT;
-+		} else if (mmu->cpu_role.base.level == PT32_ROOT_LEVEL) {
-+			gva = i << 30;
- 		}
-
--		root = mmu_alloc_root(vcpu, root_gfn, i << 30,
-+		root = mmu_alloc_root(vcpu, root_gfn, gva,
- 				      PT32_ROOT_LEVEL, false);
- 		mmu->pae_root[i] = root | pm_mask;
- 	}
-
-base-commit: 8bae380ad7dd3c31266d3685841ea4ce574d462d
---
-
+Reviewed-by: Sean Christopherson <seanjc@google.com>
