@@ -2,85 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E4751C4E2
-	for <lists+linux-mips@lfdr.de>; Thu,  5 May 2022 18:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F7651C540
+	for <lists+linux-mips@lfdr.de>; Thu,  5 May 2022 18:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345296AbiEEQO3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 May 2022 12:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S243243AbiEEQnY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 May 2022 12:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382328AbiEEQOU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 12:14:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF701D0FC;
-        Thu,  5 May 2022 09:10:32 -0700 (PDT)
+        with ESMTP id S234363AbiEEQnW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 12:43:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A730580DE;
+        Thu,  5 May 2022 09:39:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B22161E38;
-        Thu,  5 May 2022 16:10:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE18C385A8;
-        Thu,  5 May 2022 16:10:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD9A0B82E08;
+        Thu,  5 May 2022 16:39:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C9EBC385A8;
+        Thu,  5 May 2022 16:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651767031;
-        bh=y1bm/ePw6qN7M+uAMLXPbjzr3hDC7iN+2T5U5hZp75c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=V+TiGeXpnpx8QAPISZ/tFZ1vgqt07jnZ/e8UGsZFjYbSOIbxjOaFyb/UjHBhqn5hx
-         Z64n0P5wnIuaGgxiRpF7HUD9ziSD/Vy04koyZ+3OiNayjnxjzS0fZIDvEf4IlnjJDh
-         ZFqZNchd+Rmh0D+frE/gcDMj07LtCQDi4bliOoYzYtwBViRsBNVzjXBMPmC2/Yp3+O
-         avJDoEKTBRLhRLGuv5dd4ZPPntedsmPSHGr9oDetkDU8rgxRb4BichpG/ijCid5diK
-         e/q4W6AYEDDk6fNQ6Z+JXpgOmkNdUU12Kp4sKoGZvuLv591DrEpNAjn9EHl9SCvfts
-         lHbL5gffrnaQA==
-Date:   Thu, 5 May 2022 11:10:28 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-Message-ID: <20220505161028.GA492600@bhelgaas>
+        s=k20201202; t=1651768779;
+        bh=GBXigcmNZ6oOn9FevkRokCy3qepznYTUsv2xJiimIl0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ut2f2uWjvBhhVRVR4NRdJXuyTTf9QAxePd4HC5EVHI7fhBzaDBKpX++IvnSnuPQwz
+         eQ4/hHwUE4NHoPQsThPFTkXyPkT5h3uiKbQ0GQLkVwUUlwAL9o1QEfcvl12wHw9jnC
+         38o+fGeJ4tA63JRmsQTFUWcONUVI/wcjF7+YkZyYCtvADZGhv3APyKD9igryOlKbCY
+         vRfI2+/BUto/ADMC7B3bWo2pCiMpbTGJHnsu47Q2AfEaWb0hCwMiDj+4dgjNlVRMEn
+         AcW9RpKGEDU6wJ5N5wLx62gbShhetgWJeaZmULspwTiQL0SD0IKJLthqzlqcsVdVUt
+         X20i7NbU+HMlg==
+Date:   Thu, 5 May 2022 09:39:38 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Allen Pais <apais@linux.microsoft.com>, netdev@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFm?= =?UTF-8?B?YcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v4 1/1] firmware: tee_bnxt: Use UUID API for exporting
+ the UUID
+Message-ID: <20220505093938.571702fd@kernel.org>
+In-Reply-To: <20220504091407.70661-1-andriy.shevchenko@linux.intel.com>
+References: <20220504091407.70661-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -91,50 +58,17 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 04, 2022 at 11:31:28PM +0200, Arnd Bergmann wrote:
-> On Wed, May 4, 2022 at 11:08 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, Apr 29, 2022 at 03:49:59PM +0200, Niklas Schnelle wrote:
-> > > We introduce a new HAS_IOPORT Kconfig option to indicate support for
-> > > I/O Port access. In a future patch HAS_IOPORT=n will disable compilation
-> > > of the I/O accessor functions inb()/outb() and friends on architectures
-> > > which can not meaningfully support legacy I/O spaces such as s390 or
-> > > where such support is optional.
-> >
-> > So you plan to drop inb()/outb() on architectures where I/O port space
-> > is optional?  So even platforms that have I/O port space may not be
-> > able to use it?
-> >
-> > This feels like a lot of work where the main benefit is to keep
-> > Kconfig from offering drivers that aren't of interest on s390.
-> >
-> > Granted, there may be issues where inb()/outb() does the wrong thing
-> > such as dereferencing null pointers when I/O port space isn't
-> > implemented.  I think that's a defect in inb()/outb() and could be
-> > fixed there.
+On Wed,  4 May 2022 12:14:07 +0300 Andy Shevchenko wrote:
+> There is export_uuid() function which exports uuid_t to the u8 array.
+> Use it instead of open coding variant.
 > 
-> The current implementation in asm-generic/io.h implements inb()/outb()
-> using readb()/writeb() with a fixed architecture specific offset.
+> This allows to hide the uuid_t internals.
 > 
-> There are three possible things that can happen here:
-> 
-> a) there is a host bridge driver that maps its I/O ports to this window,
->     and everything works
-> b) the address range is reserved and accessible but no host bridge
->    driver has mapped its registers there, so an access causes a
->    page fault
-> c) the architecture does not define an offset, and accessing low I/O
->     ports ends up as a NULL pointer dereference
-> 
-> The main goal is to avoid c), which is what happens on s390, but
-> can also happen elsewhere. Catching b) would be nice as well,
-> but is much harder to do from generic code as you'd need an
-> architecture specific inline asm statement to insert a ex_table
-> fixup, or a runtime conditional on each access.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+> v4: added tag (Christoph), resent with 126858db81a5 (in next) in mind (Florian)
 
-Or s390 could implement its own inb().
-
-I'm hearing that generic powerpc kernels have to run both on machines
-that have I/O port space and those that don't.  That makes me think
-s390 could do something similar.
-
-Bjorn
+Judging by the history of the file this may go via the tee tree or
+net-next. Since tee was not CCed I presume the latter is preferred.
+Please let us know if that's incorrect otherwise we'll apply tomorrow :)
