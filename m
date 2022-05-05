@@ -2,354 +2,310 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716BF51CA07
-	for <lists+linux-mips@lfdr.de>; Thu,  5 May 2022 22:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC2B51CB9E
+	for <lists+linux-mips@lfdr.de>; Thu,  5 May 2022 23:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385646AbiEEUMB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 May 2022 16:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S245503AbiEEVyR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 May 2022 17:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiEEUL7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 16:11:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36BE5F247;
-        Thu,  5 May 2022 13:08:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F323B82C4C;
-        Thu,  5 May 2022 20:08:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB6CCC385B7;
-        Thu,  5 May 2022 20:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651781295;
-        bh=2J3A2nVP5j1kW5YxuBOcohrcVqh9eJh7hKJ6qkG2IxE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pGVOA+nlWAv4zF+ej+HpjpYGvH6HjzHeDv3lOmq24s8T0eibj88c7+gk93eI+fRaF
-         Kp3zzYaat/CbzzeB/V10tF09ZsR67AAUtR+0z9cOSKhBAXHUYoO7IQ5BYFKRFGUGr+
-         YQSWOz0N05szaT98gHaOM7xggH2PBGVuuDKZrnw5XyGzmaBHK5ntiBZrWs5sgDoCf+
-         VJ82aib+w3vhPWVcDQ3Cyz6DsJYkC0OKx/WsBcycpc0eIx3+jSu/t+3NgLso6VuUmc
-         neUMO9CWLMcBBYqSO5qbFSr1ATtFaJSrsz3OV9cXjqosJAGpCw/0090GDMQMGxvE6x
-         krOpMKF815ykQ==
-Received: by mail-wm1-f46.google.com with SMTP id o12-20020a1c4d0c000000b00393fbe2973dso5738750wmh.2;
-        Thu, 05 May 2022 13:08:15 -0700 (PDT)
-X-Gm-Message-State: AOAM532d7WSYD7ZC2iW9BXuXRVxpH+486Gmzo/JjBoj5Ob96aKFMRFy6
-        VR3b4Yv8vC1J3thoNkErF0/kAa3eB6IjMRtST0Q=
-X-Google-Smtp-Source: ABdhPJwwObn/UaqT30q1FbiaZHyI1hmOOl8iNniR0W2zAZ7y8tPUXLBWeVll6mQz87F2JUMC3yVO95QaB6biNASW3WU=
-X-Received: by 2002:a05:600c:4144:b0:394:1972:1a73 with SMTP id
- h4-20020a05600c414400b0039419721a73mr27085wmm.71.1651781293834; Thu, 05 May
- 2022 13:08:13 -0700 (PDT)
+        with ESMTP id S1352840AbiEEVyO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 17:54:14 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6185370E
+        for <linux-mips@vger.kernel.org>; Thu,  5 May 2022 14:50:33 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d17so5653283plg.0
+        for <linux-mips@vger.kernel.org>; Thu, 05 May 2022 14:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5X8TLlvge+LlB3alZPLbCxAz6Qe4vYldwHlV49dkSrM=;
+        b=r8TOD7zULp1YAmzdclvxd/BQo4hCWS743mscDf9VA3a5LGYWcHp8Z6o/3lyCM0ndFR
+         zdkOM/1GUpGXCslbckxlZXCC73zZZtGuBQ4VpCWkgcnp34jpf4u/rwj4w9sRIWAldLcT
+         I9Xg22FzOAjQwaOk2OPkWJK/TM/Tqrx2VQ7V8qx/YRikOLesgtu+1jWwD4XqSIogRxXu
+         cAAEjok7Wz6EwTStG758pdT83nrKy5IJ+oFgzHnXyZjhe4bIt5fmDWtClnd1PtpH+ld7
+         6GbQcg0yOqdvGBE3DpRFyUNyBZJTZ5g99gJpCVlLwrJPJLQ/L3Pvtpx8yQJTOeYI8qEh
+         SZQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5X8TLlvge+LlB3alZPLbCxAz6Qe4vYldwHlV49dkSrM=;
+        b=jJBhL+3YmZlKGLAHLwDP4qkCTdMg3Lqsxr1lGvfOB8pDkmVVM9D2xnw+nALr+9BfZq
+         /uUKETCpqIKmQovDAYKrNFW4BMZTdZQWlnD8pT39IIqRtddr2g3LLl+i48AOEmLgcK4K
+         PJ9KRSpVIZtHda4upg4PTPf2vLb7qMWa7sJpMc6L6XK39gv3+aev/jyQgtDC1DySbraD
+         IuXc75HEtmPS8TEBu4KQgZwaKzjXSQ8QZ4QuC/rwWoqPirisxGn+u3sRkH7VN6pzD0hM
+         LQ6AQEp44mg9y9AwOCdWYwn8JY28I8Q1CbsNt52KOCeHoT7r41OsC5PYOE3QxKei0syI
+         AHbw==
+X-Gm-Message-State: AOAM5328HFWZzDmrbnsRqhphoC8dZbT79Rd0hMPPqXAqp3gFZQn2L09G
+        6R0GEc2vUpQlkyvVeQdEdQGATg==
+X-Google-Smtp-Source: ABdhPJwuRDiJVYHYkKhPttO59afzh31uDobhndG7CuDNtKzk9Wtkasqz2Nx2N6J5qXiiYr9Q7ipMyQ==
+X-Received: by 2002:a17:903:228d:b0:15e:a2aa:2c55 with SMTP id b13-20020a170903228d00b0015ea2aa2c55mr323986plh.121.1651787432627;
+        Thu, 05 May 2022 14:50:32 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c17-20020a63ef51000000b003c2f9540127sm1782118pgk.93.2022.05.05.14.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 14:50:32 -0700 (PDT)
+Date:   Thu, 5 May 2022 21:50:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v4 03/20] KVM: x86/mmu: Derive shadow MMU page role from
+ parent
+Message-ID: <YnRGpDa/kG+9h7Jd@google.com>
+References: <20220422210546.458943-1-dmatlack@google.com>
+ <20220422210546.458943-4-dmatlack@google.com>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
- <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
- <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
- <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
- <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
- <CACRpkdaNRX0RDYJd_uaGo5jtiXu_qGHmEDGniaCmR=TZvcHH8A@mail.gmail.com>
- <YnPhna5h1+kQGFLa@sirena.org.uk> <CAK8P3a2cYUYMKSMo3VOLVTO0=LWc0sHf72Eph8t_es9axo_eeA@mail.gmail.com>
- <YnPna0pW9csiFkHK@sirena.org.uk>
-In-Reply-To: <YnPna0pW9csiFkHK@sirena.org.uk>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 5 May 2022 22:07:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1H-74Q1CzqW_Q=7g0KGkcd+TY3HTBbbE27XhXmfJhrRA@mail.gmail.com>
-Message-ID: <CAK8P3a1H-74Q1CzqW_Q=7g0KGkcd+TY3HTBbbE27XhXmfJhrRA@mail.gmail.com>
-Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422210546.458943-4-dmatlack@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 5, 2022 at 5:04 PM Mark Brown <broonie@kernel.org> wrote:
-> On Thu, May 05, 2022 at 04:59:35PM +0200, Arnd Bergmann wrote:
-> > On Thu, May 5, 2022 at 4:39 PM Mark Brown <broonie@kernel.org> wrote:
-> > > On Thu, May 05, 2022 at 04:33:06PM +0200, Linus Walleij wrote:
-> > > > On Thu, May 5, 2022 at 8:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> > > > > static struct snd_soc_jack_pin hs_jack_pin[] = {
-> > > > >         {
-> > > > >                 .pin    = "Headphone Jack",
-> > > > >                 .mask   = SND_JACK_HEADPHONE,
-> > > > >         },
-> > > > >         {
-> > > > >                 .pin    = "Speaker",
-> > > > >                 /* disable speaker when hp jack is inserted */
-> > > > >                 .mask   = SND_JACK_HEADPHONE,
-> > > > >                 .invert = 1,
-> > > > >         },
->
-> > > > Hm some ASoC thingie. No idea what that is, but I suppose another
-> > > > place where a subsystem for legacy reasons try to do the gpiolib
-> > > > inversion on it's own accord. That one isn't flagged as active low in the
-> > > > descriptor so it's fine I guess.
->
-> > > It's saying that when the headphone is inserted the headphone output
-> > > should be enabled and the speaker output should be disabled, and vice
-> > > versa.
->
-> > Ok, that sounds like I should remove the flag here if I declare the
-> > GPIO line as GPIO_ACTIVE_LOW instead of GPIO_ACTIVE_HIGH, right?
->
-> If you change the sense of the GPIO you'll need to flip the invert to
-> the headphone instead of the speaker - whichever way round the GPIO
-> sense is each of the pins should be taking the opposite sense from the
-> GPIO state to the other.
+On Fri, Apr 22, 2022, David Matlack wrote:
+> Instead of computing the shadow page role from scratch for every new
+> page, derive most of the information from the parent shadow page.  This
+> avoids redundant calculations and reduces the number of parameters to
+> kvm_mmu_get_page().
+> 
+> Preemptively split out the role calculation to a separate function for
+> use in a following commit.
+> 
+> No functional change intended.
+> 
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c         | 96 +++++++++++++++++++++++-----------
+>  arch/x86/kvm/mmu/paging_tmpl.h |  9 ++--
+>  2 files changed, 71 insertions(+), 34 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index dc20eccd6a77..4249a771818b 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2021,31 +2021,15 @@ static void clear_sp_write_flooding_count(u64 *spte)
+>  	__clear_sp_write_flooding_count(sptep_to_sp(spte));
+>  }
+>  
+> -static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
+> -					     gfn_t gfn,
+> -					     gva_t gaddr,
+> -					     unsigned level,
+> -					     bool direct,
+> -					     unsigned int access)
+> +static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
+> +					     union kvm_mmu_page_role role)
+>  {
+> -	union kvm_mmu_page_role role;
+>  	struct hlist_head *sp_list;
+> -	unsigned quadrant;
+>  	struct kvm_mmu_page *sp;
+>  	int ret;
+>  	int collisions = 0;
+>  	LIST_HEAD(invalid_list);
+>  
+> -	role = vcpu->arch.mmu->root_role;
+> -	role.level = level;
+> -	role.direct = direct;
+> -	role.access = access;
+> -	if (role.has_4_byte_gpte) {
+> -		quadrant = gaddr >> (PAGE_SHIFT + (PT64_PT_BITS * level));
+> -		quadrant &= (1 << ((PT32_PT_BITS - PT64_PT_BITS) * level)) - 1;
+> -		role.quadrant = quadrant;
+> -	}
+> -
 
-Ok, I hope I got it this time:
+When you rebase to kvm/queue, the helper will need to deal with
 
-- The hs_jack_gpio/"earphone-det" is declared as GPIO_ACTIVE_LOW,
-    with the ".invert" dropped in the snd_soc_jack_gpio definition to match
+	if (level <= vcpu->arch.mmu->cpu_role.base.level)
+		role.passthrough = 0;
 
-- "spk-sd" is declared as GPIO_ACTIVE_LOW, so both
-  this and  "hp-driver" are enabled by setting the gpio to active, rather than
-  the two being opposites
+KVM should never create a passthrough huge page, so I believe it's just a matter
+of adding yet another boolean param to kvm_mmu_child_role().
 
-- snd_soc_jack_pin flips the 'invert' flag from speaker to headphone, since
-  the "earphone-det" is now  reversed
 
-- hx4700_spk_power() flips polarity when setting the output to match the
-  GPIO_ACTIVE_LOW setting, but hx4700_hp_power() does not change.
+>  	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
+>  	for_each_valid_sp(vcpu->kvm, sp, sp_list) {
+>  		if (sp->gfn != gfn) {
+> @@ -2063,7 +2047,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
+>  			 * Unsync pages must not be left as is, because the new
+>  			 * upper-level page will be write-protected.
+>  			 */
+> -			if (level > PG_LEVEL_4K && sp->unsync)
+> +			if (role.level > PG_LEVEL_4K && sp->unsync)
+>  				kvm_mmu_prepare_zap_page(vcpu->kvm, sp,
+>  							 &invalid_list);
+>  			continue;
 
-        Arnd
+...
 
-commit 20a9b05eff0488b78aa02c07f58654daa294069a
-Author: Arnd Bergmann <arnd@arndb.de>
-Date:   Wed Sep 11 14:27:13 2019 +0200
+> @@ -3310,12 +3338,21 @@ static int mmu_check_root(struct kvm_vcpu *vcpu, gfn_t root_gfn)
+>  	return ret;
+>  }
+>  
+> -static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, gva_t gva,
+> +static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
+>  			    u8 level, bool direct)
+>  {
+> +	union kvm_mmu_page_role role;
+>  	struct kvm_mmu_page *sp;
+>  
+> -	sp = kvm_mmu_get_page(vcpu, gfn, gva, level, direct, ACC_ALL);
+> +	role = vcpu->arch.mmu->root_role;
+> +	role.level = level;
+> +	role.direct = direct;
+> +	role.access = ACC_ALL;
+> +
+> +	if (role.has_4_byte_gpte)
+> +		role.quadrant = quadrant;
 
-    ARM: pxa: hx4700: use gpio descriptors for audio
+Maybe add a comment explaining the PAE and 32-bit paging paths share a call for
+allocating PDPTEs?  Otherwise it looks like passing a non-zero quadrant when the
+guest doesn't have 4-byte PTEs should be a bug.
 
-    The audio driver should not use a hardwired gpio number
-    from the header. Change it to use a lookup table.
+Hmm, even better, if the check is moved to the caller, then this can be:
 
-    Cc: Philipp Zabel <philipp.zabel@gmail.com>
-    Cc: Paul Parsons <lost.distance@yahoo.com>
-    Acked-by: Mark Brown <broonie@kernel.org>
-    Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-    Cc: alsa-devel@alsa-project.org
-    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+	role.level = level;
+	role.direct = direct;
+	role.access = ACC_ALL;
+	role.quadrant = quadrant;
 
-diff --git a/arch/arm/mach-pxa/hx4700-pcmcia.c
-b/arch/arm/mach-pxa/hx4700-pcmcia.c
-index e8acbfc9ef6c..e2331dfe427d 100644
---- a/arch/arm/mach-pxa/hx4700-pcmcia.c
-+++ b/arch/arm/mach-pxa/hx4700-pcmcia.c
-@@ -10,7 +10,7 @@
- #include <linux/irq.h>
+	WARN_ON_ONCE(quadrant && !role.has_4_byte_gpte));
+	WARN_ON_ONCE(direct && role.has_4_byte_gpte));
 
- #include <asm/mach-types.h>
--#include <mach/hx4700.h>
-+#include "hx4700.h"
+and no comment is necessary.
 
- #include <pcmcia/soc_common.h>
+> +
+> +	sp = kvm_mmu_get_page(vcpu, gfn, role);
+>  	++sp->root_count;
+>  
+>  	return __pa(sp->spt);
+> @@ -3349,8 +3386,8 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
+>  		for (i = 0; i < 4; ++i) {
+>  			WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
+>  
+> -			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT),
+> -					      i << 30, PT32_ROOT_LEVEL, true);
+> +			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), i,
 
-diff --git a/arch/arm/mach-pxa/hx4700.c b/arch/arm/mach-pxa/hx4700.c
-index 140a44cb2989..2ae06edf413c 100644
---- a/arch/arm/mach-pxa/hx4700.c
-+++ b/arch/arm/mach-pxa/hx4700.c
-@@ -41,7 +41,7 @@
+The @quadrant here can be hardcoded to '0', has_4_byte_gpte is guaranteed to be
+false if the MMU is direct.  And then in the indirect path, set gva (and then
+quadrant) based on 'i' iff the guest is using 32-bit paging.
 
- #include "pxa27x.h"
- #include "addr-map.h"
--#include <mach/hx4700.h>
-+#include "hx4700.h"
- #include <linux/platform_data/irda-pxaficp.h>
+Probably worth making it a separate patch just in case I'm forgetting something.
+Lightly tested...
 
- #include <sound/ak4641.h>
-@@ -834,6 +834,19 @@ static struct i2c_board_info i2c_board_info[]
-__initdata = {
-        },
- };
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Thu, 5 May 2022 14:19:35 -0700
+Subject: [PATCH] KVM: x86/mmu: Pass '0' for @gva when allocating root with
+ 8-byte gpte
 
-+static struct gpiod_lookup_table hx4700_audio_gpio_table = {
-+       .dev_id = "hx4700-audio",
-+       .table = {
-+               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-+                           "earphone-det", GPIO_ACTIVE_LOW),
-+               GPIO_LOOKUP("gpio-pxa", GPIO92_HX4700_HP_DRIVER,
-+                           "hp-driver", GPIO_ACTIVE_HIGH),
-+               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
-+                           "spk-sd", GPIO_ACTIVE_LOW),
-+               { },
-+       },
-+};
+Pass '0' instead of the "real" gva when allocating a direct PAE root,
+a.k.a. a direct PDPTE, and when allocating indirect roots that shadow
+64-bit / 8-byte GPTEs.
+
+Thee @gva is only needed if the root is shadowing 32-bit paging in the
+guest, in which case KVM needs to use different shadow pages for each of
+the two 4-byte GPTEs covered by KVM's 8-byte PAE SPTE.
+
+For direct MMUs, there's obviously no shadowing, and for indirect MMU
+
+In anticipation of moving the quadrant logic into mmu_alloc_root(), WARN
+if a non-zero @gva is passed for !4-byte GPTEs, and WARN if 4-byte GPTEs
+are ever combined with a direct root (there's no shadowing, so TDP roots
+should ignore the GPTE size).
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index dc20eccd6a77..6dfa3cfa8394 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3313,8 +3313,12 @@ static int mmu_check_root(struct kvm_vcpu *vcpu, gfn_t root_gfn)
+ static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, gva_t gva,
+ 			    u8 level, bool direct)
+ {
++	union kvm_mmu_page_role role = vcpu->arch.mmu->root_role;
+ 	struct kvm_mmu_page *sp;
+
++	WARN_ON_ONCE(gva && !role.has_4_byte_gpte);
++	WARN_ON_ONCE(direct && role.has_4_byte_gpte);
 +
- static struct platform_device audio = {
-        .name   = "hx4700-audio",
-        .id     = -1,
-@@ -895,6 +908,7 @@ static void __init hx4700_init(void)
+ 	sp = kvm_mmu_get_page(vcpu, gfn, gva, level, direct, ACC_ALL);
+ 	++sp->root_count;
 
-        gpiod_add_lookup_table(&bq24022_gpiod_table);
-        gpiod_add_lookup_table(&gpio_vbus_gpiod_table);
-+       gpiod_add_lookup_table(&hx4700_audio_gpio_table);
-        platform_add_devices(devices, ARRAY_SIZE(devices));
-        pwm_add_table(hx4700_pwm_lookup, ARRAY_SIZE(hx4700_pwm_lookup));
+@@ -3349,8 +3353,8 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
+ 		for (i = 0; i < 4; ++i) {
+ 			WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
 
-diff --git a/arch/arm/mach-pxa/include/mach/hx4700.h
-b/arch/arm/mach-pxa/hx4700.h
-similarity index 99%
-rename from arch/arm/mach-pxa/include/mach/hx4700.h
-rename to arch/arm/mach-pxa/hx4700.h
-index 0c30e6d9c660..ce2db33989e1 100644
---- a/arch/arm/mach-pxa/include/mach/hx4700.h
-+++ b/arch/arm/mach-pxa/hx4700.h
-@@ -10,7 +10,7 @@
+-			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT),
+-					      i << 30, PT32_ROOT_LEVEL, true);
++			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), 0,
++					      PT32_ROOT_LEVEL, true);
+ 			mmu->pae_root[i] = root | PT_PRESENT_MASK |
+ 					   shadow_me_mask;
+ 		}
+@@ -3435,6 +3439,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 	u64 pdptrs[4], pm_mask;
+ 	gfn_t root_gfn, root_pgd;
+ 	hpa_t root;
++	gva_t gva;
+ 	unsigned i;
+ 	int r;
 
- #include <linux/gpio.h>
- #include <linux/mfd/asic3.h>
--#include "irqs.h" /* PXA_NR_BUILTIN_GPIO */
-+#include <mach/irqs.h> /* PXA_NR_BUILTIN_GPIO */
+@@ -3508,6 +3513,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 		}
+ 	}
 
- #define HX4700_ASIC3_GPIO_BASE PXA_NR_BUILTIN_GPIO
- #define HX4700_EGPIO_BASE      (HX4700_ASIC3_GPIO_BASE + ASIC3_NUM_GPIOS)
-diff --git a/sound/soc/pxa/hx4700.c b/sound/soc/pxa/hx4700.c
-index 7334fac758de..e6473c50e512 100644
---- a/sound/soc/pxa/hx4700.c
-+++ b/sound/soc/pxa/hx4700.c
-@@ -10,7 +10,7 @@
- #include <linux/interrupt.h>
- #include <linux/platform_device.h>
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
++	gva = 0;
+ 	for (i = 0; i < 4; ++i) {
+ 		WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
 
- #include <sound/core.h>
- #include <sound/jack.h>
-@@ -18,10 +18,10 @@
- #include <sound/pcm_params.h>
- #include <sound/soc.h>
+@@ -3517,9 +3523,11 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 				continue;
+ 			}
+ 			root_gfn = pdptrs[i] >> PAGE_SHIFT;
++		} else if (mmu->cpu_role.base.level == PT32_ROOT_LEVEL) {
++			gva = i << 30;
+ 		}
 
--#include <mach/hx4700.h>
- #include <asm/mach-types.h>
- #include "pxa2xx-i2s.h"
+-		root = mmu_alloc_root(vcpu, root_gfn, i << 30,
++		root = mmu_alloc_root(vcpu, root_gfn, gva,
+ 				      PT32_ROOT_LEVEL, false);
+ 		mmu->pae_root[i] = root | pm_mask;
+ 	}
 
-+static struct gpio_desc *gpiod_hp_driver, *gpiod_spk_sd;
- static struct snd_soc_jack hs_jack;
+base-commit: 8bae380ad7dd3c31266d3685841ea4ce574d462d
+--
 
- /* Headphones jack detection DAPM pin */
-@@ -29,20 +29,18 @@ static struct snd_soc_jack_pin hs_jack_pin[] = {
-        {
-                .pin    = "Headphone Jack",
-                .mask   = SND_JACK_HEADPHONE,
-+               .invert = 1,
-        },
-        {
-                .pin    = "Speaker",
-                /* disable speaker when hp jack is inserted */
-                .mask   = SND_JACK_HEADPHONE,
--               .invert = 1,
-        },
- };
-
- /* Headphones jack detection GPIO */
- static struct snd_soc_jack_gpio hs_jack_gpio = {
--       .gpio           = GPIO75_HX4700_EARPHONE_nDET,
--       .invert         = true,
--       .name           = "hp-gpio",
-+       .name           = "earphone-det",
-        .report         = SND_JACK_HEADPHONE,
-        .debounce_time  = 200,
- };
-@@ -81,14 +79,14 @@ static const struct snd_soc_ops hx4700_ops = {
- static int hx4700_spk_power(struct snd_soc_dapm_widget *w,
-                            struct snd_kcontrol *k, int event)
- {
--       gpio_set_value(GPIO107_HX4700_SPK_nSD, !!SND_SOC_DAPM_EVENT_ON(event));
-+       gpiod_set_value(gpiod_spk_sd, !SND_SOC_DAPM_EVENT_ON(event));
-        return 0;
- }
-
- static int hx4700_hp_power(struct snd_soc_dapm_widget *w,
-                           struct snd_kcontrol *k, int event)
- {
--       gpio_set_value(GPIO92_HX4700_HP_DRIVER, !!SND_SOC_DAPM_EVENT_ON(event));
-+       gpiod_set_value(gpiod_hp_driver, !!SND_SOC_DAPM_EVENT_ON(event));
-        return 0;
- }
-
-@@ -162,11 +160,6 @@ static struct snd_soc_card snd_soc_card_hx4700 = {
-        .fully_routed           = true,
- };
-
--static struct gpio hx4700_audio_gpios[] = {
--       { GPIO107_HX4700_SPK_nSD, GPIOF_OUT_INIT_HIGH, "SPK_POWER" },
--       { GPIO92_HX4700_HP_DRIVER, GPIOF_OUT_INIT_LOW, "EP_POWER" },
--};
--
- static int hx4700_audio_probe(struct platform_device *pdev)
- {
-        int ret;
-@@ -174,26 +167,26 @@ static int hx4700_audio_probe(struct
-platform_device *pdev)
-        if (!machine_is_h4700())
-                return -ENODEV;
-
--       ret = gpio_request_array(hx4700_audio_gpios,
--                               ARRAY_SIZE(hx4700_audio_gpios));
-+       gpiod_hp_driver = devm_gpiod_get(&pdev->dev, "hp-driver", GPIOD_ASIS);
-+       ret = PTR_ERR_OR_ZERO(gpiod_hp_driver);
-+       if (ret)
-+               return ret;
-+       gpiod_spk_sd = devm_gpiod_get(&pdev->dev, "spk-sd", GPIOD_ASIS);
-+       ret = PTR_ERR_OR_ZERO(gpiod_spk_sd);
-        if (ret)
-                return ret;
-
-+       hs_jack_gpio.gpiod_dev = &pdev->dev;
-        snd_soc_card_hx4700.dev = &pdev->dev;
-        ret = devm_snd_soc_register_card(&pdev->dev, &snd_soc_card_hx4700);
--       if (ret)
--               gpio_free_array(hx4700_audio_gpios,
--                               ARRAY_SIZE(hx4700_audio_gpios));
-
-        return ret;
- }
-
- static int hx4700_audio_remove(struct platform_device *pdev)
- {
--       gpio_set_value(GPIO92_HX4700_HP_DRIVER, 0);
--       gpio_set_value(GPIO107_HX4700_SPK_nSD, 0);
--
--       gpio_free_array(hx4700_audio_gpios, ARRAY_SIZE(hx4700_audio_gpios));
-+       gpiod_set_value(gpiod_hp_driver, 0);
-+       gpiod_set_value(gpiod_spk_sd, 0);
-        return 0;
- }
