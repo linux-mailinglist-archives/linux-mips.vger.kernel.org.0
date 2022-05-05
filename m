@@ -2,49 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0C051B99B
-	for <lists+linux-mips@lfdr.de>; Thu,  5 May 2022 10:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 593B751B9B8
+	for <lists+linux-mips@lfdr.de>; Thu,  5 May 2022 10:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346321AbiEEIKV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 May 2022 04:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
+        id S1346521AbiEEIQW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 May 2022 04:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239748AbiEEIKV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 04:10:21 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB15533E89
-        for <linux-mips@vger.kernel.org>; Thu,  5 May 2022 01:06:40 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxMNqEhXNi6J8KAA--.43533S2;
-        Thu, 05 May 2022 16:06:29 +0800 (CST)
-From:   Hui Li <lihui@loongson.cn>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     kexec@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: [PATCH v3] kexec-tools:mips:Pass initrd parameter via cmdline
-Date:   Thu,  5 May 2022 16:06:28 +0800
-Message-Id: <20220505080628.14708-1-lihui@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
+        with ESMTP id S234291AbiEEIQU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 04:16:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E487724080;
+        Thu,  5 May 2022 01:12:41 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2454o237019760;
+        Thu, 5 May 2022 08:10:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=z4sq9VpdyC1twtJvv6LraDF4oC5l7K1Gjqz/EX96h48=;
+ b=byg8yPH7lB6IZpHqaGAW/IeqHBFw1qVNnemAYMuW6RqtAD2Pr44LXtY5qhdvLHHtmyHS
+ zx9iz65kowFV3EWLgEN1WG/d59kZe4yfXhGahlw0zEySpnmOMpKtnTu1H+qcza8lcgus
+ VP1jt7FqQK3My93W8lTLtP5pcjNasJUlrXI0Oj9oLP5ti+9vQ6TEUWY2ibcsPnUs14uv
+ NmvMjJPL0KUnhOk2z1eHsYp83y9pSRyRUfpRV7sovwq8yCY9xzBZFlBb50MQwBEdnaiO
+ 0N3pnELj4DvaEamDhYosnYTLvIbL2KA1mWAd5tpRBkVo6hFlV6xAvxmWORtU26wlKUnZ hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fv7w5ayn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 08:10:24 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24580f9U005340;
+        Thu, 5 May 2022 08:10:23 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fv7w5ayks-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 08:10:22 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 245884X7030065;
+        Thu, 5 May 2022 08:10:20 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3fttcj2t2u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 08:10:19 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2458AH1F53543266
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 May 2022 08:10:17 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C65511C050;
+        Thu,  5 May 2022 08:10:17 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B05911C04A;
+        Thu,  5 May 2022 08:10:15 +0000 (GMT)
+Received: from sig-9-145-85-251.uk.ibm.com (unknown [9.145.85.251])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  5 May 2022 08:10:15 +0000 (GMT)
+Message-ID: <ce5510ff230fe76d9a74d0368d7d5be22011ff88.camel@linux.ibm.com>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Date:   Thu, 05 May 2022 10:10:15 +0200
+In-Reply-To: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
+References: <20220429135108.2781579-2-schnelle@linux.ibm.com>
+         <20220504210840.GA469916@bhelgaas>
+         <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TfB74bisdmBom1WXjB4-tPfxPcdeJalQ
+X-Proofpoint-ORIG-GUID: fSEH5H7pwKFZyghH7nTHuMCiubmCCcLs
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9BxMNqEhXNi6J8KAA--.43533S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw1xtw13CF4kur13Cw1UAwb_yoW7Gr1fpw
-        43tas8Gr4rAw4xtryfAFs8X3yfXwn3A3WjvFWag34DZ3Z0gFn0q3yfXF15ZryDJrWjvF1I
-        yrWYvFykua17Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r43MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07b7D7-UUUUU=
-X-CM-SenderInfo: 5olk3xo6or00hjvr0hdfq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-05_02,2022-05-04_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ spamscore=0 clxscore=1015 malwarescore=0 adultscore=0 priorityscore=1501
+ suspectscore=0 bulkscore=0 mlxlogscore=278 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205050055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,155 +131,59 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Under loongson platform,use command:
-kexec -l vmlinux... --append="root=UUID=28e1..." --initrd=...
-kexec -e
-quick restart failed like this:
+On Wed, 2022-05-04 at 23:31 +0200, Arnd Bergmann wrote:
+> On Wed, May 4, 2022 at 11:08 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, Apr 29, 2022 at 03:49:59PM +0200, Niklas Schnelle wrote:
+> > > We introduce a new HAS_IOPORT Kconfig option to indicate support for
+> > > I/O Port access. In a future patch HAS_IOPORT=n will disable compilation
+> > > of the I/O accessor functions inb()/outb() and friends on architectures
+> > > which can not meaningfully support legacy I/O spaces such as s390 or
+> > > where such support is optional.
+> > 
+> > So you plan to drop inb()/outb() on architectures where I/O port space
+> > is optional?  So even platforms that have I/O port space may not be
+> > able to use it?
+> > 
+> > This feels like a lot of work where the main benefit is to keep
+> > Kconfig from offering drivers that aren't of interest on s390.
+> > 
+> > Granted, there may be issues where inb()/outb() does the wrong thing
+> > such as dereferencing null pointers when I/O port space isn't
+> > implemented.  I think that's a defect in inb()/outb() and could be
+> > fixed there.
+> 
+> The current implementation in asm-generic/io.h implements inb()/outb()
+> using readb()/writeb() with a fixed architecture specific offset.
+> 
+> There are three possible things that can happen here:
+> 
+> a) there is a host bridge driver that maps its I/O ports to this window,
+>     and everything works
+> b) the address range is reserved and accessible but no host bridge
+>    driver has mapped its registers there, so an access causes a
+>    page fault
+> c) the architecture does not define an offset, and accessing low I/O
+>     ports ends up as a NULL pointer dereference
+> 
+> The main goal is to avoid c), which is what happens on s390, but
+> can also happen elsewhere. Catching b) would be nice as well,
+> but is much harder to do from generic code as you'd need an
+> architecture specific inline asm statement to insert a ex_table
+> fixup, or a runtime conditional on each access.
+> 
+>          Arnd
 
-[    3.420791] VFS: Cannot open root device "UUID=6462a8a4-02fb-49ff-bcb6-54fe53813c2a" or unknown-block(0,0): error -6
-[    3.431262] Please append a correct "root=" boot option; here are the available partitions:
-...
-...
-...
-[    3.543175]   0801         4194304 sda1 554e69cc-01
-[    3.543175]
-[    3.549494]   0802        62914560 sda2 554e69cc-02
-[    3.549495]
-[    3.555818]   0803         8388608 sda3 554e69cc-03
-[    3.555819]
-[    3.562139]   0804       174553229 sda4 554e69cc-04
-[    3.562139]
-[    3.568463] 0b00         1048575 sr0
-[    3.568464]  driver: sr
-[    3.574524] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
-[    3.582750] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
+Yes and to add to this, we did try a local solution in inb()/outb()
+before. This added a warning when they are used and we know at compile
+time that we're dealing with case c). This approach was nacked by Linus
+though as we were turning a compile time known broken case into a
+runtime one:
 
-For compatibility with previous platforms,
-loongson platform obtain the initrd parameter through cmdline in kernel,
-and the kernel also supports the use of cmdline to parse initrd.
-But under the mips architecture, kexec-tools pass the initrd through DTB.
-So some modifications are made as follows:
+https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
 
-(1) in kexec/arch/mips/kexec-elf-mips.c
-    Add patch_initrd_info() function, at runtime to distinguish different platforms.
-    Only for loongson platform, add initrd parameter to cmdline.
-
-(2) in kexec/arch/mips/crashdump-mips.c
-    Because loongson uses a different page_offset,
-    it should be modified to ensure that crashdump functionality is correct and reliable.
-
-Signed-off-by: Hui Li <lihui@loongson.cn>
----
- kexec/arch/mips/crashdump-mips.c |  3 ++
- kexec/arch/mips/kexec-elf-mips.c | 73 +++++++++++++++++++++++++++++++-
- 2 files changed, 74 insertions(+), 2 deletions(-)
-
-diff --git a/kexec/arch/mips/crashdump-mips.c b/kexec/arch/mips/crashdump-mips.c
-index aa09c83..548aeff 100644
---- a/kexec/arch/mips/crashdump-mips.c
-+++ b/kexec/arch/mips/crashdump-mips.c
-@@ -335,6 +335,9 @@ static int patch_elf_info(void)
- 			/* OCTEON uses a different page_offset. */
- 			if (strstr(line, "Octeon"))
- 				elf_info64.page_offset = 0x8000000000000000ULL;
-+			/* LOONGSON uses a different page_offset. */
-+			else if (strstr(line, "Loongson"))
-+				elf_info64.page_offset = 0xffffffff80000000ULL;
- 			break;
- 		}
- 	}
-diff --git a/kexec/arch/mips/kexec-elf-mips.c b/kexec/arch/mips/kexec-elf-mips.c
-index a2d11fc..fcc711c 100644
---- a/kexec/arch/mips/kexec-elf-mips.c
-+++ b/kexec/arch/mips/kexec-elf-mips.c
-@@ -40,6 +40,74 @@ static const int probe_debug = 0;
- #define CMDLINE_PREFIX "kexec "
- static char cmdline_buf[COMMAND_LINE_SIZE] = CMDLINE_PREFIX;
- 
-+/* Converts unsigned long to ascii string. */
-+static void ultoa(unsigned long i, char *str)
-+{
-+	int j = 0, k;
-+	char tmp;
-+
-+	do {
-+		str[j++] = i % 10 + '0';
-+	} while ((i /= 10) > 0);
-+	str[j] = '\0';
-+
-+	/* Reverse the string. */
-+	for (j = 0, k = strlen(str) - 1; j < k; j++, k--) {
-+		tmp = str[k];
-+		str[k] = str[j];
-+		str[j] = tmp;
-+	}
-+}
-+
-+/* Adds initrd parameters to command line. */
-+static int cmdline_add_initrd(char *cmdline, unsigned long addr, char *new_para)
-+{
-+	int cmdlen, len;
-+	char str[30], *ptr;
-+
-+	ptr = str;
-+	strcpy(str, new_para);
-+	ptr += strlen(str);
-+	ultoa(addr, ptr);
-+	len = strlen(str);
-+	cmdlen = strlen(cmdline) + len;
-+	if (cmdlen > (COMMAND_LINE_SIZE - 1))
-+		die("Command line overflow\n");
-+	strcat(cmdline, str);
-+
-+	return 0;
-+}
-+
-+/* add initrd to cmdline to compatible with previous platforms. */
-+static int patch_initrd_info(char *cmdline, unsigned long initrd_base, unsigned long initrd_size)
-+{
-+	const char cpuinfo[] = "/proc/cpuinfo";
-+	char line[MAX_LINE];
-+	FILE *fp;
-+    unsigned long page_offset = PAGE_OFFSET;
-+
-+	fp = fopen(cpuinfo, "r");
-+	if (!fp) {
-+		fprintf(stderr, "Cannot open %s: %s\n",
-+		cpuinfo, strerror(errno));
-+		return -1;
-+	}
-+	while (fgets(line, sizeof(line), fp) != 0) {
-+		if (strncmp(line, "cpu model", 9) == 0) {
-+			/* LOONGSON64  uses a different page_offset. */
-+		if (strstr(line, "Loongson")) {
-+				if (arch_options.core_header_type == CORE_TYPE_ELF64)
-+					page_offset = (unsigned long)0xffffffff80000000ULL;
-+				cmdline_add_initrd(cmdline, page_offset + initrd_base, " rd_start=");
-+				cmdline_add_initrd(cmdline, initrd_size, " rd_size=");
-+				break;
-+			}
-+		}
-+	}
-+	fclose(fp);
-+	return 0;
-+}
-+
- int elf_mips_probe(const char *buf, off_t len)
- {
- 	struct mem_ehdr ehdr;
-@@ -171,9 +239,10 @@ int elf_mips_load(int argc, char **argv, const char *buf, off_t len,
- 		/* Now that the buffer for initrd is prepared, update the dtb
- 		 * with an appropriate location */
- 		dtb_set_initrd(&dtb_buf, &dtb_length, initrd_base, initrd_base + initrd_size);
--	}
--
- 
-+		/* Add the initrd parameters to cmdline */
-+		patch_initrd_info(cmdline_buf, initrd_base, initrd_size);
-+	}
- 	/* This is a legacy method for commandline passing used
- 	 * currently by Octeon CPUs only */
- 	add_buffer(info, cmdline_buf, sizeof(cmdline_buf),
--- 
-2.20.1
+I do agree with this assesment and think this is the right™ approach
+but it is more churn as can be seen by the size of this series. I think
+longer term it could be valuable though especially if more platforms
+phase out I/O port support like POWER9 for which this also allows
+filtering what drivers will never work.
 
