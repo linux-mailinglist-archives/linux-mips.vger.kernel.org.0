@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A664B51CCC7
-	for <lists+linux-mips@lfdr.de>; Fri,  6 May 2022 01:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3399151CCE8
+	for <lists+linux-mips@lfdr.de>; Fri,  6 May 2022 01:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347742AbiEEXgt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 May 2022 19:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S235584AbiEEXui (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 May 2022 19:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiEEXgp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 19:36:45 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195055E77F
-        for <linux-mips@vger.kernel.org>; Thu,  5 May 2022 16:33:05 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id s14so5805707plk.8
-        for <linux-mips@vger.kernel.org>; Thu, 05 May 2022 16:33:05 -0700 (PDT)
+        with ESMTP id S1386888AbiEEXuh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 19:50:37 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F38606FA
+        for <linux-mips@vger.kernel.org>; Thu,  5 May 2022 16:46:56 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p8so4884769pfh.8
+        for <linux-mips@vger.kernel.org>; Thu, 05 May 2022 16:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=1Rru4EvM+XN9fli3rN5SHjuT5guNThoc36o1YydC9Qw=;
-        b=an3wpmzQDMQBkQXqJoOqd+t3py56kyzvH6SCFffNtjcFenp5AuLHGLxJnfURCGI1+n
-         uE9X/0H1kj/PRv/Zo127tJTpx031+RG5G+7idyXKOfNS3/LCuHdR9TUGlCDOd2fTX0GR
-         uSnL5URALBUeYYhd47aPiBvJwAR9rvRdJWWN+pTORArwRgWnJN74zQM9jtsAVEWrk3tW
-         jHehIdevXXhdPspJtGMRa5MhmK8Mn0J0TAT99JodxRypVQgnwiCjbvlZimpERRb4P9ea
-         Rl7p+mvefRVHBNMXq2ADk/r/yGexaUrT12X7Oh2dzI6i8jRl2bzD5sU6OP8DMLHciHaO
-         UDpg==
+        bh=UXlxQWVPF63McNIcQ+A040lcStWvWFpvQxHMkE9R0XY=;
+        b=At67K2Y4KGg6aRuQ7SBWpf7VNQtpqf3Y1lbdewqOCGIOp9dBYcGBoaWLhYEoSIqxQP
+         Zv8nH9HNjn04xhBHJnvRuaqDorPQBLGEleKUtbDW9+CVyCrzSCnQUe906MMzyfvI5cOp
+         cphDe1trwuzxUWWfrEjR8RLktm6BDp7pMrINwNHC2Lj6C6poV2839PsPY7xjZoNuG/Xo
+         RlEuXTtiokG2+cELXEYgNDgGHfnw+t1XqQH+Kdhv2oEegEx3lEbHa5XnPuPB4TtJuR43
+         /0OP26/oUVQBq/o9zTyABDxGo+Zk5+FzKWWuXZM90ikc+sDNWr4R7RlS/ZzuShzLvU/m
+         BtzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1Rru4EvM+XN9fli3rN5SHjuT5guNThoc36o1YydC9Qw=;
-        b=b9HjwSBr4pCVXndRXlu5W5B5vMkm8oUQvrTT81XKUkXysiRxyAhelAyd23/j+sIrMH
-         jx4/LjM7Gtqjl63rMA6ZXE+JvQgvQp5GcKbeFENG2CteueUm3dy3Z6P3Duet1RDKY5LJ
-         ZZy7SKnvcfomPRAjGPR45tmqd5lUfeLTXYIc4aSS0mTmiVblYUQFqUlC0Os/gm8hTNyV
-         2LfJovPBebSJfdoIGyxM5RhVqkIIZrWf2sSZkM7RHIixac0hlCvj3sYJiWkpWmbYnWzb
-         gFL8csInookUHbMfimNv6Reui/fkI0o8YwzQgGk18Pc9iCfiEhYz+UJUdP+bqX+VgozB
-         f6uQ==
-X-Gm-Message-State: AOAM530kGOV7oIvkBNchkHh9MvEqyqvJ8RaoYAGLP/iv6Ab4xGRQWesJ
-        iuwXBAUHZNhx8vRqTM+p841Qsg==
-X-Google-Smtp-Source: ABdhPJz15lbM0bMDWimOz5AKmg1zx67gRQwuIdcs+TBruzTwqhiF+UyOijI/QMMMoovS4rb8KIF7Lg==
-X-Received: by 2002:a17:902:b704:b0:156:624:934b with SMTP id d4-20020a170902b70400b001560624934bmr671141pls.116.1651793584418;
-        Thu, 05 May 2022 16:33:04 -0700 (PDT)
+        bh=UXlxQWVPF63McNIcQ+A040lcStWvWFpvQxHMkE9R0XY=;
+        b=CaqskuCW9ZNk23pE9dIRaOJu8/WWqnKZQ4o7V2cnSO/iwHafFIaWizTCrn8ET5pwYu
+         9ltdZ/+8mspBrB9ef0+3J2yboqlBh0t+CEDPKWF2bMuz+rZAjx7voM1mUksfaVT4ViOF
+         3MIBz4gnPnELCIfEJmiCOL8/MWiVz+1eiYMyfbkytUw1fYR3K1JQeQ96FzMveJXfMm9n
+         O6GSmWBWNP4QxKt5md8UnvsyLasiFAoL8JmE3ht2CSxy7GrJ/ejQvXeWGrHznGLkTvAZ
+         H3GaVqt3+1nq8clirbeuv9zAPTjrVTc/Bu1jDsZzJ+NwXRDtjGOHs0Hhxt97T0byPc3e
+         EkpQ==
+X-Gm-Message-State: AOAM531IvglBuRfOQmJckAvWjBcdcZqM0ow+1Ma+IalFJ4AM6t0NneK4
+        M7wx2zbc9BuOCVBCV31Ri/KqzA==
+X-Google-Smtp-Source: ABdhPJz58A4E/Uzn7xxWw89AW8b22CVIBbrmFsaLiw+m0NqSKF1b6yIOoFI8sXFMfGQhIvtZl+2WbA==
+X-Received: by 2002:a63:88c3:0:b0:3ab:2edc:b95b with SMTP id l186-20020a6388c3000000b003ab2edcb95bmr473166pgd.233.1651794415699;
+        Thu, 05 May 2022 16:46:55 -0700 (PDT)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id w131-20020a627b89000000b0050dc762815fsm1931440pfc.57.2022.05.05.16.33.04
+        by smtp.gmail.com with ESMTPSA id b10-20020a17090a550a00b001d954837197sm5814952pji.22.2022.05.05.16.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 16:33:04 -0700 (PDT)
-Date:   Thu, 5 May 2022 23:33:00 +0000
+        Thu, 05 May 2022 16:46:55 -0700 (PDT)
+Date:   Thu, 5 May 2022 23:46:51 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
@@ -68,15 +68,15 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         <kvm@vger.kernel.org>,
         "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
         <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v4 11/20] KVM: x86/mmu: Allow for NULL vcpu pointer in
- __kvm_mmu_get_shadow_page()
-Message-ID: <YnRerE5+FpwkUdQE@google.com>
+Subject: Re: [PATCH v4 13/20] KVM: x86/mmu: Decouple rmap_add() and
+ link_shadow_page() from kvm_vcpu
+Message-ID: <YnRh6yyGQZ+U31U1@google.com>
 References: <20220422210546.458943-1-dmatlack@google.com>
- <20220422210546.458943-12-dmatlack@google.com>
+ <20220422210546.458943-14-dmatlack@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422210546.458943-12-dmatlack@google.com>
+In-Reply-To: <20220422210546.458943-14-dmatlack@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -89,80 +89,35 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Fri, Apr 22, 2022, David Matlack wrote:
-> Allow the vcpu pointer in __kvm_mmu_get_shadow_page() to be NULL. Rename
-> it to vcpu_or_null to prevent future commits from accidentally taking
-> dependency on it without first considering the NULL case.
-> 
-> The vcpu pointer is only used for syncing indirect shadow pages in
-> kvm_mmu_find_shadow_page(). A vcpu pointer it not required for
-> correctness since unsync pages can simply be zapped. But this should
-> never occur in practice, since the only use-case for passing a NULL vCPU
-> pointer is eager page splitting which will only request direct shadow
-> pages (which can never be unsync).
-> 
-> Even though __kvm_mmu_get_shadow_page() can gracefully handle a NULL
-> vcpu, add a WARN() that will fire if __kvm_mmu_get_shadow_page() is ever
-> called to get an indirect shadow page with a NULL vCPU pointer, since
-> zapping unsync SPs is a performance overhead that should be considered.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 40 ++++++++++++++++++++++++++++++++--------
->  1 file changed, 32 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 04029c01aebd..21407bd4435a 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1845,16 +1845,27 @@ static void kvm_mmu_commit_zap_page(struct kvm *kvm,
->  	  &(_kvm)->arch.mmu_page_hash[kvm_page_table_hashfn(_gfn)])	\
->  		if ((_sp)->gfn != (_gfn) || (_sp)->role.direct) {} else
->  
-> -static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-> -			 struct list_head *invalid_list)
-> +static int __kvm_sync_page(struct kvm *kvm, struct kvm_vcpu *vcpu_or_null,
-> +			   struct kvm_mmu_page *sp,
-> +			   struct list_head *invalid_list)
+> -static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep,
+> -			     struct kvm_mmu_page *sp)
+> +static void __link_shadow_page(struct kvm_mmu_memory_cache *cache, u64 *sptep,
+> +			       struct kvm_mmu_page *sp)
 >  {
-> -	int ret = vcpu->arch.mmu->sync_page(vcpu, sp);
-> +	int ret = -1;
+>  	u64 spte;
+>  
+> @@ -2297,12 +2300,17 @@ static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep,
+>  
+>  	mmu_spte_set(sptep, spte);
+>  
+> -	mmu_page_add_parent_pte(vcpu, sp, sptep);
+> +	mmu_page_add_parent_pte(cache, sp, sptep);
+>  
+>  	if (sp->unsync_children || sp->unsync)
+>  		mark_unsync(sptep);
+>  }
+>  
+> +static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep, struct kvm_mmu_page *sp)
+
+Nit, would prefer to wrap here, especially since __link_shadow_page() wraps.
+
+> +{
+> +	__link_shadow_page(&vcpu->arch.mmu_pte_list_desc_cache, sptep, sp);
+> +}
 > +
-> +	if (vcpu_or_null)
-
-This should never happen.  I like the idea of warning early, but I really don't
-like that the WARN is far removed from the code that actually depends on @vcpu
-being non-NULL. Case in point, KVM should have bailed on the WARN and never
-reached this point.  And the inner __kvm_sync_page() is completely unnecessary.
-
-I also don't love the vcpu_or_null terminology; I get the intent, but it doesn't
-really help because understand why/when it's NULL.
-
-I played around with casting, e.g. to/from an unsigned long or void *, to prevent
-usage, but that doesn't work very well because 'unsigned long' ends up being
-awkward/confusing, and 'void *' is easily lost on a function call.  And both
-lose type safety :-(
-
-All in all, I think I'd prefer this patch to simply be a KVM_BUG_ON() if
-kvm_mmu_find_shadow_page() encounters an unsync page.  Less churn, and IMO there's
-no real loss in robustness, e.g. we'd really have to screw up code review and
-testing to introduce a null vCPU pointer dereference in this code.
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 3d102522804a..5aed9265f592 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2041,6 +2041,13 @@ static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
-                        goto out;
-
-                if (sp->unsync) {
-+                       /*
-+                        * Getting indirect shadow pages without a vCPU pointer
-+                        * is not supported, i.e. this should never happen.
-+                        */
-+                       if (KVM_BUG_ON(!vcpu, kvm))
-+                               break;
-+
-                        /*
-                         * The page is good, but is stale.  kvm_sync_page does
-                         * get the latest guest state, but (unlike mmu_unsync_children)
-
+>  static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+>  				   unsigned direct_access)
+>  {
+> -- 
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+> 
