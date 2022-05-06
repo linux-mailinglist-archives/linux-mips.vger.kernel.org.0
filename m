@@ -2,179 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D46251DFCB
-	for <lists+linux-mips@lfdr.de>; Fri,  6 May 2022 21:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61C151E0A3
+	for <lists+linux-mips@lfdr.de>; Fri,  6 May 2022 23:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391789AbiEFTvE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 May 2022 15:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
+        id S1444345AbiEFVJf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 May 2022 17:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391850AbiEFTvC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 May 2022 15:51:02 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B496AA41
-        for <linux-mips@vger.kernel.org>; Fri,  6 May 2022 12:47:18 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so11672081pjb.5
-        for <linux-mips@vger.kernel.org>; Fri, 06 May 2022 12:47:18 -0700 (PDT)
+        with ESMTP id S1444409AbiEFVJU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 May 2022 17:09:20 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E252B1C931
+        for <linux-mips@vger.kernel.org>; Fri,  6 May 2022 14:05:35 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso7858844pjj.2
+        for <linux-mips@vger.kernel.org>; Fri, 06 May 2022 14:05:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nmr+AH6GUiQVKg/lqAG1BcDa6rkwmcO9PiTJLcm3vjM=;
-        b=U2bwdDOISPfpNSZR7/BlxGhBrUPE80tEwKwbP78OiiiqRJAS7GEuBM4FtQq0mbcwwK
-         1eJ07Uq+ALubHgrrirJAgrVh3bK0cxESTZ41vWBDRSSoQ4p+EUYwSeotKxB+qT5dflR/
-         0bFjJQ++RP9GZ5CVlPHE7PUiV/zMVIvci8VDwW4+WVe5sP8iSYBwZ+CKqsBFvWgCL5XZ
-         nhFyG8n+bNq4qzsVlIdX7CMJQzQPgQ0fuIKbiEXUwvOZ/+9gtadOW9UAfhFV+VjXFGAa
-         oVoukit96tPbVfrWQ4mpFiFvUPZ2xpqRuq5IRIU93CVwGPX5dIzahsTxzlYlw1wfxEoO
-         uZUg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=gmmgqd2enKSblS7bCmnm2ivMD5ZTgpfnW/j/MNizwci6pH3rJEQXq3L9+ZdKL4HUTr
+         YB+Dhjpe2MkKztjhU+UDqenquKjwj+pPKOCMhVrtxmSec4u8GzSTlKnYmXQROsqwJ7YF
+         fpyt4ZWxoGKOIdNHSzn6X8527WsL9seFFIUc417Aceaz0HyqyfLzhrTyiK1hfEoe7bgf
+         O66BH+VPp/USBREXReLf48zIB9vdsgcsn+kPDpodP7afE/7TIv51GGMLWkNAhK51uLVF
+         lGR5deZqynPeLivFeL+j4lPiytJOppTfXKPKuEkvtzBoRNP5faKFInL0FLuVz9LTzW90
+         0CuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nmr+AH6GUiQVKg/lqAG1BcDa6rkwmcO9PiTJLcm3vjM=;
-        b=UZsDaqbNZGpK1NREGQszOazZd/dtNe7czwaMXIik7MXX5XOvANmVCgaxioXKPWWjLN
-         5GGUmmxin9/AmVIxSI/OXzQU3Xj1HOUTm6NngQKgJ/PME09AR6az8G4UUDTNseUKd/3h
-         EmnppzdR6ILxPzjy2L0ftH+z8mcL1Bj623Zu2YAMb+lHlrnMgxwGF1w9PB0c7oojgLFF
-         vI5yYDGOOzFHchfXJJOLdMuHyOZl1POCuH2zl9HUmrQWhihe3S+dn0msGZ3tIzienmBX
-         mC1GYHX6WWtLWOfveP0BlI7RE1Dkpj58zb8iiEDCWWQF8KL0lCjzfpNs1D7CvlhbCvQr
-         O7/Q==
-X-Gm-Message-State: AOAM5313RZfndvc1PXA6CQVvfqqaEyAkFZBwiiw4UzpAaKU5YFLtNa/1
-        ywpjViLb7GFwWllMMy/1o3iddQ==
-X-Google-Smtp-Source: ABdhPJx2W2s0XDr5knnrxjU/QOn2nWMZ5XriOwGOqf4NFEZIHnzgq+6wjY1bPlgr+nIx5/fnbHXnhA==
-X-Received: by 2002:a17:902:ef45:b0:155:cede:5a9d with SMTP id e5-20020a170902ef4500b00155cede5a9dmr5107832plx.93.1651866437748;
-        Fri, 06 May 2022 12:47:17 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id gt9-20020a17090af2c900b001dc1e6db7c2sm7599741pjb.57.2022.05.06.12.47.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 12:47:16 -0700 (PDT)
-Date:   Fri, 6 May 2022 19:47:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v4 15/20] KVM: x86/mmu: Cache the access bits of shadowed
- translations
-Message-ID: <YnV7QUOkYVg+Ktnl@google.com>
-References: <20220422210546.458943-1-dmatlack@google.com>
- <20220422210546.458943-16-dmatlack@google.com>
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=yrdhq/UiBSF+6y9sWGOVApxtmu68VZs05QJwi/jdVqPZT7zVYPqxocURJWmFG/9nNK
+         YJvw+Oi9PedhCDnQyQNnnlN8KrtzsAkhUG+kCCDbLUxq4UK1Lp/YgA593jMv/xOCS3NO
+         hWTI/X96tZhGbw/0xBGVbZWqZCo2J0s6VpfHPirqxrPHYRuecDjdBeCdA4c6MO9DQJV6
+         lBE7h26E+qyZVXur0dOyWYJLEkVrQbNIYm+q0wCjcYK4PWSjOKCg3B2RTuHphHsyt4gq
+         AiYrf8IrUYFzZ5OY+m1C4xMAt5OWppdWppDoyefMWsqEfUAyNmVx/XI76dh6cd9Z7Q0y
+         Nn+Q==
+X-Gm-Message-State: AOAM533xOLjFLshCTBU6akycTBCj3XpWJUy25QljN/+S4TRY3wY6DoeG
+        85PephGU+PLkQgVp4PWIuB9T6uU8iKMW1z8g0w==
+X-Google-Smtp-Source: ABdhPJyqTkc39jIaJ9/Rbqdi6sONfGmoHQRCW6ADRHNTA3OhSOJwlsoTVRnEtva6v71BUuTBbiWSrg7BAnP42QBwIqU=
+X-Received: by 2002:a17:902:a501:b0:153:f956:29f0 with SMTP id
+ s1-20020a170902a50100b00153f95629f0mr5598333plq.120.1651871135500; Fri, 06
+ May 2022 14:05:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422210546.458943-16-dmatlack@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
+ 14:05:33 -0700 (PDT)
+Reply-To: warren001buffett@gmail.com
+In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+From:   Warren Buffett <guidayema@gmail.com>
+Date:   Fri, 6 May 2022 21:05:33 +0000
+Message-ID: <CAD_xG_o-NeOti3yu7R9R5-myJ=Pi4nnU5Tuumw-xPcT-nT8e=Q@mail.gmail.com>
+Subject: Fwd: My name is Warren Buffett, an American businessman.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1041 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4978]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [guidayema[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 22, 2022, David Matlack wrote:
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index a8a755e1561d..97bf53b29b88 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -978,7 +978,8 @@ static gpa_t FNAME(gva_to_gpa)(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
->  }
->  
->  /*
-> - * Using the cached information from sp->gfns is safe because:
-> + * Using the information in sp->shadowed_translation (kvm_mmu_page_get_gfn()
-> + * and kvm_mmu_page_get_access()) is safe because:
->   * - The spte has a reference to the struct page, so the pfn for a given gfn
->   *   can't change unless all sptes pointing to it are nuked first.
->   *
-> @@ -1052,12 +1053,15 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
->  		if (sync_mmio_spte(vcpu, &sp->spt[i], gfn, pte_access))
->  			continue;
->  
-> -		if (gfn != sp->gfns[i]) {
-> +		if (gfn != kvm_mmu_page_get_gfn(sp, i)) {
->  			drop_spte(vcpu->kvm, &sp->spt[i]);
->  			flush = true;
->  			continue;
->  		}
->  
-> +		if (pte_access != kvm_mmu_page_get_access(sp, i))
-> +			kvm_mmu_page_set_access(sp, i, pte_access);
+My name is Warren Buffett, an American businessman and investor I have
+something important to discuss with you.
 
-Very tangentially related, and more an FYI than anything else (I'll send a patch
-separately)...   Replying here because this got me wondering about the validity of
-pte_access.
-
-There's an existing bug for nEPT here, which I proved after 3 hours of fighting
-with KUT's EPT tests (ugh).
-
-  1. execute-only EPT entries are supported
-  2. L1 creates a upper-level RW EPTE and a 4kb leaf RW EPTE
-  3. L2 accesses the address; KVM installs a SPTE
-  4. L1 modifies the leaf EPTE to be X-only, and does INVEPT
-  5. ept_sync_page() creates a SPTE with pte_access=0 / RWX=0
-
-The logic for pte_access (just above this code) is:
-
-		pte_access = sp->role.access;
-		pte_access &= FNAME(gpte_access)(gpte);
-
-The parent guest EPTE is 'RW', and so sp->role.access is 'RW'.  When the new 'X'
-EPTE is ANDed with the 'RW' parent protections, the result is a RWX=0 SPTE.  This
-is only possible if execute-only is supported, because otherwise PTEs are always
-readable, i.e. shadow_present_mask is non-zero.
-
-I don't think anything bad happens per se, but it's odd to have a !PRESENT in
-hardware, shadow-present SPTE.  I think the correct/easiest fix is:
-
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index b025decf610d..f8ea881cfce6 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -1052,7 +1052,7 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
-                if (sync_mmio_spte(vcpu, &sp->spt[i], gfn, pte_access))
-                        continue;
-
--               if (gfn != sp->gfns[i]) {
-+               if ((!pte_access && !shadow_present_mask) || gfn != sp->gfns[i]) {
-                        drop_spte(vcpu->kvm, &sp->spt[i]);
-                        flush = true;
-                        continue;
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index 75c9e87d446a..9ad60662beac 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -101,6 +101,8 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-        u64 spte = SPTE_MMU_PRESENT_MASK;
-        bool wrprot = false;
-
-+       WARN_ON_ONCE(!pte_access && !shadow_present_mask);
-+
-        if (sp->role.ad_disabled)
-                spte |= SPTE_TDP_AD_DISABLED_MASK;
-        else if (kvm_mmu_page_ad_need_write_protect(sp))
-
-
-> +
->  		sptep = &sp->spt[i];
->  		spte = *sptep;
->  		host_writable = spte & shadow_host_writable_mask;
-> -- 
-> 2.36.0.rc2.479.g8af0fa9b8e-goog
-> 
+Mr. Warren Buffett
+warren001buffett@gmail.com
+Chief Executive Officer: Berkshire Hathaway
+aphy/Warren-Edward-Buffett
