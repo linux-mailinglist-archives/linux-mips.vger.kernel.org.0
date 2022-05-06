@@ -2,219 +2,338 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF08651CCFD
-	for <lists+linux-mips@lfdr.de>; Fri,  6 May 2022 01:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364E451CE65
+	for <lists+linux-mips@lfdr.de>; Fri,  6 May 2022 04:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386974AbiEEX6W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 May 2022 19:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        id S245258AbiEFBsy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 May 2022 21:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379884AbiEEX6V (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 19:58:21 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AACA60D8E;
-        Thu,  5 May 2022 16:54:40 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 245LD91r026132;
-        Thu, 5 May 2022 23:53:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=A9+wXYUYyUAGlF0mbEuM+sIc/r/G9bD7HU7dyO9Lgpk=;
- b=NPsXpnRbFZ2cqnmvcfNd7Vo7NR8COb8sN7r9L1iVAjQyG2fn7PnR18mAMF8+/bKrYCe1
- sCf23FEE2+xnhf1H0YzDYRwIYDFKl8JT2jzGxsGs6L9Aomxsy0flQ24tPd8VZ6BfuJIk
- 9rjIo/2gac37o7DqzexDd+o9MrqkIfblAwUkz4FTGhFYkNcsIxIq8FH47SdvxKSIpQgT
- gNYdXEe0qH4eYx7+OK3r0j5X45Uw37O2JWwvOFqCVyh7rvIGymVCpTj5l7ncA7rVkzi1
- Ii2Lf2kNK5RIRGT9jgS42h71f4QB6WSv3ByqZcIMXvRtuk2XJA2ndcGm4260sCVJ7aq1 SQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruhcch99-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 05 May 2022 23:53:41 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 245Nj2Nf017161;
-        Thu, 5 May 2022 23:53:40 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3frujbc8fg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 05 May 2022 23:53:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DzDzLX4zeGK99M2hgjcxEU+riDLZKMbl+XZHNwn86KNj4XZDN3JyV90UdVQrc1UN1mx+24GgsCS5Vz7cVlH/YIWM58tif5GBOUv1hPyBBZaqBn4btzHruuwFVxu63LtObYD0qpI/pj0PaQBl9peHRY3Sfm8r6My0Qn/sOhfPRtpRg8bt6uIEXcSrPzsKibDrfHQld79DJvhj9HC7X3XanuIbYBD9v24jUm26Oh5143Z4IudZEd5/+GiPekQ2df2dI5zHimX/HlErFq5+rHqr9jrjCOY5ASC/OpSmKtd32KFIMBaUrFSS+N0MACfOjfgnJiU1wr3z9DPuFJT0EvgItg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A9+wXYUYyUAGlF0mbEuM+sIc/r/G9bD7HU7dyO9Lgpk=;
- b=ErvhFWgq5qOuoWZ7GQyiJJDQKBYld6we/cAJBfZdg42wbN+gFrYdJFCm6tbGap11D/b4ffyXIAP/fbo7ucWB/O2ca0eMp2H7w6m4EZK1OCeGIzNB3JraE306FJy61TkrgG7rW0LSndQZpUqFhBABPI4Onf7+agm+Z4UnR+A9+OhnfP/qddru6mHSU0wXJeyMrAS4TbkzJ25l3l3COtLOc8vmJfUAtMDku0rfthUaFxdRvlDpBohVOP9w576xEe4DOW433qQu3htMkZ7+duOv73010h30PAob5mGwfKIxa23+PlicNnjGsnfJLc+/oUqBUckNW7lCQi69W6eoqk4x9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A9+wXYUYyUAGlF0mbEuM+sIc/r/G9bD7HU7dyO9Lgpk=;
- b=PCPFOcR+60YMBlMgjAEDFOCLqDKzdHhHUtUfYfQXRqO7lYmZWBNwvegQG8J1DMgzY0Es34exGkbumcukuc7nWG0u3bwUwnZl2bXxH4MFdFwrGGpWllNVwmWrp2DuYW/qxi9AUuDtcV5MzfYRex7E9rwSr2rmZK9SGt2mCXFK9UQ=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by DM6PR10MB3833.namprd10.prod.outlook.com (2603:10b6:5:1d2::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25; Thu, 5 May
- 2022 23:53:38 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::9d76:7926:9b76:f461]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::9d76:7926:9b76:f461%7]) with mapi id 15.20.5206.024; Thu, 5 May 2022
- 23:53:38 +0000
-Message-ID: <5cab0eca-9630-a7c6-4f5d-5cb45ff82c83@oracle.com>
-Date:   Thu, 5 May 2022 16:53:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- migration
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org, catalin.marinas@arm.com, will@kernel.org
-Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
- <11b92502b3df0e0bba6a1dc71476d79cab6c79ba.1651216964.git.baolin.wang@linux.alibaba.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-In-Reply-To: <11b92502b3df0e0bba6a1dc71476d79cab6c79ba.1651216964.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S234118AbiEFBsx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 May 2022 21:48:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3DF54F8E;
+        Thu,  5 May 2022 18:45:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42D63B82E5C;
+        Fri,  6 May 2022 01:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F27EC385A8;
+        Fri,  6 May 2022 01:45:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651801509;
+        bh=8bAJ5yL3BZ34e6ga6jj9plfjb8Qyt7hfVj4J6T0fzFk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ua7fhwe6C269LQAFYu6FQzizDPP0p68q2LIpqugBQYFa/8qcqiuZKFMZY4iKh63/m
+         N56dEXe2vvnt2K8k20w7agwrusVD0Zyxn0hvG5AoBZsw7Eokfep7ClSaETb5HARoKW
+         6/epUgmNo9WakAUU5YtvLbLazaKyZawEMssmPtqVdGgkItBRz6mr4giCLYEOzIl/rM
+         D7lahp0k9msgUlTAwYhD8brIFdAaBkUbLGQk7/XgFAmcgYFXYpxUq9Z+ZA3sd665B7
+         Jnu88mVxcWSP/KO3rzZVuTP7P6d0h5YSFb8p+1MfYa4uGQ3MByvw3JAo6WuHIOwmOs
+         Uw3FdvdZdo0WA==
+Date:   Fri, 6 May 2022 10:45:04 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] MIPS: Use NOKPROBE_SYMBOL() instead of __kprobes
+ annotation
+Message-Id: <20220506104504.535c6ab065993b97604178fe@kernel.org>
+In-Reply-To: <1651753148-1464-3-git-send-email-yangtiezhu@loongson.cn>
+References: <1651753148-1464-1-git-send-email-yangtiezhu@loongson.cn>
+        <1651753148-1464-3-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0390.namprd04.prod.outlook.com
- (2603:10b6:303:81::35) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e82b4d86-edaf-45f4-aaf8-08da2ef279aa
-X-MS-TrafficTypeDiagnostic: DM6PR10MB3833:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB3833F118C4D75E89DD34E9D7E2C29@DM6PR10MB3833.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bnkD5keNChWMxZ9gCa6gI9MwwqVTC/KboBefSOEkshNrw9xKbeMD7como7mTxxl8JBRA0a589vu6N3PwJta0VyNGOZ6xTMDJGqalkUZRkvRCbNglbSLla3QapFBaALgZEmXyzunOVT1UfwNU4hQSkmWgEumUsxr2kgJrDmSpY2uq8uBSN/HfrzAnN1OZaOgHkN55joMF81PqarrjDxB2upvXAm3DlaghVcZzu3Rtm+QS/R6aUU6yTRIoraILiVrZh/lZfXchlSr+OuVTldoVNQm2WQF0Orjb2nsjuqlFg/huBHs16XTQof5I31PHzCLWMLhZkQECaiNjzLmQRGHjNTrDebzLPcY26vRUD4Y7POpxWsNjpwHuV+27gnqNiUR2cO7NCfpCUeyRKmyfGsYwGnWvNYAMb/VK2rizSPe3bq/KST80n9GDb4oWjeN6zU1qbTL9aVPVhgf2PqtEAOPgF2HPccKTz3nMpS4v6jvBB4J6XbAiSIefXmu+MdswiS+Q74EVyfbj3y69FnJdzA2442BUVxGE5H43dOG5aK0RPd9ZYJeQPT3IUoqBq2Yxdcabg81HiTNVbkqsOb7shiB73eDuz09gJxeZthxFa6Be1urDDU7nemWmw2o9W81wEMd8k35zw/H+vbIC9XpNe4kjZmBM18/8aKuxI5c+y6OroVwPF1PZGg61q/tA+qjhIEpPvZLnmZox4ISQoNA4+V0/9hTeUaXz3M0QsD9zs3sA6F+DZ4cifxo2onp+P/cYO6DS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(7406005)(508600001)(5660300002)(7416002)(44832011)(6486002)(66476007)(8936002)(36756003)(2906002)(31686004)(316002)(8676002)(66556008)(4326008)(66946007)(6512007)(2616005)(6666004)(26005)(52116002)(186003)(53546011)(6506007)(38100700002)(31696002)(38350700002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TXZPY3NHMjQ4L3B5c2x6NlpwaitMeVZRZTZmb0dTR2ZTbzJVaGZYNFZLSGFr?=
- =?utf-8?B?Q1Y0Nndqc0hqTjlkNjUvZEgyeE1SNGtsdExOWk5MRTArN2h5aWlBY1hGL2x0?=
- =?utf-8?B?ejBtK3RZUEJmdjNTM3BFTWxaU2U2N2F2VjRUMW5iSExKci8vdkRIVkNGeWdo?=
- =?utf-8?B?MDZacmlxTU8xVGRYb043Q3ZSem9OSCtCOTg4UU1iOE5tMUU2NUVFaU9hVWRn?=
- =?utf-8?B?NUYvMHQ4bWxYaVZhcWxDWlF5WmZwRFoxNWtrL3EyOUx0ZlVWOEVEcmUrSE5h?=
- =?utf-8?B?bmxmWXYxejJMVzRQVHhMQWkrZVRSamtEYUV1ZkZVR3l5T2l3Miswai9jRXh2?=
- =?utf-8?B?ZWZVR0hlL21jdkVuZURuVWE2andMeFh0aXowdGFEQytiM20yYkZEMU1TZ2Qw?=
- =?utf-8?B?Y2ppYi94SmRVY1pNUFd5QnVrYTQycHRhR1E0Sy9memNuQ3JZY0o1NVBqUW1q?=
- =?utf-8?B?dmFoeDhsZlF4TThXK0pUdkVFbUJHYlF6cVY4eURnUjhXMVhnQU9FRlB1dkl2?=
- =?utf-8?B?TlFvdjIyeE1td3B2R01LcmwxTVBUbXZIT3U1Wm9CUHVzdS9lc2tYeWJBWGxq?=
- =?utf-8?B?RW1WNlZqcWtXU0NNWFIzTzdSdEt0WldicFFCZ1V3dWJHbGhVN25maGlrTldU?=
- =?utf-8?B?aVM4T2ZFVndKcmpOSXpLUlFWQW84UG8zcWt0WGFRNFhzLzhESkxpeGVpd3Jx?=
- =?utf-8?B?QVU5K2JYcHhlTjdkWnE1TFQ5REwrdTNQbU41aHRVOVZaaW9HeUZzdVJOeGRK?=
- =?utf-8?B?QWtEcFp4WkZlbEh2RjVNSk9Bc3h3QTJoK0FvUmJvbG9lUTdSK29pQmJMbHl4?=
- =?utf-8?B?dHVGR0lEVFhKdmx0bEl5SlErR21lZ2Y4Y2lqd2dxVytmczJ3bGQycnRQeVJz?=
- =?utf-8?B?VUhXaUZCT3VoekJTT0hVaU1ZRVFZblhnNVhPREJrRlFjTGtEWndHRTVRc1V0?=
- =?utf-8?B?SFF2TXFuREtjZE94ZGVlN25SRG8rcFN2cmUrcUxXMnpNTHQyM2dVc0Z4Ullh?=
- =?utf-8?B?Vjd1eW5NNVJiRXI4cXNPRThMNmNSQUhjUnlSY1ZmcjVBRlNDUDBVUmdVK3Zn?=
- =?utf-8?B?Y3l6cnFFWk42Y1FwUUJGOXdOWW5IN3FVWEl1ellVYTVRa3M4ODQyTXJjNkVs?=
- =?utf-8?B?MExKSkwvRmdpK1kwWDhwWllrMzJJbXg4THBvUVZBRmxoOURYWllTR0drV2Jk?=
- =?utf-8?B?Z2lYVmFxNDdMTWsxbGZVVVZNc1RmdkZpWVFJU2xHZFdoazNqczhya0lqeEtk?=
- =?utf-8?B?aUEzMmNoY3c2ZzgzQjg5dGw4QjFGeUJ3SFEvMFh6QzZGdjM4eXB4K0JUOHND?=
- =?utf-8?B?Yjd0THRuclU3ZXJ0bms2cCtqL213ZnVVbEMzWVBpcnhrMUtLd3lROW4xeFdD?=
- =?utf-8?B?VU5QWG9tQm9nb0VQOXE2cnV6Njd1WU4yN2Njc2wzZGpiNW5iME9iRjIrOFRq?=
- =?utf-8?B?WEdIZWE5T09FaTBwS24wNWdBdHpmYjdSSHpCUURFTk1pN1N5QUhhUjhNbito?=
- =?utf-8?B?eENlbXVaV05BOVR4K3RnOHpvc1hkZGNudnltUVBTSGtvcmt0N0dGcDNsSXh4?=
- =?utf-8?B?WGFVckE2TjhHN3REaFJIdkNVTlVvQlRENDlRcVBCWUhVQnN6S1hTbkd3b0Z5?=
- =?utf-8?B?ZE5pb1BtenF0dVhXYjdRWVpoVDlNRjlRZVN2azVIbDlGWWhJTC8zY09TT3cv?=
- =?utf-8?B?QmNPREZZVXp2Q1hHMzk1c0VOVVBaZExDczZ5MWRrbnd5QW1NMEZZZnFKMGZX?=
- =?utf-8?B?cHNJK0dwMFAxL0x4WERVcmduY29mZVJTZE1SajRPZVFpRUZFdXh3empvSzA1?=
- =?utf-8?B?dEx4SjZ5bnFwWlcxQlRzT2VyU2J2eGlyT3BQYTRFM2FsUlRIQ21aU2NEMSto?=
- =?utf-8?B?bjZNQ3pJQU5mcEdGNUhSWjdJQkhkc3BnaHVqMmdwdlcwRmtvMlZOblBWRDBi?=
- =?utf-8?B?dGhQRFFVRVF0YnpKZnA5MzRGRHFFakpkMXRrSEtpY0JFMFV5ZUozZXNDcGty?=
- =?utf-8?B?d2RwMXg3ZHBTK1lFcDk4a1N0QzEvcmtpdDlCTnJreDMzalRhbzNDTnduTFZa?=
- =?utf-8?B?RnBRTURlWU1veGlZR3VnQWZzRG9yZ3N4M0lydkl1dW5sSlN6b1lCTUNlTTJB?=
- =?utf-8?B?N3ZlaGE3cnJuRFovSnJkem1BS0VVNUpIQ1BQYzlOV0tkMjJqUC9VUm5XNXht?=
- =?utf-8?B?RkRaems2Nmg0QndDQkVEcHk1eHpGL1BmVG5vcTVScWs3ZG9mdXQ2K0NkVkN2?=
- =?utf-8?B?L1ZjdWNsNm1zWHdFUEx6d3ZXQ2VBRGF1K0lQV1RmSVJKTFZ6eVdzRDN2bjl0?=
- =?utf-8?B?dFRhU0xabTJVVmUvaFdhQU1sSldudHZIb2NlZldjckdRQjgwdlJFbmJPZDBP?=
- =?utf-8?Q?J6UxcxvKUEswB6GA=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e82b4d86-edaf-45f4-aaf8-08da2ef279aa
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 23:53:38.8130
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E5T7WMELgiLbaPMEVV9E0tFeZALiNTF08+yfO3IaMZBzDpoDCwOYIu+qshuU7Fw/eSXQrwngK7bFqxiIWtEl2g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3833
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-05-05_10:2022-05-05,2022-05-05 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
- bulkscore=0 suspectscore=0 mlxlogscore=817 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205050150
-X-Proofpoint-GUID: VzSeLcTGNL8M4sL4QLvtS66MJppnyJ8Y
-X-Proofpoint-ORIG-GUID: VzSeLcTGNL8M4sL4QLvtS66MJppnyJ8Y
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/29/22 01:14, Baolin Wang wrote:
-> On some architectures (like ARM64), it can support CONT-PTE/PMD size
-> hugetlb, which means it can support not only PMD/PUD size hugetlb:
-> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
-> size specified.
-<snip>
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 6fdd198..7cf2408 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -1924,13 +1924,15 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
->  					break;
->  				}
->  			}
-> +
-> +			/* Nuke the hugetlb page table entry */
-> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
->  		} else {
->  			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
-> +			/* Nuke the page table entry. */
-> +			pteval = ptep_clear_flush(vma, address, pvmw.pte);
->  		}
+On Thu,  5 May 2022 20:19:08 +0800
+Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+
+> If define CONFIG_KPROBES, __kprobes annotation forces the whole function
+> into the ".kprobes.text" section, NOKPROBE_SYMBOL() just stores the given
+> function address in the "_kprobe_blacklist" section which is introduced
+> to maintain kprobes blacklist.
+> 
+> Modify the related code to use NOKPROBE_SYMBOL() to protect functions from
+> kprobes instead of __kprobes annotation under arch/mips.
+
+So you added some non '__kprobes' annotated functions to NOKPROBE_SYMBOL()
+in this patch. Those caused the kernel panic, right? If so, please add such
+comment on this description too. Or, split this into 2 patches, one fixes
+the kernel panic by adding those functions to NOKPROBE_SYMBOL() and the
+other is replacing __kprobes with NOKPROBE_SYMBOL().
+
+Also, could you also find the commit which introduces the kernel panic?
+It is worth to backport such fix to stable trees.
+
+Thank you,
+
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/mips/kernel/kprobes.c | 45 ++++++++++++++++++++++++++++++++-------------
+>  arch/mips/mm/fault.c       |  6 ++++--
+>  2 files changed, 36 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/mips/kernel/kprobes.c b/arch/mips/kernel/kprobes.c
+> index 6c7f3b1..21f9cec 100644
+> --- a/arch/mips/kernel/kprobes.c
+> +++ b/arch/mips/kernel/kprobes.c
+> @@ -44,10 +44,11 @@ static const union mips_instruction breakpoint2_insn = {
+>  DEFINE_PER_CPU(struct kprobe *, current_kprobe);
+>  DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
 >  
-
-On arm64 with CONT-PTE/PMD the returned pteval will have dirty or young set
-if ANY of the PTE/PMDs had dirty or young set.
-
-> -		/* Nuke the page table entry. */
-> -		pteval = ptep_clear_flush(vma, address, pvmw.pte);
-> -
->  		/* Set the dirty flag on the folio now the pte is gone. */
->  		if (pte_dirty(pteval))
->  			folio_mark_dirty(folio);
-> @@ -2015,7 +2017,10 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
->  			pte_t swp_pte;
+> -static int __kprobes insn_has_delayslot(union mips_instruction insn)
+> +static int insn_has_delayslot(union mips_instruction insn)
+>  {
+>  	return __insn_has_delay_slot(insn);
+>  }
+> +NOKPROBE_SYMBOL(insn_has_delayslot);
 >  
->  			if (arch_unmap_one(mm, vma, address, pteval) < 0) {
-> -				set_pte_at(mm, address, pvmw.pte, pteval);
-> +				if (folio_test_hugetlb(folio))
-> +					set_huge_pte_at(mm, address, pvmw.pte, pteval);
+>  /*
+>   * insn_has_ll_or_sc function checks whether instruction is ll or sc
+> @@ -56,7 +57,7 @@ static int __kprobes insn_has_delayslot(union mips_instruction insn)
+>   * instructions; cannot do much about breakpoint in the middle of
+>   * ll/sc pair; it is upto user to avoid those places
+>   */
+> -static int __kprobes insn_has_ll_or_sc(union mips_instruction insn)
+> +static int insn_has_ll_or_sc(union mips_instruction insn)
+>  {
+>  	int ret = 0;
+>  
+> @@ -72,8 +73,9 @@ static int __kprobes insn_has_ll_or_sc(union mips_instruction insn)
+>  	}
+>  	return ret;
+>  }
+> +NOKPROBE_SYMBOL(insn_has_ll_or_sc);
+>  
+> -int __kprobes arch_prepare_kprobe(struct kprobe *p)
+> +int arch_prepare_kprobe(struct kprobe *p)
+>  {
+>  	union mips_instruction insn;
+>  	union mips_instruction prev_insn;
+> @@ -132,26 +134,30 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+>  out:
+>  	return ret;
+>  }
+> +NOKPROBE_SYMBOL(arch_prepare_kprobe);
+>  
+> -void __kprobes arch_arm_kprobe(struct kprobe *p)
+> +void arch_arm_kprobe(struct kprobe *p)
+>  {
+>  	*p->addr = breakpoint_insn;
+>  	flush_insn_slot(p);
+>  }
+> +NOKPROBE_SYMBOL(arch_arm_kprobe);
+>  
+> -void __kprobes arch_disarm_kprobe(struct kprobe *p)
+> +void arch_disarm_kprobe(struct kprobe *p)
+>  {
+>  	*p->addr = p->opcode;
+>  	flush_insn_slot(p);
+>  }
+> +NOKPROBE_SYMBOL(arch_disarm_kprobe);
+>  
+> -void __kprobes arch_remove_kprobe(struct kprobe *p)
+> +void arch_remove_kprobe(struct kprobe *p)
+>  {
+>  	if (p->ainsn.insn) {
+>  		free_insn_slot(p->ainsn.insn, 0);
+>  		p->ainsn.insn = NULL;
+>  	}
+>  }
+> +NOKPROBE_SYMBOL(arch_remove_kprobe);
+>  
+>  static void save_previous_kprobe(struct kprobe_ctlblk *kcb)
+>  {
+> @@ -161,6 +167,7 @@ static void save_previous_kprobe(struct kprobe_ctlblk *kcb)
+>  	kcb->prev_kprobe.saved_SR = kcb->kprobe_saved_SR;
+>  	kcb->prev_kprobe.saved_epc = kcb->kprobe_saved_epc;
+>  }
+> +NOKPROBE_SYMBOL(save_previous_kprobe);
+>  
+>  static void restore_previous_kprobe(struct kprobe_ctlblk *kcb)
+>  {
+> @@ -170,6 +177,7 @@ static void restore_previous_kprobe(struct kprobe_ctlblk *kcb)
+>  	kcb->kprobe_saved_SR = kcb->prev_kprobe.saved_SR;
+>  	kcb->kprobe_saved_epc = kcb->prev_kprobe.saved_epc;
+>  }
+> +NOKPROBE_SYMBOL(restore_previous_kprobe);
+>  
+>  static void set_current_kprobe(struct kprobe *p, struct pt_regs *regs,
+>  			       struct kprobe_ctlblk *kcb)
+> @@ -178,6 +186,7 @@ static void set_current_kprobe(struct kprobe *p, struct pt_regs *regs,
+>  	kcb->kprobe_saved_SR = kcb->kprobe_old_SR = (regs->cp0_status & ST0_IE);
+>  	kcb->kprobe_saved_epc = regs->cp0_epc;
+>  }
+> +NOKPROBE_SYMBOL(set_current_kprobe);
+>  
+>  /**
+>   * evaluate_branch_instrucion -
+> @@ -225,6 +234,7 @@ static int evaluate_branch_instruction(struct kprobe *p, struct pt_regs *regs,
+>  	return -EFAULT;
+>  
+>  }
+> +NOKPROBE_SYMBOL(evaluate_branch_instruction);
+>  
+>  static void prepare_singlestep(struct kprobe *p, struct pt_regs *regs,
+>  						struct kprobe_ctlblk *kcb)
+> @@ -244,6 +254,7 @@ static void prepare_singlestep(struct kprobe *p, struct pt_regs *regs,
+>  	}
+>  	regs->cp0_epc = (unsigned long)&p->ainsn.insn[0];
+>  }
+> +NOKPROBE_SYMBOL(prepare_singlestep);
+>  
+>  /*
+>   * Called after single-stepping.  p->addr is the address of the
+> @@ -257,7 +268,7 @@ static void prepare_singlestep(struct kprobe *p, struct pt_regs *regs,
+>   * breakpoint trap. In case of branch instructions, the target
+>   * epc to be restored.
+>   */
+> -static void __kprobes resume_execution(struct kprobe *p,
+> +static void resume_execution(struct kprobe *p,
+>  				       struct pt_regs *regs,
+>  				       struct kprobe_ctlblk *kcb)
+>  {
+> @@ -268,8 +279,9 @@ static void __kprobes resume_execution(struct kprobe *p,
+>  		regs->cp0_epc = orig_epc + 4;
+>  	}
+>  }
+> +NOKPROBE_SYMBOL(resume_execution);
+>  
+> -static int __kprobes kprobe_handler(struct pt_regs *regs)
+> +static int kprobe_handler(struct pt_regs *regs)
+>  {
+>  	struct kprobe *p;
+>  	int ret = 0;
+> @@ -367,8 +379,9 @@ static int __kprobes kprobe_handler(struct pt_regs *regs)
+>  	return ret;
+>  
+>  }
+> +NOKPROBE_SYMBOL(kprobe_handler);
+>  
+> -static inline int post_kprobe_handler(struct pt_regs *regs)
+> +static int post_kprobe_handler(struct pt_regs *regs)
+>  {
+>  	struct kprobe *cur = kprobe_running();
+>  	struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
+> @@ -396,6 +409,7 @@ static inline int post_kprobe_handler(struct pt_regs *regs)
+>  
+>  	return 1;
+>  }
+> +NOKPROBE_SYMBOL(post_kprobe_handler);
+>  
+>  int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
+>  {
+> @@ -411,11 +425,12 @@ int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
+>  	}
+>  	return 0;
+>  }
+> +NOKPROBE_SYMBOL(kprobe_fault_handler);
+>  
+>  /*
+>   * Wrapper routine for handling exceptions.
+>   */
+> -int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+> +int kprobe_exceptions_notify(struct notifier_block *self,
+>  				       unsigned long val, void *data)
+>  {
+>  
+> @@ -446,6 +461,7 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+>  	}
+>  	return ret;
+>  }
+> +NOKPROBE_SYMBOL(kprobe_exceptions_notify);
+>  
+>  /*
+>   * Function return probe trampoline:
+> @@ -469,7 +485,7 @@ static void __used kretprobe_trampoline_holder(void)
+>  
+>  void __kretprobe_trampoline(void);
+>  
+> -void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+> +void arch_prepare_kretprobe(struct kretprobe_instance *ri,
+>  				      struct pt_regs *regs)
+>  {
+>  	ri->ret_addr = (kprobe_opcode_t *) regs->regs[31];
+> @@ -478,11 +494,12 @@ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+>  	/* Replace the return addr with trampoline addr */
+>  	regs->regs[31] = (unsigned long)__kretprobe_trampoline;
+>  }
+> +NOKPROBE_SYMBOL(arch_prepare_kretprobe);
+>  
+>  /*
+>   * Called when the probe at kretprobe trampoline is hit
+>   */
+> -static int __kprobes trampoline_probe_handler(struct kprobe *p,
+> +static int trampoline_probe_handler(struct kprobe *p,
+>  						struct pt_regs *regs)
+>  {
+>  	instruction_pointer(regs) = __kretprobe_trampoline_handler(regs, NULL);
+> @@ -493,14 +510,16 @@ static int __kprobes trampoline_probe_handler(struct kprobe *p,
+>  	 */
+>  	return 1;
+>  }
+> +NOKPROBE_SYMBOL(trampoline_probe_handler);
+>  
+> -int __kprobes arch_trampoline_kprobe(struct kprobe *p)
+> +int arch_trampoline_kprobe(struct kprobe *p)
+>  {
+>  	if (p->addr == (kprobe_opcode_t *)__kretprobe_trampoline)
+>  		return 1;
+>  
+>  	return 0;
+>  }
+> +NOKPROBE_SYMBOL(arch_trampoline_kprobe);
+>  
+>  static struct kprobe trampoline_p = {
+>  	.addr = (kprobe_opcode_t *)__kretprobe_trampoline,
+> diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
+> index 44f9810..b08bc55 100644
+> --- a/arch/mips/mm/fault.c
+> +++ b/arch/mips/mm/fault.c
+> @@ -35,7 +35,7 @@ int show_unhandled_signals = 1;
+>   * and the problem, and then passes it off to one of the appropriate
+>   * routines.
+>   */
+> -static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+> +static void __do_page_fault(struct pt_regs *regs, unsigned long write,
+>  	unsigned long address)
+>  {
+>  	struct vm_area_struct * vma = NULL;
+> @@ -322,8 +322,9 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+>  	}
+>  #endif
+>  }
+> +NOKPROBE_SYMBOL(__do_page_fault);
+>  
+> -asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
+> +asmlinkage void do_page_fault(struct pt_regs *regs,
+>  	unsigned long write, unsigned long address)
+>  {
+>  	enum ctx_state prev_state;
+> @@ -332,3 +333,4 @@ asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
+>  	__do_page_fault(regs, write, address);
+>  	exception_exit(prev_state);
+>  }
+> +NOKPROBE_SYMBOL(do_page_fault);
+> -- 
+> 2.1.0
+> 
 
-And, we will use that pteval for ALL the PTE/PMDs here.  So, we would set
-the dirty or young bit in ALL PTE/PMDs.
 
-Could that cause any issues?  May be more of a question for the arm64 people.
 -- 
-Mike Kravetz
+Masami Hiramatsu <mhiramat@kernel.org>
