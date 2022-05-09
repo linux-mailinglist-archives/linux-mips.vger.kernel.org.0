@@ -2,85 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD425202E2
-	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 18:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD2D520433
+	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 20:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239373AbiEIQwN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 May 2022 12:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S240006AbiEISMa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 May 2022 14:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239364AbiEIQwM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 12:52:12 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C9D237246
-        for <linux-mips@vger.kernel.org>; Mon,  9 May 2022 09:48:17 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 204so9948005pfx.3
-        for <linux-mips@vger.kernel.org>; Mon, 09 May 2022 09:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gr9sMVs6ZdL8g3tPzoqOfbfxtZ+VfAYj0GG/Lu5p3Do=;
-        b=OjZ2kHgAm+ILSkIUJhTMWyTvLuftdyN9Kyi5pPlToUr2VbBgQzqMUvubbcjgcNoEKY
-         MXYEnQTNZicEPklzohiMYBm+qP9+SYEduyruz2LNwSpo+USrM27as+qWNBIgYtxEZv5E
-         WCmCreQKrqgSdfsvR/pMxVBm6RrS8hxwl8b9+Cjrp61ynKE00Ia3w6w1K1uFIobv4dQQ
-         aIQZvwYL+FUa1nMowwvnlDaTET5kDXKgRwzA5TOMmAPfdQZPb2aF9agEBMF5V2C8abWU
-         PvaYjtBfEYbtDRS/ZncAjUhNAsBBXlyVm4pIymLVH7kh51QXIiMLGjEHljjUysN1gQ0O
-         g5ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gr9sMVs6ZdL8g3tPzoqOfbfxtZ+VfAYj0GG/Lu5p3Do=;
-        b=5qoh4kE18ZOPM5R0KK4RlJff+PAkodNVR6FCiBv9PauBsar8HwDtFxsJtGxeHjHaGA
-         bWQvyX6hYrKq+SSnK6vIxw9lcKtYp6hFXMEZs6DMilrDekeM2JSQrlHK5fOwKdJiOaBK
-         QgfChAydySmF/A/qu25akV70NXxVV6fjmFNYHYbDZEJ3Hd6FjZ0ZMogBtLECCpF1GSJv
-         qXQA/pT5/gl6vTazrQ71Kr0pmx4BhdWXvWz2vWQih3pFdgnubNhJXdWIuvEWDQVd5Fr9
-         V8nZ1J/kALXNSSSz9i/d3+LzXAof+FfMHfONhUI+RGaITDyPxDTpj1d5vMXb0ghgwKGX
-         +6yg==
-X-Gm-Message-State: AOAM532fhboY5qGQ+Pkmqcflg+IskHoBePlUK6p6E027/zgXUMyuPpae
-        Eo6y14kkDY3iP3PYKUi7TLk4jQ==
-X-Google-Smtp-Source: ABdhPJx215vrOO009vGUpGxw2kjUjvEvzUv6r8zkab3Hrf61cs9pR1cmpHEArZYDJKlr8poCIJHRbg==
-X-Received: by 2002:a05:6a00:1391:b0:50d:e125:e3c with SMTP id t17-20020a056a00139100b0050de1250e3cmr16967062pfg.75.1652114896725;
-        Mon, 09 May 2022 09:48:16 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id r7-20020a17090b050700b001d2bff34228sm12911467pjz.9.2022.05.09.09.48.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 09:48:16 -0700 (PDT)
-Date:   Mon, 9 May 2022 16:48:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v4 20/20] KVM: x86/mmu: Extend Eager Page Splitting to
- nested MMUs
-Message-ID: <YnlFzMpJZNfFuFic@google.com>
-References: <20220422210546.458943-1-dmatlack@google.com>
- <20220422210546.458943-21-dmatlack@google.com>
+        with ESMTP id S240001AbiEISMa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 14:12:30 -0400
+Received: from out28-220.mail.aliyun.com (out28-220.mail.aliyun.com [115.124.28.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4711C2AACD8;
+        Mon,  9 May 2022 11:08:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07437433|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00800986-0.000615016-0.991375;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.Ngpb1vc_1652119708;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Ngpb1vc_1652119708)
+          by smtp.aliyun-inc.com(33.37.67.126);
+          Tue, 10 May 2022 02:08:29 +0800
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+To:     jringle@gridpoint.com, shc_work@mail.ru,
+        Rob Herring <robh@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Paul Boddie <paul@boddie.org.uk>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-serial@vger.kernel.org,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Question about SC16IS752 device tree.
+Message-ID: <7c89db86-4055-90b5-6a67-611410f5759f@wanyeetech.com>
+Date:   Tue, 10 May 2022 02:08:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422210546.458943-21-dmatlack@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,171 +46,154 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 22, 2022, David Matlack wrote:
-> +static bool need_topup_split_caches_or_resched(struct kvm *kvm)
-> +{
-> +	if (need_resched() || rwlock_needbreak(&kvm->mmu_lock))
-> +		return true;
-> +
-> +	/*
-> +	 * In the worst case, SPLIT_DESC_CACHE_CAPACITY descriptors are needed
-> +	 * to split a single huge page. Calculating how many are actually needed
-> +	 * is possible but not worth the complexity.
-> +	 */
-> +	return need_topup(&kvm->arch.split_desc_cache, SPLIT_DESC_CACHE_CAPACITY) ||
-> +		need_topup(&kvm->arch.split_page_header_cache, 1) ||
-> +		need_topup(&kvm->arch.split_shadow_page_cache, 1);
+Hi folks,
 
-Uber nit that Paolo will make fun of me for... please align indentiation
+I encountered a problem when using the SC16IS752 to expand the serial port.
+I connected two Bluetooth modules to the two serial ports extended by the
+SC16IS752. The device tree is as follows:
 
-	return need_topup(&kvm->arch.split_desc_cache, SPLIT_DESC_CACHE_CAPACITY) ||
-	       need_topup(&kvm->arch.split_page_header_cache, 1) ||
-	       need_topup(&kvm->arch.split_shadow_page_cache, 1);
+&ssi0 {
+     status = "okay";
 
-> +static void nested_mmu_split_huge_page(struct kvm *kvm,
-> +				       const struct kvm_memory_slot *slot,
-> +				       u64 *huge_sptep)
-> +
-> +{
-> +	struct kvm_mmu_memory_cache *cache = &kvm->arch.split_desc_cache;
-> +	u64 huge_spte = READ_ONCE(*huge_sptep);
-> +	struct kvm_mmu_page *sp;
-> +	bool flush = false;
-> +	u64 *sptep, spte;
-> +	gfn_t gfn;
-> +	int index;
-> +
-> +	sp = nested_mmu_get_sp_for_split(kvm, huge_sptep);
-> +
-> +	for (index = 0; index < PT64_ENT_PER_PAGE; index++) {
-> +		sptep = &sp->spt[index];
-> +		gfn = kvm_mmu_page_get_gfn(sp, index);
-> +
-> +		/*
-> +		 * The SP may already have populated SPTEs, e.g. if this huge
-> +		 * page is aliased by multiple sptes with the same access
-> +		 * permissions. These entries are guaranteed to map the same
-> +		 * gfn-to-pfn translation since the SP is direct, so no need to
-> +		 * modify them.
-> +		 *
-> +		 * However, if a given SPTE points to a lower level page table,
-> +		 * that lower level page table may only be partially populated.
-> +		 * Installing such SPTEs would effectively unmap a potion of the
-> +		 * huge page, which requires a TLB flush.
+     num-cs = <2>;
 
-Maybe explain why a TLB flush is required?  E.g. "which requires a TLB flush as
-a subsequent mmu_notifier event on the unmapped region would fail to detect the
-need to flush".
+     pinctrl-names = "default";
+     pinctrl-0 = <&pins_ssi0>;
 
-> +static bool nested_mmu_skip_split_huge_page(u64 *huge_sptep)
+     sc16is752: expander@0 {
+         compatible = "nxp,sc16is752";
+         reg = <0>; /* CE0 */
 
-"skip" is kinda odd terminology.  It reads like a command, but it's actually
-querying state _and_ it's returning a boolean, which I've learned to hate :-)
+         spi-rx-bus-width = <1>;
+         spi-tx-bus-width = <1>;
+         spi-max-frequency = <6000000>;
 
-I don't see any reason for a helper, there's one caller and it can just do
-"continue" directly.
+         clocks = <&exclk_sc16is752>;
 
-> +static void kvm_nested_mmu_try_split_huge_pages(struct kvm *kvm,
-> +						const struct kvm_memory_slot *slot,
-> +						gfn_t start, gfn_t end,
-> +						int target_level)
-> +{
-> +	int level;
-> +
-> +	/*
-> +	 * Split huge pages starting with KVM_MAX_HUGEPAGE_LEVEL and working
-> +	 * down to the target level. This ensures pages are recursively split
-> +	 * all the way to the target level. There's no need to split pages
-> +	 * already at the target level.
-> +	 */
-> +	for (level = KVM_MAX_HUGEPAGE_LEVEL; level > target_level; level--) {
+         interrupt-parent = <&gpb>;
+         interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
 
-Unnecessary braces.
-> +		slot_handle_level_range(kvm, slot,
-> +					nested_mmu_try_split_huge_pages,
-> +					level, level, start, end - 1,
-> +					true, false);
+         gpio-controller;
+         #gpio-cells = <2>;
 
-IMO it's worth running over by 4 chars to drop 2 lines:
+         bluetooth@0 {
+             compatible = "brcm,bcm43438-bt";
+             max-speed = <1000000>;
 
-	for (level = KVM_MAX_HUGEPAGE_LEVEL; level > target_level; level--)
-		slot_handle_level_range(kvm, slot, nested_mmu_try_split_huge_pages,
-					level, level, start, end - 1, true, false);
-> +	}
-> +}
-> +
->  /* Must be called with the mmu_lock held in write-mode. */
+             device-wakeup-gpios = <&gpc 26 GPIO_ACTIVE_HIGH>;
+             reset-gpios = <&gpb 17 GPIO_ACTIVE_LOW>;
+         };
 
-Add a lockdep assertion, not a comment.
+         bluetooth@1 {
+             compatible = "brcm,bcm43438-bt";
 
->  void kvm_mmu_try_split_huge_pages(struct kvm *kvm,
->  				   const struct kvm_memory_slot *memslot,
->  				   u64 start, u64 end,
->  				   int target_level)
->  {
-> -	if (is_tdp_mmu_enabled(kvm))
-> -		kvm_tdp_mmu_try_split_huge_pages(kvm, memslot, start, end,
-> -						 target_level, false);
-> +	if (!is_tdp_mmu_enabled(kvm))
-> +		return;
-> +
-> +	kvm_tdp_mmu_try_split_huge_pages(kvm, memslot, start, end, target_level,
-> +					 false);
-> +
-> +	if (kvm_memslots_have_rmaps(kvm))
-> +		kvm_nested_mmu_try_split_huge_pages(kvm, memslot, start, end,
-> +						    target_level);
->  
->  	/*
->  	 * A TLB flush is unnecessary at this point for the same resons as in
-> @@ -6051,10 +6304,19 @@ void kvm_mmu_slot_try_split_huge_pages(struct kvm *kvm,
->  	u64 start = memslot->base_gfn;
->  	u64 end = start + memslot->npages;
->  
-> -	if (is_tdp_mmu_enabled(kvm)) {
-> -		read_lock(&kvm->mmu_lock);
-> -		kvm_tdp_mmu_try_split_huge_pages(kvm, memslot, start, end, target_level, true);
-> -		read_unlock(&kvm->mmu_lock);
-> +	if (!is_tdp_mmu_enabled(kvm))
-> +		return;
-> +
-> +	read_lock(&kvm->mmu_lock);
-> +	kvm_tdp_mmu_try_split_huge_pages(kvm, memslot, start, end, target_level,
-> +					 true);
+             device-wakeup-gpios = <&gpc 28 GPIO_ACTIVE_HIGH>;
+             reset-gpios = <&gpb 19 GPIO_ACTIVE_LOW>;
+         };
+     };
+};
 
-Eh, let this poke out.
 
-> +	read_unlock(&kvm->mmu_lock);
-> +
-> +	if (kvm_memslots_have_rmaps(kvm)) {
-> +		write_lock(&kvm->mmu_lock);
-> +		kvm_nested_mmu_try_split_huge_pages(kvm, memslot, start, end,
-> +						    target_level);
-> +		write_unlock(&kvm->mmu_lock);
 
-Super duper nit: all other flows do rmaps first, than TDP MMU.  Might as well keep
-that ordering here, otherwise it suggests there's a reason to be different.
+There are the following error messages after startup:
 
->  	}
->  
->  	/*
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index ab336f7c82e4..e123e24a130f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -12161,6 +12161,12 @@ static void kvm_mmu_slot_apply_flags(struct kvm *kvm,
->  		 * page faults will create the large-page sptes.
->  		 */
->  		kvm_mmu_zap_collapsible_sptes(kvm, new);
-> +
-> +		/*
-> +		 * Free any memory left behind by eager page splitting. Ignore
-> +		 * the module parameter since userspace might have changed it.
-> +		 */
-> +		free_split_caches(kvm);
->  	} else {
->  		/*
->  		 * Initially-all-set does not require write protecting any page,
-> -- 
-> 2.36.0.rc2.479.g8af0fa9b8e-goog
-> 
+[    0.548417] serial serial0-0: controller busy
+[    0.553572] serial serial0-0: failure adding device. status -EBUSY
+[    0.559764] serial serial0: tty port ttySC0 registered
+[    0.565545] spi0.0: ttySC1 at I/O 0x1 (irq = 18, base_baud = 3000000) 
+is a SC16IS752
+[    0.573987] serial serial1-0: controller busy
+[    0.578351] serial serial1-0: failure adding device. status -EBUSY
+[    0.585003] serial serial1: tty port ttySC1 registered
+
+And only the module connected to the first serial port (ttySC0) can work 
+normally.
+
+
+
+If I change the device tree to:
+
+&ssi0 {
+     status = "okay";
+
+     num-cs = <2>;
+
+     pinctrl-names = "default";
+     pinctrl-0 = <&pins_ssi0>;
+
+     sc16is752: expander@0 {
+         compatible = "nxp,sc16is752";
+         reg = <0>; /* CE0 */
+
+         spi-rx-bus-width = <1>;
+         spi-tx-bus-width = <1>;
+         spi-max-frequency = <6000000>;
+
+         clocks = <&exclk_sc16is752>;
+
+         interrupt-parent = <&gpb>;
+         interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
+
+         gpio-controller;
+         #gpio-cells = <2>;
+
+         bluetooth@0 {
+             compatible = "brcm,bcm43438-bt";
+             max-speed = <1000000>;
+
+             device-wakeup-gpios = <&gpc 26 GPIO_ACTIVE_HIGH>;
+             reset-gpios = <&gpb 17 GPIO_ACTIVE_LOW>;
+         };
+     };
+};
+
+Then there will be no error message, and the module connected to the first
+serial port (ttySC0) can also work normally.
+
+
+
+After tracing, the problem seems to be in "serdev_device_add()" (line 
+111) of
+"drivers/tty/serdev/core.c":
+
+int serdev_device_add(struct serdev_device *serdev)
+{
+     struct serdev_controller *ctrl = serdev->ctrl;
+     struct device *parent = serdev->dev.parent;
+     int err;
+
+     dev_set_name(&serdev->dev, "%s-%d", dev_name(parent), serdev->nr);
+
+     /* Only a single slave device is currently supported. */
+     if (ctrl->serdev) {
+         dev_err(&serdev->dev, "controller busy\n");
+         return -EBUSY;
+     }
+     ctrl->serdev = serdev;
+
+     err = device_add(&serdev->dev);
+     if (err < 0) {
+         dev_err(&serdev->dev, "Can't add %s, status %pe\n",
+             dev_name(&serdev->dev), ERR_PTR(err));
+         goto err_clear_serdev;
+     }
+
+     dev_dbg(&serdev->dev, "device %s registered\n", 
+dev_name(&serdev->dev));
+
+     return 0;
+
+err_clear_serdev:
+     ctrl->serdev = NULL;
+     return err;
+}
+EXPORT_SYMBOL_GPL(serdev_device_add);
+
+
+
+Is there any way to correctly describe the device mounted on the second
+serial port (ttySC1) in the device tree? Or how do I need to modify the
+"drivers/tty/serdev/core.c" to make the SC16IS752 still work properly
+with two child nodes mounted?
+
+Thanks and beset regards!
