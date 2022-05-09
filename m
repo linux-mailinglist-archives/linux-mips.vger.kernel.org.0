@@ -2,182 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A921651FB7D
-	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 13:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40F651FCF0
+	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 14:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbiEILra (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 May 2022 07:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S234595AbiEIMhk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 May 2022 08:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiEILrZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 07:47:25 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D396A1ECBBB;
-        Mon,  9 May 2022 04:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652096591; x=1683632591;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=ZTyA1HS8jeWS2uplJonrsTVm9m3xk+zuXOASyRBer64=;
-  b=k79c/UL7bS5xE6bgFELpDjZw91MSdmyf2SNf4MUHE8y9gFAvXrj6TNe/
-   gw82oy0tpfd3nMQSyeN8wgKdAMXP0foCg7exBi8roBxStp4Hiv2Gtbjn6
-   0+XmMS/4hzbAo2pr38kpXZjIFl0gWzEFfeJdAT858lW9PGVUNMPrSY15p
-   1eBeZ2T4lFjzmIRaYPaeTfdI+Cjw62EHLHOfxWsMwm5dYSoLkvpQQvupQ
-   FDaIvWbSJHnnDH1CFS6MqFc7NeFAuQAln4KsDeAiLB/FA6D0klQxn6+oS
-   N/HGnp+vBkZfPX6vTdsCicERTN+YoSQxtdFGW2Rt5VmdMfuUr8bk4UydT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="251069137"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="251069137"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 04:43:10 -0700
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="591991357"
-Received: from mfuent2x-mobl1.amr.corp.intel.com ([10.251.220.67])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 04:43:05 -0700
-Date:   Mon, 9 May 2022 14:42:59 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Helge Deller <deller@gmx.de>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 1/3] termbits.h: create termbits-common.h for identical
- bits
-In-Reply-To: <97b0e932-1309-edfd-3886-fee1498bff7d@gmx.de>
-Message-ID: <8b407358-294-74ee-5659-f51d4598998@linux.intel.com>
-References: <20220509093446.6677-1-ilpo.jarvinen@linux.intel.com> <20220509093446.6677-2-ilpo.jarvinen@linux.intel.com> <97b0e932-1309-edfd-3886-fee1498bff7d@gmx.de>
+        with ESMTP id S234488AbiEIMhi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 08:37:38 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21BD28BDC9;
+        Mon,  9 May 2022 05:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=L3p0/83L4yDVyZoegOtsQfWmJV/6wtv6TZoOXChWFJg=; b=Gm1PabHNS+/VMjWNpRDgN0q7Gz
+        okgDM+2WHp5z93ZUGeQzJtlj40ch1Djul+F9LKvzWURwbafLBOoP/NgGu9GSmPuuE28KOgN2Dlog/
+        GHXl8dWWFH9IUIBQmU28gspF2npPpEWaJ19eWl8SzxR3mk4Q/F4kmhrZuCV0rVMHSE4nkq5aDi9ss
+        tskoNSlPr3h/0gKp/FmRCE42MZtPYeJf36WeID1+imZk2dUy5vrTX2Nb6oqUW3HqWx20YRVV7+Jqn
+        2U5xO3lqX+ogULZEqtYM74LQ/XjYNOdW70A5rw6LBK7UHwdRlT2URD08Y6BIbm5BwJqTO8MAols4i
+        vbgjN92g==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1no2ZO-0002Vw-CD; Mon, 09 May 2022 14:32:58 +0200
+Message-ID: <b5a1370c-1319-24d1-6b2a-629e5c8915ed@igalia.com>
+Date:   Mon, 9 May 2022 09:32:27 -0300
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1244401664-1652096590=:1620"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 01/30] x86/crash,reboot: Avoid re-disabling VMX in all
+ CPUs on crash/restart
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, vkuznets@redhat.com
+Cc:     kexec@lists.infradead.org, pmladek@suse.com, bhe@redhat.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, will@kernel.org,
+        "David P . Reed" <dpreed@deepplum.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-2-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220427224924.592546-2-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1244401664-1652096590=:1620
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Mon, 9 May 2022, Helge Deller wrote:
-
-> Hello Ilpo,
+On 27/04/2022 19:48, Guilherme G. Piccoli wrote:
+> In the panic path we have a list of functions to be called, the panic
+> notifiers - such callbacks perform various actions in the machine's
+> last breath, and sometimes users want them to run before kdump. We
+> have the parameter "crash_kexec_post_notifiers" for that. When such
+> parameter is used, the function "crash_smp_send_stop()" is executed
+> to poweroff all secondary CPUs through the NMI-shootdown mechanism;
+> part of this process involves disabling virtualization features in
+> all CPUs (except the main one).
 > 
-> On 5/9/22 11:34, Ilpo Järvinen wrote:
-> > Some defines are the same across all archs. Move the most obvious
-> > intersection to termbits-common.h.
+> Now, in the emergency restart procedure we have also a way of
+> disabling VMX in all CPUs, using the same NMI-shootdown mechanism;
+> what happens though is that in case we already NMI-disabled all CPUs,
+> the emergency restart fails due to a second addition of the same items
+> in the NMI list, as per the following log output:
 > 
-> I like your cleanup patches, but in this specific one, does it makes sense
-> to split up together-belonging constants, e.g.
+> sysrq: Trigger a crash
+> Kernel panic - not syncing: sysrq triggered crash
+> [...]
+> Rebooting in 2 seconds..
+> list_add double add: new=<addr1>, prev=<addr2>, next=<addr1>.
+> ------------[ cut here ]------------
+> kernel BUG at lib/list_debug.c:29!
+> invalid opcode: 0000 [#1] PREEMPT SMP PTI
 > 
-> > diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
-> > index 6017ee08f099..7f74a822b7ea 100644
-> > --- a/arch/parisc/include/uapi/asm/termbits.h
-> > +++ b/arch/parisc/include/uapi/asm/termbits.h
-> > @@ -61,31 +61,15 @@ struct ktermios {
-> >
-> >
-> >  /* c_iflag bits */
-> > -#define IGNBRK	0x00001
-> > -#define BRKINT	0x00002
-> > -#define IGNPAR	0x00004
-> > -#define PARMRK	0x00008
-> > -#define INPCK	0x00010
-> > -#define ISTRIP	0x00020
-> > -#define INLCR	0x00040
-> > -#define IGNCR	0x00080
-> > -#define ICRNL	0x00100
-> >  #define IUCLC	0x00200
-> >  #define IXON	0x00400
-> > -#define IXANY	0x00800
-> >  #define IXOFF	0x01000
-> >  #define IMAXBEL	0x04000
-> >  #define IUTF8	0x08000
+> In order to reproduce the problem, users just need to set the kernel
+> parameter "crash_kexec_post_notifiers" *without* kdump set in any
+> system with the VMX feature present.
 > 
-> In the hunk above you leave IUCLC, IXON, IXOFF... because they seem unique to parisc.
-> The other defines are then taken from generic header.
-> Although this is correct, it leaves single values alone, which make it hard to verify
-> because you don't see the full list of values in one place.
-
-While I too am fine either way, I don't think these are as strongly 
-grouped as you seem to imply. There's no big advantage in having as much 
-as possible within the same file. If somebody is looking for the meaning 
-of these, these headers are no match when compared e.g. with stty manpage.
-
-For c_iflag, the break, parity and cr related "groups" within c_iflag are 
-moving completely to common header.
-
-IXANY is probably only one close to borderline whether it kind of belongs 
-to the same group as IXON/IXOFF (which both by chance both remained on the 
-same side in the split). I don't think it does strongly enough to warrant 
-keeping them next to each other but I'm open what opinions others have on 
-it.
-
-The rest in c_iflag don't seem to be strongly tied/grouped to the other 
-defines within c_iflag. They're just bits that appear next/close to each 
-other but are not tied by any significant meaning-based connection.
-
-C_oflag is more messy. I exercised grouping based judgement with c_oflag 
-where only the defines with all bits as zero would have moved to the 
-common header breaking the groups very badly. That is, only CR0 would have 
-moved and CR1-3 remained in arch headers, etc. which made no sense to do. 
-One could argue, that since ONLCR (and perhaps CRDLY) are not moving, no 
-other cr related defines should move either.
-
-> > @@ -112,24 +96,6 @@ struct ktermios {
-> >
-> >  /* c_cflag bit meaning */
-> >  #define CBAUD		0x0000100f
-> > -#define  B0		0x00000000	/* hang up */
-> > -#define  B50		0x00000001
-> > -#define  B75		0x00000002
-> > -#define  B110		0x00000003
-> > -#define  B134		0x00000004
-> > -#define  B150		0x00000005
-> > -#define  B200		0x00000006
-> > -#define  B300		0x00000007
-> > -#define  B600		0x00000008
-> > -#define  B1200		0x00000009
-> > -#define  B1800		0x0000000a
-> > -#define  B2400		0x0000000b
-> > -#define  B4800		0x0000000c
-> > -#define  B9600		0x0000000d
-> > -#define  B19200		0x0000000e
-> > -#define  B38400		0x0000000f
-> > -#define EXTA B19200
-> > -#define EXTB B38400
+> Since there is no benefit in re-disabling VMX in all CPUs in case
+> it was already done, this patch prevents that by guarding the restart
+> routine against doubly issuing NMIs unnecessarily. Notice we still
+> need to disable VMX locally in the emergency restart.
 > 
-> Here all baud values are dropped and will be taken from generic header, 
-> which is good. 
+> Fixes: ed72736183c4 ("x86/reboot: Force all cpus to exit VMX root if VMX is supported)
+> Fixes: 0ee59413c967 ("x86/panic: replace smp_send_stop() with kdump friendly version in panic path")
+> Cc: David P. Reed <dpreed@deepplum.com>
+> Cc: Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  arch/x86/include/asm/cpu.h |  1 +
+>  arch/x86/kernel/crash.c    |  8 ++++----
+>  arch/x86/kernel/reboot.c   | 14 ++++++++++++--
+>  3 files changed, 17 insertions(+), 6 deletions(-)
 > 
-> That said, I think it's good to move away the second hunk,
-> but maybe we should keep the first as is?
-> 
-> It's just a thought. Either way, I'm fine your patch if that's the
-> way which is decided to go for all platforms.
 
-Yes, lets wait and see what the others think.
+Hi Paolo / Sean / Vitaly, sorry for the ping.
+But do you think this fix is OK from the VMX point-of-view?
 
-Thanks for taking a look!
+I'd like to send a V2 of this set soon, so any review here is highly
+appreciated!
 
--- 
- i.
+Cheers,
 
---8323329-1244401664-1652096590=:1620--
+
+Guilherme
+
