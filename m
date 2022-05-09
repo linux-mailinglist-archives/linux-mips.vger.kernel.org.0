@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C7F5206B3
-	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 23:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88125206D1
+	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 23:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiEIViv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 May 2022 17:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
+        id S229538AbiEIVpT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 May 2022 17:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiEIViu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 17:38:50 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8AD2C818A
-        for <linux-mips@vger.kernel.org>; Mon,  9 May 2022 14:34:55 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 4so18603993ljw.11
-        for <linux-mips@vger.kernel.org>; Mon, 09 May 2022 14:34:55 -0700 (PDT)
+        with ESMTP id S229550AbiEIVpS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 17:45:18 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99065D660
+        for <linux-mips@vger.kernel.org>; Mon,  9 May 2022 14:41:22 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id h29so26117732lfj.2
+        for <linux-mips@vger.kernel.org>; Mon, 09 May 2022 14:41:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tN7G2C4PQ3ma2oS8lsGwUMG2S6za5ikyX+q1/ZuZ/h0=;
-        b=dnqffuw15iCZYQIzqr3eUW9WYZhCBFPccgCfdSUSeIwz2z5j/6sw6y5DSFHpwgaKwR
-         YMoh/zK/zitW9WLxNfK2L4WV4dwQDsMck1fc8KCK3oEizhgnMZv6ZfQVIMhWhk0m7IkT
-         k3NtwOMSCP/xsHIdEOMpAzD689LVJPO3xJYOtptqQY/9cupIecGTV/gkE3ZTFu7/HfUp
-         wdYSHtOc6FHyUgZgVpawMDXejPCoB7XORrJ+zwveCOWDaVlt9aVx/qlwX7GGn2O0Q+uY
-         W3zuml4Es+Jh8Bya8FiLAv/9ZQ9kN3abL7CZjJF1bib6+bZukU9329H+ux2av3qqrrr8
-         lurg==
+        bh=O+5gvsFijOHeW3i755kklmCaNCPDrPNduHFLHJgoMI8=;
+        b=bhNOFb/ujRVSbL/+KIKaKwcxZJXu5sdlVTvgox92xqawxOdyXcuhwJ/ZfiLwgx0zkB
+         rWp2VUnHPTmRizZI0H5Zx//ET/GzJK7XbUChcnwYBowjffWiC66TqPhPeOAjx7U/8lEU
+         6NjYacJEaLjLPNkd2nVuOzLxWGGzY0sfDNKLmTJFa/dkyzQ0VdeW/v6NwV2HTyXKeD2Z
+         zoCOYbSPtT35iepPAdvX6k70g92evKNYXsqMRfnqzEfDBZrs1VoWHAabc+4tUzoGJJYG
+         lem7Rxz5VSNBh0lcN1vobTMCOFZEi6iPdhDFYXf6567DJdjmYKSqGjoQL6J0+3OiPKFj
+         sNhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tN7G2C4PQ3ma2oS8lsGwUMG2S6za5ikyX+q1/ZuZ/h0=;
-        b=dSbGAI/v59JORbmpo8/qF7k1s31ETcR2bEpdTU51OdHSks91bRaivS00tq1O11Xm+S
-         oZ/30pnXdKYaJD7ICkFZpDMYiIvSd7z6q7uZ6mWr6JxiPqjBcyPdkWMWMKtPyBAfn+EJ
-         1hDx8Vm2vkT1FBSOyBFmBsLuieYMWzxSfjWLyu0WwRipMCKGAmQ2Bn/gtjYxo/wELcT1
-         x7gOCHXyiqHF0g6flJiPt9GvgWYRfFve0Kff+okHckeZLDlIP7hf0CWMaK2riixATrE1
-         8Xn4r6W1c4B+90eSFIz2MdowEMQ0Py4gfQRVFFXin+P9yrvC5dZZfNljMLQcd9p2eudO
-         Vgcg==
-X-Gm-Message-State: AOAM531ZOxifMUP3J7m6oZsDpZ+XE5jRblng/2FT7FhRFUF0fG0uOaDj
-        JwQOZ7jelpou1l3oq/TJZnO9tWXyMM7plTuPsarCRw==
-X-Google-Smtp-Source: ABdhPJwYgZHhvdFXOAHhV8tAaZIlptVAnf4MbnvZxg6VsGD7IQ1/g5BzdRDRYZ/yR4ilZw5IP/itbOlJUXnAeeSZevc=
-X-Received: by 2002:a05:651c:b24:b0:250:6414:c91a with SMTP id
- b36-20020a05651c0b2400b002506414c91amr11545842ljr.198.1652132093384; Mon, 09
- May 2022 14:34:53 -0700 (PDT)
+        bh=O+5gvsFijOHeW3i755kklmCaNCPDrPNduHFLHJgoMI8=;
+        b=ZeD4gK/aAag7iafj/ndtfdTRQi67Fw22VFIGYebOPWtNswy3QUBpWL6k4C/vLetj41
+         RI43XFTnixEYUqGul/RoyoeTwAAAwP7h8K4ZAxzcT+uy8yWiT+2551RZuJ98vERFK6WI
+         UStQBHbKaBh8LzdwXstfHUAKWdPvHRVNS+NrS0hUeY2Ds0pNnxNdA0lGygv9itnxjE6y
+         VQZP2ChfXhgiVy80Wcc/hpeAYcKsyy/YCT9WzpLRP0p8bT9x5kb+FCyURG9JsE/TV3Ov
+         4js8oozWaDxuHyrtiPj3/c+2hYMS/UUQw2OyMHWDIoQsXl2Aae8RhCkwfBaPZBM7otns
+         KX4g==
+X-Gm-Message-State: AOAM532V6i3d9MDKtt8zfIni8lrU19Fdm4P9oQ2GfDk7CKvuwb2lAMhc
+        NP78KPEfR1ClwLXwek4yCJbKeQDcrvjLC5h/n5YujQ==
+X-Google-Smtp-Source: ABdhPJynfBI2TATP0BS9cf2tDgm1Odlr/6us6YsCv+zgfrkGbMVsGuj1TtNZCdoktolPs7BHsN/YjWoS8WV1kehKsww=
+X-Received: by 2002:a05:6512:398d:b0:473:a597:540a with SMTP id
+ j13-20020a056512398d00b00473a597540amr14456367lfu.64.1652132481002; Mon, 09
+ May 2022 14:41:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220422210546.458943-1-dmatlack@google.com> <20220422210546.458943-18-dmatlack@google.com>
- <YnlB8n8UMCuaCj1G@google.com>
-In-Reply-To: <YnlB8n8UMCuaCj1G@google.com>
+References: <20220422210546.458943-1-dmatlack@google.com> <20220422210546.458943-21-dmatlack@google.com>
+ <de48ed40-4e6e-c49d-426e-91aba4ce1337@gmail.com>
+In-Reply-To: <de48ed40-4e6e-c49d-426e-91aba4ce1337@gmail.com>
 From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 9 May 2022 14:34:27 -0700
-Message-ID: <CALzav=fQoqet7-MnNvsJ-deJ7RxiuiH_bHMwAEHNuXJ1VGqg0Q@mail.gmail.com>
-Subject: Re: [PATCH v4 17/20] KVM: x86/mmu: Zap collapsible SPTEs at all
- levels in the shadow MMU
-To:     Sean Christopherson <seanjc@google.com>
+Date:   Mon, 9 May 2022 14:40:54 -0700
+Message-ID: <CALzav=dTmLLO1tLDuZyx6EPF3RbRi=BtpKiT0piU6xjW6f_LSw@mail.gmail.com>
+Subject: Re: [PATCH v4 20/20] KVM: x86/mmu: Extend Eager Page Splitting to
+ nested MMUs
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -61,6 +61,7 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
         Andrew Jones <drjones@redhat.com>,
         Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
         "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
@@ -84,85 +85,115 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 9, 2022 at 9:31 AM Sean Christopherson <seanjc@google.com> wrote:
+On Sat, May 7, 2022 at 12:51 AM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
 >
-> Maybe a slight tweak to the shortlog?  "Zap collapsible SPTEs at all levels in
-> the shadow MMU" left me wondering "when is KVM zapping at all levels?"
 >
->   KVM: x86/mmu: Zap all possible levels in shadow MMU when collapsing SPTEs
->
-> On Fri, Apr 22, 2022, David Matlack wrote:
-> > Currently KVM only zaps collapsible 4KiB SPTEs in the shadow MMU (i.e.
-> > in the rmap). This is fine for now KVM never creates intermediate huge
-> > pages during dirty logging, i.e. a 1GiB page is never partially split to
-> > a 2MiB page.
->
-> "partially" is really confusing.  I think what you mean is that KVM can split a
-> 1gb to a 2mb page, and not split all the way down to 4kb.  But "partially" makes
-> it sound like KVM ends up with a huge SPTE that is half split or something.  I
-> think you can just avoid that altogether and be more explicit:
->
->   i.e. a 1GiB pager is never split to just 2MiB, dirty logging always splits
->   down to 4KiB pages.
->
-> > However, this will stop being true once the shadow MMU participates in
-> > eager page splitting, which can in fact leave behind partially split
->
-> "partially" again.  Maybe
->
->   which can in fact leave behind 2MiB pages after splitting 1GiB huge pages.
-
-Looks good, I'll incorporate these edits into v5.
-
->
-> > huge pages. In preparation for that change, change the shadow MMU to
-> > iterate over all necessary levels when zapping collapsible SPTEs.
+> On 2022/4/23 05:05, David Matlack wrote:
+> > Add support for Eager Page Splitting pages that are mapped by nested
+> > MMUs. Walk through the rmap first splitting all 1GiB pages to 2MiB
+> > pages, and then splitting all 2MiB pages to 4KiB pages.
 > >
-> > No functional change intended.
+> > Note, Eager Page Splitting is limited to nested MMUs as a policy rather
+> > than due to any technical reason (the sp->role.guest_mode check could
+> > just be deleted and Eager Page Splitting would work correctly for all
+> > shadow MMU pages). There is really no reason to support Eager Page
+> > Splitting for tdp_mmu=N, since such support will eventually be phased
+> > out, and there is no current use case supporting Eager Page Splitting on
+> > hosts where TDP is either disabled or unavailable in hardware.
+> > Furthermore, future improvements to nested MMU scalability may diverge
+> > the code from the legacy shadow paging implementation. These
+> > improvements will be simpler to make if Eager Page Splitting does not
+> > have to worry about legacy shadow paging.
 > >
-> > Reviewed-by: Peter Xu <peterx@redhat.com>
+> > Splitting huge pages mapped by nested MMUs requires dealing with some
+> > extra complexity beyond that of the TDP MMU:
+> >
+> > (1) The shadow MMU has a limit on the number of shadow pages that are
+> >      allowed to be allocated. So, as a policy, Eager Page Splitting
+> >      refuses to split if there are KVM_MIN_FREE_MMU_PAGES or fewer
+> >      pages available.
+> >
+> > (2) Splitting a huge page may end up re-using an existing lower level
+> >      shadow page tables. This is unlike the TDP MMU which always allocates
+> >      new shadow page tables when splitting.
+> >
+> > (3) When installing the lower level SPTEs, they must be added to the
+> >      rmap which may require allocating additional pte_list_desc structs.
+> >
+> > Case (2) is especially interesting since it may require a TLB flush,
+> > unlike the TDP MMU which can fully split huge pages without any TLB
+> > flushes. Specifically, an existing lower level page table may point to
+> > even lower level page tables that are not fully populated, effectively
+> > unmapping a portion of the huge page, which requires a flush.
+> >
+> > This commit performs such flushes after dropping the huge page and
+> > before installing the lower level page table. This TLB flush could
+> > instead be delayed until the MMU lock is about to be dropped, which
+> > would batch flushes for multiple splits.  However these flushes should
+> > be rare in practice (a huge page must be aliased in multiple SPTEs and
+> > have been split for NX Huge Pages in only some of them). Flushing
+> > immediately is simpler to plumb and also reduces the chances of tripping
+> > over a CPU bug (e.g. see iTLB multihit).
+> >
+> > Suggested-by: Peter Feiner <pfeiner@google.com>
+> > [ This commit is based off of the original implementation of Eager Page
+> >    Splitting from Peter in Google's kernel from 2016. ]
 > > Signed-off-by: David Matlack <dmatlack@google.com>
 > > ---
-> >  arch/x86/kvm/mmu/mmu.c | 21 ++++++++++++++-------
-> >  1 file changed, 14 insertions(+), 7 deletions(-)
+> >   .../admin-guide/kernel-parameters.txt         |   3 +-
+> >   arch/x86/include/asm/kvm_host.h               |  20 ++
+> >   arch/x86/kvm/mmu/mmu.c                        | 276 +++++++++++++++++-
+> >   arch/x86/kvm/x86.c                            |   6 +
+> >   4 files changed, 296 insertions(+), 9 deletions(-)
 > >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index ed65899d15a2..479c581e8a96 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -6098,18 +6098,25 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
-> >       return need_tlb_flush;
-> >  }
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > index 3f1cc5e317ed..bc3ad3d4df0b 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -2387,8 +2387,7 @@
+> >                       the KVM_CLEAR_DIRTY ioctl, and only for the pages being
+> >                       cleared.
 > >
-> > +static void kvm_rmap_zap_collapsible_sptes(struct kvm *kvm,
-> > +                                        const struct kvm_memory_slot *slot)
-> > +{
-> > +     /*
-> > +      * Note, use KVM_MAX_HUGEPAGE_LEVEL - 1 since there's no need to zap
-> > +      * pages that are already mapped at the maximum possible level.
-> > +      */
-> > +     if (slot_handle_level(kvm, slot, kvm_mmu_zap_collapsible_spte,
-> > +                           PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL - 1,
-> > +                           true))
-> > +             kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
-> > +}
+> > -                     Eager page splitting currently only supports splitting
+> > -                     huge pages mapped by the TDP MMU.
+> > +                     Eager page splitting is only supported when kvm.tdp_mmu=Y.
+> >
+> >                       Default is Y (on).
+> >
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 15131aa05701..5df4dff385a1 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1240,6 +1240,24 @@ struct kvm_arch {
+> >       hpa_t   hv_root_tdp;
+> >       spinlock_t hv_root_tdp_lock;
+> >   #endif
 > > +
-> >  void kvm_mmu_zap_collapsible_sptes(struct kvm *kvm,
-> >                                  const struct kvm_memory_slot *slot)
-> >  {
-> >       if (kvm_memslots_have_rmaps(kvm)) {
-> >               write_lock(&kvm->mmu_lock);
-> > -             /*
-> > -              * Zap only 4k SPTEs since the legacy MMU only supports dirty
-> > -              * logging at a 4k granularity and never creates collapsible
-> > -              * 2m SPTEs during dirty logging.
-> > -              */
-> > -             if (slot_handle_level_4k(kvm, slot, kvm_mmu_zap_collapsible_spte, true))
-> > -                     kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
-> > +             kvm_rmap_zap_collapsible_sptes(kvm, slot);
-> >               write_unlock(&kvm->mmu_lock);
-> >       }
+> > +     /*
+> > +      * Memory caches used to allocate shadow pages when performing eager
+> > +      * page splitting. No need for a shadowed_info_cache since eager page
+> > +      * splitting only allocates direct shadow pages.
+> > +      */
+> > +     struct kvm_mmu_memory_cache split_shadow_page_cache;
+> > +     struct kvm_mmu_memory_cache split_page_header_cache;
+> > +
+> > +     /*
+> > +      * Memory cache used to allocate pte_list_desc structs while splitting
+> > +      * huge pages. In the worst case, to split one huge page, 512
+> > +      * pte_list_desc structs are needed to add each lower level leaf sptep
+> > +      * to the rmap plus 1 to extend the parent_ptes rmap of the lower level
+> > +      * page table.
+> > +      */
+> > +#define SPLIT_DESC_CACHE_CAPACITY 513
+> > +     struct kvm_mmu_memory_cache split_desc_cache;
+> >   };
 > >
-> > --
-> > 2.36.0.rc2.479.g8af0fa9b8e-goog
 > >
+>
+>
+> I think it needs to document that the topup operations for these caches are
+>
+> protected by kvm->slots_lock.
+
+Will do. Thanks!
+>
