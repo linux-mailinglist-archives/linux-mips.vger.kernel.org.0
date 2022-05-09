@@ -2,71 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C3C52021F
-	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 18:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4BE52023A
+	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 18:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238922AbiEIQTG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 May 2022 12:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S238978AbiEIQ0W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 May 2022 12:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238901AbiEIQTF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 12:19:05 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5571527A8A0;
-        Mon,  9 May 2022 09:15:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF6E2153B;
-        Mon,  9 May 2022 09:15:08 -0700 (PDT)
-Received: from [10.57.1.248] (unknown [10.57.1.248])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15C183F73D;
-        Mon,  9 May 2022 09:14:59 -0700 (PDT)
-Message-ID: <d9ec6f31-6125-0723-b7d7-5898abeb3289@arm.com>
-Date:   Mon, 9 May 2022 17:14:58 +0100
+        with ESMTP id S238972AbiEIQ0V (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 12:26:21 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2517414FCB0
+        for <linux-mips@vger.kernel.org>; Mon,  9 May 2022 09:22:27 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id v11so12679467pff.6
+        for <linux-mips@vger.kernel.org>; Mon, 09 May 2022 09:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=h0BduPSlx+0DYGpcl48qYpS5kqKKQ08NtMh3QxSXYwI=;
+        b=JanI5ZQydg1tdBAykjwdsFPI3CK1CwVbAt0KrqXY795qNT/V7Etv6rVxC+dyGPbEAV
+         GziUvX8FGVtebKTogqpzyPQGeofN2Rg3T6iNHK6ejGDGzEpBWh3lXl+CCYPYssN94MbQ
+         n3gY/+D8E8veN5qQIYAWPYX/1M0UC64rHNYGLvDhsHDZ80Cm9e5UYglbWcc/Cj5LvB1X
+         gtHtYXMrhZ7rfTUhYpnNKNzSHb6kl6Uj3zo/cBe4Li6W9PLV2pGV3VFmo0dlz3aCFt1l
+         Ep4A1epZ6BRdW5zx9ySp2yBXF7AFLl7bH9j9X7esz8gWCqvktjQqWznULIJpSLql5L+V
+         DHjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=h0BduPSlx+0DYGpcl48qYpS5kqKKQ08NtMh3QxSXYwI=;
+        b=YIZY+zcwlrTnflDmk+XOoPO3CC7rzVVSnREEmqkAY8/DhePYtNFXrOH/vzUxOtBQe5
+         xo6jUV8GIOlPVN6rFe7uk6iZxy4wBteAy9Ck+tHb5W2pDhT83IEEsf0L69byYOnwZc0k
+         cwjbqS/SHha06gdyZLLUaIVIQe/inHUEzBfCTnakC/yvnT3RPgqrfsHrspIoTGhCXzfC
+         8u8e+g+g0fKbuzVNRfSdPHLCeJIM8pugNhDW1EYMr75FGF+r/+7oe4A85m+BaKwJT/jq
+         O7mkiRgwBBTqFb4rhB2ehF4EpDJYBdjMs9DKP9HAoZrg7juPVyNgcxnXPcXx3ayC7Zq8
+         /60A==
+X-Gm-Message-State: AOAM5339MoQB2Gp3OP6t94H3NVx1TPcoWDkzOuhtj010MLWmKTDfqzWQ
+        toL8Nq8aZ2FkjrZSrDrRGkMVrg==
+X-Google-Smtp-Source: ABdhPJwS/aqF9inY824wgySOHIECTDMrAtVZPxpl4nEz+ZeRKEi2y7w0amGxzMFqw/dLeDMc+xApRA==
+X-Received: by 2002:a63:2c8a:0:b0:3c5:f760:2e36 with SMTP id s132-20020a632c8a000000b003c5f7602e36mr13796842pgs.372.1652113346392;
+        Mon, 09 May 2022 09:22:26 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s40-20020a056a0017a800b0050dc7628146sm9006481pfg.32.2022.05.09.09.22.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 09:22:25 -0700 (PDT)
+Date:   Mon, 9 May 2022 16:22:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v4 16/20] KVM: x86/mmu: Extend
+ make_huge_page_split_spte() for the shadow MMU
+Message-ID: <Ynk/vnHQsXnZkMGT@google.com>
+References: <20220422210546.458943-1-dmatlack@google.com>
+ <20220422210546.458943-17-dmatlack@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH 09/30] coresight: cpu-debug: Replace mutex with
- mutex_trylock on panic notifier
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-10-gpiccoli@igalia.com>
- <3cafe4fd-8a0b-2633-44a3-2995abd6c38c@arm.com>
- <65f24bc5-2211-0139-ee12-b2608e81ceb1@igalia.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <65f24bc5-2211-0139-ee12-b2608e81ceb1@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422210546.458943-17-dmatlack@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +88,115 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi
-
-On 09/05/2022 14:09, Guilherme G. Piccoli wrote:
-> On 28/04/2022 05:11, Suzuki K Poulose wrote:
->> Hi Guilherme,
->>
->> On 27/04/2022 23:49, Guilherme G. Piccoli wrote:
->>> The panic notifier infrastructure executes registered callbacks when
->>> a panic event happens - such callbacks are executed in atomic context,
->>> with interrupts and preemption disabled in the running CPU and all other
->>> CPUs disabled. That said, mutexes in such context are not a good idea.
->>>
->>> This patch replaces a regular mutex with a mutex_trylock safer approach;
->>> given the nature of the mutex used in the driver, it should be pretty
->>> uncommon being unable to acquire such mutex in the panic path, hence
->>> no functional change should be observed (and if it is, that would be
->>> likely a deadlock with the regular mutex).
->>>
->>> Fixes: 2227b7c74634 ("coresight: add support for CPU debug module")
->>> Cc: Leo Yan <leo.yan@linaro.org>
->>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
->>> Cc: Mike Leach <mike.leach@linaro.org>
->>> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
->>> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
->>
->> How would you like to proceed with queuing this ? I am happy
->> either way. In case you plan to push this as part of this
->> series (I don't see any potential conflicts) :
->>
->> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+On Fri, Apr 22, 2022, David Matlack wrote:
+> Currently make_huge_page_split_spte() assumes execute permissions can be
+> granted to any 4K SPTE when splitting huge pages. This is true for the
+> TDP MMU but is not necessarily true for the shadow MMU, since KVM may be
+> shadowing a non-executable huge page.
 > 
-> Hi Suzuki, some other maintainers are taking the patches to their next
-> branches for example. I'm working on V2, and I guess in the end would be
-> nice to reduce the size of the series a bit.
+> To fix this, pass in the child shadow page where the huge page will be
+> split and derive the execution permission from the shadow page's role.
+> This is correct because huge pages are always split with direct shadow
+> page and thus the shadow page role contains the correct access
+> permissions.
 > 
-> So, do you think you could pick this one for your coresight/next branch
-> (or even for rc cycle, your call - this is really a fix)?
-> This way, I won't re-submit this one in V2, since it's gonna be merged
-> already in your branch.
+> No functional change intended.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  arch/x86/kvm/mmu/spte.c    | 13 +++++++------
+>  arch/x86/kvm/mmu/spte.h    |  2 +-
+>  arch/x86/kvm/mmu/tdp_mmu.c |  2 +-
+>  3 files changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index 4739b53c9734..9db98fbeee61 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -215,10 +215,11 @@ static u64 make_spte_executable(u64 spte)
+>   * This is used during huge page splitting to build the SPTEs that make up the
+>   * new page table.
+>   */
+> -u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
+> +u64 make_huge_page_split_spte(u64 huge_spte, struct kvm_mmu_page *sp, int index)
 
-I have queued this to coresight/next.
+Rather than pass in @sp, what about passing in @role?  Then the need for
+exec_allowed and child_level goes away (for whatever reason I reacted to the
+"allowed" part of exec_allowed).
 
-Thanks
-Suzuki
+E.g.
+
+---
+ arch/x86/kvm/mmu/spte.c    | 11 +++++------
+ arch/x86/kvm/mmu/spte.h    |  3 ++-
+ arch/x86/kvm/mmu/tdp_mmu.c |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+index 9db98fbeee61..1b766e381727 100644
+--- a/arch/x86/kvm/mmu/spte.c
++++ b/arch/x86/kvm/mmu/spte.c
+@@ -215,10 +215,9 @@ static u64 make_spte_executable(u64 spte)
+  * This is used during huge page splitting to build the SPTEs that make up the
+  * new page table.
+  */
+-u64 make_huge_page_split_spte(u64 huge_spte, struct kvm_mmu_page *sp, int index)
++u64 make_huge_page_split_spte(u64 huge_spte, union kvm_mmu_page_role role,
++			      int index)
+ {
+-	bool exec_allowed = sp->role.access & ACC_EXEC_MASK;
+-	int child_level = sp->role.level;
+ 	u64 child_spte;
+
+ 	if (WARN_ON_ONCE(!is_shadow_present_pte(huge_spte)))
+@@ -234,9 +233,9 @@ u64 make_huge_page_split_spte(u64 huge_spte, struct kvm_mmu_page *sp, int index)
+ 	 * split. So we just have to OR in the offset to the page at the next
+ 	 * lower level for the given index.
+ 	 */
+-	child_spte |= (index * KVM_PAGES_PER_HPAGE(child_level)) << PAGE_SHIFT;
++	child_spte |= (index * KVM_PAGES_PER_HPAGE(role.level)) << PAGE_SHIFT;
+
+-	if (child_level == PG_LEVEL_4K) {
++	if (role.level == PG_LEVEL_4K) {
+ 		child_spte &= ~PT_PAGE_SIZE_MASK;
+
+ 		/*
+@@ -244,7 +243,7 @@ u64 make_huge_page_split_spte(u64 huge_spte, struct kvm_mmu_page *sp, int index)
+ 		 * the page executable as the NX hugepage mitigation no longer
+ 		 * applies.
+ 		 */
+-		if (exec_allowed && is_nx_huge_page_enabled())
++		if ((role.access & ACC_EXEC_MASK) && is_nx_huge_page_enabled())
+ 			child_spte = make_spte_executable(child_spte);
+ 	}
+
+diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+index 921ea77f1b5e..80d36d0d9def 100644
+--- a/arch/x86/kvm/mmu/spte.h
++++ b/arch/x86/kvm/mmu/spte.h
+@@ -415,7 +415,8 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+ 	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
+ 	       u64 old_spte, bool prefetch, bool can_unsync,
+ 	       bool host_writable, u64 *new_spte);
+-u64 make_huge_page_split_spte(u64 huge_spte, struct kvm_mmu_page *sp, int index);
++u64 make_huge_page_split_spte(u64 huge_spte, union kvm_mmu_page_role role,
++			      int index);
+ u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled);
+ u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access);
+ u64 mark_spte_for_access_track(u64 spte);
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 110a34ca41c2..c4c4bad69f38 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1469,7 +1469,7 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
+ 	 * not been linked in yet and thus is not reachable from any other CPU.
+ 	 */
+ 	for (i = 0; i < PT64_ENT_PER_PAGE; i++)
+-		sp->spt[i] = make_huge_page_split_spte(huge_spte, sp, i);
++		sp->spt[i] = make_huge_page_split_spte(huge_spte, sp->role, i);
+
+ 	/*
+ 	 * Replace the huge spte with a pointer to the populated lower level
+
+base-commit: 721828e2397ab854b536de3ea10a9bc7962091a9
+--
