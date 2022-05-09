@@ -2,97 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B876F520268
-	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 18:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4110D52027A
+	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 18:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239092AbiEIQbR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 May 2022 12:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        id S238987AbiEIQfq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 May 2022 12:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239073AbiEIQbM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 12:31:12 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A172821B177;
-        Mon,  9 May 2022 09:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9i+OK+B4WtRAOc8WSMPsYke6rlZ4xBWZoesmtMxOiqA=; b=GajbuIp7qtfA1gL+RPS2SXW7q0
-        Vraxp03Er1/ulBPczR4jeK2gXNYw1QHwX+65lsLXsgoQAcIdxZGe/+WWRC335caKoXycxD0Z3x4PP
-        PCChOAEvQHFR3h4UawQfb9N6Z8knUowIzg0/dNyhzWus6YExYHQOg3lgx3zNijxQY/5UEVyTsU5Ee
-        oRSolpioMk06T89IZHAQg91xzRBm4fNuENY64OTsnaWwgm+PjfUORhXl2iNP0+mT/pErDsk4F7R+0
-        xGrr2cJy2Cu50umiX4PUdpi4rNkK5XT6AYQf77hlh8AUJqbCwwyU3G8+vIO6rDA82b9ywoWo/D9EX
-        Ws9UFdfQ==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1no6Dc-0008Ch-Cc; Mon, 09 May 2022 18:26:44 +0200
-Message-ID: <e4c71307-d59c-fec8-1fef-f67b86d5fb07@igalia.com>
-Date:   Mon, 9 May 2022 13:26:10 -0300
+        with ESMTP id S239004AbiEIQfp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 12:35:45 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6329B10115A
+        for <linux-mips@vger.kernel.org>; Mon,  9 May 2022 09:31:51 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so17441658pjb.5
+        for <linux-mips@vger.kernel.org>; Mon, 09 May 2022 09:31:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5m6MbZqTR/K0ls/JbmsnhfS4t8Ut8ls1IozELXnIajI=;
+        b=s13iOT82pVhN2fLD51n/NkSFDJD8cuLjhPlrxBexcLZ+iCv7bxql+RQW5WZNA6fFA4
+         z5l+nLKe3RnRjm9mBUN+Nff6o7y8D4q/xHGhe2K9N4IqAqRDugEr/Md2q9u3/c5F/JeM
+         WrKAlaJvdQA05qhUztwbpvAVjRR+Klf10Dx7bfv4TjyzmvrwjiDZ7xthVIuwaa3gbA1g
+         H+JuabtImAJ4cKsXDDOmsdE/LAdlpMI8Yb6Dy91JJ0dh+3ELSh7wwaaHAoS+aTacs9DY
+         zdriLZJSyn2UsZueEqG5RS1L3NnSWos5SqYxdNX5gf2T6ZYpeD3PGG4H1BBc0gN5wHud
+         HzOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5m6MbZqTR/K0ls/JbmsnhfS4t8Ut8ls1IozELXnIajI=;
+        b=vgMWp7ZuZZb3yJpUT00z0+nJapmT1oM7qbbEt/bO+X8Y78uZR/b6yhUKzavLW35gAS
+         lnrb9B3eIq+1Q3qgX+GBfAbtY8rXadwaFG89iFPDmjEv33QDCfzlm65kHbVXISd3MDqd
+         zND+pru1tTAxq2G1+GEohJjRPnmvXThNFixx/+4MdjtXqTm75HHBauPLjvuOTXu5VEiT
+         hFv2OY/CJ1xFggiznC0y4CsCWCmxrbQrsv5M8LdP+ltpmH3sqL2ntnSeSb37xIzd96Pd
+         9LgoZ6RfdNl5UHJDLS+jj6/t4I1W8fwSQGG8lKdNNCZhgOHKqYP+LBFVIp5E1G9cSa3V
+         rCYA==
+X-Gm-Message-State: AOAM530abgaKTADl0ifTSn9IHjiVfhkdAoyOIqrMpKftb0q9U9C7hyqC
+        tsmY2dXwQqtPXyZiVk4oSDeQRQ==
+X-Google-Smtp-Source: ABdhPJzGs1IwQJk/45XzTRSExCEERaP5PYcy1LzTQKkXOwouwsurcXkKRerTln5UGHN/bEbuxUUpMw==
+X-Received: by 2002:a17:902:cf05:b0:156:8445:ce0f with SMTP id i5-20020a170902cf0500b001568445ce0fmr16888729plg.99.1652113910711;
+        Mon, 09 May 2022 09:31:50 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u21-20020a17090abb1500b001d95cdb62d4sm12797700pjr.33.2022.05.09.09.31.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 09:31:50 -0700 (PDT)
+Date:   Mon, 9 May 2022 16:31:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v4 17/20] KVM: x86/mmu: Zap collapsible SPTEs at all
+ levels in the shadow MMU
+Message-ID: <YnlB8n8UMCuaCj1G@google.com>
+References: <20220422210546.458943-1-dmatlack@google.com>
+ <20220422210546.458943-18-dmatlack@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 09/30] coresight: cpu-debug: Replace mutex with
- mutex_trylock on panic notifier
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-10-gpiccoli@igalia.com>
- <3cafe4fd-8a0b-2633-44a3-2995abd6c38c@arm.com>
- <65f24bc5-2211-0139-ee12-b2608e81ceb1@igalia.com>
- <d9ec6f31-6125-0723-b7d7-5898abeb3289@arm.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <d9ec6f31-6125-0723-b7d7-5898abeb3289@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422210546.458943-18-dmatlack@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/05/2022 13:14, Suzuki K Poulose wrote:
-> [...]> 
-> I have queued this to coresight/next.
+Maybe a slight tweak to the shortlog?  "Zap collapsible SPTEs at all levels in
+the shadow MMU" left me wondering "when is KVM zapping at all levels?"
+
+  KVM: x86/mmu: Zap all possible levels in shadow MMU when collapsing SPTEs
+
+On Fri, Apr 22, 2022, David Matlack wrote:
+> Currently KVM only zaps collapsible 4KiB SPTEs in the shadow MMU (i.e.
+> in the rmap). This is fine for now KVM never creates intermediate huge
+> pages during dirty logging, i.e. a 1GiB page is never partially split to
+> a 2MiB page.
+
+"partially" is really confusing.  I think what you mean is that KVM can split a
+1gb to a 2mb page, and not split all the way down to 4kb.  But "partially" makes
+it sound like KVM ends up with a huge SPTE that is half split or something.  I
+think you can just avoid that altogether and be more explicit:
+
+  i.e. a 1GiB pager is never split to just 2MiB, dirty logging always splits
+  down to 4KiB pages.
+
+> However, this will stop being true once the shadow MMU participates in
+> eager page splitting, which can in fact leave behind partially split
+
+"partially" again.  Maybe
+
+  which can in fact leave behind 2MiB pages after splitting 1GiB huge pages.
+
+> huge pages. In preparation for that change, change the shadow MMU to
+> iterate over all necessary levels when zapping collapsible SPTEs.
 > 
-> Thanks
-> Suzuki
-
-
-Thanks a lot Suzuki!
+> No functional change intended.
+> 
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index ed65899d15a2..479c581e8a96 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -6098,18 +6098,25 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
+>  	return need_tlb_flush;
+>  }
+>  
+> +static void kvm_rmap_zap_collapsible_sptes(struct kvm *kvm,
+> +					   const struct kvm_memory_slot *slot)
+> +{
+> +	/*
+> +	 * Note, use KVM_MAX_HUGEPAGE_LEVEL - 1 since there's no need to zap
+> +	 * pages that are already mapped at the maximum possible level.
+> +	 */
+> +	if (slot_handle_level(kvm, slot, kvm_mmu_zap_collapsible_spte,
+> +			      PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL - 1,
+> +			      true))
+> +		kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
+> +}
+> +
+>  void kvm_mmu_zap_collapsible_sptes(struct kvm *kvm,
+>  				   const struct kvm_memory_slot *slot)
+>  {
+>  	if (kvm_memslots_have_rmaps(kvm)) {
+>  		write_lock(&kvm->mmu_lock);
+> -		/*
+> -		 * Zap only 4k SPTEs since the legacy MMU only supports dirty
+> -		 * logging at a 4k granularity and never creates collapsible
+> -		 * 2m SPTEs during dirty logging.
+> -		 */
+> -		if (slot_handle_level_4k(kvm, slot, kvm_mmu_zap_collapsible_spte, true))
+> -			kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
+> +		kvm_rmap_zap_collapsible_sptes(kvm, slot);
+>  		write_unlock(&kvm->mmu_lock);
+>  	}
+>  
+> -- 
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+> 
