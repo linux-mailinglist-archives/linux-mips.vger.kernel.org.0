@@ -2,274 +2,322 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92E4520812
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 00:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C7252086B
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 01:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbiEIXA7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 May 2022 19:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        id S232501AbiEIXhB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 May 2022 19:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiEIXA5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 19:00:57 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A584C7B6
-        for <linux-mips@vger.kernel.org>; Mon,  9 May 2022 15:57:02 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d17so15249606plg.0
-        for <linux-mips@vger.kernel.org>; Mon, 09 May 2022 15:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cyz9tulYjjoPlqL/KyMBr2cr526E/FbUGIe/SucGFmg=;
-        b=grLQrLP7ejbiRHexQT7PQYQ7lzWo6AkBKPhUCpNagMVYqHnAc+3s9EzWnczkci8U9T
-         x0CDMY8JYKuCbt1+SulS+AXwIWvH90zQPVSYGBwdV3dMyJmNQzZ1BveU220IQBuCLLzO
-         IjmdvKpP5ZXQHIeTShNvYcKExMHAF7QKL4ECgoUPWvNE19+YdjxPemP6m+8x79QmI2jn
-         ivkApIfUWLr/yCQkhuSvkYtjxYyLyAQ567smHX0zm4TcX4IhSEwwfENF9v7BVcee33Qb
-         2wCbZMj25Hxzb2WLAfYU0q8GJVDtcIrlsIda+iPeZ7soBfZexXpzYkuy7Px5UOuBDyzH
-         pBIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cyz9tulYjjoPlqL/KyMBr2cr526E/FbUGIe/SucGFmg=;
-        b=b601toz0/rat2pJHOABgEJY/kKleNi63XST2eJc++BSxrFYfPL/S+2LybAHudZLvgJ
-         jrhUmQcW0Bfw+dGaqEMRgu84wTt5A4xHAcsPwvIOIE6tWvmpBT87U0NFE4vPZxtyrHxX
-         f64k96L8VJ97/xa2Hdo7LbXhcJaRrKxSIH2KGMS0+XhW32RbaVDgWFCcHX1rx9gTW2UV
-         sG2bGC/tF4DSipMz9PTe6jcvtAlDcPooFTgJbJb0avF8pxr0MvV/2mVc5fKGV7Xip7g7
-         +hb44nKz2mLiL09oX/o4Q0nhOuCH5Vw+ps6sP9wUbr4sGNf8Xbhs25NXdyXijxDTWqQr
-         zM1w==
-X-Gm-Message-State: AOAM530JppEd6uCM0c/p/QtNb1XZSJXVq85VeLiNzCiLUDNIFHyG6c6I
-        y2Jtg0b+IgxIXk0LaA7OYvt6Kg==
-X-Google-Smtp-Source: ABdhPJx05y8bnmEfbnKZzU7mDZxHDicGOkpEGJYcw60iVRQzZoyIVrNyM6mO9JBa501S5piekC0NJQ==
-X-Received: by 2002:a17:902:ccc1:b0:15a:24df:a7cc with SMTP id z1-20020a170902ccc100b0015a24dfa7ccmr18081599ple.42.1652137021345;
-        Mon, 09 May 2022 15:57:01 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a25-20020aa780d9000000b0050dc7628182sm9392409pfn.92.2022.05.09.15.57.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 15:57:00 -0700 (PDT)
-Date:   Mon, 9 May 2022 22:56:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
+        with ESMTP id S232477AbiEIXhA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 19:37:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009F5216045;
+        Mon,  9 May 2022 16:33:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 607931F416C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652139183;
+        bh=lLgNEvskjYPed89A1nrHxa9JSdRs0IUn4pOHSUK7jTc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WUHzEmLOMl++gIYprzLY4Y5ZgwkylBFM3NXfpKcZkd+7BNaZaUmiGqg0VUYWRABmv
+         hJH1Ou7MvzVQEeCAUDDHWRMZxDQoppEXGKbM2j06jRJrIABXsEZZwm7i9NM879gB6O
+         2Y1Se37TomGB4d2h1mXO6OlgzOTBjNFsW3GHIFZ7/mIkei0JXAEQaCq8Rz0ut+bUea
+         RPU0PjopsaMLBS9qFclxouby5tVIWXA/d0NuIMg3imq9abL7b/0/41RgiE9Je581Oh
+         wDZpoyFknmJS5vpV9L2nPVYSN0vUloiI1KAFaWeUbC9qrgYElXNzM0KEblyCj/O68o
+         va3jAifDGqHhA==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v4 11/20] KVM: x86/mmu: Allow for NULL vcpu pointer in
- __kvm_mmu_get_shadow_page()
-Message-ID: <YnmcOdZILo2LqhAW@google.com>
-References: <20220422210546.458943-1-dmatlack@google.com>
- <20220422210546.458943-12-dmatlack@google.com>
- <YnRerE5+FpwkUdQE@google.com>
- <CALzav=de1=euis3WocTNBi+xNn1Ypo-GRROQNqmtAKk6q1NUqg@mail.gmail.com>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v8 00/27] Introduce power-off+restart call chain API
+Date:   Tue, 10 May 2022 02:32:08 +0300
+Message-Id: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALzav=de1=euis3WocTNBi+xNn1Ypo-GRROQNqmtAKk6q1NUqg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 09, 2022, David Matlack wrote:
-> On Thu, May 5, 2022 at 4:33 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Fri, Apr 22, 2022, David Matlack wrote:
-> > > Allow the vcpu pointer in __kvm_mmu_get_shadow_page() to be NULL. Rename
-> > > it to vcpu_or_null to prevent future commits from accidentally taking
-> > > dependency on it without first considering the NULL case.
-> > >
-> > > The vcpu pointer is only used for syncing indirect shadow pages in
-> > > kvm_mmu_find_shadow_page(). A vcpu pointer it not required for
-> > > correctness since unsync pages can simply be zapped. But this should
-> > > never occur in practice, since the only use-case for passing a NULL vCPU
-> > > pointer is eager page splitting which will only request direct shadow
-> > > pages (which can never be unsync).
-> > >
-> > > Even though __kvm_mmu_get_shadow_page() can gracefully handle a NULL
-> > > vcpu, add a WARN() that will fire if __kvm_mmu_get_shadow_page() is ever
-> > > called to get an indirect shadow page with a NULL vCPU pointer, since
-> > > zapping unsync SPs is a performance overhead that should be considered.
-> > >
-> > > Signed-off-by: David Matlack <dmatlack@google.com>
-> > > ---
-> > >  arch/x86/kvm/mmu/mmu.c | 40 ++++++++++++++++++++++++++++++++--------
-> > >  1 file changed, 32 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 04029c01aebd..21407bd4435a 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -1845,16 +1845,27 @@ static void kvm_mmu_commit_zap_page(struct kvm *kvm,
-> > >         &(_kvm)->arch.mmu_page_hash[kvm_page_table_hashfn(_gfn)])     \
-> > >               if ((_sp)->gfn != (_gfn) || (_sp)->role.direct) {} else
-> > >
-> > > -static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-> > > -                      struct list_head *invalid_list)
-> > > +static int __kvm_sync_page(struct kvm *kvm, struct kvm_vcpu *vcpu_or_null,
-> > > +                        struct kvm_mmu_page *sp,
-> > > +                        struct list_head *invalid_list)
-> > >  {
-> > > -     int ret = vcpu->arch.mmu->sync_page(vcpu, sp);
-> > > +     int ret = -1;
-> > > +
-> > > +     if (vcpu_or_null)
-> >
-> > This should never happen.  I like the idea of warning early, but I really don't
-> > like that the WARN is far removed from the code that actually depends on @vcpu
-> > being non-NULL. Case in point, KVM should have bailed on the WARN and never
-> > reached this point.  And the inner __kvm_sync_page() is completely unnecessary.
-> 
-> Yeah that's fair.
-> 
-> >
-> > I also don't love the vcpu_or_null terminology; I get the intent, but it doesn't
-> > really help because understand why/when it's NULL.
-> 
-> Eh, I don't think it needs to encode why or when. It just needs to
-> flag to the reader (and future code authors) that this vcpu pointer
-> (unlike all other vcpu pointers in KVM) is NULL in certain cases.
+Problem
+-------
 
-My objection is that without the why/when, developers that aren't familiar with
-this code won't know the rules for using vcpu_or_null.  E.g. I don't want to end
-up with
+SoC devices require power-off call chaining functionality from kernel.
+We have a widely used restart chaining provided by restart notifier API,
+but nothing for power-off.
 
-	if (vcpu_or_null)
-		do x;
-	else
-		do y;
+Solution
+--------
 
-because inevitably it'll become unclear whether or not that code is actually _correct_.
-It might not #GP on a NULL pointer, but it doesn't mean it's correct.
+Introduce new API that provides call chains support for all restart and
+power-off modes. The new API is designed with simplicity and extensibility
+in mind.
 
-> > I played around with casting, e.g. to/from an unsigned long or void *, to prevent
-> > usage, but that doesn't work very well because 'unsigned long' ends up being
-> > awkward/confusing, and 'void *' is easily lost on a function call.  And both
-> > lose type safety :-(
-> 
-> Yet another shortcoming of C :(
+This is a third attempt to introduce the new API. First was made by
+Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+In fact the work didn't stop and recently arm_pm_restart() was removed
+from v5.14 kernel, which was a part of preparatory work started by
+Guenter Roeck.
 
-And lack of closures, which would work very well here.
+Adoption plan
+-------------
 
-> (The other being our other discussion about the RET_PF* return codes
-> getting easily misinterpreted as KVM's magic return-to-user /
-> continue-running-guest return codes.)
-> 
-> Makes me miss Rust!
-> 
-> >
-> > All in all, I think I'd prefer this patch to simply be a KVM_BUG_ON() if
-> > kvm_mmu_find_shadow_page() encounters an unsync page.  Less churn, and IMO there's
-> > no real loss in robustness, e.g. we'd really have to screw up code review and
-> > testing to introduce a null vCPU pointer dereference in this code.
-> 
-> Agreed about moving the check here and dropping __kvm_sync_page(). But
-> I would prefer to retain the vcpu_or_null name (or at least something
-> other than "vcpu" to indicate there's something non-standard about
-> this pointer).
+This patchset introduces the new API. It also converts multiple drivers
+and arch code to the new API to demonstrate how it all looks in practice,
+removing the pm_power_off_prepare global variable.
 
-The least awful idea I've come up with is wrapping the vCPU in a struct, e.g.
+The plan is:
 
-	struct sync_page_info {
-		void *vcpu;
-	}
+1. Merge the new API and convert arch code to use do_kernel_power_off().
+   For now the new API will co-exist with the older API.
 
-That provides the contextual information I want, and also provides the hint that
-something is odd about the vcpu, which you want.  It's like a very poor man's closure :-)
-	
-The struct could even be passed by value to avoid the miniscule overhead, and to
-make readers look extra hard because it's that much more wierd.
+2. Convert all drivers and platform code to the new API.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 3d102522804a..068be77a4fff 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2003,8 +2003,13 @@ static void clear_sp_write_flooding_count(u64 *spte)
-        __clear_sp_write_flooding_count(sptep_to_sp(spte));
- }
+3. Remove obsoleted pm_power_off and pm_power_off_prepare variables.
 
-+/* Wrapper to make it difficult to dereference a potentially NULL @vcpu. */
-+struct sync_page_info {
-+       void *vcpu;
-+};
-+
- static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
--                                                    struct kvm_vcpu *vcpu,
-+                                                    struct sync_page_info spi,
-                                                     gfn_t gfn,
-                                                     struct hlist_head *sp_list,
-                                                     union kvm_mmu_page_role role)
-@@ -2041,6 +2046,13 @@ static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
-                        goto out;
+Results
+-------
 
-                if (sp->unsync) {
-+                       /*
-+                        * Getting indirect shadow pages without a valid @spi
-+                        * is not supported, i.e. this should never happen.
-+                        */
-+                       if (KVM_BUG_ON(!spi.vcpu, kvm))
-+                               break;
-+
-                        /*
-                         * The page is good, but is stale.  kvm_sync_page does
-                         * get the latest guest state, but (unlike mmu_unsync_children)
-@@ -2053,7 +2065,7 @@ static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
-                         * If the sync fails, the page is zapped.  If so, break
-                         * in order to rebuild it.
-                         */
--                       ret = kvm_sync_page(vcpu, sp, &invalid_list);
-+                       ret = kvm_sync_page(spi.vcpu, sp, &invalid_list);
-                        if (ret < 0)
-                                break;
+1. Devices can be powered off properly.
 
-@@ -2120,7 +2132,7 @@ static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm *kvm,
- }
+2. Global variables are removed from drivers.
 
- static struct kvm_mmu_page *__kvm_mmu_get_shadow_page(struct kvm *kvm,
--                                                     struct kvm_vcpu *vcpu,
-+                                                     struct sync_page_info spi,
-                                                      struct shadow_page_caches *caches,
-                                                      gfn_t gfn,
-                                                      union kvm_mmu_page_role role)
-@@ -2131,7 +2143,7 @@ static struct kvm_mmu_page *__kvm_mmu_get_shadow_page(struct kvm *kvm,
+3. Global pm_power_off and pm_power_off_prepare callback variables are
+removed once all users are converted to the new API. The latter callback
+is removed by patch #24 of this series.
 
-        sp_list = &kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
+4. Ambiguous call chain ordering is prohibited for non-default priorities.
 
--       sp = kvm_mmu_find_shadow_page(kvm, vcpu, gfn, sp_list, role);
-+       sp = kvm_mmu_find_shadow_page(kvm, spi, gfn, sp_list, role);
-        if (!sp) {
-                created = true;
-                sp = kvm_mmu_alloc_shadow_page(kvm, caches, gfn, sp_list, role);
-@@ -2151,7 +2163,11 @@ static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
-                .gfn_array_cache = &vcpu->arch.mmu_gfn_array_cache,
-        };
+Changelog:
 
--       return __kvm_mmu_get_shadow_page(vcpu->kvm, vcpu, &caches, gfn, role);
-+       struct sync_page_info spi = {
-+               .vcpu = vcpu,
-+       };
-+
-+       return __kvm_mmu_get_shadow_page(vcpu->kvm, spi, &caches, gfn, role);
- }
+v8: - Reworked sys-off handler like was suggested by Rafael Wysocki in
+      the comments to v7.
 
- static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, u32 access)
+    - The struct sys-off handler now is private to kernel/reboot.c and
+      new API is simplified.
+
+    - There is a single sys-off API function for all handler types.
+      Users shall pass the required sys-off mode type (restart, power-off
+      and etc).
+
+    - There is single struct sys_off_data callback argument for all
+      handler modes.
+
+    - User's callback now must return NOTIFY_DONE or NOTIFY_STOP.
+
+    - The default priority level is zero now.
+
+    - Multiple handlers now allowed to be registered at the default
+      priority level.
+
+    - Power-off call chain is atomic now, like the restart chain.
+
+    - kernel/reboot.c changes are split up into several logical patches.
+
+    - Added r-b from Michał Mirosław to unmodified patches from v7.
+
+    - Added acks that were missing in v7 by accident.
+
+v7: - Rebased on a recent linux-next. Dropped the recently removed
+      NDS32 architecture. Only SH and x86 arches left un-acked.
+
+    - Added acks from Thomas Bogendoerfer and Krzysztof Kozlowski
+      to the MIPS and memory/emif patches respectively.
+
+    - Made couple minor cosmetic improvements to the new API.
+
+    - A month ago I joined Collabora and continuing to work on this series
+      on the company's time, so changed my email address to collabora.com
+
+v6: - Rebased on a recent linux-next.
+
+    - Made minor couple cosmetic changes.
+
+v5: - Dropped patches which cleaned up notifier/reboot headers, as was
+      requested by Rafael Wysocki.
+
+    - Dropped WARN_ON() from the code, as was requested by Rafael Wysocki.
+      Replaced it with pr_err() appropriately.
+
+    - Dropped *_notifier_has_unique_priority() functions and added
+      *_notifier_chain_register_unique_prio() instead, as was suggested
+      by Michał Mirosław and Rafael Wysocki.
+
+    - Dropped export of blocking_notifier_call_chain_is_empty() symbol,
+      as was suggested by Rafael Wysocki.
+
+    - Michał Mirosław suggested that will be better to split up patch
+      that adds the new API to ease reviewing, but Rafael Wysocki asked
+      not add more patches, so I kept it as a single patch.
+
+    - Added temporary "weak" stub for pm_power_off() which fixes linkage
+      failure once symbol is removed from arch/* code. Previously I missed
+      this problem because was only compile-testing object files.
+
+v4: - Made a very minor improvement to doc comments, clarifying couple
+      default values.
+
+    - Corrected list of emails recipient by adding Linus, Sebastian,
+      Philipp and more NDS people. Removed bouncing emails.
+
+    - Added acks that were given to v3.
+
+v3: - Renamed power_handler to sys_off_handler as was suggested by
+      Rafael Wysocki.
+
+    - Improved doc-comments as was suggested by Rafael Wysocki. Added more
+      doc-comments.
+
+    - Implemented full set of 180 patches which convert whole kernel in
+      accordance to the plan, see link [1] above. Slightly adjusted API to
+      better suit for the remaining converted drivers.
+
+      * Added unregister_sys_off_handler() that is handy for a couple old
+        platform drivers.
+
+      * Dropped devm_register_trivial_restart_handler(), 'simple' variant
+        is enough to have.
+
+    - Improved "Add atomic/blocking_notifier_has_unique_priority()" patch,
+      as was suggested by Andy Shevchenko. Also replaced down_write() with
+      down_read() and factored out common notifier_has_unique_priority().
+
+    - Added stop_chain field to struct restart_data and reboot_prep_data
+      after discovering couple drivers wanting that feature.
+
+    - Added acks that were given to v2.
+
+v2: - Replaced standalone power-off call chain demo-API with the combined
+      power-off+restart API because this is what drivers want. It's a more
+      comprehensive solution.
+
+    - Converted multiple drivers and arch code to the new API. Suggested by
+      Andy Shevchenko. I skimmed through the rest of drivers, verifying that
+      new API suits them. The rest of the drivers will be converted once we
+      will settle on the new API, otherwise will be too many patches here.
+
+    - v2 API doesn't expose notifier to users and require handlers to
+      have unique priority. Suggested by Guenter Roeck.
+
+    - v2 API has power-off chaining disabled by default and require
+      drivers to explicitly opt-in to the chaining. This preserves old
+      behaviour for existing drivers once they are converted to the new
+      API.
+
+Dmitry Osipenko (27):
+  notifier: Add atomic_notifier_call_chain_is_empty()
+  notifier: Add blocking/atomic_notifier_chain_register_unique_prio()
+  kernel/reboot: Introduce sys-off handler API
+  kernel/reboot: Wrap legacy power-off callbacks into sys-off handlers
+  kernel/reboot: Add do_kernel_power_off()
+  kernel/reboot: Add stub for pm_power_off
+  kernel/reboot: Add kernel_can_power_off()
+  kernel/reboot: Add register_platform_power_off()
+  ARM: Use do_kernel_power_off()
+  csky: Use do_kernel_power_off()
+  riscv: Use do_kernel_power_off()
+  arm64: Use do_kernel_power_off()
+  parisc: Use do_kernel_power_off()
+  xen/x86: Use do_kernel_power_off()
+  powerpc: Use do_kernel_power_off()
+  m68k: Switch to new sys-off handler API
+  sh: Use do_kernel_power_off()
+  x86: Use do_kernel_power_off()
+  ia64: Use do_kernel_power_off()
+  mips: Use do_kernel_power_off()
+  memory: emif: Use kernel_can_power_off()
+  ACPI: power: Switch to sys-off handler API
+  regulator: pfuze100: Use devm_register_sys_off_handler()
+  reboot: Remove pm_power_off_prepare()
+  soc/tegra: pmc: Use sys-off handler API to power off Nexus 7 properly
+  kernel/reboot: Add devm_register_power_off_handler()
+  kernel/reboot: Add devm_register_restart_handler()
+
+ arch/arm/kernel/reboot.c               |   4 +-
+ arch/arm64/kernel/process.c            |   3 +-
+ arch/csky/kernel/power.c               |   6 +-
+ arch/ia64/kernel/process.c             |   4 +-
+ arch/m68k/emu/natfeat.c                |   3 +-
+ arch/m68k/include/asm/machdep.h        |   1 -
+ arch/m68k/kernel/process.c             |   5 +-
+ arch/m68k/kernel/setup_mm.c            |   1 -
+ arch/m68k/kernel/setup_no.c            |   1 -
+ arch/m68k/mac/config.c                 |   4 +-
+ arch/mips/kernel/reset.c               |   3 +-
+ arch/parisc/kernel/process.c           |   4 +-
+ arch/powerpc/kernel/setup-common.c     |   4 +-
+ arch/powerpc/xmon/xmon.c               |   3 +-
+ arch/riscv/kernel/reset.c              |  12 +-
+ arch/sh/kernel/reboot.c                |   3 +-
+ arch/x86/kernel/reboot.c               |   4 +-
+ arch/x86/xen/enlighten_pv.c            |   4 +-
+ drivers/acpi/sleep.c                   |  16 +-
+ drivers/memory/emif.c                  |   2 +-
+ drivers/regulator/pfuze100-regulator.c |  42 ++-
+ drivers/soc/tegra/pmc.c                |  87 +++++--
+ include/linux/notifier.h               |   7 +
+ include/linux/pm.h                     |   1 -
+ include/linux/reboot.h                 |  91 +++++++
+ kernel/notifier.c                      | 101 +++++--
+ kernel/reboot.c                        | 347 ++++++++++++++++++++++++-
+ 27 files changed, 639 insertions(+), 124 deletions(-)
+
+-- 
+2.35.1
 
