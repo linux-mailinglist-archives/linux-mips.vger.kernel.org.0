@@ -2,137 +2,257 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B2B5202C8
-	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 18:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD425202E2
+	for <lists+linux-mips@lfdr.de>; Mon,  9 May 2022 18:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239264AbiEIQpp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 May 2022 12:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
+        id S239373AbiEIQwN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 May 2022 12:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239250AbiEIQpo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 12:45:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C9DD1C5F96
-        for <linux-mips@vger.kernel.org>; Mon,  9 May 2022 09:41:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652114505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=46wpjVCZhJPBmgWeRQ9uBt+Od81o8qIGqdyqzSCTbIU=;
-        b=JeETDsMEypPXoCbhMDCa+O3IBoSCrTKGO0VF+qyxMrTnCd+PRERsIAnsnFww2ERFkTskcE
-        jOX/3TfEjfJgImkU0e7Je6ySx8psTtD68Q+v1sW3ahycrUrerv1+H7xdinh7T8hGnEcuaI
-        RYVZdm0CK6tq2y4UTmGRzdmIauP7d8c=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-258-aZtuWAhLMw2BDoOQFkv18Q-1; Mon, 09 May 2022 12:41:44 -0400
-X-MC-Unique: aZtuWAhLMw2BDoOQFkv18Q-1
-Received: by mail-il1-f200.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso7885305ilu.19
-        for <linux-mips@vger.kernel.org>; Mon, 09 May 2022 09:41:43 -0700 (PDT)
+        with ESMTP id S239364AbiEIQwM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 May 2022 12:52:12 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C9D237246
+        for <linux-mips@vger.kernel.org>; Mon,  9 May 2022 09:48:17 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id 204so9948005pfx.3
+        for <linux-mips@vger.kernel.org>; Mon, 09 May 2022 09:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gr9sMVs6ZdL8g3tPzoqOfbfxtZ+VfAYj0GG/Lu5p3Do=;
+        b=OjZ2kHgAm+ILSkIUJhTMWyTvLuftdyN9Kyi5pPlToUr2VbBgQzqMUvubbcjgcNoEKY
+         MXYEnQTNZicEPklzohiMYBm+qP9+SYEduyruz2LNwSpo+USrM27as+qWNBIgYtxEZv5E
+         WCmCreQKrqgSdfsvR/pMxVBm6RrS8hxwl8b9+Cjrp61ynKE00Ia3w6w1K1uFIobv4dQQ
+         aIQZvwYL+FUa1nMowwvnlDaTET5kDXKgRwzA5TOMmAPfdQZPb2aF9agEBMF5V2C8abWU
+         PvaYjtBfEYbtDRS/ZncAjUhNAsBBXlyVm4pIymLVH7kh51QXIiMLGjEHljjUysN1gQ0O
+         g5ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=46wpjVCZhJPBmgWeRQ9uBt+Od81o8qIGqdyqzSCTbIU=;
-        b=NbH1ahbL8x6afSK8Iw+7xzG5unyp/fMx1QgG3yufxF66/LqP7G7Rq2fQFVZfd5r109
-         Ua7Y85EQVLnloaP+gi6s5MULb2SJHBWg8B1uc09RbOr2GIGTNqdN9igM0tha7PgcJ6CJ
-         7QtSgXh8l/6mEtVG9SgN5CZnBIJvwb2jLgwMux9tqX5h3VpOqQ9qa7skBFVlZ+Wl3Bep
-         SbSJ5oG4HI/9Zyhz8e4psbt8g8rfahYuNG32UIbkBLDJ174YrV3Wy7QT8d8AY9dUdUNI
-         /z1sTmiQ5UfxI0kvTugS2lA72QTTnbHARGNp3XKBZw3+1ehFaR0P+Xl7+jbTkgeQ69Un
-         JpXQ==
-X-Gm-Message-State: AOAM533YbbnV9srCRXShy7MrMwVO2LMk/DTqkPKXHZKqHB4npCvQKa1o
-        D7Gr2Z2DIEPtfO74KQzjLlriLzNwJjaZAOIF0JS3WjuIbhJjG+Z+XV8sW2smfzc8WnwFbDJxNfT
-        I3VsQpgQdKQ0J1J6+E7l/CQ==
-X-Received: by 2002:a05:6e02:164e:b0:2cf:82bc:6c76 with SMTP id v14-20020a056e02164e00b002cf82bc6c76mr6451774ilu.95.1652114503280;
-        Mon, 09 May 2022 09:41:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxE3U4JsTh97DMqQwaSKR+J9MOnj5nTpGNATaHacf1CibJGqYaNUSWSiHqNy5VvKai+5PTu/Q==
-X-Received: by 2002:a05:6e02:164e:b0:2cf:82bc:6c76 with SMTP id v14-20020a056e02164e00b002cf82bc6c76mr6451741ilu.95.1652114503011;
-        Mon, 09 May 2022 09:41:43 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id x26-20020a6bfe1a000000b0065a48a57f6dsm3633311ioh.40.2022.05.09.09.41.40
+        bh=gr9sMVs6ZdL8g3tPzoqOfbfxtZ+VfAYj0GG/Lu5p3Do=;
+        b=5qoh4kE18ZOPM5R0KK4RlJff+PAkodNVR6FCiBv9PauBsar8HwDtFxsJtGxeHjHaGA
+         bWQvyX6hYrKq+SSnK6vIxw9lcKtYp6hFXMEZs6DMilrDekeM2JSQrlHK5fOwKdJiOaBK
+         QgfChAydySmF/A/qu25akV70NXxVV6fjmFNYHYbDZEJ3Hd6FjZ0ZMogBtLECCpF1GSJv
+         qXQA/pT5/gl6vTazrQ71Kr0pmx4BhdWXvWz2vWQih3pFdgnubNhJXdWIuvEWDQVd5Fr9
+         V8nZ1J/kALXNSSSz9i/d3+LzXAof+FfMHfONhUI+RGaITDyPxDTpj1d5vMXb0ghgwKGX
+         +6yg==
+X-Gm-Message-State: AOAM532fhboY5qGQ+Pkmqcflg+IskHoBePlUK6p6E027/zgXUMyuPpae
+        Eo6y14kkDY3iP3PYKUi7TLk4jQ==
+X-Google-Smtp-Source: ABdhPJx215vrOO009vGUpGxw2kjUjvEvzUv6r8zkab3Hrf61cs9pR1cmpHEArZYDJKlr8poCIJHRbg==
+X-Received: by 2002:a05:6a00:1391:b0:50d:e125:e3c with SMTP id t17-20020a056a00139100b0050de1250e3cmr16967062pfg.75.1652114896725;
+        Mon, 09 May 2022 09:48:16 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id r7-20020a17090b050700b001d2bff34228sm12911467pjz.9.2022.05.09.09.48.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 09:41:42 -0700 (PDT)
-Date:   Mon, 9 May 2022 12:41:38 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org, catalin.marinas@arm.com,
-        will@kernel.org, tsbogend@alpha.franken.de,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- unmapping
-Message-ID: <YnlEQvipCM6hnIYT@xz-m1.local>
-References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
- <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
- <20220429220214.4cfc5539@thinkpad>
- <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
- <20220502160232.589a6111@thinkpad>
- <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
- <20220503120343.6264e126@thinkpad>
- <927dfbf4-c899-b88a-4d58-36a637d611f9@oracle.com>
+        Mon, 09 May 2022 09:48:16 -0700 (PDT)
+Date:   Mon, 9 May 2022 16:48:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v4 20/20] KVM: x86/mmu: Extend Eager Page Splitting to
+ nested MMUs
+Message-ID: <YnlFzMpJZNfFuFic@google.com>
+References: <20220422210546.458943-1-dmatlack@google.com>
+ <20220422210546.458943-21-dmatlack@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <927dfbf4-c899-b88a-4d58-36a637d611f9@oracle.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220422210546.458943-21-dmatlack@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 06, 2022 at 12:07:13PM -0700, Mike Kravetz wrote:
-> On 5/3/22 03:03, Gerald Schaefer wrote:
-> > On Tue, 3 May 2022 10:19:46 +0800
-> > Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> >> On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
+On Fri, Apr 22, 2022, David Matlack wrote:
+> +static bool need_topup_split_caches_or_resched(struct kvm *kvm)
+> +{
+> +	if (need_resched() || rwlock_needbreak(&kvm->mmu_lock))
+> +		return true;
+> +
+> +	/*
+> +	 * In the worst case, SPLIT_DESC_CACHE_CAPACITY descriptors are needed
+> +	 * to split a single huge page. Calculating how many are actually needed
+> +	 * is possible but not worth the complexity.
+> +	 */
+> +	return need_topup(&kvm->arch.split_desc_cache, SPLIT_DESC_CACHE_CAPACITY) ||
+> +		need_topup(&kvm->arch.split_page_header_cache, 1) ||
+> +		need_topup(&kvm->arch.split_shadow_page_cache, 1);
 
-[...]
+Uber nit that Paolo will make fun of me for... please align indentiation
 
-> >> Please see previous code, we'll use the original pte value to check if 
-> >> it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs 
-> >> is set noop_dirty_folio().
-> >>
-> >> pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
-> > 
-> > Uh, ok, that wouldn't work on s390, but we also don't have
-> > CONFIG_PTE_MARKER_UFFD_WP / HAVE_ARCH_USERFAULTFD_WP set, so
-> > I guess we will be fine (for now).
-> > 
-> > Still, I find it a bit unsettling that pte_install_uffd_wp_if_needed()
-> > would work on a potential hugetlb *pte, directly de-referencing it
-> > instead of using huge_ptep_get().
-> > 
-> > The !pte_none(*pte) check at the beginning would be broken in the
-> > hugetlb case for s390 (not sure about other archs, but I think s390
-> > might be the only exception strictly requiring huge_ptep_get()
-> > for de-referencing hugetlb *pte pointers).
+	return need_topup(&kvm->arch.split_desc_cache, SPLIT_DESC_CACHE_CAPACITY) ||
+	       need_topup(&kvm->arch.split_page_header_cache, 1) ||
+	       need_topup(&kvm->arch.split_shadow_page_cache, 1);
 
-We could have used is_vm_hugetlb_page(vma) within the helper so as to
-properly use either generic pte or hugetlb version of pte fetching.  We may
-want to conditionally do set_[huge_]pte_at() too at the end.
+> +static void nested_mmu_split_huge_page(struct kvm *kvm,
+> +				       const struct kvm_memory_slot *slot,
+> +				       u64 *huge_sptep)
+> +
+> +{
+> +	struct kvm_mmu_memory_cache *cache = &kvm->arch.split_desc_cache;
+> +	u64 huge_spte = READ_ONCE(*huge_sptep);
+> +	struct kvm_mmu_page *sp;
+> +	bool flush = false;
+> +	u64 *sptep, spte;
+> +	gfn_t gfn;
+> +	int index;
+> +
+> +	sp = nested_mmu_get_sp_for_split(kvm, huge_sptep);
+> +
+> +	for (index = 0; index < PT64_ENT_PER_PAGE; index++) {
+> +		sptep = &sp->spt[index];
+> +		gfn = kvm_mmu_page_get_gfn(sp, index);
+> +
+> +		/*
+> +		 * The SP may already have populated SPTEs, e.g. if this huge
+> +		 * page is aliased by multiple sptes with the same access
+> +		 * permissions. These entries are guaranteed to map the same
+> +		 * gfn-to-pfn translation since the SP is direct, so no need to
+> +		 * modify them.
+> +		 *
+> +		 * However, if a given SPTE points to a lower level page table,
+> +		 * that lower level page table may only be partially populated.
+> +		 * Installing such SPTEs would effectively unmap a potion of the
+> +		 * huge page, which requires a TLB flush.
 
-I could prepare a patch for that even if it's not really anything urgently
-needed. I assume that won't need to block this patchset since we need the
-pteval for pte_dirty() check anyway and uffd-wp definitely needs it too.
+Maybe explain why a TLB flush is required?  E.g. "which requires a TLB flush as
+a subsequent mmu_notifier event on the unmapped region would fail to detect the
+need to flush".
 
-Thanks,
+> +static bool nested_mmu_skip_split_huge_page(u64 *huge_sptep)
 
--- 
-Peter Xu
+"skip" is kinda odd terminology.  It reads like a command, but it's actually
+querying state _and_ it's returning a boolean, which I've learned to hate :-)
 
+I don't see any reason for a helper, there's one caller and it can just do
+"continue" directly.
+
+> +static void kvm_nested_mmu_try_split_huge_pages(struct kvm *kvm,
+> +						const struct kvm_memory_slot *slot,
+> +						gfn_t start, gfn_t end,
+> +						int target_level)
+> +{
+> +	int level;
+> +
+> +	/*
+> +	 * Split huge pages starting with KVM_MAX_HUGEPAGE_LEVEL and working
+> +	 * down to the target level. This ensures pages are recursively split
+> +	 * all the way to the target level. There's no need to split pages
+> +	 * already at the target level.
+> +	 */
+> +	for (level = KVM_MAX_HUGEPAGE_LEVEL; level > target_level; level--) {
+
+Unnecessary braces.
+> +		slot_handle_level_range(kvm, slot,
+> +					nested_mmu_try_split_huge_pages,
+> +					level, level, start, end - 1,
+> +					true, false);
+
+IMO it's worth running over by 4 chars to drop 2 lines:
+
+	for (level = KVM_MAX_HUGEPAGE_LEVEL; level > target_level; level--)
+		slot_handle_level_range(kvm, slot, nested_mmu_try_split_huge_pages,
+					level, level, start, end - 1, true, false);
+> +	}
+> +}
+> +
+>  /* Must be called with the mmu_lock held in write-mode. */
+
+Add a lockdep assertion, not a comment.
+
+>  void kvm_mmu_try_split_huge_pages(struct kvm *kvm,
+>  				   const struct kvm_memory_slot *memslot,
+>  				   u64 start, u64 end,
+>  				   int target_level)
+>  {
+> -	if (is_tdp_mmu_enabled(kvm))
+> -		kvm_tdp_mmu_try_split_huge_pages(kvm, memslot, start, end,
+> -						 target_level, false);
+> +	if (!is_tdp_mmu_enabled(kvm))
+> +		return;
+> +
+> +	kvm_tdp_mmu_try_split_huge_pages(kvm, memslot, start, end, target_level,
+> +					 false);
+> +
+> +	if (kvm_memslots_have_rmaps(kvm))
+> +		kvm_nested_mmu_try_split_huge_pages(kvm, memslot, start, end,
+> +						    target_level);
+>  
+>  	/*
+>  	 * A TLB flush is unnecessary at this point for the same resons as in
+> @@ -6051,10 +6304,19 @@ void kvm_mmu_slot_try_split_huge_pages(struct kvm *kvm,
+>  	u64 start = memslot->base_gfn;
+>  	u64 end = start + memslot->npages;
+>  
+> -	if (is_tdp_mmu_enabled(kvm)) {
+> -		read_lock(&kvm->mmu_lock);
+> -		kvm_tdp_mmu_try_split_huge_pages(kvm, memslot, start, end, target_level, true);
+> -		read_unlock(&kvm->mmu_lock);
+> +	if (!is_tdp_mmu_enabled(kvm))
+> +		return;
+> +
+> +	read_lock(&kvm->mmu_lock);
+> +	kvm_tdp_mmu_try_split_huge_pages(kvm, memslot, start, end, target_level,
+> +					 true);
+
+Eh, let this poke out.
+
+> +	read_unlock(&kvm->mmu_lock);
+> +
+> +	if (kvm_memslots_have_rmaps(kvm)) {
+> +		write_lock(&kvm->mmu_lock);
+> +		kvm_nested_mmu_try_split_huge_pages(kvm, memslot, start, end,
+> +						    target_level);
+> +		write_unlock(&kvm->mmu_lock);
+
+Super duper nit: all other flows do rmaps first, than TDP MMU.  Might as well keep
+that ordering here, otherwise it suggests there's a reason to be different.
+
+>  	}
+>  
+>  	/*
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index ab336f7c82e4..e123e24a130f 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -12161,6 +12161,12 @@ static void kvm_mmu_slot_apply_flags(struct kvm *kvm,
+>  		 * page faults will create the large-page sptes.
+>  		 */
+>  		kvm_mmu_zap_collapsible_sptes(kvm, new);
+> +
+> +		/*
+> +		 * Free any memory left behind by eager page splitting. Ignore
+> +		 * the module parameter since userspace might have changed it.
+> +		 */
+> +		free_split_caches(kvm);
+>  	} else {
+>  		/*
+>  		 * Initially-all-set does not require write protecting any page,
+> -- 
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+> 
