@@ -2,69 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE75521462
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 13:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2575214F9
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 14:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241328AbiEJMAu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 08:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
+        id S241599AbiEJMSV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 May 2022 08:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241325AbiEJMAt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 08:00:49 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3787E50B13
-        for <linux-mips@vger.kernel.org>; Tue, 10 May 2022 04:56:52 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id k27so19695652edk.4
-        for <linux-mips@vger.kernel.org>; Tue, 10 May 2022 04:56:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9ygkrQc+ek2XiZL48rDG/nZ8HONRH2u6mkORGAxrJ18=;
-        b=Y9Nl99f5HgrkjgDxCSpM6dbyxPS2u9FQxHujLBEikHc+qYJSzfVW7gc9Nxo3dNr68j
-         Bd54r53pDXjXJu4m4yn4HKTCidCffVaVDKUNcDx92+TFM+W5iHDvCe4PSnG9OZZlgmGR
-         hjF2HLehCYMNb9qh0Cj6phg9FUfv/nW13+f9RPZxKnB3fB/Vs1+3QzyOEG26NtjI+VFT
-         mQsmvWiiFNXZtzaMXgZszBpXgtFges5xNKYAsS8jMCy99uaiPLAoc3TbzHnUOsbolkAr
-         voWODBEyuAbrfNdpp77w2kh6DlAqB7SCn6r2s/0H+jGARegJQgF3vM/YPZaYX9wMUv+V
-         9xDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9ygkrQc+ek2XiZL48rDG/nZ8HONRH2u6mkORGAxrJ18=;
-        b=MTq48JvwlESwlewBdUVI8tRb7biq2c6wrTwcGQKa2Ao8UoOmmdcZHb8ap8wuy2dbZG
-         JwotQo0w7wVNBgGg/WPolsbMoIM6OAlErNJSs3UYnPqyvt0Mg8kY64osYKo70ZHiwNYS
-         KAsYgStaU0jzZfy5P1WeW88OlZhlo3Os1hIyY8l1AIUzskfYXbr1t3ufRd2gCrL7DudX
-         fcDZ3QimsnZa56EN3DD7O30LivSG4FLVkCE/T1K5V9ODFW4dL95mP+SJI7E/ughpwJgv
-         wz4kjpBuZdMVJAblPi0Bod2e3e85I9JBO1Z7aEOFSrrj5NGwcOghjTJPx4EvUhYyTXfz
-         Ezjg==
-X-Gm-Message-State: AOAM530qARs7yJSjNb6atsgyHVKosn7tWpYkm2SdNC91p3j6/eW1gAtc
-        ylPWMQz8vnQr2EqqrFUp8esE60/UgEjTtorpSIg=
-X-Google-Smtp-Source: ABdhPJxyEaXEG+HUM8DpT/lTNID3yZQqiqgAYlDBIY6OAwMKdvbRyPxU+qwFiJgCTRvfG3CxWYW4HRPaKXVXjS+IsFY=
-X-Received: by 2002:a05:6402:3513:b0:427:dd44:90a5 with SMTP id
- b19-20020a056402351300b00427dd4490a5mr23062484edd.144.1652183810890; Tue, 10
- May 2022 04:56:50 -0700 (PDT)
+        with ESMTP id S241592AbiEJMSS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 08:18:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE1B244F2E;
+        Tue, 10 May 2022 05:14:20 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6756A21B7F;
+        Tue, 10 May 2022 12:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652184859; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z0qCXGbgchboCgbitrJZObbFnXC/YqP7fhEXmnIw2vY=;
+        b=OcxDFXmKKoVdDJUxSKREkD35h3cfh7L/UHzdGP/cbflejeipwrciY4AbOjnQu6DKNCs7aq
+        Tea2QFXBj209QcyaHp7BuefH2IIusivsxr3vlgfi6p9lZaMFpVOppWn8lIP/+rweBZrcrm
+        +Lwt8IUC7jK6VwI0ouYkElgPt01wPwE=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 552522C141;
+        Tue, 10 May 2022 12:14:16 +0000 (UTC)
+Date:   Tue, 10 May 2022 14:14:16 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 05/30] misc/pvpanic: Convert regular spinlock into
+ trylock on panic path
+Message-ID: <YnpXGOXicwdy1E6n@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-6-gpiccoli@igalia.com>
 MIME-Version: 1.0
-Received: by 2002:a54:30c1:0:0:0:0:0 with HTTP; Tue, 10 May 2022 04:56:50
- -0700 (PDT)
-Reply-To: sgtkayla2001@gmail.com
-From:   Kayla Manthey <eyanacthan.com@gmail.com>
-Date:   Tue, 10 May 2022 11:56:50 +0000
-Message-ID: <CAG3fTckEzwV-fmyoKuvpSL=-XXUcmoNo_cmg1-9XcVDopvtZ2w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427224924.592546-6-gpiccoli@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
--- 
-Salut draga mea, te rog, vreau sa stiu daca ai primit mesajul meu
-anterior, multumesc.
+On Wed 2022-04-27 19:48:59, Guilherme G. Piccoli wrote:
+> The pvpanic driver relies on panic notifiers to execute a callback
+> on panic event. Such function is executed in atomic context - the
+> panic function disables local IRQs, preemption and all other CPUs
+> that aren't running the panic code.
+> 
+> With that said, it's dangerous to use regular spinlocks in such path,
+> as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
+> This patch fixes that by replacing regular spinlocks with the trylock
+> safer approach.
+
+It seems that the lock is used just to manipulating a list. A super
+safe solution would be to use the rcu API: rcu_add_rcu() and
+list_del_rcu() under rcu_read_lock(). The spin lock will not be
+needed and the list will always be valid.
+
+The advantage would be that it will always call members that
+were successfully added earlier. That said, I am not familiar
+with pvpanic and am not sure if it is worth it.
+
+> It also fixes an old comment (about a long gone framebuffer code) and
+> the notifier priority - we should execute hypervisor notifiers early,
+> deferring this way the panic action to the hypervisor, as expected by
+> the users that are setting up pvpanic.
+
+This should be done in a separate patch. It changes the behavior.
+Also there might be a discussion whether it really should be
+the maximal priority.
+
+Best Regards,
+Petr
