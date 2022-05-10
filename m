@@ -2,147 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F42521A3B
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 15:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3C9521C74
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 16:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243729AbiEJNy0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 09:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S1343654AbiEJOhf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 May 2022 10:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243744AbiEJNpl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 09:45:41 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9442BE7323
-        for <linux-mips@vger.kernel.org>; Tue, 10 May 2022 06:31:26 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id x88so4333119pjj.1
-        for <linux-mips@vger.kernel.org>; Tue, 10 May 2022 06:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eAkpZobv3rZ1Hb3Ti+DnJgCEz5o6zS6z0CRMJI9AM3s=;
-        b=jBI/IJVRvrcXrn0dmybmF38aVhy0igFdbEZFkPme71/HQ9GvoJ+XAo/584Dy/1j/IA
-         eKmiNsg0QRnSUTK2r3JdsiSVecH2pp3BGQdPp8VUZP0AqAKfmpxphSqIYnjeLfeiFQPG
-         4Oyh1vHBKMAuToyEeJKAEgJwkwHU1mz4dTg0y1Ydho5V/mtT1ywbMxTJ9EVQ5RngOgK4
-         eRanlq+s+j1OL6oL8R7ETXaFshDMsAfkYQ7LzPnxpf6kZ6VCMXr3Kv9r4owShVPjEnc9
-         5kAIxQgrPSRtOygh+uwcCxIwjofUsWOOJSGJo5Md3peUgiztJejwvlLNLjWbLn4m1Njx
-         nmVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eAkpZobv3rZ1Hb3Ti+DnJgCEz5o6zS6z0CRMJI9AM3s=;
-        b=GOwesegh3nvJ02ZemcpM/vmPL9BKDLhN49Zgpd1wheHa3Dx+EVHQlpc++XTlY53e7y
-         o1SEzV/BkU/ZMtDHPjBSqpMGhkHYLfiZfjff4HcuMrZS1779M+B/6c6Tzevx4O6k4a5k
-         UirvhtOWkt4/033pJHt8ONYoehORo6OrZYqrQqWPQbGFauxfKfcVR/bpPe6YwD7tccyS
-         Zltwv7HZqJU6FI+ZSYCcboh30AL8N+UIZRyxPw5SSH6xTp99stDrn3+eul4mSvgeAUen
-         /C+SIsOUgCSEq0pkgALSCUiIaT+CiKsDAXr9kp/yF1Vz/iAYHnMkSkz3ynaHjl/fNN8r
-         KBNw==
-X-Gm-Message-State: AOAM531GoMvOL0VNiSXZ7ei64gF4E/52xDhRDqYJGCRTPBP4S3xBt9k9
-        MXIOPzuxD/Ch5zoau+JioAXR8w==
-X-Google-Smtp-Source: ABdhPJy7im86kJAw08T88EHkeZvOY5JH1GuJc2LoV3L/ahvJpYDIzSXEONMZQ/5L8AsbQATcBcnd/Q==
-X-Received: by 2002:a17:902:d4ce:b0:15e:90f8:216c with SMTP id o14-20020a170902d4ce00b0015e90f8216cmr21440392plg.65.1652189485589;
-        Tue, 10 May 2022 06:31:25 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id r5-20020a170902ea4500b0015eddb8e450sm2048059plg.25.2022.05.10.06.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 06:31:25 -0700 (PDT)
-Date:   Tue, 10 May 2022 13:31:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v4 03/20] KVM: x86/mmu: Derive shadow MMU page role from
- parent
-Message-ID: <YnppKY8j78Z1E6bH@google.com>
-References: <20220422210546.458943-1-dmatlack@google.com>
- <20220422210546.458943-4-dmatlack@google.com>
- <75fbbcb6-d9bb-3d30-0bf4-fbf925517d09@gmail.com>
- <CALzav=dmseUw6khErkiSV7T5K88QvaRvWvBpvrb6VNOQTE3bQQ@mail.gmail.com>
- <CAJhGHyDQn=atFmn5o2TREW9cSY5Tv1F1vsSekzor6uYQxDgcfQ@mail.gmail.com>
+        with ESMTP id S1344626AbiEJOfJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 10:35:09 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44F72DD793;
+        Tue, 10 May 2022 06:54:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyKJp4qqdz4yTd;
+        Tue, 10 May 2022 23:54:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652190848;
+        bh=RKiZUE5HvPhTVnUibJtmltdG/qpHsl+mSP0bgs2lHhQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Z05kSyfn/tRZEkMC+xx0iIJQ7Am+MQO7HLgvv0mZSHOcfpqTom2o/uwqzS0x8Mf2S
+         +MV9rZ+Fzf71f3gh47v8ZN6FuQpE+0hL2e6Ug+4kF9Y6fEpYke0W/joqSUA70Lwp5I
+         4Ppma9tFa9PkRNG20BN4X8MRlMpJ63sRO/S19u9v0FZlEHa4Js3eqk1sS3wGAa85dR
+         +Jh96R1o2OAtJhZFfuVMo1EZ8CMSa8mkEAFP0AyoLzOV+kygqKbLAfKRxs3fKgbcsD
+         1Vaxn4RMiVSaImYmC7RQ1ktIs3LG4P5Jb+tgoFnzybYroBhkWvfkc77elbZWKz1nx/
+         2xhke52QkhhQQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Hari Bathini <hbathini@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        pmladek@suse.com, kexec@lists.infradead.org, bhe@redhat.com,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, akpm@linux-foundation.org
+Subject: Re: [PATCH 08/30] powerpc/setup: Refactor/untangle panic notifiers
+In-Reply-To: <f9c3de3c-1709-a1aa-2ece-c9fbfd5e6d6a@igalia.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-9-gpiccoli@igalia.com>
+ <3c34d8e2-6f84-933f-a4ed-338cd300d6b0@linux.ibm.com>
+ <f9c3de3c-1709-a1aa-2ece-c9fbfd5e6d6a@igalia.com>
+Date:   Tue, 10 May 2022 23:53:56 +1000
+Message-ID: <87fslh8pe3.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJhGHyDQn=atFmn5o2TREW9cSY5Tv1F1vsSekzor6uYQxDgcfQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 10, 2022, Lai Jiangshan wrote:
-> ()
-> 
-> On Tue, May 10, 2022 at 5:04 AM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Sat, May 7, 2022 at 1:28 AM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
-> > > > +static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, u32 access)
-> > > > +{
-> > > > +     struct kvm_mmu_page *parent_sp = sptep_to_sp(sptep);
-> > > > +     union kvm_mmu_page_role role;
-> > > > +
-> > > > +     role = parent_sp->role;
-> > > > +     role.level--;
-> > > > +     role.access = access;
-> > > > +     role.direct = direct;
-> > > > +
-> > > > +     /*
-> > > > +      * If the guest has 4-byte PTEs then that means it's using 32-bit,
-> > > > +      * 2-level, non-PAE paging. KVM shadows such guests using 4 PAE page
-> > > > +      * directories, each mapping 1/4 of the guest's linear address space
-> > > > +      * (1GiB). The shadow pages for those 4 page directories are
-> > > > +      * pre-allocated and assigned a separate quadrant in their role.
-> > >
-> > >
-> > > It is not going to be true in patchset:
-> > > [PATCH V2 0/7] KVM: X86/MMU: Use one-off special shadow page for special roots
-> > >
-> > > https://lore.kernel.org/lkml/20220503150735.32723-1-jiangshanlai@gmail.com/
-> > >
-> > > The shadow pages for those 4 page directories are also allocated on demand.
-> >
-> > Ack. I can even just drop this sentence in v5, it's just background information.
-> 
-> No, if one-off special shadow pages are used.
-> 
-> kvm_mmu_child_role() should be:
-> 
-> +       if (role.has_4_byte_gpte) {
-> +               if (role.level == PG_LEVEL_4K)
-> +                       role.quadrant = (sptep - parent_sp->spt) % 2;
-> +               if (role.level == PG_LEVEL_2M)
+"Guilherme G. Piccoli" <gpiccoli@igalia.com> writes:
+> On 05/05/2022 15:55, Hari Bathini wrote:
+>> [...] 
+>> The change looks good. I have tested it on an LPAR (ppc64).
+>> 
+>> Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
+>> 
+>
+> Hi Michael. do you think it's possible to add this one to powerpc/next
+> (or something like that), or do you prefer a V2 with his tag?
 
-If the code ends up looking anything like this, please use PT32_ROOT_LEVEL instead
-of PG_LEVEL_2M.  PSE paging has 4M huge pages, using PG_LEVEL_2M is confusing.
+Ah sorry, I assumed it was going in as part of the whole series. I guess
+I misread the cover letter.
 
-Or even better might be to do:
+So you want me to take this patch on its own via the powerpc tree?
 
-		if (role.level == PG_LEVEL_4k)
-			...
-		else
-			...
-
-Or arithmetic using role.level directly, a la the current code.
+cheers
