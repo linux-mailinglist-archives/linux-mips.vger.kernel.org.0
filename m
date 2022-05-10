@@ -2,122 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353CC521505
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 14:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15C0521636
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 15:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241495AbiEJMTW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 08:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S242155AbiEJNGX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 May 2022 09:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239373AbiEJMTV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 08:19:21 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8561E2498BC;
-        Tue, 10 May 2022 05:15:24 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id A67173200974;
-        Tue, 10 May 2022 08:15:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 10 May 2022 08:15:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1652184920; x=
-        1652271320; bh=achtEq3Cjhbongjo3uD3uyw7O+KFl9lQyt1JsKzzN88=; b=r
-        7RvBjWT2rLKDHkgw3b/hLu48nmCJjXdaUeTXT10M4FXaGTH3Q9XaraDGukECmtzr
-        Qr7kHqX+lxkTPYUoJ9qT6j7DJ1BHvih/Goss4lrMs8Gz8VU+vW1/Hgl6ZpegcJME
-        uv4WAbv8RlybSwcNreZtrmh4vs5d78viUhzmzG8ajuEWzNWhORD6GBPqOuhGuDih
-        qszKB4jBSwFP8i6CFjFt7kZ874SLQBqKOzIdTUgH7kFZhNRjd6MbFG/NTa775T6X
-        myRhMQD/7Sxh2f47b1wJw6Vr/ADBALL+35S9A+74Wpyw6vn8lHyRj9dHGMG/fUUo
-        p8mT40ag/ea2Efc0dLlBQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652184920; x=1652271320; bh=achtEq3Cjhbon
-        gjo3uD3uyw7O+KFl9lQyt1JsKzzN88=; b=zeTgWOxUR22vwa7ctidfg86lI0BDa
-        O500IUA3WuzpV8qXvoh4dxqvdJLKT9FIDtt2q5BIkLq2stngz6zihM0lazY7ORmX
-        bVszK/D6IL6JxA6nyp/DjmitRuZeBshvhkULSc2/19DwYPzDzwieGAcSl7eKSKma
-        xhv6UZsvlEPOLY8Rtd7Kdae3heI7kdwyPLUQOwI8YrB+vczkJ7AgwWJhLsfBpibk
-        G+zLL9d1StKaB3KVQlhgh+/Q3Bp9HtS//1RVL0lGb+HmBMTtDmQm/9MjD3ei8l8p
-        J3Y30Nzy3GP/n6vCPh1bwh4OLm5mUA9cLC6gdN9SySzPbXRw9t6TcE+Ow==
-X-ME-Sender: <xms:V1d6YiGPA2aL9IrydBC-vVK62kv3mMCGZSImj8G4L_lkus_iBphqeg>
-    <xme:V1d6YjWzfXqqX_iJfm1FzP9hw56mS5HH0Or51ixSSPCaJkGkiiOWgLvV0C6AY9qDS
-    fedStZoojYeOYtbk38>
-X-ME-Received: <xmr:V1d6YsJDwzhjkKKQCZdXJp4x7FoEf7n3WljBJAC3xl10WhvPP5bnLzLqSTRMDNM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedugdeghecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeegieeh
-    vefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:V1d6YsGRv5Fivm4p8AY0TK4e2V9KV-AEOpvNF2-LR7nIPfQvPQ1T0g>
-    <xmx:V1d6YoU5tCPDP285gee4ErT-UGcGiIuktU8-LiwgwaRt_WDTFMzsFg>
-    <xmx:V1d6YvOX7Pz8prr9gr1r0H2NE0cB0y5DfPqJY3xV8MezUo-X8Jog-g>
-    <xmx:WFd6YmwH4J7ecfXEDHLs4jLBcikDzBX43G6sR7NDyvLnfcnkJatWVw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 May 2022 08:15:18 -0400 (EDT)
-Message-ID: <21bb46ea-6a36-b426-2ca9-4471af5879a1@flygoat.com>
-Date:   Tue, 10 May 2022 13:15:17 +0100
+        with ESMTP id S242191AbiEJNF7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 09:05:59 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EE02618FC;
+        Tue, 10 May 2022 06:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=JWyep5EFfEPXN0/UUFSWkvsTwBT4W/fOxchQHhKa4RM=; b=sx6DF8PoUIO1mHu5cZY1RxwoA9
+        niB1KysO8rrmF0zp8Z8GTN/NtCj2d4QR4yv3E2E5W17RExRi8A0KAmcw+03c1G1ooU/Pm21U+zIEh
+        0zp/hEbV2HUhNtVPnHFdp5DB6IlN6W8R3VOm7oythqBX2GRaLpOj+rJPIjIYg4FRTMuO76QGoLFC6
+        YTJOWt6WzTDBhnK8IJgaIHAnWrK2atb9lCglavMKbFL3MElzKi625NHcWNdIldxGBU96c/pM4S0g8
+        wJXsSSNXtcQC2Akbyu07xQvQmC9j0tVwKiovTIAilxmwfqg23OLqdBOLywiRmkuVFih5uNhaytVXp
+        cz9YcgaQ==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1noPUd-0004lT-6O; Tue, 10 May 2022 15:01:35 +0200
+Message-ID: <0a20dd06-f459-638e-cb4d-8255ab1a1f23@igalia.com>
+Date:   Tue, 10 May 2022 10:00:58 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] irqchip/loongson-liointc: 4 cores correspond to different
- interrupt status registers
-Content-Language: en-GB
-To:     Haoran Jiang <jianghaoran@kylinos.cn>, chenhuacai@kernel.org
-Cc:     tglx@linutronix.de, maz@kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 05/30] misc/pvpanic: Convert regular spinlock into trylock
+ on panic path
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-6-gpiccoli@igalia.com> <YnpXGOXicwdy1E6n@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YnpXGOXicwdy1E6n@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 10/05/2022 09:14, Petr Mladek wrote:
+> [...]
+>> With that said, it's dangerous to use regular spinlocks in such path,
+>> as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
+>> This patch fixes that by replacing regular spinlocks with the trylock
+>> safer approach.
+> 
+> It seems that the lock is used just to manipulating a list. A super
+> safe solution would be to use the rcu API: rcu_add_rcu() and
+> list_del_rcu() under rcu_read_lock(). The spin lock will not be
+> needed and the list will always be valid.
+> 
+> The advantage would be that it will always call members that
+> were successfully added earlier. That said, I am not familiar
+> with pvpanic and am not sure if it is worth it.
+> 
+>> It also fixes an old comment (about a long gone framebuffer code) and
+>> the notifier priority - we should execute hypervisor notifiers early,
+>> deferring this way the panic action to the hypervisor, as expected by
+>> the users that are setting up pvpanic.
+> 
+> This should be done in a separate patch. It changes the behavior.
+> Also there might be a discussion whether it really should be
+> the maximal priority.
+> 
+> Best Regards,
+> Petr
+
+Thanks for the review Petr. Patch was already merged - my goal was to be
+concise, i.e., a patch per driver / module, so the patch kinda fixes
+whatever I think is wrong with the driver with regards panic handling.
+
+Do you think it worth to remove this patch from Greg's branch just to
+split it in 2? Personally I think it's not worth, but opinions are welcome.
+
+About the RCU part, this one really could be a new patch, a good
+improvement patch - it makes sense to me, we can think about that after
+the fixes I guess.
+
+Cheers,
 
 
-在 2022/5/10 6:53, Haoran Jiang 写道:
-> According to the loongson cpu manual,different cpu cores
-> correspond to different interrupt status registers
-NAK!
-
-It is intentional to do so.
-
-The per-core ISR register is broken on 3B1500. So we use general ISR 
-register here.
-The per-core variable is left for LS2K.
-
-Thanks
-- Jiaxun
->
-> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
-> ---
->   drivers/irqchip/irq-loongson-liointc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> index 649c58391618..f4e015b50af0 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -195,7 +195,7 @@ static int __init liointc_of_init(struct device_node *node,
->   		}
->   
->   		for (i = 0; i < LIOINTC_NUM_CORES; i++)
-> -			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
-> +			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS + i*8;
->   	}
->   
->   	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
-
+Guilherme
