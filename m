@@ -2,169 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05775213FB
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 13:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48DF52141C
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 13:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241117AbiEJLml (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 07:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S241178AbiEJLsl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 May 2022 07:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241118AbiEJLmk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 07:42:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBBC24DC00;
-        Tue, 10 May 2022 04:38:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E7BCB21C07;
-        Tue, 10 May 2022 11:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652182721; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QjxQbnD6WUcAB5XSGPbhgiXq5Z1nB8h07eo4ZkZ4QC8=;
-        b=ux1OKlKPpQAZrqb3VSx/+cdnKv+z0GMrb7Vrl4wT7av9mwtdsYHmGTFl15YLILBNoNipDu
-        zhzvyNUQ0tVf4I8bosAIddNvm3hk9CLYxTFt2W7RQIuTrmM1G9742/mw3JpxDF9W//N0xh
-        4YsR4kO61TX2TGUrgE/V7TAnZzSnJsg=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id F0AB42C141;
-        Tue, 10 May 2022 11:38:39 +0000 (UTC)
-Date:   Tue, 10 May 2022 13:38:39 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>, luto@kernel.org,
-        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
-        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Julius Werner <jwerner@chromium.org>
-Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
- trylock on panic path
-Message-ID: <YnpOv4hAPV4b+6v4@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-5-gpiccoli@igalia.com>
- <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
- <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+        with ESMTP id S236537AbiEJLsk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 07:48:40 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11144250E8A;
+        Tue, 10 May 2022 04:44:42 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.2.9.158])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxutgpUHpiPAkQAA--.54769S2;
+        Tue, 10 May 2022 19:44:41 +0800 (CST)
+From:   Mao Bibo <maobibo@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: smp: optimization for flush_tlb_mm when exiting
+Date:   Tue, 10 May 2022 19:44:41 +0800
+Message-Id: <20220510114441.2959886-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxutgpUHpiPAkQAA--.54769S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XryDWFyDur17Ww17Cw1Dtrb_yoWkXFXEyw
+        sIgwn5Gryrtw1Iv3yxWr4fWF909wsY9F1v9r9Fgr9Iy3s8tr1UZaykur97XrZ5XrZYvFZ5
+        Jr9xJryUAay2qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxkYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5
+        B8BUUUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue 2022-05-03 16:12:09, Guilherme G. Piccoli wrote:
-> On 03/05/2022 15:03, Evan Green wrote:
-> > [...]
-> > gsmi_shutdown_reason() is a common function called in other scenarios
-> > as well, like reboot and thermal trip, where it may still make sense
-> > to wait to acquire a spinlock. Maybe we should add a parameter to
-> > gsmi_shutdown_reason() so that you can get your change on panic, but
-> > we don't convert other callbacks into try-fail scenarios causing us to
-> > miss logs.
-> > 
-> 
-> Hi Evan, thanks for your feedback, much appreciated!
-> What I've done in other cases like this was to have a helper checking
-> the spinlock in the panic notifier - if we can acquire that, go ahead
-> but if not, bail out. For a proper example of an implementation, check
-> patch 13 of the series:
-> https://lore.kernel.org/lkml/20220427224924.592546-14-gpiccoli@igalia.com/ .
-> 
-> Do you agree with that, or prefer really a parameter in
-> gsmi_shutdown_reason() ? I'll follow your choice =)
+When process exits or execute new binary, it will call function
+exit_mmap with old mm, there is such function call trace:
+  exit_mmap(struct mm_struct *mm)
+      --> tlb_finish_mmu(&tlb, 0, -1)
+         --> arch_tlb_finish_mmu(tlb, start, end, force)
+	    --> tlb_flush_mmu(tlb);
+               --> tlb_flush(struct mmu_gather *tlb)
+                  --> flush_tlb_mm(tlb->mm)
 
-I see two more alternative solutions:
+It is not necessary to flush tlb since oldmm is not used anymore
+by the process, there is similar operations on IA64/ARM64 etc,
+this patch adds such optimization on MIPS.
 
-1st variant is a trick already used in console write() callbacks.
-They do trylock() when oops_in_progress is set. They remember
-the result to prevent double unlock when printing Oops messages and
-the system will try to continue working. For example:
+Signed-off-by: Mao Bibo <maobibo@loongson.cn>
+---
+ arch/mips/kernel/smp.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-pl011_console_write(struct console *co, const char *s, unsigned int count)
-{
-[...]
-	int locked = 1;
-[...]
-	if (uap->port.sysrq)
-		locked = 0;
-	else if (oops_in_progress)
-		locked = spin_trylock(&uap->port.lock);
-	else
-		spin_lock(&uap->port.lock);
+diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+index 1986d1309410..1d93b85271ba 100644
+--- a/arch/mips/kernel/smp.c
++++ b/arch/mips/kernel/smp.c
+@@ -518,6 +518,12 @@ static inline void smp_on_each_tlb(void (*func) (void *info), void *info)
+ 
+ void flush_tlb_mm(struct mm_struct *mm)
+ {
++	if (!mm)
++		return;
++
++	if (atomic_read(&mm->mm_users) == 0)
++		return;		/* happens as a result of exit_mmap() */
++
+ 	preempt_disable();
+ 
+ 	if (cpu_has_mmid) {
+-- 
+2.27.0
 
-[...]
-
-	if (locked)
-		spin_unlock(&uap->port.lock);
-}
-
-
-2nd variant is to check panic_cpu variable. It is used in printk.c.
-We might move the function to panic.h:
-
-static bool panic_in_progress(void)
-{
-	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
-}
-
-and then do:
-
-	if (panic_in_progress()) {
-		...
-
-
-> > Though thinking more about it, is this really a Good Change (TM)? The
-> > spinlock itself already disables interrupts, meaning the only case
-> > where this change makes a difference is if the panic happens from
-> > within the function that grabbed the spinlock (in which case the
-> > callback is also likely to panic), or in an NMI that panics within
-> > that window.
-
-As already mentioned in the other reply, panic() sometimes stops
-the other CPUs using NMI, for example, see kdump_nmi_shootdown_cpus().
-
-Another situation is when the CPU using the lock ends in some
-infinite loop because something went wrong. The system is in
-an unpredictable state during panic().
-
-I am not sure if this is possible with the code under gsmi_dev.lock
-but such things really happen during panic() in other subsystems.
-Using trylock in the panic() code path is a good practice.
-
-Best Regards,
-Petr
