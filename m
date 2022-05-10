@@ -2,202 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BFB52232A
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 19:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F5C5223BA
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 20:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244623AbiEJR5b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 13:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S1348752AbiEJSUM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 10 May 2022 14:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243459AbiEJR5a (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 13:57:30 -0400
-Received: from out28-217.mail.aliyun.com (out28-217.mail.aliyun.com [115.124.28.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEF460B9E;
-        Tue, 10 May 2022 10:53:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436371|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0728242-0.00472228-0.922454;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.NhaEB4._1652205206;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NhaEB4._1652205206)
-          by smtp.aliyun-inc.com(33.32.24.88);
-          Wed, 11 May 2022 01:53:28 +0800
-Subject: Re: Question about SC16IS752 device tree.
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>, jringle@gridpoint.com,
-        shc_work@mail.ru, Rob Herring <robh@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-serial@vger.kernel.org,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        johan@kernel.org, tomasz.mon@camlingroup.com,
-        l.perczak@camlintechnologies.com
-References: <7c89db86-4055-90b5-6a67-611410f5759f@wanyeetech.com>
- <ZYNMBR.VDVV3VHFQBMO1@crapouillou.net>
- <04bd0853-7e34-5210-f1b5-f3ea8c35e484@wanyeetech.com>
- <501852E6-6934-4BB2-850C-B53A07580568@goldelico.com>
- <8533f999-f584-ea31-0c44-1ce29c066d88@wanyeetech.com>
- <1B523C47-1F9C-42EE-B242-EF63F89B94F9@goldelico.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <35c60fea-ac74-9d23-51ac-b877a5b4eb86@wanyeetech.com>
-Date:   Wed, 11 May 2022 01:53:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S1348854AbiEJST0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 14:19:26 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190252A975A;
+        Tue, 10 May 2022 11:14:24 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id m128so32191961ybm.5;
+        Tue, 10 May 2022 11:14:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qpqXrLDWUEHd+BUtmgMjhwAa3QcGPruT6uNMBEv9rjU=;
+        b=sE0t+MrA2XaCL45MizPmFfYKh+U7rCzOjLv98vxpalwZsq4dz5KZYWa5EvT7z4Dj/J
+         72cDF6NlgQd5iWSoHTtTXxceYUf04R6uRHcOV8jsHXPlhwwbDMcx1IMyPtxOrsKhDggi
+         wuvB1W8gNO5ex306dapgVyE0ASFzoomTxg7L9zcB+drqohTFQe1hR9PsfiRaJ27pJr9l
+         H9JvOI63+Ooq4kqdLZBUXUvsOeixRzwIj1hEV+GcQckk7SAXqz9jSivd5ellFLiPqFs8
+         5bJ2n96C8IUu5Z4Fpv4clNCpiCIoJ0o2C6AAumEzIviiNN9HcMufo4dJXUAXqyc/StxF
+         2E1g==
+X-Gm-Message-State: AOAM531+oHyPotUKmUfvdnQsDixTSyf4gFm2u1Db2FoFEqVUEzAdkJOx
+        yFppIfJjpin5xoQr9N1U5JMJQ0EWlcJyxNaNJzA=
+X-Google-Smtp-Source: ABdhPJy/3C7Xf5XL6o3yFhMZ917Dv3JWEaRfPbmjw9NKhK3//cChodJMWe9FmxWaGm5UEgRYGP1Nqk2NauJUMOpu3kk=
+X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
+ e140-20020a25e792000000b006457ddbb5ebmr19781278ybh.482.1652206451725; Tue, 10
+ May 2022 11:14:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1B523C47-1F9C-42EE-B242-EF63F89B94F9@goldelico.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com> <20220509233235.995021-2-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220509233235.995021-2-dmitry.osipenko@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 May 2022 20:14:00 +0200
+Message-ID: <CAJZ5v0gApRhc9+jZLxgNXC2B2tmz450=8+mFZUjTFF1iU7C-gw@mail.gmail.com>
+Subject: Re: [PATCH v8 01/27] notifier: Add atomic_notifier_call_chain_is_empty()
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-On 2022/5/10 下午11:31, H. Nikolaus Schaller wrote:
-> Hi,
+On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
 >
->> Am 10.05.2022 um 04:29 schrieb Zhou Yanjie <zhouyanjie@wanyeetech.com>:
->>
->> Hi Nikolaus,
->>
->> On 2022/5/10 上午4:19, H. Nikolaus Schaller wrote:
->>> Hi,
->>>
->>>> Am 09.05.2022 um 20:41 schrieb Zhou Yanjie <zhouyanjie@wanyeetech.com>:
->>>>
->>>> Hi Paul,
->>>>
->>>> On 2022/5/10 上午2:13, Paul Cercueil wrote:
->>>>> I can't say for sure that it's your problem, but your bluetooth nodes are missing "reg" properties.
->>>> Unfortunately it doesn't seem to be the problem here, I added "reg" and
->>>> the problem persists, and I've looked at other device trees that contain
->>>> "brcm,bcm43438-bt", none of them use "reg", and "reg" is not mentioned in
->>>> neither "Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt" nor
->>>> "Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml".
->>> what happens if you remove the serdev children from DTS? Does the driver create two separate /dev/tty ports? And do they work?
->>
->> Yes, there will be two separate /dev/tty ports (ttySC0 and ttySC1), and
->> both ports can work normally, but at this time the two bluetooth modules
->> are not working.
->>
->> I guess it is because the driver does not detect bluetooth module nodes,
->> so the inability to operate "reset-gpios" and "device-wakeup-gpios" causes
->> the bluetooth module to work incorrectly.
-> I would assume that it is not prepared to handle two serdev subnodes and
-> assign the right gpios.
+> Add atomic_notifier_call_chain_is_empty() that returns true if given
+> atomic call chain is empty.
 
+It would be good to mention a use case for it.
 
-I found something new now, if I follow the practice in 
-"fsl-ls1012a-frdm.dts"
-and put the clock node inside the node of SC16IS752:
-
-&ssi0 {
-     status = "okay";
-
-     num-cs = <2>;
-
-     pinctrl-names = "default";
-     pinctrl-0 = <&pins_ssi0>;
-
-     sc16is752: expander@0 {
-         compatible = "nxp,sc16is752";
-         reg = <0>; /* CE0 */
-         #address-cells = <1>;
-         #size-cells = <0>;
-
-         spi-rx-bus-width = <1>;
-         spi-tx-bus-width = <1>;
-         spi-max-frequency = <6000000>;
-
-         clocks = <&exclk_sc16is752>;
-
-         interrupt-parent = <&gpb>;
-         interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
-
-         gpio-controller;
-         #gpio-cells = <2>;
-
-         exclk_sc16is752: sc16is752 {
-             compatible = "fixed-clock";
-             #clock-cells = <0>;
-             clock-frequency = <48000000>;
-         };
-
-         bluetooth@0 {
-             compatible = "brcm,bcm43438-bt";
-             reg = <0>;
-             max-speed = <1000000>;
-
-             device-wakeup-gpios = <&gpc 26 GPIO_ACTIVE_HIGH>;
-             reset-gpios = <&gpb 17 GPIO_ACTIVE_LOW>;
-         };
-
-         bluetooth@1 {
-             compatible = "brcm,bcm43438-bt";
-             reg = <1>;
-             max-speed = <1000000>;
-
-             device-wakeup-gpios = <&gpc 28 GPIO_ACTIVE_HIGH>;
-             reset-gpios = <&gpb 19 GPIO_ACTIVE_LOW>;
-         };
-     };
-};
-
-This will cause all bluetooth modules to not work, and if the clock node 
-is moved
-to the end of the child node, the bluetooth module connected to ttySC0 
-can work
-normally, which seems to mean that only the first child node can work 
-correctly.
-
-
-
-And I found this patch:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/drivers/tty/serdev?h=usb-next&id=08fcee289f341786eb3b44e5f2d1dc850943238e
-
-It seems to mean that the SC16IS752 driver does not correctly 
-distinguish between
-the two serial ports, which makes the serdev driver think that the child 
-nodes are
-on the same serial device bus, which leads to the current problem.
-
-
+> Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  include/linux/notifier.h |  2 ++
+>  kernel/notifier.c        | 13 +++++++++++++
+>  2 files changed, 15 insertions(+)
 >
->>
->>> Maybe the sc16is752 driver does not separate them for child nodes, i.e. while "reg" should be added it may not be handled?
->>
->> I'm not too sure, I'm not very familiar with serial port systems.
->> If the truth is what you think, how should I improve it?
-> Unfortunately I also don't know how the serdev implementation really works.
+> diff --git a/include/linux/notifier.h b/include/linux/notifier.h
+> index 87069b8459af..95e2440037de 100644
+> --- a/include/linux/notifier.h
+> +++ b/include/linux/notifier.h
+> @@ -173,6 +173,8 @@ extern int blocking_notifier_call_chain_robust(struct blocking_notifier_head *nh
+>  extern int raw_notifier_call_chain_robust(struct raw_notifier_head *nh,
+>                 unsigned long val_up, unsigned long val_down, void *v);
 >
-> It was my nagging to make it happen by persistently proposing a non-universal
-> solutionsome years ago until one of the maintainers had mercy to write a general
-> solution. So I could switch my driver to simply use the serdev API. It was for a GPS
-> client device but not a tty side driver.
+> +extern bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh);
+> +
+>  #define NOTIFY_DONE            0x0000          /* Don't care */
+>  #define NOTIFY_OK              0x0001          /* Suits me */
+>  #define NOTIFY_STOP_MASK       0x8000          /* Don't call further */
+> diff --git a/kernel/notifier.c b/kernel/notifier.c
+> index ba005ebf4730..aaf5b56452a6 100644
+> --- a/kernel/notifier.c
+> +++ b/kernel/notifier.c
+> @@ -204,6 +204,19 @@ int atomic_notifier_call_chain(struct atomic_notifier_head *nh,
+>  EXPORT_SYMBOL_GPL(atomic_notifier_call_chain);
+>  NOKPROBE_SYMBOL(atomic_notifier_call_chain);
 >
-> I think if you look up the first patches for the serdev interface this should
-> reveal the original author an he should be able to help.
-
-
-The original author of the serdev driver is Rob Herring, the original 
-author of the
-SC16IS752 is Jon Ringle, they are already on the CC list, I also added 
-Johan Hovold
-and the two authors Tomasz Moń and Lech Percza who sent patches to the 
-sc16is7xx.c
-driver in this year.
-
-Hopefully they can guide us here.
-
-
-Best regards!
-
-
+> +/**
+> + *     atomicnotifier_call_chain_is_empty - Check whether notifier chain is empty
+> + *     @nh: Pointer to head of the blocking notifier chain
+> + *
+> + *     Checks whether notifier chain is empty.
+> + *
+> + *     Returns true is notifier chain is empty, false otherwise.
+> + */
+> +bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh)
+> +{
+> +       return !rcu_access_pointer(nh->head);
+> +}
+> +
+>  /*
+>   *     Blocking notifier chain routines.  All access to the chain is
+>   *     synchronized by an rwsem.
+> --
+> 2.35.1
 >
-> BR,
-> Nikolaus
