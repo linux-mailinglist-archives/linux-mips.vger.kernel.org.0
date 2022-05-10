@@ -2,52 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3B1520CDA
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 06:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0800520D63
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 07:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236538AbiEJEc6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 00:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S236920AbiEJF7d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 May 2022 01:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbiEJEbf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 00:31:35 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FF43526D;
-        Mon,  9 May 2022 21:26:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VCp29EM_1652156751;
-Received: from 30.15.214.13(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCp29EM_1652156751)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 10 May 2022 12:25:53 +0800
-Message-ID: <0db300f4-8a91-b330-5c6f-bbc63cf2f151@linux.alibaba.com>
-Date:   Tue, 10 May 2022 12:26:32 +0800
+        with ESMTP id S236903AbiEJF7X (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 01:59:23 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2491D266F34;
+        Mon,  9 May 2022 22:55:26 -0700 (PDT)
+X-UUID: 84347a7a319042fa9812bdcc02531991-20220510
+X-UUID: 84347a7a319042fa9812bdcc02531991-20220510
+Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
+        (envelope-from <jianghaoran@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 937845475; Tue, 10 May 2022 13:58:44 +0800
+X-ns-mid: postfix-6279FE4C-2811404153
+Received: from localhost.localdomain (unknown [172.30.60.211])
+        by cs2c.com.cn (NSMail) with ESMTPSA id 3C244383E604;
+        Tue, 10 May 2022 05:55:24 +0000 (UTC)
+From:   Haoran Jiang <jianghaoran@kylinos.cn>
+To:     chenhuacai@kernel.org
+Cc:     jiaxun.yang@flygoat.com, tglx@linutronix.de, maz@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jianghaoran@kylinos.cn
+Subject: [PATCH] irqchip/loongson-liointc: 4 cores correspond to different interrupt status registers
+Date:   Tue, 10 May 2022 13:53:03 +0800
+Message-Id: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 0/3] Fix CONT-PTE/PMD size hugetlb issue when unmapping
- or migrating
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     mike.kravetz@oracle.com, catalin.marinas@arm.com, will@kernel.org,
-        songmuchun@bytedance.com, tsbogend@alpha.franken.de,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.osdn.me, dalias@libc.org, davem@davemloft.net,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <cover.1652147571.git.baolin.wang@linux.alibaba.com>
- <20220509210404.6a43aff15d0d6b3af0741001@linux-foundation.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220509210404.6a43aff15d0d6b3af0741001@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +44,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+According to the loongson cpu manual,different cpu cores
+correspond to different interrupt status registers
 
+Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+---
+ drivers/irqchip/irq-loongson-liointc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 5/10/2022 12:04 PM, Andrew Morton wrote:
-> On Tue, 10 May 2022 11:45:57 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->> Hi,
->>
->> Now migrating a hugetlb page or unmapping a poisoned hugetlb page, we'll
->> use ptep_clear_flush() and set_pte_at() to nuke the page table entry
->> and remap it, and this is incorrect for CONT-PTE or CONT-PMD size hugetlb
->> page,
-> 
-> It would be helpful to describe why it's wrong.  Something like "should
-> use huge_ptep_clear_flush() and huge_ptep_clear_flush() for this
-> purpose"?
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index 649c58391618..f4e015b50af0 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -195,7 +195,7 @@ static int __init liointc_of_init(struct device_node *node,
+ 		}
+ 
+ 		for (i = 0; i < LIOINTC_NUM_CORES; i++)
+-			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
++			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS + i*8;
+ 	}
+ 
+ 	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
+-- 
+2.25.1
 
-Sorry for the confusing description. I described the problem explicitly 
-in each patch's commit message.
-
-https://lore.kernel.org/all/ea5abf529f0997b5430961012bfda6166c1efc8c.1652147571.git.baolin.wang@linux.alibaba.com/
-https://lore.kernel.org/all/730ea4b6d292f32fb10b7a4e87dad49b0eb30474.1652147571.git.baolin.wang@linux.alibaba.com/
-
-> 
->> which will cause potential data consistent issue. This patch set
->> will change to use hugetlb related APIs to fix this issue, please find
->> details in each patch. Thanks.
-> 
-> Is a cc:stable needed here?  And are we able to identify a target for a
-> Fixes: tag?
-
-I think need a cc:stable tag, however I am not sure the target fixes 
-tag, since we should trace back to the introduction of CONT-PTE/PMD 
-hugetlb? 66b3923a1a0f ("arm64: hugetlb: add support for PTE contiguous bit")
