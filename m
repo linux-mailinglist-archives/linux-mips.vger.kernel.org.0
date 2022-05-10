@@ -2,92 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48DF52141C
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 13:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE75521462
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 13:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241178AbiEJLsl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 07:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
+        id S241328AbiEJMAu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 May 2022 08:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbiEJLsk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 07:48:40 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11144250E8A;
-        Tue, 10 May 2022 04:44:42 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.2.9.158])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxutgpUHpiPAkQAA--.54769S2;
-        Tue, 10 May 2022 19:44:41 +0800 (CST)
-From:   Mao Bibo <maobibo@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: smp: optimization for flush_tlb_mm when exiting
-Date:   Tue, 10 May 2022 19:44:41 +0800
-Message-Id: <20220510114441.2959886-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S241325AbiEJMAt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 08:00:49 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3787E50B13
+        for <linux-mips@vger.kernel.org>; Tue, 10 May 2022 04:56:52 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id k27so19695652edk.4
+        for <linux-mips@vger.kernel.org>; Tue, 10 May 2022 04:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9ygkrQc+ek2XiZL48rDG/nZ8HONRH2u6mkORGAxrJ18=;
+        b=Y9Nl99f5HgrkjgDxCSpM6dbyxPS2u9FQxHujLBEikHc+qYJSzfVW7gc9Nxo3dNr68j
+         Bd54r53pDXjXJu4m4yn4HKTCidCffVaVDKUNcDx92+TFM+W5iHDvCe4PSnG9OZZlgmGR
+         hjF2HLehCYMNb9qh0Cj6phg9FUfv/nW13+f9RPZxKnB3fB/Vs1+3QzyOEG26NtjI+VFT
+         mQsmvWiiFNXZtzaMXgZszBpXgtFges5xNKYAsS8jMCy99uaiPLAoc3TbzHnUOsbolkAr
+         voWODBEyuAbrfNdpp77w2kh6DlAqB7SCn6r2s/0H+jGARegJQgF3vM/YPZaYX9wMUv+V
+         9xDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9ygkrQc+ek2XiZL48rDG/nZ8HONRH2u6mkORGAxrJ18=;
+        b=MTq48JvwlESwlewBdUVI8tRb7biq2c6wrTwcGQKa2Ao8UoOmmdcZHb8ap8wuy2dbZG
+         JwotQo0w7wVNBgGg/WPolsbMoIM6OAlErNJSs3UYnPqyvt0Mg8kY64osYKo70ZHiwNYS
+         KAsYgStaU0jzZfy5P1WeW88OlZhlo3Os1hIyY8l1AIUzskfYXbr1t3ufRd2gCrL7DudX
+         fcDZ3QimsnZa56EN3DD7O30LivSG4FLVkCE/T1K5V9ODFW4dL95mP+SJI7E/ughpwJgv
+         wz4kjpBuZdMVJAblPi0Bod2e3e85I9JBO1Z7aEOFSrrj5NGwcOghjTJPx4EvUhYyTXfz
+         Ezjg==
+X-Gm-Message-State: AOAM530qARs7yJSjNb6atsgyHVKosn7tWpYkm2SdNC91p3j6/eW1gAtc
+        ylPWMQz8vnQr2EqqrFUp8esE60/UgEjTtorpSIg=
+X-Google-Smtp-Source: ABdhPJxyEaXEG+HUM8DpT/lTNID3yZQqiqgAYlDBIY6OAwMKdvbRyPxU+qwFiJgCTRvfG3CxWYW4HRPaKXVXjS+IsFY=
+X-Received: by 2002:a05:6402:3513:b0:427:dd44:90a5 with SMTP id
+ b19-20020a056402351300b00427dd4490a5mr23062484edd.144.1652183810890; Tue, 10
+ May 2022 04:56:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxutgpUHpiPAkQAA--.54769S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XryDWFyDur17Ww17Cw1Dtrb_yoWkXFXEyw
-        sIgwn5Gryrtw1Iv3yxWr4fWF909wsY9F1v9r9Fgr9Iy3s8tr1UZaykur97XrZ5XrZYvFZ5
-        Jr9xJryUAay2qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxkYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5
-        B8BUUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Received: by 2002:a54:30c1:0:0:0:0:0 with HTTP; Tue, 10 May 2022 04:56:50
+ -0700 (PDT)
+Reply-To: sgtkayla2001@gmail.com
+From:   Kayla Manthey <eyanacthan.com@gmail.com>
+Date:   Tue, 10 May 2022 11:56:50 +0000
+Message-ID: <CAG3fTckEzwV-fmyoKuvpSL=-XXUcmoNo_cmg1-9XcVDopvtZ2w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When process exits or execute new binary, it will call function
-exit_mmap with old mm, there is such function call trace:
-  exit_mmap(struct mm_struct *mm)
-      --> tlb_finish_mmu(&tlb, 0, -1)
-         --> arch_tlb_finish_mmu(tlb, start, end, force)
-	    --> tlb_flush_mmu(tlb);
-               --> tlb_flush(struct mmu_gather *tlb)
-                  --> flush_tlb_mm(tlb->mm)
-
-It is not necessary to flush tlb since oldmm is not used anymore
-by the process, there is similar operations on IA64/ARM64 etc,
-this patch adds such optimization on MIPS.
-
-Signed-off-by: Mao Bibo <maobibo@loongson.cn>
----
- arch/mips/kernel/smp.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-index 1986d1309410..1d93b85271ba 100644
---- a/arch/mips/kernel/smp.c
-+++ b/arch/mips/kernel/smp.c
-@@ -518,6 +518,12 @@ static inline void smp_on_each_tlb(void (*func) (void *info), void *info)
- 
- void flush_tlb_mm(struct mm_struct *mm)
- {
-+	if (!mm)
-+		return;
-+
-+	if (atomic_read(&mm->mm_users) == 0)
-+		return;		/* happens as a result of exit_mmap() */
-+
- 	preempt_disable();
- 
- 	if (cpu_has_mmid) {
 -- 
-2.27.0
-
+Salut draga mea, te rog, vreau sa stiu daca ai primit mesajul meu
+anterior, multumesc.
