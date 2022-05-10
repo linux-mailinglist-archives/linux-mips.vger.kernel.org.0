@@ -2,83 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0292652227B
-	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 19:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE0D5222AA
+	for <lists+linux-mips@lfdr.de>; Tue, 10 May 2022 19:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346659AbiEJR33 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 13:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S1348214AbiEJRdc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 May 2022 13:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348016AbiEJR30 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 13:29:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E634D2BAE5B;
-        Tue, 10 May 2022 10:24:41 -0700 (PDT)
-Message-ID: <20220510171254.529249404@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652203480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=ymoBlOGN2ybNUuPo4wojs5hcQRHP3a2WlqWJBn+DUm4=;
-        b=vufO8Hja8bINZyZPG6SGh615X52P+Ij4wwRXcvisaFTxzUtrNxjQUCG/ubBeu016GhN2gf
-        PtcClYnDRGtgQWcTwd0clkYmklqYIFNF7RFRNTVv5xaeKmgj7I0yHK0nV0UfuOHqA0+GC3
-        9porDwFu58cWKIJsOUPv9DI4Gic2uptUMj0MUj/dJvS+uXVGDF9WBPKm4uhzxLOoWDeyJV
-        K0AzEjVb7JNj7z8V69Ht1yNPUpmtM8hQNJ3we5PF+qnc1JfQB0GitfLg21cSX/SlKFqvo+
-        q9Q4FVVAqGai39AvHCPnSzv5awVp50OoPLw+FUxyKSv6uzqoAcrK8DhnsZOBKA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652203480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=ymoBlOGN2ybNUuPo4wojs5hcQRHP3a2WlqWJBn+DUm4=;
-        b=u6XvzzxQUQQ3fTQ/dMKNp7FAB032iNrqjtZ7Nyy7mPlgJCCvTwHzzhfairobEjD2tbtw4H
-        li4LgJeSVL47vdDQ==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-spdx@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-mips@vger.kernel.org
-Subject: [patch 03/10] clocksource/drivers/mips-gic-timer: Convert to SPDX identifier
-References: <20220510171003.952873904@linutronix.de>
+        with ESMTP id S1348194AbiEJRd3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 13:33:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4435229ED3C;
+        Tue, 10 May 2022 10:29:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFAFB61929;
+        Tue, 10 May 2022 17:29:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E2BFC385C2;
+        Tue, 10 May 2022 17:29:23 +0000 (UTC)
+Date:   Tue, 10 May 2022 13:29:22 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Xiaoming Ni <nixiaoming@huawei.com>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        <akpm@linux-foundation.org>, <bhe@redhat.com>, <pmladek@suse.com>,
+        <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <coresight@lists.linaro.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-alpha@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
+        <linux-leds@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-parisc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-um@lists.infradead.org>,
+        <linux-xtensa@linux-xtensa.org>, <netdev@vger.kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>, <rcu@vger.kernel.org>,
+        <sparclinux@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
+        <x86@kernel.org>, <kernel-dev@igalia.com>, <kernel@gpiccoli.net>,
+        <halves@canonical.com>, <fabiomirmar@gmail.com>,
+        <alejandro.j.jimenez@oracle.com>,
+        <andriy.shevchenko@linux.intel.com>, <arnd@arndb.de>,
+        <bp@alien8.de>, <corbet@lwn.net>, <d.hatayama@jp.fujitsu.com>,
+        <dave.hansen@linux.intel.com>, <dyoung@redhat.com>,
+        <feng.tang@intel.com>, <gregkh@linuxfoundation.org>,
+        <mikelley@microsoft.com>, <hidehiro.kawai.ez@hitachi.com>,
+        <jgross@suse.com>, <john.ogness@linutronix.de>,
+        <keescook@chromium.org>, <luto@kernel.org>, <mhiramat@kernel.org>,
+        <mingo@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
+        <senozhatsky@chromium.org>, <stern@rowland.harvard.edu>,
+        <tglx@linutronix.de>, <vgoyal@redhat.com>, <vkuznets@redhat.com>,
+        <will@kernel.org>, Arjan van de Ven <arjan@linux.intel.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Subject: Re: [PATCH 18/30] notifier: Show function names on notifier
+ routines if DEBUG_NOTIFIERS is set
+Message-ID: <20220510132922.61883db0@gandalf.local.home>
+In-Reply-To: <9f44aae6-ec00-7ede-ec19-6e67ceb74510@huawei.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+        <20220427224924.592546-19-gpiccoli@igalia.com>
+        <9f44aae6-ec00-7ede-ec19-6e67ceb74510@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 10 May 2022 19:24:40 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The licensing text references explicitely the COPYING file in the kernel
-base directory, which is clearly GPL version 2 only.
+On Thu, 28 Apr 2022 09:01:13 +0800
+Xiaoming Ni <nixiaoming@huawei.com> wrote:
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Serge Semin <fancer.lancer@gmail.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-mips@vger.kernel.org
----
- drivers/clocksource/mips-gic-timer.c |    9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+> > +#ifdef CONFIG_DEBUG_NOTIFIERS
+> > +	{
+> > +		char sym_name[KSYM_NAME_LEN];
+> > +
+> > +		pr_info("notifiers: registered %s()\n",
+> > +			notifier_name(n, sym_name));
+> > +	}  
+> 
+> Duplicate Code.
+> 
+> Is it better to use __func__ and %pS?
+> 
+> pr_info("%s: %pS\n", __func__, n->notifier_call);
+> 
+> 
+> > +#endif
 
---- a/drivers/clocksource/mips-gic-timer.c
-+++ b/drivers/clocksource/mips-gic-timer.c
-@@ -1,10 +1,5 @@
--/*
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-- * for more details.
-- *
-- * Copyright (C) 2012 MIPS Technologies, Inc.  All rights reserved.
-- */
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2012 MIPS Technologies, Inc.  All rights reserved.
- 
- #define pr_fmt(fmt) "mips-gic-timer: " fmt
- 
+Also, don't sprinkle #ifdef in C code. Instead:
 
+	if (IS_ENABLED(CONFIG_DEBUG_NOTIFIERS))
+		pr_info("notifers: regsiter %ps()\n",
+			n->notifer_call);
+
+
+Or define a print macro at the start of the C file that is a nop if it is
+not defined, and use the macro.
+
+-- Steve
