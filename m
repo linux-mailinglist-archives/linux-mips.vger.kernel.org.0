@@ -2,92 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E67D522A89
-	for <lists+linux-mips@lfdr.de>; Wed, 11 May 2022 05:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECA3522AA8
+	for <lists+linux-mips@lfdr.de>; Wed, 11 May 2022 05:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbiEKDxN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 23:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S230422AbiEKD7d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 May 2022 23:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiEKDxM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 23:53:12 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8AA4BFEE
-        for <linux-mips@vger.kernel.org>; Tue, 10 May 2022 20:53:10 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso3775928pjw.0
-        for <linux-mips@vger.kernel.org>; Tue, 10 May 2022 20:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wistron-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hNKpWzYHI9Vgstna+3ALIzkg0zGqDA41g9+YRGC2T5M=;
-        b=HMiHyjKoAn9m4gcFlJI5LTXOM6uIALb1YBOFu5efQLjDgcs5QRf0QLtaAhAGlOfjZJ
-         yQhgo0+1hP0fKHDwyFVS1b4m2A7iwJrAlhxn53XzbHAQTsfMm2szI6t9d87+AkIVnvnL
-         mdSsZGtpRnGFZdls+zq9Y29/347xqfMt7g8uGKMWmh8Tp7UC1fJ9v+m8IWgTyJHxXZcS
-         CrYHXew9UJTvWdpwQlV1sYAa7hZMtZxoCcbYtcwHkjLqOnXC86diYxVc3nnPyjTD2Ssp
-         xA/Kf9gzIeDDqtg/ydXj2PKq7c2R6xwgWhtiRdD9xwkIvejUUW+BRnDFe5K/15VMAeoG
-         EdHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hNKpWzYHI9Vgstna+3ALIzkg0zGqDA41g9+YRGC2T5M=;
-        b=WhTO8k0gVFOWcUU3qwooSU9KVS/QD+cJz81FxUgCmK6mPvYvbonHQ3OlQbAR/zfrL8
-         7Qs1tKhygM11hyxl2MoXUakgtccG9OtaWPIEwbdt6FF9ief7xTNHO5AW68LJSFKzmnif
-         gNLJNj8vLtm6hArPTpE8Rey1LBarnkUg9j3OpalG1WITkwSjlF+Cy2DHYzbIbIZIw50E
-         hYc1qxdGhvwWiyFvqGcGK+c4QUreFbobz6a8qWSoxCi20FPX5mkePT7Q/Fzee1cIfrGH
-         bo9+f/+q/2ACVFJjFfuD1Z3iAvzJmaOWVprDcRdDtVOo/nVFCVaBIzLHXK6DTJA4nTeU
-         UsBQ==
-X-Gm-Message-State: AOAM530ZIze7HGjxmspoJzlBAolcByYfpkjP/YKZ04SLIqwbCOYmemz2
-        thlp8nALqCk+FatHgmoHg3Fylw==
-X-Google-Smtp-Source: ABdhPJxHw7dmFAcXGY6fz6nB+/XMEkWocXYbhlmS9LW9oH2L8/y5kiJhfQEHiHw5ZJocGRqTqcKoCA==
-X-Received: by 2002:a17:902:e812:b0:15e:a6cc:e015 with SMTP id u18-20020a170902e81200b0015ea6cce015mr23693391plg.93.1652241189761;
-        Tue, 10 May 2022 20:53:09 -0700 (PDT)
-Received: from localhost.localdomain ([180.217.250.247])
-        by smtp.gmail.com with ESMTPSA id z188-20020a6233c5000000b0050dc7628133sm374652pfz.13.2022.05.10.20.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 20:53:09 -0700 (PDT)
-From:   Scott Chao <scott_chao@wistron.corp-partner.google.com>
-To:     paulburton@kernel.org
-Cc:     ralf@linux-mips.org, jhogan@kernel.org, christian@brauner.io,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Scott Chao <scott_chao@wistron.corp-partner.google.com>
-Subject: [PATCH] [v2] media: platform: Add moli to the match table
-Date:   Wed, 11 May 2022 11:51:47 +0800
-Message-Id: <20220511035147.28532-1-scott_chao@wistron.corp-partner.google.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S229584AbiEKD7c (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 23:59:32 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A10229FD5;
+        Tue, 10 May 2022 20:59:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VCu38tE_1652241558;
+Received: from 30.30.99.144(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCu38tE_1652241558)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 11 May 2022 11:59:22 +0800
+Message-ID: <84209c7b-ac3e-fa3b-75fc-d76ec7c99d68@linux.alibaba.com>
+Date:   Wed, 11 May 2022 11:59:57 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ migration
+To:     Andrew Morton <akpm@linux-foundation.org>, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org, songmuchun@bytedance.com,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.osdn.me, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1652147571.git.baolin.wang@linux.alibaba.com>
+ <ea5abf529f0997b5430961012bfda6166c1efc8c.1652147571.git.baolin.wang@linux.alibaba.com>
+ <20220510161739.fdea4d78dde8471033aab22b@linux-foundation.org>
+ <20220510162847.d9cf3c767e755a54699fb121@linux-foundation.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220510162847.d9cf3c767e755a54699fb121@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The Google Moli device uses the same approach as the Google Brask
-which enables the HDMI CEC via the cros-ec-cec driver.
 
-Signed-off-by: Scott Chao <scott_chao@wistron.corp-partner.google.com>
----
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index 8c8d8fc5e63e..25dc7309beab 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -217,6 +217,8 @@ static const struct cec_dmi_match cec_dmi_match_table[] = {
- 	{ "Google", "Fizz", "0000:00:02.0", "Port B" },
- 	/* Google Brask */
- 	{ "Google", "Brask", "0000:00:02.0", "Port B" },
-+	/* Google Moli */
-+	{ "Google", "Moli", "0000:00:02.0", "Port B" },
- };
- 
- static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
--- 
-2.17.1
+On 5/11/2022 7:28 AM, Andrew Morton wrote:
+> On Tue, 10 May 2022 16:17:39 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+> 
+>>> +
+>>> +static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+>>> +					  unsigned long addr, pte_t *ptep)
+>>> +{
+>>> +	return ptep_get(ptep);
+>>> +}
+>>> +
+>>> +static inline void set_huge_pte_at(struct mm_struct *mm, unsigned long addr,
+>>> +				   pte_t *ptep, pte_t pte)
+>>> +{
+>>> +}
+>>>   #endif	/* CONFIG_HUGETLB_PAGE */
+>>>   
+>>
+>> This blows up nommu (arm allnoconfig):
+>>
+>> In file included from fs/io_uring.c:71:
+>> ./include/linux/hugetlb.h: In function 'huge_ptep_clear_flush':
+>> ./include/linux/hugetlb.h:1100:16: error: implicit declaration of function 'ptep_get' [-Werror=implicit-function-declaration]
+>>   1100 |         return ptep_get(ptep);
+>>        |                ^~~~~~~~
+>>
+>>
+>> huge_ptep_clear_flush() is only used in CONFIG_NOMMU=n files, so I simply
+>> zapped this change.
+>>
+> 
+> Well that wasn't a great success.  Doing this instead.  It's pretty
+> nasty - something nicer would be nicer please.
 
+Thanks for fixing the building issue. I'll look at this to simplify the 
+dummy function. Myabe just remove the ptep_get().
+
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -1097,7 +1097,7 @@ static inline void set_huge_swap_pte_at(struct 
+mm_struct *mm, unsigned long addr
+  static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+                                           unsigned long addr, pte_t *ptep)
+  {
+-       return ptep_get(ptep);
++       return *ptep;
+  }
+
+> 
+> --- a/include/linux/hugetlb.h~mm-rmap-fix-cont-pte-pmd-size-hugetlb-issue-when-migration-fix
+> +++ a/include/linux/hugetlb.h
+> @@ -1094,6 +1094,7 @@ static inline void set_huge_swap_pte_at(
+>   {
+>   }
+>   
+> +#ifdef CONFIG_MMU
+>   static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+>   					  unsigned long addr, pte_t *ptep)
+>   {
+> @@ -1104,6 +1105,7 @@ static inline void set_huge_pte_at(struc
+>   				   pte_t *ptep, pte_t pte)
+>   {
+>   }
+> +#endif
+>   #endif	/* CONFIG_HUGETLB_PAGE */
+>   
+>   static inline spinlock_t *huge_pte_lock(struct hstate *h,
+> _
