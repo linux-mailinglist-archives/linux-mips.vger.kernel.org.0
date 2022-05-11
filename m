@@ -2,55 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECA3522AA8
-	for <lists+linux-mips@lfdr.de>; Wed, 11 May 2022 05:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBE9522BC9
+	for <lists+linux-mips@lfdr.de>; Wed, 11 May 2022 07:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiEKD7d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 May 2022 23:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S241839AbiEKFg3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 May 2022 01:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiEKD7c (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 May 2022 23:59:32 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A10229FD5;
-        Tue, 10 May 2022 20:59:28 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VCu38tE_1652241558;
-Received: from 30.30.99.144(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCu38tE_1652241558)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 11 May 2022 11:59:22 +0800
-Message-ID: <84209c7b-ac3e-fa3b-75fc-d76ec7c99d68@linux.alibaba.com>
-Date:   Wed, 11 May 2022 11:59:57 +0800
+        with ESMTP id S241383AbiEKFf5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 May 2022 01:35:57 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CC6120B7;
+        Tue, 10 May 2022 22:35:51 -0700 (PDT)
+X-UUID: c15df73932a042b48c13c870fdd5a331-20220511
+X-UUID: c15df73932a042b48c13c870fdd5a331-20220511
+Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
+        (envelope-from <jianghaoran@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1227716475; Wed, 11 May 2022 13:38:53 +0800
+X-ns-mid: postfix-627B4B26-356447265
+Received: from [172.30.60.211] (unknown [172.30.60.211])
+        by cs2c.com.cn (NSMail) with ESMTPSA id 4ED52384867C;
+        Wed, 11 May 2022 05:35:34 +0000 (UTC)
+Subject: Re: [PATCH] irqchip/loongson-liointc: 4 cores correspond to different
+ interrupt status registers
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, chenhuacai@kernel.org
+Cc:     tglx@linutronix.de, maz@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
+ <21bb46ea-6a36-b426-2ca9-4471af5879a1@flygoat.com>
+From:   jianghaoran <jianghaoran@kylinos.cn>
+Message-ID: <833ade5f-ab35-1d69-28b1-b50ae41df2f5@kylinos.cn>
+Date:   Wed, 11 May 2022 13:33:12 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- migration
-To:     Andrew Morton <akpm@linux-foundation.org>, mike.kravetz@oracle.com,
-        catalin.marinas@arm.com, will@kernel.org, songmuchun@bytedance.com,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.osdn.me, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1652147571.git.baolin.wang@linux.alibaba.com>
- <ea5abf529f0997b5430961012bfda6166c1efc8c.1652147571.git.baolin.wang@linux.alibaba.com>
- <20220510161739.fdea4d78dde8471033aab22b@linux-foundation.org>
- <20220510162847.d9cf3c767e755a54699fb121@linux-foundation.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220510162847.d9cf3c767e755a54699fb121@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <21bb46ea-6a36-b426-2ca9-4471af5879a1@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,71 +52,41 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 5/11/2022 7:28 AM, Andrew Morton wrote:
-> On Tue, 10 May 2022 16:17:39 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+在 2022/5/10 下午8:15, Jiaxun Yang 写道:
 > 
->>> +
->>> +static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->>> +					  unsigned long addr, pte_t *ptep)
->>> +{
->>> +	return ptep_get(ptep);
->>> +}
->>> +
->>> +static inline void set_huge_pte_at(struct mm_struct *mm, unsigned long addr,
->>> +				   pte_t *ptep, pte_t pte)
->>> +{
->>> +}
->>>   #endif	/* CONFIG_HUGETLB_PAGE */
->>>   
->>
->> This blows up nommu (arm allnoconfig):
->>
->> In file included from fs/io_uring.c:71:
->> ./include/linux/hugetlb.h: In function 'huge_ptep_clear_flush':
->> ./include/linux/hugetlb.h:1100:16: error: implicit declaration of function 'ptep_get' [-Werror=implicit-function-declaration]
->>   1100 |         return ptep_get(ptep);
->>        |                ^~~~~~~~
->>
->>
->> huge_ptep_clear_flush() is only used in CONFIG_NOMMU=n files, so I simply
->> zapped this change.
->>
 > 
-> Well that wasn't a great success.  Doing this instead.  It's pretty
-> nasty - something nicer would be nicer please.
-
-Thanks for fixing the building issue. I'll look at this to simplify the 
-dummy function. Myabe just remove the ptep_get().
-
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -1097,7 +1097,7 @@ static inline void set_huge_swap_pte_at(struct 
-mm_struct *mm, unsigned long addr
-  static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
-                                           unsigned long addr, pte_t *ptep)
-  {
--       return ptep_get(ptep);
-+       return *ptep;
-  }
-
+> 在 2022/5/10 6:53, Haoran Jiang 写道:
+>> According to the loongson cpu manual,different cpu cores
+>> correspond to different interrupt status registers
+> NAK!
 > 
-> --- a/include/linux/hugetlb.h~mm-rmap-fix-cont-pte-pmd-size-hugetlb-issue-when-migration-fix
-> +++ a/include/linux/hugetlb.h
-> @@ -1094,6 +1094,7 @@ static inline void set_huge_swap_pte_at(
->   {
->   }
->   
-> +#ifdef CONFIG_MMU
->   static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->   					  unsigned long addr, pte_t *ptep)
->   {
-> @@ -1104,6 +1105,7 @@ static inline void set_huge_pte_at(struc
->   				   pte_t *ptep, pte_t pte)
->   {
->   }
-> +#endif
->   #endif	/* CONFIG_HUGETLB_PAGE */
->   
->   static inline spinlock_t *huge_pte_lock(struct hstate *h,
-> _
+> It is intentional to do so.
+> 
+> The per-core ISR register is broken on 3B1500. So we use general ISR 
+> register here.
+> The per-core variable is left for LS2K.
+> 
+> Thanks
+> - Jiaxun
+>>
+>> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+>> ---
+>>   drivers/irqchip/irq-loongson-liointc.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/irqchip/irq-loongson-liointc.c 
+>> b/drivers/irqchip/irq-loongson-liointc.c
+>> index 649c58391618..f4e015b50af0 100644
+>> --- a/drivers/irqchip/irq-loongson-liointc.c
+>> +++ b/drivers/irqchip/irq-loongson-liointc.c
+>> @@ -195,7 +195,7 @@ static int __init liointc_of_init(struct 
+>> device_node *node,
+>>           }
+>>           for (i = 0; i < LIOINTC_NUM_CORES; i++)
+>> -            priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
+>> +            priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS + i*8;
+>>       }
+>>       for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
+> 
+
+Thank you for your review!
