@@ -2,159 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A37522E5E
-	for <lists+linux-mips@lfdr.de>; Wed, 11 May 2022 10:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DF152306D
+	for <lists+linux-mips@lfdr.de>; Wed, 11 May 2022 12:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243683AbiEKIa0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 May 2022 04:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S241889AbiEKKMp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 May 2022 06:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbiEKIaW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 May 2022 04:30:22 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B26B118B97B;
-        Wed, 11 May 2022 01:30:19 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxkNoPdHtiw+cQAA--.6S4;
-        Wed, 11 May 2022 16:30:10 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yangtiezhu@loongson.cn,
-        zhangqing@loongson.cn
-Subject: [PATCH 3/3] MIPS: Loongson64: Enable CONFIG_SMP and set default NR_CPUS to 2
-Date:   Wed, 11 May 2022 16:30:07 +0800
-Message-Id: <20220511083007.17700-3-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220511083007.17700-1-zhangqing@loongson.cn>
-References: <20220511083007.17700-1-zhangqing@loongson.cn>
+        with ESMTP id S241418AbiEKKMd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 May 2022 06:12:33 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D63021AA8E;
+        Wed, 11 May 2022 03:12:19 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 6482B1F44D36
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652263934;
+        bh=qcj+acMxU0ciOKBaVy6pJbQiEuRN08dsxaJseG6RfwE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ALAQu/eEe04LAruPgoaxZO/rAmAmbVl+HcocVYpgGrXIRB8C3EP1FAmUZXjQFjUKn
+         wfogK/QUTiSxNChIDNBZqO/aeRmGclTu4TrSdSdMO/cmWfEIqdry6AZOEiAP2fouZ6
+         Ze5K+g3wOPlOW2v6pMuegjSC6cihNNChKdrphdfE2ltP+RE0LEmom809Y8+fvE6J4/
+         Ahs2yVkxSRw3aK+Wy1uhxbsXzAskjDUGhwcgP9S4/r1ElfK42qDIjASJs4PEUZO9GN
+         V4ie/nhjCksrQsC7KjRypS3JpnKPKwmWfZcBd1V4WsAwj2K9BvhnPx92oDSMYGMk4e
+         Jp2S214QNnEnQ==
+Message-ID: <5894c310-fe50-8037-fc9c-cbedb0d8e71f@collabora.com>
+Date:   Wed, 11 May 2022 13:12:07 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9BxkNoPdHtiw+cQAA--.6S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryDKFW8Cr45KF1UKF1Utrb_yoW5ur4Dpr
-        4fGFWxXay8Kr1UKrWjkr4DGasYqayDJa9FkF47Aw1Du3W8Aa13Xr1Dtr18JrWUXFZrXr4r
-        Xas3Kwn3Aan8Ga7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBS14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRijjyUUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v8 01/27] notifier: Add
+ atomic_notifier_call_chain_is_empty()
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+ <20220509233235.995021-2-dmitry.osipenko@collabora.com>
+ <CAJZ5v0gApRhc9+jZLxgNXC2B2tmz450=8+mFZUjTFF1iU7C-gw@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAJZ5v0gApRhc9+jZLxgNXC2B2tmz450=8+mFZUjTFF1iU7C-gw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/mips/configs/loongson2k_defconfig | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+On 5/10/22 21:14, Rafael J. Wysocki wrote:
+> On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>> Add atomic_notifier_call_chain_is_empty() that returns true if given
+>> atomic call chain is empty.
+> It would be good to mention a use case for it.
+> 
 
-diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
-index e948ca487e2d..74353a4254eb 100644
---- a/arch/mips/configs/loongson2k_defconfig
-+++ b/arch/mips/configs/loongson2k_defconfig
-@@ -20,7 +20,10 @@ CONFIG_RELAY=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EMBEDDED=y
- CONFIG_MACH_LOONGSON64=y
-+# CONFIG_CPU_LOONGSON3_WORKAROUNDS is not set
- # CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION is not set
-+CONFIG_SMP=y
-+CONFIG_NR_CPUS=2
- CONFIG_HZ_256=y
- CONFIG_MIPS32_O32=y
- CONFIG_MIPS32_N32=y
-@@ -95,7 +98,6 @@ CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_MTD=m
- CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_CRYPTOLOOP=y
- CONFIG_BLK_DEV_RAM=y
- CONFIG_BLK_DEV_RAM_SIZE=8192
- CONFIG_RAID_ATTRS=m
-@@ -144,7 +146,6 @@ CONFIG_TUN=m
- # CONFIG_NET_VENDOR_ARC is not set
- # CONFIG_NET_VENDOR_ATHEROS is not set
- # CONFIG_NET_VENDOR_BROADCOM is not set
--# CONFIG_NET_VENDOR_BROCADE is not set
- # CONFIG_NET_VENDOR_CHELSIO is not set
- # CONFIG_NET_VENDOR_CIRRUS is not set
- # CONFIG_NET_VENDOR_CISCO is not set
-@@ -163,15 +164,16 @@ CONFIG_IXGBE=y
- # CONFIG_NET_VENDOR_MICROCHIP is not set
- # CONFIG_NET_VENDOR_MICROSEMI is not set
- # CONFIG_NET_VENDOR_MYRI is not set
-+# CONFIG_NET_VENDOR_NI is not set
- # CONFIG_NET_VENDOR_NATSEMI is not set
- # CONFIG_NET_VENDOR_NETERION is not set
- # CONFIG_NET_VENDOR_NETRONOME is not set
--# CONFIG_NET_VENDOR_NI is not set
- # CONFIG_NET_VENDOR_NVIDIA is not set
- # CONFIG_NET_VENDOR_OKI is not set
- # CONFIG_NET_VENDOR_PACKET_ENGINES is not set
- # CONFIG_NET_VENDOR_PENSANDO is not set
- # CONFIG_NET_VENDOR_QLOGIC is not set
-+# CONFIG_NET_VENDOR_BROCADE is not set
- # CONFIG_NET_VENDOR_QUALCOMM is not set
- # CONFIG_NET_VENDOR_RDC is not set
- CONFIG_8139CP=y
-@@ -182,9 +184,9 @@ CONFIG_R8169=y
- # CONFIG_NET_VENDOR_ROCKER is not set
- # CONFIG_NET_VENDOR_SAMSUNG is not set
- # CONFIG_NET_VENDOR_SEEQ is not set
--# CONFIG_NET_VENDOR_SOLARFLARE is not set
- # CONFIG_NET_VENDOR_SILAN is not set
- # CONFIG_NET_VENDOR_SIS is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
- # CONFIG_NET_VENDOR_SMSC is not set
- CONFIG_STMMAC_ETH=y
- # CONFIG_NET_VENDOR_SUN is not set
-@@ -229,7 +231,6 @@ CONFIG_SERIAL_8250_RSA=y
- CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_SERIAL_NONSTANDARD=y
- CONFIG_HW_RANDOM=y
--CONFIG_RAW_DRIVER=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_PIIX4=y
- CONFIG_GPIO_LOONGSON=y
-@@ -243,13 +244,9 @@ CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=y
--CONFIG_FB_RADEON=y
- CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_LCD_PLATFORM=m
- # CONFIG_VGA_CONSOLE is not set
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
--CONFIG_LOGO=y
- CONFIG_SOUND=y
- CONFIG_SND=y
- CONFIG_SND_VERBOSE_PRINTK=y
-@@ -336,7 +333,6 @@ CONFIG_DEFAULT_SECURITY_DAC=y
- CONFIG_CRYPTO_SEQIV=m
- CONFIG_CRYPTO_HMAC=y
- CONFIG_CRYPTO_MD5=y
--CONFIG_CRYPTO_TGR192=m
- CONFIG_CRYPTO_WP512=m
- CONFIG_CRYPTO_BLOWFISH=m
- CONFIG_CRYPTO_CAST5=m
+I'll update this patch for v9.
+
 -- 
-2.20.1
-
+Best regards,
+Dmitry
