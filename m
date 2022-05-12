@@ -2,36 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D552552522F
-	for <lists+linux-mips@lfdr.de>; Thu, 12 May 2022 18:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6CE525234
+	for <lists+linux-mips@lfdr.de>; Thu, 12 May 2022 18:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356303AbiELQLt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 May 2022 12:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S1356316AbiELQLw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 May 2022 12:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356315AbiELQLr (ORCPT
+        with ESMTP id S1356318AbiELQLr (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Thu, 12 May 2022 12:11:47 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB0EE66687;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB39366696;
         Thu, 12 May 2022 09:11:42 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1npBPf-0001Vm-03; Thu, 12 May 2022 18:11:39 +0200
+        id 1npBPf-0001Vm-04; Thu, 12 May 2022 18:11:39 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id AE78BC01DC; Thu, 12 May 2022 18:09:27 +0200 (CEST)
-Date:   Thu, 12 May 2022 18:09:27 +0200
+        id 5C79DC01DC; Thu, 12 May 2022 18:10:54 +0200 (CEST)
+Date:   Thu, 12 May 2022 18:10:54 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
-Subject: Re: [PATCH] MIPS: Sibyte: remove unnecessary return variable
-Message-ID: <20220512160927.GD14475@alpha.franken.de>
-References: <20220505030116.14371-1-guozhengkui@vivo.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Modify some code about kprobe
+Message-ID: <20220512161054.GE14475@alpha.franken.de>
+References: <1651834923-31573-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505030116.14371-1-guozhengkui@vivo.com>
+In-Reply-To: <1651834923-31573-1-git-send-email-yangtiezhu@loongson.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -42,43 +44,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 05, 2022 at 11:01:14AM +0800, Guo Zhengkui wrote:
-> Fix the following coccicheck warning:
+On Fri, May 06, 2022 at 07:02:01PM +0800, Tiezhu Yang wrote:
+> v3: no need to change post_kprobe_handler() in patch #2 now,
+>     sorry for the carelessness.
 > 
-> arch/mips/sibyte/bcm1480/setup.c:37:5-8: Unneeded variable: "ret".
-> Return "0" on line 67.
+> v2:
+>   -- only replace __kprobes with NOKPROBE_SYMBOL() in patch #2
+>   -- update the commit messages
 > 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> ---
->  arch/mips/sibyte/bcm1480/setup.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> Tiezhu Yang (2):
+>   selftests/ftrace: Save kprobe_events to test log
+>   MIPS: Use NOKPROBE_SYMBOL() instead of __kprobes annotation
 > 
-> diff --git a/arch/mips/sibyte/bcm1480/setup.c b/arch/mips/sibyte/bcm1480/setup.c
-> index 6f34b871b08e..e3e807046a9c 100644
-> --- a/arch/mips/sibyte/bcm1480/setup.c
-> +++ b/arch/mips/sibyte/bcm1480/setup.c
-> @@ -34,8 +34,6 @@ static char *pass_str;
->  
->  static int __init setup_bcm1x80_bcm1x55(void)
->  {
-> -	int ret = 0;
-> -
->  	switch (soc_pass) {
->  	case K_SYS_REVISION_BCM1480_S0:
->  		periph_rev = 1;
-> @@ -64,7 +62,7 @@ static int __init setup_bcm1x80_bcm1x55(void)
->  		break;
->  	}
->  
-> -	return ret;
-> +	return 0;
->  }
->  
->  /* Setup code likely to be common to all SiByte platforms */
+>  arch/mips/kernel/kprobes.c                         | 36 ++++++++++++++--------
+>  arch/mips/mm/fault.c                               |  6 ++--
+>  .../ftrace/test.d/kprobe/multiple_kprobes.tc       |  2 ++
+>  3 files changed, 30 insertions(+), 14 deletions(-)
+> 
 > -- 
-> 2.20.1
+> 2.1.0
 
-applied to mips-next.
+seires applied to mips-next.
 
 Thomas.
 
