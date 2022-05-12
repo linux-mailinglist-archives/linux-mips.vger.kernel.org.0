@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894B352522E
-	for <lists+linux-mips@lfdr.de>; Thu, 12 May 2022 18:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E273525233
+	for <lists+linux-mips@lfdr.de>; Thu, 12 May 2022 18:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356310AbiELQLu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 May 2022 12:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
+        id S1356301AbiELQLx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 May 2022 12:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356308AbiELQLr (ORCPT
+        with ESMTP id S1356291AbiELQLr (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Thu, 12 May 2022 12:11:47 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB4316669F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB4ED666A6;
         Thu, 12 May 2022 09:11:42 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1npBPf-0001Vm-01; Thu, 12 May 2022 18:11:39 +0200
+        id 1npBPf-0001Vm-02; Thu, 12 May 2022 18:11:39 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id B6208C01DC; Thu, 12 May 2022 18:08:53 +0200 (CEST)
-Date:   Thu, 12 May 2022 18:08:53 +0200
+        id 7F290C01DC; Thu, 12 May 2022 18:09:09 +0200 (CEST)
+Date:   Thu, 12 May 2022 18:09:09 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Haowen Bai <baihaowen@meizu.com>
+To:     Jason Wang <wangborong@cdjrlc.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: VR41xx: Drop redundant spinlock initialization
-Message-ID: <20220512160853.GB14475@alpha.franken.de>
-References: <1652176527-4507-1-git-send-email-baihaowen@meizu.com>
+Subject: Re: [PATCH] MIPS: tools: no need to initialise statics to 0
+Message-ID: <20220512160909.GC14475@alpha.franken.de>
+References: <20220508023146.100385-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1652176527-4507-1-git-send-email-baihaowen@meizu.com>
+In-Reply-To: <20220508023146.100385-1-wangborong@cdjrlc.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -40,30 +40,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:55:27PM +0800, Haowen Bai wrote:
-> slot_errbuf_lock has declared and initialized by DEFINE_SPINLOCK,
-> so we don't need to spin_lock_init again, drop it.
+On Sun, May 08, 2022 at 10:31:46AM +0800, Jason Wang wrote:
+> Static variables do not need to be initialised to 0, because compiler
+> will initialise all uninitialised statics to 0. Thus, remove the
+> unneeded initializations.
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 > ---
->  arch/mips/vr41xx/common/cmu.c | 2 --
->  1 file changed, 2 deletions(-)
+>  arch/mips/boot/tools/relocs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/mips/vr41xx/common/cmu.c b/arch/mips/vr41xx/common/cmu.c
-> index b59ee5479313..e4cbe116b26d 100644
-> --- a/arch/mips/vr41xx/common/cmu.c
-> +++ b/arch/mips/vr41xx/common/cmu.c
-> @@ -236,8 +236,6 @@ static int __init vr41xx_cmu_init(void)
->  	if (current_cpu_type() == CPU_VR4133)
->  		cmuclkmsk2 = cmu_read(CMUCLKMSK2);
+> diff --git a/arch/mips/boot/tools/relocs.c b/arch/mips/boot/tools/relocs.c
+> index 1bf53f3524b3..02fc85f3e8ff 100644
+> --- a/arch/mips/boot/tools/relocs.c
+> +++ b/arch/mips/boot/tools/relocs.c
+> @@ -351,7 +351,7 @@ static void read_symtabs(FILE *fp)
 >  
-> -	spin_lock_init(&cmu_lock);
-> -
->  	return 0;
->  }
+>  static void read_relocs(FILE *fp)
+>  {
+> -	static unsigned long base = 0;
+> +	static unsigned long base;
+>  	int i, j;
 >  
+>  	if (!base) {
 > -- 
-> 2.7.4
+> 2.35.1
 
 applied to mips-next.
 
