@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C0D526B43
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4E5526B44
 	for <lists+linux-mips@lfdr.de>; Fri, 13 May 2022 22:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384218AbiEMU2l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 May 2022 16:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S1384210AbiEMU2m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 May 2022 16:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384210AbiEMU2i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 May 2022 16:28:38 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5775337014
-        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 13:28:37 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id f6-20020a170902ab8600b0015f186a69e7so4865541plr.2
-        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 13:28:37 -0700 (PDT)
+        with ESMTP id S1384205AbiEMU2k (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 May 2022 16:28:40 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304226C571
+        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 13:28:39 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id v10-20020a17090a0c8a00b001c7a548e4f7so6700332pja.2
+        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 13:28:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=wGHIzUdkImHbOgCE37BkR/+UNfqdKdFelxzR1hh/jTU=;
-        b=AW85gt8Cm/akM6fN9YF1VI56V5qXCSMYonkm5FLUHZmqUsPnuhCTTXnBtgi9DFNwcn
-         lj1Uwa/0VEsJQYRr9wQ3+UjaZWq8uJG7fLbKkyERC0L8JC2D3iot3WmxCKvtFjImh4xD
-         xGivzkup6jQN70pJM4gSbe1QGqAurA9yISloGSd7fmpHI225Zi4f2zMdXPe5FBZz/2MU
-         3vdJN+sPmDEcwZag+FclmZI/8GrsXPDO7sTuMsFGNuF/I5yRtjZDVCGP3adLsCmRIPHe
-         gAEFJbvUCcNJ4pRE9G+UuIthYkITZL9tRzZHkxVAVDuMrnxwVze4xwuduMVNOWpNhKMx
-         pSiw==
+        bh=+Sv7kNyPL5ertkNdZxFciYA9vcaUcEJcKSOobOrADMc=;
+        b=KF23WTkiI+zBOEBWpicHYNDifapajdcg9QdtJGa0p0hr2oVTJ15KwXLosodDzzIb2o
+         Oyi3tLlTSNWU6vVZuopOLg6cqAgsKcoFykFCURldL1C+O2x3mhWkTpQVm+TXngV/OoV9
+         Gz7VOrWz6MUFxqhds+p2IhVXCMXVURJFBQ3uBjsXcRX3bCsnTz1ztDOm4n4AsXWLJRq3
+         wxbpDX0gXUuuqqmNel4WwcDfNEe3UVhZnkjnlvFgJymorYcYGaLeERjf4odNh6rvTNog
+         akSAVTRrMrWLtbRFRez6tyvAD8TgkJ0HvxdJGTP7q5VgBwdN//pZk2ppTOUUSQEe1mSM
+         siDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=wGHIzUdkImHbOgCE37BkR/+UNfqdKdFelxzR1hh/jTU=;
-        b=IH3uYSHUTxJEW/D6EYTEmeaHpD+fb6OoVZ8RMO1+NBmlUtdh5pzbgl79yFaw5K3vc2
-         CPkA0EkwAs7iu0KzkMi8ERdH32bmQRa9Fi9ljgB4UD/jqDh5NHiqPC5cxdOmP5PEwUPx
-         5Ihj1VRK48QUFh6HGnYwNP0yhERMzc7cCYZWIm8cmcPl6ngiOBpuCU+5/sgT6lBMxTp7
-         2IfoqXuNsCQcnduZ0WmZdT6Ch/asdzvibQFCoXWUE6ASx3IEL1PUSJztqS5H9/vvEV9p
-         I0pdYY8qYPK6m61lSr5WeyrocYJ6MkHPOrJHbY/tXwVJlO9MGZ1LWKBYtlvmqbh8/hxI
-         ySKw==
-X-Gm-Message-State: AOAM532TUzNg/aInC83pxetW6CisDLOwmhXiRz7clKX3uPxVSiJr0oRB
-        8V71rBdFeT26x1uDszblfFtygKk//HEceg==
-X-Google-Smtp-Source: ABdhPJwKUE0zCOcwZVsO97x6AhzKjnMvIvYyLucVAPqidHDvTm6P1AHwrq6LuBKpW9p7xKHAdpS8f31uCrjI/A==
+        bh=+Sv7kNyPL5ertkNdZxFciYA9vcaUcEJcKSOobOrADMc=;
+        b=aaRetYN0Oft6oasGIH9YGKqwK1dXe189xrVoMgU8GfU3IqBgXItji1k1wSI+CUDRRM
+         LoSMUy8cuQcWyJ9rysdd2TqEANMv5MvkJyYntuTTlQMOkl6OaDjNYOaNyV3YpaVOZkPi
+         qyImB/zj6IXdmcUfF1nhamiFBM8VSrvlXAarYx/y5g9DO7RWIzRPykRkNLyMCWPcPJL9
+         hsR2ffa9q0txOh8f3IAuvAHzLbV8zndBzzZ3cKU1rHpYOC6fnSEjFBaowOhycAQBAlDL
+         VUesJqexoMF6WPsodDc0bMka19cHzkQJ76p8Lw50i2j9g1wZxzldaMRkuN8IE7bvsox1
+         DRrw==
+X-Gm-Message-State: AOAM532kvaEjTiGVp4tnvyvxuHCt6ELfj1xCN7qnJjrRfxwNvfo2CsHg
+        7DmOU3KrDM7vs6cHm4k6AhgtZ9Zzp6C2bQ==
+X-Google-Smtp-Source: ABdhPJxwhDppDshguB1v/xVRglyKO+xBcau3ctqNCObYm1B3k+tEQ83O8U/DbxoBw0VUkiEwWTds+WnO8qnY9w==
 X-Received: from dmatlack-heavy.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:19cd])
  (user=dmatlack job=sendgmr) by 2002:a17:90a:8d83:b0:1dd:258c:7c55 with SMTP
- id d3-20020a17090a8d8300b001dd258c7c55mr250781pjo.1.1652473715329; Fri, 13
- May 2022 13:28:35 -0700 (PDT)
-Date:   Fri, 13 May 2022 20:28:02 +0000
+ id d3-20020a17090a8d8300b001dd258c7c55mr250783pjo.1.1652473718175; Fri, 13
+ May 2022 13:28:38 -0700 (PDT)
+Date:   Fri, 13 May 2022 20:28:03 +0000
 In-Reply-To: <20220513202819.829591-1-dmatlack@google.com>
-Message-Id: <20220513202819.829591-5-dmatlack@google.com>
+Message-Id: <20220513202819.829591-6-dmatlack@google.com>
 Mime-Version: 1.0
 References: <20220513202819.829591-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v5 04/21] KVM: x86/mmu: Always pass 0 for @quadrant when gptes
- are 8 bytes
+Subject: [PATCH v5 05/21] KVM: x86/mmu: Decompose kvm_mmu_get_page() into
+ separate functions
 From:   David Matlack <dmatlack@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
@@ -79,73 +79,132 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The quadrant is only used when gptes are 4 bytes, but
-mmu_alloc_{direct,shadow}_roots() pass in a non-zero quadrant for PAE
-page directories regardless. Make this less confusing by only passing in
-a non-zero quadrant when it is actually necessary.
+Decompose kvm_mmu_get_page() into separate helper functions to increase
+readability and prepare for allocating shadow pages without a vcpu
+pointer.
 
+Specifically, pull the guts of kvm_mmu_get_page() into 2 helper
+functions:
+
+kvm_mmu_find_shadow_page() -
+  Walks the page hash checking for any existing mmu pages that match the
+  given gfn and role.
+
+kvm_mmu_alloc_shadow_page()
+  Allocates and initializes an entirely new kvm_mmu_page. This currently
+  requries a vcpu pointer for allocation and looking up the memslot but
+  that will be removed in a future commit.
+
+No functional change intended.
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 52 +++++++++++++++++++++++++++++++-----------
+ 1 file changed, 39 insertions(+), 13 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index a927a062a598..34786244ebad 100644
+index 34786244ebad..ce334eaeef22 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3409,9 +3409,10 @@ static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
- 	role.level = level;
- 	role.direct = direct;
- 	role.access = ACC_ALL;
-+	role.quadrant = quadrant;
+@@ -2019,16 +2019,16 @@ static void clear_sp_write_flooding_count(u64 *spte)
+ 	__clear_sp_write_flooding_count(sptep_to_sp(spte));
+ }
  
--	if (role.has_4_byte_gpte)
--		role.quadrant = quadrant;
-+	WARN_ON_ONCE(quadrant && !role.has_4_byte_gpte);
-+	WARN_ON_ONCE(direct && role.has_4_byte_gpte);
+-static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
+-					     union kvm_mmu_page_role role)
++static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm_vcpu *vcpu,
++						     gfn_t gfn,
++						     struct hlist_head *sp_list,
++						     union kvm_mmu_page_role role)
+ {
+-	struct hlist_head *sp_list;
+ 	struct kvm_mmu_page *sp;
+ 	int ret;
+ 	int collisions = 0;
+ 	LIST_HEAD(invalid_list);
  
- 	if (level <= vcpu->arch.mmu->cpu_role.base.level)
- 		role.passthrough = 0;
-@@ -3450,7 +3451,7 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
- 		for (i = 0; i < 4; ++i) {
- 			WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
+-	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
+ 	for_each_valid_sp(vcpu->kvm, sp, sp_list) {
+ 		if (sp->gfn != gfn) {
+ 			collisions++;
+@@ -2053,7 +2053,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
  
--			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), i,
-+			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), 0,
- 					      PT32_ROOT_LEVEL, true);
- 			mmu->pae_root[i] = root | PT_PRESENT_MASK |
- 					   shadow_me_mask;
-@@ -3535,6 +3536,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
- 	struct kvm_mmu *mmu = vcpu->arch.mmu;
- 	u64 pdptrs[4], pm_mask;
- 	gfn_t root_gfn, root_pgd;
-+	unsigned int quadrant;
- 	hpa_t root;
- 	unsigned i;
- 	int r;
-@@ -3620,7 +3622,15 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
- 			root_gfn = pdptrs[i] >> PAGE_SHIFT;
- 		}
+ 		/* unsync and write-flooding only apply to indirect SPs. */
+ 		if (sp->role.direct)
+-			goto trace_get_page;
++			goto out;
  
--		root = mmu_alloc_root(vcpu, root_gfn, i, PT32_ROOT_LEVEL, false);
-+		/*
-+		 * If shadowing 32-bit non-PAE page tables, each PAE page
-+		 * directory maps one quarter of the guest's non-PAE page
-+		 * directory. Othwerise each PAE page direct shadows one guest
-+		 * PAE page directory so that quadrant should be 0.
-+		 */
-+		quadrant = (mmu->cpu_role.base.level == PT32_ROOT_LEVEL) ? i : 0;
-+
-+		root = mmu_alloc_root(vcpu, root_gfn, quadrant, PT32_ROOT_LEVEL, false);
- 		mmu->pae_root[i] = root | pm_mask;
+ 		if (sp->unsync) {
+ 			/*
+@@ -2079,14 +2079,26 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
+ 
+ 		__clear_sp_write_flooding_count(sp);
+ 
+-trace_get_page:
+-		trace_kvm_mmu_get_page(sp, false);
+ 		goto out;
  	}
+ 
++	sp = NULL;
+ 	++vcpu->kvm->stat.mmu_cache_miss;
+ 
+-	sp = kvm_mmu_alloc_page(vcpu, role.direct);
++out:
++	kvm_mmu_commit_zap_page(vcpu->kvm, &invalid_list);
++
++	if (collisions > vcpu->kvm->stat.max_mmu_page_hash_collisions)
++		vcpu->kvm->stat.max_mmu_page_hash_collisions = collisions;
++	return sp;
++}
++
++static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm_vcpu *vcpu,
++						      gfn_t gfn,
++						      struct hlist_head *sp_list,
++						      union kvm_mmu_page_role role)
++{
++	struct kvm_mmu_page *sp = kvm_mmu_alloc_page(vcpu, role.direct);
+ 
+ 	sp->gfn = gfn;
+ 	sp->role = role;
+@@ -2096,12 +2108,26 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
+ 		if (role.level == PG_LEVEL_4K && kvm_vcpu_write_protect_gfn(vcpu, gfn))
+ 			kvm_flush_remote_tlbs_with_address(vcpu->kvm, gfn, 1);
+ 	}
+-	trace_kvm_mmu_get_page(sp, true);
+-out:
+-	kvm_mmu_commit_zap_page(vcpu->kvm, &invalid_list);
+ 
+-	if (collisions > vcpu->kvm->stat.max_mmu_page_hash_collisions)
+-		vcpu->kvm->stat.max_mmu_page_hash_collisions = collisions;
++	return sp;
++}
++
++static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
++					     union kvm_mmu_page_role role)
++{
++	struct hlist_head *sp_list;
++	struct kvm_mmu_page *sp;
++	bool created = false;
++
++	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
++
++	sp = kvm_mmu_find_shadow_page(vcpu, gfn, sp_list, role);
++	if (!sp) {
++		created = true;
++		sp = kvm_mmu_alloc_shadow_page(vcpu, gfn, sp_list, role);
++	}
++
++	trace_kvm_mmu_get_page(sp, created);
+ 	return sp;
+ }
  
 -- 
 2.36.0.550.gb090851708-goog
