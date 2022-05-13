@@ -2,167 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1635526148
-	for <lists+linux-mips@lfdr.de>; Fri, 13 May 2022 13:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05973526521
+	for <lists+linux-mips@lfdr.de>; Fri, 13 May 2022 16:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379963AbiEMLpO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 May 2022 07:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S1381500AbiEMOqL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 May 2022 10:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379988AbiEMLpF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 May 2022 07:45:05 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D9F66AE8;
-        Fri, 13 May 2022 04:45:04 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id d19so14050150lfj.4;
-        Fri, 13 May 2022 04:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lrkOSYGyb2W5e8iUM5z5KtK2vG4OpEu1byRK8zMbpr4=;
-        b=hdk5ctyCFq20dAvLLQVvmATc9nh/gLK5FRKmtF0qJxZZtXibHJw9r45AlNa1rsEV7T
-         zwbd6akbuu2CharSzyM8gIkxHOZFeLfKMrdX0FIoh7XicFhmd2BX2I+g9AoKqZ4tmsmE
-         ndwmf0WYoer/+z+pK5HWQ2H5z2eTXC1jErOzjaVTHDFU/zfpwjS+KPtvqzMyv1WDPhbv
-         +PIkmHHiuZoRkhoa7JMi0LKsc4a0aMZR9rK8jjd2ZPi8G2xFXHKalylXNCUlCHaZwmo5
-         +WG5sfF/fm0dd85Be6STYv083tuIWFyV4reLUscOg82z/Q2jhL34aESg8Dt+OOYE0bAj
-         SpDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=lrkOSYGyb2W5e8iUM5z5KtK2vG4OpEu1byRK8zMbpr4=;
-        b=REcxcvEdy2dDaCmlzY0JPIrYOxA7kukC9F+LMc3BeWJUbCmUMRo2MRUctKp6kNRs6p
-         ud1X0XdhqNQI0YYNoUWIN2PZPZL4jkLsdxs+wf/jVDvBivKq/VtWZU8OAHgAyLwkgTgx
-         XJeAiXcVkGbyCuBYgNKUqH2NZ9xzD5Q2VcOUmo0dzA7LtXD5tNtm2huYNWMtfwiyWSK4
-         JWjfdRXC123P0j631ymHgDQAmb4FwgKCFSz8vETeoE1NwJIsWE3JpELm80IyVlw6UgqV
-         Utpztte0cu1EIzfdfz7ntR+chCBGHGTay9MXWj6g7yJ8Razb/DD1024PS7ANCJ+Rc5o5
-         66uA==
-X-Gm-Message-State: AOAM531JxuL2lEJbc8f3njXh1Wq5XTuZX5UTj0dXGjHNGcfQea6b99Jk
-        OsfiFWsgYMv7jB1F9Y4lrPw=
-X-Google-Smtp-Source: ABdhPJxChqikX4BilmRZa0+BBqRiME9trRNKbm4ZJLV3xG0dsMbRFGTdEGanqLwyuWZv1OWz16FShA==
-X-Received: by 2002:a05:6512:3045:b0:473:d457:1541 with SMTP id b5-20020a056512304500b00473d4571541mr3230896lfb.308.1652442302168;
-        Fri, 13 May 2022 04:45:02 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id f19-20020a19ae13000000b0047255d211b4sm346402lfc.227.2022.05.13.04.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 04:45:01 -0700 (PDT)
-Date:   Fri, 13 May 2022 14:44:58 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] clk: Baikal-T1 DDR/PCIe resets and some xGMAC
- fixes
-Message-ID: <20220513114458.lgnrrejnwolak5sj@mobilestation>
-References: <20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru>
+        with ESMTP id S1381450AbiEMOp6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 May 2022 10:45:58 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB093C4B7;
+        Fri, 13 May 2022 07:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=A7LCydQD5IYNzaoDGyfG1KKM7tCxGhr7TuWULSo03X0=;
+        t=1652453114; x=1653662714; b=LYs2Kri0cw+/UGCEdaklFX6++OP3d6XjJhLcC02jkMM6M13
+        enCTtLPVnFDCrQRFLX819G3cOwVdjYiBSa9JccmqbQblnXISEdyq/7i5O4aMDV5xAFeJh8X61XWYA
+        3hNxcWPO6okKyPbXVAhEt6WHQ/sVkV0gcWR0C3dCeQWocdHTJKZWVZ25I4x63uWgmbhevhAje3sRQ
+        ynAaFSpM6xFAePbWKVwYY4aWUVh0Ju93mi2MceapTMkNIryb6lt7v4/iXwdFQzg89Tz18COaji5Fq
+        iSqUu6mUSMMlAVO2Bcj32MYDMrCOrP4TWkawclAlZw9o6WbW7KIcYMOBD7zR8fsA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1npWX2-00AdYm-Tp;
+        Fri, 13 May 2022 16:44:41 +0200
+Message-ID: <1760d499824f9ef053af7a8dac04b48ab7d7fd3d.camel@sipsolutions.net>
+Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
+ ordering
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Date:   Fri, 13 May 2022 16:44:36 +0200
+In-Reply-To: <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+         <20220427224924.592546-12-gpiccoli@igalia.com> <Ynp2hRodh04K3pzK@alley>
+         <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru>
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Stephen, Michael
+On Wed, 2022-05-11 at 17:22 -0300, Guilherme G. Piccoli wrote:
+> On 10/05/2022 11:28, Petr Mladek wrote:
+> > [...]
+> > It is not clear to me why user mode linux should not care about
+> > the other notifiers. It might be because I do not know much
+> > about the user mode linux.
+> > 
+> > Is the because they always create core dump or are never running
+> > in a hypervisor or ...?
+> > 
+> > AFAIK, the notifiers do many different things. For example, there
+> > is a notifier that disables RCU watchdog, print some extra
+> > information. Why none of them make sense here?
+> > 
+> 
+> Hi Petr, my understanding is that UML is a form of running Linux as a
+> regular userspace process for testing purposes.
 
-The series has been here for about two months with no comments. Seeing
-the dependent patches won't be merged in before the next merge window,
-could you please merge this series in through your repo?
+Correct.
 
--Sergey
+> With that said, as soon
+> as we exit in the error path, less "pollution" would happen, so users
+> can use GDB to debug the core dump for example.
+> 
+> In later patches of this series (when we split the panic notifiers in 3
+> lists) these UML notifiers run in the pre-reboot list, so they run after
+> the informational notifiers for example (in the default level).
+> But without the list split we cannot order properly, so my gut feeling
+> is that makes sense to run them rather earlier than later in the panic
+> process...
+> 
+> Maybe Anton / Johannes / Richard could give their opinions - appreciate
+> that, I'm not attached to the priority here, it's more about users'
+> common usage of UML I can think of...
 
-On Tue, May 03, 2022 at 11:57:18PM +0300, Serge Semin wrote:
-> This patchset is an initial one in the series created in the framework
-> of my Baikal-T1 PCIe/eDMA-related work:
-> 
-> [1: In-progress v3] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
-> Link: https://lore.kernel.org/linux-pci/20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru/
-> [2: In-progress v1] PCI: dwc: Various fixes and cleanups
-> Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
-> [3: In-progress v1] PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
-> Link: https://lore.kernel.org/linux-pci/20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru/
-> [4: In-progress v1] dmaengine: dw-edma: Add RP/EP local DMA controllers support
-> Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
-> 
-> Since some of the patches in the later patchsets depend on the
-> modifications introduced here, @Lorenzo could you please merge this series
-> through your PCIe subsystem repo? After getting all the required ack'es of
-> course.
-> 
-> Short summary regarding this patchset. A few more modifications are
-> introduced here to finally finish the Baikal-T1 CCU unit support up and
-> prepare the code before adding the Baikal-T1 PCIe/xGMAC support. First of
-> all it turned out I specified wrong DW xGMAC PTP reference clock divider
-> in my initial patches. It must be 8, not 10. Secondly I was wrong to add a
-> joint xGMAC Ref and PTP clock instead of having them separately defined.
-> The SoC manual describes these clocks as separate fixed clock wrappers.
-> Finally in order to close the SoC clock/reset support up we need to add
-> the DDR and PCIe interfaces reset controls support. It's done in two
-> steps. First I've moved the reset-controls-related code into a dedicated
-> module. Then the DDR/PCIe reset-control functionality is added.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v2:
-> - Resubmit the series with adding @Philipp to the list of the recipients.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v3:
-> - Rebased from v5.17 onto v5.18-rc3.
-> - No comments. Just resend the series.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (4):
->   clk: baikal-t1: Fix invalid xGMAC PTP clock divider
->   clk: baikal-t1: Define shared xGMAC ref/ptp clocks parent
->   clk: baikal-t1: Move reset-controls code into a dedicated module
->   clk: baikal-t1: Add DDR/PCIe directly controlled resets support
-> 
->  drivers/clk/baikal-t1/Kconfig       |  12 +-
->  drivers/clk/baikal-t1/Makefile      |   1 +
->  drivers/clk/baikal-t1/ccu-div.c     |   1 +
->  drivers/clk/baikal-t1/ccu-div.h     |   6 +
->  drivers/clk/baikal-t1/ccu-rst.c     | 373 ++++++++++++++++++++++++++++
->  drivers/clk/baikal-t1/ccu-rst.h     |  64 +++++
->  drivers/clk/baikal-t1/clk-ccu-div.c | 102 ++------
->  include/dt-bindings/reset/bt1-ccu.h |   9 +
->  8 files changed, 482 insertions(+), 86 deletions(-)
->  create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
->  create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
-> 
-> -- 
-> 2.35.1
-> 
+It's hard to say ... In a sense I'm not sure it matters?
+
+OTOH something like the ftrace dump notifier (kernel/trace/trace.c)
+might still be useful to run before the mconsole and coredump ones, even
+if you could probably use gdb to figure out the information.
+
+Personally, I don't have a scenario where I'd care about the trace
+buffers though, and most of the others I found would seem irrelevant
+(drivers that aren't even compiled, hung tasks won't really happen since
+we exit immediately, and similar.)
+
+johannes
