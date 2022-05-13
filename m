@@ -2,129 +2,195 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05973526521
-	for <lists+linux-mips@lfdr.de>; Fri, 13 May 2022 16:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C883152693B
+	for <lists+linux-mips@lfdr.de>; Fri, 13 May 2022 20:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381500AbiEMOqL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 May 2022 10:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S1383291AbiEMS1A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 May 2022 14:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381450AbiEMOp6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 May 2022 10:45:58 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB093C4B7;
-        Fri, 13 May 2022 07:45:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=A7LCydQD5IYNzaoDGyfG1KKM7tCxGhr7TuWULSo03X0=;
-        t=1652453114; x=1653662714; b=LYs2Kri0cw+/UGCEdaklFX6++OP3d6XjJhLcC02jkMM6M13
-        enCTtLPVnFDCrQRFLX819G3cOwVdjYiBSa9JccmqbQblnXISEdyq/7i5O4aMDV5xAFeJh8X61XWYA
-        3hNxcWPO6okKyPbXVAhEt6WHQ/sVkV0gcWR0C3dCeQWocdHTJKZWVZ25I4x63uWgmbhevhAje3sRQ
-        ynAaFSpM6xFAePbWKVwYY4aWUVh0Ju93mi2MceapTMkNIryb6lt7v4/iXwdFQzg89Tz18COaji5Fq
-        iSqUu6mUSMMlAVO2Bcj32MYDMrCOrP4TWkawclAlZw9o6WbW7KIcYMOBD7zR8fsA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1npWX2-00AdYm-Tp;
-        Fri, 13 May 2022 16:44:41 +0200
-Message-ID: <1760d499824f9ef053af7a8dac04b48ab7d7fd3d.camel@sipsolutions.net>
-Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
- ordering
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Date:   Fri, 13 May 2022 16:44:36 +0200
-In-Reply-To: <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
-         <20220427224924.592546-12-gpiccoli@igalia.com> <Ynp2hRodh04K3pzK@alley>
-         <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S1383309AbiEMS06 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 May 2022 14:26:58 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7090020185
+        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 11:26:57 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id x52so8347206pfu.11
+        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 11:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f3nBn1LwcriRtnTdKkMxJqrXvUJa99h1XpX9rIbmPsc=;
+        b=RhJ/oVsdfQd/xDIXzKmKW89BkOLc+aB9PbcUuGD8DhE/r1xIp+zmzF5kbvsJgECked
+         iIDCEwz4polbRa9Kza2tvUk6jUn+c10xHR6SCkOweNd9d/plenEL5MksTH2Zx6zNGeKz
+         VBz7ICQbeCFH4zDwa7cyQ5r9phyax2KPG0XaKgy/L4Fae3lWJOYMoavacX6i60ivO2OH
+         Y0H7NAccqvn8wLt+movJmmQXzSIItkXTeqicXrylSCSAfE8CxKsphG4sNpJoRcLavqjo
+         5pjxkAIUhwC6CNq/bIGLGGwFkhGx74uXQXnbfxeKgn7oRxrBFscg5wrIvz11H3AXtWFf
+         EifA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f3nBn1LwcriRtnTdKkMxJqrXvUJa99h1XpX9rIbmPsc=;
+        b=52kO9D73F2UWVmzcsmtQ/HSZu8A2Jw7m6gokyH5baGz6I9SnWR5O87/UeYY2lqMWWm
+         6DnjKrqvma1GvBHxfPmlvBOeE5TQ79/6IfEIVBnjslA6FX+u6J/CVoXuaZcjb1ybRokb
+         g/9JQcJ51TFkmYKSRC9RBLa0LFAoJMhdtuuNn3HC7XChWIayfPi85jpmAf3cS58jli2r
+         2PrUI30m2SOxmqQXZz/aCYHi3RklICmKsEAN93tJx+8nQfkDKWbJat1GOh1Iuh06PbXZ
+         Q6StNrxeE5WWp/gJnGUKdzvdl6zmORwrJhFS6Zp9ijvWQL65xYpqqO2UuLOxdNOhE1Vj
+         szpQ==
+X-Gm-Message-State: AOAM533xH2lpQWLWJaHTh1CciGME7jZoFdu/squIarAu4LKTZ08h4UsL
+        t3r0TYVPyJ4b7/Oy/aLrkirfEQ==
+X-Google-Smtp-Source: ABdhPJx9wMHQkLxpxX6sjpmk8QGYH6lnHrQ2Dj8+GdFaKMu4dvSUQ4p0vrU3A0yjKp68wJ49odGJsA==
+X-Received: by 2002:a63:d747:0:b0:3db:74a9:ff92 with SMTP id w7-20020a63d747000000b003db74a9ff92mr5012769pgi.293.1652466416498;
+        Fri, 13 May 2022 11:26:56 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id i12-20020a17090ad34c00b001d96bc27a57sm1896907pjx.54.2022.05.13.11.26.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 11:26:55 -0700 (PDT)
+Date:   Fri, 13 May 2022 18:26:51 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v4 03/20] KVM: x86/mmu: Derive shadow MMU page role from
+ parent
+Message-ID: <Yn6i6yUkIKyzXb+j@google.com>
+References: <20220422210546.458943-1-dmatlack@google.com>
+ <20220422210546.458943-4-dmatlack@google.com>
+ <75fbbcb6-d9bb-3d30-0bf4-fbf925517d09@gmail.com>
+ <CALzav=dmseUw6khErkiSV7T5K88QvaRvWvBpvrb6VNOQTE3bQQ@mail.gmail.com>
+ <CAJhGHyDQn=atFmn5o2TREW9cSY5Tv1F1vsSekzor6uYQxDgcfQ@mail.gmail.com>
+ <CALzav=e0VnYar=jUr+C=uhVf9O6NDXaHx2rW-+yUocdHVk39Mg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=e0VnYar=jUr+C=uhVf9O6NDXaHx2rW-+yUocdHVk39Mg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 2022-05-11 at 17:22 -0300, Guilherme G. Piccoli wrote:
-> On 10/05/2022 11:28, Petr Mladek wrote:
-> > [...]
-> > It is not clear to me why user mode linux should not care about
-> > the other notifiers. It might be because I do not know much
-> > about the user mode linux.
-> > 
-> > Is the because they always create core dump or are never running
-> > in a hypervisor or ...?
-> > 
-> > AFAIK, the notifiers do many different things. For example, there
-> > is a notifier that disables RCU watchdog, print some extra
-> > information. Why none of them make sense here?
-> > 
+On Thu, May 12, 2022 at 09:10:59AM -0700, David Matlack wrote:
+> On Mon, May 9, 2022 at 7:58 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+> > On Tue, May 10, 2022 at 5:04 AM David Matlack <dmatlack@google.com> wrote:
+> > > On Sat, May 7, 2022 at 1:28 AM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+> > > > On 2022/4/23 05:05, David Matlack wrote:
+> > > > > +     /*
+> > > > > +      * If the guest has 4-byte PTEs then that means it's using 32-bit,
+> > > > > +      * 2-level, non-PAE paging. KVM shadows such guests using 4 PAE page
+> > > > > +      * directories, each mapping 1/4 of the guest's linear address space
+> > > > > +      * (1GiB). The shadow pages for those 4 page directories are
+> > > > > +      * pre-allocated and assigned a separate quadrant in their role.
+> > > >
+> > > >
+> > > > It is not going to be true in patchset:
+> > > > [PATCH V2 0/7] KVM: X86/MMU: Use one-off special shadow page for special roots
+> > > >
+> > > > https://lore.kernel.org/lkml/20220503150735.32723-1-jiangshanlai@gmail.com/
+> > > >
+> > > > The shadow pages for those 4 page directories are also allocated on demand.
+> > >
+> > > Ack. I can even just drop this sentence in v5, it's just background information.
+> >
+> > No, if one-off special shadow pages are used.
+> >
+> > kvm_mmu_child_role() should be:
+> >
+> > +       if (role.has_4_byte_gpte) {
+> > +               if (role.level == PG_LEVEL_4K)
+> > +                       role.quadrant = (sptep - parent_sp->spt) % 2;
+> > +               if (role.level == PG_LEVEL_2M)
+> > +                       role.quadrant = (sptep - parent_sp->spt) % 4;
+> > +       }
+> >
+> >
+> > And if one-off special shadow pages are merged first.  You don't
+> > need any calculation in mmu_alloc_root(), you can just directly use
+> >     sp = kvm_mmu_get_page(vcpu, gfn, vcpu->arch.mmu->root_role);
+> > because vcpu->arch.mmu->root_role is always the real role of the root
+> > sp no matter if it is a normall root sp or an one-off special sp.
+> >
+> > I hope you will pardon me for my touting my patchset and asking
+> > people to review them in your threads.
 > 
-> Hi Petr, my understanding is that UML is a form of running Linux as a
-> regular userspace process for testing purposes.
+> I see what you mean now. If your series is queued I will rebase on top
+> with the appropriate changes. But for now I will continue to code
+> against kvm/queue.
 
-Correct.
+Here is what I'm going with for v5:
 
-> With that said, as soon
-> as we exit in the error path, less "pollution" would happen, so users
-> can use GDB to debug the core dump for example.
-> 
-> In later patches of this series (when we split the panic notifiers in 3
-> lists) these UML notifiers run in the pre-reboot list, so they run after
-> the informational notifiers for example (in the default level).
-> But without the list split we cannot order properly, so my gut feeling
-> is that makes sense to run them rather earlier than later in the panic
-> process...
-> 
-> Maybe Anton / Johannes / Richard could give their opinions - appreciate
-> that, I'm not attached to the priority here, it's more about users'
-> common usage of UML I can think of...
+        /*
+         * If the guest has 4-byte PTEs then that means it's using 32-bit,
+         * 2-level, non-PAE paging. KVM shadows such guests with PAE paging
+         * (i.e. 8-byte PTEs). The difference in PTE size means that
+         * KVM must shadow each guest page table with multiple shadow page
+         * tables, which requires extra bookkeeping in the role.
+         *
+         * Specifically, to shadow the guest's page directory (which covers a
+         * 4GiB address space), KVM uses 4 PAE page directories, each mapping
+         * 1GiB of the address space. @role.quadrant encodes which quarter of
+         * the address space each maps.
+         *
+         * To shadow the guest's page tables (which each map a 4MiB region),
+         * KVM uses 2 PAE page tables, each mapping a 2MiB region. For these,
+         * @role.quadrant encodes which half of the region they map.
+         *
+         * Note, the 4 PAE page directories are pre-allocated and the quadrant
+         * assigned in mmu_alloc_root(). So only page tables need to be handled
+         * here.
+         */
+        if (role.has_4_byte_gpte) {
+                WARN_ON_ONCE(role.level != PG_LEVEL_4K);
+                role.quadrant = (sptep - parent_sp->spt) % 2;
+        }
 
-It's hard to say ... In a sense I'm not sure it matters?
+Then to make it work with your series we can just apply this diff:
 
-OTOH something like the ftrace dump notifier (kernel/trace/trace.c)
-might still be useful to run before the mconsole and coredump ones, even
-if you could probably use gdb to figure out the information.
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index f7c4f08e8a69..0e0e2da2f37d 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2131,14 +2131,10 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, u32 a
+         * To shadow the guest's page tables (which each map a 4MiB region),
+         * KVM uses 2 PAE page tables, each mapping a 2MiB region. For these,
+         * @role.quadrant encodes which half of the region they map.
+-        *
+-        * Note, the 4 PAE page directories are pre-allocated and the quadrant
+-        * assigned in mmu_alloc_root(). So only page tables need to be handled
+-        * here.
+         */
+        if (role.has_4_byte_gpte) {
+-               WARN_ON_ONCE(role.level != PG_LEVEL_4K);
+-               role.quadrant = (sptep - parent_sp->spt) % 2;
++               WARN_ON_ONCE(role.level > PG_LEVEL_2M);
++               role.quadrant = (sptep - parent_sp->spt) % (1 << role.level);
+        }
 
-Personally, I don't have a scenario where I'd care about the trace
-buffers though, and most of the others I found would seem irrelevant
-(drivers that aren't even compiled, hung tasks won't really happen since
-we exit immediately, and similar.)
+        return role;
 
-johannes
+If your series is queued first, I can resend a v6 with this change or Paolo can
+apply it. If mine is queued first then you can include this as part of your
+series.
