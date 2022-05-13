@@ -2,57 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4E5526B44
-	for <lists+linux-mips@lfdr.de>; Fri, 13 May 2022 22:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2FD526B49
+	for <lists+linux-mips@lfdr.de>; Fri, 13 May 2022 22:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384210AbiEMU2m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 May 2022 16:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S1384206AbiEMU2q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 May 2022 16:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384205AbiEMU2k (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 May 2022 16:28:40 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304226C571
-        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 13:28:39 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id v10-20020a17090a0c8a00b001c7a548e4f7so6700332pja.2
-        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 13:28:39 -0700 (PDT)
+        with ESMTP id S1384257AbiEMU2o (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 May 2022 16:28:44 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225FB1275E
+        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 13:28:42 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id l72-20020a63914b000000b003c1ac4355f5so4672686pge.4
+        for <linux-mips@vger.kernel.org>; Fri, 13 May 2022 13:28:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=+Sv7kNyPL5ertkNdZxFciYA9vcaUcEJcKSOobOrADMc=;
-        b=KF23WTkiI+zBOEBWpicHYNDifapajdcg9QdtJGa0p0hr2oVTJ15KwXLosodDzzIb2o
-         Oyi3tLlTSNWU6vVZuopOLg6cqAgsKcoFykFCURldL1C+O2x3mhWkTpQVm+TXngV/OoV9
-         Gz7VOrWz6MUFxqhds+p2IhVXCMXVURJFBQ3uBjsXcRX3bCsnTz1ztDOm4n4AsXWLJRq3
-         wxbpDX0gXUuuqqmNel4WwcDfNEe3UVhZnkjnlvFgJymorYcYGaLeERjf4odNh6rvTNog
-         akSAVTRrMrWLtbRFRez6tyvAD8TgkJ0HvxdJGTP7q5VgBwdN//pZk2ppTOUUSQEe1mSM
-         siDg==
+        bh=fScK4lvuJyuU42NFoLm0OON5ITyyiDkyHzjcV83EFqI=;
+        b=aL+4n5FgxmVKFh7F5Bt67HqG+J2qQUhuBh3wos9f+VD7hGVD81zzElxq/koyhZFgDZ
+         C0tKwovEEPxpqfsZ61X3Eb/sGvbI+f+L0faf+zfVZ+HqpY2CIEtgtr1tIz7WeO1FJk1p
+         I+NO4ghx3JpILB8E/TcsTvWw5Jyx9Xt92B5NPZw5NLQlU/UT+J0zuDWPIVfAvVwjUD2p
+         nomsi78cdRnFpAHBpLmhFmy+0eY23fyI9MB5B4cbBoNa1zgmT8DLuQs/gsgEhnPLrlTB
+         DtqCfD04UG7dmBzDDwFFmG+s0ZJi+Bm9XPs35xhQEsXQh9bjWuZE7sV4YIyj0/aVQyDe
+         hKmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=+Sv7kNyPL5ertkNdZxFciYA9vcaUcEJcKSOobOrADMc=;
-        b=aaRetYN0Oft6oasGIH9YGKqwK1dXe189xrVoMgU8GfU3IqBgXItji1k1wSI+CUDRRM
-         LoSMUy8cuQcWyJ9rysdd2TqEANMv5MvkJyYntuTTlQMOkl6OaDjNYOaNyV3YpaVOZkPi
-         qyImB/zj6IXdmcUfF1nhamiFBM8VSrvlXAarYx/y5g9DO7RWIzRPykRkNLyMCWPcPJL9
-         hsR2ffa9q0txOh8f3IAuvAHzLbV8zndBzzZ3cKU1rHpYOC6fnSEjFBaowOhycAQBAlDL
-         VUesJqexoMF6WPsodDc0bMka19cHzkQJ76p8Lw50i2j9g1wZxzldaMRkuN8IE7bvsox1
-         DRrw==
-X-Gm-Message-State: AOAM532kvaEjTiGVp4tnvyvxuHCt6ELfj1xCN7qnJjrRfxwNvfo2CsHg
-        7DmOU3KrDM7vs6cHm4k6AhgtZ9Zzp6C2bQ==
-X-Google-Smtp-Source: ABdhPJxwhDppDshguB1v/xVRglyKO+xBcau3ctqNCObYm1B3k+tEQ83O8U/DbxoBw0VUkiEwWTds+WnO8qnY9w==
+        bh=fScK4lvuJyuU42NFoLm0OON5ITyyiDkyHzjcV83EFqI=;
+        b=TXN2maIsMF+Ojx7b50wnqlM5z7IUryq0DTeUEZM9i2DCGFnu0r64eYEqsVm8gf8moQ
+         3wCvKiWiNCBI1g4OANuceEteM2YyxXfrvpmwVl9OY8I26TYPfjMg+/E36aQRXBqybFWY
+         krhicfXKRGhQh4p8XIXukfljzSIFymu3N51Fq5ejRL+x9j/ocZ5E52FY3ZYhaafmDOan
+         C0SY8lB7Oufwi4+fqdcKJAkltWwrPI18qPO5R/qwPTTZu7eAw+F+rSra68oCZdL+aUGp
+         bGXixXeWCW7lo7wUJPB8Wf1Me83d5eLjMMOV0W9Br3azV7WJXrIQdGZDXHB2xNDHgZzl
+         Mggw==
+X-Gm-Message-State: AOAM531XRabqOVPMNipkACL1rXsj5pJDwqqN+oszgB3y6kQMjhCHfO2d
+        QCNtnxgwpzKjzn1azPY7XZX7dgnZfqOmFA==
+X-Google-Smtp-Source: ABdhPJxTk2/Hk3H67iJ+ptMF1GJpY+MWXmC2trsgpmoBpCRkxirXB3r44DMKvAFZqafXEXOdnnbKUl0VcVfvLQ==
 X-Received: from dmatlack-heavy.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:19cd])
  (user=dmatlack job=sendgmr) by 2002:a17:90a:8d83:b0:1dd:258c:7c55 with SMTP
- id d3-20020a17090a8d8300b001dd258c7c55mr250783pjo.1.1652473718175; Fri, 13
- May 2022 13:28:38 -0700 (PDT)
-Date:   Fri, 13 May 2022 20:28:03 +0000
+ id d3-20020a17090a8d8300b001dd258c7c55mr250785pjo.1.1652473720072; Fri, 13
+ May 2022 13:28:40 -0700 (PDT)
+Date:   Fri, 13 May 2022 20:28:04 +0000
 In-Reply-To: <20220513202819.829591-1-dmatlack@google.com>
-Message-Id: <20220513202819.829591-6-dmatlack@google.com>
+Message-Id: <20220513202819.829591-7-dmatlack@google.com>
 Mime-Version: 1.0
 References: <20220513202819.829591-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v5 05/21] KVM: x86/mmu: Decompose kvm_mmu_get_page() into
- separate functions
+Subject: [PATCH v5 06/21] KVM: x86/mmu: Consolidate shadow page allocation and initialization
 From:   David Matlack <dmatlack@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
@@ -86,126 +85,74 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Decompose kvm_mmu_get_page() into separate helper functions to increase
-readability and prepare for allocating shadow pages without a vcpu
-pointer.
-
-Specifically, pull the guts of kvm_mmu_get_page() into 2 helper
-functions:
-
-kvm_mmu_find_shadow_page() -
-  Walks the page hash checking for any existing mmu pages that match the
-  given gfn and role.
-
-kvm_mmu_alloc_shadow_page()
-  Allocates and initializes an entirely new kvm_mmu_page. This currently
-  requries a vcpu pointer for allocation and looking up the memslot but
-  that will be removed in a future commit.
+Consolidate kvm_mmu_alloc_page() and kvm_mmu_alloc_shadow_page() under
+the latter so that all shadow page allocation and initialization happens
+in one place.
 
 No functional change intended.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 52 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 39 insertions(+), 13 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 39 +++++++++++++++++----------------------
+ 1 file changed, 17 insertions(+), 22 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 34786244ebad..ce334eaeef22 100644
+index ce334eaeef22..fd749748b280 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2019,16 +2019,16 @@ static void clear_sp_write_flooding_count(u64 *spte)
- 	__clear_sp_write_flooding_count(sptep_to_sp(spte));
+@@ -1690,27 +1690,6 @@ static void drop_parent_pte(struct kvm_mmu_page *sp,
+ 	mmu_spte_clear_no_track(parent_pte);
  }
  
--static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
--					     union kvm_mmu_page_role role)
-+static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm_vcpu *vcpu,
-+						     gfn_t gfn,
-+						     struct hlist_head *sp_list,
-+						     union kvm_mmu_page_role role)
+-static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, bool direct)
+-{
+-	struct kvm_mmu_page *sp;
+-
+-	sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
+-	sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
+-	if (!direct)
+-		sp->gfns = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_gfn_array_cache);
+-	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
+-
+-	/*
+-	 * active_mmu_pages must be a FIFO list, as kvm_zap_obsolete_pages()
+-	 * depends on valid pages being added to the head of the list.  See
+-	 * comments in kvm_zap_obsolete_pages().
+-	 */
+-	sp->mmu_valid_gen = vcpu->kvm->arch.mmu_valid_gen;
+-	list_add(&sp->link, &vcpu->kvm->arch.active_mmu_pages);
+-	kvm_mod_used_mmu_pages(vcpu->kvm, +1);
+-	return sp;
+-}
+-
+ static void mark_unsync(u64 *spte);
+ static void kvm_mmu_mark_parents_unsync(struct kvm_mmu_page *sp)
  {
--	struct hlist_head *sp_list;
- 	struct kvm_mmu_page *sp;
- 	int ret;
- 	int collisions = 0;
- 	LIST_HEAD(invalid_list);
- 
--	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
- 	for_each_valid_sp(vcpu->kvm, sp, sp_list) {
- 		if (sp->gfn != gfn) {
- 			collisions++;
-@@ -2053,7 +2053,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
- 
- 		/* unsync and write-flooding only apply to indirect SPs. */
- 		if (sp->role.direct)
--			goto trace_get_page;
-+			goto out;
- 
- 		if (sp->unsync) {
- 			/*
-@@ -2079,14 +2079,26 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
- 
- 		__clear_sp_write_flooding_count(sp);
- 
--trace_get_page:
--		trace_kvm_mmu_get_page(sp, false);
- 		goto out;
- 	}
- 
-+	sp = NULL;
- 	++vcpu->kvm->stat.mmu_cache_miss;
- 
--	sp = kvm_mmu_alloc_page(vcpu, role.direct);
-+out:
-+	kvm_mmu_commit_zap_page(vcpu->kvm, &invalid_list);
+@@ -2098,7 +2077,23 @@ static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm_vcpu *vcpu,
+ 						      struct hlist_head *sp_list,
+ 						      union kvm_mmu_page_role role)
+ {
+-	struct kvm_mmu_page *sp = kvm_mmu_alloc_page(vcpu, role.direct);
++	struct kvm_mmu_page *sp;
 +
-+	if (collisions > vcpu->kvm->stat.max_mmu_page_hash_collisions)
-+		vcpu->kvm->stat.max_mmu_page_hash_collisions = collisions;
-+	return sp;
-+}
++	sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
++	sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
++	if (!role.direct)
++		sp->gfns = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_gfn_array_cache);
 +
-+static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm_vcpu *vcpu,
-+						      gfn_t gfn,
-+						      struct hlist_head *sp_list,
-+						      union kvm_mmu_page_role role)
-+{
-+	struct kvm_mmu_page *sp = kvm_mmu_alloc_page(vcpu, role.direct);
++	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
++
++	/*
++	 * active_mmu_pages must be a FIFO list, as kvm_zap_obsolete_pages()
++	 * depends on valid pages being added to the head of the list.  See
++	 * comments in kvm_zap_obsolete_pages().
++	 */
++	sp->mmu_valid_gen = vcpu->kvm->arch.mmu_valid_gen;
++	list_add(&sp->link, &vcpu->kvm->arch.active_mmu_pages);
++	kvm_mod_used_mmu_pages(vcpu->kvm, +1);
  
  	sp->gfn = gfn;
  	sp->role = role;
-@@ -2096,12 +2108,26 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
- 		if (role.level == PG_LEVEL_4K && kvm_vcpu_write_protect_gfn(vcpu, gfn))
- 			kvm_flush_remote_tlbs_with_address(vcpu->kvm, gfn, 1);
- 	}
--	trace_kvm_mmu_get_page(sp, true);
--out:
--	kvm_mmu_commit_zap_page(vcpu->kvm, &invalid_list);
- 
--	if (collisions > vcpu->kvm->stat.max_mmu_page_hash_collisions)
--		vcpu->kvm->stat.max_mmu_page_hash_collisions = collisions;
-+	return sp;
-+}
-+
-+static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
-+					     union kvm_mmu_page_role role)
-+{
-+	struct hlist_head *sp_list;
-+	struct kvm_mmu_page *sp;
-+	bool created = false;
-+
-+	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
-+
-+	sp = kvm_mmu_find_shadow_page(vcpu, gfn, sp_list, role);
-+	if (!sp) {
-+		created = true;
-+		sp = kvm_mmu_alloc_shadow_page(vcpu, gfn, sp_list, role);
-+	}
-+
-+	trace_kvm_mmu_get_page(sp, created);
- 	return sp;
- }
- 
 -- 
 2.36.0.550.gb090851708-goog
 
