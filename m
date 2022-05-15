@@ -2,319 +2,312 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3988752723D
-	for <lists+linux-mips@lfdr.de>; Sat, 14 May 2022 16:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2FD1527750
+	for <lists+linux-mips@lfdr.de>; Sun, 15 May 2022 13:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbiENOxJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 14 May 2022 10:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S229585AbiEOLm6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 15 May 2022 07:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbiENOxI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 14 May 2022 10:53:08 -0400
-Received: from out28-1.mail.aliyun.com (out28-1.mail.aliyun.com [115.124.28.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9033A451;
-        Sat, 14 May 2022 07:53:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436291|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0596507-0.000320858-0.940028;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.NkRoEBs_1652539974;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NkRoEBs_1652539974)
-          by smtp.aliyun-inc.com(33.37.71.62);
-          Sat, 14 May 2022 22:52:55 +0800
-Subject: Re: Question about SC16IS752 device tree.
-To:     Rob Herring <robh@kernel.org>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Paul Cercueil <paul@crapouillou.net>, jringle@gridpoint.com,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>, tomasz.mon@camlingroup.com,
-        l.perczak@camlintechnologies.com,
-        Yunian Yang <reimu@sudomaker.com>,
-        =?UTF-8?B?5ZGo5q2j?= <sernia.zhou@foxmail.com>
-References: <7c89db86-4055-90b5-6a67-611410f5759f@wanyeetech.com>
- <ZYNMBR.VDVV3VHFQBMO1@crapouillou.net>
- <04bd0853-7e34-5210-f1b5-f3ea8c35e484@wanyeetech.com>
- <501852E6-6934-4BB2-850C-B53A07580568@goldelico.com>
- <8533f999-f584-ea31-0c44-1ce29c066d88@wanyeetech.com>
- <1B523C47-1F9C-42EE-B242-EF63F89B94F9@goldelico.com>
- <35c60fea-ac74-9d23-51ac-b877a5b4eb86@wanyeetech.com>
- <CAL_Jsq+vAtfOywCry+6A3cEKaKupyAC1aah6LNk+YdWzxtdVeA@mail.gmail.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <b429a5a6-dad5-469b-a32b-8e2b17642586@wanyeetech.com>
-Date:   Sat, 14 May 2022 22:52:53 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+vAtfOywCry+6A3cEKaKupyAC1aah6LNk+YdWzxtdVeA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229941AbiEOLm6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 15 May 2022 07:42:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26C513DD8;
+        Sun, 15 May 2022 04:42:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4863B60F6B;
+        Sun, 15 May 2022 11:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83016C385B8;
+        Sun, 15 May 2022 11:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652614975;
+        bh=7dIbSSC/bm+DplSUSi0xigmR6pbZLkiHLoE4XzIM19M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rpvso4EBNT37tDYBsc9ObnOQUk00vKtVas7WliAOCjUUzdiLbHfFD+h7bwe30PB59
+         UaoTrP/EssBsJ0iT+cG3vQ8D1QeQlBX40eREQ29IBiw5ji1ZdBwnlJPUAf4JXZu1ak
+         kc3N2hlk0cbWjIBTdlAvsttPMDv+u41KescmWnsKxn7rRDO7XyxHgHvqiSHI33HkSB
+         GN68ze6eTNgYMB9IR7l+5/fxcAwfvwb51nvSZILeFEK6Eo6gU12fczb0Yxn/LXs0NL
+         hvND1HuhpGq8NIqc9kCY8yCNM7RbDqvj1mhYepKiGSOoPKrAMCXznvSTz9UG5dZlYp
+         ib4JQWSxVZSRQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nqCeC-00BQ2N-It; Sun, 15 May 2022 12:42:52 +0100
+Date:   Sun, 15 May 2022 12:42:52 +0100
+Message-ID: <87r14v58eb.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v5 20/21] KVM: Allow for different capacities in kvm_mmu_memory_cache structs
+In-Reply-To: <20220513202819.829591-21-dmatlack@google.com>
+References: <20220513202819.829591-1-dmatlack@google.com>
+        <20220513202819.829591-21-dmatlack@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: dmatlack@google.com, pbonzini@redhat.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, seanjc@google.com, drjones@redhat.com, bgardon@google.com, peterx@redhat.com, maciej.szmigiero@oracle.com, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, pfeiner@google.com, jiangshanlai@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
+On Fri, 13 May 2022 21:28:18 +0100,
+David Matlack <dmatlack@google.com> wrote:
+> 
+> Allow the capacity of the kvm_mmu_memory_cache struct to be chosen at
+> declaration time rather than being fixed for all declarations. This will
+> be used in a follow-up commit to declare an cache in x86 with a capacity
+> of 512+ objects without having to increase the capacity of all caches in
+> KVM.
+> 
+> This change requires each cache now specify its capacity at runtime,
+> since the cache struct itself no longer has a fixed capacity known at
+> compile time. To protect against someone accidentally defining a
+> kvm_mmu_memory_cache struct directly (without the extra storage), this
+> commit includes a WARN_ON() in kvm_mmu_topup_memory_cache().
+> 
+> In order to support different capacities, this commit changes the
+> objects pointer array to be dynamically allocated the first time the
+> cache is topped-up.
+> 
+> An alternative would be to lay out the objects array after the
+> kvm_mmu_memory_cache struct, which can be done at compile time. But that
+> change, unfortunately, adds some grottiness to arm64 and riscv, which
+> uses a function-local (i.e.  stack-allocated) kvm_mmu_memory_cache
+> struct. Since C does not allow anonymous structs in functions, the new
+> wrapper struct that contains kvm_mmu_memory_cache and the objects
+> pointer array, must be named, which means dealing with an outer and
+> inner struct. The outer struct can't be dropped since then there would
+> be no guarantee the kvm_mmu_memory_cache struct and objects array would
+> be laid out consecutively on the stack.
 
-On 2022/5/12 下午10:49, Rob Herring wrote:
-> On Tue, May 10, 2022 at 12:53 PM Zhou Yanjie <zhouyanjie@wanyeetech.com> wrote:
->> Hi,
->>
->> On 2022/5/10 下午11:31, H. Nikolaus Schaller wrote:
->>> Hi,
->>>
->>>> Am 10.05.2022 um 04:29 schrieb Zhou Yanjie <zhouyanjie@wanyeetech.com>:
->>>>
->>>> Hi Nikolaus,
->>>>
->>>> On 2022/5/10 上午4:19, H. Nikolaus Schaller wrote:
->>>>> Hi,
->>>>>
->>>>>> Am 09.05.2022 um 20:41 schrieb Zhou Yanjie <zhouyanjie@wanyeetech.com>:
->>>>>>
->>>>>> Hi Paul,
->>>>>>
->>>>>> On 2022/5/10 上午2:13, Paul Cercueil wrote:
->>>>>>> I can't say for sure that it's your problem, but your bluetooth nodes are missing "reg" properties.
->>>>>> Unfortunately it doesn't seem to be the problem here, I added "reg" and
->>>>>> the problem persists, and I've looked at other device trees that contain
->>>>>> "brcm,bcm43438-bt", none of them use "reg", and "reg" is not mentioned in
->>>>>> neither "Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt" nor
->>>>>> "Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml".
->>>>> what happens if you remove the serdev children from DTS? Does the driver create two separate /dev/tty ports? And do they work?
->>>> Yes, there will be two separate /dev/tty ports (ttySC0 and ttySC1), and
->>>> both ports can work normally, but at this time the two bluetooth modules
->>>> are not working.
->>>>
->>>> I guess it is because the driver does not detect bluetooth module nodes,
->>>> so the inability to operate "reset-gpios" and "device-wakeup-gpios" causes
->>>> the bluetooth module to work incorrectly.
->>> I would assume that it is not prepared to handle two serdev subnodes and
->>> assign the right gpios.
->>
->> I found something new now, if I follow the practice in
->> "fsl-ls1012a-frdm.dts"
->> and put the clock node inside the node of SC16IS752:
->>
->> &ssi0 {
->>       status = "okay";
->>
->>       num-cs = <2>;
->>
->>       pinctrl-names = "default";
->>       pinctrl-0 = <&pins_ssi0>;
->>
->>       sc16is752: expander@0 {
->>           compatible = "nxp,sc16is752";
->>           reg = <0>; /* CE0 */
->>           #address-cells = <1>;
->>           #size-cells = <0>;
->>
->>           spi-rx-bus-width = <1>;
->>           spi-tx-bus-width = <1>;
->>           spi-max-frequency = <6000000>;
->>
->>           clocks = <&exclk_sc16is752>;
->>
->>           interrupt-parent = <&gpb>;
->>           interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
->>
->>           gpio-controller;
->>           #gpio-cells = <2>;
->>
->>           exclk_sc16is752: sc16is752 {
->>               compatible = "fixed-clock";
->>               #clock-cells = <0>;
->>               clock-frequency = <48000000>;
->>           };
-> That doesn't look right. This clock source is not part of or coming
-> from the sc16is752. This belongs at the top level.
+You may want to drop this paragraph. Someone interested in the history
+can find it on the list.
 
+> 
+> No functional change intended.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  arch/arm64/kvm/arm.c      |  1 +
+>  arch/arm64/kvm/mmu.c      |  5 ++++-
+>  arch/mips/kvm/mips.c      |  2 ++
+>  arch/riscv/kvm/mmu.c      |  8 ++++----
+>  arch/riscv/kvm/vcpu.c     |  1 +
+>  arch/x86/kvm/mmu/mmu.c    |  9 +++++++++
+>  include/linux/kvm_types.h |  9 +++++++--
+>  virt/kvm/kvm_main.c       | 20 ++++++++++++++++++--
+>  8 files changed, 46 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 7fceb855fa71..aa1e0c1659d4 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -320,6 +320,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>  	vcpu->arch.target = -1;
+>  	bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
+>  
+> +	vcpu->arch.mmu_page_cache.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>  	vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+>  
+>  	/* Set up the timer */
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 53ae2c0640bc..2f2ef6b60ff4 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -764,7 +764,10 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+>  {
+>  	phys_addr_t addr;
+>  	int ret = 0;
+> -	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+> +	struct kvm_mmu_memory_cache cache = {
+> +		.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE,
+> +		.gfp_zero = __GFP_ZERO,
+> +	};
+>  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+>  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
+>  				     KVM_PGTABLE_PROT_R |
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index a25e0b73ee70..45c7179144dc 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -387,6 +387,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>  	if (err)
+>  		goto out_free_gebase;
+>  
+> +	vcpu->arch.mmu_page_cache.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+> +
+>  	return 0;
+>  
+>  out_free_gebase:
+> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> index f80a34fbf102..8c2338ecc246 100644
+> --- a/arch/riscv/kvm/mmu.c
+> +++ b/arch/riscv/kvm/mmu.c
+> @@ -347,10 +347,10 @@ static int stage2_ioremap(struct kvm *kvm, gpa_t gpa, phys_addr_t hpa,
+>  	int ret = 0;
+>  	unsigned long pfn;
+>  	phys_addr_t addr, end;
+> -	struct kvm_mmu_memory_cache pcache;
+> -
+> -	memset(&pcache, 0, sizeof(pcache));
+> -	pcache.gfp_zero = __GFP_ZERO;
+> +	struct kvm_mmu_memory_cache pcache = {
+> +		.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE,
+> +		.gfp_zero = __GFP_ZERO,
+> +	};
+>  
+>  	end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
+>  	pfn = __phys_to_pfn(hpa);
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 6785aef4cbd4..bbcb9d4a04fb 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -94,6 +94,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>  
+>  	/* Mark this VCPU never ran */
+>  	vcpu->arch.ran_atleast_once = false;
+> +	vcpu->arch.mmu_page_cache.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>  	vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+>  
+>  	/* Setup ISA features available to VCPU */
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 4b40fa2e27eb..dad7e19ef8ed 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5803,12 +5803,21 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+>  {
+>  	int ret;
+>  
+> +	vcpu->arch.mmu_pte_list_desc_cache.capacity =
+> +		KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>  	vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
+>  	vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
+>  
+> +	vcpu->arch.mmu_page_header_cache.capacity =
+> +		KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>  	vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+>  	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+>  
+> +	vcpu->arch.mmu_shadowed_info_cache.capacity =
+> +		KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+> +
+> +	vcpu->arch.mmu_shadow_page_cache.capacity =
+> +		KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
+>  	vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+>  
+>  	vcpu->arch.mmu = &vcpu->arch.root_mmu;
+> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> index ac1ebb37a0ff..549103a4f7bc 100644
+> --- a/include/linux/kvm_types.h
+> +++ b/include/linux/kvm_types.h
+> @@ -83,14 +83,19 @@ struct gfn_to_pfn_cache {
+>   * MMU flows is problematic, as is triggering reclaim, I/O, etc... while
+>   * holding MMU locks.  Note, these caches act more like prefetch buffers than
+>   * classical caches, i.e. objects are not returned to the cache on being freed.
+> + *
+> + * The storage for the cache object pointers is allocated dynamically when the
+> + * cache is topped-up. The capacity field defines the number of object pointers
+> + * available after the struct.
+>   */
+>  struct kvm_mmu_memory_cache {
+>  	int nobjs;
+> +	int capacity;
+>  	gfp_t gfp_zero;
+>  	struct kmem_cache *kmem_cache;
+> -	void *objects[KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE];
+> +	void **objects;
+>  };
+> -#endif
+> +#endif /* KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE */
 
-I saw in the "arch/arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts" file 
-that the clock
-node was placed inside the SC16IS752 node, and I found that some 
-RaspberryPi developers
-did the same. I think the reason them do this may be because the clock 
-of SC16IS752 is
-provided by the oscillator circuit inside the chip (an external crystal 
-oscillator is
-required). If you feel this is inappropriate, I will leave the clock 
-node alone.
+One thing that is missing here (and was already missing) is to make it
+plain that kvm_mmu_memory_cache can only be used in contexts where
+there are no concurrent accesses to the cache.
 
+>  
+>  #define HALT_POLL_HIST_COUNT			32
+>  
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index e089db822c12..264e4107e06f 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -371,12 +371,23 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+>  
+>  int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+>  {
+> +	gfp_t gfp = GFP_KERNEL_ACCOUNT;
+>  	void *obj;
+>  
+>  	if (mc->nobjs >= min)
+>  		return 0;
+> -	while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> -		obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> +
+> +	if (WARN_ON(mc->capacity == 0))
+> +		return -EINVAL;
+> +
+> +	if (!mc->objects) {
+> +		mc->objects = kvmalloc_array(sizeof(void *), mc->capacity, gfp);
+> +		if (!mc->objects)
+> +			return -ENOMEM;
+> +	}
+> +
+> +	while (mc->nobjs < mc->capacity) {
+> +		obj = mmu_memory_cache_alloc_obj(mc, gfp);
+>  		if (!obj)
+>  			return mc->nobjs >= min ? 0 : -ENOMEM;
+>  		mc->objects[mc->nobjs++] = obj;
+> @@ -397,6 +408,11 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
+>  		else
+>  			free_page((unsigned long)mc->objects[--mc->nobjs]);
+>  	}
+> +
+> +	kvfree(mc->objects);
+> +
+> +	/* Note, must set to NULL to avoid use-after-free in the next top-up. */
+> +	mc->objects = NULL;
+>  }
+>  
+>  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
 
->
->>           bluetooth@0 {
->>               compatible = "brcm,bcm43438-bt";
->>               reg = <0>;
->>               max-speed = <1000000>;
->>
->>               device-wakeup-gpios = <&gpc 26 GPIO_ACTIVE_HIGH>;
->>               reset-gpios = <&gpb 17 GPIO_ACTIVE_LOW>;
->>           };
->>
->>           bluetooth@1 {
->>               compatible = "brcm,bcm43438-bt";
->>               reg = <1>;
->>               max-speed = <1000000>;
->>
->>               device-wakeup-gpios = <&gpc 28 GPIO_ACTIVE_HIGH>;
->>               reset-gpios = <&gpb 19 GPIO_ACTIVE_LOW>;
->>           };
->>       };
->> };
->>
->> This will cause all bluetooth modules to not work, and if the clock node
->> is moved
->> to the end of the child node, the bluetooth module connected to ttySC0
->> can work
->> normally, which seems to mean that only the first child node can work
->> correctly.
->>
->>
->>
->> And I found this patch:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/drivers/tty/serdev?h=usb-next&id=08fcee289f341786eb3b44e5f2d1dc850943238e
->>
->> It seems to mean that the SC16IS752 driver does not correctly
->> distinguish between
->> the two serial ports, which makes the serdev driver think that the child
->> nodes are
->> on the same serial device bus, which leads to the current problem.
->>
->>
->>>>> Maybe the sc16is752 driver does not separate them for child nodes, i.e. while "reg" should be added it may not be handled?
->>>> I'm not too sure, I'm not very familiar with serial port systems.
->>>> If the truth is what you think, how should I improve it?
->>> Unfortunately I also don't know how the serdev implementation really works.
->>>
->>> It was my nagging to make it happen by persistently proposing a non-universal
->>> solutionsome years ago until one of the maintainers had mercy to write a general
->>> solution. So I could switch my driver to simply use the serdev API. It was for a GPS
->>> client device but not a tty side driver.
->>>
->>> I think if you look up the first patches for the serdev interface this should
->>> reveal the original author an he should be able to help.
->>
->> The original author of the serdev driver is Rob Herring, the original
->> author of the
->> SC16IS752 is Jon Ringle, they are already on the CC list, I also added
->> Johan Hovold
->> and the two authors Tomasz Moń and Lech Percza who sent patches to the
->> sc16is7xx.c
->> driver in this year.
->>
->> Hopefully they can guide us here.
-> I think what needs to happen is of_serdev_register_devices() needs to
-> be passed the port index which can then be used to get the child with
-> a matching address/index.
->
-> There's not any DT binding that defines how this looks. It could be
-> either the slave devices are direct child nodes like you have or each
-> serial port should have a child node for the port and the grandchild
-> nodes are the slave device. I'd suppose it is possible to have
-> multiple devices muxed to a single port (that's what the comment is
-> about and handling muxed devices would require more work in serdev).
-> That binding would end up looking just like the former style and the
-> serdev core could have a hard time figuring out whether it is multiple
-> ports or multiple mux settings. I suppose we would be able to
-> distinguish that with the presence of mux-control binding or not. In
-> any case, all that needs to be considered before we change serdev.
+Otherwise:
 
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-I think it seems that the grandchild node scheme should be more in line 
-with the
-current situation, since on further exploration I found these:
+	M.
 
-/sys/bus/platform/devices/10043000.spi/spi_master/spi0/spi0.0/serial0/serial0-0
-/sys/bus/platform/devices/10043000.spi/spi_master/spi0/spi0.0/serial1/serial1-0
-
-This means that for the SC16IS752 chip there are two serial device buses 
-(one for
-each serial port). The previous experimental results have proved that 
-the current
-driver does not seem to be able to correctly determine the 
-correspondence between
-two child nodes and two serial device buses, and when I removed the 2nd 
-bluetooth
-device (both module hardware and device tree node) and put the clock 
-node alone,
-I got these:
-
-[    1.208848] Bluetooth: HCI UART driver ver 2.3
-[    1.213302] Bluetooth: HCI UART protocol H4 registered
-[    1.220201] hci_uart_bcm serial0-0: No reset resource, using default 
-baud rate
-[    1.227717] Bluetooth: HCI UART protocol Broadcom registered
-[    1.240239] hci_uart_bcm: probe of serial1-0 failed with error -16
-
-The device tree at this time looks like this:
-
-&ssi0 {
-     status = "okay";
-
-     num-cs = <2>;
-
-     pinctrl-names = "default";
-     pinctrl-0 = <&pins_ssi0>;
-
-     sc16is752: expander@0 {
-         compatible = "nxp,sc16is752";
-         reg = <0>; /* CE0 */
-
-         spi-rx-bus-width = <1>;
-         spi-tx-bus-width = <1>;
-         spi-max-frequency = <4000000>;
-
-         clocks = <&exclk_sc16is752>;
-
-         interrupt-parent = <&gpb>;
-         interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
-
-         gpio-controller;
-         #gpio-cells = <2>;
-
-         bluetooth {
-          compatible = "brcm,bcm43438-bt";
-          max-speed = <1000000>;
-
-          device-wakeup-gpios = <&gpc 26 GPIO_ACTIVE_HIGH>;
-          reset-gpios = <&gpb 17 GPIO_ACTIVE_LOW>;
-         };
-     };
-};
-
-I guess this is also because the current driver can't correctly 
-determine the
-correspondence between the child node and the two serial device buses:
-
-Both serial device buses think that this child node corresponds to 
-themselves,
-so they both try to register it, but because now ttySC1 (corresponding 
-to the
-second serial device bus) is not connected to any bluetooth module, 
-resulting
-in registration failure.
-
-If there are child nodes to represent each port, the correspondence between
-the slave devices (grandchild node) and the serial device buses (child node)
-will be very clear. But unfortunately, it seems that the current SC16IS752
-driver does not support this form (at least there is no relevant information
-in the "Example" given in nxp,sc16is7xx.txt).
-
-I'm not too sure what kind of modifications need to be made to the SC16IS752
-driver to achieve this, could you please give me some guidance (or 
-examples)?
-
-
-Thanks and best regards!
-
-
->
-> Rob
+-- 
+Without deviation from the norm, progress is not possible.
