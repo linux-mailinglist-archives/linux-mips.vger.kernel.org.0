@@ -2,103 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB6C528DAE
-	for <lists+linux-mips@lfdr.de>; Mon, 16 May 2022 21:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030335292FE
+	for <lists+linux-mips@lfdr.de>; Mon, 16 May 2022 23:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345272AbiEPTG0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 May 2022 15:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        id S1349416AbiEPViv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 May 2022 17:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345325AbiEPTGK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 May 2022 15:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F31920BD8;
-        Mon, 16 May 2022 12:06:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBB50614CB;
-        Mon, 16 May 2022 19:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83024C385AA;
-        Mon, 16 May 2022 19:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652727967;
-        bh=2Resw6p+2SXUmxtcyRn6SOdYMRyAbxOVblDDKJZfhuk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BSfKI3ipMdkFD4rYZrdaySQegpDAWsCAylzId9ynBGOuOqecfeWt14fH5AoEc7BHS
-         V8gAZ8FUYAWZ7+5K/4PIDrD6pGIIdrV0O2Jn6D6ulUbwttrVFEhG/G9b0Md4pdqADY
-         53Xfp2wtiTvaziCmhPIFbYVTjPjsMkMemaBd4jPHGp7NQtU+tEhOGlW+KsaU0+Uy//
-         GqydFI+z4tPURPZqkSW3aoa95B2I32CoYGYQEgbbShn5S4SKud+VDFCFP1PSKk/hrU
-         wBLkQLJ+Vw6ANisqhMcgiJZpjptSCT72a9hpW4OU0IhEEp1d+2ZA0FAxOElhbv5Pqe
-         BtFm85iRWxmGA==
-Date:   Mon, 16 May 2022 12:06:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, netdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-sh@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        kunit-dev@googlegroups.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, bpf@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 1e1b28b936aed946122b4e0991e7144fdbbfd77e
-Message-ID: <20220516120605.7a6bb562@kernel.org>
-In-Reply-To: <6280f965.kTCPpIEVY9TwoNre%lkp@intel.com>
-References: <6280f965.kTCPpIEVY9TwoNre%lkp@intel.com>
+        with ESMTP id S1349430AbiEPVij (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 May 2022 17:38:39 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4AF419BE
+        for <linux-mips@vger.kernel.org>; Mon, 16 May 2022 14:38:37 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id y32so28076816lfa.6
+        for <linux-mips@vger.kernel.org>; Mon, 16 May 2022 14:38:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RGRQiwR6nMDWdELQLZomuoHgNcB74pq7BSHN33rcyck=;
+        b=IsfR/Ba8Lmb+VJH2OG0mIgzWKLWgJSZ7G3RtQlM9ozVeYj+IjPRW4gphkF+ePx5pPK
+         /ARCnfbfKxB+CrmtIHAtVCy/macGC66sVlMQi2bYubo+LAEtIO2ur2X295UsCC4eOE7v
+         82TwvhmCNXtTf3reKHYT8k0OGZeIsyEqRaJx26mbJ9PuGA9weeVgy1owjHYkgctW2uN4
+         J04QlA82V/guPrOqw6heaj2eGWVasuQemmz6eps1IOJRq+16ntEJ8ldA2QCPV0k9PUqe
+         +2W1gTouJaPx1cvAB/rQVOnqnr4Q4qGiHJtgvdFD2hP4wp1H9uXHLOnm7lsfl8f+cuQj
+         zHVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RGRQiwR6nMDWdELQLZomuoHgNcB74pq7BSHN33rcyck=;
+        b=JRoi26I00B7U7NPPqmstvJ/gVieOxdaa6cf+wtbNufh4JqPHcvz2jD1p854gvj3ePe
+         RyonafVgNilG1SDCfnqPgwL3aCZwMSR11b/dTKmQhi4DdJR16tvUiSsk7AD16Zr6QB4X
+         vClrqXCX69tfxTxqiQvDQdriZm7w+jXKIZpI8mIRBWGpfdT9qwBzD3BKbvf7qD3E1bFh
+         4LNsQxydGiAAwBdXs1HNigP4uaE7Ov/k09yB/kUmMD0w5N9Svf9gbkdaxptnhGVV3JTj
+         09pU+43ZWyk+UCIRDDBowW3kJ+UfKDAQE4ewBKp4XKtjo/rGcyNs/7eaXgJ0c/tpXujI
+         P7qA==
+X-Gm-Message-State: AOAM533owTwcMZj9c4NzDKkmujVr52GVkDvaS9kt1SBwRlTlOIXWhfWs
+        vV15j+PpGOq/dHMRHbUoAsL7I7VzZlvR5HJn4j0Lfg==
+X-Google-Smtp-Source: ABdhPJzhERAS9lHQHB6Dz/Db29pEQFX1daKzVrhh48FjaZbwCqNewI9tJhfWv44RYQoQCBR3iXMGVI6TmcXJ2YsQ79g=
+X-Received: by 2002:ac2:5399:0:b0:472:1f95:85df with SMTP id
+ g25-20020ac25399000000b004721f9585dfmr14058450lfh.102.1652737115690; Mon, 16
+ May 2022 14:38:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513202819.829591-1-dmatlack@google.com> <20220513202819.829591-4-dmatlack@google.com>
+ <CAJhGHyAU_5Esn6i-eeBNKOh4XenOc9_1aiF8N0+CeMF5yyhxew@mail.gmail.com>
+In-Reply-To: <CAJhGHyAU_5Esn6i-eeBNKOh4XenOc9_1aiF8N0+CeMF5yyhxew@mail.gmail.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 16 May 2022 14:38:09 -0700
+Message-ID: <CALzav=cOS580FMr3zoDT+efYaBDSPSq+m84a1jQBv+jt3xvnqA@mail.gmail.com>
+Subject: Re: [PATCH v5 03/21] KVM: x86/mmu: Derive shadow MMU page role from parent
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 15 May 2022 21:00:21 +0800 kernel test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> branch HEAD: 1e1b28b936aed946122b4e0991e7144fdbbfd77e  Add linux-next specific files for 20220513
-> 
-> Error/Warning reports:
-> 
-> https://lore.kernel.org/linux-mm/202204181931.klAC6fWo-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202204291924.vTGZmerI-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205031017.4TwMan3l-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205041248.WgCwPcEV-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205122113.uLKzd3SZ-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205150051.3RzuooAG-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205150117.sd6HzBVm-lkp@intel.com
-> https://lore.kernel.org/lkml/202205100617.5UUm3Uet-lkp@intel.com
-> https://lore.kernel.org/llvm/202204210555.DNvfHvIb-lkp@intel.com
-> https://lore.kernel.org/llvm/202205060132.uhqyUx1l-lkp@intel.com
-> https://lore.kernel.org/llvm/202205120010.zWBednzM-lkp@intel.com
-> https://lore.kernel.org/llvm/202205141122.qihFGUem-lkp@intel.com
-> 
-> Error/Warning: (recently discovered and may have been fixed)
-> 
-> <command-line>: fatal error: ./include/generated/utsrelease.h: No such file or directory
-> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
-> arch/x86/kvm/pmu.h:20:32: warning: 'vmx_icl_pebs_cpu' defined but not used [-Wunused-const-variable=]
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5102:7: warning: variable 'allow_lttpr_non_transparent_mode' set but not used [-Wunused-but-set-variable]
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5147:6: warning: no previous prototype for function 'dp_parse_lttpr_mode' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1364:5: warning: no previous prototype for 'amdgpu_discovery_get_mall_info' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1983:6: warning: no previous prototype for function 'gfx_v11_0_rlc_stop' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/soc21.c:171:6: warning: no previous prototype for 'soc21_grbm_select' [-Wmissing-prototypes]
-> drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: 'ssd130x_spi_table' defined but not used [-Wunused-const-variable=]
-> drivers/hwmon/nct6775-platform.c:199:9: sparse:    unsigned char
-> drivers/hwmon/nct6775-platform.c:199:9: sparse:    void
-> drivers/video/fbdev/omap/hwa742.c:492:5: warning: no previous prototype for 'hwa742_update_window_async' [-Wmissing-prototypes]
-> fs/buffer.c:2254:5: warning: stack frame size (2144) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
-> fs/ntfs/aops.c:378:12: warning: stack frame size (2224) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
-> kernel/trace/fgraph.c:37:12: warning: no previous prototype for 'ftrace_enable_ftrace_graph_caller' [-Wmissing-prototypes]
-> kernel/trace/fgraph.c:46:12: warning: no previous prototype for 'ftrace_disable_ftrace_graph_caller' [-Wmissing-prototypes]
+On Sun, May 15, 2022 at 11:55 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+>
+> On Sat, May 14, 2022 at 4:28 AM David Matlack <dmatlack@google.com> wrote:
+>
+> > -static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, gva_t gva,
+> > +static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
+> >                             u8 level, bool direct)
+> >  {
+> > +       union kvm_mmu_page_role role;
+> >         struct kvm_mmu_page *sp;
+> >
+> > -       sp = kvm_mmu_get_page(vcpu, gfn, gva, level, direct, ACC_ALL);
+> > +       role = vcpu->arch.mmu->root_role;
+> > +       role.level = level;
+> > +       role.direct = direct;
+> > +       role.access = ACC_ALL;
+> > +
+> > +       if (role.has_4_byte_gpte)
+> > +               role.quadrant = quadrant;
+> > +
+> > +       if (level <= vcpu->arch.mmu->cpu_role.base.level)
+> > +               role.passthrough = 0;
+> > +
+>
+>
+>
+> +       role.level = level;
+> +
+> +       if (role.has_4_byte_gpte)
+> +               role.quadrant = quadrant;
+>
+> Only these lines are needed because of mmu->pae_root, others are
+> the same as vcpu->arch.mmu->root_role.
+>
+> The argument @direct is vcpu->arch.mmu->root_role.direct.
+> vcpu->arch.mmu->root_role.access is always set to be ACC_ALL.
+>
+> vcpu->arch.mmu->root_role.passthrough is 0 when mmu->pae_root is used.
+> Or if vcpu->arch.mmu->root_role.passthrough is 1, @level must be 5
+> and vcpu->arch.mmu->cpu_role.base.level must be 4, the code here
+> is useless.
 
-Is this report CCed everywhere or there's a reason why netdev@ is CCed?
-I'm trying to figure out we need to care and it's not obvious..
+Ah, thank you for the tip. That is cleaner.
