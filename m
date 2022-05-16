@@ -2,161 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4679528774
-	for <lists+linux-mips@lfdr.de>; Mon, 16 May 2022 16:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C06452878B
+	for <lists+linux-mips@lfdr.de>; Mon, 16 May 2022 16:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244677AbiEPOt0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 May 2022 10:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S244725AbiEPOuW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 May 2022 10:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244671AbiEPOtZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 May 2022 10:49:25 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EBD2EA21
-        for <linux-mips@vger.kernel.org>; Mon, 16 May 2022 07:49:24 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id ds11so3110780pjb.0
-        for <linux-mips@vger.kernel.org>; Mon, 16 May 2022 07:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JQA1CAM9EcNlBvTilQjyrtgzNtDUyC6fSOZfEYDNvqw=;
-        b=Ofiyf21IY/JWacyt2sm4b5JqGuuC4xCXQfaviI0AIJLTpd/Oflx9mf4AgU0jPq/he9
-         P8q38uagOiSBPUbhhVCO3xI8wFi0ws+7XMFVjOWAvczYAZ33OeUVSPMA8IVoEmfTxavH
-         +Jh+8dMsZkVLYRmnNIWBfjKQFw8nAEdqSzfrse3j8qFBus5uBYj6xSSRx79YbRUTr+10
-         8B536NcDWQLKPoDEy+LDdo2lk4qv4nAC0OGBKT90rawf8LvkqU6R1Si7o1p8XjJnsjqN
-         GT9r+zrdlv0EmZI6VxVd3V7k7fmzQe0uepCQluN6+sScjYoFjch6hclfAYUVyNMTtadf
-         qwxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JQA1CAM9EcNlBvTilQjyrtgzNtDUyC6fSOZfEYDNvqw=;
-        b=kjSTvpCudj5DlD76fjgbKW+vLYquuzxUqtL1Ra8zdZX/74Gx4VGBFUSe8jrLErXMnQ
-         /zc69YxGXdjLLLxZqIhIqy5AHGHlHk0vsEPBGG9tYF8sUdskn+8QSdeN9iBcyWSvkhjz
-         88mqYh8JHj1iqO5xWnqLUxuJ4Aoa67DMcYDurER1QkXq6uZw1quPeTx2WL0SHj7wrvGO
-         41tlKOkezLtAM3qtuqSAXzRPFtMLC0ct2H31zBmyc9ZB7DbDhkSWBIERGpLZo64wpeYL
-         abW+FRYUivr7pAp/tJpu6/lgmm3B/3xUiozJXAPLBCoCqz/r/ELAVXL8vVCt3U37q0fd
-         ivcw==
-X-Gm-Message-State: AOAM5312NRqBx8DSIq+afkNqaYThKGIdyKTbR+fUL+dvenmcXC7GQh0E
-        1MKQ1+srlperufAYI/3is6ILtA==
-X-Google-Smtp-Source: ABdhPJzWW2D4IvLQy4A8frhcp8tSvPwynf61rQPofCvBwMRNuG9eI1HYcmZ1MomMsjCVF1GmR1hHDA==
-X-Received: by 2002:a17:903:2d0:b0:14d:8a8d:cb1 with SMTP id s16-20020a17090302d000b0014d8a8d0cb1mr17896959plk.50.1652712563657;
-        Mon, 16 May 2022 07:49:23 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id jc13-20020a17090325cd00b001618b4d86b3sm1609217plb.180.2022.05.16.07.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 07:49:23 -0700 (PDT)
-Date:   Mon, 16 May 2022 14:49:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v5 20/21] KVM: Allow for different capacities in
- kvm_mmu_memory_cache structs
-Message-ID: <YoJkb7oMEz0v1dnp@google.com>
-References: <20220513202819.829591-1-dmatlack@google.com>
- <20220513202819.829591-21-dmatlack@google.com>
+        with ESMTP id S244747AbiEPOuS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 May 2022 10:50:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152E32ED56;
+        Mon, 16 May 2022 07:50:15 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8A0901FB39;
+        Mon, 16 May 2022 14:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652712613; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KQiIlBeAtlsgCeLOjjHzTpkuGh7+XAuIIUDB14idFd4=;
+        b=S4QT9bHIulh2DX7+Td1E1eHZ8ylXqLGd87dgOU5qON7f0TC2viT1I31ABT9u1YFo+zVF7s
+        CRf1jIcOXQaAUTOOLTnLyfyBeX0en2TY7mgyp7gvJnFWNhPu01YU8FRcK1p4/UGj8Io8lk
+        XM2tY8ZdnQQ59J0fQXUB5igw6KG7gMQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0B9D32C142;
+        Mon, 16 May 2022 14:50:13 +0000 (UTC)
+Date:   Mon, 16 May 2022 16:50:12 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, akpm@linux-foundation.org,
+        bhe@redhat.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
+        stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com,
+        vkuznets@redhat.com, will@kernel.org
+Subject: Re: [PATCH 23/30] printk: kmsg_dump: Introduce helper to inform
+ number of dumpers
+Message-ID: <YoJkpAp8XdS7ROgd@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-24-gpiccoli@igalia.com>
+ <20220510134014.3923ccba@gandalf.local.home>
+ <c8818906-f113-82b6-b58b-d47ae0c16b4f@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513202819.829591-21-dmatlack@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c8818906-f113-82b6-b58b-d47ae0c16b4f@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 13, 2022, David Matlack wrote:
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 53ae2c0640bc..2f2ef6b60ff4 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -764,7 +764,10 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
->  {
->  	phys_addr_t addr;
->  	int ret = 0;
-> -	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-> +	struct kvm_mmu_memory_cache cache = {
-> +		.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE,
-> +		.gfp_zero = __GFP_ZERO,
+On Wed 2022-05-11 17:03:51, Guilherme G. Piccoli wrote:
+> On 10/05/2022 14:40, Steven Rostedt wrote:
+> > On Wed, 27 Apr 2022 19:49:17 -0300
+> > "Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
+> > 
+> >> Currently we don't have a way to check if there are dumpers set,
+> >> except counting the list members maybe. This patch introduces a very
+> >> simple helper to provide this information, by just keeping track of
+> >> registered/unregistered kmsg dumpers. It's going to be used on the
+> >> panic path in the subsequent patch.
+> > 
+> > FYI, it is considered "bad form" to reference in the change log "this
+> > patch". We know this is a patch. The change log should just talk about what
+> > is being done. So can you reword your change logs (you do this is almost
+> > every patch). Here's what I would reword the above to be:
+> > 
+> >  Currently we don't have a way to check if there are dumpers set, except
+> >  perhaps by counting the list members. Introduce a very simple helper to
+> >  provide this information, by just keeping track of registered/unregistered
+> >  kmsg dumpers. This will simplify the refactoring of the panic path.
+> 
+> Thanks for the hint, you're right - it's almost in all of my patches.
+> I'll reword all of them (except the ones already merged) to remove this
+> "bad form".
 
-I dislike requiring all users to specificy the capacity.  It largely defeats the
-purpose of KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE, and bleeds details into code that
-really doesn't care all that much about the details.
+Shame on me that I do not care that much about the style of the commit
+message :-)
 
-Rather than force the capacity to be set before topup, what about adding a custom
-capacity topup helper?  That allows keeping a default capacity, better documents
-the caches that are special, and provides an opportunity to sanity check that the
-capacity isn't incorrectly changed by the user.  
+Anyway, the code looks good to me. With the better commit message:
 
-And then I believe this code becomes:
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-	struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
-
-E.g. (completely untested)
-
-static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc,
-					int capacity, int min)
-{
-	gfp_t gfp = GFP_KERNEL_ACCOUNT;
-	void *obj;
-
-	if (mc->nobjs >= min)
-		return 0;
-
-	if (likely(mc->capacity)) {
-		if (WARN_ON_ONCE(mc->capacity != capacity || !mc->objects))
-			return -EIO;
-	} else {
-		mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-		if (!mc->objects)
-			return -ENOMEM;
-
-		mc->capacity = capacity;
-	}
-
-	while (mc->nobjs < mc->capacity) {
-		obj = mmu_memory_cache_alloc_obj(mc, gfp);
-		if (!obj)
-			return mc->nobjs >= min ? 0 : -ENOMEM;
-		mc->objects[mc->nobjs++] = obj;
-	}
-	return 0;
-}
-
-int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-{
-	const int capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
-
-	return __kvm_mmu_topup_memory_cache(mc, capacity, min);
-}
-
-int kvm_mmu_topup_custom_memory_cache(struct kvm_mmu_memory_cache *mc,
-				      int capacity)
-{
-	return __kvm_mmu_topup_memory_cache(mc, capacity, capacity);
-}
-
+Best Regards,
+Petr
