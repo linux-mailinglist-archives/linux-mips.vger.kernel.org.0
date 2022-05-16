@@ -2,122 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E26C527DEB
-	for <lists+linux-mips@lfdr.de>; Mon, 16 May 2022 08:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48F1528113
+	for <lists+linux-mips@lfdr.de>; Mon, 16 May 2022 11:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234700AbiEPGzK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 May 2022 02:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S240813AbiEPJwj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 May 2022 05:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240581AbiEPGzJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 May 2022 02:55:09 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42E9366B5;
-        Sun, 15 May 2022 23:55:07 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id e78so4304874ybc.12;
-        Sun, 15 May 2022 23:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1dK2edFTU6ZA396mt6VL7asKfbqNWslhLCJG//w22WE=;
-        b=WVYfP4NvxnHADNi+hRg6j3xIW9SSgkwiYdcc4w4LkOcObEbK4djJuGbyRgSNXfqRUc
-         /OpAOGbxuX0XJVU+FZAjYzt6GgK2Z+C0SZukTADGxR5J3mtX3I5HAItHwW8nzVi6yVay
-         HO+mhZ0KkyMX4E6/xxDVv1j6XmvTBkZT8N2qrsYsG7VZd30ddAmcKTEEj1X/ekScfmpI
-         E1Ep5yaon/rUT9cGuvuGaHRt+iBlFR1trUiR46MoJ4KR+qtTNUlRRJ4IwqRPhW114le9
-         DMvywKUWPGHv1WSyDW+cMm+0w2JQO+XgUC1uuhm5N/9Lmnaumrt3JJMYnTvjeMSP7ciz
-         o5WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1dK2edFTU6ZA396mt6VL7asKfbqNWslhLCJG//w22WE=;
-        b=7MicOJmpdDTHqAB27PY9Asr0QRToOD2yUMx55i1sDFXFfGk3a6BpFpkKfeYYD2zTqb
-         /e9MtMaW6OLH7x+r5hAsUd7jLUFCQWvtICHNF44zcstLyXbGWa1kmiY1jKiGue0Jey76
-         krGc1m6/gbmiM5qIKyYLBLwj5GP0fUzX7UkiO51xM2S7/Vo8kTt8v5oGU0Hvd0WJUyK8
-         XvJBC0xDzhY6f+br1gBwZDnJxxJftUk7PLz69x2vJq178kBxuf3LFH9IOVw2HeHnVh7R
-         Gu3alvA3/hZSepV4iQEnndjF5P/wVubCTfy+ve/C34gigDvoSQsdMV9L3yURbhmODpSd
-         cMjQ==
-X-Gm-Message-State: AOAM530Gzqv5QzyogCffv5nqEY2SfhAhcKO/s5ETmuCFRw40g750S49e
-        aopTWZg+mkbfDkHrfINOLbGkVct1rxTa1uMMqM4=
-X-Google-Smtp-Source: ABdhPJzocFzE5rLFilLG6+T+z0h5XBshtuxJ3zJwJJbakycdvZGhiUOe/2JYCMFm7TDfi4FBy+rA24Yx8TOKnCEWpQ0=
-X-Received: by 2002:a25:cf42:0:b0:64d:8800:ade3 with SMTP id
- f63-20020a25cf42000000b0064d8800ade3mr5478053ybg.376.1652684107021; Sun, 15
- May 2022 23:55:07 -0700 (PDT)
+        with ESMTP id S241564AbiEPJwe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 May 2022 05:52:34 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A560AE66
+        for <linux-mips@vger.kernel.org>; Mon, 16 May 2022 02:52:20 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2599F5C0131;
+        Mon, 16 May 2022 05:52:18 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 16 May 2022 05:52:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1652694738; x=
+        1652781138; bh=SZ13pwsy92l3ohFkD5FLOoXYKo+Z0gUBGMWontvhRF4=; b=D
+        ctfXVcC67ar/5yrB0XRJAUnWtcInM1BZW1XYJCxRrQoVLsAz9afpn1vFp8XB1nbC
+        E+yf+xvQfsOJylVjIc17ltlcx4VQIem9OjA/iBiXEY0boyzMezl41t+b5jUinYo/
+        CKhH1NGkEFhVQ8QRTEmGStxFU6X+kloQ3QjaxarBUj5/Lq1nzel+iYJb0QWqrLcP
+        hAqsnPlwTdYXN3EWPR7R17NRHf2XJviLFds7vY58qDQf/b/E/Cr2iHw7b6l02DcB
+        AwSUmDG98hS28Ly2Hhz+V6xJJj2v81ZuScsQv5MvlcdxzBPnkMrcNj0ewPVECkm3
+        8TR6I7H+oFy6O2lAmNFHQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:date:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1652694738; x=1652781138; bh=SZ13pwsy92l3ohFkD5FLOoXYKo+Z
+        0gUBGMWontvhRF4=; b=fJH5r0pTcJNdJPHkHSyuqkbxG8zy4f+1vp+v+3IYxQYb
+        l4rvF3cY0s780G6CrXNxS6hhM2H9GNn986SNKGyVHRDY4BJKwNu75wTcXXRi2Ngg
+        V/3MXx7dF7CxArK35Mdf/NnPtucOQ8DY+1RmeDiJGOq7AlKoM1NuU0Cn9hgZZN+0
+        dsNkT1jHJ3FDQsSmhXf0zUN+SPyZSe581dBzPMcqh53JFAKrlS39RWM4EXEbHWMy
+        9BfyLJ/4HiuhskhCbJ5Yxt9w4AvQxztvwkCq6zmrnWqyDhI1xjLdypiwhv7W7Pss
+        RjKXg6gGyln7dWJckHsihEYlDxSEOfWxy0FNJwDj7w==
+X-ME-Sender: <xms:0R6CYsH5IbsF1SHCAjqcwhRawLhgaLRj7WIGpnRFRK3WAzJZGNdENw>
+    <xme:0R6CYlXZvBdN9XzIT99a9ValIOwZac2zfhDDTPhNAo6zEQkiM48NnzlrIGQmNsXHp
+    -AwJaffk1riMHdPmkU>
+X-ME-Received: <xmr:0R6CYmI_Z84xVuSGv0H2VkChmhCbVVXTyWOBuoruAj3_aqvJDsAPezZ7gMFm7d0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrheehgddulecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepteegvdfgjedvgeetleevudfggffhudelhfegtddvveelgefggeeg
+    vdfhudeggfeknecuffhomhgrihhnpegrohhstgdrihhonecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihg
+    ohgrthdrtghomh
+X-ME-Proxy: <xmx:0R6CYuF0I1SZgITME70Ad8KsG6dyhGgJ_cp0Lybnh5qTcUYnro8C-Q>
+    <xmx:0R6CYiWuysdC14pCiH6qqLbaId0iSx-svCEVJ7kiFqElKFBaeMJ6Mw>
+    <xmx:0R6CYhMAxEov_aDAtyYnd7uGYEVWFkiXjrmiBJBI4W9wQ4kQ9hsHaA>
+    <xmx:0h6CYrcmJOsoHRzxsZro0UCvX8dTLFAA-TRL8F6XjIeFPT1ZCQRERg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 May 2022 05:52:17 -0400 (EDT)
+Message-ID: <bd4731d2-e285-fd47-040f-dc7d9ceaa4bf@flygoat.com>
+Date:   Mon, 16 May 2022 10:52:15 +0100
 MIME-Version: 1.0
-References: <20220513202819.829591-1-dmatlack@google.com> <20220513202819.829591-4-dmatlack@google.com>
-In-Reply-To: <20220513202819.829591-4-dmatlack@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Mon, 16 May 2022 14:54:55 +0800
-Message-ID: <CAJhGHyAU_5Esn6i-eeBNKOh4XenOc9_1aiF8N0+CeMF5yyhxew@mail.gmail.com>
-Subject: Re: [PATCH v5 03/21] KVM: x86/mmu: Derive shadow MMU page role from parent
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: Any Linux MIPS distribution that still supports Lemote Yeeloong?
+Content-Language: en-GB
+To:     Jan Prunk <janprunk@gmail.com>, linux-mips@vger.kernel.org
+References: <CALnoPX5iSE+uNE+fADiSkO-YrPZ+1Dxac5a=Rw012E9hj6Gr=w@mail.gmail.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <CALnoPX5iSE+uNE+fADiSkO-YrPZ+1Dxac5a=Rw012E9hj6Gr=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, May 14, 2022 at 4:28 AM David Matlack <dmatlack@google.com> wrote:
+Hi,
 
-> -static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, gva_t gva,
-> +static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
->                             u8 level, bool direct)
->  {
-> +       union kvm_mmu_page_role role;
->         struct kvm_mmu_page *sp;
+AOSC/Retro[1] supports Yeeloong presently.
+Their package are updated annually so you may not expect it to be a
+state-of-art distro but it provides modern Linux desktop experiences.
+
+Thanks
+- Jiaxun
+
+[1]: https://wiki.aosc.io/aosc-os/retro/intro/
+
+在 2022/5/15 18:14, Jan Prunk 写道:
+> Hello,
 >
-> -       sp = kvm_mmu_get_page(vcpu, gfn, gva, level, direct, ACC_ALL);
-> +       role = vcpu->arch.mmu->root_role;
-> +       role.level = level;
-> +       role.direct = direct;
-> +       role.access = ACC_ALL;
-> +
-> +       if (role.has_4_byte_gpte)
-> +               role.quadrant = quadrant;
-> +
-> +       if (level <= vcpu->arch.mmu->cpu_role.base.level)
-> +               role.passthrough = 0;
-> +
+> I am interested, if there is a Linux distribution that still has an
+> active (updated) port for the Loongson2f based Lemote Yeeloong 8089B
+> computer? AFAIK I was only able to find the active port in Gentoo, but
+> haven't tried it yet.
+>
+> Best regards,
+> Jan
 
-
-
-+       role.level = level;
-+
-+       if (role.has_4_byte_gpte)
-+               role.quadrant = quadrant;
-
-Only these lines are needed because of mmu->pae_root, others are
-the same as vcpu->arch.mmu->root_role.
-
-The argument @direct is vcpu->arch.mmu->root_role.direct.
-vcpu->arch.mmu->root_role.access is always set to be ACC_ALL.
-
-vcpu->arch.mmu->root_role.passthrough is 0 when mmu->pae_root is used.
-Or if vcpu->arch.mmu->root_role.passthrough is 1, @level must be 5
-and vcpu->arch.mmu->cpu_role.base.level must be 4, the code here
-is useless.
