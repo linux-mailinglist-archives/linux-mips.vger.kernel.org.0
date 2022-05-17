@@ -2,127 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140BF52A113
-	for <lists+linux-mips@lfdr.de>; Tue, 17 May 2022 14:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED40E52A29D
+	for <lists+linux-mips@lfdr.de>; Tue, 17 May 2022 15:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345700AbiEQMCZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 May 2022 08:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
+        id S1346085AbiEQNFN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 May 2022 09:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345715AbiEQMCD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 May 2022 08:02:03 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521542A709;
-        Tue, 17 May 2022 05:01:42 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id d15so30885934lfk.5;
-        Tue, 17 May 2022 05:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1XEfcTfh5IBE4Hjq7tgRfCnyVEzUbgopQ2XduZTHdoY=;
-        b=JsoIPfQZlAqsSaswROdKslKyG/uZD3znk3WFv+pc2Cjlwgs8av4+twevvWm9xqngtE
-         qBhT3LmHzN93yhSzjBckOWuSoOj162DzbXzGdHMCi/7byVkjMITOwZmsw6YVsTOzErB9
-         9EuPWUL9A9mpwqNpFhrPEA54Ptp+D4/cNopmpOQ8FTtxb6+s1HC0s7l216032h2qixBK
-         sb8mtRG0V/p8VmT09slzOqk5HZqLRy5QSAY4MYtZnNFTKcH3Ji0Q/+BXg/7gzrnJffWe
-         NVYUDdSkUj5q97JDjff9uT2Rcu3hNEuao+cEWu1KzvAm/tmUGjQLndkq4v4+yNrCKisU
-         EnOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1XEfcTfh5IBE4Hjq7tgRfCnyVEzUbgopQ2XduZTHdoY=;
-        b=FEDV0CCHg7TFvP7STxFHLuQk0p8x9CRoVR3o3qoGsW4fcH3XLG4vfdzDjTKJ6WSURq
-         jJFe4xlbj7jIg3aLwJMwWPUQXlD+FaHOcFvfl/aCqz79yWFp4BfkBTmv2GVeK14CF2mR
-         30s5wt53yrAAiNqmEcuUQsVAx6ZdfR7jBuMTso/8ZPSdR/LcAA+a70TEbx0hRTIvncI7
-         yx884dmeG6n/43pPyiBnTBZXWZO6ZthkIA6qGgJA+8bmckLSHDM1jIYVxG2u1LV9Tg9S
-         jX2MZHT9jnSejIH2kg4ZDXjzFVtHhr66mk02cvxHHw1R1yUAGp0f4OAlrbChVgLsFwdS
-         LHIQ==
-X-Gm-Message-State: AOAM5307vUiZzyM1EBZ1IK0U2mbI7rcRSmyH2YCtziMduJzpKh50ocDl
-        7L2eq/06j7NIx3940M6+kas=
-X-Google-Smtp-Source: ABdhPJyw6crfKTxgnFRCnsGY6+gLCyX9jN1UKVLmG7EouLUk9AG2WbNzvsc1rSStulGPSfMQci/JcA==
-X-Received: by 2002:a05:6512:b10:b0:477:a556:4ab6 with SMTP id w16-20020a0565120b1000b00477a5564ab6mr1938339lfu.385.1652788898914;
-        Tue, 17 May 2022 05:01:38 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id p17-20020a2eb7d1000000b0024f3d1dae8csm1869603ljo.20.2022.05.17.05.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 05:01:38 -0700 (PDT)
-Date:   Tue, 17 May 2022 15:01:36 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] clk: baikal-t1: Move reset-controls code into a
- dedicated module
-Message-ID: <20220517120136.mg6ihyzjb6rme6lc@mobilestation>
-References: <20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru>
- <20220503205722.24755-4-Sergey.Semin@baikalelectronics.ru>
- <20220517073729.2FAE2C385B8@smtp.kernel.org>
+        with ESMTP id S1346828AbiEQNE7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 May 2022 09:04:59 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482551583A;
+        Tue, 17 May 2022 06:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7k65fdRTQg/wflBs9f0TJRvKoWTammEy4iwKmtzcPs4=; b=OpLRZBE1TUxWd4SJevol7qmbWp
+        7cf/63XEfW1McNr9yfxJ/wNA5PzTA6GfEDtrBWeHePG4UP9vT004IKq/Y2n1Wdo9PCU8d40cNtPr7
+        evvA1G/GsHzDMrD3kL1RWnjHzehDzDywj5u53TN0tmnpdWb3jYfL8mY4Uh+43rmflK1PctID/9pFc
+        ZvUCbSUysCdoW+hfAZNQhZbT4OFisfS/H/quOUTTDHZ+I5zaEEC4729JtousRNxBxXebYRI1Dcqzp
+        PvSzoHit05E/cq1DK95qfXV5U60l7efTEeM0sV+06rVod3szWCADFSxvFodt56BQEE6VcTzDLc2Bf
+        FOG6Wfyw==;
+Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nqwrY-008RNM-0M; Tue, 17 May 2022 15:03:44 +0200
+Message-ID: <53ceb2c7-f2d7-3b92-4efa-a063487585bc@igalia.com>
+Date:   Tue, 17 May 2022 10:03:13 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517073729.2FAE2C385B8@smtp.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 05/30] misc/pvpanic: Convert regular spinlock into trylock
+ on panic path
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-6-gpiccoli@igalia.com> <YnpXGOXicwdy1E6n@alley>
+ <0a20dd06-f459-638e-cb4d-8255ab1a1f23@igalia.com> <YoN/x2fpdDU4+nSB@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoN/x2fpdDU4+nSB@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 17, 2022 at 12:37:26AM -0700, Stephen Boyd wrote:
-> Quoting Serge Semin (2022-05-03 13:57:21)
-> > Before adding the directly controlled resets support it's reasonable to
-> > move the existing resets control functionality into a dedicated object for
-> > the sake of the CCU dividers clock driver simplification. After the new
-> > functionality is added clk-ccu-div.c would have got to a mixture of the
-> > weakly dependent clocks and resets methods. Splitting the methods up into
-> > the two objects will make code easier to read especially seeing it isn't
-> > that hard to do.
-> > 
-> > As before the CCU reset module will support the trigger-like CCU resets
-> > only, which are responsible for the AXI-bus, APB-bus and SATA-ref blocks
-> > reset. The assert/de-assert-capable reset controls support will be added
-> > in the next commit.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/clk/baikal-t1/Kconfig       |  12 +-
-> >  drivers/clk/baikal-t1/Makefile      |   1 +
-> >  drivers/clk/baikal-t1/ccu-rst.c     | 258 ++++++++++++++++++++++++++++
-> >  drivers/clk/baikal-t1/ccu-rst.h     |  60 +++++++
-> >  drivers/clk/baikal-t1/clk-ccu-div.c |  94 ++--------
+On 17/05/2022 07:58, Petr Mladek wrote:
+> [...]
+>> Thanks for the review Petr. Patch was already merged - my goal was to be
+>> concise, i.e., a patch per driver / module, so the patch kinda fixes
+>> whatever I think is wrong with the driver with regards panic handling.
+>>
+>> Do you think it worth to remove this patch from Greg's branch just to
+>> split it in 2? Personally I think it's not worth, but opinions are welcome.
+> 
+> No problem. It is not worth the effort.
 > 
 
-> Perhaps this should be done via the auxiliary bus by having the clk
-> driver register the reset driver and have some private API to pass any
-> data to the reset driver? Then the whole file could be in
-> drivers/reset/, reviewed and maintained by the reset maintainer.
+OK, perfect!
 
-I'd rather stick to the current design in the same way as the most of
-the OF-based platform clock drivers. Completely splitting the reset
-and clock parts isn't that easy is it seems like (though the main part
-has been done in the framework of this patchset). AXI/APB-interface
-reset controls are tightly coupled with the AXI/APB-clock domains at
-least by having the same CSRs. Due to that the corresponding AXI-clock
-domains reset functionality will need to be left in the
-drivers/clk/baikal-t1/clk-ccu* module. It makes the movement isn't
-that justified and will result in needless code complications and the
-code coherency worsening.
+Cheers,
 
--Sergey
+
+Guilherme
