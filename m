@@ -2,43 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131F352B439
-	for <lists+linux-mips@lfdr.de>; Wed, 18 May 2022 10:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E7452BC16
+	for <lists+linux-mips@lfdr.de>; Wed, 18 May 2022 16:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbiERH7y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 May 2022 03:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S237529AbiERNKl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 May 2022 09:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbiERH6Y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 May 2022 03:58:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB051207E6;
-        Wed, 18 May 2022 00:58:22 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1B35021B9A;
-        Wed, 18 May 2022 07:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652860701; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QH8rZRpDaB1rKzYBSvbHTkuJfXIZgq5PPOEyov0S61g=;
-        b=T0gGp12c0pU5b8b1i3GTuIGm3SeP3EhRpXPECQNn/enftlsKdapz4VZkfCcS2uIPqM17q+
-        /PBA3AVHUNLBKEckN04LlFAw1RfXD18Ad2wMfhhColdg9InPjS0Cl4zZnO5bfZL0Ln9Soj
-        5NqvLRJqL5BZI+4DmlPHTXzoYIVJS4o=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0683D2C142;
-        Wed, 18 May 2022 07:58:19 +0000 (UTC)
-Date:   Wed, 18 May 2022 09:58:18 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        with ESMTP id S237535AbiERNKb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 May 2022 09:10:31 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4A219FB2A;
+        Wed, 18 May 2022 06:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Du0yR9uhHpKwWrKsjoqMfifs7bCXApVmJcTLKS159Q8=; b=KR8Ca3qzn6Prru2b2ovD3a5c88
+        3Yl32PXNgwJAzJv1K+GwtALbIi3R7PHWPogPI//mjA46BacEdcFlczlu7VgbqBbi0iRFln4dhAmL3
+        5vAwoEH2Y5npRXnrsBS0Pt1IPEFHpxBOrNJbK+CGAUFY1mpA/Xk/bDS+XL+ITQtGq3i57YSw2ze27
+        6u/aeZyJiDji8Ld6K9lb+iY/t9E1NA5TGk8rCRjPY8WXYQAQH85dDOYmikTTt80JzPDf76BhHmUH/
+        IE+yGx2cI+Y6f449JTeHotkEOnM9AIr+trG8kHtj2MTTykTHXqJtKMQ7SzJhAjeP0O52jetyt0xPW
+        XVvP+JXg==;
+Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nrJR1-009xZP-0G; Wed, 18 May 2022 15:09:51 +0200
+Message-ID: <8a1159c6-b4c1-87b9-8a09-6d5696f8f3f4@igalia.com>
+Date:   Wed, 18 May 2022 10:09:06 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Sebastian Reichel <sre@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
         akpm@linux-foundation.org, bhe@redhat.com,
         kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
@@ -92,19 +98,16 @@ Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
         Wang ShaoBo <bobo.shaobowang@huawei.com>,
         Wei Liu <wei.liu@kernel.org>,
         zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
-Message-ID: <YoSnGmBJ3kYs5WMf@alley>
 References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-20-gpiccoli@igalia.com>
- <YoJZVZl/MH0KiE/J@alley>
- <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
- <YoOpyW1+q+Z5as78@alley>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoOpyW1+q+Z5as78@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+ <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
+ <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com> <YoSijKwuwbY9uHxG@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoSijKwuwbY9uHxG@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -113,46 +116,19 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue 2022-05-17 15:57:34, Petr Mladek wrote:
-> On Mon 2022-05-16 12:06:17, Guilherme G. Piccoli wrote:
-> > >> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-> > >> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-> > >> @@ -814,7 +814,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
-> > >>  		goto out;
-> > >>  	}
-> > >>  
-> > >> -	atomic_notifier_chain_register(&panic_notifier_list,
-> > >> +	atomic_notifier_chain_register(&panic_hypervisor_list,
-> > >>  				       &brcmstb_pm_panic_nb);
-> > > 
-> > > I am not sure about this one. It instruct some HW to preserve DRAM.
-> > > IMHO, it better fits into pre_reboot category but I do not have
-> > > strong opinion.
-> > 
-> > Disagree here, I'm CCing Florian for information.
-> > 
-> > This notifier preserves RAM so it's *very interesting* if we have
-> > kmsg_dump() for example, but maybe might be also relevant in case kdump
-> > kernel is configured to store something in a persistent RAM (then,
-> > without this notifier, after kdump reboots the system data would be lost).
+On 18/05/2022 04:38, Petr Mladek wrote:
+> [...]
+> I have answered this in more detail in the other reply, see
+> https://lore.kernel.org/r/YoShZVYNAdvvjb7z@alley
 > 
-> I see. It is actually similar problem as with
-> drivers/firmware/google/gsmi.c.
+> I agree that both notifiers in
+> 
+>     drivers/soc/bcm/brcmstb/pm/pm-arm.c
+>     drivers/firmware/google/gsmi.c
+> 
+> better fit into the hypervisor list after all.
+> 
+> Best Regards,
+> Petr
 
-As discussed in the other other reply, it seems that both affected
-notifiers do not store kernel logs and should stay in the "hypervisor".
-
-> I does similar things like kmsg_dump() so it should be called in
-> the same location (after info notifier list and before kdump).
->
-> A solution might be to put it at these notifiers at the very
-> end of the "info" list or make extra "dump" notifier list.
-
-I just want to point out that the above idea has problems.
-Notifiers storing kernel log need to be treated as kmsg_dump().
-In particular, we would  need to know if there are any.
-We do not need to call "info" notifier list before kdump
-when there is no kernel log dumper registered.
-
-Best Regards,
-Petr
+Perfect, thanks - will keep both in such list for V2.
