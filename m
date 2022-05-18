@@ -2,51 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B9752C4BF
-	for <lists+linux-mips@lfdr.de>; Wed, 18 May 2022 22:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6431152C4ED
+	for <lists+linux-mips@lfdr.de>; Wed, 18 May 2022 23:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242670AbiERUrj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 May 2022 16:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S242788AbiERU54 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 May 2022 16:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242665AbiERUri (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 May 2022 16:47:38 -0400
+        with ESMTP id S242699AbiERU5t (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 May 2022 16:57:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3048516F928;
-        Wed, 18 May 2022 13:47:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACE920F4E1;
+        Wed, 18 May 2022 13:57:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA0F4B821A6;
-        Wed, 18 May 2022 20:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89090C34113;
-        Wed, 18 May 2022 20:47:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4794B821BD;
+        Wed, 18 May 2022 20:57:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 726B4C385A5;
+        Wed, 18 May 2022 20:57:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652906854;
-        bh=SX18tJ/Q4djcifq3uNSbnVcMyMpSs0l93zGHYzet49A=;
+        s=k20201202; t=1652907465;
+        bh=hNvnMNGwVFP3i+RgR8W3Ac6dzYcK1NDEZnTWAf9kxR8=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=OWayIlw1AFINnjxiTPrsIaVsWVg1kak/cOCUrQNTlKSq+V8JDFuPz1dWVt9GUYcRs
-         m43tC67ugEGyy5zjzJibwtS21+8CTuCyTuUwo3rRLWf6hxsBBGWhjW/PlnrhOiSwwg
-         6fMEG/r2jFunUh10vuVIsXSjUEZreq7rLvj9R3tCb10l4WbJ/m3YQay3NwJkzZbfFt
-         t1gCVJ53JC76ArhzpYshlw1HzDoriJRypmBzyEXp2ztNh/BnTnVxHfdqo4hDmbWUZF
-         0mjHUP4cwUQHAR0a7+qncuoT4gG4hl4GIcDCjkJRnQrF6DCUgYbCaiVnY8fils+KH2
-         0mMVEd8KyjPFg==
+        b=PsWKcx/zLVK204PpDVuuGERmyi94v4chLDATVEXLTNVC1tQrLFr4tyOJ3p2lUMHLW
+         xwIJpr1WrXpC4+4ikcnlkiCEFL4UWEX53ylYChyeNz5M+LehHAdMOlUmnu5t7udXCu
+         8tpCQfKnPOPBl5KmhlUX2pWmdrpz05OKyRDCjjUvkxeC1Jrnxpy7/jkdW+u+QHPvN6
+         453AgoUp1Dp8WGqT4+mVqLRgkxeaKia49WRlrrj6lA5MuzisgUwmwCIxg447mOmRZ+
+         mApjit19t9PS8hJ7stO1yWdPB1gjFt/YBiAfqs0GO+S7bmR1DQSJGKnrR1CEIySjLe
+         rxQu4EzJk2Cfg==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220412122750.279058-3-aidanmacdonald.0x0@gmail.com>
-References: <20220412122750.279058-1-aidanmacdonald.0x0@gmail.com> <20220412122750.279058-3-aidanmacdonald.0x0@gmail.com>
-Subject: Re: [PATCH v5 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000 SoCs
+In-Reply-To: <20220428164454.17908-2-aidanmacdonald.0x0@gmail.com>
+References: <20220428164454.17908-1-aidanmacdonald.0x0@gmail.com> <20220428164454.17908-2-aidanmacdonald.0x0@gmail.com>
+Subject: Re: [PATCH v2 1/3] clk: ingenic: Allow specifying common clock flags
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        dan.carpenter@oracle.com
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, krzk+dt@kernel.org,
-        mturquette@baylibre.com, paul@crapouillou.net, robh+dt@kernel.org,
-        tsbogend@alpha.franken.de
-Date:   Wed, 18 May 2022 13:47:32 -0700
+Cc:     paulburton@kernel.org, paul@crapouillou.net,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        mturquette@baylibre.com, tsbogend@alpha.franken.de
+Date:   Wed, 18 May 2022 13:57:43 -0700
 User-Agent: alot/0.10
-Message-Id: <20220518204734.89090C34113@smtp.kernel.org>
+Message-Id: <20220518205745.726B4C385A5@smtp.kernel.org>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,18 +56,15 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Aidan MacDonald (2022-04-12 05:27:50)
-> The TCU clock gate on X1000 wasn't requested by the driver and could
-> be gated automatically later on in boot, which prevents timers from
-> running and breaks PWM.
->=20
-> Add a workaround to support old device trees that don't specify the
-> "tcu" clock gate. In this case the kernel will print a warning and
-> attempt to continue without the clock, which is wrong, but it could
-> work if "clk_ignore_unused" is in the kernel arguments.
+Quoting Aidan MacDonald (2022-04-28 09:44:52)
+> Provide a flags field for clocks under the ingenic-cgu driver,
+> which can be used to set generic common clock framework flags
+> on the created clocks. For example, the CLK_IS_CRITICAL flag
+> is needed for some clocks (such as CPU or memory) to stop them
+> being automatically disabled.
 >=20
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 > ---
 
-Can I take just this one patch through clk tree without the dts part?
-dts snippets go through soc trees.
+Applied to clk-next
