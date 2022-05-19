@@ -2,116 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894CE52DD26
-	for <lists+linux-mips@lfdr.de>; Thu, 19 May 2022 20:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D7452DDAE
+	for <lists+linux-mips@lfdr.de>; Thu, 19 May 2022 21:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244139AbiESSwM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 May 2022 14:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S244504AbiESTVs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 May 2022 15:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244145AbiESSwK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 19 May 2022 14:52:10 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2111.outbound.protection.outlook.com [40.107.22.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8535F24C;
-        Thu, 19 May 2022 11:52:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JWI+/EX+LsfrqO7Gz20GxK9mLO7DudDBl+PuMfSwvPt4jznOuX+h9aPt40rjV5wOS/A9U6PnSwA9iJpG8GVuC2q8E09lKvxhgIi7rk+mkLf0KdZ0N3mBZvNXwcPySUSTP6ER3/cMe/9CC5OaeWPYUkAKJOF6wo7QMxDT1by65dhSOjH5Uvo9/FN56G1n956qvyrQDSoKhOiTMdgH78nNGa098xy65Zah/PpZpMSoNSmcL/U34G6bLr3VQWRm8IWsCWefvg+L8nzAixFoC6H8IlGNgI/BmOiOhRYIV7w2cVYv8kS8XaHmmBxXY4gm2zN21nLzjOG2TMDDSKydplSjJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7dFtvrI6cAWIhkP2VikjYEVNfcUS4jClT066YFUgeao=;
- b=NEG4mp98/9hzl7952HMpdumOJel1YglS+lFZh+17LzS7STgwQ8SeXLfw0wVlAooVEXfUtga6oeiJ9Bpvb0yxUm12NdzwNwE+lEqth0bkOllBknvSXSgJla3dWtHR4IqMnBassUi/A/rW0kjzTuwSfrm2tM3Mc4zcZWR/PSJpOTxHDQ/TWPbPWfv5L3OQgE6AleRZDSbN8PQXLQ4kqsMoe0PrtT7TWWegHtiOxCuSgUuYbylo21S6nPHA065vP7REgyugqoAOw7VI0EWvVKAMQibmOeBf1zKM16o94SJlJboIYJ6VS+4CfbqPgNBjxaiwBREgN+NPApTjfWrP2zF9Mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=syrmia.com; dmarc=pass action=none header.from=syrmia.com;
- dkim=pass header.d=syrmia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syrmia.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7dFtvrI6cAWIhkP2VikjYEVNfcUS4jClT066YFUgeao=;
- b=eLZh0hNjhuU02zV0crVjPCXP94hLecFWbGDfe15BNTWFBXt8BJbV+z2XIlo84GuczYeuL/JmxMlBhEIpg7+vT+3zvasY/ZZgeo6Q8Vzws38lzzEOBtpW7pd7u1HCoLYfgzohPmGy1Iq6PRbto0396cXNP1psrhwuqwr9Q33WD98=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=syrmia.com;
-Received: from VI1PR03MB4208.eurprd03.prod.outlook.com (2603:10a6:803:51::25)
- by AM5PR0301MB2546.eurprd03.prod.outlook.com (2603:10a6:203:a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Thu, 19 May
- 2022 18:51:50 +0000
-Received: from VI1PR03MB4208.eurprd03.prod.outlook.com
- ([fe80::b513:6272:f3c5:c709]) by VI1PR03MB4208.eurprd03.prod.outlook.com
- ([fe80::b513:6272:f3c5:c709%7]) with mapi id 15.20.5273.014; Thu, 19 May 2022
- 18:51:50 +0000
-From:   Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Chao-ying Fu <cfu@wavecomp.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 12/12] MIPS: CPS: Boot CPUs in secondary clusters
-Date:   Thu, 19 May 2022 20:51:25 +0200
-Message-Id: <20220519185125.11686-13-Dragan.Mladjenovic@syrmia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220519185125.11686-1-Dragan.Mladjenovic@syrmia.com>
-References: <20220519185125.11686-1-Dragan.Mladjenovic@syrmia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0602CA0016.eurprd06.prod.outlook.com
- (2603:10a6:800:bc::26) To VI1PR03MB4208.eurprd03.prod.outlook.com
- (2603:10a6:803:51::25)
+        with ESMTP id S244447AbiESTVq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 19 May 2022 15:21:46 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110555712C
+        for <linux-mips@vger.kernel.org>; Thu, 19 May 2022 12:21:38 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id i17so5601385pla.10
+        for <linux-mips@vger.kernel.org>; Thu, 19 May 2022 12:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=wNk3T9xGpMyf89JGz9Id8RLi6i6yJPpW5zopmVI27mw=;
+        b=RGRUDejYscQKzSivyRY68oqCF9ZyRrI8qr1fVuGKaNCHgoSLaGuo2SSnf7D1SSbrlJ
+         +4V+9uG/FYvYAd07RGQIEsh6fR75v+f6iCjvSMHMHeUejg1FbEKLmm5e9p5amAVl61Am
+         pTy5ASPirxrR/P0/sBf2eGVZNsdMueOVkOjZU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=wNk3T9xGpMyf89JGz9Id8RLi6i6yJPpW5zopmVI27mw=;
+        b=bdEuBgXNmQa0faevSOVBdgBP8FAG/ixNN75HccAxjBjkWEV4yFp5zqUq2AYLKlT2/+
+         SHCqPCDK0pbmVxNpKKlYgO83U9lhJLmUu4U3XU/wHxWLZhTwALHOXZcwGsV/gt4ZWMQM
+         ir39h/GuJx6LhS7uzFeYy3NAEVlv/Vg9gNKnasr7mdtJWcdky6R7yfJfeUB44S1Fq7fW
+         CHGT0CAXyA0B/rv7QfrVkStVqKehjdQZu+9wc9sbKIoBdjA9e7aiwMqZkE0KpEoufAp3
+         0nogFp6/vhTJ9G+kc/5G1tieyd6FiujHeWsdKfimJfnnDz9a6+ibtmAB+LLe9b74g8bd
+         J0LA==
+X-Gm-Message-State: AOAM531P98+ocNY/xiDJwJQPa1Cdpy3M93RDpciWgrTSxczxDvmfZq3S
+        c4GfsupHZqf56SpVE3A9Wj1D1Q==
+X-Google-Smtp-Source: ABdhPJy10NyoQgp6RBZKGliXG8eNodnAGbYEZ6SUYrfrdh7Px/LOSRK6yXAE0oXiUJBwAYB6KTRkcw==
+X-Received: by 2002:a17:902:8644:b0:153:9f01:2090 with SMTP id y4-20020a170902864400b001539f012090mr5952326plt.101.1652988097307;
+        Thu, 19 May 2022 12:21:37 -0700 (PDT)
+Received: from [10.136.13.180] ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id s13-20020a17090302cd00b0015e8d4eb244sm4097873plk.142.2022.05.19.12.20.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 12:21:36 -0700 (PDT)
+Message-ID: <d1cc0bee-2a98-0c2e-8796-6fb7fae6b803@broadcom.com>
+Date:   Thu, 19 May 2022 12:20:54 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 76327c10-5294-4b8e-e574-08da39c8a108
-X-MS-TrafficTypeDiagnostic: AM5PR0301MB2546:EE_
-X-Microsoft-Antispam-PRVS: <AM5PR0301MB25462B8E0A195A8385DA202BEFD09@AM5PR0301MB2546.eurprd03.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L6k3P+dZmlD2Rrw7t5+Ar5birB3PU8P5LFXrPCLJE/Wy1Cz10FXHl0vSIaaun3GHs80Ebc3f3qfVwRFxKGPUxbRr6wf/CNNMZUYO/3YUbhxYPs0Dz1yA9JGqmJYWyeggKqGUqG2ORJJ45teP8WuywZau9Fe6Giw2VHrsq0fJogwCK9al/ISrWbrGqhzVfl9tCbQS43rEmIHM8/PEU8myWVqi3UJSRBfGexsBt39KuPpgjxnhWPABDdRSEPthPBKrM0hUcoy6ERGpiIkF/1VG/urLKFXF2oMNCkOJcASJkqwATOlQRlKuvhtX15gsWDKKvrPlQ0aGnE0uOwaoW7tyc7Lun3zGWm2LG30U1YYa6Z7zbXSU2k7X4K63whq3j3Kp0bXF7a0JRBDpLaxqgacuRSNcTCEVIdDwBTHvAKB9EAtCTIZ2TGi6QnhfGCx7Z0nwxPWz10bMuGR8C+F1XupfEGS0SHbVrdFjmHAMmXh5/wMq43cXp0YgLrVKj8aS3BMx/yh1g7A0RtnGcC8R40QasNECdG7Ss+xCb+1lphyySd7a7CO/1R6RyJJxPrvxd4BCqF2F472eqFaX0PAYNutebNUtAeZF1cvTONlGEYa3vXIrnoNKrPEXm5dCQVsBIMusUnkrNC+VWYJc+27yZ0sJFQLOHT9sVizQ0ijjQliqTWD4GxbZIh7nU8lnT5Vmfihb
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB4208.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(346002)(366004)(39840400004)(396003)(136003)(5660300002)(66476007)(66556008)(38100700002)(30864003)(8676002)(38350700002)(4326008)(8936002)(66946007)(83380400001)(6512007)(26005)(86362001)(36756003)(52116002)(316002)(6666004)(41300700001)(2906002)(6916009)(54906003)(6506007)(6486002)(1076003)(2616005)(186003)(508600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8Ebsq4NGWM8eF3uGU9R3kf4vlZc15rQOHF4WyoD4ZmEXk6zMIHRSv2xKSuer?=
- =?us-ascii?Q?dK+iCIkitcOWpaoma3vTLGzWX2vpCto+8B4QNWKsrHIci5OOumefcP7X3XfL?=
- =?us-ascii?Q?rUUbdelxnogEtX/RRkTE0qzogPLoir8cor0u/sBKm0tfSc/7295WlMHDp4yp?=
- =?us-ascii?Q?3cKjD7uKdskZvn0BEycTUyqyUqXr2NoYcX4lRCOiCoVsIVX6XmaWn8tpk7n0?=
- =?us-ascii?Q?O/hU6Mf99VOf8mAPsLab/EavbU6Hbj4HrNVcbTHOqIz7bnMwQp9Q8rzfoTgY?=
- =?us-ascii?Q?OZsE8mm37IpNotUJmuo0u4V0uI7UWYmMGWlTw40VXs0ceYv4JA6CIA675lXA?=
- =?us-ascii?Q?qLU/HxJ2z8j9B0m9lWNLK2Mrh+GlvmUwH/u8fGYlFwNNcsxac4zXWW9n3c6R?=
- =?us-ascii?Q?Ice6nxtvLcJULd15jCO9cB9r1a7BkQjV2QjWtDaHxhJ0Mag7f4HR/nYUhiIL?=
- =?us-ascii?Q?k1upXGruYHXfQkUTM4brfuLoJTcuDrre7jf8PPfSGkA2qjGcga0uff9c1mP3?=
- =?us-ascii?Q?eAqdMXGqUqg+acYitmtV0REvqmdbwkp4mmdzQouz794i78elBFW95ud8Jnhi?=
- =?us-ascii?Q?unutddNZPOvQtgUMmHkzrgcgkee2OZcAKvNtD7r4+fm8d9w7buh9gOwam9PN?=
- =?us-ascii?Q?TSkEZaqqfc+jqvwUjg1v9mBX8J7n/gJQ/S30o0bFyBe5LAI2rljvxWVXQIbh?=
- =?us-ascii?Q?/5sCPGc2N/PueidTr+AYrOqYiRb821snW7uF+zwf8IdZJBbepDe4Vl7NAhEq?=
- =?us-ascii?Q?x8g5ViilbHBVwr70zfqvp/8qUInk7lehr35NjzUr28/j+yoCDUe9OiOOTmnz?=
- =?us-ascii?Q?L2ymX+TTMmv2/uuAhU1jxcUBeNIQPq+IWRWWabDrApoxWnmQs90l8UqryNG5?=
- =?us-ascii?Q?60wOxkE0KFKgbEWudk4I1UuZpcc/qrGEJsXC/Ls2ijqljwL7Oz6tRDW+6Atc?=
- =?us-ascii?Q?3ldSlx/oEvBAU8Euu/4teAt1EyK0Je3486S9UghfD3mCR2BRC2XXB90fbo/v?=
- =?us-ascii?Q?VREFxXrk9OlrmYH0WAlo2TlBQfy5Wo3HT78lbavanDMoCs+4fJSobAOquwSU?=
- =?us-ascii?Q?AG+Z2bt27KIJTqhCZ5idW0u6z3O89nnrqnHBoDkQ1kbNjfJdCqESP5NTxA3G?=
- =?us-ascii?Q?Blwi6wgQV93QIqkfqdvPzItWo23dWiB0xlrKEdbkzcLM51caWXiBQB28sEZ4?=
- =?us-ascii?Q?u8V3j7bo7GnyEoJXBKL0B6pOv9xr1O4IXQLoHEoAERBDNEjRm//z+agkQSPE?=
- =?us-ascii?Q?G1+pSZISPwAQ2NKCPoNhXBdRbXz+YX6L+RlshJ4H9NwuUHiMJJ/cnA25Nuei?=
- =?us-ascii?Q?74wGG8aTEwABuXEkIECiye1WHPXDyfYYJe+TF3QEhfOEq8ZZfd71vSaYBvVI?=
- =?us-ascii?Q?CiqDll0ZxqQcLQ4lU29cBztQh/y9Yf2Mv14ulMM4qMRy48SnZ5TSR+SLNY+A?=
- =?us-ascii?Q?APH/AUFqBDx3w6oK9NMheo7gz6iMR/tpQ4yI0xcTarStCUW0YN8RtPZBKE8g?=
- =?us-ascii?Q?wRM6yfP+KlfaKEWNLNxXAgXp/7BmRiy3IBs3ZI2yqAlQMWOvsY7iC0lxyVsQ?=
- =?us-ascii?Q?cZty7NP9h3f9NEalDNLB1yEFPG5eMjr5YMyffY769OI5w5Z7b1YHyzCMN4/g?=
- =?us-ascii?Q?JI8hgfI2Q1jlYKOJAUqVD8FF1eqEo9ZaZxfDyHNzAEOe1e5XReqKX1yJqX4u?=
- =?us-ascii?Q?IZl7E2tk2r22CZ/IUqCjLxZZWWHxYRWiGEVhUQHNDChNRxSUVI5ZuZtQFY2w?=
- =?us-ascii?Q?jHFheVd1VZ2MReQ4MG/hBawcTpuWJMMSeWmDMO7opV0Lz8ucz7VX?=
-X-OriginatorOrg: syrmia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76327c10-5294-4b8e-e574-08da39c8a108
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB4208.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 18:51:48.5709
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 19214a73-c1ab-4e19-8f59-14bdcb09a66e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GbSfrhKyj7JhGVnpTOrig7HS4fRgiDZom0wjwraLvXMMNRL45UhIAps2EzXQbXtcpoK51Wyn40osnmB1Y1gXompX4coTZIkCrxLb2/dId7M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0301MB2546
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Desmond yan <desmond.yan@broadcom.com>
+Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
+ <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
+ <81878a67-21f1-fee8-1add-f381bc8b05df@broadcom.com>
+ <edbaa4fa-561c-6f5e-f2ab-43ae68acaede@igalia.com>
+From:   Scott Branden <scott.branden@broadcom.com>
+In-Reply-To: <edbaa4fa-561c-6f5e-f2ab-43ae68acaede@igalia.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000061f92305df6248cb"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,423 +131,154 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Burton <paulburton@kernel.org>
+--00000000000061f92305df6248cb
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Probe for & boot CPUs (cores & VPs) in secondary clusters (ie. not the
-cluster that began booting Linux) when they are present in systems with
-CM 3.5 or higher.
 
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 
-diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
-index 23c67c0871b1..435049907e44 100644
---- a/arch/mips/include/asm/mips-cm.h
-+++ b/arch/mips/include/asm/mips-cm.h
-@@ -239,6 +239,12 @@ GCR_ACCESSOR_RW(32, 0x130, l2_config)
- GCR_ACCESSOR_RO(32, 0x150, sys_config2)
- #define CM_GCR_SYS_CONFIG2_MAXVPW		GENMASK(3, 0)
- 
-+/* GCR_L2-RAM_CONFIG - Configuration & status of L2 cache RAMs */
-+GCR_ACCESSOR_RW(64, 0x240, l2_ram_config)
-+#define CM_GCR_L2_RAM_CONFIG_PRESENT		BIT(31)
-+#define CM_GCR_L2_RAM_CONFIG_HCI_DONE		BIT(30)
-+#define CM_GCR_L2_RAM_CONFIG_HCI_SUPPORTED	BIT(29)
-+
- /* GCR_L2_PFT_CONTROL - Controls hardware L2 prefetching */
- GCR_ACCESSOR_RW(32, 0x300, l2_pft_control)
- #define CM_GCR_L2_PFT_CONTROL_PAGEMASK		GENMASK(31, 12)
-@@ -250,6 +256,18 @@ GCR_ACCESSOR_RW(32, 0x308, l2_pft_control_b)
- #define CM_GCR_L2_PFT_CONTROL_B_CEN		BIT(8)
- #define CM_GCR_L2_PFT_CONTROL_B_PORTID		GENMASK(7, 0)
- 
-+/* GCR_L2_TAG_ADDR - Access addresses in L2 cache tags */
-+GCR_ACCESSOR_RW(64, 0x600, l2_tag_addr)
-+
-+/* GCR_L2_TAG_STATE - Access L2 cache tag state */
-+GCR_ACCESSOR_RW(64, 0x608, l2_tag_state)
-+
-+/* GCR_L2_DATA - Access data in L2 cache lines */
-+GCR_ACCESSOR_RW(64, 0x610, l2_data)
-+
-+/* GCR_L2_ECC - Access ECC information from L2 cache lines */
-+GCR_ACCESSOR_RW(64, 0x618, l2_ecc)
-+
- /* GCR_L2SM_COP - L2 cache op state machine control */
- GCR_ACCESSOR_RW(32, 0x620, l2sm_cop)
- #define CM_GCR_L2SM_COP_PRESENT			BIT(31)
-diff --git a/arch/mips/include/asm/smp-cps.h b/arch/mips/include/asm/smp-cps.h
-index 84a713667be2..7bcad119ceb1 100644
---- a/arch/mips/include/asm/smp-cps.h
-+++ b/arch/mips/include/asm/smp-cps.h
-@@ -21,6 +21,7 @@ struct core_boot_config {
- };
- 
- struct cluster_boot_config {
-+	unsigned long *core_power;
- 	struct core_boot_config *core_config;
- };
- 
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 5b843c2ff077..f4c23bcab417 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -309,7 +309,9 @@ void mips_cm_lock_other(unsigned int cluster, unsigned int core,
- 		      FIELD_PREP(CM3_GCR_Cx_OTHER_VP, vp);
- 
- 		if (cm_rev >= CM_REV_CM3_5) {
--			val |= CM_GCR_Cx_OTHER_CLUSTER_EN;
-+			if (cluster != cpu_cluster(&current_cpu_data))
-+				val |= CM_GCR_Cx_OTHER_CLUSTER_EN;
-+			val |= CM_GCR_Cx_OTHER_GIC_EN;
- 			val |= FIELD_PREP(CM_GCR_Cx_OTHER_CLUSTER, cluster);
- 			val |= FIELD_PREP(CM_GCR_Cx_OTHER_BLOCK, block);
- 		} else {
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index 360d132bee71..311e9e40e5c7 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -25,7 +25,6 @@
- #include <asm/uasm.h>
- 
- static bool threads_disabled;
--static DECLARE_BITMAP(core_power, NR_CPUS);
- 
- struct cluster_boot_config *mips_cps_cluster_bootcfg;
- 
-@@ -36,6 +35,51 @@ static int __init setup_nothreads(char *s)
- }
- early_param("nothreads", setup_nothreads);
- 
-+static void power_up_other_cluster(unsigned int cluster)
-+{
-+	u32 stat, seq_state;
-+	unsigned int timeout;
-+
-+	mips_cm_lock_other(cluster, CM_GCR_Cx_OTHER_CORE_CM, 0,
-+			   CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+	stat = read_cpc_co_stat_conf();
-+	mips_cm_unlock_other();
-+
-+	seq_state = stat & CPC_Cx_STAT_CONF_SEQSTATE;
-+	seq_state >>= __ffs(CPC_Cx_STAT_CONF_SEQSTATE);
-+	if (seq_state == CPC_Cx_STAT_CONF_SEQSTATE_U5)
-+		return;
-+
-+	/* Set endianness & power up the CM */
-+	mips_cm_lock_other(cluster, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+	write_cpc_redir_sys_config(IS_ENABLED(CONFIG_CPU_BIG_ENDIAN));
-+	write_cpc_redir_pwrup_ctl(1);
-+	mips_cm_unlock_other();
-+
-+	/* Wait for the CM to start up */
-+	timeout = 1000;
-+	mips_cm_lock_other(cluster, CM_GCR_Cx_OTHER_CORE_CM, 0,
-+			   CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+	while (1) {
-+		stat = read_cpc_co_stat_conf();
-+		seq_state = stat & CPC_Cx_STAT_CONF_SEQSTATE;
-+		seq_state >>= __ffs(CPC_Cx_STAT_CONF_SEQSTATE);
-+		if (seq_state == CPC_Cx_STAT_CONF_SEQSTATE_U5)
-+			break;
-+
-+		if (timeout) {
-+			mdelay(1);
-+			timeout--;
-+		} else {
-+			pr_warn("Waiting for cluster %u CM to power up... STAT_CONF=0x%x\n",
-+				cluster, stat);
-+			mdelay(1000);
-+		}
-+	}
-+
-+	mips_cm_unlock_other();
-+}
-+
- static unsigned core_vpe_count(unsigned int cluster, unsigned core)
- {
- 	if (threads_disabled)
-@@ -59,6 +103,9 @@ static void __init cps_smp_setup(void)
- 			pr_cont(",");
- 		pr_cont("{");
- 
-+		if (mips_cm_revision() >= CM_REV_CM3_5)
-+			power_up_other_cluster(cl);
-+
- 		ncores = mips_cps_numcores(cl);
- 		for (c = 0; c < ncores; c++) {
- 			core_vpes = core_vpe_count(cl, c);
-@@ -86,8 +133,8 @@ static void __init cps_smp_setup(void)
- 
- 	/* Indicate present CPUs (CPU being synonymous with VPE) */
- 	for (v = 0; v < min_t(unsigned, nvpes, NR_CPUS); v++) {
--		set_cpu_possible(v, cpu_cluster(&cpu_data[v]) == 0);
--		set_cpu_present(v, cpu_cluster(&cpu_data[v]) == 0);
-+		set_cpu_possible(v, true);
-+		set_cpu_present(v, true);
- 		__cpu_number_map[v] = v;
- 		__cpu_logical_map[v] = v;
- 	}
-@@ -95,19 +142,15 @@ static void __init cps_smp_setup(void)
- 	/* Set a coherent default CCA (CWB) */
- 	change_c0_config(CONF_CM_CMASK, 0x5);
- 
--	/* Core 0 is powered up (we're running on it) */
--	bitmap_set(core_power, 0, 1);
--
- 	/* Initialise core 0 */
- 	mips_cps_core_init();
- 
- 	/* Make core 0 coherent with everything */
- 	write_gcr_cl_coherence(0xff);
- 
--	if (mips_cm_revision() >= CM_REV_CM3) {
--		core_entry = CKSEG1ADDR((unsigned long)mips_cps_core_entry);
-+	core_entry = CKSEG1ADDR((unsigned long)mips_cps_core_entry);
-+	if (mips_cm_revision() >= CM_REV_CM3)
- 		write_gcr_bev_base(core_entry);
--	}
- 
- #ifdef CONFIG_MIPS_MT_FPAFF
- 	/* If we have an FPU, enroll ourselves in the FPU-full mask */
-@@ -185,6 +228,10 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
- 			goto err_out;
- 		mips_cps_cluster_bootcfg[cl].core_config = core_bootcfg;
- 
-+		mips_cps_cluster_bootcfg[cl].core_power =
-+			kcalloc(BITS_TO_LONGS(ncores), sizeof(unsigned long),
-+				GFP_KERNEL);
-+
- 		/* Allocate VPE boot configuration structs */
- 		for (c = 0; c < ncores; c++) {
- 			core_vpes = core_vpe_count(cl, c);
-@@ -196,11 +243,12 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
- 		}
- 	}
- 
--	/* Mark this CPU as booted */
-+	/* Mark this CPU as powered up & booted */
- 	cl = cpu_cluster(&current_cpu_data);
- 	c = cpu_core(&current_cpu_data);
- 	cluster_bootcfg = &mips_cps_cluster_bootcfg[cl];
- 	core_bootcfg = &cluster_bootcfg->core_config[c];
-+	bitmap_set(cluster_bootcfg->core_power, cpu_core(&current_cpu_data), 1);
- 	atomic_set(&core_bootcfg->vpe_mask, 1 << cpu_vpe_id(&current_cpu_data));
- 
- 	return;
-@@ -228,16 +276,123 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
- 	}
- }
- 
--static void boot_core(unsigned int core, unsigned int vpe_id)
-+static void init_cluster_l2(void)
- {
--	u32 stat, seq_state;
--	unsigned timeout;
-+	u32 l2_cfg, l2sm_cop, result;
-+
-+	while (1) {
-+		l2_cfg = read_gcr_redir_l2_ram_config();
-+
-+		/* If HCI is not supported, use the state machine below */
-+		if (!(l2_cfg & CM_GCR_L2_RAM_CONFIG_PRESENT))
-+			break;
-+		if (!(l2_cfg & CM_GCR_L2_RAM_CONFIG_HCI_SUPPORTED))
-+			break;
-+
-+		/* If the HCI_DONE bit is set, we're finished */
-+		if (l2_cfg & CM_GCR_L2_RAM_CONFIG_HCI_DONE)
-+			return;
-+	}
-+
-+	l2sm_cop = read_gcr_redir_l2sm_cop();
-+	if (WARN(!(l2sm_cop & CM_GCR_L2SM_COP_PRESENT),
-+		 "L2 init not supported on this system yet"))
-+		return;
-+
-+	/* Clear L2 tag registers */
-+	write_gcr_redir_l2_tag_state(0);
-+	write_gcr_redir_l2_ecc(0);
-+
-+	/* Ensure the L2 tag writes complete before the state machine starts */
-+	mb();
-+
-+	/* Wait for the L2 state machine to be idle */
-+	do {
-+		l2sm_cop = read_gcr_redir_l2sm_cop();
-+	} while (l2sm_cop & CM_GCR_L2SM_COP_RUNNING);
-+
-+	/* Start a store tag operation */
-+	l2sm_cop = CM_GCR_L2SM_COP_TYPE_IDX_STORETAG;
-+	l2sm_cop <<= __ffs(CM_GCR_L2SM_COP_TYPE);
-+	l2sm_cop |= CM_GCR_L2SM_COP_CMD_START;
-+	write_gcr_redir_l2sm_cop(l2sm_cop);
-+
-+	/* Ensure the state machine starts before we poll for completion */
-+	mb();
-+
-+	/* Wait for the operation to be complete */
-+	do {
-+		l2sm_cop = read_gcr_redir_l2sm_cop();
-+		result = l2sm_cop & CM_GCR_L2SM_COP_RESULT;
-+		result >>= __ffs(CM_GCR_L2SM_COP_RESULT);
-+	} while (!result);
-+
-+	WARN(result != CM_GCR_L2SM_COP_RESULT_DONE_OK,
-+	     "L2 state machine failed cache init with error %u\n", result);
-+}
-+
-+static void boot_core(unsigned int cluster, unsigned int core,
-+		      unsigned int vpe_id)
-+{
-+	struct cluster_boot_config *cluster_cfg;
-+	u32 access, stat, seq_state;
-+	unsigned int timeout, ncores;
-+	unsigned long core_entry;
-+
-+	cluster_cfg = &mips_cps_cluster_bootcfg[cluster];
-+	ncores = mips_cps_numcores(cluster);
-+	core_entry = CKSEG1ADDR((unsigned long)mips_cps_core_entry);
-+
-+	if ((cluster != cpu_cluster(&current_cpu_data)) &&
-+	    bitmap_empty(cluster_cfg->core_power, ncores)) {
-+		power_up_other_cluster(cluster);
-+
-+		mips_cm_lock_other(cluster, core, 0,
-+				   CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+
-+		/* Ensure cluster GCRs are where we expect */
-+		write_gcr_redir_base(read_gcr_base());
-+		write_gcr_redir_cpc_base(read_gcr_cpc_base());
-+		write_gcr_redir_gic_base(read_gcr_gic_base());
-+
-+		init_cluster_l2();
-+
-+		/* Mirror L2 configuration */
-+		write_gcr_redir_l2_only_sync_base(read_gcr_l2_only_sync_base());
-+		write_gcr_redir_l2_pft_control(read_gcr_l2_pft_control());
-+		write_gcr_redir_l2_pft_control_b(read_gcr_l2_pft_control_b());
-+
-+		/* Mirror ECC/parity setup */
-+		write_gcr_redir_err_control(read_gcr_err_control());
-+
-+		/* Set BEV base */
-+		write_gcr_redir_bev_base(core_entry);
-+
-+		mips_cm_unlock_other();
-+	}
-+
-+	if (cluster != cpu_cluster(&current_cpu_data)) {
-+		mips_cm_lock_other(cluster, core, 0,
-+				   CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+
-+		/* Ensure the core can access the GCRs */
-+		access = read_gcr_redir_access();
-+		access |= BIT(core);
-+		write_gcr_redir_access(access);
-+
-+		mips_cm_unlock_other();
-+	} else {
-+		/* Ensure the core can access the GCRs */
-+		access = read_gcr_access();
-+		access |= BIT(core);
-+		write_gcr_access(access);
-+	}
- 
- 	/* Select the appropriate core */
--	mips_cm_lock_other(0, core, 0, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+	mips_cm_lock_other(cluster, core, 0, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
- 
- 	/* Set its reset vector */
--	write_gcr_co_reset_base(CKSEG1ADDR((unsigned long)mips_cps_core_entry));
-+	write_gcr_co_reset_base(core_entry);
- 
- 	/* Ensure its coherency is disabled */
- 	write_gcr_co_coherence(0);
-@@ -245,9 +400,6 @@ static void boot_core(unsigned int core, unsigned int vpe_id)
- 	/* Start it with the legacy memory map and exception base */
- 	write_gcr_co_reset_ext_base(CM_GCR_Cx_RESET_EXT_BASE_UEB);
- 
--	/* Ensure the core can access the GCRs */
--	set_gcr_access(1 << core);
--
- 	if (mips_cpc_present()) {
- 		/* Reset the core */
- 		mips_cpc_lock_other(core);
-@@ -297,7 +449,17 @@ static void boot_core(unsigned int core, unsigned int vpe_id)
- 	mips_cm_unlock_other();
- 
- 	/* The core is now powered up */
--	bitmap_set(core_power, core, 1);
-+	bitmap_set(cluster_cfg->core_power, core, 1);
-+
-+	/*
-+	 * Restore CM_PWRUP=0 so that the CM can power down if all the cores in
-+	 * the cluster do (eg. if they're all removed via hotplug.
-+	 */
-+	if (mips_cm_revision() >= CM_REV_CM3_5) {
-+		mips_cm_lock_other(cluster, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+		write_cpc_redir_pwrup_ctl(0);
-+		mips_cm_unlock_other();
-+	}
- }
- 
- static void remote_vpe_boot(void *dummy)
-@@ -324,10 +486,6 @@ static int cps_boot_secondary(int cpu, struct task_struct *idle)
- 	unsigned int remote;
- 	int err;
- 
--	/* We don't yet support booting CPUs in other clusters */
--	if (cpu_cluster(&cpu_data[cpu]) != cpu_cluster(&raw_current_cpu_data))
--		return -ENOSYS;
--
- 	vpe_cfg->pc = (unsigned long)&smp_bootstrap;
- 	vpe_cfg->sp = __KSTK_TOS(idle);
- 	vpe_cfg->gp = (unsigned long)task_thread_info(idle);
-@@ -336,14 +494,15 @@ static int cps_boot_secondary(int cpu, struct task_struct *idle)
- 
- 	preempt_disable();
- 
--	if (!test_bit(core, core_power)) {
-+	if (!test_bit(core, cluster_cfg->core_power)) {
- 		/* Boot a VPE on a powered down core */
--		boot_core(core, vpe_id);
-+		boot_core(cluster, core, vpe_id);
- 		goto out;
- 	}
- 
- 	if (cpu_has_vp) {
--		mips_cm_lock_other(0, core, vpe_id, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+		mips_cm_lock_other(cluster, core, vpe_id,
-+				   CM_GCR_Cx_OTHER_BLOCK_LOCAL);
- 		core_entry = CKSEG1ADDR((unsigned long)mips_cps_core_entry);
- 		write_gcr_co_reset_base(core_entry);
- 		mips_cm_unlock_other();
-@@ -543,11 +702,15 @@ static void wait_for_sibling_halt(void *ptr_cpu)
- 
- static void cps_cpu_die(unsigned int cpu)
- {
-+	unsigned int cluster = cpu_cluster(&cpu_data[cpu]);
- 	unsigned core = cpu_core(&cpu_data[cpu]);
- 	unsigned int vpe_id = cpu_vpe_id(&cpu_data[cpu]);
- 	ktime_t fail_time;
- 	unsigned stat;
- 	int err;
-+	struct cluster_boot_config *cluster_cfg;
-+
-+	cluster_cfg = &mips_cps_cluster_bootcfg[cluster];
- 
- 	/* Wait for the cpu to choose its way out */
- 	if (!cpu_wait_death(cpu, 5)) {
-@@ -605,7 +768,7 @@ static void cps_cpu_die(unsigned int cpu)
- 		} while (1);
- 
- 		/* Indicate the core is powered off */
--		bitmap_clear(core_power, core, 1);
-+		bitmap_clear(cluster_cfg->core_power, core, 1);
- 	} else if (cpu_has_mipsmt) {
- 		/*
- 		 * Have a CPU with access to the offlined CPUs registers wait
--- 
-2.17.1
+On 2022-05-19 05:19, Guilherme G. Piccoli wrote:
+> On 18/05/2022 19:17, Scott Branden wrote:
+>> Hi Guilherme,
+>>
+>> +Desmond
+>> [...]
+>>>>> I'm afraid it breaks kdump if this device is not reset beforehand - it's
+>>>>> a doorbell write, so not high risk I think...
+>>>>>
+>>>>> But in case the not-reset device can be probed normally in kdump kernel,
+>>>>> then I'm fine in moving this to the reboot list! I don't have the HW to
+>>>>> test myself.
+>>>>
+>>>> Good question. Well, it if has to be called before kdump then
+>>>> even "hypervisor" list is a wrong place because is not always
+>>>> called before kdump.
+>>> [...]
+>> We register to the panic notifier so that we can kill the VK card ASAP
+>> to stop DMAing things over to the host side.  If it is not notified then
+>> memory may not be frozen when kdump is occurring.
+>> Notifying the card on panic is also needed to allow for any type of
+>> reset to occur.
+>>
+>> So, the only thing preventing moving the notifier later is the chance
+>> that memory is modified while kdump is occurring.  Or, if DMA is
+>> disabled before kdump already then this wouldn't be an issue and the
+>> notification to the card (to allow for clean resets) can be done later.
+> 
+> Hi Scott / Desmond, thanks for the detailed answer! Is this adapter
+> designed to run in x86 only or you have other architectures' use cases?
+The adapter may be used in any PCIe design that supports DMA.
+So it may be possible to run in arm64 servers.
+> 
+> I'm not expert on that, but I guess whether DMA is "kept" or not depends
+> a bit if IOMMU is used. IIRC, there was a copy of the DMAR table in
+> kdump (at least for Intel IOMMU). Also, devices are not properly
+> quiesced on kdump IIUC, we don't call shutdown/reset handlers, they're
+> skip due to the crash nature - so there is a risk of devices doing bad
+> things in the new kernel.
+> 
+> With that said, and given this is a lightweight notifier that ideally
+> should run ASAP, I'd keep this one in the hypervisor list. We can
+> "adjust" the semantic of this list to include lightweight notifiers that
+> reset adapters.
+Sounds the best to keep system operating as tested today.
+> 
+> With that said, Petr has a point - not always such list is going to be
+> called before kdump. So, that makes me think in another idea: what if we
+> have another list, but not on panic path, but instead in the custom
+> crash_shutdown()? Drivers could add callbacks there that must execute
+> before kexec/kdump, no matter what.
+It may be beneficial for some other drivers but for our use we would 
+then need to register for the panic path and the crash_shutdown path. 
+We notify the VK card for 2 purposes: one to stop DMA so memory stop 
+changing during a kdump.  And also to get the card into a good state so 
+resets happen cleanly.
+> 
+> Let me know your thoughts Scott / Desmond / Petr and all interested parties.
+> Cheers,
+> 
+> 
+> Guilherme
 
+--00000000000061f92305df6248cb
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+cRe0CRXA7ypOJSgxO/nOOyQoaJxT7CGg1npOeSpPjEuc3fE4xum3l0nvU85hj6MlKZu43hokdBh0
+D0nLyyhEwlR3AC/msdff/UGbM/JR9vk812RP4m/aNWZFJwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUOhjEpl04Sz9dh5MI82E1
+V39lM/owDQYJKoZIhvcNAQELBQADggEBAA7Rlypx/esz/iq1yA4+KW7uwV/aBY344BWcXt6I+SNK
+VwFBgFWfLj5vaEud9TVv2fPSiaHJo0umemOJk+43QD+bsoqmgcFXd21PrOt7Jjs+jjVED9VC5kJq
+S4NNKUkS+BqijJwSegtVygrc/atrIlJbjI21q4qpemUo5fgwqCNm++BmBGTI8yA09vtGSNDRN42k
+lLX9hl3iEj5SBgkQqCbbnoE+ZjjKfqt7ED166WhgyQWNrl39yLcvLj+JRUB3RuvXKZjH0NQEEBII
+wZBDSkyneykLt3CBNIhSCTxKM6OWxVp936ALSa5K9FNy00TeWSpokR6NmzaW8VD/EjTgvqAxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgx9oXSJpKniO4dS
+Gk8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILXYB80rvGoONbSrKccJNuW/yt4P
+RwosxTdX9/zqPyCuMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDUxOTE5MjEzN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBsqFeeADkOUmIUQkOFTz4+tbTbcu1kJOu0o2LxolE41ACQ
+Jjl4mG3AxFObAA/vLQRFL2LzmM7+OQ1nUaL/1rIXCVF7a9/kONy4oIc1uslvIVE6XRS3TrWAZyJ1
+KXT1lLM7MUhCe5EkzcZxuapBiKdpmxfhxDzt27vOsC3LpZXW8YbnYGANBVAG0RYROLCIzpGsRUeh
+vHZtk9Zj5ppQPXoMCjx9Nah3XO3Uhnp0i0UbRd2dsZj60JkDxx2H+iX54btyjpq60IUp5n2ulZMN
+latE6tPUnpMceZbDhq45QMDYde9jGlCoU4/7lo4RwQhU+Kl7xsUECNDbTk4UszM1uyGJ
+--00000000000061f92305df6248cb--
