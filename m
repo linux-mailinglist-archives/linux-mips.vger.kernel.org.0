@@ -2,92 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2144E52EA12
-	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 12:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE3D52EA5C
+	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 12:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348235AbiETKk5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 May 2022 06:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
+        id S236426AbiETK4T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 May 2022 06:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239447AbiETKk4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 06:40:56 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A386DE94;
-        Fri, 20 May 2022 03:40:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4NYD43MVz4xXj;
-        Fri, 20 May 2022 20:40:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1653043251;
-        bh=kLvXGUJ3/ReQbtc7FZG4S2UHVHzM/605lq9b6IyiY5M=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=pMWZBKi2JiSg+r6at1yci6wwlaKqROcHmumy1qm2oKAprlF7OjcdtRnL4YzJI0ww7
-         sD2U1Ve/WujuCckOohm/ghb7M2rTLRAwbRVbneALWNRVCOFweOj4Zqw+AiW9Qd6YZ5
-         W8BcHWFaEuMsjmgGl/FVfHm//aeurxvN5nPWIZtI1sM70KGr6t0eNoNv7Jklm+Psb0
-         uWvsjppTeHZvH5lbRxbKW7wZyqx2ocpwCpyz87TjsFA6JEPD90EbiYrFICy2ODn2bl
-         Dty+eeRKILrhrPZyMVQ2MjxpU8FQLn9KXVqel0TNRihZ+MlyNDRF0C2Afqo96JN5nC
-         hHtsMOodRK9Mg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-        Jakub Kicinski <kuba@kernel.org>, corbet@lwn.net,
-        tsbogend@alpha.franken.de, benh@kernel.crashing.org,
-        paulus@samba.org, sburla@marvell.com, vburru@marvell.com,
-        aayarekar@marvell.com, arnd@arndb.de, zhangyue1@kylinos.cn,
-        linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH net-next] eth: de4x5: remove support for Generic DECchip
- & DIGITAL EtherWORKS PCI/EISA
-In-Reply-To: <20220519031345.2134401-1-kuba@kernel.org>
-References: <20220519031345.2134401-1-kuba@kernel.org>
-Date:   Fri, 20 May 2022 20:40:48 +1000
-Message-ID: <87o7zsmqq7.fsf@mpe.ellerman.id.au>
+        with ESMTP id S1348340AbiETK4I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 06:56:08 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 160723981B;
+        Fri, 20 May 2022 03:56:05 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 1380992009C; Fri, 20 May 2022 12:56:03 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 1010A92009B;
+        Fri, 20 May 2022 11:56:03 +0100 (BST)
+Date:   Fri, 20 May 2022 11:56:02 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     =?UTF-8?B?6ZmI5a2m5YW1?= <chenxuebing@jari.cn>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [MIPS] DEC:do not initialise statics to 0
+In-Reply-To: <4d4c0b64.993.180d7a6945a.Coremail.chenxuebing@jari.cn>
+Message-ID: <alpine.DEB.2.21.2205200308000.52080@angie.orcam.me.uk>
+References: <4d4c0b64.993.180d7a6945a.Coremail.chenxuebing@jari.cn>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> writes:
-> Looks like almost all changes to this driver had been tree-wide
-> refactoring since git era begun. There is one commit from Al
-> 15 years ago which could potentially be fixing a real bug.
->
-> The driver is using virt_to_bus() and is a real magnet for pointless
-> cleanups. It seems unlikely to have real users. Let's try to shed
-> this maintenance burden.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: corbet@lwn.net
-> CC: tsbogend@alpha.franken.de
-> CC: mpe@ellerman.id.au
-> CC: benh@kernel.crashing.org
-> CC: paulus@samba.org
-> CC: sburla@marvell.com
-> CC: vburru@marvell.com
-> CC: aayarekar@marvell.com
-> CC: arnd@arndb.de
-> CC: zhangyue1@kylinos.cn
-> CC: linux-doc@vger.kernel.org
-> CC: linux-mips@vger.kernel.org
-> CC: linuxppc-dev@lists.ozlabs.org
-> CC: linux-parisc@vger.kernel.org
-> ---
->  .../device_drivers/ethernet/dec/de4x5.rst     |  189 -
->  .../device_drivers/ethernet/index.rst         |    1 -
->  arch/mips/configs/mtx1_defconfig              |    1 -
->  arch/powerpc/configs/chrp32_defconfig         |    1 -
->  arch/powerpc/configs/ppc6xx_defconfig         |    1 -
+On Wed, 18 May 2022, 陈学兵 wrote:
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> ​Static variables do not need to be initialised to 0,
 
-cheers
+ This is true.
+
+> because compiler
+> will initialise all uninitialised statics to 0.
+
+ This is however not (even though such zeroing is mandated by the C 
+language standard), because it is this code:
+
+	PTR_LA		t0, __bss_start		# clear .bss
+	LONG_S		zero, (t0)
+	PTR_LA		t1, __bss_stop - LONGSIZE
+1:
+	PTR_ADDIU	t0, LONGSIZE
+	LONG_S		zero, (t0)
+	bne		t0, t1, 1b
+
+in arch/mips/kernel/head.S that does it in Linux (in userland code this 
+will be in CRT startup, but it's not a part of the compiler either).  So 
+please avoid spreading misleading information in your change description.
+
+> diff --git a/arch/mips/dec/prom/identify.c b/arch/mips/dec/prom/identify.c
+> index 80cd14cd1a63..89e736670ccf 100644
+> --- a/arch/mips/dec/prom/identify.c
+> +++ b/arch/mips/dec/prom/identify.c
+> @@ -45,7 +45,7 @@ const char *get_system_type(void)
+>  {
+>  #define STR_BUF_LEN 64
+>   static char system[STR_BUF_LEN];
+> - static int called = 0;
+> + static int called;
+
+ Barring the inaccuracy of the change description your code update is 
+correct, however your patch has been whitespace-damaged in transit and 
+cannot be applied as it stands.
+
+ Please send an updated version with the problems addressed.
+
+ NB the same concerns apply to your other such change submitted.
+
+  Maciej
