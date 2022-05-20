@@ -2,114 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598D752EC11
-	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 14:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3537A52ED51
+	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 15:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242140AbiETMbS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 May 2022 08:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S1349882AbiETNjJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 May 2022 09:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241416AbiETMbR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 08:31:17 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6146447568;
-        Fri, 20 May 2022 05:31:13 -0700 (PDT)
-Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N3KDM-1nidun1Y1a-010L21; Fri, 20 May 2022 14:31:11 +0200
-Received: by mail-yb1-f172.google.com with SMTP id r1so13919589ybo.7;
-        Fri, 20 May 2022 05:31:10 -0700 (PDT)
-X-Gm-Message-State: AOAM533XICYSchr83/2dnnvlXYJ4p8DurUidGgS1IQc22J1Xjhw4Rq8S
-        ggohQQS/MAC5kuY3vi/H1bpfmpgzzMs77SmJ3i4=
-X-Google-Smtp-Source: ABdhPJzM0/g+q1PRwguziGorhB8SDUsN9iEFZbR/3vnqE9X6zeZuqHYx8uEJ7JXjS9vB4zG423aFir2s+dxjeU1ONqo=
-X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
- x185-20020a2531c2000000b00641660f230fmr9208955ybx.472.1653049869839; Fri, 20
- May 2022 05:31:09 -0700 (PDT)
+        with ESMTP id S1349096AbiETNjI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 09:39:08 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7113F169E3B;
+        Fri, 20 May 2022 06:39:07 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id eg11so10806951edb.11;
+        Fri, 20 May 2022 06:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/vZ5EIynCj28UhpMo2WaUDTGXgrMDD6ssuzpbKQFTrE=;
+        b=dbdCdy787bi5RG1nfo93JEf7fRSGqgvdGgWbhi5+jiM2gZq411FflPdY9L2o3Sz097
+         XA9SzdoyvFOw4oNvCmxQtifumEL2ucGkRJdht2gKQbj9YVfuffNrO+QPvuuZxjrqoS0F
+         NfU67GWBYzEpstGDy844RVUmfAl7HNRGvf/LwT4rnlN6DngXc2ZKIaPbBdhEQ53EpZ4s
+         ITsYoJPxw+STd6rZ1MhtfXgofir7SDd7Ohuuh33FWGAKbBMX+xkiGJYwBkluf7rb/Tbk
+         3LkMR2KGcBuBeRhqmlx3nsng24xG35IMWoTed7v6OpPZiYpWbvZKUFT3MZVg1KYI/Bnh
+         bK1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/vZ5EIynCj28UhpMo2WaUDTGXgrMDD6ssuzpbKQFTrE=;
+        b=rj176+aMvhWNFkb2oyWSikqNSiPZiT21mY9HNuXFUFubMvPDldQrQQvQ7x0ItrvR0R
+         XQK8jYs1YLpSysypjR6hUUZVRXG4rVvHcUp2cG2HYqJkPTM5HSCNEnQvOi/XcTRK2JAH
+         7AVZaeYKMPOBDNPTKCYjnR4tjtbZcadsJ3XMj1DIVaMIHAP3uF1BKjNnJoFiXS7YuUJt
+         ItG2t0559rG5MWAD/yGAbTMF6Dml9FPUMf3seHZ4TAMa9tJ/+BqJ0HNdt4xjmJqM2Tmo
+         xVdIurlbF4hUFiWw8C9MKR+up1AyOWgTC2kel/dJPoanCaxErFH8uGYBRPfTae28BLce
+         miuA==
+X-Gm-Message-State: AOAM531+fTdSWUN6Fq9054rF/Yqcbi0mMce7I8I7EYtTzOKjoE5kqzlA
+        iQkCBMR4QFWwiq3y4qPGnUk=
+X-Google-Smtp-Source: ABdhPJzB4dDO6rQGcvP8GfFmFaDFqb3hZ0xhEwmOtYMgE32gUNPAUosh+C78GjzIs6waR9fAZFTMtw==
+X-Received: by 2002:a05:6402:3488:b0:427:b4ec:991b with SMTP id v8-20020a056402348800b00427b4ec991bmr10869813edc.319.1653053945963;
+        Fri, 20 May 2022 06:39:05 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id b2-20020aa7df82000000b0042abfe32ac8sm4225152edy.30.2022.05.20.06.39.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 06:39:05 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     broonie@kernel.org, Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     lgirdwood@gmail.com, kuninori.morimoto.gx@renesas.com,
+        nicolas.ferre@microchip.com, nsaenz@kernel.org,
+        shawnguo@kernel.org, linux-imx@nxp.com, cezary.rojewski@intel.com,
+        pierre-louis.bossart@linux.intel.com, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, daniel@zonque.org,
+        srinivas.kandagatla@linaro.org, linux-rockchip@lists.infradead.org,
+        krzk@kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
+        heiko@sntech.de, jbrunet@baylibre.com, kernel@pengutronix.de,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH 18/56] ASoC: rockchip: Update to use set_fmt_new callback
+Date:   Fri, 20 May 2022 15:39:03 +0200
+Message-ID: <4375965.enAZpblka2@archbook>
+In-Reply-To: <20220519154318.2153729-19-ckeepax@opensource.cirrus.com>
+References: <20220519154318.2153729-1-ckeepax@opensource.cirrus.com> <20220519154318.2153729-19-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
-References: <20220519031345.2134401-1-kuba@kernel.org>
-In-Reply-To: <20220519031345.2134401-1-kuba@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 20 May 2022 13:30:50 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3_4fNQV51V0-QUnuTr4dK0-S_ffeFzfA8vG1uGh8vyhg@mail.gmail.com>
-Message-ID: <CAK8P3a3_4fNQV51V0-QUnuTr4dK0-S_ffeFzfA8vG1uGh8vyhg@mail.gmail.com>
-Subject: Re: [PATCH net-next] eth: de4x5: remove support for Generic DECchip &
- DIGITAL EtherWORKS PCI/EISA
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        pabeni@redhat.com, corbet@lwn.net, tsbogend@alpha.franken.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        sburla@marvell.com, vburru@marvell.com, aayarekar@marvell.com,
-        arnd@arndb.de, zhangyue1@kylinos.cn, linux-doc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:RxidTNlQXTP5LyaUmtNAetv6uI1NVNaDYJwJVsMWQ7BOLaI5KHE
- BtANPl6/Mpb7IMmupUSDX+IsM35n8hWFOMNOYw+0YgSgKQA2FDDwU3YK4lDZQcZZlJmaAvo
- SZV9v5sCdIrOTEIPAKcGMViiGmdUCw1NuunYTM5JMQxgHn6zNKtV7QRkg8i+MLpW5EhFOmi
- b6RNeMTv+G71tkjVyMk8A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:e/tDl3btj98=:gvOYMsp+h25Jgb6dzhVdva
- 0DyHnXDqjhtjeu4Pk1OZ7FZJJ0bWPdC7LgJPFm2pUoYTY1F0VUqKRRLkBeGRiXqHGPanmkBd+
- aBFbqZ1AH/5ZyPSmzjB4Hda9TFjuZ9/G4+47e4Ia4AYmjPQt1jzcvc4NmsqYvL6oCYvwdHnY6
- kDxgSXfGtcSRfBhgFpnzK59seeAPmZZ21ChXfu7UN5MxNYv1Oabmsaxc9HbvSARXxsZEGkET4
- JPlTMGSQfO8EQ7JwPs8E/EqpcxgY6LhsO5bQj7su6dveLB2o0P9NoEUxs+tSxloGZf0dBZm0V
- w6zMWKM2cbpW4nMJvsFnCyYOUzDIQCHcnjiqmffej7ibOqrcOmphjBGin276Nqs3gIvv+b48r
- 5wQwolelaftPAGlEgFefW4ygh72SVpzU8pllcGBxxUqgtJ0Wl/0VdpAnIIaH+bWzbLF/K6VGA
- aO9SMtfT8BK4nploXjRUy2cAOYCVd/f8nfJRn2B3smFoS/5bxcR2dgS3nywOTAqVE8+FhoqvL
- doSY0NqYBY+V6MYhXUNYUHOOw2FW1SQnTwGBRh9NP6L3nvkrq5FIMm3ZHFYJ0pSM/AZRzeI58
- 9XpJMw4OKijWCak2SAMy8yI5K1eHIx3dOkt9fLY8w1ClnwAOsXDpujOVyX+MHeN62xpsgX/s8
- WNtT3MNIhnjSQp1mwux3EHkbsArd/vYRfGujMyo48otmyeNLK7DdNRLAxWCwJ1U5ziJ+DQ1Tl
- aRQKRUuEWzdY+gEyN2VlWys8iHRjxTpid1Joig==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 19, 2022 at 4:13 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> Looks like almost all changes to this driver had been tree-wide
-> refactoring since git era begun. There is one commit from Al
-> 15 years ago which could potentially be fixing a real bug.
->
-> The driver is using virt_to_bus() and is a real magnet for pointless
-> cleanups. It seems unlikely to have real users. Let's try to shed
-> this maintenance burden.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+On Donnerstag, 19. Mai 2022 17:42:40 CEST Charles Keepax wrote:
+> As part of updating the core to directly tell drivers if they are clock
+> provider or consumer update these CPU side drivers to use the new direct
+> callback.
+> 
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 > ---
-> CC: corbet@lwn.net
-> CC: tsbogend@alpha.franken.de
-> CC: mpe@ellerman.id.au
-> CC: benh@kernel.crashing.org
-> CC: paulus@samba.org
-> CC: sburla@marvell.com
-> CC: vburru@marvell.com
-> CC: aayarekar@marvell.com
-> CC: arnd@arndb.de
+>  sound/soc/rockchip/rockchip_i2s.c     | 8 ++++----
+>  sound/soc/rockchip/rockchip_i2s_tdm.c | 8 ++++----
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/sound/soc/rockchip/rockchip_i2s.c b/sound/soc/rockchip/rockchip_i2s.c
+> index 4ce5d25793875..0a66c7df323dc 100644
+> --- a/sound/soc/rockchip/rockchip_i2s.c
+> +++ b/sound/soc/rockchip/rockchip_i2s.c
+> @@ -199,13 +199,13 @@ static int rockchip_i2s_set_fmt(struct snd_soc_dai *cpu_dai,
+>  
+>  	pm_runtime_get_sync(cpu_dai->dev);
+>  	mask = I2S_CKR_MSS_MASK;
+> -	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
+> -	case SND_SOC_DAIFMT_CBS_CFS:
+> +	switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
+> +	case SND_SOC_DAIFMT_BP_FP:
+>  		/* Set source clock in Master mode */
+>  		val = I2S_CKR_MSS_MASTER;
+>  		i2s->is_master_mode = true;
+>  		break;
+> -	case SND_SOC_DAIFMT_CBM_CFM:
+> +	case SND_SOC_DAIFMT_BC_FC:
+>  		val = I2S_CKR_MSS_SLAVE;
+>  		i2s->is_master_mode = false;
+>  		break;
+> @@ -486,7 +486,7 @@ static const struct snd_soc_dai_ops rockchip_i2s_dai_ops = {
+>  	.hw_params = rockchip_i2s_hw_params,
+>  	.set_bclk_ratio	= rockchip_i2s_set_bclk_ratio,
+>  	.set_sysclk = rockchip_i2s_set_sysclk,
+> -	.set_fmt = rockchip_i2s_set_fmt,
+> +	.set_fmt_new = rockchip_i2s_set_fmt,
+>  	.trigger = rockchip_i2s_trigger,
+>  };
+>  
+> diff --git a/sound/soc/rockchip/rockchip_i2s_tdm.c b/sound/soc/rockchip/rockchip_i2s_tdm.c
+> index 98700e75b82a1..c90afccdae362 100644
+> --- a/sound/soc/rockchip/rockchip_i2s_tdm.c
+> +++ b/sound/soc/rockchip/rockchip_i2s_tdm.c
+> @@ -411,12 +411,12 @@ static int rockchip_i2s_tdm_set_fmt(struct snd_soc_dai *cpu_dai,
+>  	}
+>  
+>  	mask = I2S_CKR_MSS_MASK;
+> -	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
+> -	case SND_SOC_DAIFMT_CBC_CFC:
+> +	switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
+> +	case SND_SOC_DAIFMT_BP_FP:
+>  		val = I2S_CKR_MSS_MASTER;
+>  		i2s_tdm->is_master_mode = true;
+>  		break;
+> -	case SND_SOC_DAIFMT_CBP_CFP:
+> +	case SND_SOC_DAIFMT_BC_FC:
+>  		val = I2S_CKR_MSS_SLAVE;
+>  		i2s_tdm->is_master_mode = false;
+>  		break;
+> @@ -1113,7 +1113,7 @@ static const struct snd_soc_dai_ops rockchip_i2s_tdm_dai_ops = {
+>  	.hw_params = rockchip_i2s_tdm_hw_params,
+>  	.set_bclk_ratio	= rockchip_i2s_tdm_set_bclk_ratio,
+>  	.set_sysclk = rockchip_i2s_tdm_set_sysclk,
+> -	.set_fmt = rockchip_i2s_tdm_set_fmt,
+> +	.set_fmt_new = rockchip_i2s_tdm_set_fmt,
+>  	.set_tdm_slot = rockchip_dai_tdm_slot,
+>  	.trigger = rockchip_i2s_tdm_trigger,
+>  };
+> 
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Please run ./scripts/get_maintainer.pl against the individual patches so
+that I'm included in the recipients of the e-mail as well.
 
-> ---
->  .../device_drivers/ethernet/dec/de4x5.rst     |  189 -
->  .../device_drivers/ethernet/index.rst         |    1 -
->  arch/mips/configs/mtx1_defconfig              |    1 -
->  arch/powerpc/configs/chrp32_defconfig         |    1 -
->  arch/powerpc/configs/ppc6xx_defconfig         |    1 -
->  drivers/net/ethernet/dec/tulip/Kconfig        |   15 -
->  drivers/net/ethernet/dec/tulip/Makefile       |    1 -
->  drivers/net/ethernet/dec/tulip/de4x5.c        | 5591 -----------------
->  drivers/net/ethernet/dec/tulip/de4x5.h        | 1017 ---
+Anyway, for the i2s-tdm parts:
+
+Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+
+Tested on a RK3566 connected to an RK817 codec.
+
+Regards,
+Nicolas Frattaroli
 
 
-I checked the defconfig files to make sure we are not removing the
-last ethernet driver from
-one of them. mtx1 has built-in networking and no PCI slot, so this is
-definitely fine.
-the ppc32 configs are for machines with PCI slots and also enable
-multiple drivers but I saw
-nothing specifically needing this card.
-
-       Arnd
