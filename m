@@ -2,131 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5750152EAB4
-	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 13:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4FA52EB24
+	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 13:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347888AbiETLYe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 May 2022 07:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
+        id S1348733AbiETLvY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 May 2022 07:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbiETLYb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 07:24:31 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA58B36CE;
-        Fri, 20 May 2022 04:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DGPrrkXTp6oI8cbbgByz5QLKv15GNHxUgmjuIwTAy/E=; b=eqnE/suLTpG3xbkMCBtDpxLY3n
-        NIRgLQiaBi0sCvdNCD4AFRLhJwRt1fDLW5HSSGFY7WXFEGFCYXn6Q0dC8gIFph3vTjXA6DvyBiQwz
-        I5PwxVn4HFAkq1g0udGCDh7f8awWYDjllyLtGAcRh6eSoRE6OIuNpAwHVy7SfEQenDYcne2doKiCl
-        jXXzZQlRm486qDYGQtQ0jW8Ms6RtpLdk65Qcz7YJ7/YEdFvKdb+dzF1Re9Q6nwXZnFrLVKgAD5Mwb
-        LfHsy0RngN1antwERG5D/EtoEWfAXqtoLg2k7TzZKasJtkGm7zpf+kH+Fd2GGS1HnQh8pXfJiIePS
-        VAbFF/9w==;
-Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1ns0jj-00Cb4k-Od; Fri, 20 May 2022 13:24:04 +0200
-Message-ID: <ded31ec0-076b-2c5b-0fe6-0c274954821f@igalia.com>
-Date:   Fri, 20 May 2022 08:23:33 -0300
+        with ESMTP id S1348723AbiETLvX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 07:51:23 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D04C19C0C
+        for <linux-mips@vger.kernel.org>; Fri, 20 May 2022 04:51:20 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2FD18402E2
+        for <linux-mips@vger.kernel.org>; Fri, 20 May 2022 11:51:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653047478;
+        bh=ulZqruHzuXibmsmfjZ5kTMOimfHFQdq4BeiWtFLLtng=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=X7uHG9VDORGKRLGbuo5Xis8d+Y9Nwh9YoFSxezbC7eGCQBLpwsE6f7DxQUBDQVF8p
+         pZ+AEBOcpLPvR504MLr5EA/ku2KOTKXa2RoO1LQpiRz2gebHuhO16YLe892qnRfsHH
+         iPrEpo7QY7L/JlTbwNV627DyFww2MV89zFIeWNm/5Bzwb/yDLikuj63np+1KgPrPou
+         gqcL1WVWQZHkkpn/g3IIR//PwY/qUuiQGL0+WQjYzrX/NcclGxcRcPCpujfh4cNPdO
+         /Bjg4Jb9K7XOYIkY8UqZwNoX2bLEv9m/XLeEbD1xJB+XLt3ykwb84MNDCX2qi1cHlV
+         5rauryB6fuLkg==
+Received: by mail-ej1-f69.google.com with SMTP id sd38-20020a1709076e2600b006f3e54b1dbcso3902042ejc.4
+        for <linux-mips@vger.kernel.org>; Fri, 20 May 2022 04:51:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ulZqruHzuXibmsmfjZ5kTMOimfHFQdq4BeiWtFLLtng=;
+        b=5BRO5XP77QmHS5TY+Ahhoc3rOJ/z/AE9ZV5fn6JCu8oCGfBONlCvUbyV9XpsyY5jKV
+         DNXV7sXvv+WQz6B9NMQ+HEc6QCbcgFd08ASCov11IF96xJfEu0aNjoBEsM9H/mfu/VH5
+         YkNOD4cY/ZpOVPqtjtnjhsGMfja8totKVmG/lcvs6xsiQYpkVIjYrYr17T34ne5YbANh
+         cf9LYD5GJ7VxLEtl94A0SgtigGbT30qPF3YuhL/tw3yy7uHN4sE4UvHFicRsi7F7w64J
+         CuqC8Mh+58a7eNtlcSAEmplJFZha81c5kXNE+99CrpJuua2LGmtBbg+8grSR0xmi6hXT
+         j19w==
+X-Gm-Message-State: AOAM533+ln4V10UWMz1LWax/2AiN8sc6FQEBCRXzzt7gH4oeTR27EnxR
+        YsALOCqoGA00ecO2XiaF2Mi7xmssQYuDtGffoFUkIee5RUM+yBPlt96qI+ROHP+LsAEevy37GX1
+        XIs8emlWogRkz0EmFehbhrNo0+2AVe8Tkd8dcd+o=
+X-Received: by 2002:a17:907:7ea2:b0:6fe:7ef2:b71d with SMTP id qb34-20020a1709077ea200b006fe7ef2b71dmr8127409ejc.508.1653047477468;
+        Fri, 20 May 2022 04:51:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwcRQRee3TWn0TijUw5yehWrcDOC+S3/Ig1s/PEUC/T4w2AOT2xmnYsTj5rT1lS6xgC2pgVrQ==
+X-Received: by 2002:a17:907:7ea2:b0:6fe:7ef2:b71d with SMTP id qb34-20020a1709077ea200b006fe7ef2b71dmr8127397ejc.508.1653047477330;
+        Fri, 20 May 2022 04:51:17 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id e18-20020a50fb92000000b0042ab8c5e99fsm4112411edq.14.2022.05.20.04.51.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 04:51:16 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     keguang.zhang@gmail.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH] MIPS: loongson32: Kconfig: Remove extra space
+Date:   Fri, 20 May 2022 13:51:13 +0200
+Message-Id: <20220520115113.147170-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, Petr Mladek <pmladek@suse.com>
-Cc:     "michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Young <dyoung@redhat.com>, d.hatayama@jp.fujitsu.com,
-        akpm@linux-foundation.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
-        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com> <Yn0TnsWVxCcdB2yO@alley>
- <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
- <20220519234502.GA194232@MiWiFi-R3L-srv>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220519234502.GA194232@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19/05/2022 20:45, Baoquan He wrote:
-> [...]
->> I really appreciate the summary skill you have, to convert complex
->> problems in very clear and concise ideas. Thanks for that, very useful!
->> I agree with what was summarized above.
-> 
-> I want to say the similar words to Petr's reviewing comment when I went
-> through the patches and traced each reviewing sub-thread to try to
-> catch up. Petr has reivewed this series so carefully and given many
-> comments I want to ack immediately.
-> 
-> I agree with most of the suggestions from Petr to this patch, except of
-> one tiny concern, please see below inline comment.
+Remove extra space between 'prompt' keyword and string.
 
-Hi Baoquan, thanks! I'm glad you're also reviewing that =)
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+---
+ arch/mips/loongson32/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/mips/loongson32/Kconfig b/arch/mips/loongson32/Kconfig
+index e27879b4813b..2ef9da0016df 100644
+--- a/arch/mips/loongson32/Kconfig
++++ b/arch/mips/loongson32/Kconfig
+@@ -46,7 +46,7 @@ menuconfig CEVT_CSRC_LS1X
+ 	  If unsure, say N.
+ 
+ choice
+-	prompt  "Select clockevent/clocksource"
++	prompt "Select clockevent/clocksource"
+ 	depends on CEVT_CSRC_LS1X
+ 	default TIMER_USE_PWM0
+ 
+-- 
+2.32.0
 
-> [...]
-> 
-> I like the proposed skeleton of panic() and code style suggested by
-> Petr very much. About panic_prefer_crash_dump which might need be added,
-> I hope it has a default value true. This makes crash_dump execute at
-> first by default just as before, unless people specify
-> panic_prefer_crash_dump=0|n|off to disable it. Otherwise we need add
-> panic_prefer_crash_dump=1 in kernel and in our distros to enable kdump,
-> this is inconsistent with the old behaviour.
-
-I'd like to understand better why the crash_kexec() must always be the
-first thing in your use case. If we keep that behavior, we'll see all
-sorts of workarounds - see the last patches of this series, Hyper-V and
-PowerPC folks hardcoded "crash_kexec_post_notifiers" in order to force
-execution of their relevant notifiers (like the vmbus disconnect,
-specially in arm64 that has no custom machine_crash_shutdown, or the
-fadump case in ppc). This led to more risk in kdump.
-
-The thing is: with the notifiers' split, we tried to keep only the most
-relevant/necessary stuff in this first list, things that ultimately
-should improve kdump reliability or if not, at least not break it. My
-feeling is that, with this series, we should change the idea/concept
-that kdump must run first nevertheless, not matter what. We're here
-trying to accommodate the antagonistic goals of hypervisors that need
-some clean-up (even for kdump to work) VS. kdump users, that wish a
-"pristine" system reboot ASAP after the crash.
-
-Cheers,
-
-
-Guilherme
