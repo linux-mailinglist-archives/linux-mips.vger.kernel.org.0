@@ -2,74 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4FA52EB24
-	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 13:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598D752EC11
+	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 14:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348733AbiETLvY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 May 2022 07:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S242140AbiETMbS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 May 2022 08:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348723AbiETLvX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 07:51:23 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D04C19C0C
-        for <linux-mips@vger.kernel.org>; Fri, 20 May 2022 04:51:20 -0700 (PDT)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2FD18402E2
-        for <linux-mips@vger.kernel.org>; Fri, 20 May 2022 11:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653047478;
-        bh=ulZqruHzuXibmsmfjZ5kTMOimfHFQdq4BeiWtFLLtng=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=X7uHG9VDORGKRLGbuo5Xis8d+Y9Nwh9YoFSxezbC7eGCQBLpwsE6f7DxQUBDQVF8p
-         pZ+AEBOcpLPvR504MLr5EA/ku2KOTKXa2RoO1LQpiRz2gebHuhO16YLe892qnRfsHH
-         iPrEpo7QY7L/JlTbwNV627DyFww2MV89zFIeWNm/5Bzwb/yDLikuj63np+1KgPrPou
-         gqcL1WVWQZHkkpn/g3IIR//PwY/qUuiQGL0+WQjYzrX/NcclGxcRcPCpujfh4cNPdO
-         /Bjg4Jb9K7XOYIkY8UqZwNoX2bLEv9m/XLeEbD1xJB+XLt3ykwb84MNDCX2qi1cHlV
-         5rauryB6fuLkg==
-Received: by mail-ej1-f69.google.com with SMTP id sd38-20020a1709076e2600b006f3e54b1dbcso3902042ejc.4
-        for <linux-mips@vger.kernel.org>; Fri, 20 May 2022 04:51:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ulZqruHzuXibmsmfjZ5kTMOimfHFQdq4BeiWtFLLtng=;
-        b=5BRO5XP77QmHS5TY+Ahhoc3rOJ/z/AE9ZV5fn6JCu8oCGfBONlCvUbyV9XpsyY5jKV
-         DNXV7sXvv+WQz6B9NMQ+HEc6QCbcgFd08ASCov11IF96xJfEu0aNjoBEsM9H/mfu/VH5
-         YkNOD4cY/ZpOVPqtjtnjhsGMfja8totKVmG/lcvs6xsiQYpkVIjYrYr17T34ne5YbANh
-         cf9LYD5GJ7VxLEtl94A0SgtigGbT30qPF3YuhL/tw3yy7uHN4sE4UvHFicRsi7F7w64J
-         CuqC8Mh+58a7eNtlcSAEmplJFZha81c5kXNE+99CrpJuua2LGmtBbg+8grSR0xmi6hXT
-         j19w==
-X-Gm-Message-State: AOAM533+ln4V10UWMz1LWax/2AiN8sc6FQEBCRXzzt7gH4oeTR27EnxR
-        YsALOCqoGA00ecO2XiaF2Mi7xmssQYuDtGffoFUkIee5RUM+yBPlt96qI+ROHP+LsAEevy37GX1
-        XIs8emlWogRkz0EmFehbhrNo0+2AVe8Tkd8dcd+o=
-X-Received: by 2002:a17:907:7ea2:b0:6fe:7ef2:b71d with SMTP id qb34-20020a1709077ea200b006fe7ef2b71dmr8127409ejc.508.1653047477468;
-        Fri, 20 May 2022 04:51:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwcRQRee3TWn0TijUw5yehWrcDOC+S3/Ig1s/PEUC/T4w2AOT2xmnYsTj5rT1lS6xgC2pgVrQ==
-X-Received: by 2002:a17:907:7ea2:b0:6fe:7ef2:b71d with SMTP id qb34-20020a1709077ea200b006fe7ef2b71dmr8127397ejc.508.1653047477330;
-        Fri, 20 May 2022 04:51:17 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id e18-20020a50fb92000000b0042ab8c5e99fsm4112411edq.14.2022.05.20.04.51.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 04:51:16 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
-To:     keguang.zhang@gmail.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
-Subject: [PATCH] MIPS: loongson32: Kconfig: Remove extra space
-Date:   Fri, 20 May 2022 13:51:13 +0200
-Message-Id: <20220520115113.147170-1-juergh@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S241416AbiETMbR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 08:31:17 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6146447568;
+        Fri, 20 May 2022 05:31:13 -0700 (PDT)
+Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N3KDM-1nidun1Y1a-010L21; Fri, 20 May 2022 14:31:11 +0200
+Received: by mail-yb1-f172.google.com with SMTP id r1so13919589ybo.7;
+        Fri, 20 May 2022 05:31:10 -0700 (PDT)
+X-Gm-Message-State: AOAM533XICYSchr83/2dnnvlXYJ4p8DurUidGgS1IQc22J1Xjhw4Rq8S
+        ggohQQS/MAC5kuY3vi/H1bpfmpgzzMs77SmJ3i4=
+X-Google-Smtp-Source: ABdhPJzM0/g+q1PRwguziGorhB8SDUsN9iEFZbR/3vnqE9X6zeZuqHYx8uEJ7JXjS9vB4zG423aFir2s+dxjeU1ONqo=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr9208955ybx.472.1653049869839; Fri, 20
+ May 2022 05:31:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220519031345.2134401-1-kuba@kernel.org>
+In-Reply-To: <20220519031345.2134401-1-kuba@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 20 May 2022 13:30:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3_4fNQV51V0-QUnuTr4dK0-S_ffeFzfA8vG1uGh8vyhg@mail.gmail.com>
+Message-ID: <CAK8P3a3_4fNQV51V0-QUnuTr4dK0-S_ffeFzfA8vG1uGh8vyhg@mail.gmail.com>
+Subject: Re: [PATCH net-next] eth: de4x5: remove support for Generic DECchip &
+ DIGITAL EtherWORKS PCI/EISA
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+        pabeni@redhat.com, corbet@lwn.net, tsbogend@alpha.franken.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        sburla@marvell.com, vburru@marvell.com, aayarekar@marvell.com,
+        arnd@arndb.de, zhangyue1@kylinos.cn, linux-doc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:RxidTNlQXTP5LyaUmtNAetv6uI1NVNaDYJwJVsMWQ7BOLaI5KHE
+ BtANPl6/Mpb7IMmupUSDX+IsM35n8hWFOMNOYw+0YgSgKQA2FDDwU3YK4lDZQcZZlJmaAvo
+ SZV9v5sCdIrOTEIPAKcGMViiGmdUCw1NuunYTM5JMQxgHn6zNKtV7QRkg8i+MLpW5EhFOmi
+ b6RNeMTv+G71tkjVyMk8A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:e/tDl3btj98=:gvOYMsp+h25Jgb6dzhVdva
+ 0DyHnXDqjhtjeu4Pk1OZ7FZJJ0bWPdC7LgJPFm2pUoYTY1F0VUqKRRLkBeGRiXqHGPanmkBd+
+ aBFbqZ1AH/5ZyPSmzjB4Hda9TFjuZ9/G4+47e4Ia4AYmjPQt1jzcvc4NmsqYvL6oCYvwdHnY6
+ kDxgSXfGtcSRfBhgFpnzK59seeAPmZZ21ChXfu7UN5MxNYv1Oabmsaxc9HbvSARXxsZEGkET4
+ JPlTMGSQfO8EQ7JwPs8E/EqpcxgY6LhsO5bQj7su6dveLB2o0P9NoEUxs+tSxloGZf0dBZm0V
+ w6zMWKM2cbpW4nMJvsFnCyYOUzDIQCHcnjiqmffej7ibOqrcOmphjBGin276Nqs3gIvv+b48r
+ 5wQwolelaftPAGlEgFefW4ygh72SVpzU8pllcGBxxUqgtJ0Wl/0VdpAnIIaH+bWzbLF/K6VGA
+ aO9SMtfT8BK4nploXjRUy2cAOYCVd/f8nfJRn2B3smFoS/5bxcR2dgS3nywOTAqVE8+FhoqvL
+ doSY0NqYBY+V6MYhXUNYUHOOw2FW1SQnTwGBRh9NP6L3nvkrq5FIMm3ZHFYJ0pSM/AZRzeI58
+ 9XpJMw4OKijWCak2SAMy8yI5K1eHIx3dOkt9fLY8w1ClnwAOsXDpujOVyX+MHeN62xpsgX/s8
+ WNtT3MNIhnjSQp1mwux3EHkbsArd/vYRfGujMyo48otmyeNLK7DdNRLAxWCwJ1U5ziJ+DQ1Tl
+ aRQKRUuEWzdY+gEyN2VlWys8iHRjxTpid1Joig==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +68,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove extra space between 'prompt' keyword and string.
+On Thu, May 19, 2022 at 4:13 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> Looks like almost all changes to this driver had been tree-wide
+> refactoring since git era begun. There is one commit from Al
+> 15 years ago which could potentially be fixing a real bug.
+>
+> The driver is using virt_to_bus() and is a real magnet for pointless
+> cleanups. It seems unlikely to have real users. Let's try to shed
+> this maintenance burden.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: corbet@lwn.net
+> CC: tsbogend@alpha.franken.de
+> CC: mpe@ellerman.id.au
+> CC: benh@kernel.crashing.org
+> CC: paulus@samba.org
+> CC: sburla@marvell.com
+> CC: vburru@marvell.com
+> CC: aayarekar@marvell.com
+> CC: arnd@arndb.de
 
-Signed-off-by: Juerg Haefliger <juergh@canonical.com>
----
- arch/mips/loongson32/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/arch/mips/loongson32/Kconfig b/arch/mips/loongson32/Kconfig
-index e27879b4813b..2ef9da0016df 100644
---- a/arch/mips/loongson32/Kconfig
-+++ b/arch/mips/loongson32/Kconfig
-@@ -46,7 +46,7 @@ menuconfig CEVT_CSRC_LS1X
- 	  If unsure, say N.
- 
- choice
--	prompt  "Select clockevent/clocksource"
-+	prompt "Select clockevent/clocksource"
- 	depends on CEVT_CSRC_LS1X
- 	default TIMER_USE_PWM0
- 
--- 
-2.32.0
+> ---
+>  .../device_drivers/ethernet/dec/de4x5.rst     |  189 -
+>  .../device_drivers/ethernet/index.rst         |    1 -
+>  arch/mips/configs/mtx1_defconfig              |    1 -
+>  arch/powerpc/configs/chrp32_defconfig         |    1 -
+>  arch/powerpc/configs/ppc6xx_defconfig         |    1 -
+>  drivers/net/ethernet/dec/tulip/Kconfig        |   15 -
+>  drivers/net/ethernet/dec/tulip/Makefile       |    1 -
+>  drivers/net/ethernet/dec/tulip/de4x5.c        | 5591 -----------------
+>  drivers/net/ethernet/dec/tulip/de4x5.h        | 1017 ---
 
+
+I checked the defconfig files to make sure we are not removing the
+last ethernet driver from
+one of them. mtx1 has built-in networking and no PCI slot, so this is
+definitely fine.
+the ppc32 configs are for machines with PCI slots and also enable
+multiple drivers but I saw
+nothing specifically needing this card.
+
+       Arnd
