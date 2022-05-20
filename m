@@ -2,36 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE3D52EA5C
-	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 12:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5C552EA7B
+	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 13:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236426AbiETK4T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 May 2022 06:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S1348339AbiETLIF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 May 2022 07:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348340AbiETK4I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 06:56:08 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 160723981B;
-        Fri, 20 May 2022 03:56:05 -0700 (PDT)
+        with ESMTP id S1345351AbiETLIE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 07:08:04 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5D705E150;
+        Fri, 20 May 2022 04:08:03 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 1380992009C; Fri, 20 May 2022 12:56:03 +0200 (CEST)
+        id 55FD592009C; Fri, 20 May 2022 13:08:02 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 1010A92009B;
-        Fri, 20 May 2022 11:56:03 +0100 (BST)
-Date:   Fri, 20 May 2022 11:56:02 +0100 (BST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 5282D92009B;
+        Fri, 20 May 2022 12:08:02 +0100 (BST)
+Date:   Fri, 20 May 2022 12:08:02 +0100 (BST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     =?UTF-8?B?6ZmI5a2m5YW1?= <chenxuebing@jari.cn>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [MIPS] DEC:do not initialise statics to 0
-In-Reply-To: <4d4c0b64.993.180d7a6945a.Coremail.chenxuebing@jari.cn>
-Message-ID: <alpine.DEB.2.21.2205200308000.52080@angie.orcam.me.uk>
-References: <4d4c0b64.993.180d7a6945a.Coremail.chenxuebing@jari.cn>
+To:     Paul Cercueil <paul@crapouillou.net>
+cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips <linux-mips@vger.kernel.org>
+Subject: Re: arch/mips/include/asm/checksum.h:195:9: error: unsupported inline
+ asm: input with type 'unsigned long' matching output with type '__wsum' (aka
+ 'unsigned int')
+In-Reply-To: <OB55CR.QAT1J8A48BK21@crapouillou.net>
+Message-ID: <alpine.DEB.2.21.2205200510350.52080@angie.orcam.me.uk>
+References: <202205200128.layu7VXF-lkp@intel.com> <OB55CR.QAT1J8A48BK21@crapouillou.net>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -41,47 +44,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 18 May 2022, 陈学兵 wrote:
+On Thu, 19 May 2022, Paul Cercueil wrote:
 
-> ​Static variables do not need to be initialised to 0,
+> About the real issue: Maybe the last "addu" in csum_tcpudp_nofold() should be
+> a "daddu"?
 
- This is true.
+ It doesn't matter whether there is ADDU or DADDU anymore, given that 
+commit 198688edbf77 ("MIPS: Fix inline asm input/output type mismatch in 
+checksum.h used with Clang") has added a redundant 32-bit sign-extension 
+operation right afterwards, regressing size/performance by an extra 
+instruction in this performance-critical code as a workaround for a stupid 
+compiler.
 
-> because compiler
-> will initialise all uninitialised statics to 0.
-
- This is however not (even though such zeroing is mandated by the C 
-language standard), because it is this code:
-
-	PTR_LA		t0, __bss_start		# clear .bss
-	LONG_S		zero, (t0)
-	PTR_LA		t1, __bss_stop - LONGSIZE
-1:
-	PTR_ADDIU	t0, LONGSIZE
-	LONG_S		zero, (t0)
-	bne		t0, t1, 1b
-
-in arch/mips/kernel/head.S that does it in Linux (in userland code this 
-will be in CRT startup, but it's not a part of the compiler either).  So 
-please avoid spreading misleading information in your change description.
-
-> diff --git a/arch/mips/dec/prom/identify.c b/arch/mips/dec/prom/identify.c
-> index 80cd14cd1a63..89e736670ccf 100644
-> --- a/arch/mips/dec/prom/identify.c
-> +++ b/arch/mips/dec/prom/identify.c
-> @@ -45,7 +45,7 @@ const char *get_system_type(void)
->  {
->  #define STR_BUF_LEN 64
->   static char system[STR_BUF_LEN];
-> - static int called = 0;
-> + static int called;
-
- Barring the inaccuracy of the change description your code update is 
-correct, however your patch has been whitespace-damaged in transit and 
-cannot be applied as it stands.
-
- Please send an updated version with the problems addressed.
-
- NB the same concerns apply to your other such change submitted.
+ I'm not sure though why the bot has been verifying old commit 
+c434b9f80b09 ("MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol") instead, 
+which predates the workaround.  Perhaps current master also fails to build 
+in this file for one reason or another and bisection has misled the bot 
+into an unrelated commit?
 
   Maciej
