@@ -2,99 +2,686 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF53A52E533
-	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 08:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2BE52E7BB
+	for <lists+linux-mips@lfdr.de>; Fri, 20 May 2022 10:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345961AbiETGpV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 May 2022 02:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S1347045AbiETIif (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 May 2022 04:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345955AbiETGpU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 02:45:20 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCC914CA3A
-        for <linux-mips@vger.kernel.org>; Thu, 19 May 2022 23:45:18 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id r3so1749119ljd.7
-        for <linux-mips@vger.kernel.org>; Thu, 19 May 2022 23:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AnEwnvhKln/QqudtDrsLeq9rcJ9ha/C6wjXnDVo990k=;
-        b=O6glMIfzZPcKFuiAIfpgKl4vPS6f/5kKRDEsCZ51jhpn2nvRMnbXG5g+EDHeE904nP
-         t7HS+b/93itLD8AaEQHAOU/xrWjqGgTNAbPH9jakVpgMQTIhKd99kpg+p8rnNvdIqwdN
-         6qoJ6hv6rNLvwFxEXHoFISEMQCRvxYIVNP2Tdx5gjSpfV8JASem8ZyxogIrKo+3noZeo
-         On3nePrDC2RBv0fxVZnC2PEjR3MvP9xqKuaD0jO5YVuhsa36Q52R9it54/UTpAk0vFOu
-         oN03MNBdr3Uh7nMtz9gRp/Uo5idHLu4wjadR99H/ArdkjYBw/HcmyNp38tQ7XXACXvAn
-         7LxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AnEwnvhKln/QqudtDrsLeq9rcJ9ha/C6wjXnDVo990k=;
-        b=EWu7X4B8TPoBmx8jn29hlJL6IR/D5iQbpJl9Q/h5tHxUHihdP/3gr1M08q/EFeXzye
-         GR1dG4V0zPTC9GaXxFhZ1lWuxzgYETjIUizoj8Vk7hyZYh1pzJ8j1iwWSu2DAihJmALk
-         sj+qMdQaAKIllOvg7RvrygBNhqNiZNkCwdCyW36OnUF6EN7akBKqOxeuAJs2wM0e3ky5
-         xq6/xI9xjotXt27vgUOByL098lcTqYvklkcNYYlm1xQpqcu6Y5NR+4X3j+j7RpFG0ZRX
-         Stsscf9xOqqb3RadyznMfVcroGaReS8tDYogr+U6NpoiHUFcvwvPqffgLTPp5AkfxLwP
-         AMqA==
-X-Gm-Message-State: AOAM530v5ds157Z+RCkypAHvcF5wPwphid5QhtG38h/d1JZ7jfVkJnWo
-        he53WiL7gTncd7gLOTtIuXnNBA==
-X-Google-Smtp-Source: ABdhPJxU0QeXD6emlDZWLebUbtElcVEEa6zD5/lvXQQQBtACmvvZZjPEOav+NOjy2nN8XnxEigbRJQ==
-X-Received: by 2002:a05:651c:158b:b0:250:a056:7e48 with SMTP id h11-20020a05651c158b00b00250a0567e48mr4800506ljq.64.1653029116920;
-        Thu, 19 May 2022 23:45:16 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id y22-20020a2e95d6000000b0024f3d1dae8esm197255ljh.22.2022.05.19.23.45.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 23:45:16 -0700 (PDT)
-Message-ID: <cab52964-31d5-a545-9856-b298d3cd3c84@linaro.org>
-Date:   Fri, 20 May 2022 08:45:14 +0200
+        with ESMTP id S1344658AbiETIie (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 May 2022 04:38:34 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D03B9CF59;
+        Fri, 20 May 2022 01:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653035912; x=1684571912;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=rcWAqUmkaH3YekMgB1Mnm+5TYdr78RHJ0s3k6It8HII=;
+  b=JgXhF/wCbuw2w5CKm754mh/3VtOzB0PmytXN2O9oDm0hRA0U6/dDG+Ax
+   t4Z213uSmovOnch4+Se5zw8Jn/CU06RyW0rvjiI2MZkj5vFSMsHjVd+4Q
+   c8ysu2psKpfb+TKpb7Gm6TsV9j5G97z+ck9LsbrCig0koL7cVuEJXyKqx
+   7pk0p+HxVtT+9mTwECqSV1/pO2PLDC//R4yAKaGzFu6UpQX3xvURyvxaS
+   7YXuF0kMv/2nN7dvq/7G7kfZZ671YNYDHG0wAKDuV0mubqp/6DsaWrdwW
+   pvWkMZLZwDgjduIVeRgg97wNmJLDjFSFyelYFieRhK6byl1RQLBJW3bCV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272668270"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="272668270"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 01:38:31 -0700
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="570705930"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.242]) ([10.255.28.242])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 01:38:28 -0700
+Subject: Re: [kbuild-all] Re: arch/mips/include/asm/checksum.h:195:9: error:
+ unsupported inline asm: input with type 'unsigned long' matching output with
+ type '__wsum' (aka 'unsigned int')
+To:     Paul Cercueil <paul@crapouillou.net>,
+        kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips <linux-mips@vger.kernel.org>
+References: <202205200128.layu7VXF-lkp@intel.com>
+ <OB55CR.QAT1J8A48BK21@crapouillou.net>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <0b98eb74-5a70-7170-72ab-517e3df4b202@intel.com>
+Date:   Fri, 20 May 2022 16:38:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 46/56] ASoC: samsung: Rename set_fmt_new back to set_fmt
+In-Reply-To: <OB55CR.QAT1J8A48BK21@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, kuninori.morimoto.gx@renesas.com,
-        nicolas.ferre@microchip.com, nsaenz@kernel.org,
-        shawnguo@kernel.org, linux-imx@nxp.com, cezary.rojewski@intel.com,
-        pierre-louis.bossart@linux.intel.com, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, daniel@zonque.org,
-        srinivas.kandagatla@linaro.org, linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
-        heiko@sntech.de, jbrunet@baylibre.com, kernel@pengutronix.de,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com
-References: <20220519154318.2153729-1-ckeepax@opensource.cirrus.com>
- <20220519154318.2153729-47-ckeepax@opensource.cirrus.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220519154318.2153729-47-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19/05/2022 17:43, Charles Keepax wrote:
-> Now the core has been migrated across to the new direct clock
-> specification we can move the drivers back to the normal set_fmt
-> callback.
+
+
+On 5/20/2022 1:45 AM, Paul Cercueil wrote:
+> Hi Bot,
 > 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> Le ven., mai 20 2022 at 01:23:43 +0800, kernel test robot 
+> <lkp@intel.com> a écrit :
+>> tree: 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   f993aed406eaf968ba3867a76bb46c95336a33d0
+>> commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add 
+>> MIPS_GENERIC_KERNEL symbol
+> 
+> I have no idea how that error could be even remotely related to the 
+> commit above.
 
+Hi Paul,
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Sorry for the inconvience, the error is not introduced by the commit,
+it's only bisected to it after kconfig changed.
 
+Best Regards,
+Rong Chen
 
-Best regards,
-Krzysztof
+> 
+> About the real issue: Maybe the last "addu" in csum_tcpudp_nofold() 
+> should be a "daddu"?
+> 
+> Cheers,
+> -Paul
+> 
+>> date:   1 year, 8 months ago
+>> config: mips-randconfig-r036-20220519 
+>> (https://download.01.org/0day-ci/archive/20220520/202205200128.layu7VXF-lkp@intel.com/config) 
+>>
+>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 
+>> e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
+>> reproduce (this is a W=1 build):
+>>         wget 
+>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+>> -O ~/bin/make.cross
+>>         chmod +x ~/bin/make.cross
+>>         # install mips cross compiling tool for clang build
+>>         # apt-get install binutils-mips-linux-gnu
+>>         # 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 
+>>
+>>         git remote add linus 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>         git fetch --no-tags linus master
+>>         git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+>>         # save the config file
+>>         mkdir build_dir && cp config build_dir/.config
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 
+>> O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/cavium-octeon/ 
+>> drivers/dma-buf/heaps/ net/ipv6/
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All error/warnings (new ones prefixed by >>):
+>>
+>>    In file included from arch/mips/cavium-octeon/octeon-platform.c:10:
+>>    In file included from include/linux/etherdevice.h:20:
+>>    In file included from include/linux/if_ether.h:19:
+>>    In file included from include/linux/skbuff.h:28:
+>>    In file included from include/net/checksum.h:22:
+>>>>  arch/mips/include/asm/checksum.h:195:9: error: unsupported inline 
+>>>> asm: input with type 'unsigned long' matching output with type 
+>>>> '__wsum' (aka 'unsigned int')
+>>            : "0" ((__force unsigned long)daddr),
+>>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    In file included from arch/mips/cavium-octeon/octeon-platform.c:15:
+>>    In file included from arch/mips/include/asm/octeon/octeon.h:11:
+>>    In file included from arch/mips/include/asm/octeon/cvmx.h:72:
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:323:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:323:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:324:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_SIM)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:324:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:325:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_EBT3000)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:325:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:326:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_KODAMA)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:326:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:327:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NIAGARA)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:327:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:328:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NAC38)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:328:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:329:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_THUNDER)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:329:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:330:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_TRANTOR)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:330:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:331:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_EBH3000)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:331:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:332:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_EBH3100)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>> -- 
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:397:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>> ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MIN)
+>> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:397:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:398:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_UBNT_E100)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:398:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:399:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_DSR1000N)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:399:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:400:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_KONTRON_S1901)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:400:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:401:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>> ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MAX)
+>> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:401:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:412:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_NULL)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:412:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:413:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_SIM_TYPE_DEPRECATED)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:413:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:414:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_OCTEON_SAMPLE)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:414:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:415:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_MAX)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:415:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                              ^
+>>    arch/mips/cavium-octeon/smp.c:99:6: warning: no previous prototype 
+>> for function 'octeon_send_ipi_single' [-Wmissing-prototypes]
+>>    void octeon_send_ipi_single(int cpu, unsigned int action)
+>>         ^
+>>    arch/mips/cavium-octeon/smp.c:99:1: note: declare 'static' if the 
+>> function is not intended to be used outside of this translation unit
+>>    void octeon_send_ipi_single(int cpu, unsigned int action)
+>>    ^
+>>    static
+>>>>  arch/mips/cavium-octeon/smp.c:194:5: warning: no previous prototype 
+>>>> for function 'plat_post_relocation' [-Wmissing-prototypes]
+>>    int plat_post_relocation(long offset)
+>>        ^
+>>    arch/mips/cavium-octeon/smp.c:194:1: note: declare 'static' if the 
+>> function is not intended to be used outside of this translation unit
+>>    int plat_post_relocation(long offset)
+>>    ^
+>>    static
+>>    81 warnings generated.
+>>    Assembler messages:
+>>    Warning: a different -march was already specified, is now octeon
+>> -- 
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:394:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:397:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>> ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MIN)
+>> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:397:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:398:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_UBNT_E100)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:398:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:399:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_DSR1000N)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:399:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:400:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_KONTRON_S1901)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:400:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:401:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>> ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MAX)
+>> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:401:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note: expanded 
+>> from macro 'ENUM_BRD_TYPE_CASE'
+>>            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:412:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_NULL)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:412:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:413:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_SIM_TYPE_DEPRECATED)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:413:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:414:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_OCTEON_SAMPLE)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:414:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                              ^
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:415:3: warning: adding 
+>> 'int' to a string does not append to the string [-Wstring-plus-int]
+>>                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_MAX)
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                           ~~~^~~~
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:415:3: note: use array 
+>> indexing to silence this warning
+>>    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note: expanded 
+>> from macro 'ENUM_CHIP_TYPE_CASE'
+>>            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
+>>                              ^
+>>    In file included from arch/mips/cavium-octeon/crypto/octeon-sha1.c:23:
+>>    In file included from include/crypto/internal/hash.h:11:
+>>    In file included from include/crypto/algapi.h:13:
+>>    In file included from include/linux/skbuff.h:28:
+>>    In file included from include/net/checksum.h:22:
+>>>>  arch/mips/include/asm/checksum.h:195:9: error: unsupported inline 
+>>>> asm: input with type 'unsigned long' matching output with type 
+>>>> '__wsum' (aka 'unsigned int')
+>>            : "0" ((__force unsigned long)daddr),
+>>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    79 warnings and 1 error generated.
+>> ..
+>>
+>>
+>> vim +195 arch/mips/include/asm/checksum.h
+>>
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  162
+>> 01cfbad79a5e2b arch/mips/include/asm/checksum.h Alexander Duyck 
+>> 2016-03-11  163  static inline __wsum csum_tcpudp_nofold(__be32 saddr, 
+>> __be32 daddr,
+>> 01cfbad79a5e2b arch/mips/include/asm/checksum.h Alexander Duyck 
+>> 2016-03-11  164                      __u32 len, __u8 proto,
+>> 8e3d8433d8c22c include/asm-mips/checksum.h      Al Viro 2006-11-14  
+>> 165                      __wsum sum)
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  166  {
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  167      __asm__(
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  168      "    .set    push        # csum_tcpudp_nofold\n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  169      "    .set    noat        \n"
+>> 875d43e72b5bf2 include/asm-mips/checksum.h      Ralf Baechle 
+>> 2005-09-03  170  #ifdef CONFIG_32BIT
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  171      "    addu    %0, %2        \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  172      "    sltu    $1, %0, %2    \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  173      "    addu    %0, $1        \n"
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  174
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  175      "    addu    %0, %3        \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  176      "    sltu    $1, %0, %3    \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  177      "    addu    %0, $1        \n"
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  178
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  179      "    addu    %0, %4        \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  180      "    sltu    $1, %0, %4    \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  181      "    addu    %0, $1        \n"
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  182  #endif
+>> 875d43e72b5bf2 include/asm-mips/checksum.h      Ralf Baechle 
+>> 2005-09-03  183  #ifdef CONFIG_64BIT
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  184      "    daddu    %0, %2        \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  185      "    daddu    %0, %3        \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  186      "    daddu    %0, %4        \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  187      "    dsll32    $1, %0, 0    \n"
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  188      "    daddu    %0, $1        \n"
+>> 66fd848cadaa6b arch/mips/include/asm/checksum.h Ralf Baechle 
+>> 2017-01-26  189      "    sltu    $1, %0, $1    \n"
+>> e97288386a316e include/asm-mips/checksum.h      Ralf Baechle 
+>> 2005-09-20  190      "    dsra32    %0, %0, 0    \n"
+>> 66fd848cadaa6b arch/mips/include/asm/checksum.h Ralf Baechle 
+>> 2017-01-26  191      "    addu    %0, $1        \n"
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  192  #endif
+>> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer 
+>> 2005-07-08  193      "    .set    pop"
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  194      : "=r" (sum)
+>> 66218da212bf14 include/asm-mips/checksum.h      Atsushi Nemoto 
+>> 2007-01-24 @195      : "0" ((__force unsigned long)daddr),
+>> 66218da212bf14 include/asm-mips/checksum.h      Atsushi Nemoto 
+>> 2007-01-24  196        "r" ((__force unsigned long)saddr),
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  197  #ifdef __MIPSEL__
+>> 8e3d8433d8c22c include/asm-mips/checksum.h      Al Viro 2006-11-14  
+>> 198        "r" ((proto + len) << 8),
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  199  #else
+>> 8e3d8433d8c22c include/asm-mips/checksum.h      Al Viro 2006-11-14  
+>> 200        "r" (proto + len),
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  201  #endif
+>> 1d464c26b56252 include/asm-mips/checksum.h      Dave Johnson 
+>> 2007-04-18  202        "r" ((__force unsigned long)sum));
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  203
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  204      return sum;
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  205  }
+>> b4b5015a1c1450 arch/mips/include/asm/checksum.h Ralf Baechle 
+>> 2014-12-17  206  #define csum_tcpudp_nofold csum_tcpudp_nofold
+>> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds 
+>> 2005-04-16  207
+>>
+>> :::::: The code at line 195 was first introduced by commit
+>> :::::: 66218da212bf141532d678a699f5789c78145ab1 [MIPS] Fix wrong 
+>> checksum calculation on 64-bit MIPS
+>>
+>> :::::: TO: Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+>> :::::: CC: Ralf Baechle <ralf@linux-mips.org>
+>>
+>> -- 
+>> 0-DAY CI Kernel Test Service
+>> https://01.org/lkp
+> 
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
