@@ -2,64 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439405305F2
-	for <lists+linux-mips@lfdr.de>; Sun, 22 May 2022 22:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BFF530640
+	for <lists+linux-mips@lfdr.de>; Sun, 22 May 2022 23:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351237AbiEVUs4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 22 May 2022 16:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S235184AbiEVVgf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 22 May 2022 17:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343506AbiEVUsy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 May 2022 16:48:54 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A7102A268;
-        Sun, 22 May 2022 13:48:53 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 9F3B492009E; Sun, 22 May 2022 22:48:52 +0200 (CEST)
+        with ESMTP id S1351614AbiEVVgf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 May 2022 17:36:35 -0400
+X-Greylist: delayed 403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 May 2022 14:36:31 PDT
+Received: from a01.hm-f.jp (a01.hm-f.jp [58.191.38.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ADC22716D
+        for <linux-mips@vger.kernel.org>; Sun, 22 May 2022 14:36:31 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 987B592009D;
-        Sun, 22 May 2022 21:48:52 +0100 (BST)
-Date:   Sun, 22 May 2022 21:48:52 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Nathan Chancellor <nathan@kernel.org>
-cc:     Paul Cercueil <paul@crapouillou.net>,
-        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips <linux-mips@vger.kernel.org>
-Subject: Re: arch/mips/include/asm/checksum.h:195:9: error: unsupported inline
- asm: input with type 'unsigned long' matching output with type '__wsum' (aka
- 'unsigned int')
-In-Reply-To: <Yoe5TafDskZ9JDSW@dev-arch.thelio-3990X>
-Message-ID: <alpine.DEB.2.21.2205202256030.52080@angie.orcam.me.uk>
-References: <202205200128.layu7VXF-lkp@intel.com> <OB55CR.QAT1J8A48BK21@crapouillou.net> <alpine.DEB.2.21.2205200510350.52080@angie.orcam.me.uk> <Yoe5TafDskZ9JDSW@dev-arch.thelio-3990X>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        by a01.hm-f.jp (Postfix) with ESMTP id E2599964C6E5
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 06:28:51 +0900 (JST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     <linux-mips@vger.kernel.org>
+From:   =?ISO-2022-JP?B?GyRCM3Q8MDJxPFIbKEJHLXBpdA==?= <mag@g-pit.com>
+Reply-To: =?ISO-2022-JP?B?GyRCM3Q8MDJxPFIbKEJHLXBpdA==?= <mag@g-pit.com>
+Subject: =?ISO-2022-JP?B?GyRCRVBPPzQwTjskTiQqQ04kaSQ7GyhC?=
+X-Mailer: HM System
+Message-Id: <364313896.bdbe2c3ff5bcb8b7355f64dd30b1cd77postmaster@a01.hm-f.jp>
+Date:   Mon, 23 May 2022 06:28:51 +0900
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,RCVD_IN_PSBL,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
+        *      [58.191.38.133 listed in psbl.surriel.com]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [58.191.38.133 listed in bl.score.senderscore.com]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 20 May 2022, Nathan Chancellor wrote:
+登録が完了しました。
 
-> >  It doesn't matter whether there is ADDU or DADDU anymore, given that 
-> > commit 198688edbf77 ("MIPS: Fix inline asm input/output type mismatch in 
-> > checksum.h used with Clang") has added a redundant 32-bit sign-extension 
-> > operation right afterwards, regressing size/performance by an extra 
-> > instruction in this performance-critical code as a workaround for a stupid 
-> > compiler.
-> 
-> Shouldn't this concern have been addressed by Tiezhu's follow up?
-> 
-> https://lore.kernel.org/1617359240-16609-1-git-send-email-yangtiezhu@loongson.cn/
-> 
-> I guess it never got picked up?
+メールアドレス
+linux-mips@vger.kernel.org
 
- Still it is a hack.  I have now rewritten this code in plain C instead.
 
-  Maciej
+入力内容
+メールアドレス : linux-mips@vger.kernel.org
+お名前 : ? Chantal want to meet you! Click Here: https://wondergirl22.page.link/29hQ?4h1n ?
+
+ご登録ありがとうございました。
+
