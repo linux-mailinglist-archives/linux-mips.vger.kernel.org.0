@@ -2,111 +2,199 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D495305C4
-	for <lists+linux-mips@lfdr.de>; Sun, 22 May 2022 22:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A305305F0
+	for <lists+linux-mips@lfdr.de>; Sun, 22 May 2022 22:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242363AbiEVUMB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 22 May 2022 16:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S1344311AbiEVUsT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 22 May 2022 16:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351043AbiEVUMA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 May 2022 16:12:00 -0400
-X-Greylist: delayed 1375 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 May 2022 13:11:58 PDT
-Received: from out2.nocdirect.com (out2.nocdirect.com [69.73.171.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA674369D1
-        for <linux-mips@vger.kernel.org>; Sun, 22 May 2022 13:11:58 -0700 (PDT)
-Received: from binky.nswebhost.com ([69.73.168.248])
-        by spamexperts03.nocdirect.com with esmtpsa (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <support@iesottawa.ca>)
-        id 1nsrZS-0000RR-Ss
-        for linux-mips@vger.kernel.org; Sun, 22 May 2022 15:49:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iesottawa.ca; s=default; h=Sender:Content-Type:MIME-Version:Message-ID:
-        Reply-To:From:Date:Subject:To:Cc:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tsytaq9P6jbx84sZaeZ2ujyYY054YqWU2QI73VCcE8s=; b=OR609FU60aSDGn4oBTp4ypCFwp
-        Xc9f+Q/a1SF8AdYjLXrEEIOOrhOUz9KuGOJmpgeQ3D0fkfL53voFA5UsrwuaV3/SOagJP+nV5qMb/
-        Y9a8Tf/iQS2Ck2x+GoVsx/kssSC4i//flonkZ1wVpAwxTtudzMEqSg5nW0pgK3e/HLeMVz0Xz33Sg
-        IBaEehm9XdwB8H5NZBRZ+9hcibjuykH0hIZIxVLGA9FbuZzyEjDYZN6XlhQYPykNNfeemKa5H4BUi
-        om1y0NpKuRbWfxfyrB58J3YuuhFQcIBDgyojPb5Qbk2qO+xtKvjfXD3TMwuuEZz+VyMJjU1k1HCU2
-        ZT1A3VXw==;
-Received: from ottawa by binky.nswebhost.com with local (Exim 4.93)
-        (envelope-from <support@iesottawa.ca>)
-        id 1nsrYS-00079d-Be
-        for linux-mips@vger.kernel.org; Sun, 22 May 2022 15:47:56 -0400
-To:     linux-mips@vger.kernel.org
-Subject: Re: Looking forward to hearing from you
-X-PHP-Script: iesottawa.ca/modules/mod_simplefileuploadv1.3/elements/bcqkhulk.php for 36.37.185.70
-Date:   Sun, 22 May 2022 19:47:56 +0000
-From:   "Mrs. Mamand Mashamsul" <support@iesottawa.ca>
-Reply-To: mrsmamands@gmail.com
-Message-ID: <f23ec4ad34102cb08f42b69245593def@iesottawa.ca>
+        with ESMTP id S1343506AbiEVUsT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 May 2022 16:48:19 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E63F22A268;
+        Sun, 22 May 2022 13:48:17 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id ACFBB92009C; Sun, 22 May 2022 22:48:14 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id A5EEE92009B;
+        Sun, 22 May 2022 21:48:14 +0100 (BST)
+Date:   Sun, 22 May 2022 21:48:14 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Paul Cercueil <paul@crapouillou.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Rewrite `csum_tcpudp_nofold' in plain C
+Message-ID: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Sender:  <ottawa@binky.nswebhost.com>
-X-Originating-IP: 69.73.168.248
-X-SpamExperts-Domain: nocdirect.com
-X-SpamExperts-Username: binky
-Authentication-Results: nocdirect.com; auth=pass (login) smtp.auth=binky@nocdirect.com
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.83)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9NxnHXhFI9aLFhf4G9YVDvPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xPt5M4XGxkizxeZMleDN0et8C9mOBdONdnsxgsk1D2pw/C
- h5SE4jAyhe1COeASyU9r2Irva2gpw5SYpBQlyhQ44ld5rdi2ZxohSIq+dqifZuwfXg3lLHvg5NA5
- Q4UKfXmxp/mE01KBSG8B+VR6ttEpv1+cB8x6sK/GtN6tmZVqFHuTaKzWYJN7hB19IACPtQaT73qE
- /bPEQRw1+/YAfTC609mB3MdpSV3sWIdO2eYbSvVLiitsLbvAhupvUnzDINDjcMbskMcaRQWUu9pQ
- An0SxmD/2Y9vQ6c+CWRhbvYX8/rD2tNFnxZmcBDP9GZo454L8e9V2yadybeHOMTl0mz22loBPGfx
- bYV/C90G1lGhhe/6sDrXXpSG4IEX5iNEcVtdjx85xQq9VD42UbTRudBo31/E3ahF5MMcDI7KdpjQ
- KTDdLlR8TbTgFjQZY9NlDQvzzkUyZY2wKDSP6xtXq/WhbbgVl4iunqFoEGZzSy+km6VHO6XhXqN3
- g0DWG4Tioc84Kpmg5+UpQ2PZprb+nvdWlgS6K9aAlnrXFI3hveFdl/03PID3XZmJFyZSBdUjoTdd
- vjenWNHvA5jfEJ3hHCEZruLxWSRZyNCy6UgUM+1zNVE0fVDhXnP6kGReswqtZAHzg1zcjVdIhfBo
- dOedlBBe92PNDpgLsd6Ddd/s7VM53kslpjM9zsleUEOBBiT9j3nwJ3XTYPX8/FYF1qeGoVdUbmMR
- muBOVM7E1dn+Ka3qTuwi7V/ADrOzPdyAj2FKsXRmMRr+w2X69ygMahiTQMBdz643WjsO7W/dj5iS
- OOwnyDheMPxghFsjIwINNqkbXC/I4+m/hj19mxilNKakCSQALvVEu1zJCMgvv3qd3SrMXiQCHNoV
- ZSIr6skNpUbpwLtbs5foXiuJWiv1/Vo4VRuN629ZC8+7qMn7BbctwahGsbM/Lgg1DmF6Ill58fwl
- wFp/x303qPlmX5UbR5AEwmer
-X-Report-Abuse-To: spam@spamexperts01.nocdirect.com
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        HK_NAME_MR_MRS,PHP_SCRIPT,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
-        *       low trust
-        *      [69.73.171.1 listed in list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7123]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.5 PHP_SCRIPT Sent by PHP script
-        *  1.0 HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Greatings Dear
+Recent commit 198688edbf77 ("MIPS: Fix inline asm input/output type 
+mismatch in checksum.h used with Clang") introduced a code size and 
+performance regression with 64-bit code emitted for `csum_tcpudp_nofold' 
+by GCC, caused by a redundant truncation operation produced due to a 
+data type change made to the variable associated with the inline 
+assembly's output operand.
 
-I am Mrs. Mamand Mashamsul, from Kabul, Capital of Afghanistan. With due respect, I want to know if foreigners can buy and own properties in your beautiful country, I desire to relocate my investment capital abroad where it will generate more returns. 
+The intent previously expressed here with operands and constraints for 
+optimal code was to have the output operand share a register with one 
+inputs, both of a different integer type each.  This is perfectly valid 
+with the MIPS psABI where a register can hold integer data of different 
+types and the assembly code used here makes data stored in the output 
+register match the data type used with the output operand, however it 
+has turned out impossible to express this arrangement in source code 
+such as to satisfy LLVM, apparently due to the compiler's internal 
+limitations.
+
+There is nothing peculiar about the inline assembly `csum_tcpudp_nofold' 
+includes however, though it does choose assembly instructions carefully.
+
+Rewrite this piece of assembly in plain C then, using corresponding C 
+language operations, making GCC produce the same assembly instructions, 
+possibly shuffled, in the general case and sometimes actually fewer of 
+them where an input is constant, because the compiler does not have to 
+reload it to a register (operand constraints could be adjusted for that, 
+but the plain C approach is cleaner anyway).
+
+Example code size changes are as follows, for a 32-bit configuration:
+
+      text       data        bss      total filename
+   5920480    1347236     126592    7394308 vmlinux-old
+   5920480    1347236     126592    7394308 vmlinux-now
+   5919728    1347236     126592    7393556 vmlinux-c
+
+and for a 64-bit configuration:
+
+      text       data        bss      total filename
+   6024112    1790828     225728    8040668 vmlinux-old
+   6024128    1790828     225728    8040684 vmlinux-now
+   6023760    1790828     225728    8040316 vmlinux-c
+
+respectively, where "old" is with the commit referred reverted, "now" is 
+with no change, and "c" is with this change applied.
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+---
+Hi,
+
+ I have visually inspected code produced and verified this change to boot 
+with TCP networking performing just fine, both with a 32-bit and a 64-bit 
+configuration.  Sadly with the little endianness only, because in the 
+course of this verification I have discovered the core card of my Malta 
+board bit the dust a few days ago, apparently in a permanent manner, and I 
+have no other big-endian MIPS system available here to try.
+
+ The only difference between the two endiannesses is the left-shift 
+operation on (proto + len) however, which doesn't happen for big-endian 
+configurations, so the little endianness should in principle provide 
+enough coverage.
+
+ Also I'm leaving it to LLVM folks to verify, however this is plain C, so 
+it is expected to just work.
+
+ Please apply.
+
+  Maciej
+---
+ arch/mips/include/asm/checksum.h |   71 ++++++++++++++++++---------------------
+ 1 file changed, 34 insertions(+), 37 deletions(-)
+
+linux-mips-csum-tcpudp-nofold-proper-fix.diff
+Index: linux-macro/arch/mips/include/asm/checksum.h
+===================================================================
+--- linux-macro.orig/arch/mips/include/asm/checksum.h
++++ linux-macro/arch/mips/include/asm/checksum.h
+@@ -128,48 +128,45 @@ static inline __sum16 ip_fast_csum(const
  
-I will appreciate your response. Please let me know your ideas and knowledge regarding my research. In Any viable investment idea you suggest to me will be also be considered. 
+ static inline __wsum csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
+ 					__u32 len, __u8 proto,
+-					__wsum sum)
++					__wsum isum)
+ {
+-	unsigned long tmp = (__force unsigned long)sum;
++	const unsigned int sh32 = IS_ENABLED(CONFIG_64BIT) ? 32 : 0;
++	unsigned long sum = (__force unsigned long)daddr;
++	unsigned long tmp;
++	__u32 osum;
  
-Looking forward to hearing from you.
-
-Best regards,
-Mrs. Mamand Mashamsul
-
+-	__asm__(
+-	"	.set	push		# csum_tcpudp_nofold\n"
+-	"	.set	noat		\n"
+-#ifdef CONFIG_32BIT
+-	"	addu	%0, %2		\n"
+-	"	sltu	$1, %0, %2	\n"
+-	"	addu	%0, $1		\n"
++	tmp = (__force unsigned long)saddr;
++	sum += tmp;
+ 
+-	"	addu	%0, %3		\n"
+-	"	sltu	$1, %0, %3	\n"
+-	"	addu	%0, $1		\n"
++	if (IS_ENABLED(CONFIG_32BIT))
++		sum += sum < tmp;
+ 
+-	"	addu	%0, %4		\n"
+-	"	sltu	$1, %0, %4	\n"
+-	"	addu	%0, $1		\n"
+-#endif
+-#ifdef CONFIG_64BIT
+-	"	daddu	%0, %2		\n"
+-	"	daddu	%0, %3		\n"
+-	"	daddu	%0, %4		\n"
+-	"	dsll32	$1, %0, 0	\n"
+-	"	daddu	%0, $1		\n"
+-	"	sltu	$1, %0, $1	\n"
+-	"	dsra32	%0, %0, 0	\n"
+-	"	addu	%0, $1		\n"
+-#endif
+-	"	.set	pop"
+-	: "=r" (tmp)
+-	: "0" ((__force unsigned long)daddr),
+-	  "r" ((__force unsigned long)saddr),
+-#ifdef __MIPSEL__
+-	  "r" ((proto + len) << 8),
+-#else
+-	  "r" (proto + len),
+-#endif
+-	  "r" ((__force unsigned long)sum));
++	/*
++	 * We know PROTO + LEN has the sign bit clear, so cast to a signed
++	 * type to avoid an extraneous zero-extension where TMP is 64-bit.
++	 */
++	tmp = (__s32)(proto + len);
++	tmp <<= IS_ENABLED(CONFIG_CPU_LITTLE_ENDIAN) ? 8 : 0;
++	sum += tmp;
++	if (IS_ENABLED(CONFIG_32BIT))
++		sum += sum < tmp;
+ 
+-	return (__force __wsum)tmp;
++	tmp = (__force unsigned long)isum;
++	sum += tmp;
++
++	if (IS_ENABLED(CONFIG_32BIT)) {
++		sum += sum < tmp;
++		osum = sum;
++	} else if (IS_ENABLED(CONFIG_64BIT)) {
++		tmp = sum << sh32;
++		sum += tmp;
++		osum = sum < tmp;
++		osum += sum >> sh32;
++	} else {
++		BUILD_BUG();
++	}
++
++	return (__force __wsum)osum;
+ }
+ #define csum_tcpudp_nofold csum_tcpudp_nofold
+ 
