@@ -2,83 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD41753021A
-	for <lists+linux-mips@lfdr.de>; Sun, 22 May 2022 11:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79CE4530360
+	for <lists+linux-mips@lfdr.de>; Sun, 22 May 2022 15:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238967AbiEVJiz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 22 May 2022 05:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S1343889AbiEVNoZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 22 May 2022 09:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236843AbiEVJiz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 May 2022 05:38:55 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAAD3B3C9;
-        Sun, 22 May 2022 02:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1653212330; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hqD/oZcjT9FRYsqGzFInG5WgvxzOftyg0RKNFC2ww7o=;
-        b=FVSK1Pm7oLYN4Wygr8ewEmceAFkGgywZlcIA5rYPRgcOqvVobezKziIRP+8oU6I21fMzJ+
-        e5xUZi4NU6pLs0TdZwDKNxSpX5+I6QnnjY7iWEGooa+9Hop9/35vL00vPqwQPytPSAod+y
-        1qfQH1dR9utKidirmQMyikHPURajoD8=
-Date:   Sun, 22 May 2022 10:38:41 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] dmaengine: jz4780: fix typo in comment
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <HS2ACR.CGG9DJPX3OD31@crapouillou.net>
-In-Reply-To: <20220521111145.81697-20-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-20-Julia.Lawall@inria.fr>
+        with ESMTP id S239610AbiEVNoY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 May 2022 09:44:24 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8788E17E33
+        for <linux-mips@vger.kernel.org>; Sun, 22 May 2022 06:44:22 -0700 (PDT)
+Received: from pop-os.home ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id slsYnY5CQ5ohRslsYnnhLI; Sun, 22 May 2022 15:44:21 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 22 May 2022 15:44:21 +0200
+X-ME-IP: 86.243.180.246
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     dan.carpenter@oracle.com, Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH] irqchip/loongson-liointc: Fix an error handling path in liointc_init()
+Date:   Sun, 22 May 2022 15:44:17 +0200
+Message-Id: <1c4e81eda5f9651f581f1554629d334f1afda841.1653227039.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Julia,
+If a of_property_match_string() call fails, we still need to release some
+resources.
+Add the corresponding goto instead of a direct return.
 
-Le sam., mai 21 2022 at 13:10:30 +0200, Julia Lawall=20
-<Julia.Lawall@inria.fr> a =E9crit :
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
->=20
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+Fixes: 807e93d0ecbb ("irqchip/loongson-liointc: Add ACPI init support")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/irqchip/irq-loongson-liointc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-
-Thanks!
--Paul
-
->=20
-> ---
->  drivers/dma/dma-jz4780.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-> index e2ec540e6519..2a483802d9ee 100644
-> --- a/drivers/dma/dma-jz4780.c
-> +++ b/drivers/dma/dma-jz4780.c
-> @@ -388,7 +388,7 @@ static struct dma_async_tx_descriptor=20
-> *jz4780_dma_prep_slave_sg(
->=20
->  		if (i !=3D (sg_len - 1) &&
->  		    !(jzdma->soc_data->flags & JZ_SOC_DATA_BREAK_LINKS)) {
-> -			/* Automatically proceeed to the next descriptor. */
-> +			/* Automatically proceed to the next descriptor. */
->  			desc->desc[i].dcm |=3D JZ_DMA_DCM_LINK;
->=20
->  			/*
->=20
-
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index ff3cb5b05710..2227b702a81d 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -185,8 +185,10 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
+ 			int index = of_property_match_string(node,
+ 					"reg-names", core_reg_names[i]);
+ 
+-			if (index < 0)
+-				return -EINVAL;
++			if (index < 0) {
++				err = -EINVAL;
++				goto out_iounmap;
++			}
+ 
+ 			priv->core_isr[i] = of_iomap(node, index);
+ 		}
+-- 
+2.34.1
 
