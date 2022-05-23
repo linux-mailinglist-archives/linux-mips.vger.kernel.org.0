@@ -2,72 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB355313B8
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 18:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1467A53139E
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 18:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236253AbiEWN3I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 09:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S236764AbiEWN60 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 09:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236261AbiEWN3H (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 09:29:07 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F1C2A6;
-        Mon, 23 May 2022 06:29:02 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nt87K-0002gG-00; Mon, 23 May 2022 15:29:02 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id EAD17C0311; Mon, 23 May 2022 15:28:52 +0200 (CEST)
-Date:   Mon, 23 May 2022 15:28:52 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] MIPS: Modify early_parse_mem()
-Message-ID: <20220523132852.GA8289@alpha.franken.de>
-References: <1647615920-23103-1-git-send-email-yangtiezhu@loongson.cn>
- <c3e2d39f-1691-4065-c1fb-06f4059c3e0c@loongson.cn>
+        with ESMTP id S236762AbiEWN6Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 09:58:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FACE56FBE;
+        Mon, 23 May 2022 06:58:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A4E76114D;
+        Mon, 23 May 2022 13:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A97C385AA;
+        Mon, 23 May 2022 13:58:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653314303;
+        bh=bMQ76dp2HmQ3uXRMykYlpLogfkiug4VqJggIc37zUrM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Rhu8OE2IygT78Kmgi0veHK3UCRU45Wa1lKf0qRn0eRRSfxWy/znDUceR1oMSY55by
+         b/Qjp4WqXMjPxggvmrJcC0RWd7ISbVc4buSL335hPdmnd2FbWEy07P0apQgYY7H11+
+         NFlr8OEtHhW7GJ19ciDaIYgTWsKV1vSBJJWX4qSZ5rMgEPypBdhRc5bD8iHWcFmgwf
+         if4LTn3sIyl73Q+1hgTvOuYTzaXOBuU1ZdpC5irzwKSc81r7BU7d44Qfg04P23t3Wj
+         xjPCV1EQ8qgX5fLkrsY98A1lDRWt1NrDy4qNgFPCtMrf6R9Y+4BKiSHtAS13/wW86d
+         X2gY2kmU5w6bQ==
+Message-ID: <8e440c28-d4b9-2fc6-0294-f77544264d5c@kernel.org>
+Date:   Mon, 23 May 2022 08:58:16 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3e2d39f-1691-4065-c1fb-06f4059c3e0c@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 06/11] nios2: use fallback for random_get_entropy()
+ instead of zero
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, arnd@arndb.de
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+References: <20220413115411.21489-1-Jason@zx2c4.com>
+ <20220413115411.21489-7-Jason@zx2c4.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20220413115411.21489-7-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 09, 2022 at 03:30:11PM +0800, Tiezhu Yang wrote:
-> 
-> 
-> On 03/18/2022 11:05 PM, Tiezhu Yang wrote:
-> > Tiezhu Yang (3):
-> >   MIPS: Return -EINVAL if mem parameter is empty in early_parse_mem()
-> >   MIPS: Return -EINVAL if mem parameter is invalid in early_parse_mem()
-> >   MIPS: Use memblock_add_node() in early_parse_mem() under CONFIG_NUMA
-> > 
-> >  arch/mips/kernel/setup.c | 35 +++++++++++++++++++++++++++++------
-> >  1 file changed, 29 insertions(+), 6 deletions(-)
-> > 
-> 
-> Hi Thomas,
-> 
-> Any comments? Are you OK with these changes?
 
-first and last patch are ok with me. The second patch changes semantics
-for mem=, which I don't want to change. Iirc the latest idea to solve
-your problem was to use mem=XX@ syntax to limit detected memory, which
-is the preferred way for me, too.
 
-If you want I'll take patch 1 and 3 out of this series.
+On 4/13/22 06:54, Jason A. Donenfeld wrote:
+> In the event that random_get_entropy() can't access a cycle counter or
+> similar, falling back to returning 0 is really not the best we can do.
+> Instead, at least calling random_get_entropy_fallback() would be
+> preferable, because that always needs to return _something_, even
+> falling back to jiffies eventually. It's not as though
+> random_get_entropy_fallback() is super high precision or guaranteed to
+> be entropic, but basically anything that's not zero all the time is
+> better than returning zero all the time.
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>   arch/nios2/include/asm/timex.h | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/nios2/include/asm/timex.h b/arch/nios2/include/asm/timex.h
+> index a769f871b28d..d9a3f426cdda 100644
+> --- a/arch/nios2/include/asm/timex.h
+> +++ b/arch/nios2/include/asm/timex.h
+> @@ -9,4 +9,6 @@ typedef unsigned long cycles_t;
+>   
+>   extern cycles_t get_cycles(void);
+>   
+> +#define random_get_entropy() (((unsigned long)get_cycles()) ?: random_get_entropy_fallback())
+> +
+>   #endif
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
