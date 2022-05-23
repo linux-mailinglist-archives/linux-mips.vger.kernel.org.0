@@ -2,80 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C965319BF
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D56531B99
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238753AbiEWQ3A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 12:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
+        id S242463AbiEWRtU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 13:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238699AbiEWQ3A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 12:29:00 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E0095DA08;
-        Mon, 23 May 2022 09:28:59 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1ntAvS-0003hj-00; Mon, 23 May 2022 18:28:58 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 20388C0312; Mon, 23 May 2022 18:28:45 +0200 (CEST)
-Date:   Mon, 23 May 2022 18:28:45 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        with ESMTP id S242488AbiEWRsq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 13:48:46 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E17AEE27
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 10:37:25 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so14344751pjf.5
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 10:37:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uPvB4xKkZsbv/NQuw+LVF1ZeOmndZIablC0q46ZFciY=;
+        b=XvH+fP7b6A7IaMFFBQF7IkZCZBYDCe5tYb80MfrbM2f0FYzFokK+x6mgbkPTeOgoUg
+         LclNFKJEWXiNeIZWkIZLNbNNePqmTZSw88j10EPFP/TCd88RX+QFgo+8KXnJ7ZFWEqw8
+         e258spbjBdsYFehtuKv0B7wbQEdEuoZG2QfXIkOIkFlhdL9EvniL6ve+PR8g87Ue1Ipd
+         qlKgwGG9OiDFl7+72jz8mhlBqYjKbIOUmNWAcLmyrAe5QY5hfjJUdhA+UHLy5+ZIOXNQ
+         y5rtJrUIwrCDHAi+YfCoOzCaRCeBurqBgL7bm+aoHAkTBJ7vzfBVMAs7LZYNqcNRbsWw
+         xF8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uPvB4xKkZsbv/NQuw+LVF1ZeOmndZIablC0q46ZFciY=;
+        b=kO4vjCpB5vCk+sw/VLotJudvkOALsbQ7aBOcvZJL9VZifq8IEmWe+sMvIJ/5772Tmg
+         j8fZTX9xe4foPLZQnzvkOFXHnqWWx2NpD9KAHwS6ppMUqLvMcNR1YO+7RgCr1XM908XV
+         OtcrfvQXjNu3VAMXJmdvm3cQJxkJs0/5N7mFZOrp2NFDG+aumtgBJoPT+4DvqjgmEcSb
+         fCdf4qT+oCB4/qxRmDzTEUSOezyOO2HQ4yps96o+xwwQVuJ0UQM+4PksCsJTY6EqvJsw
+         kI48K+o12pipyS0tQ4cfSJ0qq5ybqaLMhQ+G8mGl2vUdrqflR/z+6DehTeCgmyh9qWXc
+         GXUw==
+X-Gm-Message-State: AOAM531rtLOJofEjNElpwDU+vnoXtbPMNvsi4P6dRpxhW4pjT/gqtlbu
+        iyPeB96pc6/yhXL4zsfo21bhz+S2xqngrA==
+X-Google-Smtp-Source: ABdhPJw4AGNGxsFqbqwZIS+BFk/8egtH9UXiumvmBRxLQ0/47sCH59HMfF1NiH7idboGwFW37lheDQ==
+X-Received: by 2002:a17:90b:4b90:b0:1e0:1b0:1a1 with SMTP id lr16-20020a17090b4b9000b001e001b001a1mr146255pjb.70.1653327444125;
+        Mon, 23 May 2022 10:37:24 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b0015e8d4eb260sm5388000plx.170.2022.05.23.10.37.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 10:37:23 -0700 (PDT)
+Date:   Mon, 23 May 2022 17:37:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
         <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] MIPS: bmips: Fix compiler warning observed on W=1
- build
-Message-ID: <20220523162845.GA10839@alpha.franken.de>
-References: <20220523121639.16521-1-jim2101024@gmail.com>
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v6 21/22] KVM: Allow for different capacities in
+ kvm_mmu_memory_cache structs
+Message-ID: <YovGUDrYZMZ7PXeY@google.com>
+References: <20220516232138.1783324-1-dmatlack@google.com>
+ <20220516232138.1783324-22-dmatlack@google.com>
+ <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220523121639.16521-1-jim2101024@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 23, 2022 at 08:16:39AM -0400, Jim Quinlan wrote:
-> The function arch_sync_dma_for_cpu_all() was used but was
-> missing a prototype declaration.
+On Fri, May 20, 2022, Mingwei Zhang wrote:
+> On Mon, May 16, 2022 at 4:24 PM David Matlack <dmatlack@google.com> wrote:
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index e089db822c12..5e2e75014256 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -369,14 +369,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+> >                 return (void *)__get_free_page(gfp_flags);
+> >  }
+> >
+> > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> >  {
+> > +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
+> >         void *obj;
+> >
+> >         if (mc->nobjs >= min)
+> >                 return 0;
+> > -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> > +
+> > +       if (unlikely(!mc->objects)) {
+> > +               if (WARN_ON_ONCE(!capacity))
+> > +                       return -EIO;
+> > +
+> > +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
+> > +               if (!mc->objects)
+> > +                       return -ENOMEM;
+> > +
+> > +               mc->capacity = capacity;
 > 
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  arch/mips/bmips/dma.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/mips/bmips/dma.c b/arch/mips/bmips/dma.c
-> index c535f9cb75ec..33788668cbdb 100644
-> --- a/arch/mips/bmips/dma.c
-> +++ b/arch/mips/bmips/dma.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0+
->  
->  #include <linux/types.h>
-> +#include <linux/dma-map-ops.h>
->  #include <asm/bmips.h>
->  #include <asm/io.h>
->  
-> 
-> base-commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-> -- 
-> 2.17.1
+> Do we want to ensure the minimum value of the capacity? I think
+> otherwise, we may more likely start using memory from GFP_ATOMIC if
+> the capacity is less than, say 5? But the minimum value seems related
+> to each cache type.
 
-applied to mips-next.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Eh, if we specify a minimum, just make the arch default the minimum.  That way we
+avoid adding even more magic/arbitrary numbers.  E.g. for whatever reason, MIPS's
+default is '4'.
