@@ -2,121 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29540530E2F
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 12:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77630530D30
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 12:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234066AbiEWKab (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 06:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S234072AbiEWKaM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 06:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234089AbiEWKa1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 06:30:27 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37A014B85F;
-        Mon, 23 May 2022 03:30:21 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nt5K1-0001dy-01; Mon, 23 May 2022 12:29:57 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 663AEC0311; Mon, 23 May 2022 11:40:05 +0200 (CEST)
-Date:   Mon, 23 May 2022 11:40:05 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Rewrite `csum_tcpudp_nofold' in plain C
-Message-ID: <20220523094005.GB6296@alpha.franken.de>
-References: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
+        with ESMTP id S234066AbiEWKaL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 06:30:11 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CDA4B43D;
+        Mon, 23 May 2022 03:30:10 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 27so11707931ljw.0;
+        Mon, 23 May 2022 03:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=q+D4+x9Ejx/vd1/L2sZoQuS+SholF4oqHtieSOOiG1E=;
+        b=VAKzmOPm4zBP+u3nqOY493ToRu4/JG29VfNBPGjHBiFeG29uE0CFsAjL+a1dpRM+Et
+         bbRHEhVBWwNyuoj9D8XSPDyhmnW+TkacBNpfYmPYN5Xos23WkSQ43kYVTlGZbPn6V+Sp
+         hjITZm+z70bpXzYGNdQcrgHEcOOI6XeTLAh5mRe9wpLm/gfSMy+5HMksl/sHpvzB0rpo
+         1Hf/x1CyDukUZK+V0ObW1oaE65XnhcquXI/UCG3XjY1JjQkjvTII+CHhhjuNNZUYc1Bx
+         coTvHOjOkfnZ0kN0PjfWSvZ4SM7UZX8hRVdAAJ0vTHzsRz3CSrGNUgXBJB/tOLdv6Xug
+         uSYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q+D4+x9Ejx/vd1/L2sZoQuS+SholF4oqHtieSOOiG1E=;
+        b=0IY5s5i+SFLeraVjZY6XiGb31Vn59T6WnvNm5Un9PELHDZBOKmixeuNtC/UMJARm5J
+         QoF8AedYz/7HEdizPcl5S0R8cWm6vpayWGrl0UjeVIDVhjlV4pI5mxCigNHwXddkEghi
+         5PDhBX1q3roq/NrFtIfmiGTpvZzT872yhxxyNoRIsPhBXV5cRykbuW+kGgGPzklz8xId
+         r/ezhVFEWFwq2zV1L4cvkLiOv0enFiwwMJqq9N/V/BTIFfQXeMydwjwd/lHq6hR8YZ/y
+         2rebYlzfJLEoC6kDu1LJJBoMBcYS9bnfNQno5/Ob9G23pNAnY1hXsB/6joAqtGnnmPu9
+         P/vQ==
+X-Gm-Message-State: AOAM532LJmvf7pCeEQii1ZhkO25y0rQrfK2jJrtHAcPcQQGfbyqmS0hS
+        q6PaYs9XCFcR4EURIm/75eGDW/eDpkaOuA==
+X-Google-Smtp-Source: ABdhPJwB2J5Hj96U28XtsZysxrVvnfQkgK6OUgPfkpYFHjI3AYNNsQRzgYW70iM9po7efCEROzH7ng==
+X-Received: by 2002:a2e:681a:0:b0:253:bba4:231a with SMTP id c26-20020a2e681a000000b00253bba4231amr12456589lja.286.1653301809073;
+        Mon, 23 May 2022 03:30:09 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id z5-20020a056512308500b0047255d211e9sm1761572lfd.280.2022.05.23.03.30.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 03:30:08 -0700 (PDT)
+Date:   Mon, 23 May 2022 13:30:06 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Marc Zyngier <maz@kernel.org>,
+        Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chao-ying Fu <cfu@wavecomp.com>
+Subject: Re: [PATCH 03/12] irqchip: mips-gic: Introduce
+ gic_with_each_online_cpu()
+Message-ID: <20220523103006.gklftp22pyjrkoqm@mobilestation>
+References: <20220519185125.11686-1-Dragan.Mladjenovic@syrmia.com>
+ <20220519185125.11686-4-Dragan.Mladjenovic@syrmia.com>
+ <87k0agmwdc.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87k0agmwdc.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, May 22, 2022 at 09:48:14PM +0100, Maciej W. Rozycki wrote:
-> Recent commit 198688edbf77 ("MIPS: Fix inline asm input/output type 
-> mismatch in checksum.h used with Clang") introduced a code size and 
-> performance regression with 64-bit code emitted for `csum_tcpudp_nofold' 
-> by GCC, caused by a redundant truncation operation produced due to a 
-> data type change made to the variable associated with the inline 
-> assembly's output operand.
+On Fri, May 20, 2022 at 09:38:55AM +0100, Marc Zyngier wrote:
+> On Thu, 19 May 2022 19:51:16 +0100,
+> Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
+> > 
+> > From: Paul Burton <paulburton@kernel.org>
+> > 
+> > A few pieces of code in the MIPS GIC driver operate on the GIC local
+> > register block for each online CPU, accessing each via the GIC's
+> > other/redirect register block. This patch abstracts the process of
+> > iterating over online CPUs & configuring the other/redirect region to
+> > access their registers through a new gic_with_each_online_cpu() macro.
+> > 
+> > This simplifies users of the new macro slightly, and more importantly
+> > prepares us for handling multi-cluster systems where the register
+> > configuration will be done via the CM's GCR_CL_REDIRECT register. By
+> > abstracting all other/redirect block configuration through this macro,
+> > and the __gic_with_next_online_cpu() function which backs it, users will
+> > trivially gain support for multi-cluster when it is implemented in
+> > __gic_with_next_online_cpu().
+> > 
+> > Signed-off-by: Paul Burton <paulburton@kernel.org>
+> > Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
+> > 
+> > diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+> > index ff89b36267dd..4872bebe24cf 100644
+> > --- a/drivers/irqchip/irq-mips-gic.c
+> > +++ b/drivers/irqchip/irq-mips-gic.c
 > 
-> The intent previously expressed here with operands and constraints for 
-> optimal code was to have the output operand share a register with one 
-> inputs, both of a different integer type each.  This is perfectly valid 
-> with the MIPS psABI where a register can hold integer data of different 
-> types and the assembly code used here makes data stored in the output 
-> register match the data type used with the output operand, however it 
-> has turned out impossible to express this arrangement in source code 
-> such as to satisfy LLVM, apparently due to the compiler's internal 
-> limitations.
-> 
-> There is nothing peculiar about the inline assembly `csum_tcpudp_nofold' 
-> includes however, though it does choose assembly instructions carefully.
-> 
-> Rewrite this piece of assembly in plain C then, using corresponding C 
-> language operations, making GCC produce the same assembly instructions, 
-> possibly shuffled, in the general case and sometimes actually fewer of 
-> them where an input is constant, because the compiler does not have to 
-> reload it to a register (operand constraints could be adjusted for that, 
-> but the plain C approach is cleaner anyway).
-> 
-> Example code size changes are as follows, for a 32-bit configuration:
-> 
->       text       data        bss      total filename
->    5920480    1347236     126592    7394308 vmlinux-old
->    5920480    1347236     126592    7394308 vmlinux-now
->    5919728    1347236     126592    7393556 vmlinux-c
-> 
-> and for a 64-bit configuration:
-> 
->       text       data        bss      total filename
->    6024112    1790828     225728    8040668 vmlinux-old
->    6024128    1790828     225728    8040684 vmlinux-now
->    6023760    1790828     225728    8040316 vmlinux-c
-> 
-> respectively, where "old" is with the commit referred reverted, "now" is 
-> with no change, and "c" is with this change applied.
-> 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> ---
-> Hi,
-> 
->  I have visually inspected code produced and verified this change to boot 
-> with TCP networking performing just fine, both with a 32-bit and a 64-bit 
-> configuration.  Sadly with the little endianness only, because in the 
-> course of this verification I have discovered the core card of my Malta 
-> board bit the dust a few days ago, apparently in a permanent manner, and I 
-> have no other big-endian MIPS system available here to try.
-> 
->  The only difference between the two endiannesses is the left-shift 
-> operation on (proto + len) however, which doesn't happen for big-endian 
-> configurations, so the little endianness should in principle provide 
-> enough coverage.
-> 
->  Also I'm leaving it to LLVM folks to verify, however this is plain C, so 
-> it is expected to just work.
-> 
->  Please apply.
-> 
->   Maciej
-> ---
->  arch/mips/include/asm/checksum.h |   71 ++++++++++++++++++---------------------
 
-applied to mips-next.
+> No SoB from the sender, odd patch format (no ---), and I didn't get a
+> complete series, which makes it impossible to review things in context
+> (I don't even know what the series is about).
 
-Thomas.
+Hi Marc,
+Here is the link to the whole series:
+https://lore.kernel.org/linux-mips/20220519185125.11686-1-Dragan.Mladjenovic@syrmia.com/
+but yes, having a full patchset in the inbox would be much better.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+@Dragan, if you are still willing to get the series reviewed, please
+add both Marc and me to the lists of the recipients of each patch and
+resend. Of course make sure Thomas Bogendoerfer gets the whole series too.
+
+@Dragan, as Marc already noted the sender's SoB must be added.
+Who is Chao-ying and why do you need to add his SoB to each patch?
+For instance you have the patch
+"[PATCH 05/12] irqchip: mips-gic: Setup defaults in each cluster"
+in this series which is stated being authored by Chao-ying but
+you've also added Paul' SoB there. What did Paul do for that patch
+development?
+
+-Sergey
+
+> 
+> Please fix things and resend.
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.
