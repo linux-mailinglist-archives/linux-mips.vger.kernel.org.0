@@ -2,55 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D56531B99
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DB1531A99
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242463AbiEWRtU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 13:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
+        id S241166AbiEWSAn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 14:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242488AbiEWRsq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 13:48:46 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E17AEE27
-        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 10:37:25 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so14344751pjf.5
-        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 10:37:25 -0700 (PDT)
+        with ESMTP id S242832AbiEWR7z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 13:59:55 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF66E27B05
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 10:46:11 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id s5so18066639ljd.10
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 10:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uPvB4xKkZsbv/NQuw+LVF1ZeOmndZIablC0q46ZFciY=;
-        b=XvH+fP7b6A7IaMFFBQF7IkZCZBYDCe5tYb80MfrbM2f0FYzFokK+x6mgbkPTeOgoUg
-         LclNFKJEWXiNeIZWkIZLNbNNePqmTZSw88j10EPFP/TCd88RX+QFgo+8KXnJ7ZFWEqw8
-         e258spbjBdsYFehtuKv0B7wbQEdEuoZG2QfXIkOIkFlhdL9EvniL6ve+PR8g87Ue1Ipd
-         qlKgwGG9OiDFl7+72jz8mhlBqYjKbIOUmNWAcLmyrAe5QY5hfjJUdhA+UHLy5+ZIOXNQ
-         y5rtJrUIwrCDHAi+YfCoOzCaRCeBurqBgL7bm+aoHAkTBJ7vzfBVMAs7LZYNqcNRbsWw
-         xF8Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Lt+QmLRlAmSG7nATNb3de1rpq1KDptBx8X9RCMbUflw=;
+        b=Rr3FTbZSH6OEOK11OGjw8VhElwCyNuOyvzb6UGiQa0VN2z4nznXexLQevuNvWvmzge
+         CTYxbMdQDt/ABY+5MJUs3UQ9cjgZB5HpfDYKoRS1NjSjEXU07Em23YCDUfUVa0uX8nb/
+         9z73CqVXPwVsA8Daek73ky1cd2penETPszXb/oyC1JTxYrs3iF1+pny/UHRiTwvpdI8k
+         g8tK6SALO5ySpktT2RjFFNN6TQsPT7nll0EKnmQlStwKvKJ60ZHIYNM+jC9XU/fKERYw
+         C53AE92+J6jh3ctfSI6kiJseh3KT/sVgJBhffuZkOWwWVE+RPT6LvCRHczR7+R0zJEmT
+         JfYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uPvB4xKkZsbv/NQuw+LVF1ZeOmndZIablC0q46ZFciY=;
-        b=kO4vjCpB5vCk+sw/VLotJudvkOALsbQ7aBOcvZJL9VZifq8IEmWe+sMvIJ/5772Tmg
-         j8fZTX9xe4foPLZQnzvkOFXHnqWWx2NpD9KAHwS6ppMUqLvMcNR1YO+7RgCr1XM908XV
-         OtcrfvQXjNu3VAMXJmdvm3cQJxkJs0/5N7mFZOrp2NFDG+aumtgBJoPT+4DvqjgmEcSb
-         fCdf4qT+oCB4/qxRmDzTEUSOezyOO2HQ4yps96o+xwwQVuJ0UQM+4PksCsJTY6EqvJsw
-         kI48K+o12pipyS0tQ4cfSJ0qq5ybqaLMhQ+G8mGl2vUdrqflR/z+6DehTeCgmyh9qWXc
-         GXUw==
-X-Gm-Message-State: AOAM531rtLOJofEjNElpwDU+vnoXtbPMNvsi4P6dRpxhW4pjT/gqtlbu
-        iyPeB96pc6/yhXL4zsfo21bhz+S2xqngrA==
-X-Google-Smtp-Source: ABdhPJw4AGNGxsFqbqwZIS+BFk/8egtH9UXiumvmBRxLQ0/47sCH59HMfF1NiH7idboGwFW37lheDQ==
-X-Received: by 2002:a17:90b:4b90:b0:1e0:1b0:1a1 with SMTP id lr16-20020a17090b4b9000b001e001b001a1mr146255pjb.70.1653327444125;
-        Mon, 23 May 2022 10:37:24 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b0015e8d4eb260sm5388000plx.170.2022.05.23.10.37.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 10:37:23 -0700 (PDT)
-Date:   Mon, 23 May 2022 17:37:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     David Matlack <dmatlack@google.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Lt+QmLRlAmSG7nATNb3de1rpq1KDptBx8X9RCMbUflw=;
+        b=T9D2iZbwgNaPQlpSRvW70DWEDRdIqlFEpqRnCH4Mm0cT6J2uReTZBuPPmh/pDSlygI
+         QeOnI9TnjXDW98pBAlEYMSfM2mSlf86tQoKJGAM9ZArGCwNmsGRIZWxZWAl1/iEACRB+
+         wv7c/ggAS0vhgE9WrNUEsR2Ahlk3Is8hPFfmKe5JoIqK+G3GlIG5Cd5r/Dq016U/hfWN
+         DybZURBEyZaApz0x2o/p+jhkeFzVL1oTOrSTNvfpsdojrJkavfrQ/V5xuUEl1gIbI8dz
+         Nj6Ht7qxKzxlz105YugTT859d7i1H0VLSO2iJgVKjKUAZqWDl0QRAEy+dhVP+3iB2asp
+         VZAw==
+X-Gm-Message-State: AOAM531ijizgs65nn1KxA8PFsq/8OCPli4ogJPwYgIUgt4rcW4VwhYPK
+        SlORygKUtML9jBx64bU9iVU/SCw9Yarcdzb4+ca99A==
+X-Google-Smtp-Source: ABdhPJzDb1QQeQPt37UpqWbTLpFmjnccbcNhzyRtox2/Lhza8BwHrGwgro263+zixdfWhTwF6P7oNs645WQMXX3iLvE=
+X-Received: by 2002:a05:651c:b20:b0:253:f4ec:b7d0 with SMTP id
+ b32-20020a05651c0b2000b00253f4ecb7d0mr159601ljr.198.1653327872507; Mon, 23
+ May 2022 10:44:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220516232138.1783324-1-dmatlack@google.com> <20220516232138.1783324-22-dmatlack@google.com>
+ <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com> <YovGUDrYZMZ7PXeY@google.com>
+In-Reply-To: <YovGUDrYZMZ7PXeY@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 23 May 2022 10:44:05 -0700
+Message-ID: <CALzav=fUTYGjDuWQxJusH4CzkEwGja-4xAmpqEOZdUfBftYwYw@mail.gmail.com>
+Subject: Re: [PATCH v6 21/22] KVM: Allow for different capacities in
+ kvm_mmu_memory_cache structs
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Mingwei Zhang <mizhang@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -61,7 +65,7 @@ Cc:     David Matlack <dmatlack@google.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Andrew Jones <drjones@redhat.com>,
         Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
         "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
         <kvmarm@lists.cs.columbia.edu>,
         "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
@@ -71,63 +75,63 @@ Cc:     David Matlack <dmatlack@google.com>,
         "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
         <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v6 21/22] KVM: Allow for different capacities in
- kvm_mmu_memory_cache structs
-Message-ID: <YovGUDrYZMZ7PXeY@google.com>
-References: <20220516232138.1783324-1-dmatlack@google.com>
- <20220516232138.1783324-22-dmatlack@google.com>
- <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 20, 2022, Mingwei Zhang wrote:
-> On Mon, May 16, 2022 at 4:24 PM David Matlack <dmatlack@google.com> wrote:
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index e089db822c12..5e2e75014256 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -369,14 +369,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
-> >                 return (void *)__get_free_page(gfp_flags);
-> >  }
+On Mon, May 23, 2022 at 10:37 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Fri, May 20, 2022, Mingwei Zhang wrote:
+> > On Mon, May 16, 2022 at 4:24 PM David Matlack <dmatlack@google.com> wrote:
+> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > > index e089db822c12..5e2e75014256 100644
+> > > --- a/virt/kvm/kvm_main.c
+> > > +++ b/virt/kvm/kvm_main.c
+> > > @@ -369,14 +369,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+> > >                 return (void *)__get_free_page(gfp_flags);
+> > >  }
+> > >
+> > > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> > > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> > >  {
+> > > +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
+> > >         void *obj;
+> > >
+> > >         if (mc->nobjs >= min)
+> > >                 return 0;
+> > > -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> > > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> > > +
+> > > +       if (unlikely(!mc->objects)) {
+> > > +               if (WARN_ON_ONCE(!capacity))
+> > > +                       return -EIO;
+> > > +
+> > > +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
+> > > +               if (!mc->objects)
+> > > +                       return -ENOMEM;
+> > > +
+> > > +               mc->capacity = capacity;
 > >
-> > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-> > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
-> >  {
-> > +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
-> >         void *obj;
-> >
-> >         if (mc->nobjs >= min)
-> >                 return 0;
-> > -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
-> > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
-> > +
-> > +       if (unlikely(!mc->objects)) {
-> > +               if (WARN_ON_ONCE(!capacity))
-> > +                       return -EIO;
-> > +
-> > +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-> > +               if (!mc->objects)
-> > +                       return -ENOMEM;
-> > +
-> > +               mc->capacity = capacity;
-> 
-> Do we want to ensure the minimum value of the capacity? I think
-> otherwise, we may more likely start using memory from GFP_ATOMIC if
-> the capacity is less than, say 5? But the minimum value seems related
-> to each cache type.
+> > Do we want to ensure the minimum value of the capacity? I think
+> > otherwise, we may more likely start using memory from GFP_ATOMIC if
+> > the capacity is less than, say 5? But the minimum value seems related
+> > to each cache type.
+>
+> Eh, if we specify a minimum, just make the arch default the minimum.  That way we
+> avoid adding even more magic/arbitrary numbers.  E.g. for whatever reason, MIPS's
+> default is '4'.
 
-Eh, if we specify a minimum, just make the arch default the minimum.  That way we
-avoid adding even more magic/arbitrary numbers.  E.g. for whatever reason, MIPS's
-default is '4'.
+I'm not exactly sure what you had in mind Mingwei. But there is a bug
+in this code if min > capacity. This function will happily return 0
+after filling up the cache, even though it did not allocate min
+objects. The same bug existed before this patch if min >
+ARRAY_SIZE(mc->objects). I can include a separate patch to fix this
+bug (e.g. WARN and return -ENOMEM if min > capacity).
