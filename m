@@ -2,136 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DB1531A99
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23245316C9
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241166AbiEWSAn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 14:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
+        id S240125AbiEWSbu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 14:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242832AbiEWR7z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 13:59:55 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF66E27B05
-        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 10:46:11 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id s5so18066639ljd.10
-        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 10:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Lt+QmLRlAmSG7nATNb3de1rpq1KDptBx8X9RCMbUflw=;
-        b=Rr3FTbZSH6OEOK11OGjw8VhElwCyNuOyvzb6UGiQa0VN2z4nznXexLQevuNvWvmzge
-         CTYxbMdQDt/ABY+5MJUs3UQ9cjgZB5HpfDYKoRS1NjSjEXU07Em23YCDUfUVa0uX8nb/
-         9z73CqVXPwVsA8Daek73ky1cd2penETPszXb/oyC1JTxYrs3iF1+pny/UHRiTwvpdI8k
-         g8tK6SALO5ySpktT2RjFFNN6TQsPT7nll0EKnmQlStwKvKJ60ZHIYNM+jC9XU/fKERYw
-         C53AE92+J6jh3ctfSI6kiJseh3KT/sVgJBhffuZkOWwWVE+RPT6LvCRHczR7+R0zJEmT
-         JfYA==
+        with ESMTP id S243719AbiEWSbf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 14:31:35 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B64620F5A;
+        Mon, 23 May 2022 11:06:22 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id v11so13415860qkf.1;
+        Mon, 23 May 2022 11:06:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Lt+QmLRlAmSG7nATNb3de1rpq1KDptBx8X9RCMbUflw=;
-        b=T9D2iZbwgNaPQlpSRvW70DWEDRdIqlFEpqRnCH4Mm0cT6J2uReTZBuPPmh/pDSlygI
-         QeOnI9TnjXDW98pBAlEYMSfM2mSlf86tQoKJGAM9ZArGCwNmsGRIZWxZWAl1/iEACRB+
-         wv7c/ggAS0vhgE9WrNUEsR2Ahlk3Is8hPFfmKe5JoIqK+G3GlIG5Cd5r/Dq016U/hfWN
-         DybZURBEyZaApz0x2o/p+jhkeFzVL1oTOrSTNvfpsdojrJkavfrQ/V5xuUEl1gIbI8dz
-         Nj6Ht7qxKzxlz105YugTT859d7i1H0VLSO2iJgVKjKUAZqWDl0QRAEy+dhVP+3iB2asp
-         VZAw==
-X-Gm-Message-State: AOAM531ijizgs65nn1KxA8PFsq/8OCPli4ogJPwYgIUgt4rcW4VwhYPK
-        SlORygKUtML9jBx64bU9iVU/SCw9Yarcdzb4+ca99A==
-X-Google-Smtp-Source: ABdhPJzDb1QQeQPt37UpqWbTLpFmjnccbcNhzyRtox2/Lhza8BwHrGwgro263+zixdfWhTwF6P7oNs645WQMXX3iLvE=
-X-Received: by 2002:a05:651c:b20:b0:253:f4ec:b7d0 with SMTP id
- b32-20020a05651c0b2000b00253f4ecb7d0mr159601ljr.198.1653327872507; Mon, 23
- May 2022 10:44:32 -0700 (PDT)
+        bh=N4rBBcobCQCpRnDX0N4E6NWTW64w3K1pdJQpMj8qNhc=;
+        b=udpNSUAhyP0FG8UDM1hTD/Pjh6SNQULn1hGtdAPYeDLHUc4PzchUBkFrhQd5rk4IgN
+         kUXrLc9uejFGUyzcZTIyCZ2OksTZRKTfxc1CkuMmtblrmLspSRWOPZG4e+b7l8dtiHjD
+         E7oW9+ss3tMBcn8UH2dpYG47tK19BqyKzW/P4vD3StmxjzMm1mavXFvhPFpXvk82I1UZ
+         Vjq63QGnvRKmjV0vx7Vyrp5yF4DR41bld6QNEudT27Q2oEMyHOnoX6yWLZ6YURSTdFVi
+         wq1nIg2h7mCMxMmwkO/5wc8qwRVUtTF9Hq0UqUDzPxc6yJgTxWuEZnkZiHErEEoYKjei
+         Uwrg==
+X-Gm-Message-State: AOAM533xZQUl2IWoB0x6AQv2JNRZwHN3T1Iu9fOpk1tP18i+6+BrCpq3
+        1yUh8xUnLSBiVz1I93FWpv4yttvzTploOtMzc3E=
+X-Google-Smtp-Source: ABdhPJzWjZYTz0j8MSLd3DxKvbLW/XPtFjrPCplrW/MOl5criBTRv3K3QA0OeDfkMtd0+xXjk3TDeQ==
+X-Received: by 2002:a05:620a:2446:b0:6a0:50e8:2b2f with SMTP id h6-20020a05620a244600b006a050e82b2fmr14661026qkn.261.1653328871953;
+        Mon, 23 May 2022 11:01:11 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id o8-20020a05622a138800b002f93554c009sm2686537qtk.59.2022.05.23.11.01.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 11:01:11 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id p139so26782803ybc.11;
+        Mon, 23 May 2022 11:01:11 -0700 (PDT)
+X-Received: by 2002:a81:ad11:0:b0:2fe:fb00:a759 with SMTP id
+ l17-20020a81ad11000000b002fefb00a759mr24887559ywh.283.1653328860919; Mon, 23
+ May 2022 11:01:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516232138.1783324-1-dmatlack@google.com> <20220516232138.1783324-22-dmatlack@google.com>
- <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com> <YovGUDrYZMZ7PXeY@google.com>
-In-Reply-To: <YovGUDrYZMZ7PXeY@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 23 May 2022 10:44:05 -0700
-Message-ID: <CALzav=fUTYGjDuWQxJusH4CzkEwGja-4xAmpqEOZdUfBftYwYw@mail.gmail.com>
-Subject: Re: [PATCH v6 21/22] KVM: Allow for different capacities in
- kvm_mmu_memory_cache structs
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com> <CAJZ5v0jhWs-8ChHddebTZcaH6kA05sLEMsXM9Op7kHWAQDxeYA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jhWs-8ChHddebTZcaH6kA05sLEMsXM9Op7kHWAQDxeYA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 23 May 2022 20:00:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVbWpgubaA0V_tau3O=czAb3RQV9AwJsoQ+LWjf-wjMkA@mail.gmail.com>
+Message-ID: <CAMuHMdVbWpgubaA0V_tau3O=czAb3RQV9AwJsoQ+LWjf-wjMkA@mail.gmail.com>
+Subject: Re: [PATCH v8 00/27] Introduce power-off+restart call chain API
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 23, 2022 at 10:37 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, May 20, 2022, Mingwei Zhang wrote:
-> > On Mon, May 16, 2022 at 4:24 PM David Matlack <dmatlack@google.com> wrote:
-> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > index e089db822c12..5e2e75014256 100644
-> > > --- a/virt/kvm/kvm_main.c
-> > > +++ b/virt/kvm/kvm_main.c
-> > > @@ -369,14 +369,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
-> > >                 return (void *)__get_free_page(gfp_flags);
-> > >  }
-> > >
-> > > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-> > > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
-> > >  {
-> > > +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
-> > >         void *obj;
-> > >
-> > >         if (mc->nobjs >= min)
-> > >                 return 0;
-> > > -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
-> > > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
-> > > +
-> > > +       if (unlikely(!mc->objects)) {
-> > > +               if (WARN_ON_ONCE(!capacity))
-> > > +                       return -EIO;
-> > > +
-> > > +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-> > > +               if (!mc->objects)
-> > > +                       return -ENOMEM;
-> > > +
-> > > +               mc->capacity = capacity;
-> >
-> > Do we want to ensure the minimum value of the capacity? I think
-> > otherwise, we may more likely start using memory from GFP_ATOMIC if
-> > the capacity is less than, say 5? But the minimum value seems related
-> > to each cache type.
->
-> Eh, if we specify a minimum, just make the arch default the minimum.  That way we
-> avoid adding even more magic/arbitrary numbers.  E.g. for whatever reason, MIPS's
-> default is '4'.
+Hi Rafael,
 
-I'm not exactly sure what you had in mind Mingwei. But there is a bug
-in this code if min > capacity. This function will happily return 0
-after filling up the cache, even though it did not allocate min
-objects. The same bug existed before this patch if min >
-ARRAY_SIZE(mc->objects). I can include a separate patch to fix this
-bug (e.g. WARN and return -ENOMEM if min > capacity).
+On Wed, May 18, 2022 at 4:46 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+
+> >   m68k: Switch to new sys-off handler API
+
+Sorry, I didn't realize this was going to interact with the new m68k
+virtual machine support, which is included in the m68k pull request
+for v5.19.
+
+> However, I'm going to send a pull request with it in the second half
+> of the merge window, after the majority of the other changes in the
+> subsystems touched by it have been integrated.
+
+And presumably you will have to merge in v5.19-rc1, too?
+
+I've sent a fix.  It should appear at
+https://lore.kernel.org/r/20220523175520.949681-1-geert@linux-m68k.org
+soon.
+
+Can you please include that in your PR?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
