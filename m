@@ -2,169 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E84531A8E
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3264531BEA
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242913AbiEWSm4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 14:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S229555AbiEWUlM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 16:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242928AbiEWSmk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 14:42:40 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE9819C74F
-        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 11:23:26 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id i23so18218655ljb.4
-        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 11:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JBE+c6B6mu+AU/hAc8TEq+k0wWV4teBbrl8ksLPajFc=;
-        b=cWHVnC7SjbQmMEiVyXfCzVIwsV3Lh2RylQXtUjn75DQ9ceQTENt+WSdC1+qQPWw8yy
-         SpilqZe8fjKZ2i4ZcQNVW/Xq0QMQ/FwJiZMkeGDFUTu5YZHSdHeRx8ieJzECO8muh3Bt
-         krUpWLStrKeGzqo0aLvY1wu7oGH4X5EtBrO1MG9y4N5YbR+JT8IUm7O8vcYLqskmy1SI
-         SCIaY6VoNwevl9WnTh6ITh4or1ZmLLZEXDOsmRxsiZdaqklvLnhpa5Uni3T3Rc7oytnp
-         7WnKbUaItrZqB9NYSo6Dt90ETwk9rrSVO6HZU2Zkx4UZkTjinD/QFxrX+oYCwgEAlqZF
-         moLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JBE+c6B6mu+AU/hAc8TEq+k0wWV4teBbrl8ksLPajFc=;
-        b=qvXC7jW+TU/tVyLoF+Dhj/DPMp46JUfn7yNQqPZzDNff3EN9TBvhjFrM1p8pFCunXU
-         t0PtvB9SgMnFrxObA8mHT2M0ShXaff9vlKaR1IOiny7ASBHroqpMGacYCTBtjqX2OMGv
-         udcjXcy6Jc2PJsvjCfsLmc8V58OfjtXgk6lTbdBCS2yCRCpTPL9wp3M+WlM4vhG/a6DN
-         VgJe6+UeGxVtAyPFYFfqW648AyaVyf+rwHds0xyoU5qcqT8SpFWCepaqCh4dFD48rNER
-         EVamMvj8pFzlVlWsXGXLyqNtxj5HOL+Lq6VAjmMQtx3i811OMnHI6BsYhqjFeZ+AmOmo
-         2OQA==
-X-Gm-Message-State: AOAM5316PJ1NHzsnzaGcPCVStFNs+Piftq1dBRkx8D4gtMC3Du9AKRun
-        MIinQX85npI2K2jaWwDRr7VqoN3ZO3cslHPJxLetyg==
-X-Google-Smtp-Source: ABdhPJyNsj6lIr9f0L/th/WhKwBNwG+T8hd6N7+QYW7amPHZGMNM9aG5b3qM5eH0DKS98CKLvqIisTXtpNcpRY+gaWM=
-X-Received: by 2002:a2e:9d93:0:b0:253:c9bd:288 with SMTP id
- c19-20020a2e9d93000000b00253c9bd0288mr13678056ljj.223.1653330204606; Mon, 23
- May 2022 11:23:24 -0700 (PDT)
+        with ESMTP id S233175AbiEWUlD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 16:41:03 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE309C3F;
+        Mon, 23 May 2022 13:41:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LG2HkLvcft3PZ/5y+RaNtcoQpztQykGkc8EQp8pxJfI=; b=fPCMiuZns16FgBzoGF9Je3OLkO
+        LL4L2QHAG/wGtiXgEhS21zRsWqE1LMzGwwDxe6f9KpfZaY9eV7CGD4vwhcqTRNInSSR1HDaLnpPpS
+        miMpU8/+9j0GmfawjCEu88Tqk7uAI9V6UbtlRLQsT2Paj7KpRr9Eexx/1nt9uyC0/PRdqZ6qso//5
+        331flFwFw5rYDxq1lD4s7YGntuImz8x8p2XDCS463SY8sQhksTBKudAp4pKnME8DpTbZ4fGAvbQxT
+        wafY442u8mSqR6x/cwniP7CEUq4fd8W+eVImWzP4xrptC52doj1jXiLwbdsJQSnWbw0nF1P7Xd8f/
+        wPYC4mSw==;
+Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ntEr0-00Gje9-7b; Mon, 23 May 2022 22:40:38 +0200
+Message-ID: <0dda86c0-3a54-8c70-d1e7-18bbb4d41bab@igalia.com>
+Date:   Mon, 23 May 2022 17:40:07 -0300
 MIME-Version: 1.0
-References: <20220516232138.1783324-1-dmatlack@google.com> <20220516232138.1783324-22-dmatlack@google.com>
- <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com>
- <YovGUDrYZMZ7PXeY@google.com> <CALzav=fUTYGjDuWQxJusH4CzkEwGja-4xAmpqEOZdUfBftYwYw@mail.gmail.com>
- <CAL715WL8g4y=agnMCM7uX6dhBp1JdFKHOCcYsh-=HT0wF=sQUA@mail.gmail.com>
-In-Reply-To: <CAL715WL8g4y=agnMCM7uX6dhBp1JdFKHOCcYsh-=HT0wF=sQUA@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 23 May 2022 11:22:57 -0700
-Message-ID: <CALzav=dcFmkZsEBUWGECUQVzrE4TiF=eOxhRXW-XQ-_q4cXchA@mail.gmail.com>
-Subject: Re: [PATCH v6 21/22] KVM: Allow for different capacities in
- kvm_mmu_memory_cache structs
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 12/30] parisc: Replace regular spinlock with spin_trylock
+ on panic path
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        pmladek@suse.com, bhe@redhat.com, akpm@linux-foundation.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-13-gpiccoli@igalia.com>
+ <6a7c924a-54a9-c5ea-8a9d-3ea92987b436@gmx.de>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <6a7c924a-54a9-c5ea-8a9d-3ea92987b436@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 23, 2022 at 11:13 AM Mingwei Zhang <mizhang@google.com> wrote:
->
-> On Mon, May 23, 2022 at 10:44 AM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Mon, May 23, 2022 at 10:37 AM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Fri, May 20, 2022, Mingwei Zhang wrote:
-> > > > On Mon, May 16, 2022 at 4:24 PM David Matlack <dmatlack@google.com> wrote:
-> > > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > > > index e089db822c12..5e2e75014256 100644
-> > > > > --- a/virt/kvm/kvm_main.c
-> > > > > +++ b/virt/kvm/kvm_main.c
-> > > > > @@ -369,14 +369,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
-> > > > >                 return (void *)__get_free_page(gfp_flags);
-> > > > >  }
-> > > > >
-> > > > > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-> > > > > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
-> > > > >  {
-> > > > > +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
-> > > > >         void *obj;
-> > > > >
-> > > > >         if (mc->nobjs >= min)
-> > > > >                 return 0;
-> > > > > -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
-> > > > > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
-> > > > > +
-> > > > > +       if (unlikely(!mc->objects)) {
-> > > > > +               if (WARN_ON_ONCE(!capacity))
-> > > > > +                       return -EIO;
-> > > > > +
-> > > > > +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-> > > > > +               if (!mc->objects)
-> > > > > +                       return -ENOMEM;
-> > > > > +
-> > > > > +               mc->capacity = capacity;
-> > > >
-> > > > Do we want to ensure the minimum value of the capacity? I think
-> > > > otherwise, we may more likely start using memory from GFP_ATOMIC if
-> > > > the capacity is less than, say 5? But the minimum value seems related
-> > > > to each cache type.
-> > >
-> > > Eh, if we specify a minimum, just make the arch default the minimum.  That way we
-> > > avoid adding even more magic/arbitrary numbers.  E.g. for whatever reason, MIPS's
-> > > default is '4'.
-> >
-> > I'm not exactly sure what you had in mind Mingwei. But there is a bug
-> > in this code if min > capacity. This function will happily return 0
-> > after filling up the cache, even though it did not allocate min
-> > objects. The same bug existed before this patch if min >
-> > ARRAY_SIZE(mc->objects). I can include a separate patch to fix this
-> > bug (e.g. WARN and return -ENOMEM if min > capacity).
->
-> oh, what I am saying is this one:
-> https://elixir.bootlin.com/linux/latest/source/virt/kvm/kvm_main.c#L417
->
-> If we are running out of kmem cache, then we start to use
-> __GFP_ATOMIC, which should be avoided as much as we can? Since this
-> patch parameterized the 'capacity', then to avoid the future usage
-> where caller provides a too small value, maybe we could add a warning
-> if the 'capacity' is too small, say, smaller than 40 (the default
-> value)?
+On 28/04/2022 13:55, Helge Deller wrote:
+> [...]
+> You may add:
+> Acked-by: Helge Deller <deller@gmx.de> # parisc
+> 
+> Helge
 
-I'm not too worried about that. Callers of
-kvm_mmu_topup_memory_cache() are responsible for passing in a min
-value. It doesn't matter if capacity is a number lower than 40, as
-long as kvm_mmu_topup_memory_cache() is able to allocate min objects,
-the call is a success (and the GFP_ATOMIC fallback should never
-trigger, and if it does, we'll get a WARN splat).
+Hi Helge, do you think would be possible to still pick this one for
+v5.19 or do you prefer to hold for the next release?
 
-The only actual loophole I can spot is if capacity is less than min.
-In that case topup will return 0 despite allocating less than min
-objects. Again we'll still hit the GFP_ATOMIC and get a WARN splat,
-but we can detect the problem in kvm_mmu_topup_memory_cache() which
-will include the buggy callsite in the backtrace.
+I'm working on V2, so if it's merged for 5.19 I won't send it again.
+Thanks,
 
->
-> The case of  'capacity' < min would be a more serious issue, that
-> situation probably should never be allowed.
+
+Guilherme
