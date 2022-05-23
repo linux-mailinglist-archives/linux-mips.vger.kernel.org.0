@@ -2,153 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23245316C9
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FEBD531708
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240125AbiEWSbu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 14:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S237474AbiEWSfu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 14:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243719AbiEWSbf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 14:31:35 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B64620F5A;
-        Mon, 23 May 2022 11:06:22 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id v11so13415860qkf.1;
-        Mon, 23 May 2022 11:06:22 -0700 (PDT)
+        with ESMTP id S241093AbiEWSfV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 14:35:21 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C071015BAFF
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 11:13:45 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id v6so10119442qtx.12
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 11:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9HFX9sjl+4VLRtd7vfZP8e0JAPWXxyf7EQ+egr1dfcA=;
+        b=XmbHC6s54toCVJhe+r/t0oUqEEo6vDWi/pHAZbCRT05gdM7142NZCPkCgjNSbDneXa
+         2HpkmYLGn+24ofjOzud50aHEqkNXt1LTQG3yZMKQqsw9VEqcO2V2Vb+0T2iuw03j+K2G
+         hDs9ogxGqyL5a3X/u0ZmYwqJQpSm+Ny7bDTEHcUlg+U7Og5466M8sXwCbBXM3q7JApWz
+         MLbxGNntDJc1tilQd9QdKWMHLowyt/5xXuLr+TQqWHJC18gPAgPGdZvjMo+clA05NFbd
+         MkU7+k6RROPiJEctaZ/MKvf48EyVF2qYy2b7jEvZPZ9kgO7wZk8UXSZDRefysbVdSvwF
+         QrnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=N4rBBcobCQCpRnDX0N4E6NWTW64w3K1pdJQpMj8qNhc=;
-        b=udpNSUAhyP0FG8UDM1hTD/Pjh6SNQULn1hGtdAPYeDLHUc4PzchUBkFrhQd5rk4IgN
-         kUXrLc9uejFGUyzcZTIyCZ2OksTZRKTfxc1CkuMmtblrmLspSRWOPZG4e+b7l8dtiHjD
-         E7oW9+ss3tMBcn8UH2dpYG47tK19BqyKzW/P4vD3StmxjzMm1mavXFvhPFpXvk82I1UZ
-         Vjq63QGnvRKmjV0vx7Vyrp5yF4DR41bld6QNEudT27Q2oEMyHOnoX6yWLZ6YURSTdFVi
-         wq1nIg2h7mCMxMmwkO/5wc8qwRVUtTF9Hq0UqUDzPxc6yJgTxWuEZnkZiHErEEoYKjei
-         Uwrg==
-X-Gm-Message-State: AOAM533xZQUl2IWoB0x6AQv2JNRZwHN3T1Iu9fOpk1tP18i+6+BrCpq3
-        1yUh8xUnLSBiVz1I93FWpv4yttvzTploOtMzc3E=
-X-Google-Smtp-Source: ABdhPJzWjZYTz0j8MSLd3DxKvbLW/XPtFjrPCplrW/MOl5criBTRv3K3QA0OeDfkMtd0+xXjk3TDeQ==
-X-Received: by 2002:a05:620a:2446:b0:6a0:50e8:2b2f with SMTP id h6-20020a05620a244600b006a050e82b2fmr14661026qkn.261.1653328871953;
-        Mon, 23 May 2022 11:01:11 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id o8-20020a05622a138800b002f93554c009sm2686537qtk.59.2022.05.23.11.01.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 11:01:11 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id p139so26782803ybc.11;
-        Mon, 23 May 2022 11:01:11 -0700 (PDT)
-X-Received: by 2002:a81:ad11:0:b0:2fe:fb00:a759 with SMTP id
- l17-20020a81ad11000000b002fefb00a759mr24887559ywh.283.1653328860919; Mon, 23
- May 2022 11:01:00 -0700 (PDT)
+        bh=9HFX9sjl+4VLRtd7vfZP8e0JAPWXxyf7EQ+egr1dfcA=;
+        b=Bi0OSfx9QiWvNnglj56aUei9RjdZvKcUkaBvqh8xpmUbNkEwqEuq6y3kok1Xfg/VGR
+         l2EYi8Z6iLmD4opShXvdeojvdVolNCamhDEKtAhfbVmMy5xdI5lC7BXnJ+frGa5HKZOB
+         Koo6z7a+Kb2H1WB6QufP/KeFKl4IHw1ktjikaAtm5U7tll8WsvKTQg8btezDdcyynllW
+         uEhWxwRgw8bwOGzoq+zkUnzQEy+wiTM+vcB19dmSbErzW1HiH9aZfhMzocEGMDftKavr
+         iLF4kAyBVyYCCc8gKyAwPwo4cicGDAC3VhW/qPap5khLpkZrkC0fHPdfk5tXYCrXSkSz
+         oScw==
+X-Gm-Message-State: AOAM532lITaRjKiGl41OBn/Dojh6OE4r3fdpsKLVLicPGYgICRfGy9Y/
+        kYmWhW5zxVeR2DiSWhpqyVvZpVFDtH3Zcvsq8f3nWg==
+X-Google-Smtp-Source: ABdhPJyTpagwHeBg7qLoy4BlcwV85GdG9mZ1tyZUA0awaQdoCbca3Xf2RKHRW63ETWlsi2oNPpabaRdlW0+nTdF5Iqs=
+X-Received: by 2002:a05:622a:1903:b0:2f3:ddac:436d with SMTP id
+ w3-20020a05622a190300b002f3ddac436dmr16866137qtc.25.1653329610964; Mon, 23
+ May 2022 11:13:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com> <CAJZ5v0jhWs-8ChHddebTZcaH6kA05sLEMsXM9Op7kHWAQDxeYA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jhWs-8ChHddebTZcaH6kA05sLEMsXM9Op7kHWAQDxeYA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 23 May 2022 20:00:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVbWpgubaA0V_tau3O=czAb3RQV9AwJsoQ+LWjf-wjMkA@mail.gmail.com>
-Message-ID: <CAMuHMdVbWpgubaA0V_tau3O=czAb3RQV9AwJsoQ+LWjf-wjMkA@mail.gmail.com>
-Subject: Re: [PATCH v8 00/27] Introduce power-off+restart call chain API
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
+References: <20220516232138.1783324-1-dmatlack@google.com> <20220516232138.1783324-22-dmatlack@google.com>
+ <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com>
+ <YovGUDrYZMZ7PXeY@google.com> <CALzav=fUTYGjDuWQxJusH4CzkEwGja-4xAmpqEOZdUfBftYwYw@mail.gmail.com>
+In-Reply-To: <CALzav=fUTYGjDuWQxJusH4CzkEwGja-4xAmpqEOZdUfBftYwYw@mail.gmail.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Mon, 23 May 2022 11:13:20 -0700
+Message-ID: <CAL715WL8g4y=agnMCM7uX6dhBp1JdFKHOCcYsh-=HT0wF=sQUA@mail.gmail.com>
+Subject: Re: [PATCH v6 21/22] KVM: Allow for different capacities in
+ kvm_mmu_memory_cache structs
+To:     David Matlack <dmatlack@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rafael,
+On Mon, May 23, 2022 at 10:44 AM David Matlack <dmatlack@google.com> wrote:
+>
+> On Mon, May 23, 2022 at 10:37 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Fri, May 20, 2022, Mingwei Zhang wrote:
+> > > On Mon, May 16, 2022 at 4:24 PM David Matlack <dmatlack@google.com> wrote:
+> > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > > > index e089db822c12..5e2e75014256 100644
+> > > > --- a/virt/kvm/kvm_main.c
+> > > > +++ b/virt/kvm/kvm_main.c
+> > > > @@ -369,14 +369,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+> > > >                 return (void *)__get_free_page(gfp_flags);
+> > > >  }
+> > > >
+> > > > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> > > > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> > > >  {
+> > > > +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
+> > > >         void *obj;
+> > > >
+> > > >         if (mc->nobjs >= min)
+> > > >                 return 0;
+> > > > -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> > > > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> > > > +
+> > > > +       if (unlikely(!mc->objects)) {
+> > > > +               if (WARN_ON_ONCE(!capacity))
+> > > > +                       return -EIO;
+> > > > +
+> > > > +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
+> > > > +               if (!mc->objects)
+> > > > +                       return -ENOMEM;
+> > > > +
+> > > > +               mc->capacity = capacity;
+> > >
+> > > Do we want to ensure the minimum value of the capacity? I think
+> > > otherwise, we may more likely start using memory from GFP_ATOMIC if
+> > > the capacity is less than, say 5? But the minimum value seems related
+> > > to each cache type.
+> >
+> > Eh, if we specify a minimum, just make the arch default the minimum.  That way we
+> > avoid adding even more magic/arbitrary numbers.  E.g. for whatever reason, MIPS's
+> > default is '4'.
+>
+> I'm not exactly sure what you had in mind Mingwei. But there is a bug
+> in this code if min > capacity. This function will happily return 0
+> after filling up the cache, even though it did not allocate min
+> objects. The same bug existed before this patch if min >
+> ARRAY_SIZE(mc->objects). I can include a separate patch to fix this
+> bug (e.g. WARN and return -ENOMEM if min > capacity).
 
-On Wed, May 18, 2022 at 4:46 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
+oh, what I am saying is this one:
+https://elixir.bootlin.com/linux/latest/source/virt/kvm/kvm_main.c#L417
 
-> >   m68k: Switch to new sys-off handler API
+If we are running out of kmem cache, then we start to use
+__GFP_ATOMIC, which should be avoided as much as we can? Since this
+patch parameterized the 'capacity', then to avoid the future usage
+where caller provides a too small value, maybe we could add a warning
+if the 'capacity' is too small, say, smaller than 40 (the default
+value)?
 
-Sorry, I didn't realize this was going to interact with the new m68k
-virtual machine support, which is included in the m68k pull request
-for v5.19.
-
-> However, I'm going to send a pull request with it in the second half
-> of the merge window, after the majority of the other changes in the
-> subsystems touched by it have been integrated.
-
-And presumably you will have to merge in v5.19-rc1, too?
-
-I've sent a fix.  It should appear at
-https://lore.kernel.org/r/20220523175520.949681-1-geert@linux-m68k.org
-soon.
-
-Can you please include that in your PR?
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+The case of  'capacity' < min would be a more serious issue, that
+situation probably should never be allowed.
