@@ -2,59 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEBD531708
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E84531A8E
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 22:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237474AbiEWSfu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 14:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S242913AbiEWSm4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 14:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241093AbiEWSfV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 14:35:21 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C071015BAFF
-        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 11:13:45 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id v6so10119442qtx.12
-        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 11:13:45 -0700 (PDT)
+        with ESMTP id S242928AbiEWSmk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 14:42:40 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE9819C74F
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 11:23:26 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id i23so18218655ljb.4
+        for <linux-mips@vger.kernel.org>; Mon, 23 May 2022 11:23:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9HFX9sjl+4VLRtd7vfZP8e0JAPWXxyf7EQ+egr1dfcA=;
-        b=XmbHC6s54toCVJhe+r/t0oUqEEo6vDWi/pHAZbCRT05gdM7142NZCPkCgjNSbDneXa
-         2HpkmYLGn+24ofjOzud50aHEqkNXt1LTQG3yZMKQqsw9VEqcO2V2Vb+0T2iuw03j+K2G
-         hDs9ogxGqyL5a3X/u0ZmYwqJQpSm+Ny7bDTEHcUlg+U7Og5466M8sXwCbBXM3q7JApWz
-         MLbxGNntDJc1tilQd9QdKWMHLowyt/5xXuLr+TQqWHJC18gPAgPGdZvjMo+clA05NFbd
-         MkU7+k6RROPiJEctaZ/MKvf48EyVF2qYy2b7jEvZPZ9kgO7wZk8UXSZDRefysbVdSvwF
-         QrnQ==
+        bh=JBE+c6B6mu+AU/hAc8TEq+k0wWV4teBbrl8ksLPajFc=;
+        b=cWHVnC7SjbQmMEiVyXfCzVIwsV3Lh2RylQXtUjn75DQ9ceQTENt+WSdC1+qQPWw8yy
+         SpilqZe8fjKZ2i4ZcQNVW/Xq0QMQ/FwJiZMkeGDFUTu5YZHSdHeRx8ieJzECO8muh3Bt
+         krUpWLStrKeGzqo0aLvY1wu7oGH4X5EtBrO1MG9y4N5YbR+JT8IUm7O8vcYLqskmy1SI
+         SCIaY6VoNwevl9WnTh6ITh4or1ZmLLZEXDOsmRxsiZdaqklvLnhpa5Uni3T3Rc7oytnp
+         7WnKbUaItrZqB9NYSo6Dt90ETwk9rrSVO6HZU2Zkx4UZkTjinD/QFxrX+oYCwgEAlqZF
+         moLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9HFX9sjl+4VLRtd7vfZP8e0JAPWXxyf7EQ+egr1dfcA=;
-        b=Bi0OSfx9QiWvNnglj56aUei9RjdZvKcUkaBvqh8xpmUbNkEwqEuq6y3kok1Xfg/VGR
-         l2EYi8Z6iLmD4opShXvdeojvdVolNCamhDEKtAhfbVmMy5xdI5lC7BXnJ+frGa5HKZOB
-         Koo6z7a+Kb2H1WB6QufP/KeFKl4IHw1ktjikaAtm5U7tll8WsvKTQg8btezDdcyynllW
-         uEhWxwRgw8bwOGzoq+zkUnzQEy+wiTM+vcB19dmSbErzW1HiH9aZfhMzocEGMDftKavr
-         iLF4kAyBVyYCCc8gKyAwPwo4cicGDAC3VhW/qPap5khLpkZrkC0fHPdfk5tXYCrXSkSz
-         oScw==
-X-Gm-Message-State: AOAM532lITaRjKiGl41OBn/Dojh6OE4r3fdpsKLVLicPGYgICRfGy9Y/
-        kYmWhW5zxVeR2DiSWhpqyVvZpVFDtH3Zcvsq8f3nWg==
-X-Google-Smtp-Source: ABdhPJyTpagwHeBg7qLoy4BlcwV85GdG9mZ1tyZUA0awaQdoCbca3Xf2RKHRW63ETWlsi2oNPpabaRdlW0+nTdF5Iqs=
-X-Received: by 2002:a05:622a:1903:b0:2f3:ddac:436d with SMTP id
- w3-20020a05622a190300b002f3ddac436dmr16866137qtc.25.1653329610964; Mon, 23
- May 2022 11:13:30 -0700 (PDT)
+        bh=JBE+c6B6mu+AU/hAc8TEq+k0wWV4teBbrl8ksLPajFc=;
+        b=qvXC7jW+TU/tVyLoF+Dhj/DPMp46JUfn7yNQqPZzDNff3EN9TBvhjFrM1p8pFCunXU
+         t0PtvB9SgMnFrxObA8mHT2M0ShXaff9vlKaR1IOiny7ASBHroqpMGacYCTBtjqX2OMGv
+         udcjXcy6Jc2PJsvjCfsLmc8V58OfjtXgk6lTbdBCS2yCRCpTPL9wp3M+WlM4vhG/a6DN
+         VgJe6+UeGxVtAyPFYFfqW648AyaVyf+rwHds0xyoU5qcqT8SpFWCepaqCh4dFD48rNER
+         EVamMvj8pFzlVlWsXGXLyqNtxj5HOL+Lq6VAjmMQtx3i811OMnHI6BsYhqjFeZ+AmOmo
+         2OQA==
+X-Gm-Message-State: AOAM5316PJ1NHzsnzaGcPCVStFNs+Piftq1dBRkx8D4gtMC3Du9AKRun
+        MIinQX85npI2K2jaWwDRr7VqoN3ZO3cslHPJxLetyg==
+X-Google-Smtp-Source: ABdhPJyNsj6lIr9f0L/th/WhKwBNwG+T8hd6N7+QYW7amPHZGMNM9aG5b3qM5eH0DKS98CKLvqIisTXtpNcpRY+gaWM=
+X-Received: by 2002:a2e:9d93:0:b0:253:c9bd:288 with SMTP id
+ c19-20020a2e9d93000000b00253c9bd0288mr13678056ljj.223.1653330204606; Mon, 23
+ May 2022 11:23:24 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220516232138.1783324-1-dmatlack@google.com> <20220516232138.1783324-22-dmatlack@google.com>
  <CAL715WJ5DVM-A8EFND0iQ-MH9nAhE3rvWdYWaEgRTCJEVeegRg@mail.gmail.com>
  <YovGUDrYZMZ7PXeY@google.com> <CALzav=fUTYGjDuWQxJusH4CzkEwGja-4xAmpqEOZdUfBftYwYw@mail.gmail.com>
-In-Reply-To: <CALzav=fUTYGjDuWQxJusH4CzkEwGja-4xAmpqEOZdUfBftYwYw@mail.gmail.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Mon, 23 May 2022 11:13:20 -0700
-Message-ID: <CAL715WL8g4y=agnMCM7uX6dhBp1JdFKHOCcYsh-=HT0wF=sQUA@mail.gmail.com>
+ <CAL715WL8g4y=agnMCM7uX6dhBp1JdFKHOCcYsh-=HT0wF=sQUA@mail.gmail.com>
+In-Reply-To: <CAL715WL8g4y=agnMCM7uX6dhBp1JdFKHOCcYsh-=HT0wF=sQUA@mail.gmail.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 23 May 2022 11:22:57 -0700
+Message-ID: <CALzav=dcFmkZsEBUWGECUQVzrE4TiF=eOxhRXW-XQ-_q4cXchA@mail.gmail.com>
 Subject: Re: [PATCH v6 21/22] KVM: Allow for different capacities in
  kvm_mmu_memory_cache structs
-To:     David Matlack <dmatlack@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -81,73 +82,89 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 23, 2022 at 10:44 AM David Matlack <dmatlack@google.com> wrote:
+On Mon, May 23, 2022 at 11:13 AM Mingwei Zhang <mizhang@google.com> wrote:
 >
-> On Mon, May 23, 2022 at 10:37 AM Sean Christopherson <seanjc@google.com> wrote:
+> On Mon, May 23, 2022 at 10:44 AM David Matlack <dmatlack@google.com> wrote:
 > >
-> > On Fri, May 20, 2022, Mingwei Zhang wrote:
-> > > On Mon, May 16, 2022 at 4:24 PM David Matlack <dmatlack@google.com> wrote:
-> > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > > index e089db822c12..5e2e75014256 100644
-> > > > --- a/virt/kvm/kvm_main.c
-> > > > +++ b/virt/kvm/kvm_main.c
-> > > > @@ -369,14 +369,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
-> > > >                 return (void *)__get_free_page(gfp_flags);
-> > > >  }
-> > > >
-> > > > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-> > > > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
-> > > >  {
-> > > > +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
-> > > >         void *obj;
-> > > >
-> > > >         if (mc->nobjs >= min)
-> > > >                 return 0;
-> > > > -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
-> > > > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
-> > > > +
-> > > > +       if (unlikely(!mc->objects)) {
-> > > > +               if (WARN_ON_ONCE(!capacity))
-> > > > +                       return -EIO;
-> > > > +
-> > > > +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-> > > > +               if (!mc->objects)
-> > > > +                       return -ENOMEM;
-> > > > +
-> > > > +               mc->capacity = capacity;
+> > On Mon, May 23, 2022 at 10:37 AM Sean Christopherson <seanjc@google.com> wrote:
 > > >
-> > > Do we want to ensure the minimum value of the capacity? I think
-> > > otherwise, we may more likely start using memory from GFP_ATOMIC if
-> > > the capacity is less than, say 5? But the minimum value seems related
-> > > to each cache type.
+> > > On Fri, May 20, 2022, Mingwei Zhang wrote:
+> > > > On Mon, May 16, 2022 at 4:24 PM David Matlack <dmatlack@google.com> wrote:
+> > > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > > > > index e089db822c12..5e2e75014256 100644
+> > > > > --- a/virt/kvm/kvm_main.c
+> > > > > +++ b/virt/kvm/kvm_main.c
+> > > > > @@ -369,14 +369,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+> > > > >                 return (void *)__get_free_page(gfp_flags);
+> > > > >  }
+> > > > >
+> > > > > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> > > > > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> > > > >  {
+> > > > > +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
+> > > > >         void *obj;
+> > > > >
+> > > > >         if (mc->nobjs >= min)
+> > > > >                 return 0;
+> > > > > -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> > > > > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> > > > > +
+> > > > > +       if (unlikely(!mc->objects)) {
+> > > > > +               if (WARN_ON_ONCE(!capacity))
+> > > > > +                       return -EIO;
+> > > > > +
+> > > > > +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
+> > > > > +               if (!mc->objects)
+> > > > > +                       return -ENOMEM;
+> > > > > +
+> > > > > +               mc->capacity = capacity;
+> > > >
+> > > > Do we want to ensure the minimum value of the capacity? I think
+> > > > otherwise, we may more likely start using memory from GFP_ATOMIC if
+> > > > the capacity is less than, say 5? But the minimum value seems related
+> > > > to each cache type.
+> > >
+> > > Eh, if we specify a minimum, just make the arch default the minimum.  That way we
+> > > avoid adding even more magic/arbitrary numbers.  E.g. for whatever reason, MIPS's
+> > > default is '4'.
 > >
-> > Eh, if we specify a minimum, just make the arch default the minimum.  That way we
-> > avoid adding even more magic/arbitrary numbers.  E.g. for whatever reason, MIPS's
-> > default is '4'.
+> > I'm not exactly sure what you had in mind Mingwei. But there is a bug
+> > in this code if min > capacity. This function will happily return 0
+> > after filling up the cache, even though it did not allocate min
+> > objects. The same bug existed before this patch if min >
+> > ARRAY_SIZE(mc->objects). I can include a separate patch to fix this
+> > bug (e.g. WARN and return -ENOMEM if min > capacity).
 >
-> I'm not exactly sure what you had in mind Mingwei. But there is a bug
-> in this code if min > capacity. This function will happily return 0
-> after filling up the cache, even though it did not allocate min
-> objects. The same bug existed before this patch if min >
-> ARRAY_SIZE(mc->objects). I can include a separate patch to fix this
-> bug (e.g. WARN and return -ENOMEM if min > capacity).
+> oh, what I am saying is this one:
+> https://elixir.bootlin.com/linux/latest/source/virt/kvm/kvm_main.c#L417
+>
+> If we are running out of kmem cache, then we start to use
+> __GFP_ATOMIC, which should be avoided as much as we can? Since this
+> patch parameterized the 'capacity', then to avoid the future usage
+> where caller provides a too small value, maybe we could add a warning
+> if the 'capacity' is too small, say, smaller than 40 (the default
+> value)?
 
-oh, what I am saying is this one:
-https://elixir.bootlin.com/linux/latest/source/virt/kvm/kvm_main.c#L417
+I'm not too worried about that. Callers of
+kvm_mmu_topup_memory_cache() are responsible for passing in a min
+value. It doesn't matter if capacity is a number lower than 40, as
+long as kvm_mmu_topup_memory_cache() is able to allocate min objects,
+the call is a success (and the GFP_ATOMIC fallback should never
+trigger, and if it does, we'll get a WARN splat).
 
-If we are running out of kmem cache, then we start to use
-__GFP_ATOMIC, which should be avoided as much as we can? Since this
-patch parameterized the 'capacity', then to avoid the future usage
-where caller provides a too small value, maybe we could add a warning
-if the 'capacity' is too small, say, smaller than 40 (the default
-value)?
+The only actual loophole I can spot is if capacity is less than min.
+In that case topup will return 0 despite allocating less than min
+objects. Again we'll still hit the GFP_ATOMIC and get a WARN splat,
+but we can detect the problem in kvm_mmu_topup_memory_cache() which
+will include the buggy callsite in the backtrace.
 
-The case of  'capacity' < min would be a more serious issue, that
-situation probably should never be allowed.
+>
+> The case of  'capacity' < min would be a more serious issue, that
+> situation probably should never be allowed.
