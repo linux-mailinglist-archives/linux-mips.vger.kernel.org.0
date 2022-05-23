@@ -2,220 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705B0531393
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 18:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 118E8531348
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 18:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237673AbiEWPTJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 11:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
+        id S238127AbiEWPlI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 11:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237564AbiEWPTI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 11:19:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F534704A;
-        Mon, 23 May 2022 08:19:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 330F761291;
-        Mon, 23 May 2022 15:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A49C34116;
-        Mon, 23 May 2022 15:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653319144;
-        bh=4fHAe4j+ojBMcjH5GhxAYVhFuKYrezHCFPgRSz6rx+w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i9oyXJLfyAFAPe8qWXJl7MAvnMXZcCcjmuACUabG9bdEnboEwJq2vTsc2PZsoP9wQ
-         wAYzS6o2zLlGbtGZTIf1b5BzN6tqR559SEa6+fH4IqOGCL8aY5v5UiMnLcQiJvScd8
-         8oDgjWbWvNHK6U0x4TtPQ5FPqtLwnrptY8q3I0uxMhgScUmIZWIXFOVUj5ZJsT/x87
-         C70+RGdRWyQGDDWkc6Lan9HUKhIlG7ixnK95isN/Yy+McxnQq+8+XqiOuYkgyTIkHV
-         Z6uNCJfP4QaVVPwTDlWMj+NvFXuq0K/8wB4Hyc5nPiiFqzMXuVjpAgWSkcmHSuT2zF
-         MYlIRpAZ1RoZQ==
-Received: by mail-vs1-f44.google.com with SMTP id h4so4319685vsr.13;
-        Mon, 23 May 2022 08:19:04 -0700 (PDT)
-X-Gm-Message-State: AOAM5326FF47dFvgoE6lRr7ksWZb/jPb0Xx6P1dz2TpmiEPF7fd0ySrS
-        171JQqiTD9DnMxR4O0IV4Nk/HD0IHWi3zo638WM=
-X-Google-Smtp-Source: ABdhPJz3x4FnU1xJIN5HGyrJz5hbsOQdssNQxOwdNEDN3TkyrDbRot8YxmpskB5AUverVzBjaEAbLsuwnBkdE/XlkDc=
-X-Received: by 2002:a05:6102:390b:b0:32d:5fc3:bd2c with SMTP id
- e11-20020a056102390b00b0032d5fc3bd2cmr8220616vsu.51.1653319143526; Mon, 23
- May 2022 08:19:03 -0700 (PDT)
+        with ESMTP id S238114AbiEWPlF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 11:41:05 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C65BEA;
+        Mon, 23 May 2022 08:41:01 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id h186so14011907pgc.3;
+        Mon, 23 May 2022 08:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0YD67E57Qb/IhZOVhYDq1CM3zL4yutpuxXEgEr4gyrQ=;
+        b=kWjUSzqOOHO+g+CiVUfbBgvcgYAr8bTNivTObbe3srRtBWXtUrKLRfhydDSw9pk+hM
+         fLX3rXbYLfybH4Xt/XJyFh2W9UEtwgSQKe92iTVV5in55zSnR4RLHenZM8u/s32kvfuX
+         uMnSkXA7JIN4QbUGt2n0wgh0WWmxIC9hlp3vzyDFYUp5tgK8GVEwg1xvKMvzUMCYTWgE
+         Cuk/p/TBf5FI74Kcnk7gv7jA4h2mWeg0RAZLFMx+atU1GWHfag+KvebbSWNGUdx/afCz
+         IxDH3PL4qgt4/JJ58o1KmExionsrbvcOjYEJh/ytTeWsyjmmfbXevVN/9FN7sE93i1Fi
+         KCcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0YD67E57Qb/IhZOVhYDq1CM3zL4yutpuxXEgEr4gyrQ=;
+        b=gAQFxqHCRYw/zw+mRgKJTiBgm+Tj2lDUZU5+wxyqkdxbeBkIJBo1xv8MKtaIbDbjNf
+         GJpFMG7yAMkSASneSbvQ6Wtu7lSz/ElH37NKemrM6SiSkmvhZ6Y3HuTJqnGVxmhnQt6T
+         TIl+3P67KFc6NiH4ernK9+K9c0wkaG7dGJQd6THAej5U/pdd0iWH2BuqczAmbyMJIfwx
+         hnjJJCbG/6zEHmcmVCOgcY7WalsP+TTS+e9tIRQD/3tAAMIZ5dtYACM1wb5JkS9hqcTq
+         iLXf57CYWk9QKmNGt5FaUEJp+WOt+HSMU/XW/0YeVr/CM9PnODgLYtlJiC30NtgKgKk3
+         pIAw==
+X-Gm-Message-State: AOAM531h3qIsnxK5nDet7CSo+RiwuNk35XsD7fmAE1E4dMTAsbE0eXac
+        SbF1nu16wFzG1yc7NRMsqwDJLrvOvJY=
+X-Google-Smtp-Source: ABdhPJzLJrHJyFuqgXp/lCM5wrTiqNtbJRZ7PVsr8F8p99eVQyyOe80gdg1IFmhD0yUgunH1JeMpCg==
+X-Received: by 2002:a63:e24d:0:b0:3fa:1e2e:b992 with SMTP id y13-20020a63e24d000000b003fa1e2eb992mr7889491pgj.595.1653320461383;
+        Mon, 23 May 2022 08:41:01 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id a8-20020a654188000000b003db580384d6sm4890602pgq.60.2022.05.23.08.41.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 08:41:00 -0700 (PDT)
+Message-ID: <72c52318-9cf8-1bf1-27f3-001abc164408@gmail.com>
+Date:   Mon, 23 May 2022 08:40:59 -0700
 MIME-Version: 1.0
-References: <20220322144003.2357128-1-guoren@kernel.org> <20220322144003.2357128-21-guoren@kernel.org>
- <20220523054550.GA1511899@roeck-us.net>
-In-Reply-To: <20220523054550.GA1511899@roeck-us.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 23 May 2022 23:18:52 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSCcYif4DEpvrJ6d02no3CU_viyE+OkhhjCV3VsGmcT5Q@mail.gmail.com>
-Message-ID: <CAJF2gTSCcYif4DEpvrJ6d02no3CU_viyE+OkhhjCV3VsGmcT5Q@mail.gmail.com>
-Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1] MIPS: bmips: Fix compiler warning observed on W=1
+ build
+Content-Language: en-US
+To:     Jim Quinlan <jim2101024@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220523121639.16521-1-jim2101024@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220523121639.16521-1-jim2101024@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-I tested Palmer's branch, it's okay:
-8810d7feee5a (HEAD -> for-next, palmer/for-next) riscv: Don't output a
-bogus mmu-type on a no MMU kernel
-
-I also tested linux-next, it's okay:
-
-rv64_rootfs:
-# uname -a
-Linux buildroot 5.18.0-next-20220523 #7 SMP Mon May 23 11:15:17 EDT
-2022 riscv64 GNU/Linux
-#
-#
-#
-# ls /lib
-ld-uClibc-1.0.39.so  libatomic.so.1       libgcc_s.so
-ld-uClibc.so.0       libatomic.so.1.2.0   libgcc_s.so.1
-ld-uClibc.so.1       libc.so.0            libuClibc-1.0.39.so
-libatomic.so         libc.so.1            modules
-
-rv32_rootfs:
-buildroot login: root
-# uname -a
-Linux buildroot 5.18.0-next-20220523 #7 SMP Mon May 23 11:15:17 EDT
-2022 riscv64 GNU/Linux
-# ls /lib
-ld-linux-riscv32-ilp32d.so.1  libm.so.6
-libanl.so.1                   libnss_dns.so.2
-libatomic.so                  libnss_files.so.2
-libatomic.so.1                libpthread.so.0
-libatomic.so.1.2.0            libresolv.so.2
-libc.so.6                     librt.so.1
-libcrypt.so.1                 libthread_db.so.1
-libdl.so.2                    libutil.so.1
-libgcc_s.so                   modules
-libgcc_s.so.1
-
-Here is my qemu version:
-commit 19f13a92cef8405052e0f73d5289f9e15474dad3 (HEAD ->
-riscv-to-apply.next, alistair/riscv-to-apply.next)
-Author: Tsukasa OI <research_trasio@irq.a4lg.com>
-Date:   Sun May 15 11:56:11 2022 +0900
-
-    target/riscv: Move/refactor ISA extension checks
-
-    We should separate "check" and "configure" steps as possible.
-    This commit separates both steps except vector/Zfinx-related checks.
-
-    Signed-off-by: Tsukasa OI <research_trasio@irq.a4lg.com>
-    Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-    Message-Id:
-<c3145fa37a529484cf3047c8cb9841e9effad4b0.1652583332.git.research_trasio@irq.a4lg.com>
-    Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-
-On Mon, May 23, 2022 at 1:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Tue, Mar 22, 2022 at 10:40:03PM +0800, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
-> > 64bit S-mode) support.
-> >  - Setup kconfig & dummy functions for compiling.
-> >  - Implement compat_start_thread by the way.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> > Tested-by: Heiko Stuebner <heiko@sntech.de>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
->
-> With this patch in linux-next, all my riscv64 emulations crash.
->
-> [   11.600082] Run /sbin/init as init process
-> [   11.628561] init[1]: unhandled signal 11 code 0x1 at 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
-> [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
-> [   11.629462] Hardware name: riscv-virtio,qemu (DT)
-> [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp : 00ffffffc58199f0
-> [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 : ffffffffffffffff
-> [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 : 00ffffff8ade0cc0
-> [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 : 00ffffffc5819a00
-> [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 : 00ffffffc5819b00
-> [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 : 0000000000000000
-> [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 : 00ffffff8ade0728
-> [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 : 00ffffffc5819e40
-> [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10: 0000000000000000
-> [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 : 0000000000000001
-> [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
-> [   11.629699] status: 0000000000004020 badaddr: 0000000000000000 cause: 000000000000000d
-> [   11.633421] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> [   11.633664] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
-> [   11.633784] Hardware name: riscv-virtio,qemu (DT)
-> [   11.633881] Call Trace:
-> [   11.633960] [<ffffffff80005e72>] dump_backtrace+0x1c/0x24
-> [   11.634162] [<ffffffff809aa9ec>] show_stack+0x2c/0x38
-> [   11.634274] [<ffffffff809b8482>] dump_stack_lvl+0x60/0x8e
-> [   11.634386] [<ffffffff809b84c4>] dump_stack+0x14/0x1c
-> [   11.634491] [<ffffffff809aaca0>] panic+0x116/0x2e2
-> [   11.634596] [<ffffffff80015540>] do_exit+0x7ce/0x7d4
-> [   11.634707] [<ffffffff80015666>] do_group_exit+0x24/0x7c
-> [   11.634817] [<ffffffff80022294>] get_signal+0x7ee/0x830
-> [   11.634924] [<ffffffff800051c0>] do_notify_resume+0x6c/0x41c
-> [   11.635037] [<ffffffff80003ad4>] ret_from_exception+0x0/0x10
->
-> Guenter
->
-> ---
-> # bad: [18ecd30af1a8402c162cca1bd58771c0e5be7815] Add linux-next specific files for 20220520
-> # good: [42226c989789d8da4af1de0c31070c96726d990c] Linux 5.18-rc7
-> git bisect start 'HEAD' 'v5.18-rc7'
-> # bad: [f9b63740b666dd9887eb0282d21b5f65bb0cadd0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-> git bisect bad f9b63740b666dd9887eb0282d21b5f65bb0cadd0
-> # bad: [7db97132097c5973ff77466d0ee681650af653de] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-> git bisect bad 7db97132097c5973ff77466d0ee681650af653de
-> # good: [2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb] soc: document merges
-> git bisect good 2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb
-> # good: [69c9668f853fdd409bb8abbb37d615785510b29a] Merge branch 'clk-next' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
-> git bisect good 69c9668f853fdd409bb8abbb37d615785510b29a
-> # bad: [1577f290aa0d4c5b29c03c46ef52e4952a21bfbb] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git
-> git bisect bad 1577f290aa0d4c5b29c03c46ef52e4952a21bfbb
-> # good: [34f0971f8ca73d7e5502b4cf299788a9402120f7] powerpc/powernv/flash: Check OPAL flash calls exist before using
-> git bisect good 34f0971f8ca73d7e5502b4cf299788a9402120f7
-> # good: [0349d7dfc70a26b3facd8ca97de34980d4b60954] Merge branch 'mips-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
-> git bisect good 0349d7dfc70a26b3facd8ca97de34980d4b60954
-> # bad: [20bfb54d3b121699674c17a854c5ebc7a8f97d81] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
-> git bisect bad 20bfb54d3b121699674c17a854c5ebc7a8f97d81
-> # bad: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
-> git bisect bad 9be8459298eadb39b9fe9974b890239e9c123107
-> # good: [01abdfeac81b5f56062d0a78f2cdc805db937a75] riscv: compat: Support TASK_SIZE for compat mode
-> git bisect good 01abdfeac81b5f56062d0a78f2cdc805db937a75
-> # good: [f4b395e6f1a588ed6c9a30474e58cf6b27b65783] riscv: compat: Add hw capability check for elf
-> git bisect good f4b395e6f1a588ed6c9a30474e58cf6b27b65783
-> # good: [3092eb45637573c5e435fbf5eaf9516316e5f9c6] riscv: compat: vdso: Add setup additional pages implementation
-> git bisect good 3092eb45637573c5e435fbf5eaf9516316e5f9c6
-> # good: [4608c159594fb40a5101357d4f614fdde9ce1fdb] riscv: compat: ptrace: Add compat_arch_ptrace implement
-> git bisect good 4608c159594fb40a5101357d4f614fdde9ce1fdb
-> # first bad commit: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
 
 
+On 5/23/2022 5:16 AM, Jim Quinlan wrote:
+> The function arch_sync_dma_for_cpu_all() was used but was
+> missing a prototype declaration.
+> 
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Florian
