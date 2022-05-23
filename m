@@ -2,162 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A88A5306B4
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 01:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908E05308F2
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 07:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbiEVX0Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 22 May 2022 19:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S230258AbiEWFp4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 01:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiEVX0Y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 May 2022 19:26:24 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2116.outbound.protection.outlook.com [40.107.113.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAF4BCA3;
-        Sun, 22 May 2022 16:26:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iLTaWden5/JzR+9N2YQR1xIOcKaZ9DgNqRe7w2jPeO+N2NOb/N+s24DOkvYqK+dUyBXP5465PpKy07aFSdwcTlThCroh8/VVx1JOvzK9nnlCnIA2uztvClcXjVURean8CUgE3yIWOwPq8ZV0HzFwxOg/cmj1j3VHLSO3gDiuKT5/HPA998mzD8rqW3AhksDo0df9SZHoA6Cuq3qsd5g6hogZoGx/2xYaPRsanhlO9xMdgRT1G4hNq5JIIzw19tgPOXNVTOxA403d4ceiNRmYW7QfD/rc32ZDCMLwWw5SEzV82Gs2wt2pnEeRBrbML/ohMPJBmhfuTd7jy8wIX3MorQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mfkbh7VD/OXUtCIUM1z9Wp8Ezx9Pm3IQNN3ZSESLMrM=;
- b=VMKj+WWc2TmsZMQe7yVBf/nCeZ9wShjMzCgR1NVz2YDx+vh2yUy6LofW7qfenmUFLXfC+t4zMV1t6ip8Kwlp41Rp7VBRJsr0dqy92ZgI/KpGBr4YhrxxUlTn3joskfZHKGwcTLQe2Y8SWC894at/avuVSWsJYTHOi8lwIoDwSqy3Qv6sg62nj7Q1sTNZ7TqImKGs4N2f2cVoqHfn8oldzJcV7eHvMF+GRc6NgvFyIRtM9VDiCm2EmEC6JyscwY3EKPJ9VtnqVYAESzXPGhdsV3QzEgUe31iOPdcS1GzAvxCb+xSj/06pj8caR7XnbFMUYd4QjBMuazAsvceusauwRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mfkbh7VD/OXUtCIUM1z9Wp8Ezx9Pm3IQNN3ZSESLMrM=;
- b=MYwpg/ShrW4rRZrPccr9ODIRkua8uWJ31OhNObN4vGXEjnv7J3DbPOBSj+mPvxtuNRz7V497J6193G8cRH1fsCveaMn9SpmAMMDqZxzMmw4wbegNmpIScnS/VadzxeSnf6+oi8HQ/HWO9FSADjpkVO8ENqy9/ZDck2bWdgputYg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com (2603:1096:604:194::10)
- by OSBPR01MB2135.jpnprd01.prod.outlook.com (2603:1096:603:23::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.18; Sun, 22 May
- 2022 23:26:19 +0000
-Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com
- ([fe80::f4d9:ee3d:e07b:171a]) by OS3PR01MB8426.jpnprd01.prod.outlook.com
- ([fe80::f4d9:ee3d:e07b:171a%8]) with mapi id 15.20.5273.022; Sun, 22 May 2022
- 23:26:18 +0000
-Message-ID: <87o7zpno8b.wl-kuninori.morimoto.gx@renesas.com>
-From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <nicolas.ferre@microchip.com>, <nsaenz@kernel.org>,
-        <shawnguo@kernel.org>, <linux-imx@nxp.com>,
-        <cezary.rojewski@intel.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <linux-mips@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <daniel@zonque.org>,
-        <srinivas.kandagatla@linaro.org>,
-        <linux-rockchip@lists.infradead.org>, <krzk@kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>, <linux-xtensa@linux-xtensa.org>,
-        <peter.ujfalusi@gmail.com>, <jarkko.nikula@bitmer.com>,
-        <heiko@sntech.de>, <jbrunet@baylibre.com>, <kernel@pengutronix.de>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>
-Subject: Re: [PATCH 56/56] ASoC: simple-card-utils: Move snd_soc_component_is_codec to be local
-In-Reply-To: <20220520102447.GL38351@ediswmail.ad.cirrus.com>
-References: <20220519154318.2153729-1-ckeepax@opensource.cirrus.com>
-        <20220519154318.2153729-57-ckeepax@opensource.cirrus.com>
-        <87czg98193.wl-kuninori.morimoto.gx@renesas.com>
-        <20220520102447.GL38351@ediswmail.ad.cirrus.com>
-User-Agent: Wanderlust/2.15.9 Emacs/26.3 Mule/6.0
-Content-Type: text/plain; charset=US-ASCII
-Date:   Sun, 22 May 2022 23:26:17 +0000
-X-ClientProxiedBy: TYCPR01CA0118.jpnprd01.prod.outlook.com
- (2603:1096:405:4::34) To OS3PR01MB8426.jpnprd01.prod.outlook.com
- (2603:1096:604:194::10)
+        with ESMTP id S229679AbiEWFpy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 01:45:54 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1C52655D;
+        Sun, 22 May 2022 22:45:53 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e93bbb54f9so17116184fac.12;
+        Sun, 22 May 2022 22:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kK4Ka04kceqN8VVd9w6tDOmbYPZ+nJZTIe88jIZoSJk=;
+        b=bXwOmwvptXUzVEf8w+LjU8kE7nkSzHrjDVPCC77O/zHZxaE7Um57oJfNSQvms127Vg
+         6bVR+SErg44S1V80Z6bc4GM2Z2FO9T4mQLwDIRDmL9hD/pvQuLzwjq9zNUFcrGLEc8LO
+         7OaccycPlYwewUEVPyM7GtavDiuB1e14X2NVHnRB5BLlpGtpNAEQNzd+Izih4uBvXhks
+         xd+08qJAhqvzotdJ7BMPNOIk/G/7GfyOHXvm0qGrS7Z3LC9XSTseYoj102Y7IlTZc6Sq
+         jKMw76OUOdxUurNA+tEjR3JNslzHLKtGCM+hn+4PYsPkOcm7T068yqc7PbOcaEZEsIQT
+         XThQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=kK4Ka04kceqN8VVd9w6tDOmbYPZ+nJZTIe88jIZoSJk=;
+        b=ns94DGshDvLoFDPitT38HsalfN7ZsVrUo7ThOeCHuuuw8Zc8NCVPMjOM5q4tVA/G9m
+         XiLiKKatw2Oa7U7aFGwxRaO106w6xy/ufl+EyTY2pi2c2qkM11YivW2mRhRaJgcehFWw
+         HgiB6dkK5ZcRkf6TDvn8uYU0gzk43BlEaq90kQ4Rw3mErRXFO+eydc2jcFemwr7RhHqx
+         QqSOlXYCzV0RhqkSjqLRqdqB1sT/v5aQ1aCD+J58EK6snvk5P0BacQFzQezmsHR5aU5E
+         LpGYgW2odWt0t+IAKuGVjFh46/MbR6R8nf2cGktETqgEVrkjfW4uKkLPYJmv8VKxPa7l
+         3ZoQ==
+X-Gm-Message-State: AOAM533adjBSqzIaiObngnyMdX9dAGv0UqiFHJW7nzQB6v/E8vgDbBNI
+        TAFASPygymp4KoPXJJTO8x4=
+X-Google-Smtp-Source: ABdhPJzFVeM2nlljQKtG8croc7W21cxaI0vylQicrB+nyqNUTxI9l8dpKFNg37Q+twl0LUnv80NpPQ==
+X-Received: by 2002:a05:6871:283:b0:f1:a2cb:1371 with SMTP id i3-20020a056871028300b000f1a2cb1371mr10792141oae.147.1653284752356;
+        Sun, 22 May 2022 22:45:52 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 106-20020a9d0bf3000000b0060603221276sm3660850oth.70.2022.05.22.22.45.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 22:45:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 22 May 2022 22:45:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     guoren@kernel.org
+Cc:     palmer@dabbelt.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+        hch@lst.de, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal
+ support
+Message-ID: <20220523054550.GA1511899@roeck-us.net>
+References: <20220322144003.2357128-1-guoren@kernel.org>
+ <20220322144003.2357128-21-guoren@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 57841910-a5ca-4c34-2f6f-08da3c4a78e6
-X-MS-TrafficTypeDiagnostic: OSBPR01MB2135:EE_
-X-Microsoft-Antispam-PRVS: <OSBPR01MB2135DABC178B5EB90C0849D6D4D59@OSBPR01MB2135.jpnprd01.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /XnFRfnB1iKz6kUjhJAvTrQk1dW8jMWZhLScwW7um5SSE0WYE3UXfpBucI+w8HBtq+OUujpgBMrkmxd/XN8B/CJSKSMHc3WK4RYS9Bb5aCXhULGVv5LDadBgfhMTT2FiEfinsAfC2W0BXweENpIDUGUPz8VIkagGgObZDCOU8pUKNAEocyIuGp+rBiN+grE2tPIgrsz91DQnGfDURTEILXJeQJKpbeBA2iLz7Dypkh9u0jpUOL+Q83OK3pA/mnsQ6j2LD9QVFgKpsfPWszU6N/xtOJnLv/v8F9bhi11b9x17OYeW/m01ZEeTbZeoM6irQyCESmspA481abQdfBbbmElctECqIEROeyT+fa40GoSgwDJ2XRPwo46WmOxOocTk3g1bzYojqE8DKI309cauiGGAacEvxaCALmaP9nqzzeHhGQj7HS2Bir8s3/fp04KdSPhV459lMNEKinK+pfYgseBdRSnVeBf1Dd6ZUbVJc+hvILmnxK2ycGOycTNtThQc1eXirHg70GW3tkPnvlkAAeD0O+jFPSQLOiqy913JALUv1BfmyNwpg8jCxK/UOPWE70TdmMzI1VwVzHL7nwUzRfQ+CK1/Z28HdWriejLG66nSX4qQcDcdUPVfoMtQW1Lsx2xcljycKWg+F/i8vh4hMeYrvzOyNZ0FfgpIQuNvXNnLX7Vi3tKMy2zCASj8GSg1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8426.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(2616005)(186003)(6486002)(508600001)(8936002)(2906002)(86362001)(36756003)(52116002)(26005)(6506007)(38350700002)(38100700002)(4744005)(316002)(7416002)(5660300002)(66946007)(8676002)(54906003)(4326008)(66476007)(66556008)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bHVvLKJD1+8MLk9HC6CzPk3F0IllS09LMNecicKCZb1BxEb+ZwmpSnTdTaHV?=
- =?us-ascii?Q?SlCkpRhJ5hJUWFnLi15AFXAFaDHjRKUB0BZgrhxnrpXke1ZxfZgd17HQuHqo?=
- =?us-ascii?Q?FCQVF8SwveS2n1d36LzKcBV0IZmEs8IfDOdB6/Hdu3Zu70mB18exZfiPM8gH?=
- =?us-ascii?Q?GyGkM5zSlQ1WEHqNLj9cC5QF2XxIRJ7Myyp7F0CqbQYLkMrvbdTBZn62cM/F?=
- =?us-ascii?Q?WWvjLIiucbyHtHb7j+Q04jNAXHqncDNFGVIo7/KOINvk8E2pPQY6Ca1y9vow?=
- =?us-ascii?Q?RpUwFPJQr81krG85bBq7uE1iJn+MJKi22q+G+iqZKJlVtNQ0JUI8sIJC6TYf?=
- =?us-ascii?Q?FioGIo3QCClvZIAbOh7kCG2gGHrGsiwj5K2TUiHctAH0GNJhnC6aTR+v7DMc?=
- =?us-ascii?Q?NGgd2RnZsGnK8USIMs1O91x0uz2WWMHeMFDGZuN63wNQZmrOT9PmyDnGwon+?=
- =?us-ascii?Q?qUvnztgK/MIEoo5oFZaEYlT+JrumCOdbwZuO+a134UW5itk54Scy2AT6QhBq?=
- =?us-ascii?Q?al3aUCq6Q3bLIWn51/j6WJQtNU2VdDgkQdZAgJIyi+uUE1dlZctfJQlVA9An?=
- =?us-ascii?Q?j0Z82uo2ZJ9OmyZKnQ14obMzxm/V9UEe+65BGZvJ3tchQmmZnxxTQj5YPzYg?=
- =?us-ascii?Q?RoWMvX42ojR+10V58+wRfEYs5y+JfasNothygxv2oegigS4COVK33r7mo3xe?=
- =?us-ascii?Q?loRfzWGISFriDts+ni2cIaPylUr3NZ7ht46as81t/xspZF0acnlokeKRz+2S?=
- =?us-ascii?Q?PJ5yxRKG0akWooJOWcXBPl4lTDjq7XhzFZqVkfsqgiCIRhj9h9anL/jC0AG9?=
- =?us-ascii?Q?UmX29ZLgaLNm/zfjXCav2ms2ALY5QmNseHFltvr6l7a60w4gLrPUw8QXvbEf?=
- =?us-ascii?Q?QEVCuS5Csc/r2tkvYuZOfpoDCct/yFI1Xhqxsmqasq/OY9FBinxYLZ1tqzsg?=
- =?us-ascii?Q?c2gtp8l8VBOxU2wrgCx4PkYeg5JEi9AUwV5TrZlrhTOLn2LSZSMIV4J+WAqJ?=
- =?us-ascii?Q?jwGwv6q+XKSpJu75qgdkN/j9jYXAPWP0uCmGRjzY2mJJT+RpDJ0x1UQwXiCx?=
- =?us-ascii?Q?pUnNH4u1VfBxqtby++G4/zLKVLgL7Va93Ytk+FVxy2ieA0QkUGeO2rXIrQxR?=
- =?us-ascii?Q?I7GfO5PtHEFmJZlEP8a9ERA5SXQsW02R2GoQuST8ypcPHMFjCdwfUMMXQJsI?=
- =?us-ascii?Q?MRP2gXJFmAtMMkbVxFWoRWBGU6fhKR1Q0apUYdxIuI2QwxepHvQRduCJgP4B?=
- =?us-ascii?Q?7+XNWMU6qFPpoXrM7E+liwRQB1PYxkVhpLS8kOOWfYVaTzHLn2BPY3eXprfz?=
- =?us-ascii?Q?0rT8fRG+1EahoGSpkERDuCYuzvSO9FmakY63fJmWxVJndNFfGIXsm+TCtxpj?=
- =?us-ascii?Q?cqxlTBwNIDrBUaYz9sgyIp60q+8yLBYfyyy8Q9T0fGXa6BSnKQm0kipFRHv8?=
- =?us-ascii?Q?F2PkVMd5hlZ4wJbFAxPwU1YckAVYdERiTRxAWxgGxjhstH92CIqhnfYfIijQ?=
- =?us-ascii?Q?Cwe2Oans0g40o3rkBtr2I2wZwtaujMnDEG1j2Dzg+syeuP0wCAjvwYiSSD0w?=
- =?us-ascii?Q?OR6ZYYqF4qsoZ+hp9sslH2X0cEHV+Liz/argPe2ijIn/TwI3mqTR0sugaAu2?=
- =?us-ascii?Q?YRU/oir4E2MkfgV+4j0NG/Xxx58OQsDbS7Y29prsK5KfErhJq7j0FPNfaT/b?=
- =?us-ascii?Q?9r5Ky4n/t6RcuVCbTOSDfo69//s8UVFai6uPOyM9Zaf8JNeZ5VSYqhTKRH9/?=
- =?us-ascii?Q?ldn0FkpzzXAu5wOkp4vq5l0Ka9+AJzmqfBVIwrHIauKrGV18+1lX?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57841910-a5ca-4c34-2f6f-08da3c4a78e6
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8426.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2022 23:26:18.1818
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hlNj65R1lxLQAFo8gcM3bkjtX5l/pK2ioU5PbOL+8bwIGeez3ke/GWpr0NYKlNBKq8HvJdODG1IsuYT1jQNJma0qdaTweBQ8KOsAyox6ycYRRaYZUlODCva2890LfEIw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB2135
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322144003.2357128-21-guoren@kernel.org>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-Hi
-
-> > -	.endianness
-> > -	.non_legacy_dai_naming
-> > +	.is_codec
+On Tue, Mar 22, 2022 at 10:40:03PM +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> Yeah I considered this but it didn't really feel like the right
-> way to go to me. Firstly, at this stage we almost certainly need
-> to keep the endianness and non_legacy_dai_naming flags, there are
-> corner cases when endianness probably shouldn't be applied to CODECs
-> (as noted in my endianness series), and there are platform drivers
-> that use non_legacy_dai_naming.
+> Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
+> 64bit S-mode) support.
+>  - Setup kconfig & dummy functions for compiling.
+>  - Implement compat_start_thread by the way.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
 
-Oops, yes indeed :)
-Thank you for pointing it.
+With this patch in linux-next, all my riscv64 emulations crash.
 
-> We could add an is_codec flag along side the other two. But it
-> means a whole extra flag and means the the core is still requiring
-> a concept of what is a CODEC driver, which really we want to get
-> rid of as part of componentisation.
+[   11.600082] Run /sbin/init as init process
+[   11.628561] init[1]: unhandled signal 11 code 0x1 at 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
+[   11.629398] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
+[   11.629462] Hardware name: riscv-virtio,qemu (DT)
+[   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp : 00ffffffc58199f0
+[   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 : ffffffffffffffff
+[   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 : 00ffffff8ade0cc0
+[   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 : 00ffffffc5819a00
+[   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 : 00ffffffc5819b00
+[   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 : 0000000000000000
+[   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 : 00ffffff8ade0728
+[   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 : 00ffffffc5819e40
+[   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10: 0000000000000000
+[   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 : 0000000000000001
+[   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
+[   11.629699] status: 0000000000004020 badaddr: 0000000000000000 cause: 000000000000000d
+[   11.633421] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+[   11.633664] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
+[   11.633784] Hardware name: riscv-virtio,qemu (DT)
+[   11.633881] Call Trace:
+[   11.633960] [<ffffffff80005e72>] dump_backtrace+0x1c/0x24
+[   11.634162] [<ffffffff809aa9ec>] show_stack+0x2c/0x38
+[   11.634274] [<ffffffff809b8482>] dump_stack_lvl+0x60/0x8e
+[   11.634386] [<ffffffff809b84c4>] dump_stack+0x14/0x1c
+[   11.634491] [<ffffffff809aaca0>] panic+0x116/0x2e2
+[   11.634596] [<ffffffff80015540>] do_exit+0x7ce/0x7d4
+[   11.634707] [<ffffffff80015666>] do_group_exit+0x24/0x7c
+[   11.634817] [<ffffffff80022294>] get_signal+0x7ee/0x830
+[   11.634924] [<ffffffff800051c0>] do_notify_resume+0x6c/0x41c
+[   11.635037] [<ffffffff80003ad4>] ret_from_exception+0x0/0x10
 
-Hmm... yes, indeed.
+Guenter
 
-Thank you for your help !!
-
-Best regards
 ---
-Kuninori Morimoto
+# bad: [18ecd30af1a8402c162cca1bd58771c0e5be7815] Add linux-next specific files for 20220520
+# good: [42226c989789d8da4af1de0c31070c96726d990c] Linux 5.18-rc7
+git bisect start 'HEAD' 'v5.18-rc7'
+# bad: [f9b63740b666dd9887eb0282d21b5f65bb0cadd0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect bad f9b63740b666dd9887eb0282d21b5f65bb0cadd0
+# bad: [7db97132097c5973ff77466d0ee681650af653de] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+git bisect bad 7db97132097c5973ff77466d0ee681650af653de
+# good: [2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb] soc: document merges
+git bisect good 2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb
+# good: [69c9668f853fdd409bb8abbb37d615785510b29a] Merge branch 'clk-next' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
+git bisect good 69c9668f853fdd409bb8abbb37d615785510b29a
+# bad: [1577f290aa0d4c5b29c03c46ef52e4952a21bfbb] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git
+git bisect bad 1577f290aa0d4c5b29c03c46ef52e4952a21bfbb
+# good: [34f0971f8ca73d7e5502b4cf299788a9402120f7] powerpc/powernv/flash: Check OPAL flash calls exist before using
+git bisect good 34f0971f8ca73d7e5502b4cf299788a9402120f7
+# good: [0349d7dfc70a26b3facd8ca97de34980d4b60954] Merge branch 'mips-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
+git bisect good 0349d7dfc70a26b3facd8ca97de34980d4b60954
+# bad: [20bfb54d3b121699674c17a854c5ebc7a8f97d81] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
+git bisect bad 20bfb54d3b121699674c17a854c5ebc7a8f97d81
+# bad: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
+git bisect bad 9be8459298eadb39b9fe9974b890239e9c123107
+# good: [01abdfeac81b5f56062d0a78f2cdc805db937a75] riscv: compat: Support TASK_SIZE for compat mode
+git bisect good 01abdfeac81b5f56062d0a78f2cdc805db937a75
+# good: [f4b395e6f1a588ed6c9a30474e58cf6b27b65783] riscv: compat: Add hw capability check for elf
+git bisect good f4b395e6f1a588ed6c9a30474e58cf6b27b65783
+# good: [3092eb45637573c5e435fbf5eaf9516316e5f9c6] riscv: compat: vdso: Add setup additional pages implementation
+git bisect good 3092eb45637573c5e435fbf5eaf9516316e5f9c6
+# good: [4608c159594fb40a5101357d4f614fdde9ce1fdb] riscv: compat: ptrace: Add compat_arch_ptrace implement
+git bisect good 4608c159594fb40a5101357d4f614fdde9ce1fdb
+# first bad commit: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
