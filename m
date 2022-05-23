@@ -2,38 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD57530D25
-	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 12:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFE4530CFA
+	for <lists+linux-mips@lfdr.de>; Mon, 23 May 2022 12:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiEWJbp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 05:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S232918AbiEWJa6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 05:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbiEWJbk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 05:31:40 -0400
+        with ESMTP id S232868AbiEWJa5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 05:30:57 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91027DF8A;
-        Mon, 23 May 2022 02:31:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BEF749908;
+        Mon, 23 May 2022 02:30:56 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nt4Or-0001Pn-00; Mon, 23 May 2022 11:30:53 +0200
+        id 1nt4Or-0001Pn-01; Mon, 23 May 2022 11:30:53 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 58DC0C02EA; Mon, 23 May 2022 11:16:07 +0200 (CEST)
-Date:   Mon, 23 May 2022 11:16:07 +0200
+        id C3125C02F4; Mon, 23 May 2022 11:16:28 +0200 (CEST)
+Date:   Mon, 23 May 2022 11:16:28 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Genjian Zhang <zhanggenjian123@gmail.com>
-Cc:     maz@kernel.org, keescook@chromium.org, mark.rutland@arm.com,
-        nathan@kernel.org, siyanteng01@gmail.com, yyuasa@linux.com,
-        ralf@linux-mips.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huhai@kylinos.cn,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] irq: mips: Export irq_err_count to modules
-Message-ID: <20220523091607.GA5069@alpha.franken.de>
-References: <20220523081625.2074527-1-zhanggenjian@kylinos.cn>
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     kernel-janitors@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Octeon: fix typo in comment
+Message-ID: <20220523091628.GB5069@alpha.franken.de>
+References: <20220521111145.81697-65-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220523081625.2074527-1-zhanggenjian@kylinos.cn>
+In-Reply-To: <20220521111145.81697-65-Julia.Lawall@inria.fr>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -44,34 +41,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 23, 2022 at 04:16:25PM +0800, Genjian Zhang wrote:
-> From: huhai <huhai@kylinos.cn>
+On Sat, May 21, 2022 at 01:11:15PM +0200, Julia Lawall wrote:
+> Spelling mistake (triple letters) in comment.
+> Detected with the help of Coccinelle.
 > 
-> modpost complains once these drivers become modules.
->   ERROR: modpost: "irq_err_count" [drivers/gpio/gpio-vr41xx.ko] undefined!
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 > 
-> Fix it by export them when that symbol is =m.
-> 
-> Fixes: 27fdd325dace ("MIPS: Update VR41xx GPIO driver to use gpiolib")
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: huhai <huhai@kylinos.cn>
 > ---
->  arch/mips/kernel/irq.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/mips/pci/pcie-octeon.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/mips/kernel/irq.c b/arch/mips/kernel/irq.c
-> index 5e11582fe308..b0038b715008 100644
-> --- a/arch/mips/kernel/irq.c
-> +++ b/arch/mips/kernel/irq.c
-> @@ -38,6 +38,9 @@ void ack_bad_irq(unsigned int irq)
->  }
+> diff --git a/arch/mips/pci/pcie-octeon.c b/arch/mips/pci/pcie-octeon.c
+> index 50a3394a9d25..c9edd3fb380d 100644
+> --- a/arch/mips/pci/pcie-octeon.c
+> +++ b/arch/mips/pci/pcie-octeon.c
+> @@ -895,7 +895,7 @@ static int __cvmx_pcie_rc_initialize_gen1(int pcie_port)
+>  	mem_access_subid.s.nsw = 0;	/* Enable Snoop for Writes. */
+>  	mem_access_subid.s.ror = 0;	/* Disable Relaxed Ordering for Reads. */
+>  	mem_access_subid.s.row = 0;	/* Disable Relaxed Ordering for Writes. */
+> -	mem_access_subid.s.ba = 0;	/* PCIe Adddress Bits <63:34>. */
+> +	mem_access_subid.s.ba = 0;	/* PCIe Address Bits <63:34>. */
 >  
->  atomic_t irq_err_count;
-> +#ifdef CONFIG_GPIO_VR41XX_MODULE
-> +EXPORT_SYMBOL_GPL(irq_err_count);
-> +#endif
+>  	/*
+>  	 * Setup mem access 12-15 for port 0, 16-19 for port 1,
 
-please use spurious_interrupt() in drivers/gpio/gpio-vr41xx.c.
+applied to mips-next.
 
 Thomas.
 
