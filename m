@@ -2,91 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476A35320F0
-	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 04:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FDB532139
+	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 04:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233285AbiEXC1z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 22:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
+        id S232038AbiEXCuN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 22:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbiEXC1x (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 22:27:53 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5B2C694B5;
-        Mon, 23 May 2022 19:27:52 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxvyqmQoxix8cgAA--.5133S4;
-        Tue, 24 May 2022 10:27:51 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] MIPS: Use memblock_add_node() in early_parse_mem() under CONFIG_NUMA
-Date:   Tue, 24 May 2022 10:27:50 +0800
-Message-Id: <1653359270-27056-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1653359270-27056-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1653359270-27056-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxvyqmQoxix8cgAA--.5133S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrtFyDGw4DGw1kAw1kKw4kWFg_yoWDGwbEyw
-        1S9r4kG34ayF1jvr47X3s3Wa4jy3yUXFyxuFna9r42y3s8JryUG393Ar1DZrs8ur1DArn5
-        Zr9xCrWUCan7WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbhxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-        0Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4UMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb5fHUUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232017AbiEXCuM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 22:50:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F646EB11;
+        Mon, 23 May 2022 19:50:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E49FCB81722;
+        Tue, 24 May 2022 02:50:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A559FC36AE3;
+        Tue, 24 May 2022 02:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653360608;
+        bh=9tJzgDSzNbcE3lkPHHMiOyFzxrJvq0EKSU2oKxbKIoM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b6UAAB3hpv8m6aTOEYYiWrfrlORMkuuyR7su5oPM4rVsyNZXRLPJS+Zlj0DgEAl01
+         3UURv9EPt68fdFGsJnkHdcRtYiFCe0kyB2YLi0VztaKlRWVN+KUxedApXPLsIkDCrr
+         Zx5xVogUzGv589rAKDM265+dY8lOzIbO4hodtaIbOvYcdGUCZMnGJiTxm5Q2FpmdWe
+         Vj4uz8Jeyq01lHjcostR8wh0scGnER8O8EgHahQBPC34bPsB5I4K7dNzKweVdkjVvt
+         2wPehCzgm1puDwCV1eQo+SiNOPLQYZtZC6Dc08z8ImIoutVS6XOB2uTnfJjfxVdCx5
+         0PC13HyuUHx5Q==
+Received: by mail-vs1-f51.google.com with SMTP id 67so1763472vsh.2;
+        Mon, 23 May 2022 19:50:08 -0700 (PDT)
+X-Gm-Message-State: AOAM533c+XzBWg2euBMYEHAdFf+mS1BUdzfCTm5mY2I4hV2QPYrTzIvN
+        AUnVBsgcNma5sjF18uDYYzfqVtrjGeoZwPuO/68=
+X-Google-Smtp-Source: ABdhPJzwXGK1MbaJ7TTtBoFyMr/agYiAbxyTf7HvMrhpcP0V0i/PJTWjerMRQpBE9AhGVF8/+Y7Lp3ILB/1fUHaQT3Y=
+X-Received: by 2002:a67:e899:0:b0:337:932a:2fc5 with SMTP id
+ x25-20020a67e899000000b00337932a2fc5mr6298284vsn.40.1653360607569; Mon, 23
+ May 2022 19:50:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <1c4e81eda5f9651f581f1554629d334f1afda841.1653227039.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <1c4e81eda5f9651f581f1554629d334f1afda841.1653227039.git.christophe.jaillet@wanadoo.fr>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 24 May 2022 10:50:00 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H73Gj-KDjLuqCtasX5dtBRTHe_8s51wR1mrd=_rBF_XZA@mail.gmail.com>
+Message-ID: <CAAhV-H73Gj-KDjLuqCtasX5dtBRTHe_8s51wR1mrd=_rBF_XZA@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/loongson-liointc: Fix an error handling path in liointc_init()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     dan.carpenter@oracle.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use memblock_add_node to add new memblock region within a NUMA node
-in early_parse_mem() under CONFIG_NUMA, otherwise the mem parameter
-can not work well.
+Hi, Christophe,
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/kernel/setup.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+On Sun, May 22, 2022 at 9:44 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> If a of_property_match_string() call fails, we still need to release some
+> resources.
+> Add the corresponding goto instead of a direct return.
+Your patch is correct, but 807e93d0ecbb hasn't been upstream, I don't
+know how to handle it.
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 1c7f916..2ca156a 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -37,6 +37,7 @@
- #include <asm/cdmm.h>
- #include <asm/cpu.h>
- #include <asm/debug.h>
-+#include <asm/mmzone.h>
- #include <asm/sections.h>
- #include <asm/setup.h>
- #include <asm/smp-ops.h>
-@@ -364,7 +365,10 @@ static int __init early_parse_mem(char *p)
- 	if (*p == '@')
- 		start = memparse(p + 1, &p);
- 
--	memblock_add(start, size);
-+	if (IS_ENABLED(CONFIG_NUMA))
-+		memblock_add_node(start, size, pa_to_nid(start), MEMBLOCK_NONE);
-+	else
-+		memblock_add(start, size);
- 
- 	return 0;
- }
--- 
-2.1.0
-
+Huacai
+>
+> Fixes: 807e93d0ecbb ("irqchip/loongson-liointc: Add ACPI init support")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/irqchip/irq-loongson-liointc.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+> index ff3cb5b05710..2227b702a81d 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -185,8 +185,10 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
+>                         int index = of_property_match_string(node,
+>                                         "reg-names", core_reg_names[i]);
+>
+> -                       if (index < 0)
+> -                               return -EINVAL;
+> +                       if (index < 0) {
+> +                               err = -EINVAL;
+> +                               goto out_iounmap;
+> +                       }
+>
+>                         priv->core_isr[i] = of_iomap(node, index);
+>                 }
+> --
+> 2.34.1
+>
