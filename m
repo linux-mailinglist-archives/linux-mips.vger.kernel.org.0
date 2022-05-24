@@ -2,105 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FDB532139
-	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 04:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28600532194
+	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 05:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiEXCuN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 22:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
+        id S230206AbiEXD3T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 23:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbiEXCuM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 22:50:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F646EB11;
-        Mon, 23 May 2022 19:50:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E49FCB81722;
-        Tue, 24 May 2022 02:50:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A559FC36AE3;
-        Tue, 24 May 2022 02:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653360608;
-        bh=9tJzgDSzNbcE3lkPHHMiOyFzxrJvq0EKSU2oKxbKIoM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b6UAAB3hpv8m6aTOEYYiWrfrlORMkuuyR7su5oPM4rVsyNZXRLPJS+Zlj0DgEAl01
-         3UURv9EPt68fdFGsJnkHdcRtYiFCe0kyB2YLi0VztaKlRWVN+KUxedApXPLsIkDCrr
-         Zx5xVogUzGv589rAKDM265+dY8lOzIbO4hodtaIbOvYcdGUCZMnGJiTxm5Q2FpmdWe
-         Vj4uz8Jeyq01lHjcostR8wh0scGnER8O8EgHahQBPC34bPsB5I4K7dNzKweVdkjVvt
-         2wPehCzgm1puDwCV1eQo+SiNOPLQYZtZC6Dc08z8ImIoutVS6XOB2uTnfJjfxVdCx5
-         0PC13HyuUHx5Q==
-Received: by mail-vs1-f51.google.com with SMTP id 67so1763472vsh.2;
-        Mon, 23 May 2022 19:50:08 -0700 (PDT)
-X-Gm-Message-State: AOAM533c+XzBWg2euBMYEHAdFf+mS1BUdzfCTm5mY2I4hV2QPYrTzIvN
-        AUnVBsgcNma5sjF18uDYYzfqVtrjGeoZwPuO/68=
-X-Google-Smtp-Source: ABdhPJzwXGK1MbaJ7TTtBoFyMr/agYiAbxyTf7HvMrhpcP0V0i/PJTWjerMRQpBE9AhGVF8/+Y7Lp3ILB/1fUHaQT3Y=
-X-Received: by 2002:a67:e899:0:b0:337:932a:2fc5 with SMTP id
- x25-20020a67e899000000b00337932a2fc5mr6298284vsn.40.1653360607569; Mon, 23
- May 2022 19:50:07 -0700 (PDT)
+        with ESMTP id S232291AbiEXD3P (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 23:29:15 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15996996AA;
+        Mon, 23 May 2022 20:29:15 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id cs3-20020a17090af50300b001e0808b5838so61544pjb.1;
+        Mon, 23 May 2022 20:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=chsCh2ddSCkGriuAaT3W/gLAbDBmBFGcAXjDbZAAsck=;
+        b=LU4+uYppoarzT9XpfW7N7FXaVEaojsCjxslu+M+SUHazDjSsdhQLudmOwft7H+Spon
+         3MA83hS0WgLQ0HyqIY8pRVEiksGL4HTjl6WKW0SZ/NV9eY2DM6BLqfdTdk71ZgeGvyQb
+         twvN9cuFqC27bUjk7qZWHyE/1/qT0w6JMo/UIiCnuc4eQLG91/M7cooGJdvvA0X2iBzb
+         ZK68GrCSmKvefTNupclOyU6fRaQ1irzxSagsoVFjwpGLvUWsgLTi+/AslLsozuvyEGRY
+         SHloMhol+pVksqr+8MpkSsiI0toW80ooOTw9cfMgZD7hjdUt1+me5yqVHGhD0Os9101m
+         Sx0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=chsCh2ddSCkGriuAaT3W/gLAbDBmBFGcAXjDbZAAsck=;
+        b=kCzmDod4pUNJqBKH74G0y69i3lczmKSswTA8lIbPv0Ys9jc8IbEysE69ur+R/n7icV
+         QSHkWFEYWzGJfumeqkMJZsvInNC+a7Kyn9TqWGGw/+EoiaDuGU3/8dl4twGW6LHSsIkv
+         76D0j64tKoT1/w9CO5iCQH0+HnT/VGXn9TkHUqP+CcoRqIpdoibAPDaZRyt7rLhsAieD
+         XLFz5Em/cVwXGMSCp0UcLUyFSt2vNGSHE25REiD7CGEaOxSX+kp0SkrZZuqx8FAMlfK6
+         mVqSGrct8DW90QB++uck4fuhrtbfgE6Rsc6Nhch4Tl364kTxfuRc99SgXRRT0J3DiZq4
+         GhzQ==
+X-Gm-Message-State: AOAM530yQ7Wwdt3amFScHcsy46HXV6IMurwIklc3SZrEz3aLyhTYAuB2
+        gFAY/mfX/YgNwL7tbu+nNzY=
+X-Google-Smtp-Source: ABdhPJy+/+ZYbSjad/VNd4WxI0IAynwMTTJXgre/Mk7BfEWoNi7kJkVmyaJnnz5qxXi4Hw2YKEk7hg==
+X-Received: by 2002:a17:90a:b295:b0:1df:8462:b96e with SMTP id c21-20020a17090ab29500b001df8462b96emr2430989pjr.162.1653362954590;
+        Mon, 23 May 2022 20:29:14 -0700 (PDT)
+Received: from localhost.localdomain ([103.167.134.51])
+        by smtp.gmail.com with ESMTPSA id c123-20020a621c81000000b0050dc7628202sm7840573pfc.220.2022.05.23.20.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 20:29:13 -0700 (PDT)
+From:   Genjian Zhang <zhanggenjian123@gmail.com>
+X-Google-Original-From: Genjian Zhang <zhanggenjian@kylinos.cn>
+To:     tsbogend@alpha.franken.de, maz@kernel.org, keescook@chromium.org,
+        mark.rutland@arm.com, nathan@kernel.org, siyanteng01@gmail.com,
+        yyuasa@linux.com, ralf@linux-mips.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huhai@kylinos.cn, zhanggenjian123@gmail.com,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH v2] gpio: vr41xx: Use spurious_interrupt() and export it to modules
+Date:   Tue, 24 May 2022 11:28:47 +0800
+Message-Id: <20220524032847.3244853-1-zhanggenjian@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1c4e81eda5f9651f581f1554629d334f1afda841.1653227039.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <1c4e81eda5f9651f581f1554629d334f1afda841.1653227039.git.christophe.jaillet@wanadoo.fr>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 24 May 2022 10:50:00 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H73Gj-KDjLuqCtasX5dtBRTHe_8s51wR1mrd=_rBF_XZA@mail.gmail.com>
-Message-ID: <CAAhV-H73Gj-KDjLuqCtasX5dtBRTHe_8s51wR1mrd=_rBF_XZA@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/loongson-liointc: Fix an error handling path in liointc_init()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     dan.carpenter@oracle.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Christophe,
+From: huhai <huhai@kylinos.cn>
 
-On Sun, May 22, 2022 at 9:44 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> If a of_property_match_string() call fails, we still need to release some
-> resources.
-> Add the corresponding goto instead of a direct return.
-Your patch is correct, but 807e93d0ecbb hasn't been upstream, I don't
-know how to handle it.
+modpost complains once these drivers become modules.
+  ERROR: modpost: "irq_err_count" [drivers/gpio/gpio-vr41xx.ko] undefined!
 
-Huacai
->
-> Fixes: 807e93d0ecbb ("irqchip/loongson-liointc: Add ACPI init support")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/irqchip/irq-loongson-liointc.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> index ff3cb5b05710..2227b702a81d 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -185,8 +185,10 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
->                         int index = of_property_match_string(node,
->                                         "reg-names", core_reg_names[i]);
->
-> -                       if (index < 0)
-> -                               return -EINVAL;
-> +                       if (index < 0) {
-> +                               err = -EINVAL;
-> +                               goto out_iounmap;
-> +                       }
->
->                         priv->core_isr[i] = of_iomap(node, index);
->                 }
-> --
-> 2.34.1
->
+Fix it by use spurious_interrupt() and export spurious_interrupt() when
+that symbol is =m.
+
+Fixes: 27fdd325dace ("MIPS: Update VR41xx GPIO driver to use gpiolib")
+Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: huhai <huhai@kylinos.cn>
+---
+ arch/mips/kernel/irq.c     | 3 +++
+ drivers/gpio/gpio-vr41xx.c | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/kernel/irq.c b/arch/mips/kernel/irq.c
+index 5e11582fe308..69f9a46bf9e5 100644
+--- a/arch/mips/kernel/irq.c
++++ b/arch/mips/kernel/irq.c
+@@ -49,6 +49,9 @@ asmlinkage void spurious_interrupt(void)
+ {
+ 	atomic_inc(&irq_err_count);
+ }
++#ifdef CONFIG_GPIO_VR41XX_MODULE
++EXPORT_SYMBOL_GPL(spurious_interrupt);
++#endif
+ 
+ void __init init_IRQ(void)
+ {
+diff --git a/drivers/gpio/gpio-vr41xx.c b/drivers/gpio/gpio-vr41xx.c
+index 98cd715ccc33..8f27a0e0ad99 100644
+--- a/drivers/gpio/gpio-vr41xx.c
++++ b/drivers/gpio/gpio-vr41xx.c
+@@ -217,7 +217,7 @@ static int giu_get_irq(unsigned int irq)
+ 	printk(KERN_ERR "spurious GIU interrupt: %04x(%04x),%04x(%04x)\n",
+ 	       maskl, pendl, maskh, pendh);
+ 
+-	atomic_inc(&irq_err_count);
++	spurious_interrupt();
+ 
+ 	return -EINVAL;
+ }
+-- 
+2.27.0
+
