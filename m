@@ -2,111 +2,182 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E0E53306F
-	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 20:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDAE533245
+	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 22:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239561AbiEXSa6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 May 2022 14:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S241461AbiEXUQx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 May 2022 16:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiEXSa6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 May 2022 14:30:58 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CD57A83C;
-        Tue, 24 May 2022 11:30:56 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id g184so17014190pgc.1;
-        Tue, 24 May 2022 11:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=62oZybgFBxJptBg4w0Na6gq9SY8Uv4M/InFJNbcHhmk=;
-        b=VqJQMqdAxeBonlch9i3vHMiugUkHlr9s+Xb5tHFiBx3q9rCtF46NjF73GdAqmImMrm
-         8ntyEeZeWjALovaxhWhvgoDKkcE3K8ngjvxaF/J7Q0j6R6/5VjeOY/L8wpSxwr0cwRPD
-         FgFhQAldBMml51lQcLdtyO/9NRsyAeJTlyZB6Jmin0/i3tgip6fbqvq3+lM4/m7pw0b+
-         fuzRF1/kxwnk4dEu6nwuFZPa/93ipcP9sKJmpGsYyMptT0pnSYH0/xZBV/uZRw5k3Utk
-         j7kCKdPBgnsxn3sUh24EbW7l5LO2uVgiRzp5ifdV/Tu1YczHc5C2NmadUJEFGZmRR70N
-         EKPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=62oZybgFBxJptBg4w0Na6gq9SY8Uv4M/InFJNbcHhmk=;
-        b=ONprRaGF63xMOLdJPofaSxnei3jqA3cpaosdjZRAb936yd4cVkb7EnXrdNKXtvOEBv
-         p05c39XqdXBhRExVb7XoCyAd1Ughea5AvFMwmsKXWR1vHtk1SE6DRgc6ZI61as3lGX69
-         6KtqI0YOcrsGNE0i1h3Hd96TD1O9IB2zPXHyWYdUtIFmXCWOqI5k/qAS4iHUH87AHtnI
-         yAbgzzoyijWhwwCwAL0YJUvDPGd1WmuZjoYRMD96kNGU5OMJNjoAr4g6lrGAR4nesfHw
-         115RzfcXPQnOOWRHCyBABggYpDZVJTYwycom1YzvFsJFUGF4J+LZWAi/U8rr/YElUoSx
-         n5kw==
-X-Gm-Message-State: AOAM530t3YohT2pF2fnnr1Sb4vYaSrOdZ6OQzZuL+zWtn53ZSpfj6gRM
-        hch4om3WklPALIgubh19eaI=
-X-Google-Smtp-Source: ABdhPJyQzpaNFo2nczBx1uzo/ZblhzifGBeJX0dd5t9EA8B0X9nDFpCRi45dZpj58OKrvnw/ibX4YQ==
-X-Received: by 2002:a05:6a00:a8b:b0:4e1:52db:9e5c with SMTP id b11-20020a056a000a8b00b004e152db9e5cmr29526928pfl.38.1653417055980;
-        Tue, 24 May 2022 11:30:55 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id p9-20020aa78609000000b0051878e8cc13sm8091200pfn.116.2022.05.24.11.30.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 11:30:55 -0700 (PDT)
-Message-ID: <b567d6bd-b563-f696-60f2-0fc36261d094@gmail.com>
-Date:   Tue, 24 May 2022 11:30:54 -0700
+        with ESMTP id S231410AbiEXUQx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 May 2022 16:16:53 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFDB2317B;
+        Tue, 24 May 2022 13:16:51 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id F2E871F447A6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653423409;
+        bh=zYjjoQPSRD28QTzcQmCkF+0zDUTSRxsuI5oi8F0+rRQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fWA1AifiGfpu5zAody+hWBW74K5h5PJY4o9syShHoFUvcDbGztdgO0rxpFXKrmy2Y
+         v+m0QvVaF2TMOM3FrIQn4vCIIUWVeH9erQlS971HHUB5axW0nhIjNhf2t83dRltpj5
+         F+MJuBOytIM400P1utntTu0dMtY0yhe0QZvOmzJR1Di7UCyoNz6N/1CjkNfHCg26JH
+         3c5z3Ze+AYN7fowyq3Sq6g1iqMrOvzo1fQihDQtpwVaXvHM7BJiRY1axu6Kqy3ixZu
+         ZneM8hZeXSfA/wa0YX+aUD23BvnxfaiuWymTABWNglyXpsDZsuQOqKpz07ThIMgq+Y
+         y0ERqGVUsfdJQ==
+Message-ID: <72eceb0c-8654-6c63-f1c4-c9374f99dfb3@collabora.com>
+Date:   Tue, 24 May 2022 23:16:41 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] MIPS: Rewrite `csum_tcpudp_nofold' in plain C
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 07/27] kernel/reboot: Add kernel_can_power_off()
 Content-Language: en-US
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
- <7682977b-5929-890a-3a18-662fbfcede5c@gmail.com>
- <alpine.DEB.2.21.2205241811180.52080@angie.orcam.me.uk>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <alpine.DEB.2.21.2205241811180.52080@angie.orcam.me.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+ <20220509233235.995021-8-dmitry.osipenko@collabora.com>
+ <CAMuHMdVGjeFe=Z_1Kr9ZaNZ7HUVH1usvubEB31WUQf0fg8E1kA@mail.gmail.com>
+ <c4914e14-1882-55a1-bcbd-a905852b45a3@collabora.com>
+ <CAMuHMdWBWWVeegvLQQzT8CRL5z38AhXigaNjzw8p0NwQ1B4DPQ@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAMuHMdWBWWVeegvLQQzT8CRL5z38AhXigaNjzw8p0NwQ1B4DPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/24/22 10:18, Maciej W. Rozycki wrote:
-> On Tue, 24 May 2022, Florian Fainelli wrote:
+On 5/24/22 18:03, Geert Uytterhoeven wrote:
+> Hi Dmitry,
 > 
->>>    I have visually inspected code produced and verified this change to boot
->>> with TCP networking performing just fine, both with a 32-bit and a 64-bit
->>> configuration.  Sadly with the little endianness only, because in the
->>> course of this verification I have discovered the core card of my Malta
->>> board bit the dust a few days ago, apparently in a permanent manner, and I
->>> have no other big-endian MIPS system available here to try.
+> On Tue, May 24, 2022 at 3:41 PM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>> On 5/24/22 16:14, Geert Uytterhoeven wrote:
+>>> On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
+>>> <dmitry.osipenko@collabora.com> wrote:
+>>>> Add kernel_can_power_off() helper that replaces open-coded checks of
+>>>> the global pm_power_off variable. This is a necessary step towards
+>>>> supporting chained power-off handlers.
+>>>>
+>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>
+>>> Thanks for your patch, which is now commit 0e2110d2e910e44c
+>>> ("kernel/reboot: Add kernel_can_power_off()") in pm/linux-next.
+>>>
+>>> This causes the "poweroff" command (Debian nfsroot) to no longer
+>>> cleanly halt the system on arm32 systems, but fail with a panic
+>>> instead:
+>>>
+>>> -reboot: System halted
+>>> +reboot: Power down
+>>> +Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
+>>> +CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted
+>>> 5.18.0-rc7-shmobile-00007-g0e2110d2e910 #1274
+>>> +Hardware name: Generic R-Car Gen2 (Flattened Device Tree)
+>>> + unwind_backtrace from show_stack+0x10/0x14
+>>> + show_stack from dump_stack_lvl+0x40/0x4c
+>>> + dump_stack_lvl from panic+0xf4/0x330
+>>> + panic from do_exit+0x1c8/0x8e4
+>>> + do_exit from __do_sys_reboot+0x174/0x1fc
+>>> + __do_sys_reboot from ret_fast_syscall+0x0/0x54
+>>> +Exception stack(0xf0815fa8 to 0xf0815ff0)
+>>> +5fa0:                   004e6954 00000000 fee1dead 28121969 4321fedc f0d94600
+>>> +5fc0: 004e6954 00000000 00000000 00000058 befa0c78 00000000 befa0c10 004e56f8
+>>> +5fe0: 00000058 befa0b6c b6ec8d45 b6e4a746
+>>> +---[ end Kernel panic - not syncing: Attempted to kill init!
+>>> exitcode=0x00000000 ]---
+>>>
+>>> On arm64, "poweroff" causes a clean "reboot: Power down" before/after.
+>>>
+>>> On both arm32 and arm64, the same handlers are registered:
+>>>   - SYS_OFF_MODE_POWER_OFF_PREPARE: legacy_pm_power_off_prepare
+>>>   - SYS_OFF_MODE_POWER_OFF: legacy_pm_power_off
+>>>
+>>> On both arm32 and arm64, legacy_pm_power_off_prepare() is called.
+>>> On both arm32 and arm64, legacy_pm_power_off() does not seem to
+>>> be called.
+>>>
+>>> On arm32, both pm_power_off_prepare and pm_power_off are NULL.
+>>> On arm64, pm_power_off_prepare is NULL, and
+>>> pm_power_off is psci_sys_poweroff.
+>>>
+>>> Do you have a clue?
+>>> Thanks!
 >>
->> How about QEMU is not that a viable option for testing big/little endian
->> configurations?
+>> Thank you, Geert! I see the problem, the kernel_can_power_off() checks whether power-off handler is registered, but it's always registered because legacy_pm_power_off is registered unconditionally. So it causes trouble for platforms that don't have power-off handler installed at all. All platforms that I tested have a power-off handler, so now wonder that I didn't notice this before.
+>>
+>> This change should fix the problem, please give it a try:
 > 
->   Yeah, for this particular change, sure.  I don't have QEMU set up however
-> at the moment and would have to take some time to sort it, and it won't do
-> for peripherals it doesn't implement.  The failure is a fresh problem and
-> I yet need to figure out what to do about it.  A bad coincidence I guess
-> as I have MIPS hardware 10 years older that still goes strong.
+> Thank you, that fixes the problem for me!
+> 
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-If that makes it any easier, OpenWrt has 4 configurations of Malta for 
-QEMU which allows you to have at least networking (relevant here) for 
-32/64 and le/be:
+Great! I'll send the proper patch soon.
 
-https://git.openwrt.org/?p=openwrt/openwrt.git;a=tree;f=target/linux/malta;h=90b2913dec291a1926eefc332b90b5842746c6e6;hb=HEAD
-
-Along with a readme file on how to start those platforms:
-
-https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/malta/README;h=bbe806de3d6671d69ecc3db0fcfccf9f9176de13;hb=HEAD
-
-It's really easy.
 -- 
-Florian
+Best regards,
+Dmitry
