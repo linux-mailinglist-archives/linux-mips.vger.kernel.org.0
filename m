@@ -2,68 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9E4532F17
-	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 18:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5950F532F1C
+	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 18:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234099AbiEXQib (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 May 2022 12:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
+        id S234034AbiEXQln (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 May 2022 12:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiEXQia (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 May 2022 12:38:30 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02ADAE023;
-        Tue, 24 May 2022 09:38:30 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id q4so16302460plr.11;
-        Tue, 24 May 2022 09:38:29 -0700 (PDT)
+        with ESMTP id S233418AbiEXQlm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 May 2022 12:41:42 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CF12B244;
+        Tue, 24 May 2022 09:41:41 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id c22so16797865pgu.2;
+        Tue, 24 May 2022 09:41:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HDX84FFeFcjSflCNx/dYP2mOlMAVfBYz8NXog7/4cdA=;
-        b=kCGVsnokeKe36OuduWxziv0q3V3zFewTgyZ8ZcYnQUMh2yWCS/RhP0lulH2745OHxm
-         TrBc6V/3T6oYEPYvu5h636CXl8ymu9t7NmarcjASamefGZ4C2xBhz1sSRShLQIscFrol
-         SdtK9pnKzB15c5ABS9qP2+hTL02S/SN0vH6P3XmGP31V9lmgMiI2ERYE/I8qxBDERClb
-         Hhs5dxeS6k/FQYmSM39bCFrWO9ZZnkGqhrhloxdQazHOMAuyrDJy6UO5YV69TM5zVQoU
-         BFEfJxAetRO6IJW85qZLE7PEi6cq6J0yoHLfInuG+l3jAld2BtEEjg7ifGyWhUiq0H9q
-         9HEQ==
+        bh=54bmEZ++K7ig8vN/OveMaZwftyKMfoK/livEpi3yPkU=;
+        b=cwk8BjSpPjQmJ+hzqdyfkFnu+Yoc0pdrRH2mkoiCe1x35JxAeXs2ufMLuFlSy9x3lP
+         f1DeEQZbMzXjE9S0JwpP1IXXY9wZYLUXW9GFgmEMpZTZOX/2o8M9aiYmziGxPuu0yUYM
+         5MKwPa0WmjS/jH9BwHsU2aE7bkFxwe4JFmvA8vldvPOIM4ohiHi61YcrjxLK3SgIWJQE
+         VX6Hz0KCIm9HRLd/5UNEgnfnmoR2ASzD+leQIgq4msVqHBEl/ntwprfF7XzciIUL4zSk
+         wu48Bh52w3iHzFtCdBlbZ6jO/KknWSP3WSMGMygaJ/PtwR3lHAbHeTy880Paq4p2V2w/
+         VjOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HDX84FFeFcjSflCNx/dYP2mOlMAVfBYz8NXog7/4cdA=;
-        b=1/R0DOUWgjsz3lwPGr/2Z6ubpl+svHfHtycrOYxoxeZgE6gSCY9lB7OoYRzKLWLeQN
-         AF8v85ilnQ1aaQqw2gnf/qPbJhGAwQAnPcWQYwSavzsG+KauDaXLIZDI7HLQZIF3Hl08
-         8h/8rrzM48u2KFlO3vMNde3DmNktiTI7KH77WNquLzdk9sTcROBrrEM+CfkgeRgxs76o
-         dQmUMRBsASz/XKB4JiONCMJWY5htfz245f+Z/nkDlOHsLtRsKbE/H2xcLovxwvqMTfxI
-         468/9ko6Q9wpW7K0LjCAWFFZCcwU1mK+w33SAAC9EQ/4XwboQp1QSb5MimcdlS4GAiTP
-         BO3g==
-X-Gm-Message-State: AOAM533X+jzOqvk25zFj0H+3RdpPNAKaILJPK4iZmRHdDwnSTQo36Wxo
-        s2nxxBB83STRCzFWLpmP7Gk=
-X-Google-Smtp-Source: ABdhPJyHJTZK9prcTPjbOowTYJbwGiMQofwKhcs/AB/aQXuadf8eb7QK39M1QUve5l38G3Hve1FeXg==
-X-Received: by 2002:a17:903:288:b0:15f:a13:dfd5 with SMTP id j8-20020a170903028800b0015f0a13dfd5mr28525273plr.55.1653410309327;
-        Tue, 24 May 2022 09:38:29 -0700 (PDT)
+        bh=54bmEZ++K7ig8vN/OveMaZwftyKMfoK/livEpi3yPkU=;
+        b=I+KLkQJFjo4JtxNvHUfROPjty6OSSpawihdExcSJX8bbO3NnmVHYOFGelpEwTBGnMX
+         xie2MrClGC1c4uyhQ0mK1/xewRylUoj3GLQhPmzUHkBh25Lk/y226QBJD5I+d6R6qqjw
+         miVj7V9ESqyFy0M2OjVpAI1gN0WUV7hOVWMfmigSqZzU7IemwwjhRFmnByqyysJbPQqt
+         KgJO6ozLtgE9+VxwuB7PQpMUz6uISpfL8eZKgQVuIRX7BB1weUSvArZ6EUzi1wM1o1Qk
+         coulg5DMM5g5r3Q6avM2K4wLiurzdqurrlZSXj5ZneKWcgArADUYaBfPbi1O0nYRqlC0
+         tX9w==
+X-Gm-Message-State: AOAM531gNlNuBWg4Y/Fm9aDbrEuBa28NP92k57C8mbxXeC5sghNwnx5J
+        6BcI9pimeLLsy1/4F21G+gA=
+X-Google-Smtp-Source: ABdhPJz3E8OGCE3qkq1XtpScdaqVhjfE5Y78Pb3IokOStU9OD3cc4Qk4Z63s599XzkD6yIPw/k9Z2w==
+X-Received: by 2002:a05:6a00:1a08:b0:510:a1db:1a91 with SMTP id g8-20020a056a001a0800b00510a1db1a91mr29026230pfv.69.1653410501245;
+        Tue, 24 May 2022 09:41:41 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id v6-20020a63b946000000b003c14af5063fsm6808077pgo.87.2022.05.24.09.38.28
+        by smtp.googlemail.com with ESMTPSA id 1-20020a170902c10100b0015e8d4eb228sm7495221pli.114.2022.05.24.09.41.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 09:38:28 -0700 (PDT)
-Message-ID: <7682977b-5929-890a-3a18-662fbfcede5c@gmail.com>
-Date:   Tue, 24 May 2022 09:38:27 -0700
+        Tue, 24 May 2022 09:41:40 -0700 (PDT)
+Message-ID: <6c5f414b-870d-4cef-a6b9-7d9c19381064@gmail.com>
+Date:   Tue, 24 May 2022 09:41:38 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH] MIPS: Rewrite `csum_tcpudp_nofold' in plain C
+Subject: Re: [PATCH v2] gpio: vr41xx: Use spurious_interrupt() and export it
+ to modules
 Content-Language: en-US
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
+To:     Genjian Zhang <zhanggenjian123@gmail.com>,
+        tsbogend@alpha.franken.de, maz@kernel.org, keescook@chromium.org,
+        mark.rutland@arm.com, nathan@kernel.org, siyanteng01@gmail.com,
+        yyuasa@linux.com, ralf@linux-mips.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huhai@kylinos.cn, k2ci <kernel-bot@kylinos.cn>
+References: <20220524032847.3244853-1-zhanggenjian@kylinos.cn>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
+In-Reply-To: <20220524032847.3244853-1-zhanggenjian@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,63 +77,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/22/22 13:48, Maciej W. Rozycki wrote:
-> Recent commit 198688edbf77 ("MIPS: Fix inline asm input/output type
-> mismatch in checksum.h used with Clang") introduced a code size and
-> performance regression with 64-bit code emitted for `csum_tcpudp_nofold'
-> by GCC, caused by a redundant truncation operation produced due to a
-> data type change made to the variable associated with the inline
-> assembly's output operand.
+On 5/23/22 20:28, Genjian Zhang wrote:
+> From: huhai <huhai@kylinos.cn>
 > 
-> The intent previously expressed here with operands and constraints for
-> optimal code was to have the output operand share a register with one
-> inputs, both of a different integer type each.  This is perfectly valid
-> with the MIPS psABI where a register can hold integer data of different
-> types and the assembly code used here makes data stored in the output
-> register match the data type used with the output operand, however it
-> has turned out impossible to express this arrangement in source code
-> such as to satisfy LLVM, apparently due to the compiler's internal
-> limitations.
+> modpost complains once these drivers become modules.
+>    ERROR: modpost: "irq_err_count" [drivers/gpio/gpio-vr41xx.ko] undefined!
 > 
-> There is nothing peculiar about the inline assembly `csum_tcpudp_nofold'
-> includes however, though it does choose assembly instructions carefully.
+> Fix it by use spurious_interrupt() and export spurious_interrupt() when
+> that symbol is =m.
 > 
-> Rewrite this piece of assembly in plain C then, using corresponding C
-> language operations, making GCC produce the same assembly instructions,
-> possibly shuffled, in the general case and sometimes actually fewer of
-> them where an input is constant, because the compiler does not have to
-> reload it to a register (operand constraints could be adjusted for that,
-> but the plain C approach is cleaner anyway).
-> 
-> Example code size changes are as follows, for a 32-bit configuration:
-> 
->        text       data        bss      total filename
->     5920480    1347236     126592    7394308 vmlinux-old
->     5920480    1347236     126592    7394308 vmlinux-now
->     5919728    1347236     126592    7393556 vmlinux-c
-> 
-> and for a 64-bit configuration:
-> 
->        text       data        bss      total filename
->     6024112    1790828     225728    8040668 vmlinux-old
->     6024128    1790828     225728    8040684 vmlinux-now
->     6023760    1790828     225728    8040316 vmlinux-c
-> 
-> respectively, where "old" is with the commit referred reverted, "now" is
-> with no change, and "c" is with this change applied.
-> 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: 27fdd325dace ("MIPS: Update VR41xx GPIO driver to use gpiolib")
+> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: huhai <huhai@kylinos.cn>
 > ---
-> Hi,
+>   arch/mips/kernel/irq.c     | 3 +++
+>   drivers/gpio/gpio-vr41xx.c | 2 +-
+>   2 files changed, 4 insertions(+), 1 deletion(-)
 > 
->   I have visually inspected code produced and verified this change to boot
-> with TCP networking performing just fine, both with a 32-bit and a 64-bit
-> configuration.  Sadly with the little endianness only, because in the
-> course of this verification I have discovered the core card of my Malta
-> board bit the dust a few days ago, apparently in a permanent manner, and I
-> have no other big-endian MIPS system available here to try.
+> diff --git a/arch/mips/kernel/irq.c b/arch/mips/kernel/irq.c
+> index 5e11582fe308..69f9a46bf9e5 100644
+> --- a/arch/mips/kernel/irq.c
+> +++ b/arch/mips/kernel/irq.c
+> @@ -49,6 +49,9 @@ asmlinkage void spurious_interrupt(void)
+>   {
+>   	atomic_inc(&irq_err_count);
+>   }
+> +#ifdef CONFIG_GPIO_VR41XX_MODULE
+> +EXPORT_SYMBOL_GPL(spurious_interrupt);
+> +#endif
 
-How about QEMU is not that a viable option for testing big/little endian 
-configurations?
+You should not be exporting for just a specific configuration, export it 
+unconditionally. The generic IRQ layer however prefers to use 
+handle_bad_irq() which is already exported, can you consider using that?
 -- 
 Florian
