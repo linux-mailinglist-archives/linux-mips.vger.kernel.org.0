@@ -2,98 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DA853208A
-	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 04:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88CC5320F3
+	for <lists+linux-mips@lfdr.de>; Tue, 24 May 2022 04:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232912AbiEXCBc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 May 2022 22:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S232388AbiEXC1x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 May 2022 22:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232925AbiEXCBb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 22:01:31 -0400
+        with ESMTP id S229800AbiEXC1x (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 May 2022 22:27:53 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A8991E3D1;
-        Mon, 23 May 2022 19:01:29 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axith4PIxi_sIgAA--.20109S3;
-        Tue, 24 May 2022 10:01:28 +0800 (CST)
-Subject: Re: [PATCH 0/3] MIPS: Modify early_parse_mem()
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CD5669734;
+        Mon, 23 May 2022 19:27:52 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxvyqmQoxix8cgAA--.5133S2;
+        Tue, 24 May 2022 10:27:50 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <1647615920-23103-1-git-send-email-yangtiezhu@loongson.cn>
- <c3e2d39f-1691-4065-c1fb-06f4059c3e0c@loongson.cn>
- <20220523132852.GA8289@alpha.franken.de>
 Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <1492a31f-9cda-8e2f-165f-dd79b9abb100@loongson.cn>
-Date:   Tue, 24 May 2022 10:01:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <20220523132852.GA8289@alpha.franken.de>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Axith4PIxi_sIgAA--.20109S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFW8JFWrKw47Kw15AFWkWFg_yoWDXFc_Xa
-        y7C39rGw1YqF97AF9rGr45ZrWDKrWUAFWrua42grsrCwn5XF1UGFsYkryrXr1kJF4xJrnr
-        CrZ8Za4fXr429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbVxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
-        67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
-        73UjIFyTuYvjfUYc_-DUUUU
+Subject: [PATCH v2 0/2] MIPS: Modify early_parse_mem()
+Date:   Tue, 24 May 2022 10:27:48 +0800
+Message-Id: <1653359270-27056-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxvyqmQoxix8cgAA--.5133S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYr7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v
+        4I1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73Uj
+        IFyTuYvjfU5vtCUUUUU
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+v2: drop patch #2 of v1 series.
 
+Tiezhu Yang (2):
+  MIPS: Return -EINVAL if mem parameter is empty in early_parse_mem()
+  MIPS: Use memblock_add_node() in early_parse_mem() under CONFIG_NUMA
 
-On 05/23/2022 09:28 PM, Thomas Bogendoerfer wrote:
-> On Mon, May 09, 2022 at 03:30:11PM +0800, Tiezhu Yang wrote:
->>
->>
->> On 03/18/2022 11:05 PM, Tiezhu Yang wrote:
->>> Tiezhu Yang (3):
->>>   MIPS: Return -EINVAL if mem parameter is empty in early_parse_mem()
->>>   MIPS: Return -EINVAL if mem parameter is invalid in early_parse_mem()
->>>   MIPS: Use memblock_add_node() in early_parse_mem() under CONFIG_NUMA
->>>
->>>  arch/mips/kernel/setup.c | 35 +++++++++++++++++++++++++++++------
->>>  1 file changed, 29 insertions(+), 6 deletions(-)
->>>
->>
->> Hi Thomas,
->>
->> Any comments? Are you OK with these changes?
->
-> first and last patch are ok with me. The second patch changes semantics
-> for mem=, which I don't want to change. Iirc the latest idea to solve
-> your problem was to use mem=XX@ syntax to limit detected memory, which
-> is the preferred way for me, too.
->
-> If you want I'll take patch 1 and 3 out of this series.
->
-> Thomas.
->
+ arch/mips/kernel/setup.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-OK, thank you.
-
-Let me rebase and send v2 later.
-
-Thanks,
-Tiezhu
+-- 
+2.1.0
 
