@@ -2,76 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F24533FD8
-	for <lists+linux-mips@lfdr.de>; Wed, 25 May 2022 17:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854B6534109
+	for <lists+linux-mips@lfdr.de>; Wed, 25 May 2022 18:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244964AbiEYPCi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 May 2022 11:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S245233AbiEYQIk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 May 2022 12:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244946AbiEYPBz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 May 2022 11:01:55 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB3A4AFB08;
-        Wed, 25 May 2022 08:01:40 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 8666B92009C; Wed, 25 May 2022 17:01:39 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 8066E92009B;
-        Wed, 25 May 2022 16:01:39 +0100 (BST)
-Date:   Wed, 25 May 2022 16:01:39 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Rewrite `csum_tcpudp_nofold' in plain C
-In-Reply-To: <b567d6bd-b563-f696-60f2-0fc36261d094@gmail.com>
-Message-ID: <alpine.DEB.2.21.2205251523120.52080@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk> <7682977b-5929-890a-3a18-662fbfcede5c@gmail.com> <alpine.DEB.2.21.2205241811180.52080@angie.orcam.me.uk> <b567d6bd-b563-f696-60f2-0fc36261d094@gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S234454AbiEYQIj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 May 2022 12:08:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE4EB2250;
+        Wed, 25 May 2022 09:08:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 618C9615E2;
+        Wed, 25 May 2022 16:08:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CE4C34117;
+        Wed, 25 May 2022 16:08:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653494917;
+        bh=yKZpZ7SIZeLHb0X8nC5bqkpDaZyHuZo++7kw37oIcGQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=goVP0r/5GwDlgxrUTVvx6jhaOtTm7pWUyfqhP1hgj2iDGXU4Tiq8pzDnwCvAkgpG4
+         L1r86pR2gPdL9aCADSayVXaRv86iKfwqr3WFbWOZxdLnDhv1govZgITWE7RtDWiB5+
+         LSjycCUndGv9y0jhBd0U8lb2tsEZKd0fEkC2wJsMf/1yO50v0Dzuq7GoqJ/s9pQejc
+         wNgI7SjceSjeavb7oG9cfRxObqafmjEdCwDyFAraqlxbB1zYcaDbq+IRyVfomMK/KY
+         bNjIBroLqZ8u1NSoR6dO+y5X61zbeNatpUa3EJ8SCurI9i1y8SKf6MZABNuUT5W2GC
+         6go17gsxUHsuQ==
+Received: by mail-vk1-f177.google.com with SMTP id i25so5151556vkr.8;
+        Wed, 25 May 2022 09:08:37 -0700 (PDT)
+X-Gm-Message-State: AOAM533v0pAJ28zdQU8hf2sK+UhmFZGXe9sdHuiU9EA2ZfVlmk3zruRk
+        vHa6E66Wu59tSuKeVXx19GVavYor0eOIbeuf9Wc=
+X-Google-Smtp-Source: ABdhPJw1WHHqxuzdMTtb2eEqwRRFtvXa8jU3vxrvtrww8g1vIS4KjJWMDyxFq63Hm2BXr071eyutBaZ38+UIdXynb6U=
+X-Received: by 2002:a1f:2106:0:b0:357:a8c9:a8d6 with SMTP id
+ h6-20020a1f2106000000b00357a8c9a8d6mr5907118vkh.2.1653494913806; Wed, 25 May
+ 2022 09:08:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220322144003.2357128-1-guoren@kernel.org> <20220524220646.GA3990738@roeck-us.net>
+ <6435704.4vTCxPXJkl@diego> <3418219.V25eIC5XRa@diego>
+In-Reply-To: <3418219.V25eIC5XRa@diego>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 26 May 2022 00:08:22 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTkpHLZf-+VXZE_gCn=5ZJ5FS3jOxKLVoMyL4i=baPd7Q@mail.gmail.com>
+Message-ID: <CAJF2gTTkpHLZf-+VXZE_gCn=5ZJ5FS3jOxKLVoMyL4i=baPd7Q@mail.gmail.com>
+Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 24 May 2022, Florian Fainelli wrote:
+Thx Heiko & Guenter,
 
-> >   Yeah, for this particular change, sure.  I don't have QEMU set up however
-> > at the moment and would have to take some time to sort it, and it won't do
-> > for peripherals it doesn't implement.  The failure is a fresh problem and
-> > I yet need to figure out what to do about it.  A bad coincidence I guess
-> > as I have MIPS hardware 10 years older that still goes strong.
-> 
-> If that makes it any easier, OpenWrt has 4 configurations of Malta for QEMU
-> which allows you to have at least networking (relevant here) for 32/64 and
-> le/be:
-> 
-> https://git.openwrt.org/?p=openwrt/openwrt.git;a=tree;f=target/linux/malta;h=90b2913dec291a1926eefc332b90b5842746c6e6;hb=HEAD
-> 
-> Along with a readme file on how to start those platforms:
-> 
-> https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/malta/README;h=bbe806de3d6671d69ecc3db0fcfccf9f9176de13;hb=HEAD
-> 
-> It's really easy.
+On Wed, May 25, 2022 at 7:10 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
+>
+> Am Mittwoch, 25. Mai 2022, 12:57:30 CEST schrieb Heiko St=C3=BCbner:
+> > Am Mittwoch, 25. Mai 2022, 00:06:46 CEST schrieb Guenter Roeck:
+> > > On Wed, May 25, 2022 at 01:46:38AM +0800, Guo Ren wrote:
+> > > [ ... ]
+> > >
+> > > > > The problem is come from "__dls3's vdso decode part in musl's
+> > > > > ldso/dynlink.c". The ehdr->e_phnum & ehdr->e_phentsize are wrong.
+> > > > >
+> > > > > I think the root cause is from musl's implementation with the wro=
+ng
+> > > > > elf parser. I would fix that soon.
+> > > > Not elf parser, it's "aux vector just past environ[]". I think I co=
+uld
+> > > > solve this, but anyone who could help dig in is welcome.
+> > > >
+> > >
+> > > I am not sure I understand what you are saying here. Point is that my
+> > > root file system, generated with musl a year or so ago, crashes with
+> > > your patch set applied. That is a regression, even if there is a bug
+> > > in musl.
+Thx for the report, it's a valuable regression for riscv-compat.
 
- Thanks.  I worked with QEMU in the past, up to contributing to the MIPS 
-target, so I'm quite familiar with this stuff, but it does require some 
-time to set up, which I'd rather use for something else right now.
+> >
+> > Also as I said in the other part of the thread, the rootfs seems innoce=
+nt,
+> > as my completely-standard Debian riscv64 rootfs is also affected.
+> >
+> > The merged version seems to be v12 [0] - not sure how we this discussio=
+n
+> > ended up in v9, but I just tested this revision in two variants:
+> >
+> > - v5.17 + this v9 -> works nicely
+>
+> I take that back ... now going back to that build I somehow also run into
+> that issue here ... will investigate more.
+Yeah, it's my fault. I've fixed up it, please have a try:
 
- Also I'd rather I had the core card repaired or replaced really as the 
-preferred solution before resorting to alternatives.  The baseboard seems 
-fine and it would be a waste of a valuable resource to just have it lying 
-around collecting dust.  I wonder if the problem could be a BGA failure 
-(this is a pre-RoHS device, so no issue with early lead-free solder) or an 
-actual component fault.
+https://lore.kernel.org/linux-riscv/20220525160404.2930984-1-guoren@kernel.=
+org/T/#u
 
-  Maciej
+>
+>
+> > - v5.18-rc6 + this v9 (rebased onto it) -> breaks the boot
+> >   The only rebase-conflict was with the introduction of restartable
+> >   sequences and removal of the tracehook include, but turning CONFIG_RS=
+EQ
+> >   off doesn't seem to affect the breakage.
+> >
+> > So it looks like something changed between 5.17 and 5.18 that causes th=
+e issue.
+> >
+> >
+> > Heiko
+> >
+> >
+> > [0] https://lore.kernel.org/all/20220405071314.3225832-1-guoren@kernel.=
+org/
+> >
+>
+>
+>
+>
+
+
+--=20
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
