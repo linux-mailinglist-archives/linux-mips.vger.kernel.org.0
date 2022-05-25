@@ -1,113 +1,49 @@
 Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D08533B5C
-	for <lists+linux-mips@lfdr.de>; Wed, 25 May 2022 13:11:16 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id A09AE533BC2
+	for <lists+linux-mips@lfdr.de>; Wed, 25 May 2022 13:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241943AbiEYLLN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 May 2022 07:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S242697AbiEYLaD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 May 2022 07:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241080AbiEYLLK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 May 2022 07:11:10 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3CA8CCC5;
-        Wed, 25 May 2022 04:11:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TTSfncRF4bwVxkeR+S4pHa2NuE5vU7NkHqU52imXoeo=; b=AZ7NLjulpP1WzqY4jAw9CJ6mzn
-        eNxn6mITLdAkzreesFIusYyJANkaOvbZVslHzJxDDqo/jW9prJ6mSOYajnNAsWgSTZTPCGe4Y+H+t
-        Q7b5K2i3OxODvn+feDcYZuuvagMcqlznlm2xJ6e8wPUzB4c/WkijGr50Z8D32ZlBmwWuMwGQbue1E
-        mrsCyjPGVmj7xf/0/rnV0zIseeyVAHCeyTCYTi0ZFmZwkk1CWC0IMPFglArv51u64lwHpRP8/QuNm
-        TypGtB34O3uGaPoduTA8k7e4jOZswva+y2onGqiOIb4Z5GAtPEnJDGpyLSzDy3ZlKvUO8MvNVaZm2
-        4u9mbK6A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ntouK-001b5l-Bp; Wed, 25 May 2022 11:10:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59CA2300222;
-        Wed, 25 May 2022 13:10:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 374CD207688E7; Wed, 25 May 2022 13:10:17 +0200 (CEST)
-Date:   Wed, 25 May 2022 13:10:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Richard Henderson <rth@twiddle.net>,
-        David Hildenbrand <david@redhat.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michal Simek <monstr@monstr.eu>,
-        Russell King <linux@armlinux.org.uk>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-riscv@lists.infradead.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jonas Bonn <jonas@southpole.se>, Will Deacon <will@kernel.org>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        openrisc@lists.librecores.org, linux-s390@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Chris Zankel <chris@zankel.net>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        sparclinux@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-xtensa@linux-xtensa.org, Nicholas Piggin <npiggin@gmail.com>,
-        linux-sh@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Borislav Petkov <bp@alien8.de>, linux-mips@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Helge Deller <deller@gmx.de>, Vineet Gupta <vgupta@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-um@lists.infradead.org, linux-alpha@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-ia64@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Hugh Dickins <hughd@google.com>, Rich Felker <dalias@libc.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-parisc@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3] mm: Avoid unnecessary page fault retires on shared
- memory types
-Message-ID: <Yo4OmaNW5YUrGE0S@hirez.programming.kicks-ass.net>
-References: <20220524234531.1949-1-peterx@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524234531.1949-1-peterx@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        with ESMTP id S236911AbiEYLaC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 May 2022 07:30:02 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10F889EB5F;
+        Wed, 25 May 2022 04:30:00 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Cx7+U2E45iXTcBAA--.7414S2;
+        Wed, 25 May 2022 19:29:58 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH] MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
+Date:   Wed, 25 May 2022 19:29:55 +0800
+Message-Id: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Cx7+U2E45iXTcBAA--.7414S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuFyrGF17WFWfCF43tryUAwb_yoW5Cr48pF
+        s5Ar92vw4rGFy3Ga1fZFn7uFsxWws8XFWUXr1FgwnxZF1qq347Jrs3Kr15AFW5JFs2qFWx
+        tr1fKw1UZFyqyaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw4l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUUAhltUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,55 +51,91 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 24, 2022 at 07:45:31PM -0400, Peter Xu wrote:
-> I observed that for each of the shared file-backed page faults, we're very
-> likely to retry one more time for the 1st write fault upon no page.  It's
-> because we'll need to release the mmap lock for dirty rate limit purpose
-> with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
-> 
-> Then after that throttling we return VM_FAULT_RETRY.
-> 
-> We did that probably because VM_FAULT_RETRY is the only way we can return
-> to the fault handler at that time telling it we've released the mmap lock.
-> 
-> However that's not ideal because it's very likely the fault does not need
-> to be retried at all since the pgtable was well installed before the
-> throttling, so the next continuous fault (including taking mmap read lock,
-> walk the pgtable, etc.) could be in most cases unnecessary.
-> 
-> It's not only slowing down page faults for shared file-backed, but also add
-> more mmap lock contention which is in most cases not needed at all.
-> 
-> To observe this, one could try to write to some shmem page and look at
-> "pgfault" value in /proc/vmstat, then we should expect 2 counts for each
-> shmem write simply because we retried, and vm event "pgfault" will capture
-> that.
-> 
-> To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
-> show that we've completed the whole fault and released the lock.  It's also
-> a hint that we should very possibly not need another fault immediately on
-> this page because we've just completed it.
-> 
-> This patch provides a ~12% perf boost on my aarch64 test VM with a simple
-> program sequentially dirtying 400MB shmem file being mmap()ed and these are
-> the time it needs:
-> 
->   Before: 650.980 ms (+-1.94%)
->   After:  569.396 ms (+-1.38%)
-> 
-> I believe it could help more than that.
-> 
-> We need some special care on GUP and the s390 pgfault handler (for gmap
-> code before returning from pgfault), the rest changes in the page fault
-> handlers should be relatively straightforward.
-> 
-> Another thing to mention is that mm_account_fault() does take this new
-> fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
-> 
-> I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
-> not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
-> them as-is.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+kernel test robot reports a build error used with clang compiler and
+mips-randconfig [1]:
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+    ld.lld: error: undefined symbol: pci_remap_iospace
+
+we can see the following configs in the mips-randconfig file:
+
+    CONFIG_RALINK=y
+    CONFIG_SOC_MT7620=y
+    CONFIG_PCI_DRIVERS_LEGACY=y
+    CONFIG_PCI=y
+
+CONFIG_RALINK is set, so pci_remap_iospace is defined in the related
+arch/mips/include/asm/mach-ralink/spaces.h header file:
+
+    #define pci_remap_iospace pci_remap_iospace
+
+CONFIG_PCI is set, so pci_remap_iospace() in drivers/pci/pci.c is not
+built due to pci_remap_iospace is defined under CONFIG_RALINK.
+
+    #ifndef pci_remap_iospace
+    int pci_remap_iospace(const struct resource *res, ...)
+
+    $ objdump -d drivers/pci/pci.o | grep pci_remap_iospace
+    00004cc8 <devm_pci_remap_iospace>:
+        4d18:	10400008 	beqz	v0,4d3c <devm_pci_remap_iospace+0x74>
+        4d2c:	1040000c 	beqz	v0,4d60 <devm_pci_remap_iospace+0x98>
+        4d70:	1000fff3 	b	4d40 <devm_pci_remap_iospace+0x78>
+
+In addition, CONFIG_PCI_DRIVERS_GENERIC is not set, so pci_remap_iospace()
+in arch/mips/pci/pci-generic.c is not built too.
+
+    #ifdef pci_remap_iospace
+    int pci_remap_iospace(const struct resource *res, ...)
+
+For the above reasons, undefined reference pci_remap_iospace() looks like
+reasonable.
+
+Here are simple steps to reproduce used with gcc and defconfig:
+
+    cd mips.git
+    make vocore2_defconfig # set RALINK, SOC_MT7620, PCI_DRIVERS_LEGACY
+    make menuconfig        # set PCI
+    make
+
+there exists the following build error:
+
+      LD      vmlinux.o
+      MODPOST vmlinux.symvers
+      MODINFO modules.builtin.modinfo
+      GEN     modules.builtin
+      LD      .tmp_vmlinux.kallsyms1
+    drivers/pci/pci.o: In function `devm_pci_remap_iospace':
+    pci.c:(.text+0x4d24): undefined reference to `pci_remap_iospace'
+    Makefile:1158: recipe for target 'vmlinux' failed
+    make: *** [vmlinux] Error 1
+
+Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC can fix the build
+error, with this patch, no build error remains. This patch is similar with
+commit e538e8649892 ("MIPS: asm: pci: define arch-specific
+'pci_remap_iospace()' dependent on 'CONFIG_PCI_DRIVERS_GENERIC'").
+
+[1] https://lore.kernel.org/lkml/202205251247.nQ5cxSV6-lkp@intel.com/
+
+Fixes: 09d97da660ff ("MIPS: Only define pci_remap_iospace() for Ralink")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
+index f7af11e..a9f0570 100644
+--- a/arch/mips/include/asm/mach-ralink/spaces.h
++++ b/arch/mips/include/asm/mach-ralink/spaces.h
+@@ -6,7 +6,9 @@
+ #define PCI_IOSIZE	SZ_64K
+ #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
+ 
++#ifdef CONFIG_PCI_DRIVERS_GENERIC
+ #define pci_remap_iospace pci_remap_iospace
++#endif
+ 
+ #include <asm/mach-generic/spaces.h>
+ #endif
+-- 
+2.1.0
+
