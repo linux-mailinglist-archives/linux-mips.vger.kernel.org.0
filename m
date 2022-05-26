@@ -2,176 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43701534799
-	for <lists+linux-mips@lfdr.de>; Thu, 26 May 2022 02:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C232534958
+	for <lists+linux-mips@lfdr.de>; Thu, 26 May 2022 05:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245582AbiEZAl0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 May 2022 20:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
+        id S242867AbiEZDk7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 May 2022 23:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344960AbiEZAkL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 May 2022 20:40:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243A8B0D20;
-        Wed, 25 May 2022 17:40:10 -0700 (PDT)
+        with ESMTP id S242286AbiEZDk6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 May 2022 23:40:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CACBCEA6;
+        Wed, 25 May 2022 20:40:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9B1FB81ECB;
-        Thu, 26 May 2022 00:40:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6589DC34118;
-        Thu, 26 May 2022 00:40:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D8D660FE6;
+        Thu, 26 May 2022 03:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BBA1C385B8;
+        Thu, 26 May 2022 03:40:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653525607;
-        bh=XbYpsC9yEq2qbfVcCMnpASOsc0x6dM1zetw0N7lzPwE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OzeAYiRZdsB0yXNS0g4T0S862JWB2B/LUQvACOo5rMGE2n7o9TZvPB27hB71zz38y
-         vo9jrOt3g7Uz6Ayo1wV41mp4/BSeoUVtantEuSKD5nAs/iu8jdCOVoUa11gVT2bdrc
-         Te2G/7HFQTTP7+EIraOOvVasWY1jJOE6CNGvIfHnnTricGNK2En6oABwY37E52bEjy
-         OerKaDd5ZbVw2Fhm6RTHF/WOyuj0HDTUusgZKY1QYwx5AzZBjQ/IDqX+0Q3Igt0ccj
-         na8+zgUeTUqSTMCBGY8rJGZE3RXEGnIg6ufUHZKVlRoUxxV42EVxFThlBwDoaMNG68
-         /qk7UI4Wse96g==
-Received: by mail-vs1-f46.google.com with SMTP id m2so42228vsr.8;
-        Wed, 25 May 2022 17:40:07 -0700 (PDT)
-X-Gm-Message-State: AOAM532RKsjUwuddb79+sBVhEXiHohPcDMW74d3X2KG0MaN6lrjoT9g3
-        0Z/QDjIXEC5X8ZaRZoq75Sl9tCpVobhk8FopS84=
-X-Google-Smtp-Source: ABdhPJx0cJkHljwuAHpyaehwgqdzrKWDw6u17/hHUkJNA8qg9NggwxKoibBsRSciUSmCfyeKXeu5IRU/QTIMEigENhQ=
-X-Received: by 2002:a67:c117:0:b0:337:a2ea:98e3 with SMTP id
- d23-20020a67c117000000b00337a2ea98e3mr8547786vsj.59.1653525606376; Wed, 25
- May 2022 17:40:06 -0700 (PDT)
+        s=k20201202; t=1653536455;
+        bh=/FC3fRDbTNCC3O7WmAhxUVAkmggWpUFeLv7OpR1lxLg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hLLrqk/dSj3ABZgHj+oG01SXfcPdfcPLbCPW5c/vtlKKjGhr826rFN6lLQogyE6R+
+         V4+rLm9jBH6we4JcRrEMO+7ArvhQ4vUukeFX5qG0umNfJEjOVl7t+dToTe7orX2kZK
+         bSWoDGynO3/vHi04K7UfgRIeRSjHN5GtmmMIX2USGvftGI9pdfeJrjgnAmxrltc5n0
+         8y833O4MCr4JKKzVPSDGbAvYYjpDQY/dQCqYoM1yOIlCVTJtDFNiHcFx0Vs05+lAF0
+         ALTHrfJeOAfPcImvCexeRL9L6Mpy6p/bjPRzg8B1971s8Zq8YHz1AyoKFvxIGL0AWO
+         PHAjKqVSOf5bw==
+Message-ID: <8f6add25-2e8f-4533-fa42-e43db0e32f2d@kernel.org>
+Date:   Wed, 25 May 2022 20:40:51 -0700
 MIME-Version: 1.0
-References: <20220322144003.2357128-1-guoren@kernel.org> <3418219.V25eIC5XRa@diego>
- <CAJF2gTTkpHLZf-+VXZE_gCn=5ZJ5FS3jOxKLVoMyL4i=baPd7Q@mail.gmail.com> <1766627.8hzESeGDPO@diego>
-In-Reply-To: <1766627.8hzESeGDPO@diego>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 26 May 2022 08:39:54 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRrrwDUOTqLDTxZLNnWM1LXEq4VFVB8jZPdYvnS2i0ung@mail.gmail.com>
-Message-ID: <CAJF2gTRrrwDUOTqLDTxZLNnWM1LXEq4VFVB8jZPdYvnS2i0ung@mail.gmail.com>
-Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3] mm: Avoid unnecessary page fault retires on shared
+ memory types
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Richard Henderson <rth@twiddle.net>,
+        David Hildenbrand <david@redhat.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michal Simek <monstr@monstr.eu>,
+        Russell King <linux@armlinux.org.uk>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        linux-riscv@lists.infradead.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jonas Bonn <jonas@southpole.se>, Will Deacon <will@kernel.org>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        openrisc@lists.librecores.org, linux-s390@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-m68k@lists.linux-m68k.org,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Heiko Carstens <hca@linux.ibm.com>,
+        Chris Zankel <chris@zankel.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        sparclinux@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-xtensa@linux-xtensa.org, Nicholas Piggin <npiggin@gmail.com>,
+        linux-sh@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Borislav Petkov <bp@alien8.de>, linux-mips@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Helge Deller <deller@gmx.de>, Vineet Gupta <vgupta@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-um@lists.infradead.org, linux-alpha@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-ia64@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-snps-arc@lists.infradead.org,
+        Hugh Dickins <hughd@google.com>, Rich Felker <dalias@libc.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        linux-parisc@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>
+References: <20220524234531.1949-1-peterx@redhat.com>
+From:   Vineet Gupta <vgupta@kernel.org>
+In-Reply-To: <20220524234531.1949-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 26, 2022 at 3:37 AM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Am Mittwoch, 25. Mai 2022, 18:08:22 CEST schrieb Guo Ren:
-> > Thx Heiko & Guenter,
-> >
-> > On Wed, May 25, 2022 at 7:10 PM Heiko St=C3=BCbner <heiko@sntech.de> wr=
-ote:
-> > >
-> > > Am Mittwoch, 25. Mai 2022, 12:57:30 CEST schrieb Heiko St=C3=BCbner:
-> > > > Am Mittwoch, 25. Mai 2022, 00:06:46 CEST schrieb Guenter Roeck:
-> > > > > On Wed, May 25, 2022 at 01:46:38AM +0800, Guo Ren wrote:
-> > > > > [ ... ]
-> > > > >
-> > > > > > > The problem is come from "__dls3's vdso decode part in musl's
-> > > > > > > ldso/dynlink.c". The ehdr->e_phnum & ehdr->e_phentsize are wr=
-ong.
-> > > > > > >
-> > > > > > > I think the root cause is from musl's implementation with the=
- wrong
-> > > > > > > elf parser. I would fix that soon.
-> > > > > > Not elf parser, it's "aux vector just past environ[]". I think =
-I could
-> > > > > > solve this, but anyone who could help dig in is welcome.
-> > > > > >
-> > > > >
-> > > > > I am not sure I understand what you are saying here. Point is tha=
-t my
-> > > > > root file system, generated with musl a year or so ago, crashes w=
-ith
-> > > > > your patch set applied. That is a regression, even if there is a =
-bug
-> > > > > in musl.
-> > Thx for the report, it's a valuable regression for riscv-compat.
-> >
-> > > >
-> > > > Also as I said in the other part of the thread, the rootfs seems in=
-nocent,
-> > > > as my completely-standard Debian riscv64 rootfs is also affected.
-> > > >
-> > > > The merged version seems to be v12 [0] - not sure how we this discu=
-ssion
-> > > > ended up in v9, but I just tested this revision in two variants:
-> > > >
-> > > > - v5.17 + this v9 -> works nicely
-> > >
-> > > I take that back ... now going back to that build I somehow also run =
-into
-> > > that issue here ... will investigate more.
-> > Yeah, it's my fault. I've fixed up it, please have a try:
-> >
-> > https://lore.kernel.org/linux-riscv/20220525160404.2930984-1-guoren@ker=
-nel.org/T/#u
->
-> very cool that you found the issue.
-> I've tested your patch and it seems to fix the issue for me.
->
-> Thanks for figuring out the cause
-I should thx Guenter Roeck, It just surprised me that compat_vdso
-could work with quite a lot of rv64 apps.
-
-> Heiko
->
->
-> > > > - v5.18-rc6 + this v9 (rebased onto it) -> breaks the boot
-> > > >   The only rebase-conflict was with the introduction of restartable
-> > > >   sequences and removal of the tracehook include, but turning CONFI=
-G_RSEQ
-> > > >   off doesn't seem to affect the breakage.
-> > > >
-> > > > So it looks like something changed between 5.17 and 5.18 that cause=
-s the issue.
-> > > >
-> > > >
-> > > > Heiko
-> > > >
-> > > >
-> > > > [0] https://lore.kernel.org/all/20220405071314.3225832-1-guoren@ker=
-nel.org/
-> > > >
-> > >
-> > >
-> > >
-> > >
-> >
-> >
-> >
->
->
->
->
 
 
---=20
-Best Regards
- Guo Ren
+On 5/24/22 16:45, Peter Xu wrote:
+> I observed that for each of the shared file-backed page faults, we're very
+> likely to retry one more time for the 1st write fault upon no page.  It's
+> because we'll need to release the mmap lock for dirty rate limit purpose
+> with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
+>
+> Then after that throttling we return VM_FAULT_RETRY.
+>
+> We did that probably because VM_FAULT_RETRY is the only way we can return
+> to the fault handler at that time telling it we've released the mmap lock.
+>
+> However that's not ideal because it's very likely the fault does not need
+> to be retried at all since the pgtable was well installed before the
+> throttling, so the next continuous fault (including taking mmap read lock,
+> walk the pgtable, etc.) could be in most cases unnecessary.
+>
+> It's not only slowing down page faults for shared file-backed, but also add
+> more mmap lock contention which is in most cases not needed at all.
+>
+> To observe this, one could try to write to some shmem page and look at
+> "pgfault" value in /proc/vmstat, then we should expect 2 counts for each
+> shmem write simply because we retried, and vm event "pgfault" will capture
+> that.
+>
+> To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
+> show that we've completed the whole fault and released the lock.  It's also
+> a hint that we should very possibly not need another fault immediately on
+> this page because we've just completed it.
+>
+> This patch provides a ~12% perf boost on my aarch64 test VM with a simple
+> program sequentially dirtying 400MB shmem file being mmap()ed and these are
+> the time it needs:
+>
+>    Before: 650.980 ms (+-1.94%)
+>    After:  569.396 ms (+-1.38%)
+>
+> I believe it could help more than that.
+>
+> We need some special care on GUP and the s390 pgfault handler (for gmap
+> code before returning from pgfault), the rest changes in the page fault
+> handlers should be relatively straightforward.
+>
+> Another thing to mention is that mm_account_fault() does take this new
+> fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
+>
+> I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
+> not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
+> them as-is.
+>
+> Signed-off-by: Peter Xu<peterx@redhat.com>
+> ---
+>
+> v3:
+> - Rebase to akpm/mm-unstable
+> - Copy arch maintainers
+> ---
+>    arch/arc/mm/fault.c           |  4 ++++
 
-ML: https://lore.kernel.org/linux-csky/
+Acked-by: Vineet Gupta <vgupta@kernel.org>
+
+Thx,
+-Vineet
