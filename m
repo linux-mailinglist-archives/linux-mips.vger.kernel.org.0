@@ -2,180 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C232534958
-	for <lists+linux-mips@lfdr.de>; Thu, 26 May 2022 05:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF7E534A33
+	for <lists+linux-mips@lfdr.de>; Thu, 26 May 2022 07:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242867AbiEZDk7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 May 2022 23:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S241181AbiEZFYU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 May 2022 01:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242286AbiEZDk6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 May 2022 23:40:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CACBCEA6;
-        Wed, 25 May 2022 20:40:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D8D660FE6;
-        Thu, 26 May 2022 03:40:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BBA1C385B8;
-        Thu, 26 May 2022 03:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653536455;
-        bh=/FC3fRDbTNCC3O7WmAhxUVAkmggWpUFeLv7OpR1lxLg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hLLrqk/dSj3ABZgHj+oG01SXfcPdfcPLbCPW5c/vtlKKjGhr826rFN6lLQogyE6R+
-         V4+rLm9jBH6we4JcRrEMO+7ArvhQ4vUukeFX5qG0umNfJEjOVl7t+dToTe7orX2kZK
-         bSWoDGynO3/vHi04K7UfgRIeRSjHN5GtmmMIX2USGvftGI9pdfeJrjgnAmxrltc5n0
-         8y833O4MCr4JKKzVPSDGbAvYYjpDQY/dQCqYoM1yOIlCVTJtDFNiHcFx0Vs05+lAF0
-         ALTHrfJeOAfPcImvCexeRL9L6Mpy6p/bjPRzg8B1971s8Zq8YHz1AyoKFvxIGL0AWO
-         PHAjKqVSOf5bw==
-Message-ID: <8f6add25-2e8f-4533-fa42-e43db0e32f2d@kernel.org>
-Date:   Wed, 25 May 2022 20:40:51 -0700
+        with ESMTP id S230040AbiEZFYT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 May 2022 01:24:19 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5524CA5AAC;
+        Wed, 25 May 2022 22:24:16 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id b11so970017qvv.4;
+        Wed, 25 May 2022 22:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YHO6zM29Kcg3RuIDmSGj1k3u9xjpChjCh4IML1ge/VM=;
+        b=A8ggUJBTgjIruHVO2AGSGC50BJpzccp2JqngUhzLy/tfmWgfIWRDLNwWLNmHNLYw+a
+         hKb8cIblIrrNzbnAl119oFOfmfo5t2kdizwA1SlLIjgcFJ7jsc6CrNpVjgBlAqArbR44
+         bXjDqv3OxphYAQ6HqZVfzo53iG7r6lvHTReeaUNgitl55aMyMk4PouDkSQISzkbPMYxB
+         h3S5KeMYr1TVF4dv5eI3uZaBzydeG7LWtBgw2mTL7nAaKUeYBS+ESjl1DS7OJD0OC3eK
+         CiiGt9mQQTk8/w8c4ZYb/3+Yh0lU4wF5tNoQHCwzRHhZckh4OhBEGVMBm6M+I2eTanpy
+         pi3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YHO6zM29Kcg3RuIDmSGj1k3u9xjpChjCh4IML1ge/VM=;
+        b=uOgdrXwfJby1HuWAXqM9EMprDZaCUoPeev4TuJ0pNS9HkTzxtMyMMQzg/yJo6Av7hg
+         KejWhdYJL7IhWFKI10aKOXbIXMY1GmzbEL1dHb5BMtvcWmulbP+gxfj5lw+0FLgkbmoa
+         V5+G2rAMo+8hDcZp2p5GKUEg+Eni+vZVVyd5Fs/JQ0v1Y+4rms6HVOzio/jjJ4x4sHRf
+         DHp1LY1ClxuESEPfStVAaR9JmQd0NNnLOHoggAeWEQYlMuVoVUiqbrbHtuTFrUmQsPV9
+         2ozCWR/1WUmMC1wbbx9kiiorh8nbA7L/py2qiD37n8PnPAnrvMlTDUQRCD3BGj61v23I
+         Slqw==
+X-Gm-Message-State: AOAM530ZFIQg/HNTP0eOokVR6H+xAJIJNtifsV67u8C3aVwhRXUCdkfl
+        aTs15BeXMo4p9GrC7oItdlHwiWxjPgtNwePBZAYh8NJ3kCw=
+X-Google-Smtp-Source: ABdhPJwb6UvvGofVw7KIoM/B1pA9VRC/+Ovrxd0sIsDmlMbHYWwyso9BrACMyTItqwM3HaImR8+DQK7ZIYa45LflQpk=
+X-Received: by 2002:ad4:5945:0:b0:45a:ff69:47c4 with SMTP id
+ eo5-20020ad45945000000b0045aff6947c4mr28706059qvb.86.1653542655510; Wed, 25
+ May 2022 22:24:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3] mm: Avoid unnecessary page fault retires on shared
- memory types
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Richard Henderson <rth@twiddle.net>,
-        David Hildenbrand <david@redhat.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michal Simek <monstr@monstr.eu>,
-        Russell King <linux@armlinux.org.uk>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-riscv@lists.infradead.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jonas Bonn <jonas@southpole.se>, Will Deacon <will@kernel.org>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        openrisc@lists.librecores.org, linux-s390@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Chris Zankel <chris@zankel.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        sparclinux@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-xtensa@linux-xtensa.org, Nicholas Piggin <npiggin@gmail.com>,
-        linux-sh@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Borislav Petkov <bp@alien8.de>, linux-mips@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Helge Deller <deller@gmx.de>, Vineet Gupta <vgupta@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-um@lists.infradead.org, linux-alpha@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-ia64@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Hugh Dickins <hughd@google.com>, Rich Felker <dalias@libc.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-parisc@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>
-References: <20220524234531.1949-1-peterx@redhat.com>
-From:   Vineet Gupta <vgupta@kernel.org>
-In-Reply-To: <20220524234531.1949-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 26 May 2022 07:24:04 +0200
+Message-ID: <CAMhs-H_5kHmvG5F=KZaDMzQ8VbSQfg_qqVnzCMuntpH9YU+V4Q@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 5/24/22 16:45, Peter Xu wrote:
-> I observed that for each of the shared file-backed page faults, we're very
-> likely to retry one more time for the 1st write fault upon no page.  It's
-> because we'll need to release the mmap lock for dirty rate limit purpose
-> with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
+On Wed, May 25, 2022 at 8:59 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> Then after that throttling we return VM_FAULT_RETRY.
+> kernel test robot reports a build error used with clang compiler and
+> mips-randconfig [1]:
 >
-> We did that probably because VM_FAULT_RETRY is the only way we can return
-> to the fault handler at that time telling it we've released the mmap lock.
+>     ld.lld: error: undefined symbol: pci_remap_iospace
 >
-> However that's not ideal because it's very likely the fault does not need
-> to be retried at all since the pgtable was well installed before the
-> throttling, so the next continuous fault (including taking mmap read lock,
-> walk the pgtable, etc.) could be in most cases unnecessary.
+> we can see the following configs in the mips-randconfig file:
 >
-> It's not only slowing down page faults for shared file-backed, but also add
-> more mmap lock contention which is in most cases not needed at all.
+>     CONFIG_RALINK=y
+>     CONFIG_SOC_MT7620=y
+>     CONFIG_PCI_DRIVERS_LEGACY=y
+>     CONFIG_PCI=y
 >
-> To observe this, one could try to write to some shmem page and look at
-> "pgfault" value in /proc/vmstat, then we should expect 2 counts for each
-> shmem write simply because we retried, and vm event "pgfault" will capture
-> that.
+> CONFIG_RALINK is set, so pci_remap_iospace is defined in the related
+> arch/mips/include/asm/mach-ralink/spaces.h header file:
 >
-> To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
-> show that we've completed the whole fault and released the lock.  It's also
-> a hint that we should very possibly not need another fault immediately on
-> this page because we've just completed it.
+>     #define pci_remap_iospace pci_remap_iospace
 >
-> This patch provides a ~12% perf boost on my aarch64 test VM with a simple
-> program sequentially dirtying 400MB shmem file being mmap()ed and these are
-> the time it needs:
+> CONFIG_PCI is set, so pci_remap_iospace() in drivers/pci/pci.c is not
+> built due to pci_remap_iospace is defined under CONFIG_RALINK.
 >
->    Before: 650.980 ms (+-1.94%)
->    After:  569.396 ms (+-1.38%)
+>     #ifndef pci_remap_iospace
+>     int pci_remap_iospace(const struct resource *res, ...)
 >
-> I believe it could help more than that.
+>     $ objdump -d drivers/pci/pci.o | grep pci_remap_iospace
+>     00004cc8 <devm_pci_remap_iospace>:
+>         4d18:   10400008        beqz    v0,4d3c <devm_pci_remap_iospace+0x74>
+>         4d2c:   1040000c        beqz    v0,4d60 <devm_pci_remap_iospace+0x98>
+>         4d70:   1000fff3        b       4d40 <devm_pci_remap_iospace+0x78>
 >
-> We need some special care on GUP and the s390 pgfault handler (for gmap
-> code before returning from pgfault), the rest changes in the page fault
-> handlers should be relatively straightforward.
+> In addition, CONFIG_PCI_DRIVERS_GENERIC is not set, so pci_remap_iospace()
+> in arch/mips/pci/pci-generic.c is not built too.
 >
-> Another thing to mention is that mm_account_fault() does take this new
-> fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
+>     #ifdef pci_remap_iospace
+>     int pci_remap_iospace(const struct resource *res, ...)
 >
-> I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
-> not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
-> them as-is.
+> For the above reasons, undefined reference pci_remap_iospace() looks like
+> reasonable.
 >
-> Signed-off-by: Peter Xu<peterx@redhat.com>
+> Here are simple steps to reproduce used with gcc and defconfig:
+>
+>     cd mips.git
+>     make vocore2_defconfig # set RALINK, SOC_MT7620, PCI_DRIVERS_LEGACY
+>     make menuconfig        # set PCI
+>     make
+>
+> there exists the following build error:
+>
+>       LD      vmlinux.o
+>       MODPOST vmlinux.symvers
+>       MODINFO modules.builtin.modinfo
+>       GEN     modules.builtin
+>       LD      .tmp_vmlinux.kallsyms1
+>     drivers/pci/pci.o: In function `devm_pci_remap_iospace':
+>     pci.c:(.text+0x4d24): undefined reference to `pci_remap_iospace'
+>     Makefile:1158: recipe for target 'vmlinux' failed
+>     make: *** [vmlinux] Error 1
+>
+> Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC can fix the build
+> error, with this patch, no build error remains. This patch is similar with
+> commit e538e8649892 ("MIPS: asm: pci: define arch-specific
+> 'pci_remap_iospace()' dependent on 'CONFIG_PCI_DRIVERS_GENERIC'").
+>
+> [1] https://lore.kernel.org/lkml/202205251247.nQ5cxSV6-lkp@intel.com/
+>
+> Fixes: 09d97da660ff ("MIPS: Only define pci_remap_iospace() for Ralink")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
->
-> v3:
-> - Rebase to akpm/mm-unstable
-> - Copy arch maintainers
-> ---
->    arch/arc/mm/fault.c           |  4 ++++
+>  arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Acked-by: Vineet Gupta <vgupta@kernel.org>
-
-Thx,
--Vineet
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
