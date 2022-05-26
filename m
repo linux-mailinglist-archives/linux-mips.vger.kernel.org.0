@@ -2,143 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF7E534A33
-	for <lists+linux-mips@lfdr.de>; Thu, 26 May 2022 07:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B46534AF0
+	for <lists+linux-mips@lfdr.de>; Thu, 26 May 2022 09:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241181AbiEZFYU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 26 May 2022 01:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S1346342AbiEZHnt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 May 2022 03:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiEZFYT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 May 2022 01:24:19 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5524CA5AAC;
-        Wed, 25 May 2022 22:24:16 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id b11so970017qvv.4;
-        Wed, 25 May 2022 22:24:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YHO6zM29Kcg3RuIDmSGj1k3u9xjpChjCh4IML1ge/VM=;
-        b=A8ggUJBTgjIruHVO2AGSGC50BJpzccp2JqngUhzLy/tfmWgfIWRDLNwWLNmHNLYw+a
-         hKb8cIblIrrNzbnAl119oFOfmfo5t2kdizwA1SlLIjgcFJ7jsc6CrNpVjgBlAqArbR44
-         bXjDqv3OxphYAQ6HqZVfzo53iG7r6lvHTReeaUNgitl55aMyMk4PouDkSQISzkbPMYxB
-         h3S5KeMYr1TVF4dv5eI3uZaBzydeG7LWtBgw2mTL7nAaKUeYBS+ESjl1DS7OJD0OC3eK
-         CiiGt9mQQTk8/w8c4ZYb/3+Yh0lU4wF5tNoQHCwzRHhZckh4OhBEGVMBm6M+I2eTanpy
-         pi3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YHO6zM29Kcg3RuIDmSGj1k3u9xjpChjCh4IML1ge/VM=;
-        b=uOgdrXwfJby1HuWAXqM9EMprDZaCUoPeev4TuJ0pNS9HkTzxtMyMMQzg/yJo6Av7hg
-         KejWhdYJL7IhWFKI10aKOXbIXMY1GmzbEL1dHb5BMtvcWmulbP+gxfj5lw+0FLgkbmoa
-         V5+G2rAMo+8hDcZp2p5GKUEg+Eni+vZVVyd5Fs/JQ0v1Y+4rms6HVOzio/jjJ4x4sHRf
-         DHp1LY1ClxuESEPfStVAaR9JmQd0NNnLOHoggAeWEQYlMuVoVUiqbrbHtuTFrUmQsPV9
-         2ozCWR/1WUmMC1wbbx9kiiorh8nbA7L/py2qiD37n8PnPAnrvMlTDUQRCD3BGj61v23I
-         Slqw==
-X-Gm-Message-State: AOAM530ZFIQg/HNTP0eOokVR6H+xAJIJNtifsV67u8C3aVwhRXUCdkfl
-        aTs15BeXMo4p9GrC7oItdlHwiWxjPgtNwePBZAYh8NJ3kCw=
-X-Google-Smtp-Source: ABdhPJwb6UvvGofVw7KIoM/B1pA9VRC/+Ovrxd0sIsDmlMbHYWwyso9BrACMyTItqwM3HaImR8+DQK7ZIYa45LflQpk=
-X-Received: by 2002:ad4:5945:0:b0:45a:ff69:47c4 with SMTP id
- eo5-20020ad45945000000b0045aff6947c4mr28706059qvb.86.1653542655510; Wed, 25
- May 2022 22:24:15 -0700 (PDT)
+        with ESMTP id S230305AbiEZHns (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 May 2022 03:43:48 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B32A0D04
+        for <linux-mips@vger.kernel.org>; Thu, 26 May 2022 00:43:46 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:6498:8099:cb9:b18e])
+        by michel.telenet-ops.be with bizsmtp
+        id bKjX2700H0qhjiN06KjXSy; Thu, 26 May 2022 09:43:43 +0200
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nu89a-001en6-FJ; Thu, 26 May 2022 09:43:30 +0200
+Date:   Thu, 26 May 2022 09:43:30 +0200 (CEST)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+        corbet@lwn.net, tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        paulus@samba.org, sburla@marvell.com, vburru@marvell.com,
+        aayarekar@marvell.com, arnd@arndb.de, zhangyue1@kylinos.cn,
+        linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH net-next] eth: de4x5: remove support for Generic DECchip
+ & DIGITAL EtherWORKS PCI/EISA
+In-Reply-To: <f84c4cb17eebe385fe22c3fc4563645742269d46.camel@kernel.crashing.org>
+Message-ID: <alpine.DEB.2.22.394.2205260933520.394690@ramsan.of.borg>
+References: <20220519031345.2134401-1-kuba@kernel.org> <f84c4cb17eebe385fe22c3fc4563645742269d46.camel@kernel.crashing.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 26 May 2022 07:24:04 +0200
-Message-ID: <CAMhs-H_5kHmvG5F=KZaDMzQ8VbSQfg_qqVnzCMuntpH9YU+V4Q@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 25, 2022 at 8:59 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
-> kernel test robot reports a build error used with clang compiler and
-> mips-randconfig [1]:
->
->     ld.lld: error: undefined symbol: pci_remap_iospace
->
-> we can see the following configs in the mips-randconfig file:
->
->     CONFIG_RALINK=y
->     CONFIG_SOC_MT7620=y
->     CONFIG_PCI_DRIVERS_LEGACY=y
->     CONFIG_PCI=y
->
-> CONFIG_RALINK is set, so pci_remap_iospace is defined in the related
-> arch/mips/include/asm/mach-ralink/spaces.h header file:
->
->     #define pci_remap_iospace pci_remap_iospace
->
-> CONFIG_PCI is set, so pci_remap_iospace() in drivers/pci/pci.c is not
-> built due to pci_remap_iospace is defined under CONFIG_RALINK.
->
->     #ifndef pci_remap_iospace
->     int pci_remap_iospace(const struct resource *res, ...)
->
->     $ objdump -d drivers/pci/pci.o | grep pci_remap_iospace
->     00004cc8 <devm_pci_remap_iospace>:
->         4d18:   10400008        beqz    v0,4d3c <devm_pci_remap_iospace+0x74>
->         4d2c:   1040000c        beqz    v0,4d60 <devm_pci_remap_iospace+0x98>
->         4d70:   1000fff3        b       4d40 <devm_pci_remap_iospace+0x78>
->
-> In addition, CONFIG_PCI_DRIVERS_GENERIC is not set, so pci_remap_iospace()
-> in arch/mips/pci/pci-generic.c is not built too.
->
->     #ifdef pci_remap_iospace
->     int pci_remap_iospace(const struct resource *res, ...)
->
-> For the above reasons, undefined reference pci_remap_iospace() looks like
-> reasonable.
->
-> Here are simple steps to reproduce used with gcc and defconfig:
->
->     cd mips.git
->     make vocore2_defconfig # set RALINK, SOC_MT7620, PCI_DRIVERS_LEGACY
->     make menuconfig        # set PCI
->     make
->
-> there exists the following build error:
->
->       LD      vmlinux.o
->       MODPOST vmlinux.symvers
->       MODINFO modules.builtin.modinfo
->       GEN     modules.builtin
->       LD      .tmp_vmlinux.kallsyms1
->     drivers/pci/pci.o: In function `devm_pci_remap_iospace':
->     pci.c:(.text+0x4d24): undefined reference to `pci_remap_iospace'
->     Makefile:1158: recipe for target 'vmlinux' failed
->     make: *** [vmlinux] Error 1
->
-> Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC can fix the build
-> error, with this patch, no build error remains. This patch is similar with
-> commit e538e8649892 ("MIPS: asm: pci: define arch-specific
-> 'pci_remap_iospace()' dependent on 'CONFIG_PCI_DRIVERS_GENERIC'").
->
-> [1] https://lore.kernel.org/lkml/202205251247.nQ5cxSV6-lkp@intel.com/
->
-> Fixes: 09d97da660ff ("MIPS: Only define pci_remap_iospace() for Ralink")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
->  1 file changed, 2 insertions(+)
+ 	Hi Ben,
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+On Sat, 21 May 2022, Benjamin Herrenschmidt wrote:
+> On Wed, 2022-05-18 at 20:13 -0700, Jakub Kicinski wrote:
+>> Looks like almost all changes to this driver had been tree-wide
+>> refactoring since git era begun. There is one commit from Al
+>> 15 years ago which could potentially be fixing a real bug.
+>>
+>> The driver is using virt_to_bus() and is a real magnet for pointless
+>> cleanups. It seems unlikely to have real users. Let's try to shed
+>> this maintenance burden.
+>>
+>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>
+> Removing this driver will kill support for some rather old PowerMac
+> models (some PowerBooks I think, paulus would know). No objection on my
+> part, though. I doubt people still use these things with new kernels
+> but ... who knows ? :-)
+
+Aren't these PCI, and thus working fine with the PCI-only DE2104X
+(dc2104x) or TULIP (dc2114x) drivers?
+
+IIRC, I've initially used the de4x5 driver on Alpha (UDB/Multia) or PPC
+(CHRP), but switched to the TULIP driver later (that was before the
+dc2104x/dc2114x driver split, hence a loooong time ago).
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
