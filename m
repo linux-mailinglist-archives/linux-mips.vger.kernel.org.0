@@ -2,96 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A60536DE7
-	for <lists+linux-mips@lfdr.de>; Sat, 28 May 2022 19:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4B85371B1
+	for <lists+linux-mips@lfdr.de>; Sun, 29 May 2022 17:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238957AbiE1RRR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 28 May 2022 13:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S231235AbiE2PvS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 May 2022 11:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238811AbiE1RRP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 28 May 2022 13:17:15 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145F9BC8E
-        for <linux-mips@vger.kernel.org>; Sat, 28 May 2022 10:17:14 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id r82so2845898ybc.13
-        for <linux-mips@vger.kernel.org>; Sat, 28 May 2022 10:17:14 -0700 (PDT)
+        with ESMTP id S229782AbiE2PvS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 May 2022 11:51:18 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF8703C0
+        for <linux-mips@vger.kernel.org>; Sun, 29 May 2022 08:51:17 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id v8so13442646lfd.8
+        for <linux-mips@vger.kernel.org>; Sun, 29 May 2022 08:51:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=Evcz97LOKzHfSgT/AL/l+ZvMvf33Mnf2JcLi4+SabJA4RVfVM4/A46bF7LrAex2ihQ
-         DAlRR8/zXtJTnIoEfh6f7bdC2JRR+yXK1eOVqaphmBhPg+nXO/886U3X5GDEMu2yZzTG
-         2QbvLBgO/2ZnaMZ64zlK5XOVIIl1SuH3E1vYjFzTh4ifT/z4GjIOkdCqWZaLHfZRu/L9
-         XInGcHNGmawHrNpuj/q0VbBJWcYR7YDA070uYdD/UQCxkpMMrEj2bhBVT3vnoFUN6ubb
-         FY2vKq+UskzZ+khk4B7ynDvYv4mv8uOY5VIkwWrNQ13Yu6d+0uCVvcPG55NygjZC9ZzA
-         KzyQ==
+        d=sudomaker-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:references:in-reply-to:content-transfer-encoding;
+        bh=s+tcnPY6RDs/I3tvYQalyNObieEk8xx2Fm0hBzJoj0g=;
+        b=1DjUROjFkP/ZoCxf/jclBoiNYiQWGxjin9upYPKq5V0kg6xyvetuI7s48K8poZURLR
+         Y1Im6p0tul4FyHnWLDddwogUi9U5OwcSJ93zdJlvu4I4HQ10pQHz9uk5zheS+sIoOmFO
+         BOqsWlo3dhCYK3gOFTc/MD4kK6RW07RLZiHZkmqKyS3a8Em59PsGAHuJmhYR5+fDgJFQ
+         2iEpyJRTF5k7f+Y68hlFLXHuf1wxY/AA8meMPLQ3dgKYWrvwIQ+wuD0zCx/IF4KD1Y7T
+         We2bGmstXEyD8f8cGaVViMExDB6uX3VmfgfQMPiNH6/QBAhAd3/OT33zHQSsYPGSF+Vi
+         wMGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=YX6mZS0P5Y9DgX8pwum9XVZw4PgNwwrqBYxMhPYkwohMFfz10XOARYo2oocZmtsXG2
-         v6RFQBRcTTD1GJAnEPmB/1mcsriCT1vEGCmw6IhVkdmuDK9pJS+2e8eIyPD3S+r53dYm
-         Ricr7K7e2yjJrEOxah1EImFn7lBAv8IKVFEjZOIyEZXsHcFuxopuHcAWJdMGNMtiuInx
-         54FDPSubE36Q4ZsWf4/C5LqDp9ot0rPbhnxU+jDs4JYoUMypI1BJnie44v03DDYXp3qV
-         TU46iab4icJdL7vVXBRNh7+/1dXXB040yRiPZE1WjJdNMFosejXyrkY3Xfy0N1ISLqq9
-         o+/Q==
-X-Gm-Message-State: AOAM532+JxY+yCuRs0xP6cGm8V/fpdH0BR1ETkynIKWm7EK5Ut7hmUBY
-        k9//hZj+pQhicMDccjpIBzkdrx1Z+bIm5QiONTQ=
-X-Google-Smtp-Source: ABdhPJxPsnNngIXYUzCPybntA0BZ3Hio+So97vpfEl2GjbHePX/ZnvzzyR/z5l50rmRV1R4F3fvnNoPkkQhCO5/mYL4=
-X-Received: by 2002:a25:168b:0:b0:64a:54ba:e88e with SMTP id
- 133-20020a25168b000000b0064a54bae88emr42052597ybw.17.1653758233195; Sat, 28
- May 2022 10:17:13 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=s+tcnPY6RDs/I3tvYQalyNObieEk8xx2Fm0hBzJoj0g=;
+        b=HZGV1X/qUmlLFylXOHO7L8n+ouIBwPgD4wn+A0ctd6pGhuHpvNc0C2LpkRlFGmWdap
+         P8PMjJfClQkV2Wyvh+OmSeZBoHR3hTBtv0baJJMvXgU7+rQvRC0NHdKnx/7zCeRqRKXd
+         51cZX0uYsu0BpPbQS3bup58mTYe9soGD4zsgJ8IuWRbpMluwS1lHENJcnPKfNpINuhIz
+         U3oOojP4453Xb48ByxZc4/gnRKmG2WP65sz4IV3LEgBDUcORFRZMTr5vEGqs73kjfY1i
+         WU69GPUpXaiHjMZGALR8MSUSTSkIEmIKMr4GZmA2kkgKGqMmrbsmhLhyUKFBy8Nyo2GA
+         g7mA==
+X-Gm-Message-State: AOAM530RXMscUkqJiXELaTLo66bcGB96ok+H7ZNer1qOSITGuBg7Moi3
+        DkTPROk7bMeY4gKxYDxQZSmOKkogSVwyPpWLXMc=
+X-Google-Smtp-Source: ABdhPJwBvGC6mPG38RqIOPz0gedGUX/AAzvzq2sNz8JOAAfaZ3nYweYfS/qDbJKr77xwvNpsYW0i8A==
+X-Received: by 2002:a05:6512:2625:b0:478:5a51:7fe3 with SMTP id bt37-20020a056512262500b004785a517fe3mr29416853lfb.158.1653839475200;
+        Sun, 29 May 2022 08:51:15 -0700 (PDT)
+Received: from [172.16.24.11] ([91.219.212.219])
+        by smtp.gmail.com with ESMTPSA id be10-20020a056512250a00b00478cd831077sm883605lfb.271.2022.05.29.08.51.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 08:51:14 -0700 (PDT)
+Message-ID: <6235834d-d6bf-1567-6b4b-4131515baabd@sudomaker.com>
+Date:   Sun, 29 May 2022 23:50:42 +0800
 MIME-Version: 1.0
-Received: by 2002:a05:7108:768b:0:0:0:0 with HTTP; Sat, 28 May 2022 10:17:12
- -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   Viviane Amouzou <vivianeamouzou5@gmail.com>
-Date:   Sat, 28 May 2022 18:17:12 +0100
-Message-ID: <CAHpnGrhK7NLqZF9qc8c4tF7S0W5tp9A3wdfsMR8bpNThgpvN4w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b34 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5055]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [vivianeamouzou5[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [vivianeamouzou5[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [davidnelson7702626[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: Ingenic X SoC cache problems
+Content-Language: en-US
+From:   Yunian Yang <reimu@sudomaker.com>
+To:     linux-mips@vger.kernel.org, paul Cercueil <paul@crapouillou.net>,
+        zhouyanjie@wanyeetech.com
+References: <c102518f-3288-29fb-6653-0d39a53639df@sudomaker.com>
+In-Reply-To: <c102518f-3288-29fb-6653-0d39a53639df@sudomaker.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+Brief update on the current situation.
+
+I have been working with Professor Zhou (zhouyanjie@wanyeetech.com) to diagnose this problem in the last 2 days. After multiple tests, we finally pinpointed the problem: the SLOB allocator.
+
+Using unpatched 5.18 kernel, under stress test, all DMA operations worked like a charm w/ SLAB or SLUB, but not SLOB.
+
+The stress tests were conducted using the CU1000-Neo board. DMA-enabled components were: SPI & MSC (using PDMA), and dwc2 & SFC (they're bus masters). Also, the memory & kernel data structures debugging were ALL enabled in order to catch more silent memory corruptions. It involves performing these operations together:
+1. Continuously reading the eMMC storage via MSC0 (while :; do dd if=/dev/mmcblk0 of=/dev/null bs=1M 2> /dev/null; sleep 1; done&)
+2. Continuously reading the SPI NOR storage via SFC (while :; do dd if=/dev/mtdblock0 of=/dev/null bs=1M 2> /dev/null; sleep 1; done&)
+3. Continuously refreshing a ST7789V SPI LCD using the fb_tft driver (while :; do cat /dev/urandom > /dev/fb0 2> /dev/null; sleep 0.2; done&)
+4. Enable the USB CDC ACM gadget and continuously transfer large amount of data (PC side: cat /dev/urandom > /dev/ttyACM0) (X1000 side: cat /dev/ttyGS0 > /dev/null)
+
+With SLAB or SLUB, the X1000 survived these tests for more than 30 minutes. No silent corruptions were reported by the kernel.
+
+With SLOB, it instantly dies at the boot process (before init). Sometimes it's a linked list corruption, sometimes it's a null ptr dereference, and sometimes it simply becomes silent.
+
+I always used SLOB for devices with little RAM and thought it would be beneficial. But I never thought it would be a problem.
+
+Should this be forwarded to the linux-mm mailing list?
+
+Thanks and best regards!
+
+On 5/27/22 19:03, Yunian Yang wrote:
+> Hello all.
+> 
+> In the past month, I was struggling with random memory corruptions and crashes on the Ingenic X1000. After some detailed testing, I need to point out, the current cache management routines seems to be incorrect for X1000, and maybe all X series SoCs. It mainly affects DMA operations. Every form of peripheral to RAM transfer will corrupt the RAM, and this includes the dwc2 and SFC's DMA and the PDMA controller. If all the DMAs are disabled (e.g. hard coding dma_capable = false in dwc2), it will be fine running CPU and I/O benchmarks for a week. If you have the hardware, you can enable the kernel data structures & memory debugging and see for yourself.
+> 
+> So I went back and looked at Ingenic's old 4.4 and 3.10 kernel sources. They used a separate file (sc-xburst.c) for the cache routines, which is based on an very old sc-mips.c. And there are two important macros, called MIPS_CACHE_SYNC_WAR and MIPS_BRIDGE_SYNC_WAR. They're both set to 1. However these macros are removed from the kernel long time ago. The line `mips_sc_ops.bc_wback_inv = mips_bridge_sync_war;' seems to be the key point. 
+> 
+> Do you have any recommendations of what could be done to fix this problem?
+> 
+> Thanks and best regards!
+
