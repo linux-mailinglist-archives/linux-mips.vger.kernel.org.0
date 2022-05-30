@@ -2,47 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F727537C17
-	for <lists+linux-mips@lfdr.de>; Mon, 30 May 2022 15:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F177538049
+	for <lists+linux-mips@lfdr.de>; Mon, 30 May 2022 16:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237074AbiE3NbX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 May 2022 09:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        id S233317AbiE3Nrg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 May 2022 09:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237208AbiE3NaM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 May 2022 09:30:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548B213EA9;
-        Mon, 30 May 2022 06:26:44 -0700 (PDT)
+        with ESMTP id S238922AbiE3NqF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 May 2022 09:46:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E123FA206A;
+        Mon, 30 May 2022 06:33:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA3EC60ED0;
-        Mon, 30 May 2022 13:26:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F72C36AE9;
-        Mon, 30 May 2022 13:26:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4617FB80DAE;
+        Mon, 30 May 2022 13:33:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1525DC36AE3;
+        Mon, 30 May 2022 13:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917203;
+        s=k20201202; t=1653917624;
         bh=Dz8ai7iKPglweNQzZKbSzXedFDeTrb0db8t40QK1R4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rYh3m+E4acp2qt55yLiva1Vnd4jFEF8P5sTCZaSRsuu/6UICb4na/dglBJlVwrZSm
-         T7fmzTwO18wWcDRCbyv5K0pbTEA7TypBIs+M5Yp259lFTNDHjx8My6ZqcNFWm7tSvQ
-         8FLtpWdsSV0N7LdIsrcR2gbRvNlHlx+4Q7WVBlbMcBQvAVOzoyAoJQEbIgo4OYLo6K
-         Bg8B26jy1lTV9Vr5bssEC+P6Mc6ZaeKFwcE99DovpY1XWKxK+DlR+zEMwBJZ5Tdbb5
-         VwJFboncJt+lxgHaoHhbiVOt5nmitRLhWtV3IeSu8eifVO+hVvZc8HZfKiwkBza/rP
-         waIqnD/kQ5yvA==
+        b=FyFr2byDNhWZjSdYSzqVbuBXKpCJgl0/yBWyvq6WI2gJuNVWmM/FKRCNuFWNBhjJu
+         Z6+e+iDHrXRNH2zJaCNZm5tMM2k9MnkTsiDY3AfxrDxcEzBY2ZOrD4vqLSPpz8Q/xj
+         +ZotVPb5sRE70W/P/HHFZBQM5D1YN1ipUwjBDZAlx9w5Nq3F9xD8GjlBhbbLpQ605I
+         9vdEXe49QzjbQRgX9cuEi/ZGOKnVcFi+KraHL/kIOzgUwsKzmKPuraH0+qmhEnWHYs
+         OvaNJoCPDSTCX1SAVatXr1h9429Sghp4LyCeUmBQj+H6hPbq09yV+OzlsodxHjSVaP
+         tH6UMlEmsZ+fg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>, paul@crapouillou.net,
         linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 055/159] mmc: jz4740: Apply DMA engine limits to maximum segment size
-Date:   Mon, 30 May 2022 09:22:40 -0400
-Message-Id: <20220530132425.1929512-55-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.17 045/135] mmc: jz4740: Apply DMA engine limits to maximum segment size
+Date:   Mon, 30 May 2022 09:30:03 -0400
+Message-Id: <20220530133133.1931716-45-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
-References: <20220530132425.1929512-1-sashal@kernel.org>
+In-Reply-To: <20220530133133.1931716-1-sashal@kernel.org>
+References: <20220530133133.1931716-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
