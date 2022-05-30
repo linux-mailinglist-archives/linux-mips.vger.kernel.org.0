@@ -2,47 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A636153820D
-	for <lists+linux-mips@lfdr.de>; Mon, 30 May 2022 16:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADBA53820F
+	for <lists+linux-mips@lfdr.de>; Mon, 30 May 2022 16:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237565AbiE3OVl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 May 2022 10:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S237555AbiE3OVn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 May 2022 10:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241276AbiE3OR0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 May 2022 10:17:26 -0400
+        with ESMTP id S241664AbiE3ORz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 May 2022 10:17:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D669B199;
-        Mon, 30 May 2022 06:45:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C0566C8F;
+        Mon, 30 May 2022 06:47:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D24E0B80AE8;
-        Mon, 30 May 2022 13:45:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF44C385B8;
-        Mon, 30 May 2022 13:45:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 501A7B80DAA;
+        Mon, 30 May 2022 13:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 202A4C341C4;
+        Mon, 30 May 2022 13:47:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918302;
-        bh=LSyYnQ80RRn/HYSrTP8taEbH6kR+0uM24sQ94XaQbAw=;
+        s=k20201202; t=1653918470;
+        bh=RNeHE94BSj+4gptWB0XYtF6cAVaNg9bbvHZewnS9el8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gPBj34fOwVD+uBumpLNNwnc9XJ8LIt4B2i3QHkDCoDJPYjz4mxBZVHp5U2MsgQvsI
-         oTixNecAwSTYHEDpZ9pu/HyddJw9cD4o/qD4ZWh12p6rKdspRWLuTVdZppC4rqA691
-         Tby9Hw2MKgGyzQwfFiD8vog/nneF8xR14Kd5u+XWoBE9eGXheiq1kPD0LRFWusNqFK
-         eCVQCANj7Ceaah4Oh6SXGcINbCd1np/mGDGEVlmiH1yt6GTOwOkUFQS9OGvcKyEDDW
-         eRtqn3+yCPEDHuFpjc5lYL4T1J8XGmXHF0GDJQlPJqnVTNFvf63uakWAYqJfL7SR/q
-         JddQsLgvF19Tw==
+        b=meHHyMmbsZ0N3ZWPjlDV/mdOpeBF5y49oIt7Z8jbMetkpuogvXIHgpR3BighXYwKP
+         X3VpdvsXQU956+WvKjwsTB0xvwvgm+kO6MDt0pORXTNbDStBfjKHLI2aMYOvowTZbZ
+         4opFXtDuXTQsI/9RZHHc/MRB7stxU6JMUOvOh7oeqWCPgRoWNBEUPJ1JmDxU0yiMVj
+         v87oC9o683JhCpWzvqURrfpsWCcQdoRfN4R7TxoUij4yBd7qIWTTpLAv7V+oAIuJVU
+         XKa1KROAl0UA9JKQg54L5HnPeA8NMu8io9CHziNWXMlbaXCy8xi01P+6lUjE/tZReK
+         pRak8mTc//g6w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>, paul@crapouillou.net,
         linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 25/76] mmc: jz4740: Apply DMA engine limits to maximum segment size
-Date:   Mon, 30 May 2022 09:43:15 -0400
-Message-Id: <20220530134406.1934928-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 19/55] mmc: jz4740: Apply DMA engine limits to maximum segment size
+Date:   Mon, 30 May 2022 09:46:25 -0400
+Message-Id: <20220530134701.1935933-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
-References: <20220530134406.1934928-1-sashal@kernel.org>
+In-Reply-To: <20220530134701.1935933-1-sashal@kernel.org>
+References: <20220530134701.1935933-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -108,10 +108,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 20 insertions(+)
 
 diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-index a1f92fed2a55..aa3dfb9c1071 100644
+index f816c06ef916..a316c912a118 100644
 --- a/drivers/mmc/host/jz4740_mmc.c
 +++ b/drivers/mmc/host/jz4740_mmc.c
-@@ -236,6 +236,26 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
+@@ -224,6 +224,26 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
  		return PTR_ERR(host->dma_rx);
  	}
  
