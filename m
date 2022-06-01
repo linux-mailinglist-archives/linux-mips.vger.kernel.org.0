@@ -2,129 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E00353ACC9
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Jun 2022 20:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F4453ACA6
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Jun 2022 20:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiFAS2O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Jun 2022 14:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S1356586AbiFASVv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Jun 2022 14:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiFAS2O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Jun 2022 14:28:14 -0400
-X-Greylist: delayed 229 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 11:28:13 PDT
-Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213465641D
-        for <linux-mips@vger.kernel.org>; Wed,  1 Jun 2022 11:28:12 -0700 (PDT)
-Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-10.nifty.com with ESMTP id 251ILWuJ008713
-        for <linux-mips@vger.kernel.org>; Thu, 2 Jun 2022 03:21:32 +0900
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-07.nifty.com with ESMTP id 251IJkAR014364;
-        Thu, 2 Jun 2022 03:19:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 251IJkAR014364
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654107589;
-        bh=LsM4sO5i55Of2kVMrK89AneiaTofuiZcCz2cCABSr0I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TWh2hRSyve09QThcQe6M9jHhdIGvQytWsvsxB6H3RGwETs96Niw8SVPFtoHkPUcLk
-         z3c8GzPisT/eJEXWqrMtWIymcwxW0U7cU15llABQq7eD0oDm1qidITvPg/IxiTrghr
-         DiuMqUv+1sTG/pijrpxmZJnBwEhhj4srD2mwrQDem8xfZgxttC7qzl40WzPklwOQo6
-         RMu/vOkezdfgIEJ1IyziI73a7cthZ/VblQQNAuC/zJX3x23m3jCsdqXgO9uK1g004u
-         maUTiFcs84Yp4QD1zspizs/siQVhXCNDKXDFEIw/kEjLEgJWiPk2X2ca88SBB6RuLz
-         Yma359gqIlhJw==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Carlos Llamas <cmllamas@google.com>,
-        Christopher Ferris <cferris@google.com>,
-        Todd Kjos <tkjos@android.com>, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 1/3] mips: use __kernel_{uid,gid}32_t in uapi/asm/stat.h
-Date:   Thu,  2 Jun 2022 03:19:39 +0900
-Message-Id: <20220601181941.3706832-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220601181941.3706832-1-masahiroy@kernel.org>
-References: <20220601181941.3706832-1-masahiroy@kernel.org>
+        with ESMTP id S1356590AbiFASVu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Jun 2022 14:21:50 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAFC65ED;
+        Wed,  1 Jun 2022 11:21:47 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0E98968AA6; Wed,  1 Jun 2022 20:21:42 +0200 (CEST)
+Date:   Wed, 1 Jun 2022 20:21:41 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
+        x86@kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 09/15] swiotlb: make the swiotlb_init interface more
+ useful
+Message-ID: <20220601182141.GA28309@lst.de>
+References: <20220404050559.132378-1-hch@lst.de> <20220404050559.132378-10-hch@lst.de> <YpehC7BwBlnuxplF@dev-arch.thelio-3990X> <20220601173441.GB27582@lst.de> <YpemDuzdoaO3rijX@Ryzen-9-3900X.> <20220601175743.GA28082@lst.de> <Yper7agk7XfCCQNa@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yper7agk7XfCCQNa@dev-arch.thelio-3990X>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit 8c1a381a4fbb ("mips: add asm/stat.h to UAPI compile-test
-coverage") converted as follows:
+On Wed, Jun 01, 2022 at 11:11:57AM -0700, Nathan Chancellor wrote:
+> On Wed, Jun 01, 2022 at 07:57:43PM +0200, Christoph Hellwig wrote:
+> > On Wed, Jun 01, 2022 at 10:46:54AM -0700, Nathan Chancellor wrote:
+> > > On Wed, Jun 01, 2022 at 07:34:41PM +0200, Christoph Hellwig wrote:
+> > > > Can you send me the full dmesg and the content of
+> > > > /sys/kernel/debug/swiotlb/io_tlb_nslabs for a good and a bad boot?
+> > > 
+> > > Sure thing, they are attached! If there is anything else I can provide
+> > > or test, I am more than happy to do so.
+> > 
+> > Nothing interesting.  But the performance numbers almost look like
+> > swiotlb=force got ignored before (even if I can't explain why).
+> 
+> I was able to get my performance back with this diff but I don't know if
+> this is a hack or a proper fix in the context of the series.
 
-  uid_t  -->  __kernel_uid_t
-  gid_t  -->  __kernel_gid_t
+This looks good, but needs a little tweak.  I'd go for this variant of
+it:
 
-The bit width of __kernel_{uid,gid}_t is 16 or 32-bits depending on
-architectures.
 
-MIPS uses 32-bits for them as in include/uapi/asm-generic/posix_types.h,
-so the previous conversion is probably fine, but let's stick to the
-arch-independent conversion just in case.
-
-The safe replacements across all architectures are:
-
-  uid_t  -->  __kernel_uid32_t
-  gid_t  -->  __kernel_gid32_t
-
-as defined in include/linux/types.h.
-
-A similar issue was reported for the android binder. [1]
-
-[1]: https://lore.kernel.org/all/20220601010017.2639048-1-cmllamas@google.com/
-
-Fixes: 8c1a381a4fbb ("mips: add asm/stat.h to UAPI compile-test coverage")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- arch/mips/include/uapi/asm/stat.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/mips/include/uapi/asm/stat.h b/arch/mips/include/uapi/asm/stat.h
-index 8a8bb78883a4..aaccdc61be74 100644
---- a/arch/mips/include/uapi/asm/stat.h
-+++ b/arch/mips/include/uapi/asm/stat.h
-@@ -22,8 +22,8 @@ struct stat {
- 	__kernel_ino_t	st_ino;
- 	__kernel_mode_t	st_mode;
- 	__u32		st_nlink;
--	__kernel_uid_t	st_uid;
--	__kernel_gid_t	st_gid;
-+	__kernel_uid32_t st_uid;
-+	__kernel_gid32_t st_gid;
- 	unsigned	st_rdev;
- 	long		st_pad2[2];
- 	long		st_size;
-@@ -58,8 +58,8 @@ struct stat64 {
- 	__kernel_mode_t	st_mode;
- 	__u32		st_nlink;
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index dfa1de89dc944..cb50f8d383606 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -192,7 +192,7 @@ void __init swiotlb_update_mem_attributes(void)
+ }
  
--	__kernel_uid_t	st_uid;
--	__kernel_gid_t	st_gid;
-+	__kernel_uid32_t st_uid;
-+	__kernel_gid32_t st_gid;
+ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
+-				    unsigned long nslabs, bool late_alloc)
++		unsigned long nslabs, unsigned int flags, bool late_alloc)
+ {
+ 	void *vaddr = phys_to_virt(start);
+ 	unsigned long bytes = nslabs << IO_TLB_SHIFT, i;
+@@ -203,8 +203,7 @@ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
+ 	mem->index = 0;
+ 	mem->late_alloc = late_alloc;
  
- 	unsigned long	st_rdev;
- 	unsigned long	st_pad1[3];	/* Reserved for st_rdev expansion  */
-@@ -99,8 +99,8 @@ struct stat {
- 	__kernel_mode_t		st_mode;
- 	__u32			st_nlink;
+-	if (swiotlb_force_bounce)
+-		mem->force_bounce = true;
++	mem->force_bounce = swiotlb_force_bounce || (flags & SWIOTLB_FORCE);
  
--	__kernel_uid_t		st_uid;
--	__kernel_gid_t		st_gid;
-+	__kernel_uid32_t	st_uid;
-+	__kernel_gid32_t	st_gid;
+ 	spin_lock_init(&mem->lock);
+ 	for (i = 0; i < mem->nslabs; i++) {
+@@ -275,8 +274,7 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
+ 		panic("%s: Failed to allocate %zu bytes align=0x%lx\n",
+ 		      __func__, alloc_size, PAGE_SIZE);
  
- 	unsigned int		st_rdev;
- 	unsigned int		st_pad1[3]; /* Reserved for st_rdev expansion */
--- 
-2.32.0
+-	swiotlb_init_io_tlb_mem(mem, __pa(tlb), nslabs, false);
+-	mem->force_bounce = flags & SWIOTLB_FORCE;
++	swiotlb_init_io_tlb_mem(mem, __pa(tlb), nslabs, flags, false);
+ 
+ 	if (flags & SWIOTLB_VERBOSE)
+ 		swiotlb_print_info();
+@@ -348,7 +346,7 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask,
+ 
+ 	set_memory_decrypted((unsigned long)vstart,
+ 			     (nslabs << IO_TLB_SHIFT) >> PAGE_SHIFT);
+-	swiotlb_init_io_tlb_mem(mem, virt_to_phys(vstart), nslabs, true);
++	swiotlb_init_io_tlb_mem(mem, virt_to_phys(vstart), nslabs, 0, true);
+ 
+ 	swiotlb_print_info();
+ 	return 0;
+@@ -835,8 +833,8 @@ static int rmem_swiotlb_device_init(struct reserved_mem *rmem,
+ 
+ 		set_memory_decrypted((unsigned long)phys_to_virt(rmem->base),
+ 				     rmem->size >> PAGE_SHIFT);
+-		swiotlb_init_io_tlb_mem(mem, rmem->base, nslabs, false);
+-		mem->force_bounce = true;
++		swiotlb_init_io_tlb_mem(mem, rmem->base, nslabs, SWIOTLB_FORCE,
++				false);
+ 		mem->for_alloc = true;
+ 
+ 		rmem->priv = mem;
 
