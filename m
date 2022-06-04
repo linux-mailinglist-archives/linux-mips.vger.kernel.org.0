@@ -2,118 +2,195 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76FF53D692
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Jun 2022 13:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9038853D6B1
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Jun 2022 14:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbiFDLly (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 4 Jun 2022 07:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S232870AbiFDMOG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 4 Jun 2022 08:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiFDLlw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Jun 2022 07:41:52 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57D338A;
-        Sat,  4 Jun 2022 04:41:50 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8D2525C00EE;
-        Sat,  4 Jun 2022 07:41:47 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 04 Jun 2022 07:41:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654342907; x=
-        1654429307; bh=RBuggEGkGl6KrQneDZnBPmW9/bKWHPYv+xdHJioDFGY=; b=2
-        eERrEKY0qwuefVCBxzafKkzzMS8qDQn4NNcvHsW0mDCVAHf7gBW8LFj6ZIzGF1t4
-        uKerdAFzOARWhygja2imd65LxTNjnTyNztYQgwuLqMSukRoSSTqqpQkKwuUJkKDu
-        dq8pycI04wmZ4yTP3a9+9BdmVaq4nXAOkpQsYzO9TBCWuRAwYdin+LEhTJTn0QcF
-        /wEzlZrMgrCcl9qbiIWoBtqnnPcttDpTEM9GKVPnBefvbi0/vRiEOEIXOCfK8ILY
-        0MWBIzsQojKajMBpWDauZdnJTjTLqMU0wSCItOAnuhIStkjkQKGraFo5aAjTBsTY
-        epgjuJferPpdHvjNUeHrA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654342907; x=
-        1654429307; bh=RBuggEGkGl6KrQneDZnBPmW9/bKWHPYv+xdHJioDFGY=; b=f
-        RayLOyvD0NZQ+gQn+d60XInBRcxLNsLYn817IdTp9uE7ac3kPDXzmsjC8bqmIKhD
-        tqZEzykmSqFeNMaroxBVtk98mVxTqnqIC6DqZxr3eRpOtmJ4Tdr22aO0y+0ODUwN
-        7jY3J+/DdceQtSwfCNPzg4KySAL+2crIPpIlg4eCS90MSCoYReUjEyb3PmOvAJx6
-        q3v9fYomx/Z2D3ywsId5Y0OYBw0QLwxsygcqjkL4V0P2NdiWFbHWkDB+Xeak5KLO
-        LvWxMZjACf66N+y9Z3olqkqiyx3xYgS0tl8ymJABphqxnnWZ+qOdC8mO8+CGlWnq
-        gj/5C+zNncg6qSUqzCS1w==
-X-ME-Sender: <xms:-kSbYhSLJ-NwctzAJDu2_5_SQ8vRy1pBMatD4UvcDhm0Uexw9nkHuA>
-    <xme:-kSbYqxLMBUjMd4yCiPEEfrAS-SMRd2xbwMTMmIRZJWlH83OhMGbmwGmTQ-sHc965
-    vW39acJdyacjMeoI8Y>
-X-ME-Received: <xmr:-kSbYm0YfUsTeh-OvEEF0dLxCMlntR0Wp4PXi3KaBRE8P7_StzcsQ2lTxXYMdwxDp2Xbkdtx2262bTyXdKTMY4qV_Ci1AxZ-IhbeMRHdKbY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleekgdegvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeegieeh
-    vefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:-kSbYpDAlNdTz2dQ5OkhCHMx32j8oYzkQourIOfmIsX1WbCWyslQQA>
-    <xmx:-kSbYqghWxAHsDD8OsY7X9RMp5Dms6g2G4AtN-43aWv5jP6Q0w7XlQ>
-    <xmx:-kSbYtrg0A4QcXk2vjcSI2bqTPmO75-G3b2a3ZcRrR5BT4VJ4eP61Q>
-    <xmx:-0SbYlXdnSzb5kpKWOwTFyrBhS_M_bQ5JeDGvhbK2G5boEyo5MGuUA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 4 Jun 2022 07:41:45 -0400 (EDT)
-Message-ID: <3ff0b2af-033f-f9d5-f6d7-c53c3e6c0858@flygoat.com>
-Date:   Sat, 4 Jun 2022 12:41:43 +0100
+        with ESMTP id S231445AbiFDMOG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Jun 2022 08:14:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69861C923;
+        Sat,  4 Jun 2022 05:14:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99CEDB802C5;
+        Sat,  4 Jun 2022 12:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3397FC341CC;
+        Sat,  4 Jun 2022 12:14:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654344842;
+        bh=P9g5evQvLeCWlEOvlwctyGL5SApo79l0tSxaVcIHKPA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GIyFj6BBzBZ4owCCVP5Aw4h3f0cXtR3hEqmrT9g670pZU/aQzIAQ2WfJvI/DknBRp
+         4bYKwydQ0aYuGH1L5fBQCLpyzXIofO9higKucAr9Sy6M/NdNgRTqlWLPjz76TpemCg
+         o5/euygaM3XOLTr8By89APAq6jiMVCST2z+Q9PMv3E7nS9Z42DH7R0OrYd6SVheduF
+         EZlfIsJBqn4SM90nhHS8OrgxuSA94ZHCoBGkUfXicORrA8v5ly8ntcA/nQuwU0e9It
+         FE7DXLjmfzYeTqs7rwtKtwfeJR+KZPybsrMoiF6VsZOU0EImc2irdP0IzRClSsVLBw
+         zeZ+URjHsYFVg==
+Received: by mail-vs1-f45.google.com with SMTP id w10so9696538vsa.4;
+        Sat, 04 Jun 2022 05:14:02 -0700 (PDT)
+X-Gm-Message-State: AOAM533QDGbgQtUYDUt5lnPn6GA+OLSYhOxnFUcLmkURTGrp3R94X8mw
+        y5DHLtxtDNWiyDLUZ6DCMfuzifnjsP/Wl0IAvq0=
+X-Google-Smtp-Source: ABdhPJwwEZX9ryeNihnPAt9cIeqrE+zZlFv6d4BeVpnc8qN7eqFa9hlNwwNfnB2L+k7vfA514WdPGRvZColxx5FoxRk=
+X-Received: by 2002:a05:6102:292b:b0:34b:9fad:2b63 with SMTP id
+ cz43-20020a056102292b00b0034b9fad2b63mr2132145vsb.51.1654344840935; Sat, 04
+ Jun 2022 05:14:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: mainline build failure due to fa84f89395e0
- ("irqchip/loongson-liointc: Fix build error for LoongArch")
-Content-Language: en-GB
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>, WANG Xuerui <git@xen0n.name>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
-References: <Yps1Jw6PJdLBya1W@debian>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <Yps1Jw6PJdLBya1W@debian>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220603101411.488970-1-anshuman.khandual@arm.com> <20220603101411.488970-5-anshuman.khandual@arm.com>
+In-Reply-To: <20220603101411.488970-5-anshuman.khandual@arm.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 4 Jun 2022 20:13:50 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQOKUfCyaU7gqkejvoJWeSnqc5QyyzWQCw1RJ8PEB2zKg@mail.gmail.com>
+Message-ID: <CAJF2gTQOKUfCyaU7gqkejvoJWeSnqc5QyyzWQCw1RJ8PEB2zKg@mail.gmail.com>
+Subject: Re: [PATCH 4/6] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        linux-csky@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Acked-by: Guo Ren <guoren@kernel.org>
 
-
-在 2022/6/4 11:34, Sudip Mukherjee 写道:
-> Hi All,
+On Fri, Jun 3, 2022 at 6:15 PM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
 >
-> The latest mainline kernel branch fails to build for "mips loongson2k_defconfig"
-> with the error:
+> This defines and exports a platform specific custom vm_get_page_prot() via
+> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> macros can be dropped which are no longer needed.
 >
-> drivers/irqchip/irq-loongson-liointc.c: In function 'liointc_chained_handle_irq':
-> drivers/irqchip/irq-loongson-liointc.c:60:20: error: implicit declaration of function 'cpu_logical_map' [-Werror=implicit-function-declaration]
->     60 |         int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: linux-csky@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  arch/csky/Kconfig               |  1 +
+>  arch/csky/include/asm/pgtable.h | 18 ------------------
+>  arch/csky/mm/init.c             | 32 ++++++++++++++++++++++++++++++++
+>  3 files changed, 33 insertions(+), 18 deletions(-)
 >
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 21d72b078eef..588b8a9c68ed 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -6,6 +6,7 @@ config CSKY
+>         select ARCH_HAS_GCOV_PROFILE_ALL
+>         select ARCH_HAS_SYNC_DMA_FOR_CPU
+>         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+> +       select ARCH_HAS_VM_GET_PAGE_PROT
+>         select ARCH_USE_BUILTIN_BSWAP
+>         select ARCH_USE_QUEUED_RWLOCKS
+>         select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
+> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+> index bbe245117777..229a5f4ad7fc 100644
+> --- a/arch/csky/include/asm/pgtable.h
+> +++ b/arch/csky/include/asm/pgtable.h
+> @@ -77,24 +77,6 @@
+>  #define MAX_SWAPFILES_CHECK() \
+>                 BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
 >
-> git bisect pointed to fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for LoongArch")
+> -#define __P000 PAGE_NONE
+> -#define __P001 PAGE_READ
+> -#define __P010 PAGE_READ
+> -#define __P011 PAGE_READ
+> -#define __P100 PAGE_READ
+> -#define __P101 PAGE_READ
+> -#define __P110 PAGE_READ
+> -#define __P111 PAGE_READ
+> -
+> -#define __S000 PAGE_NONE
+> -#define __S001 PAGE_READ
+> -#define __S010 PAGE_WRITE
+> -#define __S011 PAGE_WRITE
+> -#define __S100 PAGE_READ
+> -#define __S101 PAGE_READ
+> -#define __S110 PAGE_WRITE
+> -#define __S111 PAGE_WRITE
+> -
+>  extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+>  #define ZERO_PAGE(vaddr)       (virt_to_page(empty_zero_page))
 >
-> And, reverting it on top of mainline branch has fixed the build failure.
-Thanks for the reminder.
-I'll prepare a patch for it.
-
-Thanks
-- Jiaxun
-
->
+> diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+> index bf2004aa811a..f9babbed17d4 100644
+> --- a/arch/csky/mm/init.c
+> +++ b/arch/csky/mm/init.c
+> @@ -197,3 +197,35 @@ void __init fixaddr_init(void)
+>         vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
+>         fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
+>  }
+> +
+> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+> +       case VM_NONE:
+> +               return PAGE_NONE;
+> +       case VM_READ:
+> +       case VM_WRITE:
+> +       case VM_WRITE | VM_READ:
+> +       case VM_EXEC:
+> +       case VM_EXEC | VM_READ:
+> +       case VM_EXEC | VM_WRITE:
+> +       case VM_EXEC | VM_WRITE | VM_READ:
+> +               return PAGE_READ;
+> +       case VM_SHARED:
+> +               return PAGE_NONE;
+> +       case VM_SHARED | VM_READ:
+> +               return PAGE_READ;
+> +       case VM_SHARED | VM_WRITE:
+> +       case VM_SHARED | VM_WRITE | VM_READ:
+> +               return PAGE_WRITE;
+> +       case VM_SHARED | VM_EXEC:
+> +       case VM_SHARED | VM_EXEC | VM_READ:
+> +               return PAGE_READ;
+> +       case VM_SHARED | VM_EXEC | VM_WRITE:
+> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
+> +               return PAGE_WRITE;
+> +       default:
+> +               BUILD_BUG();
+> +       }
+> +}
+> +EXPORT_SYMBOL(vm_get_page_prot);
 > --
-> Regards
-> Sudip
+> 2.25.1
+>
 
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
