@@ -2,109 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FC753D6CF
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Jun 2022 14:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C185953D6F4
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Jun 2022 15:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbiFDMlH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 4 Jun 2022 08:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        id S232173AbiFDNL7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 4 Jun 2022 09:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241004AbiFDMlG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Jun 2022 08:41:06 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7879E31536;
-        Sat,  4 Jun 2022 05:41:05 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 7BA6132003AC;
-        Sat,  4 Jun 2022 08:41:04 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sat, 04 Jun 2022 08:41:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1654346464; x=1654432864; bh=Y8
-        5O8Dk7VWQXXoJvprtQ8Dh0VDIc6G4b2piXzVambvs=; b=QsI1Pc5GL0ftpGmkVM
-        4cS9+b1ukcVX5MX7Jw7pL29q/OOiJ3z41W9nxz6+Pu/yUCbbP0KqtMpTXSpoDSHw
-        Qc6SGVEctoGDGdQ5493R9q6GV2LS3/uKv6NKUYMV2zuDSLp+oVeV9NaThNARsEnA
-        c75eXmyYat1viqX7nukAL66Hjm8D0/ncwmE/lMZEpYOSfRTrKx40NzCfkFUBsMQa
-        xxEYMRslEwcTQ4qPlB2HtrOOkUJlV6chebdkoGdToj8yjB2DdDO/5Z+1j/oFgdpH
-        ax2lnYVKUJg+7WFf92QUTgndBotS9/tgP6onjvYHWXyZWBJuiNSUzvw1W58irngr
-        YIbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1654346464; x=1654432864; bh=Y85O8Dk7VWQXX
-        oJvprtQ8Dh0VDIc6G4b2piXzVambvs=; b=mrXA7BVV28fhRcI3UqKMl2/FKYrDw
-        LXmD5R8KfzOORUWGEH9xPeHMdJTBYTPPS0YJqAZrw1Ur5alOs7ehGgfIdN+c/KPw
-        W4Nss5nJ9b1ZE0uCp+MQ7+WjAJ8hPwqVpOEoI4BpjuaSxdaqPSETUznGIXdJpLfK
-        Ay8Hu7YvJkeCTJ/DGOZreUUwUI4nf3e0Ky6CO2SPqI4ccpNH+butX+jS7mUzXEfZ
-        UAvHgMiUhsIerfwKlKswhzZJIlL179TUPMFBo9a34VHVxBrqQ0MiMP11hbLkAFB7
-        BSkWRIIRcZndMSvMglbIxkSoXYtGC7/sruuDXUBQdeS5gcEF7xS7guNyg==
-X-ME-Sender: <xms:31KbYupkotXKY0oJS32FIqcNzw7_FlS3iz5usu_8QyWTlQqny3GdtA>
-    <xme:31KbYspPfRg3Pwv3lonnmAibyWiNteRWHh9BWQovhMoRGSdKY9k6cHCV-kT9jAafh
-    _BrY0AO7YTY7tqcYkA>
-X-ME-Received: <xmr:31KbYjPNorQf39HEau-bZ4TYm1FwwsQ2ZtUgdxiatf7SL_wIhdxrvwrhwEx22nRAy0cPv-FxPZ2u-LD4--Zp9n5x5x05veD5k6SLOpJAvxD3milCW50>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleekgdehgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeefledufeehgedvuedvvd
-    egkefgvddttedtleeiiefhgeetudegkefhvdfhjeeftdenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihgh
-    horghtrdgtohhm
-X-ME-Proxy: <xmx:31KbYt6clNdOGMDrbXIumu3GRxrWvAPFUoXeE62M76D0DGgCCyDk9g>
-    <xmx:31KbYt4CIqx7sZWbzfymZseDnJwCO5qreY7zAjX7kZtPx0IzmmSZIA>
-    <xmx:31KbYthInYJlfjNkh32EdpZH3viQhgEE5KS4tFteplI6ofOoeuokhg>
-    <xmx:4FKbYg0mDb0X_V5XO_rxnMqAUnZJyvo4VJ02bSi3HUO5YYwtFYt5CQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 4 Jun 2022 08:41:01 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     chenhuacai@kernel.org
-Cc:     kernel@xen0n.name, maz@kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH for-5.19 2/2] loongarch: Mask out higher bits for get_csr_cpuid
-Date:   Sat,  4 Jun 2022 13:40:52 +0100
-Message-Id: <20220604124052.1550-2-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
-References: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
+        with ESMTP id S1347023AbiFDNL6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Jun 2022 09:11:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CAB3AB;
+        Sat,  4 Jun 2022 06:11:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A32A9B80171;
+        Sat,  4 Jun 2022 13:11:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70099C36AE2;
+        Sat,  4 Jun 2022 13:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654348314;
+        bh=LigdOMTiHU3JDXFoM3FYPWJ+NL2sB0dXjxk5b2cv4K0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HzqQlSUxQbpKcoQlGjyaiU7sKZUSmKiO7KqjdDFu7oUA8K0R+3hiuL6MMoUuuk8/F
+         0ThbEFLH80drR0uSZTltIbNjH3D9mLsiMK/Q9MKV74Ou4fhRDXi+ZAgR9H6TQiyL+o
+         4SUyW2lqg9yVLNnVsyX6wubN4qDopeabXx6cm60C14J6l7wlsJdh6657Xf8YUHAvjz
+         CjrkaVAIPCczwRYosz0ARYCH6MRb3kUfexwcUxyC2vW7+E2R7Old3DlUMXaUh+/wvV
+         5C3SaueY1Ia2qGb9P0r/sJ50JFgq3XLIa/ZFUDYegOgaum0zopF6SvnbbqxxndXLQT
+         23v/fDIUeMqAQ==
+Received: by mail-il1-f174.google.com with SMTP id u2so8237885iln.2;
+        Sat, 04 Jun 2022 06:11:54 -0700 (PDT)
+X-Gm-Message-State: AOAM533ZyP4STw7F0IpFIwkpAkwh1HuBL+S/NLjz70FBeXFm29w0tYyZ
+        Xjr2V1JeBzv91X0hlQyXzLr8BlmtEzpnFekIRgk=
+X-Google-Smtp-Source: ABdhPJxUEf+MMefg9IiUMQhY92XfBtlnMp/f5td6s1NaICWD0XhC31UFdHFnXRGex9ZTTi4ra7SinOJIonay9rX4K38=
+X-Received: by 2002:a05:6e02:12b4:b0:2d3:a822:3a16 with SMTP id
+ f20-20020a056e0212b400b002d3a8223a16mr8187552ilr.279.1654348313547; Sat, 04
+ Jun 2022 06:11:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220604124052.1550-1-jiaxun.yang@flygoat.com> <20220604124052.1550-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20220604124052.1550-2-jiaxun.yang@flygoat.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 4 Jun 2022 21:11:34 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H42rRE5w2qThfO3fEa8PZVfRQp-mzUqw8pWx1x2JYo9Pw@mail.gmail.com>
+Message-ID: <CAAhV-H42rRE5w2qThfO3fEa8PZVfRQp-mzUqw8pWx1x2JYo9Pw@mail.gmail.com>
+Subject: Re: [PATCH for-5.19 2/2] loongarch: Mask out higher bits for get_csr_cpuid
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>, Marc Zyngier <maz@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Only low 9 bits of CPUID CSR represents coreid, higher bits
-are marked as reserved. In case Loongson may define higher
-bits in future, just mask them out for get_csr_cpuid.
+Hi, Jiaxun,
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/loongarch/include/asm/loongarch.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, Jun 4, 2022 at 8:41 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> Only low 9 bits of CPUID CSR represents coreid, higher bits
+> are marked as reserved. In case Loongson may define higher
+> bits in future, just mask them out for get_csr_cpuid.
+I think we needn't to modify, until the high bits actually get defined. :)
 
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index 3ba4f7e87cd2..7f3933f747f9 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -1200,7 +1200,7 @@ static inline u64 drdtime(void)
- 
- static inline unsigned int get_csr_cpuid(void)
- {
--	return csr_read32(LOONGARCH_CSR_CPUID);
-+	return csr_read32(LOONGARCH_CSR_CPUID) & CSR_CPUID_COREID;
- }
- 
- static inline void csr_any_send(unsigned int addr, unsigned int data,
--- 
-2.25.1
+Huacai
 
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/loongarch/include/asm/loongarch.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+> index 3ba4f7e87cd2..7f3933f747f9 100644
+> --- a/arch/loongarch/include/asm/loongarch.h
+> +++ b/arch/loongarch/include/asm/loongarch.h
+> @@ -1200,7 +1200,7 @@ static inline u64 drdtime(void)
+>
+>  static inline unsigned int get_csr_cpuid(void)
+>  {
+> -       return csr_read32(LOONGARCH_CSR_CPUID);
+> +       return csr_read32(LOONGARCH_CSR_CPUID) & CSR_CPUID_COREID;
+>  }
+>
+>  static inline void csr_any_send(unsigned int addr, unsigned int data,
+> --
+> 2.25.1
+>
