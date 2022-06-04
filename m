@@ -2,195 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9038853D6B1
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Jun 2022 14:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43C253D6CE
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Jun 2022 14:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbiFDMOG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 4 Jun 2022 08:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
+        id S234845AbiFDMlF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 4 Jun 2022 08:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiFDMOG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Jun 2022 08:14:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69861C923;
-        Sat,  4 Jun 2022 05:14:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99CEDB802C5;
-        Sat,  4 Jun 2022 12:14:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3397FC341CC;
-        Sat,  4 Jun 2022 12:14:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654344842;
-        bh=P9g5evQvLeCWlEOvlwctyGL5SApo79l0tSxaVcIHKPA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GIyFj6BBzBZ4owCCVP5Aw4h3f0cXtR3hEqmrT9g670pZU/aQzIAQ2WfJvI/DknBRp
-         4bYKwydQ0aYuGH1L5fBQCLpyzXIofO9higKucAr9Sy6M/NdNgRTqlWLPjz76TpemCg
-         o5/euygaM3XOLTr8By89APAq6jiMVCST2z+Q9PMv3E7nS9Z42DH7R0OrYd6SVheduF
-         EZlfIsJBqn4SM90nhHS8OrgxuSA94ZHCoBGkUfXicORrA8v5ly8ntcA/nQuwU0e9It
-         FE7DXLjmfzYeTqs7rwtKtwfeJR+KZPybsrMoiF6VsZOU0EImc2irdP0IzRClSsVLBw
-         zeZ+URjHsYFVg==
-Received: by mail-vs1-f45.google.com with SMTP id w10so9696538vsa.4;
-        Sat, 04 Jun 2022 05:14:02 -0700 (PDT)
-X-Gm-Message-State: AOAM533QDGbgQtUYDUt5lnPn6GA+OLSYhOxnFUcLmkURTGrp3R94X8mw
-        y5DHLtxtDNWiyDLUZ6DCMfuzifnjsP/Wl0IAvq0=
-X-Google-Smtp-Source: ABdhPJwwEZX9ryeNihnPAt9cIeqrE+zZlFv6d4BeVpnc8qN7eqFa9hlNwwNfnB2L+k7vfA514WdPGRvZColxx5FoxRk=
-X-Received: by 2002:a05:6102:292b:b0:34b:9fad:2b63 with SMTP id
- cz43-20020a056102292b00b0034b9fad2b63mr2132145vsb.51.1654344840935; Sat, 04
- Jun 2022 05:14:00 -0700 (PDT)
+        with ESMTP id S233159AbiFDMlE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Jun 2022 08:41:04 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1311531536;
+        Sat,  4 Jun 2022 05:41:03 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 354F53200344;
+        Sat,  4 Jun 2022 08:41:00 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 04 Jun 2022 08:41:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1654346459; x=1654432859; bh=lVC02QK4SHsr+00py+U1MSnZZ
+        Egh3HHWEX2YPoM+RBo=; b=4hiQqR26na7FmbxhQbKOst12IMMuhyNU9p9p5LDCc
+        gfwoi2N72pxgcVOoOB4G0174YDXLpZZ03hx9KYUxTuBk6DB67KU6BBq5ZzQjB8eg
+        gZ61ae9f8u/JghYAXe4XaLB7clcWpSdab8MDmgl2SBLD1EGT4Kew6flvher+Pl0q
+        bGzSvqV9cVlHktd4wIFf6a9gxoLR4wdDpbi44Q6v1pvr1A9kZ/l2S9RjYLpN4Fl1
+        W5BnCQapr6D+vniBN4RuseIZnKCt2TuvLXLF0jtBoCTENxAC6rPScx1bkmhjj9vc
+        C71AM6OQEh0uiWbp+FfXntZUJteaAcp9+bPXSNp2fbBYQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1654346459; x=1654432859; bh=lVC02QK4SHsr+00py+U1MSnZZEgh3HHWEX2
+        YPoM+RBo=; b=FrbJDl6fBu/000qV/LpbkIRjm9EonOFBHRAzIvRFPf2/NjH410F
+        akKPp9xHyX8qLugC4CkJlIvVOkcHmjg+f/Q5G6Z2UM3W2sgeN0lYXYDaMHGgFMqc
+        5GMQXwA9bEpSOqMs3UntXuLKsZ5SeOpZaEpAJGtFSRElCriWJkOH5UFiiWZiAc/Q
+        JpA9vKHxJkpetlREqO9yjjpfB+Q/vta2/k2+Yj5//Oh+UsUXm1KLRS8Bit4EBE2n
+        UUlGUf8d/DX7TwRiMe1BA8arkJz5Iyo5sFE3BXihSrvNBC4jCjnSJQLhVsi5juqB
+        NHtYLTGbZph1xYaoOw4CmK2Jv405wWilkRA==
+X-ME-Sender: <xms:21KbYvPWgLfBLTf1GF3O6NfksTBFqB7kkhXEbZAB_Xlsv9P-ej18qg>
+    <xme:21KbYp_z8wzO415KJnTQ_xNZIvqlCZUozj8CeBP-p5c_NO-2FrRKamqa5cps5GD98
+    WA34rJgOKooZpxFCuo>
+X-ME-Received: <xmr:21KbYuTssyDfHboQjeR8TCo2TKpsjnqMGcNYPh0_0CX7gTX5eZRvXMCd_MHhjCxf-SNp7eSFMXKlQFa1Sf6BgHEXDrsIkpyxcoLYUnq701zUIQW7ogc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleekgdehgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekredtre
+    dttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpefhtedutdduveeileejjeetff
+    ehueejudehgfffjeduhfeuleeludfffefgffevkeenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorg
+    htrdgtohhm
+X-ME-Proxy: <xmx:21KbYjshhPIPM8vji13fTVEGoKAjFXMb3deaI__bjM6vlPkYt1lp0w>
+    <xmx:21KbYnfsxADlr27Zt3YpW3_Hp2cfFBgFvGgYwojeT1bNXkUQ2Qg7Jg>
+    <xmx:21KbYv005vDYJhlGfw7P9HdcO-UGc4dtZiOW2a8c8A9WK_OvqKm8BQ>
+    <xmx:21KbYu4GzPz-OIWMaxUnCpTR9TcjrcD5hapo1DBn1BKONFAb0kPQsw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 4 Jun 2022 08:40:57 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     chenhuacai@kernel.org
+Cc:     kernel@xen0n.name, maz@kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH for-5.19 1/2] irqchip/loongson-liointc: Use architecture register to get coreid
+Date:   Sat,  4 Jun 2022 13:40:51 +0100
+Message-Id: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220603101411.488970-1-anshuman.khandual@arm.com> <20220603101411.488970-5-anshuman.khandual@arm.com>
-In-Reply-To: <20220603101411.488970-5-anshuman.khandual@arm.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 4 Jun 2022 20:13:50 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQOKUfCyaU7gqkejvoJWeSnqc5QyyzWQCw1RJ8PEB2zKg@mail.gmail.com>
-Message-ID: <CAJF2gTQOKUfCyaU7gqkejvoJWeSnqc5QyyzWQCw1RJ8PEB2zKg@mail.gmail.com>
-Subject: Re: [PATCH 4/6] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        linux-csky@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for
+LoongArch") replaced get_ebase_cpunum with physical processor
+id from SMP facilities. However that breaks MIPS non-SMP build
+and makes booting from other cores inpossible on non-SMP kernel.
 
-On Fri, Jun 3, 2022 at 6:15 PM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
-> This defines and exports a platform specific custom vm_get_page_prot() via
-> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> macros can be dropped which are no longer needed.
->
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: linux-csky@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  arch/csky/Kconfig               |  1 +
->  arch/csky/include/asm/pgtable.h | 18 ------------------
->  arch/csky/mm/init.c             | 32 ++++++++++++++++++++++++++++++++
->  3 files changed, 33 insertions(+), 18 deletions(-)
->
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 21d72b078eef..588b8a9c68ed 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -6,6 +6,7 @@ config CSKY
->         select ARCH_HAS_GCOV_PROFILE_ALL
->         select ARCH_HAS_SYNC_DMA_FOR_CPU
->         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-> +       select ARCH_HAS_VM_GET_PAGE_PROT
->         select ARCH_USE_BUILTIN_BSWAP
->         select ARCH_USE_QUEUED_RWLOCKS
->         select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
-> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-> index bbe245117777..229a5f4ad7fc 100644
-> --- a/arch/csky/include/asm/pgtable.h
-> +++ b/arch/csky/include/asm/pgtable.h
-> @@ -77,24 +77,6 @@
->  #define MAX_SWAPFILES_CHECK() \
->                 BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
->
-> -#define __P000 PAGE_NONE
-> -#define __P001 PAGE_READ
-> -#define __P010 PAGE_READ
-> -#define __P011 PAGE_READ
-> -#define __P100 PAGE_READ
-> -#define __P101 PAGE_READ
-> -#define __P110 PAGE_READ
-> -#define __P111 PAGE_READ
-> -
-> -#define __S000 PAGE_NONE
-> -#define __S001 PAGE_READ
-> -#define __S010 PAGE_WRITE
-> -#define __S011 PAGE_WRITE
-> -#define __S100 PAGE_READ
-> -#define __S101 PAGE_READ
-> -#define __S110 PAGE_WRITE
-> -#define __S111 PAGE_WRITE
-> -
->  extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
->  #define ZERO_PAGE(vaddr)       (virt_to_page(empty_zero_page))
->
-> diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-> index bf2004aa811a..f9babbed17d4 100644
-> --- a/arch/csky/mm/init.c
-> +++ b/arch/csky/mm/init.c
-> @@ -197,3 +197,35 @@ void __init fixaddr_init(void)
->         vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
->         fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
->  }
-> +
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> +{
-> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +       case VM_NONE:
-> +               return PAGE_NONE;
-> +       case VM_READ:
-> +       case VM_WRITE:
-> +       case VM_WRITE | VM_READ:
-> +       case VM_EXEC:
-> +       case VM_EXEC | VM_READ:
-> +       case VM_EXEC | VM_WRITE:
-> +       case VM_EXEC | VM_WRITE | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED:
-> +               return PAGE_NONE;
-> +       case VM_SHARED | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED | VM_WRITE:
-> +       case VM_SHARED | VM_WRITE | VM_READ:
-> +               return PAGE_WRITE;
-> +       case VM_SHARED | VM_EXEC:
-> +       case VM_SHARED | VM_EXEC | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED | VM_EXEC | VM_WRITE:
-> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-> +               return PAGE_WRITE;
-> +       default:
-> +               BUILD_BUG();
-> +       }
-> +}
-> +EXPORT_SYMBOL(vm_get_page_prot);
-> --
-> 2.25.1
->
+Thus we revert get_ebase_cpunum back and use get_csr_cpuid for
+LoongArch.
 
+Fixes: fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for LoongArch")
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ drivers/irqchip/irq-loongson-liointc.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index aed88857d90f..c11cf97bcd1a 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -39,6 +39,14 @@
+ 
+ #define LIOINTC_ERRATA_IRQ	10
+ 
++#if defined(CONFIG_MIPS)
++#define liointc_core_id get_ebase_cpunum()
++#elif defined(CONFIG_LOONGARCH)
++#define liointc_core_id get_csr_cpuid()
++#else
++#define liointc_core_id 0
++#endif
++
+ struct liointc_handler_data {
+ 	struct liointc_priv	*priv;
+ 	u32			parent_int_map;
+@@ -57,7 +65,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
+ 	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct irq_chip_generic *gc = handler->priv->gc;
+-	int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
++	int core = liointc_core_id % LIOINTC_NUM_CORES;
+ 	u32 pending;
+ 
+ 	chained_irq_enter(chip, desc);
 -- 
-Best Regards
- Guo Ren
+2.25.1
 
-ML: https://lore.kernel.org/linux-csky/
