@@ -2,30 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE06D53DB26
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Jun 2022 11:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931BA53DB3A
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Jun 2022 12:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244281AbiFEJ6U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 5 Jun 2022 05:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S245383AbiFEKTp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 5 Jun 2022 06:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiFEJ6T (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Jun 2022 05:58:19 -0400
+        with ESMTP id S245251AbiFEKTn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Jun 2022 06:19:43 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A0242BD0;
-        Sun,  5 Jun 2022 02:58:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95B994B87C;
+        Sun,  5 Jun 2022 03:19:41 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9300D6E;
-        Sun,  5 Jun 2022 02:58:17 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 526A6D6E;
+        Sun,  5 Jun 2022 03:19:41 -0700 (PDT)
 Received: from [10.163.37.253] (unknown [10.163.37.253])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FB513F66F;
-        Sun,  5 Jun 2022 02:58:08 -0700 (PDT)
-Message-ID: <53c7da54-e106-0161-a128-4f0cfe92d7e4@arm.com>
-Date:   Sun, 5 Jun 2022 15:28:08 +0530
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 477943F66F;
+        Sun,  5 Jun 2022 03:19:32 -0700 (PDT)
+Message-ID: <0de0e896-2c4b-55e5-9860-07227a5d3ef6@arm.com>
+Date:   Sun, 5 Jun 2022 15:49:32 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 2/6] s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Subject: Re: [PATCH 1/6] mm/mmap: Restrict generic protection_map[] array
+ visibility
 Content-Language: en-US
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>
@@ -33,7 +34,6 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Paul Mackerras <paulus@samba.org>,
         "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
         Will Deacon <will@kernel.org>, Jonas Bonn <jonas@southpole.se>,
         "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
         "x86@kernel.org" <x86@kernel.org>,
@@ -49,15 +49,14 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
         Dinh Nguyen <dinguyen@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
         "David S. Miller" <davem@davemloft.net>
 References: <20220603101411.488970-1-anshuman.khandual@arm.com>
- <20220603101411.488970-3-anshuman.khandual@arm.com>
- <a97cba97-73f0-e8c2-6445-1f314eb27d87@csgroup.eu>
+ <20220603101411.488970-2-anshuman.khandual@arm.com>
+ <cd27ea20-73c1-443a-b6ad-6d22b8b1145f@csgroup.eu>
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <a97cba97-73f0-e8c2-6445-1f314eb27d87@csgroup.eu>
+In-Reply-To: <cd27ea20-73c1-443a-b6ad-6d22b8b1145f@csgroup.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -71,125 +70,280 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 6/3/22 17:55, Christophe Leroy wrote:
+On 6/3/22 17:48, Christophe Leroy wrote:
 > 
 > 
 > Le 03/06/2022 à 12:14, Anshuman Khandual a écrit :
->> This defines and exports a platform specific custom vm_get_page_prot() via
->> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->> macros can be dropped which are no longer needed.
+>> Restrict generic protection_map[] array visibility only for platforms which
+>> do not enable ARCH_HAS_VM_GET_PAGE_PROT. For other platforms that do define
+>> their own vm_get_page_prot() enabling ARCH_HAS_VM_GET_PAGE_PROT, could have
+>> their private static protection_map[] still implementing an array look up.
+>> These private protection_map[] array could do without __PXXX/__SXXX macros,
+>> making them redundant and dropping them off.
 >>
->> Cc: Heiko Carstens <hca@linux.ibm.com>
->> Cc: Vasily Gorbik <gor@linux.ibm.com>
->> Cc: linux-s390@vger.kernel.org
+>> But platforms which do not define their custom vm_get_page_prot() enabling
+>> ARCH_HAS_VM_GET_PAGE_PROT, will still have to provide __PXXX/__SXXX macros.
+>> Although this now provides a method for other willing platforms to drop off
+>> __PXXX/__SXX macros completely.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Paul Mackerras <paulus@samba.org>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: x86@kernel.org
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> Cc: sparclinux@vger.kernel.org
+>> Cc: linux-mm@kvack.org
 >> Cc: linux-kernel@vger.kernel.org
->> Acked-by: Sven Schnelle <svens@linux.ibm.com>
->> Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
 >> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 >> ---
->>   arch/s390/Kconfig               |  1 +
->>   arch/s390/include/asm/pgtable.h | 17 -----------------
->>   arch/s390/mm/mmap.c             | 33 +++++++++++++++++++++++++++++++++
->>   3 files changed, 34 insertions(+), 17 deletions(-)
+>>   arch/arm64/include/asm/pgtable-prot.h | 18 ------------------
+>>   arch/arm64/mm/mmap.c                  | 21 +++++++++++++++++++++
+>>   arch/powerpc/include/asm/pgtable.h    |  2 ++
+>>   arch/powerpc/mm/book3s64/pgtable.c    | 20 ++++++++++++++++++++
+>>   arch/sparc/include/asm/pgtable_32.h   |  2 ++
+>>   arch/sparc/include/asm/pgtable_64.h   | 19 -------------------
+>>   arch/sparc/mm/init_64.c               | 20 ++++++++++++++++++++
+>>   arch/x86/include/asm/pgtable_types.h  | 19 -------------------
+>>   arch/x86/mm/pgprot.c                  | 19 +++++++++++++++++++
+>>   include/linux/mm.h                    |  2 ++
+>>   mm/mmap.c                             |  2 +-
+>>   11 files changed, 87 insertions(+), 57 deletions(-)
 >>
->> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
->> index b17239ae7bd4..cdcf678deab1 100644
->> --- a/arch/s390/Kconfig
->> +++ b/arch/s390/Kconfig
->> @@ -81,6 +81,7 @@ config S390
->>   	select ARCH_HAS_SYSCALL_WRAPPER
->>   	select ARCH_HAS_UBSAN_SANITIZE_ALL
->>   	select ARCH_HAS_VDSO_DATA
->> +	select ARCH_HAS_VM_GET_PAGE_PROT
->>   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
->>   	select ARCH_INLINE_READ_LOCK
->>   	select ARCH_INLINE_READ_LOCK_BH
->> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
->> index a397b072a580..c63a05b5368a 100644
->> --- a/arch/s390/include/asm/pgtable.h
->> +++ b/arch/s390/include/asm/pgtable.h
->> @@ -424,23 +424,6 @@ static inline int is_module_addr(void *addr)
->>    * implies read permission.
->>    */
->>            /*xwr*/
->> -#define __P000	PAGE_NONE
->> -#define __P001	PAGE_RO
->> -#define __P010	PAGE_RO
->> -#define __P011	PAGE_RO
->> -#define __P100	PAGE_RX
->> -#define __P101	PAGE_RX
->> -#define __P110	PAGE_RX
->> -#define __P111	PAGE_RX
+> 
+>> diff --git a/arch/powerpc/include/asm/pgtable.h b/arch/powerpc/include/asm/pgtable.h
+>> index d564d0ecd4cd..8ed2a80c896e 100644
+>> --- a/arch/powerpc/include/asm/pgtable.h
+>> +++ b/arch/powerpc/include/asm/pgtable.h
+>> @@ -21,6 +21,7 @@ struct mm_struct;
+>>   #endif /* !CONFIG_PPC_BOOK3S */
+>>   
+>>   /* Note due to the way vm flags are laid out, the bits are XWR */
+>> +#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+> 
+> Ok, so until now it was common to all powerpc platforms. Now you define 
+> a different way whether it is a PPC_BOOK3S_64 or another platform ? 
+> What's the point ?
+
+On powerpc,
+
+select ARCH_HAS_VM_GET_PAGE_PROT        if PPC_BOOK3S_64
+
+Currently protection_map[] which requires __PXXX/__SXXX macros,
+is applicable on all platforms, irrespective whether they enable
+ARCH_HAS_VM_GET_PAGE_PROT or not. But because protection_map[]
+is being made private for ARCH_HAS_VM_GET_PAGE_PROT enabling
+platforms, they will not require __PXXX/__SXXX macros anymore.
+
+In this case, PPC_BOOK3S_64 does not require the macros anymore,
+where as other powerpc platforms will still require them as they
+depend on the generic protection_map[].
+
+> 
+>>   #define __P000	PAGE_NONE
+>>   #define __P001	PAGE_READONLY
+>>   #define __P010	PAGE_COPY
+>> @@ -38,6 +39,7 @@ struct mm_struct;
+>>   #define __S101	PAGE_READONLY_X
+>>   #define __S110	PAGE_SHARED_X
+>>   #define __S111	PAGE_SHARED_X
+>> +#endif
+>>   
+>>   #ifndef __ASSEMBLY__
+>>   
+>> diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
+>> index 7b9966402b25..2cf10a17c0a9 100644
+>> --- a/arch/powerpc/mm/book3s64/pgtable.c
+>> +++ b/arch/powerpc/mm/book3s64/pgtable.c
+>> @@ -551,6 +551,26 @@ unsigned long memremap_compat_align(void)
+>>   EXPORT_SYMBOL_GPL(memremap_compat_align);
+>>   #endif
+>>   
+>> +/* Note due to the way vm flags are laid out, the bits are XWR */
+>> +static pgprot_t protection_map[16] __ro_after_init = {
+> 
+> I don't think powerpc modifies that at all. Could be const instead of 
+> ro_after_init.
+
+Sure, will change that.
+
+> 
+>> +	[VM_NONE]					= PAGE_NONE,
+>> +	[VM_READ]					= PAGE_READONLY,
+>> +	[VM_WRITE]					= PAGE_COPY,
+>> +	[VM_WRITE | VM_READ]				= PAGE_COPY,
+>> +	[VM_EXEC]					= PAGE_READONLY_X,
+>> +	[VM_EXEC | VM_READ]				= PAGE_READONLY_X,
+>> +	[VM_EXEC | VM_WRITE]				= PAGE_COPY_X,
+>> +	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_COPY_X,
+>> +	[VM_SHARED]					= PAGE_NONE,
+>> +	[VM_SHARED | VM_READ]				= PAGE_READONLY,
+>> +	[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
+>> +	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
+>> +	[VM_SHARED | VM_EXEC]				= PAGE_READONLY_X,
+>> +	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READONLY_X,
+>> +	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED_X,
+>> +	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_SHARED_X
+>> +};
+> 
+> That's nice but it could apply to all powerpc platforms. Why restrict it 
+> to book3s/64 ?
+
+Because as mentioned earlier, others powerpc platforms do not
+enable ARCH_HAS_VM_GET_PAGE_PROT.
+
+> 
+>> +
+>>   pgprot_t vm_get_page_prot(unsigned long vm_flags)
+>>   {
+>>   	unsigned long prot = pgprot_val(protection_map[vm_flags &
+>> diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
+>> index 4866625da314..bca98b280fdd 100644
+>> --- a/arch/sparc/include/asm/pgtable_32.h
+>> +++ b/arch/sparc/include/asm/pgtable_32.h
+>> @@ -65,6 +65,7 @@ void paging_init(void);
+>>   extern unsigned long ptr_in_current_pgd;
+>>   
+>>   /*         xwr */
+>> +#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+> 
+> CONFIG_ARCH_HAS_VM_GET_PAGE_PROT is selected by sparc64 only, is that 
+> ifdef needed at all ?
+
+Not really necessary, but added just to tighten up.
+
+> 
+>>   #define __P000  PAGE_NONE
+>>   #define __P001  PAGE_READONLY
+>>   #define __P010  PAGE_COPY
+>> @@ -82,6 +83,7 @@ extern unsigned long ptr_in_current_pgd;
+>>   #define __S101	PAGE_READONLY
+>>   #define __S110	PAGE_SHARED
+>>   #define __S111	PAGE_SHARED
+>> +#endif
+>>   
+>>   /* First physical page can be anywhere, the following is needed so that
+>>    * va-->pa and vice versa conversions work properly without performance
+>> diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
+>> index 4679e45c8348..a779418ceba9 100644
+>> --- a/arch/sparc/include/asm/pgtable_64.h
+>> +++ b/arch/sparc/include/asm/pgtable_64.h
+>> @@ -187,25 +187,6 @@ bool kern_addr_valid(unsigned long addr);
+>>   #define _PAGE_SZHUGE_4U	_PAGE_SZ4MB_4U
+>>   #define _PAGE_SZHUGE_4V	_PAGE_SZ4MB_4V
+>>   
+>> -/* These are actually filled in at boot time by sun4{u,v}_pgprot_init() */
+>> -#define __P000	__pgprot(0)
+>> -#define __P001	__pgprot(0)
+>> -#define __P010	__pgprot(0)
+>> -#define __P011	__pgprot(0)
+>> -#define __P100	__pgprot(0)
+>> -#define __P101	__pgprot(0)
+>> -#define __P110	__pgprot(0)
+>> -#define __P111	__pgprot(0)
 >> -
->> -#define __S000	PAGE_NONE
->> -#define __S001	PAGE_RO
->> -#define __S010	PAGE_RW
->> -#define __S011	PAGE_RW
->> -#define __S100	PAGE_RX
->> -#define __S101	PAGE_RX
->> -#define __S110	PAGE_RWX
->> -#define __S111	PAGE_RWX
+>> -#define __S000	__pgprot(0)
+>> -#define __S001	__pgprot(0)
+>> -#define __S010	__pgprot(0)
+>> -#define __S011	__pgprot(0)
+>> -#define __S100	__pgprot(0)
+>> -#define __S101	__pgprot(0)
+>> -#define __S110	__pgprot(0)
+>> -#define __S111	__pgprot(0)
+>> -
+>>   #ifndef __ASSEMBLY__
+>>   
+>>   pte_t mk_pte_io(unsigned long, pgprot_t, int, unsigned long);
+>> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+>> index f6174df2d5af..6edc2a68b73c 100644
+>> --- a/arch/sparc/mm/init_64.c
+>> +++ b/arch/sparc/mm/init_64.c
+>> @@ -2634,6 +2634,26 @@ void vmemmap_free(unsigned long start, unsigned long end,
+>>   }
+>>   #endif /* CONFIG_SPARSEMEM_VMEMMAP */
+>>   
+>> +/* These are actually filled in at boot time by sun4{u,v}_pgprot_init() */
+>> +static pgprot_t protection_map[16] __ro_after_init = {
+>> +	[VM_NONE]					= __pgprot(0),
+>> +	[VM_READ]					= __pgprot(0),
+>> +	[VM_WRITE]					= __pgprot(0),
+>> +	[VM_WRITE | VM_READ]				= __pgprot(0),
+>> +	[VM_EXEC]					= __pgprot(0),
+>> +	[VM_EXEC | VM_READ]				= __pgprot(0),
+>> +	[VM_EXEC | VM_WRITE]				= __pgprot(0),
+>> +	[VM_EXEC | VM_WRITE | VM_READ]			= __pgprot(0),
+>> +	[VM_SHARED]					= __pgprot(0),
+>> +	[VM_SHARED | VM_READ]				= __pgprot(0),
+>> +	[VM_SHARED | VM_WRITE]				= __pgprot(0),
+>> +	[VM_SHARED | VM_WRITE | VM_READ]		= __pgprot(0),
+>> +	[VM_SHARED | VM_EXEC]				= __pgprot(0),
+>> +	[VM_SHARED | VM_EXEC | VM_READ]			= __pgprot(0),
+>> +	[VM_SHARED | VM_EXEC | VM_WRITE]		= __pgprot(0),
+>> +	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= __pgprot(0)
+>> +};
+> 
+> __pgprot(0) is 0 so you don't need to initialise the fields at all, it 
+> is zeroized at startup as part of BSS section.
+
+Sure, will change.
+
+> 
+>> +
+>>   static void prot_init_common(unsigned long page_none,
+>>   			     unsigned long page_shared,
+>>   			     unsigned long page_copy,
+> 
+>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>> index bc8f326be0ce..2254c1980c8e 100644
+>> --- a/include/linux/mm.h
+>> +++ b/include/linux/mm.h
+>> @@ -420,11 +420,13 @@ extern unsigned int kobjsize(const void *objp);
+>>   #endif
+>>   #define VM_FLAGS_CLEAR	(ARCH_VM_PKEY_FLAGS | VM_ARCH_CLEAR)
+>>   
+>> +#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+>>   /*
+>>    * mapping from the currently active vm_flags protection bits (the
+>>    * low four bits) to a page protection mask..
+>>    */
+>>   extern pgprot_t protection_map[16];
+>> +#endif
 >>   
 >>   /*
->>    * Segment entry (large page) protection definitions.
->> diff --git a/arch/s390/mm/mmap.c b/arch/s390/mm/mmap.c
->> index d545f5c39f7e..11d75b8d5ec0 100644
->> --- a/arch/s390/mm/mmap.c
->> +++ b/arch/s390/mm/mmap.c
->> @@ -188,3 +188,36 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
->>   		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
->>   	}
->>   }
->> +
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->> +	case VM_NONE:
->> +		return PAGE_NONE;
->> +	case VM_READ:
->> +	case VM_WRITE:
->> +	case VM_WRITE | VM_READ:
->> +		return PAGE_RO;
->> +	case VM_EXEC:
->> +	case VM_EXEC | VM_READ:
->> +	case VM_EXEC | VM_WRITE:
->> +	case VM_EXEC | VM_WRITE | VM_READ:
->> +		return PAGE_RX;
->> +	case VM_SHARED:
->> +		return PAGE_NONE;
->> +	case VM_SHARED | VM_READ:
->> +		return PAGE_RO;
->> +	case VM_SHARED | VM_WRITE:
->> +	case VM_SHARED | VM_WRITE | VM_READ:
->> +		return PAGE_RW;
->> +	case VM_SHARED | VM_EXEC:
->> +	case VM_SHARED | VM_EXEC | VM_READ:
->> +		return PAGE_RX;
->> +	case VM_SHARED | VM_EXEC | VM_WRITE:
->> +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->> +		return PAGE_RWX;
->> +	default:
->> +		BUILD_BUG();
->> +	}
->> +}
->> +EXPORT_SYMBOL(vm_get_page_prot);
+>>    * The default fault flags that should be used by most of the
+>> diff --git a/mm/mmap.c b/mm/mmap.c
+>> index 61e6135c54ef..e66920414945 100644
+>> --- a/mm/mmap.c
+>> +++ b/mm/mmap.c
+>> @@ -101,6 +101,7 @@ static void unmap_region(struct mm_struct *mm,
+>>    *								w: (no) no
+>>    *								x: (yes) yes
+>>    */
+>> +#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+>>   pgprot_t protection_map[16] __ro_after_init = {
+>>   	[VM_NONE]					= __P000,
+>>   	[VM_READ]					= __P001,
+>> @@ -120,7 +121,6 @@ pgprot_t protection_map[16] __ro_after_init = {
+>>   	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= __S111
+>>   };
+>>   
+>> -#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
 > 
-> Wasn't it demonstrated in previous discussions that a switch/case is 
-> suboptimal compared to a table cell read ?
+> Why not let architectures provide their protection_map[] and keep that 
+> function ?
 
-Right but all these platform patches here were acked from respective
-platform folks. I assumed that they might have valued the simplicity
-in switch case statements, while also dropping off the __SXXX/__PXXX
-macros, which is the final objective. Looks like that assumption was
-not accurate.
+Just to understand this correctly.
+
+All platforms provide their private protection_map[] array, drop __SXXX, __PXXX
+macros which will not be required anymore, depend on generic vm_get_page_prot()
+array look up, unless they need custom function via ARCH_HAS_VM_GET_PAGE_PROT ?
 
 > 
-> In order to get rid of the _Sxxx/_Pxxx macros, my preference would go to 
-> having architectures provide their own protection_map[] table, and keep 
-> the generic vm_get_page_prot() for the architectures would don't need a 
-> specific version of it.
-
-I will try and rework the patches as suggested.
-
-> 
-> This comment applies to all following patches as well.
+>>   pgprot_t vm_get_page_prot(unsigned long vm_flags)
+>>   {
+>>   	return protection_map[vm_flags & (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)];
