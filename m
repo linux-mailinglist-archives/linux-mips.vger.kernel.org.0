@@ -2,162 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D15A53D70E
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Jun 2022 15:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2B653DA5B
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Jun 2022 08:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbiFDNqo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 4 Jun 2022 09:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S244048AbiFEGHX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 5 Jun 2022 02:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiFDNqn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Jun 2022 09:46:43 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FE02C11F;
-        Sat,  4 Jun 2022 06:46:42 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 24A5F32003C0;
-        Sat,  4 Jun 2022 09:46:39 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 04 Jun 2022 09:46:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654350398; x=
-        1654436798; bh=rUGhNqosCaJGWgpyLmYVfMrRwpqvKKDo49Pbm+4zht8=; b=s
-        OoxChwUQ6fh3ZeD30iz4ZsFFFInLqvE9aTxPGkS42kjxUvGk+Jn6U6MOnNUZbqXP
-        vGGXLH+aVTrqiCzlrdsfgyY5poU76Ouz42YnPJkgynZ2w3YvFFCZ/koRImuNZIWM
-        gPMzZavD5QXlIwCviQvwz2m0UrpBowUC6+RHweGDuH7hq5r8NXR9IzR6XfdwAQ4Z
-        0To7LiVrjVTLKk9viqytfwXQNy3r4AtnG1kYTPhko4sEVYFlvraKIwFShE6B8OoU
-        lFtxPeSpU9k/t2zq1vMXKJ2bUSjdO67DoRP8ROLwAU0Z7jUVXRe4ypVNdnMIylE+
-        L9Ps27yzhDXUDC28hC4EA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654350398; x=
-        1654436798; bh=rUGhNqosCaJGWgpyLmYVfMrRwpqvKKDo49Pbm+4zht8=; b=i
-        UKN6QJxL2eheOwNJNaR2v6DzJG5VzQFvoVVwn+B64cFSh/6W1puWhQSYrbYTqpmu
-        NKyMa3QdE4GWRhW1TaC/OGVuD+2B0cH6bnHYbpKoJlup1KE580n6Fb1E+aGfVno/
-        u6G9r5adqHHbljqK4X85iohVnawMS/jN+w0hP5hXuRMg6m3COJlh/aPMOiupjVmB
-        tWjf3/aXJbXdt39CQkISQ8hnDFKhJT26FJQSGvoaYw10ViWw0ZUO/jgmNNxMrsoV
-        a0BaaDB2OHM7pDrLui0vGCmFR/abEn1g6YyreIjqkZsiMrL6XO29LQuEegkCFwkt
-        zI2OlUOeB/4oJdv+wOW6Q==
-X-ME-Sender: <xms:PmKbYjDzBjGXoXDXbaTqv6e7_KwCT_pdCDKVzg4Advhp6V9P8pojFA>
-    <xme:PmKbYpjHqDZp7qgrSnyLvWhxNSgo10uiFZqoakq2FM1dKzj7b7pUe8WEA_tMcRADL
-    0jbKpPnEHk2tWdMwgE>
-X-ME-Received: <xmr:PmKbYunjr7BpxAR-F5veIqiTkzcqPfjUJVkIzDo0iLDi8wAGj7--9di-B5aGwaY4FrR5AmoxSIhqFKZBllNXkOAYf_T4C2VrLQ4o5fjN1fjMT3mY6RLH>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleekgdeikecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeegieeh
-    vefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:PmKbYlzMVq8jv8PAIYG7COblLtKCsGnY36rQdiFE9SgP9US0TL7wnQ>
-    <xmx:PmKbYoRvowwVA1Y63sXLwyTroD36bF4NYRsYBQKLwxEAETQ1V2I8mQ>
-    <xmx:PmKbYoavXf4rzMOwnFaU7aJRXyc8Sd7ya069cGehlai2A1-OQqXRvg>
-    <xmx:PmKbYuc_Hng7GuNYETYrH45C2hSk-KdFwwutrKP2MdnR0Sn0b4LEIA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 4 Jun 2022 09:46:36 -0400 (EDT)
-Message-ID: <01dd74cb-b53c-93e3-d27f-57603d348f67@flygoat.com>
-Date:   Sat, 4 Jun 2022 14:46:30 +0100
+        with ESMTP id S244060AbiFEGHS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Jun 2022 02:07:18 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06173DFBA;
+        Sat,  4 Jun 2022 23:07:16 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id x4so1733256pfj.10;
+        Sat, 04 Jun 2022 23:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ntiAGYWvOui4xB3cbO1kuW43WbW64QLsxlfvqLjsP00=;
+        b=UNdwgXBqNRzek8pEr5Qw32/XwVITDA54mg7Kzlts/3Dok86B2ZXU7Lqr1Wdv51FkOu
+         D+DjiX7VwRrTKbDe9kWrgm/TbkjVysKd4l5D7wVPorYtHyYfdyRppXHf4MZfzJ7QRI0G
+         EC3BWN8KlO2/z7rWQ5i+BIzMbh+leiVDSOc8qAYViWptCWWG4Owq+H4XBnLjjs1xCcOz
+         A8JCjb5m0d0MotydVY6eHW9GrrnezCP2hIrGtTB7iBJQaS8HSmbaubLLvbOEwEFd1AwU
+         Y4nKLkkmEYL9atMXbUbAZFFBIXckKQRQLkBUUHtnrU17dM/sv/B9E0r1k5EpKBBHQfIF
+         cZEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ntiAGYWvOui4xB3cbO1kuW43WbW64QLsxlfvqLjsP00=;
+        b=FPjopPBEwcNXp5tiVLVjPwNNf0ALmrHpzHfc5VoUya5EdFX8AqomJshz+m7f8fMlhC
+         eHb+C5iBTfvd2q1vvnfqsc14Us9lf/zKN5vy/aRgLHyLMkGgD5+2DYb9dOf6l6+jSFD1
+         RJoRwskJOkUOfXVysw+V16Pkqt2caV/a/RBmfRa6YUb36FAnvokDKvJVtoFLr7xp5NYn
+         oQ9OBg/JWx1rQcxc1XSfDY94bnZxjep2HmFsK30ZAD5F3nzfyPTldK5H/m5dRc4P+sx7
+         O9cpANjEHYV6pAymQ+0mmunDKH9JXVRDnyP5wHbAw35lFEWQWBKf64X8ozCZcFapL6jM
+         hGww==
+X-Gm-Message-State: AOAM530GA5DbATD8OuTM3mKdZTGx0cW+Phs0+rmWoLXAVRpSwKungFoj
+        B4dsUCBlJPgUvGbInuWKnhu37MJNI0pLFA==
+X-Google-Smtp-Source: ABdhPJyA1lhiKwlzudDECY/g6A/17Ban2AXmzmlCM0DNLWnaso1OtO7XN2+wdSLdJ6SJvCSQi3abLQ==
+X-Received: by 2002:a05:6a00:1594:b0:51b:f4ec:4c02 with SMTP id u20-20020a056a00159400b0051bf4ec4c02mr5896399pfk.27.1654409235449;
+        Sat, 04 Jun 2022 23:07:15 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id u1-20020a1709026e0100b0015e8d4eb231sm8153260plk.123.2022.06.04.23.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jun 2022 23:07:14 -0700 (PDT)
+Date:   Sun, 5 Jun 2022 15:07:12 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
+        openrisc@lists.librecores.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] openrisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Message-ID: <YpxIENWD3gOkFiG2@antec>
+References: <20220603101411.488970-1-anshuman.khandual@arm.com>
+ <20220603101411.488970-7-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH for-5.19 1/2] irqchip/loongson-liointc: Use architecture
- register to get coreid
-Content-Language: en-GB
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>, Marc Zyngier <maz@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-References: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
- <CAAhV-H6KMC7OiLO74nN05+qfcR6ZZCih12T-iBGQ4_L9RVOjoQ@mail.gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <CAAhV-H6KMC7OiLO74nN05+qfcR6ZZCih12T-iBGQ4_L9RVOjoQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603101411.488970-7-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Fri, Jun 03, 2022 at 03:44:11PM +0530, Anshuman Khandual wrote:
+> This defines and exports a platform specific custom vm_get_page_prot() via
+> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> macros can be dropped which are no longer needed.
+> 
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: openrisc@lists.librecores.org
+> Cc: linux-kernel@vger.kernel.org
+> Acked-by: Stafford Horne <shorne@gmail.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
+Is it possible to retract my Acked-by?  I was following the discussion of this
+new function actually being sub optimal.  So as far as I am concerned all these
+architecture patches should be nak'ed.
 
-在 2022/6/4 14:18, Huacai Chen 写道:
-> Hi, Jiaxun,
->
-> On Sat, Jun 4, 2022 at 8:41 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->> fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for
->> LoongArch") replaced get_ebase_cpunum with physical processor
->> id from SMP facilities. However that breaks MIPS non-SMP build
->> and makes booting from other cores inpossible on non-SMP kernel.
->>
->> Thus we revert get_ebase_cpunum back and use get_csr_cpuid for
->> LoongArch.
->>
->> Fixes: fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for LoongArch")
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->>   drivers/irqchip/irq-loongson-liointc.c | 10 +++++++++-
->>   1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
->> index aed88857d90f..c11cf97bcd1a 100644
->> --- a/drivers/irqchip/irq-loongson-liointc.c
->> +++ b/drivers/irqchip/irq-loongson-liointc.c
->> @@ -39,6 +39,14 @@
->>
->>   #define LIOINTC_ERRATA_IRQ     10
->>
->> +#if defined(CONFIG_MIPS)
->> +#define liointc_core_id get_ebase_cpunum()
->> +#elif defined(CONFIG_LOONGARCH)
->> +#define liointc_core_id get_csr_cpuid()
->> +#else
->> +#define liointc_core_id 0
->> +#endif
-> Thank you for your quick fix. But I think it is better to do like this:
->
-> #if defined(CONFIG_LOONGARCH)
-> #define liointc_core_id get_csr_cpuid()
-> #else
-> #define liointc_core_id get_ebase_cpunum()
-> #endif
->
-> Because this driver doesn't depend on COMPILE_TEST, it can only be
-> built under MIPS and LOONGARCH. Moreover, let the else branch be the
-> same as the old behavior looks more reasonable.
-Thanks for the suggestion.
-Will do for v2.
-
-- Jiaxun
-
->
-> Huacai
->
->> +
->>   struct liointc_handler_data {
->>          struct liointc_priv     *priv;
->>          u32                     parent_int_map;
->> @@ -57,7 +65,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
->>          struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
->>          struct irq_chip *chip = irq_desc_get_chip(desc);
->>          struct irq_chip_generic *gc = handler->priv->gc;
->> -       int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
->> +       int core = liointc_core_id % LIOINTC_NUM_CORES;
->>          u32 pending;
->>
->>          chained_irq_enter(chip, desc);
->> --
->> 2.25.1
->>
-
+-Stafford
