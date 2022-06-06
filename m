@@ -2,42 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F01653EA20
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Jun 2022 19:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E2453E9A8
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Jun 2022 19:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238280AbiFFNFr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Jun 2022 09:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
+        id S238545AbiFFNNX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Jun 2022 09:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238264AbiFFNFp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jun 2022 09:05:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2EE38D90;
-        Mon,  6 Jun 2022 06:05:43 -0700 (PDT)
+        with ESMTP id S238540AbiFFNNW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jun 2022 09:13:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B719718B0F;
+        Mon,  6 Jun 2022 06:13:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7A5F2CE1A8F;
-        Mon,  6 Jun 2022 13:05:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A26C3411F;
-        Mon,  6 Jun 2022 13:05:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AE3AB81812;
+        Mon,  6 Jun 2022 13:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2862DC3411C;
+        Mon,  6 Jun 2022 13:13:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654520739;
-        bh=xtSZpREwcefu3/OKJIzEr4wdqXfHclweHI5c8Rpk0R0=;
+        s=k20201202; t=1654521199;
+        bh=qbO7lBbtmW3Eet7P0hr1OYo1n6g40lpKLJ1V7MD0vxY=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a+8qy0zJAIbbXlHJQMfbAdDlms89dwtXgyg0bQ0WaLy+yPPTYrknJhqrKo88VMfTR
-         d3I/tYtVVKDAcwZf+cHTgafy0QLm4ofSC1n8KucjFoFf6eWFy2Eu12Pvzx0qlobPfS
-         Euy298/3+/p2pR/NHTkwx9B9M8ihQjsNrIkb6yArJ91uMzST0pPVXpjvGsuRncs99C
-         fSIso33/WkUdJpkLtJ65RITU0EySxz6hvIKPUmvlEWj8go0KJCGypFW4botcKAr4S2
-         D+zwQb2UEjWqs5yZ7UdBDjsoXDypRw2x+tHXpezvKA/3DSWLB4Ev59cwKLkOlOSLQ0
-         4IEZVi2nuZh5w==
+        b=mlzLz+kOsMx/FW6FW7BiEQ7laxoGg0DZj1Std7P3Y3JNYkG0AyRfekSyye8MKjMOs
+         Z3kFBnj4guzB0y+7cYNglF/MvvatjrXIqtljIPTt88RxEdbD5zfh2H+fsgWNTb771I
+         i9s7n138ZFWLn7hDjtDWGCFyZ/fxpXiTodeICQqmIHJQahRQdC6gP5tseboA7LWWs6
+         HvWqHCoixjs5Fyte09ar+iCmKtvfa+lqskuYj0w8kayv+wKPUahzj2EXzEQUX4hxTD
+         VL1bMev2+bgs0oWpDmEWXHNzmSFiKxreMHxQ3a7zM0HnF4IXXQiTrDPNBRi2L2wgM/
+         qsFaUxdChEDcQ==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nyCQL-00FuCO-Ek; Mon, 06 Jun 2022 14:05:37 +0100
-Date:   Mon, 06 Jun 2022 14:05:37 +0100
-Message-ID: <87v8te3psu.wl-maz@kernel.org>
+        id 1nyCXk-00FuJV-Pw; Mon, 06 Jun 2022 14:13:16 +0100
+Date:   Mon, 06 Jun 2022 14:13:16 +0100
+Message-ID: <87tu8y3pg3.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -55,10 +55,10 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Tiezhu Yang <yangtiezhu@loongson.cn>,
         Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
-Subject: Re: [PATCH v2 03/12] irqchip: mips-gic: Introduce gic_with_each_online_cpu()
-In-Reply-To: <20220525121030.16054-4-Dragan.Mladjenovic@syrmia.com>
+Subject: Re: [PATCH v2 04/12] irqchip: mips-gic: Support multi-cluster in gic_with_each_online_cpu()
+In-Reply-To: <20220525121030.16054-5-Dragan.Mladjenovic@syrmia.com>
 References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
-        <20220525121030.16054-4-Dragan.Mladjenovic@syrmia.com>
+        <20220525121030.16054-5-Dragan.Mladjenovic@syrmia.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -78,125 +78,51 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 25 May 2022 13:10:21 +0100,
+On Wed, 25 May 2022 13:10:22 +0100,
 Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
 > 
 > From: Paul Burton <paulburton@kernel.org>
 > 
-> A few pieces of code in the MIPS GIC driver operate on the GIC local
-> register block for each online CPU, accessing each via the GIC's
-> other/redirect register block. This patch abstracts the process of
-> iterating over online CPUs & configuring the other/redirect region to
-> access their registers through a new gic_with_each_online_cpu() macro.
+> Introduce support for multi-cluster GIC register access in
+> __gic_with_next_online_cpu(), and therefore in its user
+> gic_with_each_online_cpu(). We access registers in remote clusters using
+> the CM's GCR_CL_REDIRECT register, and so here we delegate to
+> mips_cm_lock_other() in order to configure this access.
 > 
-> This simplifies users of the new macro slightly, and more importantly
-> prepares us for handling multi-cluster systems where the register
-> configuration will be done via the CM's GCR_CL_REDIRECT register. By
-> abstracting all other/redirect block configuration through this macro,
-> and the __gic_with_next_online_cpu() function which backs it, users will
-> trivially gain support for multi-cluster when it is implemented in
-> __gic_with_next_online_cpu().
+> With this done, users of gic_with_each_online_cpu() gain support for
+> multi-cluster with no further changes.
 > 
 > Signed-off-by: Paul Burton <paulburton@kernel.org>
 > Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 > Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
 > 
 > diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-> index ff89b36267dd..4872bebe24cf 100644
+> index 4872bebe24cf..89a3c6d04e09 100644
 > --- a/drivers/irqchip/irq-mips-gic.c
 > +++ b/drivers/irqchip/irq-mips-gic.c
-> @@ -65,6 +65,45 @@ static struct gic_all_vpes_chip_data {
->  	bool	mask;
->  } gic_all_vpes_chip_data[GIC_NUM_LOCAL_INTRS];
->  
-> +static int __gic_with_next_online_cpu(int prev)
-> +{
-> +	unsigned int cpu;
-> +
-> +	/* Discover the next online CPU */
-> +	cpu = cpumask_next(prev, cpu_online_mask);
-> +
-> +	/* If there isn't one, we're done */
-> +	if (cpu >= nr_cpu_ids)
-> +		return cpu;
-> +
-> +	/*
-> +	 * Lock access to the next CPU's GIC local register block.
-> +	 *
-> +	 * In the single cluster case we simply set GIC_VL_OTHER. The caller
-> +	 * holds gic_lock so nothing can clobber the value we write.
-> +	 */
-> +	write_gic_vl_other(mips_cm_vp_id(cpu));
-> +
-> +	return cpu;
-> +}
-> +
-> +/**
-> + * gic_with_each_online_cpu() - Iterate over online CPUs, access local registers
-> + * @cpu: An integer variable to hold the current CPU number
-> + *
-> + * Iterate over online CPUs & configure the other/redirect register region to
-> + * access each CPUs GIC local register block, which can be accessed from the
-> + * loop body using read_gic_vo_*() or write_gic_vo_*() accessor functions or
-> + * their derivatives.
-> + *
-> + * The caller must hold gic_lock throughout the loop, such that GIC_VL_OTHER
-> + * cannot be clobbered.
-> + */
-> +#define gic_with_each_online_cpu(cpu)			\
-
-nit: please keep the kernel convention of using 'for_each'. This makes
-it far easier to grep for such iterators when doing bulk refactoring.
-
-Also, since there is a requirement to hold the gic_lock, please add a
-lockdep_assert_held() in the loop so that it can be checked with a
-lockdep kernel.
-
-> +	for ((cpu) = __gic_with_next_online_cpu(-1);	\
-> +	     (cpu) = __gic_with_next_online_cpu(cpu),	\
-> +	     (cpu) < nr_cpu_ids;)
-> +
->  static void gic_clear_pcpu_masks(unsigned int intr)
+> @@ -69,6 +69,20 @@ static int __gic_with_next_online_cpu(int prev)
 >  {
->  	unsigned int i;
-> @@ -357,10 +396,8 @@ static void gic_mask_local_irq_all_vpes(struct irq_data *d)
->  	cd->mask = false;
+>  	unsigned int cpu;
 >  
->  	spin_lock_irqsave(&gic_lock, flags);
-> -	for_each_online_cpu(cpu) {
-> -		write_gic_vl_other(mips_cm_vp_id(cpu));
-> +	gic_with_each_online_cpu(cpu)
->  		write_gic_vo_rmask(BIT(intr));
-> -	}
->  	spin_unlock_irqrestore(&gic_lock, flags);
->  }
->  
-> @@ -375,10 +412,8 @@ static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
->  	cd->mask = true;
->  
->  	spin_lock_irqsave(&gic_lock, flags);
-> -	for_each_online_cpu(cpu) {
-> -		write_gic_vl_other(mips_cm_vp_id(cpu));
-> +	gic_with_each_online_cpu(cpu)
->  		write_gic_vo_smask(BIT(intr));
-> -	}
->  	spin_unlock_irqrestore(&gic_lock, flags);
->  }
->  
-> @@ -532,10 +567,8 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
->  		return -EPERM;
->  
->  	spin_lock_irqsave(&gic_lock, flags);
-> -	for_each_online_cpu(cpu) {
-> -		write_gic_vl_other(mips_cm_vp_id(cpu));
-> +	gic_with_each_online_cpu(cpu)
->  		write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
-> -	}
->  	spin_unlock_irqrestore(&gic_lock, flags);
->  
->  	return 0;
+> +	/*
+> +	 * Unlock access to the previous CPU's GIC local register block.
+> +	 *
+> +	 * Delegate to the CM locking code in the multi-cluster case, since
+> +	 * other clusters can only be accessed using GCR_CL_REDIRECT.
+> +	 *
+> +	 * In the single cluster case we don't need to do anything; the caller
+> +	 * is responsible for maintaining gic_lock & nothing should be
+> +	 * expecting any particular value of GIC_VL_OTHER so we can leave it
+> +	 * as-is.
+> +	 */
+> +	if ((prev != -1) && mips_cps_multicluster_cpus())
+> +		mips_cm_unlock_other();
 
-Thanks,
+Huh. It now strikes me that if you exit the gic_with_next_online_cpu()
+early (with a 'break;', for example), the state machine breaks as you
+won't have performed the unlock...
+
+This definitely needs some documenting, at the very least.
 
 	M.
 
