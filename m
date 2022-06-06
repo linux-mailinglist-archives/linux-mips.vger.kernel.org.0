@@ -2,42 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E2453E9A8
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Jun 2022 19:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA64D53E788
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Jun 2022 19:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238545AbiFFNNX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Jun 2022 09:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
+        id S238584AbiFFNOf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Jun 2022 09:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238540AbiFFNNW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jun 2022 09:13:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B719718B0F;
-        Mon,  6 Jun 2022 06:13:21 -0700 (PDT)
+        with ESMTP id S238623AbiFFNOb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jun 2022 09:14:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB481AD81;
+        Mon,  6 Jun 2022 06:14:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AE3AB81812;
-        Mon,  6 Jun 2022 13:13:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2862DC3411C;
-        Mon,  6 Jun 2022 13:13:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28EEE6122B;
+        Mon,  6 Jun 2022 13:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B4D5C34115;
+        Mon,  6 Jun 2022 13:14:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654521199;
-        bh=qbO7lBbtmW3Eet7P0hr1OYo1n6g40lpKLJ1V7MD0vxY=;
+        s=k20201202; t=1654521254;
+        bh=YDX4NNlOVpqDCWCFK0MqZGOJ//FD8OgInNrhbDMDRqc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mlzLz+kOsMx/FW6FW7BiEQ7laxoGg0DZj1Std7P3Y3JNYkG0AyRfekSyye8MKjMOs
-         Z3kFBnj4guzB0y+7cYNglF/MvvatjrXIqtljIPTt88RxEdbD5zfh2H+fsgWNTb771I
-         i9s7n138ZFWLn7hDjtDWGCFyZ/fxpXiTodeICQqmIHJQahRQdC6gP5tseboA7LWWs6
-         HvWqHCoixjs5Fyte09ar+iCmKtvfa+lqskuYj0w8kayv+wKPUahzj2EXzEQUX4hxTD
-         VL1bMev2+bgs0oWpDmEWXHNzmSFiKxreMHxQ3a7zM0HnF4IXXQiTrDPNBRi2L2wgM/
-         qsFaUxdChEDcQ==
+        b=YZHN5+ZGwp6uasf+gER256E64FyixZ8PUrwizVGOgvJvGpU2xeNHI40K4fdEBG58I
+         fFg2tqQnfNhKqhI+j/47ZsK4JZMYVZdb3xas9xFas1a7Eh7oLj5F4R7QggFus7Y+29
+         ocvKdTbDa+ZcvQCEj+KqZKoyxMv+R50hhKI+QwUmACNxLmwzkYyrwOgIc9JIo2N8cB
+         5+DRYMMuzrfc4rMWw4sgE1mjbeipPPkRVtjJe3OXuclQR6semuYsTfB4NHqNekHmkR
+         MTTseK7TD+RQaGbgmrZ1OFWnAWCEhd0MRt3Sf/3UuDvnL9Sv7Xe9dpZAhQgCZrP6hO
+         6bRSdf2xU5V1w==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nyCXk-00FuJV-Pw; Mon, 06 Jun 2022 14:13:16 +0100
-Date:   Mon, 06 Jun 2022 14:13:16 +0100
-Message-ID: <87tu8y3pg3.wl-maz@kernel.org>
+        id 1nyCYe-00FuK3-5c; Mon, 06 Jun 2022 14:14:12 +0100
+Date:   Mon, 06 Jun 2022 14:14:11 +0100
+Message-ID: <87sfoi3pek.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -55,10 +55,10 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Tiezhu Yang <yangtiezhu@loongson.cn>,
         Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
-Subject: Re: [PATCH v2 04/12] irqchip: mips-gic: Support multi-cluster in gic_with_each_online_cpu()
-In-Reply-To: <20220525121030.16054-5-Dragan.Mladjenovic@syrmia.com>
+Subject: Re: [PATCH v2 11/12] MIPS: Report cluster in /proc/cpuinfo
+In-Reply-To: <20220525121030.16054-12-Dragan.Mladjenovic@syrmia.com>
 References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
-        <20220525121030.16054-5-Dragan.Mladjenovic@syrmia.com>
+        <20220525121030.16054-12-Dragan.Mladjenovic@syrmia.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -78,51 +78,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 25 May 2022 13:10:22 +0100,
+On Wed, 25 May 2022 13:10:29 +0100,
 Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
 > 
 > From: Paul Burton <paulburton@kernel.org>
 > 
-> Introduce support for multi-cluster GIC register access in
-> __gic_with_next_online_cpu(), and therefore in its user
-> gic_with_each_online_cpu(). We access registers in remote clusters using
-> the CM's GCR_CL_REDIRECT register, and so here we delegate to
-> mips_cm_lock_other() in order to configure this access.
-> 
-> With this done, users of gic_with_each_online_cpu() gain support for
-> multi-cluster with no further changes.
+> When >= CM3.5 output cluster number.
 > 
 > Signed-off-by: Paul Burton <paulburton@kernel.org>
-> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 > Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
 > 
-> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-> index 4872bebe24cf..89a3c6d04e09 100644
-> --- a/drivers/irqchip/irq-mips-gic.c
-> +++ b/drivers/irqchip/irq-mips-gic.c
-> @@ -69,6 +69,20 @@ static int __gic_with_next_online_cpu(int prev)
->  {
->  	unsigned int cpu;
+> diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+> index bb43bf850314..a66e7705315d 100644
+> --- a/arch/mips/kernel/proc.c
+> +++ b/arch/mips/kernel/proc.c
+> @@ -12,6 +12,7 @@
+>  #include <asm/cpu.h>
+>  #include <asm/cpu-features.h>
+>  #include <asm/idle.h>
+> +#include <asm/mips-cps.h>
+>  #include <asm/mipsregs.h>
+>  #include <asm/processor.h>
+>  #include <asm/prom.h>
+> @@ -282,6 +283,8 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>  	seq_printf(m, "kscratch registers\t: %d\n",
+>  		      hweight8(cpu_data[n].kscratch_mask));
+>  	seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
+> +	if (mips_cm_revision() >= CM_REV_CM3_5)
+> +		seq_printf(m, "cluster\t\t\t: %d\n", cpu_cluster(&cpu_data[n]));
+>  	seq_printf(m, "core\t\t\t: %d\n", cpu_core(&cpu_data[n]));
 >  
-> +	/*
-> +	 * Unlock access to the previous CPU's GIC local register block.
-> +	 *
-> +	 * Delegate to the CM locking code in the multi-cluster case, since
-> +	 * other clusters can only be accessed using GCR_CL_REDIRECT.
-> +	 *
-> +	 * In the single cluster case we don't need to do anything; the caller
-> +	 * is responsible for maintaining gic_lock & nothing should be
-> +	 * expecting any particular value of GIC_VL_OTHER so we can leave it
-> +	 * as-is.
-> +	 */
-> +	if ((prev != -1) && mips_cps_multicluster_cpus())
-> +		mips_cm_unlock_other();
+>  #if defined(CONFIG_MIPS_MT_SMP) || defined(CONFIG_CPU_MIPSR6)
 
-Huh. It now strikes me that if you exit the gic_with_next_online_cpu()
-early (with a 'break;', for example), the state machine breaks as you
-won't have performed the unlock...
-
-This definitely needs some documenting, at the very least.
+This will break userspace. Please don't do that.
 
 	M.
 
