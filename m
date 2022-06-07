@@ -2,68 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A352E540438
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jun 2022 19:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33685412C4
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Jun 2022 21:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344416AbiFGRAN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Jun 2022 13:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S1356380AbiFGTyV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Jun 2022 15:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345363AbiFGRAJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Jun 2022 13:00:09 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0849F338F;
-        Tue,  7 Jun 2022 10:00:03 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bg6so16635489ejb.0;
-        Tue, 07 Jun 2022 10:00:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:date:in-reply-to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=S4VNfIke2KvnIJMRH6f3rNuBXi/ZA3zV6uDJeQjXmuM=;
-        b=XoRM00N+6Fems+DaFXMoRxUfOYcdFfCtH6mFIARABY5BhA6F4rfx2mkxwv01maf96k
-         nTl5lEKoT2wjKMQFXlaUaCF4OGeNAV8zWFfdYk7Q5emAi3v1LD6anMPP/WNhi/5vM0At
-         FT1uPMLYhi8eiavZAe3FPEQstjLibpvEI+G5RMdP29SW+viUozVjvl5n2XY5aJYAdCUd
-         EwCDv6xfyA1l/kqo07ZZ6k3Yp5VmbgNtxjUJamVowAapQc5rS8QfZ7lZblRnnt2UJeRR
-         UNgdyOPV2wVDKRWU0VXGK9OMCe1tM2oCh8SRIMjvEOM6SV0AcJJxVn4zaGMX9SbQM70T
-         wM4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version:content-transfer-encoding;
-        bh=S4VNfIke2KvnIJMRH6f3rNuBXi/ZA3zV6uDJeQjXmuM=;
-        b=T9oAYbSY3HpF3HQQznDwRuFpc/LofI4HCXPhIPWnTy09g4a4lZlC00lJuiiZlqpbt/
-         C/pq6QqmYaV3qu4OPcXFzR+X5w+1hkb9RNjQtLMlJ7P0D+d+pSgse9Fsf9zb45PBtWY5
-         TMA1rUQqoid6YFPFrclJNJGTGuZ0eM6vg0WkgObp4Iu+6u8sT+PGbiw9FiqUK2vI2rRv
-         MkmlKURiZECuaarNw+K6PQzJEpOBq7ris+XyFrS02jpaZfaNJS5KA5J/43QG9iRpguSj
-         lC8zPUcg/LkhWwX3YxDC18MTw1XCp3NFwLyrMN93CmDRWkQyKO0UK9mLBc4j/MoVfgxZ
-         4Fyw==
-X-Gm-Message-State: AOAM533f5ibeADo5I9Ktn8koyrnJYnJsFhn69t+EgWF8QUpwTMA69W6h
-        1r6Z87WbpUjdndzY0Kyha4c=
-X-Google-Smtp-Source: ABdhPJzltR9FAeMw59VT6yBMmW6WR18FUMvbw6FRycDCDKYttTuT7QrLC7JP8zVaXstbu0hJmuZIFQ==
-X-Received: by 2002:a17:906:54c3:b0:6ef:d07b:c8ec with SMTP id c3-20020a17090654c300b006efd07bc8ecmr27443327ejp.687.1654621202058;
-        Tue, 07 Jun 2022 10:00:02 -0700 (PDT)
-Received: from localhost (92.40.203.36.threembb.co.uk. [92.40.203.36])
-        by smtp.gmail.com with ESMTPSA id gi5-20020a1709070c8500b006feb8cebbbfsm7904125ejc.6.2022.06.07.10.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 10:00:01 -0700 (PDT)
-References: <20220607110525.36922-1-aidanmacdonald.0x0@gmail.com>
- <TC84DR.BXHQAW8NSA8H@crapouillou.net>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pinctrl: ingenic: Convert to immutable irq chip
-Date:   Tue, 07 Jun 2022 17:47:19 +0100
-In-reply-to: <TC84DR.BXHQAW8NSA8H@crapouillou.net>
-Message-ID: <OUo8utshKyFB2wcmtEAH6jswJGetDRWg@localhost>
+        with ESMTP id S1358950AbiFGTxY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Jun 2022 15:53:24 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18E99FE7;
+        Tue,  7 Jun 2022 11:23:08 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 06FE95C0194;
+        Tue,  7 Jun 2022 14:23:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 07 Jun 2022 14:23:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1654626186; x=
+        1654712586; bh=A2Qz84RTtLj12xCCvGD9YEnpJpWvd/IEQH37atiAywk=; b=X
+        tbU6xTVF1e6z2o3FN1AzPdanm+UDnIeBx7vn1QLtuWEnbnGiMPgdhWtP/c1fmgpK
+        004ApcGLooLI7mD6nopG4fsyDdxSMu/4g1FO0ByLyHWwL+634Cpd1HHaWCOlzpk6
+        kmERRs1qNXZcpYE0PH9+DOwWH1+wPWrLXv8Jfc4mB+1fERLqt21U5d2klW9Y3kGz
+        A8p6VcLtarAYnWppvzlEPbwJZSIiU7gX2ha12zYRRds/sxtFtIT+fYGtPL38PRP4
+        0SxTMCuauskKc7TGZBeIBLIIpg3dObujvsbbmrY3XiGCvr5BbtoSoX0OzSMaRLAc
+        DXsCOR7MLfymF1nrGTHCQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1654626186; x=
+        1654712586; bh=A2Qz84RTtLj12xCCvGD9YEnpJpWvd/IEQH37atiAywk=; b=g
+        fLKM3cRy6/bvh/Dqt1bbAAlSs0ZatAyOwikb2xZZ4Ue2wY5QtTG5rH6HBi0hgRIJ
+        23F3e7NWnjtASVeAJrGVjWrd90ZnVPTiRVOQ2KpQIttfyfSKHDUM0OhD1QddWcMB
+        0ckGVBdGdD4dYl2l9zjo67PoPF+gmPIy3wqm0MpBgx1HRe6d5+L9SwlkEdbHrrUb
+        W/RDqcd+fZWSi142cWIXuaHOXWqGDH6QV4Dy/yQ39kGY2abytrMWw0RCdRc1kCcC
+        mDsg8sAu9W7zY7acv1+BEEi3DGhVwjZIkqIv/VAI9bbtmXZppstjlS+qnx9d6XuY
+        ZtElA3ttKP4Veyp7aP7WA==
+X-ME-Sender: <xms:iZefYt_QKzDJuI_H55srUQAfZGO8B0M0Z1VLadyQlULjsW-RehIHnA>
+    <xme:iZefYhtl2he6-5PYj6hWXsVcjwV7Ir9FIoNeJQbMohf6m4oOz9VvW1jOAvPTUeXCu
+    Apn6hhEftboVnbnkqQ>
+X-ME-Received: <xmr:iZefYrCmF_VHwHeTDqLYqPdV6cwmkoVT_8V6BjolPePgMF_SrCqhcw5tktIJjNxd3I_F36lMQJWdL23VD5DeKjcyUZ-wHR27mCkGNV2mUjI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddthedguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhi
+    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeeg
+    ieehvefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:iZefYheF9ykhy5_RZ6_CqR_rdhJTRuFslz0YfXy6CyBzWnAJEY7JQQ>
+    <xmx:iZefYiMZbh-Ls7dCaRNDExiQOVcEkqWfjPEPSEeutBgAJVpRXWa5ig>
+    <xmx:iZefYjnCoFPlabAcaI_-FgTQ7mlDPdkAOhRKO9dc6ps1XCweHByBeg>
+    <xmx:ipefYpmvM1CzWnBpEp_HBfSJX55iED9u7NTjrtpS52HzqlZqYmwJRQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 7 Jun 2022 14:23:03 -0400 (EDT)
+Message-ID: <0a5dd632-0607-dab6-4de7-1ea248490863@flygoat.com>
+Date:   Tue, 7 Jun 2022 19:23:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 06/12] irqchip: mips-gic: Multi-cluster support
+Content-Language: en-GB
+To:     Marc Zyngier <maz@kernel.org>,
+        Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Chao-ying Fu <cfu@wavecomp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Paul Burton <paulburton@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
+ <20220525121030.16054-7-Dragan.Mladjenovic@syrmia.com>
+ <87wndu3tff.wl-maz@kernel.org>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <87wndu3tff.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,123 +102,46 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-Paul Cercueil <paul@crapouillou.net> writes:
 
-> Hi Aidan,
->
-> Le mar., juin 7 2022 at 12:05:25 +0100, Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
->> Update the driver to use an immutable IRQ chip to fix this warning:
->>     "not an immutable chip, please consider fixing it!"
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>  drivers/pinctrl/pinctrl-ingenic.c | 33 ++++++++++++++++++-------------
->>  1 file changed, 19 insertions(+), 14 deletions(-)
->> diff --git a/drivers/pinctrl/pinctrl-ingenic.c
->> b/drivers/pinctrl/pinctrl-ingenic.c
->> index 1ca11616db74..37258fb05be3 100644
->> --- a/drivers/pinctrl/pinctrl-ingenic.c
->> +++ b/drivers/pinctrl/pinctrl-ingenic.c
->> @@ -135,7 +135,6 @@ struct ingenic_pinctrl {
->>  struct ingenic_gpio_chip {
->>  	struct ingenic_pinctrl *jzpc;
->>  	struct gpio_chip gc;
->> -	struct irq_chip irq_chip;
->>  	unsigned int irq, reg_base;
->>  };
->> @@ -3419,6 +3418,8 @@ static void ingenic_gpio_irq_enable(struct irq_data
->> *irqd)
->>  	struct ingenic_gpio_chip *jzgc =3D gpiochip_get_data(gc);
->>  	int irq =3D irqd->hwirq;
->> +	gpiochip_enable_irq(gc, irq);
->> +
->>  	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
->>  		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, true);
->>  	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
->> @@ -3443,6 +3444,8 @@ static void ingenic_gpio_irq_disable(struct irq_da=
-ta
->> *irqd)
->>  		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_SELECT, irq, false);
->>  	else
->>  		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIER, irq, false);
->> +
->> +	gpiochip_disable_irq(gc, irq);
->>  }
->>  static void ingenic_gpio_irq_ack(struct irq_data *irqd)
->> @@ -3684,6 +3687,20 @@ static void ingenic_gpio_irq_release(struct irq_d=
-ata
->> *data)
->>  	return gpiochip_relres_irq(gpio_chip, data->hwirq);
->>  }
->> +static const struct irq_chip ingenic_gpio_irqchip =3D {
->> +	.name			=3D "gpio",
->> +	.irq_enable		=3D ingenic_gpio_irq_enable,
->> +	.irq_disable		=3D ingenic_gpio_irq_disable,
->> +	.irq_unmask		=3D ingenic_gpio_irq_unmask,
->> +	.irq_mask		=3D ingenic_gpio_irq_mask,
->> +	.irq_ack		=3D ingenic_gpio_irq_ack,
->> +	.irq_set_type		=3D ingenic_gpio_irq_set_type,
->> +	.irq_set_wake		=3D ingenic_gpio_irq_set_wake,
->> +	.irq_request_resources	=3D ingenic_gpio_irq_request,
->> +	.irq_release_resources	=3D ingenic_gpio_irq_release,
->> +	.flags			=3D IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
->> +};
->> +
->>  static int ingenic_pinmux_set_pin_fn(struct ingenic_pinctrl *jzpc,
->>  		int pin, int func)
->>  {
->> @@ -4172,20 +4189,8 @@ static int __init ingenic_gpio_probe(struct
->> ingenic_pinctrl *jzpc,
->>  	if (!jzgc->irq)
->>  		return -EINVAL;
->> -	jzgc->irq_chip.name =3D jzgc->gc.label;
->> -	jzgc->irq_chip.irq_enable =3D ingenic_gpio_irq_enable;
->> -	jzgc->irq_chip.irq_disable =3D ingenic_gpio_irq_disable;
->> -	jzgc->irq_chip.irq_unmask =3D ingenic_gpio_irq_unmask;
->> -	jzgc->irq_chip.irq_mask =3D ingenic_gpio_irq_mask;
->> -	jzgc->irq_chip.irq_ack =3D ingenic_gpio_irq_ack;
->> -	jzgc->irq_chip.irq_set_type =3D ingenic_gpio_irq_set_type;
->> -	jzgc->irq_chip.irq_set_wake =3D ingenic_gpio_irq_set_wake;
->> -	jzgc->irq_chip.irq_request_resources =3D ingenic_gpio_irq_request;
->> -	jzgc->irq_chip.irq_release_resources =3D ingenic_gpio_irq_release;
->> -	jzgc->irq_chip.flags =3D IRQCHIP_MASK_ON_SUSPEND;
->> -
->>  	girq =3D &jzgc->gc.irq;
->> -	girq->chip =3D &jzgc->irq_chip;
->> +	gpio_irq_chip_set_chip(girq, &ingenic_gpio_irqchip);
->
-> This will change each irq_chip's name to "gpio", do we want that?
->
-> You didn't remove jzgc->irq_chip, so maybe what you could do is
-> jzgc->irq_chip =3D ingenic_gpio_irqchip;
-> jzgc->irq_chip.name =3D jzgc->gc.label;
-> gpio_irq_chip_set_chip(girq, &jzgc->irq_chip);
->
-> Thoughts?
->
-> Cheers,
-> -Paul
->
+在 2022/6/6 12:47, Marc Zyngier 写道:
+> On Wed, 25 May 2022 13:10:24 +0100,
+> Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
+>> From: Paul Burton <paulburton@kernel.org>
+>>
+>> The MIPS I6500 CPU & CM (Coherence Manager) 3.5 introduce the concept of
+>> multiple clusters to the system. In these systems each cluster contains
+>> its own GIC, so the GIC isn't truly global any longer. We do have the
+>> ability to access registers in the GICs of remote clusters using a
+>> redirect register block much like the redirect register blocks provided
+>> by the CM & CPC, and configured through the same GCR_REDIRECT register
+>> that we our mips_cm_lock_other() abstraction builds upon.
+>>
+>> It is expected that external interrupts are connected identically to all
+>> clusters. That is, if we have a device providing an interrupt connected
+>> to GIC interrupt pin 0 then it should be connected to pin 0 of every GIC
+>> in the system. This simplifies things somewhat by allowing us for the
+>> most part to treat the GIC as though it is still truly global, so long
+>> as we take care to configure interrupts in the cluster that we want them
+>> affine to.
+> I can see how this can work for level interrupts, but how does this
+> work for edge interrupts? Is there any guarantee that the interrupt
+> will be discarded if routed to a cluster where it isn't configured?
+It is supposed to mask the interrupt out on the GIC which belongs to the
+cluster that the interrupt is not routed to.
 
-I wondered that myself, but it doesn't seem to affect anything except
-what is displayed in /proc/interrupts. Is the name used anywhere else
-where it might cause confusion?
+When it's masked out GIC simply won't sense any level change.
 
-The only similar case I could find was pinctrl-microchip-sgpio.c where
-microchip_sgpio_register_bank() is called in a loop and registers the
-same irq chip repeatedly, so it's probably(?) okay to do this here. It
-seems to defeat the point of immutable irqchips if they just have to be
-copied anyway...
+I guess it's sort of guarantee?
 
-(btw, I did remove jzgc->irq_chip -- or did I miss something?)
+Thanks
+- Jiaxun
 
-Best regards,
-Aidan
-
->>  	girq->parent_handler =3D ingenic_gpio_irq_handler;
->>  	girq->num_parents =3D 1;
->>  	girq->parents =3D devm_kcalloc(dev, 1, sizeof(*girq->parents),
->> --
->> 2.35.1
->>=20
+>
+> Otherwise, I can imagine plenty of spurious interrupts on affinity
+> change.
+>
+> Thanks,
+>
+> 	M.
+>
 
