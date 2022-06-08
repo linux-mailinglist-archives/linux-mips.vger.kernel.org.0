@@ -2,269 +2,198 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCBA542E34
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Jun 2022 12:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C61543260
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Jun 2022 16:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237291AbiFHKpj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Jun 2022 06:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        id S241196AbiFHOVs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Jun 2022 10:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbiFHKph (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Jun 2022 06:45:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534072AE11;
-        Wed,  8 Jun 2022 03:45:35 -0700 (PDT)
+        with ESMTP id S241191AbiFHOVr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Jun 2022 10:21:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93DA3D1D5;
+        Wed,  8 Jun 2022 07:21:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3C80B826B8;
-        Wed,  8 Jun 2022 10:45:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487FCC341C6;
-        Wed,  8 Jun 2022 10:45:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFA7661B49;
+        Wed,  8 Jun 2022 14:21:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A51C34116;
+        Wed,  8 Jun 2022 14:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654685132;
-        bh=IUkks1rKSJ/NdE5ptUYvV5ETNPKdfPh+xYmfyDN6j5A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y3DH+BPm08KVSut05Senfp4vB0Ejiz90/0DzI4vHCNQF16R43bm9dX0GsLcK8wSpK
-         plrR1TLzk5K/Qat9LG5AiN84lz9yBdURg1nRZ5wniBrPOMmDXCft6VEwf2ePW0UaO/
-         FVOeSu0qQBF1TU/ywvAWyjf2kUVucSdIMPerJSs75FMqBbnmcsEaKVPHtgYZf5QOWf
-         cV/jySGcmUoNAsA2qd+ohhIyMDuAMABCr2rMK9SexxphliKJ4L+/URsW6eQ0qI7yLG
-         DVqLtbIGZcSO2dOy3he82ehh6trVRaOjMN0KpC3PuYXvxSPp7rojL7Qb7P1bVGkRIi
-         4mr+zRf+Pg+uw==
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        s=k20201202; t=1654698097;
+        bh=1qpAEjSAq5djkkmLyIM6rUzEBFpBwb5S8o8YQ4yPKWA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=f+5uNDkmztVja1h70Kf8HEKtlvbSFHPe7GufnVlMvMkA7EPZj1hNREAoLZkLn4yMZ
+         6bQ50bNMEBhe4ElBm12ffDV3hbaNZWOfcPkkH6bD1GJ7qTD49z3ahsgnNBTvpURWx5
+         rrvu5QDBi4lRbKEy6EZew4PC7oAb8cDKq8Fbm+3bojZb/vbBuJ9tfwqhpbvZdjxTl3
+         y+uNV/KGl545f2ZW+p6SVfNeUdQ8cwc6SLEJ01DZ+ERUPHKg87AJa/IPMGV7vQAvac
+         xZpWEpxQFIZUDnAYuJHwAFDjwTFYVd/DGOvZKjhTQTx1jhQ+TBRkABL3RxqqFRF6Ed
+         MNrXttwyxlWig==
+Date:   Wed, 8 Jun 2022 23:21:15 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Guo Ren <guoren@kernel.org>, Jarkko Sakkinen <jarkko@profian.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH 3/3] jump_label: make initial NOP patching the special case
-Date:   Wed,  8 Jun 2022 12:45:12 +0200
-Message-Id: <20220608104512.1176209-4-ardb@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220608104512.1176209-1-ardb@kernel.org>
-References: <20220608104512.1176209-1-ardb@kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7711; h=from:subject; bh=IUkks1rKSJ/NdE5ptUYvV5ETNPKdfPh+xYmfyDN6j5A=; b=owEB7QES/pANAwAKAcNPIjmS2Y8kAcsmYgBioH23z/sItwB00nGMha5Ha+zYBS5GkKeFiVirkyRz Z6sfHB+JAbMEAAEKAB0WIQT72WJ8QGnJQhU3VynDTyI5ktmPJAUCYqB9twAKCRDDTyI5ktmPJEPOC/ 90LIbIy+/gbgiX0AcTzY9J5qxBHb2tBJg57qdy0vZgq6YXW9lk1TbqhSB5oRSWenMgxFwgSV4pp/VS F0X8MC5aaIZMfaJb7AMP9o/n6MUHqaMI3Y/x9DbuK1LedWYrAU0pEgmA3Cp/Sh2zDl0lM3c7JJmxT5 iig2vO3AVMNxDkCpOIkvv49syUB4oNyRJdaHM/eBkkI4xuj4IFFEjrJ/wzHasavLpGBnIl97rpw/oN bEkHxz7TBWVXruTXcgcW4JwVFbrUGqVt5Zj5lKuuIr7YUf80r+6wz4xAj13Vxu94ierpwqVaze07vR rDcCaJo0SjwDVg/Sgu36X4sM8oSreMmHS/oT+CY3c6gtrIaVAto8wSwRBp/9goBEhst6To1wIkwwAy pjpVxGND5LfUI1EKLKlsAsogQ+mxaqTNn2Wn1tAT+9RGJZphb6BGs2wYj90u2tQECZlhnLUYjLrfh7 asC8ZlLoRWywY2bTprQg0YXwCam51umh4rvV5XP7SLUg4=
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dave Anglin <dave.anglin@bell.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jordan Niethe <jniethe5@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Wu Caize <zepan@sipeed.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tobias Huschle <huschle@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Message-Id: <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
+In-Reply-To: <YqAy0qjI4Lktk/uJ@iki.fi>
+References: <20220608000014.3054333-1-jarkko@profian.com>
+        <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
+        <YqAy0qjI4Lktk/uJ@iki.fi>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Instead of defaulting to patching NOP opcodes at init time, and leaving
-it to the architectures to override this if this is not needed, switch
-to a model where doing nothing is the default. This is the common case
-by far, as only MIPS requires NOP patching at init time. On all other
-architectures, the correct encodings are emitted by the compiler and so
-no initial patching is needed.
+Hi Jarkko,
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- Documentation/staging/static-keys.rst |  3 ---
- arch/arc/kernel/jump_label.c          | 13 -------------
- arch/arm/kernel/jump_label.c          |  6 ------
- arch/arm64/kernel/jump_label.c        | 11 -----------
- arch/mips/include/asm/jump_label.h    |  2 ++
- arch/parisc/kernel/jump_label.c       | 11 -----------
- arch/riscv/kernel/jump_label.c        | 12 ------------
- arch/s390/kernel/jump_label.c         |  5 -----
- arch/x86/kernel/jump_label.c          | 13 -------------
- kernel/jump_label.c                   | 14 +++-----------
- 10 files changed, 5 insertions(+), 85 deletions(-)
+On Wed, 8 Jun 2022 08:25:38 +0300
+Jarkko Sakkinen <jarkko@kernel.org> wrote:
 
-diff --git a/Documentation/staging/static-keys.rst b/Documentation/staging/static-keys.rst
-index 38290b9f25eb..b0a519f456cf 100644
---- a/Documentation/staging/static-keys.rst
-+++ b/Documentation/staging/static-keys.rst
-@@ -201,9 +201,6 @@ static_key->entry field makes use of the two least significant bits.
- * ``void arch_jump_label_transform(struct jump_entry *entry, enum jump_label_type type)``,
-     see: arch/x86/kernel/jump_label.c
- 
--* ``__init_or_module void arch_jump_label_transform_static(struct jump_entry *entry, enum jump_label_type type)``,
--    see: arch/x86/kernel/jump_label.c
--
- * ``struct jump_entry``,
-     see: arch/x86/include/asm/jump_label.h
- 
-diff --git a/arch/arc/kernel/jump_label.c b/arch/arc/kernel/jump_label.c
-index b8600dc325b5..70b74a5d047b 100644
---- a/arch/arc/kernel/jump_label.c
-+++ b/arch/arc/kernel/jump_label.c
-@@ -96,19 +96,6 @@ void arch_jump_label_transform(struct jump_entry *entry,
- 	flush_icache_range(entry->code, entry->code + JUMP_LABEL_NOP_SIZE);
- }
- 
--void arch_jump_label_transform_static(struct jump_entry *entry,
--				      enum jump_label_type type)
--{
--	/*
--	 * We use only one NOP type (1x, 4 byte) in arch_static_branch, so
--	 * there's no need to patch an identical NOP over the top of it here.
--	 * The generic code calls 'arch_jump_label_transform' if the NOP needs
--	 * to be replaced by a branch, so 'arch_jump_label_transform_static' is
--	 * never called with type other than JUMP_LABEL_NOP.
--	 */
--	BUG_ON(type != JUMP_LABEL_NOP);
--}
--
- #ifdef CONFIG_ARC_DBG_JUMP_LABEL
- #define SELFTEST_MSG	"ARC: instruction generation self-test: "
- 
-diff --git a/arch/arm/kernel/jump_label.c b/arch/arm/kernel/jump_label.c
-index 303b3ab87f7e..eb9c24b6e8e2 100644
---- a/arch/arm/kernel/jump_label.c
-+++ b/arch/arm/kernel/jump_label.c
-@@ -27,9 +27,3 @@ void arch_jump_label_transform(struct jump_entry *entry,
- {
- 	__arch_jump_label_transform(entry, type, false);
- }
--
--void arch_jump_label_transform_static(struct jump_entry *entry,
--				      enum jump_label_type type)
--{
--	__arch_jump_label_transform(entry, type, true);
--}
-diff --git a/arch/arm64/kernel/jump_label.c b/arch/arm64/kernel/jump_label.c
-index fc98037e1220..faf88ec9c48e 100644
---- a/arch/arm64/kernel/jump_label.c
-+++ b/arch/arm64/kernel/jump_label.c
-@@ -26,14 +26,3 @@ void arch_jump_label_transform(struct jump_entry *entry,
- 
- 	aarch64_insn_patch_text_nosync(addr, insn);
- }
--
--void arch_jump_label_transform_static(struct jump_entry *entry,
--				      enum jump_label_type type)
--{
--	/*
--	 * We use the architected A64 NOP in arch_static_branch, so there's no
--	 * need to patch an identical A64 NOP over the top of it here. The core
--	 * will call arch_jump_label_transform from a module notifier if the
--	 * NOP needs to be replaced by a branch.
--	 */
--}
-diff --git a/arch/mips/include/asm/jump_label.h b/arch/mips/include/asm/jump_label.h
-index 3185fd3220ec..c5c6864e64bc 100644
---- a/arch/mips/include/asm/jump_label.h
-+++ b/arch/mips/include/asm/jump_label.h
-@@ -8,6 +8,8 @@
- #ifndef _ASM_MIPS_JUMP_LABEL_H
- #define _ASM_MIPS_JUMP_LABEL_H
- 
-+#define arch_jump_label_transform_static arch_jump_label_transform
-+
- #ifndef __ASSEMBLY__
- 
- #include <linux/types.h>
-diff --git a/arch/parisc/kernel/jump_label.c b/arch/parisc/kernel/jump_label.c
-index d2f3cb12e282..e253b134500d 100644
---- a/arch/parisc/kernel/jump_label.c
-+++ b/arch/parisc/kernel/jump_label.c
-@@ -42,14 +42,3 @@ void arch_jump_label_transform(struct jump_entry *entry,
- 
- 	patch_text(addr, insn);
- }
--
--void arch_jump_label_transform_static(struct jump_entry *entry,
--				      enum jump_label_type type)
--{
--	/*
--	 * We use the architected NOP in arch_static_branch, so there's no
--	 * need to patch an identical NOP over the top of it here. The core
--	 * will call arch_jump_label_transform from a module notifier if the
--	 * NOP needs to be replaced by a branch.
--	 */
--}
-diff --git a/arch/riscv/kernel/jump_label.c b/arch/riscv/kernel/jump_label.c
-index 20e09056d141..e6694759dbd0 100644
---- a/arch/riscv/kernel/jump_label.c
-+++ b/arch/riscv/kernel/jump_label.c
-@@ -39,15 +39,3 @@ void arch_jump_label_transform(struct jump_entry *entry,
- 	patch_text_nosync(addr, &insn, sizeof(insn));
- 	mutex_unlock(&text_mutex);
- }
--
--void arch_jump_label_transform_static(struct jump_entry *entry,
--				      enum jump_label_type type)
--{
--	/*
--	 * We use the same instructions in the arch_static_branch and
--	 * arch_static_branch_jump inline functions, so there's no
--	 * need to patch them up here.
--	 * The core will call arch_jump_label_transform  when those
--	 * instructions need to be replaced.
--	 */
--}
-diff --git a/arch/s390/kernel/jump_label.c b/arch/s390/kernel/jump_label.c
-index d764f0d229ab..e808bb8bc0da 100644
---- a/arch/s390/kernel/jump_label.c
-+++ b/arch/s390/kernel/jump_label.c
-@@ -80,8 +80,3 @@ void arch_jump_label_transform_apply(void)
- {
- 	text_poke_sync();
- }
--
--void __init_or_module arch_jump_label_transform_static(struct jump_entry *entry,
--						       enum jump_label_type type)
--{
--}
-diff --git a/arch/x86/kernel/jump_label.c b/arch/x86/kernel/jump_label.c
-index 68f091ba8443..f5b8ef02d172 100644
---- a/arch/x86/kernel/jump_label.c
-+++ b/arch/x86/kernel/jump_label.c
-@@ -146,16 +146,3 @@ void arch_jump_label_transform_apply(void)
- 	text_poke_finish();
- 	mutex_unlock(&text_mutex);
- }
--
--static enum {
--	JL_STATE_START,
--	JL_STATE_NO_UPDATE,
--	JL_STATE_UPDATE,
--} jlstate __initdata_or_module = JL_STATE_START;
--
--__init_or_module void arch_jump_label_transform_static(struct jump_entry *entry,
--				      enum jump_label_type type)
--{
--	if (jlstate == JL_STATE_UPDATE)
--		jump_label_transform(entry, type, 1);
--}
-diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-index b1ac2948be79..ff8576c00893 100644
---- a/kernel/jump_label.c
-+++ b/kernel/jump_label.c
-@@ -332,17 +332,9 @@ static int __jump_label_text_reserved(struct jump_entry *iter_start,
- 	return 0;
- }
- 
--/*
-- * Update code which is definitely not currently executing.
-- * Architectures which need heavyweight synchronization to modify
-- * running code can override this to make the non-live update case
-- * cheaper.
-- */
--void __weak __init_or_module arch_jump_label_transform_static(struct jump_entry *entry,
--					    enum jump_label_type type)
--{
--	arch_jump_label_transform(entry, type);
--}
-+#ifndef arch_jump_label_transform_static
-+#define arch_jump_label_transform_static(entry, type)
-+#endif
- 
- static inline struct jump_entry *static_key_entries(struct static_key *key)
- {
+> On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
+> > .
+> > 
+> > On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
+> > >
+> > > Tracing with kprobes while running a monolithic kernel is currently
+> > > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
+> > > dependency is a result of kprobes code using the module allocator for the
+> > > trampoline code.
+> > >
+> > > Detaching kprobes from modules helps to squeeze down the user space,
+> > > e.g. when developing new core kernel features, while still having all
+> > > the nice tracing capabilities.
+> > >
+> > > For kernel/ and arch/*, move module_alloc() and module_memfree() to
+> > > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
+> > > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
+> > > code with CONFIG_MODULES.
+> > >
+> > > As the result, kprobes can be used with a monolithic kernel.
+> > It's strange when MODULES is n, but vmlinux still obtains module_alloc.
+> > 
+> > Maybe we need a kprobe_alloc, right?
+> 
+> Perhaps not the best name but at least it documents the fact that
+> they use the same allocator.
+> 
+> Few years ago I carved up something "half-way there" for kprobes,
+> and I used the name text_alloc() [*].
+> 
+> [*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/ 
+
+Yeah, I remember that. Thank you for updating your patch!
+I think the idea (split module_alloc() from CONFIG_MODULE) is good to me.
+If module support maintainers think this name is not good, you may be
+able to rename it as text_alloc() and make the module_alloc() as a
+wrapper of it.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+for kprobe side.
+
+Thank you,
+
 -- 
-2.30.2
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
