@@ -2,178 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091BB544DF8
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jun 2022 15:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3431C54523A
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jun 2022 18:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244046AbiFINo6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jun 2022 09:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S237756AbiFIQon (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jun 2022 12:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbiFINo5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jun 2022 09:44:57 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DF21A07A;
-        Thu,  9 Jun 2022 06:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NHIPvBaPp5ezFE0h6AYG9aEftcsm+tTZkR/4v4e/RO8=; b=ZkTA3OQR9tQAPfsN8i3VT0+tcQ
-        VkNiVG4DvxfE7u93S0pqGwdWhkGV1NcSm080rrE6ZN6PZmE/7MFiC0p5O9k7EowRl1BGbyDIZ+diS
-        F67SHfIxA8A3HlLNF161DlTI7MBt5iWAICHfCzPAzIbG6AP+mVcrMDj+Im//qlKEsfJfMnBJJw/45
-        OjKfECOlFuzeBrcqR7UfXnNNFMXEyuIFinDBu5p08c3Ss/zhmk6MA3OiEBmqbxjLL6u6EgrsmqZ4L
-        XnIHH4EiskReSnyaDTw0LFwUML/2XUIT+CdASkQ7cnHXlptF3Y20dvcpLoetViskFTqFGvKcey9zH
-        sQ8iTAFg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nzISr-002FYc-3e; Thu, 09 Jun 2022 13:44:45 +0000
-Date:   Thu, 9 Jun 2022 06:44:45 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Jarkko Sakkinen <jarkko@profian.com>, linux-kernel@vger.kernel.org,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Dan Li <ashimida@linux.alibaba.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dave Anglin <dave.anglin@bell.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jordan Niethe <jniethe5@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liao Chang <liaochang1@huawei.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Wu Caize <zepan@sipeed.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tobias Huschle <huschle@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <YqH5TfN9w35kHFLU@bombadil.infradead.org>
-References: <20220608000014.3054333-1-jarkko@profian.com>
- <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S232459AbiFIQon (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jun 2022 12:44:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054FC3EF15;
+        Thu,  9 Jun 2022 09:44:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE617B82D85;
+        Thu,  9 Jun 2022 16:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAC2C34114;
+        Thu,  9 Jun 2022 16:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654793079;
+        bh=XWTIu6xq2I66/SdQ0OlvXKQ/zKaWgtQgHLQd7mcVBIY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=flX894j3GgjAgV+X6ihLQ12oI1agwQCE1fAuTxoHFHV8P4rTRyUFba1Om5CxTA+j9
+         0+vRYynrrevyz+9M62JWZTt38qXC0dYiCioZFAlkQkEvmgyZ9rzDC/1xeuoVSDuutE
+         Zc/OJn+Mx0NQwhP+xUmo99b7CNcorf3O8fQ+W07yKzV7AfzQCI+Jfw8up0vzm+hdXp
+         gzrHj/c02h1sdp0/uJ2mV6GokiH4zrR6ddgIUxKJfDK2izgbz0QJyFFWBgpdZYT8ce
+         wsPXBHwPXUk8NjPEFdP2zcwOcs0+KkpPx3VIr5eUCkrE3iF1tgYSfWsZTWdvbvXuPH
+         e3w5Nqy/InjnA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nzLGu-00GvvR-NS; Thu, 09 Jun 2022 17:44:36 +0100
+Date:   Thu, 09 Jun 2022 17:44:36 +0100
+Message-ID: <877d5p4wi3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH for-5.19 1/2] irqchip/loongson-liointc: Use architecture register to get coreid
+In-Reply-To: <01dd74cb-b53c-93e3-d27f-57603d348f67@flygoat.com>
+References: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
+        <CAAhV-H6KMC7OiLO74nN05+qfcR6ZZCih12T-iBGQ4_L9RVOjoQ@mail.gmail.com>
+        <01dd74cb-b53c-93e3-d27f-57603d348f67@flygoat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, chenhuacai@kernel.org, kernel@xen0n.name, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 08:47:38AM +0100, Russell King (Oracle) wrote:
-> On Wed, Jun 08, 2022 at 02:59:27AM +0300, Jarkko Sakkinen wrote:
-> > diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
-> > index 553866751e1a..d2bb954cd54f 100644
-> > --- a/arch/arm/kernel/Makefile
-> > +++ b/arch/arm/kernel/Makefile
-> > @@ -44,6 +44,11 @@ obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
-> >  obj-$(CONFIG_ISA_DMA_API)	+= dma.o
-> >  obj-$(CONFIG_FIQ)		+= fiq.o fiqasm.o
-> >  obj-$(CONFIG_MODULES)		+= armksyms.o module.o
-> > +ifeq ($(CONFIG_MODULES),y)
-> > +obj-y				+= module_alloc.o
-> > +else
-> > +obj-$(CONFIG_KPROBES)		+= module_alloc.o
-> > +endif
-> 
-> Doesn't:
-> 
-> obj-$(CONFIG_MODULES)		+= module_alloc.o
-> obj-$(CONFIG_KPROBES)		+= module_alloc.o
+On Sat, 04 Jun 2022 14:46:30 +0100,
+Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>=20
+>=20
+>=20
+> =E5=9C=A8 2022/6/4 14:18, Huacai Chen =E5=86=99=E9=81=93:
+> > Hi, Jiaxun,
+> >=20
+> > On Sat, Jun 4, 2022 at 8:41 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wr=
+ote:
+> >> fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for
+> >> LoongArch") replaced get_ebase_cpunum with physical processor
+> >> id from SMP facilities. However that breaks MIPS non-SMP build
+> >> and makes booting from other cores inpossible on non-SMP kernel.
+> >>=20
+> >> Thus we revert get_ebase_cpunum back and use get_csr_cpuid for
+> >> LoongArch.
+> >>=20
+> >> Fixes: fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for Lo=
+ongArch")
+> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >> ---
+> >>   drivers/irqchip/irq-loongson-liointc.c | 10 +++++++++-
+> >>   1 file changed, 9 insertions(+), 1 deletion(-)
+> >>=20
+> >> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/=
+irq-loongson-liointc.c
+> >> index aed88857d90f..c11cf97bcd1a 100644
+> >> --- a/drivers/irqchip/irq-loongson-liointc.c
+> >> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> >> @@ -39,6 +39,14 @@
+> >>=20
+> >>   #define LIOINTC_ERRATA_IRQ     10
+> >>=20
+> >> +#if defined(CONFIG_MIPS)
+> >> +#define liointc_core_id get_ebase_cpunum()
+> >> +#elif defined(CONFIG_LOONGARCH)
+> >> +#define liointc_core_id get_csr_cpuid()
+> >> +#else
+> >> +#define liointc_core_id 0
+> >> +#endif
+> > Thank you for your quick fix. But I think it is better to do like this:
+> >=20
+> > #if defined(CONFIG_LOONGARCH)
+> > #define liointc_core_id get_csr_cpuid()
+> > #else
+> > #define liointc_core_id get_ebase_cpunum()
+> > #endif
+> >=20
+> > Because this driver doesn't depend on COMPILE_TEST, it can only be
+> > built under MIPS and LOONGARCH. Moreover, let the else branch be the
+> > same as the old behavior looks more reasonable.
+> Thanks for the suggestion.
+> Will do for v2.
 
-That just begs for a new kconfig symbol for the object, and for
-the object then to be built with it.
+Any update on this? I believe MIPS is still broken.
 
-The archs which override the default can use ARCH_HAS_VM_ALLOC_EXEC.
-Please note that the respective free is important as well and its
-not clear if we need an another define for the free. Someone has
-to do that work. We want to ensure to noexec the code on free and
-this can vary on each arch.
+Thanks,
 
-> work just as well? The kbuild modules.rst documentation says:
-> 
->         The order of files in $(obj-y) is significant.  Duplicates in
->         the lists are allowed: the first instance will be linked into
->         built-in.a and succeeding instances will be ignored.
-> 
-> so you should be fine... or the documentation is wrong!
+	M.
 
-Agreed, but this is just sloppy, better to use a new kconfig symbol
-to represent what is actually being required.
-
-  Luis
+--=20
+Without deviation from the norm, progress is not possible.
