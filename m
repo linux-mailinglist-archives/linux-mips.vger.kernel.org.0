@@ -2,131 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D097D544AFD
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jun 2022 13:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23631544B11
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jun 2022 13:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243027AbiFILuL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jun 2022 07:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S242879AbiFILy6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jun 2022 07:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244644AbiFILuH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jun 2022 07:50:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2172B20B155;
-        Thu,  9 Jun 2022 04:50:04 -0700 (PDT)
+        with ESMTP id S243826AbiFILy5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jun 2022 07:54:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00311174;
+        Thu,  9 Jun 2022 04:54:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFC6CB82D36;
-        Thu,  9 Jun 2022 11:50:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D5E1C3411B;
-        Thu,  9 Jun 2022 11:50:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B3A160BD4;
+        Thu,  9 Jun 2022 11:54:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE3BC34114;
+        Thu,  9 Jun 2022 11:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654775401;
-        bh=md2cOKY0UjufG4JRi8yS8d/Uy6RwmNPC5w/ptfzbrDI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=De+o670BbtOyb/W8kZuv1eJLacQIdlvshH76kO751dnHlBG9ViMAkMis6KRuoxNYC
-         hxi4KpllFRC2A0BKuuUS3IOoSUxaWz/0JTTZN/YOVl6lxfWRRcQPHAv0eFx/y/Hmal
-         Z6f3y/fxWtBMoM+h9oOVQhTuSN5K1yVlv6GRYsf777Mo7ELPHew9LGyg//lHrCj/2f
-         xUWagCs+J6qo5XlYXX06rKdTz4CtfSjmblhEeV9HNPeWsBSGzXmVkKXW1Ms5tvZns/
-         wVEBoygFpSksMVX+0JkbCCn6ldys+Sb/YT7pT6GCNe8xiVizupbn0QdKTx0wuIzLjM
-         8nlBqin4Cd+LQ==
-Date:   Thu, 9 Jun 2022 14:48:02 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Jarkko Sakkinen <jarkko@profian.com>, linux-kernel@vger.kernel.org,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Dan Li <ashimida@linux.alibaba.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dave Anglin <dave.anglin@bell.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jordan Niethe <jniethe5@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liao Chang <liaochang1@huawei.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Wu Caize <zepan@sipeed.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tobias Huschle <huschle@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <YqHd8mwRVWg0u+Ci@iki.fi>
-References: <20220608000014.3054333-1-jarkko@profian.com>
- <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
+        s=k20201202; t=1654775695;
+        bh=3F1odUtmDda3QwpKj+WvYA9M+JuDro8NAG9ovoNuOZ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hWcW4wASDx7gRt5+7XdmF1kb5NfU9b9rMaabQYeU9RQwu/UymBkzI6+R7ZH2lAs63
+         Hr003xZnq3bKnZEixA/21XxBEYGwxQdVW91RWQ/RqhhYZdOTbT0yKInOsIXj9mgFSn
+         idklVDdz9kFhAy7BzwzY6XG51fOMZH2moAyWX0FS3hwWJVHcLCQFSwIgTTINdHc3GX
+         FTGe971tLUjWwe6iGiFi+5PXunVhYi2K4cKOm54urRsCHNprBEV0KSM5iyk8xwnLTn
+         WyOx4RQ9nRHgYHxx9xR23c6Qqu9dLPM7DLVOWx+rpYYbjKKYoMmMeUgX6H/uQ663/t
+         0rS3mNQ4KHJUA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nzGkX-00GrG4-2j; Thu, 09 Jun 2022 12:54:53 +0100
+Date:   Thu, 09 Jun 2022 12:54:52 +0100
+Message-ID: <87bkv23vcj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+Cc:     "Dragan Mladjenovic" <Dragan.Mladjenovic@syrmia.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Chao-ying Fu" <cfu@wavecomp.com>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Greg Ungerer" <gerg@kernel.org>,
+        "Hauke Mehrtens" <hauke@hauke-m.de>,
+        "Ilya Lipnitskiy" <ilya.lipnitskiy@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "paulburton@kernel.org" <paulburton@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Serge Semin" <fancer.lancer@gmail.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v2 06/12] irqchip: mips-gic: Multi-cluster support
+In-Reply-To: <692f7fc0-4953-408a-93fd-b1fe9b87663c@www.fastmail.com>
+References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
+        <20220525121030.16054-7-Dragan.Mladjenovic@syrmia.com>
+        <87wndu3tff.wl-maz@kernel.org>
+        <0a5dd632-0607-dab6-4de7-1ea248490863@flygoat.com>
+        <87pmjjzo3k.wl-maz@kernel.org>
+        <692f7fc0-4953-408a-93fd-b1fe9b87663c@www.fastmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, Dragan.Mladjenovic@syrmia.com, tsbogend@alpha.franken.de, cfu@wavecomp.com, daniel.lezcano@linaro.org, geert@linux-m68k.org, gerg@kernel.org, hauke@hauke-m.de, ilya.lipnitskiy@gmail.com, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, paulburton@kernel.org, peterz@infradead.org, fancer.lancer@gmail.com, tglx@linutronix.de, yangtiezhu@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -137,35 +83,76 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 08:47:38AM +0100, Russell King (Oracle) wrote:
-> On Wed, Jun 08, 2022 at 02:59:27AM +0300, Jarkko Sakkinen wrote:
-> > diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
-> > index 553866751e1a..d2bb954cd54f 100644
-> > --- a/arch/arm/kernel/Makefile
-> > +++ b/arch/arm/kernel/Makefile
-> > @@ -44,6 +44,11 @@ obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
-> >  obj-$(CONFIG_ISA_DMA_API)	+= dma.o
-> >  obj-$(CONFIG_FIQ)		+= fiq.o fiqasm.o
-> >  obj-$(CONFIG_MODULES)		+= armksyms.o module.o
-> > +ifeq ($(CONFIG_MODULES),y)
-> > +obj-y				+= module_alloc.o
-> > +else
-> > +obj-$(CONFIG_KPROBES)		+= module_alloc.o
-> > +endif
-> 
-> Doesn't:
-> 
-> obj-$(CONFIG_MODULES)		+= module_alloc.o
-> obj-$(CONFIG_KPROBES)		+= module_alloc.o
-> 
-> work just as well? The kbuild modules.rst documentation says:
-> 
->         The order of files in $(obj-y) is significant.  Duplicates in
->         the lists are allowed: the first instance will be linked into
->         built-in.a and succeeding instances will be ignored.
-> 
-> so you should be fine... or the documentation is wrong!
+On Thu, 09 Jun 2022 11:14:01 +0100,
+"Jiaxun Yang" <jiaxun.yang@flygoat.com> wrote:
+>=20
+>=20
+>=20
+> =E5=9C=A82022=E5=B9=B46=E6=9C=888=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
+=8D=887:05=EF=BC=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
+> > On Tue, 07 Jun 2022 19:23:02 +0100,
+> > Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> >>=20
+> >>=20
+> >>=20
+> >> =E5=9C=A8 2022/6/6 12:47, Marc Zyngier =E5=86=99=E9=81=93:
+> >> > On Wed, 25 May 2022 13:10:24 +0100,
+> >> > Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
+> >> >> From: Paul Burton <paulburton@kernel.org>
+> >> >>=20
+> >> >> The MIPS I6500 CPU & CM (Coherence Manager) 3.5 introduce the conce=
+pt of
+> >> >> multiple clusters to the system. In these systems each cluster cont=
+ains
+> >> >> its own GIC, so the GIC isn't truly global any longer. We do have t=
+he
+> >> >> ability to access registers in the GICs of remote clusters using a
+> >> >> redirect register block much like the redirect register blocks prov=
+ided
+> >> >> by the CM & CPC, and configured through the same GCR_REDIRECT regis=
+ter
+> >> >> that we our mips_cm_lock_other() abstraction builds upon.
+> >> >>=20
+> >> >> It is expected that external interrupts are connected identically t=
+o all
+> >> >> clusters. That is, if we have a device providing an interrupt conne=
+cted
+> >> >> to GIC interrupt pin 0 then it should be connected to pin 0 of ever=
+y GIC
+> >> >> in the system. This simplifies things somewhat by allowing us for t=
+he
+> >> >> most part to treat the GIC as though it is still truly global, so l=
+ong
+> >> >> as we take care to configure interrupts in the cluster that we want=
+ them
+> >> >> affine to.
+> >> > I can see how this can work for level interrupts, but how does this
+> >> > work for edge interrupts? Is there any guarantee that the interrupt
+> >> > will be discarded if routed to a cluster where it isn't configured?
+> >> It is supposed to mask the interrupt out on the GIC which belongs to t=
+he
+> >> cluster that the interrupt is not routed to.
+> >>=20
+> >> When it's masked out GIC simply won't sense any level change.
+> >>=20
+> >> I guess it's sort of guarantee?
+> >
+> > Pretty much the opposite. There is a *strong* requirement that a
+> > masked interrupt can still detect interrupts, so that on unmask the
+> > interrupt fires (you'd otherwise lose edge interrupts pretty often).
+> Oops, sorry there is a terminology issue. On MIPS Coherent Manager
+> manual it uses terminology of =E2=80=9CMasked=E2=80=9D when vector regist=
+er of
+> a interrupt is cleared.
+>=20
+> It means implementation will guarantee interrupt will be dropped
+> when it=E2=80=99s routed to nowhere.
 
-OK, I did not know this. Thanks for the tip!
+Ah, right, that makes more sense.
 
-BR, Jarkko
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
