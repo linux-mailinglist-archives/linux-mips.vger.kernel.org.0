@@ -2,196 +2,192 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383415447F9
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jun 2022 11:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CEB54482F
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jun 2022 12:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242897AbiFIJsc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jun 2022 05:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S232896AbiFIKBM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jun 2022 06:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242882AbiFIJsU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jun 2022 05:48:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F3E23A3D8;
-        Thu,  9 Jun 2022 02:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9jA4mchnYQoJ5XaXo73/qgoc6iaW5C3P1k7XaYKsS1U=; b=cB9XFjQVxWqfDyzeN0qaxTZuLD
-        YLcvVXkDGRGNOtMLtEgH+zL1QwGa+jRQrKiDu6o+KwcqUIios781clMIKdQSQtEcXojjpXyjmvj46
-        euyjd4m+n/z+pXAWpiww5AHKVJISuO8dbwfn2kdK+vnbm4iQMh9u58KvobfYp6DKnGfTofnM78Yt0
-        Jz76LJDB6p5dvl91aPCez/Dj+sFAkswEne+HjI0PWGc0G7Uh6QasF9s0y9AlvQ8RjyVaUQ4ilXQ62
-        Z4qivKfe5pGVxrpCjV/g6X6ndctS6ICj5/6oYIabFd8D02kUsNuFDdK3DNDO+pifvTslSQOhwvIep
-        NfI5oq7A==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nzEli-00DR5Q-VZ; Thu, 09 Jun 2022 09:47:59 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 100CA981287; Thu,  9 Jun 2022 11:47:58 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 11:47:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        bcain@quicinc.com, Huacai Chen <chenhuacai@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Creasey <sammy@sammy.net>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Juergen Gross <jgross@suse.com>, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, Pv-drivers <pv-drivers@vmware.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Rafael Wysocki <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        lpieralisi@kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        jacob.jun.pan@linux.intel.com, Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        vschneid@redhat.com, jpoimboe@kernel.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-perf-users@vger.kernel.org,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH 33/36] cpuidle,omap3: Use WFI for omap3_pm_idle()
-Message-ID: <YqHBzbAiqaZeoipw@worktop.programming.kicks-ass.net>
-References: <20220608142723.103523089@infradead.org>
- <20220608144518.010587032@infradead.org>
- <CAK8P3a0g-fNu9=BUECSXcNeWT7XWHQMnSXZE-XYE+5eakHxKxA@mail.gmail.com>
- <YqGjqgSrTRseJW6M@atomide.com>
+        with ESMTP id S234844AbiFIKBK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jun 2022 06:01:10 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCEF1B6FF7;
+        Thu,  9 Jun 2022 03:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1654768858; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bd1VR7EHm2qQdIpS9yw5horRLAzp3UgpZJNESzie2ZU=;
+        b=KeMsJfkgkZmZnHe53jjdKzAK//6HCEiLkLIGty3ZzARczr0hjv1MwGs8Vg+RQNZsE4/5V5
+        +JiSjOD/P7Z+dOqtsPvGqrsuFlEUvE9hC13IP93exn4YQaUJnEhDTn9qsxMJqBVnTswWTr
+        NVdFIxYPJG0ktwXnyPLn8B2Fv+2tBCA=
+Date:   Thu, 09 Jun 2022 11:00:44 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] pinctrl: ingenic: Convert to immutable irq chip
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <8TF7DR.ISCIMDT0UMMA@crapouillou.net>
+In-Reply-To: <OUo8utshKyFB2wcmtEAH6jswJGetDRWg@localhost>
+References: <20220607110525.36922-1-aidanmacdonald.0x0@gmail.com>
+        <TC84DR.BXHQAW8NSA8H@crapouillou.net>
+        <OUo8utshKyFB2wcmtEAH6jswJGetDRWg@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqGjqgSrTRseJW6M@atomide.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 10:39:22AM +0300, Tony Lindgren wrote:
-> * Arnd Bergmann <arnd@arndb.de> [220608 18:18]:
-> > On Wed, Jun 8, 2022 at 4:27 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > arch_cpu_idle() is a very simple idle interface and exposes only a
-> > > single idle state and is expected to not require RCU and not do any
-> > > tracing/instrumentation.
-> > >
-> > > As such, omap_sram_idle() is not a valid implementation. Replace it
-> > > with the simple (shallow) omap3_do_wfi() call. Leaving the more
-> > > complicated idle states for the cpuidle driver.
-> 
-> Agreed it makes sense to limit deeper idle states to cpuidle. Hopefully
-> there is some informative splat for attempting to use arch_cpu_ide()
-> for deeper idle states :)
+Hi Aidan,
 
-The arch_cpu_idle() interface doesn't allow one to express a desire for
-deeper states. I'm not sure how anyone could even attempt this.
+Le mar., juin 7 2022 at 17:47:19 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+>=20
+> Paul Cercueil <paul@crapouillou.net> writes:
+>=20
+>>  Hi Aidan,
+>>=20
+>>  Le mar., juin 7 2022 at 12:05:25 +0100, Aidan MacDonald
+>>  <aidanmacdonald.0x0@gmail.com> a =E9crit :
+>>>  Update the driver to use an immutable IRQ chip to fix this warning:
+>>>      "not an immutable chip, please consider fixing it!"
+>>>  Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>>>  ---
+>>>   drivers/pinctrl/pinctrl-ingenic.c | 33=20
+>>> ++++++++++++++++++-------------
+>>>   1 file changed, 19 insertions(+), 14 deletions(-)
+>>>  diff --git a/drivers/pinctrl/pinctrl-ingenic.c
+>>>  b/drivers/pinctrl/pinctrl-ingenic.c
+>>>  index 1ca11616db74..37258fb05be3 100644
+>>>  --- a/drivers/pinctrl/pinctrl-ingenic.c
+>>>  +++ b/drivers/pinctrl/pinctrl-ingenic.c
+>>>  @@ -135,7 +135,6 @@ struct ingenic_pinctrl {
+>>>   struct ingenic_gpio_chip {
+>>>   	struct ingenic_pinctrl *jzpc;
+>>>   	struct gpio_chip gc;
+>>>  -	struct irq_chip irq_chip;
+>>>   	unsigned int irq, reg_base;
+>>>   };
+>>>  @@ -3419,6 +3418,8 @@ static void ingenic_gpio_irq_enable(struct=20
+>>> irq_data
+>>>  *irqd)
+>>>   	struct ingenic_gpio_chip *jzgc =3D gpiochip_get_data(gc);
+>>>   	int irq =3D irqd->hwirq;
+>>>  +	gpiochip_enable_irq(gc, irq);
+>>>  +
+>>>   	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
+>>>   		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, true);
+>>>   	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
+>>>  @@ -3443,6 +3444,8 @@ static void ingenic_gpio_irq_disable(struct=20
+>>> irq_data
+>>>  *irqd)
+>>>   		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_SELECT, irq, false);
+>>>   	else
+>>>   		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIER, irq, false);
+>>>  +
+>>>  +	gpiochip_disable_irq(gc, irq);
+>>>   }
+>>>   static void ingenic_gpio_irq_ack(struct irq_data *irqd)
+>>>  @@ -3684,6 +3687,20 @@ static void ingenic_gpio_irq_release(struct=20
+>>> irq_data
+>>>  *data)
+>>>   	return gpiochip_relres_irq(gpio_chip, data->hwirq);
+>>>   }
+>>>  +static const struct irq_chip ingenic_gpio_irqchip =3D {
+>>>  +	.name			=3D "gpio",
+>>>  +	.irq_enable		=3D ingenic_gpio_irq_enable,
+>>>  +	.irq_disable		=3D ingenic_gpio_irq_disable,
+>>>  +	.irq_unmask		=3D ingenic_gpio_irq_unmask,
+>>>  +	.irq_mask		=3D ingenic_gpio_irq_mask,
+>>>  +	.irq_ack		=3D ingenic_gpio_irq_ack,
+>>>  +	.irq_set_type		=3D ingenic_gpio_irq_set_type,
+>>>  +	.irq_set_wake		=3D ingenic_gpio_irq_set_wake,
+>>>  +	.irq_request_resources	=3D ingenic_gpio_irq_request,
+>>>  +	.irq_release_resources	=3D ingenic_gpio_irq_release,
+>>>  +	.flags			=3D IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
+>>>  +};
+>>>  +
+>>>   static int ingenic_pinmux_set_pin_fn(struct ingenic_pinctrl *jzpc,
+>>>   		int pin, int func)
+>>>   {
+>>>  @@ -4172,20 +4189,8 @@ static int __init ingenic_gpio_probe(struct
+>>>  ingenic_pinctrl *jzpc,
+>>>   	if (!jzgc->irq)
+>>>   		return -EINVAL;
+>>>  -	jzgc->irq_chip.name =3D jzgc->gc.label;
+>>>  -	jzgc->irq_chip.irq_enable =3D ingenic_gpio_irq_enable;
+>>>  -	jzgc->irq_chip.irq_disable =3D ingenic_gpio_irq_disable;
+>>>  -	jzgc->irq_chip.irq_unmask =3D ingenic_gpio_irq_unmask;
+>>>  -	jzgc->irq_chip.irq_mask =3D ingenic_gpio_irq_mask;
+>>>  -	jzgc->irq_chip.irq_ack =3D ingenic_gpio_irq_ack;
+>>>  -	jzgc->irq_chip.irq_set_type =3D ingenic_gpio_irq_set_type;
+>>>  -	jzgc->irq_chip.irq_set_wake =3D ingenic_gpio_irq_set_wake;
+>>>  -	jzgc->irq_chip.irq_request_resources =3D ingenic_gpio_irq_request;
+>>>  -	jzgc->irq_chip.irq_release_resources =3D ingenic_gpio_irq_release;
+>>>  -	jzgc->irq_chip.flags =3D IRQCHIP_MASK_ON_SUSPEND;
+>>>  -
+>>>   	girq =3D &jzgc->gc.irq;
+>>>  -	girq->chip =3D &jzgc->irq_chip;
+>>>  +	gpio_irq_chip_set_chip(girq, &ingenic_gpio_irqchip);
+>>=20
+>>  This will change each irq_chip's name to "gpio", do we want that?
+>>=20
+>>  You didn't remove jzgc->irq_chip, so maybe what you could do is
+>>  jzgc->irq_chip =3D ingenic_gpio_irqchip;
+>>  jzgc->irq_chip.name =3D jzgc->gc.label;
+>>  gpio_irq_chip_set_chip(girq, &jzgc->irq_chip);
+>>=20
+>>  Thoughts?
+>>=20
+>>  Cheers,
+>>  -Paul
+>>=20
+>=20
+> I wondered that myself, but it doesn't seem to affect anything except
+> what is displayed in /proc/interrupts. Is the name used anywhere else
+> where it might cause confusion?
 
-But given what OMAP needs to go deeper, this would involve things that
-require RCU, combine that with the follow up patches that rip out all
-the trace_.*_rcuidle() hackery from the power and clock domain code,
-PROVE_RCU should scream if anybody were to attempt it.
+I don't really know. If it only really affects the display in=20
+/proc/interrupts then I'm fine with it. In doubt, I'd prefer to keep=20
+the existing names.
+
+> The only similar case I could find was pinctrl-microchip-sgpio.c where
+> microchip_sgpio_register_bank() is called in a loop and registers the
+> same irq chip repeatedly, so it's probably(?) okay to do this here. It
+> seems to defeat the point of immutable irqchips if they just have to=20
+> be
+> copied anyway...
+
+The point of immutable irqchips is that they aren't modified by the=20
+core, if I understand it correctly. Immutable doesn't mean it has to be=20
+static const.
+
+> (btw, I did remove jzgc->irq_chip -- or did I miss something?)
+
+Oops, missed that.
+
+Cheers,
+-Paul
+
+> Best regards,
+> Aidan
+>=20
+>>>   	girq->parent_handler =3D ingenic_gpio_irq_handler;
+>>>   	girq->num_parents =3D 1;
+>>>   	girq->parents =3D devm_kcalloc(dev, 1, sizeof(*girq->parents),
+>>>  --
+>>>  2.35.1
+>>>=20
+>=20
+
+
