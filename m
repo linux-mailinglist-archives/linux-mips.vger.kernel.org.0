@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE48546371
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 12:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C56546380
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 12:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348338AbiFJKUg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jun 2022 06:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S1347982AbiFJKYq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jun 2022 06:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347910AbiFJKUe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 06:20:34 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21C140E73;
-        Fri, 10 Jun 2022 03:20:32 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id a29so13592809lfk.2;
-        Fri, 10 Jun 2022 03:20:32 -0700 (PDT)
+        with ESMTP id S245446AbiFJKYp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 06:24:45 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B528DFB7;
+        Fri, 10 Jun 2022 03:24:44 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id d19so16618899lji.10;
+        Fri, 10 Jun 2022 03:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ZyKaOw9RvuJRuYktHECHNOQEuba6ugOgIyEEBqrK/Eg=;
-        b=FkN2p0XTvR5FjZxYW/GZzpetPZ/9mmZlZPkuaCyudWLBbqV7eskqbeN68RZm+snPV6
-         dXpM2LQLFLYt6ou73A5IjYsoP17NHAfZCyiJ5TQ16LE4aCyLZjoWzlsXY6wsYgE93fSH
-         wjjOaQAGl61PXviy2nGbAy//x1fpEgRCFVkLM5a6MuWOr9IWSy92Bcz1KEVDnO+wldlJ
-         Qj0ncZWZPh01KIy//DNcWqShpDn7fS9LY9tuWda1PZmvutGJKR1CWhHNlAtpK9KAkLmE
-         rYpH9ASksteUC18/cM+wBF45MsPoGnTLPUlFDzkkwPgt21lsKqc87kre4Ib49b+nUtuN
-         sItA==
+        bh=mQkg5BFcWf589C+wuulEqAsCmR3RQXLtbhuR5v5QD+Q=;
+        b=l2+IJM229M3SPHh7e8DgjWAjrbApaXeUGaYU6B5FfKIRrgDeAvXZz+caPFdCePZGus
+         n3EBieDnYjrDEyRGGEJQbvZN3361ADG9TH8Iqc9aE6nntloE6GkBfJd3V4VFDIyQlVNq
+         u2gINhMYrP2b3WjmrU9JB2J7/aRQhnCccMo5YGL7+NfX/4uamau/Io1PLJIf5vrLKMbd
+         dXNNhY8WgG3z79hP/kXytEFUPY5uwrbjaa9Vy71yiRRBhhsmBsumQvQ2k+R1kZXIWMaS
+         MoGr8/iuiM92eAZ9i/zyVXKybD6gRV7dnxtIqEbNshK8dENbhQ8pcV9QsXih/cuXS+2c
+         OUAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ZyKaOw9RvuJRuYktHECHNOQEuba6ugOgIyEEBqrK/Eg=;
-        b=U8p/wPChts2OwPweYvbV3QpijTzBPrBLPi2/rtRprhoguJeDjs0SiWgFq+N18rM36s
-         pkvfnaMAE2AUuUgF+dhQiFkVuxP90dREYZ86twlKqNj0smlyI7nBfNNN0GupNOOdUjgT
-         K6VxrjPIuNbomCAxPBHq90WSHL96VJjGm/ahIULIt6ydpwLBg1yp93fEzuxjPAvBnhyf
-         9/PKwASkZcMv0EOKP3R9zCNZ7nSXE4lgluZEfxAk7d24nVyBCCuFfEbaWlj31FR5lyUE
-         h/Az/TVkQUwqFG7YXAzFcjAQd4U7gSW2N6t/Nl5P+1/dN8gjdlXiCRhu694IWLVPQZgc
-         Ac6w==
-X-Gm-Message-State: AOAM531/yh+KbHT3kDv49lpoPGxJOwnmVwyKB0JnKWzDfiARdem4Pc1N
-        X3X94bdjan6uoNyuO0psGYY=
-X-Google-Smtp-Source: ABdhPJyA/3LVgAllZ7uk2CXWuPX6HVrwry8k5SVZL7ctkAfDZr7BZhpfdIysIKn3+f3QB7ufC9oK7g==
-X-Received: by 2002:ac2:51a5:0:b0:47d:b71a:6b5a with SMTP id f5-20020ac251a5000000b0047db71a6b5amr690842lfk.383.1654856431172;
-        Fri, 10 Jun 2022 03:20:31 -0700 (PDT)
+        bh=mQkg5BFcWf589C+wuulEqAsCmR3RQXLtbhuR5v5QD+Q=;
+        b=NyXQMlobysz246+GiVNy0Y4p9FB3/Ak7fItUFTunlJW7WDMARviESTW1fk7xU0QAVS
+         ueZsrJkvsqBpJQfXp653Wo3qoU8Jao401rKSQAjg2RgcdXJzbdIH05iUB0xJDpzhKY8O
+         6aJb7+4CEuFDHJH1+M66UNR0Ud0bAfB2ey5g/H6xzy7Ycr1yU/0/Hf+eAfeH7eqjAofD
+         uQe8xVEQCnbP/slrrC8Q7RzL1mZxfi/H/8UT/jzpBltqwGJvznVAKa/W+0t9JLq0YuOj
+         kqxiMGDhdgJcr73c0+5eFU3R0ImglSXN53AmE84b4vRVvtQ4u13DWFhVW1oABUcvIRcL
+         +92Q==
+X-Gm-Message-State: AOAM533Ny1KoXeYgVkqoE3o8UpTwsns/XI0hdjPbjb2xCQyyZsj9PthX
+        nsRJuyKZJ4dYSIgbKqXFKIM=
+X-Google-Smtp-Source: ABdhPJxgxcCtlb5Z+Y7tZ/ZH2Zooff5ggN8+p1CIxsDICuK0H9aEHtzuS0DOVgFRxpWe3OivTBz9zg==
+X-Received: by 2002:a2e:b8c4:0:b0:258:f008:5b75 with SMTP id s4-20020a2eb8c4000000b00258f0085b75mr189727ljp.189.1654856682873;
+        Fri, 10 Jun 2022 03:24:42 -0700 (PDT)
 Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id t20-20020a056512209400b0047d479884b8sm693054lfr.27.2022.06.10.03.20.29
+        by smtp.gmail.com with ESMTPSA id d21-20020a05651c089500b0025567827117sm4064786ljq.13.2022.06.10.03.24.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 03:20:30 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 13:20:28 +0300
+        Fri, 10 Jun 2022 03:24:42 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 13:24:40 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Stephen Boyd <sboyd@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Michael Turquette <mturquette@baylibre.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
         Marek Vasut <marek.vasut@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
@@ -62,14 +63,14 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@codeaurora.org>
 Subject: Re: [PATCH v4 2/8] clk: vc5: Fix 5P49V6901 outputs disabling when
  enabling FOD
-Message-ID: <20220610102028.p5nif76fncz2oyv7@mobilestation>
+Message-ID: <20220610102440.ubejkcbkwb7wgah6@mobilestation>
 References: <20220610072124.8714-1-Sergey.Semin@baikalelectronics.ru>
  <20220610072124.8714-3-Sergey.Semin@baikalelectronics.ru>
- <0fd31531-63a3-46a7-cf0b-9641d7f32a1f@lucaceresoli.net>
+ <eb0cbc41-2868-4cbf-9fbf-eeabd25dda04@omp.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0fd31531-63a3-46a7-cf0b-9641d7f32a1f@lucaceresoli.net>
+In-Reply-To: <eb0cbc41-2868-4cbf-9fbf-eeabd25dda04@omp.ru>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,12 +81,9 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:39:18AM +0200, Luca Ceresoli wrote:
-> Hi Serge,
+On Fri, Jun 10, 2022 at 01:03:10PM +0300, Sergey Shtylyov wrote:
+> On 6/10/22 10:21 AM, Serge Semin wrote:
 > 
-> thank you for your patch!
-> 
-> On 10/06/22 09:21, Serge Semin wrote:
 > > We have discovered random glitches during the system boot up procedure.
 > > The problem investigation led us to the weird outcomes: when none of the
 > > Renesas 5P49V6901 ports are explicitly enabled by the kernel driver, the
@@ -96,6 +94,15 @@ On Fri, Jun 10, 2022 at 11:39:18AM +0200, Luca Ceresoli wrote:
 > > out the 5P49V6901 clock generator stopped its output for a short period of
 > > time during the VC5_OUT_DIV_CONTROL register writing. The same problem has
 > > was found for the 5P49V6965 revision of the chip and the was successfully
+> 
+
+>    s/was found/been found/, s/the was/that was/?
+
+Right. Thanks.)
+
+-Sergey
+
+> 
 > > fixed in commit fc336ae622df ("clk: vc5: fix output disabling when
 > > enabling a FOD") by enabling the "bypass_sync" flag hidden inside "Unused
 > > Factory Reserved Register". Even though the 5P49V6901 registers
@@ -105,42 +112,10 @@ On Fri, Jun 10, 2022 at 11:39:18AM +0200, Luca Ceresoli wrote:
 > > submitted in commit fc336ae622df ("clk: vc5: fix output disabling when
 > > enabling a FOD") for the Renesas 5P49V6901 chip too in order to remove
 > > the ports implicit inter-dependency.
-> 
-
-> Sadly, you have been through the same troubles I had on the 6965.
-
-Hi Luca
-
-Yeah, it was a nightmare fixing that weird problem. Thanks god you
-have committed the solution. Last time I had to face something similar
-was when I was fixing a problem in the IDT NTB controller, which caused
-PCIe MRd TLPs successfully passed from one side to another, but not in
-the opposite direction. I spent months trying to figure out the root
-cause of the problem or at least find some workaround. I wrote several
-messages to the support team but for some reason they didn't respond.
-After all the struggle I've found the IDT PCIe bridges configuration
-tool, hacked it's XML config files where I found the info regarding the
-Vendor-specific PCIe config-space undocumented flags. It turned out that
-by default the controller discarded the PCIe MRd responses coming from
-the link-partner with non-zero device number. In order to make things
-working a vendor-specific flag needed to be set.
-
-> 
+> > 
 > > Fixes: dbf6b16f5683 ("clk: vc5: Add support for IDT VersaClock 5P49V6901")
 > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> [...]
 > 
-> (not sure which address is appropriate as I sent patches to update to
-> the Bootlin one and they are being applied one y one on the various
-> maintainers branches)
-
-Thanks. I'll use the top one then since it was used in the patch
-Author tag.
-
--Sergey
-
-> 
-> -- 
-> Luca
+> MBR, Sergey
