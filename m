@@ -2,116 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D183545B43
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 06:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AB7545D7C
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 09:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiFJEor (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jun 2022 00:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S1346914AbiFJHaQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jun 2022 03:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiFJEop (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 00:44:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C7222ABEE;
-        Thu,  9 Jun 2022 21:44:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61C6AB830F5;
-        Fri, 10 Jun 2022 04:44:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A7EC385A9;
-        Fri, 10 Jun 2022 04:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654836279;
-        bh=6g8FeECka/KS2OLX1kxuu5yztPOwSYzNR43hULG6+8Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E3wNbIM4qlOnhH5R9OAfUinrtC77k/72ABLwvZGgUA3Re9CWAXoP332lZlxjeRePm
-         /ZTNnWx2KC5UGLglD+QnvPKnhUrc1lMctnmAPgPlkrNXMcy+8bplePqGlhaEeMt2Gl
-         b4X1VWTEPm3/svMjAWhVp+Yzam3CFRy3riM5c5o179W/z1jGYBwLy8Bdw4rkhgHDC1
-         jrZAti5votTEtRGUfHycsBpw4E3zzgecUMhGu9YPTwe6QUqKhClmPJ3cVguY8qUSG6
-         ldKV73X5m/V5XGL4OPgn8eJ35MqME/ZrIKRNjB2RlFozaiGCIsCumj6J0pu8Z1sT4v
-         5xE1b3Z3OaY4Q==
-Received: by mail-lj1-f172.google.com with SMTP id b7so15806510ljr.6;
-        Thu, 09 Jun 2022 21:44:38 -0700 (PDT)
-X-Gm-Message-State: AOAM530/hIk6uyBooC8NfYJDFKAnY4SvXVMt6XMglXeiAL5lTJBBRgnL
-        5iCXiTzTz39Ltkh6m6iBLRM93C07Izvpz7j+tmY=
-X-Google-Smtp-Source: ABdhPJy5/YxRiE2j7JzJj5kNHWQCd1L9sjVAS061CWCsWWdXO/0bRtO7RJBYvN8z2BbzNpYDOyZk8RnoIs3UB2Vxfeg=
-X-Received: by 2002:a2e:9695:0:b0:255:6eb1:469c with SMTP id
- q21-20020a2e9695000000b002556eb1469cmr24151525lji.188.1654836276984; Thu, 09
- Jun 2022 21:44:36 -0700 (PDT)
+        with ESMTP id S1346873AbiFJHaB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 03:30:01 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4BB711CA15;
+        Fri, 10 Jun 2022 00:29:49 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 819DDBD1;
+        Fri, 10 Jun 2022 10:22:23 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 819DDBD1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1654845744;
+        bh=z8mq2UkwmLMqL0DG3q1BtK9e5Sy5l+mkuuDHM21YBtE=;
+        h=From:To:CC:Subject:Date:From;
+        b=m6eCIpghqmDeRukr/Br6GjfyvzRYxOnOv8AGjsR3DwyzaNp6wykxtCSgkvoN3pptk
+         2kSPJi481Cto5P5X6ZeoVgW7cYWD4XT8ebTade/DDUoBdkGtgvg+dM1Ow4mexRsJ0V
+         7KJ7AoyzVf604/r+gBjvGolMuU3S1C3J9whpcUTI=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 10:21:31 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-clk@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/8] clk/resets: baikal-t1: Add DDR/PCIe resets and xGMAC/SATA fixes
+Date:   Fri, 10 Jun 2022 10:21:16 +0300
+Message-ID: <20220610072124.8714-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220610011958.3263650-1-liyupeng@zbhlos.com>
-In-Reply-To: <20220610011958.3263650-1-liyupeng@zbhlos.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 10 Jun 2022 12:44:26 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7HY=vT5Z2d2WEt75LYSxEgrf+TSKebt0hjc7qUNhKd9g@mail.gmail.com>
-Message-ID: <CAAhV-H7HY=vT5Z2d2WEt75LYSxEgrf+TSKebt0hjc7qUNhKd9g@mail.gmail.com>
-Subject: Re: [PATCH 1/1] irqchip/loongson-liointc: Guard uses of cpu_logical_map
-To:     Yupeng Li <liyupeng@zbhlos.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, caizp2008@163.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Yupeng,
+Short summary regarding this patchset. The series starts from fixing a
+wrong semantic of the device managed optional exclusive bulk reset control
+getter. Then we suggest a fix of the clocks glitching cause by the Renesas
+5P49V6901 chip in some circumstances. Afterwards a few more modifications
+are introduced to finally finish the Baikal-T1 CCU unit support up and
+prepare the code before adding the Baikal-T1 PCIe/xGMAC support. First of
+all it turned out I specified wrong DW xGMAC PTP reference clock divider
+in my initial patches. It must be 8, not 10. Secondly I was wrong to add a
+joint xGMAC Ref and PTP clock instead of having them separately defined.
+The SoC manual describes these clocks as separate fixed clock wrappers.
+Finally in order to close the SoC clock/reset support up we need to add
+the DDR and PCIe interfaces reset controls support. It's done in two
+steps. First I've moved the reset-controls-related code into a dedicated
+module. Then the DDR/PCIe reset-control functionality is added. As the
+series finalization we've decided to convert the Baikal-T1 clock/reset
+source drivers to mainly being the platform device driver and
+pre-initialize the basic clocks only at the early kernel boot stages.
 
-On Fri, Jun 10, 2022 at 9:20 AM Yupeng Li <liyupeng@zbhlos.com> wrote:
->
->   cpu_logical_map is only defined for CONFIG_SMP builds, when we are in an
->   UP configuration, the boot CPU is 0. Some kernel compilation error
->   information is as follows:
->
->   CALL    scripts/atomic/check-atomics.sh
->   CALL    scripts/checksyscalls.sh
->   CHK     include/generated/compile.h
->   CC      drivers/irqchip/irq-loongson-liointc.o
-> drivers/irqchip/irq-loongson-liointc.c: In function 'liointc_chained_handle_irq':
-> drivers/irqchip/irq-loongson-liointc.c:60:13: error: implicit declaration of function 'cpu_logical_map' [-Werror=implicit-function-declaration]
->   int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
->              ^~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
-> make[2]: *** [scripts/Makefile.build:249:drivers/irqchip/irq-loongson-liointc.o] error 1
-> make[1]: *** [scripts/Makefile.build:466:drivers/irqchip] error 2
-This has been fixed by Jiaxun:
-https://lore.kernel.org/lkml/20220609175242.977-1-jiaxun.yang@flygoat.com/T/#t
+Link: https://lore.kernel.org/linux-pci/20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Resubmit the series with adding @Philipp to the list of the recipients.
 
+Link: https://lore.kernel.org/linux-pci/20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- No comments. Just resend the series.
+- Rebased from v5.17 onto v5.18-rc3.
 
-Huacai
+Link: https://lore.kernel.org/linux-clk/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v4:
+- Completely split the CCU Dividers and Resets functionality up. (@Stephen)
+- Add a new fixes patch: "clk: baikal-t1: Actually enable SATA internal
+  ref clock".
+- Add a new fixes patch: "reset: Fix devm bulk optional exclusive control
+  getter".
+- Add a new fixes patch: "clk: vc5: Fix 5P49V6901 outputs disabling when
+  enabling FOD".
+- Add a new feagure patch: "clk: baikal-t1: Convert to platform device
+  driver".
+- Change the internal clock ID to the XGMAC-referred name.
+- Rebase onto the kernel v5.18.
 
->
-> Acked-by: Caicai <caizp2008@163.com>
-> Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
-> ---
->  drivers/irqchip/irq-loongson-liointc.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> index aed88857d90f..927e236bf18e 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -57,7 +57,11 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
->         struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
->         struct irq_chip *chip = irq_desc_get_chip(desc);
->         struct irq_chip_generic *gc = handler->priv->gc;
-> +#ifdef CONFIG_SMP
->         int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
-> +#else
-> +       int core = 0;
-> +#endif
->         u32 pending;
->
->         chained_irq_enter(chip, desc);
-> --
-> 2.34.1
->
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (8):
+  reset: Fix devm bulk optional exclusive control getter
+  clk: vc5: Fix 5P49V6901 outputs disabling when enabling FOD
+  clk: baikal-t1: Fix invalid xGMAC PTP clock divider
+  clk: baikal-t1: Add shared xGMAC ref/ptp clocks internal parent
+  clk: baikal-t1: Add SATA internal ref clock buffer
+  clk: baikal-t1: Move reset-controls code into a dedicated module
+  clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+  clk: baikal-t1: Convert to platform device driver
+
+ drivers/clk/baikal-t1/Kconfig       |  12 +-
+ drivers/clk/baikal-t1/Makefile      |   1 +
+ drivers/clk/baikal-t1/ccu-div.c     |  84 +++++++--
+ drivers/clk/baikal-t1/ccu-div.h     |  17 +-
+ drivers/clk/baikal-t1/ccu-pll.h     |   8 +
+ drivers/clk/baikal-t1/ccu-rst.c     |  99 ++++++++++
+ drivers/clk/baikal-t1/ccu-rst.h     |  79 ++++++++
+ drivers/clk/baikal-t1/clk-ccu-div.c | 272 +++++++++++++++++-----------
+ drivers/clk/baikal-t1/clk-ccu-pll.c | 128 ++++++++++---
+ drivers/clk/baikal-t1/clk-ccu-rst.c | 257 ++++++++++++++++++++++++++
+ drivers/clk/clk-versaclock5.c       |   2 +-
+ include/dt-bindings/reset/bt1-ccu.h |   9 +
+ include/linux/reset.h               |   2 +-
+ 13 files changed, 814 insertions(+), 156 deletions(-)
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
+ create mode 100644 drivers/clk/baikal-t1/clk-ccu-rst.c
+
+-- 
+2.35.1
+
