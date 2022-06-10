@@ -2,120 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C56546380
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 12:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76882546548
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 13:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347982AbiFJKYq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jun 2022 06:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
+        id S1348143AbiFJLOy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jun 2022 07:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245446AbiFJKYp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 06:24:45 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B528DFB7;
-        Fri, 10 Jun 2022 03:24:44 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id d19so16618899lji.10;
-        Fri, 10 Jun 2022 03:24:44 -0700 (PDT)
+        with ESMTP id S245507AbiFJLOx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 07:14:53 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A3214915C;
+        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id j6so23563723pfe.13;
+        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mQkg5BFcWf589C+wuulEqAsCmR3RQXLtbhuR5v5QD+Q=;
-        b=l2+IJM229M3SPHh7e8DgjWAjrbApaXeUGaYU6B5FfKIRrgDeAvXZz+caPFdCePZGus
-         n3EBieDnYjrDEyRGGEJQbvZN3361ADG9TH8Iqc9aE6nntloE6GkBfJd3V4VFDIyQlVNq
-         u2gINhMYrP2b3WjmrU9JB2J7/aRQhnCccMo5YGL7+NfX/4uamau/Io1PLJIf5vrLKMbd
-         dXNNhY8WgG3z79hP/kXytEFUPY5uwrbjaa9Vy71yiRRBhhsmBsumQvQ2k+R1kZXIWMaS
-         MoGr8/iuiM92eAZ9i/zyVXKybD6gRV7dnxtIqEbNshK8dENbhQ8pcV9QsXih/cuXS+2c
-         OUAQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jwvPtBJlHjffDNQx8lPTiOlFv8Yml0X3QqZ5RFqKFOM=;
+        b=Ck0Q29cZZuM/Kh2xhbfXUt+BhMt9IcSGn615Yl6vJacDxaA8lIZEXPvkqrGnXquu7v
+         KdSyN5BDhsueBwizGiuCJ132pXWz2C/jkofBT7tUzu14Y4ZTy3QvbJBVleaVK5G6YI16
+         RiUyJQ1c9U+T/im7q2d8oN9uQuYy8SyivKExVFT2vqBQ4Z13ul0ujKl+PRyjPaaYYOaq
+         TY7Q5oQemfJR8PMRAKj4QF4COhGPi32as6lDCXc7zzNUx6FFb8Z7TWv1WAMyytAg9gMA
+         xvxQSKnzcaUeA5oJxtfBuhO8krjkPlTZYD3FWnEes5vTljA0X4BK7uW15yxRuNX+tBQy
+         4SrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mQkg5BFcWf589C+wuulEqAsCmR3RQXLtbhuR5v5QD+Q=;
-        b=NyXQMlobysz246+GiVNy0Y4p9FB3/Ak7fItUFTunlJW7WDMARviESTW1fk7xU0QAVS
-         ueZsrJkvsqBpJQfXp653Wo3qoU8Jao401rKSQAjg2RgcdXJzbdIH05iUB0xJDpzhKY8O
-         6aJb7+4CEuFDHJH1+M66UNR0Ud0bAfB2ey5g/H6xzy7Ycr1yU/0/Hf+eAfeH7eqjAofD
-         uQe8xVEQCnbP/slrrC8Q7RzL1mZxfi/H/8UT/jzpBltqwGJvznVAKa/W+0t9JLq0YuOj
-         kqxiMGDhdgJcr73c0+5eFU3R0ImglSXN53AmE84b4vRVvtQ4u13DWFhVW1oABUcvIRcL
-         +92Q==
-X-Gm-Message-State: AOAM533Ny1KoXeYgVkqoE3o8UpTwsns/XI0hdjPbjb2xCQyyZsj9PthX
-        nsRJuyKZJ4dYSIgbKqXFKIM=
-X-Google-Smtp-Source: ABdhPJxgxcCtlb5Z+Y7tZ/ZH2Zooff5ggN8+p1CIxsDICuK0H9aEHtzuS0DOVgFRxpWe3OivTBz9zg==
-X-Received: by 2002:a2e:b8c4:0:b0:258:f008:5b75 with SMTP id s4-20020a2eb8c4000000b00258f0085b75mr189727ljp.189.1654856682873;
-        Fri, 10 Jun 2022 03:24:42 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id d21-20020a05651c089500b0025567827117sm4064786ljq.13.2022.06.10.03.24.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jwvPtBJlHjffDNQx8lPTiOlFv8Yml0X3QqZ5RFqKFOM=;
+        b=bAnaZAOi0V/kMNPs8LANFWOO9xHP/Q2pTyN87CqNtzQN8/jvR32z19QsFjczlul0NH
+         vCLk/6UcDGOQWfDpGesU03XRBNZY8M/L7qE3MqeNW5fuWj+LvS1iLHF7Deyv9e6/AOkY
+         4Fke1f23eWDiqBwOpE3LBgZAlR1Do3xahr2ZQWPGitaoxnJK5X4uhccRVxY/oGG0OaRh
+         VjWtLSeLWKah44m7DhXD6mjZU14WFOOcljt08aieHr10wrRJrnpaUe+cnuT5IEVhauib
+         a31Sw3ygJd85X7sB4fYjtSWlGWLUhN7bmm7g5/fQQ+kn4wUAgfg+QbCJrQbk5mCnn8gL
+         hFtw==
+X-Gm-Message-State: AOAM5332pHnF7dZ9kHLQ468K161BF33Sl3bF9GzHpOtliGwjKU5jzUXS
+        A44TEAh7kNuRAGPQ3mb/P2g=
+X-Google-Smtp-Source: ABdhPJzBtL3PAEY3N/qiHUGqDpGAp+B0oH8SxkTt89cp2LNCw8a9iUYpnbFmz1kHBGKLl4F/nVPuEg==
+X-Received: by 2002:a63:1b53:0:b0:3fd:168e:d9a with SMTP id b19-20020a631b53000000b003fd168e0d9amr34794019pgm.617.1654859690303;
+        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
+Received: from localhost.localdomain ([209.146.108.140])
+        by smtp.gmail.com with ESMTPSA id t6-20020a1709028c8600b001636c0b98a7sm18497487plo.226.2022.06.10.04.14.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 03:24:42 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 13:24:40 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@codeaurora.org>
-Subject: Re: [PATCH v4 2/8] clk: vc5: Fix 5P49V6901 outputs disabling when
- enabling FOD
-Message-ID: <20220610102440.ubejkcbkwb7wgah6@mobilestation>
-References: <20220610072124.8714-1-Sergey.Semin@baikalelectronics.ru>
- <20220610072124.8714-3-Sergey.Semin@baikalelectronics.ru>
- <eb0cbc41-2868-4cbf-9fbf-eeabd25dda04@omp.ru>
+        Fri, 10 Jun 2022 04:14:49 -0700 (PDT)
+From:   Genjian Zhang <zhanggenjian123@gmail.com>
+X-Google-Original-From: Genjian Zhang <zhanggenjian@kylinos.cn>
+To:     tsbogend@alpha.franken.de, linus.walleij@linaro.org, brgl@bgdev.pl,
+        f.fainelli@gmail.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, huhai <huhai@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>,
+        Genjian Zhang <zhanggenjian@kylinos.cn>
+Subject: [PATCH v4] MIPS: Remove repetitive increase irq_err_count
+Date:   Fri, 10 Jun 2022 19:14:20 +0800
+Message-Id: <20220610111420.1520410-1-zhanggenjian@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220525043916.584850-1-zhanggenjian@kylinos.cn>
+References: <20220525043916.584850-1-zhanggenjian@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb0cbc41-2868-4cbf-9fbf-eeabd25dda04@omp.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:03:10PM +0300, Sergey Shtylyov wrote:
-> On 6/10/22 10:21 AM, Serge Semin wrote:
-> 
-> > We have discovered random glitches during the system boot up procedure.
-> > The problem investigation led us to the weird outcomes: when none of the
-> > Renesas 5P49V6901 ports are explicitly enabled by the kernel driver, the
-> > glitches disappeared. It was a mystery since the SoC external clock
-> > domains were fed with different 5P49V6901 outputs. The driver code didn't
-> > seem like bogus either. We almost despaired to find out a root cause when
-> > the solution was found for a more modern revision of the chip. It turned
-> > out the 5P49V6901 clock generator stopped its output for a short period of
-> > time during the VC5_OUT_DIV_CONTROL register writing. The same problem has
-> > was found for the 5P49V6965 revision of the chip and the was successfully
-> 
+From: huhai <huhai@kylinos.cn>
 
->    s/was found/been found/, s/the was/that was/?
+commit 979934da9e7a ("[PATCH] mips: update IRQ handling for vr41xx") added
+a function irq_dispatch, and it'll increase irq_err_count when the get_irq
+callback returns a negative value, but increase irq_err_count in get_irq
+was not removed.
 
-Right. Thanks.)
+And also, modpost complains once gpio-vr41xx drivers become modules.
+  ERROR: modpost: "irq_err_count" [drivers/gpio/gpio-vr41xx.ko] undefined!
 
--Sergey
+So it would be a good idea to remove repetitive increase irq_err_count in
+get_irq callback.
 
-> 
-> > fixed in commit fc336ae622df ("clk: vc5: fix output disabling when
-> > enabling a FOD") by enabling the "bypass_sync" flag hidden inside "Unused
-> > Factory Reserved Register". Even though the 5P49V6901 registers
-> > description and programming guide doesn't provide any intel regarding that
-> > flag, setting it up anyway in the officially unused register completely
-> > eliminated the denoted glitches. Thus let's activate the functionality
-> > submitted in commit fc336ae622df ("clk: vc5: fix output disabling when
-> > enabling a FOD") for the Renesas 5P49V6901 chip too in order to remove
-> > the ports implicit inter-dependency.
-> > 
-> > Fixes: dbf6b16f5683 ("clk: vc5: Add support for IDT VersaClock 5P49V6901")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> [...]
-> 
-> MBR, Sergey
+Fixes: 27fdd325dace ("MIPS: Update VR41xx GPIO driver to use gpiolib")
+Fixes: 979934da9e7a ("[PATCH] mips: update IRQ handling for vr41xx")
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: huhai <huhai@kylinos.cn>
+Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+---
+ arch/mips/vr41xx/common/icu.c | 2 --
+ drivers/gpio/gpio-vr41xx.c    | 2 --
+ 2 files changed, 4 deletions(-)
+
+diff --git a/arch/mips/vr41xx/common/icu.c b/arch/mips/vr41xx/common/icu.c
+index 7b7f25b4b057..9240bcdbe74e 100644
+--- a/arch/mips/vr41xx/common/icu.c
++++ b/arch/mips/vr41xx/common/icu.c
+@@ -640,8 +640,6 @@ static int icu_get_irq(unsigned int irq)
+ 
+ 	printk(KERN_ERR "spurious ICU interrupt: %04x,%04x\n", pend1, pend2);
+ 
+-	atomic_inc(&irq_err_count);
+-
+ 	return -1;
+ }
+ 
+diff --git a/drivers/gpio/gpio-vr41xx.c b/drivers/gpio/gpio-vr41xx.c
+index 98cd715ccc33..8d09b619c166 100644
+--- a/drivers/gpio/gpio-vr41xx.c
++++ b/drivers/gpio/gpio-vr41xx.c
+@@ -217,8 +217,6 @@ static int giu_get_irq(unsigned int irq)
+ 	printk(KERN_ERR "spurious GIU interrupt: %04x(%04x),%04x(%04x)\n",
+ 	       maskl, pendl, maskh, pendh);
+ 
+-	atomic_inc(&irq_err_count);
+-
+ 	return -EINVAL;
+ }
+ 
+-- 
+2.25.1
+
