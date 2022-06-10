@@ -2,126 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76882546548
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 13:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9870546634
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 14:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348143AbiFJLOy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jun 2022 07:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S240337AbiFJMDZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jun 2022 08:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245507AbiFJLOx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 07:14:53 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A3214915C;
-        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id j6so23563723pfe.13;
-        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jwvPtBJlHjffDNQx8lPTiOlFv8Yml0X3QqZ5RFqKFOM=;
-        b=Ck0Q29cZZuM/Kh2xhbfXUt+BhMt9IcSGn615Yl6vJacDxaA8lIZEXPvkqrGnXquu7v
-         KdSyN5BDhsueBwizGiuCJ132pXWz2C/jkofBT7tUzu14Y4ZTy3QvbJBVleaVK5G6YI16
-         RiUyJQ1c9U+T/im7q2d8oN9uQuYy8SyivKExVFT2vqBQ4Z13ul0ujKl+PRyjPaaYYOaq
-         TY7Q5oQemfJR8PMRAKj4QF4COhGPi32as6lDCXc7zzNUx6FFb8Z7TWv1WAMyytAg9gMA
-         xvxQSKnzcaUeA5oJxtfBuhO8krjkPlTZYD3FWnEes5vTljA0X4BK7uW15yxRuNX+tBQy
-         4SrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jwvPtBJlHjffDNQx8lPTiOlFv8Yml0X3QqZ5RFqKFOM=;
-        b=bAnaZAOi0V/kMNPs8LANFWOO9xHP/Q2pTyN87CqNtzQN8/jvR32z19QsFjczlul0NH
-         vCLk/6UcDGOQWfDpGesU03XRBNZY8M/L7qE3MqeNW5fuWj+LvS1iLHF7Deyv9e6/AOkY
-         4Fke1f23eWDiqBwOpE3LBgZAlR1Do3xahr2ZQWPGitaoxnJK5X4uhccRVxY/oGG0OaRh
-         VjWtLSeLWKah44m7DhXD6mjZU14WFOOcljt08aieHr10wrRJrnpaUe+cnuT5IEVhauib
-         a31Sw3ygJd85X7sB4fYjtSWlGWLUhN7bmm7g5/fQQ+kn4wUAgfg+QbCJrQbk5mCnn8gL
-         hFtw==
-X-Gm-Message-State: AOAM5332pHnF7dZ9kHLQ468K161BF33Sl3bF9GzHpOtliGwjKU5jzUXS
-        A44TEAh7kNuRAGPQ3mb/P2g=
-X-Google-Smtp-Source: ABdhPJzBtL3PAEY3N/qiHUGqDpGAp+B0oH8SxkTt89cp2LNCw8a9iUYpnbFmz1kHBGKLl4F/nVPuEg==
-X-Received: by 2002:a63:1b53:0:b0:3fd:168e:d9a with SMTP id b19-20020a631b53000000b003fd168e0d9amr34794019pgm.617.1654859690303;
-        Fri, 10 Jun 2022 04:14:50 -0700 (PDT)
-Received: from localhost.localdomain ([209.146.108.140])
-        by smtp.gmail.com with ESMTPSA id t6-20020a1709028c8600b001636c0b98a7sm18497487plo.226.2022.06.10.04.14.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 04:14:49 -0700 (PDT)
-From:   Genjian Zhang <zhanggenjian123@gmail.com>
-X-Google-Original-From: Genjian Zhang <zhanggenjian@kylinos.cn>
-To:     tsbogend@alpha.franken.de, linus.walleij@linaro.org, brgl@bgdev.pl,
-        f.fainelli@gmail.com
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, huhai <huhai@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>,
-        Genjian Zhang <zhanggenjian@kylinos.cn>
-Subject: [PATCH v4] MIPS: Remove repetitive increase irq_err_count
-Date:   Fri, 10 Jun 2022 19:14:20 +0800
-Message-Id: <20220610111420.1520410-1-zhanggenjian@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220525043916.584850-1-zhanggenjian@kylinos.cn>
-References: <20220525043916.584850-1-zhanggenjian@kylinos.cn>
+        with ESMTP id S1347985AbiFJMDW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 08:03:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E823EA87;
+        Fri, 10 Jun 2022 05:03:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1B5B62184;
+        Fri, 10 Jun 2022 12:03:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9656BC3411D;
+        Fri, 10 Jun 2022 12:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654862598;
+        bh=f91prLddVZ6W3Wxb6Hqxhw4VdV2kGrg/IH7kR4PdhnY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U1znS8ABzt3/7+3tW8r9w0ODLWoHYuds726WAKeoahr9hFltRLm81H0CA03oc5Onx
+         23VM+SJfFghn425BmH1i2xpNVPDVsNSvEL/cpHEuCZoyxDGEaAo989Whdcq+w8Xr0x
+         eM1QnspuhULq9B32zaxPnZEYYuRFsh5AvVkZYA+n9Rb1/XRe3sNm605YjInqypuQGf
+         Ct0RLvUATkkDNkfEu+LaV/yPbv5tU1dN7tRgiZFdckQmCpZSAeMflyqASdKidO9ISp
+         ZlUgqPC+kRCvY06U7U1bpuV5knThQEuewmaR79v8OzQme2AWBWAAH0vkrEzq39r705
+         METMJ1sJh6Oyg==
+Date:   Fri, 10 Jun 2022 13:03:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     ckeepax@opensource.cirrus.com, linux-sunxi@lists.linux.dev,
+        peter.ujfalusi@gmail.com, pierre-louis.bossart@linux.intel.com,
+        linux-imx@nxp.com, krzk@kernel.org, jarkko.nikula@bitmer.com,
+        linux-xtensa@linux-xtensa.org, cezary.rojewski@intel.com,
+        shawnguo@kernel.org, linux-mediatek@lists.infradead.org,
+        nicolas.ferre@microchip.com, patches@opensource.cirrus.com,
+        linux-amlogic@lists.infradead.org, srinivas.kandagatla@linaro.org,
+        daniel@zonque.org, linux-mips@vger.kernel.org,
+        linux-tegra@vger.kernel.org, nsaenz@kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, heiko@sntech.de,
+        alsa-devel@alsa-project.org, kernel@pengutronix.de,
+        jbrunet@baylibre.com,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        linux-rockchip@lists.infradead.org, linux-omap@vger.kernel.org,
+        lgirdwood@gmail.com
+Subject: Re: [PATCH 00/56] Specify clock provider directly to CPU DAIs
+Message-ID: <YqMy/FkxDPKmzdrB@sirena.org.uk>
+References: <20220519154318.2153729-1-ckeepax@opensource.cirrus.com>
+ <165478153064.1052094.1721875477574787769.b4-ty@kernel.org>
+ <2a498819-dbbf-31c1-4145-bbd2d7179bd8@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uQXJNv1MQUHjV+R+"
+Content-Disposition: inline
+In-Reply-To: <2a498819-dbbf-31c1-4145-bbd2d7179bd8@sholland.org>
+X-Cookie: Teachers have class.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: huhai <huhai@kylinos.cn>
 
-commit 979934da9e7a ("[PATCH] mips: update IRQ handling for vr41xx") added
-a function irq_dispatch, and it'll increase irq_err_count when the get_irq
-callback returns a negative value, but increase irq_err_count in get_irq
-was not removed.
+--uQXJNv1MQUHjV+R+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-And also, modpost complains once gpio-vr41xx drivers become modules.
-  ERROR: modpost: "irq_err_count" [drivers/gpio/gpio-vr41xx.ko] undefined!
+On Thu, Jun 09, 2022 at 09:03:15PM -0500, Samuel Holland wrote:
+> On 6/9/22 8:32 AM, Mark Brown wrote:
+> > On Thu, 19 May 2022 16:42:22 +0100, Charles Keepax wrote:
 
-So it would be a good idea to remove repetitive increase irq_err_count in
-get_irq callback.
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
 
-Fixes: 27fdd325dace ("MIPS: Update VR41xx GPIO driver to use gpiolib")
-Fixes: 979934da9e7a ("[PATCH] mips: update IRQ handling for vr41xx")
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: huhai <huhai@kylinos.cn>
-Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
----
- arch/mips/vr41xx/common/icu.c | 2 --
- drivers/gpio/gpio-vr41xx.c    | 2 --
- 2 files changed, 4 deletions(-)
+> > [22/56] ASoC: sunxi: Update to use set_fmt_new callback
+> >         commit: 7cc3965fde74c9c725ed01de4ac35bc7d562d16a
 
-diff --git a/arch/mips/vr41xx/common/icu.c b/arch/mips/vr41xx/common/icu.c
-index 7b7f25b4b057..9240bcdbe74e 100644
---- a/arch/mips/vr41xx/common/icu.c
-+++ b/arch/mips/vr41xx/common/icu.c
-@@ -640,8 +640,6 @@ static int icu_get_irq(unsigned int irq)
- 
- 	printk(KERN_ERR "spurious ICU interrupt: %04x,%04x\n", pend1, pend2);
- 
--	atomic_inc(&irq_err_count);
--
- 	return -1;
- }
- 
-diff --git a/drivers/gpio/gpio-vr41xx.c b/drivers/gpio/gpio-vr41xx.c
-index 98cd715ccc33..8d09b619c166 100644
---- a/drivers/gpio/gpio-vr41xx.c
-+++ b/drivers/gpio/gpio-vr41xx.c
-@@ -217,8 +217,6 @@ static int giu_get_irq(unsigned int irq)
- 	printk(KERN_ERR "spurious GIU interrupt: %04x(%04x),%04x(%04x)\n",
- 	       maskl, pendl, maskh, pendh);
- 
--	atomic_inc(&irq_err_count);
--
- 	return -EINVAL;
- }
- 
--- 
-2.25.1
+> This patch is wrong, which I pointed out earlier[1]. It will break audio on the
+> Allwinner A33 and A64 SoCs. Charles said he would send a v2[2]. Excluding the
+> changes to sound/soc/sunxi/sun8i-codec.c from the patch would fix it.
 
+Your mail doesn't say that this will break, it says the change is
+unexpected.  In any case, please send an incremental fix - there's no
+need to revert the entire series for this.
+
+--uQXJNv1MQUHjV+R+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKjMvsACgkQJNaLcl1U
+h9DEiwgAg5/u/EffroYC0gc/E++OVOkz3gwInEgNAC9hOiZUubIV0pLgHmDWF03b
+jPn25vdDiJrTgFiUmwAYyaI1N8iwXmd1UllhVOv/gLkFfltVeVeI5bb7VHjskvpU
+Xx9nbpqcM0LhbDF9NG+WYAoVy5NB/aJZRKoCWoc2qbqyxE4kHlcQ+uGmXHyJDseS
+8BmRAzbUgyMhj1H2rxUsdSJBv07mGmLozTE9V6Ah8CM/7n4PVN9VjDs29qDcs1v2
+4cxYC5JHT+tbp1KldMeaAv50v0292Sfvps0RbW8zrLY4WwXo5mYJWrS+TYv1UQ+M
+XNVup9oVA23wO2KVtvmWoirnwl8blg==
+=hG/3
+-----END PGP SIGNATURE-----
+
+--uQXJNv1MQUHjV+R+--
