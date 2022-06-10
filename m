@@ -2,129 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F9C54695E
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 17:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B3B5469A5
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jun 2022 17:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243026AbiFJP3F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jun 2022 11:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S231317AbiFJPnm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jun 2022 11:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiFJP3E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 11:29:04 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D3BD82;
-        Fri, 10 Jun 2022 08:29:03 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id y15so24568395ljc.0;
-        Fri, 10 Jun 2022 08:29:03 -0700 (PDT)
+        with ESMTP id S1349340AbiFJPnI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jun 2022 11:43:08 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B66113F88;
+        Fri, 10 Jun 2022 08:42:25 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id a15so28529234wrh.2;
+        Fri, 10 Jun 2022 08:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=v+jZ6r+UjKDKeJGUYw7c5giWLtAjtBGzVupfZsrUfPw=;
-        b=YftxElw48vAzTMHF/1nfU7VfFHsJSYUmrN1ldESryIJDZgWI62xwEtnFBnCOtU1dBy
-         hugT6puqW7XaZIJXo1TEsfOzKiAxZbj7elvsLJSguBWcH268hWJLPJ9n6csgtT0bsFAu
-         oG+5atjoQLcNfaqFj1A/1giu0nztBRDoV5yyzxGAH+WDdZW8PWD5NPRMy9Jb68+jEOas
-         rO7SvIZAjGbxr/an2qmDZHU6GyFFqKxmQkILq2u14xvgnxAOPDhGLNNy8IiKfsMtIYqY
-         o3DiP0TqRJiGuuR8sP4NOpGYv3F2oz+tU1K7wiqJ+zfYH/pArdVyPDp3VHieI+PB2M76
-         nAtg==
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=adpxe2916dr9ZdckfINqW/VDd+pvv3GHwzAlINgI0C0=;
+        b=I5dzn8xLp4OL/37jS3+3dhjU9FGpQeTRHgO9S18ZF1kN9v/PeLLqf21lgBRQIMBqPv
+         gokjLMGpPdNCHimU3iVhLN8tzpLXcdC1Ea6kJZzz5fKcsHzBeuKiULIjb9gg1MZhx3iQ
+         5FHZCcNtq+srI/uE+GYWoN+uzKnWFeceRVj2TEqFUVMkVRyZH3sbcm+5UVzhoZdZrRGD
+         GI9AXPVbdnJL3NbVqNbluxo+uCFYqZGwh8LlfwVWa2GbpJiw8B7aQQYvyO1RT6QZumai
+         yjHsxvznZUnO/sEdoYJa9qsKGqbowT6HzupDNlVKhetwsR4JcfU1uvYwljb9KKPuiwpA
+         MAOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=v+jZ6r+UjKDKeJGUYw7c5giWLtAjtBGzVupfZsrUfPw=;
-        b=7jm+buB8HKvwKL9Sn5W/7hYFbYU8IcK/sBfqKIWppWheM9hVA3ga2CJEWJB0M4101H
-         HVrihFAmUNSGknGLFsDdDFgFeGTNBUPhLdujo0CgGITrOQlpBG8AfXnSqXQd/fL6ahJV
-         N1WdWHgijltnAA5x4EAPHpzQJ5gi1PFcz6Qby8uJqWXPbGlwzcRXjLAZCOEQn5hBCv2P
-         jmeBGuBp0UxCBVKqqViZyUOq41t/DIalFGJCDmhYN0koEwnafmR2bjf/nBStB4gxmQcs
-         YuOdWa604n+O9Br2ieNcCK45cSUvYpKBRNo12OaXkHsefqZ4vD0PPBE5b99YeSeWaU5u
-         FsRg==
-X-Gm-Message-State: AOAM533oLUExYRk+W8CE7hqAFIaFmbvXdWfv0fRjqhfGs3rIi1B08ixY
-        pVrDWZv9w+pClYvEEOALb9alfYo4P76c54zoyHM=
-X-Google-Smtp-Source: ABdhPJwl2v2/H6OLQAJbbAo++RAUaoWbhTiq/DJO2nyXA23eqXmg6t46Wkkb2wH2XOIksQG/+e42V+8jRbh1NeB2EQY=
-X-Received: by 2002:a2e:b8d1:0:b0:255:bfef:7212 with SMTP id
- s17-20020a2eb8d1000000b00255bfef7212mr8012769ljp.378.1654874942164; Fri, 10
- Jun 2022 08:29:02 -0700 (PDT)
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=adpxe2916dr9ZdckfINqW/VDd+pvv3GHwzAlINgI0C0=;
+        b=IToDB1cOq8n4qz1eEbXOTEtVaGnwF/+OGgEFXGsQsxpnee3wmk28GZOkpou6148DiS
+         G2IaumjxUyV0hjZTCdW1pNCvd8B6zJv+v1v1lJYLPNWu9dI8ca2EY3tKZZOcYg34eu9s
+         c4lVZi2rpAZdUtxuyi+PticWfhgvb01b8Bss4Hfg2LDFnsttgtl9pkgQaOPk6DfjNrGj
+         NDYhEuPLc4olb9IRkUBw44we06N15lUZBdY10xWUXzS6p5D/rOjg+xFbUbu87gIEeDRY
+         OUlwSadI35wirPTio3RLpQHibXbiPtfrcHqOj6h/kBBhMdhIAwUT25KId/UAKEsnpmep
+         5VxQ==
+X-Gm-Message-State: AOAM531Fl7acma/DV4qsgYv0ODLvuF1PYj3CO5sCIHX+2qjUEMrpvkrJ
+        a4H0EzGmA0kkMFdZ94iet9o=
+X-Google-Smtp-Source: ABdhPJxAELODO4RgC1p5z6ljkxgw8kqxmhvPo4D9SIWp9ZWEqBTTFSvPTND+9mkehaj8aQf3VGLZDA==
+X-Received: by 2002:a5d:648b:0:b0:215:da35:3a6b with SMTP id o11-20020a5d648b000000b00215da353a6bmr35715109wri.358.1654875744124;
+        Fri, 10 Jun 2022 08:42:24 -0700 (PDT)
+Received: from localhost (92.40.202.174.threembb.co.uk. [92.40.202.174])
+        by smtp.gmail.com with ESMTPSA id p3-20020a05600c418300b00397342bcfb7sm3159715wmh.46.2022.06.10.08.42.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 08:42:23 -0700 (PDT)
+References: <20220603134705.11156-1-aidanmacdonald.0x0@gmail.com>
+ <20220609224200.D1E8BC34114@smtp.kernel.org>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com, paul@crapouillou.net,
+        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: ingenic-tcu: Properly enable registers before
+ accessing timers
+In-reply-to: <20220609224200.D1E8BC34114@smtp.kernel.org>
+Date:   Fri, 10 Jun 2022 16:43:27 +0100
+Message-ID: <qONO5Rg11q4yBfTVshsrN1odktNWOtHV@localhost>
 MIME-Version: 1.0
-References: <20220610084545.547700-1-nuno.sa@analog.com> <CAHp75VfhRoDupB2rFS+hg1zFN3=8RhnBcXrg0O72bKJYQz+8Kg@mail.gmail.com>
-In-Reply-To: <CAHp75VfhRoDupB2rFS+hg1zFN3=8RhnBcXrg0O72bKJYQz+8Kg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 10 Jun 2022 17:28:24 +0200
-Message-ID: <CAHp75VevzkT-WYz=BiWhDAETx==Sswe-rYCo_qxy7vyL2qRwVA@mail.gmail.com>
-Subject: Re: [PATCH 00/34] make iio inkern interface firmware agnostic
-To:     =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        chrome-platform@lists.linux.dev,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jishnu Prakash <quic_jprakash@quicinc.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Benson Leung <bleung@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, Nancy Yuen <yuenn@google.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 4:48 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Fri, Jun 10, 2022 at 10:45 AM Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Stephen Boyd <sboyd@kernel.org> writes:
 
-Ditto for patches 26-34.
+> Quoting Aidan MacDonald (2022-06-03 06:47:05)
+>> Access to registers is guarded by ingenic_tcu_{enable,disable}_regs()
+>> so the stop bit can be cleared before accessing a timer channel, but
+>> those functions did not clear the stop bit on SoCs with a global TCU
+>> clock gate.
+>> 
+>> Testing on the X1000 has revealed that the stop bits must be cleared
+>> _and_ the global TCU clock must be ungated to access timer registers.
+>> Programming manuals for the X1000, JZ4740, and JZ4725B specify this
+>> behavior. If the stop bit isn't cleared, then writes to registers do
+>> not take effect, which can leave clocks with no defined parent when
+>> registered and leave clock tree state out of sync with the hardware,
+>> triggering bugs in downstream drivers relying on TCU clocks.
+>> 
+>> Fixing this is easy: have ingenic_tcu_{enable,disable}_regs() always
+>> clear the stop bit, regardless of the presence of a global TCU gate.
+>> 
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>
+> Any Fixes: tag?
 
---=20
-With Best Regards,
-Andy Shevchenko
+Probably 4f89e4b8f121 ("clk: ingenic: Add driver for the TCU clocks")
+but I don't have docs or hardware to confirm the bug affects the jz4770,
+which is the only other SoC affected by the change.
+
+I think what caused my problem was my bootloader stopping all the timer
+channels. The stop bits are supposed to be zeroed at reset, so I'd guess
+the jz4770 relied on that and only worked by accident.
+
+I'll send a v2 along shortly. Is it worth CC'ing stable as well?
