@@ -2,52 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39358547567
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jun 2022 16:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A2A547586
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jun 2022 16:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbiFKONw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 11 Jun 2022 10:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
+        id S234681AbiFKOP1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 11 Jun 2022 10:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234947AbiFKONd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Jun 2022 10:13:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F564D25;
-        Sat, 11 Jun 2022 07:13:27 -0700 (PDT)
+        with ESMTP id S237115AbiFKOPK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Jun 2022 10:15:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4539663F8;
+        Sat, 11 Jun 2022 07:14:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72ACEB80B78;
-        Sat, 11 Jun 2022 14:13:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A775DC34116;
-        Sat, 11 Jun 2022 14:13:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F077B81AEC;
+        Sat, 11 Jun 2022 14:14:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F2CC3411B;
+        Sat, 11 Jun 2022 14:14:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654956804;
-        bh=nyZvL91oFCb9bthQSadgYmYYNFgPdHqKzIod7PSvXoE=;
+        s=k20201202; t=1654956874;
+        bh=ZKyellprd64RtYJKSOQfzM4bD9hHJfuJJpfQL2HMihY=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=C2tuo46TtbrdY2D19m2dgc8qWZXkB9kD9XOOUf+g2P6r7or/YShlN3zfieoRbi1Vk
-         mRI7PO6xQMBBZDFZ33JtIn/6IVQn/VTxVQXaJO1ADbDwlQfv3ugfoK+SZ2wWPnkBEe
-         NQN0YnkPwxplxSwb5TPXK7nCa4EcaM5XEQsCru/WIGnRxSEQ5MOC6fJr8zRFIfBTyu
-         tLwN+T41I7UHRhABICFeESgCC5Pk7w7sag45jDCofg7ENDt7w2JsMMV2UnrL0YRNvo
-         0EPVDiII3hAp7sPmFQsLP0zYudeuY2ortQ78I2x55E+QAmRNr9FxfNDMWR9mLxN2JJ
-         ED2zAMUfpL0uQ==
-Date:   Sat, 11 Jun 2022 15:22:22 +0100
+        b=ikpsyenPeJKaBTv55xRDJbGWaBhqbW/eqk1CpAqsvzPNg66kKAjj6YxofQnOLQmXM
+         0g7pGHTElpAs/zwZAy8zDOTCEOJSl+WNBNkOhINpOqr+uSeriZeQ0/IvQu2i+aWHPY
+         qYEEOq9WHShueiogHB608ePY0hoDPOYdjHT6V61ISvVOYOnxWJB919YSpT5HBP1u4M
+         isTxwCN28IRZ61N84vBUEvvM2gJUk4rw5GPFqAtGr4lwJyyL/pMHUee8mFi8SnbmdZ
+         nQLmL3jmAegETqYYhO0IkEo2kFPSxz7XDjUiPqgvW1itemdTo8FFKQeGLeJaQxJatg
+         AxXEuI1HnXnVg==
+Date:   Sat, 11 Jun 2022 15:23:33 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        chrome-platform@lists.linux.dev,
+To:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>
+Cc:     <linux-imx@nxp.com>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <chrome-platform@lists.linux.dev>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "moderated list:ARM/Mediatek SoC support" 
         <linux-mediatek@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, Cai Huoqing <cai.huoqing@linux.dev>,
         Benjamin Fair <benjaminfair@google.com>,
         Jishnu Prakash <quic_jprakash@quicinc.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -75,6 +70,7 @@ Cc:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Tomer Maimon <tmaimon77@gmail.com>,
@@ -87,13 +83,12 @@ Cc:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
         Olivier Moysan <olivier.moysan@foss.st.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH 15/34] iio: humidity: hts221_buffer: explicitly add
+Subject: Re: [PATCH 16/34] iio: light: cros_ec_light_prox: explicitly add
  proper header files
-Message-ID: <20220611152222.43ab685e@jic23-huawei>
-In-Reply-To: <CAHp75VdCrFa67_k3TJSznT0fzEK3h3+fk0MHpuwM6NBpTQODEw@mail.gmail.com>
+Message-ID: <20220611152333.0a954361@jic23-huawei>
+In-Reply-To: <20220610084545.547700-17-nuno.sa@analog.com>
 References: <20220610084545.547700-1-nuno.sa@analog.com>
-        <20220610084545.547700-16-nuno.sa@analog.com>
-        <CAHp75VdCrFa67_k3TJSznT0fzEK3h3+fk0MHpuwM6NBpTQODEw@mail.gmail.com>
+        <20220610084545.547700-17-nuno.sa@analog.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -108,35 +103,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 10 Jun 2022 16:47:16 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Fri, 10 Jun 2022 10:45:27 +0200
+Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
 
-> On Fri, Jun 10, 2022 at 10:47 AM Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
-> >
-> > Do not trust the fact that iio.h includes of.h which in turn includes
-> > all the headers we are relying on.
-> >
-> > The ultimate goal is to actually drop of.h from iio.h. =20
+> Do not trust the fact that iio.h includes of.h which in turn includes
+> all the headers we are relying on.
 >=20
-> ...
+> The ultimate goal is to actually drop of.h from iio.h.
 >=20
-> >  #include <linux/irqreturn.h>
-> >  #include <linux/regmap.h>
-> >  #include <linux/bitfield.h>
-> > +#include <linux/property.h> =20
->=20
-> Yes, I see, but you can make life easier if you try to squeeze to the
-> most sorted part. I do not see full context, but here I would put it
-> before regmap.h.
->=20
-With full context it's clear the list is way off sorted, but meh
-putting it above regmap probably reduces the follow up diff a tiny
-bit and I doubt Nuno feels strongly about this so I went with
-what Andy suggested as a tweak whilst applying.
-
+> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 Applied
 
 Thanks,
 
-Jonathan
+J
+
+> ---
+>  drivers/iio/light/cros_ec_light_prox.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/iio/light/cros_ec_light_prox.c b/drivers/iio/light/c=
+ros_ec_light_prox.c
+> index a00a8b3b86cf..e345e0f71b74 100644
+> --- a/drivers/iio/light/cros_ec_light_prox.c
+> +++ b/drivers/iio/light/cros_ec_light_prox.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/iio/triggered_buffer.h>
+>  #include <linux/iio/trigger_consumer.h>
+>  #include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
 
