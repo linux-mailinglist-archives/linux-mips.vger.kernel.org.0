@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101305474EB
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jun 2022 15:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE825474F4
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jun 2022 15:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbiFKNuU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 11 Jun 2022 09:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S231653AbiFKNwH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 11 Jun 2022 09:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232552AbiFKNuT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Jun 2022 09:50:19 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9745E140;
-        Sat, 11 Jun 2022 06:50:11 -0700 (PDT)
+        with ESMTP id S231378AbiFKNwG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Jun 2022 09:52:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF24DF13;
+        Sat, 11 Jun 2022 06:52:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4801CCE02C5;
-        Sat, 11 Jun 2022 13:50:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E49FDC34116;
-        Sat, 11 Jun 2022 13:49:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B95BB816AD;
+        Sat, 11 Jun 2022 13:52:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF57C34116;
+        Sat, 11 Jun 2022 13:51:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654955407;
-        bh=axWYZgHjU+vWL39otfQyFw7n1cGND5pHaeO608w9aDQ=;
+        s=k20201202; t=1654955519;
+        bh=mG9PRa/hoJU++oy2/1rOsVQjjCa+upUYtaTD+8dvzg4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kXEFWai8vIb/IcKUCUsY5h6FQ5HgBYwoNoO6x0MjQtdX9+M+TxIqv68GybTf+JOgW
-         q/rV4SV3/m1/STeXQ+UhMBbZQgylp8pVkzRVphpH0I9ytGjY804Yv+Hfj7kFzrY8FN
-         dQ5Bsv9xQ4YGPIVB0zHbP6oKxuv28f0GR5JQljdn7j5Hm/k4wwQwu/0bq5LIzb7kGO
-         qiRF8DBvDKq57IzKjPeCW9Uc/oQWQ/I3eyGpG4r9iA19/4Xzgt4xaW5KPrZqH+YdYX
-         CvRdaHxByHiYYFDF3o0LpHQcmqIK+hK/B8HUt9XKFV7g3A47bKyk80WnlHX4RfshFk
-         IyGi7XrE4Zc2A==
-Date:   Sat, 11 Jun 2022 14:59:05 +0100
+        b=s0iPw9d6lhJbgaK9lLIA2OIuxQ4bl+kSAbcG0kXZDcOSUpfApg/txQldMZuYY/Q1V
+         CsqTR8iiLvTD1/+sjmf4qUb46LDL/dW+Apejlsbhs2rVCnllqOFk1AvCdRYhx+u2xz
+         584swGpqE/bG+WSc/NoyUne2IfjfyqSDh2j1QqcdQDdTotd3NVUuXfNlO6OOYeAh7d
+         Fiq78NgFxij99miG9rX+kTdenvERnOyR8G0oc2FtjoXu7ytR4Ylkzmp26mhWXKn8BF
+         Y+qZYkwNlBEpGjY7XZf+qjIeuzennmJD9NgaQh4lQRgUN3w9EsLFHRM1/QJRAN216q
+         7N9TFuuJ+en6A==
+Date:   Sat, 11 Jun 2022 15:00:58 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>
 Cc:     <linux-imx@nxp.com>, <linux-renesas-soc@vger.kernel.org>,
@@ -83,12 +83,12 @@ Cc:     <linux-imx@nxp.com>, <linux-renesas-soc@vger.kernel.org>,
         Olivier Moysan <olivier.moysan@foss.st.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH 01/34] iio: adc: ad7606: explicitly add proper header
- files
-Message-ID: <20220611145905.55e9b074@jic23-huawei>
-In-Reply-To: <20220610084545.547700-2-nuno.sa@analog.com>
+Subject: Re: [PATCH 02/34] iio: adc: ad7606_par: explicitly add proper
+ header files
+Message-ID: <20220611150058.11cfc344@jic23-huawei>
+In-Reply-To: <20220610084545.547700-3-nuno.sa@analog.com>
 References: <20220610084545.547700-1-nuno.sa@analog.com>
-        <20220610084545.547700-2-nuno.sa@analog.com>
+        <20220610084545.547700-3-nuno.sa@analog.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -103,7 +103,7 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 10 Jun 2022 10:45:12 +0200
+On Fri, 10 Jun 2022 10:45:13 +0200
 Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
 
 > Do not trust the fact that iio.h includes of.h which in turn includes
@@ -112,35 +112,22 @@ Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
 > The ultimate goal is to actually drop of.h from iio.h.
 >=20
 > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-Hi Nuno,
-
-Not sure how far I'll get through the series, but to try and
-reduce the noise / traffic for any future versions I'm going to
-pick up as many of these precursor patches as possible.
-
-Applied to the togreg branch of iio.git (which just got rebased
-on v5.19-rc1) and pushed out as testing for 0-day to take a quick
-look and see if we missed anything.
-
-Thanks,
-
-Jonathan
-
+Applied
 
 > ---
->  drivers/iio/adc/ad7606.c | 1 +
+>  drivers/iio/adc/ad7606_par.c | 1 +
 >  1 file changed, 1 insertion(+)
 >=20
-> diff --git a/drivers/iio/adc/ad7606.c b/drivers/iio/adc/ad7606.c
-> index 3b193dc26438..ba24f99523e0 100644
-> --- a/drivers/iio/adc/ad7606.c
-> +++ b/drivers/iio/adc/ad7606.c
-> @@ -12,6 +12,7 @@
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
+> diff --git a/drivers/iio/adc/ad7606_par.c b/drivers/iio/adc/ad7606_par.c
+> index 8888e56b5e90..b912b4df9b56 100644
+> --- a/drivers/iio/adc/ad7606_par.c
+> +++ b/drivers/iio/adc/ad7606_par.c
+> @@ -5,6 +5,7 @@
+>   * Copyright 2011 Analog Devices Inc.
+>   */
+> =20
+> +#include <linux/mod_devicetable.h>
 >  #include <linux/module.h>
-> +#include <linux/property.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/sched.h>
->  #include <linux/slab.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/types.h>
 
