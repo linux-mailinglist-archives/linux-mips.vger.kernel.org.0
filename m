@@ -2,126 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A375482C7
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jun 2022 11:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68E5548332
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jun 2022 11:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbiFMJCa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jun 2022 05:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S239065AbiFMJZh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jun 2022 05:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiFMJC2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jun 2022 05:02:28 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6511C3;
-        Mon, 13 Jun 2022 02:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1655110940; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wzTq3X/06BFOnsk1/1jD9KPlkg3opvD7FWyWkz4J1rI=;
-        b=eLbD7wDeL0e0UWjrlIAm+qxeUDjLUr4Yyk0i2d54W+5bAOCWSQRMYIi1m81Qr72nZqeEgF
-        HnHc235l7jwMFS6tEjgir9ZSM+GK0ETMW/sTRnSfdAKWWG+73XAR2rdXGhp/vLId5m1VXb
-        aklKa5aNN8ZZcUu/Obf/x/a9IfsHEi4=
-Date:   Mon, 13 Jun 2022 10:02:11 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] clk: ingenic-tcu: Properly enable registers before
- accessing timers
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <NRREDR.U6G6SM5BIXEC3@crapouillou.net>
-In-Reply-To: <20220603134705.11156-1-aidanmacdonald.0x0@gmail.com>
-References: <20220603134705.11156-1-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S240833AbiFMJZg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jun 2022 05:25:36 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DB0193E3;
+        Mon, 13 Jun 2022 02:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655112334; x=1686648334;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=9W8UBL8GQK1i8P7k7h9skaKJIvKeSxs0mGTdDoAxlas=;
+  b=fqMhrCKaoqC18aJhxKIlakXRGms7GbxdKM1A/CwyiOfup9s5DZRKbjBb
+   p0si3DRNncvKkKvGcNN5Z+nweA9ptJpBKGKLaAsnvdNF0H5xvztOzLuDD
+   hdfEvXCxGjaSo+W4mypSFf5mPCR7COAuLPbF7yJkServD+pT3BHTHvzTL
+   nrdWq29LNE5Fj9VPfS4PMH316kI2/RIVhoZqhJJJFwu81gCNq9Eq0OHtt
+   qq5PkNWjmQoMsDXLoU0KAk7psxSuw4HFU0ZH54dASNtZ96Y+MbvWvq5Sz
+   4ETvIq+gjeMG9R6A/nYT7oGKd7JcR1WsqyTx/3o9CuRNYDrV5Y6VCEbp8
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="339898381"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="339898381"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 02:25:33 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="639635137"
+Received: from fnechitx-mobl.ger.corp.intel.com ([10.249.40.115])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 02:25:30 -0700
+Date:   Mon, 13 Jun 2022 12:25:24 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas.wunner@intel.com>,
+        =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v6 1/6] serial: 8250: make saved LSR larger
+In-Reply-To: <670010a1-7727-f2d9-87ad-18ddbeb0cbef@kernel.org>
+Message-ID: <cd812b3-393-79be-d7bf-ce79376d9f@linux.intel.com>
+References: <20220613075227.10394-1-ilpo.jarvinen@linux.intel.com> <20220613075227.10394-2-ilpo.jarvinen@linux.intel.com> <670010a1-7727-f2d9-87ad-18ddbeb0cbef@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-657426468-1655112332=:2044"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aidan,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Le ven., juin 3 2022 at 14:47:05 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Access to registers is guarded by ingenic_tcu_{enable,disable}_regs()
-> so the stop bit can be cleared before accessing a timer channel, but
-> those functions did not clear the stop bit on SoCs with a global TCU
-> clock gate.
->=20
-> Testing on the X1000 has revealed that the stop bits must be cleared
-> _and_ the global TCU clock must be ungated to access timer registers.
-> Programming manuals for the X1000, JZ4740, and JZ4725B specify this
-> behavior. If the stop bit isn't cleared, then writes to registers do
-> not take effect, which can leave clocks with no defined parent when
-> registered and leave clock tree state out of sync with the hardware,
-> triggering bugs in downstream drivers relying on TCU clocks.
->=20
-> Fixing this is easy: have ingenic_tcu_{enable,disable}_regs() always
-> clear the stop bit, regardless of the presence of a global TCU gate.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+--8323329-657426468-1655112332=:2044
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Tested on JZ4770, it still works fine.
+On Mon, 13 Jun 2022, Jiri Slaby wrote:
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+> On 13. 06. 22, 9:52, Ilpo Järvinen wrote:
+> > DW flags address received as BIT(8) in LSR. In order to not lose that
+> > on read, enlarge lsr_saved_flags to u16.
+> > 
+> > Adjust lsr/status variables and related call chains which used unsigned
+> > char type previously to unsigned int. Technically, some of these type
+> > conversion would not be needed but it doesn't hurt to be consistent.
+> > 
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ...
+> > --- a/include/linux/serial_8250.h
+> > +++ b/include/linux/serial_8250.h
+> > @@ -119,7 +119,7 @@ struct uart_8250_port {
+> >   	 * be immediately processed.
+> >   	 */
+> >   #define LSR_SAVE_FLAGS UART_LSR_BRK_ERROR_BITS
+> > -	unsigned char		lsr_saved_flags;
+> > +	u16			lsr_saved_flags;
+> >   #define MSR_SAVE_FLAGS UART_MSR_ANY_DELTA
+> >   	unsigned char		msr_saved_flags;
+> >   @@ -170,8 +170,8 @@ extern void serial8250_do_set_divisor(struct uart_port
+> > *port, unsigned int baud,
+> >   				      unsigned int quot_frac);
+> >   extern int fsl8250_handle_irq(struct uart_port *port);
+> >   int serial8250_handle_irq(struct uart_port *port, unsigned int iir);
+> > -unsigned char serial8250_rx_chars(struct uart_8250_port *up, unsigned char
+> > lsr);
+> > -void serial8250_read_char(struct uart_8250_port *up, unsigned char lsr);
+> > +unsigned int serial8250_rx_chars(struct uart_8250_port *up, unsigned int
+> > lsr);
+> > +void serial8250_read_char(struct uart_8250_port *up, unsigned int lsr);
+> 
+> It looks odd to have
+>   u16 lsr_saved_flags
+> in the struct and
+>   unsigned int lsr
+> here and there. You wrote:
+>   Technically, some of these type conversion would not be needed
+>   but it doesn't hurt to be consistent
+> But it looks like you actually made them a bit inconsistent.
 
-Still needs a Fixes: tag (+ Cc: linux-stable) so I'm expecting a V2.
+Those were actually meant to discuss on different things. u16 is the 
+oldest part of change and the reason why it is only u16 is that I
+didn't need more than that to store the bits used for the mask.
 
-Cheers,
--Paul
+That "consistent" part was written to note that there are case which check 
+only e.g. TEMT flag. As TEMT is within first 8 bits, it doesn't absolutely 
+need more than unsigned char but I enlarged those types regardless.
+I agree with you though the wording doesn't convey meaning exclusive to 
+those cases.
 
-> ---
->  drivers/clk/ingenic/tcu.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-> index 201bf6e6b6e0..d5544cbc5c48 100644
-> --- a/drivers/clk/ingenic/tcu.c
-> +++ b/drivers/clk/ingenic/tcu.c
-> @@ -101,15 +101,11 @@ static bool ingenic_tcu_enable_regs(struct=20
-> clk_hw *hw)
->  	bool enabled =3D false;
->=20
->  	/*
-> -	 * If the SoC has no global TCU clock, we must ungate the channel's
-> -	 * clock to be able to access its registers.
-> -	 * If we have a TCU clock, it will be enabled automatically as it=20
-> has
-> -	 * been attached to the regmap.
-> +	 * According to the programming manual, a timer channel's registers=20
-> can
-> +	 * only be accessed when the channel's stop bit is clear.
->  	 */
-> -	if (!tcu->clk) {
-> -		enabled =3D !!ingenic_tcu_is_enabled(hw);
-> -		regmap_write(tcu->map, TCU_REG_TSCR, BIT(info->gate_bit));
-> -	}
-> +	enabled =3D !!ingenic_tcu_is_enabled(hw);
-> +	regmap_write(tcu->map, TCU_REG_TSCR, BIT(info->gate_bit));
->=20
->  	return enabled;
->  }
-> @@ -120,8 +116,7 @@ static void ingenic_tcu_disable_regs(struct=20
-> clk_hw *hw)
->  	const struct ingenic_tcu_clk_info *info =3D tcu_clk->info;
->  	struct ingenic_tcu *tcu =3D tcu_clk->tcu;
->=20
-> -	if (!tcu->clk)
-> -		regmap_write(tcu->map, TCU_REG_TSSR, BIT(info->gate_bit));
-> +	regmap_write(tcu->map, TCU_REG_TSSR, BIT(info->gate_bit));
->  }
->=20
->  static u8 ingenic_tcu_get_parent(struct clk_hw *hw)
-> --
-> 2.35.1
->=20
+> So why not use u16 for everyone?
 
+If that consistency is necessary, I'd be more inclined to make the ones in 
+the uart_8250_port unsigned int instead. The reason is that it would then 
+align better to read/ignore_status_mask that are already unsigned int. 
+Would it be ok or do you still prefer u16?
 
+-- 
+ i.
+
+--8323329-657426468-1655112332=:2044--
