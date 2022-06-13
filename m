@@ -2,179 +2,249 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB09548071
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jun 2022 09:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A745480F1
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jun 2022 09:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbiFMHWa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jun 2022 03:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S238529AbiFMHw4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jun 2022 03:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiFMHW3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jun 2022 03:22:29 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA3A12AF8;
-        Mon, 13 Jun 2022 00:22:28 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id q104so3791136qvq.8;
-        Mon, 13 Jun 2022 00:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=t8GkcF/AscIjmYX1Ft+2LOWOMCGcc3ou443uyI/gHgM=;
-        b=lgYBehJwnc7p76Sp7QYODbs+eJsn9x/aAZca0AhE5KDXVc2emmsRxjtpfkhG0ym3jF
-         +YmyjmCo8KwGowRdjt9uIvuUoTlmDmEhKvtAV4CSG4hTEjA91HAM5qlNsrTQS1SRX91R
-         LFvp/Mktzkcb1CVjqHCgBxNr9WvYpOAxf+96MGlGzCOnNiSwu1/E0KM1WiGropKJpSPJ
-         I1FGxJQBE5G5ow1BWz+8k8tlsSYxFVWF+sox/Wak2AzR/lG0tAdRt9KAZDThpdGND1Zh
-         2o8Dtj8SUUB+OwaZDXw05iMGYlfFzStAu7j7cL8cCzdwPXdi8qQXd8eBti7wRpJI/O1K
-         B+xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=t8GkcF/AscIjmYX1Ft+2LOWOMCGcc3ou443uyI/gHgM=;
-        b=RDJI1zvk1ddPstemqmiFxWVljz6PPgUeOK8PZUdZkq8raiqqxFTt9RP6/aGr5e1Sws
-         mTn9N7tAO9QEyDkJgDcGbiHEaXIShcl7gIz/2acXbI6wa0r1qtNHadzRG9P05fxHaHKQ
-         cWF5KTzGGRmmRZDTczHB+CrGumDa0crxAUirxpPEDCNK/TtpddjWonORWK6o/bb5wfF8
-         hR8OX2Zd7MEgAPLCszFcPZwCqYtNAwKkcYJuQd1hnwb25j6LfKZkeuRHJodHvF9qwSf4
-         6nqZH3cY6odkQoCFoR5DSNqoIPxcfEZEK7DpNlTa4pPJk+aohyUvbcEJ9T5Dz+skbUXg
-         ZuKA==
-X-Gm-Message-State: AOAM533CxL8DbYUWnzWJBJY+KFzZAnMo1S888m2o6jYQVdt15CFv50Tr
-        xaB5TJxHy+oojCH7SmEwKKg=
-X-Google-Smtp-Source: ABdhPJzJwQGuL0izMZeZrCmNmnxm8u/ohN3iHcmN+Ftx1/l43JyjW+szv6Fscr1wrYk++4pmje2xJg==
-X-Received: by 2002:ad4:5b81:0:b0:465:ded8:780 with SMTP id 1-20020ad45b81000000b00465ded80780mr45550533qvp.119.1655104947222;
-        Mon, 13 Jun 2022 00:22:27 -0700 (PDT)
-Received: from p200300f6ef062c0090c03b551078f99d.dip0.t-ipconnect.de (p200300f6ef062c0090c03b551078f99d.dip0.t-ipconnect.de. [2003:f6:ef06:2c00:90c0:3b55:1078:f99d])
-        by smtp.gmail.com with ESMTPSA id y6-20020a05622a004600b002f9399ccefasm4637163qtw.34.2022.06.13.00.22.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 00:22:26 -0700 (PDT)
-Message-ID: <d1d465f2e828642f30bc8a2bdd49e89fdfed7caf.camel@gmail.com>
-Subject: Re: [PATCH 34/34] iio: inkern: fix coding style warnings
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Joe Simmons-Talbott <joetalbott@gmail.com>,
-        Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        chrome-platform@lists.linux.dev,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-iio@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jishnu Prakash <quic_jprakash@quicinc.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Benson Leung <bleung@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, Nancy Yuen <yuenn@google.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        with ESMTP id S238805AbiFMHwz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jun 2022 03:52:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26004DF1A;
+        Mon, 13 Jun 2022 00:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655106772; x=1686642772;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=VOQY22IXG4lx5PEpmOJgOIgcAllOaTO6Y+sdw+nwOJw=;
+  b=bo0luhNdJR+OQG2ApmaJihGG/Qzce1p+NgTazg9Lhfw88KXUwYjITirK
+   UNmTvOqWUrODLqgwJS2fsiYjG39CatI+2fm5bXKqGxKJipWBx4QmiamrK
+   9bazkn9bsE2az9zAyMYuCGIh2zqL1yfc+xX0//xypRUPmZrj/uBixgj0S
+   IVxHfPm8jOka7mLeJROHUeDB0jBVNed8GNdPh0y/iwFVeqLfMwOO207Ws
+   H9lCiO43SbaMNKHsDUUIHcJHRDzPmdHMPK2GI2gESJoCsD7cXDoyQNmEz
+   T/h4Z4xNPmu5xI/J79R2cWYUwtIn3mBUEYAa15a59WRuaMRgERlt4YIOp
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="261239103"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="261239103"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 00:52:50 -0700
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="639593158"
+Received: from fnechitx-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.40.115])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 00:52:40 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         Paul Cercueil <paul@crapouillou.net>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Date:   Mon, 13 Jun 2022 09:23:16 +0200
-In-Reply-To: <CAMuHMdXtLQOo2fiTHA-CBgWZE0hbPVUzv77sKrf_Qz8oHp7bkA@mail.gmail.com>
-References: <20220610084545.547700-1-nuno.sa@analog.com>
-         <20220610084545.547700-35-nuno.sa@analog.com> <YqNo6U8r80aNFzUr@spruce>
-         <d083dd2c7e9e6eefb32124648a06799a9ebe8dfd.camel@gmail.com>
-         <CAMuHMdXtLQOo2fiTHA-CBgWZE0hbPVUzv77sKrf_Qz8oHp7bkA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas.wunner@intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v6 1/6] serial: 8250: make saved LSR larger
+Date:   Mon, 13 Jun 2022 10:52:22 +0300
+Message-Id: <20220613075227.10394-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220613075227.10394-1-ilpo.jarvinen@linux.intel.com>
+References: <20220613075227.10394-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 2022-06-12 at 19:39 +0200, Geert Uytterhoeven wrote:
-> Hi Nuno,
->=20
-> On Fri, Jun 10, 2022 at 9:52 PM Nuno S=C3=A1 <noname.nuno@gmail.com>
-> wrote:
-> > On Fri, 2022-06-10 at 11:53 -0400, Joe Simmons-Talbott wrote:
-> > > On Fri, Jun 10, 2022 at 10:45:45AM +0200, Nuno S=C3=A1 wrote:
-> > > > Just cosmetics. No functional change intended...
-> > > >=20
-> > > > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
->=20
-> > > > --- a/drivers/iio/inkern.c
-> > > > +++ b/drivers/iio/inkern.c
-> > > > @@ -45,13 +45,13 @@ int iio_map_array_register(struct iio_dev
-> > > > *indio_dev, struct iio_map *maps)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int i =3D 0, ret =3D 0;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct iio_map_internal =
-*mapi;
-> > > >=20
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (maps =3D=3D NULL)
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!maps)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > > >=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_lock(&iio_map_list=
-_lock);
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 while (maps[i].consumer_dev_n=
-ame !=3D NULL) {
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 while (!maps[i].consumer_dev_=
-name) {
-> > >=20
-> > > Shouldn't this be?:
-> > > while (maps[i].consumer_dev_name) {
-> >=20
-> > Ups... Nice catch! I was probably in bot mode already.
->=20
-> When making a change with no functional change intended, it is always
-> a good idea to compare the generated assembler before/after.=C2=A0 I.e.
->=20
-> =C2=A0=C2=A0=C2=A0 make drivers/iio/inkern.s
-> =C2=A0=C2=A0=C2=A0 mv drivers/iio/inkern.s drivers/iio/inkern.s.orig
-> =C2=A0=C2=A0=C2=A0 [make your change]
-> =C2=A0=C2=A0=C2=A0 make drivers/iio/inkern.s
-> =C2=A0=C2=A0=C2=A0 diff -u drivers/iio/inkern.s{.orig,}
->=20
+DW flags address received as BIT(8) in LSR. In order to not lose that
+on read, enlarge lsr_saved_flags to u16.
 
-Ah thx... That's indeed a good idea!
+Adjust lsr/status variables and related call chains which used unsigned
+char type previously to unsigned int. Technically, some of these type
+conversion would not be needed but it doesn't hurt to be consistent.
 
-- Nuno S=C3=A1
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_exar.c    |  2 +-
+ drivers/tty/serial/8250/8250_fsl.c     |  2 +-
+ drivers/tty/serial/8250/8250_ingenic.c |  2 +-
+ drivers/tty/serial/8250/8250_omap.c    |  8 ++++----
+ drivers/tty/serial/8250/8250_port.c    | 15 ++++++++-------
+ include/linux/serial_8250.h            |  6 +++---
+ 6 files changed, 18 insertions(+), 17 deletions(-)
 
-
-
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index 528779b40049..0eae2d8a9494 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -195,7 +195,7 @@ static int xr17v35x_startup(struct uart_port *port)
+ 
+ static void exar_shutdown(struct uart_port *port)
+ {
+-	unsigned char lsr;
++	unsigned int lsr;
+ 	bool tx_complete = false;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct circ_buf *xmit = &port->state->xmit;
+diff --git a/drivers/tty/serial/8250/8250_fsl.c b/drivers/tty/serial/8250/8250_fsl.c
+index 9c01c531349d..fde48527caab 100644
+--- a/drivers/tty/serial/8250/8250_fsl.c
++++ b/drivers/tty/serial/8250/8250_fsl.c
+@@ -25,7 +25,7 @@
+ 
+ int fsl8250_handle_irq(struct uart_port *port)
+ {
+-	unsigned char lsr, orig_lsr;
++	unsigned int lsr, orig_lsr;
+ 	unsigned long flags;
+ 	unsigned int iir;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+diff --git a/drivers/tty/serial/8250/8250_ingenic.c b/drivers/tty/serial/8250/8250_ingenic.c
+index cff91aa03f29..1f247a270b17 100644
+--- a/drivers/tty/serial/8250/8250_ingenic.c
++++ b/drivers/tty/serial/8250/8250_ingenic.c
+@@ -54,7 +54,7 @@ static void early_out(struct uart_port *port, int offset, uint8_t value)
+ 
+ static void ingenic_early_console_putc(struct uart_port *port, unsigned char c)
+ {
+-	uint8_t lsr;
++	unsigned int lsr;
+ 
+ 	do {
+ 		lsr = early_in(port, UART_LSR);
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index ac8bfa042391..f0114eca9095 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -1115,8 +1115,8 @@ static bool handle_rx_dma(struct uart_8250_port *up, unsigned int iir)
+ 	return omap_8250_rx_dma(up);
+ }
+ 
+-static unsigned char omap_8250_handle_rx_dma(struct uart_8250_port *up,
+-					     u8 iir, unsigned char status)
++static unsigned int omap_8250_handle_rx_dma(struct uart_8250_port *up,
++					    u8 iir, unsigned int status)
+ {
+ 	if ((status & (UART_LSR_DR | UART_LSR_BI)) &&
+ 	    (iir & UART_IIR_RDI)) {
+@@ -1130,7 +1130,7 @@ static unsigned char omap_8250_handle_rx_dma(struct uart_8250_port *up,
+ }
+ 
+ static void am654_8250_handle_rx_dma(struct uart_8250_port *up, u8 iir,
+-				     unsigned char status)
++				     unsigned int status)
+ {
+ 	/*
+ 	 * Queue a new transfer if FIFO has data.
+@@ -1164,7 +1164,7 @@ static int omap_8250_dma_handle_irq(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct omap8250_priv *priv = up->port.private_data;
+-	unsigned char status;
++	unsigned int status;
+ 	u8 iir;
+ 
+ 	serial8250_rpm_get(up);
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index c860f5964138..8ff9f4815c7b 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1508,7 +1508,7 @@ static inline void __stop_tx(struct uart_8250_port *p)
+ 	struct uart_8250_em485 *em485 = p->em485;
+ 
+ 	if (em485) {
+-		unsigned char lsr = serial_lsr_in(p);
++		unsigned int lsr = serial_lsr_in(p);
+ 		u64 stop_delay = 0;
+ 
+ 		if (!(lsr & UART_LSR_THRE))
+@@ -1565,7 +1565,7 @@ static inline void __start_tx(struct uart_port *port)
+ 
+ 	if (serial8250_set_THRI(up)) {
+ 		if (up->bugs & UART_BUG_TXEN) {
+-			unsigned char lsr = serial_lsr_in(up);
++			unsigned int lsr = serial_lsr_in(up);
+ 
+ 			if (lsr & UART_LSR_THRE)
+ 				serial8250_tx_chars(up);
+@@ -1719,7 +1719,7 @@ static void serial8250_enable_ms(struct uart_port *port)
+ 	serial8250_rpm_put(up);
+ }
+ 
+-void serial8250_read_char(struct uart_8250_port *up, unsigned char lsr)
++void serial8250_read_char(struct uart_8250_port *up, unsigned int lsr)
+ {
+ 	struct uart_port *port = &up->port;
+ 	unsigned char ch;
+@@ -1788,7 +1788,7 @@ EXPORT_SYMBOL_GPL(serial8250_read_char);
+  * (such as THRE) because the LSR value might come from an already consumed
+  * character.
+  */
+-unsigned char serial8250_rx_chars(struct uart_8250_port *up, unsigned char lsr)
++unsigned int serial8250_rx_chars(struct uart_8250_port *up, unsigned int lsr)
+ {
+ 	struct uart_port *port = &up->port;
+ 	int max_count = 256;
+@@ -1908,7 +1908,7 @@ static bool handle_rx_dma(struct uart_8250_port *up, unsigned int iir)
+  */
+ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
+ {
+-	unsigned char status;
++	unsigned int status;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	bool skip_rx = false;
+ 	unsigned long flags;
+@@ -2117,7 +2117,7 @@ static void wait_for_xmitr(struct uart_8250_port *up, int bits)
+ static int serial8250_get_poll_char(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+-	unsigned char lsr;
++	unsigned int lsr;
+ 	int status;
+ 
+ 	serial8250_rpm_get(up);
+@@ -2173,7 +2173,8 @@ int serial8250_do_startup(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	unsigned long flags;
+-	unsigned char lsr, iir;
++	unsigned char iir;
++	unsigned int lsr;
+ 	int retval;
+ 
+ 	if (!port->fifosize)
+diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
+index ff84a3ed10ea..921df4c60062 100644
+--- a/include/linux/serial_8250.h
++++ b/include/linux/serial_8250.h
+@@ -119,7 +119,7 @@ struct uart_8250_port {
+ 	 * be immediately processed.
+ 	 */
+ #define LSR_SAVE_FLAGS UART_LSR_BRK_ERROR_BITS
+-	unsigned char		lsr_saved_flags;
++	u16			lsr_saved_flags;
+ #define MSR_SAVE_FLAGS UART_MSR_ANY_DELTA
+ 	unsigned char		msr_saved_flags;
+ 
+@@ -170,8 +170,8 @@ extern void serial8250_do_set_divisor(struct uart_port *port, unsigned int baud,
+ 				      unsigned int quot_frac);
+ extern int fsl8250_handle_irq(struct uart_port *port);
+ int serial8250_handle_irq(struct uart_port *port, unsigned int iir);
+-unsigned char serial8250_rx_chars(struct uart_8250_port *up, unsigned char lsr);
+-void serial8250_read_char(struct uart_8250_port *up, unsigned char lsr);
++unsigned int serial8250_rx_chars(struct uart_8250_port *up, unsigned int lsr);
++void serial8250_read_char(struct uart_8250_port *up, unsigned int lsr);
+ void serial8250_tx_chars(struct uart_8250_port *up);
+ unsigned int serial8250_modem_status(struct uart_8250_port *up);
+ void serial8250_init_port(struct uart_8250_port *up);
+-- 
+2.30.2
 
