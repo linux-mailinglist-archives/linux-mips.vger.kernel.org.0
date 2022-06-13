@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8561548E23
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jun 2022 18:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67962549730
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jun 2022 18:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346494AbiFMKzg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jun 2022 06:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S1358267AbiFMMGG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jun 2022 08:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350093AbiFMKyl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jun 2022 06:54:41 -0400
+        with ESMTP id S1359256AbiFMMFe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jun 2022 08:05:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D2424970;
-        Mon, 13 Jun 2022 03:29:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DED626134;
+        Mon, 13 Jun 2022 03:59:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30475B80E59;
-        Mon, 13 Jun 2022 10:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEDFC34114;
-        Mon, 13 Jun 2022 10:29:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C983B80EA8;
+        Mon, 13 Jun 2022 10:59:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3406AC34114;
+        Mon, 13 Jun 2022 10:59:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116149;
-        bh=pOFYgfee5iVtMFAxZz46DsyhKPKQrBcJoxcFBBfq19w=;
+        s=korg; t=1655117986;
+        bh=2xRg+D79i5GNl8UccOe7sFp/4aJop6QuUDfI2goaweQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c08SeGDs8US+g6GmBs5+Hg8uFHB7AGqyQzPYpSQl7YYj3h7QkpBr+i0wo1xnFRx0P
-         bCT7yjG63LqSKq7+GV7momnFXIJ3ra73EOJOUpyvgnN6lxLaOVGvAGvo4awI8JlAM6
-         eonfeBkYMzE85vKDINwDwFYI8krZLGWhuUgVGAt0=
+        b=agNjp7jMXrA9TqgI6g1CdLPQgX+K2v1Z1PPTTC56CtdmAShdrqsiCl1PDLMaa029f
+         oGg+rEOQX9l3x5nnykd/B7aeCZxN/Zces+Cf9TLRuY9UthB2UfXjGyDftSQwaRbbVt
+         jbZ8ZJPoIPJuWNjFLdjd6d1bx9PwqnH+RijvMHGQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -40,12 +40,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-mips@vger.kernel.org, Manuel Lauss <manuel.lauss@gmail.com>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 140/218] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
-Date:   Mon, 13 Jun 2022 12:09:58 +0200
-Message-Id: <20220613094924.834796876@linuxfoundation.org>
+Subject: [PATCH 4.19 189/287] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
+Date:   Mon, 13 Jun 2022 12:10:13 +0200
+Message-Id: <20220613094929.598096632@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -88,7 +88,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
-index d3c378b4db6c..20d85d564b80 100644
+index cbbe4a285b48..a8fdd6df6a12 100644
 --- a/drivers/pcmcia/Kconfig
 +++ b/drivers/pcmcia/Kconfig
 @@ -146,7 +146,7 @@ config TCIC
