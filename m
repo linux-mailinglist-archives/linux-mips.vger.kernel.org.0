@@ -2,126 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF49754B42C
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jun 2022 17:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D2F54B5B3
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jun 2022 18:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242638AbiFNPGH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jun 2022 11:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S244005AbiFNQP1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jun 2022 12:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244046AbiFNPGF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jun 2022 11:06:05 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B052F41988
-        for <linux-mips@vger.kernel.org>; Tue, 14 Jun 2022 08:06:03 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id b7so10067779ljr.6
-        for <linux-mips@vger.kernel.org>; Tue, 14 Jun 2022 08:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=vDXeosZPLnAdet3lLyVvlgmLSkIXe3ZMAo+I2HLU3qM=;
-        b=ADjcc9w1bQrx5rtV1Mf+IAGWlLSnQcDys2nJcMpvgLW+wY6RlS9S/6FycY7NjTjAPh
-         Qw9TM/HuVzl1lMtOJZ/ovI3Fv/kg/iWv3++BYbAkPZ1Tzt9KMG96qZmAE4YU35eeHpkN
-         6L0M2zJ/3/QcUsKmuQ7ZfcB0+e4pTJ9Jr5o7DgSM5eqJUIX2CbaYxazFoXXQc6RDmOix
-         aG2xQWxoNoysjUiTVEHnvQ5G1Djrfkfz8mYKHb23m6vkxlCidCHXcP2Y+owGSguF1dMX
-         DJ6DCeKRx1ISj6NAak6aOFajI+6HoxE51IdFvDnWraSO93lzVgN7EDyG7lezu+uvznQm
-         2Hjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=vDXeosZPLnAdet3lLyVvlgmLSkIXe3ZMAo+I2HLU3qM=;
-        b=OegBCwkbTAxieYmsZCxHM3M+hxWVqHY43t03fJbG85ol01xHZjQNoQPQUwa7yQerqI
-         TZmtbeyF/xGo7/M58EqtH7vANu8k+ubG6tEQxSRIAwPHUrNyHI7MdWReyZCv2SDSjYsW
-         av3xYuSj3BecVE3plZ+pKjkSldmO5hGjV4cWf29ufMd/c5LMmqI7hmL92dKi80r/5I8A
-         zcwr+M6Ao1sLBRxiBCPUDgftOMALXUD21ZxatokAZaY/CWAqUSfndZxlAPiICLrWvutY
-         db+s7cbdYbzEAJnLEpwIPAp7Ag3Fmjh2zq4tSZJFYV3bJ3J2yuBF2eECjPFQrkRTxSqs
-         eJBQ==
-X-Gm-Message-State: AJIora8KXueZf74pW2URVbLCp/HBxudadEFvvXTHyQgCZc7+c4y+LWC4
-        7OGeFwOFt9ylZU7yo6dLabJtUcHQLlnHipnb4V8=
-X-Google-Smtp-Source: AGRyM1spBnC0vsT94e8LmoA03BULxafK5Jk21LYSVQka8mO4afoKR+HLt4deBwBjEmmhSz+rOQctw5Z1CMjvXW5nY78=
-X-Received: by 2002:a05:651c:44f:b0:255:889c:d100 with SMTP id
- g15-20020a05651c044f00b00255889cd100mr2804082ljg.352.1655219161695; Tue, 14
- Jun 2022 08:06:01 -0700 (PDT)
+        with ESMTP id S1357083AbiFNQNm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jun 2022 12:13:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1CEC37A0E;
+        Tue, 14 Jun 2022 09:13:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EB231691;
+        Tue, 14 Jun 2022 09:13:38 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.41.154])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4946B3F66F;
+        Tue, 14 Jun 2022 09:13:20 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 17:13:16 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH 15/36] cpuidle,cpu_pm: Remove RCU fiddling from
+ cpu_pm_{enter,exit}()
+Message-ID: <YqiznJL7qB9uSQ9c@FVFF77S0Q05N>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144516.871305980@infradead.org>
 MIME-Version: 1.0
-Sender: moyba45@gmail.com
-Received: by 2002:a05:6504:1891:0:0:0:0 with HTTP; Tue, 14 Jun 2022 08:06:00
- -0700 (PDT)
-From:   Juliette Allard <julittealard40@gmail.com>
-Date:   Tue, 14 Jun 2022 08:06:00 -0700
-X-Google-Sender-Auth: 7lCte0r1d0HCOWshYxFTzoUEtj4
-Message-ID: <CALePR89j-31gx0GzOWLVXd=m856Dpz6EAScc4HWvb2+Eb5V0tQ@mail.gmail.com>
-Subject: Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        MILLION_HUNDRED,MILLION_USD,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:241 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [moyba45[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [moyba45[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  2.0 MILLION_USD BODY: Talks about millions of dollars
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608144516.871305980@infradead.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh,
+On Wed, Jun 08, 2022 at 04:27:38PM +0200, Peter Zijlstra wrote:
+> All callers should still have RCU enabled.
 
-hello dear
+IIUC with that true we should be able to drop the RCU_NONIDLE() from
+drivers/perf/arm_pmu.c, as we only needed that for an invocation via a pm
+notifier.
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
+I should be able to give that a spin on some hardware.
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  kernel/cpu_pm.c |    9 ---------
+>  1 file changed, 9 deletions(-)
+> 
+> --- a/kernel/cpu_pm.c
+> +++ b/kernel/cpu_pm.c
+> @@ -30,16 +30,9 @@ static int cpu_pm_notify(enum cpu_pm_eve
+>  {
+>  	int ret;
+>  
+> -	/*
+> -	 * This introduces a RCU read critical section, which could be
+> -	 * disfunctional in cpu idle. Copy RCU_NONIDLE code to let RCU know
+> -	 * this.
+> -	 */
+> -	rcu_irq_enter_irqson();
+>  	rcu_read_lock();
+>  	ret = raw_notifier_call_chain(&cpu_pm_notifier.chain, event, NULL);
+>  	rcu_read_unlock();
+> -	rcu_irq_exit_irqson();
 
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
+To make this easier to debug, is it worth adding an assertion that RCU is
+watching here? e.g.
 
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about the investment
+	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+			 "cpu_pm_notify() used illegally from EQS");
 
-Your Urgent Reply Will Be Appreciated with this emailaddress
-(aishagaddafimuslim8@gmail.com)
+>  
+>  	return notifier_to_errno(ret);
+>  }
+> @@ -49,11 +42,9 @@ static int cpu_pm_notify_robust(enum cpu
+>  	unsigned long flags;
+>  	int ret;
+>  
+> -	rcu_irq_enter_irqson();
+>  	raw_spin_lock_irqsave(&cpu_pm_notifier.lock, flags);
+>  	ret = raw_notifier_call_chain_robust(&cpu_pm_notifier.chain, event_up, event_down, NULL);
+>  	raw_spin_unlock_irqrestore(&cpu_pm_notifier.lock, flags);
+> -	rcu_irq_exit_irqson();
 
-Best Regards
-Mrs Aisha Al-Qaddafi
+
+... and likewise here?
+
+Thanks,
+Mark.
+
+>  
+>  	return notifier_to_errno(ret);
+>  }
+> 
+> 
