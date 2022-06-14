@@ -2,74 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828C854B04C
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jun 2022 14:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075DF54B0CC
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jun 2022 14:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243894AbiFNMO4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jun 2022 08:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S242886AbiFNMaz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jun 2022 08:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356974AbiFNMOV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jun 2022 08:14:21 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB451117B
-        for <linux-mips@vger.kernel.org>; Tue, 14 Jun 2022 05:14:14 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id l24-20020a0568301d7800b0060c1ebc6438so6404470oti.9
-        for <linux-mips@vger.kernel.org>; Tue, 14 Jun 2022 05:14:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
-        b=UNA00ExpSe/IYk9qRpK3nhNY3MQGhIZVH9b+TBjq+LdlUjXIh78z6gPdY8GF0sQHK1
-         HJ2n3gfPpUPhyyacfGQvRyEpF1QlynrQ30w+G5Aew5oVgyNdOMVYVhySdHNUBZObva2y
-         PuLir0DHRxYshYjhyycNkTLQ7VsAQLmTK6m5EVJfcKtgRbmxa7D08ugJk7y5pLRJ/ze1
-         6cL1+ieOt2sNltOPHDSKZebgxow79UdI2TUNij2cNTn50jsq9VR126vHNmWni88LExVM
-         7xKsxa1nHQ7JrwK4VAXG7j0wCn6FqCQrLI4ANDOm8760jdm8KbeqIvWnFua/uGvpfZQ4
-         nejg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
-        b=FcLuYKekxIAl3XGM/tipqjWuwhBYjZiVBIVcC2vCBaQSCgZylH7ISd2p7i8wup2+Rp
-         P0DnEAk+88BEBMhtzIo+5gBBzAuH4MbwEtQDvacmTMQG+uEO+NIgRjdsnY8es+s78M7i
-         DfvI+ZANxrAonkaYWqtH/GbauWdVcP2Qe3RkMRbpQ1QiU1P3vC1iePBVSmoFePsswlXJ
-         xUdL9xSuhJLISoLkUgrxcFt/L0pHVYE/ELcRxdq/NvtPDnnumkekOoHn8YgSYWlGG9Gs
-         snZ3O9ZTvHmF7bOhCV395r3obCzNWafWh2udLam3/q7/Iwft3og1QGeefWugL3Ntq3bv
-         suTQ==
-X-Gm-Message-State: AOAM5302ITlfEcLnY40TL+Wjsg/N1KL8ECfoFb8KCZt/ZAX+7ZyaeiWV
-        FnlY8E7kfhOCR5nz+mp7JBvEYL8UtJW64IxLsAw=
-X-Google-Smtp-Source: ABdhPJxH036Sb3549Y0f3hc7Zhwns93SCbnuybCuqmcROW8sIBDtc8O0vPfU6QLql+6epoXLTxfkWaoTwfvvDQjMptA=
-X-Received: by 2002:a05:6830:1691:b0:60c:1eb1:6ddf with SMTP id
- k17-20020a056830169100b0060c1eb16ddfmr1906144otr.205.1655208853785; Tue, 14
- Jun 2022 05:14:13 -0700 (PDT)
+        with ESMTP id S1356489AbiFNM3L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jun 2022 08:29:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC85937A1E;
+        Tue, 14 Jun 2022 05:29:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB27FB8186F;
+        Tue, 14 Jun 2022 12:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD278C3411B;
+        Tue, 14 Jun 2022 12:29:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655209746;
+        bh=WwkV+wdhEGuk3aWMSKuKEvN2vXm13Pz6A3nxRaMWcYw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GmZZTh5AcjCClrHWs3VzPNS3NDB/fZYoF2wqNVQLdlvmWn9h0BDbVxVX3F04Uo3T8
+         eZyS1EnQ3QoAm3dhVIyUgjxTAre/c/32LTAFZXWs3tsKqr+GwjbmeRA9amxGaF8ufK
+         6OSafRU0IFiFK/L7SRc97y7385zCc3ibb6HHdRQipLSGFivEgrJ4udUTBdFWQ3oQLH
+         9AEopySQG40sZQUbz4wkez2DOEuhgPETohgRdoIUOq/KteuhQgDpSBf2ZK4CQUpA2z
+         3jydwp78L52Rsmb7dhGJLTuOBiU1Ge15Q/P7JnSLdFb3CUPVyd/Jwyi38eAm6G9BT/
+         bAYTFHxUI9fMQ==
+Date:   Tue, 14 Jun 2022 15:26:59 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jarkko Sakkinen <jarkko@profian.com>,
+        linux-kernel@vger.kernel.org,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dave Anglin <dave.anglin@bell.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jordan Niethe <jniethe5@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Wu Caize <zepan@sipeed.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tobias Huschle <huschle@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Message-ID: <Yqh+k7Udth0IOBrd@iki.fi>
+References: <20220608000014.3054333-1-jarkko@profian.com>
+ <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
+ <YqH5TfN9w35kHFLU@bombadil.infradead.org>
 MIME-Version: 1.0
-Received: by 2002:a8a:c46:0:b0:42d:ab20:ed24 with HTTP; Tue, 14 Jun 2022
- 05:14:13 -0700 (PDT)
-From:   Daniel Affum <danielaffum05@gmail.com>
-Date:   Tue, 14 Jun 2022 15:14:13 +0300
-Message-ID: <CAPkju_PQmptLCUNLrFjDqn4sN-xwFQ9XOg5Cv+KN_pd6V1aXpA@mail.gmail.com>
-Subject: Confirm Receipt
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqH5TfN9w35kHFLU@bombadil.infradead.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Dear,
+On Thu, Jun 09, 2022 at 06:44:45AM -0700, Luis Chamberlain wrote:
+> On Thu, Jun 09, 2022 at 08:47:38AM +0100, Russell King (Oracle) wrote:
+> > On Wed, Jun 08, 2022 at 02:59:27AM +0300, Jarkko Sakkinen wrote:
+> > > diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
+> > > index 553866751e1a..d2bb954cd54f 100644
+> > > --- a/arch/arm/kernel/Makefile
+> > > +++ b/arch/arm/kernel/Makefile
+> > > @@ -44,6 +44,11 @@ obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
+> > >  obj-$(CONFIG_ISA_DMA_API)	+= dma.o
+> > >  obj-$(CONFIG_FIQ)		+= fiq.o fiqasm.o
+> > >  obj-$(CONFIG_MODULES)		+= armksyms.o module.o
+> > > +ifeq ($(CONFIG_MODULES),y)
+> > > +obj-y				+= module_alloc.o
+> > > +else
+> > > +obj-$(CONFIG_KPROBES)		+= module_alloc.o
+> > > +endif
+> > 
+> > Doesn't:
+> > 
+> > obj-$(CONFIG_MODULES)		+= module_alloc.o
+> > obj-$(CONFIG_KPROBES)		+= module_alloc.o
+> 
+> That just begs for a new kconfig symbol for the object, and for
+> the object then to be built with it.
+> 
+> The archs which override the default can use ARCH_HAS_VM_ALLOC_EXEC.
+> Please note that the respective free is important as well and its
+> not clear if we need an another define for the free. Someone has
+> to do that work. We want to ensure to noexec the code on free and
+> this can vary on each arch.
 
-I am Daniel Affum a retired civil servant i have a  business to
-discuss with you from the Eastern part of Africa aimed at agreed
-percentage upon your acceptance of my hand in business and friendship.
-Kindly respond to me if you are interested to partner with me for an
-update.Very important.
+Let me check if I understand this (not 100% sure).
 
-Yours Sincerely,
-Daniel Affum.
-Reply to:danielaffum005@yahoo.com
+So if arch define ARCH_HAS_VMALLOC_EXEC, then this would set
+config flag CONFIG_VMALLOC_EXEC, which would be used to include
+the compilation unit?
+
+BR, Jarkko
