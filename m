@@ -2,76 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21F854C53D
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jun 2022 11:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C854A54C56E
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jun 2022 12:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347261AbiFOJ7R (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jun 2022 05:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S242978AbiFOKGx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jun 2022 06:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346430AbiFOJ61 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jun 2022 05:58:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D9A2F000;
-        Wed, 15 Jun 2022 02:58:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3124F61AEF;
-        Wed, 15 Jun 2022 09:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E2CC341C4;
-        Wed, 15 Jun 2022 09:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655287105;
-        bh=olVZaX+Ei3ossRIrggwze0jxjL/US0T//Qz67+mOFlQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jZJIPayWVQ5/uvWzTsXk2GXO2sVyZp2zdsdRMUBOukqLc1IJvMVxC0GaQ2CfhpOKX
-         WjeadKesJaONRVFX79itG71aU0200AjMOnpXI7N8c68bZEbPsLzoxwX4iOM9M3J84n
-         CfQ184wQ1twtbwyD1VuQgJULVP0q57ZSusCdvKHZu3VwQFB2jH9JzLVdk+ZlrCO0Bj
-         7XazbzKbPITavSC3EUcGTRFEAzcAzF+c5m7wWhl2k6Io1g5rC+XDUhciy5htDzhO14
-         rvpgWxFqRWz8p+mrURM0JD9B99S1qYSGcm15e+ThED14KICLunCWnZEZhBbjPpjz5b
-         eHjauPt3FPg0A==
-Received: by mail-oo1-f52.google.com with SMTP id g9-20020a4adc89000000b0041bef879199so1988856oou.10;
-        Wed, 15 Jun 2022 02:58:25 -0700 (PDT)
-X-Gm-Message-State: AOAM532hEaS0giRS28MX2VnZ/qa9ZKC6UWP0ghiQZrK5U/pca7uwgU/7
-        ZVAFRvStQw0jPUn7g3vzO0aeELYGQbNfhoOQgAQ=
-X-Google-Smtp-Source: ABdhPJyVO70wdflNgGcNG4INXdvO9+iuiEhFxA1Fe2GqIaFaK/RQV7rXvy1v8tHKMlmWeDPRzw8DIAQ4EeSOeRiVcRc=
-X-Received: by 2002:a4a:c983:0:b0:41b:9e6f:44ab with SMTP id
- u3-20020a4ac983000000b0041b9e6f44abmr3689475ooq.98.1655287104725; Wed, 15 Jun
- 2022 02:58:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220608104512.1176209-1-ardb@kernel.org> <20220608104512.1176209-4-ardb@kernel.org>
- <Yqmr6fvu4OYkarCm@FVFF77S0Q05N>
-In-Reply-To: <Yqmr6fvu4OYkarCm@FVFF77S0Q05N>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 15 Jun 2022 11:58:13 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGP0fyGp+iHR-xB0833-Mieo8UJb1V78ohG84kEpG+g=w@mail.gmail.com>
-Message-ID: <CAMj1kXGP0fyGp+iHR-xB0833-Mieo8UJb1V78ohG84kEpG+g=w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] jump_label: make initial NOP patching the special case
+        with ESMTP id S238275AbiFOKGw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jun 2022 06:06:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E8E3BF8D;
+        Wed, 15 Jun 2022 03:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=X4eey67g7t7O8BPfmN7/7q5QPXgKgTakp0SBwPI8Wwc=; b=A9gwmKAW+XiQ9/DOSyqS8RJYDi
+        kLftzCd0j9LecehqiL/heefWcKRALCLCgCI6c1Tu5XFO6iOIW6t+mnQs40w8vhM6UYlb40E5XJBPF
+        lKAnJla+8pJmZnFEzggotql2iqWkR6j9Zs2v1tzI0Tv7jH5KJkwPqo+cyU5aKyalw/pGa4Reo+XZv
+        PEn0pc1fJcgZFYxVz0OgVmIKIZgY6CnfbUvLbCqdGhdjNewgT5wNDSwB5e7Lww1K+HxgKb148dm8C
+        JROyYYP3CAoRJLlfsHBxkBl9Nzc8osG+72C0hwxIGsRVAhBUjT7MU4jDf1dnmODn0sh/dPc9+WyRn
+        +zQOBI0Q==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1Pv7-000xmS-0e; Wed, 15 Jun 2022 10:06:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4C5433001C3;
+        Wed, 15 Jun 2022 12:06:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1A817201A4F6D; Wed, 15 Jun 2022 12:06:39 +0200 (CEST)
+Date:   Wed, 15 Jun 2022 12:06:39 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:S390" <linux-s390@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 3/3] jump_label: make initial NOP patching the special
+ case
+Message-ID: <YqmvL2Biw3TnIl7a@hirez.programming.kicks-ass.net>
+References: <20220608104512.1176209-1-ardb@kernel.org>
+ <20220608104512.1176209-4-ardb@kernel.org>
+ <Yqmr6fvu4OYkarCm@FVFF77S0Q05N>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yqmr6fvu4OYkarCm@FVFF77S0Q05N>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 15 Jun 2022 at 11:52, Mark Rutland <mark.rutland@arm.com> wrote:
->
+On Wed, Jun 15, 2022 at 10:52:41AM +0100, Mark Rutland wrote:
 > On Wed, Jun 08, 2022 at 12:45:12PM +0200, Ard Biesheuvel wrote:
 > > Instead of defaulting to patching NOP opcodes at init time, and leaving
 > > it to the architectures to override this if this is not needed, switch
@@ -79,7 +74,7 @@ On Wed, 15 Jun 2022 at 11:52, Mark Rutland <mark.rutland@arm.com> wrote:
 > > by far, as only MIPS requires NOP patching at init time. On all other
 > > architectures, the correct encodings are emitted by the compiler and so
 > > no initial patching is needed.
-> >
+> > 
 > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 > > ---
 > >  Documentation/staging/static-keys.rst |  3 ---
@@ -93,50 +88,19 @@ On Wed, 15 Jun 2022 at 11:52, Mark Rutland <mark.rutland@arm.com> wrote:
 > >  arch/x86/kernel/jump_label.c          | 13 -------------
 > >  kernel/jump_label.c                   | 14 +++-----------
 > >  10 files changed, 5 insertions(+), 85 deletions(-)
->
+> 
 > I have one minor comment below, but either way this is a nice cleanup (and I'm
 > always happy to see __weak functions disappear), so FWIW:
->
->   Acked-by: Mark Rutland <mark.rutland@arm.com>
->
-> [...]
->
-> > diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-> > index b1ac2948be79..ff8576c00893 100644
-> > --- a/kernel/jump_label.c
-> > +++ b/kernel/jump_label.c
-> > @@ -332,17 +332,9 @@ static int __jump_label_text_reserved(struct jump_entry *iter_start,
-> >       return 0;
-> >  }
-> >
-> > -/*
-> > - * Update code which is definitely not currently executing.
-> > - * Architectures which need heavyweight synchronization to modify
-> > - * running code can override this to make the non-live update case
-> > - * cheaper.
-> > - */
-> > -void __weak __init_or_module arch_jump_label_transform_static(struct jump_entry *entry,
-> > -                                         enum jump_label_type type)
-> > -{
-> > -     arch_jump_label_transform(entry, type);
-> > -}
-> > +#ifndef arch_jump_label_transform_static
-> > +#define arch_jump_label_transform_static(entry, type)
-> > +#endif
->
-> It might be slightly better to make this a static inline stub so that we always
-> get the compiler to type-check it, e.g.
->
-> | #ifndef arch_jump_label_transform_static
-> | static inline void arch_jump_label_transform_static(struct jump_entry *entry,
-> |                                                   enum jump_label_type type)
-> | {
-> |       /* nothing to do on most architectures */
-> | }
-> | #define arch_jump_label_transform_static arch_jump_label_transform_static
-> | #endif
->
 
-Yeah, good point. Note that the current patch is broken because of
-this, as the empty string is not a statement, and so the if binds to
-the following line (I got a couple of bot warnings about this)
+(I've got a new found hatred for __weak after having had to fix so many
+objtool issues with it, so yeah, that).
+
+> 
+>   Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+With the thing Mark pointed out fixed:
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+(although, I'll probably be the one to eventually apply these I suppose,
+unless they're needed in a different tree?)
