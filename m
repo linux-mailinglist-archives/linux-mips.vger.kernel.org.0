@@ -2,55 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DA954CB4A
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jun 2022 16:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4899854CB50
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jun 2022 16:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245344AbiFOO1B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jun 2022 10:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S1344340AbiFOO2R (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jun 2022 10:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243777AbiFOO1A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jun 2022 10:27:00 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6856745AF9
-        for <linux-mips@vger.kernel.org>; Wed, 15 Jun 2022 07:26:59 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-30ce6492a60so62820757b3.8
-        for <linux-mips@vger.kernel.org>; Wed, 15 Jun 2022 07:26:59 -0700 (PDT)
+        with ESMTP id S1349072AbiFOO2O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jun 2022 10:28:14 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFDD30F4E
+        for <linux-mips@vger.kernel.org>; Wed, 15 Jun 2022 07:27:44 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id r3so20828577ybr.6
+        for <linux-mips@vger.kernel.org>; Wed, 15 Jun 2022 07:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=xMSeDjVBl8Op1MiME+3ol3t5KwHqA10J2T41KnFjWVI=;
-        b=qz4+2/j3HuKLbz8sDkEIpH8ZLP9Jo8DhJ+Q2ht5CP+YvOT59Zf+re5Tujl0ZB6ZFPL
-         6eIRF/MkMH9d8XYNP4+51SwLnjpzBos7nFmTYB8Ul+O4d2U6PeoLZ7QjQijKEZ8jLm95
-         SELWUDdWwSs1Mh2zeOOA3+M0iUdmkybKKFT7IjVpsD5/9ncX5E7fGGraLMKtF7YFOE15
-         3ZsziFepyBJtS+OHCqnLHN05xHlLU+0K7/YCV5W8FlGwHDwuOBWTMVvTFAoqv5pVaZxz
-         Rpqrs1a41xszHea5Bvl2plED3iCFlGdMsfyTuDfKIA63BBNAp8s43G582spKqlDGmWXf
-         4qPw==
+        bh=fsun78rWieFnLaLeD83Q2xWjxjOs241/wdwG/0QCsic=;
+        b=M0lG3b8vfMcZ/7Ka36O1ZxSsUemkOvvlFAQXkpVQ4QpCs+1BTt67QSw4HKiQD5WOcb
+         52snuFlKH/21oU1OKHImIEHhsr/qfhoQOlanFV+m4TeEl8ICjJe2Sd491tUIQIDSw5Bq
+         xHExXe7XqUhLlIhXKD4i9kKCqB5PLrMMw5aIrSuv673UinrPE2m5a9fMdvB5OZ6CYFIq
+         /u1FbiRcfzMPM33M1qWbZlUZBeX0dAiMnD8nksss+jrH8U5wAD3bdbqxbououS4Wce5+
+         si5vaEILsaJTJRlA5Tvc5IU5RHPyGLfiWb4X0xjPRiEJMgOmZeod+1F/8J2LCdxK/urt
+         bp3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xMSeDjVBl8Op1MiME+3ol3t5KwHqA10J2T41KnFjWVI=;
-        b=V+DM76lBY1249LeNceeCNKZ84OuLx3Gd1S6Cyto6Zy1LeAS2ebGgM9U6pOggRqvkNV
-         lSRGYxrZWndr5ITFBeyzNw3xiic9DmHT4bpe/t7vkebE305WUklC4dFAcVEPeySW4HX0
-         FF3cf4R6eMnnirxc6rHoGPmQGPKS+kMIcptma0PKzN7H285fEjBUK+1ZTb1o5zGKE6h7
-         ilePuQlCevBRtXeIVuA/qPMHN+Axq/U9UkHa55fQewUrsTh6QRblTQ0ai378Ull7OSY3
-         4t7N92eAZh7TeOLbvJ+VfeuaSEFpTX4bhf7nPyY9Kxr87eCwszbxn5+oRvbJlsOHOpWY
-         EmYw==
-X-Gm-Message-State: AJIora+Ii8nHX5wOfqbyZDXucCiX9OxkFBJTykVzjCivXpSs2fVJIiVs
-        fulolIDAdXaBEVIEbEM2gIxg0/2sHC8iQxRvy05dUQ==
-X-Google-Smtp-Source: AGRyM1uf8yFhBnEUo8jDPf5ukxxTZvvQvwcMTtNGMVxYlbJA7mSO+23X9N9/rXSOE+V75SpZAwzwan4QnL+Hc3y01yY=
-X-Received: by 2002:a0d:e246:0:b0:30c:5e77:7104 with SMTP id
- l67-20020a0de246000000b0030c5e777104mr12571722ywe.448.1655303218482; Wed, 15
- Jun 2022 07:26:58 -0700 (PDT)
+        bh=fsun78rWieFnLaLeD83Q2xWjxjOs241/wdwG/0QCsic=;
+        b=4dSWyuOMX9tzxekJckBGEH6HC2cKaHJKVneCvZQgumc4XDN8VaHSTCdUOTOAw64Wc+
+         lCo3gSA1GlOLCYBqmuoFkLm9l9sOOTuOktvHee3AECe8aciIQX4Z8Qr2i+KnPYAHZmi3
+         3RqYQA4BvrkJZyh7vQX2SRCJRAcnF0o/tu1bc3Pk8dq4ip1aZMpi8jhO7YqnlCDETlcM
+         db0jHuoLrrwkegCBqrEjc/tHdkprJALx9Bc1KwSpGidREDXMk2VvIvmjOIgN2x91fKXw
+         OH3OUNNrTwmdXURX6d6FG5FFQfqzRekubGj22lt12ao695u1jQj0oISbyOYy80uhaYak
+         qRzQ==
+X-Gm-Message-State: AJIora8kHGYpj80Hlg76S+hhEYrThETv4O5k4fbFkp2Bl0C7XrKn0NEh
+        yWkBjIEH6Ce/mC8Ep0JpyJUI4BaBEOXnTFb3j4ivqA==
+X-Google-Smtp-Source: AGRyM1t0twq2NH5TwVMffJ95BCvjUqTPe1/bY9PSUuCjeVYRJKVWPPGecH5Bnr87yp5uioRcTcWI/9qkOUV49rzlV5c=
+X-Received: by 2002:a25:8387:0:b0:664:7589:27b9 with SMTP id
+ t7-20020a258387000000b00664758927b9mr86691ybk.291.1655303263361; Wed, 15 Jun
+ 2022 07:27:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610084545.547700-1-nuno.sa@analog.com> <20220610084545.547700-28-nuno.sa@analog.com>
-In-Reply-To: <20220610084545.547700-28-nuno.sa@analog.com>
+References: <20220610084545.547700-1-nuno.sa@analog.com> <20220610084545.547700-30-nuno.sa@analog.com>
+In-Reply-To: <20220610084545.547700-30-nuno.sa@analog.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 15 Jun 2022 16:26:47 +0200
-Message-ID: <CACRpkdYVqsEdDDHLSkfJzMDPbPgkVihxa+ukLg1XnoyGghcdoA@mail.gmail.com>
-Subject: Re: [PATCH 27/34] iio: adc: ab8500-gpadc: convert to device properties
+Date:   Wed, 15 Jun 2022 16:27:32 +0200
+Message-ID: <CACRpkdYtBY9bWevrWNL+mXz8LbsdDEFmGvrmPQ85Mn=yZ=FyHg@mail.gmail.com>
+Subject: Re: [PATCH 29/34] iio: adc: qcom-pm8xxx-xoadc: convert to device properties
 To:     =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
 Cc:     linux-imx@nxp.com, linux-renesas-soc@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -104,7 +104,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,7 +112,7 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:48 AM Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
+On Fri, Jun 10, 2022 at 10:49 AM Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
 
 > Make the conversion to firmware agnostic device properties. As part of
 > the conversion the IIO inkern interface 'of_xlate()' is also converted to
