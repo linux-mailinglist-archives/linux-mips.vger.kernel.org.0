@@ -2,117 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35BC54C5F0
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jun 2022 12:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B788554C8CC
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jun 2022 14:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347160AbiFOKV5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jun 2022 06:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S240337AbiFOMoR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jun 2022 08:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242728AbiFOKVq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jun 2022 06:21:46 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EFA5130A;
-        Wed, 15 Jun 2022 03:20:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 626BDCE1EAF;
-        Wed, 15 Jun 2022 10:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A222FC3411C;
-        Wed, 15 Jun 2022 10:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655288435;
-        bh=ADWNwalPsj7wlzAK4STHI1I3vbvADJHLuzQJhszxX8c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Y7wogYQbzqKyD6JEqXbaMxzp/l8MWvg+8x9iOIJ+wpI+Ktjxakhgy/0uDZVfe/73b
-         Aq+okQgvH8mxgO8oRvY+kYStktMkS3/ksME5k6wZoo/WN5cgyUgeXEWDLIFRn4gMtZ
-         vIQEymiSa90u/BGkczf9XwvnVz4N2tpkuHjTf7YEnaAufwbuXcH0ym6IaIwYvhF0b1
-         7ygSeQoPdgvK/1avI8sHeS8nRRAZ0pucud/TEcCijnRkUp8e5K+o8ypNiR2QsKkyz+
-         oSdFGBlTJMRVEtLSQSdbHiwCjJVt5UvyBKm8GBE2b25/2Qs3eNrg18F4/1fxaX8D6Y
-         lnsfzZkCSi6bw==
-Received: by mail-ot1-f50.google.com with SMTP id s20-20020a056830439400b0060c3e43b548so8499707otv.7;
-        Wed, 15 Jun 2022 03:20:35 -0700 (PDT)
-X-Gm-Message-State: AOAM5306pP1JuWW0En0s8WX5ZOa74779Pa/KGiSFZvHv1GTKr7GePTH+
-        dy6vQS+vm5aNs5eJUujddrZdv5vJJliFKv7s/5c=
-X-Google-Smtp-Source: ABdhPJwWPYfdpESn/ZfR63iU+BQ4uVPMs4SdDmopyiZZb6tFOGP0dMOcdj9I8c73xtXC57WSh/UYFNp5DHskI5jx+vs=
-X-Received: by 2002:a9d:37a3:0:b0:60c:5427:1f56 with SMTP id
- x32-20020a9d37a3000000b0060c54271f56mr3970819otb.71.1655288434829; Wed, 15
- Jun 2022 03:20:34 -0700 (PDT)
+        with ESMTP id S1348482AbiFOMoQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jun 2022 08:44:16 -0400
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECB0E3A181;
+        Wed, 15 Jun 2022 05:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=eZeXQ
+        LI0Qb9U+a8CP0CcBum5Wq7iRv3hWHUItekcgbM=; b=NU5wJtOPhFlFxXuCu6c2W
+        yZKYSv3repoQQPCo/npAdRpUfNFCSKjPuKsGjY2mjWIi9fTebn21pb9rKj5Nbhvl
+        xVy72B/SrHvVXG/10MQ9mkEEq7YEbBwNhxTOZM138pvsRn+Xu9OERLFRgWp6+2Sm
+        ELwfEZOPezc0QfwuLx1p58=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp3 (Coremail) with SMTP id DcmowADXb5EU1KliUUGKDQ--.43652S2;
+        Wed, 15 Jun 2022 20:44:04 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] arch: mips: pic32: pic32mzda: Add missing of_node_put() in time.c
+Date:   Wed, 15 Jun 2022 20:44:02 +0800
+Message-Id: <20220615124402.3966099-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220608104512.1176209-1-ardb@kernel.org> <20220608104512.1176209-4-ardb@kernel.org>
- <Yqmr6fvu4OYkarCm@FVFF77S0Q05N> <YqmvL2Biw3TnIl7a@hirez.programming.kicks-ass.net>
-In-Reply-To: <YqmvL2Biw3TnIl7a@hirez.programming.kicks-ass.net>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 15 Jun 2022 12:20:23 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHUQMA5A54KnVDR+dbwVv+H25xCJyUBpTkrYF7FgpNr8w@mail.gmail.com>
-Message-ID: <CAMj1kXHUQMA5A54KnVDR+dbwVv+H25xCJyUBpTkrYF7FgpNr8w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] jump_label: make initial NOP patching the special case
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:S390" <linux-s390@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowADXb5EU1KliUUGKDQ--.43652S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFW3GryrZw4rGw4UXw4xJFb_yoW3JFb_Kr
+        n7Za1UZr43XFn8CrWI9w13J345Zw15Wr1S9rs2qF17Ar1Yy3sxWF4DJa4vkw129ayjyrW3
+        KrZxZryrAwsFyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_YFAtUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgUhF1-HZTacLQAAsT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 15 Jun 2022 at 12:06, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Jun 15, 2022 at 10:52:41AM +0100, Mark Rutland wrote:
-> > On Wed, Jun 08, 2022 at 12:45:12PM +0200, Ard Biesheuvel wrote:
-> > > Instead of defaulting to patching NOP opcodes at init time, and leaving
-> > > it to the architectures to override this if this is not needed, switch
-> > > to a model where doing nothing is the default. This is the common case
-> > > by far, as only MIPS requires NOP patching at init time. On all other
-> > > architectures, the correct encodings are emitted by the compiler and so
-> > > no initial patching is needed.
-> > >
-> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > > ---
-> > >  Documentation/staging/static-keys.rst |  3 ---
-> > >  arch/arc/kernel/jump_label.c          | 13 -------------
-> > >  arch/arm/kernel/jump_label.c          |  6 ------
-> > >  arch/arm64/kernel/jump_label.c        | 11 -----------
-> > >  arch/mips/include/asm/jump_label.h    |  2 ++
-> > >  arch/parisc/kernel/jump_label.c       | 11 -----------
-> > >  arch/riscv/kernel/jump_label.c        | 12 ------------
-> > >  arch/s390/kernel/jump_label.c         |  5 -----
-> > >  arch/x86/kernel/jump_label.c          | 13 -------------
-> > >  kernel/jump_label.c                   | 14 +++-----------
-> > >  10 files changed, 5 insertions(+), 85 deletions(-)
-> >
-> > I have one minor comment below, but either way this is a nice cleanup (and I'm
-> > always happy to see __weak functions disappear), so FWIW:
->
-> (I've got a new found hatred for __weak after having had to fix so many
-> objtool issues with it, so yeah, that).
->
-> >
-> >   Acked-by: Mark Rutland <mark.rutland@arm.com>
->
-> With the thing Mark pointed out fixed:
->
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->
-> (although, I'll probably be the one to eventually apply these I suppose,
-> unless they're needed in a different tree?)
+In pic32_xlate_core_timer_irq(), of_find_matching_node() will return
+a node pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-Not really - this just came up when Jason was looking into how to
-enable jump labels extremely early on every single architecture, but
-fortunately, that issue got fixed in a different way.
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/mips/pic32/pic32mzda/time.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I'll respin and resend and leave it to you to apply them whenever convenient.
+diff --git a/arch/mips/pic32/pic32mzda/time.c b/arch/mips/pic32/pic32mzda/time.c
+index 7174e9abbb1b..c5b5343ca03c 100644
+--- a/arch/mips/pic32/pic32mzda/time.c
++++ b/arch/mips/pic32/pic32mzda/time.c
+@@ -32,6 +32,9 @@ static unsigned int pic32_xlate_core_timer_irq(void)
+ 		goto default_map;
+ 
+ 	irq = irq_of_parse_and_map(node, 0);
++	
++	of_node_put(node);
++	
+ 	if (!irq)
+ 		goto default_map;
+ 
+-- 
+2.25.1
+
