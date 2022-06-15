@@ -2,87 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCBE54CD12
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jun 2022 17:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFA954CD38
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jun 2022 17:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347386AbiFOPeR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jun 2022 11:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
+        id S229662AbiFOPlx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jun 2022 11:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348988AbiFOPeP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jun 2022 11:34:15 -0400
-Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAA7B2251F;
-        Wed, 15 Jun 2022 08:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=qA/Mf
-        K70pcaP6AdlLT8hpxzBJq/0hmiFokmu1lnak5Y=; b=kdp19rkbRAjsm89x+oNg/
-        9HneJ0oosgWT6JsWkGvnpa07MAO+P331qVi9niDbbh49ppafRhliZoQ05WkMKbUq
-        HSOw230L2Vx9Q5ErHtL2nbJLzuREMN7Q9QYSZ0sFesVScuwDe2dtJqorZ5pQdcbV
-        U3Frp0AWT66w7laTINfDus=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp10 (Coremail) with SMTP id NuRpCgD3+0PT+6liQETOEg--.51059S2;
-        Wed, 15 Jun 2022 23:33:41 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     john@phrozen.org, tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        windhl@126.com
-Subject: [PATCH] mips: lantiq: Add missing of_node_put() in irq.c
-Date:   Wed, 15 Jun 2022 23:33:39 +0800
-Message-Id: <20220615153339.3970658-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229653AbiFOPlx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Jun 2022 11:41:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7542E69F;
+        Wed, 15 Jun 2022 08:41:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF88EB81FCD;
+        Wed, 15 Jun 2022 15:41:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F57C34115;
+        Wed, 15 Jun 2022 15:41:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655307709;
+        bh=4W3jsjWJz1C/Sx04Tfe1wqMqpWb2MMMxBdXzowiBwj0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=POC0aKJeGNB7XE6Kdew/cLf56vQ1GVOjdO2F91ip1Tbtr9z2Ae4tUdwjMmo3EWpAY
+         LJMzPuTClEcbqsqdfRbERawI42b1v3fkXtT026TJc0AbrZhr1LtoZq+55rtXVHtY5s
+         IH1sr0Wu+YGsD8goyoE753TVy9dfDgOTSz66NVIvFHsm9WUQkLRLak7ccL5yWRK+CJ
+         /gK77t18jAy4rC7itoUN2Gyhr7KblsZ4NAxn89whuf4nLqIZCdvU8/w0rXzeIK+X9o
+         lvLxXGlFTrMG1VZ0jo5QFSfHhG37plALl2uCPzQr4joSUFdHzg7sIApHTNozoDsi0o
+         nyxLT0jA8WTUg==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH v2 0/3] jump_label: get rid of NOP patching where possible
+Date:   Wed, 15 Jun 2022 17:41:39 +0200
+Message-Id: <20220615154142.1574619-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2266; h=from:subject; bh=4W3jsjWJz1C/Sx04Tfe1wqMqpWb2MMMxBdXzowiBwj0=; b=owEB7QES/pANAwAKAcNPIjmS2Y8kAcsmYgBiqf2wp3rY7kfOcb3a6vq+iySWA8sjXdE7fisy+IP4 5V4b7LOJAbMEAAEKAB0WIQT72WJ8QGnJQhU3VynDTyI5ktmPJAUCYqn9sAAKCRDDTyI5ktmPJBy1C/ 9CfZWST0pKJSzgtTRNYSOV/OB4KGvjvqU/RIT7j6gJrPJnBRnp0rAEyyHP70OXshALiz9UAWy4F/V3 MSOJScr97M4oIHuL12lFzUtO6gAvL4Jgo3+vpILcGidFqTs+kCbASCHsXHsXsrAxrJ+4RJDtGMadnS s2SviCOCJROLUM6j685o4HmrCG5ij50txvEDRWzjj7Zcfgl78JiBbTSYNScs8bH0kH0RxgvyNgcsQV NHWtFttrJhoTzfWa0F6gHLsBaOk2VErNYpx2JB3W6jpZPIO+4OpxG0cfxE4nl6LAFRcsAikVZ2j0bL Q4Prm1CBBp7bl3uELp/+cucFU1zIApBMLDra25RE+jQaWyu+GgVIdLGwUTHPEuUPLNk5oSp7AmQUL+ NKBiuUvAbfBuM5ts9BtZ29WbkXMM17mmoN/BoGBuzqn1S7c0QHnWfXLDIWGvar5tB6k+5Gc2HLMb5X E0mD09H9pc3jlLmvrMB0jEufoHOaw5K275xaPMz/sMB7Y=
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NuRpCgD3+0PT+6liQETOEg--.51059S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZr1rCry8Gw45uFykCFy7GFg_yoWDGFXEg3
-        WIgr9rG3yrJ3WrJrZruw4agFs8A397WFyrA3Z2yFySy3W3A3WDtr47Jr17A3yUXF4SvFW5
-        Cr1Dur4Yvw429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRK0eHtUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2hUhF1uwMNZANgAAsC
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In icu_of_init(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put()
-when it is not used anymore.
+The only architecture that actually needs to convert compiler generated
+jump label NOP encodings into something else at runtime is MIPS, because
+the assembler cannot be trusted to emit a sequence that can be safely
+patched into a branch instruction.
 
-Signed-off-by: Liang He <windhl@126.com>
----
- arch/mips/lantiq/irq.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+All other architectures either do nothing with jump label NOPs at load
+time, or patch a perfectly good NOP into a different one, or into the same
+one - none of this seems very useful, so let's get rid of it where we
+can.
 
-diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
-index b732495f138a..62f1b20a2169 100644
---- a/arch/mips/lantiq/irq.c
-+++ b/arch/mips/lantiq/irq.c
-@@ -396,6 +396,9 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
- 
- 		ret = of_property_read_u32_array(eiu_node, "lantiq,eiu-irqs",
- 						ltq_eiu_irq, exin_avail);
-+						
-+		of_node_put(eiu_node);
-+						
- 		if (ret)
- 			panic("failed to load external irq resources");
- 
-@@ -409,6 +412,9 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
- 			panic("Failed to remap eiu memory");
- 	}
- 
-+	/* if eiu_node&of_address_to_resource */
-+	of_node_put(eiu_node);
-+
- 	return 0;
- }
- 
+Changes since v1:
+- use a default implementation of arch_jump_label_transform_static()
+  instead of an empty macro in patch #3
+- fix MIPS with CONFIG_MODULES=n
+- add acks from Mark and Peter to patch #3
+
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+
+Ard Biesheuvel (3):
+  jump_label: s390: avoid pointless initial NOP patching
+  jump_label: mips: move module NOP patching into arch code
+  jump_label: make initial NOP patching the special case
+
+ Documentation/staging/static-keys.rst |  3 --
+ arch/arc/kernel/jump_label.c          | 13 -------
+ arch/arm/kernel/jump_label.c          |  6 ---
+ arch/arm64/kernel/jump_label.c        | 11 ------
+ arch/mips/include/asm/jump_label.h    |  2 +
+ arch/mips/kernel/jump_label.c         | 19 +++++++++
+ arch/mips/kernel/module.c             |  5 ++-
+ arch/parisc/kernel/jump_label.c       | 11 ------
+ arch/riscv/kernel/jump_label.c        | 12 ------
+ arch/s390/include/asm/jump_label.h    |  5 +--
+ arch/s390/kernel/jump_label.c         | 28 +++----------
+ arch/s390/kernel/module.c             |  1 -
+ arch/sparc/kernel/module.c            |  3 --
+ arch/x86/kernel/jump_label.c          | 13 -------
+ arch/x86/kernel/module.c              |  3 --
+ include/linux/jump_label.h            |  7 +---
+ kernel/jump_label.c                   | 41 +++-----------------
+ 17 files changed, 38 insertions(+), 145 deletions(-)
+
 -- 
-2.25.1
+2.35.1
 
