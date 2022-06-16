@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737AC54E4EC
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jun 2022 16:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0396654E431
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jun 2022 16:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378023AbiFPOg5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jun 2022 10:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S1377729AbiFPOf6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jun 2022 10:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377993AbiFPOgh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Jun 2022 10:36:37 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB824163A;
-        Thu, 16 Jun 2022 07:36:36 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25G8o9fT009500;
+        with ESMTP id S1376997AbiFPOfq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Jun 2022 10:35:46 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA43B222AB;
+        Thu, 16 Jun 2022 07:35:39 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25G4igBh030693;
         Thu, 16 Jun 2022 09:34:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=zQRzG9lSCmk/k4e5JnTlev/FoIoDPsWc475D5DF4tf0=;
- b=DatX+iqGt6kv+5Q/5pGtHc4UzTB8vsj98rhLEQ6BXPdisPWrv9AOZyhH0IiCfRe9j/xk
- lVGQd0bWS0CiWJOc+iWf6BK+BbkcPuVcHj3WxMyGucMhf96T69aKu4iBDzYYobMFIEHw
- WK7EcAx6iWxJmodhqsQbFdzE4OXyiQGEsdqcLGqezDSfPESxqzMY8m3n6WmbnWK+rv/1
- S6DVS8g/GHUuxRBzm9o7qiKczHjpoCwd7KMB8gWas/fO+oTybDl5MS51g5CDzv9rI+Pd
- DtBXXl9RPQaK3XjUbByK4Yw8bC6pra22de7iz6H2yNzexMEUoQO4/OJXVp/SQxWfbskd 3w== 
+ bh=vlkEX7RNFddpO/aDpfiCPJt6XWVaMAGTeCyH39xTp1w=;
+ b=kbGYHMTyjM2Nc21Sd3Rcu8i4hbQ0YSUhaQM6W/hKeVvXRX8tHlZ2pMMrb+vSsJXCpG8x
+ p4EaZjciZ8Oh/nK1hroK7m2Y1VQUwJrX5sW6ty8btzBpo1e/pcIIgyHWW8Ip8MvzLvFG
+ F+DIMbp87lMQitPTH1rmS9Mk//A3zVHGvhBoR48YbCt01uKLTu1TGxqwHjYKKQhOomNP
+ 2GQIDt+m9S20iE7MAvJAdOfxl9fX5opYx6Pjg5D6OfTUd9OUC3B7KkcDkQ0p9dqTsNRl
+ KlJNxtxedPOiq1e2ET0UU8imA/mh4FryCdEzpioFlBOoH6LPyzN/hcGJVfeo09eIPczE lA== 
 Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gmqfq5w3u-1
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gmrf35vuw-12
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 16 Jun 2022 09:34:47 -0500
+        Thu, 16 Jun 2022 09:34:46 -0500
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
  (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 16 Jun
@@ -38,7 +38,7 @@ Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
  Transport; Thu, 16 Jun 2022 15:34:34 +0100
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8A06D11DA;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 95CE211D4;
         Thu, 16 Jun 2022 14:34:34 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <broonie@kernel.org>
@@ -59,17 +59,17 @@ CC:     <lgirdwood@gmail.com>, <kuninori.morimoto.gx@renesas.com>,
         <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <dri-devel@lists.freedesktop.org>,
         <linux-rpi-kernel@lists.infradead.org>
-Subject: [PATCH 58/96] ASoC: ssm*: Remove now redundant non_legacy_dai_naming flag
-Date:   Thu, 16 Jun 2022 15:33:51 +0100
-Message-ID: <20220616143429.1324494-59-ckeepax@opensource.cirrus.com>
+Subject: [PATCH 59/96] ASoC: sta*: Remove now redundant non_legacy_dai_naming flag
+Date:   Thu, 16 Jun 2022 15:33:52 +0100
+Message-ID: <20220616143429.1324494-60-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220616143429.1324494-1-ckeepax@opensource.cirrus.com>
 References: <20220616143429.1324494-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: m0hzjWtCOG102Ju18rDdGmkffJORwiSx
-X-Proofpoint-GUID: m0hzjWtCOG102Ju18rDdGmkffJORwiSx
+X-Proofpoint-GUID: LR7YdrIm3nU46uHXPyh1joqhO8vE7vut
+X-Proofpoint-ORIG-GUID: LR7YdrIm3nU46uHXPyh1joqhO8vE7vut
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -86,47 +86,47 @@ the non_legacy_dai_naming flag.
 
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- sound/soc/codecs/ssm2518.c | 1 -
- sound/soc/codecs/ssm2602.c | 1 -
- sound/soc/codecs/ssm4567.c | 1 -
+ sound/soc/codecs/sta32x.c | 1 -
+ sound/soc/codecs/sta350.c | 1 -
+ sound/soc/codecs/sta529.c | 1 -
  3 files changed, 3 deletions(-)
 
-diff --git a/sound/soc/codecs/ssm2518.c b/sound/soc/codecs/ssm2518.c
-index 012f209e76e90..6d88478482990 100644
---- a/sound/soc/codecs/ssm2518.c
-+++ b/sound/soc/codecs/ssm2518.c
-@@ -721,7 +721,6 @@ static const struct snd_soc_component_driver ssm2518_component_driver = {
- 	.num_dapm_routes	= ARRAY_SIZE(ssm2518_routes),
- 	.use_pmdown_time	= 1,
- 	.endianness		= 1,
--	.non_legacy_dai_naming	= 1,
- };
- 
- static const struct regmap_config ssm2518_regmap_config = {
-diff --git a/sound/soc/codecs/ssm2602.c b/sound/soc/codecs/ssm2602.c
-index 1821854ca0f37..cbbe83b85adaf 100644
---- a/sound/soc/codecs/ssm2602.c
-+++ b/sound/soc/codecs/ssm2602.c
-@@ -624,7 +624,6 @@ static const struct snd_soc_component_driver soc_component_dev_ssm2602 = {
+diff --git a/sound/soc/codecs/sta32x.c b/sound/soc/codecs/sta32x.c
+index 17e5077f26b00..8c86b578eba83 100644
+--- a/sound/soc/codecs/sta32x.c
++++ b/sound/soc/codecs/sta32x.c
+@@ -1014,7 +1014,6 @@ static const struct snd_soc_component_driver sta32x_component = {
  	.idle_bias_on		= 1,
  	.use_pmdown_time	= 1,
  	.endianness		= 1,
 -	.non_legacy_dai_naming	= 1,
  };
  
- static bool ssm2602_register_volatile(struct device *dev, unsigned int reg)
-diff --git a/sound/soc/codecs/ssm4567.c b/sound/soc/codecs/ssm4567.c
-index b47321c597d0e..4b0265617c7b5 100644
---- a/sound/soc/codecs/ssm4567.c
-+++ b/sound/soc/codecs/ssm4567.c
-@@ -427,7 +427,6 @@ static const struct snd_soc_component_driver ssm4567_component_driver = {
- 	.num_dapm_routes	= ARRAY_SIZE(ssm4567_routes),
+ static const struct regmap_config sta32x_regmap = {
+diff --git a/sound/soc/codecs/sta350.c b/sound/soc/codecs/sta350.c
+index b2d15d20fe63d..7b2c5b57d5d45 100644
+--- a/sound/soc/codecs/sta350.c
++++ b/sound/soc/codecs/sta350.c
+@@ -1057,7 +1057,6 @@ static const struct snd_soc_component_driver sta350_component = {
+ 	.idle_bias_on		= 1,
  	.use_pmdown_time	= 1,
  	.endianness		= 1,
 -	.non_legacy_dai_naming	= 1,
  };
  
- static const struct regmap_config ssm4567_regmap_config = {
+ static const struct regmap_config sta350_regmap = {
+diff --git a/sound/soc/codecs/sta529.c b/sound/soc/codecs/sta529.c
+index d90e5512a7317..3139570991454 100644
+--- a/sound/soc/codecs/sta529.c
++++ b/sound/soc/codecs/sta529.c
+@@ -322,7 +322,6 @@ static const struct snd_soc_component_driver sta529_component_driver = {
+ 	.idle_bias_on		= 1,
+ 	.use_pmdown_time	= 1,
+ 	.endianness		= 1,
+-	.non_legacy_dai_naming	= 1,
+ };
+ 
+ static const struct regmap_config sta529_regmap = {
 -- 
 2.30.2
 
