@@ -2,98 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E028854F1D5
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 09:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B70D54F28F
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 10:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380257AbiFQHZo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jun 2022 03:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S1380805AbiFQINg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jun 2022 04:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380206AbiFQHZn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 03:25:43 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1773A65D01;
-        Fri, 17 Jun 2022 00:25:42 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id D16F15C0151;
-        Fri, 17 Jun 2022 03:25:38 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 17 Jun 2022 03:25:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1655450738; x=
-        1655537138; bh=t6QXcNLzauxbqf0PNTG8MvaAdoQQFis6uQHBpNA5m+I=; b=n
-        r/26OCnEDIr6jYGUp00hxr/NMoxkf6xXfRuhMockkxh6n/wloYbpla88d1SGLc3P
-        BtUBgD8RZGZwQq1VPEdFsxTpp0vbEShL/ls6VxYlg3QMzR0vwLar8HSi00UlQ0gL
-        CH0ldBnQE8fgusDetIp4GspeBfNwxFV/Kux0Hx5Gn4thT/XQgU8PMW4HgsFFcXRm
-        Zivnb/+Onrj1LGZ5AHx2nvHV0C75KC/tYxnCCabt/MYKO/z8c0fQcLinaQbHGkZ/
-        ReDK0Ixt6XyqgHi5Jl8vZzwm7V5ELSXQsKa2v6qLRWnUgG5G2P5dohWhsokjAjTc
-        L+OzZ1aV3f76OQGSJyChg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655450738; x=
-        1655537138; bh=t6QXcNLzauxbqf0PNTG8MvaAdoQQFis6uQHBpNA5m+I=; b=C
-        kYUa18GGhGd0oZQ43NnZDN3+5y/3awo+Sws0Pq3eb6UKVOekXJ4Y7ZEHvLp36JHj
-        tycJVtu9HwZf6jSnqxW4zSYXVJbe86AaaXxlWH7q4QH3qe9lRa6jd+fNATp9LPAT
-        uMB4hcgr49bGrbUHs5jLTWfsDcAY1XnxmodGaA/DgxKZG0akk8naBHEsjI+9wBbi
-        bdBT2GvJE4pNDjc9Q1xJKM5StazQkLXgIHK2oujsy/VM2X0INDscm2W7ndAJ5rcf
-        mBBIfmMwMR/jziK5WAQT6SO63sjbrOoLYrgXG/T1UfFrVqW/5w3OIEWPJWQoFPkh
-        /k+4PB1FRuFRA5/pGTzAw==
-X-ME-Sender: <xms:cCysYuGbj_tXIkPunEurAIwroXW5XpxjXpF4QSJbzxhbPXclwax6XA>
-    <xme:cCysYvWgkzuxSA4c7vUx_UbBJT8gLLCv-uNPJbxN_6t01QjqR06uBZtc0l9wxHzhR
-    zr0LWaTeAJNrwG7Sv4>
-X-ME-Received: <xmr:cCysYoL-s8_MAzYdUOgHxl_upF4_8dJ4RyvHl_ZD6Qzg5t8bcXrIWoJ5sq56JxsiML5p_3EqajNOb9VnX0x1uY0f2nUbuWm7o5g4tUo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvgedguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgr
-    gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
-    frrghtthgvrhhnpeetgfelgefggeekkefggfeludeiudffjeffgeevveekjedukedtudeu
-    teefteefgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:cCysYoGVB8cZQ7yOz48SmLfp873hgDRpdEpPRutGsvxTCLizycl41w>
-    <xmx:cCysYkVSvHtiRSBPNAhrPCzXsNP5d45QhqafU_iIo0w9pj_rG6ibZQ>
-    <xmx:cCysYrOhmw8cG_xUkAWqqi3Xw5qv0x5wtJ9n4l4N9ZI1Bu5NZbr7WA>
-    <xmx:ciysYvyJISiAd-XGF0UUbZ-Rv8dPZGqNpVjs7CZjxA6lvgGh5OS30A>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Jun 2022 03:25:36 -0400 (EDT)
-Date:   Fri, 17 Jun 2022 09:25:33 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lgirdwood@gmail.com,
-        kuninori.morimoto.gx@renesas.com, airlied@linux.ie,
-        daniel@ffwll.ch, vkoul@kernel.org, nicolas.ferre@microchip.com,
-        nsaenz@kernel.org, shawnguo@kernel.org, linux-imx@nxp.com,
-        cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
-        linux-mips@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        daniel@zonque.org, srinivas.kandagatla@linaro.org,
-        linux-rockchip@lists.infradead.org, krzk@kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
-        heiko@sntech.de, jbrunet@baylibre.com, kernel@pengutronix.de,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        dri-devel@lists.freedesktop.org,
-        linux-rpi-kernel@lists.infradead.org
-Subject: Re: [PATCH 03/96] drm/vc4: Migrate to new style legacy DAI naming
- flag
-Message-ID: <20220617072533.foajsg6z3c2js3nb@houat>
-References: <20220616143429.1324494-1-ckeepax@opensource.cirrus.com>
- <20220616143429.1324494-4-ckeepax@opensource.cirrus.com>
+        with ESMTP id S234805AbiFQINf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 04:13:35 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3059D67D36
+        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 01:13:33 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id gd1so3401514pjb.2
+        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 01:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7ajw5ZlW7BO6xh4idYg9ZGUxMVX3OZuSbGQMRvZITss=;
+        b=BjmCyWwguCYTpglhYm7P+9sfT2Sf6eI4hqC5TCzRNcj8GpT7Cc5jJvVeFu+/QvdoQO
+         RGPpgCZxneDK+JRvBbAA3vU8YL0MLBkdIjsUazKCO2zJ5IT6caqZ177xBPaHYaNtSFhL
+         wsOPZyAq8zDsC4+RXY1GMKrYj3Yyu9EDxibHdpAAagnIOLEJ3bJD7JOCrpBNaHhaJdjq
+         /4qXmmNFH+/zsDvQ2LPSFYj7Byd34mjZXsxzy6la7Th49HWzuITGgf435hSeF0LnrHen
+         fHCXck9cWmkJX/PFv6Ee2nUXQikqy1BawnEmGitan/14y2a4JTmEO8TSXRXXDJrqoj/v
+         LdRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7ajw5ZlW7BO6xh4idYg9ZGUxMVX3OZuSbGQMRvZITss=;
+        b=8GT7408ITkoOeYWE5Dcl1Z4yQLEALQsU+Q1THJNuU+cFyy5IKt0cxQxfS5QIgAjfI3
+         fLpRhqXjRU6shuqqJaPyA+pKLSJUOv5oHkjjPqEVff7OasoaSBHwWkP9Dljm3YRLqK+S
+         ssVI16zxo1Y2pLlMti4dral7WzuDEclRH2OaTGdEJgdVOiEsDDAAXh76zLulAP+g5zpg
+         F2I+7cQXW6DiB2droCtXCk/Xzwlw2x+Ey0DH9lswobxZItsgRHNPrbbwjKeNWA2gp2sm
+         wa2R3tG2hDv8qv7jmOthtyIlIgY0IJMmYYIZZ6BpXcU1LLAqS9oKNVlkHsI1MwkBrU8L
+         ICQA==
+X-Gm-Message-State: AJIora8jwbs2+azGLvEzqwEj3Vk0L/yMLH1oYIGeBU6blFnGBWICN1Ma
+        66ZeCi90IlIJpN6OOI5EqTkB0Q==
+X-Google-Smtp-Source: AGRyM1uaJ6D+98lyL0Nb8O2bTi6YMfyv3saLk9hySILdD8r9XB2OdIlAqHZgNeMyStjI4ZdfZ29vcg==
+X-Received: by 2002:a17:90b:4a4c:b0:1e4:da3a:9b07 with SMTP id lb12-20020a17090b4a4c00b001e4da3a9b07mr9398372pjb.242.1655453612597;
+        Fri, 17 Jun 2022 01:13:32 -0700 (PDT)
+Received: from localhost ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0015e8d4eb219sm2932151plk.99.2022.06.17.01.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 01:13:31 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 16:13:28 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        catalin.marinas@arm.com, will@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 1/4] hugetlb: skip to end of PT page mapping when pte not
+ present
+Message-ID: <Yqw3qHZIwM35rcLh@FVFYT0MHHV2J.usts.net>
+References: <20220616210518.125287-1-mike.kravetz@oracle.com>
+ <20220616210518.125287-2-mike.kravetz@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220616143429.1324494-4-ckeepax@opensource.cirrus.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+In-Reply-To: <20220616210518.125287-2-mike.kravetz@oracle.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,15 +84,34 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 03:32:56PM +0100, Charles Keepax wrote:
-> Change the legacy DAI naming flag from opting in to the new scheme
-> (non_legacy_dai_naming), to opting out of it (legacy_dai_naming).
-> This driver appears to be on the CPU side of the DAI link and
-> currently uses the legacy naming, so add the new flag.
->=20
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+On Thu, Jun 16, 2022 at 02:05:15PM -0700, Mike Kravetz wrote:
+> HugeTLB address ranges are linearly scanned during fork, unmap and
+> remap operations.  If a non-present entry is encountered, the code
+> currently continues to the next huge page aligned address.  However,
+> a non-present entry implies that the page table page for that entry
+> is not present.  Therefore, the linear scan can skip to the end of
+> range mapped by the page table page.  This can speed operations on
+> large sparsely populated hugetlb mappings.
+> 
+> Create a new routine hugetlb_mask_last_page() that will return an
+> address mask.  When the mask is ORed with an address, the result
+> will be the address of the last huge page mapped by the associated
+> page table page.  Use this mask to update addresses in routines which
+> linearly scan hugetlb address ranges when a non-present pte is
+> encountered.
+> 
+> hugetlb_mask_last_page is related to the implementation of
+> huge_pte_offset as hugetlb_mask_last_page is called when huge_pte_offset
+> returns NULL.  This patch only provides a complete hugetlb_mask_last_page
+> implementation when CONFIG_ARCH_WANT_GENERAL_HUGETLB is defined.
+> Architectures which provide their own versions of huge_pte_offset can also
+> provide their own version of hugetlb_mask_last_page.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-Acked-by: Maxime Ripard <maxime@cerno.tech>
+It'll be more efficient, Thanks.
 
-Thanks!
-Maxime
+Acked-by: Muchun Song <songmuchun@bytedance.com>
+
