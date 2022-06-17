@@ -2,168 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C621554FBD2
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 19:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7314E54FC2D
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 19:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235898AbiFQRBh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jun 2022 13:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S1383010AbiFQRXg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jun 2022 13:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbiFQRBf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 13:01:35 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA0C3054F
-        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 10:01:35 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 31so4514603pgv.11
-        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 10:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SRO7S+VtYQQ7CuT0HxqPXVXaFoJKc9kcpBIC9Ny2GXE=;
-        b=H/yPj2x7BlxCCt81iCpTE5EkFP3Dty/VK1bZV1z25KE/LjGyN7SXeTJT2hDinGXVsP
-         yKnWD+bSnMg17PHjkfrn+c3NqZSIABspHotC46x9KpdL1XIujrP880h5/dYfIzpJqffP
-         r/IGHr8StQdM9Pv4HgEjUqpIBy/hAmMbDAuwsEalh68jgIXoLI4hMSbBS9C8QKV77NWi
-         1wOP8X1/Imj52YER3j06T7ncEH788Qvydm5p/zpwISDRL1jsOMw1jIGPJnqg/bFRCKJz
-         J43GPBCSUETfo7/1PtSdE4Pi9GCX0J2+XuZVUwLzY3a44bo+0aQMg7lgiSVpVcOKhTf5
-         hOyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SRO7S+VtYQQ7CuT0HxqPXVXaFoJKc9kcpBIC9Ny2GXE=;
-        b=M7QoHx4E2daX3v+fd84bWz86YHwh8OTVVq1VwwK9Ehf/a3xk5MpUeBeMs8r31Q7c2s
-         Ch5SBk96cfFDe435oU98L804QyNNs1L+O0glfrkr1FS+YpPV6yPGHgc97aaOyXrnLuXe
-         RXkb6kYFV2mCiIpdOgPUhXphf9ekgV01lunPtVQDXIr/zyGL0NVSfvS0ZVbCIfQ+7Sl9
-         f3K+xlrXO3EK3daiY5i7akdVQjJw4Gxmz72LFWMSfO3FeglRkrCalTpptKkItCHc6ZIG
-         cCbKB6DYDxDK38naNQxUKzx8VuouN0XS+z2sm8JkTLGAqmvSj6XL6dERAf96/MBQPCf4
-         TTmA==
-X-Gm-Message-State: AJIora/W8QUsmOyvey5cSi9LZtyQ478c5T2uGzk2qiEskNYIqGkb6n96
-        I2bi00WoXM2kFTlIX+AsMk4afA==
-X-Google-Smtp-Source: AGRyM1sFPXEURTOwpo2fql5+Md+sSZz0Ko9Lq4pBbmT0ckr/KaLsXrnXfTdc/59+n072/62ew2vEbw==
-X-Received: by 2002:a63:5a13:0:b0:3c6:3d28:87e5 with SMTP id o19-20020a635a13000000b003c63d2887e5mr10117659pgb.452.1655485294325;
-        Fri, 17 Jun 2022 10:01:34 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id a29-20020aa7971d000000b0051bc1865ca5sm4007529pfg.122.2022.06.17.10.01.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 10:01:33 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 17:01:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
+        with ESMTP id S1382906AbiFQRXe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 13:23:34 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBB918383;
+        Fri, 17 Jun 2022 10:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655486613; x=1687022613;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5r0rapPYszeZBBEbJ/ZlpHIsTYM/ozOqcBVhPIANdrM=;
+  b=eO+bj2hEeWAUudtg5CU9yl9fxz0asyamHWOeYHJ1EqkZMBoywm3DB07O
+   aGX083DvfOXZPN2ZXOmJI1ZgcaGukg1qroBnoGQ44xP2o8WFM+BeCkroY
+   rh4bWzzWk+OKKYO7SlwsYvamyMbMbntL3o0TRfPYlxn71wfwPsUjPs997
+   VpHzLjF8EJp3GU56yeCLC9Cd98FD81sLzoTPTPSA04zuJncDwl5qnKvvp
+   dDxBqAAkjRdtKVR1jj6BBg4lxGKmo83PxNNP67U5qSyrpa7eiLOlP28Ua
+   zGd05SBQxpAtIZDuL2dJMWgkX3KRRT8yqKE2dqZYhJkiV9k/NWy6nmCbr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259358208"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="259358208"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 10:06:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="560563793"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 17 Jun 2022 10:06:50 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2FQn-000Pcp-M0;
+        Fri, 17 Jun 2022 17:06:49 +0000
+Date:   Sat, 18 Jun 2022 01:06:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     kbuild-all@lists.01.org, Muchun Song <songmuchun@bytedance.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v6 19/22] KVM: x86/mmu: Zap collapsible SPTEs in shadow
- MMU at all possible levels
-Message-ID: <Yqyzavjp9eS9p4+m@google.com>
-References: <20220516232138.1783324-1-dmatlack@google.com>
- <20220516232138.1783324-20-dmatlack@google.com>
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        catalin.marinas@arm.com, will@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [PATCH 1/4] hugetlb: skip to end of PT page mapping when pte not
+ present
+Message-ID: <202206180021.rcc4B1by-lkp@intel.com>
+References: <20220616210518.125287-2-mike.kravetz@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516232138.1783324-20-dmatlack@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220616210518.125287-2-mike.kravetz@oracle.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 16, 2022, David Matlack wrote:
-> Currently KVM only zaps collapsible 4KiB SPTEs in the shadow MMU. This
-> is fine for now since KVM never creates intermediate huge pages during
-> dirty logging. In other words, KVM always replaces 1GiB pages directly
-> with 4KiB pages, so there is no reason to look for collapsible 2MiB
-> pages.
-> 
-> However, this will stop being true once the shadow MMU participates in
-> eager page splitting. During eager page splitting, each 1GiB is first
-> split into 2MiB pages and then those are split into 4KiB pages. The
-> intermediate 2MiB pages may be left behind if an error condition causes
-> eager page splitting to bail early.
-> 
-> No functional change intended.
-> 
-> Reviewed-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index f83de72feeac..a5d96d452f42 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6177,18 +6177,25 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
->  	return need_tlb_flush;
->  }
->  
-> +static void kvm_rmap_zap_collapsible_sptes(struct kvm *kvm,
-> +					   const struct kvm_memory_slot *slot)
-> +{
-> +	/*
-> +	 * Note, use KVM_MAX_HUGEPAGE_LEVEL - 1 since there's no need to zap
-> +	 * pages that are already mapped at the maximum possible level.
-> +	 */
-> +	if (slot_handle_level(kvm, slot, kvm_mmu_zap_collapsible_spte,
-> +			      PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL - 1,
-> +			      true))
+Hi Mike,
 
-No need to wrap, "true" fits easily on the previous line.  That said, I don't see
-any point in adding a helper.  It's highly unlike there will be another caller,
-and IMO it's not any more readable since I have to go look at another function
-when reading kvm_mmu_zap_collapsible_sptes().
+I love your patch! Yet something to improve:
 
-With some gentle massaging, the comment can squeeze onto two lines even with the
-extra level of indentation.
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on linus/master v5.19-rc2 next-20220617]
+[cannot apply to arm64/for-next/core arm/for-next kvmarm/next xilinx-xlnx/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-		/*
-	 	 * Note, use KVM_MAX_HUGEPAGE_LEVEL - 1, there's no need to zap
-		 * pages that are already mapped at the maximum hugepage level.
-		 */
-		if (slot_handle_level(kvm, slot, kvm_mmu_zap_collapsible_spte,
-				      PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL - 1, true)
-			kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Kravetz/hugetlb-speed-up-linear-address-scanning/20220617-050726
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: i386-debian-10.3 (https://download.01.org/0day-ci/archive/20220618/202206180021.rcc4B1by-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/4c647687607f10fece04967b8180c0dadaf765e6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mike-Kravetz/hugetlb-speed-up-linear-address-scanning/20220617-050726
+        git checkout 4c647687607f10fece04967b8180c0dadaf765e6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> +		kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
-> +}
-> +
->  void kvm_mmu_zap_collapsible_sptes(struct kvm *kvm,
->  				   const struct kvm_memory_slot *slot)
->  {
->  	if (kvm_memslots_have_rmaps(kvm)) {
->  		write_lock(&kvm->mmu_lock);
-> -		/*
-> -		 * Zap only 4k SPTEs since the legacy MMU only supports dirty
-> -		 * logging at a 4k granularity and never creates collapsible
-> -		 * 2m SPTEs during dirty logging.
-> -		 */
-> -		if (slot_handle_level_4k(kvm, slot, kvm_mmu_zap_collapsible_spte, true))
-> -			kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
-> +		kvm_rmap_zap_collapsible_sptes(kvm, slot);
->  		write_unlock(&kvm->mmu_lock);
->  	}
->  
-> -- 
-> 2.36.0.550.gb090851708-goog
-> 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   mm/hugetlb.c: In function 'hugetlb_mask_last_page':
+>> mm/hugetlb.c:6901:9: error: duplicate case value
+    6901 |         case PUD_SIZE:
+         |         ^~~~
+   mm/hugetlb.c:6899:9: note: previously used here
+    6899 |         case P4D_SIZE:
+         |         ^~~~
+
+
+vim +6901 mm/hugetlb.c
+
+  6886	
+  6887	/*
+  6888	 * Return a mask that can be used to update an address to the last huge
+  6889	 * page in a page table page mapping size.  Used to skip non-present
+  6890	 * page table entries when linearly scanning address ranges.  Architectures
+  6891	 * with unique huge page to page table relationships can define their own
+  6892	 * version of this routine.
+  6893	 */
+  6894	unsigned long hugetlb_mask_last_page(struct hstate *h)
+  6895	{
+  6896		unsigned long hp_size = huge_page_size(h);
+  6897	
+  6898		switch (hp_size) {
+  6899		case P4D_SIZE:
+  6900			return PGDIR_SIZE - P4D_SIZE;
+> 6901		case PUD_SIZE:
+  6902			return P4D_SIZE - PUD_SIZE;
+  6903		case PMD_SIZE:
+  6904			return PUD_SIZE - PMD_SIZE;
+  6905		default:
+  6906			break; /* Should never happen */
+  6907		}
+  6908	
+  6909		return ~(0UL);
+  6910	}
+  6911	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
