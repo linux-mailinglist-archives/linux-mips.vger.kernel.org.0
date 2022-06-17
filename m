@@ -2,116 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEC154F758
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 14:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AA754F75F
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 14:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382082AbiFQMRO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jun 2022 08:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S1380537AbiFQMUZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jun 2022 08:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380126AbiFQMRL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 08:17:11 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5633AA5F;
-        Fri, 17 Jun 2022 05:17:09 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id eo8so5995093edb.0;
-        Fri, 17 Jun 2022 05:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cCthpcEAF3mRrnq/JjWJ+hCkQXEbYPikiDTi9Vf1eLU=;
-        b=ANDlcQsHwB1617Y00BnwnZiE+R+jmlAq7Jc6RnyHnNOw0XBM0k4kIZbxnNZmx4Bkxh
-         1DYEr455RL/ch2YnZzrppY3ueoEKjhJFlIR7g2tnteS5KCczArWn1XSuXL1CdtXWmuov
-         bCl8iloUjuz9HQr97kJ39UCVh7Hv2IfsV3fQH7yujlXo3dn3Gx8gmdfUdrN1zFl8GUYh
-         jO62gIq6A/0USlazcyqVkTp/HbXc+IhcXt2yozxyD5L8I2Xed01B+5vxqShT/bU0wUtt
-         9ZxjFAJZ77ShoWRlva9dcGqkKSzsFqfJHC/vDVp0qs1OqFhBksth3S4UVM97Ic+wdwxu
-         h/AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cCthpcEAF3mRrnq/JjWJ+hCkQXEbYPikiDTi9Vf1eLU=;
-        b=haXq5cs2+354kCsozzvIJZ9nzfvYXrPrOWDLIv/X4A17+xVzZU1bEnSMKg6VbdyTfQ
-         j5PA3PBsvhnHtzFB572mt2K43gUSr3JViUPhiV67IazIcvAuCS5xwzpwW60kHJod7MxN
-         VC+o0GWXg5UWmNSXqru/HvnLSzuzz4jKjJCelHqIMLnPaCMKe4UHSn3uL1Uw485b8Xd4
-         FfgRu/yvccjSxA1h+ZWvbg2V7yJHdgty48+xSbMzQMBbnNnJnKptJlvOqaEyTFlfn239
-         W9CRtyeJT1pTiRG1XmXpLxiPNtPTGL48lH3yVQ/kHUUsnP/TouyiSP3jl7dvHPtzngZJ
-         IbJQ==
-X-Gm-Message-State: AJIora8coHZo8sAe625WyJ2g6V1Y0ClYR3U2HtApQBuAloWMUfaSy1Kq
-        n2oIQMt0CUHVdW983GSnikf2DbwSYyyWOw==
-X-Google-Smtp-Source: AGRyM1vzDDRkFbZxlt7z0Ka1jOJZZhUGEMnWOK5rQScjIXnXd9D9PwEvTowb/zLA4Bc50S75xem3gw==
-X-Received: by 2002:a05:6402:5388:b0:435:71b:5d44 with SMTP id ew8-20020a056402538800b00435071b5d44mr11976515edb.364.1655468227889;
-        Fri, 17 Jun 2022 05:17:07 -0700 (PDT)
-Received: from localhost (92.40.168.190.threembb.co.uk. [92.40.168.190])
-        by smtp.gmail.com with ESMTPSA id qf6-20020a1709077f0600b006fec4ee28d0sm2094853ejc.189.2022.06.17.05.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 05:17:07 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     tsbogend@alpha.franken.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        paul@crapouillou.net, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 1/2] mips: dts: ingenic: Add TCU clock to x1000/x1830 tcu device node
-Date:   Fri, 17 Jun 2022 13:18:05 +0100
-Message-Id: <20220617121805.738157-2-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220617121805.738157-1-aidanmacdonald.0x0@gmail.com>
-References: <20220617121805.738157-1-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S236136AbiFQMUZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 08:20:25 -0400
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58A5F4D6BC;
+        Fri, 17 Jun 2022 05:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8kX2g
+        PaQQUBFGChfB1VheAAwH9ZwON9dzg5HDq5fFVw=; b=D3lsRpMFzcDxd3YgDLkci
+        UvvegT1syjAq3rh+UKN6W5KHpoL2uoEEdTwv5+9Ky1NUK1ZpQgfNxvKSltPy9L1f
+        tWMVikDo2UA0cDTw3ezepsMqo+uR0GB1l5B+404cdUMY3cFcm62UPv75pqIr9mMW
+        oWpL95HK5CrnBedqz1LKwM=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp8 (Coremail) with SMTP id NORpCgBX6IRvcaxi5hJwFw--.39068S2;
+        Fri, 17 Jun 2022 20:19:59 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     john@phrozen.org, tsbogend@alpha.franken.de,
+        xkernel.wang@foxmail.com, wangborong@cdjrlc.com
+Cc:     windhl@126.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mips: lantiq: falcon: Fix refcount leak bug in sysctrl
+Date:   Fri, 17 Jun 2022 20:19:58 +0800
+Message-Id: <20220617121958.4047910-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: NORpCgBX6IRvcaxi5hJwFw--.39068S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruFyfGr18WFyxAryfuF4DJwb_yoWDWrgEg3
+        Z2gr98GryrCF4rurWxZr43C3s0y3sagrZ5A3Z7Jw4aka4ava4UXFy2vr95urWUZw4Fy3y7
+        ArsxGFWY9rW29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUURBT7UUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3A8jF1pEDvZK5QAAsu
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This clock is a gate for the TCU hardware block on these SoCs, but
-it wasn't included in the device tree since the ingenic-tcu driver
-erroneously did not request it.
+In ltq_soc_init(), of_find_compatible_node() will return a node pointer
+with refcount incremented. We should use of_node_put() when it is not
+used anymore.
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Signed-off-by: Liang He <windhl@126.com>
 ---
- arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
- arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ arch/mips/lantiq/falcon/sysctrl.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index b0a034b468bb..42e69664efd9 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -111,8 +111,9 @@ tcu: timer@10002000 {
+diff --git a/arch/mips/lantiq/falcon/sysctrl.c b/arch/mips/lantiq/falcon/sysctrl.c
+index 5204fc6d6d50..1187729d8cbb 100644
+--- a/arch/mips/lantiq/falcon/sysctrl.c
++++ b/arch/mips/lantiq/falcon/sysctrl.c
+@@ -208,6 +208,12 @@ void __init ltq_soc_init(void)
+ 			of_address_to_resource(np_sysgpe, 0, &res_sys[2]))
+ 		panic("Failed to get core resources");
  
- 		clocks = <&cgu X1000_CLK_RTCLK>,
- 			 <&cgu X1000_CLK_EXCLK>,
--			 <&cgu X1000_CLK_PCLK>;
--		clock-names = "rtc", "ext", "pclk";
-+			 <&cgu X1000_CLK_PCLK>,
-+			 <&cgu X1000_CLK_TCU>;
-+		clock-names = "rtc", "ext", "pclk", "tcu";
- 
- 		interrupt-controller;
- 		#interrupt-cells = <1>;
-diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi b/arch/mips/boot/dts/ingenic/x1830.dtsi
-index dbf21afaccb1..65a5da71c199 100644
---- a/arch/mips/boot/dts/ingenic/x1830.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
-@@ -104,8 +104,9 @@ tcu: timer@10002000 {
- 
- 		clocks = <&cgu X1830_CLK_RTCLK>,
- 			 <&cgu X1830_CLK_EXCLK>,
--			 <&cgu X1830_CLK_PCLK>;
--		clock-names = "rtc", "ext", "pclk";
-+			 <&cgu X1830_CLK_PCLK>,
-+			 <&cgu X1830_CLK_TCU>;
-+		clock-names = "rtc", "ext", "pclk", "tcu";
- 
- 		interrupt-controller;
- 		#interrupt-cells = <1>;
++	of_node_put(np_status);
++	of_node_put(np_ebu);
++	of_node_put(np_sys1);
++	of_node_put(np_syseth);
++	of_node_put(np_sysgpe);
++
+ 	if ((request_mem_region(res_status.start, resource_size(&res_status),
+ 				res_status.name) < 0) ||
+ 		(request_mem_region(res_ebu.start, resource_size(&res_ebu),
 -- 
-2.35.1
+2.25.1
 
