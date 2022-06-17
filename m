@@ -2,79 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DD254F69D
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 13:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D9B54F755
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 14:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235741AbiFQL0t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jun 2022 07:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
+        id S1381190AbiFQMRI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jun 2022 08:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235394AbiFQL0s (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 07:26:48 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2AE6A06B;
-        Fri, 17 Jun 2022 04:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655465207; x=1687001207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O0OzaZWt5JBpgO+HWeUig13mrHT0bkF4JZGnMqUmzAI=;
-  b=Rv1zjxjwhl0YSHCALlE56R8qHdmizvxY81phVDtkG+XB7o40XLsVEL//
-   c4sp74bDQszlHt5s/j1NsLg0oUq/esQzOTTlfl4gd/jmQi+53JcuDPhRu
-   6OR3XkcQr22FT2jx6GIFzyCvYFz1/U3UGG4/CrrN+Hts/Kn8825XGxAHM
-   WLB3Ru8iukqzhpnm7XFrRfz5YcvQEMt1Nxunsju5o7mM5soHRg5WOaHz/
-   qobCeXD0IK1DyqQIi/tJd2uF8dPLZjy3mSn79mS7+12Uu58hqs4PXkQ6z
-   yQog4DY3LQpQU6qzOCqxgHP++HyUnZOMVniOVTVxHeWrv0wzXS+J8GTBB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268178377"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="268178377"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 04:26:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="675457992"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jun 2022 04:26:40 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2A7b-000PP9-Vz;
-        Fri, 17 Jun 2022 11:26:39 +0000
-Date:   Fri, 17 Jun 2022 19:26:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        catalin.marinas@arm.com, will@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH 1/4] hugetlb: skip to end of PT page mapping when pte not
- present
-Message-ID: <202206171929.ZIUrNg6p-lkp@intel.com>
-References: <20220616210518.125287-2-mike.kravetz@oracle.com>
+        with ESMTP id S1380126AbiFQMRI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 08:17:08 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC7A3AA5F;
+        Fri, 17 Jun 2022 05:17:07 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id ej4so1991674edb.7;
+        Fri, 17 Jun 2022 05:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nPItxiChc7ysnYILfXxzAEU8Pmf3UY2MwXEKt7e1ms0=;
+        b=XQwZw5oiz6COgZEY10idLilDKnr8vfdSlTtJdrgz0z9ND1xkyXsod5lUJtQWtBpT7A
+         kNLnW0SR9uovJskHM3YuG3W8InkRLl1L7f7hQStp9CiZ2ut8ZwfjhTGt4XmqvWv20X7n
+         ofc0PczxBTD9zWlly0fUXFxQ3xXdN3k6JEi7FvnfDrUnfE+l4i+wtBK/WFsX0fJ6R9Z2
+         Li/2Y8iuvQItAwULhPY4Zq4eKZfLmUep3jbog0QGpcBmfMkbZOH/OqjIUQ/uJkTueSiI
+         +SFF1yI7TQIK9ZV6u5B//Zy6kpdyLMkOb0y4t24Rw9Q5rErzXM1UEEVpP2M074Mhrtbi
+         9k/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nPItxiChc7ysnYILfXxzAEU8Pmf3UY2MwXEKt7e1ms0=;
+        b=n2Re0kV2YocUASFhzO1gzs6OP3UrRmLTfnB4OEd2HHDHIm3k96w5HUqiY8JeGVkUGY
+         miAMzZ/2AB0noO2OOdKe82aDfTkJz6thIVsH9OyEinFrqNcSMqnF6hdilZjVhg25rXGN
+         lYQRTgyWntoRj+u9YAoFn2xoF3CPy44lvuAo7yRNqklCXG1UsZvdAHiJDd1p3+XJuKPV
+         /uHxNl8BiuhHec7lu9vFTspk0hSrO6LQXxYPmXOBZcsYjSVdQBRmhBgjVNFO+AX1QGlS
+         qrQYLP+DlTUoSKJgECDp/907An7p5YJYfHiSpjYJ/qdCIvCYEeZvG+tIff1QFQvdMfYI
+         pefQ==
+X-Gm-Message-State: AJIora/B1foMv/VwtBVVyy6w5phzA50JurCwh9wwKhrycQZgHa8ABK5r
+        9NQdNlbUucAPsBu1OL12Rrc=
+X-Google-Smtp-Source: AGRyM1uN2AslgOs2dopM2SjLxLqgoT2BmNIf4gs23Bvq9kLeJ3kg9kpPrg12q8uREWKdMvlYZiwUuA==
+X-Received: by 2002:a05:6402:438a:b0:42e:985:4944 with SMTP id o10-20020a056402438a00b0042e09854944mr12028262edc.283.1655468225808;
+        Fri, 17 Jun 2022 05:17:05 -0700 (PDT)
+Received: from localhost (92.40.168.190.threembb.co.uk. [92.40.168.190])
+        by smtp.gmail.com with ESMTPSA id la5-20020a170907780500b006f3ef214de7sm2125562ejc.77.2022.06.17.05.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 05:17:05 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     tsbogend@alpha.franken.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        paul@crapouillou.net, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/2] Fix missing TCU clock for X1000/X1830 SoCs
+Date:   Fri, 17 Jun 2022 13:18:04 +0100
+Message-Id: <20220617121805.738157-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616210518.125287-2-mike.kravetz@oracle.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,93 +67,28 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Mike,
+Hi,
 
-I love your patch! Yet something to improve:
+This is a resend of one patch from v5 since it seems to have fallen off
+the radar. I'd like to get it merged in 5.19 to complete the fix for the
+bug mentioned in commit e98839fb56ea ("clk: ingenic-tcu: Fix missing TCU
+clock for X1000 SoCs") which was patch 2/2.
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on linus/master v5.19-rc2 next-20220617]
-[cannot apply to arm64/for-next/core arm/for-next kvmarm/next xilinx-xlnx/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thanks and best regards,
+Aidan
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Kravetz/hugetlb-speed-up-linear-address-scanning/20220617-050726
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220617/202206171929.ZIUrNg6p-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4c647687607f10fece04967b8180c0dadaf765e6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mike-Kravetz/hugetlb-speed-up-linear-address-scanning/20220617-050726
-        git checkout 4c647687607f10fece04967b8180c0dadaf765e6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+v6: drop patch 2/2 which was already merged upstream
+v5: fix use of uninitialized variable reported by kernel test robot & Dan Carpenter
+v4: resend of v3 with some minor changes
+v3: https://lore.kernel.org/linux-mips/20220224150326.525707-1-aidanmacdonald.0x0@gmail.com/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Aidan MacDonald (1):
+  mips: dts: ingenic: Add TCU clock to x1000/x1830 tcu device node
 
-All errors (new ones prefixed by >>):
-
->> mm/hugetlb.c:6901:7: error: duplicate case value '4194304'
-           case PUD_SIZE:
-                ^
-   include/asm-generic/pgtable-nopud.h:20:20: note: expanded from macro 'PUD_SIZE'
-   #define PUD_SIZE        (1UL << PUD_SHIFT)
-                           ^
-   mm/hugetlb.c:6899:7: note: previous case defined here
-           case P4D_SIZE:
-                ^
-   include/asm-generic/pgtable-nop4d.h:13:19: note: expanded from macro 'P4D_SIZE'
-   #define P4D_SIZE                (1UL << P4D_SHIFT)
-                                   ^
-   mm/hugetlb.c:6903:7: error: duplicate case value '4194304'
-           case PMD_SIZE:
-                ^
-   include/asm-generic/pgtable-nopmd.h:22:20: note: expanded from macro 'PMD_SIZE'
-   #define PMD_SIZE        (1UL << PMD_SHIFT)
-                           ^
-   mm/hugetlb.c:6901:7: note: previous case defined here
-           case PUD_SIZE:
-                ^
-   include/asm-generic/pgtable-nopud.h:20:20: note: expanded from macro 'PUD_SIZE'
-   #define PUD_SIZE        (1UL << PUD_SHIFT)
-                           ^
-   2 errors generated.
-
-
-vim +/4194304 +6901 mm/hugetlb.c
-
-  6886	
-  6887	/*
-  6888	 * Return a mask that can be used to update an address to the last huge
-  6889	 * page in a page table page mapping size.  Used to skip non-present
-  6890	 * page table entries when linearly scanning address ranges.  Architectures
-  6891	 * with unique huge page to page table relationships can define their own
-  6892	 * version of this routine.
-  6893	 */
-  6894	unsigned long hugetlb_mask_last_page(struct hstate *h)
-  6895	{
-  6896		unsigned long hp_size = huge_page_size(h);
-  6897	
-  6898		switch (hp_size) {
-  6899		case P4D_SIZE:
-  6900			return PGDIR_SIZE - P4D_SIZE;
-> 6901		case PUD_SIZE:
-  6902			return P4D_SIZE - PUD_SIZE;
-  6903		case PMD_SIZE:
-  6904			return PUD_SIZE - PMD_SIZE;
-  6905		default:
-  6906			break; /* Should never happen */
-  6907		}
-  6908	
-  6909		return ~(0UL);
-  6910	}
-  6911	
+ arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+ arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
