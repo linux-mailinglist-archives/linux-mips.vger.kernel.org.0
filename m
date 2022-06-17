@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E2454FA46
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 17:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5DE54FA51
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 17:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbiFQP2W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jun 2022 11:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
+        id S1382224AbiFQPay (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jun 2022 11:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381370AbiFQP2V (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 11:28:21 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F6C3585D
-        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 08:28:20 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d5so4146964plo.12
-        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 08:28:20 -0700 (PDT)
+        with ESMTP id S1347292AbiFQPau (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 11:30:50 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387223BA44
+        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 08:30:50 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id m14so4174268plg.5
+        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 08:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=9lnCWB9zsyKOczCBSceUjigaztv7AStK8BeDoARKMKM=;
-        b=MRDsetQVY8MyaT0DSP6tz4YsogDP3sj0rr5b0qt8A1QJdSxqRb2FK2SCRN4Rv61+Xf
-         uskMCdC3eAPe8Jxgq7H0ZOFru5CTDkW409Q1LHVbJCTaXzRXAGYKGhrYiVfIRJl1ZDdV
-         LIWk1N1oBF6dDpzc/XNOmabSkUSj7Za5iwn8ezuXDyex9GiKIa3Y5J+JPuzFG0UAgVNV
-         5KoEC5iY+aBJCAWXTTjVyrG3AY5I7cI8s2MhNOBu3VH1llzYd24SxPA1cXi3c6/zWkOJ
-         18PuIj7gGXc1WYJ5hDHcxEV/8icIiaWpaFpD0nfNGnI9Fae7NamaLQf8acl4eJ/wls2K
-         dMnw==
+        bh=JX9xGdiptLoNDTC4kLICm3LWkZE4wnBomWiv9D2Jt+A=;
+        b=FroTbfKQXF4oe57u8/z01s4H2lPuFDNHQSRgJovvAXDxEMhjV6urKT0B8sHR2d8L3n
+         ae5hlfF9DTvZ3c4JoenCBYAcFC4Cg8LCcOK2JrDuN6oUMXhIoi9o/mdMIV451aYKFaHM
+         hsdOfB+Hs+/CcS7myUfGVKpDlXbB3fjN6geQn+KJQKA17rR8Sm9IHtsMFgdomwiKqeEC
+         T71kaL/J/sl8yWloLQdFRdTBTWZOAvcg6ooTQr6dWni9zBgS6eSDRk96BL8uwMhSgZPi
+         PQtlmqwUfOUCyJu9V8Rp++e8ZGmSuy0PGyvVrA380adh0l3CDL5Obk4WtrHI/VRK72em
+         XaEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=9lnCWB9zsyKOczCBSceUjigaztv7AStK8BeDoARKMKM=;
-        b=qXE4EL8eigKA3u+sBtmZboFsHMa1nTcY2uOtn8sfQbYmvCwjk4rmhGdDHhxIn/BgmF
-         bzCryb1T09yRYJagp7FaAm26IDQdP7W+Mr2L4upUjAS/NSh5R0I3hjW8W9W0eqn3sRlZ
-         M8gOIYkyV8iCymWWMdxJJoi8OL0Ta9+LcaKmqU1DdcqoSZBB38ZuYpMuhZyOpw7eyfTs
-         qdZCZIhYA9h9Hzolq9FKfF4ZyQbtKUhLH3CpwIY4sOXH5Urnxaz2X0t1OT11SHrCTytO
-         RRuW9tqNkAXLlbzE4KfpfJnroEKDxyiv4xxdThFVOlWeeL8T14HsdiUObzgiYN5GjogD
-         NbmQ==
-X-Gm-Message-State: AJIora/UFVHeAgDmMkc6EF3JZHis1ZO/YhQjWFvcLAH0Bacv4BVwYvUH
-        f1QiEDayz2egp04/TBiji8yfWg==
-X-Google-Smtp-Source: AGRyM1tIpViIJ0OwvugoNaYPS81DxsMmaeO15jp/Gqk615TT7T4/NIE2uXviTLDn9T52SnoA3upg+w==
-X-Received: by 2002:a17:90b:1b48:b0:1e8:5885:f8b with SMTP id nv8-20020a17090b1b4800b001e858850f8bmr11152803pjb.122.1655479699649;
-        Fri, 17 Jun 2022 08:28:19 -0700 (PDT)
+        bh=JX9xGdiptLoNDTC4kLICm3LWkZE4wnBomWiv9D2Jt+A=;
+        b=4jccCVE1TfDytcL9GFXT9pl+IusquhsYuONOF/mmlSs8o3EQIy0Li8u/wfFu0yPdvZ
+         lMOSSUFjedYiJh4bgAlAGZhqHOp1nF3/oRWUdkuYdXTlLb1N8Ot7EKcKjtZVL6ancEHC
+         TTccrV03/aWRQS25e8ajH5QNANVCv56zLvszYv2WV3iKbd52A6uLsR4utjpF/hcP4X9k
+         j+hPeIe7xrXTcmNNg5ihbhUapudR+WALB8TzjDcdDFMsDgWSW82wLUDqSF9oKFf+CE9P
+         p5K1VBgbar3s0D9loMf00+6vJochPbWelbqyZ/UG3Vlr+jspWCzyalw9fug/oxYGylbX
+         7NAg==
+X-Gm-Message-State: AJIora/mnOj/UkPBkslofRhcFaLLYfwx1wXir6Ofy/q9W907tU2TCw49
+        8pId8orKyi7nsyUivm/xggN5+Q==
+X-Google-Smtp-Source: AGRyM1sShni0HcA+wwvElgEG+uhqDvpiuI/Mbz6fR5xrdxpUTVbxDXYkPyaLGZqxKkWHjKOvWmjOaA==
+X-Received: by 2002:a17:903:2ca:b0:156:f1cc:7cb6 with SMTP id s10-20020a17090302ca00b00156f1cc7cb6mr10651437plk.174.1655479849528;
+        Fri, 17 Jun 2022 08:30:49 -0700 (PDT)
 Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id x6-20020a1709029a4600b0015e8d4eb1d1sm3742777plv.27.2022.06.17.08.28.18
+        by smtp.gmail.com with ESMTPSA id o4-20020a1709026b0400b00163de9e9342sm3758558plk.17.2022.06.17.08.30.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 08:28:18 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 15:28:15 +0000
+        Fri, 17 Jun 2022 08:30:48 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 15:30:44 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
@@ -69,15 +69,14 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
         <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v6 13/22] KVM: x86/mmu: Allow NULL @vcpu in
- kvm_mmu_find_shadow_page()
-Message-ID: <YqydjxjnuaYTIYMt@google.com>
+Subject: Re: [PATCH v6 14/22] KVM: x86/mmu: Pass const memslot to rmap_add()
+Message-ID: <YqyeJKMcqkO5zynw@google.com>
 References: <20220516232138.1783324-1-dmatlack@google.com>
- <20220516232138.1783324-14-dmatlack@google.com>
+ <20220516232138.1783324-15-dmatlack@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516232138.1783324-14-dmatlack@google.com>
+In-Reply-To: <20220516232138.1783324-15-dmatlack@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -90,94 +89,20 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Mon, May 16, 2022, David Matlack wrote:
-> Allow @vcpu to be NULL in kvm_mmu_find_shadow_page() (and its only
-> caller __kvm_mmu_get_shadow_page()). @vcpu is only required to sync
-> indirect shadow pages, so it's safe to pass in NULL when looking up
-> direct shadow pages.
-> 
-> This will be used for doing eager page splitting, which allocates direct
 
-"hugepage" again, because I need constant reminders :-)
+Please restate the shortlog in the changelog, it doesn't require much more typing
+and means readers don't have to mentally preserve context across "paragraphs".
 
-> shadow pages from the context of a VM ioctl without access to a vCPU
-> pointer.
+  Constify rmap_add()'s @slot parameter, the is just passed on to
+  gfn_to_rmap(), which takes a const memslot.
+
+> rmap_add() only uses the slot to call gfn_to_rmap() which takes a const
+> memslot.
 > 
+> No functional change intended.
+> 
+> Reviewed-by: Ben Gardon <bgardon@google.com>
 > Signed-off-by: David Matlack <dmatlack@google.com>
 > ---
 
-With nits addressed,
-
 Reviewed-by: Sean Christopherson <seanjc@google.com>
-
->  arch/x86/kvm/mmu/mmu.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 4fbc2da47428..acb54d6e0ea5 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1850,6 +1850,7 @@ static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  
->  	if (ret < 0)
->  		kvm_mmu_prepare_zap_page(vcpu->kvm, sp, invalid_list);
-> +
-
-Unrelated whitespace change leftover from the previous approach.
-
->  	return ret;
->  }
->  
-> @@ -2001,6 +2002,7 @@ static void clear_sp_write_flooding_count(u64 *spte)
->  	__clear_sp_write_flooding_count(sptep_to_sp(spte));
->  }
->  
-> +/* Note, @vcpu may be NULL if @role.direct is true. */
->  static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
->  						     struct kvm_vcpu *vcpu,
->  						     gfn_t gfn,
-> @@ -2039,6 +2041,16 @@ static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
->  			goto out;
->  
->  		if (sp->unsync) {
-> +			/*
-> +			 * A vCPU pointer should always be provided when finding
-
-s/should/must, and "be provided" in unnecessarily ambiguous, simply state that
-"@vcpu must be non-NULL".  E.g. if a caller provides a pointer, but that pointer
-happens to be NULL.
-
-> +			 * indirect shadow pages, as that shadow page may
-> +			 * already exist and need to be synced using the vCPU
-> +			 * pointer. Direct shadow pages are never unsync and
-> +			 * thus do not require a vCPU pointer.
-> +			 */
-
-"vCPU pointer" over and over is a bit versbose, and I prefer to refer to vCPUs/VMs
-as objects themselves.  E.g. "XYZ requires a vCPU" versus "XYZ requires a vCPU
-pointer" since it's not the pointer itself that's required, it's all the context
-of the vCPU that is needed.
-
-			/*
-			 * @vcpu must be non-NULL when finding indirect shadow
-			 * pages, as such pages may already exist and need to
-			 * be synced, which requires a vCPU.  Direct pages are
-			 * never unsync and thus do not require a vCPU.
-			 */
-
-> +			if (KVM_BUG_ON(!vcpu, kvm))
-> +				break;
-> +
->  			/*
->  			 * The page is good, but is stale.  kvm_sync_page does
->  			 * get the latest guest state, but (unlike mmu_unsync_children)
-> @@ -2116,6 +2128,7 @@ static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm *kvm,
->  	return sp;
->  }
->  
-> +/* Note, @vcpu may be NULL if @role.direct is true. */
->  static struct kvm_mmu_page *__kvm_mmu_get_shadow_page(struct kvm *kvm,
->  						      struct kvm_vcpu *vcpu,
->  						      struct shadow_page_caches *caches,
-> -- 
-> 2.36.0.550.gb090851708-goog
-> 
