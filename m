@@ -2,173 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2378754FA21
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 17:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4917A54FA3D
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 17:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381817AbiFQPUf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jun 2022 11:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
+        id S1382741AbiFQP0q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jun 2022 11:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347292AbiFQPUe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 11:20:34 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AF24AE33
-        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 08:20:33 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id l4so4297876pgh.13
-        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 08:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9lvtLfhK9FmnJCkjV3dLNO0hqHNedTj51KG69lT+G7U=;
-        b=Cnrh4J+Enfnr9AuDAiARSUS8mUaZcnFEgSEcsP/3UOmGi7ZFakP7Lj2GtJ7HnTrwqv
-         L6J6/wfxFldCidlYCZQIhOrF+sUiIK0rRRCP214gYUgZJ7L4yKYTZzRG5CmXdrBWMffR
-         Akc5WcXega+OF3hbiRscqL4Ns4GZedxPJe8j/HkcuYxvxtsoVn3LwCnGxR0OABmr+NlW
-         6oAEDJX+HWJuIx8+sea4NUDWVHS6om0EdHTwqcCX0PIBPigOMV+zn/JxKPP+iN+2cwzb
-         Iv3dASZw4C+i3tz5KuZPaPlN6oKgslXa73WjAlmBCS9XMjU+en4eJH9i1oScyrizdAUs
-         H41g==
+        with ESMTP id S1382720AbiFQP0p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 11:26:45 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4E42CDFD;
+        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id cu16so6304141qvb.7;
+        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9lvtLfhK9FmnJCkjV3dLNO0hqHNedTj51KG69lT+G7U=;
-        b=j2XDq7XfW87IFqASDqPsLa1r9O+F8SUqXGyLVH75K5xyKy8IMhKkghnIj9xjEg8Ibr
-         cIH6rtiU0KzIDqXZpr1dvOEHJCiWIAEOqw8MzDg82cLCViYTsFU4Rf89EMtcc3O3qmaG
-         7eN7l6wXmSkZR9wPdEAJoX8AklL/SLt7DgBbAi0MH0+iC7y7Bwv0vtrb8curHP5bgurH
-         a561qlXLVRaLNFY+ZZrw/31IkabRGjykOhI3JLlNJokjwGgI/WT3xKtuo5vFdF75Asos
-         FABGBYPi3/D9RFf8z4VtRmgcgSakKM1mJt25L65Jly6NyH5xH3cn0DBXUPz3SyXM1Sl4
-         TVxg==
-X-Gm-Message-State: AJIora9wzUE/DPlMn4Gvfgu0s+nu0hVIAsy8uPGRYWh5UkMQnhN/9Jtc
-        qbngIk1S8dl9Ix8UdcStCcDuIg==
-X-Google-Smtp-Source: AGRyM1tE4W44jfGPjBoEvzrK2Cg/RlLC/1RDwKrs0fwTi62j7Xg865cr/MrV4kkvr1ussDo8Q6fhrQ==
-X-Received: by 2002:a63:8b4b:0:b0:3fc:ee1a:9574 with SMTP id j72-20020a638b4b000000b003fcee1a9574mr9555543pge.431.1655479233124;
-        Fri, 17 Jun 2022 08:20:33 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id p3-20020a170902780300b00161ac982b9esm3691318pll.185.2022.06.17.08.20.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 08:20:32 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 15:20:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v6 05/22] KVM: x86/mmu: Always pass 0 for @quadrant when
- gptes are 8 bytes
-Message-ID: <YqybvAdDr6JY6Cu0@google.com>
-References: <20220516232138.1783324-1-dmatlack@google.com>
- <20220516232138.1783324-6-dmatlack@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nxeOkeINDpzy3OEEqm+X2I0MEyWZgikOx3MDeUuxZIA=;
+        b=x352egzjQ+bgWBPvIOmHwrWHqtJYzKs6aPO2F8bLrEH9JwpqkX/8NsU9XVQkI5fKwV
+         6ltnZCkL9bPTM/vaZYzpAuRgmNkrTuwem4mmLvu42R49EykYrgqHQDfD4WdKzop+Db51
+         xuYOVSO3jIMn16mYfmHh/GrkHReTvLUcD9zrC5hTqBVwG40E4ykj2L0gOQlsS7J+rzoj
+         1D/hAzkZ7UfSBzFb223OuZgruktaAftR32nSZwts7o4Wsccqp6B4ey5E5RbKdI/n/1rl
+         CTXDLH4J1RuCSY1/ysET+h5VPadAiCXvXei41bhvjpiumn4BmftMo0pVAQ6E8ajug0lt
+         Va4g==
+X-Gm-Message-State: AJIora/bHuAycwqoF7x7xcQ4vk/j3wsHR06DlCn9FXbTEyhjtOztZEsh
+        +s9zIUbqnxtCQbIoY2J9QJQiM/dZuJC8cQ==
+X-Google-Smtp-Source: AGRyM1sIcwLrFMLBTl9Zjr0d8MQNxHkWGqCz9qYTJ1djfdjakA8ISv2WHTFx3VpDrDScxXOd1IppdA==
+X-Received: by 2002:ac8:5d93:0:b0:305:2b38:af70 with SMTP id d19-20020ac85d93000000b003052b38af70mr8952987qtx.383.1655479604039;
+        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id v63-20020a372f42000000b006a6a5d1e240sm4298333qkh.34.2022.06.17.08.26.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 08:26:43 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id k2so7838468ybj.3;
+        Fri, 17 Jun 2022 08:26:42 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr11481017ybb.202.1655479602392; Fri, 17
+ Jun 2022 08:26:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516232138.1783324-6-dmatlack@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220616210518.125287-1-mike.kravetz@oracle.com>
+ <20220616210518.125287-2-mike.kravetz@oracle.com> <YqyMhmAjrQ4C+EyA@xz-m1.local>
+In-Reply-To: <YqyMhmAjrQ4C+EyA@xz-m1.local>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 17 Jun 2022 17:26:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU-qdNMqwtpm+PMixKoicYHPokAQqWAh-Vw-sjZz_z7xA@mail.gmail.com>
+Message-ID: <CAMuHMdU-qdNMqwtpm+PMixKoicYHPokAQqWAh-Vw-sjZz_z7xA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] hugetlb: skip to end of PT page mapping when pte not present
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 16, 2022, David Matlack wrote:
-> The quadrant is only used when gptes are 4 bytes, but
-> mmu_alloc_{direct,shadow}_roots() pass in a non-zero quadrant for PAE
-> page directories regardless. Make this less confusing by only passing in
-> a non-zero quadrant when it is actually necessary.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
+Hi Peter,
 
-One nit, otherwise
+On Fri, Jun 17, 2022 at 4:22 PM Peter Xu <peterx@redhat.com> wrote:
+> On Thu, Jun 16, 2022 at 02:05:15PM -0700, Mike Kravetz wrote:
+> > @@ -6877,6 +6896,39 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
+> >       return (pte_t *)pmd;
+> >  }
+> >
+> > +/*
+> > + * Return a mask that can be used to update an address to the last huge
+> > + * page in a page table page mapping size.  Used to skip non-present
+> > + * page table entries when linearly scanning address ranges.  Architectures
+> > + * with unique huge page to page table relationships can define their own
+> > + * version of this routine.
+> > + */
+> > +unsigned long hugetlb_mask_last_page(struct hstate *h)
+> > +{
+> > +     unsigned long hp_size = huge_page_size(h);
+> > +
+> > +     switch (hp_size) {
+> > +     case P4D_SIZE:
+> > +             return PGDIR_SIZE - P4D_SIZE;
+> > +     case PUD_SIZE:
+> > +             return P4D_SIZE - PUD_SIZE;
+> > +     case PMD_SIZE:
+> > +             return PUD_SIZE - PMD_SIZE;
+> > +     default:
+>
+> Should we add a WARN_ON_ONCE() if it should never trigger?
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+And with panic_on_warn, it'll panic only once ;-)
 
->  arch/x86/kvm/mmu/mmu.c | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 515e0b33144a..8508c4bfddb5 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3406,9 +3406,10 @@ static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
->  	struct kvm_mmu_page *sp;
->  
->  	role.level = level;
-> +	role.quadrant = quadrant;
->  
-> -	if (role.has_4_byte_gpte)
-> -		role.quadrant = quadrant;
-> +	WARN_ON_ONCE(quadrant && !role.has_4_byte_gpte);
-> +	WARN_ON_ONCE(role.direct && role.has_4_byte_gpte);
->  
->  	sp = kvm_mmu_get_page(vcpu, gfn, role);
->  	++sp->root_count;
-> @@ -3444,7 +3445,7 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
->  		for (i = 0; i < 4; ++i) {
->  			WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
->  
-> -			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), i,
-> +			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), 0,
->  					      PT32_ROOT_LEVEL);
->  			mmu->pae_root[i] = root | PT_PRESENT_MASK |
->  					   shadow_me_mask;
-> @@ -3529,6 +3530,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
->  	struct kvm_mmu *mmu = vcpu->arch.mmu;
->  	u64 pdptrs[4], pm_mask;
->  	gfn_t root_gfn, root_pgd;
-> +	unsigned int quadrant;
->  	hpa_t root;
->  	unsigned i;
+Gr{oetje,eeting}s,
 
-Not really your fault, but this manages to use three different type declarations
-for quadrant.  i is a bare "unsigned", quadrant an "unsigned int" here, and then
-@quadrant in mmu_alloc_root() is an "int".
+                        Geert
 
-I suspect the "unsigned i" is originated with the "i << (30 - PAGE_SHIFT)" in
-mmu_alloc_direct_roots(), though even that can't create a negative value.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Given that quadrant is tiny and "int i" is a de facto standard for iterator values,
-my preference would be to opportunisticaly consolidate this to
-
-	int quadrant, i, r;
-
->  	int r;
-> @@ -3614,7 +3616,15 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
->  			root_gfn = pdptrs[i] >> PAGE_SHIFT;
->  		}
->  
-> -		root = mmu_alloc_root(vcpu, root_gfn, i, PT32_ROOT_LEVEL);
-> +		/*
-> +		 * If shadowing 32-bit non-PAE page tables, each PAE page
-> +		 * directory maps one quarter of the guest's non-PAE page
-> +		 * directory. Othwerise each PAE page direct shadows one guest
-> +		 * PAE page directory so that quadrant should be 0.
-> +		 */
-> +		quadrant = (mmu->cpu_role.base.level == PT32_ROOT_LEVEL) ? i : 0;
-> +
-> +		root = mmu_alloc_root(vcpu, root_gfn, quadrant, PT32_ROOT_LEVEL);
->  		mmu->pae_root[i] = root | pm_mask;
->  	}
->  
-> -- 
-> 2.36.0.550.gb090851708-goog
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
