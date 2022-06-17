@@ -2,129 +2,182 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4917A54FA3D
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 17:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E2454FA46
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 17:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382741AbiFQP0q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jun 2022 11:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
+        id S232895AbiFQP2W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jun 2022 11:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382720AbiFQP0p (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 11:26:45 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4E42CDFD;
-        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id cu16so6304141qvb.7;
-        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
+        with ESMTP id S1381370AbiFQP2V (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 11:28:21 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F6C3585D
+        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 08:28:20 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d5so4146964plo.12
+        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 08:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9lnCWB9zsyKOczCBSceUjigaztv7AStK8BeDoARKMKM=;
+        b=MRDsetQVY8MyaT0DSP6tz4YsogDP3sj0rr5b0qt8A1QJdSxqRb2FK2SCRN4Rv61+Xf
+         uskMCdC3eAPe8Jxgq7H0ZOFru5CTDkW409Q1LHVbJCTaXzRXAGYKGhrYiVfIRJl1ZDdV
+         LIWk1N1oBF6dDpzc/XNOmabSkUSj7Za5iwn8ezuXDyex9GiKIa3Y5J+JPuzFG0UAgVNV
+         5KoEC5iY+aBJCAWXTTjVyrG3AY5I7cI8s2MhNOBu3VH1llzYd24SxPA1cXi3c6/zWkOJ
+         18PuIj7gGXc1WYJ5hDHcxEV/8icIiaWpaFpD0nfNGnI9Fae7NamaLQf8acl4eJ/wls2K
+         dMnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nxeOkeINDpzy3OEEqm+X2I0MEyWZgikOx3MDeUuxZIA=;
-        b=x352egzjQ+bgWBPvIOmHwrWHqtJYzKs6aPO2F8bLrEH9JwpqkX/8NsU9XVQkI5fKwV
-         6ltnZCkL9bPTM/vaZYzpAuRgmNkrTuwem4mmLvu42R49EykYrgqHQDfD4WdKzop+Db51
-         xuYOVSO3jIMn16mYfmHh/GrkHReTvLUcD9zrC5hTqBVwG40E4ykj2L0gOQlsS7J+rzoj
-         1D/hAzkZ7UfSBzFb223OuZgruktaAftR32nSZwts7o4Wsccqp6B4ey5E5RbKdI/n/1rl
-         CTXDLH4J1RuCSY1/ysET+h5VPadAiCXvXei41bhvjpiumn4BmftMo0pVAQ6E8ajug0lt
-         Va4g==
-X-Gm-Message-State: AJIora/bHuAycwqoF7x7xcQ4vk/j3wsHR06DlCn9FXbTEyhjtOztZEsh
-        +s9zIUbqnxtCQbIoY2J9QJQiM/dZuJC8cQ==
-X-Google-Smtp-Source: AGRyM1sIcwLrFMLBTl9Zjr0d8MQNxHkWGqCz9qYTJ1djfdjakA8ISv2WHTFx3VpDrDScxXOd1IppdA==
-X-Received: by 2002:ac8:5d93:0:b0:305:2b38:af70 with SMTP id d19-20020ac85d93000000b003052b38af70mr8952987qtx.383.1655479604039;
-        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id v63-20020a372f42000000b006a6a5d1e240sm4298333qkh.34.2022.06.17.08.26.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 08:26:43 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id k2so7838468ybj.3;
-        Fri, 17 Jun 2022 08:26:42 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr11481017ybb.202.1655479602392; Fri, 17
- Jun 2022 08:26:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220616210518.125287-1-mike.kravetz@oracle.com>
- <20220616210518.125287-2-mike.kravetz@oracle.com> <YqyMhmAjrQ4C+EyA@xz-m1.local>
-In-Reply-To: <YqyMhmAjrQ4C+EyA@xz-m1.local>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 17 Jun 2022 17:26:31 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU-qdNMqwtpm+PMixKoicYHPokAQqWAh-Vw-sjZz_z7xA@mail.gmail.com>
-Message-ID: <CAMuHMdU-qdNMqwtpm+PMixKoicYHPokAQqWAh-Vw-sjZz_z7xA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] hugetlb: skip to end of PT page mapping when pte not present
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9lnCWB9zsyKOczCBSceUjigaztv7AStK8BeDoARKMKM=;
+        b=qXE4EL8eigKA3u+sBtmZboFsHMa1nTcY2uOtn8sfQbYmvCwjk4rmhGdDHhxIn/BgmF
+         bzCryb1T09yRYJagp7FaAm26IDQdP7W+Mr2L4upUjAS/NSh5R0I3hjW8W9W0eqn3sRlZ
+         M8gOIYkyV8iCymWWMdxJJoi8OL0Ta9+LcaKmqU1DdcqoSZBB38ZuYpMuhZyOpw7eyfTs
+         qdZCZIhYA9h9Hzolq9FKfF4ZyQbtKUhLH3CpwIY4sOXH5Urnxaz2X0t1OT11SHrCTytO
+         RRuW9tqNkAXLlbzE4KfpfJnroEKDxyiv4xxdThFVOlWeeL8T14HsdiUObzgiYN5GjogD
+         NbmQ==
+X-Gm-Message-State: AJIora/UFVHeAgDmMkc6EF3JZHis1ZO/YhQjWFvcLAH0Bacv4BVwYvUH
+        f1QiEDayz2egp04/TBiji8yfWg==
+X-Google-Smtp-Source: AGRyM1tIpViIJ0OwvugoNaYPS81DxsMmaeO15jp/Gqk615TT7T4/NIE2uXviTLDn9T52SnoA3upg+w==
+X-Received: by 2002:a17:90b:1b48:b0:1e8:5885:f8b with SMTP id nv8-20020a17090b1b4800b001e858850f8bmr11152803pjb.122.1655479699649;
+        Fri, 17 Jun 2022 08:28:19 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id x6-20020a1709029a4600b0015e8d4eb1d1sm3742777plv.27.2022.06.17.08.28.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 08:28:18 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 15:28:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v6 13/22] KVM: x86/mmu: Allow NULL @vcpu in
+ kvm_mmu_find_shadow_page()
+Message-ID: <YqydjxjnuaYTIYMt@google.com>
+References: <20220516232138.1783324-1-dmatlack@google.com>
+ <20220516232138.1783324-14-dmatlack@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516232138.1783324-14-dmatlack@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Peter,
+On Mon, May 16, 2022, David Matlack wrote:
+> Allow @vcpu to be NULL in kvm_mmu_find_shadow_page() (and its only
+> caller __kvm_mmu_get_shadow_page()). @vcpu is only required to sync
+> indirect shadow pages, so it's safe to pass in NULL when looking up
+> direct shadow pages.
+> 
+> This will be used for doing eager page splitting, which allocates direct
 
-On Fri, Jun 17, 2022 at 4:22 PM Peter Xu <peterx@redhat.com> wrote:
-> On Thu, Jun 16, 2022 at 02:05:15PM -0700, Mike Kravetz wrote:
-> > @@ -6877,6 +6896,39 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
-> >       return (pte_t *)pmd;
-> >  }
-> >
-> > +/*
-> > + * Return a mask that can be used to update an address to the last huge
-> > + * page in a page table page mapping size.  Used to skip non-present
-> > + * page table entries when linearly scanning address ranges.  Architectures
-> > + * with unique huge page to page table relationships can define their own
-> > + * version of this routine.
-> > + */
-> > +unsigned long hugetlb_mask_last_page(struct hstate *h)
-> > +{
-> > +     unsigned long hp_size = huge_page_size(h);
-> > +
-> > +     switch (hp_size) {
-> > +     case P4D_SIZE:
-> > +             return PGDIR_SIZE - P4D_SIZE;
-> > +     case PUD_SIZE:
-> > +             return P4D_SIZE - PUD_SIZE;
-> > +     case PMD_SIZE:
-> > +             return PUD_SIZE - PMD_SIZE;
-> > +     default:
->
-> Should we add a WARN_ON_ONCE() if it should never trigger?
+"hugepage" again, because I need constant reminders :-)
 
-And with panic_on_warn, it'll panic only once ;-)
+> shadow pages from the context of a VM ioctl without access to a vCPU
+> pointer.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
 
-Gr{oetje,eeting}s,
+With nits addressed,
 
-                        Geert
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>  arch/x86/kvm/mmu/mmu.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 4fbc2da47428..acb54d6e0ea5 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1850,6 +1850,7 @@ static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  
+>  	if (ret < 0)
+>  		kvm_mmu_prepare_zap_page(vcpu->kvm, sp, invalid_list);
+> +
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Unrelated whitespace change leftover from the previous approach.
+
+>  	return ret;
+>  }
+>  
+> @@ -2001,6 +2002,7 @@ static void clear_sp_write_flooding_count(u64 *spte)
+>  	__clear_sp_write_flooding_count(sptep_to_sp(spte));
+>  }
+>  
+> +/* Note, @vcpu may be NULL if @role.direct is true. */
+>  static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
+>  						     struct kvm_vcpu *vcpu,
+>  						     gfn_t gfn,
+> @@ -2039,6 +2041,16 @@ static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
+>  			goto out;
+>  
+>  		if (sp->unsync) {
+> +			/*
+> +			 * A vCPU pointer should always be provided when finding
+
+s/should/must, and "be provided" in unnecessarily ambiguous, simply state that
+"@vcpu must be non-NULL".  E.g. if a caller provides a pointer, but that pointer
+happens to be NULL.
+
+> +			 * indirect shadow pages, as that shadow page may
+> +			 * already exist and need to be synced using the vCPU
+> +			 * pointer. Direct shadow pages are never unsync and
+> +			 * thus do not require a vCPU pointer.
+> +			 */
+
+"vCPU pointer" over and over is a bit versbose, and I prefer to refer to vCPUs/VMs
+as objects themselves.  E.g. "XYZ requires a vCPU" versus "XYZ requires a vCPU
+pointer" since it's not the pointer itself that's required, it's all the context
+of the vCPU that is needed.
+
+			/*
+			 * @vcpu must be non-NULL when finding indirect shadow
+			 * pages, as such pages may already exist and need to
+			 * be synced, which requires a vCPU.  Direct pages are
+			 * never unsync and thus do not require a vCPU.
+			 */
+
+> +			if (KVM_BUG_ON(!vcpu, kvm))
+> +				break;
+> +
+>  			/*
+>  			 * The page is good, but is stale.  kvm_sync_page does
+>  			 * get the latest guest state, but (unlike mmu_unsync_children)
+> @@ -2116,6 +2128,7 @@ static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm *kvm,
+>  	return sp;
+>  }
+>  
+> +/* Note, @vcpu may be NULL if @role.direct is true. */
+>  static struct kvm_mmu_page *__kvm_mmu_get_shadow_page(struct kvm *kvm,
+>  						      struct kvm_vcpu *vcpu,
+>  						      struct shadow_page_caches *caches,
+> -- 
+> 2.36.0.550.gb090851708-goog
+> 
