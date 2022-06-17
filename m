@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AD054FC54
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 19:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F0054FCFC
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jun 2022 20:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382728AbiFQRl7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jun 2022 13:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S230253AbiFQSfF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jun 2022 14:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiFQRl6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 13:41:58 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866663F8B6
-        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 10:41:57 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id k7so4456626plg.7
-        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 10:41:57 -0700 (PDT)
+        with ESMTP id S229794AbiFQSfE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jun 2022 14:35:04 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD00230F6B
+        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 11:35:03 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 193so1890369pgc.2
+        for <linux-mips@vger.kernel.org>; Fri, 17 Jun 2022 11:35:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=/I2MpXcjw3AyYEvY6nT3sj6eeTPFPpb8SnX52+vnNhI=;
-        b=SrVIGN592I55tVcbNN6o+NeIvQUZsEvz/Cd/zBTooQP5MUHDNsHnEIe/HEIvL02MeS
-         +Vyb3GJ6hErVeRvGS4HKJZ8esknwX53f3/JYrKgK6qbHVwKjP6g5DTzaSfNSoSuWQSUE
-         0OpWVK9BS9qSSbcucEV6DeKwOo8YJIoV+RGeD2gyNROhhDqiT5D4ALRgYjWzdtBz4f1z
-         KKgXsB4qjmX8Ii5d4QgiGZj9HhJ2UScgx+TKViXz+8p4mWC2jvzXsTcDbiDYFKdUxp2Y
-         T0ok5qmZxXkaKD6iNmhtGJtvy5CJM+LV5fEouuWd7p08FI5WsuMwnP7LbyGa5BVLe0Zk
-         V/1A==
+        bh=wn5PJvZjayRGTgY0EL7zo+ZpkVBIhnd1vf/XBJfv398=;
+        b=XUjHAkComAsH676GvMGE8tfx7jPYVHXd49eunVKrZupRS34+He9Ne0Gtm/unj7Uqyl
+         ykdip2LZH2YlJjdHgomgqFc1Zio2za04RCEQEox9FQRzHqZ9we1ib3s5M1DhJyFZa9MB
+         nnl5RiYodqPM9NTNq+MB76c62ZV49AUKSUk5uIlwYA7OxXm0KgOM2nJwnHg5npdpCC8F
+         H8M1+Ofb3zHl5174PCWBppRvNiI2V22LzZfKWhFLP7bQKF4az2k7MvbZx4421pwNr9Xr
+         v6vIoBdyVQZiyzfWn+jGiAPVJ7cHZf608mZ+JbqR3zUZHJ5W6IPaR1ljg1lxpVqRMVHS
+         JzRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=/I2MpXcjw3AyYEvY6nT3sj6eeTPFPpb8SnX52+vnNhI=;
-        b=kr4q4rzW/RckH4GM/IkSSFIS5OiDjWkh09gO2owguppFHct5sEr7h8VDAlCY3K9L5W
-         l9/ihUbEti7hKs0vPANYH1vKhJgUhCG26rfVFsShuwv4jFffAhlcn2yZ2tJpkql9bPG0
-         Khssfg1Fk5e/11sXWqiKOuA4QVTkvB/qea6IUAbT+jPRXiXOwd4pqWHnFOXG5GKgDxCL
-         rWb2zKB2kM8UehPXa8kxwQqbCUQBWqB6bIBVLrcMGtnbD/Zw87pNKjuo0EGLPMxvP1nG
-         xfMT0k9ew7HOcc71/FCkyKwB6pwEmNzTyoSwUiOuBBV8JtHvLFmyHYmTsTn1X6zHmrHU
-         EYZQ==
-X-Gm-Message-State: AJIora9u7PDzr3VoY+63S5u1b5y6hHzcJ+WGkSYSYq3XiYX6IVkTSphh
-        al4m7eT+ygTlUOiYYjLKefC7mw==
-X-Google-Smtp-Source: AGRyM1t9uTrYoSS1GO4s/tyedBnGd6ejt1GvCWW+u/gAjLzqhH4WzpxK/5q7wKeu3TQmWYILwdJAhA==
-X-Received: by 2002:a17:903:1105:b0:168:9cac:a0a5 with SMTP id n5-20020a170903110500b001689caca0a5mr10965048plh.59.1655487716808;
-        Fri, 17 Jun 2022 10:41:56 -0700 (PDT)
+        bh=wn5PJvZjayRGTgY0EL7zo+ZpkVBIhnd1vf/XBJfv398=;
+        b=AoPk6vMEg15YQCuHrUpdxXASrf60UKsunY4MF846V+uzPG4DIwkilBm/ZUOXqr7AQG
+         ktKLo87BB7voOk5170Xtyk7mUKUDoysLgiYCYxCPgMWhlFFAo9SV17P1WM/hYqMBRvxm
+         AtUun6du3GMhhMFjlMI8y9k0B20hVElcbnhzWRs1k5l00hPHdCd1FcRy9IVoI8U7qB4c
+         rwua1g5e8BriEKahq7OzqaHPrkm9CVnLIkLSf7Cy20tCvcyBaK2bO20H+epl6rCwDAw4
+         mFWMKoSr8Nwi+ARzH9jaevU0NkU/yx3bP15IH0eGjdShPR0YPryMHgxuM3+3Z7u2tvb9
+         YZ4w==
+X-Gm-Message-State: AJIora9m3RZ3RzcS3dt3XuiAO3ZA/QQt95JgU7IItpl6oJjUC1nrFTkl
+        PJzpQtqye7nAMW6IHR4VE+SPxQ==
+X-Google-Smtp-Source: AGRyM1spMY0SV+af/bWX4jYu0RNeMMMehRL+RlWnsxhf3BAN02q9XVjNqdlG9AaqqAiCUkeYx2Fagw==
+X-Received: by 2002:a05:6a00:218c:b0:51c:c64:3f6a with SMTP id h12-20020a056a00218c00b0051c0c643f6amr11135128pfi.50.1655490903050;
+        Fri, 17 Jun 2022 11:35:03 -0700 (PDT)
 Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id jj21-20020a170903049500b001616e19537esm3817546plb.213.2022.06.17.10.41.56
+        by smtp.gmail.com with ESMTPSA id g8-20020a62f948000000b0051b8e7765edsm4014810pfm.67.2022.06.17.11.35.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 10:41:56 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 17:41:52 +0000
+        Fri, 17 Jun 2022 11:35:02 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 18:34:59 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
@@ -71,88 +71,61 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Lai Jiangshan <jiangshanlai@gmail.com>
 Subject: Re: [PATCH v6 21/22] KVM: Allow for different capacities in
  kvm_mmu_memory_cache structs
-Message-ID: <Yqy84GkGAdE1BzI6@google.com>
+Message-ID: <YqzJUxrW67vACltI@google.com>
 References: <20220516232138.1783324-1-dmatlack@google.com>
  <20220516232138.1783324-22-dmatlack@google.com>
+ <Yqy84GkGAdE1BzI6@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516232138.1783324-22-dmatlack@google.com>
+In-Reply-To: <Yqy84GkGAdE1BzI6@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 16, 2022, David Matlack wrote:
-> -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-> +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+On Fri, Jun 17, 2022, Sean Christopherson wrote:
+> On Mon, May 16, 2022, David Matlack wrote:
+> > -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> > +static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> 
+> I still find it somewhat kludgy to have callers provide an capacity.  It's not
+> terrible while there's only a single call site, but if a use case comes along
+> for using an oversized cache with multiple call sites, it'll be gross.
+> 
+> Tweaking my idea of a "custom" wrapper, what about adding an "oversized" wrapper?
+> That yields clear, firm rules on when to use each helper, guards against calling
+> the "standard" flavor with an impossible @min, and addresses Mingwei's concern
+> that a misguided user could specify a nonsensically small capacity.
 
-I still find it somewhat kludgy to have callers provide an capacity.  It's not
-terrible while there's only a single call site, but if a use case comes along
-for using an oversized cache with multiple call sites, it'll be gross.
+Drat, arguing against my own idea.
 
-Tweaking my idea of a "custom" wrapper, what about adding an "oversized" wrapper?
-That yields clear, firm rules on when to use each helper, guards against calling
-the "standard" flavor with an impossible @min, and addresses Mingwei's concern
-that a misguided user could specify a nonsensically small capacity.
+The future usage in nested_mmu_try_split_huge_page() is going to be inefficient.
+By having capacity==min, consuming just one entry, which is guaranteed when a
+huge page split is successful, will mean the cache needs to be topped up.  In other
+words, I'm pretty sure need_topup_split_caches_or_resched() will always return
+true between different huge pages and so KVM will drop mmu_lock and reschedule
+after every huge page.  Maybe that's not a big deal, but at the very least it's
+odd, and its a nasty gotcha with forcing capacity==min.
 
-The only quirk is that kvm_mmu_topup_memory_cache_oversized() has a fixed min,
-but IMO that's an acceptable tradeoff, and it's a non-issue until another user
-pops up.
+So I'm ok with this patch, though it should yell if min > capacity.
 
-static int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc,
-					int capacity, int min)
-{
-	gfp_t gfp = GFP_KERNEL_ACCOUNT;
-	void *obj;
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 932abb4fb67e..14e807501229 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -388,7 +388,7 @@ int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity,
+                return 0;
 
-	if (mc->nobjs >= min)
-		return 0;
+        if (unlikely(!mc->objects)) {
+-               if (WARN_ON_ONCE(!capacity))
++               if (WARN_ON_ONCE(!capacity || min > capacity))
+                        return -EIO;
 
-	if (unlikely(!mc->objects)) {
-		capacity = max(min, KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE);
-
-		mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-		if (!mc->objects)
-			return -ENOMEM;
-
-		mc->capacity = capacity;
-	}
-
-	/* It is illegal to request a different capacity across topups. */
-	if (WARN_ON_ONCE(mc->capacity != capacity))
-		return -EIO;
-
-	while (mc->nobjs < mc->capacity) {
-		obj = mmu_memory_cache_alloc_obj(mc, gfp);
-		if (!obj)
-			return mc->nobjs >= min ? 0 : -ENOMEM;
-		mc->objects[mc->nobjs++] = obj;
-	}
-	return 0;
-}
-
-int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-{
-	const int capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
-
-	if (WARN_ON_ONCE(min > capacity))
-		min = capacity;
-
-	return __kvm_mmu_topup_memory_cache(mc, capacity, min);
-}
-
-/* Oversized caches have a fixed size, i.e. min == capacity == size. */
-int kvm_mmu_topup_memory_cache_oversized(struct kvm_mmu_memory_cache *mc, int size)
-{
-	if (WARN_ON_ONCE(size < KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE)
-		size = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
-
-	return __kvm_mmu_topup_memory_cache(mc, size, size);
-}
+                mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
