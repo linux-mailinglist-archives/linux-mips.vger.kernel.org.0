@@ -2,47 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8A355055D
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Jun 2022 16:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DEC550651
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Jun 2022 19:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234185AbiFROCG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 18 Jun 2022 10:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S231939AbiFRRVn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 18 Jun 2022 13:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244203AbiFRN5U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Jun 2022 09:57:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDCDE6B;
-        Sat, 18 Jun 2022 06:57:19 -0700 (PDT)
+        with ESMTP id S231142AbiFRRVm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Jun 2022 13:21:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AA0140CF;
+        Sat, 18 Jun 2022 10:21:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19F3B60BB1;
-        Sat, 18 Jun 2022 13:57:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1EE2C3411A;
-        Sat, 18 Jun 2022 13:57:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17596B80A72;
+        Sat, 18 Jun 2022 17:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41652C3411A;
+        Sat, 18 Jun 2022 17:21:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655560638;
-        bh=lRorEWc2KTi7z7ymOlOmHg76zQDyaFrAFstUtz9SnBg=;
+        s=k20201202; t=1655572894;
+        bh=s9rzUJH1dCU78egHZ+iIG03v6Lj+ion9PzSseqxJCFI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AHFj/HFoFUUH94y50WWJJ41Nc0+xVyu0BnPz6ynMPeCuA7tW1khpFHcZOcygfpS66
-         1PJdLDzuD9XLdoajYWLREwRAil3c82vDUZ1NpmJkmEvfQh8et0/u/ebN3adQ5YS49E
-         8rFcodb3jxfyoQyunzWPPKvsaeSLocaZU+cQic/JV8F9tZOPKEeTIt8kcRe5ZukkUq
-         tC8mkXxl1GHz/gJLiyIVLfWHvitlR6Yvz5/CJvrG8iSMlMnfArAYkQhVYGdY+V8m14
-         j2OCBtwYS9BuyltkfUIfF1QkJE3GHgLcO5pM1rV3UdWaNJotY41oTuDuq5mtMGUnRq
-         zduVJofRh6Ktw==
-Date:   Sat, 18 Jun 2022 15:06:24 +0100
+        b=mLbJ4PLP002IFIyUS/mFXkt7VRPo37gj1dl2UgXLay+Jd+5DxzlSRZxjCKSQfzLtm
+         w4ERJv/y4Vtvf+zMWg/hqpOjfO75ncGomxEsmRBeblvqyljZF/cJ0Ghsf1i8AkvVYy
+         CTfCUKo5VD9g1SiBv2jluSBhogu0x0nNfUVOBKIfVg9HtAQUAAfDJ/p33a5g0kx2kd
+         QlWaytpoO91OuQliAYmBYJC3yq5N6Q8XpHivXx5gTE7c7v/ixy3a9u9FLFcZpTIv8D
+         BUJ5TsJBVILC9zkvhKEqh4bM/awT4sH6gM4Y9KEH1IVSYXTDyOvr87C/r8rkSapHHo
+         AwM2FiuCayWcQ==
+Date:   Sat, 18 Jun 2022 18:30:40 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>
-Cc:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, linux-imx@nxp.com,
-        linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
+To:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>
+Cc:     <linux-imx@nxp.com>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <chrome-platform@lists.linux.dev>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        openbmc@lists.ozlabs.org, Cai Huoqing <cai.huoqing@linux.dev>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, Cai Huoqing <cai.huoqing@linux.dev>,
         Benjamin Fair <benjaminfair@google.com>,
         Jishnu Prakash <quic_jprakash@quicinc.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -83,14 +83,12 @@ Cc:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, linux-imx@nxp.com,
         Olivier Moysan <olivier.moysan@foss.st.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH 22/34] iio: inkern: only return error codes in
- iio_channel_get_*() APIs
-Message-ID: <20220618150624.1bfc8914@jic23-huawei>
-In-Reply-To: <35e7c36c9ecbdc67698b413cf867cf19442ccfa9.camel@gmail.com>
+Subject: Re: [PATCH 20/34] iio: inkern: only relase the device node when
+ done with it
+Message-ID: <20220618183040.29ed935d@jic23-huawei>
+In-Reply-To: <20220610084545.547700-21-nuno.sa@analog.com>
 References: <20220610084545.547700-1-nuno.sa@analog.com>
-        <20220610084545.547700-23-nuno.sa@analog.com>
-        <20220611161701.46a68837@jic23-huawei>
-        <35e7c36c9ecbdc67698b413cf867cf19442ccfa9.camel@gmail.com>
+        <20220610084545.547700-21-nuno.sa@analog.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -105,109 +103,50 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 13 Jun 2022 09:06:49 +0200
-Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
+On Fri, 10 Jun 2022 10:45:31 +0200
+Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
 
-> On Sat, 2022-06-11 at 16:17 +0100, Jonathan Cameron wrote:
-> > On Fri, 10 Jun 2022 10:45:33 +0200
-> > Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
-> >  =20
-> > > APIs like of_iio_channel_get_by_name() and of_iio_channel_get_all()
-> > > were
-> > > returning a mix of NULL and error pointers being NULL the way to =20
-> >=20
-> > pointers with NULL being the way to...
-> >  =20
-> > > "notify" that we should do a "system" lookup for channels. This
-> > > make
-> > > it very confusing and prone to errors as commit dbbccf7c20bf
-> > > ("iio: inkern: fix return value in
-> > > devm_of_iio_channel_get_by_name()")
-> > > proves. On top of this, patterns like 'if (channel !=3D NULL) return
-> > > channel'
-> > > were being used where channel could actually be an error code which
-> > > makes the code hard to read.
-> > >=20
-> > > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > > ---
-> > > =C2=A0drivers/iio/inkern.c | 24 +++++++++++-------------
-> > > =C2=A01 file changed, 11 insertions(+), 13 deletions(-)
-> > >=20
-> > > diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-> > > index 87fd2a0d44f2..31d9c122199a 100644
-> > > --- a/drivers/iio/inkern.c
-> > > +++ b/drivers/iio/inkern.c
-> > > @@ -214,7 +214,7 @@ static struct iio_channel
-> > > *of_iio_channel_get(struct device_node *np, int index)
-> > > =C2=A0struct iio_channel *of_iio_channel_get_by_name(struct device_no=
-de
-> > > *np,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const char *name)
-> > > =C2=A0{
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct iio_channel *chan =
-=3D NULL;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct iio_channel *chan;
-> > > =C2=A0
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Walk up the tree o=
-f devices looking for a matching iio
-> > > channel */
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0while (np) {
-> > > @@ -231,11 +231,11 @@ struct iio_channel
-> > > *of_iio_channel_get_by_name(struct device_node *np,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 name);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0chan =3D of_iio_channel_get(np, index);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!IS_ERR(chan) || PTR_ERR(chan) =3D=3D -
-> > > EPROBE_DEFER)
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bre=
-ak; =20
-> >=20
-> > This original behaviour is 'interesting'. If we get a error like -
-> > ENOMEM
-> > we should return it rather than carry on.=C2=A0 Do we have enough
-> > knowledge
-> > of possible errors here to be more explicit on when we keep looking
-> > up
-> > the tree?=C2=A0 I think we can get -ENOENT from
-> > of_parse_phandle_with_args()
-> >=20
-> > That raises an interesting question on whether -ENODEV is the right
-> > response
-> > for the previously NULL case or is -ENOENT more consistent with other
-> > of_ functions?=C2=A0 No device could be thought of as being the case th=
-at
-> > needs
-> > to defer (in hope it turns up later) whereas no entry means it will
-> > never
-> > succeed. =20
+Typo in patch title (just noticed whilst scrolling past)
+
+release
+
+
+> 'of_node_put()' can potentially release the memory pointed to by
+> 'iiospec.np' which would leave us with an invalid pointer (and we would
+> still pass it in 'of_xlate()'). As such, we can only release the node
+> after we are done with it.
 >=20
-> From what I could see, of_parse_phandle_with_args() either returns=C2=A0
-> -EINVAL or -ENOENT. We also have the internal of_iio_channel_get()
-> which can return -ENOMEM. So I guess we should only continue looking if
-> we get -ENOENT?
+> Fixes: 17d82b47a215d ("iio: Add OF support")
+> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+> ---
+>  drivers/iio/inkern.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >=20
-> To be clear, do you still prefer to explicitly return -ENODEV in the
-> previous NULL cases or should we honor the return code from=20
-> of_parse_phandle_with_args() and just return chans (and thus ENOENT)?
-You've looked at this more than me, so whilst I think -ENOENT is probably
-slightly more consistent I'll go with whatever you conclude is the
-best option.  Maybe add a small amount of description on what you chose
-and why to the relevant patch descriptions.
-
-Thanks,
-
-Jonathan
-
-
->=20
-> - Nuno S=C3=A1
+> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+> index df74765d33dc..9d87057794fc 100644
+> --- a/drivers/iio/inkern.c
+> +++ b/drivers/iio/inkern.c
+> @@ -165,9 +165,10 @@ static int __of_iio_channel_get(struct iio_channel *=
+channel,
+> =20
+>  	idev =3D bus_find_device(&iio_bus_type, NULL, iiospec.np,
+>  			       iio_dev_node_match);
+> -	of_node_put(iiospec.np);
+> -	if (idev =3D=3D NULL)
+> +	if (idev =3D=3D NULL) {
+> +		of_node_put(iiospec.np);
+>  		return -EPROBE_DEFER;
+> +	}
+> =20
+>  	indio_dev =3D dev_to_iio_dev(idev);
+>  	channel->indio_dev =3D indio_dev;
+> @@ -175,6 +176,7 @@ static int __of_iio_channel_get(struct iio_channel *c=
+hannel,
+>  		index =3D indio_dev->info->of_xlate(indio_dev, &iiospec);
+>  	else
+>  		index =3D __of_iio_simple_xlate(indio_dev, &iiospec);
+> +	of_node_put(iiospec.np);
+>  	if (index < 0)
+>  		goto err_put;
+>  	channel->channel =3D &indio_dev->channels[index];
 
