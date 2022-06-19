@@ -2,82 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D9B5506B1
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Jun 2022 22:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56075508B0
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Jun 2022 06:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiFRUkv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 18 Jun 2022 16:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        id S231315AbiFSEyt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Jun 2022 00:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFRUku (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Jun 2022 16:40:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE4B11C02
-        for <linux-mips@vger.kernel.org>; Sat, 18 Jun 2022 13:40:49 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2fFN-0000Fm-R7; Sat, 18 Jun 2022 22:40:45 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2fFI-001Jog-Pj; Sat, 18 Jun 2022 22:40:42 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2fFJ-00HEzM-Cx; Sat, 18 Jun 2022 22:40:41 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Finn Thain <fthain@linux-m68k.org>
-Cc:     linux-mips@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] mips: sgi-ip22: Drop redundant check from .remove()
-Date:   Sat, 18 Jun 2022 22:40:37 +0200
-Message-Id: <20220618204037.35947-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S229639AbiFSEys (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Jun 2022 00:54:48 -0400
+Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DDB2F5B4;
+        Sat, 18 Jun 2022 21:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Z9bpe
+        gj2PLCMxSrP9Wmvpb4Z13yyZp3UPvP7FlEHtbg=; b=RyXw7Aldjg2gSNAakGJjp
+        kebNmGK0xU7ZM8CVex3uriI0AYPZUPg1BLfLMwVQE4C59UTsqDw5Mk81++cT8kax
+        LaSACtSflhG9OOBZgA0jf5uARmWO9uibmLbUU3F4mp7g/OiLNjDryNgxrPbRG/oR
+        AbmxH8lKZoCEqjRYQHAAQs=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp7 (Coremail) with SMTP id DsmowAAna_oFrK5ik2fCDg--.45446S2;
+        Sun, 19 Jun 2022 12:54:31 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     tsbogend@alpha.franken.de, yangtiezhu@loongson.cn
+Cc:     windhl@126.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mips/pic32/pic32mzda: Fix refcount leak bugs
+Date:   Sun, 19 Jun 2022 12:54:27 +0800
+Message-Id: <20220619045427.4064946-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=840; h=from:subject; bh=ObDzHuVgiGP/q5DVUd3A0i/gRJh3vi+u64EHOQwpdaI=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBirjhBgQ02UvjrfOQ8zQix1ziLsYoD54wvhu8Ib0T/ BQkR7xeJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYq44QQAKCRDB/BR4rcrsCXtZB/ 4miy+EP9rT0pH5XcKAhuRzQuwUBnv7qqJsFrISAOCThcoCyR8SGY+/QO3shUsYcHSb47eq0PEeOIZB dcw3yJHPlqLZ0bRa2/9PcE6BhVBHO0+/zQAbeotKa+iwnmQ+KyLFjzV/5DZ8HFAJV+qp20nh8udsBN /XNJdJpn+IuWHOzXK6sIbF/mcqgsXUPMD2mZrpy2AQ+lLoUa9ZhLOFJv3t05tjSwom1YrhmBiHjScr kp8wtAMV/SgYtTC2uBzz7hSPr9+nl1Ak4t5o3Sh/JGK6MeGOf9Pvlab6jNEoaaLqORcJ0td43fhoKg SSKx0PWTVSjz2UiVFFzEK9jRJjY5PD
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: DsmowAAna_oFrK5ik2fCDg--.45446S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WrWUKF4DZFy7Zr4UtFW5Wrg_yoW8WFyDp3
+        y5CFyfJFy8ur17tF9ayFyDXrs0qFykXrWUZay0kFy3A3WDXFn5Zr4xtrn8J3WDAFWfW3Wr
+        Xr4FvFW5WF4vya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi4CJdUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizgclF18RPUvQFQAAsG
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The remove callback is only called by the driver core if there is a
-driver to unbind, so there is no need to check dev->driver to be
-non-NULL.
+of_find_matching_node(), of_find_compatible_node() and
+of_find_node_by_path() will return node pointers with refcout
+incremented. We should call of_node_put() when they are not
+used anymore.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Liang He <windhl@126.com>
 ---
- arch/mips/sgi-ip22/ip22-gio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/sgi-ip22/ip22-gio.c b/arch/mips/sgi-ip22/ip22-gio.c
-index 38d12f417e48..8686e8c1c4e5 100644
---- a/arch/mips/sgi-ip22/ip22-gio.c
-+++ b/arch/mips/sgi-ip22/ip22-gio.c
-@@ -148,7 +148,7 @@ static void gio_device_remove(struct device *dev)
- 	struct gio_device *gio_dev = to_gio_device(dev);
- 	struct gio_driver *drv = to_gio_driver(dev->driver);
+ changelog: 
  
--	if (dev->driver && drv->remove)
-+	if (drv->remove)
- 		drv->remove(gio_dev);
+ v2: (1) merge pic32/pic32mzda bugs into one patch
+     (2) fix leak bug related to of_find_node_by_path.
+ v1: use two patch for intit.c and time.c
+
+ arch/mips/pic32/pic32mzda/init.c | 7 ++++++-
+ arch/mips/pic32/pic32mzda/time.c | 3 +++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/pic32/pic32mzda/init.c b/arch/mips/pic32/pic32mzda/init.c
+index 129915616763..d9c8c4e46aff 100644
+--- a/arch/mips/pic32/pic32mzda/init.c
++++ b/arch/mips/pic32/pic32mzda/init.c
+@@ -98,13 +98,18 @@ static int __init pic32_of_prepare_platform_data(struct of_dev_auxdata *lookup)
+ 		np = of_find_compatible_node(NULL, NULL, lookup->compatible);
+ 		if (np) {
+ 			lookup->name = (char *)np->name;
+-			if (lookup->phys_addr)
++			if (lookup->phys_addr) {
++				of_node_put(np);
+ 				continue;
++			}
+ 			if (!of_address_to_resource(np, 0, &res))
+ 				lookup->phys_addr = res.start;
++			of_node_put(np);
+ 		}
+ 	}
+ 
++	of_node_put(root);
++
+ 	return 0;
  }
  
-
-base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+diff --git a/arch/mips/pic32/pic32mzda/time.c b/arch/mips/pic32/pic32mzda/time.c
+index 7174e9abbb1b..777b515c52c8 100644
+--- a/arch/mips/pic32/pic32mzda/time.c
++++ b/arch/mips/pic32/pic32mzda/time.c
+@@ -32,6 +32,9 @@ static unsigned int pic32_xlate_core_timer_irq(void)
+ 		goto default_map;
+ 
+ 	irq = irq_of_parse_and_map(node, 0);
++
++	of_node_put(node);
++
+ 	if (!irq)
+ 		goto default_map;
+ 
 -- 
-2.36.1
+2.25.1
 
