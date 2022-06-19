@@ -2,44 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56075508B0
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Jun 2022 06:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B078D550C59
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Jun 2022 19:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiFSEyt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Jun 2022 00:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
+        id S237087AbiFSRni (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Jun 2022 13:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiFSEys (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Jun 2022 00:54:48 -0400
-Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DDB2F5B4;
-        Sat, 18 Jun 2022 21:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Z9bpe
-        gj2PLCMxSrP9Wmvpb4Z13yyZp3UPvP7FlEHtbg=; b=RyXw7Aldjg2gSNAakGJjp
-        kebNmGK0xU7ZM8CVex3uriI0AYPZUPg1BLfLMwVQE4C59UTsqDw5Mk81++cT8kax
-        LaSACtSflhG9OOBZgA0jf5uARmWO9uibmLbUU3F4mp7g/OiLNjDryNgxrPbRG/oR
-        AbmxH8lKZoCEqjRYQHAAQs=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp7 (Coremail) with SMTP id DsmowAAna_oFrK5ik2fCDg--.45446S2;
-        Sun, 19 Jun 2022 12:54:31 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     tsbogend@alpha.franken.de, yangtiezhu@loongson.cn
-Cc:     windhl@126.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mips/pic32/pic32mzda: Fix refcount leak bugs
-Date:   Sun, 19 Jun 2022 12:54:27 +0800
-Message-Id: <20220619045427.4064946-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S237170AbiFSRna (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Jun 2022 13:43:30 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D9AA47D;
+        Sun, 19 Jun 2022 10:43:29 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id w17so11740611wrg.7;
+        Sun, 19 Jun 2022 10:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x1GJBDNs5yTZIr20ZTfGmqGw+VA/IHMmm9RzUdjuSNI=;
+        b=PG5S7vpop0zKsTwPwuiVBzt8o6QGR0G3K1zaG1+m9V6EpGo2DnAXpwGEL7/9aePkRY
+         ykcPv/vVovpHppy0K+P+x7pbEQ7O6gIxvyGHXQB/kV+x3dUL4Ab5IzPwP3nEyeoqchIh
+         z96qtY5Qftnlu9ldYsuPpbBcDA/h6SRJ5b405iMtl+O3fRNFvd+NSdZCymukQeYuQTu5
+         P0fXS12b+b4m4vK+rKBYb9v7RY/ghVHmOyhm2ehRKGEswqdNLn9MbrJyTmW87JovsW4E
+         f4F/F5wXTLaN0XgCwKuoOjiu6NWll/q6LMQsALCXwt8k6BAQRUwxv1rW2Tgq078JZoCl
+         soUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x1GJBDNs5yTZIr20ZTfGmqGw+VA/IHMmm9RzUdjuSNI=;
+        b=wxQ5WaZNOtJAvI1WcJ2oX1m2A3w28i8Fe2THgw8lUbq6DrqbuxIrvASLPHs9vXfBDh
+         AdcMv+McMoubTBT3L/MH3d+F/IVTVBjqSScsflfaN6fTPYG8WU1hjY8d+wNKish6UlyG
+         6GjGh95cv95SEID2sDm2DFoDeMsuRv3CWeTM33mMWbDrWDkseOj6IW3o9QyRINDubtLY
+         fjoygFYDNdKdPnn5IFv4wQCqWT4bNEPw+gZ47Ra1sytmHAC/edz0ulOBbu5nPAYRPU5g
+         iU4aql5ttTrvG25vMpO/oroRi9r0eLCkqujU+6yqGIB/PqNTfaLnNHjoSaroxvEu7c3F
+         FegQ==
+X-Gm-Message-State: AJIora/MH205p9L02tzUgiSoq5haXo1ea83FwQlYL57NdxKL+5JfVcI0
+        ydlKBLkyNjtKevXDWSHBRJSD5yPq+lE=
+X-Google-Smtp-Source: AGRyM1vucVEffRRfE76cbwwLXOQ0fR1dQ9uVprKeoEuImGpyxHBGqnRFG4RTx0Fw5jxnWiE5J5rDvw==
+X-Received: by 2002:adf:e988:0:b0:21b:8c9d:6ba3 with SMTP id h8-20020adfe988000000b0021b8c9d6ba3mr3124199wrm.10.1655660607563;
+        Sun, 19 Jun 2022 10:43:27 -0700 (PDT)
+Received: from localhost (226.100-195-80.static.virginmediabusiness.co.uk. [80.195.100.226])
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c1c1300b0039c5645c60fsm24347607wms.3.2022.06.19.10.43.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 10:43:27 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: PCI: Remove leading space in info message
+Date:   Sun, 19 Jun 2022 18:43:26 +0100
+Message-Id: <20220619174326.28743-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsmowAAna_oFrK5ik2fCDg--.45446S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WrWUKF4DZFy7Zr4UtFW5Wrg_yoW8WFyDp3
-        y5CFyfJFy8ur17tF9ayFyDXrs0qFykXrWUZay0kFy3A3WDXFn5Zr4xtrn8J3WDAFWfW3Wr
-        Xr4FvFW5WF4vya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi4CJdUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizgclF18RPUvQFQAAsG
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,61 +68,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-of_find_matching_node(), of_find_compatible_node() and
-of_find_node_by_path() will return node pointers with refcout
-incremented. We should call of_node_put() when they are not
-used anymore.
+There is an info message with an extraneous leading space. Remove it.
 
-Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- changelog: 
- 
- v2: (1) merge pic32/pic32mzda bugs into one patch
-     (2) fix leak bug related to of_find_node_by_path.
- v1: use two patch for intit.c and time.c
+ arch/mips/pci/fixup-lemote2f.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- arch/mips/pic32/pic32mzda/init.c | 7 ++++++-
- arch/mips/pic32/pic32mzda/time.c | 3 +++
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/pic32/pic32mzda/init.c b/arch/mips/pic32/pic32mzda/init.c
-index 129915616763..d9c8c4e46aff 100644
---- a/arch/mips/pic32/pic32mzda/init.c
-+++ b/arch/mips/pic32/pic32mzda/init.c
-@@ -98,13 +98,18 @@ static int __init pic32_of_prepare_platform_data(struct of_dev_auxdata *lookup)
- 		np = of_find_compatible_node(NULL, NULL, lookup->compatible);
- 		if (np) {
- 			lookup->name = (char *)np->name;
--			if (lookup->phys_addr)
-+			if (lookup->phys_addr) {
-+				of_node_put(np);
- 				continue;
-+			}
- 			if (!of_address_to_resource(np, 0, &res))
- 				lookup->phys_addr = res.start;
-+			of_node_put(np);
+diff --git a/arch/mips/pci/fixup-lemote2f.c b/arch/mips/pci/fixup-lemote2f.c
+index 632ff2daa338..790d674cd80a 100644
+--- a/arch/mips/pci/fixup-lemote2f.c
++++ b/arch/mips/pci/fixup-lemote2f.c
+@@ -80,7 +80,7 @@ int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
  		}
+ 		return dev->irq;
+ 	} else {
+-		printk(KERN_INFO " strange pci slot number.\n");
++		printk(KERN_INFO "strange pci slot number.\n");
+ 		return 0;
  	}
- 
-+	of_node_put(root);
-+
- 	return 0;
  }
- 
-diff --git a/arch/mips/pic32/pic32mzda/time.c b/arch/mips/pic32/pic32mzda/time.c
-index 7174e9abbb1b..777b515c52c8 100644
---- a/arch/mips/pic32/pic32mzda/time.c
-+++ b/arch/mips/pic32/pic32mzda/time.c
-@@ -32,6 +32,9 @@ static unsigned int pic32_xlate_core_timer_irq(void)
- 		goto default_map;
- 
- 	irq = irq_of_parse_and_map(node, 0);
-+
-+	of_node_put(node);
-+
- 	if (!irq)
- 		goto default_map;
- 
 -- 
-2.25.1
+2.35.3
 
