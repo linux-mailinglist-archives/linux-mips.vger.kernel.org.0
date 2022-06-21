@@ -2,262 +2,198 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2E5553D3E
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jun 2022 23:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407D4553F3A
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jun 2022 01:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355930AbiFUVGq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Jun 2022 17:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S1354511AbiFUX5S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Jun 2022 19:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355937AbiFUVGZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jun 2022 17:06:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1818C30F7D
-        for <linux-mips@vger.kernel.org>; Tue, 21 Jun 2022 13:54:17 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3koX-0003Nu-CG; Tue, 21 Jun 2022 22:49:33 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3koE-001tq7-4E; Tue, 21 Jun 2022 22:49:15 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3koE-000HIi-Od; Tue, 21 Jun 2022 22:49:14 +0200
-Date:   Tue, 21 Jun 2022 22:49:14 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jon Hunter <jonathanh@nvidia.com>, Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-iio@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dri-devel@lists.freedesktop.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-i2c@vger.kernel.org,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-clk@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Michal Simek <michal.simek@xilinx.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Andy Gross <agross@kernel.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-pwm@vger.kernel.org, kernel@pengutronix.de,
-        linux-arm-msm@vger.kernel.org,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Vladimir Zapolskiy <vz@mleia.com>, linux-gpio@vger.kernel.org,
-        =?utf-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>, linux-mips@vger.kernel.org,
-        linux-spi@vger.kernel.org, Cai Huoqing <caihuoqing@baidu.com>,
-        linux-crypto@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        dmaengine@vger.kernel.org
-Subject: Re: [PATCH v8 01/16] clk: generalize devm_clk_get() a bit
-Message-ID: <20220621204914.byokkrxiznvod7vq@pengutronix.de>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
- <20220314141643.22184-2-u.kleine-koenig@pengutronix.de>
- <d6b890c8-bfb5-cfa5-c6d8-ee245701c077@nvidia.com>
+        with ESMTP id S233808AbiFUX5O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jun 2022 19:57:14 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6482F16583;
+        Tue, 21 Jun 2022 16:57:12 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LIvLGb007514;
+        Tue, 21 Jun 2022 23:56:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=JCAUTkU7DIVAPFGJ68CqLPcMG2CgrmMo+eXKPgxjQds=;
+ b=OGgFKvfqewyRdxGbMvTFmN7R46E9M2zor+dSO06ICHUdVrQY8TdERVBHci3Zo/7MrZO2
+ ZBli2H1+Er9jyhExT8EJWofxMz1vU74uAmZhmrgJ1B/oMWIxkyPIDCZ+ITX3O4ZqP43u
+ qJ92gy8zMw00Ej4CTEMP5S06xCZmOSfvAi3w0zgvU0/jAtruAMrDcwYoRnME5ehLEaI0
+ AE7WN+ADDbGkoJxC4M+JgSNOrJB6qgP8737ARCNuiVkEqAF3ThNWltdnVjR115NA8HcB
+ iVKZ51bfGKfhb83JSLTdzlGZBMRuMPAucAMn1yYt+rrgdOMGsY3DanuHsEh6CgUQs0M9 rw== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs5g1y162-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Jun 2022 23:56:32 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25LNoVC4013270;
+        Tue, 21 Jun 2022 23:56:31 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gth8wwugy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Jun 2022 23:56:31 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FQWUjIb25+67jIRslMcUSLGrSr3IuOeenxWmhYrP+9wuEUEYyZEKrbaD+5ZWhwfGdI76PhaPRboYJzAD20nOqHLFPgypWNIBHyT4ho2WEXaXpbnGVhhq2VF4KPMyjbt5tKXoI8Lj8QQXSORe7ykjQZJGxM1sohMOwRqIGNJqpQlwzpdCGr7zc/J0BNhSlr2jeRbm7ql/uBQ1PTeFzdLuVSoj0F+SMhxtivyuCYeUQ2l+BuN2ZvTuzp1MNw/JqniE2SeQcPJpqBEn9V1IQjA/VJg07mLOO6VZ2yvvcvB5XZcDCseAkhhCJhBQewOJ0zPVYhGM6sC9dXnaavZmf1oAhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JCAUTkU7DIVAPFGJ68CqLPcMG2CgrmMo+eXKPgxjQds=;
+ b=iIuP3tV/cGyDKvumoM0lWPkb4X6SCrmUUi6F7DsjEztxh7q89PbN5k8sJoUoCKcIjGUjN5hx22q1D3E9vkJjyLPYC15U7/+S9AezplTs0pSUDYqtkQ5OFXanJHLnxw/a0WgQL748Gij7/e6HixQ/BRZGROulozHDOS4Xw+sE2PnmTicHU1ohMo8lt344LzbOXtb7LDbH9Xy/KBk0338B7IM/wkJSi+tRBudDuvG90RQ1UwltNfwvSLvCH+t0Nr3a5aA0Wn0adUhy857A+9P2w0qevltt0Ai4WuDifSTfiIVa4Ib1lka9dWAJpmG5jm9kIjjbyNTm25wONxqDFFFQFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JCAUTkU7DIVAPFGJ68CqLPcMG2CgrmMo+eXKPgxjQds=;
+ b=XgtIMwFyBpHQZTTw3xvmpwUBATumvgDBpkA8nTYk6uLYBbJoHjuEAmlvn62JUiTWyqkJwF8HbLsuzU9kTsQBBumiRtVpQSH9ikLy2grnlpPuhUyKM6WcyG9H5p4ZzoGPqY9bqQa9Gm8As/r98db8nKd008ePu0Vo8Huxops2S0w=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by MWHPR10MB1501.namprd10.prod.outlook.com (2603:10b6:300:24::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Tue, 21 Jun
+ 2022 23:56:29 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::2125:9bb7:bfeb:81f9]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::2125:9bb7:bfeb:81f9%8]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
+ 23:56:28 +0000
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        catalin.marinas@arm.com, will@kernel.org,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: [PATCH v2 0/4] hugetlb: speed up linear address scanning
+Date:   Tue, 21 Jun 2022 16:56:16 -0700
+Message-Id: <20220621235620.291305-1-mike.kravetz@oracle.com>
+X-Mailer: git-send-email 2.35.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MW4P221CA0009.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:303:8b::14) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uzxszqlixhftbuhf"
-Content-Disposition: inline
-In-Reply-To: <d6b890c8-bfb5-cfa5-c6d8-ee245701c077@nvidia.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9785a83f-1ace-4793-e9ff-08da53e1a894
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1501:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB15016896A29BF1C47EE56D39E2B39@MWHPR10MB1501.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RiU1UfSSQ04hHu/uKT7++qlyZrE/95sX1vsSC8unUDyhTylc832sHKTaXw2n6QTsD9SwY/61UBOwD7YTu8s2JWOxzc/DxbWg9irzIZEghMHRyYjtozD+q76lniohVTLrD55It84AimUhOPvJSgxGmmpaS65VoguFQe4bjOO7eZCjkdCYfPbImaXeY40K+qMdh+j6BsPmQVBnEAxzZXO64JHvHk6h+5DXZF4f29IUZLxjV5vj3cEPymVTCJEJFcc2fxUsOmMxjSpYEsLGG3XbRd1tq3Dj4WD+XTHNaJDmu6zIClS0PCT/gJfa+aMe7ftpjq3IQOi86DgPwi6eCvqlNP9DSkosK932GRdFBmS31x5EMOgBAcFHDA9wHkPYqlzk45uOBfb3aaIBJITCD872Gxz7sQHk7I8Kb3XClqiN/32g5epLldhFh5wnLEBP5Qp/LeDFnUrZ5tw5U8N1Dq2c8lCC0Yo11Te3fsJzpQ1sHpWFN6JqZGtA5cngnW2yi9RMSIlf+WurDl3nR2CtnMoqNGx4ZbP980ys1EFmV5xb/UgTwoV9xgnTNpgfqhhB1rtqZEuP50IgGOWRfVfvoNXxPD0BLHmqbxYwSrqJRCqwuUVXgMCb3a1pdnm3h3gvRHT6zXwktgLx0uTbSNSRgzNVPAtRP8UYCCgmtUhBXF2rIsYKVemfVoybbWVy9ZgD7AcU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(366004)(136003)(39860400002)(396003)(7416002)(38100700002)(478600001)(316002)(6666004)(186003)(5660300002)(8936002)(2616005)(1076003)(107886003)(83380400001)(41300700001)(2906002)(86362001)(8676002)(66556008)(26005)(6512007)(66946007)(36756003)(66476007)(44832011)(6486002)(4326008)(54906003)(921005)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GFwHZ4yRaYMcynGzv/uO+EosR+2JdmrkzPR392ovpEFAJnhMWhDneaRaQphz?=
+ =?us-ascii?Q?Hqs99Opf8R1j+GjOHBncr1ub18/BpnqCj0e8zUKqBHxZsxzlrkotTkZmzkC9?=
+ =?us-ascii?Q?JX/buitJ4QguopUf3S1NcJ4NYRAU5Buj4UOllt5y+uKTTXou7ZAThI5++n0b?=
+ =?us-ascii?Q?iNwYXNaYFYVZydblveWiGzcv+MVQeSLCva3UJiDaIvCbiJJp7IQA34RLSDGp?=
+ =?us-ascii?Q?SNadhn86xTleQZdlwLaPPmNbtCNK7rBA0vQr/O2FzD7ouyhaQ21Au9zXFma4?=
+ =?us-ascii?Q?d3BX2xHaOd97UOsXOpuugNS/XJkabehwC9aSqjj8Sr4exty8fqs7mz8WzFkV?=
+ =?us-ascii?Q?W+/dxrUSdqcEhKZX1/WwdB75bsEEQ5aFH9r3vpsUiF62e56fM6G88vG7fuXC?=
+ =?us-ascii?Q?mt6yAd3m4c9hkWabme/6odLRMCK0RCYo05J+spN7hDlU1I4VK7Per9lkdutS?=
+ =?us-ascii?Q?+0s0sR7qSpWoKyi0khXXHbEWFSb08ABovSzbtXkWkTRaH9ZsVdZDInaxUFM7?=
+ =?us-ascii?Q?iid/JAx849Gg4WGRfJlNFGbZAfesjM2mobl+NEWZdfbWb988TX2dSJV46/y6?=
+ =?us-ascii?Q?vU2mMbcyiMLJvbU7Ox9ZpV/D4LmKL7/undllsm3UjnhN5QN0sA68PLFJs0zJ?=
+ =?us-ascii?Q?YtZ+zz+ZOOEMb2Sp8yVTTLbJEwrMbwna79M65oLd+nG2ka1XrW8IOdAWuuGl?=
+ =?us-ascii?Q?Z0py9z6G3cte14414UJPxEWyRGZEyYGue7mlA1nJ2bNVuyKEp3jMyBjAZicG?=
+ =?us-ascii?Q?8sax2WdGT61r7ICKEj3NdhebvVHI4NgMbVJShK3/gwujVNlnAGuWFdvyip4s?=
+ =?us-ascii?Q?v7RbPps+qvsWP/qp7GLI9ZcuzyZBBsZrLLRHy10c2UOxk9xX5AEyniqjCrzZ?=
+ =?us-ascii?Q?fADEwEDtMT5Yt4XNKrpD80osjzx7Bzp55YoKNNB6NG6p1FkPdtPn9WS/RZMR?=
+ =?us-ascii?Q?utBL5Eo83YzWfmivQb4Xe6xMh1XXzgJWnUWEblhP6blc1Jt3uQb+ixr8Yzcb?=
+ =?us-ascii?Q?wLUPYzHnASkdU84E4XB5neTuunZxmiQjsje27RfwhS5rF0d5efyAUlkrlAiX?=
+ =?us-ascii?Q?3h3whKF6GQTFLAxC8aTSmpG1t6kBy29vtOpq2hGy/YyIgybJcGly1LDmnOyq?=
+ =?us-ascii?Q?i3Ckpd2TYT8cSjQRT/baS2po95+LQc+Vtq/qqXiZBlDTQUmG6BtLGuLQpwwB?=
+ =?us-ascii?Q?JP1UgxW3Q10tHvYF63WAt5hGKl69EqGPrh7oq4aRZwT/JzO0DzO8nIXa4ciC?=
+ =?us-ascii?Q?KuDgrmvfWQ8a6X/Z7rugbTjzap3p1YWaLS9KEeoa21tXTf2mCIgfw8buDi2e?=
+ =?us-ascii?Q?28kmSJDmCyth6Ex7TTedTyHZnzqbhzniJ0KcBBpDNEL2k8JqDtr7zsd3GW9G?=
+ =?us-ascii?Q?/nK4erSk/Tpshb0kf6TbysQJvGL8+owj+hG+ZATlRS+dUe195QbXSnYO86Ke?=
+ =?us-ascii?Q?gluAKCBUPvJ8AFI65RfciKulbyFVKFtyxxhRPrRjg0bKC7z/5zkybkTfy9b2?=
+ =?us-ascii?Q?TBmvYcgUUEF9vErzu3VwYWdA+VBLhoOQkprqPayP9gWyFKP0E126VBOsE8ve?=
+ =?us-ascii?Q?NQWJmbGorZuwVKlBnzaltqkPhoT29MpQFD2uDZ+A94/ZHfOLsOZrcv/iZwkr?=
+ =?us-ascii?Q?ySHV5Ae6QvYeFoJ2g3y+OveoHTldLvZKxfCoNh+UYRdlwXEmREhEPaOrHHX6?=
+ =?us-ascii?Q?IyJGRKY0Nm9AmGY4HIZdP6T4RlHtwKCtvEQLIktkMa2sEFpzSoiMI7PbQNIJ?=
+ =?us-ascii?Q?oqV+f4HUFxZd92mNQQ7imc+nKY2uiUc=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9785a83f-1ace-4793-e9ff-08da53e1a894
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 23:56:28.8987
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ETCSvQhVGKOQ7c3CAVVHTS4+Lb7nhqeO0sp1OPUZ8Msu2FDM2fVqlq+IO44j1+W1OxlHcyXQN/MQdYX3PAtOsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1501
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-06-21_10:2022-06-21,2022-06-21 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
+ phishscore=0 adultscore=0 suspectscore=0 mlxlogscore=738 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206210105
+X-Proofpoint-GUID: HbXXjC84H3vS9iRHVh-73hQJ5rzE4_R7
+X-Proofpoint-ORIG-GUID: HbXXjC84H3vS9iRHVh-73hQJ5rzE4_R7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+At unmap, fork and remap time hugetlb address ranges are linearly
+scanned.  We can optimize these scans if the ranges are sparsely
+populated.
 
---uzxszqlixhftbuhf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Also, enable page table "Lazy copy" for hugetlb at fork.
 
-On Tue, Jun 21, 2022 at 08:57:00PM +0100, Jon Hunter wrote:
-> Some of our Tegra boards are not booting with the current -next and
-> bisect is pointing to this commit. Looking at the boot log I am
-> seeing the following panic ...
->=20
-> [    2.097048] 8<--- cut here ---
-> [    2.097053] Unable to handle kernel paging request at virtual address =
-c216c810
-> [    2.097060] [c216c810] *pgd=3D0201141e(bad)
-> [    2.097079] Internal error: Oops: 8000000d [#1] SMP ARM
-> [    2.097088] Modules linked in:
-> [    2.097097] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc3-next-=
-20220621-g34d1d36073ea #1
-> [    2.097107] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
-> [    2.097113] PC is at 0xc216c810
-> [    2.097123] LR is at devm_clk_release+0x18/0x24
-> [    2.097150] pc : [<c216c810>]    lr : [<c088cb04>]    psr: a0000013
-> [    2.097155] sp : f080dde8  ip : 000006cf  fp : c18d4854
-> [    2.097161] r10: c1501850  r9 : c1a04d10  r8 : c1c4efa0
-> [    2.097166] r7 : c216c810  r6 : f080de1c  r5 : c2737680  r4 : c26a9680
-> [    2.097172] r3 : c216c810  r2 : 00000000  r1 : c2737840  r0 : c2082840
-> [    2.097179] Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segme=
-nt none
-> [    2.097187] Control: 10c5387d  Table: 0020404a  DAC: 00000051
-> [    2.097191] Register r0 information: slab kmalloc-192 start c2082840 p=
-ointer offset 0 size 192
-> [    2.097216] Register r1 information: slab kmalloc-128 start c2737800 p=
-ointer offset 64 size 128
-> [    2.097236] Register r2 information: NULL pointer
-> [    2.097244] Register r3 information: slab kmalloc-1k start c216c800 po=
-inter offset 16 size 1024
-> [    2.097263] Register r4 information: slab kmalloc-64 start c26a9680 po=
-inter offset 0 size 64
-> [    2.097282] Register r5 information: slab kmalloc-128 start c2737680 p=
-ointer offset 0 size 128
-> [    2.097301] Register r6 information: 2-page vmalloc region starting at=
- 0xf080c000 allocated at kernel_clone+0xb4/0x3e8
-> [    2.097321] Register r7 information: slab kmalloc-1k start c216c800 po=
-inter offset 16 size 1024
-> [    2.097341] Register r8 information: non-slab/vmalloc memory
-> [    2.097348] Register r9 information: non-slab/vmalloc memory
-> [    2.097355] Register r10 information: non-slab/vmalloc memory
-> [    2.097362] Register r11 information: non-slab/vmalloc memory
-> [    2.097369] Register r12 information: non-paged memory
-> [    2.097375] Process swapper/0 (pid: 1, stack limit =3D 0x(ptrval))
-> [    2.097384] Stack: (0xf080dde8 to 0xf080e000)
-> [    2.097394] dde0:                   c2737800 c0a72d38 c18d4854 c053049=
-0 c216c810 f080de1c
-> [    2.097404] de00: c2120000 00000005 c216c9c0 80000013 0000017e c0a73d6=
-8 00000008 c2629e00
-> [    2.097413] de20: c2737880 5640e141 c216c810 c216c810 00000205 c1c09dd=
-4 00000000 c27375b8
-> [    2.097422] de40: c2091700 c0a6e9a0 c216c810 c0a6f288 c216c810 c1c09dd=
-4 c216c810 00000000
-> [    2.097430] de60: c27375b8 c0a6f3c0 c1caa8e0 c216c810 c216c810 c0a6f45=
-0 00000000 c216c810
-> [    2.097439] de80: c1c09dd4 c2120000 c27375b8 c0a6f850 00000000 c1c09dd=
-4 c0a6f7c4 c0a6d4c0
-> [    2.097447] dea0: 00000000 c2091458 c2286434 5640e141 c1be7f08 c1c09dd=
-4 c2737580 c1be7f08
-> [    2.097455] dec0: 00000000 c0a6e484 c1615714 c1be7c50 c1c09dd4 c212000=
-0 c189a99c 00000000
-> [    2.097464] dee0: c2120000 c0a701a0 c1c494e0 c2120000 c189a99c c030214=
-4 0000017d c0364438
-> [    2.097472] df00: c16da8bc c1626700 00000000 00000006 00000006 c16554c=
-8 00000000 c2120000
-> [    2.097480] df20: c15105bc c14f9778 c2091700 c20917d9 00000000 5640e14=
-1 c1a88930 c16da8bc
-> [    2.097488] df40: c1c59000 5640e141 c16da8bc c1c59000 c1953b4c c18d483=
-4 00000007 c1801340
-> [    2.097497] df60: 00000006 00000006 00000000 c18004dc c2120000 c18004d=
-c f080df74 c1a04cc0
-> [    2.097505] df80: c106bbf0 00000000 00000000 00000000 00000000 0000000=
-0 00000000 c106bc08
-> [    2.097513] dfa0: 00000000 c106bbf0 00000000 c03001a8 00000000 0000000=
-0 00000000 00000000
-> [    2.097520] dfc0: 00000000 00000000 00000000 00000000 00000000 0000000=
-0 00000000 00000000
-> [    2.097528] dfe0: 00000000 00000000 00000000 00000000 00000013 0000000=
-0 00000000 00000000
-> [    2.097542]  devm_clk_release from release_nodes+0x58/0xc0
-> [    2.097575]  release_nodes from devres_release_all+0x7c/0xc0
-> [    2.097596]  devres_release_all from device_unbind_cleanup+0xc/0x60
-> [    2.097626]  device_unbind_cleanup from really_probe+0x1f4/0x2a8
-> [    2.097650]  really_probe from __driver_probe_device+0x84/0xe4
-> [    2.097673]  __driver_probe_device from driver_probe_device+0x30/0xd0
-> [    2.097696]  driver_probe_device from __driver_attach+0x8c/0xf0
-> [    2.097713]  __driver_attach from bus_for_each_dev+0x70/0xb0
-> [    2.097729]  bus_for_each_dev from bus_add_driver+0x168/0x1f4
-> [    2.097749]  bus_add_driver from driver_register+0x7c/0x118
-> [    2.097766]  driver_register from do_one_initcall+0x44/0x1ec
-> [    2.097784]  do_one_initcall from kernel_init_freeable+0x1d4/0x224
-> [    2.097803]  kernel_init_freeable from kernel_init+0x18/0x12c
-> [    2.097820]  kernel_init from ret_from_fork+0x14/0x2c
-> [    2.097831] Exception stack(0xf080dfb0 to 0xf080dff8)
-> [    2.097839] dfa0:                                     00000000 0000000=
-0 00000000 00000000
-> [    2.097847] dfc0: 00000000 00000000 00000000 00000000 00000000 0000000=
-0 00000000 00000000
-> [    2.097854] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [    2.097862] Code: c2288680 ffffffff 00000000 00000000 (c2288680)
-> [    2.097872] ---[ end trace 0000000000000000 ]---
->=20
->=20
-> Let me know if you have any thoughts.
+NOTE: Architectures not defining CONFIG_ARCH_WANT_GENERAL_HUGETLB
+need to add an arch specific version hugetlb_mask_last_page() to
+take advantage of sparse address scanning improvements.  Baolin Wang
+added the routine for arm64.  Other architectures which could be
+optimized are: ia64, mips, parisc, powerpc, s390, sh and sparc.
 
-Yeah, sorry, there is already a fix at
-https://lore.kernel.org/linux-clk/20220620171815.114212-1-u.kleine-koenig@p=
-engutronix.de
+v1->v2  Change hugetlb_mask_last_page default code to 0 instead of ~0.  Peter
+        Fix build issues on i386, including going back to if-else-if
+	instead of switch in hugetlb_mask_last_page. kernel test robot
+        Update commit message. Rolf Eike Beer
+        Changes were relatively minor, so I left the Reviewed-by and
+        ACKed-by tags.
 
-(Pro tipp: The commit in next has a Link: footer. If you follow the
-link, you find the thread that was actually applied (i.e. v9) and where
-the fix is also contained.)
+Baolin Wang (1):
+  arm64/hugetlb: Implement arm64 specific hugetlb_mask_last_page
 
-@Stephen: It would be a great favour to our testers if you could apply
-the fix ...
+Mike Kravetz (3):
+  hugetlb: skip to end of PT page mapping when pte not present
+  hugetlb: do not update address in huge_pmd_unshare
+  hugetlb: Lazy page table copies in fork()
 
-Best regards
-Uwe
+ arch/arm64/mm/hugetlbpage.c |  20 +++++++
+ include/linux/hugetlb.h     |   5 +-
+ mm/hugetlb.c                | 102 +++++++++++++++++++++++++-----------
+ mm/memory.c                 |   2 +-
+ mm/rmap.c                   |   4 +-
+ 5 files changed, 96 insertions(+), 37 deletions(-)
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+-- 
+2.35.3
 
---uzxszqlixhftbuhf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKyLscACgkQwfwUeK3K
-7AnhOwgAoJ7+WVNat5QtQxPAov0GgQ/NeeLpTVS16heM9RAVaRuezJxOr7k7z/AN
-DSNd0SEFBPDE8PkdUrAbIY607zkPkKaLrKQFpjhDciHceMDazKEoKdALu/lMM409
-sCiY8s2KTYhosNBXTORdQ2ItBXOWazKLe6M+WWiIWu9Sa83Ulagv5CifqiCvUBrc
-g1x7kXPbQDMorRwwT+nuQ5Ph03wEef0UMGyS/20yU966XafejCZCkfTALLJWiGzt
-NRO6lO+0NlxhEY8ccLGw+Lu3svkIMOX08s829MM0IF3GwWi5ktZmZ/QN291tKRlT
-xZbpiGeH4vZPdETbfxbl1w7F+4JFmQ==
-=qUR3
------END PGP SIGNATURE-----
-
---uzxszqlixhftbuhf--
