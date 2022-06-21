@@ -2,118 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D292553947
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jun 2022 19:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DB0553AC3
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jun 2022 21:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236616AbiFUR7N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Jun 2022 13:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S1354126AbiFUTsg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Jun 2022 15:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245609AbiFUR7M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jun 2022 13:59:12 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8376220DE
-        for <linux-mips@vger.kernel.org>; Tue, 21 Jun 2022 10:59:11 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id u37so13781002pfg.3
-        for <linux-mips@vger.kernel.org>; Tue, 21 Jun 2022 10:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JbuWAytcUZALQjKHnKlHD39QZVXy3a1bRzVkWDq42KQ=;
-        b=VErgQoB8GWymThL3YgzGl2WrL12ULYe/Cx/wyQRAW01d1/41ggxbQwxVOnzuwICFhG
-         hlA/lrHAMM3uUbioCGYIMB10kT5kJRIxBeHBxMtKnqe8TOc1UA6q8/qtaiFqCan3/IJX
-         zbld0o+9fIhscaxiitkhFrgx3xF2+mm+jDKQcXlVY6HSgbY1WNrPJinLucleTCE+gUAp
-         ZzKcF99tELyFLUKjMPVKMvpACZbdJEki9ptdeMGLcmOKYAiaI8j87t1CGi/1EX4C73n/
-         er1cQQAVMrZvwmWyBge9+Hybfl4bxzFWz1KNBdnXAQ8WoAaTDtPiczPKVjpEk59p0pZZ
-         80Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JbuWAytcUZALQjKHnKlHD39QZVXy3a1bRzVkWDq42KQ=;
-        b=64YZLL8X+w+bMOG9Rfz68ep/vMwYJznOruwZtLZ47SWIaEeY/KgvAAExe+6gfVlJrr
-         6XKN+BewFDIvDTG7ShlnqeMahE17yxcsLZhTIlGzwYc3S9iGf4pxXdzWQ74HA8M8QyGK
-         hIEscqM01RqhR7FyPuRSZRJsxaFFOMe59eGeQADkgULenu5zCLIL4ob7YksXa2JqDlLj
-         Qm7zQVI5PO7AcmhGpGXCnDL2T6LZD5CTAVf9Y1E52nEMtbKqjQ19TPiLn5uMa0mOFnQ8
-         Pcqm+LKSXcY8zm/VNPeaesKQmKaH3057tccy0RiNu3w+GMnpYlCRzr3xYP77f0u+Yj03
-         POEg==
-X-Gm-Message-State: AJIora9wiWPPZ8zs5h5XVgEtO+rI6u4tpl4o2qa5/PPbg95umWZx2scD
-        SR4dyoMvWK8nAkD8fqE6KCnu3Q==
-X-Google-Smtp-Source: AGRyM1tyKoScvgZ9jUTl9r400vYVAKVYV/qzOYeNUaiQG+sTZs1pyelcoub/qTYVZzhpTV2f2gXgXw==
-X-Received: by 2002:a63:e705:0:b0:3fd:fb59:bd7f with SMTP id b5-20020a63e705000000b003fdfb59bd7fmr27065817pgi.505.1655834350902;
-        Tue, 21 Jun 2022 10:59:10 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id jj4-20020a170903048400b001678898ad06sm5027806plb.47.2022.06.21.10.59.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 10:59:10 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 17:59:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v6 19/22] KVM: x86/mmu: Zap collapsible SPTEs in shadow
- MMU at all possible levels
-Message-ID: <YrIG6/dymlPQGwg1@google.com>
-References: <20220516232138.1783324-1-dmatlack@google.com>
- <20220516232138.1783324-20-dmatlack@google.com>
- <Yqyzavjp9eS9p4+m@google.com>
- <CALzav=dG9f2X8GBLjQgR-Lj4yPKX2Adg3C+9_9aC83A7mzmbtw@mail.gmail.com>
+        with ESMTP id S1352857AbiFUTsW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jun 2022 15:48:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D9F62E0
+        for <linux-mips@vger.kernel.org>; Tue, 21 Jun 2022 12:48:20 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o3jr3-0004Tn-Ml; Tue, 21 Jun 2022 21:48:05 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o3jqu-001tMQ-OO; Tue, 21 Jun 2022 21:47:58 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o3jqv-000Gjf-G8; Tue, 21 Jun 2022 21:47:57 +0200
+Date:   Tue, 21 Jun 2022 21:47:57 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jiang Jian <jiangjian@cdjrlc.com>
+Cc:     tsbogend@alpha.franken.de, srinivas.kandagatla@linaro.org,
+        rafael@kernel.org, sudeep.holla@arm.com,
+        alexandre.belloni@bootlin.com, xkernel.wang@foxmail.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: sgi-ip22: Remove duplicate 'of' in two places.
+Message-ID: <20220621194757.ay4z6bbwev7ibggs@pengutronix.de>
+References: <20220621162114.23723-1-jiangjian@cdjrlc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="s4a723nibkbfrw2k"
 Content-Disposition: inline
-In-Reply-To: <CALzav=dG9f2X8GBLjQgR-Lj4yPKX2Adg3C+9_9aC83A7mzmbtw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220621162114.23723-1-jiangjian@cdjrlc.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 21, 2022, David Matlack wrote:
-> On Fri, Jun 17, 2022 at 10:01 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, May 16, 2022, David Matlack wrote:
-> > > +static void kvm_rmap_zap_collapsible_sptes(struct kvm *kvm,
-> > > +                                        const struct kvm_memory_slot *slot)
-> > > +{
-> > > +     /*
-> > > +      * Note, use KVM_MAX_HUGEPAGE_LEVEL - 1 since there's no need to zap
-> > > +      * pages that are already mapped at the maximum possible level.
-> > > +      */
-> > > +     if (slot_handle_level(kvm, slot, kvm_mmu_zap_collapsible_spte,
-> > > +                           PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL - 1,
-> > > +                           true))
-> >
-> > No need to wrap, "true" fits easily on the previous line.  That said, I don't see
-> > any point in adding a helper.  It's highly unlike there will be another caller,
-> > and IMO it's not any more readable since I have to go look at another function
-> > when reading kvm_mmu_zap_collapsible_sptes().
-> 
-> I could see an argument for readability either way. Putting it in a
-> helper function abstracts away the details, which would aid
-> readability if the reader does not care about the implementation
-> details of the rmap case.
 
-I'm ok either way, dealer's choice.
+--s4a723nibkbfrw2k
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+The Subject speaks about two places, there is only one change here
+however?
+
+On Wed, Jun 22, 2022 at 12:21:14AM +0800, Jiang Jian wrote:
+> file: ./arch/mips/sgi-ip22/ip22-gio.c
+> line: 44
+>   * @ids: array of of device match structures to search in
+> changed to
+>   * @ids: array of device match structures to search in
+
+I know writing a sensible commit log is hard, but this is really very
+useless. This is a plain repetition of the diff below.
+
+Additionally I'm not sure the patch is right. The comment speaks about
+of (=3D open firmware) devices. So if you want to improve here, maybe make
+it read
+
++ * @match: array gio_device_id structures to search in
+
+But please double check this is indeed sensible; I didn't.
+
+(But yes, @ids is wrong, the parameter is named match.)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--s4a723nibkbfrw2k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKyIGoACgkQwfwUeK3K
+7AmWRAf9GbhbYFWPzdOQIDbXFeD1he67uvEGsTTtcwrsgq8b1KGkXdzVvxLwlm2p
+qUSDzZ3aS+jP/ScaLCkO3FRo/LfliAPKI6a26M/SeZf2F0jnNUjqcbDyQ7kjFbx2
+eJ4dzoG7VBWe5GZfRxwzCjUKSVqUENqyCX85tMpo8cA0Jvv1lQcJSWz+kvrHUaiI
+00cEWRsCOFCJPFRgUbu9yUQpKr+Hc6s9ahlTq4G+Ato63IeYtPV8wcqfD8gg7BuX
+So6/w0bOfN8LCfUZ2pAHBC7ssoTPRgjcpjIL9hxGwWKk3Xr1qjkMJcn+xKdbTTCx
+OitQ5aizcuZxM9yeP6uAwzFLFGygMg==
+=jxEL
+-----END PGP SIGNATURE-----
+
+--s4a723nibkbfrw2k--
