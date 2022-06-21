@@ -2,85 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CDC553625
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jun 2022 17:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4540C553670
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jun 2022 17:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237637AbiFUPdR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Jun 2022 11:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S1353201AbiFUPl6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Jun 2022 11:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiFUPdN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jun 2022 11:33:13 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D456654B;
-        Tue, 21 Jun 2022 08:33:10 -0700 (PDT)
+        with ESMTP id S1353200AbiFUPll (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jun 2022 11:41:41 -0400
+Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF2042CE19
+        for <linux-mips@vger.kernel.org>; Tue, 21 Jun 2022 08:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=9VZGf
-        79RSfusZpOmSyRtMDiWqSh9xMMOEKRSR6xpo/0=; b=G8ljdWdJf4WzfbMSHoyLm
-        zgLJMH9DocVUCfLW1MILDPPwt+o5QbxgFWjufjsMB+kX4rqhstF3zAy8olzkpMQ3
-        CN+Vc3iSMRmJZPCv94R7k/fbHP1x1KIVSoLZZVtxExYnGOg1a1LZC1ps+/H6H9/+
-        /z5DAWaBB0r/QWNPIAd1NU=
-Received: from windhl$126.com ( [123.112.70.164] ) by ajax-webmail-wmsvr50
- (Coremail) ; Tue, 21 Jun 2022 23:32:41 +0800 (CST)
-X-Originating-IP: [123.112.70.164]
-Date:   Tue, 21 Jun 2022 23:32:41 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc:     john@phrozen.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] mips: lantiq: Add missing of_node_put() in irq.c
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <20220621152119.GB12322@alpha.franken.de>
-References: <20220615153339.3970658-1-windhl@126.com>
- <20220621152119.GB12322@alpha.franken.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6uQYp
+        trw7IZBjnbUg4GbSjS8GM49xU3jv5quovyWUBk=; b=eOLXqsBuf4WsYCz2CLOQN
+        Qj1VbeA8MW3oZdxEDVMwg27bEwwHEUazphW+Fd50EOY7VaidCNQTIqNPG2KVykFX
+        Bb1ypp3lKYRf0J2VFCCtlMlpuHH2/bAVDtT2s1KbAyamQ3eIUkwvcJexkiFDjZLQ
+        VqbmG3WSJromxnyWAaCE6w=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp7 (Coremail) with SMTP id DsmowAAHA9ul5rFit6wSDw--.59399S2;
+        Tue, 21 Jun 2022 23:41:27 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH v2] mips: lantiq: Add missing of_node_put() in irq.c
+Date:   Tue, 21 Jun 2022 23:41:25 +0800
+Message-Id: <20220621154125.4084010-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <5b777944.84cc.18186e4f5ba.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowADHHPGa5LFiN+g6AA--.2303W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7QknF1pEAP6xCQADsP
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsmowAAHA9ul5rFit6wSDw--.59399S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZr1rCry8Gw45uFykCFy7GFg_yoW3XFgEg3
+        WI939rKFWrJw4kX39ruF43GrnxA3yvgFn5Awn7Aw1Fyw1fA3WUtFZrtrZ2qw4rZFZIvFWr
+        AryDWr1Yvw429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRNVbkDUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2ggnF1uwMQPeCgAAsv
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CgpBdCAyMDIyLTA2LTIxIDIzOjIxOjE5LCAiVGhvbWFzIEJvZ2VuZG9lcmZlciIgPHRzYm9nZW5k
-QGFscGhhLmZyYW5rZW4uZGU+IHdyb3RlOgo+T24gV2VkLCBKdW4gMTUsIDIwMjIgYXQgMTE6MzM6
-MzlQTSArMDgwMCwgTGlhbmcgSGUgd3JvdGU6Cj4+IEluIGljdV9vZl9pbml0KCksIG9mX2ZpbmRf
-Y29tcGF0aWJsZV9ub2RlKCkgd2lsbCByZXR1cm4gYSBub2RlCj4+IHBvaW50ZXIgd2l0aCByZWZj
-b3VudCBpbmNyZW1lbnRlZC4gV2Ugc2hvdWxkIHVzZSBvZl9ub2RlX3B1dCgpCj4+IHdoZW4gaXQg
-aXMgbm90IHVzZWQgYW55bW9yZS4KPj4gCj4+IFNpZ25lZC1vZmYtYnk6IExpYW5nIEhlIDx3aW5k
-aGxAMTI2LmNvbT4KPj4gLS0tCj4+ICBhcmNoL21pcHMvbGFudGlxL2lycS5jIHwgNiArKysrKysK
-Pj4gIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9h
-cmNoL21pcHMvbGFudGlxL2lycS5jIGIvYXJjaC9taXBzL2xhbnRpcS9pcnEuYwo+PiBpbmRleCBi
-NzMyNDk1ZjEzOGEuLjYyZjFiMjBhMjE2OSAxMDA2NDQKPj4gLS0tIGEvYXJjaC9taXBzL2xhbnRp
-cS9pcnEuYwo+PiArKysgYi9hcmNoL21pcHMvbGFudGlxL2lycS5jCj4+IEBAIC0zOTYsNiArMzk2
-LDkgQEAgaW50IF9faW5pdCBpY3Vfb2ZfaW5pdChzdHJ1Y3QgZGV2aWNlX25vZGUgKm5vZGUsIHN0
-cnVjdCBkZXZpY2Vfbm9kZSAqcGFyZW50KQo+PiAgCj4+ICAJCXJldCA9IG9mX3Byb3BlcnR5X3Jl
-YWRfdTMyX2FycmF5KGVpdV9ub2RlLCAibGFudGlxLGVpdS1pcnFzIiwKPj4gIAkJCQkJCWx0cV9l
-aXVfaXJxLCBleGluX2F2YWlsKTsKPj4gKwkJCQkJCQo+Cj50cmFpbGluZyB3aGl0ZXNwYWNlcwo+
-Cj4+ICsJCW9mX25vZGVfcHV0KGVpdV9ub2RlKTsKPj4gKwkJCQkJCQo+Cj50cmFpbGluZyB3aGl0
-ZXNwYWNlcwo+Cj4+ICAJCWlmIChyZXQpCj4+ICAJCQlwYW5pYygiZmFpbGVkIHRvIGxvYWQgZXh0
-ZXJuYWwgaXJxIHJlc291cmNlcyIpOwo+PiAgCj4+IEBAIC00MDksNiArNDEyLDkgQEAgaW50IF9f
-aW5pdCBpY3Vfb2ZfaW5pdChzdHJ1Y3QgZGV2aWNlX25vZGUgKm5vZGUsIHN0cnVjdCBkZXZpY2Vf
-bm9kZSAqcGFyZW50KQo+PiAgCQkJcGFuaWMoIkZhaWxlZCB0byByZW1hcCBlaXUgbWVtb3J5Iik7
-Cj4+ICAJfQo+PiAgCj4+ICsJLyogaWYgZWl1X25vZGUmb2ZfYWRkcmVzc190b19yZXNvdXJjZSAq
-Lwo+PiArCW9mX25vZGVfcHV0KGVpdV9ub2RlKTsKPj4gKwo+Cj5pZiBJJ20gbm90IG1pc3Rha2Vu
-IHlvdSBhcmUgZnJlZWluZyB0aGUgdGFrZW4gcmVmZXJlbmNlIHR3aWNlLiBTaG91bGRuJ3QKPml0
-IHdvcmsgYnkgb25seSBhZGRpbmcgdGhlIGxhc3Qgb2Zfbm9kZV9wdXQoKSA/Cj4KPlRob21hcy4K
-CkhpLCBUaG9tYXMuCgpUaGFua3MgdmVyeSBtdWNoIGZvciB5b3VyIGVmZm9ydCB0byByZXZpZXcg
-YW5kIGFwcGx5IG15IHBhdGNoZXMuCgpZb3UgYXJlIHJpZ2h0LCB0aGlzIHBhdGNoIGlzIHdyb25n
-IGFuZCBvbmx5IHRoZSBsYXN0IHB1dCBpcyBuZWVkZWQuCgpJIHdpbGwgc2VuZCBhIG5ldyBwYXRj
-aDogcmVtb3ZpbmcgdHJhaWxpbmcgd2hpdHNwYWNlIGFuZCB0aGUgZmlyc3QgcHV0LgoKVGhhbnMg
-YWdhaW4uCgpMaWFuZwoKPgo+LS0gCj5DcmFwIGNhbiB3b3JrLiBHaXZlbiBlbm91Z2ggdGhydXN0
-IHBpZ3Mgd2lsbCBmbHksIGJ1dCBpdCdzIG5vdCBuZWNlc3NhcmlseSBhCj5nb29kIGlkZWEuICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgWyBSRkMxOTI1LCAy
-LjMgXQo=
+In icu_of_init(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
+
+Signed-off-by: Liang He <windhl@126.com>
+---
+ changelog:
+
+ v2: fix bug intro-ed by v1, only one put needed.
+ v1: add missing of_node_put()
+
+ arch/mips/lantiq/irq.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
+index b732495f138a..20622bf0a9b3 100644
+--- a/arch/mips/lantiq/irq.c
++++ b/arch/mips/lantiq/irq.c
+@@ -408,6 +408,7 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
+ 		if (!ltq_eiu_membase)
+ 			panic("Failed to remap eiu memory");
+ 	}
++	of_node_put(eiu_node);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
+
