@@ -2,35 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A283C5535EE
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jun 2022 17:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F015535D7
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jun 2022 17:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352729AbiFUPWD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Jun 2022 11:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S1352682AbiFUPV4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Jun 2022 11:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352733AbiFUPWC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jun 2022 11:22:02 -0400
+        with ESMTP id S1350448AbiFUPVz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jun 2022 11:21:55 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7D1328E2C;
-        Tue, 21 Jun 2022 08:22:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA50D252BD;
+        Tue, 21 Jun 2022 08:21:53 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1o3fh4-0001zL-05; Tue, 21 Jun 2022 17:21:30 +0200
+        id 1o3fh4-0001zL-06; Tue, 21 Jun 2022 17:21:30 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id DAA63C01AA; Tue, 21 Jun 2022 17:16:11 +0200 (CEST)
-Date:   Tue, 21 Jun 2022 17:16:11 +0200
+        id 349D9C01AA; Tue, 21 Jun 2022 17:19:45 +0200 (CEST)
+Date:   Tue, 21 Jun 2022 17:19:45 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Liang He <windhl@126.com>
-Cc:     yangtiezhu@loongson.cn, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mips/pic32/pic32mzda: Fix refcount leak bugs
-Message-ID: <20220621151611.GF12206@alpha.franken.de>
-References: <20220619045427.4064946-1-windhl@126.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        paul@crapouillou.net, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] mips: dts: ingenic: Add TCU clock to x1000/x1830
+ tcu device node
+Message-ID: <20220621151945.GA12322@alpha.franken.de>
+References: <20220617121805.738157-1-aidanmacdonald.0x0@gmail.com>
+ <20220617121805.738157-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220619045427.4064946-1-windhl@126.com>
+In-Reply-To: <20220617121805.738157-2-aidanmacdonald.0x0@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -41,23 +44,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 12:54:27PM +0800, Liang He wrote:
-> of_find_matching_node(), of_find_compatible_node() and
-> of_find_node_by_path() will return node pointers with refcout
-> incremented. We should call of_node_put() when they are not
-> used anymore.
+On Fri, Jun 17, 2022 at 01:18:05PM +0100, Aidan MacDonald wrote:
+> This clock is a gate for the TCU hardware block on these SoCs, but
+> it wasn't included in the device tree since the ingenic-tcu driver
+> erroneously did not request it.
 > 
-> Signed-off-by: Liang He <windhl@126.com>
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  changelog: 
->  
->  v2: (1) merge pic32/pic32mzda bugs into one patch
->      (2) fix leak bug related to of_find_node_by_path.
->  v1: use two patch for intit.c and time.c
+>  arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+>  arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 > 
->  arch/mips/pic32/pic32mzda/init.c | 7 ++++++-
->  arch/mips/pic32/pic32mzda/time.c | 3 +++
->  2 files changed, 9 insertions(+), 1 deletion(-)
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> index b0a034b468bb..42e69664efd9 100644
+> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> @@ -111,8 +111,9 @@ tcu: timer@10002000 {
+>  
+>  		clocks = <&cgu X1000_CLK_RTCLK>,
+>  			 <&cgu X1000_CLK_EXCLK>,
+> -			 <&cgu X1000_CLK_PCLK>;
+> -		clock-names = "rtc", "ext", "pclk";
+> +			 <&cgu X1000_CLK_PCLK>,
+> +			 <&cgu X1000_CLK_TCU>;
+> +		clock-names = "rtc", "ext", "pclk", "tcu";
+>  
+>  		interrupt-controller;
+>  		#interrupt-cells = <1>;
+> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> index dbf21afaccb1..65a5da71c199 100644
+> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> @@ -104,8 +104,9 @@ tcu: timer@10002000 {
+>  
+>  		clocks = <&cgu X1830_CLK_RTCLK>,
+>  			 <&cgu X1830_CLK_EXCLK>,
+> -			 <&cgu X1830_CLK_PCLK>;
+> -		clock-names = "rtc", "ext", "pclk";
+> +			 <&cgu X1830_CLK_PCLK>,
+> +			 <&cgu X1830_CLK_TCU>;
+> +		clock-names = "rtc", "ext", "pclk", "tcu";
+>  
+>  		interrupt-controller;
+>  		#interrupt-cells = <1>;
+> -- 
+> 2.35.1
 
 applied to mips-fixes.
 
