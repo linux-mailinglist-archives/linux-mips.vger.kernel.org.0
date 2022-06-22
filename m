@@ -2,132 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD83C554690
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jun 2022 14:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8549C554957
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jun 2022 14:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236553AbiFVJCr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jun 2022 05:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S1357042AbiFVJJB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jun 2022 05:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241346AbiFVJCq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 05:02:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C885D37BD5;
-        Wed, 22 Jun 2022 02:02:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DE1AB81CBF;
-        Wed, 22 Jun 2022 09:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9158BC34114;
-        Wed, 22 Jun 2022 09:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655888563;
-        bh=Kp00LHfC1mYkuniYsZS/lSb2xs0mf8PbEYvivI4r6pk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mw1oXqgc/P9xaWQrYULrVMjaO8nmm1rponOi0V4mgtMHvXIL96Q+mCYU75ZquJOFf
-         3JO75nVgSfUBOu+7e9SN94BUBvQ3YJJUUD6BjH2SdUSDE5NgpBAg90RsqVi/Jm0hXI
-         7RXOaYCwgloHBqHGYJeMMAk5n7flUH774uPTWtOdazOiO4hzNc/AvNwSrbXaxSj57Y
-         b8Fh2NhZmbKUa6kpOVddj9OkKYoKcSnGEnWAJTmnf/mzaisTDHi643ec0EsINMPEaZ
-         qscgR+Y+yPANZWsvDX9S0CHLh85MqqAot/DTjhu+WWmF4zihAvM1uTzk/kP98ioWOU
-         Ua7AAJF0DOv3g==
-Message-ID: <deac1d48-493c-c637-c00c-d6f09f56b074@kernel.org>
-Date:   Wed, 22 Jun 2022 11:02:38 +0200
+        with ESMTP id S1357452AbiFVJIk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 05:08:40 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EE563B2B3;
+        Wed, 22 Jun 2022 02:07:20 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 1934F1E80CD1;
+        Wed, 22 Jun 2022 17:07:10 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1VPrvNPoyuol; Wed, 22 Jun 2022 17:07:07 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.64.61.97])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 9D7911E80C7D;
+        Wed, 22 Jun 2022 17:07:06 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     tsbogend@alpha.franken.de
+Cc:     rdunlap@infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        renyu@nfschina.com, Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] MIPS: Fix 2 typos
+Date:   Wed, 22 Jun 2022 17:07:13 +0800
+Message-Id: <20220622090713.24370-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] mips: lantiq: Add missing of_node_put() in irq.c
-Content-Language: en-US
-To:     Liang He <windhl@126.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     john@phrozen.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220615153339.3970658-1-windhl@126.com>
- <20220621152119.GB12322@alpha.franken.de>
- <5b777944.84cc.18186e4f5ba.Coremail.windhl@126.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <5b777944.84cc.18186e4f5ba.Coremail.windhl@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 21/06/2022 17:32, Liang He wrote:
-> 
-> 
-> At 2022-06-21 23:21:19, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de> wrote:
->> On Wed, Jun 15, 2022 at 11:33:39PM +0800, Liang He wrote:
->>> In icu_of_init(), of_find_compatible_node() will return a node
->>> pointer with refcount incremented. We should use of_node_put()
->>> when it is not used anymore.
->>>
->>> Signed-off-by: Liang He <windhl@126.com>
->>> ---
->>>  arch/mips/lantiq/irq.c | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
->>> index b732495f138a..62f1b20a2169 100644
->>> --- a/arch/mips/lantiq/irq.c
->>> +++ b/arch/mips/lantiq/irq.c
->>> @@ -396,6 +396,9 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
->>>  
->>>  		ret = of_property_read_u32_array(eiu_node, "lantiq,eiu-irqs",
->>>  						ltq_eiu_irq, exin_avail);
->>> +						
->>
->> trailing whitespaces
->>
->>> +		of_node_put(eiu_node);
->>> +						
->>
->> trailing whitespaces
->>
->>>  		if (ret)
->>>  			panic("failed to load external irq resources");
->>>  
->>> @@ -409,6 +412,9 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
->>>  			panic("Failed to remap eiu memory");
->>>  	}
->>>  
->>> +	/* if eiu_node&of_address_to_resource */
->>> +	of_node_put(eiu_node);
->>> +
->>
->> if I'm not mistaken you are freeing the taken reference twice. Shouldn't
->> it work by only adding the last of_node_put() ?
->>
->> Thomas.
-> 
-> Hi, Thomas.
-> 
-> Thanks very much for your effort to review and apply my patches.
-> 
-> You are right, this patch is wrong and only the last put is needed.
-> 
-> I will send a new patch: removing trailing whitspace and the first put.
-> 
-> Thans again.
+Change 'modifed' to 'modified'.
+Change 'relys' to 'relays'.
 
-Thomas,
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ arch/mips/cavium-octeon/executive/cvmx-helper-board.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Before applying the patch please check it carefully. Previous evidence
-[1][2] suggests that not it was not even compiled.
+diff --git a/arch/mips/cavium-octeon/executive/cvmx-helper-board.c b/arch/mips/cavium-octeon/executive/cvmx-helper-board.c
+index 1daa0c6b6f4e..82c51f015ea3 100644
+--- a/arch/mips/cavium-octeon/executive/cvmx-helper-board.c
++++ b/arch/mips/cavium-octeon/executive/cvmx-helper-board.c
+@@ -282,9 +282,9 @@ union cvmx_helper_link_info __cvmx_helper_board_link_get(int ipd_port)
+  * support and should return the number of actual ports on the
+  * board.
+  *
+- * This function must be modifed for every new Octeon board.
++ * This function must be modified for every new Octeon board.
+  * Internally it uses switch statements based on the cvmx_sysinfo
+- * data to determine board types and revisions. It relys on the
++ * data to determine board types and revisions. It relays on the
+  * fact that every Octeon board receives a unique board type
+  * enumeration from the bootloader.
+  *
+-- 
+2.25.1
 
-
-
-[1] https://lore.kernel.org/all/202206221602.odN70SHs-lkp@intel.com/
-
-[2]
-https://lore.kernel.org/all/16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com/
-
-
-Best regards,
-Krzysztof
