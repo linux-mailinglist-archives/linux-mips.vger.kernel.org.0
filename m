@@ -2,175 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624D755538B
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jun 2022 20:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B406855542B
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jun 2022 21:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377056AbiFVStU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jun 2022 14:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S1349994AbiFVT1Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jun 2022 15:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376918AbiFVStR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 14:49:17 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60BC31917;
-        Wed, 22 Jun 2022 11:49:15 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id o8so24706309wro.3;
-        Wed, 22 Jun 2022 11:49:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DqFQG0CU8wtdroHFAZ6bAEVb5kwNC8YHs7EBfsOyGTE=;
-        b=dkGTYPc1bdYnSwGmeGjAEVF250w9M54Jr41s7xjjWmr1xoijLuaMIuTcb2t/eM35w6
-         HtlesbcBnA1t7vg6OptOG9oQ9X4j0pt5K+2k9/tDM5usGv1h4s3ErM+um0RuMdRY/Spm
-         R6IP2blAreFB1gSVp8T9iNdzucCIhcCY7C06RtESae+iE3xAAKiEDn9DNF1nUXxv9QHK
-         8RX2/hID9p695bZgAWgCTKegqssjF0dgGyQ8ycnC4CLFoQ2mSWFidn3Zcj+Zs4Bwu0Hu
-         e/ZSr50H183t5LPZ4SeCbHj5A4vOYppCgx4tiqrCfrin06OtWwV8tP9aOCojjtkoFx3O
-         w9Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DqFQG0CU8wtdroHFAZ6bAEVb5kwNC8YHs7EBfsOyGTE=;
-        b=FXZ1IbxE6DOPrywf0GNR7jnil8mSg/wnkq4zq6L+2WTgnMvJrOij4Fog7pPDEqBIfM
-         iVMPhjwmT0dkvO5IDabl+hdInZECbYcsqWuzcj8BEOg/n2T4OtBfA0/SmpjFjXYG5E/B
-         4dJB23WgVnMXvIrZ4Nj/MLmxav9ryRymqJ00BZxXLydJbCOR7mSLFvZ6kZQbHUsn6BKd
-         HSpz91yj1N4qL3LMNPYUhATNmWSQH9uLwHzhsM+s8LDrREg8hFXNE8HUuDDAGLdiQBCx
-         EjdnNLhGWuo1C8xXRZuJEmLrWAVRpL7Ub2pqOVkebBst4sJq/hhn2+mow+37Sexu1qWN
-         kHBg==
-X-Gm-Message-State: AJIora+hfNx3nXc8abSxnV/6jejxFv2mUJQ+MqCrchCv72xwCNjfjw4O
-        l6TosR9vHe2mQy69FArYyok=
-X-Google-Smtp-Source: AGRyM1vkB15KESXtruheH66NvVNQPfrMR+Ebv7PozqjW0fgpTFmRvOOMoCed61LAjw+FsF1ZtIW/XA==
-X-Received: by 2002:a5d:4e83:0:b0:21b:9dee:d109 with SMTP id e3-20020a5d4e83000000b0021b9deed109mr4859661wru.430.1655923754540;
-        Wed, 22 Jun 2022 11:49:14 -0700 (PDT)
-Received: from localhost (92.40.170.233.threembb.co.uk. [92.40.170.233])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c248100b0039c5ab7167dsm177431wms.48.2022.06.22.11.49.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 11:49:13 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     linus.walleij@linaro.org
-Cc:     paul@crapouillou.net, maz@kernel.org, andy.shevchenko@gmail.com,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] pinctrl: ingenic: Convert to immutable irq chip
-Date:   Wed, 22 Jun 2022 19:50:10 +0100
-Message-Id: <20220622185010.2022515-3-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220622185010.2022515-1-aidanmacdonald.0x0@gmail.com>
-References: <20220622185010.2022515-1-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S233259AbiFVT1U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 15:27:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 649172BC5
+        for <linux-mips@vger.kernel.org>; Wed, 22 Jun 2022 12:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655926035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Xf2w4YFMBo/KqjwPtBP8STHhW74PSmVHW8ZoSdl5DBs=;
+        b=N8qCoCy55iGa+j8ldeyMNZuBbpm8K1fXMXSgmpbccX/dber4yIRO4GbHvNzzIZvUYyPoCw
+        OSGZZGzNBylzVE2jYDV+66+Zys1NGzGgTcp8uyoy3u1UqBBxSXCimTe2o77Wb0qFJesCyl
+        CqKltdXit4uLFPygvYxmFTVpb9E+EaA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-473-gprVsIPsOwqRQYeDQd_oYA-1; Wed, 22 Jun 2022 15:27:12 -0400
+X-MC-Unique: gprVsIPsOwqRQYeDQd_oYA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E4E18001EA;
+        Wed, 22 Jun 2022 19:27:11 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B71791121315;
+        Wed, 22 Jun 2022 19:27:10 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     maz@kernel.org, anup@brainfault.org, seanjc@google.com,
+        bgardon@google.com, peterx@redhat.com, maciej.szmigiero@oracle.com,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, pfeiner@google.com,
+        jiangshanlai@gmail.com, dmatlack@google.com
+Subject: [PATCH v7 00/23] KVM: Extend Eager Page Splitting to the shadow MMU
+Date:   Wed, 22 Jun 2022 15:26:47 -0400
+Message-Id: <20220622192710.2547152-1-pbonzini@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Update the driver to use an immutable IRQ chip to fix this warning:
+For the description of the "why" of this patch, I'll just direct you to
+David's excellent cover letter from v6, which can be found at
+https://lore.kernel.org/r/20220516232138.1783324-1-dmatlack@google.com.
 
-    "not an immutable chip, please consider fixing it!"
+This version mostly does the following:
 
-Preserve per-chip labels by adding an ->irq_print_chip() callback.
+- apply the feedback from Sean and other reviewers, which is mostly
+  aesthetic
 
-Acked-by: Marc Zyngier <maz@kernel.org>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- drivers/pinctrl/pinctrl-ingenic.c | 41 ++++++++++++++++++++-----------
- 1 file changed, 27 insertions(+), 14 deletions(-)
+- replace the refactoring of drop_large_spte()/__drop_large_spte()
+  with my own version.  The insight there is that drop_large_spte()
+  is always followed by {,__}link_shadow_page(), so the call is
+  moved there
 
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
-index 69e0d88665d3..3a9ee9c8af11 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -21,6 +21,7 @@
- #include <linux/pinctrl/pinconf-generic.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-+#include <linux/seq_file.h>
- #include <linux/slab.h>
- 
- #include "core.h"
-@@ -135,7 +136,6 @@ struct ingenic_pinctrl {
- struct ingenic_gpio_chip {
- 	struct ingenic_pinctrl *jzpc;
- 	struct gpio_chip gc;
--	struct irq_chip irq_chip;
- 	unsigned int irq, reg_base;
- };
- 
-@@ -3419,6 +3419,8 @@ static void ingenic_gpio_irq_enable(struct irq_data *irqd)
- 	struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
- 	irq_hw_number_t irq = irqd_to_hwirq(irqd);
- 
-+	gpiochip_enable_irq(gc, irq);
-+
- 	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
- 		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, true);
- 	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
-@@ -3443,6 +3445,8 @@ static void ingenic_gpio_irq_disable(struct irq_data *irqd)
- 		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_SELECT, irq, false);
- 	else
- 		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIER, irq, false);
-+
-+	gpiochip_disable_irq(gc, irq);
- }
- 
- static void ingenic_gpio_irq_ack(struct irq_data *irqd)
-@@ -3687,6 +3691,27 @@ static void ingenic_gpio_irq_release(struct irq_data *data)
- 	return gpiochip_relres_irq(gpio_chip, irq);
- }
- 
-+static void ingenic_gpio_irq_print_chip(struct irq_data *data, struct seq_file *p)
-+{
-+	struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
-+
-+	seq_printf(p, "%s", gpio_chip->label);
-+}
-+
-+static const struct irq_chip ingenic_gpio_irqchip = {
-+	.irq_enable		= ingenic_gpio_irq_enable,
-+	.irq_disable		= ingenic_gpio_irq_disable,
-+	.irq_unmask		= ingenic_gpio_irq_unmask,
-+	.irq_mask		= ingenic_gpio_irq_mask,
-+	.irq_ack		= ingenic_gpio_irq_ack,
-+	.irq_set_type		= ingenic_gpio_irq_set_type,
-+	.irq_set_wake		= ingenic_gpio_irq_set_wake,
-+	.irq_request_resources	= ingenic_gpio_irq_request,
-+	.irq_release_resources	= ingenic_gpio_irq_release,
-+	.irq_print_chip		= ingenic_gpio_irq_print_chip,
-+	.flags			= IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
-+};
-+
- static int ingenic_pinmux_set_pin_fn(struct ingenic_pinctrl *jzpc,
- 		int pin, int func)
- {
-@@ -4175,20 +4200,8 @@ static int __init ingenic_gpio_probe(struct ingenic_pinctrl *jzpc,
- 	if (!jzgc->irq)
- 		return -EINVAL;
- 
--	jzgc->irq_chip.name = jzgc->gc.label;
--	jzgc->irq_chip.irq_enable = ingenic_gpio_irq_enable;
--	jzgc->irq_chip.irq_disable = ingenic_gpio_irq_disable;
--	jzgc->irq_chip.irq_unmask = ingenic_gpio_irq_unmask;
--	jzgc->irq_chip.irq_mask = ingenic_gpio_irq_mask;
--	jzgc->irq_chip.irq_ack = ingenic_gpio_irq_ack;
--	jzgc->irq_chip.irq_set_type = ingenic_gpio_irq_set_type;
--	jzgc->irq_chip.irq_set_wake = ingenic_gpio_irq_set_wake;
--	jzgc->irq_chip.irq_request_resources = ingenic_gpio_irq_request;
--	jzgc->irq_chip.irq_release_resources = ingenic_gpio_irq_release;
--	jzgc->irq_chip.flags = IRQCHIP_MASK_ON_SUSPEND;
--
- 	girq = &jzgc->gc.irq;
--	girq->chip = &jzgc->irq_chip;
-+	gpio_irq_chip_set_chip(girq, &ingenic_gpio_irqchip);
- 	girq->parent_handler = ingenic_gpio_irq_handler;
- 	girq->num_parents = 1;
- 	girq->parents = devm_kcalloc(dev, 1, sizeof(*girq->parents),
+- split the TLB flush optimization into a separate patch, mostly
+  to perform the previous refactoring independent of the optional
+  TLB flush
+
+- rename a few functions from *nested_mmu* to *shadow_mmu*
+
+David Matlack (21):
+  KVM: x86/mmu: Optimize MMU page cache lookup for all direct SPs
+  KVM: x86/mmu: Use a bool for direct
+  KVM: x86/mmu: Stop passing "direct" to mmu_alloc_root()
+  KVM: x86/mmu: Derive shadow MMU page role from parent
+  KVM: x86/mmu: Always pass 0 for @quadrant when gptes are 8 bytes
+  KVM: x86/mmu: Decompose kvm_mmu_get_page() into separate functions
+  KVM: x86/mmu: Consolidate shadow page allocation and initialization
+  KVM: x86/mmu: Rename shadow MMU functions that deal with shadow pages
+  KVM: x86/mmu: Move guest PT write-protection to account_shadowed()
+  KVM: x86/mmu: Pass memory caches to allocate SPs separately
+  KVM: x86/mmu: Replace vcpu with kvm in kvm_mmu_alloc_shadow_page()
+  KVM: x86/mmu: Pass kvm pointer separately from vcpu to
+    kvm_mmu_find_shadow_page()
+  KVM: x86/mmu: Allow NULL @vcpu in kvm_mmu_find_shadow_page()
+  KVM: x86/mmu: Pass const memslot to rmap_add()
+  KVM: x86/mmu: Decouple rmap_add() and link_shadow_page() from kvm_vcpu
+  KVM: x86/mmu: Update page stats in __rmap_add()
+  KVM: x86/mmu: Cache the access bits of shadowed translations
+  KVM: x86/mmu: Extend make_huge_page_split_spte() for the shadow MMU
+  KVM: x86/mmu: Zap collapsible SPTEs in shadow MMU at all possible
+    levels
+  KVM: Allow for different capacities in kvm_mmu_memory_cache structs
+  KVM: x86/mmu: Extend Eager Page Splitting to nested MMUs
+
+Paolo Bonzini (2):
+  KVM: x86/mmu: pull call to drop_large_spte() into __link_shadow_page()
+  KVM: x86/mmu: Avoid unnecessary flush on eager page split
+
+ .../admin-guide/kernel-parameters.txt         |   3 +-
+ arch/arm64/kvm/mmu.c                          |   2 +-
+ arch/riscv/kvm/mmu.c                          |   5 +-
+ arch/x86/include/asm/kvm_host.h               |  24 +-
+ arch/x86/kvm/mmu/mmu.c                        | 719 ++++++++++++++----
+ arch/x86/kvm/mmu/mmu_internal.h               |  17 +-
+ arch/x86/kvm/mmu/paging_tmpl.h                |  43 +-
+ arch/x86/kvm/mmu/spte.c                       |  15 +-
+ arch/x86/kvm/mmu/spte.h                       |   4 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    |   2 +-
+ include/linux/kvm_host.h                      |   1 +
+ include/linux/kvm_types.h                     |   6 +-
+ virt/kvm/kvm_main.c                           |  33 +-
+ 13 files changed, 666 insertions(+), 208 deletions(-)
+
 -- 
-2.35.1
+2.31.1
 
