@@ -2,35 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42745558018
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 18:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481F5558653
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 20:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbiFWQkv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 12:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S236462AbiFWSLJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 14:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiFWQku (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 12:40:50 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 670B846C97;
-        Thu, 23 Jun 2022 09:40:49 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1o4Psl-0004rv-00; Thu, 23 Jun 2022 18:40:39 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 3F66BC01EF; Thu, 23 Jun 2022 18:40:32 +0200 (CEST)
-Date:   Thu, 23 Jun 2022 18:40:32 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes vor v5.19
-Message-ID: <20220623164032.GA14476@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S236104AbiFWSJJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 14:09:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF123BC982;
+        Thu, 23 Jun 2022 10:20:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27D28B824C2;
+        Thu, 23 Jun 2022 17:19:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E3252C3411B;
+        Thu, 23 Jun 2022 17:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656004796;
+        bh=b61ScdAaa+H+Y7hsckbm7PjKuEr3E7rgPVk5cGCsWiU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=du6m9Vdpk6a1fjJXXEwFFXDlx2G9xSLqy8ggwLsIYjcfJGiAXBcmDH7rwX4aukfM/
+         e6j7yuliKEzS4HTO6NAichMe5GBM5fmv48H7Lx8CfoqfZ43DfU1NTSymlNMh9hXVi0
+         E6OWBhakiq7bW4UvKJ0qy5xBnVulvP4mldPSQd2JsGCRyrbQXbif2Ipm4Y9c7tQXLn
+         koz6gk3atkAnmQX8mEGpFhtn2CeMHdsH+kBrgiy88NidJeYwz0iZAgIIK8eyKQPstW
+         J3nG8SRNpPcyEJG0TPOwofSXmA8Z/+UZBD2L7N9CzNcWH8/LVUBe0qALzBHM8Z3zT+
+         NDuTTUC07qtaQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CEE02E737F0;
+        Thu, 23 Jun 2022 17:19:56 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes vor v5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220623164032.GA14476@alpha.franken.de>
+References: <20220623164032.GA14476@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220623164032.GA14476@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.19_2
+X-PR-Tracked-Commit-Id: 3748d2185ac4c2c6f80989672253aad909ecaf95
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 599d16912d0746aa67ec645ca6c121efa7bfd377
+Message-Id: <165600479684.24638.6525235646511509098.pr-tracker-bot@kernel.org>
+Date:   Thu, 23 Jun 2022 17:19:56 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -38,53 +60,15 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+The pull request you sent on Thu, 23 Jun 2022 18:40:32 +0200:
 
-  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.19_2
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/599d16912d0746aa67ec645ca6c121efa7bfd377
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.19_2
-
-for you to fetch changes up to 3748d2185ac4c2c6f80989672253aad909ecaf95:
-
-  mips: lantiq: Add missing of_node_put() in irq.c (2022-06-21 22:34:03 +0200)
-
-----------------------------------------------------------------
-- several refcount fixes
-- added missing clock for ingenic
-- fix wrong irq_err_count for vr41xx
-
-----------------------------------------------------------------
-Aidan MacDonald (1):
-      mips: dts: ingenic: Add TCU clock to x1000/x1830 tcu device node
-
-Liang He (7):
-      arch: mips: generic: Add missing of_node_put() in board-ranchu.c
-      mips: mti-malta: Fix refcount leak in malta-time.c
-      mips: ralink: Fix refcount leak in of.c
-      mips: lantiq: falcon: Fix refcount leak bug in sysctrl
-      mips: lantiq: xway: Fix refcount leak bug in sysctrl
-      mips/pic32/pic32mzda: Fix refcount leak bugs
-      mips: lantiq: Add missing of_node_put() in irq.c
-
-huhai (1):
-      MIPS: Remove repetitive increase irq_err_count
-
- arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
- arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
- arch/mips/generic/board-ranchu.c      | 1 +
- arch/mips/lantiq/falcon/sysctrl.c     | 6 ++++++
- arch/mips/lantiq/irq.c                | 1 +
- arch/mips/lantiq/xway/sysctrl.c       | 4 ++++
- arch/mips/mti-malta/malta-time.c      | 2 ++
- arch/mips/pic32/pic32mzda/init.c      | 7 ++++++-
- arch/mips/pic32/pic32mzda/time.c      | 3 +++
- arch/mips/ralink/of.c                 | 2 ++
- arch/mips/vr41xx/common/icu.c         | 2 --
- drivers/gpio/gpio-vr41xx.c            | 2 --
- 12 files changed, 31 insertions(+), 9 deletions(-)
+Thank you!
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
