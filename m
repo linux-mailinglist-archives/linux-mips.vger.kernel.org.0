@@ -2,175 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B36E555478
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jun 2022 21:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A998D5570C9
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 04:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358273AbiFVT3Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jun 2022 15:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S1377348AbiFWCAU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jun 2022 22:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358096AbiFVT13 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 15:27:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CB3B403CF
-        for <linux-mips@vger.kernel.org>; Wed, 22 Jun 2022 12:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655926046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PtZNTZPWfsMWYTlAEBsLU5lpYkmjIuplCyLvnN6roN8=;
-        b=J/DxGHI6IwmKiPc2dyAI/DooD+/sPl54IdqwUnp5iySMkPyRuPaZYKjbmEtebh5wk51OO1
-        sWt/WKx+vZyuamUA0kWnlj3zWjcMg+wMeXfArP1A+e1lnmN5hQS+79aKzHRjLfOGgN8sq8
-        OOTsReB0uurxpGRlGZeoHVDUSbruA0A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-153-p9sVOKGTNd-Hjl1hFwF5Jw-1; Wed, 22 Jun 2022 15:27:21 -0400
-X-MC-Unique: p9sVOKGTNd-Hjl1hFwF5Jw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 589571C0518C;
-        Wed, 22 Jun 2022 19:27:20 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 01FD61121314;
-        Wed, 22 Jun 2022 19:27:19 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     maz@kernel.org, anup@brainfault.org, seanjc@google.com,
-        bgardon@google.com, peterx@redhat.com, maciej.szmigiero@oracle.com,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, pfeiner@google.com,
-        jiangshanlai@gmail.com, dmatlack@google.com
-Subject: [PATCH v7 23/23] KVM: x86/mmu: Avoid unnecessary flush on eager page split
-Date:   Wed, 22 Jun 2022 15:27:10 -0400
-Message-Id: <20220622192710.2547152-24-pbonzini@redhat.com>
-In-Reply-To: <20220622192710.2547152-1-pbonzini@redhat.com>
-References: <20220622192710.2547152-1-pbonzini@redhat.com>
+        with ESMTP id S1377427AbiFWCAS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 22:00:18 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1939DA5;
+        Wed, 22 Jun 2022 19:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655949618; x=1687485618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KbeXCVtz+edFvopo5p5QoDn9huAgw0qHkMWWoFBLhXA=;
+  b=TRcjg/fXfLp1F9SNfyxslU1rzSfaxkUWr07brf1Q4kxr1JKxkSrviN54
+   V7HhryJQkD1028NN9t0UzDDcyBAOsAG6hxbIkfOdXZKz7KwT94N67Qaox
+   LLq+zGWlh4R6xZgznNWfR85Gyg+lc8l3UogXVj73y8NC/RtcsRy3ItHmH
+   ob2ctiH1fmRSRziYqDH5KHeGSVNWGjuISCd/gWbPdBhiPVTPnyyQa0Zw5
+   69Z6NP4z4eftiWNh/0M74rfpASd9qv/4GcEoOoQ6AL5CpR0CBMT0V6amg
+   0zfoSBW01Kk9kKY0jx5cqg4fTd0XHuEPf9FJ4ZQV4uN0CV82j6ROoao8y
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281325558"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="281325558"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 19:00:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="615398908"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Jun 2022 19:00:02 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4C8X-0000LT-BJ;
+        Thu, 23 Jun 2022 02:00:01 +0000
+Date:   Thu, 23 Jun 2022 09:59:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org
+Cc:     kbuild-all@lists.01.org, lgirdwood@gmail.com,
+        kuninori.morimoto.gx@renesas.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, vkoul@kernel.org,
+        nicolas.ferre@microchip.com, nsaenz@kernel.org,
+        shawnguo@kernel.org, linux-imx@nxp.com, cezary.rojewski@intel.com,
+        pierre-louis.bossart@linux.intel.com, linux-mips@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, daniel@zonque.org,
+        srinivas.kandagatla@linaro.org, linux-rockchip@lists.infradead.org,
+        krzk@kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
+        heiko@sntech.de, jbrunet@baylibre.com, kernel@pengutronix.de,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 27/96] ASoC: au1x: Migrate to new style legacy DAI naming
+ flag
+Message-ID: <202206230910.wUXKFP3z-lkp@intel.com>
+References: <20220616143429.1324494-28-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616143429.1324494-28-ckeepax@opensource.cirrus.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The TLB flush before installing the newly-populated lower level
-page table is unnecessary if the lower-level page table maps
-the huge page identically.  KVM knows it is if it did not reuse
-an existing shadow page table, tell drop_large_spte() to skip
-the flush in that case.
+Hi Charles,
 
-Extracted from a patch by David Matlack.
+I love your patch! Yet something to improve:
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/mmu/mmu.c | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on tegra/for-next sunxi/sunxi/for-next linus/master v5.19-rc3 next-20220622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 22681931921f..79c6a821ea0d 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1135,7 +1135,7 @@ static void drop_spte(struct kvm *kvm, u64 *sptep)
- 		rmap_remove(kvm, sptep);
- }
- 
--static void drop_large_spte(struct kvm *kvm, u64 *sptep)
-+static void drop_large_spte(struct kvm *kvm, u64 *sptep, bool flush)
- {
- 	struct kvm_mmu_page *sp;
- 
-@@ -1143,7 +1143,9 @@ static void drop_large_spte(struct kvm *kvm, u64 *sptep)
- 	WARN_ON(sp->role.level == PG_LEVEL_4K);
- 
- 	drop_spte(kvm, sptep);
--	kvm_flush_remote_tlbs_with_address(kvm, sp->gfn,
-+
-+	if (flush)
-+		kvm_flush_remote_tlbs_with_address(kvm, sp->gfn,
- 			KVM_PAGES_PER_HPAGE(sp->role.level));
- }
- 
-@@ -2283,7 +2285,7 @@ static void shadow_walk_next(struct kvm_shadow_walk_iterator *iterator)
- 
- static void __link_shadow_page(struct kvm *kvm,
- 			       struct kvm_mmu_memory_cache *cache, u64 *sptep,
--			       struct kvm_mmu_page *sp)
-+			       struct kvm_mmu_page *sp, bool flush)
- {
- 	u64 spte;
- 
-@@ -2291,10 +2293,11 @@ static void __link_shadow_page(struct kvm *kvm,
- 
- 	/*
- 	 * If an SPTE is present already, it must be a leaf and therefore
--	 * a large one.  Drop it and flush the TLB before installing sp.
-+	 * a large one.  Drop it, and flush the TLB if needed, before
-+	 * installing sp.
- 	 */
- 	if (is_shadow_present_pte(*sptep))
--		drop_large_spte(kvm, sptep);
-+		drop_large_spte(kvm, sptep, flush);
- 
- 	spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
- 
-@@ -2309,7 +2312,7 @@ static void __link_shadow_page(struct kvm *kvm,
- static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep,
- 			     struct kvm_mmu_page *sp)
- {
--	__link_shadow_page(vcpu->kvm, &vcpu->arch.mmu_pte_list_desc_cache, sptep, sp);
-+	__link_shadow_page(vcpu->kvm, &vcpu->arch.mmu_pte_list_desc_cache, sptep, sp, true);
- }
- 
- static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
-@@ -6172,6 +6175,7 @@ static void shadow_mmu_split_huge_page(struct kvm *kvm,
- 	struct kvm_mmu_memory_cache *cache = &kvm->arch.split_desc_cache;
- 	u64 huge_spte = READ_ONCE(*huge_sptep);
- 	struct kvm_mmu_page *sp;
-+	bool flush = false;
- 	u64 *sptep, spte;
- 	gfn_t gfn;
- 	int index;
-@@ -6189,20 +6193,24 @@ static void shadow_mmu_split_huge_page(struct kvm *kvm,
- 		 * gfn-to-pfn translation since the SP is direct, so no need to
- 		 * modify them.
- 		 *
--		 * If a given SPTE points to a lower level page table, installing
--		 * such SPTEs would effectively unmap a potion of the huge page.
--		 * This is not an issue because __link_shadow_page() flushes the TLB
--		 * when the passed sp replaces a large SPTE.
-+		 * However, if a given SPTE points to a lower level page table,
-+		 * that lower level page table may only be partially populated.
-+		 * Installing such SPTEs would effectively unmap a potion of the
-+		 * huge page. Unmapping guest memory always requires a TLB flush
-+		 * since a subsequent operation on the unmapped regions would
-+		 * fail to detect the need to flush.
- 		 */
--		if (is_shadow_present_pte(*sptep))
-+		if (is_shadow_present_pte(*sptep)) {
-+			flush |= !is_last_spte(*sptep, sp->role.level);
- 			continue;
-+		}
- 
- 		spte = make_huge_page_split_spte(kvm, huge_spte, sp->role, index);
- 		mmu_spte_set(sptep, spte);
- 		__rmap_add(kvm, cache, slot, sptep, gfn, sp->role.access);
- 	}
- 
--	__link_shadow_page(kvm, cache, huge_sptep, sp);
-+	__link_shadow_page(kvm, cache, huge_sptep, sp, flush);
- }
- 
- static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
+url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Keepax/Refactor-non_legacy_dai_naming-flag/20220616-224300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: mips-db1xxx_defconfig (https://download.01.org/0day-ci/archive/20220623/202206230910.wUXKFP3z-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/794205d61285d0921e564e722daf9b20df82ed57
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Charles-Keepax/Refactor-non_legacy_dai_naming-flag/20220616-224300
+        git checkout 794205d61285d0921e564e722daf9b20df82ed57
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/soc/au1x/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> sound/soc/au1x/ac97c.c:227:10: error: 'const struct snd_soc_component_driver' has no member named 'legacy_dai_name'; did you mean 'legacy_dai_naming'?
+     227 |         .legacy_dai_name        = 1,
+         |          ^~~~~~~~~~~~~~~
+         |          legacy_dai_naming
+>> sound/soc/au1x/ac97c.c:227:35: warning: initialization of 'const struct snd_kcontrol_new *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     227 |         .legacy_dai_name        = 1,
+         |                                   ^
+   sound/soc/au1x/ac97c.c:227:35: note: (near initialization for 'au1xac97c_component.controls')
+
+
+vim +227 sound/soc/au1x/ac97c.c
+
+   224	
+   225	static const struct snd_soc_component_driver au1xac97c_component = {
+   226		.name			= "au1xac97c",
+ > 227		.legacy_dai_name	= 1,
+   228	};
+   229	
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
