@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0F6557B05
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 14:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825E8557BE0
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 14:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiFWMx6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 08:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S232105AbiFWMyx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 08:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiFWMxw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 08:53:52 -0400
+        with ESMTP id S232051AbiFWMyr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 08:54:47 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E871403E3;
-        Thu, 23 Jun 2022 05:53:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B0A45AE8;
+        Thu, 23 Jun 2022 05:54:46 -0700 (PDT)
 Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25N6FQeh013924;
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25N6FQei013924;
         Thu, 23 Jun 2022 07:53:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=TeKfedTH0Ouzg/AS1v+qBN/wdMbF8epgQhipJsCmHVs=;
- b=fPVlkrWJutj4xIozpUEep7GO0LqChcVt+bxov8JY6SYn0Bpa0yAJnX8D8r0WRQqyT4yi
- RZDJHRCPsySvvRChpK8OVELyNSH9koikyY1WvdNhV/yJADWKnLbKbp1LCd1gCt7fV/vz
- AGZFbvfycUkILY7hoplJB+/V3rIY+K5Li7ypeHXxbvAMC5Imk/bmMZ09x4aj3HMqCJW3
- jH74PxHNcMaU+pPDsaYYqNHde8PN5UBUv9AcuYoZCWsvUl5L+lHiMd4X+deZaRAs13/X
- n5fEgbqh8aXddK/Xr7/oumHeZsXtYKNkX3b02P7JRpSk+oNqa3FmLkaUvV40yyIyUhhQ 9g== 
+ bh=/YrLbsib8Yh5fzo7Etvf2etgY4zhhSJ7yMT4UFg+Ibo=;
+ b=AZ066CSWBpyF8xfRacDfhhkBDz51cq+pdUyK2y0s79hZrlj/GCkv6TNn9zu8ha2b3BAy
+ zDapJV9IskFefEfI7YSl57TdEn72UKdytGiF5uFObomv1PR7En8QoR0FIjDgif4LBTeZ
+ 70BflmNNGVNuVxYtzYJYrYXdWDKuQsziea9Aiz67Sml4p4bFpUwSrqjNVu+OczzRwVFb
+ f4RWeFAbtUOeNkHj3LOhAeN5vhIHbBjuhqba5w6zZaD7CjTvor1zDoVx4Y3nv5Ps6ogi
+ 3kzDdEO6SCv1beSoqWv2rq5gzcgXr+xr6+Y76hE18ylvI/X7uq4V1PZ0uzAteaO9XXEc xA== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gsc41fa4x-19
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gsc41fa4x-20
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 23 Jun 2022 07:53:18 -0500
+        Thu, 23 Jun 2022 07:53:19 -0500
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 23 Jun
@@ -38,7 +38,7 @@ Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
  Transport; Thu, 23 Jun 2022 13:52:59 +0100
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 25FAB11D3;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3B6F211D4;
         Thu, 23 Jun 2022 12:52:59 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <broonie@kernel.org>
@@ -60,17 +60,17 @@ CC:     <lgirdwood@gmail.com>, <kuninori.morimoto.gx@renesas.com>,
         <dri-devel@lists.freedesktop.org>,
         <linux-rpi-kernel@lists.infradead.org>,
         <frattaroli.nicolas@gmail.com>
-Subject: [PATCH v2 94/96] ASoC: wl1273: Remove now redundant non_legacy_dai_naming flag
-Date:   Thu, 23 Jun 2022 13:52:48 +0100
-Message-ID: <20220623125250.2355471-95-ckeepax@opensource.cirrus.com>
+Subject: [PATCH v2 95/96] ASoC: zl38060: Remove now redundant non_legacy_dai_naming flag
+Date:   Thu, 23 Jun 2022 13:52:49 +0100
+Message-ID: <20220623125250.2355471-96-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220623125250.2355471-1-ckeepax@opensource.cirrus.com>
 References: <20220623125250.2355471-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: eiNMX25Yp5ydE-rs49yuVRagAeqplw3V
-X-Proofpoint-ORIG-GUID: eiNMX25Yp5ydE-rs49yuVRagAeqplw3V
+X-Proofpoint-GUID: 0VaHRuKWj1VUe2Hz7TpzGCef3HcYfQcc
+X-Proofpoint-ORIG-GUID: 0VaHRuKWj1VUe2Hz7TpzGCef3HcYfQcc
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -87,21 +87,21 @@ the non_legacy_dai_naming flag.
 
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- sound/soc/codecs/wl1273.c | 1 -
+ sound/soc/codecs/zl38060.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wl1273.c b/sound/soc/codecs/wl1273.c
-index 02232f64110e0..626278e4c9238 100644
---- a/sound/soc/codecs/wl1273.c
-+++ b/sound/soc/codecs/wl1273.c
-@@ -475,7 +475,6 @@ static const struct snd_soc_component_driver soc_component_dev_wl1273 = {
- 	.idle_bias_on		= 1,
- 	.use_pmdown_time	= 1,
+diff --git a/sound/soc/codecs/zl38060.c b/sound/soc/codecs/zl38060.c
+index 6cae0fb08093b..c3d0a2a7c36f2 100644
+--- a/sound/soc/codecs/zl38060.c
++++ b/sound/soc/codecs/zl38060.c
+@@ -385,7 +385,6 @@ static const struct snd_soc_component_driver zl38_component_dev = {
+ 	.dapm_routes		= zl38_dapm_routes,
+ 	.num_dapm_routes	= ARRAY_SIZE(zl38_dapm_routes),
  	.endianness		= 1,
 -	.non_legacy_dai_naming	= 1,
  };
  
- static int wl1273_platform_probe(struct platform_device *pdev)
+ static void chip_gpio_set(struct gpio_chip *c, unsigned int offset, int val)
 -- 
 2.30.2
 
