@@ -2,108 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D465577B5
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 12:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3845E557853
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 13:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiFWKSs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 06:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S229765AbiFWLC5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 07:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiFWKSn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 06:18:43 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E08F6425;
-        Thu, 23 Jun 2022 03:18:38 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z11so21650618edp.9;
-        Thu, 23 Jun 2022 03:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t9ea/dcrsF9M+CJZqSv3b2zBRCLTq5sbj7L8gKts0jQ=;
-        b=TFTkb1ZVGMYu/zxZXjN6uNtzgfXwdi5FhXkpJzXoeNdndwLMun/iKmle1hFkXuCQeG
-         LpoODm0Lna7VSP+5PxRcrJDWzKHaBM9E/ncY2ewlWX9jNjHDhxl+5OHrhLpfjEp0Zf97
-         gBAB2R2knxHO910erbKRa7ejBc32apiS1PAqj0IiNgkOddWvcy9HQA2K40aLJKWpBU90
-         qtSgIufbyfRRNTGI6vCGwKkR0plB7q9wySpHOxAe0JylCtquBq66ADfxiiNdjCoIVruI
-         teSome/MdQO8c5Dvb+cWUyFDE3XY86OYC1bQ/hfLOMelogpYs7KAhdDZ3coGEh7nyrqw
-         a83g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t9ea/dcrsF9M+CJZqSv3b2zBRCLTq5sbj7L8gKts0jQ=;
-        b=3mlthcogdvnIukMiBnH8sGPhSw8Jmt1g5CX4modGW5gO4n5SYLlWj6mxFt6z1/ZQYC
-         fSDSuY/Ed0L9Ykkk1WcVVU7hiuN6WTWnC2fg/7wa1gMde2kk/n95qSMm8I3KUynfIpxa
-         /lmDBJEMB115tAG0lxSWRhlZPAE0i0j23JI1LLeVSAsKhaPfAt7lb2r/ivIAzRkZYQKT
-         JdLenwqeUWcpis0hrbE3oJ6tfGKU3gVzPD25hkyJVei83kZJEc5QDosKVS3DG9ooByAd
-         EywNImuED4pXPkVroqs0fBN38wOCYJ2TEGWPtAIUwAU45//siCgxFFz3cvKgX9keQMr1
-         xwew==
-X-Gm-Message-State: AJIora+BrGYCN+Hpg13UOYKJFwjlKqJHWGRbf+SaceXKNCKfuZfweAt2
-        femAhSluS3Y1pQBvFcTrLEgTEQzEW7bdR7p5bbE=
-X-Google-Smtp-Source: AGRyM1tj9InnAI9P8P0ZW+y2x54HIErM5Ii+utwX0T1UDOfArPynP5xeyj+97Kd2EGKyVPBYIxmDT0Wht2Omb3rWlLQ=
-X-Received: by 2002:aa7:d29a:0:b0:435:705f:1319 with SMTP id
- w26-20020aa7d29a000000b00435705f1319mr9609494edq.54.1655979516662; Thu, 23
- Jun 2022 03:18:36 -0700 (PDT)
+        with ESMTP id S229710AbiFWLC4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 07:02:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF027B00;
+        Thu, 23 Jun 2022 04:02:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AC32B81BF7;
+        Thu, 23 Jun 2022 11:02:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C860C3411B;
+        Thu, 23 Jun 2022 11:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655982171;
+        bh=QWxmpYJIQevrOn+jIA9BiDlZ1Jm6cS7KRCVZB/rj9MU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uQk8I+JcFVSOI+L8cXE8qm9iQ8k8bUT7pZ8ijL0cSccXLN/EnEJluw10gdhEyLr88
+         s6xeP9hTwyT3i50PQskxDM7s5sJ2nLymilcYIEePm8cIm44TRyGaEB2yaLeixVYMrg
+         0mAYkNT2SfaDKlQsjc/t8JthcQT6mrQJK6lEVobXtbCMLERvjkwCLxxYNMtYejSyuS
+         HSovhcM4827L2LVHZT2VNMWzjxl7vsjEsFQKWsfL1FBmkr3e3R9PDrzQmE8758RzF+
+         yE7Esv/81d3SjOJ4ZNdwrzouWuT87mR+AC21FSj5henoKNvlHs7tJDzCKhtuX9qPOn
+         ITMDCSQZB//dg==
+Date:   Thu, 23 Jun 2022 12:02:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        lgirdwood@gmail.com, kuninori.morimoto.gx@renesas.com,
+        mripard@kernel.org, airlied@linux.ie, daniel@ffwll.ch,
+        vkoul@kernel.org, nicolas.ferre@microchip.com, nsaenz@kernel.org,
+        shawnguo@kernel.org, linux-imx@nxp.com, cezary.rojewski@intel.com,
+        pierre-louis.bossart@linux.intel.com, linux-mips@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, daniel@zonque.org,
+        srinivas.kandagatla@linaro.org, linux-rockchip@lists.infradead.org,
+        krzk@kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
+        heiko@sntech.de, jbrunet@baylibre.com, kernel@pengutronix.de,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 27/96] ASoC: au1x: Migrate to new style legacy DAI naming
+ flag
+Message-ID: <YrRIUef2WAs15/Mg@sirena.org.uk>
+References: <20220616143429.1324494-28-ckeepax@opensource.cirrus.com>
+ <202206230910.wUXKFP3z-lkp@intel.com>
+ <20220623093951.GG38351@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
-References: <20220621124958.3342-1-ilpo.jarvinen@linux.intel.com>
- <20220621124958.3342-7-ilpo.jarvinen@linux.intel.com> <03467516-3962-4ff2-23d2-2b3a1d647c5a@kernel.org>
- <CAHp75VeKhY6dN7j_yXQXUMhOqRwqQ2yN_qF95U9wU6K4uKPdaQ@mail.gmail.com>
- <c7115ff1-2a97-f5a0-a0c2-c7c1064af291@kernel.org> <CAHp75Vfsy5yY3saSCvCu87E-arifwEZXUNtFMrMn38gJY2LU0g@mail.gmail.com>
-In-Reply-To: <CAHp75Vfsy5yY3saSCvCu87E-arifwEZXUNtFMrMn38gJY2LU0g@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 23 Jun 2022 12:17:58 +0200
-Message-ID: <CAHp75VdSadbtkH1JeiPuJ_CSBDq82GaRWLvJFd8Egg7poY8Lxw@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] serial: Consolidate BOTH_EMPTY use
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "speakup@linux-speakup.org" <speakup@linux-speakup.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aRjk/oNkrDuhHxkv"
+Content-Disposition: inline
+In-Reply-To: <20220623093951.GG38351@ediswmail.ad.cirrus.com>
+X-Cookie: I had pancake makeup for brunch!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 12:15 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Thu, Jun 23, 2022 at 10:24 AM Jiri Slaby <jirislaby@kernel.org> wrote:
-> > On 23. 06. 22, 10:11, Andy Shevchenko wrote:
-> > >     * prom_putchar_wait() should be implemented using
-> > >        read_poll_timeout_atomic(), incl. failure/timeout handling.
-> > >
-> > > Not sure since it is an early stage and scheduler might not work as
-> > > expected. Conversions to iopoll.h macros bitten us a few times already.
-> >
-> > Except _atomic does not use scheduler :).
->
-> Sorry for a bit misleading comment, but I chased it down, so this what
-> I had in mind when commenting:
-> be24c6a71ecf ("soc: qcom: rpmh-rsc: Don't use ktime for timeout in
-> write_tcs_reg_sync()")
 
-...and this one (specifically for early stages)
+--aRjk/oNkrDuhHxkv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-c4d936efa46d ("Revert "usb: early: convert to readl_poll_timeout_atomic()"")
+On Thu, Jun 23, 2022 at 09:39:51AM +0000, Charles Keepax wrote:
 
-> (Yes, it's about _atomic variant)
->
-> Means we need to use those macros with care.
+> Mark do you want me to send a v2 for the whole series? Or given
+> the size would it be better to just resend this patch?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Series please.
+
+--aRjk/oNkrDuhHxkv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK0SFEACgkQJNaLcl1U
+h9At5wf6Ax7J+7EqACjWVB1NBLm4Fqt/fn2hmYjsWEp5xg2nu64uAExOpqhd88Ub
+8EiQ8JJ5Yh+LqGAd+ebgMayuxNfGx/YW+EBYI86mKPNt5JUiC9pf7v5IDM8Tdowt
+ItjroWnrAvyu755n93nXekhH53LbekNQZ3r38IqmgYxXfRwuBwo+6LDpWwG+yuZM
+qsKAlnQyapzbY/t5/1ziDvbV9Tu1jRGLpytGhBD3ishspCgdES0U6CAXTAiQbGpc
+MjSi61J4JAE+Xhu37HN97vid7MjwfolyUldVhZBQk80qRTtR78Iu5cv5Mg1kJ1v7
+BEu+WlV4O3xD0frAhInPwl3skpKkHQ==
+=ECPa
+-----END PGP SIGNATURE-----
+
+--aRjk/oNkrDuhHxkv--
