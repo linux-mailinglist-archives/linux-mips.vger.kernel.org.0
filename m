@@ -2,44 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AB8557C32
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 14:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8ADD557C31
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 14:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbiFWM4g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 08:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S231818AbiFWM4b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 08:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbiFWM4a (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 08:56:30 -0400
+        with ESMTP id S232096AbiFWM4Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 08:56:24 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC444BB89;
-        Thu, 23 Jun 2022 05:56:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836504AE1E;
+        Thu, 23 Jun 2022 05:56:23 -0700 (PDT)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NBvlrC011978;
-        Thu, 23 Jun 2022 07:52:57 -0500
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25N5mxl3032604;
+        Thu, 23 Jun 2022 07:52:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=mSVEpTvWy90YEvkFYzlGMD66AUzOldLzrUpolwTzCqI=;
- b=HUneLPv1LEfj7XGWkXg3uTKx8AuXrNP46JQTPLHp7Zq463kndlQQ4849aJPV8LFPr0d+
- IhC2xwPieXkfucit9pd7xg6G2DYlPzYE1/kE8jwVYL/IR800PNzXhVC69FD7LKO7IoQp
- rg4iGnYanEJv2FRUT7FB+MlmwPDQToySifAf0cNHSKV96lTaUZTUSutHqnk6b44i9OMH
- bhCyHqRiwGPJYlPoRGt2LKq0HQBtvpZP0aoJr3IZ4fckqrEdPI5UO1ijBmvtqAQyhx95
- jWtUYzyEHvfxurO+0UtbIXfWqY/TYl8wyWcpV/VmY019FukskWGok7tPlvneSZAdP9Na gg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gsb4p6wvp-7
+ bh=A965WNpWYSDhf9ldMo6HdYu7YQa1FzA7GWkgiub9ZVc=;
+ b=lZrg0fLeKcjSlEddZRwEHE6vt9yOt9whU1TnWxyQJ9rx5chpbQyHTNnCbR9pHMG/72Nl
+ 31ONDR3VFhCYSvr8bmU5x8ykuR5uX0+3qkDsZDbz3/LQDUcrFOJ1GTdZami+QObpm8RU
+ AXi3Z2TJK5Q42QlsGKAOFau5Noa5dFQSW1/n8ZvD5JjsfUUN6l6tnA4XLv3m1lM+2dD9
+ x+LMqiKGDOGeTw+gBbQo9AoZNfO5lXvBAeKsBp0AoRubkeH8+BeSdP2am+PfvOIfF94j
+ ChKUtZXfLFQeq3Z/sOB623yfecX97+q+AVcE5WGWic3zutGOfwkkHUAflWzZbeIXGf94 2g== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gsb4p6wvu-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 23 Jun 2022 07:52:56 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 23 Jun 2022 07:52:58 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 23 Jun
  2022 13:52:52 +0100
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
  Transport; Thu, 23 Jun 2022 13:52:52 +0100
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E4649478;
-        Thu, 23 Jun 2022 12:52:51 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0AA2111D3;
+        Thu, 23 Jun 2022 12:52:52 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <broonie@kernel.org>
 CC:     <lgirdwood@gmail.com>, <kuninori.morimoto.gx@renesas.com>,
@@ -60,17 +60,17 @@ CC:     <lgirdwood@gmail.com>, <kuninori.morimoto.gx@renesas.com>,
         <dri-devel@lists.freedesktop.org>,
         <linux-rpi-kernel@lists.infradead.org>,
         <frattaroli.nicolas@gmail.com>
-Subject: [PATCH v2 14/96] ASoC: sunxi: Migrate to new style legacy DAI naming flag
-Date:   Thu, 23 Jun 2022 13:51:28 +0100
-Message-ID: <20220623125250.2355471-15-ckeepax@opensource.cirrus.com>
+Subject: [PATCH v2 15/96] ASoC: Intel: Migrate to new style legacy DAI naming flag
+Date:   Thu, 23 Jun 2022 13:51:29 +0100
+Message-ID: <20220623125250.2355471-16-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220623125250.2355471-1-ckeepax@opensource.cirrus.com>
 References: <20220623125250.2355471-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: Rbz6ezQCF8Oxeyw0tvDG28evR_QP7BKr
-X-Proofpoint-ORIG-GUID: Rbz6ezQCF8Oxeyw0tvDG28evR_QP7BKr
+X-Proofpoint-GUID: ZkIw7JjuYXjXMU4pvUvvigumQtaTVjt8
+X-Proofpoint-ORIG-GUID: ZkIw7JjuYXjXMU4pvUvvigumQtaTVjt8
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -88,53 +88,37 @@ currently uses the legacy naming, so add the new flag.
 
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- sound/soc/sunxi/sun4i-codec.c | 3 ++-
- sound/soc/sunxi/sun4i-i2s.c   | 3 ++-
- sound/soc/sunxi/sun4i-spdif.c | 3 ++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ sound/soc/intel/keembay/kmb_platform.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/sunxi/sun4i-codec.c b/sound/soc/sunxi/sun4i-codec.c
-index 53e3f43816cc2..bc634962a57ee 100644
---- a/sound/soc/sunxi/sun4i-codec.c
-+++ b/sound/soc/sunxi/sun4i-codec.c
-@@ -1234,7 +1234,8 @@ static const struct snd_soc_component_driver sun8i_a23_codec_codec = {
- };
+diff --git a/sound/soc/intel/keembay/kmb_platform.c b/sound/soc/intel/keembay/kmb_platform.c
+index d10881fedc8bb..b4893365d01d5 100644
+--- a/sound/soc/intel/keembay/kmb_platform.c
++++ b/sound/soc/intel/keembay/kmb_platform.c
+@@ -388,15 +388,17 @@ static snd_pcm_uframes_t kmb_pcm_pointer(struct snd_soc_component *component,
+ }
  
- static const struct snd_soc_component_driver sun4i_codec_component = {
--	.name = "sun4i-codec",
-+	.name			= "sun4i-codec",
+ static const struct snd_soc_component_driver kmb_component = {
+-	.name		= "kmb",
+-	.pcm_construct	= kmb_platform_pcm_new,
+-	.open		= kmb_pcm_open,
+-	.trigger	= kmb_pcm_trigger,
+-	.pointer	= kmb_pcm_pointer,
++	.name			= "kmb",
++	.pcm_construct		= kmb_platform_pcm_new,
++	.open			= kmb_pcm_open,
++	.trigger		= kmb_pcm_trigger,
++	.pointer		= kmb_pcm_pointer,
 +	.legacy_dai_naming	= 1,
  };
  
- #define SUN4I_CODEC_RATES	SNDRV_PCM_RATE_CONTINUOUS
-diff --git a/sound/soc/sunxi/sun4i-i2s.c b/sound/soc/sunxi/sun4i-i2s.c
-index 5be33d07361bd..6028871825bae 100644
---- a/sound/soc/sunxi/sun4i-i2s.c
-+++ b/sound/soc/sunxi/sun4i-i2s.c
-@@ -1125,7 +1125,8 @@ static struct snd_soc_dai_driver sun4i_i2s_dai = {
- };
- 
- static const struct snd_soc_component_driver sun4i_i2s_component = {
--	.name	= "sun4i-dai",
-+	.name			= "sun4i-dai",
+ static const struct snd_soc_component_driver kmb_component_dma = {
+-	.name		= "kmb",
++	.name			= "kmb",
 +	.legacy_dai_naming	= 1,
  };
  
- static bool sun4i_i2s_rd_reg(struct device *dev, unsigned int reg)
-diff --git a/sound/soc/sunxi/sun4i-spdif.c b/sound/soc/sunxi/sun4i-spdif.c
-index 17090f43150e0..bcceebca915ac 100644
---- a/sound/soc/sunxi/sun4i-spdif.c
-+++ b/sound/soc/sunxi/sun4i-spdif.c
-@@ -583,7 +583,8 @@ static const struct of_device_id sun4i_spdif_of_match[] = {
- MODULE_DEVICE_TABLE(of, sun4i_spdif_of_match);
- 
- static const struct snd_soc_component_driver sun4i_spdif_component = {
--	.name		= "sun4i-spdif",
-+	.name			= "sun4i-spdif",
-+	.legacy_dai_naming	= 1,
- };
- 
- static int sun4i_spdif_runtime_suspend(struct device *dev)
+ static int kmb_probe(struct snd_soc_dai *cpu_dai)
 -- 
 2.30.2
 
