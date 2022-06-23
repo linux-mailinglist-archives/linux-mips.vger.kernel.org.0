@@ -2,43 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E57557C2C
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 14:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2EF557BA0
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 14:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiFWM4h (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 08:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S232043AbiFWMyh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 08:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiFWM42 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 08:56:28 -0400
+        with ESMTP id S232003AbiFWMyc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 08:54:32 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD0E4BB8B;
-        Thu, 23 Jun 2022 05:56:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707E1427E2;
+        Thu, 23 Jun 2022 05:54:31 -0700 (PDT)
 Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NAKUt8006859;
-        Thu, 23 Jun 2022 07:53:06 -0500
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NBNlqj015665;
+        Thu, 23 Jun 2022 07:53:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=2oOH0ajpjX51SxIUnf5QoeLn4u7Pp4JTnUSfyoYuy5c=;
- b=Yj3HxcQ5Nq5ttDCOuIp+XU/qOxpTKhDa4zZiD4WMR7xISVGlCB1hmBVuGJ0BkM3BZTpN
- y/U5WSLz+8E1M9oFO3oZPqaGyj63x4nwB6pNpRCeWWUgLqZKG904cJcvclX7XknHzBQ6
- 410fbLz0gxVAv6/VeMcssQH3pwxJ2aDOgJfgXpSr6CJ63/rx6F9tw1UHMBGVj3m2UY/v
- vPlTt71PvwMVS2yGisURtucfUOoGQYxhXsK9wtU3Cg62+N1JiZc8+cYIRhUWFPic4S3Q
- 8O4zh/A5/8Ml0yQQHB3jHBHy2vzZDtOfUw8DeM39+gqstUgvG2vgTNrebSDnRw3GxQOu kA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gsc41fa4u-6
+ bh=4uqNUGf6HvGyrALyQ2b9y5JkJHvBo6YEo+XEvqJ14h8=;
+ b=R5jQOHlorNP67NtCxlObpr0ktD1FJahoVHaLoiK8S1ro6pKxbw+Msp/fKGgI59ipXUrX
+ 4TMB+2KSSOfOnUoSVYTN1AW/2EuPwMQRsiaxEqZFdXcV+BohIz1k2elmVt7aB+meMUlU
+ p6WmOi6wOSjUMn9lcMtR8/3zD06XuNfpFRV94IWsqNUR6xqlqWP+2Nv4Q44A9Q7p6JWG
+ ET8g8p9xanvqR/0IS63j1XtTgifjlzREj3Xgs6MG3E7zTmLUlCAzc7Y/5pWNzqvdr/ga
+ ja0t2V0yyug3UaSceXMz6M02zB0YM1oogKPE3a0pzF8QwKWRZHoulf66giU2BDC1TeW5 3A== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gsc41fa4j-16
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
         Thu, 23 Jun 2022 07:53:05 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 23 Jun
  2022 13:52:55 +0100
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
  Transport; Thu, 23 Jun 2022 13:52:55 +0100
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3A00611D4;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 52DDD11D1;
         Thu, 23 Jun 2022 12:52:55 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <broonie@kernel.org>
@@ -60,17 +60,17 @@ CC:     <lgirdwood@gmail.com>, <kuninori.morimoto.gx@renesas.com>,
         <dri-devel@lists.freedesktop.org>,
         <linux-rpi-kernel@lists.infradead.org>,
         <frattaroli.nicolas@gmail.com>
-Subject: [PATCH v2 50/96] ASoC: da*: Remove now redundant non_legacy_dai_naming flag
-Date:   Thu, 23 Jun 2022 13:52:04 +0100
-Message-ID: <20220623125250.2355471-51-ckeepax@opensource.cirrus.com>
+Subject: [PATCH v2 51/96] ASoC: es*: Remove now redundant non_legacy_dai_naming flag
+Date:   Thu, 23 Jun 2022 13:52:05 +0100
+Message-ID: <20220623125250.2355471-52-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220623125250.2355471-1-ckeepax@opensource.cirrus.com>
 References: <20220623125250.2355471-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: sRpSKbzDDkWksB9kvIVycJdJBNHREjM2
-X-Proofpoint-ORIG-GUID: sRpSKbzDDkWksB9kvIVycJdJBNHREjM2
+X-Proofpoint-GUID: JWMBwq82031UkQgIfWERpxYmtHShjrcR
+X-Proofpoint-ORIG-GUID: JWMBwq82031UkQgIfWERpxYmtHShjrcR
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -87,86 +87,60 @@ the non_legacy_dai_naming flag.
 
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- sound/soc/codecs/da7210.c | 1 -
- sound/soc/codecs/da7213.c | 1 -
- sound/soc/codecs/da7218.c | 1 -
- sound/soc/codecs/da7219.c | 1 -
- sound/soc/codecs/da732x.c | 1 -
- sound/soc/codecs/da9055.c | 1 -
- 6 files changed, 6 deletions(-)
+ sound/soc/codecs/es7134.c | 1 -
+ sound/soc/codecs/es7241.c | 1 -
+ sound/soc/codecs/es8316.c | 1 -
+ sound/soc/codecs/es8328.c | 1 -
+ 4 files changed, 4 deletions(-)
 
-diff --git a/sound/soc/codecs/da7210.c b/sound/soc/codecs/da7210.c
-index 76a21976ccddb..f838466bfebf8 100644
---- a/sound/soc/codecs/da7210.c
-+++ b/sound/soc/codecs/da7210.c
-@@ -1173,7 +1173,6 @@ static const struct snd_soc_component_driver soc_component_dev_da7210 = {
+diff --git a/sound/soc/codecs/es7134.c b/sound/soc/codecs/es7134.c
+index f443351677dfe..f5150d2f95da6 100644
+--- a/sound/soc/codecs/es7134.c
++++ b/sound/soc/codecs/es7134.c
+@@ -213,7 +213,6 @@ static const struct snd_soc_component_driver es7134_component_driver = {
  	.idle_bias_on		= 1,
  	.use_pmdown_time	= 1,
  	.endianness		= 1,
 -	.non_legacy_dai_naming	= 1,
  };
  
- #if IS_ENABLED(CONFIG_I2C)
-diff --git a/sound/soc/codecs/da7213.c b/sound/soc/codecs/da7213.c
-index 2e645dc60eda4..544ccbcfc8844 100644
---- a/sound/soc/codecs/da7213.c
-+++ b/sound/soc/codecs/da7213.c
-@@ -1922,7 +1922,6 @@ static const struct snd_soc_component_driver soc_component_dev_da7213 = {
+ static struct snd_soc_dai_driver es7154_dai = {
+diff --git a/sound/soc/codecs/es7241.c b/sound/soc/codecs/es7241.c
+index 0baa86241cf93..339553cfbb48e 100644
+--- a/sound/soc/codecs/es7241.c
++++ b/sound/soc/codecs/es7241.c
+@@ -232,7 +232,6 @@ static const struct snd_soc_component_driver es7241_component_driver = {
+ 	.num_dapm_routes	= ARRAY_SIZE(es7241_dapm_routes),
+ 	.idle_bias_on		= 1,
+ 	.endianness		= 1,
+-	.non_legacy_dai_naming	= 1,
+ };
+ 
+ static void es7241_parse_fmt(struct device *dev, struct es7241_data *priv)
+diff --git a/sound/soc/codecs/es8316.c b/sound/soc/codecs/es8316.c
+index 4407166bb3388..eb15be9095e77 100644
+--- a/sound/soc/codecs/es8316.c
++++ b/sound/soc/codecs/es8316.c
+@@ -769,7 +769,6 @@ static const struct snd_soc_component_driver soc_component_dev_es8316 = {
+ 	.num_dapm_routes	= ARRAY_SIZE(es8316_dapm_routes),
+ 	.use_pmdown_time	= 1,
+ 	.endianness		= 1,
+-	.non_legacy_dai_naming	= 1,
+ };
+ 
+ static const struct regmap_range es8316_volatile_ranges[] = {
+diff --git a/sound/soc/codecs/es8328.c b/sound/soc/codecs/es8328.c
+index dd53dfd87b04e..160adc706cc69 100644
+--- a/sound/soc/codecs/es8328.c
++++ b/sound/soc/codecs/es8328.c
+@@ -844,7 +844,6 @@ static const struct snd_soc_component_driver es8328_component_driver = {
  	.idle_bias_on		= 1,
  	.use_pmdown_time	= 1,
  	.endianness		= 1,
 -	.non_legacy_dai_naming	= 1,
  };
  
- static const struct regmap_config da7213_regmap_config = {
-diff --git a/sound/soc/codecs/da7218.c b/sound/soc/codecs/da7218.c
-index a5d7c350a3ded..91372909d184b 100644
---- a/sound/soc/codecs/da7218.c
-+++ b/sound/soc/codecs/da7218.c
-@@ -3040,7 +3040,6 @@ static const struct snd_soc_component_driver soc_component_dev_da7218 = {
- 	.idle_bias_on		= 1,
- 	.use_pmdown_time	= 1,
- 	.endianness		= 1,
--	.non_legacy_dai_naming	= 1,
- };
- 
- 
-diff --git a/sound/soc/codecs/da7219.c b/sound/soc/codecs/da7219.c
-index c18f76f370fc4..50ecf30e6136a 100644
---- a/sound/soc/codecs/da7219.c
-+++ b/sound/soc/codecs/da7219.c
-@@ -2647,7 +2647,6 @@ static const struct snd_soc_component_driver soc_component_dev_da7219 = {
- 	.idle_bias_on		= 1,
- 	.use_pmdown_time	= 1,
- 	.endianness		= 1,
--	.non_legacy_dai_naming	= 1,
- };
- 
- 
-diff --git a/sound/soc/codecs/da732x.c b/sound/soc/codecs/da732x.c
-index 3f1cfee10df3f..2c5b0b74201c7 100644
---- a/sound/soc/codecs/da732x.c
-+++ b/sound/soc/codecs/da732x.c
-@@ -1503,7 +1503,6 @@ static const struct snd_soc_component_driver soc_component_dev_da732x = {
- 	.idle_bias_on		= 1,
- 	.use_pmdown_time	= 1,
- 	.endianness		= 1,
--	.non_legacy_dai_naming	= 1,
- };
- 
- static int da732x_i2c_probe(struct i2c_client *i2c)
-diff --git a/sound/soc/codecs/da9055.c b/sound/soc/codecs/da9055.c
-index 9d8c8adc5d768..28043b4530df8 100644
---- a/sound/soc/codecs/da9055.c
-+++ b/sound/soc/codecs/da9055.c
-@@ -1460,7 +1460,6 @@ static const struct snd_soc_component_driver soc_component_dev_da9055 = {
- 	.idle_bias_on		= 1,
- 	.use_pmdown_time	= 1,
- 	.endianness		= 1,
--	.non_legacy_dai_naming	= 1,
- };
- 
- static const struct regmap_config da9055_regmap_config = {
+ int es8328_probe(struct device *dev, struct regmap *regmap)
 -- 
 2.30.2
 
