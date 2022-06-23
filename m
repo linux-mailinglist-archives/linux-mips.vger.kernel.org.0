@@ -2,129 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A998D5570C9
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 04:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D52D5571D3
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 06:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377348AbiFWCAU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jun 2022 22:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S229509AbiFWEjH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 00:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377427AbiFWCAS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 22:00:18 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1939DA5;
-        Wed, 22 Jun 2022 19:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655949618; x=1687485618;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KbeXCVtz+edFvopo5p5QoDn9huAgw0qHkMWWoFBLhXA=;
-  b=TRcjg/fXfLp1F9SNfyxslU1rzSfaxkUWr07brf1Q4kxr1JKxkSrviN54
-   V7HhryJQkD1028NN9t0UzDDcyBAOsAG6hxbIkfOdXZKz7KwT94N67Qaox
-   LLq+zGWlh4R6xZgznNWfR85Gyg+lc8l3UogXVj73y8NC/RtcsRy3ItHmH
-   ob2ctiH1fmRSRziYqDH5KHeGSVNWGjuISCd/gWbPdBhiPVTPnyyQa0Zw5
-   69Z6NP4z4eftiWNh/0M74rfpASd9qv/4GcEoOoQ6AL5CpR0CBMT0V6amg
-   0zfoSBW01Kk9kKY0jx5cqg4fTd0XHuEPf9FJ4ZQV4uN0CV82j6ROoao8y
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281325558"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="281325558"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 19:00:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="615398908"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Jun 2022 19:00:02 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4C8X-0000LT-BJ;
-        Thu, 23 Jun 2022 02:00:01 +0000
-Date:   Thu, 23 Jun 2022 09:59:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org
-Cc:     kbuild-all@lists.01.org, lgirdwood@gmail.com,
-        kuninori.morimoto.gx@renesas.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, vkoul@kernel.org,
-        nicolas.ferre@microchip.com, nsaenz@kernel.org,
-        shawnguo@kernel.org, linux-imx@nxp.com, cezary.rojewski@intel.com,
-        pierre-louis.bossart@linux.intel.com, linux-mips@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, daniel@zonque.org,
-        srinivas.kandagatla@linaro.org, linux-rockchip@lists.infradead.org,
-        krzk@kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
-        heiko@sntech.de, jbrunet@baylibre.com, kernel@pengutronix.de,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 27/96] ASoC: au1x: Migrate to new style legacy DAI naming
- flag
-Message-ID: <202206230910.wUXKFP3z-lkp@intel.com>
-References: <20220616143429.1324494-28-ckeepax@opensource.cirrus.com>
+        with ESMTP id S229901AbiFWC7i (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 22:59:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA13E55;
+        Wed, 22 Jun 2022 19:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=sIfzbNhL8TrtFD7HElGf5ZhPwJycPkd0im274TrYgOE=; b=UnLy5cTQ9sM5zeCyJZzL7KnkWc
+        LhxMLklCHlYKiJrrXdupWsZKGXnFbZhYxYlgr9YBdgGDax6rz/IoYK7WIZV+rjNLdZxhrKFhr+801
+        y83vdod1sbpRBgyA5iR6JfWp0JFYMzrvSjEljyj9To2MadknSDDVbgfWR64/wydYAfOSNWQ9Z2kyo
+        l0DemHleTXJrCJOrjJ64mOHv3HUwlkFiikYhx/b/ryyd3u+lWw11VOuMQ7irm2/CLJc+GCLofGopK
+        kCJBoK8mqZpk0gYDRVWWvJdZXNq7OIgDLYoe9UByOuqlgrsGGMBb8aC0eANBcRahGA39veVoQDwcs
+        hne8NIzg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o4D46-007YCQ-Es; Thu, 23 Jun 2022 02:59:30 +0000
+Message-ID: <f174fa2c-40b8-af76-812f-0f3bb680b2da@infradead.org>
+Date:   Wed, 22 Jun 2022 19:59:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616143429.1324494-28-ckeepax@opensource.cirrus.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] MIPS: Fix 2 typos
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>,
+        Zhang Jiaming <jiaming@nfschina.com>, tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com
+References: <20220622090713.24370-1-jiaming@nfschina.com>
+ <d2112863-bd28-d6db-c353-1b7b94b45fcb@infradead.org>
+ <37d560bc5267408eb9cc806339025418094cf5bb.camel@perches.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <37d560bc5267408eb9cc806339025418094cf5bb.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Charles,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on tegra/for-next sunxi/sunxi/for-next linus/master v5.19-rc3 next-20220622]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Keepax/Refactor-non_legacy_dai_naming-flag/20220616-224300
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: mips-db1xxx_defconfig (https://download.01.org/0day-ci/archive/20220623/202206230910.wUXKFP3z-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/794205d61285d0921e564e722daf9b20df82ed57
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Charles-Keepax/Refactor-non_legacy_dai_naming-flag/20220616-224300
-        git checkout 794205d61285d0921e564e722daf9b20df82ed57
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/soc/au1x/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> sound/soc/au1x/ac97c.c:227:10: error: 'const struct snd_soc_component_driver' has no member named 'legacy_dai_name'; did you mean 'legacy_dai_naming'?
-     227 |         .legacy_dai_name        = 1,
-         |          ^~~~~~~~~~~~~~~
-         |          legacy_dai_naming
->> sound/soc/au1x/ac97c.c:227:35: warning: initialization of 'const struct snd_kcontrol_new *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     227 |         .legacy_dai_name        = 1,
-         |                                   ^
-   sound/soc/au1x/ac97c.c:227:35: note: (near initialization for 'au1xac97c_component.controls')
 
 
-vim +227 sound/soc/au1x/ac97c.c
+On 6/22/22 07:46, Joe Perches wrote:
+> On Wed, 2022-06-22 at 07:28 -0700, Randy Dunlap wrote:
+>> On 6/22/22 02:07, Zhang Jiaming wrote:
+>>> Change 'modifed' to 'modified'.
+>>> Change 'relys' to 'relays'.
+> []
+>>> diff --git a/arch/mips/cavium-octeon/executive/cvmx-helper-board.c b/arch/mips/cavium-octeon/executive/cvmx-helper-board.c
+> []
+>>> @@ -282,9 +282,9 @@ union cvmx_helper_link_info __cvmx_helper_board_link_get(int ipd_port)
+>>>   * support and should return the number of actual ports on the
+>>>   * board.
+>>>   *
+>>> - * This function must be modifed for every new Octeon board.
+>>> + * This function must be modified for every new Octeon board.
+>>>   * Internally it uses switch statements based on the cvmx_sysinfo
+>>> - * data to determine board types and revisions. It relys on the
+>>
+>>                                                       relies
+>>
+>> But it would be better to restrict this barrage (or swarm) of patches
+>> to Kconfig help text problems and/or strings that are printed to users.
+> 
+> I believe fixing typos isn't a particular problem and is
+> overall rather a good thing.
 
-   224	
-   225	static const struct snd_soc_component_driver au1xac97c_component = {
-   226		.name			= "au1xac97c",
- > 227		.legacy_dai_name	= 1,
-   228	};
-   229	
+OK, I can agree with that.
+
+> Though backporting these patches would be silly.
+
+Ack.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy
