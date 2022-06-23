@@ -2,91 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D52D5571D3
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 06:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8139557430
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 09:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiFWEjH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 00:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S230344AbiFWHqD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 03:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiFWC7i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jun 2022 22:59:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA13E55;
-        Wed, 22 Jun 2022 19:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=sIfzbNhL8TrtFD7HElGf5ZhPwJycPkd0im274TrYgOE=; b=UnLy5cTQ9sM5zeCyJZzL7KnkWc
-        LhxMLklCHlYKiJrrXdupWsZKGXnFbZhYxYlgr9YBdgGDax6rz/IoYK7WIZV+rjNLdZxhrKFhr+801
-        y83vdod1sbpRBgyA5iR6JfWp0JFYMzrvSjEljyj9To2MadknSDDVbgfWR64/wydYAfOSNWQ9Z2kyo
-        l0DemHleTXJrCJOrjJ64mOHv3HUwlkFiikYhx/b/ryyd3u+lWw11VOuMQ7irm2/CLJc+GCLofGopK
-        kCJBoK8mqZpk0gYDRVWWvJdZXNq7OIgDLYoe9UByOuqlgrsGGMBb8aC0eANBcRahGA39veVoQDwcs
-        hne8NIzg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o4D46-007YCQ-Es; Thu, 23 Jun 2022 02:59:30 +0000
-Message-ID: <f174fa2c-40b8-af76-812f-0f3bb680b2da@infradead.org>
-Date:   Wed, 22 Jun 2022 19:59:26 -0700
+        with ESMTP id S229451AbiFWHqC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 03:46:02 -0400
+Received: from mail.onlinesuccesses.pl (mail.onlinesuccesses.pl [198.244.150.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE6646B23
+        for <linux-mips@vger.kernel.org>; Thu, 23 Jun 2022 00:46:01 -0700 (PDT)
+Received: by mail.onlinesuccesses.pl (Postfix, from userid 1002)
+        id 12521AEF6D; Thu, 23 Jun 2022 07:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onlinesuccesses.pl;
+        s=mail; t=1655970185;
+        bh=nE8HqilgMh4dy7+Z8ksfg7Bc9rmPeQtYFq3/3YR2ODU=;
+        h=Date:From:To:Subject:From;
+        b=Nq9BdM+ok1QeercVLHjvtweP0TpPmFFK4mbvKF9iF415Bnr0yc7t9hyHcAHXeO3fn
+         3hTlLx/2pK4Pa2oiBTHsZHfbE9pycXyo23BK4h0s1nIWiKctT4+m1C4oA2p0c2pXXm
+         dBi1JyiyORajyvw0JBkKXuiU9CglzLJUyRZyv1RjKeFfZWaCuxM53u/of1eNtVnuR1
+         SIhNaMhEELfeCapaqP+M4MCtxDTuAgkV/F2VkZ9spfMVFLkjkFmXG4R4But3A8hs3A
+         9yUTcaD8JDHLslHQolwSpjugvIE6y/5RCa/m1OGSP6C1uK/uLV2eqN4AaBgEOWpiPu
+         /hQ9QOb3mGKMg==
+Received: by mail.onlinesuccesses.pl for <linux-mips@vger.kernel.org>; Thu, 23 Jun 2022 07:41:20 GMT
+Message-ID: <20220623064501-0.1.51.1mraa.0.tb3b0nh22j@onlinesuccesses.pl>
+Date:   Thu, 23 Jun 2022 07:41:20 GMT
+From:   "Wiktor Zielonko" <wiktor.zielonko@onlinesuccesses.pl>
+To:     <linux-mips@vger.kernel.org>
+Subject: Ruch z pierwszej pozycji w Google
+X-Mailer: mail.onlinesuccesses.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] MIPS: Fix 2 typos
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>,
-        Zhang Jiaming <jiaming@nfschina.com>, tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, renyu@nfschina.com
-References: <20220622090713.24370-1-jiaming@nfschina.com>
- <d2112863-bd28-d6db-c353-1b7b94b45fcb@infradead.org>
- <37d560bc5267408eb9cc806339025418094cf5bb.camel@perches.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <37d560bc5267408eb9cc806339025418094cf5bb.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Dzie=C5=84 dobry,=20
+
+jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
+j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
+e Google.=20
+
+Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
+=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
+w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
+owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
+dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
+
+Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
+edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
+edstawi=C4=87 ofert=C4=99?=20
 
 
-On 6/22/22 07:46, Joe Perches wrote:
-> On Wed, 2022-06-22 at 07:28 -0700, Randy Dunlap wrote:
->> On 6/22/22 02:07, Zhang Jiaming wrote:
->>> Change 'modifed' to 'modified'.
->>> Change 'relys' to 'relays'.
-> []
->>> diff --git a/arch/mips/cavium-octeon/executive/cvmx-helper-board.c b/arch/mips/cavium-octeon/executive/cvmx-helper-board.c
-> []
->>> @@ -282,9 +282,9 @@ union cvmx_helper_link_info __cvmx_helper_board_link_get(int ipd_port)
->>>   * support and should return the number of actual ports on the
->>>   * board.
->>>   *
->>> - * This function must be modifed for every new Octeon board.
->>> + * This function must be modified for every new Octeon board.
->>>   * Internally it uses switch statements based on the cvmx_sysinfo
->>> - * data to determine board types and revisions. It relys on the
->>
->>                                                       relies
->>
->> But it would be better to restrict this barrage (or swarm) of patches
->> to Kconfig help text problems and/or strings that are printed to users.
-> 
-> I believe fixing typos isn't a particular problem and is
-> overall rather a good thing.
-
-OK, I can agree with that.
-
-> Though backporting these patches would be silly.
-
-Ack.
-
--- 
-~Randy
+Pozdrawiam serdecznie,
+Wiktor Zielonko
