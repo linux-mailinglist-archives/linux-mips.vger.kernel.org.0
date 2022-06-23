@@ -2,92 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019DB557551
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 10:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7855576D8
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jun 2022 11:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiFWIYO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 04:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S229898AbiFWJl1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 05:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiFWIYN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 04:24:13 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8797848892;
-        Thu, 23 Jun 2022 01:24:09 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id mf9so19097553ejb.0;
-        Thu, 23 Jun 2022 01:24:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=je97Zmu9ZIV2AyqWdPVDsLNA9EKzzISpQbnMs7O+hLA=;
-        b=KYVmQwnrxiCoug29I0G4VehxA1+Kbu6oavqgW1HojBzwn89MJs4Z92X98QLd2T8g81
-         DBFFCdxEtN3nwF2P3al2pY+9ArspK4fU8R49zmv6mL1xIeewLa3sEnP3nkkcP21cqof8
-         3Iv9aT8G7dvMA6md9eK9WWhuzOKpiTb/xm01LbYsDgN+xqnsfU2vaXWheco6xPAKuKT5
-         oR931R2L4uwYHhIgupCI9BCIHs4/Dmnd2IvYPq3kirtJWESdr8U1NuQwNHLTyS7sHy70
-         FeSred4+Jbq6jCAEXoC2P3FUI4Uz+TDXWkdZ2Z3opjgmMTG5qkSNpCvSOmjW9GHk/Rxn
-         wP9A==
-X-Gm-Message-State: AJIora9AEGXy3aKi6VmhPIY74N8S9qhZmozsNt1hsPdKFDcLNJ0Optj8
-        08vh9WHib2S6bbt9Pwpg4nCrRyTLQ64OF+wW
-X-Google-Smtp-Source: AGRyM1tQkctV7PGvSEx3E4tG2gVc0zSZvBOMmNeC/R1LG1xUn4SfCS59LrKaZal29UVgYo74xLGspA==
-X-Received: by 2002:a17:907:9689:b0:71e:56c1:838b with SMTP id hd9-20020a170907968900b0071e56c1838bmr7081732ejc.304.1655972648153;
-        Thu, 23 Jun 2022 01:24:08 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id e15-20020a056402190f00b0043580ac5888sm9205712edz.82.2022.06.23.01.24.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 01:24:07 -0700 (PDT)
-Message-ID: <c7115ff1-2a97-f5a0-a0c2-c7c1064af291@kernel.org>
-Date:   Thu, 23 Jun 2022 10:24:06 +0200
+        with ESMTP id S229656AbiFWJlY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 05:41:24 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808C449909;
+        Thu, 23 Jun 2022 02:41:23 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25N7fLsF004327;
+        Thu, 23 Jun 2022 04:39:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=i32Dkqu6yqHdJkz3oPGSblt6FxDAn2yx5mHso4uT6jY=;
+ b=nIE3n9kDrMoH4e/LAawz+RzUC2VoQWASFOauN4tM5A1H8JMc8tTXY2cVBGOwMqIrQM6K
+ STuS8s6JFijovnai1W2MNLfVUjobxH6CViDtDBBPJUDXBmHrZJCFNVYS9HIj6iGziz+r
+ VnKUwYrgOKvFYjTYgJ7g8SHsa+TlwYy2/uQ+7BQ2M5FiknT1aLaBacYmzVf4gZibj1KF
+ +x6MXDk3uwUf66jBJA5uO/c3MJHdGz1TvkpWGO+3eq+mJ5MeXOg5XvUPhCzW0RdI3EaW
+ UeEhW8dhlBiL29hjgLxwPY+qxBlb9eORf5BQNruocf4tI6GNJ6GP/Mzs9siqoEV7xXtG sA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gsb4p6jm6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 23 Jun 2022 04:39:52 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 23 Jun
+ 2022 10:39:51 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Thu, 23 Jun 2022 10:39:51 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1797D11D1;
+        Thu, 23 Jun 2022 09:39:51 +0000 (UTC)
+Date:   Thu, 23 Jun 2022 09:39:51 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     kernel test robot <lkp@intel.com>
+CC:     <broonie@kernel.org>, <kbuild-all@lists.01.org>,
+        <lgirdwood@gmail.com>, <kuninori.morimoto.gx@renesas.com>,
+        <mripard@kernel.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <vkoul@kernel.org>, <nicolas.ferre@microchip.com>,
+        <nsaenz@kernel.org>, <shawnguo@kernel.org>, <linux-imx@nxp.com>,
+        <cezary.rojewski@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <linux-mips@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
+        <daniel@zonque.org>, <srinivas.kandagatla@linaro.org>,
+        <linux-rockchip@lists.infradead.org>, <krzk@kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>, <linux-xtensa@linux-xtensa.org>,
+        <peter.ujfalusi@gmail.com>, <jarkko.nikula@bitmer.com>,
+        <heiko@sntech.de>, <jbrunet@baylibre.com>, <kernel@pengutronix.de>,
+        <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 27/96] ASoC: au1x: Migrate to new style legacy DAI naming
+ flag
+Message-ID: <20220623093951.GG38351@ediswmail.ad.cirrus.com>
+References: <20220616143429.1324494-28-ckeepax@opensource.cirrus.com>
+ <202206230910.wUXKFP3z-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 6/6] serial: Consolidate BOTH_EMPTY use
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "speakup@linux-speakup.org" <speakup@linux-speakup.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
-References: <20220621124958.3342-1-ilpo.jarvinen@linux.intel.com>
- <20220621124958.3342-7-ilpo.jarvinen@linux.intel.com>
- <03467516-3962-4ff2-23d2-2b3a1d647c5a@kernel.org>
- <CAHp75VeKhY6dN7j_yXQXUMhOqRwqQ2yN_qF95U9wU6K4uKPdaQ@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAHp75VeKhY6dN7j_yXQXUMhOqRwqQ2yN_qF95U9wU6K4uKPdaQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <202206230910.wUXKFP3z-lkp@intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: ngGGSOCW3HD7Nqksfbnzki1Fx-Dv9wmS
+X-Proofpoint-ORIG-GUID: ngGGSOCW3HD7Nqksfbnzki1Fx-Dv9wmS
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23. 06. 22, 10:11, Andy Shevchenko wrote:
->     * prom_putchar_wait() should be implemented using
->        read_poll_timeout_atomic(), incl. failure/timeout handling.
+On Thu, Jun 23, 2022 at 09:59:06AM +0800, kernel test robot wrote:
+> Hi Charles,
 > 
+> I love your patch! Yet something to improve:
 > 
-> Not sure since it is an early stage and scheduler might not work as 
-> expected. Conversions to iopoll.h macros bitten us a few times already.
+> [auto build test ERROR on broonie-sound/for-next]
+> >> sound/soc/au1x/ac97c.c:227:10: error: 'const struct snd_soc_component_driver' has no member named 'legacy_dai_name'; did you mean 'legacy_dai_naming'?
+>      227 |         .legacy_dai_name        = 1,
+>          |          ^~~~~~~~~~~~~~~
+>          |          legacy_dai_naming
 
-Except _atomic does not use scheduler :).
+Hmm... apologies for this not sure how that snuck through my
+build testing, must have somehow missed this one.
 
--- 
--- 
-js
-suse labs
+Mark do you want me to send a v2 for the whole series? Or given
+the size would it be better to just resend this patch?
+
+Thanks,
+Charles
