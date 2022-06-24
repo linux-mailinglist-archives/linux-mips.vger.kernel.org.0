@@ -2,65 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6ABE558CD8
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Jun 2022 03:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4420D558FD1
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Jun 2022 06:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiFXBdY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 21:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S229960AbiFXEZJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Jun 2022 00:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiFXBdX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 21:33:23 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFC117E1D;
-        Thu, 23 Jun 2022 18:33:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VHEl8m6_1656034321;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VHEl8m6_1656034321)
-          by smtp.aliyun-inc.com;
-          Fri, 24 Jun 2022 09:33:17 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     paul@crapouillou.net
-Cc:     airlied@linux.ie, daniel@ffwll.ch, linux-mips@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] drm/ingenic: Use resource_size function on resource object
-Date:   Fri, 24 Jun 2022 09:31:59 +0800
-Message-Id: <20220624013159.88646-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S229836AbiFXEZJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jun 2022 00:25:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FE1680B6;
+        Thu, 23 Jun 2022 21:25:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2387DB8266E;
+        Fri, 24 Jun 2022 04:25:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0687C34114;
+        Fri, 24 Jun 2022 04:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656044705;
+        bh=3ofsG0+fqo2VqX2279Vp6KsempNjI6fWtI6ny6qteEw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QllQgw+Ri6XNAsWcIFs07OVlBE/AksnQiAY538Aiyghx+J5UsJRoGo3YBQAjTPG72
+         +wRTzRJOAFm+Mc0852z7JLjKFUAZlaGdobe3C/mZ+je8tYtvUsNb4BUiArhJfnZNHL
+         8+eZCZpayWwGyS6LNKWyckaWmCPGoApBIGT9LpLZxufSPBbEAPHmdhH862Uljavi+o
+         Ag0vH5hxLFY7AMfL6JdQm3DxoeezDVOgw1YS5od8ZyWC36/NyRBXxgnhcv/xbHEmEl
+         FdEkTi8swLOE61IoRKPv6ZsrN2oi7WDA6f/8oxmr4RSE7//+weuU2N9CUzjAH97H5w
+         DJTjTykyDjUIw==
+Date:   Fri, 24 Jun 2022 09:55:01 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     broonie@kernel.org, lgirdwood@gmail.com,
+        kuninori.morimoto.gx@renesas.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, nicolas.ferre@microchip.com,
+        nsaenz@kernel.org, shawnguo@kernel.org, linux-imx@nxp.com,
+        cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
+        linux-mips@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        daniel@zonque.org, srinivas.kandagatla@linaro.org,
+        linux-rockchip@lists.infradead.org, krzk@kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
+        heiko@sntech.de, jbrunet@baylibre.com, kernel@pengutronix.de,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        dri-devel@lists.freedesktop.org,
+        linux-rpi-kernel@lists.infradead.org, frattaroli.nicolas@gmail.com
+Subject: Re: [PATCH v2 02/96] soundwire: intel: Migrate to new style legacy
+ DAI naming flag
+Message-ID: <YrU8nRLVJghIzAEb@matsya>
+References: <20220623125250.2355471-1-ckeepax@opensource.cirrus.com>
+ <20220623125250.2355471-3-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623125250.2355471-3-ckeepax@opensource.cirrus.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This was found by coccicheck:
+On 23-06-22, 13:51, Charles Keepax wrote:
+> Change the legacy DAI naming flag from opting in to the new scheme
+> (non_legacy_dai_naming), to opting out of it (legacy_dai_naming).
+> This driver appears to be on the CPU side of the DAI link and
+> currently uses the legacy naming, so add the new flag.
 
-./drivers/gpu/drm/ingenic/ingenic-drm-drv.c:1149:35-38: WARNING: Suspicious code. resource_size is maybe missing with res.
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 2c559885347a..5514b163999f 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -1146,7 +1146,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 	}
- 
- 	regmap_config = ingenic_drm_regmap_config;
--	regmap_config.max_register = res->end - res->start;
-+	regmap_config.max_register = resource_size(res);
- 	priv->map = devm_regmap_init_mmio(dev, base,
- 					  &regmap_config);
- 	if (IS_ERR(priv->map)) {
 -- 
-2.20.1.7.g153144c
-
+~Vinod
