@@ -2,75 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE85B559F91
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Jun 2022 19:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39AD559FE9
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Jun 2022 20:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiFXRHu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Jun 2022 13:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S229586AbiFXR1R (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Jun 2022 13:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbiFXRHt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jun 2022 13:07:49 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFAB496A8
-        for <linux-mips@vger.kernel.org>; Fri, 24 Jun 2022 10:07:48 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id u15so5926012ejc.10
-        for <linux-mips@vger.kernel.org>; Fri, 24 Jun 2022 10:07:48 -0700 (PDT)
+        with ESMTP id S232491AbiFXR0d (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jun 2022 13:26:33 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Jun 2022 10:26:11 PDT
+Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C303AA44
+        for <linux-mips@vger.kernel.org>; Fri, 24 Jun 2022 10:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=njhxjTKf5qgs999H/NFNZlENyL8kuhp42cJfuLDuDe8=;
-        b=DRmse1ypXl3VHFhtM0fcsmCn7+/q47zNeWtzMZTE+8ishHTdLgLxHlbVqqKO27TDCX
-         QyCX/uRL352TkcOj0XEA1jqrTDB4+g1jygkbeGFYVUTut1Q1enRegCed8YUgqchsnVlW
-         BxplUtOmtf2h9ihNfB1YvxNPnDixxWeQqXjFbevoee7gjWSntrGBH9oGWvINUUsB9KoJ
-         qu0e4VbUNSAG0n0L7Ryvb46akd6jUkn9Cyv0YF5YeASDU9pRm0xNzGzsXrzys8JHhRiR
-         etgbLPC2GNJYVjH5Kh7kmckCmZA6z/KoxUm7egZb6rBhk2IhFFoAaABVqLga9lMQpBgJ
-         tN3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=njhxjTKf5qgs999H/NFNZlENyL8kuhp42cJfuLDuDe8=;
-        b=apq3lXSISBad57KcviVy0qeE4njj1Ikr007qHtmXb9IdugJO+EIELZ3L+G7vNXW8lJ
-         9yGXNOasp7cGl07+wSAsqaV8wmTP+N5dPNZSBevJgkn4YwLxYebK9wFyrt/WkbnKOoKI
-         WfCE/4jEOOOpYOBKWgPZWK5CMo2bGye0KP7FA6UC6XxAz0zJs6uKpMUGWoTqFi4Qr859
-         Uspo8/23xfeLYOlZM5bQ2YdBil1WDl2X/pzqRSYclABMS770KH0Bc4HhqpOiAlEtiXjy
-         0ipEz6ey29F4OZzCyyQhJOy69QznTv6aX1IAP4H+rZPi3ho71DMOY/csMooKUsRK5cu6
-         JM9w==
-X-Gm-Message-State: AJIora8i3QQOSMG46zeYJw/F1Q8RnGznmNWFFR23IKiV+Nhhl/OFZuTh
-        DmIQzJ1knXnu3oPbtVNDeJvrmA==
-X-Google-Smtp-Source: AGRyM1usU5fpLW1YUCimsRoTEJR1DvpJy1/MZt5fr7TyD1VT7jW9A3P3c5qYz+5Zb+cMdCk6FTIlyQ==
-X-Received: by 2002:a17:906:5d08:b0:6ff:8ed:db63 with SMTP id g8-20020a1709065d0800b006ff08eddb63mr14168737ejt.408.1656090467032;
-        Fri, 24 Jun 2022 10:07:47 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b19-20020aa7dc13000000b00435959d3605sm2455929edu.84.2022.06.24.10.07.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:07:46 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rahul Bedarkar <rahulbedarkar89@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] MIPS: dts: align gpio-key node names with dtschema
-Date:   Fri, 24 Jun 2022 19:07:40 +0200
-Message-Id: <20220624170740.66271-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
-References: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=YImQrOCjpI1Pf4sniYSIQE78QxCL87Zrr2ZodYXVNnY=;
+        b=fWqRVZB/Piz7vR6GT/pFrKYPjNsODm6Lt5B5pbB2athdA4enwZe3cwndBcrnJ57M6ATcujp0kKW2S
+         F6fM7giyCy9Eh1wtt9/qJRhGx2q7M8tLUenHtxp2qOh/9dtEarCJJcJCpYgFrHU3kLAUqx6xlAk2hW
+         70PpcGcRobBymntLPaACuMV0fd5rBXAsNsmR3OMe5ki6m1TsvkwaAPK8HgZfdjLmdpC6brj1laBfET
+         IqcPFOkzGb1JR0K7XH4FVH5btEvWwMgBg2tNiNr8kWwTgCqfciZjWE6pHIncd9tFNOaIoAD22KMoN+
+         RfT6/ejTF77vupkcDkBHddZGHkF8W7w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=YImQrOCjpI1Pf4sniYSIQE78QxCL87Zrr2ZodYXVNnY=;
+        b=0aamlKaxWOlroxmiYOuL5/s5MGru3Ba31/MhPmFhmYdTmN8Rn2J7h0+f9Zgt2oxQkHzfCsZIhEUVg
+         8SIHF1ECA==
+X-HalOne-Cookie: 96a8abf5ab4b9e66dba2a4c7a0ea66e15d8eb3a2
+X-HalOne-ID: 9728a25b-f3e2-11ec-a916-d0431ea8a290
+Received: from mailproxy4.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 9728a25b-f3e2-11ec-a916-d0431ea8a290;
+        Fri, 24 Jun 2022 17:25:06 +0000 (UTC)
+Date:   Fri, 24 Jun 2022 19:25:05 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     paul@crapouillou.net, airlied@linux.ie, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/ingenic: Use resource_size function on resource
+ object
+Message-ID: <YrXzccaCsBpPHTYw@ravnborg.org>
+References: <20220624013159.88646-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624013159.88646-1-jiapeng.chong@linux.alibaba.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,69 +61,14 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The node names should be generic and DT schema expects certain pattern
-(e.g. with key/button/switch).
+Hi Jiapeng,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/mips/boot/dts/ingenic/ci20.dts                        | 2 +-
- arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts         | 2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts         | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+On Fri, Jun 24, 2022 at 09:31:59AM +0800, Jiapeng Chong wrote:
+> This was found by coccicheck:
+> 
+> ./drivers/gpu/drm/ingenic/ingenic-drm-drv.c:1149:35-38: WARNING: Suspicious code. resource_size is maybe missing with res.
+> 
+Nice one, now I have to go back and fix my code as well.
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index ab6e3dc0bc1d..37c46720c719 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -31,7 +31,7 @@ memory {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		sw1 {
-+		switch {
- 			label = "ci20:sw1";
- 			linux,code = <KEY_F13>;
- 			gpios = <&gpd 17 GPIO_ACTIVE_HIGH>;
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index 826e91b840a3..179558161f85 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -26,7 +26,7 @@ gpio-keys {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinmux_gpio_gpio>;	/* GPIO11 */
- 
--		user_btn1 {
-+		button {
- 			label = "USER_BTN1";
- 			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
- 			linux,code =<KEY_PROG1> ;
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 37037e4f3c3b..24eebc5a85b1 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -29,7 +29,7 @@ i2c@900 {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		reset {
-+		key-reset {
- 			label = "reset";
- 			gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
- 			linux,code = <KEY_RESTART>;
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index a6201a119a1f..34006e667780 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -29,7 +29,7 @@ i2c@900 {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		reset {
-+		key-reset {
- 			label = "reset";
- 			gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
- 			linux,code = <KEY_RESTART>;
--- 
-2.34.1
-
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
