@@ -2,95 +2,286 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EC555A181
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Jun 2022 21:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3A955A2ED
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Jun 2022 22:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiFXTAX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Jun 2022 15:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S231235AbiFXUmm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Jun 2022 16:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbiFXTAT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jun 2022 15:00:19 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1F081C5C;
-        Fri, 24 Jun 2022 12:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1656097215; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=THNfze9JEECbMTbkniNl4WxsrwffazR6yHW49pczds4=;
-        b=K941P0DpIoJDcsyNQjtu54obkjlHXfjLrCJBJoMhBy8bzMbVZkEcE5OXtUNtK5CFnOQVkC
-        6PUACCO5JqQSInC01JnI685UZIAKzhA5KZvrb3V5xUdLntYxsH1Uu/73nVZ7r6AM66/277
-        4NZVnmpuPNbMaBbBZIo99FOznMgIXUY=
-Date:   Fri, 24 Jun 2022 20:00:05 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] drm/ingenic: Use resource_size function on resource
- object
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, linux-mips@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Sam Ravnborg <sam@ravnborg.org>
-Message-Id: <5SWZDR.5KODQDXQB5142@crapouillou.net>
-In-Reply-To: <20220624013159.88646-1-jiapeng.chong@linux.alibaba.com>
-References: <20220624013159.88646-1-jiapeng.chong@linux.alibaba.com>
+        with ESMTP id S230451AbiFXUmk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jun 2022 16:42:40 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6595284880;
+        Fri, 24 Jun 2022 13:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656103359; x=1687639359;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fjWAYUqOtPYEEj9xHBO9BO9wmhwh3ENAOoxiK8aLTk0=;
+  b=EGxpyopjh0yW2eRCTOYG4n9GkQxhTFrz5+Tcka9thj84wxWeNOEN7Jd1
+   WtZGzapdEG/89D7o9NEDdXYgxeVvKIO/oVUiLHBA0MZJNrsiq2xxsm/on
+   m72LP/vbb6PklltDi1QFSCzspDo8vsNrzYtA3eNBzJbpvGuPOPt1H2lOC
+   FZiO/ob9nRYUld21l6WyS3iafWuvhnw6EbbJE3uWYZh6yYpnrfrXUntBO
+   E2NvcVd7kkImcdF+cN+7/K7dnMdS4gzUjzplPZfTZNAYONsBCF5Ohrq8T
+   14/bvrHp+HqV/0X/6eripeLDd71g4y44U5rQvtZYTuViZan+F80L14VZ+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="279851817"
+X-IronPort-AV: E=Sophos;i="5.92,220,1650956400"; 
+   d="scan'208";a="279851817"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 13:42:38 -0700
+X-IronPort-AV: E=Sophos;i="5.92,220,1650956400"; 
+   d="scan'208";a="593381058"
+Received: from vhavel-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.216.91])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 13:42:35 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v9 1/6] serial: 8250: make saved LSR larger
+Date:   Fri, 24 Jun 2022 23:42:05 +0300
+Message-Id: <20220624204210.11112-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220624204210.11112-1-ilpo.jarvinen@linux.intel.com>
+References: <20220624204210.11112-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+DW flags address received as BIT(8) in LSR. In order to not lose that
+on read, enlarge lsr_saved_flags to u16.
 
-Le ven., juin 24 2022 at 09:31:59 +0800, Jiapeng Chong=20
-<jiapeng.chong@linux.alibaba.com> a =E9crit :
-> This was found by coccicheck:
->=20
-> ./drivers/gpu/drm/ingenic/ingenic-drm-drv.c:1149:35-38: WARNING:=20
-> Suspicious code. resource_size is maybe missing with res.
->=20
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c=20
-> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> index 2c559885347a..5514b163999f 100644
-> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> @@ -1146,7 +1146,7 @@ static int ingenic_drm_bind(struct device *dev,=20
-> bool has_components)
->  	}
->=20
->  	regmap_config =3D ingenic_drm_regmap_config;
-> -	regmap_config.max_register =3D res->end - res->start;
-> +	regmap_config.max_register =3D resource_size(res);
+Adjust lsr/status variables and related call chains to use u16.
+Technically, some of these type conversion would not be needed but it
+doesn't hurt to be consistent.
 
-These two are not equivalent. resource_size() is (res->end - res->start=20
-+ 1).
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250.h         |  4 ++--
+ drivers/tty/serial/8250/8250_exar.c    |  2 +-
+ drivers/tty/serial/8250/8250_fsl.c     |  2 +-
+ drivers/tty/serial/8250/8250_ingenic.c |  2 +-
+ drivers/tty/serial/8250/8250_omap.c    |  7 +++----
+ drivers/tty/serial/8250/8250_port.c    | 17 +++++++++--------
+ include/linux/serial_8250.h            |  6 +++---
+ 7 files changed, 20 insertions(+), 20 deletions(-)
 
-If the memory resource has a size of 0x10 bytes, then using=20
-resource_size() will set .max_register =3D=3D 0x10, which is invalid, as it=
-=20
-is already outside the memory resource.
-
-Cheers,
--Paul
-
-
->  	priv->map =3D devm_regmap_init_mmio(dev, base,
->  					  &regmap_config);
->  	if (IS_ERR(priv->map)) {
-> --
-> 2.20.1.7.g153144c
->=20
-
+diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+index b120da57c61f..0ff5688ba90c 100644
+--- a/drivers/tty/serial/8250/8250.h
++++ b/drivers/tty/serial/8250/8250.h
+@@ -133,9 +133,9 @@ static inline void serial_out(struct uart_8250_port *up, int offset, int value)
+  *
+  *	Returns LSR value or'ed with the preserved flags (if any).
+  */
+-static inline unsigned int serial_lsr_in(struct uart_8250_port *up)
++static inline u16 serial_lsr_in(struct uart_8250_port *up)
+ {
+-	unsigned int lsr = up->lsr_saved_flags;
++	u16 lsr = up->lsr_saved_flags;
+ 
+ 	lsr |= serial_in(up, UART_LSR);
+ 	up->lsr_saved_flags = lsr & LSR_SAVE_FLAGS;
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index 528779b40049..3d999eec4087 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -195,11 +195,11 @@ static int xr17v35x_startup(struct uart_port *port)
+ 
+ static void exar_shutdown(struct uart_port *port)
+ {
+-	unsigned char lsr;
+ 	bool tx_complete = false;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct circ_buf *xmit = &port->state->xmit;
+ 	int i = 0;
++	u16 lsr;
+ 
+ 	do {
+ 		lsr = serial_in(up, UART_LSR);
+diff --git a/drivers/tty/serial/8250/8250_fsl.c b/drivers/tty/serial/8250/8250_fsl.c
+index 9c01c531349d..fd4005fcd0d6 100644
+--- a/drivers/tty/serial/8250/8250_fsl.c
++++ b/drivers/tty/serial/8250/8250_fsl.c
+@@ -25,8 +25,8 @@
+ 
+ int fsl8250_handle_irq(struct uart_port *port)
+ {
+-	unsigned char lsr, orig_lsr;
+ 	unsigned long flags;
++	u16 lsr, orig_lsr;
+ 	unsigned int iir;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 
+diff --git a/drivers/tty/serial/8250/8250_ingenic.c b/drivers/tty/serial/8250/8250_ingenic.c
+index cff91aa03f29..2b2f5d8d24b9 100644
+--- a/drivers/tty/serial/8250/8250_ingenic.c
++++ b/drivers/tty/serial/8250/8250_ingenic.c
+@@ -54,7 +54,7 @@ static void early_out(struct uart_port *port, int offset, uint8_t value)
+ 
+ static void ingenic_early_console_putc(struct uart_port *port, unsigned char c)
+ {
+-	uint8_t lsr;
++	u16 lsr;
+ 
+ 	do {
+ 		lsr = early_in(port, UART_LSR);
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index ac8bfa042391..0dcecbbc3967 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -1115,8 +1115,7 @@ static bool handle_rx_dma(struct uart_8250_port *up, unsigned int iir)
+ 	return omap_8250_rx_dma(up);
+ }
+ 
+-static unsigned char omap_8250_handle_rx_dma(struct uart_8250_port *up,
+-					     u8 iir, unsigned char status)
++static u16 omap_8250_handle_rx_dma(struct uart_8250_port *up, u8 iir, u16 status)
+ {
+ 	if ((status & (UART_LSR_DR | UART_LSR_BI)) &&
+ 	    (iir & UART_IIR_RDI)) {
+@@ -1130,7 +1129,7 @@ static unsigned char omap_8250_handle_rx_dma(struct uart_8250_port *up,
+ }
+ 
+ static void am654_8250_handle_rx_dma(struct uart_8250_port *up, u8 iir,
+-				     unsigned char status)
++				     u16 status)
+ {
+ 	/*
+ 	 * Queue a new transfer if FIFO has data.
+@@ -1164,7 +1163,7 @@ static int omap_8250_dma_handle_irq(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct omap8250_priv *priv = up->port.private_data;
+-	unsigned char status;
++	u16 status;
+ 	u8 iir;
+ 
+ 	serial8250_rpm_get(up);
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index c860f5964138..19c612d732cf 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1508,7 +1508,7 @@ static inline void __stop_tx(struct uart_8250_port *p)
+ 	struct uart_8250_em485 *em485 = p->em485;
+ 
+ 	if (em485) {
+-		unsigned char lsr = serial_lsr_in(p);
++		u16 lsr = serial_lsr_in(p);
+ 		u64 stop_delay = 0;
+ 
+ 		if (!(lsr & UART_LSR_THRE))
+@@ -1565,7 +1565,7 @@ static inline void __start_tx(struct uart_port *port)
+ 
+ 	if (serial8250_set_THRI(up)) {
+ 		if (up->bugs & UART_BUG_TXEN) {
+-			unsigned char lsr = serial_lsr_in(up);
++			u16 lsr = serial_lsr_in(up);
+ 
+ 			if (lsr & UART_LSR_THRE)
+ 				serial8250_tx_chars(up);
+@@ -1719,7 +1719,7 @@ static void serial8250_enable_ms(struct uart_port *port)
+ 	serial8250_rpm_put(up);
+ }
+ 
+-void serial8250_read_char(struct uart_8250_port *up, unsigned char lsr)
++void serial8250_read_char(struct uart_8250_port *up, u16 lsr)
+ {
+ 	struct uart_port *port = &up->port;
+ 	unsigned char ch;
+@@ -1788,7 +1788,7 @@ EXPORT_SYMBOL_GPL(serial8250_read_char);
+  * (such as THRE) because the LSR value might come from an already consumed
+  * character.
+  */
+-unsigned char serial8250_rx_chars(struct uart_8250_port *up, unsigned char lsr)
++u16 serial8250_rx_chars(struct uart_8250_port *up, u16 lsr)
+ {
+ 	struct uart_port *port = &up->port;
+ 	int max_count = 256;
+@@ -1908,10 +1908,10 @@ static bool handle_rx_dma(struct uart_8250_port *up, unsigned int iir)
+  */
+ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
+ {
+-	unsigned char status;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	bool skip_rx = false;
+ 	unsigned long flags;
++	u16 status;
+ 
+ 	if (iir & UART_IIR_NO_INT)
+ 		return 0;
+@@ -1994,7 +1994,7 @@ static unsigned int serial8250_tx_empty(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	unsigned long flags;
+-	unsigned int lsr;
++	u16 lsr;
+ 
+ 	serial8250_rpm_get(up);
+ 
+@@ -2117,8 +2117,8 @@ static void wait_for_xmitr(struct uart_8250_port *up, int bits)
+ static int serial8250_get_poll_char(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+-	unsigned char lsr;
+ 	int status;
++	u16 lsr;
+ 
+ 	serial8250_rpm_get(up);
+ 
+@@ -2173,8 +2173,9 @@ int serial8250_do_startup(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	unsigned long flags;
+-	unsigned char lsr, iir;
++	unsigned char iir;
+ 	int retval;
++	u16 lsr;
+ 
+ 	if (!port->fifosize)
+ 		port->fifosize = uart_config[port->type].fifo_size;
+diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
+index ff84a3ed10ea..4565f25ba9a2 100644
+--- a/include/linux/serial_8250.h
++++ b/include/linux/serial_8250.h
+@@ -119,7 +119,7 @@ struct uart_8250_port {
+ 	 * be immediately processed.
+ 	 */
+ #define LSR_SAVE_FLAGS UART_LSR_BRK_ERROR_BITS
+-	unsigned char		lsr_saved_flags;
++	u16			lsr_saved_flags;
+ #define MSR_SAVE_FLAGS UART_MSR_ANY_DELTA
+ 	unsigned char		msr_saved_flags;
+ 
+@@ -170,8 +170,8 @@ extern void serial8250_do_set_divisor(struct uart_port *port, unsigned int baud,
+ 				      unsigned int quot_frac);
+ extern int fsl8250_handle_irq(struct uart_port *port);
+ int serial8250_handle_irq(struct uart_port *port, unsigned int iir);
+-unsigned char serial8250_rx_chars(struct uart_8250_port *up, unsigned char lsr);
+-void serial8250_read_char(struct uart_8250_port *up, unsigned char lsr);
++u16 serial8250_rx_chars(struct uart_8250_port *up, u16 lsr);
++void serial8250_read_char(struct uart_8250_port *up, u16 lsr);
+ void serial8250_tx_chars(struct uart_8250_port *up);
+ unsigned int serial8250_modem_status(struct uart_8250_port *up);
+ void serial8250_init_port(struct uart_8250_port *up);
+-- 
+2.30.2
 
