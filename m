@@ -2,72 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFBA558BFB
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Jun 2022 01:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6ABE558CD8
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Jun 2022 03:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiFWXyI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Jun 2022 19:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S229635AbiFXBdY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Jun 2022 21:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiFWXyG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 19:54:06 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE8560C70
-        for <linux-mips@vger.kernel.org>; Thu, 23 Jun 2022 16:54:04 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id jh14so639359plb.1
-        for <linux-mips@vger.kernel.org>; Thu, 23 Jun 2022 16:54:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wd94p2+WqQP2Ii1WcqvC1IXTIcgtiGxYezXGFIQe4aw=;
-        b=KRbCcVbxTFuDlazWUaKQUOPh9qGmRm7JwBluWdtIN5lgQADy/y7Up21hjyeZeQys9Z
-         NMqMid/gRBBHHYlCK7KIkeKD3DLErorhP5V+TeYnyI1mbE93G5ic0rsWpsJWV1C+42LU
-         PrYQmevMfKBsIGm95i+gNd0xYzQmBNyHGbpvH3LVLLxC5rB1V6KN19Cl9M0sp5s2w9l6
-         WLbDnhaJ7u2YbmxJX0UAAtHMm5VyarVBixum6aehiJ5wufCuioLQdpujYZHlxrQGAQod
-         hl/cO0Ueg3xaFoThE8ukKSg2RezOKgvSQvZsrkDGOCohZDFk9SBliO8ffRLHYo8T0d61
-         lPwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wd94p2+WqQP2Ii1WcqvC1IXTIcgtiGxYezXGFIQe4aw=;
-        b=yiFltWXn37FnoW5Xt0iPs9oFeMqHYm4xlPsCkkHg99iezvtArpBo51t+bBENPy6Raq
-         opb7LBS4uZ7TqbJXf3b7mzfwi4Z4J5/tKqzF/VFkWu39/bopkRvLN0gs9RtsXJfX48kR
-         HoWETjBoftgtL6I7yfxSD/laZlmSwdOelV8Nmsz7HHL3odRxI1rC3AzgvuclF1UyjChu
-         mReLRwTtx6Qd/z24hIVuZn5k/SYRUKT5L3bXDRzF23MyDSDqxOaO67JgtMDhQg+5W4wj
-         xsiqflB5dE1qN1h4mpy4hPpERGmaTpZYyO7v3SXDvEh81J9zl/ux82n/KnvsnmVIKVw3
-         0q5A==
-X-Gm-Message-State: AJIora+HAZLeJQQHm1v+eIPxKhpDCpjJUdYQ+IXNxq/vVgyK3wQpio/C
-        DpD/0SGxreKnDMnSk3FBDpJw3w==
-X-Google-Smtp-Source: AGRyM1siQHqmIeCYJDWhvQWr1e0zNrxAB/HYSnquYY9LulXlxpDsnuWHIYP6tBFrXyXqdMpDCmOmEg==
-X-Received: by 2002:a17:902:dac5:b0:164:13b2:4916 with SMTP id q5-20020a170902dac500b0016413b24916mr41737113plx.32.1656028444167;
-        Thu, 23 Jun 2022 16:54:04 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id bf27-20020a056a000d9b00b0051bd9981ccbsm220385pfb.39.2022.06.23.16.54.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 16:54:03 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 23:53:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, maz@kernel.org,
-        anup@brainfault.org, bgardon@google.com, peterx@redhat.com,
-        maciej.szmigiero@oracle.com, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        pfeiner@google.com, jiangshanlai@gmail.com, dmatlack@google.com
-Subject: Re: [PATCH v7 19/23] KVM: x86/mmu: Zap collapsible SPTEs in shadow
- MMU at all possible levels
-Message-ID: <YrT9F6S/PjYVk6Hr@google.com>
-References: <20220622192710.2547152-1-pbonzini@redhat.com>
- <20220622192710.2547152-20-pbonzini@redhat.com>
+        with ESMTP id S231217AbiFXBdX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Jun 2022 21:33:23 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFC117E1D;
+        Thu, 23 Jun 2022 18:33:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VHEl8m6_1656034321;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VHEl8m6_1656034321)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Jun 2022 09:33:17 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     paul@crapouillou.net
+Cc:     airlied@linux.ie, daniel@ffwll.ch, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] drm/ingenic: Use resource_size function on resource object
+Date:   Fri, 24 Jun 2022 09:31:59 +0800
+Message-Id: <20220624013159.88646-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622192710.2547152-20-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,80 +39,28 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 22, 2022, Paolo Bonzini wrote:
-> From: David Matlack <dmatlack@google.com>
-> 
-> Currently KVM only zaps collapsible 4KiB SPTEs in the shadow MMU. This
-> is fine for now since KVM never creates intermediate huge pages during
-> dirty logging. In other words, KVM always replaces 1GiB pages directly
-> with 4KiB pages, so there is no reason to look for collapsible 2MiB
-> pages.
-> 
-> However, this will stop being true once the shadow MMU participates in
-> eager page splitting. During eager page splitting, each 1GiB is first
-> split into 2MiB pages and then those are split into 4KiB pages. The
-> intermediate 2MiB pages may be left behind if an error condition causes
-> eager page splitting to bail early.
-> 
-> No functional change intended.
-> 
-> Reviewed-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Message-Id: <20220516232138.1783324-20-dmatlack@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 13a059ad5dc7..36bc49f08d60 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6154,18 +6154,25 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
->  	return need_tlb_flush;
->  }
->  
-> +static void kvm_rmap_zap_collapsible_sptes(struct kvm *kvm,
-> +					   const struct kvm_memory_slot *slot)
-> +{
-> +	/*
-> +	 * Note, use KVM_MAX_HUGEPAGE_LEVEL - 1 since there's no need to zap
-> +	 * pages that are already mapped at the maximum possible level.
-> +	 */
-> +	if (slot_handle_level(kvm, slot, kvm_mmu_zap_collapsible_spte,
-> +			      PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL - 1,
-> +			      true))
+This was found by coccicheck:
 
-Can you fix this up to put "true" on the previous line?
+./drivers/gpu/drm/ingenic/ingenic-drm-drv.c:1149:35-38: WARNING: Suspicious code. resource_size is maybe missing with res.
 
-And if you do that, maybe also tweak the comment to reference "hugepage level"
-instead of "possible level"?
-
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 8825716060e4..34b0e85b26a4 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6450,12 +6450,11 @@ static void kvm_rmap_zap_collapsible_sptes(struct kvm *kvm,
- 					   const struct kvm_memory_slot *slot)
- {
- 	/*
--	 * Note, use KVM_MAX_HUGEPAGE_LEVEL - 1 since there's no need to zap
--	 * pages that are already mapped at the maximum possible level.
-+	 * Note, use KVM_MAX_HUGEPAGE_LEVEL - 1, there's no need to zap pages
-+	 * that are already mapped at the maximum hugepage level.
- 	 */
- 	if (slot_handle_level(kvm, slot, kvm_mmu_zap_collapsible_spte,
--			      PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL - 1,
--			      true))
-+			      PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL - 1, true))
- 		kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
- }
-
-
-base-commit: fd43332c2900db8ca852676f37f0ab423d0c369a
---
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index 2c559885347a..5514b163999f 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -1146,7 +1146,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
+ 	}
+ 
+ 	regmap_config = ingenic_drm_regmap_config;
+-	regmap_config.max_register = res->end - res->start;
++	regmap_config.max_register = resource_size(res);
+ 	priv->map = devm_regmap_init_mmio(dev, base,
+ 					  &regmap_config);
+ 	if (IS_ERR(priv->map)) {
+-- 
+2.20.1.7.g153144c
 
