@@ -2,105 +2,201 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3976A55AE5D
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Jun 2022 05:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02FC55B015
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Jun 2022 09:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbiFZC6M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Jun 2022 22:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S234070AbiFZH6f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Jun 2022 03:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233895AbiFZC6J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Jun 2022 22:58:09 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7DF7666
-        for <linux-mips@vger.kernel.org>; Sat, 25 Jun 2022 19:58:05 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id sb34so12161161ejc.11
-        for <linux-mips@vger.kernel.org>; Sat, 25 Jun 2022 19:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=aT1sw4m4Agr0F5UoyxxRFIViLo6ffv+TYGmHogSjXGo=;
-        b=p/DaixlYtjrJxt0TZ9Sv0PspLH4F4gpAQfDxd2T6KqC1SHP9iljS+DwZTMfPiVSSGm
-         F/yNzbwcX3bzuMK/1r8IAdidUXoNi472FD+5xEchiaxU5Sq/f4nUM5bs2KzE38nQDDEZ
-         xSboCrjSiM+wm/jrg/92deA9oYzxIYEuFDC4v6npNzzWb+JsMCzxVQlhOP/J5Ouy0uLi
-         Z7+yA39BZEdGRUHmW3xbx5TQB4S2VCry5+wcWHVQ4OBH4rBTSMkxbT0Jgm49FOL7iNyZ
-         eJjfuW2I9E7w0ML0yN3iKNPtc1B9yptX2/H88HdKh8PtQprUzdCaXhiksW5fAtIU0eIH
-         t/wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=aT1sw4m4Agr0F5UoyxxRFIViLo6ffv+TYGmHogSjXGo=;
-        b=WloipjEmgbp+EoHyk4dCns9JDzxGDlTDmPiTO0wEx3CQgwgMnpWl2DZd6y5gpxPq1h
-         k0YUwdlQOmC59e8EGzrwdrnJ6RMD9YIDSkwdjss7N9m/V9U2NSeKsh2YgryY12b+kSyc
-         ofJss3vCL/QlnaRUHFki5Ajh4vyt6VJDFoW3hmrRIbF5jN5Cy9qz8Y3Vzs9KZ4n4t0bV
-         hatuDoBYthP9IX/P5wgqU9w2Go+K475k861LYZuevgnfTeqPrzBt+usM3mkcsGnW6HeW
-         y1a7pyJ/uPUjYAhNPCmGxj6a2bECKFr0VF7PYiY8pcGeKX2K/lH5zLD4dGAfilzYhM5U
-         nIjQ==
-X-Gm-Message-State: AJIora9GNdPPET0IbZiSuCaiJ1bT2pDZhP1C6UPcWedYX62pXcy3HHhd
-        4AOObPOIWLKcZsBtpmCMzPlH2r0PMBIyCbBOiqI=
-X-Google-Smtp-Source: AGRyM1ugSbCDNnHpCb0lHalta+66K0E8Up9pyta5m/WjutEeClM5wDgsnA3eyhUSaZXFZvkZaFOFWCa0CuHHdyv6tMw=
-X-Received: by 2002:a17:907:2cc5:b0:711:d50b:287a with SMTP id
- hg5-20020a1709072cc500b00711d50b287amr6181154ejc.47.1656212283268; Sat, 25
- Jun 2022 19:58:03 -0700 (PDT)
+        with ESMTP id S233948AbiFZH6e (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Jun 2022 03:58:34 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD4F12D03;
+        Sun, 26 Jun 2022 00:58:33 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25Q64Pvl025285;
+        Sun, 26 Jun 2022 07:58:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=XZ90HtNDrlRjkiJkulFjUc8f67d4YhL3Kx3bFG8OuUA=;
+ b=CSGvo7GpN5YCxmrbK/tIUTc+JZTqN4ZLc+WHmkDHA/NjREwnoCnDe+WOajL84uP2uU31
+ UluZkljR0GR1vutz2MpI/jHPJk9H3hhZ8WiVpXccBOooIz2hbldluTm8LEyHbGbz3sNb
+ 2szy4NmkG2RotrMOeSRekjxCS6dPpvRWAUMzgPozxpYVEryoTNeqoQGiqRRxjdHV3PMl
+ +1mk8GEQAs4mlu+cdIUidg1VkOwtRm9TNeav9H8DDdjxOX7W8v7FIp/ovEr6MZ6hVlxh
+ 2vXKFmEAPCV7j5YAR3No6i/vMgEIEaRRq63pUJV5UYB1z0nuoq3HonAp3PAMuE+lIJml fg== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gxc046sh2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Jun 2022 07:58:00 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25Q7pWED012856;
+        Sun, 26 Jun 2022 07:57:58 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3gwt08s2a1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Jun 2022 07:57:58 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25Q7vtdl14549294
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 26 Jun 2022 07:57:55 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E984DAE04D;
+        Sun, 26 Jun 2022 07:57:54 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66C62AE045;
+        Sun, 26 Jun 2022 07:57:54 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.144.178])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun, 26 Jun 2022 07:57:54 +0000 (GMT)
+Date:   Sun, 26 Jun 2022 09:57:52 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] jump_label: s390: avoid pointless initial NOP
+ patching
+Message-ID: <YrgRgKgBPs+oOVB3@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20220615154142.1574619-1-ardb@kernel.org>
+ <20220615154142.1574619-2-ardb@kernel.org>
 MIME-Version: 1.0
-Sender: jerryojomah@gmail.com
-Received: by 2002:a17:906:7306:b0:6ff:31c2:22be with HTTP; Sat, 25 Jun 2022
- 19:58:02 -0700 (PDT)
-From:   mrs marie brigitte prouvost <mariebrigitteprouvost332@gmail.com>
-Date:   Sat, 25 Jun 2022 19:58:02 -0700
-X-Google-Sender-Auth: kxr1f60VkmaWOTB8ethgMxSh3l0
-Message-ID: <CALqLPnenBJaHG2ho-J_j2WZA+Mx98T=PMFWK0Zefx=rNSkwZ6w@mail.gmail.com>
-Subject: Dear Old Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_3,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615154142.1574619-2-ardb@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: b5QUtcNkKcJxrnkTgswLWrjaXCRAC_M2
+X-Proofpoint-GUID: b5QUtcNkKcJxrnkTgswLWrjaXCRAC_M2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-25_11,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ suspectscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
+ mlxscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206260026
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
--- 
-I know you may have forgotten me, I am very happy to inform you about
-my success in getting the money transferred under the co-operation of
-a new partner from Venezuela.
+On Wed, Jun 15, 2022 at 05:41:40PM +0200, Ard Biesheuvel wrote:
+> Patching NOPs into other NOPs at boot time serves no purpose, so let's
+> use the same NOP encodings at compile time and runtime.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/s390/include/asm/jump_label.h |  5 ++---
+>  arch/s390/kernel/jump_label.c      | 23 +++++---------------
+>  2 files changed, 7 insertions(+), 21 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/jump_label.h b/arch/s390/include/asm/jump_label.h
+> index 916cfcb36d8a..895f774bbcc5 100644
+> --- a/arch/s390/include/asm/jump_label.h
+> +++ b/arch/s390/include/asm/jump_label.h
+> @@ -10,7 +10,6 @@
+>  #include <linux/stringify.h>
+>  
+>  #define JUMP_LABEL_NOP_SIZE 6
+> -#define JUMP_LABEL_NOP_OFFSET 2
+>  
+>  #ifdef CONFIG_CC_IS_CLANG
+>  #define JUMP_LABEL_STATIC_KEY_CONSTRAINT "i"
+> @@ -21,12 +20,12 @@
+>  #endif
+>  
+>  /*
+> - * We use a brcl 0,2 instruction for jump labels at compile time so it
+> + * We use a brcl 0,<offset> instruction for jump labels so it
+>   * can be easily distinguished from a hotpatch generated instruction.
+>   */
+>  static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
+>  {
+> -	asm_volatile_goto("0:	brcl	0,"__stringify(JUMP_LABEL_NOP_OFFSET)"\n"
+> +	asm_volatile_goto("0:	brcl 0,%l[label]\n"
 
-Presently I am in Venezuela with my partner for a better treatment; I
-told you that I rather die than to miss this opportunity. Meanwhile, I
-didn't forget your past efforts and attempts to assist me in
-transferring the funds despite that it failed us somehow.
+Please, use tab after brcl, not space.
 
-Before my living Burkina Faso I left a complete sum of Nine Hundred
-THousand Dollars,
-with the western union money transfer to transfer to you as your
-compensation.
+>  			  ".pushsection __jump_table,\"aw\"\n"
+>  			  ".balign	8\n"
+>  			  ".long	0b-.,%l[label]-.\n"
+> diff --git a/arch/s390/kernel/jump_label.c b/arch/s390/kernel/jump_label.c
+> index 6bec000c6c1c..d764f0d229ab 100644
+> --- a/arch/s390/kernel/jump_label.c
+> +++ b/arch/s390/kernel/jump_label.c
+> @@ -44,14 +44,8 @@ static void jump_label_bug(struct jump_entry *entry, struct insn *expected,
+>  	panic("Corrupted kernel text");
+>  }
+>  
+> -static struct insn orignop = {
+> -	.opcode = 0xc004,
+> -	.offset = JUMP_LABEL_NOP_OFFSET >> 1,
+> -};
+> -
+>  static void jump_label_transform(struct jump_entry *entry,
+> -				 enum jump_label_type type,
+> -				 int init)
+> +				 enum jump_label_type type)
+>  {
+>  	void *code = (void *)jump_entry_code(entry);
+>  	struct insn old, new;
+> @@ -63,27 +57,22 @@ static void jump_label_transform(struct jump_entry *entry,
+>  		jump_label_make_branch(entry, &old);
+>  		jump_label_make_nop(entry, &new);
+>  	}
+> -	if (init) {
+> -		if (memcmp(code, &orignop, sizeof(orignop)))
+> -			jump_label_bug(entry, &orignop, &new);
+> -	} else {
+> -		if (memcmp(code, &old, sizeof(old)))
+> -			jump_label_bug(entry, &old, &new);
+> -	}
+> +	if (memcmp(code, &old, sizeof(old)))
+> +		jump_label_bug(entry, &old, &new);
+>  	s390_kernel_write(code, &new, sizeof(new));
+>  }
+>  
+>  void arch_jump_label_transform(struct jump_entry *entry,
+>  			       enum jump_label_type type)
+>  {
+> -	jump_label_transform(entry, type, 0);
+> +	jump_label_transform(entry, type);
+>  	text_poke_sync();
+>  }
+>  
+>  bool arch_jump_label_transform_queue(struct jump_entry *entry,
+>  				     enum jump_label_type type)
+>  {
+> -	jump_label_transform(entry, type, 0);
+> +	jump_label_transform(entry, type);
+>  	return true;
+>  }
+>  
+> @@ -95,6 +84,4 @@ void arch_jump_label_transform_apply(void)
+>  void __init_or_module arch_jump_label_transform_static(struct jump_entry *entry,
+>  						       enum jump_label_type type)
+>  {
+> -	jump_label_transform(entry, type, 1);
+> -	text_poke_sync();
+>  }
 
-Now you are to contact the western union for them to commence on your
-payments, Ask them to send you the Nine Hundred
-THousand Dollars, which I kept for
-your compensation for all the past efforts and attempts to assist me
-in this transfer.
 
-Here is the Western Union money Transfer section
+With the comment above:
 
-Email. westernunionmoneytransfer.WU@financier.com
+Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
 
-Remember I have already forward this instruction to them and they will
-be expecting you to contact them to commence on your transfers.
+Thanks!
 
-
-Bye and stay bless.
-
-But never forget to inform me whenever you received all your money
-because I have paid for the transfer fee.
-
-Thanks and God bless you
-
-Sincerely
-mrs marie brigitte prouvost
+> -- 
+> 2.35.1
+> 
