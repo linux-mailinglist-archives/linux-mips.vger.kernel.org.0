@@ -2,51 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D9355B027
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Jun 2022 10:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B356855B026
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Jun 2022 10:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234128AbiFZIDn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Jun 2022 04:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S234062AbiFZIFW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Jun 2022 04:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbiFZIDn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Jun 2022 04:03:43 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CF013CC5;
-        Sun, 26 Jun 2022 01:03:41 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25Q5r9Yq024522;
-        Sun, 26 Jun 2022 08:03:31 GMT
+        with ESMTP id S233922AbiFZIFV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Jun 2022 04:05:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9299E08D;
+        Sun, 26 Jun 2022 01:05:20 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25Q60EZ4000480;
+        Sun, 26 Jun 2022 08:05:01 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
  subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=TNWSlpbsycXcSLb456Pz4qH8uAG5dWq9D4erlKr2t4s=;
- b=fJo2xWBwjpjtDrZzpCEmKT2Gp2aqkNXyeP9Gnr3/34LUX9XZMTWJxFvGp7UkspvC8gCi
- C2jEOzYfEtovNVXW0cF90YztHsRqebjdJVmDgzLuAPVajkYg7VHVbFlyav6BtkV0kmbr
- JhStWdoTVMRz7JD2wewpwDyBTzgnpaJC9AagC+cXqFiqyqEq0M+4bKNn/7esPGL80BXU
- b+OFxTfBTX0N8iPRCt4FQrppR5ZtHbXgqYv8H8qH02wT1zWYikTSeMRfaKzSt31UNW5u
- 3Iww2CLVqtQ1AwoFgzeRd52yPzfPbGgCfsP29jCAEh2pXQboeSQHNesa988YsEnHt8t+ RA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gxc1gxth4-1
+ in-reply-to; s=pp1; bh=sVH33KrA8lZ1PN9v0l09LD3biBzBdRqmhLUgDi1z0OQ=;
+ b=kCkPgJvi6GSmdOqK7TnAMDMwn99sbo8pf26KDG0F2MZjWVDBuxLLUj8Y4IdhAZdbBYiW
+ i/wLELMP2zwZx5er7nUbjMA3rplMctiLcFcdFT54jBzyK6Wqdpv0AJpGAfcMJ2rKUMHX
+ PR4FPBOY5wKP8v3qKpV41CTjKbPdv7MniwAcxoDiH2GXL4797o75y5X8LznfgcJRGnop
+ Lhuqj6jDY8R38hMiUc6pAeI1VFjOwJ3p2+DP4QxXOPBBTi87NeRujMa4c50OyalgQrBI
+ Iu/w0dKkbXSZoGfLHi/3kAp5NhNaOzWDsmzFE02QUclmZIbD/V7g/c2lXqfIFFTMdOBE Vg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gxc9g6v5g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 26 Jun 2022 08:03:31 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25Q7of9t030929;
-        Sun, 26 Jun 2022 08:03:29 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gwt08sc4h-1
+        Sun, 26 Jun 2022 08:05:00 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25Q7oPra003946;
+        Sun, 26 Jun 2022 08:04:58 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3gwt08sc42-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 26 Jun 2022 08:03:29 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25Q83Qop22020376
+        Sun, 26 Jun 2022 08:04:58 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25Q84ta313238664
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 26 Jun 2022 08:03:26 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25DA852050;
-        Sun, 26 Jun 2022 08:03:26 +0000 (GMT)
+        Sun, 26 Jun 2022 08:04:55 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 566B911C050;
+        Sun, 26 Jun 2022 08:04:55 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B832E11C04A;
+        Sun, 26 Jun 2022 08:04:54 +0000 (GMT)
 Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.144.178])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 91E805204F;
-        Sun, 26 Jun 2022 08:03:25 +0000 (GMT)
-Date:   Sun, 26 Jun 2022 10:03:24 +0200
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun, 26 Jun 2022 08:04:54 +0000 (GMT)
+Date:   Sun, 26 Jun 2022 10:04:53 +0200
 From:   Alexander Gordeev <agordeev@linux.ibm.com>
 To:     Ard Biesheuvel <ardb@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
@@ -58,25 +61,25 @@ Cc:     linux-kernel@vger.kernel.org,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] jump_label: mips: move module NOP patching into
- arch code
-Message-ID: <YrgSzHIZB6eTQ2M8@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+Subject: Re: [PATCH v2 3/3] jump_label: make initial NOP patching the special
+ case
+Message-ID: <YrgTJdycKz1fZAvj@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
 References: <20220615154142.1574619-1-ardb@kernel.org>
- <20220615154142.1574619-3-ardb@kernel.org>
+ <20220615154142.1574619-4-ardb@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615154142.1574619-3-ardb@kernel.org>
+In-Reply-To: <20220615154142.1574619-4-ardb@kernel.org>
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1ElMEBJImVhodnQI0tdEkvIctPogczDW
-X-Proofpoint-ORIG-GUID: 1ElMEBJImVhodnQI0tdEkvIctPogczDW
+X-Proofpoint-GUID: F-Qej8gC4CvDfw9WhmMtp2mvmkHhmBEE
+X-Proofpoint-ORIG-GUID: F-Qej8gC4CvDfw9WhmMtp2mvmkHhmBEE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-06-25_11,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 clxscore=1015
- mlxscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=967 bulkscore=0 mlxscore=0 impostorscore=0 malwarescore=0
+ phishscore=0 adultscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2204290000 definitions=main-2206260029
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -87,193 +90,218 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 05:41:41PM +0200, Ard Biesheuvel wrote:
-> MIPS is the only remaining architecture that needs to patch jump label
-> NOP encodings to initialize them at load time. So let's move the module
-> patching part of that from generic code into arch/mips, and drop it from
-> the others.
+On Wed, Jun 15, 2022 at 05:41:42PM +0200, Ard Biesheuvel wrote:
+> Instead of defaulting to patching NOP opcodes at init time, and leaving
+> it to the architectures to override this if this is not needed, switch
+> to a model where doing nothing is the default. This is the common case
+> by far, as only MIPS requires NOP patching at init time. On all other
+> architectures, the correct encodings are emitted by the compiler and so
+> no initial patching is needed.
 > 
 > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
->  arch/mips/kernel/jump_label.c | 19 ++++++++++++++
->  arch/mips/kernel/module.c     |  5 ++--
->  arch/s390/kernel/module.c     |  1 -
->  arch/sparc/kernel/module.c    |  3 ---
->  arch/x86/kernel/module.c      |  3 ---
->  include/linux/jump_label.h    |  7 +----
->  kernel/jump_label.c           | 27 +-------------------
->  7 files changed, 24 insertions(+), 41 deletions(-)
+>  Documentation/staging/static-keys.rst |  3 ---
+>  arch/arc/kernel/jump_label.c          | 13 -------------
+>  arch/arm/kernel/jump_label.c          |  6 ------
+>  arch/arm64/kernel/jump_label.c        | 11 -----------
+>  arch/mips/include/asm/jump_label.h    |  2 ++
+>  arch/parisc/kernel/jump_label.c       | 11 -----------
+>  arch/riscv/kernel/jump_label.c        | 12 ------------
+>  arch/s390/kernel/jump_label.c         |  5 -----
+>  arch/x86/kernel/jump_label.c          | 13 -------------
+>  kernel/jump_label.c                   | 14 +++++---------
+>  10 files changed, 7 insertions(+), 83 deletions(-)
 > 
-> diff --git a/arch/mips/kernel/jump_label.c b/arch/mips/kernel/jump_label.c
-> index 662c8db9f45b..e4c775e7c063 100644
-> --- a/arch/mips/kernel/jump_label.c
-> +++ b/arch/mips/kernel/jump_label.c
-> @@ -88,3 +88,22 @@ void arch_jump_label_transform(struct jump_entry *e,
+> diff --git a/Documentation/staging/static-keys.rst b/Documentation/staging/static-keys.rst
+> index 38290b9f25eb..b0a519f456cf 100644
+> --- a/Documentation/staging/static-keys.rst
+> +++ b/Documentation/staging/static-keys.rst
+> @@ -201,9 +201,6 @@ static_key->entry field makes use of the two least significant bits.
+>  * ``void arch_jump_label_transform(struct jump_entry *entry, enum jump_label_type type)``,
+>      see: arch/x86/kernel/jump_label.c
 >  
+> -* ``__init_or_module void arch_jump_label_transform_static(struct jump_entry *entry, enum jump_label_type type)``,
+> -    see: arch/x86/kernel/jump_label.c
+> -
+>  * ``struct jump_entry``,
+>      see: arch/x86/include/asm/jump_label.h
+>  
+> diff --git a/arch/arc/kernel/jump_label.c b/arch/arc/kernel/jump_label.c
+> index b8600dc325b5..70b74a5d047b 100644
+> --- a/arch/arc/kernel/jump_label.c
+> +++ b/arch/arc/kernel/jump_label.c
+> @@ -96,19 +96,6 @@ void arch_jump_label_transform(struct jump_entry *entry,
+>  	flush_icache_range(entry->code, entry->code + JUMP_LABEL_NOP_SIZE);
+>  }
+>  
+> -void arch_jump_label_transform_static(struct jump_entry *entry,
+> -				      enum jump_label_type type)
+> -{
+> -	/*
+> -	 * We use only one NOP type (1x, 4 byte) in arch_static_branch, so
+> -	 * there's no need to patch an identical NOP over the top of it here.
+> -	 * The generic code calls 'arch_jump_label_transform' if the NOP needs
+> -	 * to be replaced by a branch, so 'arch_jump_label_transform_static' is
+> -	 * never called with type other than JUMP_LABEL_NOP.
+> -	 */
+> -	BUG_ON(type != JUMP_LABEL_NOP);
+> -}
+> -
+>  #ifdef CONFIG_ARC_DBG_JUMP_LABEL
+>  #define SELFTEST_MSG	"ARC: instruction generation self-test: "
+>  
+> diff --git a/arch/arm/kernel/jump_label.c b/arch/arm/kernel/jump_label.c
+> index 303b3ab87f7e..eb9c24b6e8e2 100644
+> --- a/arch/arm/kernel/jump_label.c
+> +++ b/arch/arm/kernel/jump_label.c
+> @@ -27,9 +27,3 @@ void arch_jump_label_transform(struct jump_entry *entry,
+>  {
+>  	__arch_jump_label_transform(entry, type, false);
+>  }
+> -
+> -void arch_jump_label_transform_static(struct jump_entry *entry,
+> -				      enum jump_label_type type)
+> -{
+> -	__arch_jump_label_transform(entry, type, true);
+> -}
+> diff --git a/arch/arm64/kernel/jump_label.c b/arch/arm64/kernel/jump_label.c
+> index fc98037e1220..faf88ec9c48e 100644
+> --- a/arch/arm64/kernel/jump_label.c
+> +++ b/arch/arm64/kernel/jump_label.c
+> @@ -26,14 +26,3 @@ void arch_jump_label_transform(struct jump_entry *entry,
+>  
+>  	aarch64_insn_patch_text_nosync(addr, insn);
+>  }
+> -
+> -void arch_jump_label_transform_static(struct jump_entry *entry,
+> -				      enum jump_label_type type)
+> -{
+> -	/*
+> -	 * We use the architected A64 NOP in arch_static_branch, so there's no
+> -	 * need to patch an identical A64 NOP over the top of it here. The core
+> -	 * will call arch_jump_label_transform from a module notifier if the
+> -	 * NOP needs to be replaced by a branch.
+> -	 */
+> -}
+> diff --git a/arch/mips/include/asm/jump_label.h b/arch/mips/include/asm/jump_label.h
+> index 3185fd3220ec..c5c6864e64bc 100644
+> --- a/arch/mips/include/asm/jump_label.h
+> +++ b/arch/mips/include/asm/jump_label.h
+> @@ -8,6 +8,8 @@
+>  #ifndef _ASM_MIPS_JUMP_LABEL_H
+>  #define _ASM_MIPS_JUMP_LABEL_H
+>  
+> +#define arch_jump_label_transform_static arch_jump_label_transform
+> +
+>  #ifndef __ASSEMBLY__
+>  
+>  #include <linux/types.h>
+> diff --git a/arch/parisc/kernel/jump_label.c b/arch/parisc/kernel/jump_label.c
+> index d2f3cb12e282..e253b134500d 100644
+> --- a/arch/parisc/kernel/jump_label.c
+> +++ b/arch/parisc/kernel/jump_label.c
+> @@ -42,14 +42,3 @@ void arch_jump_label_transform(struct jump_entry *entry,
+>  
+>  	patch_text(addr, insn);
+>  }
+> -
+> -void arch_jump_label_transform_static(struct jump_entry *entry,
+> -				      enum jump_label_type type)
+> -{
+> -	/*
+> -	 * We use the architected NOP in arch_static_branch, so there's no
+> -	 * need to patch an identical NOP over the top of it here. The core
+> -	 * will call arch_jump_label_transform from a module notifier if the
+> -	 * NOP needs to be replaced by a branch.
+> -	 */
+> -}
+> diff --git a/arch/riscv/kernel/jump_label.c b/arch/riscv/kernel/jump_label.c
+> index 20e09056d141..e6694759dbd0 100644
+> --- a/arch/riscv/kernel/jump_label.c
+> +++ b/arch/riscv/kernel/jump_label.c
+> @@ -39,15 +39,3 @@ void arch_jump_label_transform(struct jump_entry *entry,
+>  	patch_text_nosync(addr, &insn, sizeof(insn));
 >  	mutex_unlock(&text_mutex);
 >  }
-> +
-> +#ifdef CONFIG_MODULE
-> +void jump_label_apply_nops(struct module *mod)
-> +{
-> +	struct jump_entry *iter_start = mod->jump_entries;
-> +	struct jump_entry *iter_stop = iter_start + mod->num_jump_entries;
-> +	struct jump_entry *iter;
-> +
-> +	/* if the module doesn't have jump label entries, just return */
-> +	if (iter_start == iter_stop)
-> +		return;
-> +
-> +	for (iter = iter_start; iter < iter_stop; iter++) {
-> +		/* Only write NOPs for arch_branch_static(). */
-> +		if (jump_label_init_type(iter) == JUMP_LABEL_NOP)
-> +			arch_jump_label_transform(iter, JUMP_LABEL_NOP);
-> +	}
-> +}
-> +#endif
-> diff --git a/arch/mips/kernel/module.c b/arch/mips/kernel/module.c
-> index 14f46d17500a..0c936cbf20c5 100644
-> --- a/arch/mips/kernel/module.c
-> +++ b/arch/mips/kernel/module.c
-> @@ -21,6 +21,7 @@
->  #include <linux/spinlock.h>
->  #include <linux/jump_label.h>
->  
-> +extern void jump_label_apply_nops(struct module *mod);
->  
->  struct mips_hi16 {
->  	struct mips_hi16 *next;
-> @@ -428,8 +429,8 @@ int module_finalize(const Elf_Ehdr *hdr,
->  	const Elf_Shdr *s;
->  	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
->  
-> -	/* Make jump label nops. */
-> -	jump_label_apply_nops(me);
-> +	if (IS_ENABLED(CONFIG_JUMP_LABEL))
-> +		jump_label_apply_nops(me);
->  
->  	INIT_LIST_HEAD(&me->arch.dbe_list);
->  	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
-> diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
-> index 26125a9c436d..2d159b32885b 100644
-> --- a/arch/s390/kernel/module.c
-> +++ b/arch/s390/kernel/module.c
-> @@ -548,6 +548,5 @@ int module_finalize(const Elf_Ehdr *hdr,
->  #endif /* CONFIG_FUNCTION_TRACER */
->  	}
->  
-> -	jump_label_apply_nops(me);
->  	return 0;
->  }
-> diff --git a/arch/sparc/kernel/module.c b/arch/sparc/kernel/module.c
-> index df39580f398d..66c45a2764bc 100644
-> --- a/arch/sparc/kernel/module.c
-> +++ b/arch/sparc/kernel/module.c
-> @@ -208,9 +208,6 @@ int module_finalize(const Elf_Ehdr *hdr,
->  		    const Elf_Shdr *sechdrs,
->  		    struct module *me)
->  {
-> -	/* make jump label nops */
-> -	jump_label_apply_nops(me);
 > -
->  	do_patch_sections(hdr, sechdrs);
->  
->  	/* Cheetah's I-cache is fully coherent.  */
-> diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-> index b98ffcf4d250..95b9cf25d4bd 100644
-> --- a/arch/x86/kernel/module.c
-> +++ b/arch/x86/kernel/module.c
-> @@ -304,9 +304,6 @@ int module_finalize(const Elf_Ehdr *hdr,
->  					    tseg, tseg + text->sh_size);
->  	}
->  
-> -	/* make jump label nops */
-> -	jump_label_apply_nops(me);
-> -
->  	if (orc && orc_ip)
->  		unwind_module_init(me, (void *)orc_ip->sh_addr, orc_ip->sh_size,
->  				   (void *)orc->sh_addr, orc->sh_size);
-> diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
-> index bf1eef337a07..2003a0935478 100644
-> --- a/include/linux/jump_label.h
-> +++ b/include/linux/jump_label.h
-> @@ -230,12 +230,12 @@ extern void static_key_slow_inc(struct static_key *key);
->  extern void static_key_slow_dec(struct static_key *key);
->  extern void static_key_slow_inc_cpuslocked(struct static_key *key);
->  extern void static_key_slow_dec_cpuslocked(struct static_key *key);
-> -extern void jump_label_apply_nops(struct module *mod);
->  extern int static_key_count(struct static_key *key);
->  extern void static_key_enable(struct static_key *key);
->  extern void static_key_disable(struct static_key *key);
->  extern void static_key_enable_cpuslocked(struct static_key *key);
->  extern void static_key_disable_cpuslocked(struct static_key *key);
-> +extern enum jump_label_type jump_label_init_type(struct jump_entry *entry);
->  
->  /*
->   * We should be using ATOMIC_INIT() for initializing .enabled, but
-> @@ -303,11 +303,6 @@ static inline int jump_label_text_reserved(void *start, void *end)
->  static inline void jump_label_lock(void) {}
->  static inline void jump_label_unlock(void) {}
->  
-> -static inline int jump_label_apply_nops(struct module *mod)
+> -void arch_jump_label_transform_static(struct jump_entry *entry,
+> -				      enum jump_label_type type)
 > -{
-> -	return 0;
+> -	/*
+> -	 * We use the same instructions in the arch_static_branch and
+> -	 * arch_static_branch_jump inline functions, so there's no
+> -	 * need to patch them up here.
+> -	 * The core will call arch_jump_label_transform  when those
+> -	 * instructions need to be replaced.
+> -	 */
 > -}
-> -
->  static inline void static_key_enable(struct static_key *key)
+> diff --git a/arch/s390/kernel/jump_label.c b/arch/s390/kernel/jump_label.c
+> index d764f0d229ab..e808bb8bc0da 100644
+> --- a/arch/s390/kernel/jump_label.c
+> +++ b/arch/s390/kernel/jump_label.c
+> @@ -80,8 +80,3 @@ void arch_jump_label_transform_apply(void)
 >  {
->  	STATIC_KEY_CHECK_USE(key);
+>  	text_poke_sync();
+>  }
+> -
+> -void __init_or_module arch_jump_label_transform_static(struct jump_entry *entry,
+> -						       enum jump_label_type type)
+> -{
+> -}
+> diff --git a/arch/x86/kernel/jump_label.c b/arch/x86/kernel/jump_label.c
+> index 68f091ba8443..f5b8ef02d172 100644
+> --- a/arch/x86/kernel/jump_label.c
+> +++ b/arch/x86/kernel/jump_label.c
+> @@ -146,16 +146,3 @@ void arch_jump_label_transform_apply(void)
+>  	text_poke_finish();
+>  	mutex_unlock(&text_mutex);
+>  }
+> -
+> -static enum {
+> -	JL_STATE_START,
+> -	JL_STATE_NO_UPDATE,
+> -	JL_STATE_UPDATE,
+> -} jlstate __initdata_or_module = JL_STATE_START;
+> -
+> -__init_or_module void arch_jump_label_transform_static(struct jump_entry *entry,
+> -				      enum jump_label_type type)
+> -{
+> -	if (jlstate == JL_STATE_UPDATE)
+> -		jump_label_transform(entry, type, 1);
+> -}
 > diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-> index b156e152d6b4..b1ac2948be79 100644
+> index b1ac2948be79..714ac4c3b556 100644
 > --- a/kernel/jump_label.c
 > +++ b/kernel/jump_label.c
-> @@ -508,7 +508,7 @@ void __init jump_label_init(void)
->  
->  #ifdef CONFIG_MODULES
->  
-> -static enum jump_label_type jump_label_init_type(struct jump_entry *entry)
-> +enum jump_label_type jump_label_init_type(struct jump_entry *entry)
->  {
->  	struct static_key *key = jump_entry_key(entry);
->  	bool type = static_key_type(key);
-> @@ -596,31 +596,6 @@ static void __jump_label_mod_update(struct static_key *key)
->  	}
+> @@ -332,17 +332,13 @@ static int __jump_label_text_reserved(struct jump_entry *iter_start,
+>  	return 0;
 >  }
 >  
-> -/***
-> - * apply_jump_label_nops - patch module jump labels with arch_get_jump_label_nop()
-> - * @mod: module to patch
-> - *
-> - * Allow for run-time selection of the optimal nops. Before the module
-> - * loads patch these with arch_get_jump_label_nop(), which is specified by
-> - * the arch specific jump label code.
+> -/*
+> - * Update code which is definitely not currently executing.
+> - * Architectures which need heavyweight synchronization to modify
+> - * running code can override this to make the non-live update case
+> - * cheaper.
 > - */
-> -void jump_label_apply_nops(struct module *mod)
-> -{
-> -	struct jump_entry *iter_start = mod->jump_entries;
-> -	struct jump_entry *iter_stop = iter_start + mod->num_jump_entries;
-> -	struct jump_entry *iter;
-> -
-> -	/* if the module doesn't have jump label entries, just return */
-> -	if (iter_start == iter_stop)
-> -		return;
-> -
-> -	for (iter = iter_start; iter < iter_stop; iter++) {
-> -		/* Only write NOPs for arch_branch_static(). */
-> -		if (jump_label_init_type(iter) == JUMP_LABEL_NOP)
-> -			arch_jump_label_transform_static(iter, JUMP_LABEL_NOP);
-> -	}
-> -}
-> -
->  static int jump_label_add_module(struct module *mod)
+> -void __weak __init_or_module arch_jump_label_transform_static(struct jump_entry *entry,
+> -					    enum jump_label_type type)
+> +#ifndef arch_jump_label_transform_static
+> +static void arch_jump_label_transform_static(struct jump_entry *entry,
+> +					     enum jump_label_type type)
 >  {
->  	struct jump_entry *iter_start = mod->jump_entries;
+> -	arch_jump_label_transform(entry, type);
+> +	/* nothing to do on most architectures */
+>  }
+> +#endif
+>  
+>  static inline struct jump_entry *static_key_entries(struct static_key *key)
+>  {
 
-To the common and s390 parts:
+With the follow-up fixup to the common and s390 parts:
 
 Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
-
-FWIW, the change is not mips-only, thus Subject is not exactly correct.
 
 > -- 
 > 2.35.1
