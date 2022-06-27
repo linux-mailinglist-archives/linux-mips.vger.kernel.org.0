@@ -2,307 +2,235 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B4855DA04
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630CC55E201
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbiF0Kdu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jun 2022 06:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S235612AbiF0ORv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Jun 2022 10:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbiF0Kdr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 06:33:47 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF2D63E8
-        for <linux-mips@vger.kernel.org>; Mon, 27 Jun 2022 03:33:44 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-317a66d62dfso80788237b3.7
-        for <linux-mips@vger.kernel.org>; Mon, 27 Jun 2022 03:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VODoDzVCZKAUsZE7kTSW4XAB++NVoyofY4K1h7c/MA8=;
-        b=PeN5F9996BxEsiLqg8K7vhp+0lEyXGsvf74OFPjhmfln/aUk+Kaj3vlc4Vg46HXgtS
-         nlJ+4A2XzwWCmY6wJPtGva6pK7KNJpO+YhSuqX66yq0yQ/8tOV86ihN4LL8IC2aYBS7G
-         HPLGg1wHE7F1dEFQaUAg5haTAFpNfTbbcp1dnwXYdz9iQ0FF1rrMHMEL1IWc0Zl7Ucuy
-         FM+a8ra8lJkROVKYKu8pmxGL8TeIwxGibw1pgpWFEUI1MsssfHLaSaPgNaaQuFdEBL4P
-         K9wzkwg0yGnwHaze3tLtGLvT1Lqi3/ixp59EQDw8GH6QByea9UiP/0k+SKviVXbZ++pf
-         ajFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VODoDzVCZKAUsZE7kTSW4XAB++NVoyofY4K1h7c/MA8=;
-        b=5xFt2XYsZcngy4z6gE9fNWRvZ7d7vu1x5IWCGVAcRrw5Pl5laJ9rB3heKa7WI3a3ni
-         umZ/+FKCgINZFwcenWF3euqgyshkWrj4GDJ3YYm+AC2V0sROWQ7LlJjdIgSbvCtu27eH
-         0zDgHO4ilnhPWJCsUTZccbqyrFPsxkpyocJ6IXaeWSu3NB+wubHdGAPiA4iumi7RyVVC
-         +ZwlDsHFj5gOPHDrDX/pfhk16iCgqrdejToW46BQ1DZ2Xib5u4/s0VXGSRgF4Mpw4tIU
-         O1eNe3KRdCszoOJQg61n1jWwis05KOEbMLhZ7QOhSwV0VlZ2kVK4+CB2QJY1nlFeX77S
-         XqCA==
-X-Gm-Message-State: AJIora9PYV04p9eS7ZWLNN95vkFyJoWvMrso3v3Bo1D6z00BjMckK/ox
-        kRZF5RgFI9eflJ9PiLAdxP6GAtY9Plzw3b3IWCpawg==
-X-Google-Smtp-Source: AGRyM1t2kjGjxYE+LjwZz8xCIgNDrkse8xEEP248ngplx1lPQ5sKx81AV05OwXlhicvmmEKmxlVwaMvNkIEgbMs3SAE=
-X-Received: by 2002:a81:4bc5:0:b0:317:9c15:6ceb with SMTP id
- y188-20020a814bc5000000b003179c156cebmr13783151ywa.31.1656326023558; Mon, 27
- Jun 2022 03:33:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220625095459.3786827-1-chenhuacai@loongson.cn> <20220625095459.3786827-2-chenhuacai@loongson.cn>
-In-Reply-To: <20220625095459.3786827-2-chenhuacai@loongson.cn>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 27 Jun 2022 18:33:07 +0800
-Message-ID: <CAMZfGtV+xJ_FLooUPhZDcBOae_VnRHwGZqc3Ae1a0oNoLKk=iA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] LoongArch: Add sparse memory vmemmap support
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        with ESMTP id S235523AbiF0ORu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 10:17:50 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70115.outbound.protection.outlook.com [40.107.7.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B5113EBC;
+        Mon, 27 Jun 2022 07:17:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=grKKNCPI1/sxuQe7aY7/UF1WN4W22E9ccHn2gErhunSfMJ1qsDj+XA1IN+5jVoKiNMA+U8bi4T0VGU3I2gQkT0YHj94o0lGQ3hZEVIvFV4PkLcT23cP9jOTzYKMYddq7KxeT4hJVoFFrHE7B2KP4dKQ0hd+Jnamjv2t0NeUpE6KeT+pufWRfp7YVnwfaKzHLCcN0GostIsSX/Ail6lvM05OrrB2PrFv9D/PaRZxuizOUnfjkImQOAUBkiqbnOe62+P1US+KBrIKsGQ9lV2YPaGj6O/YLpkR1t8VMNmP0s8Db+9QFMv5dVx/hHPRjVzHmwuFER4CmzoMU/oG3HSnmNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OMZz0P+6dRslXzUfyWFzD/pdx+bbyUqsHjl3YR6TwLs=;
+ b=AvMqPuhymqgJ+JgBaRSygJqUYoOYpd+fSTcBnLMDdxmXvbZJbv9BQrryEP2BQ2VUoiIHn8COeAH05Uqt4G+j+5bSBpsXH8yGjo4yTG5oUyuYiqyIKvnnbnlAfnIJv2UxY4mJpIUtLdxcNLKbXrrbqGWAPGnU8ipGhDu43DffaQo/qudXcSoXTvKBX7TbrHI3izWtpXUgsPojolKOXFxg9cFPZvByMAgrQYtrxAw8RYIQyuiqKpdC08dVhjwlZAWFbpZQ+ktU9+KDo6TNiXtBE4fW9JGSjcQO75Bv717XJlm8O9A+uYjftyK1bEyGKYGekWFo2e6lYZ/49lyiu8y7pA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=syrmia.com; dmarc=pass action=none header.from=syrmia.com;
+ dkim=pass header.d=syrmia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syrmia.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OMZz0P+6dRslXzUfyWFzD/pdx+bbyUqsHjl3YR6TwLs=;
+ b=e9JCbHgw9MDSUBn4l31o23Fd82s6eH0vK/uQt3I98IF8qovwXP7ICGRfcpXWmIMpkth9IW2/HiPTbtX7k1Z40jxlY4wFjHW0+WG2fXJixAXmnJKP+TRBUr/zNph0bKIPylUZzvX83l1A8S09ZLNzDFxvmQ1NCVQgV6jCVEwW+Hk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=syrmia.com;
+Received: from VI1PR03MB4208.eurprd03.prod.outlook.com (2603:10a6:803:51::25)
+ by DB4PR03MB8659.eurprd03.prod.outlook.com (2603:10a6:10:385::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
+ 2022 14:17:45 +0000
+Received: from VI1PR03MB4208.eurprd03.prod.outlook.com
+ ([fe80::1580:fba1:651e:7914]) by VI1PR03MB4208.eurprd03.prod.outlook.com
+ ([fe80::1580:fba1:651e:7914%7]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 14:17:45 +0000
+Message-ID: <5ff65346-ba7b-c440-a7e7-73c84fe13165@syrmia.com>
+Date:   Mon, 27 Jun 2022 16:17:43 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 07/12] clocksource: mips-gic-timer: Always use cluster
+ 0 counter as clocksource
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Chao-ying Fu <cfu@wavecomp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Min Zhou <zhoumin@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
+ <20220525121030.16054-8-Dragan.Mladjenovic@syrmia.com>
+From:   Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
+In-Reply-To: <20220525121030.16054-8-Dragan.Mladjenovic@syrmia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VE1PR08CA0024.eurprd08.prod.outlook.com
+ (2603:10a6:803:104::37) To VI1PR03MB4208.eurprd03.prod.outlook.com
+ (2603:10a6:803:51::25)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 02c0044d-ecdc-4388-a1d2-08da5847ce45
+X-MS-TrafficTypeDiagnostic: DB4PR03MB8659:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /JMlaMNljFVtA1/nRkxk4sX5HgpeuGW95cL44tQ2oLp/9sYlIQue+aaipnw4CRCEunDwRkTVs/Mw5QkokgLoaPgLsB2udLFObPvY0w3eKaODvJdzEcnOrq5K7D13epLSNfh3W+vyDFT0rw1uPS1gAzCiLCc2oGhHmQubHo6o+bsymIKX7rQJKKGCnGDlC28ODQWKh3xNGdZjqwa4OIbS2gm1H4oPb4dr2sCBd/u+DajlnzMi3UCmchC6JATszvo8RZA6LFZDsiV61M50tNb0WMatWHMSb4fZqVbp4OmNH6cjfs+ni3t4FyeUKe0Zfwh3oVjiJGZ8jhZUStAKfLjDaX0T/ZgLr8PuboHEZyM2XsaTJqqzjG0BwboWWg9PXDk2H8tmWbJvmwM1Oia4Geln1726OmaYBBd8o+xreGJZwghp6TrYvxTpptKcVAnXQBwBCurUzKQrNrG5JuRVLe/ws5h6w9fxFH9RcHaro4g1cF5WpBxsy+Jm/KOpB2wOijhVYCOPyQEMX5Wi60S3eIfho2bdDNQDOzgqQLR/senQGuywE4xXm5EEWQ3nPXUutYzAx1d2WoM4lcM2f5JM8tMqS3MN6DpOByqXcNgerFPHm6Yy4P1j9iy/QppMAcp4MsV7buDQPHzCsOxkgZFchHEdnpeL+4OskRCirnSRA25z3mYXKWxeIYAfuK2SRJDZHKzdu8vr+m77MflNfazw/jQsdXgJlOqwpqfCI2O4+2svjD8Fv4bpexayeK9ha1H+KP93kPr2DcAbsds8xmNVdXOWubLXHR6rko7sUPPjabonO/s5OVOsAvSxwuqZ5dXYKuhCwSkpu8AlKa4lWoj9chy5bdvPgNt/LrENISPpeci+zpY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB4208.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(376002)(396003)(39830400003)(346002)(186003)(6506007)(31696002)(53546011)(2616005)(41300700001)(52116002)(26005)(6512007)(83380400001)(38350700002)(38100700002)(8936002)(86362001)(5660300002)(36756003)(31686004)(2906002)(316002)(7416002)(4326008)(6486002)(478600001)(54906003)(6916009)(8676002)(66946007)(66556008)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnZpekYrT3djNDdzcDQwOWlHbkNkSnJZUUNRaFhpT1Fka0JVYTlDNVJPR1Nl?=
+ =?utf-8?B?ZzVqdkE2VHpET0JBVVNpNE80RWVsbVZrdDNtRWxxMlp0VTAvYTlMOXVldmxF?=
+ =?utf-8?B?dDJsY3hzRWZ2OVFxRmF1VlFPNlY0VHVPcVcwWlZMbDJXcS9WZ1RuNG13TW5z?=
+ =?utf-8?B?NmRjS3BhOXFsZk5jYUd4TDN0djIxdmd3ZWY1U2NqZkNscG0zTTdaalVIdXM3?=
+ =?utf-8?B?WmFsSFlTbk1FMHlqMjBteVhaeDR3S1Fka0hvYzk1M2ZFM3A2VGVZMEFmc3Bq?=
+ =?utf-8?B?WlpVQnZLT0JaMTArcG4zOXFKdmQ3Vjdmb0NsOGJYb2ZFbVU3NVBra2FwcEJI?=
+ =?utf-8?B?OE5hTlhHdmtDYXhyRFp6Y2txN2dLRFZLdG5ubTJGdkpMa3UrYkdCUWw1ZlVH?=
+ =?utf-8?B?akt4a2NlellUOWIrRWkyQmk4NElGRFprS3dVWktKcHd5SWhwQW8xUjNUQTY4?=
+ =?utf-8?B?QkVpY0hjclpuWXZ5aGIzUFZ5UktjL1o1NWd5dWpUUksxUk9rMDFUK0JxbzJy?=
+ =?utf-8?B?cVdOaE9jWGFwY2YxcXVFL3ltalNkZXIvOTd1Rzhsd2d1K05MN3U4REdwK1dv?=
+ =?utf-8?B?YVRtMmRFYW40M1RBYUMyN3VTWUh3NTE0dlhJeGNrUytQaUJhMkVmYW5GSDZL?=
+ =?utf-8?B?Snp1bE5FQ0E0K2EyQVB5QkNkYU9uQkNMOFIwc0MvL2lrUlJHdjcxWWVlNjZR?=
+ =?utf-8?B?ZjJSekl4UWVNYkV5US9HUFBuZ2tSSnhIRXVSTmcxN0ZmeEtucFVrZnRRRUxC?=
+ =?utf-8?B?ZzJ3Mi95NlV3OFMrRUFUWS82UzIwQmlwQ0NBUzZyQ2trU2c2SVYyc1BZUjRT?=
+ =?utf-8?B?R3kwSEd0MyszempUcTcyVWVjcG9RSU1nek11T3prZFRGb3RYZkRjRGkzR1Bi?=
+ =?utf-8?B?TU81bW9xRS94d083WThENzJpQXpqQlVQTjlaSlJZLzJMY2JaUTBScUZOSkRG?=
+ =?utf-8?B?Sm1KczhGSHpvallLQUhrckdpY3FmNWo1cHpHcHRLZFMvSXBhMTd6bEJqME8r?=
+ =?utf-8?B?a1hvanloemdYa2crbUtBYjA5L21YZEdVakZ4aHorS3l1UGdYbkhHMjVhRUR0?=
+ =?utf-8?B?Z29NSnZ4UWtGaXhnWGFWdUxydkJuamFCTERsVWhMTDhjcU5OaW1acWNiUEUx?=
+ =?utf-8?B?VjlLUVIvblBBUDJMRVd5TTBNeW5nQ3RKdWs4NzJybHY0ekFUSHI1OVVvczdR?=
+ =?utf-8?B?QzJNMTF2UEQ3MVpjRS9yVTcwOFdWUWRxWnU3QWg1WmJNRmcyZG1VdXNJWW16?=
+ =?utf-8?B?V2UwellSR0JEaUZCYmFPa2ptTzFpZ1VabnJXYk00alFIRGltdkttcmVXNlhn?=
+ =?utf-8?B?ZTFWNGlPcTRIYUJybjhQWVV5TWswTDlMLytxU1NqeWZHNU5DM01iRDBvaUdv?=
+ =?utf-8?B?UVVRbmliVUwweStQL3NqNFMyT252cGFQVm9WR2hhTnZzYXVjQU4rR3lXOEZ0?=
+ =?utf-8?B?dEROV0dXU1pQUXNydDQ3Um9Dak9iNmtNcnN0TkRpWEdOVldyWUVnTjU4Mzdm?=
+ =?utf-8?B?bXlGQlNNR0ZGcHkzRlZtNUpXMk9BNWdIMWl1S3E4cHp3NVR6M0dob24ybE5h?=
+ =?utf-8?B?UVFhMER0VGtIc3VtZTExeGxLT2M2R2h4TFBVNjl2L3BJWVlhQVkzYmV1dnJ4?=
+ =?utf-8?B?VFFIV1ErT0ltaldOT2JhZW44WjBWUUUxMi9SNVNsTFpNYkVnQTljRW9WZnhJ?=
+ =?utf-8?B?V1ROQ25uTnpETkZ3Y2doTFA5WWl4d1FLcnk2MlNKNG0xYjYxSVA0eUtnclpp?=
+ =?utf-8?B?SmZ2NFNPSEVWK0NQTFlUMjd6YVFIQmJ5aFNkb3VCWFczbmVHa200azR4VDlw?=
+ =?utf-8?B?aFRvWVFvQ1JOQyszNG5WSVZFcjMvdCthZm5LdXhBYk84M1lLR3NIZlN1TFdU?=
+ =?utf-8?B?ZXlMWC9SVDhPbGt5RXNjWW1ITTVpbFI1Q3hqaE14MC9UUVFoQy9aeVEwQjJC?=
+ =?utf-8?B?UkFieTZyMUN5K1VpbjlWWmtQOTc3dmdlakE4MHVFa0VES3dwOURqSlg0MUxF?=
+ =?utf-8?B?RXJQRlVSQ3lFMDNkVUJuNFM0NlNrSGVMaUpUWHRxVFZwM2JGajhBK1ROWFdU?=
+ =?utf-8?B?NTZvWkZWQkVmbHdNclo3S1hXZDBNRDVqNnFZdFhxQlhMSmRVWVVzQW1BN0VW?=
+ =?utf-8?B?ZzVCZWZxaWhzNC95cko2SEdGTGgvdnBVeVJwcWFhV2ZHZkNmdTE4ekRMWjVV?=
+ =?utf-8?Q?R4oydSPoFeq/rnVhZ19R0v8=3D?=
+X-OriginatorOrg: syrmia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02c0044d-ecdc-4388-a1d2-08da5847ce45
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB4208.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 14:17:45.4813
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 19214a73-c1ab-4e19-8f59-14bdcb09a66e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YwmkNiyHAaEqxzgilEKHPKXs96Z6d3TFuVvYgu6s3BJrZPe84kX5rKozaA8pLV/sTfUpBvJOhMl/YoaBWsldH3vCL9m9O4nuogE7Jaaqukg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR03MB8659
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 5:54 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
->
-> Add sparse memory vmemmap support for LoongArch. SPARSEMEM_VMEMMAP
-> uses a virtually mapped memmap to optimise pfn_to_page and page_to_pfn
-> operations. This is the most efficient option when sufficient kernel
-> resources are available.
->
-> Signed-off-by: Min Zhou <zhoumin@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> ---
->  arch/loongarch/Kconfig                 |  2 +
->  arch/loongarch/include/asm/pgtable.h   |  5 +-
->  arch/loongarch/include/asm/sparsemem.h |  8 +++
->  arch/loongarch/mm/init.c               | 71 +++++++++++++++++++++++++-
->  include/linux/mm.h                     |  2 +
->  mm/sparse-vmemmap.c                    | 10 ++++
->  6 files changed, 96 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index dc19cf3071ea..8e56ca28165e 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -49,6 +49,7 @@ config LOONGARCH
->         select ARCH_USE_QUEUED_RWLOCKS
->         select ARCH_USE_QUEUED_SPINLOCKS
->         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> +       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+On 25-May-22 14:10, Dragan Mladjenovic wrote:
+> From: Paul Burton <paulburton@kernel.org>
+> 
+> In a multi-cluster MIPS system we have multiple GICs - one in each
+> cluster - each of which has its own independent counter. The counters in
+> each GIC are not synchronised in any way, so they can drift relative to
+> one another through the lifetime of the system. This is problematic for
+> a clocksource which ought to be global.
+> 
+> Avoid problems by always accessing cluster 0's counter, using
+> cross-cluster register access. This adds overhead so we only do so on
+> systems where we actually have CPUs present in multiple clusters.
+> For now, be extra conservative and don't use gic counter for vdso or
+> sched_clock in this case.
+> 
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
+> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+> 
+> diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
+> index be4175f415ba..6632d314a2c0 100644
+> --- a/drivers/clocksource/mips-gic-timer.c
+> +++ b/drivers/clocksource/mips-gic-timer.c
+> @@ -170,6 +170,37 @@ static u64 gic_hpt_read(struct clocksource *cs)
+>   	return gic_read_count();
+>   }
+>   
+> +static u64 gic_hpt_read_multicluster(struct clocksource *cs)
+> +{
+> +	unsigned int hi, hi2, lo;
+> +	u64 count;
+> +
+> +	mips_cm_lock_other(0, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
+> +
+> +	if (mips_cm_is64) {
+> +		count = read_gic_redir_counter();
+> +		goto out;
+> +	}
+> +
+> +	hi = read_gic_redir_counter_32h();
+> +	while (true) {
+> +		lo = read_gic_redir_counter_32l();
+> +
+> +		/* If hi didn't change then lo didn't wrap & we're done */
+> +		hi2 = read_gic_redir_counter_32h();
+> +		if (hi2 == hi)
+> +			break;
+> +
+> +		/* Otherwise, repeat with the latest hi value */
+> +		hi = hi2;
+> +	}
+> +
+> +	count = (((u64)hi) << 32) + lo;
+> +out:
+> +	mips_cm_unlock_other();
+> +	return count;
+> +}
+> +
+>   static struct clocksource gic_clocksource = {
+>   	.name			= "GIC",
+>   	.read			= gic_hpt_read,
+> @@ -204,6 +235,11 @@ static int __init __gic_clocksource_init(void)
+>   	/* Calculate a somewhat reasonable rating value. */
+>   	gic_clocksource.rating = 200 + gic_frequency / 10000000;
+>   
+> +	if (mips_cps_multicluster_cpus()) {
+> +		gic_clocksource.read = &gic_hpt_read_multicluster;
+> +		gic_clocksource.vdso_clock_mode = VDSO_CLOCKMODE_NONE;
+> +	}
+> +
+>   	ret = clocksource_register_hz(&gic_clocksource, gic_frequency);
+>   	if (ret < 0)
+>   		pr_warn("Unable to register clocksource\n");
+> @@ -262,7 +298,8 @@ static int __init gic_clocksource_of_init(struct device_node *node)
+>   	 * stable CPU frequency or on the platforms with CM3 and CPU frequency
+>   	 * change performed by the CPC core clocks divider.
+>   	 */
+> -	if (mips_cm_revision() >= CM_REV_CM3 || !IS_ENABLED(CONFIG_CPU_FREQ)) {
+> +	if ((mips_cm_revision() >= CM_REV_CM3 || !IS_ENABLED(CONFIG_CPU_FREQ)) &&
+> +	     !mips_cps_multicluster_cpus()) {
+>   		sched_clock_register(mips_cm_is64 ?
+>   				     gic_read_count_64 : gic_read_count_2x32,
+>   				     64, gic_frequency);
 
-I think this should be a separate patch to enable HVO (HugeTLB Vmemmap
-Optimization) since it is irrelevant to this patch.
+Hi,
 
-Thanks.
+I was expecting some comments on this, but I'll ask first. We now taking 
+a conservative approach of not using gic as sched_clock in multicluster 
+case. Is this necessary or can sched_clock tolerate a fixed delta 
+between clocks on different cpu clusters?
 
->         select ARCH_WANTS_NO_INSTR
->         select BUILDTIME_TABLE_SORT
->         select COMMON_CLK
-> @@ -422,6 +423,7 @@ config ARCH_FLATMEM_ENABLE
->
->  config ARCH_SPARSEMEM_ENABLE
->         def_bool y
-> +       select SPARSEMEM_VMEMMAP_ENABLE
->         help
->           Say Y to support efficient handling of sparse physical memory,
->           for architectures which are either NUMA (Non-Uniform Memory Access)
-> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> index 9c811c3f7572..b701ec7a0309 100644
-> --- a/arch/loongarch/include/asm/pgtable.h
-> +++ b/arch/loongarch/include/asm/pgtable.h
-> @@ -92,7 +92,10 @@ extern unsigned long zero_page_mask;
->  #define VMALLOC_START  MODULES_END
->  #define VMALLOC_END    \
->         (vm_map_base +  \
-> -        min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE)
-> +        min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
-> +
-> +#define vmemmap                ((struct page *)((VMALLOC_END + PMD_SIZE) & PMD_MASK))
-> +#define VMEMMAP_END    ((unsigned long)vmemmap + VMEMMAP_SIZE - 1)
->
->  #define pte_ERROR(e) \
->         pr_err("%s:%d: bad pte %016lx.\n", __FILE__, __LINE__, pte_val(e))
-> diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
-> index 3d18cdf1b069..a1e440f6bec7 100644
-> --- a/arch/loongarch/include/asm/sparsemem.h
-> +++ b/arch/loongarch/include/asm/sparsemem.h
-> @@ -11,6 +11,14 @@
->  #define SECTION_SIZE_BITS      29 /* 2^29 = Largest Huge Page Size */
->  #define MAX_PHYSMEM_BITS       48
->
-> +#ifndef CONFIG_SPARSEMEM_VMEMMAP
-> +#define VMEMMAP_SIZE   0
-> +#else
-> +#define VMEMMAP_SIZE   (sizeof(struct page) * (1UL << (cpu_pabits + 1 - PAGE_SHIFT)))
-> +#endif
-> +
-> +#include <linux/mm_types.h>
-> +
->  #endif /* CONFIG_SPARSEMEM */
->
->  #ifdef CONFIG_MEMORY_HOTPLUG
-> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
-> index 7094a68c9b83..35128229fe46 100644
-> --- a/arch/loongarch/mm/init.c
-> +++ b/arch/loongarch/mm/init.c
-> @@ -22,7 +22,7 @@
->  #include <linux/pfn.h>
->  #include <linux/hardirq.h>
->  #include <linux/gfp.h>
-> -#include <linux/initrd.h>
-> +#include <linux/hugetlb.h>
->  #include <linux/mmzone.h>
->
->  #include <asm/asm-offsets.h>
-> @@ -157,6 +157,75 @@ void arch_remove_memory(u64 start, u64 size, struct vmem_altmap *altmap)
->  #endif
->  #endif
->
-> +#ifdef CONFIG_SPARSEMEM_VMEMMAP
-> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
-> +                                        int node, struct vmem_altmap *altmap)
-> +{
-> +       unsigned long addr = start;
-> +       unsigned long next;
-> +       pgd_t *pgd;
-> +       p4d_t *p4d;
-> +       pud_t *pud;
-> +       pmd_t *pmd;
-> +
-> +       for (addr = start; addr < end; addr = next) {
-> +               next = pmd_addr_end(addr, end);
-> +
-> +               pgd = vmemmap_pgd_populate(addr, node);
-> +               if (!pgd)
-> +                       return -ENOMEM;
-> +               p4d = vmemmap_p4d_populate(pgd, addr, node);
-> +               if (!p4d)
-> +                       return -ENOMEM;
-> +               pud = vmemmap_pud_populate(p4d, addr, node);
-> +               if (!pud)
-> +                       return -ENOMEM;
-> +
-> +               pmd = pmd_offset(pud, addr);
-> +               if (pmd_none(*pmd)) {
-> +                       void *p = NULL;
-> +
-> +                       p = vmemmap_alloc_block_buf(PMD_SIZE, node, NULL);
-> +                       if (p) {
-> +                               pmd_t entry;
-> +
-> +                               entry = pfn_pmd(virt_to_pfn(p), PAGE_KERNEL);
-> +                               pmd_val(entry) |= _PAGE_HUGE | _PAGE_HGLOBAL;
-> +                               set_pmd_at(&init_mm, addr, pmd, entry);
-> +
-> +                               continue;
-> +                       }
-> +               } else if (pmd_val(*pmd) & _PAGE_HUGE) {
-> +                       vmemmap_verify((pte_t *)pmd, node, addr, next);
-> +                       continue;
-> +               }
-> +               if (vmemmap_populate_basepages(addr, next, node, NULL))
-> +                       return -ENOMEM;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +#if CONFIG_PGTABLE_LEVELS == 2
-> +int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
-> +               struct vmem_altmap *altmap)
-> +{
-> +       return vmemmap_populate_basepages(start, end, node, NULL);
-> +}
-> +#else
-> +int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
-> +               struct vmem_altmap *altmap)
-> +{
-> +       return vmemmap_populate_hugepages(start, end, node, NULL);
-> +}
-> +#endif
-> +
-> +void vmemmap_free(unsigned long start, unsigned long end,
-> +               struct vmem_altmap *altmap)
-> +{
-> +}
-> +#endif
-> +
->  /*
->   * Align swapper_pg_dir in to 64K, allows its address to be loaded
->   * with a single LUI instruction in the TLB handlers.  If we used
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index bc8f326be0ce..3472b924a1ea 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3203,6 +3203,8 @@ void *sparse_buffer_alloc(unsigned long size);
->  struct page * __populate_section_memmap(unsigned long pfn,
->                 unsigned long nr_pages, int nid, struct vmem_altmap *altmap,
->                 struct dev_pagemap *pgmap);
-> +void pmd_init(void *addr);
-> +void pud_init(void *addr);
->  pgd_t *vmemmap_pgd_populate(unsigned long addr, int node);
->  p4d_t *vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node);
->  pud_t *vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node);
-> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-> index f4fa61dbbee3..33e2a1ceee72 100644
-> --- a/mm/sparse-vmemmap.c
-> +++ b/mm/sparse-vmemmap.c
-> @@ -587,6 +587,10 @@ pmd_t * __meminit vmemmap_pmd_populate(pud_t *pud, unsigned long addr, int node)
->         return pmd;
->  }
->
-> +void __weak __meminit pmd_init(void *addr)
-> +{
-> +}
-> +
->  pud_t * __meminit vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
->  {
->         pud_t *pud = pud_offset(p4d, addr);
-> @@ -594,11 +598,16 @@ pud_t * __meminit vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
->                 void *p = vmemmap_alloc_block_zero(PAGE_SIZE, node);
->                 if (!p)
->                         return NULL;
-> +               pmd_init(p);
->                 pud_populate(&init_mm, pud, p);
->         }
->         return pud;
->  }
->
-> +void __weak __meminit pud_init(void *addr)
-> +{
-> +}
-> +
->  p4d_t * __meminit vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
->  {
->         p4d_t *p4d = p4d_offset(pgd, addr);
-> @@ -606,6 +615,7 @@ p4d_t * __meminit vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
->                 void *p = vmemmap_alloc_block_zero(PAGE_SIZE, node);
->                 if (!p)
->                         return NULL;
-> +               pud_init(p);
->                 p4d_populate(&init_mm, p4d, p);
->         }
->         return p4d;
-> --
-> 2.27.0
->
+Best regards,
+
+Dragan
+
