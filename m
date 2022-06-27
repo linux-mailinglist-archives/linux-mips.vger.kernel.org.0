@@ -2,49 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0585955DF20
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B4855DA04
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbiF0HHS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jun 2022 03:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        id S232769AbiF0Kdu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Jun 2022 06:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbiF0HHR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 03:07:17 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0C265FAC;
-        Mon, 27 Jun 2022 00:07:15 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9giV7lijrtfAA--.5371S2;
-        Mon, 27 Jun 2022 15:07:14 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] MIPS: Loongson64: Fix section mismatch warning
-Date:   Mon, 27 Jun 2022 15:07:13 +0800
-Message-Id: <1656313633-1713-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxr9giV7lijrtfAA--.5371S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFW7CFWDGF1UXr18Cw45Wrg_yoW8GF18pa
-        yrCw1DWr4UKr4kAF1fCry8Z34xJa4rWFs3A3y7CryDW39ru3sYvr1IkF4rZFyDtr4Fya1r
-        XFn3Grs5u3W8C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4x
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjVc_3UUUU
-        U==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        with ESMTP id S232814AbiF0Kdr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 06:33:47 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF2D63E8
+        for <linux-mips@vger.kernel.org>; Mon, 27 Jun 2022 03:33:44 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-317a66d62dfso80788237b3.7
+        for <linux-mips@vger.kernel.org>; Mon, 27 Jun 2022 03:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VODoDzVCZKAUsZE7kTSW4XAB++NVoyofY4K1h7c/MA8=;
+        b=PeN5F9996BxEsiLqg8K7vhp+0lEyXGsvf74OFPjhmfln/aUk+Kaj3vlc4Vg46HXgtS
+         nlJ+4A2XzwWCmY6wJPtGva6pK7KNJpO+YhSuqX66yq0yQ/8tOV86ihN4LL8IC2aYBS7G
+         HPLGg1wHE7F1dEFQaUAg5haTAFpNfTbbcp1dnwXYdz9iQ0FF1rrMHMEL1IWc0Zl7Ucuy
+         FM+a8ra8lJkROVKYKu8pmxGL8TeIwxGibw1pgpWFEUI1MsssfHLaSaPgNaaQuFdEBL4P
+         K9wzkwg0yGnwHaze3tLtGLvT1Lqi3/ixp59EQDw8GH6QByea9UiP/0k+SKviVXbZ++pf
+         ajFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VODoDzVCZKAUsZE7kTSW4XAB++NVoyofY4K1h7c/MA8=;
+        b=5xFt2XYsZcngy4z6gE9fNWRvZ7d7vu1x5IWCGVAcRrw5Pl5laJ9rB3heKa7WI3a3ni
+         umZ/+FKCgINZFwcenWF3euqgyshkWrj4GDJ3YYm+AC2V0sROWQ7LlJjdIgSbvCtu27eH
+         0zDgHO4ilnhPWJCsUTZccbqyrFPsxkpyocJ6IXaeWSu3NB+wubHdGAPiA4iumi7RyVVC
+         +ZwlDsHFj5gOPHDrDX/pfhk16iCgqrdejToW46BQ1DZ2Xib5u4/s0VXGSRgF4Mpw4tIU
+         O1eNe3KRdCszoOJQg61n1jWwis05KOEbMLhZ7QOhSwV0VlZ2kVK4+CB2QJY1nlFeX77S
+         XqCA==
+X-Gm-Message-State: AJIora9PYV04p9eS7ZWLNN95vkFyJoWvMrso3v3Bo1D6z00BjMckK/ox
+        kRZF5RgFI9eflJ9PiLAdxP6GAtY9Plzw3b3IWCpawg==
+X-Google-Smtp-Source: AGRyM1t2kjGjxYE+LjwZz8xCIgNDrkse8xEEP248ngplx1lPQ5sKx81AV05OwXlhicvmmEKmxlVwaMvNkIEgbMs3SAE=
+X-Received: by 2002:a81:4bc5:0:b0:317:9c15:6ceb with SMTP id
+ y188-20020a814bc5000000b003179c156cebmr13783151ywa.31.1656326023558; Mon, 27
+ Jun 2022 03:33:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220625095459.3786827-1-chenhuacai@loongson.cn> <20220625095459.3786827-2-chenhuacai@loongson.cn>
+In-Reply-To: <20220625095459.3786827-2-chenhuacai@loongson.cn>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Mon, 27 Jun 2022 18:33:07 +0800
+Message-ID: <CAMZfGtV+xJ_FLooUPhZDcBOae_VnRHwGZqc3Ae1a0oNoLKk=iA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] LoongArch: Add sparse memory vmemmap support
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Min Zhou <zhoumin@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,42 +79,230 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-prom_init_numa_memory() is annotated __init and not used by any module,
-thus don't export it.
+On Sat, Jun 25, 2022 at 5:54 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
+>
+> Add sparse memory vmemmap support for LoongArch. SPARSEMEM_VMEMMAP
+> uses a virtually mapped memmap to optimise pfn_to_page and page_to_pfn
+> operations. This is the most efficient option when sufficient kernel
+> resources are available.
+>
+> Signed-off-by: Min Zhou <zhoumin@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig                 |  2 +
+>  arch/loongarch/include/asm/pgtable.h   |  5 +-
+>  arch/loongarch/include/asm/sparsemem.h |  8 +++
+>  arch/loongarch/mm/init.c               | 71 +++++++++++++++++++++++++-
+>  include/linux/mm.h                     |  2 +
+>  mm/sparse-vmemmap.c                    | 10 ++++
+>  6 files changed, 96 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index dc19cf3071ea..8e56ca28165e 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -49,6 +49,7 @@ config LOONGARCH
+>         select ARCH_USE_QUEUED_RWLOCKS
+>         select ARCH_USE_QUEUED_SPINLOCKS
+>         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> +       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
 
-Remove not needed EXPORT_SYMBOL for prom_init_numa_memory() to fix the
-following section mismatch warning:
+I think this should be a separate patch to enable HVO (HugeTLB Vmemmap
+Optimization) since it is irrelevant to this patch.
 
-  LD      vmlinux.o
-  MODPOST vmlinux.symvers
-WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Section mismatch in reference
-from the variable __ksymtab_prom_init_numa_memory to the function .init.text:prom_init_numa_memory()
-The symbol prom_init_numa_memory is exported and annotated __init
-Fix this by removing the __init annotation of prom_init_numa_memory or drop the export.
+Thanks.
 
-This is build on Linux 5.19-rc4.
-
-Fixes: 6fbde6b492df ("MIPS: Loongson64: Move files to the top-level directory")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-v2: update the commit message and add Fixes tag
-
- arch/mips/loongson64/numa.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index 69a5331..8f61e93 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -196,7 +196,6 @@ void __init prom_init_numa_memory(void)
- 	pr_info("CP0_PageGrain: CP0 5.1 (0x%x)\n", read_c0_pagegrain());
- 	prom_meminit();
- }
--EXPORT_SYMBOL(prom_init_numa_memory);
- 
- pg_data_t * __init arch_alloc_nodedata(int nid)
- {
--- 
-2.1.0
-
+>         select ARCH_WANTS_NO_INSTR
+>         select BUILDTIME_TABLE_SORT
+>         select COMMON_CLK
+> @@ -422,6 +423,7 @@ config ARCH_FLATMEM_ENABLE
+>
+>  config ARCH_SPARSEMEM_ENABLE
+>         def_bool y
+> +       select SPARSEMEM_VMEMMAP_ENABLE
+>         help
+>           Say Y to support efficient handling of sparse physical memory,
+>           for architectures which are either NUMA (Non-Uniform Memory Access)
+> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+> index 9c811c3f7572..b701ec7a0309 100644
+> --- a/arch/loongarch/include/asm/pgtable.h
+> +++ b/arch/loongarch/include/asm/pgtable.h
+> @@ -92,7 +92,10 @@ extern unsigned long zero_page_mask;
+>  #define VMALLOC_START  MODULES_END
+>  #define VMALLOC_END    \
+>         (vm_map_base +  \
+> -        min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE)
+> +        min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+> +
+> +#define vmemmap                ((struct page *)((VMALLOC_END + PMD_SIZE) & PMD_MASK))
+> +#define VMEMMAP_END    ((unsigned long)vmemmap + VMEMMAP_SIZE - 1)
+>
+>  #define pte_ERROR(e) \
+>         pr_err("%s:%d: bad pte %016lx.\n", __FILE__, __LINE__, pte_val(e))
+> diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
+> index 3d18cdf1b069..a1e440f6bec7 100644
+> --- a/arch/loongarch/include/asm/sparsemem.h
+> +++ b/arch/loongarch/include/asm/sparsemem.h
+> @@ -11,6 +11,14 @@
+>  #define SECTION_SIZE_BITS      29 /* 2^29 = Largest Huge Page Size */
+>  #define MAX_PHYSMEM_BITS       48
+>
+> +#ifndef CONFIG_SPARSEMEM_VMEMMAP
+> +#define VMEMMAP_SIZE   0
+> +#else
+> +#define VMEMMAP_SIZE   (sizeof(struct page) * (1UL << (cpu_pabits + 1 - PAGE_SHIFT)))
+> +#endif
+> +
+> +#include <linux/mm_types.h>
+> +
+>  #endif /* CONFIG_SPARSEMEM */
+>
+>  #ifdef CONFIG_MEMORY_HOTPLUG
+> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
+> index 7094a68c9b83..35128229fe46 100644
+> --- a/arch/loongarch/mm/init.c
+> +++ b/arch/loongarch/mm/init.c
+> @@ -22,7 +22,7 @@
+>  #include <linux/pfn.h>
+>  #include <linux/hardirq.h>
+>  #include <linux/gfp.h>
+> -#include <linux/initrd.h>
+> +#include <linux/hugetlb.h>
+>  #include <linux/mmzone.h>
+>
+>  #include <asm/asm-offsets.h>
+> @@ -157,6 +157,75 @@ void arch_remove_memory(u64 start, u64 size, struct vmem_altmap *altmap)
+>  #endif
+>  #endif
+>
+> +#ifdef CONFIG_SPARSEMEM_VMEMMAP
+> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> +                                        int node, struct vmem_altmap *altmap)
+> +{
+> +       unsigned long addr = start;
+> +       unsigned long next;
+> +       pgd_t *pgd;
+> +       p4d_t *p4d;
+> +       pud_t *pud;
+> +       pmd_t *pmd;
+> +
+> +       for (addr = start; addr < end; addr = next) {
+> +               next = pmd_addr_end(addr, end);
+> +
+> +               pgd = vmemmap_pgd_populate(addr, node);
+> +               if (!pgd)
+> +                       return -ENOMEM;
+> +               p4d = vmemmap_p4d_populate(pgd, addr, node);
+> +               if (!p4d)
+> +                       return -ENOMEM;
+> +               pud = vmemmap_pud_populate(p4d, addr, node);
+> +               if (!pud)
+> +                       return -ENOMEM;
+> +
+> +               pmd = pmd_offset(pud, addr);
+> +               if (pmd_none(*pmd)) {
+> +                       void *p = NULL;
+> +
+> +                       p = vmemmap_alloc_block_buf(PMD_SIZE, node, NULL);
+> +                       if (p) {
+> +                               pmd_t entry;
+> +
+> +                               entry = pfn_pmd(virt_to_pfn(p), PAGE_KERNEL);
+> +                               pmd_val(entry) |= _PAGE_HUGE | _PAGE_HGLOBAL;
+> +                               set_pmd_at(&init_mm, addr, pmd, entry);
+> +
+> +                               continue;
+> +                       }
+> +               } else if (pmd_val(*pmd) & _PAGE_HUGE) {
+> +                       vmemmap_verify((pte_t *)pmd, node, addr, next);
+> +                       continue;
+> +               }
+> +               if (vmemmap_populate_basepages(addr, next, node, NULL))
+> +                       return -ENOMEM;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +#if CONFIG_PGTABLE_LEVELS == 2
+> +int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+> +               struct vmem_altmap *altmap)
+> +{
+> +       return vmemmap_populate_basepages(start, end, node, NULL);
+> +}
+> +#else
+> +int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+> +               struct vmem_altmap *altmap)
+> +{
+> +       return vmemmap_populate_hugepages(start, end, node, NULL);
+> +}
+> +#endif
+> +
+> +void vmemmap_free(unsigned long start, unsigned long end,
+> +               struct vmem_altmap *altmap)
+> +{
+> +}
+> +#endif
+> +
+>  /*
+>   * Align swapper_pg_dir in to 64K, allows its address to be loaded
+>   * with a single LUI instruction in the TLB handlers.  If we used
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index bc8f326be0ce..3472b924a1ea 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3203,6 +3203,8 @@ void *sparse_buffer_alloc(unsigned long size);
+>  struct page * __populate_section_memmap(unsigned long pfn,
+>                 unsigned long nr_pages, int nid, struct vmem_altmap *altmap,
+>                 struct dev_pagemap *pgmap);
+> +void pmd_init(void *addr);
+> +void pud_init(void *addr);
+>  pgd_t *vmemmap_pgd_populate(unsigned long addr, int node);
+>  p4d_t *vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node);
+>  pud_t *vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node);
+> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> index f4fa61dbbee3..33e2a1ceee72 100644
+> --- a/mm/sparse-vmemmap.c
+> +++ b/mm/sparse-vmemmap.c
+> @@ -587,6 +587,10 @@ pmd_t * __meminit vmemmap_pmd_populate(pud_t *pud, unsigned long addr, int node)
+>         return pmd;
+>  }
+>
+> +void __weak __meminit pmd_init(void *addr)
+> +{
+> +}
+> +
+>  pud_t * __meminit vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
+>  {
+>         pud_t *pud = pud_offset(p4d, addr);
+> @@ -594,11 +598,16 @@ pud_t * __meminit vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
+>                 void *p = vmemmap_alloc_block_zero(PAGE_SIZE, node);
+>                 if (!p)
+>                         return NULL;
+> +               pmd_init(p);
+>                 pud_populate(&init_mm, pud, p);
+>         }
+>         return pud;
+>  }
+>
+> +void __weak __meminit pud_init(void *addr)
+> +{
+> +}
+> +
+>  p4d_t * __meminit vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
+>  {
+>         p4d_t *p4d = p4d_offset(pgd, addr);
+> @@ -606,6 +615,7 @@ p4d_t * __meminit vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
+>                 void *p = vmemmap_alloc_block_zero(PAGE_SIZE, node);
+>                 if (!p)
+>                         return NULL;
+> +               pud_init(p);
+>                 p4d_populate(&init_mm, p4d, p);
+>         }
+>         return p4d;
+> --
+> 2.27.0
+>
