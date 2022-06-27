@@ -2,197 +2,330 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47C655CB0F
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 14:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4FC55D1C7
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237385AbiF0O1s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jun 2022 10:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S237549AbiF0Ocm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Jun 2022 10:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237344AbiF0O1Y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 10:27:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DD313F21;
-        Mon, 27 Jun 2022 07:27:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EE5EB817CF;
-        Mon, 27 Jun 2022 14:27:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EBEC3411D;
-        Mon, 27 Jun 2022 14:27:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656340041;
-        bh=TnJe5GtjYTivQDaip5nx0C9FQQe/W49iagWHzZpEVqg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RJ1BibMLtKVYG/mbMot4Vmh/rnLk7kdmdwq3LkHswz6YkDJwPZJKlUL1OuW0dpCQD
-         YKJ33EIEfNVVs6aBjrLGiT86XoIcikMSHksQPRRvVOdDR71ycoH8GTXXVfK8fV3Vdr
-         fPdPBeLmqEpf3oMPAUDPgdy8i0sQAw8BmbyRy9nupzbIMs0CZyI91xmyH0a/QxAvpF
-         IOhoNkozuR7eTx7KAnNGzlMlMH0S4xrQKAGrmHQAWFKYwF1t0LJ7bhHoo4Rd7dIHQX
-         mLf1vucr+MTikDigGq4pxQYpmb5mXNv/znGWviXBqVljnyWjHqrodbvdpRwpod9m/T
-         fNZJJzxSDuuqQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o5phv-003TLr-3j;
-        Mon, 27 Jun 2022 15:27:19 +0100
+        with ESMTP id S235525AbiF0Ock (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 10:32:40 -0400
+Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.142.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ED42646;
+        Mon, 27 Jun 2022 07:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1656340359; x=1656945159;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=eYXH/ctB6v6XAcg42LM5ozEFN2HdhzgzZ+oK7wTjzCM=;
+  b=QoJXUa/b01FhK9zt2z0c8Xn88yu5jEQ5ltCECRuG2lL3D1yw5uU7v5pV
+   jas0PXwbfEvJn1mY4xy44T3k+Ogot+GcW2RojVZ6Vx6/VgspqnqONegH3
+   XhT+u0VuZj9ZuVbDXO54E2j1A5WdtmVF/otOXPnC926aSXfKQFtiuSWwi
+   8=;
+Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 14:32:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cGOW8HUQIVaBTKpLWO+C4aPx6X9Xj3tooAfUWy+sPob781xwBfm+C7JsnAksVL3znA9fm8u9Q75Yeyd1o3Tge/tgaB1QffUppb747SaJw7lnJLJEB2Xolc+JaNjb7JGObqPkaNoXE5DSopsiW9Mz+IgZg7Q6LgK8dem1EfY/Dom8edgAwsjSPNiacB+Hm2wzLwIUdwES/SUxe7yPv5rnwHaMz/wspCxkPKRIaycwdqM2wHSk9mY5u492fZdBRANCSJlUmUMbcg8VJ4szN2By0Hj7ofjbjGE+lD1M2HU+LUA6MB3sN16m1uRBbHyqicSMhC2JSQuKZ7BagnmJAqeNhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eYXH/ctB6v6XAcg42LM5ozEFN2HdhzgzZ+oK7wTjzCM=;
+ b=NZV31S8FY6LC+g0g4cS2e7+2EXToeuvX68UC8oiP7n15GL6EZoAyZ1Mk1LHHX6fJX7VbAv+uimUrpPyQNsAC0kPaga/El4ds1wJy/cUhoO9f/AUWI9p0aAw7xE0g616srjc8/TO5zPLlR3p3S5f1GWXxGuJrdLgScP+KM8s9alFA7vwQIrE/EWOEIOGH6W24mSg5e2A4jrxGMnrxSVeZBY3/bdNKpW6zIyQUWeApbFkcPIz5rVzVthWopVzFqCLjm8u8BWNFFMjxBwObIj6EtyDtdfBdxIB5F+UnczM9fuBx4/wn2aVBgcNsgo2gZa+FV5t69Qn33EI2GYHVUGr4hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
+ dkim=pass header.d=quicinc.com; arc=none
+Received: from SN6PR02MB4205.namprd02.prod.outlook.com (2603:10b6:805:35::17)
+ by DM6PR02MB6138.namprd02.prod.outlook.com (2603:10b6:5:1fd::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
+ 2022 14:32:29 +0000
+Received: from SN6PR02MB4205.namprd02.prod.outlook.com
+ ([fe80::f4c0:89e2:789d:ceb1]) by SN6PR02MB4205.namprd02.prod.outlook.com
+ ([fe80::f4c0:89e2:789d:ceb1%7]) with mapi id 15.20.5373.016; Mon, 27 Jun 2022
+ 14:32:29 +0000
+From:   Brian Cain <bcain@quicinc.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+CC:     "hch@infradead.org" <hch@infradead.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Brian Cain <bcain@codeaurora.org>
+Subject: RE: [PATCH V5 12/26] hexagon/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Thread-Topic: [PATCH V5 12/26] hexagon/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Thread-Index: AQHYieNaF68nviM9AEWMdUsq7TAcg61jUU0Q
+Date:   Mon, 27 Jun 2022 14:32:29 +0000
+Message-ID: <SN6PR02MB4205D2460F6DB1F3C82999BDB8B99@SN6PR02MB4205.namprd02.prod.outlook.com>
+References: <20220627045833.1590055-1-anshuman.khandual@arm.com>
+ <20220627045833.1590055-13-anshuman.khandual@arm.com>
+In-Reply-To: <20220627045833.1590055-13-anshuman.khandual@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quicinc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d4ab36eb-bfe6-4b73-98a3-08da5849dd6d
+x-ms-traffictypediagnostic: DM6PR02MB6138:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6LCBwa4CDTnSlgl6CnuvSHylK43fGHMLoBG839b+bXfVd5N7nYAqXddIKZqfMqXLDn6rdkMCP1/tZanVPeTPStEENKwpoEwvg8a0U6B/0/Ru8PHLp8EMwwlxlorNMwaAPhooSIHXe7nn8Z1ShjJ0dbEY2E3yX75YVCgoONo8/wT4Yp6zLqRil2kKMbKONi36XpqRJ62+CwUUA0rs8EYeg183Y/Nnzo8iYxACJkCAvv6uMW4GQlZO+IT8CgIrtpAaFh8vh4oq3k8339e0GqYlzOjkOwDqIfJDV4g3950HVCaF7gJRK8W/YV4c/M2sTtKAnZAzAp8OJnCivz55DqELuL+WRsKJOQvqZmwJdVdEcUS6HnSuyQZEjzX5c2CuBF6vVaMKBpkmRnBRlZn7mQhLMmQIGEtZhKClBhltEqaQAUMuE6h2rHsyU/HNe6/zj7Pniiyg77NtFG695+ENaEfPLLX8eBmdMPen7Wsl95DYcmW5egsFZmfXQ3rmNkz7xZxIotgUiku9DQAVGXvhGg6rFa8TTWNy7DcQXB5Hq57Qi/2nig5m7DruO8mx/x339XgDAo+wpIhkdysR0Xb3viQDLPnLEFX/NFqwRO8f6S1hJLGrZtxw3nCBuS7djTB/OYrEh0bRQbCS+XpS+5u74i+LLi89/GWkJbV0rSokF7YMuKyr2wfVZbnYPBfFLPEMyl/NZ8/npwsOHL3S22bC/riomYaiHfFjkhVIB3H8V/MO4W1u+CO6mrQ6oqQ+S6hzCuM98onf4SChF/QNMNhu2JlgX6H5pEuPIykBm/FLc1PIeTw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR02MB4205.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(396003)(366004)(39860400002)(7696005)(64756008)(7416002)(66556008)(83380400001)(76116006)(71200400001)(66946007)(41300700001)(110136005)(8676002)(38100700002)(122000001)(316002)(5660300002)(26005)(54906003)(9686003)(86362001)(186003)(55016003)(2906002)(33656002)(4326008)(66446008)(66476007)(38070700005)(52536014)(6506007)(478600001)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fjdQUrKtASc2PpuHSL32JID+E3A8OdplJEurfWMCyWe1Ev0UAJb0kdJj2NuG?=
+ =?us-ascii?Q?TlHv362lWxFoa5ALdsalq6xQWXSkO1YHoSJZY1k/rgx3J9dRCpUpxJtleWXj?=
+ =?us-ascii?Q?ODdcjBHLqnp8WDg5wZVvpSO+GL8oXGAHwTr/ZjunTHyCIIEI/9QixrMCTsHp?=
+ =?us-ascii?Q?7c5StcktmyuahjQeoeWVM/YQY8NsrQovteH2B/LvMZ6KGp024b0F7uUisWfq?=
+ =?us-ascii?Q?+qQB1c1bIgNNH1WqYoZcu5gHJp337FDnuLe4nTqkDp3+cY42e2lP7jx6P9YY?=
+ =?us-ascii?Q?GhUh5g+n8x8YRQt8Mpul/tlamczbwc/Dwh4pMotReDzXA8otSpw7fHIgqXj+?=
+ =?us-ascii?Q?P7RlC0kVsZ7z5Az84FNGanwqy/bzikZoZYizroHVA/rmaC8EOzC2Rk4CkyXv?=
+ =?us-ascii?Q?bZ8kSJGpToeh8O0GmHov5z2+/y3o2y0WWRvHOajDZXYB/5DpQZml+CgrN7Hs?=
+ =?us-ascii?Q?Ou7iPMNFH+llQl3dtFofdGRcVZgRRKlKlNZvlTdLRUHpOwDGNi0x4k1zyEWN?=
+ =?us-ascii?Q?TF6mzhZU4b3NFyGD/uG4/FWlbwgB4dV/IAL5MjjYug+4Z6P3IHUynKxDFbKz?=
+ =?us-ascii?Q?ld/E9TkW1XZdKvkO805FstbIC4WtHsR0/erVsqP5MBSsRIJ7vfXLHYU284GL?=
+ =?us-ascii?Q?kdVdT4aFiZsFORwOYvCuACAo9COWGeNV3AvFy+QxZwnsExzUgKcqqFc/wnRS?=
+ =?us-ascii?Q?GQV6446YR4t9ooSnxQksthTEWeRWBNqkPTXe030jVc4yT5zeAXe5X6aGyEBN?=
+ =?us-ascii?Q?VI6sPh+1rOEjS2/J4/GyFcbxW36qPqW4WWtKI1CL5lCH8A2N764ShZOKmoJx?=
+ =?us-ascii?Q?IT0TMj8HZaeNiFuU5jCbUTJZPm6ARtU4eRp8rJdPWp0mCzU48npI4j0ga/bT?=
+ =?us-ascii?Q?ns61D7TIBY98KX+NRDwu9anufHWBA8F45bVSPmvVsqouV9T0cN2z8tRtILcN?=
+ =?us-ascii?Q?YBWCpGRq6B53gAqpAP6ERpRWDnbmS3zzNz4gElNUQsUiiyE62DhXwx4eoerU?=
+ =?us-ascii?Q?3tClec7saJePlwbyuI+e7R5ysSR0cNnqLnHZtSU5Oa6iJpykIqtef0MYYRvE?=
+ =?us-ascii?Q?p/wuhHMG5ys9bOxu3CpQudb2iDo7EvXruu0mrNxQVkF0f3sSBvgIRwQZH/3S?=
+ =?us-ascii?Q?4eGoZhjEfrowgTio9EVAdKZ9FsSLrTfax+q5bW6C3PSaZB5F3Qv6ki+OZD9a?=
+ =?us-ascii?Q?cnSVWsU72bjIXvLVSmM8lepIJhvSBbsCMXg1MaBU86su0Ipiqyzwh0IoO+SU?=
+ =?us-ascii?Q?hm0J0op3lWe/SWrxgDhzur+2KBstLAH5JpBTlQ6tlwaY1xSc4UbI1eslgG6Y?=
+ =?us-ascii?Q?WQEZ8lV1EFXR1uWVEJVZCI+SE98u4nI7h1aEw2t8DqveVLGyxF19c9SCNhJD?=
+ =?us-ascii?Q?Oeflzg69bdYlLrdLheBQyDg5nnoRfnNJneD0CpPbrXYWggRXTSRPXggodcn3?=
+ =?us-ascii?Q?N9RgBCFjUkp8ohtO/cnQgW1IdvFSX31rCJuDpOsg3nf7aFjqVYxX8wYadu2Q?=
+ =?us-ascii?Q?XngHluuV8mZbArW9Q+q6i7T3IuXo9L920bB2loJhgUKHY6vu6HLBscmSIbM+?=
+ =?us-ascii?Q?uA7yYrM07LaCL9dzQfTN1fZctgrOxlZODvGqAb+s?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Mon, 27 Jun 2022 15:27:19 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Chao-ying Fu <cfu@wavecomp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@kernel.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH v2 07/12] clocksource: mips-gic-timer: Always use cluster
- 0 counter as clocksource
-In-Reply-To: <5ff65346-ba7b-c440-a7e7-73c84fe13165@syrmia.com>
-References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
- <20220525121030.16054-8-Dragan.Mladjenovic@syrmia.com>
- <5ff65346-ba7b-c440-a7e7-73c84fe13165@syrmia.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <efc1d0884a821377ba007e7d77344260@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: Dragan.Mladjenovic@syrmia.com, tglx@linutronix.de, cfu@wavecomp.com, daniel.lezcano@linaro.org, geert@linux-m68k.org, gerg@kernel.org, hauke@hauke-m.de, ilya.lipnitskiy@gmail.com, jiaxun.yang@flygoat.com, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, paulburton@kernel.org, peterz@infradead.org, fancer.lancer@gmail.com, yangtiezhu@loongson.cn, tsbogend@alpha.franken.de
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4205.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4ab36eb-bfe6-4b73-98a3-08da5849dd6d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 14:32:29.6681
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yz3IG0XM+MN1EUq2d+bRK8OLWKZV1yEnYf/4cni8BG9mK0RhLJTaLfTZn2doXORgMtR06QceXTPWnrNZpZNkrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6138
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022-06-27 15:17, Dragan Mladjenovic wrote:
-> On 25-May-22 14:10, Dragan Mladjenovic wrote:
->> From: Paul Burton <paulburton@kernel.org>
->> 
->> In a multi-cluster MIPS system we have multiple GICs - one in each
->> cluster - each of which has its own independent counter. The counters 
->> in
->> each GIC are not synchronised in any way, so they can drift relative 
->> to
->> one another through the lifetime of the system. This is problematic 
->> for
->> a clocksource which ought to be global.
->> 
->> Avoid problems by always accessing cluster 0's counter, using
->> cross-cluster register access. This adds overhead so we only do so on
->> systems where we actually have CPUs present in multiple clusters.
->> For now, be extra conservative and don't use gic counter for vdso or
->> sched_clock in this case.
->> 
->> Signed-off-by: Paul Burton <paulburton@kernel.org>
->> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
->> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
->> 
->> diff --git a/drivers/clocksource/mips-gic-timer.c 
->> b/drivers/clocksource/mips-gic-timer.c
->> index be4175f415ba..6632d314a2c0 100644
->> --- a/drivers/clocksource/mips-gic-timer.c
->> +++ b/drivers/clocksource/mips-gic-timer.c
->> @@ -170,6 +170,37 @@ static u64 gic_hpt_read(struct clocksource *cs)
->>   	return gic_read_count();
->>   }
->>   +static u64 gic_hpt_read_multicluster(struct clocksource *cs)
->> +{
->> +	unsigned int hi, hi2, lo;
->> +	u64 count;
->> +
->> +	mips_cm_lock_other(0, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
->> +
->> +	if (mips_cm_is64) {
->> +		count = read_gic_redir_counter();
->> +		goto out;
->> +	}
->> +
->> +	hi = read_gic_redir_counter_32h();
->> +	while (true) {
->> +		lo = read_gic_redir_counter_32l();
->> +
->> +		/* If hi didn't change then lo didn't wrap & we're done */
->> +		hi2 = read_gic_redir_counter_32h();
->> +		if (hi2 == hi)
->> +			break;
->> +
->> +		/* Otherwise, repeat with the latest hi value */
->> +		hi = hi2;
->> +	}
->> +
->> +	count = (((u64)hi) << 32) + lo;
->> +out:
->> +	mips_cm_unlock_other();
->> +	return count;
->> +}
->> +
->>   static struct clocksource gic_clocksource = {
->>   	.name			= "GIC",
->>   	.read			= gic_hpt_read,
->> @@ -204,6 +235,11 @@ static int __init __gic_clocksource_init(void)
->>   	/* Calculate a somewhat reasonable rating value. */
->>   	gic_clocksource.rating = 200 + gic_frequency / 10000000;
->>   +	if (mips_cps_multicluster_cpus()) {
->> +		gic_clocksource.read = &gic_hpt_read_multicluster;
->> +		gic_clocksource.vdso_clock_mode = VDSO_CLOCKMODE_NONE;
->> +	}
->> +
->>   	ret = clocksource_register_hz(&gic_clocksource, gic_frequency);
->>   	if (ret < 0)
->>   		pr_warn("Unable to register clocksource\n");
->> @@ -262,7 +298,8 @@ static int __init gic_clocksource_of_init(struct 
->> device_node *node)
->>   	 * stable CPU frequency or on the platforms with CM3 and CPU 
->> frequency
->>   	 * change performed by the CPC core clocks divider.
->>   	 */
->> -	if (mips_cm_revision() >= CM_REV_CM3 || 
->> !IS_ENABLED(CONFIG_CPU_FREQ)) {
->> +	if ((mips_cm_revision() >= CM_REV_CM3 || 
->> !IS_ENABLED(CONFIG_CPU_FREQ)) &&
->> +	     !mips_cps_multicluster_cpus()) {
->>   		sched_clock_register(mips_cm_is64 ?
->>   				     gic_read_count_64 : gic_read_count_2x32,
->>   				     64, gic_frequency);
-> 
-> Hi,
-> 
-> I was expecting some comments on this, but I'll ask first. We now
-> taking a conservative approach of not using gic as sched_clock in
-> multicluster case. Is this necessary or can sched_clock tolerate a
-> fixed delta between clocks on different cpu clusters?
+> -----Original Message-----
+> From: Anshuman Khandual <anshuman.khandual@arm.com>
+...
+> WARNING: This email originated from outside of Qualcomm. Please be wary
+> of any links or attachments, and do not enable macros.
+>=20
+> This enables ARCH_HAS_VM_GET_PAGE_PROT on the platform and exports
+> standard
+> vm_get_page_prot() implementation via DECLARE_VM_GET_PAGE_PROT,
+> which looks
+> up a private and static protection_map[] array. Subsequently all __SXXX a=
+nd
+> __PXXX macros can be dropped which are no longer needed.
+>=20
+> Cc: Brian Cain <bcain@codeaurora.org>
+> Cc: linux-hexagon@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  arch/hexagon/Kconfig               |  1 +
+>  arch/hexagon/include/asm/pgtable.h | 27 -------------------
+>  arch/hexagon/mm/init.c             | 42 ++++++++++++++++++++++++++++++
+>  3 files changed, 43 insertions(+), 27 deletions(-)
+>=20
+> diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
+> index 54eadf265178..bc4ceecd0588 100644
+> --- a/arch/hexagon/Kconfig
+> +++ b/arch/hexagon/Kconfig
+> @@ -6,6 +6,7 @@ config HEXAGON
+>         def_bool y
+>         select ARCH_32BIT_OFF_T
+>         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+> +       select ARCH_HAS_VM_GET_PAGE_PROT
+>         select ARCH_NO_PREEMPT
+>         select DMA_GLOBAL_POOL
+>         # Other pending projects/to-do items.
+> diff --git a/arch/hexagon/include/asm/pgtable.h
+> b/arch/hexagon/include/asm/pgtable.h
+> index 0610724d6a28..f7048c18b6f9 100644
+> --- a/arch/hexagon/include/asm/pgtable.h
+> +++ b/arch/hexagon/include/asm/pgtable.h
+> @@ -126,33 +126,6 @@ extern unsigned long _dflt_cache_att;
+>   */
+>  #define CACHEDEF       (CACHE_DEFAULT << 6)
+>=20
+> -/* Private (copy-on-write) page protections. */
+> -#define __P000 __pgprot(_PAGE_PRESENT | _PAGE_USER | CACHEDEF)
+> -#define __P001 __pgprot(_PAGE_PRESENT | _PAGE_USER | _PAGE_READ |
+> CACHEDEF)
+> -#define __P010 __P000  /* Write-only copy-on-write */
+> -#define __P011 __P001  /* Read/Write copy-on-write */
+> -#define __P100 __pgprot(_PAGE_PRESENT | _PAGE_USER | \
+> -                       _PAGE_EXECUTE | CACHEDEF)
+> -#define __P101 __pgprot(_PAGE_PRESENT | _PAGE_USER |
+> _PAGE_EXECUTE | \
+> -                       _PAGE_READ | CACHEDEF)
+> -#define __P110 __P100  /* Write/execute copy-on-write */
+> -#define __P111 __P101  /* Read/Write/Execute, copy-on-write */
+> -
+> -/* Shared page protections. */
+> -#define __S000 __P000
+> -#define __S001 __P001
+> -#define __S010 __pgprot(_PAGE_PRESENT | _PAGE_USER | \
+> -                       _PAGE_WRITE | CACHEDEF)
+> -#define __S011 __pgprot(_PAGE_PRESENT | _PAGE_USER | _PAGE_READ |
+> \
+> -                       _PAGE_WRITE | CACHEDEF)
+> -#define __S100 __pgprot(_PAGE_PRESENT | _PAGE_USER | \
+> -                       _PAGE_EXECUTE | CACHEDEF)
+> -#define __S101 __P101
+> -#define __S110 __pgprot(_PAGE_PRESENT | _PAGE_USER | \
+> -                       _PAGE_EXECUTE | _PAGE_WRITE | CACHEDEF)
+> -#define __S111 __pgprot(_PAGE_PRESENT | _PAGE_USER | _PAGE_READ |
+> \
+> -                       _PAGE_EXECUTE | _PAGE_WRITE | CACHEDEF)
+> -
+>  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];  /* located in head.S */
+>=20
+>  /*  HUGETLB not working currently  */
+> diff --git a/arch/hexagon/mm/init.c b/arch/hexagon/mm/init.c
+> index 3167a3b5c97b..146115c9de61 100644
+> --- a/arch/hexagon/mm/init.c
+> +++ b/arch/hexagon/mm/init.c
+> @@ -234,3 +234,45 @@ void __init setup_arch_memory(void)
+>          *  which is called by start_kernel() later on in the process
+>          */
+>  }
+> +
+> +static const pgprot_t protection_map[16] =3D {
+> +       [VM_NONE]                                       =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  CACHED=
+EF),
+> +       [VM_READ]                                       =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  _PAGE_=
+READ | CACHEDEF),
+> +       [VM_WRITE]                                      =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  CACHED=
+EF),
+> +       [VM_WRITE | VM_READ]                            =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  _PAGE_=
+READ | CACHEDEF),
+> +       [VM_EXEC]                                       =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  _PAGE_=
+EXECUTE | CACHEDEF),
+> +       [VM_EXEC | VM_READ]                             =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  _PAGE_=
+EXECUTE | _PAGE_READ |
+> +                                                                  CACHED=
+EF),
+> +       [VM_EXEC | VM_WRITE]                            =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  _PAGE_=
+EXECUTE | CACHEDEF),
+> +       [VM_EXEC | VM_WRITE | VM_READ]                  =3D
+> __pgprot(_PAGE_PRESENT | _PAGE_USER |
+> +                                                                  _PAGE_=
+EXECUTE | _PAGE_READ |
+> +                                                                  CACHED=
+EF),
+> +       [VM_SHARED]                                     =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  CACHED=
+EF),
+> +       [VM_SHARED | VM_READ]                           =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  _PAGE_=
+READ | CACHEDEF),
+> +       [VM_SHARED | VM_WRITE]                          =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  _PAGE_=
+WRITE | CACHEDEF),
+> +       [VM_SHARED | VM_WRITE | VM_READ]                =3D
+> __pgprot(_PAGE_PRESENT | _PAGE_USER |
+> +                                                                  _PAGE_=
+READ | _PAGE_WRITE |
+> +                                                                  CACHED=
+EF),
+> +       [VM_SHARED | VM_EXEC]                           =3D __pgprot(_PAG=
+E_PRESENT |
+> _PAGE_USER |
+> +                                                                  _PAGE_=
+EXECUTE | CACHEDEF),
+> +       [VM_SHARED | VM_EXEC | VM_READ]                 =3D
+> __pgprot(_PAGE_PRESENT | _PAGE_USER |
+> +                                                                  _PAGE_=
+EXECUTE | _PAGE_READ |
+> +                                                                  CACHED=
+EF),
+> +       [VM_SHARED | VM_EXEC | VM_WRITE]                =3D
+> __pgprot(_PAGE_PRESENT | _PAGE_USER |
+> +                                                                  _PAGE_=
+EXECUTE | _PAGE_WRITE |
+> +                                                                  CACHED=
+EF),
+> +       [VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]      =3D
+> __pgprot(_PAGE_PRESENT | _PAGE_USER |
+> +                                                                  _PAGE_=
+READ | _PAGE_EXECUTE |
+> +                                                                  _PAGE_=
+WRITE | CACHEDEF)
+> +};
+> +DECLARE_VM_GET_PAGE_PROT
+> --
+> 2.25.1
 
-I don't think that's wise. We generally go into all sort of
-troubles to keep sched_clock() strictly identical between CPUs,
-and there are tons of things that rely on this (the scheduler
-itself, but any sort of tracing...). You just have to grep
-for the various use cases.
-
-A consequence of the above is that the kernel can (and will)
-snapshot a sched_clock value, and compare it to the value on
-the current CPU. Imagine what happens if the difference is
-negative...
-
-So I don't know what the deal is with the MIPS GIC, but if any
-of the above can happen, you're doomed.
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Acked-by: Brian Cain <bcain@quicinc.com>
