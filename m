@@ -2,420 +2,189 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7A755B761
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Jun 2022 07:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7521855C4B7
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 14:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbiF0FFV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jun 2022 01:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
+        id S229895AbiF0Frs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Jun 2022 01:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbiF0FEM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 01:04:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13A2D614A;
-        Sun, 26 Jun 2022 22:02:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E2991756;
-        Sun, 26 Jun 2022 22:02:24 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.42.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 23D3A3F5A1;
-        Sun, 26 Jun 2022 22:02:15 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     hch@infradead.org, christophe.leroy@csgroup.eu,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
+        with ESMTP id S229463AbiF0Frr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 01:47:47 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90070.outbound.protection.outlook.com [40.107.9.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A117026E2;
+        Sun, 26 Jun 2022 22:47:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ekb2jO2TGz0bpRyOUCwW/JUNjOtOcdw6ZJuL1Itv4tDn02a8V3iisAvCs3eepxAQaqBX4BVqLcNtncrdONS6Y0Max1LsLlKNahmE8reBqeKYZanSBf5JHtpkrvR79Lujm8EeLYCzzejzlUiBizL7ILfw4IN9620E8ysNKJxLKVUPKKR8iFKThkWhWH0gsT8xgmHkcpmQAU0F4tCWnt+kgJ7/5Yr1/+jm+GyDJzAIsRCeFznu7HDhuaRPGyjI15EPiGFrmc09FYAe6eNzlJnyJGdo/G/jLXG1SVrdi95vUxhj0jCYm8Wx6XJsGwNXAjbRVzQr9sC2UIMMgJvTbYHsFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b1Q33phjBECCtetFkImhoykw5BTUIAQDmxJrl6FRRNI=;
+ b=BnL/ozCE9LpIHZpr8e63VMncrMB3+qH61I5c3/ybP/r2MEjFb3wgNoVAE40XJCHjyAFXvmPT2kn2sX6PGjOUFCX6jzvBjgCn+xkNxgkorzOwf8MEU2ZzEjpUOTS4b0Wmei6w1G3kt3YjdWfezJ1SWbZA2ABrtuqaC2tmv44k69bFc26AYmv/RlXFSQxEiDnJLK2BqSGlRHxlCuGC8IKAaeSBdCIyl39vD6eQdJT88AAcMxwAgAoIIvCyb/Ud8M2AjV+PeWijJSn3t6HlYhmX+7k8hfo+VrUiS5bc3Ie2Jz/qz2jo818l38xq1eRio05e1NUkleP51DKKUo1IeTsdaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b1Q33phjBECCtetFkImhoykw5BTUIAQDmxJrl6FRRNI=;
+ b=pGWZNTRnmLexpMa7Q/nqL+cJ8M93Hl0791x7PDWm4jDiKl5HbUb7WSlF3u5UUamYA4z0kygDA6/FdaedDDx1QGDItYJbQDnsnQQo370tqXwMYlgsvCVVeE4Ix/Cmrb4l/cEK4ss72f+Hs6eL9JnIU7Tv1f/S/Z6bZxLt4EomrMJquvmWQzQ+JLur6/EGLv9fX3wsZTJJS2TdJMDp/iQoqCfbgpSxE+4ZNyssBjEA4nNwu+THrpoHGP6GtQPU+QpED9Y5//breZIuoZXQPtEgnMo8GVZ3jB3Zu4mPdG88NKD6HX9Uyoj9doFWejyPFd4zNCzykwLwLKm3V6UNmts2FA==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB1617.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:14::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Mon, 27 Jun
+ 2022 05:47:42 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44%3]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 05:47:42 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+CC:     "hch@infradead.org" <hch@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, openrisc@lists.librecores.org,
-        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH V5 26/26] mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 27 Jun 2022 10:28:33 +0530
-Message-Id: <20220627045833.1590055-27-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220627045833.1590055-1-anshuman.khandual@arm.com>
-References: <20220627045833.1590055-1-anshuman.khandual@arm.com>
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V4 01/26] mm/mmap: Build protect protection_map[] with
+ __P000
+Thread-Topic: [PATCH V4 01/26] mm/mmap: Build protect protection_map[] with
+ __P000
+Thread-Index: AQHYh4UJI5SazA4DbUS8logWIeWXuK1iw8qA
+Date:   Mon, 27 Jun 2022 05:47:42 +0000
+Message-ID: <6d213700-9e7f-409a-3dc7-186eeae87099@csgroup.eu>
+References: <20220624044339.1533882-1-anshuman.khandual@arm.com>
+ <20220624044339.1533882-2-anshuman.khandual@arm.com>
+In-Reply-To: <20220624044339.1533882-2-anshuman.khandual@arm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 627a2f02-a3ec-4244-2a4f-08da58008d5b
+x-ms-traffictypediagnostic: MR1P264MB1617:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FvpwNnecMqvEhKSRaF0JGfkPlXWTCIholoUWM1P8LBk4pQtufEdp7+/Tu8cO7uT1TPahAxV8v+UB//+aZu9iScjF7TAzKewVbvlThG2cO/N5MMUbLmdeG5VrYuFiUjc4xyFmWAtpXC8RaXEXDL6EEbEhLhU6QVh1VUi3Rt9Wy3pO2FA23VePBa6ejl3UlO5OE5JHX67vMMocOBOj6kAr2/fIxbfCAJjr3iAqg/T2YuWvYzMytjzWieT4yf0heKHl+xoQml6ampl4c6sCU6sG4yRsx+npjKVvLhvHxxK3f0Z1gtOyBONR0+tywoMfDpb0GPJrmxKeQ7cpRLYSk+1WgZAyZI1HjIK87STREoyuFfy0bPPfeH3FTNI8qBqrkp/WbQX1IivogUf18SRamJp8M0WF+ERPDuqT/nmJBjgJ74cBPtTEvD6JQxxbnEEdk7YJfxnC227f3/LMtKpIekZl0kmibfVFxqalt1Bdwv+xdmxkRuUufVfFC0OqCn8UpNZv8elBhZSV9L7tW9B3u9nuOjXwwNCJcBhK0KRrX4863FbShWeo2WXTDwAXv3vEj+BwpKoJXh9AUYrS4UabKz6TKzBWluxfr7Qw4TGzNNkoPdCTjLLrBpc948mU/803U0e9BpQDS5qvQIaSh+Z832naLYgL3yjwrKI0f44uBDnX08a7zkdZ+Hhdd3ViwWG2scve4KkdUbCmWFL6NT5sYaIdVLBgzjq8ajH9YC2Bii4FTqzHQVXvmeY4JDNhKiLFT0QWKRkGKojSYfUkH+yRzddujtSOEFWtdzz/b255ZJjZKdHO669QQiTHuifINxT59imkMGmHklceq63m3ykj/+p+rpoym9CmTPaxn6UxS2WiwWg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(396003)(366004)(346002)(376002)(136003)(36756003)(31696002)(86362001)(316002)(7416002)(2906002)(122000001)(54906003)(31686004)(110136005)(6512007)(6506007)(26005)(38070700005)(6486002)(66556008)(76116006)(4326008)(38100700002)(5660300002)(66476007)(66946007)(66446008)(8676002)(64756008)(71200400001)(2616005)(186003)(41300700001)(83380400001)(91956017)(44832011)(478600001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z29haGtUVTlwdlYvczUyVmREK0xXMnBFS1I2ZDcxWUZyRFBnM1FOQTlFdlBG?=
+ =?utf-8?B?WlZERUVoUGhONXNJVmJYMzJiR2lsWjBsdTRXbmxseUxSdm1yNEYwK2xjUlZE?=
+ =?utf-8?B?Q3ZTNmp5N1VUN2NxR2V3UmwrbEwxMngrUGVsTFhydm1GcXRsaTc1MC9WUVh5?=
+ =?utf-8?B?a1BZOFdOYnV6WERjUUNFV1dXb2pEbUJvc0piZEp2dUZvVXphWWRWUVVuRGNn?=
+ =?utf-8?B?MXh2YlYreGM4algycUpnblVFVGVsbCtScmo2RFpSbjRVNE9odTlTUHBMRGth?=
+ =?utf-8?B?SFllMFRsVkRxdnJMaS9oZHRSZjNQZnZJRFh1bkJyRGlOQmJpd0hnNHBiTVFU?=
+ =?utf-8?B?MDFlL2ZhUHlZeDdHNGE5ZlA2T29PZ3pycWVQRUNnVFo2QXFTSWtmc1h2b29l?=
+ =?utf-8?B?b3doa2NMaXpWNWhKN0FTWWtJU0Y4RDZld2ZtZkZ3Vkh4dWtHcHAwN09PeXpK?=
+ =?utf-8?B?Y1VkbGJlUkh5clB0ZUNUYjhpYU1DcmhYUVB3djFNZ2FxRjdRK0ZaS21IVTJ6?=
+ =?utf-8?B?TTdxMlhRMFIrT1krU2JqNEZpc3ZoUzQxUExUa296YTl2NS9pVTliUFkxcVox?=
+ =?utf-8?B?NjI4V0sxRFBEQSsyOCtTcXJYV0NIY096RUJrb3Y1K1ovZTZiU2p6OW9nSGo5?=
+ =?utf-8?B?NXV1VVh4dEh2SUxKVDFVMXFOMGpmWVMrY0I0T2U2ditlUGs3WFdzWVcrYXF1?=
+ =?utf-8?B?WjViLzVuZG5zaWJ4RkNKYThSbld6U2Zmb3hTd2ZjYm1POUZiNktxTTFIRjlz?=
+ =?utf-8?B?VXE0Z2JQczBQa3lmK043Wm9yVXhxTnJaRFhvK3prK1M3MW1KNUI4S0VndTlp?=
+ =?utf-8?B?Z0Y0ZEJLVnJQZGt3QzdkdHFHMHVxSWpkcmFOamxpaE1BdWtVeFZUUDRCcXV2?=
+ =?utf-8?B?TStXdGU4a2d1bFVMNFV4dW8xYnVKb0VDdmw4dk96dXlGYTdEa2lvei94Vndw?=
+ =?utf-8?B?QkFKN1NmOWtOQ252UkhGRFhOK25JWnJFWE9mdjZlbDV3R0ZwNVpkRjBRVnF4?=
+ =?utf-8?B?d3FXR3htK3Y5ZDViV2R1OHNJZ05GNExSL2lZR2lON2J2YXBNT1pzS2JhVjY2?=
+ =?utf-8?B?WGdTa2dpR1FYakdJTmdDN3pTZnl1NFBKUXR5SzV0QlZVSytBZkMwdlV1M3FM?=
+ =?utf-8?B?TnhNb3VXVExLeTV6OHc5L1BRRW5qakZoeFV3WlZrckprWTRkczlkckdtSlpQ?=
+ =?utf-8?B?WGRKcFhiKzVRMG1xWVVaaWtFVGVqRkZITlJxcGEwZy9RU3pxOG52RjhKT3pC?=
+ =?utf-8?B?b1BPaFB1cGorSnpKb0ZRems2RzBCQ0JwYm90WHFtcXowU3dSZndhdkdVQnVF?=
+ =?utf-8?B?NmF3eG0vOU8vZ1dTWTk5ODVQM0FUOG9zVVpMZlYyTDQrYWtNVC81SHlHT1FD?=
+ =?utf-8?B?SFlOd1JSQmhJOXRUd1pJZXBSZ3RPcm9UOXFUeVBCOUdqQ29HZWU4UU91ZnZU?=
+ =?utf-8?B?bHo5SERDM3VWdWVORzVhOGRHeTJvUWNaM2JILyszYWZ5K2pZa0dEU3c1UEJQ?=
+ =?utf-8?B?RTN3YVpTSFNhUzM1TXNnSitodFc1Y1Fobjc2ZTdFdzJrb29tOGVDRi9CaE02?=
+ =?utf-8?B?ejR4V2M3Y3RzbVl1dkdhdnhJSm9UU0tIaTMrWHEzeWpvb0wzdHBENTdxb2lQ?=
+ =?utf-8?B?L1FLOExMckJuVjVaU2krS3dha3ZQR1FOc25Xak9VWkFmTHpXSlRRazRqOUJL?=
+ =?utf-8?B?ZWpQdVVKZjFPSS9TMHRTZG0zdGdOOW44NjJNY2JhUUtWbUY0SjRPNlRXN1pD?=
+ =?utf-8?B?MG1kK3lnblluTVZ3YThLT3M4OGZRK1BHOVYxajBOZHVNZ01icmNFNTN2TGcy?=
+ =?utf-8?B?L3B3c0wvUnFOTktwWEM1WXN2RnAzcjZzQUxLNGJ1c3hLc0hhQjIyNnlGc3hY?=
+ =?utf-8?B?djJEZ3RwMzFsOWx1aTVWOU9nZmx0a1NIOGFHcVA5SWo3bkNQSEFRbDJNWjg5?=
+ =?utf-8?B?VGIxdlFJVTA2WFpnbU50NVJnWENRVmp3YmJsbW1ZVFBvL2pCVjY2R0tQYVEz?=
+ =?utf-8?B?Nk5lY0pSazBXS2libXcwbWRac0hrVGw1NDlXRmJZSVdzaWVhbG9LZVVNOE9u?=
+ =?utf-8?B?ZUJERENNUENWaDFGNXVKTHZaMVN3RmpmbHk4cElTTG5ON0x3RGQzMHh4ME5E?=
+ =?utf-8?B?NXdFUXRqbldNSXo5UmJ4V0xzZWtuNFlZaFlhT2hFWFRqbXplNjB6M2hRUm9o?=
+ =?utf-8?Q?3iKYOjTFDWBgsTwSf39vo00=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A29F3570E7FDF74DB67B48A483FC2F0E@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 627a2f02-a3ec-4244-2a4f-08da58008d5b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 05:47:42.0684
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hE62QeN2RLuUqEHkHoanaJmzM/T2gj9KkWRc/pL8hdtx6yzO5xhFyqyMlx0OeS5mbtKOqglLf7RzE0FGUOp+nBGUJNjupF3I9Uw3X7rdGTU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB1617
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now all the platforms enable ARCH_HAS_GET_PAGE_PROT. They define and export
-own vm_get_page_prot() whether custom or standard DECLARE_VM_GET_PAGE_PROT.
-Hence there is no need for default generic fallback for vm_get_page_prot().
-Just drop this fallback and also ARCH_HAS_GET_PAGE_PROT mechanism.
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/alpha/Kconfig      |  1 -
- arch/arc/Kconfig        |  1 -
- arch/arm/Kconfig        |  1 -
- arch/arm64/Kconfig      |  1 -
- arch/csky/Kconfig       |  1 -
- arch/hexagon/Kconfig    |  1 -
- arch/ia64/Kconfig       |  1 -
- arch/loongarch/Kconfig  |  1 -
- arch/m68k/Kconfig       |  1 -
- arch/microblaze/Kconfig |  1 -
- arch/mips/Kconfig       |  1 -
- arch/nios2/Kconfig      |  1 -
- arch/openrisc/Kconfig   |  1 -
- arch/parisc/Kconfig     |  1 -
- arch/powerpc/Kconfig    |  1 -
- arch/riscv/Kconfig      |  1 -
- arch/s390/Kconfig       |  1 -
- arch/sh/Kconfig         |  1 -
- arch/sparc/Kconfig      |  1 -
- arch/um/Kconfig         |  1 -
- arch/x86/Kconfig        |  1 -
- arch/xtensa/Kconfig     |  1 -
- include/linux/mm.h      |  3 ---
- mm/Kconfig              |  3 ---
- mm/mmap.c               | 22 ----------------------
- 25 files changed, 50 deletions(-)
-
-diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-index db1c8b329461..7d0d26b5b3f5 100644
---- a/arch/alpha/Kconfig
-+++ b/arch/alpha/Kconfig
-@@ -2,7 +2,6 @@
- config ALPHA
- 	bool
- 	default y
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_32BIT_USTAT_F_TINODE
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-index 8be56a5d8a9b..9e3653253ef2 100644
---- a/arch/arc/Kconfig
-+++ b/arch/arc/Kconfig
-@@ -13,7 +13,6 @@ config ARC
- 	select ARCH_HAS_SETUP_DMA_OPS
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_SUPPORTS_ATOMIC_RMW if ARC_HAS_LLSC
- 	select ARCH_32BIT_OFF_T
- 	select BUILDTIME_TABLE_SORT
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index e153b6d4fc5b..7630ba9cb6cc 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -24,7 +24,6 @@ config ARM
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU if SWIOTLB || !MMU
- 	select ARCH_HAS_TEARDOWN_DMA_OPS if MMU
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if CPU_V7 || CPU_V7M || CPU_V6K
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1652a9800ebe..7030bf3f8d6f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -45,7 +45,6 @@ config ARM64
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
- 	select ARCH_HAVE_ELF_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 588b8a9c68ed..21d72b078eef 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -6,7 +6,6 @@ config CSKY
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
-diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
-index bc4ceecd0588..54eadf265178 100644
---- a/arch/hexagon/Kconfig
-+++ b/arch/hexagon/Kconfig
-@@ -6,7 +6,6 @@ config HEXAGON
- 	def_bool y
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_PREEMPT
- 	select DMA_GLOBAL_POOL
- 	# Other pending projects/to-do items.
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index 0510a5737711..cb93769a9f2a 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -12,7 +12,6 @@ config IA64
- 	select ARCH_HAS_DMA_MARK_CLEAN
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select ACPI
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index fd07b8e760ee..1920d52653b4 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -9,7 +9,6 @@ config LOONGARCH
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
- 	select ARCH_HAS_PHYS_TO_DMA
- 	select ARCH_HAS_PTE_SPECIAL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_INLINE_READ_LOCK if !PREEMPTION
- 	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-index 49aa0cf13e96..936cce42ae9a 100644
---- a/arch/m68k/Kconfig
-+++ b/arch/m68k/Kconfig
-@@ -7,7 +7,6 @@ config M68K
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DMA_PREP_COHERENT if HAS_DMA && MMU && !COLDFIRE
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if HAS_DMA
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
- 	select ARCH_MIGHT_HAVE_PC_PARPORT if ISA
- 	select ARCH_NO_PREEMPT if !COLDFIRE
-diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
-index 15f91ba8a0c4..8cf429ad1c84 100644
---- a/arch/microblaze/Kconfig
-+++ b/arch/microblaze/Kconfig
-@@ -7,7 +7,6 @@ config MICROBLAZE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select BUILDTIME_TABLE_SORT
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index d0b7eb11ec81..db09d45d59ec 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -14,7 +14,6 @@ config MIPS
- 	select ARCH_HAS_STRNLEN_USER
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_SUPPORTS_UPROBES
-diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-index e0459dffd218..4167f1eb4cd8 100644
---- a/arch/nios2/Kconfig
-+++ b/arch/nios2/Kconfig
-@@ -6,7 +6,6 @@ config NIOS2
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
- 	select ARCH_HAS_DMA_SET_UNCACHED
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_SWAP
- 	select COMMON_CLK
- 	select TIMER_OF
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index fe0dfb50eb86..e814df4c483c 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -10,7 +10,6 @@ config OPENRISC
- 	select ARCH_HAS_DMA_SET_UNCACHED
- 	select ARCH_HAS_DMA_CLEAR_UNCACHED
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select COMMON_CLK
- 	select OF
- 	select OF_EARLY_FLATTREE
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index 90eabc846f81..5f2448dc5a2b 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -11,7 +11,6 @@ config PARISC
- 	select ARCH_HAS_ELF_RANDOMIZE
- 	select ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_NO_SG_CHAIN
- 	select ARCH_SUPPORTS_HUGETLBFS if PA20
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 1035d172c7dd..250b8658b2d4 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -140,7 +140,6 @@ config PPC
- 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UACCESS_FLUSHCACHE
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 583389d4e43a..32ffef9f6e5b 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -32,7 +32,6 @@ config RISCV
- 	select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
- 	select ARCH_STACKWALK
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index c4481377ca83..91c0b80a8bf0 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -81,7 +81,6 @@ config S390
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_HAS_VDSO_DATA
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_INLINE_READ_LOCK
- 	select ARCH_INLINE_READ_LOCK_BH
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 91f3ea325388..5f220e903e5a 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -12,7 +12,6 @@ config SUPERH
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HIBERNATION_POSSIBLE if MMU
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_WANT_IPC_PARSE_VERSION
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 09f868613a4d..9c1cce74953a 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -13,7 +13,6 @@ config 64BIT
- config SPARC
- 	bool
- 	default y
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT if SPARC64 && PCI
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select DMA_OPS
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 7fb43654e5b5..4ec22e156a2e 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -10,7 +10,6 @@ config UML
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_PREEMPT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_SECCOMP_FILTER
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index be0b95e51df6..841e4843d0c4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -94,7 +94,6 @@ config X86
- 	select ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_DEBUG_WX
- 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 4c0d83520ff1..0b0f0172cced 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -11,7 +11,6 @@ config XTENSA
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
- 	select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 65b7f3d9ff87..fe28f19e3388 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -424,9 +424,6 @@ extern unsigned int kobjsize(const void *objp);
-  * mapping from the currently active vm_flags protection bits (the
-  * low four bits) to a page protection mask..
-  */
--#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
--extern pgprot_t protection_map[16];
--#endif
- 
- /*
-  * The default fault flags that should be used by most of the
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 169e64192e48..f47d257a053b 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -951,9 +951,6 @@ config ARCH_HAS_CURRENT_STACK_POINTER
- 	  register alias named "current_stack_pointer", this config can be
- 	  selected.
- 
--config ARCH_HAS_VM_GET_PAGE_PROT
--	bool
--
- config ARCH_HAS_PTE_DEVMAP
- 	bool
- 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 2cc722e162fa..02d6889f0ef6 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -81,28 +81,6 @@ static void unmap_region(struct mm_struct *mm,
- 		struct vm_area_struct *vma, struct vm_area_struct *prev,
- 		unsigned long start, unsigned long end);
- 
--#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
--pgprot_t protection_map[16] __ro_after_init = {
--	[VM_NONE]					= __P000,
--	[VM_READ]					= __P001,
--	[VM_WRITE]					= __P010,
--	[VM_WRITE | VM_READ]				= __P011,
--	[VM_EXEC]					= __P100,
--	[VM_EXEC | VM_READ]				= __P101,
--	[VM_EXEC | VM_WRITE]				= __P110,
--	[VM_EXEC | VM_WRITE | VM_READ]			= __P111,
--	[VM_SHARED]					= __S000,
--	[VM_SHARED | VM_READ]				= __S001,
--	[VM_SHARED | VM_WRITE]				= __S010,
--	[VM_SHARED | VM_WRITE | VM_READ]		= __S011,
--	[VM_SHARED | VM_EXEC]				= __S100,
--	[VM_SHARED | VM_EXEC | VM_READ]			= __S101,
--	[VM_SHARED | VM_EXEC | VM_WRITE]		= __S110,
--	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= __S111
--};
--DECLARE_VM_GET_PAGE_PROT
--#endif	/* CONFIG_ARCH_HAS_VM_GET_PAGE_PROT */
--
- static pgprot_t vm_pgprot_modify(pgprot_t oldprot, unsigned long vm_flags)
- {
- 	return pgprot_modify(oldprot, vm_get_page_prot(vm_flags));
--- 
-2.25.1
-
+DQoNCkxlIDI0LzA2LzIwMjIgw6AgMDY6NDMsIEFuc2h1bWFuIEtoYW5kdWFsIGEgw6ljcml0wqA6
+DQo+IEJ1aWxkIHByb3RlY3QgZ2VuZXJpYyBwcm90ZWN0aW9uX21hcFtdIGFycmF5IHdpdGggX19Q
+MDAwLCBzbyB0aGF0IGl0IGNhbiBiZQ0KPiBtb3ZlZCBpbnNpZGUgYWxsIHRoZSBwbGF0Zm9ybXMg
+b25lIGFmdGVyIHRoZSBvdGhlci4gT3RoZXJ3aXNlIHRoZXJlIHdpbGwgYmUNCj4gYnVpbGQgZmFp
+bHVyZXMgZHVyaW5nIHRoaXMgcHJvY2Vzcy4gQ09ORklHX0FSQ0hfSEFTX1ZNX0dFVF9QQUdFX1BS
+T1QgY2Fubm90DQo+IGJlIHVzZWQgZm9yIHRoaXMgcHVycG9zZSBhcyBvbmx5IGNlcnRhaW4gcGxh
+dGZvcm1zIGVuYWJsZSB0aGlzIGNvbmZpZyBub3cuDQo+IA0KPiBDYzogQW5kcmV3IE1vcnRvbiA8
+YWtwbUBsaW51eC1mb3VuZGF0aW9uLm9yZz4NCj4gQ2M6IGxpbnV4LW1tQGt2YWNrLm9yZw0KPiBD
+YzogbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWdnZXN0ZWQtYnk6IENocmlzdG9w
+aGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4NCj4gU2lnbmVkLW9mZi1ieTog
+QW5zaHVtYW4gS2hhbmR1YWwgPGFuc2h1bWFuLmtoYW5kdWFsQGFybS5jb20+DQoNClJldmlld2Vk
+LWJ5OiBDaHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQoNCj4g
+LS0tDQo+ICAgaW5jbHVkZS9saW51eC9tbS5oIHwgMiArKw0KPiAgIG1tL21tYXAuYyAgICAgICAg
+ICB8IDIgKysNCj4gICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlm
+ZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvbW0uaCBiL2luY2x1ZGUvbGludXgvbW0uaA0KPiBpbmRl
+eCBiYzhmMzI2YmUwY2UuLjQ3YmZlMDM4ZDQ2ZSAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51
+eC9tbS5oDQo+ICsrKyBiL2luY2x1ZGUvbGludXgvbW0uaA0KPiBAQCAtNDI0LDcgKzQyNCw5IEBA
+IGV4dGVybiB1bnNpZ25lZCBpbnQga29ianNpemUoY29uc3Qgdm9pZCAqb2JqcCk7DQo+ICAgICog
+bWFwcGluZyBmcm9tIHRoZSBjdXJyZW50bHkgYWN0aXZlIHZtX2ZsYWdzIHByb3RlY3Rpb24gYml0
+cyAodGhlDQo+ICAgICogbG93IGZvdXIgYml0cykgdG8gYSBwYWdlIHByb3RlY3Rpb24gbWFzay4u
+DQo+ICAgICovDQo+ICsjaWZkZWYgX19QMDAwDQo+ICAgZXh0ZXJuIHBncHJvdF90IHByb3RlY3Rp
+b25fbWFwWzE2XTsNCj4gKyNlbmRpZg0KPiAgIA0KPiAgIC8qDQo+ICAgICogVGhlIGRlZmF1bHQg
+ZmF1bHQgZmxhZ3MgdGhhdCBzaG91bGQgYmUgdXNlZCBieSBtb3N0IG9mIHRoZQ0KPiBkaWZmIC0t
+Z2l0IGEvbW0vbW1hcC5jIGIvbW0vbW1hcC5jDQo+IGluZGV4IDYxZTYxMzVjNTRlZi4uYjAxZjAy
+ODBiZGEyIDEwMDY0NA0KPiAtLS0gYS9tbS9tbWFwLmMNCj4gKysrIGIvbW0vbW1hcC5jDQo+IEBA
+IC0xMDEsNiArMTAxLDcgQEAgc3RhdGljIHZvaWQgdW5tYXBfcmVnaW9uKHN0cnVjdCBtbV9zdHJ1
+Y3QgKm1tLA0KPiAgICAqCQkJCQkJCQl3OiAobm8pIG5vDQo+ICAgICoJCQkJCQkJCXg6ICh5ZXMp
+IHllcw0KPiAgICAqLw0KPiArI2lmZGVmIF9fUDAwMA0KPiAgIHBncHJvdF90IHByb3RlY3Rpb25f
+bWFwWzE2XSBfX3JvX2FmdGVyX2luaXQgPSB7DQo+ICAgCVtWTV9OT05FXQkJCQkJPSBfX1AwMDAs
+DQo+ICAgCVtWTV9SRUFEXQkJCQkJPSBfX1AwMDEsDQo+IEBAIC0xMTksNiArMTIwLDcgQEAgcGdw
+cm90X3QgcHJvdGVjdGlvbl9tYXBbMTZdIF9fcm9fYWZ0ZXJfaW5pdCA9IHsNCj4gICAJW1ZNX1NI
+QVJFRCB8IFZNX0VYRUMgfCBWTV9XUklURV0JCT0gX19TMTEwLA0KPiAgIAlbVk1fU0hBUkVEIHwg
+Vk1fRVhFQyB8IFZNX1dSSVRFIHwgVk1fUkVBRF0JPSBfX1MxMTENCj4gICB9Ow0KPiArI2VuZGlm
+DQo+ICAgDQo+ICAgI2lmbmRlZiBDT05GSUdfQVJDSF9IQVNfVk1fR0VUX1BBR0VfUFJPVA0KPiAg
+IHBncHJvdF90IHZtX2dldF9wYWdlX3Byb3QodW5zaWduZWQgbG9uZyB2bV9mbGFncyk=
