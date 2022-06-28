@@ -2,47 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF4055DA61
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D61E55C901
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 14:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244489AbiF1C3b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jun 2022 22:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S244602AbiF1C3g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Jun 2022 22:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244754AbiF1C15 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 22:27:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1B620F76;
-        Mon, 27 Jun 2022 19:26:08 -0700 (PDT)
+        with ESMTP id S244836AbiF1C2K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 22:28:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8202B24F3D;
+        Mon, 27 Jun 2022 19:26:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B729B81C13;
-        Tue, 28 Jun 2022 02:26:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A18BC341CA;
-        Tue, 28 Jun 2022 02:26:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D7DB618F4;
+        Tue, 28 Jun 2022 02:26:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E04C34115;
+        Tue, 28 Jun 2022 02:26:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656383166;
-        bh=WQj+vlXUG9tNfMHNqFEpznWhZzUBGkgYCU7K18NUhuQ=;
+        s=k20201202; t=1656383203;
+        bh=Jbj3KyWfrVnGUc7SFB+0dOvbp461Vbc7uw0NCV65NlI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mv/CNzDeatyz/ofbI2lmRaTLd7rn07QNNbmM/ouwqTcsISy1+zmAg0sqkGAxnnD9+
-         lKFBKjqSa5wCn+xIggm5ifVsERZqv1HIDHsPeC0tRD87LNrp/LRtbmcJKWWJS0+6yN
-         ri0Aqs7KjV1G2gNfv0/oaYU4zLr9rqHFV9vFU7Iv8qwY56ETqJlZSZNh2+9MuevuA+
-         tZVHHCTXxChw5uDsnTEKh8BoiDSa0GmQgEwWASxh8QkDVdoP7l2C4azWp0YMJlP7TU
-         NOaMzZylSKx8h4RlGJUk/skAmH3FuLqL5sPzEeZBZCmJ1gkKrG5UwKIxiQKYICro2I
-         v1zmiL75PSaDQ==
+        b=hIA5Mmw5fcwBASZaLlKM0/sDYrsDg6P748WxKwfknynhWEOqzbkXymMQBe5yRJCHP
+         zMkFBlahqfJ7Ose+Y8h8/smpMG/moPcIaKhBKqaN3fyJqSb/Uvg3W+0raPPibBkMPL
+         rAd0tCRSv+U1Q/I67YZKQh3QrOARzbRCpmxpb6GqAzzdKpJEo65cG7IzwImo10nWc0
+         Ezh1q47erh/eMRr9v5w9KL6GM3Ms23RnqbKZ7AxbU3Z2wJfjlWQkCwEDMsha6Uhg6F
+         5nn6Z9Tu2mciUVhzSnOBc7BKTdQXTFNucE99MVLyueszLyhjmwG6mR3sxsUsZTzo0S
+         ehuqF/LtfWygA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Liang He <windhl@126.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, john@phrozen.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 19/22] mips: lantiq: Add missing of_node_put() in irq.c
-Date:   Mon, 27 Jun 2022 22:25:14 -0400
-Message-Id: <20220628022518.596687-19-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 11/17] mips: mti-malta: Fix refcount leak in malta-time.c
+Date:   Mon, 27 Jun 2022 22:26:09 -0400
+Message-Id: <20220628022615.596977-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628022518.596687-1-sashal@kernel.org>
-References: <20220628022518.596687-1-sashal@kernel.org>
+In-Reply-To: <20220628022615.596977-1-sashal@kernel.org>
+References: <20220628022615.596977-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,31 +58,32 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Liang He <windhl@126.com>
 
-[ Upstream commit 3748d2185ac4c2c6f80989672253aad909ecaf95 ]
+[ Upstream commit 608d94cb84c42585058d692f2fe5d327f8868cdb ]
 
-In icu_of_init(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put()
+In update_gic_frequency_dt(), of_find_compatible_node() will return
+a node pointer with refcount incremented. We should use of_node_put()
 when it is not used anymore.
 
 Signed-off-by: Liang He <windhl@126.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/lantiq/irq.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/mti-malta/malta-time.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
-index 0476d7e97a03..6e3ace045b26 100644
---- a/arch/mips/lantiq/irq.c
-+++ b/arch/mips/lantiq/irq.c
-@@ -342,6 +342,7 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
- 		if (!ltq_eiu_membase)
- 			panic("Failed to remap eiu memory");
- 	}
-+	of_node_put(eiu_node);
+diff --git a/arch/mips/mti-malta/malta-time.c b/arch/mips/mti-malta/malta-time.c
+index 66c866740ff2..eef336192d7f 100644
+--- a/arch/mips/mti-malta/malta-time.c
++++ b/arch/mips/mti-malta/malta-time.c
+@@ -231,6 +231,8 @@ static void update_gic_frequency_dt(void)
  
- 	return 0;
+ 	if (of_update_property(node, &gic_frequency_prop) < 0)
+ 		pr_err("error updating gic frequency property\n");
++
++	of_node_put(node);
  }
+ 
+ #endif
 -- 
 2.35.1
 
