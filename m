@@ -2,122 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A488C55CFE4
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E5855D8FB
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243220AbiF1H1z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 28 Jun 2022 03:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
+        id S242202AbiF1H3M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jun 2022 03:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242985AbiF1H1h (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jun 2022 03:27:37 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C165B2CE26;
-        Tue, 28 Jun 2022 00:27:35 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id i17so18728446qvo.13;
-        Tue, 28 Jun 2022 00:27:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hwgLtruPC06mcRCnQAsf+kJqHCP1mf00hTNnpiQ34M0=;
-        b=3tQxdeTXaeHedyn+zuV/55ACvAhAXmWcP4mEBFJ7jzsyYq6RsSgMON/8hhCXyPFuse
-         MLSN3K1iygLYNzbYfsEUEZlABb1G1eppIZbae+40fb4YMxpctrE+lrJz3qET/ldo5zGd
-         37edeyXGnan1cSc5wL4OCPTZESLkJDeXBVsf5Jitdq4F2SUoLicy4d+r65QQwFBoAQaF
-         rVmUy/gVspn4buiPbwq5cSH0lOm6yf061HBv7eJrhJeCu9Xa08CHGXWzt6wFcbBU42zO
-         cc0C2wJwrVFqggLP3rTWVXzc4tL0SV7qsxw7pHWn+6UvTIPwY9qNnceTZYR/8yu6Ppqr
-         0hkQ==
-X-Gm-Message-State: AJIora91XfpVhN+yRTRlxkAy8ZQagB28kxgOh0hSO/dgpIY4a+cEmxEM
-        RRrXPZ914wNJxYzvqW7oNwha7fO41WOfPA==
-X-Google-Smtp-Source: AGRyM1vuyurBth3w/1QAUlj3nOiF8B4hIrD4wqWY4IUnkxCMfrPNbOyI3fDTEu0sS0pUw3shJaj5og==
-X-Received: by 2002:a05:622a:647:b0:306:6b30:bd0a with SMTP id a7-20020a05622a064700b003066b30bd0amr12004710qtb.327.1656401254977;
-        Tue, 28 Jun 2022 00:27:34 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05620a408e00b006a5d2eb58b2sm11643530qko.33.2022.06.28.00.27.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 00:27:34 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3176b6ed923so107319457b3.11;
-        Tue, 28 Jun 2022 00:27:33 -0700 (PDT)
-X-Received: by 2002:a81:a092:0:b0:318:5c89:a935 with SMTP id
- x140-20020a81a092000000b003185c89a935mr20762801ywg.383.1656401253054; Tue, 28
- Jun 2022 00:27:33 -0700 (PDT)
+        with ESMTP id S242178AbiF1H3I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jun 2022 03:29:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B53A101E6;
+        Tue, 28 Jun 2022 00:29:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5027CB81D18;
+        Tue, 28 Jun 2022 07:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F487C341CD;
+        Tue, 28 Jun 2022 07:29:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656401345;
+        bh=9e7xqvkeOXPne6fkHK55WdOz4A7pOvMWc/9SVYribOs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QhC+rpby4BOw7U4H4rdqD0vKHlqgbn08vIl5qLgG66YFCXAEMuypYYNqBifOt8WQz
+         UR0csvk93WkR1DUiNtj+Jm4P1yG3BeNXIawp2LgI4hjNA2vYlIyJdh2uckHwYAc1dC
+         KGfmbS5JwWIW+BZd1qiXhAZJOsg2VPj/eJWAdpfU0sZNiW9bKzGsnjOGK2DljwyLGq
+         unqEmQcjMQ9biGjHRZzz7R55W7SBXC+wUD1dWbdqfoxAH5X/p9uawtq0LYmyVHcTmH
+         DPHN2XWuOxqItbvg9dvbOZwNeAN8KRHRYZYj9KevLAA5FR5diiaDpJYVLkMz4bo51u
+         NGCxLFVVRcvSA==
+Received: by mail-vs1-f51.google.com with SMTP id w187so11217251vsb.1;
+        Tue, 28 Jun 2022 00:29:05 -0700 (PDT)
+X-Gm-Message-State: AJIora+Y0mFxRZKMbA4yIC++rmOJVFHu5N11t/iVnNnGUML/DPKz2pCh
+        Jdbr8oP3g1HHjLfZrGf9dmgL5y2miFzSpCvKo5o=
+X-Google-Smtp-Source: AGRyM1uCNNlVvtFMXSOJl2rXJ+BXq/24l0yBQjfRqfBWkr48/MqTF3+P2ImyLvaXf/glefJIvsMl2/bC9KbFPDHYEoM=
+X-Received: by 2002:a05:6102:6c4:b0:354:3f88:4d3f with SMTP id
+ m4-20020a05610206c400b003543f884d3fmr1401486vsg.78.1656401344053; Tue, 28 Jun
+ 2022 00:29:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220627180432.GA136081@embeddedor>
-In-Reply-To: <20220627180432.GA136081@embeddedor>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Jun 2022 09:27:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU27TG_rpd=WTRPRcY22A4j4aN-6d_8OmK2aNpX06G3ig@mail.gmail.com>
-Message-ID: <CAMuHMdU27TG_rpd=WTRPRcY22A4j4aN-6d_8OmK2aNpX06G3ig@mail.gmail.com>
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>, dm-devel@redhat.com,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        linux-can@vger.kernel.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        nvdimm@lists.linux.dev,
-        NetFilter <netfilter-devel@vger.kernel.org>,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        target-devel <target-devel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        V9FS Developers <v9fs-developer@lists.sourceforge.net>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        linux-hardening@vger.kernel.org
+References: <1656313633-1713-1-git-send-email-yangtiezhu@loongson.cn> <a93e5cbe-deb8-c760-685a-6d3171d651f3@loongson.cn>
+In-Reply-To: <a93e5cbe-deb8-c760-685a-6d3171d651f3@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 28 Jun 2022 15:28:52 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7BiFru1AZRe8pM0NxRb2FEj7n6eYtEkZ8jEWKQWYv4WA@mail.gmail.com>
+Message-ID: <CAAhV-H7BiFru1AZRe8pM0NxRb2FEj7n6eYtEkZ8jEWKQWYv4WA@mail.gmail.com>
+Subject: Re: [PATCH v2] MIPS: Loongson64: Fix section mismatch warning
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Gustavo,
+Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-Thanks for your patch!
-
-On Mon, Jun 27, 2022 at 8:04 PM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
-> There is a regular need in the kernel to provide a way to declare
-> having a dynamically sized set of trailing elements in a structure.
-> Kernel code should always use “flexible array members”[1] for these
-> cases. The older style of one-element or zero-length arrays should
-> no longer be used[2].
-
-These rules apply to the kernel, but uapi is not considered part of the
-kernel, so different rules apply.  Uapi header files should work with
-whatever compiler that can be used for compiling userspace.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On Tue, Jun 28, 2022 at 8:16 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> Cc Masahiro Yamada <masahiroy@kernel.org>
+>
+> On 06/27/2022 03:07 PM, Tiezhu Yang wrote:
+> > prom_init_numa_memory() is annotated __init and not used by any module,
+> > thus don't export it.
+> >
+> > Remove not needed EXPORT_SYMBOL for prom_init_numa_memory() to fix the
+> > following section mismatch warning:
+> >
+> >   LD      vmlinux.o
+> >   MODPOST vmlinux.symvers
+> > WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Section mismatch in reference
+> > from the variable __ksymtab_prom_init_numa_memory to the function .init.text:prom_init_numa_memory()
+> > The symbol prom_init_numa_memory is exported and annotated __init
+> > Fix this by removing the __init annotation of prom_init_numa_memory or drop the export.
+> >
+> > This is build on Linux 5.19-rc4.
+> >
+> > Fixes: 6fbde6b492df ("MIPS: Loongson64: Move files to the top-level directory")
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > ---
+> >
+> > v2: update the commit message and add Fixes tag
+> >
+> >  arch/mips/loongson64/numa.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+> > index 69a5331..8f61e93 100644
+> > --- a/arch/mips/loongson64/numa.c
+> > +++ b/arch/mips/loongson64/numa.c
+> > @@ -196,7 +196,6 @@ void __init prom_init_numa_memory(void)
+> >       pr_info("CP0_PageGrain: CP0 5.1 (0x%x)\n", read_c0_pagegrain());
+> >       prom_meminit();
+> >  }
+> > -EXPORT_SYMBOL(prom_init_numa_memory);
+> >
+> >  pg_data_t * __init arch_alloc_nodedata(int nid)
+> >  {
+> >
+>
+> Hi Masahiro,
+>
+> Please review this patch, I think it is related with the following
+> issue, thank you.
+>
+> https://lore.kernel.org/lkml/CAHk-=wgcsUU-TNoLS7Q6YF3RCSVAKwNM7gFOwqnPQTiU_oGEWA@mail.gmail.com/
+>
+> Thanks,
+> Tiezhu
+>
