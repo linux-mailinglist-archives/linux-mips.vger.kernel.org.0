@@ -2,88 +2,182 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D85755D32A
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF31755E2E3
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244684AbiF1C3n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jun 2022 22:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S231463AbiF1DMt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Jun 2022 23:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244929AbiF1C2U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 22:28:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F1D25582;
-        Mon, 27 Jun 2022 19:27:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 914E3B81C00;
-        Tue, 28 Jun 2022 02:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA345C36AE5;
-        Tue, 28 Jun 2022 02:27:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656383248;
-        bh=rrDhxUZ7JRFCLEk5L6AChGIzQ8M4z5nHZqc1JCT5t+0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hgnkk7tDsQ1VknCu282j2UlGrhAoQtCnZIFA6ELmih37VPeYJglYDYnRc09iOVH3o
-         SEOcRFTd5A/uY7Z0pABHRw/qVODumQUimaFLwdGt+mVfvpyVkmULmNXy+zorqR8+GX
-         4EbUniNve4Crel29hUbUQa3ITUuSjXW1VKzk3hKtN82OGXCXfk/qzTZ4rSaEGHK8Ub
-         1EJqVJXyL3VAeYY8Rr7bW31NkfdGfDzW5W8QBDLlC+fkVZKKgmiaUao3pNc0+A9plY
-         /DqrY4cSn3hxVIl1jiIasbJrCjlnUXTRBeD9Hb7T7vhf1tHhngpG/ODJ9IPSISatt8
-         TzKob27GgYlcQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Liang He <windhl@126.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, john@phrozen.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 12/13] mips: lantiq: Add missing of_node_put() in irq.c
-Date:   Mon, 27 Jun 2022 22:26:56 -0400
-Message-Id: <20220628022657.597208-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628022657.597208-1-sashal@kernel.org>
-References: <20220628022657.597208-1-sashal@kernel.org>
+        with ESMTP id S232051AbiF1DMg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 23:12:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C929024F09;
+        Mon, 27 Jun 2022 20:12:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71983150C;
+        Mon, 27 Jun 2022 20:12:34 -0700 (PDT)
+Received: from [10.162.42.7] (unknown [10.162.42.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D7AC3F792;
+        Mon, 27 Jun 2022 20:12:26 -0700 (PDT)
+Message-ID: <f26804cf-e342-5826-8f01-4b087a7baa63@arm.com>
+Date:   Tue, 28 Jun 2022 08:42:24 +0530
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V5 04/26] sparc/mm: Move protection_map[] inside the
+ platform
+Content-Language: en-US
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-mm@kvack.org, hch@infradead.org, christophe.leroy@csgroup.eu,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, openrisc@lists.librecores.org,
+        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+References: <20220627045833.1590055-1-anshuman.khandual@arm.com>
+ <20220627045833.1590055-5-anshuman.khandual@arm.com>
+ <YrnlkLbyYSbI0EQw@ravnborg.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <YrnlkLbyYSbI0EQw@ravnborg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Liang He <windhl@126.com>
 
-[ Upstream commit 3748d2185ac4c2c6f80989672253aad909ecaf95 ]
 
-In icu_of_init(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put()
-when it is not used anymore.
+On 6/27/22 22:44, Sam Ravnborg wrote:
+> Hi Anshuman,
+> 
+> On Mon, Jun 27, 2022 at 10:28:11AM +0530, Anshuman Khandual wrote:
+>> This moves protection_map[] inside the platform and while here, also enable
+>> ARCH_HAS_VM_GET_PAGE_PROT on 32 bit platforms via DECLARE_VM_GET_PAGE_PROT.
+>>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: sparclinux@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>  arch/sparc/Kconfig                  |  2 +-
+>>  arch/sparc/include/asm/pgtable_32.h | 19 -------------------
+>>  arch/sparc/include/asm/pgtable_64.h | 19 -------------------
+>>  arch/sparc/mm/init_32.c             | 20 ++++++++++++++++++++
+>>  arch/sparc/mm/init_64.c             |  3 +++
+>>  5 files changed, 24 insertions(+), 39 deletions(-)
+>>
+>> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+>> index ba449c47effd..09f868613a4d 100644
+>> --- a/arch/sparc/Kconfig
+>> +++ b/arch/sparc/Kconfig
+>> @@ -13,6 +13,7 @@ config 64BIT
+>>  config SPARC
+>>  	bool
+>>  	default y
+>> +	select ARCH_HAS_VM_GET_PAGE_PROT
+>>  	select ARCH_MIGHT_HAVE_PC_PARPORT if SPARC64 && PCI
+>>  	select ARCH_MIGHT_HAVE_PC_SERIO
+>>  	select DMA_OPS
+>> @@ -84,7 +85,6 @@ config SPARC64
+>>  	select PERF_USE_VMALLOC
+>>  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>>  	select HAVE_C_RECORDMCOUNT
+>> -	select ARCH_HAS_VM_GET_PAGE_PROT
+>>  	select HAVE_ARCH_AUDITSYSCALL
+>>  	select ARCH_SUPPORTS_ATOMIC_RMW
+>>  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
+>> diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
+>> index 4866625da314..8ff549004fac 100644
+>> --- a/arch/sparc/include/asm/pgtable_32.h
+>> +++ b/arch/sparc/include/asm/pgtable_32.h
+>> @@ -64,25 +64,6 @@ void paging_init(void);
+>>  
+>>  extern unsigned long ptr_in_current_pgd;
+>>  
+>> -/*         xwr */
+>> -#define __P000  PAGE_NONE
+>> -#define __P001  PAGE_READONLY
+>> -#define __P010  PAGE_COPY
+>> -#define __P011  PAGE_COPY
+>> -#define __P100  PAGE_READONLY
+>> -#define __P101  PAGE_READONLY
+>> -#define __P110  PAGE_COPY
+>> -#define __P111  PAGE_COPY
+>> -
+>> -#define __S000	PAGE_NONE
+>> -#define __S001	PAGE_READONLY
+>> -#define __S010	PAGE_SHARED
+>> -#define __S011	PAGE_SHARED
+>> -#define __S100	PAGE_READONLY
+>> -#define __S101	PAGE_READONLY
+>> -#define __S110	PAGE_SHARED
+>> -#define __S111	PAGE_SHARED
+>> -
+>>  /* First physical page can be anywhere, the following is needed so that
+>>   * va-->pa and vice versa conversions work properly without performance
+>>   * hit for all __pa()/__va() operations.
+>> diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
+>> index 4679e45c8348..a779418ceba9 100644
+>> --- a/arch/sparc/include/asm/pgtable_64.h
+>> +++ b/arch/sparc/include/asm/pgtable_64.h
+>> @@ -187,25 +187,6 @@ bool kern_addr_valid(unsigned long addr);
+>>  #define _PAGE_SZHUGE_4U	_PAGE_SZ4MB_4U
+>>  #define _PAGE_SZHUGE_4V	_PAGE_SZ4MB_4V
+>>  
+>> -/* These are actually filled in at boot time by sun4{u,v}_pgprot_init() */
+>> -#define __P000	__pgprot(0)
+>> -#define __P001	__pgprot(0)
+>> -#define __P010	__pgprot(0)
+>> -#define __P011	__pgprot(0)
+>> -#define __P100	__pgprot(0)
+>> -#define __P101	__pgprot(0)
+>> -#define __P110	__pgprot(0)
+>> -#define __P111	__pgprot(0)
+>> -
+>> -#define __S000	__pgprot(0)
+>> -#define __S001	__pgprot(0)
+>> -#define __S010	__pgprot(0)
+>> -#define __S011	__pgprot(0)
+>> -#define __S100	__pgprot(0)
+>> -#define __S101	__pgprot(0)
+>> -#define __S110	__pgprot(0)
+>> -#define __S111	__pgprot(0)
+>> -
+>>  #ifndef __ASSEMBLY__
+>>  
+>>  pte_t mk_pte_io(unsigned long, pgprot_t, int, unsigned long);
+>> diff --git a/arch/sparc/mm/init_32.c b/arch/sparc/mm/init_32.c
+>> index 1e9f577f084d..8693e4e28b86 100644
+>> --- a/arch/sparc/mm/init_32.c
+>> +++ b/arch/sparc/mm/init_32.c
+>> @@ -302,3 +302,23 @@ void sparc_flush_page_to_ram(struct page *page)
+>>  		__flush_page_to_ram(vaddr);
+>>  }
+>>  EXPORT_SYMBOL(sparc_flush_page_to_ram);
+>> +
+>> +static pgprot_t protection_map[16] __ro_after_init = {
+> This can be const - like done for powerpc and others.
+> sparc32 and sparc64 uses each their own - and I do not see sparc32 do
+> any modifications to protection_map.
 
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/lantiq/irq.c | 1 +
- 1 file changed, 1 insertion(+)
+Indeed protection_map[] arrays are independent both for sparc32 and spacr64.
+sparc32 platform never changes the protection_map[] array during boot. Sure,
+will make it into a const instead. Thanks for pointing this out.
 
-diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
-index e64f678ca12c..e29dc58271b2 100644
---- a/arch/mips/lantiq/irq.c
-+++ b/arch/mips/lantiq/irq.c
-@@ -460,6 +460,7 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
- 		if (!ltq_eiu_membase)
- 			panic("Failed to remap eiu memory");
- 	}
-+	of_node_put(eiu_node);
- 
- 	return 0;
- }
--- 
-2.35.1
-
+> 
+> With this change:
+> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+> 
