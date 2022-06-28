@@ -2,182 +2,285 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F14155CF76
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 15:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F27A55C620
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 14:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242790AbiF1A6i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Jun 2022 20:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S241779AbiF1CDK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Jun 2022 22:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242060AbiF1A6e (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 20:58:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AA01CFE5;
-        Mon, 27 Jun 2022 17:58:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD4F7B81C0A;
-        Tue, 28 Jun 2022 00:58:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEABC341C8;
-        Tue, 28 Jun 2022 00:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656377910;
-        bh=x4KMhmowxPAczUMJ6x4nBeCjlIDio89Zlndd34Eza5Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rmtqPrxs/EakAnLyUZ+T1Y6Y2PuUVWE1p/lPmqQBXiapPC1WBd92tcHfgEnTJibSz
-         8Cqh6wp+mGRPQenFwVH/ncudi5b7Tg0x4DYK6LYwUDkNgU3v8Yk/6Or0HzPxa5QXgF
-         OYkHqjzJwOTAIzA6m0DkNzWrhG6StDZ8wiRdHVw+Wnp/Deq+bcAy4GlTPygKnkBgqV
-         sUW1DRx9UPn831OT0MRefhs1kf7ZlvXFnW9s3XTKUzsS60aUSNGKPAXfxyQi7QqZvQ
-         a8VxNxF80uRWuCVjsLU3WaCLAUnTapHIuQJvInOf0IrcXvC7dKlHhnQt1FhIxUdbDj
-         Qy7qblTn3AnuA==
-Date:   Tue, 28 Jun 2022 02:58:25 +0200
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, dm-devel@redhat.com,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
-        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
+        with ESMTP id S237326AbiF1CDH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Jun 2022 22:03:07 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E3F5FF7
+        for <linux-mips@vger.kernel.org>; Mon, 27 Jun 2022 19:03:05 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b7-20020a251b07000000b0066c8f97b0f9so6119403ybb.23
+        for <linux-mips@vger.kernel.org>; Mon, 27 Jun 2022 19:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=/OuahP8oPHDxIXADrtMOHzHvbE6HS+PoE4WDHegn+rY=;
+        b=XSa6BG9j+Us6qSO6vPHqc2TVfQxumnU0pAOfjBJHFlWcIck0At2n2mfq5tAA7z3Bx5
+         PD0vlBv1k9Q/E/30MAFFG1P5OxPr5/WK6+axB0HoavtP7KnHzjHkg1qUFmVSky1XYmCE
+         keKg7zc6YYKZDYEnwk3qbSxvFO3Xk4Y8/tdDX97msFctgpLZBdPkJDnH5LbWzXx7pTZH
+         CgzyIamG5okMqCh9aY8wAvuFixrOfwL/UhwfbnX/7paM2krnQNZDjv67WdvSzvvMWo7D
+         m5fFpT4ZoMrA6AasD66OkuDUwH3oHEeuCSo5kX9VLcSW8/gQ+X2898P5YGyQhyrYIK8G
+         Aulw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=/OuahP8oPHDxIXADrtMOHzHvbE6HS+PoE4WDHegn+rY=;
+        b=0J0rOXo1qnWHWGT8VZROAkbYy2sY0dAePFFnSfi2UaFemu4j9mehvcPqCd2q+HcJuX
+         Onob8tz3WLuK8czWINwXfz6pX/Oob7eczYFJFbWrxabo0YZrmF80O4WD6MCfhahu7Zk6
+         7BfTVKxywaheWVeVaHbs6zJEyqWzOe8Tdk9M83rE7gdZmYLObuo2ede1xls8n0ZblFVP
+         96QuFI5yNvKmKzW1AJlOHqs/aYrKCY4xl8EJziHBTnMTXmEAhgW+aaT+kmfLefTMPdJC
+         V3gPPh5l218Wn+94VCyeKJyfnANUtZRHqiSC1ZBe42oFMF0352Pmgb6Byz5hE+965x52
+         22bg==
+X-Gm-Message-State: AJIora/dWlR/ylPJj04jtEskf82KRrKinyTF90zIPx6Lqr7LgqGGKpk9
+        7C6k1D4BrzPMkgPPQpr1h0zifT2opCcx5IQ=
+X-Google-Smtp-Source: AGRyM1s6TFssoICBD8dW4KaHJ9QFnbGLouWSVAgJ1icUDVgZq5pRLN92A6h2ACkaFVoX2i0qb9ktR7y39ECy36c=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:1f27:a302:2101:1c82])
+ (user=saravanak job=sendgmr) by 2002:a81:9292:0:b0:317:dd64:5adc with SMTP id
+ j140-20020a819292000000b00317dd645adcmr19123629ywg.145.1656381784427; Mon, 27
+ Jun 2022 19:03:04 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 19:01:01 -0700
+Message-Id: <20220628020110.1601693-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v1 0/2] Fix console probe delay when stdout-path isn't set
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>, sascha hauer <sha@pengutronix.de>,
+        peng fan <peng.fan@nxp.com>, kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220628005825.GA161566@embeddedor>
-References: <20220627180432.GA136081@embeddedor>
- <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
- <20220628004052.GM23621@ziepe.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628004052.GM23621@ziepe.ca>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 09:40:52PM -0300, Jason Gunthorpe wrote:
-> On Mon, Jun 27, 2022 at 08:27:37PM +0200, Daniel Borkmann wrote:
-> > On 6/27/22 8:04 PM, Gustavo A. R. Silva wrote:
-> > > There is a regular need in the kernel to provide a way to declare
-> > > having a dynamically sized set of trailing elements in a structure.
-> > > Kernel code should always use “flexible array members”[1] for these
-> > > cases. The older style of one-element or zero-length arrays should
-> > > no longer be used[2].
-> > > 
-> > > This code was transformed with the help of Coccinelle:
-> > > (linux-5.19-rc2$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file script.cocci --include-headers --dir . > output.patch)
-> > > 
-> > > @@
-> > > identifier S, member, array;
-> > > type T1, T2;
-> > > @@
-> > > 
-> > > struct S {
-> > >    ...
-> > >    T1 member;
-> > >    T2 array[
-> > > - 0
-> > >    ];
-> > > };
-> > > 
-> > > -fstrict-flex-arrays=3 is coming and we need to land these changes
-> > > to prevent issues like these in the short future:
-> > > 
-> > > ../fs/minix/dir.c:337:3: warning: 'strcpy' will always overflow; destination buffer has size 0,
-> > > but the source string has length 2 (including NUL byte) [-Wfortify-source]
-> > > 		strcpy(de3->name, ".");
-> > > 		^
-> > > 
-> > > Since these are all [0] to [] changes, the risk to UAPI is nearly zero. If
-> > > this breaks anything, we can use a union with a new member name.
-> > > 
-> > > [1] https://en.wikipedia.org/wiki/Flexible_array_member
-> > > [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-> > > 
-> > > Link: https://github.com/KSPP/linux/issues/78
-> > > Build-tested-by: https://lore.kernel.org/lkml/62b675ec.wKX6AOZ6cbE71vtF%25lkp@intel.com/
-> > > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > > ---
-> > > Hi all!
-> > > 
-> > > JFYI: I'm adding this to my -next tree. :)
-> > 
-> > Fyi, this breaks BPF CI:
-> > 
-> > https://github.com/kernel-patches/bpf/runs/7078719372?check_suite_focus=true
-> > 
-> >   [...]
-> >   progs/map_ptr_kern.c:314:26: error: field 'trie_key' with variable sized type 'struct bpf_lpm_trie_key' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
-> >           struct bpf_lpm_trie_key trie_key;
-> >                                   ^
-> 
-> This will break the rdma-core userspace as well, with a similar
-> error:
-> 
-> /usr/bin/clang-13 -DVERBS_DEBUG -Dibverbs_EXPORTS -Iinclude -I/usr/include/libnl3 -I/usr/include/drm -g -O2 -fdebug-prefix-map=/__w/1/s=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wformat=2 -Wcast-function-type -Wformat-nonliteral -Wdate-time -Wnested-externs -Wshadow -Wstrict-prototypes -Wold-style-definition -Werror -Wredundant-decls -g -fPIC   -std=gnu11 -MD -MT libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o -MF libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o.d -o libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o   -c ../libibverbs/cmd_flow.c
-> In file included from ../libibverbs/cmd_flow.c:33:
-> In file included from include/infiniband/cmd_write.h:36:
-> In file included from include/infiniband/cmd_ioctl.h:41:
-> In file included from include/infiniband/verbs.h:48:
-> In file included from include/infiniband/verbs_api.h:66:
-> In file included from include/infiniband/ib_user_ioctl_verbs.h:38:
-> include/rdma/ib_user_verbs.h:436:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
->         struct ib_uverbs_create_cq_resp base;
->                                         ^
-> include/rdma/ib_user_verbs.h:644:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
->         struct ib_uverbs_create_qp_resp base;
-> 
-> Which is why I gave up trying to change these..
-> 
-> Though maybe we could just switch off -Wgnu-variable-sized-type-not-at-end  during configuration ?
+Since the series that fixes console probe delay based on stdout-path[1] got
+pulled into driver-core-next, I made these patches on top of them.
 
-No. I think now we can easily workaround these sorts of problems with
-something like this:
+Even if stdout-path isn't set in DT, this patch should take console
+probe times back to how they were before the deferred_probe_timeout
+clean up series[2].
 
-	struct flex {
-		any_type any_member;
-		union {
-			type array[0];
-			__DECLARE_FLEX_ARRAY(type, array_flex);
-		};
-	};
+Fabio/Ahmad/Sascha,
 
-and use array_flex in kernel-space.
+Can you give this a shot please?
 
-The same for the one-elment arrays in UAPI:
+[1] - https://lore.kernel.org/lkml/20220623080344.783549-1-saravanak@google.com/
+[2] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
 
-        struct flex {
-                any_type any_member;
-                union {
-                        type array[1];
-                        __DECLARE_FLEX_ARRAY(type, array_flex);
-                };
-        };
+Thanks,
+Saravana
 
-I'll use the idiom above to resolve all these warnings in a follow-up
-patch. :)
+cc: Rob Herring <robh@kernel.org>
+cc: sascha hauer <sha@pengutronix.de>
+cc: peng fan <peng.fan@nxp.com>
+cc: kevin hilman <khilman@kernel.org>
+cc: ulf hansson <ulf.hansson@linaro.org>
+cc: len brown <len.brown@intel.com>
+cc: pavel machek <pavel@ucw.cz>
+cc: joerg roedel <joro@8bytes.org>
+cc: will deacon <will@kernel.org>
+cc: andrew lunn <andrew@lunn.ch>
+cc: heiner kallweit <hkallweit1@gmail.com>
+cc: russell king <linux@armlinux.org.uk>
+cc: "david s. miller" <davem@davemloft.net>
+cc: eric dumazet <edumazet@google.com>
+cc: jakub kicinski <kuba@kernel.org>
+cc: paolo abeni <pabeni@redhat.com>
+cc: linus walleij <linus.walleij@linaro.org>
+cc: hideaki yoshifuji <yoshfuji@linux-ipv6.org>
+cc: david ahern <dsahern@kernel.org>
+cc: kernel-team@android.com
+cc: linux-kernel@vger.kernel.org
+cc: linux-pm@vger.kernel.org
+cc: iommu@lists.linux-foundation.org
+cc: netdev@vger.kernel.org
+cc: linux-gpio@vger.kernel.org
+Cc: kernel@pengutronix.de
 
-Thanks
---
-Gustavo
+Saravana Kannan (2):
+  driver core: Add probe_no_timeout flag for drivers
+  serial: Set probe_no_timeout for all DT based drivers
+
+ drivers/base/base.h                         |  1 +
+ drivers/base/core.c                         |  7 +++++++
+ drivers/base/dd.c                           |  3 +++
+ drivers/tty/ehv_bytechan.c                  |  1 +
+ drivers/tty/goldfish.c                      |  1 +
+ drivers/tty/hvc/hvc_opal.c                  |  1 +
+ drivers/tty/serial/8250/8250_acorn.c        |  1 -
+ drivers/tty/serial/8250/8250_aspeed_vuart.c |  1 +
+ drivers/tty/serial/8250/8250_bcm2835aux.c   |  1 +
+ drivers/tty/serial/8250/8250_bcm7271.c      |  1 +
+ drivers/tty/serial/8250/8250_dw.c           |  1 +
+ drivers/tty/serial/8250/8250_em.c           |  1 +
+ drivers/tty/serial/8250/8250_ingenic.c      |  1 +
+ drivers/tty/serial/8250/8250_lpc18xx.c      |  1 +
+ drivers/tty/serial/8250/8250_mtk.c          |  1 +
+ drivers/tty/serial/8250/8250_of.c           |  1 +
+ drivers/tty/serial/8250/8250_omap.c         |  1 +
+ drivers/tty/serial/8250/8250_pxa.c          |  1 +
+ drivers/tty/serial/8250/8250_tegra.c        |  1 +
+ drivers/tty/serial/8250/8250_uniphier.c     |  1 +
+ drivers/tty/serial/altera_jtaguart.c        |  1 +
+ drivers/tty/serial/altera_uart.c            |  1 +
+ drivers/tty/serial/amba-pl011.c             |  1 +
+ drivers/tty/serial/apbuart.c                |  1 +
+ drivers/tty/serial/ar933x_uart.c            |  1 +
+ drivers/tty/serial/arc_uart.c               |  1 +
+ drivers/tty/serial/atmel_serial.c           |  1 +
+ drivers/tty/serial/bcm63xx_uart.c           |  1 +
+ drivers/tty/serial/clps711x.c               |  1 +
+ drivers/tty/serial/cpm_uart/cpm_uart_core.c |  1 +
+ drivers/tty/serial/digicolor-usart.c        |  1 +
+ drivers/tty/serial/fsl_linflexuart.c        |  1 +
+ drivers/tty/serial/fsl_lpuart.c             |  1 +
+ drivers/tty/serial/imx.c                    |  1 +
+ drivers/tty/serial/lantiq.c                 |  1 +
+ drivers/tty/serial/liteuart.c               |  1 +
+ drivers/tty/serial/lpc32xx_hs.c             |  1 +
+ drivers/tty/serial/max310x.c                |  1 +
+ drivers/tty/serial/meson_uart.c             |  1 +
+ drivers/tty/serial/milbeaut_usio.c          |  1 +
+ drivers/tty/serial/mpc52xx_uart.c           |  1 +
+ drivers/tty/serial/mps2-uart.c              |  1 +
+ drivers/tty/serial/msm_serial.c             |  1 +
+ drivers/tty/serial/mvebu-uart.c             |  1 +
+ drivers/tty/serial/mxs-auart.c              |  1 +
+ drivers/tty/serial/omap-serial.c            |  1 +
+ drivers/tty/serial/owl-uart.c               |  1 +
+ drivers/tty/serial/pic32_uart.c             |  1 +
+ drivers/tty/serial/pmac_zilog.c             |  1 +
+ drivers/tty/serial/pxa.c                    |  1 +
+ drivers/tty/serial/qcom_geni_serial.c       |  1 +
+ drivers/tty/serial/rda-uart.c               |  1 +
+ drivers/tty/serial/samsung_tty.c            |  1 +
+ drivers/tty/serial/sc16is7xx.c              |  1 +
+ drivers/tty/serial/serial-tegra.c           |  1 +
+ drivers/tty/serial/sh-sci.c                 |  1 +
+ drivers/tty/serial/sifive.c                 |  1 +
+ drivers/tty/serial/sprd_serial.c            |  1 +
+ drivers/tty/serial/st-asc.c                 |  1 +
+ drivers/tty/serial/stm32-usart.c            |  1 +
+ drivers/tty/serial/sunhv.c                  |  1 +
+ drivers/tty/serial/sunplus-uart.c           |  1 +
+ drivers/tty/serial/sunsab.c                 |  1 +
+ drivers/tty/serial/sunsu.c                  |  1 +
+ drivers/tty/serial/sunzilog.c               |  1 +
+ drivers/tty/serial/tegra-tcu.c              |  1 +
+ drivers/tty/serial/uartlite.c               |  1 +
+ drivers/tty/serial/ucc_uart.c               |  1 +
+ drivers/tty/serial/vt8500_serial.c          |  1 +
+ drivers/tty/serial/xilinx_uartps.c          |  1 +
+ include/linux/device.h                      |  7 +++++++
+ include/linux/device/driver.h               | 11 +++++++++++
+ 72 files changed, 95 insertions(+), 1 deletion(-)
+
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+
