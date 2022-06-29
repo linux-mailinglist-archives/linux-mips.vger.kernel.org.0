@@ -2,151 +2,526 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E565603EF
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Jun 2022 17:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5C2560442
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jun 2022 17:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbiF2PHU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Jun 2022 11:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
+        id S234017AbiF2PN7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 29 Jun 2022 11:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbiF2PHG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jun 2022 11:07:06 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682CA13CD3;
-        Wed, 29 Jun 2022 08:07:05 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t24so28606620lfr.4;
-        Wed, 29 Jun 2022 08:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=X7kFcchBkGtAozFYIhhWmH8j7mV7PoFuQksuWlZQBWs=;
-        b=gcwdUlo7pR4Sdwvta8DpwPhDTEdgdaHa8EIn+saMIbSh2ycCmiO4WbTKo8jAB6Q6Gt
-         /EcSq94IabAAkXEwOvtejBNkzOqrIodwB3GpZM3GjiPB4Kwdp3tmAgtuIR0WshPMaF8V
-         2xotB2F9WWW+vKWvWzM9LWhudb/mzd5g0uhxIny89oUHRo4bN2tVuaxa6/EYmUXYqbzy
-         6UYD7AmDbGe7CtfNAjQ5WbV9JsWM9GZEbgP5zAV/mw2JCFMTwYv7FCaDLZImLueFNQII
-         r1+b9amQOxIA92SaVB1SRIojEQy+iVbuItTTClFgrOQ6Hfi6AddMKkPzkS3897xJeLiy
-         tcqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=X7kFcchBkGtAozFYIhhWmH8j7mV7PoFuQksuWlZQBWs=;
-        b=b4q9YWE0IEQK2FrdVCS+JC/ueQfKSlN9x1rBQ7ymkWYCTyOmYqa3qB9Si4j3IUhSws
-         +6mnkfDXnfoeTjIjqFE3YY/w46m5AEuQOQzCyvyjHgCVF+mzkT1FkvBFtQB+KU9wiShq
-         seciTlLlGKcq3gHFcCDG5xmYsNUQqBSuJxlg/sqQMS+rDgUv/sbya/fe+BzsUpEPbky8
-         5C4Vrina8lGKvzBABpAnZu5f9mvRhbAfm90Nr4HXNkoXPIyW1/46Q931mkhoc/BqDbo1
-         84foWMVKap7QOssVrseKVFdZKXL+DwFAcCNEz1Yd7SpIWu63aAXLZeXpEQU//nv8dAmI
-         ba+A==
-X-Gm-Message-State: AJIora+DiQwt8vdh+VIdV8OdoXtHHa7bgc5REEH+1ehjAK2op3zr4DDO
-        7XDlQ0FNInBbjiy/luLccjMJLxLxCaj1rQ==
-X-Google-Smtp-Source: AGRyM1vHzF2/5EFz2vUjTUeqp2yrAeLOohVUMI38ZRSxGCEjLojVPTa1SuYM5A260UPY40fcLooq1Q==
-X-Received: by 2002:ac2:4e4e:0:b0:47f:b3c0:2f3d with SMTP id f14-20020ac24e4e000000b0047fb3c02f3dmr2363445lfr.15.1656515222156;
-        Wed, 29 Jun 2022 08:07:02 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id d22-20020a2e3316000000b0025907141aa6sm2172108ljc.83.2022.06.29.08.07.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 08:07:01 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 18:06:59 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        with ESMTP id S234025AbiF2PNs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Jun 2022 11:13:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A21344F1
+        for <linux-mips@vger.kernel.org>; Wed, 29 Jun 2022 08:12:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6ZMh-0004IV-CK; Wed, 29 Jun 2022 17:12:27 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6ZMc-003QJ4-K7; Wed, 29 Jun 2022 17:12:26 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6ZMf-000BVg-Gm; Wed, 29 Jun 2022 17:12:25 +0200
+Message-ID: <e0869ae1b10ec19eaf87dc5fa53498f82e7deaac.camel@pengutronix.de>
+Subject: Re: [PATCH RESEND v5 6/8] clk: baikal-t1: Move reset-controls code
+ into a dedicated module
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 1/8] reset: Fix devm bulk optional exclusive
- control getter
-Message-ID: <20220629150659.4mutbylylukmoduq@mobilestation>
+Date:   Wed, 29 Jun 2022 17:12:25 +0200
+In-Reply-To: <20220624141853.7417-7-Sergey.Semin@baikalelectronics.ru>
 References: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
- <20220624141853.7417-2-Sergey.Semin@baikalelectronics.ru>
- <c6794e78b9425c84f090d3058b93319bbb17e10f.camel@pengutronix.de>
+         <20220624141853.7417-7-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c6794e78b9425c84f090d3058b93319bbb17e10f.camel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:02:43PM +0200, Philipp Zabel wrote:
-> Hi Serge,
+Hi Serge,
+
+On Fr, 2022-06-24 at 17:18 +0300, Serge Semin wrote:
+> Before adding the directly controlled resets support it's reasonable to
+> move the existing resets control functionality into a dedicated object for
+> the sake of the CCU dividers clock driver simplification. After the new
+> functionality was added clk-ccu-div.c would have got to a mixture of the
+> weakly dependent clocks and resets methods. Splitting the methods up into
+> the two objects will make the code easier to read and maintain. It shall
+> also improve the code scalability (though hopefully we won't need this
+> part that much in the future).
 > 
-> On Fr, 2022-06-24 at 17:18 +0300, Serge Semin wrote:
-> > Most likely due to copy-paste mistake the device managed version of the
-> > denoted reset control getter has been implemented with invalid semantic,
-> > which can be immediately spotted by having "WARN_ON(shared && acquired)"
-> > warning in the system log as soon as the method is called. Anyway let's
-> > fix it by altering the boolean arguments passed to the
-> > __devm_reset_control_bulk_get() method from
-> > - shared = true, optional = false, acquired = true
-> > to
-> > + shared = false, optional = true, acquired = true
-> > That's what they were supposed to be in the first place (see the non-devm
-> > version of the same method: reset_control_bulk_get_optional_exclusive()).
-> > 
-> > Fixes: 48d71395896d ("reset: Add reset_control_bulk API")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v4:
-> > - This is a new patch added on v4 lap of the series.
-> > ---
-> >  include/linux/reset.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/reset.h b/include/linux/reset.h
-> > index 8a21b5756c3e..514ddf003efc 100644
-> > --- a/include/linux/reset.h
-> > +++ b/include/linux/reset.h
-> > @@ -731,7 +731,7 @@ static inline int __must_check
-> >  devm_reset_control_bulk_get_optional_exclusive(struct device *dev, int num_rstcs,
-> >  					       struct reset_control_bulk_data *rstcs)
-> >  {
-> > -	return __devm_reset_control_bulk_get(dev, num_rstcs, rstcs, true, false, true);
-> > +	return __devm_reset_control_bulk_get(dev, num_rstcs, rstcs, false, true, true);
-> >  }
+> As it was done for the CCU PLLs and Dividers the reset control
+> functionality in its turn has been split up into two sub-modules:
+> hw-interface and generic reset device description. This commit doesn't
+> provide any change in the CCU reset module semantics. As before it
+> supports the trigger-like CCU resets only, which are responsible for the
+> AXI-bus, APB-bus and SATA-ref blocks reset. The assert/de-assert-capable
+> reset controls support will be added in the next commit.
 > 
-
-> You are right, thank you. I'll take this as a sign that the internal
-> functions should probably switch from collecting ever more boolean
-> arguments to a flags parameter, similar to enum gpiod_flags.
+> Note the CCU Clock dividers and resets functionality split up was possible
+> due to not having any side-effects (at least we didn't found ones) of the
+> regmap-based concurrent access of the common CCU dividers/reset CSRs.
 > 
-> I'll pick this up separately into the reset/fixes branch.
-
-Ok. Thanks. Meanwhile could you please take a look at the rest of the
-reset-related patches of the series? They concern the reset-control
-functionality updates of the Baikal-T1 CCU common-clock driver.
-
-[PATCH RESEND v5 6/8] clk: baikal-t1: Move reset-controls code into a dedicated module
-Link: https://lore.kernel.org/linux-clk/20220624141853.7417-7-Sergey.Semin@baikalelectronics.ru/
-[PATCH RESEND v5 7/8] clk: baikal-t1: Add DDR/PCIe directly controlled resets support
-Link: https://lore.kernel.org/linux-clk/20220624141853.7417-8-Sergey.Semin@baikalelectronics.ru/
-
-The functionality has been placed in the clocks subsystem because the
-reset-control is tightly coupled with the clock-control part of CCU.
-It's a normal approach for the SoC CCU/RCU devices, which normally
-have both clocks and reset controls intermixed. Anyway the main goal
-of the series was to add the directly controlled resets of the
-DDR and PCIe SoC sub-domains provided in the framework of the patch
-7/8. Please see the patches log for details.
-
--Sergey
-
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> regards
-> Philipp
+> ---
+> 
+> Changelog v4:
+> - Completely split CCU Dividers and Resets functionality. (@Stephen)
+> ---
+>  drivers/clk/baikal-t1/Kconfig       |  12 +-
+>  drivers/clk/baikal-t1/Makefile      |   1 +
+>  drivers/clk/baikal-t1/ccu-div.c     |  19 ---
+>  drivers/clk/baikal-t1/ccu-div.h     |   4 +-
+>  drivers/clk/baikal-t1/ccu-rst.c     |  43 +++++
+>  drivers/clk/baikal-t1/ccu-rst.h     |  67 ++++++++
+>  drivers/clk/baikal-t1/clk-ccu-div.c | 101 +++---------
+>  drivers/clk/baikal-t1/clk-ccu-rst.c | 236 ++++++++++++++++++++++++++++
+
+What is the reason for separating ccu-rst.c and clk-ccu-rst.c?
+
+I expect implementing the reset ops and registering the reset
+controller in the same compilation unit would be easier.
+
+> diff --git a/drivers/clk/baikal-t1/ccu-rst.c b/drivers/clk/baikal-t1/ccu-rst.c
+> new file mode 100644
+> index 000000000000..b355bf0b399a
+> --- /dev/null
+> +++ b/drivers/clk/baikal-t1/ccu-rst.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
+> + *
+> + * Authors:
+> + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> + *
+> + * Baikal-T1 CCU Resets interface driver
+> + */
+> +
+> +#define pr_fmt(fmt) "bt1-ccu-rst: " fmt
+> +
+> +#include <linux/delay.h>
+> +#include <linux/kernel.h>
+> +#include <linux/printk.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset-controller.h>
+> +
+> +#include "ccu-rst.h"
+> +
+> +#define CCU_RST_DELAY_US		1
+> +
+> +static int ccu_rst_reset(struct reset_controller_dev *rcdev, unsigned long idx)
+> +{
+> +	struct ccu_rst *rst;
+> +
+> +	rst = ccu_rst_get_desc(rcdev, idx);
+> +	if (IS_ERR(rst)) {
+> +		pr_err("Invalid reset index %lu specified\n", idx);
+> +		return PTR_ERR(rst);
+> +	}
+
+I don't think this is necessary, see my comments below. Since the reset
+ids are contiguous, just setting nr_resets and using the default
+.of_xlate should be enough to make sure this is never called with an
+invalid id.
+
+> +
+> +	regmap_update_bits(rst->sys_regs, rst->reg_ctl, rst->mask, rst->mask);
+
+I would expect this to get sys_regs from data, which can be obtained
+from rcdev via container_of. The reg_ctl and mask could then be
+obtained from the ccu_rst_info array, data->rsts_info[idx].
+
+> +
+> +	/* The next delay must be enough to cover all the resets. */
+> +	udelay(CCU_RST_DELAY_US);
+> +
+> +	return 0;
+> +}
+[...]
+> +
+> +const struct reset_control_ops ccu_rst_ops = {
+
+With ops and controller registration in the same .c file this could be
+static.
+
+> +	.reset = ccu_rst_reset,
+> +};
+> diff --git a/drivers/clk/baikal-t1/ccu-rst.h b/drivers/clk/baikal-t1/ccu-rst.h
+> new file mode 100644
+> index 000000000000..d03bae4b7a05
+> --- /dev/null
+> +++ b/drivers/clk/baikal-t1/ccu-rst.h
+> @@ -0,0 +1,67 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
+> + *
+> + * Baikal-T1 CCU Resets interface driver
+> + */
+> +#ifndef __CLK_BT1_CCU_RST_H__
+> +#define __CLK_BT1_CCU_RST_H__
+> +
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +
+> +struct ccu_rst_data;
+> +
+> +/*
+> + * struct ccu_rst_init_data - CCU Resets initialization data
+> + * @sys_regs: Baikal-T1 System Controller registers map.
+> + * @np: Pointer to the node with the System CCU block.
+> + */
+> +struct ccu_rst_init_data {
+> +	struct regmap *sys_regs;
+> +	struct device_node *np;
+> +};
+> +
+> +/*
+> + * struct ccu_rst - CCU Reset descriptor
+> + * @id: Reset identifier.
+> + * @reg_ctl: Reset control register base address.
+> + * @sys_regs: Baikal-T1 System Controller registers map.
+> + * @mask: Reset bitmask (normally it's just a single bit flag).
+> + */
+> +struct ccu_rst {
+> +	unsigned int id;
+
+I'm not convinced this structure is necessary.
+It is just a copy of struct ccu_rst_info, but with an added regmap
+pointer per entry, which seems excessive since the regmap is the same
+for all resets.
+
+[...]
+> diff --git a/drivers/clk/baikal-t1/clk-ccu-rst.c b/drivers/clk/baikal-t1/clk-ccu-rst.c
+> new file mode 100644
+> index 000000000000..b10857f48b8b
+> --- /dev/null
+> +++ b/drivers/clk/baikal-t1/clk-ccu-rst.c
+> @@ -0,0 +1,236 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
+> + *
+> + * Authors:
+> + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> + *
+> + * Baikal-T1 CCU Resets domain driver
+> + */
+> +#define pr_fmt(fmt) "bt1-ccu-rst: " fmt
+> +
+> +#include <linux/bits.h>
+> +#include <linux/kernel.h>
+> +#include <linux/of.h>
+> +#include <linux/printk.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/slab.h>
+> +
+> +#include <dt-bindings/reset/bt1-ccu.h>
+> +
+> +#include "ccu-rst.h"
+> +
+> +#define CCU_AXI_MAIN_BASE		0x030
+> +#define CCU_AXI_DDR_BASE		0x034
+> +#define CCU_AXI_SATA_BASE		0x038
+> +#define CCU_AXI_GMAC0_BASE		0x03C
+> +#define CCU_AXI_GMAC1_BASE		0x040
+> +#define CCU_AXI_XGMAC_BASE		0x044
+> +#define CCU_AXI_PCIE_M_BASE		0x048
+> +#define CCU_AXI_PCIE_S_BASE		0x04C
+> +#define CCU_AXI_USB_BASE		0x050
+> +#define CCU_AXI_HWA_BASE		0x054
+> +#define CCU_AXI_SRAM_BASE		0x058
+> +
+> +#define CCU_SYS_SATA_REF_BASE		0x060
+> +#define CCU_SYS_APB_BASE		0x064
+> +
+> +#define CCU_RST_TRIG(_id, _base, _ofs)		\
+> +	{					\
+> +		.id = _id,			\
+
+I think the _id parameter and id field could be dropped.
+
+> +		.base = _base,			\
+> +		.mask = BIT(_ofs),		\
+> +	}
+> +
+> +struct ccu_rst_info {
+> +	unsigned int id;
+
+This could be dropped.
+
+> +	unsigned int base;
+> +	unsigned int mask;
+
+Are there actually resets that require setting/clearing multiple bits,
+or is this theoretical?
+
+> +};
+> +
+> +struct ccu_rst_data {
+> +	struct device_node *np;
+
+This is already in rcdev.of_node, no need to carry a copy.
+
+> +	struct regmap *sys_regs;
+> +
+> +	unsigned int rsts_num;
+
+Same as above, this is already in rcdev.nr_resets.
+
+> +	const struct ccu_rst_info *rsts_info;
+> +	struct ccu_rst *rsts;
+
+This is not neccessary if you use sys_regs and rsts_info in the reset
+ops.
+
+> +
+> +	struct reset_controller_dev rcdev;
+> +};
+> +#define to_ccu_rst_data(_rcdev) container_of(_rcdev, struct ccu_rst_data, rcdev)
+> +
+> +/*
+> + * Each AXI-bus clock divider is equipped with the corresponding clock-consumer
+> + * domain reset (it's self-deasserted reset control).
+> + */
+> +static const struct ccu_rst_info axi_rst_info[] = {
+> +	CCU_RST_TRIG(CCU_AXI_MAIN_RST, CCU_AXI_MAIN_BASE, 1),
+
+This could be:
+
+	[CCU_AXI_MAIN_RST] = CCU_RST_TRIG(CCU_AXI_MAIN_BASE, 1),
+
+> +	CCU_RST_TRIG(CCU_AXI_DDR_RST, CCU_AXI_DDR_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_SATA_RST, CCU_AXI_SATA_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_GMAC0_RST, CCU_AXI_GMAC0_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_GMAC1_RST, CCU_AXI_GMAC1_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_XGMAC_RST, CCU_AXI_XGMAC_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_PCIE_M_RST, CCU_AXI_PCIE_M_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_PCIE_S_RST, CCU_AXI_PCIE_S_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_USB_RST, CCU_AXI_USB_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_HWA_RST, CCU_AXI_HWA_BASE, 1),
+> +	CCU_RST_TRIG(CCU_AXI_SRAM_RST, CCU_AXI_SRAM_BASE, 1),
+> +};
+> +
+> +/*
+> + * SATA reference clock domain and APB-bus domain are connected with the
+> + * sefl-deasserted reset control, which can be activated via the corresponding
+> + * clock divider register. DDR and PCIe sub-domains can be reset with directly
+> + * controlled reset signals. Resetting the DDR controller though won't end up
+> + * well while the Linux kernel is working.
+> + */
+> +static const struct ccu_rst_info sys_rst_info[] = {
+> +	CCU_RST_TRIG(CCU_SYS_SATA_REF_RST, CCU_SYS_SATA_REF_BASE, 1),
+
+Same as above.
+
+> +	CCU_RST_TRIG(CCU_SYS_APB_RST, CCU_SYS_APB_BASE, 1),
+> +};
+> +
+> +struct ccu_rst *ccu_rst_get_desc(struct reset_controller_dev *rcdev, unsigned long idx)
+> +{
+> +	struct ccu_rst_data *data = to_ccu_rst_data(rcdev);
+> +
+> +	if (idx >= data->rsts_num)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	return &data->rsts[idx];
+> +}
+
+This is not necessary if you just use the reset id as an index into the
+ccu_rst_info array.
+
+> +
+> +static int ccu_rst_of_idx_get(struct reset_controller_dev *rcdev,
+> +			      const struct of_phandle_args *rstspec)
+> +{
+> +	struct ccu_rst_data *data = to_ccu_rst_data(rcdev);
+> +	unsigned int id, idx;
+> +
+> +	id = rstspec->args[0];
+> +	for (idx = 0; idx < data->rsts_num; ++idx) {
+> +		if (data->rsts[idx].id == id)
+> +			break;
+> +	}
+> +	if (idx == data->rsts_num) {
+> +		pr_err("Invalid reset ID %u specified\n", id);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return idx;
+> +}
+
+Unless I'm mistaken, id == idx for all resets, and this is not
+necessary at all. You should be able to use the default .of_xlate.
+
+> +
+> +static struct ccu_rst_data *ccu_rst_create_data(const struct ccu_rst_init_data *rst_init)
+> +{
+> +	struct ccu_rst_data *data;
+> +	int ret;
+> +
+> +	data = kzalloc(sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	data->np = rst_init->np;
+
+No reason to store data->np only to copy it to data->rcdev.of_node
+later.
+
+> +	data->sys_regs = rst_init->sys_regs;
+> +	if (of_device_is_compatible(data->np, "baikal,bt1-ccu-axi")) {
+> +		data->rsts_num = ARRAY_SIZE(axi_rst_info);
+
+You could store the number of resets directly into
+data->rcdev.nr_resets.
+
+> +		data->rsts_info = axi_rst_info;
+> +	} else if (of_device_is_compatible(data->np, "baikal,bt1-ccu-sys")) {
+> +		data->rsts_num = ARRAY_SIZE(sys_rst_info);
+> +		data->rsts_info = sys_rst_info;
+> +	} else {
+> +		pr_err("Incompatible DT node '%s' specified\n",
+> +			of_node_full_name(data->np));
+> +		ret = -EINVAL;
+> +		goto err_kfree_data;
+> +	}
+> +
+> +	data->rsts = kcalloc(data->rsts_num, sizeof(*data->rsts), GFP_KERNEL);
+> +	if (!data->rsts) {
+> +		ret = -ENOMEM;
+> +		goto err_kfree_data;
+> +	}
+
+I think data->rsts is not required.
+
+> +
+> +	return data;
+> +
+> +err_kfree_data:
+> +	kfree(data);
+> +
+> +	return ERR_PTR(ret);
+> +}
+> +
+> +static void ccu_rst_free_data(struct ccu_rst_data *data)
+> +{
+> +	kfree(data->rsts);
+>
+Not necessary.
+
+> +	kfree(data);
+> +}
+
+I would fold this into ccu_rst_hw_unregister().
+
+> +
+> +static void ccu_rst_init_desc(struct ccu_rst_data *data)
+> +{
+> +	struct ccu_rst *rst = data->rsts;
+> +	unsigned int idx;
+> +
+> +	for (idx = 0; idx < data->rsts_num; ++idx, ++rst) {
+> +		const struct ccu_rst_info *info = &data->rsts_info[idx];
+> +
+> +		rst->id = info->id;
+> +		rst->type = info->type;
+> +		rst->reg_ctl = info->base;
+> +		rst->sys_regs = data->sys_regs;
+> +		rst->mask = info->mask;
+> +	}
+> +}
+
+Not necessary.
+
+> +static int ccu_rst_dev_register(struct ccu_rst_data *data)
+> +{
+> +	int ret;
+> +
+> +	data->rcdev.ops = &ccu_rst_ops;
+> +	data->rcdev.of_node = data->np;
+> +	data->rcdev.nr_resets = data->rsts_num;
+> +	data->rcdev.of_reset_n_cells = 1;
+> +	data->rcdev.of_xlate = ccu_rst_of_idx_get;
+> +
+> +	ret = reset_controller_register(&data->rcdev);
+> +	if (ret) {
+> +		pr_err("Couldn't register '%s' reset controller\n",
+> +			of_node_full_name(data->np));
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void ccu_rst_dev_unregister(struct ccu_rst_data *data)
+> +{
+> +	reset_controller_unregister(&data->rcdev);
+> +}
+
+I would fold this into ccu_rst_hw_unregister().
+
+> +struct ccu_rst_data *ccu_rst_hw_register(const struct ccu_rst_init_data *rst_init)
+> +{
+> +	struct ccu_rst_data *data;
+> +	int ret;
+> +
+> +	data = ccu_rst_create_data(rst_init);
+> +	if (IS_ERR(data))
+> +		return data;
+> +
+> +	ccu_rst_init_desc(data);
+
+Not necessary.
+
+> +
+> +	ret = ccu_rst_dev_register(data);
+> +	if (ret)
+> +		goto err_free_data;
+> +
+> +	return data;
+> +
+> +err_free_data:
+> +	ccu_rst_free_data(data);
+> +
+> +	return ERR_PTR(ret);
+> +}
+> +
+> +void ccu_rst_hw_unregister(struct ccu_rst_data *data)
+> +{
+> +	ccu_rst_dev_unregister(data);
+> +
+> +	ccu_rst_free_data(data);
+> +}
+
+To me it looks like you could avoid a few unnecessary complications and
+copied data if you merged ccu-rst.c and clk-ccu-rst.c and made use of
+the contiguous reset ids instead of the custom of_xlate and the copied
+ccu_rst descriptors.
+
+regards
+Philipp
