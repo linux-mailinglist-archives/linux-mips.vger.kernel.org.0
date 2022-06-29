@@ -2,92 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6683E55ECD8
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jun 2022 20:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6726855F422
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jun 2022 05:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbiF1SoL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jun 2022 14:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
+        id S229694AbiF2D3V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jun 2022 23:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiF1SoJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jun 2022 14:44:09 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C0823BD0
-        for <linux-mips@vger.kernel.org>; Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 2so6454523qvc.0
-        for <linux-mips@vger.kernel.org>; Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=srd0vxfduo9pXREXizXvQ1Gwi/kEACFP1rdXcY0Aglg=;
-        b=QDfPPT0fYl+zbzIvYII9znFGb4s02ZWc7rdJXgoVlQii3pb6MPHXUbo2NQcshGpobE
-         dWlWXPBgu4AcM4BoWih7Z1Nr6ImLeGEz2FZoCblM4qyf8MsycIzs6ej4nXX7nwNpGP6Q
-         WS2wAoLm7tunOmWFHsCTXENR5aJ2dwangh3Hiy+KajaZLCQ31/GJ39i5LG+HlW0f/4Yp
-         DzCT3gMR3JvAVHruRt3NJZXTCo87e7XIf3RRiCTD40KLgGYQ8Oy9U016RK3fPhyNykEI
-         VcI+7whSObzV9gDqoR9iwpi6V1hWpQPbHnX1dl7fE5ec/owdsM9r7W03JXKpNXxaLmSi
-         lJng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=srd0vxfduo9pXREXizXvQ1Gwi/kEACFP1rdXcY0Aglg=;
-        b=1bRWNheBsKF+yYjqHIQE1uyKdUEBJwnVOKz+G1zhkA1kQo2DKH8ico5hzNuI60a7RO
-         NUJVvhah+GPkPhwM7DrJeoxUyqxf6GJttam8Flk63gXtI6mDJqjV/AOuiI02ez9IdUr4
-         TaYwGrm6GeDnSAlkU5SPgezoewzKXv1zz9om1yI1zntNDaT5pDlShBqvu0vYAWYwVOz4
-         6UwSgNUZ+9xIvV+SQ7at41fOpY7tWmKzmnP+bWVV/2XM622zpbiGiqI/uUaD/pHlhe3z
-         y3R3DkPYJSGGOwaA6ieTPcdyoTsy0y5dAC2wznLTbg8gXqCiucmiH3Z+9YrqosvX3UNq
-         bX9g==
-X-Gm-Message-State: AJIora9kn1/eNp0IDFypcvt+gdMDLzpcBTWEq8ugkfT1FBrAxUBN3yF6
-        T1LhUmGCRa2fPjx7G8vIc0E/9g==
-X-Google-Smtp-Source: AGRyM1uBRJ6m7mmrK5Ju1JW1doBHC+UzIgAGX/xwYqaVx3XSmh4juFCDP3TjiYp7BZ5iZ3elpoeXxg==
-X-Received: by 2002:a05:622a:7:b0:31b:74bd:1597 with SMTP id x7-20020a05622a000700b0031b74bd1597mr6494688qtw.677.1656441846052;
-        Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id h9-20020ac85149000000b003050bd1f7c9sm9708477qtn.76.2022.06.28.11.44.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:44:05 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o6GBw-0035y2-Fs; Tue, 28 Jun 2022 15:44:04 -0300
-Date:   Tue, 28 Jun 2022 15:44:04 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, dm-devel@redhat.com,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
-        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220628184404.GS23621@ziepe.ca>
-References: <20220627180432.GA136081@embeddedor>
- <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
- <20220628004052.GM23621@ziepe.ca>
- <202206281009.4332AA33@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202206281009.4332AA33@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        with ESMTP id S230489AbiF2D3U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jun 2022 23:29:20 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4C501A050;
+        Tue, 28 Jun 2022 20:29:18 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 27FCC1E80D11;
+        Wed, 29 Jun 2022 11:28:09 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id s7BffYbgTWxE; Wed, 29 Jun 2022 11:28:06 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 661CA1E80CDC;
+        Wed, 29 Jun 2022 11:28:06 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] arch: Fix spelling mistake
+Date:   Wed, 29 Jun 2022 11:29:08 +0800
+Message-Id: <20220629032908.12417-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,15 +42,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:54:58AM -0700, Kees Cook wrote:
+Change 'modifed' to 'modified'.
 
- 
-> which must also be assuming it's a header. So probably better to just
-> drop the driver_data field? I don't see anything using it (that I can
-> find) besides as a sanity-check that the field exists and is at the end
-> of the struct.
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ arch/mips/include/asm/octeon/cvmx-helper-board.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-The field is guaranteeing alignment of the following structure. IIRC
-there are a few cases that we don't have a u64 already to force this.
+diff --git a/arch/mips/include/asm/octeon/cvmx-helper-board.h b/arch/mips/include/asm/octeon/cvmx-helper-board.h
+index ce52aafe7a8d..81c40272f2b1 100644
+--- a/arch/mips/include/asm/octeon/cvmx-helper-board.h
++++ b/arch/mips/include/asm/octeon/cvmx-helper-board.h
+@@ -63,7 +63,7 @@ typedef enum {
+  * connected to this port. On chips supporting multiple MII
+  * busses the bus number is encoded in bits <15:8>.
+  *
+- * This function must be modifed for every new Octeon board.
++ * This function must be modified for every new Octeon board.
+  * Internally it uses switch statements based on the cvmx_sysinfo
+  * data to determine board types and revisions. It relys on the
+  * fact that every Octeon board receives a unique board type
+@@ -81,7 +81,7 @@ extern int cvmx_helper_board_get_mii_address(int ipd_port);
+  * and are handled by the fall through case. This function must be
+  * updated for boards that don't have the normal Marvell PHYs.
+  *
+- * This function must be modifed for every new Octeon board.
++ * This function must be modified for every new Octeon board.
+  * Internally it uses switch statements based on the cvmx_sysinfo
+  * data to determine board types and revisions. It relys on the
+  * fact that every Octeon board receives a unique board type
+@@ -103,7 +103,7 @@ extern union cvmx_helper_link_info __cvmx_helper_board_link_get(int ipd_port);
+  * support and should return the number of actual ports on the
+  * board.
+  *
+- * This function must be modifed for every new Octeon board.
++ * This function must be modified for every new Octeon board.
+  * Internally it uses switch statements based on the cvmx_sysinfo
+  * data to determine board types and revisions. It relys on the
+  * fact that every Octeon board receives a unique board type
+-- 
+2.18.2
 
-Jason
