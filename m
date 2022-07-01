@@ -2,150 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C58562957
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Jul 2022 04:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC80562C86
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Jul 2022 09:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiGAC7H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Jun 2022 22:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
+        id S231313AbiGAHY2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Jul 2022 03:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbiGAC7G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Jun 2022 22:59:06 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E9E13FB2;
-        Thu, 30 Jun 2022 19:59:06 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id b125so954821qkg.11;
-        Thu, 30 Jun 2022 19:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w8jtgJk8lKmi1lh7Z/FaMsrSXu4qJRNfOEHwq2z+9Cw=;
-        b=B73s0lzLR4OhX1ScC5Ahw5BOXS88W2mhi5JkKvKhgxp6s4EYkGEFJWytem7La14+OK
-         fnKy+60m4odwLoeHGXgNkfaxHc3NHneTeOW3T2XrScSd/zxE9p1cCkFXd0is/ArlshU7
-         SmE/bzHE+2eqUuKP7IaiWgYSDZueQdNk7wBC9xO0JryxKjCmWgbUUvg7iCets+aFRvPZ
-         FN9BKN/v0ifLLxbVVeptR5mnju3UhyFAjZKaXFUJfKRWporDvb87bYE6haX0fHGITJn2
-         4lLbKGyjqziuyLFGxfiAhbXLSPTPr0U6Wb6KaUsNDH/rhII6neNf9A08ArYiX4zarufJ
-         93+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w8jtgJk8lKmi1lh7Z/FaMsrSXu4qJRNfOEHwq2z+9Cw=;
-        b=8H1wPgtiwo2e9V3izbzsLKGt6tNfQhdVb2+849Tvg6lgetUyoLGJqkqfhUz1NgKjHo
-         PPCMvfrRtTyqI94pkhn69FCPlHTwnuqaGLs7NXKJn5aioSg91Run2538CJBongRoq4mf
-         rqWjbEitpps7GJH9gLcR2JM5cQ11xGKIqPU1HfW+uHk41pdYw4w3YoDFMbBbPwf3ViPU
-         pTrZCBgvgL4bGluWPOCEq+B/wUcifOFDu1SY3lXbkWa5NKxFQFJVaJwzmpQEvqi96Xw8
-         mXJPjn/qB3VOE3caYFrlNp5MZa2DURvPvldQlGrcf8B1wKlk8IeApWRhHh/GOyf2jCb4
-         FN5w==
-X-Gm-Message-State: AJIora/UmQW+Wcpb8pumCTDUS0S8V+FswoPWA/U2QJ2xStTKw4nguXNm
-        +y7TVwNUP3Zy8dyJ1+Mca+k=
-X-Google-Smtp-Source: AGRyM1vkp0kNdpv+FyQWbvtcc+xRsjTPaBED7uHrXq1Gp/PTmDWpSU1p5viE+18bXplYf9BjspK5jQ==
-X-Received: by 2002:a05:620a:294c:b0:6a7:4413:941b with SMTP id n12-20020a05620a294c00b006a74413941bmr9027281qkp.159.1656644345108;
-        Thu, 30 Jun 2022 19:59:05 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:1dde:deb7:a57c:900d])
-        by smtp.gmail.com with ESMTPSA id x2-20020ae9e902000000b006a6a6f148e6sm16454587qkf.17.2022.06.30.19.59.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 19:59:04 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 19:59:04 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Mao Bibo <maobibo@loongson.cn>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] mips: micro-optimize calculate_cpu_foreign_map()
-Message-ID: <Yr5i+OCeb89YMNZw@yury-laptop>
-References: <20220621144729.533026-1-yury.norov@gmail.com>
+        with ESMTP id S231218AbiGAHY1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Jul 2022 03:24:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6143150C
+        for <linux-mips@vger.kernel.org>; Fri,  1 Jul 2022 00:24:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10214623D0
+        for <linux-mips@vger.kernel.org>; Fri,  1 Jul 2022 07:24:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE74C3411E
+        for <linux-mips@vger.kernel.org>; Fri,  1 Jul 2022 07:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656660265;
+        bh=r4hdj4HNnrq5lepz0SJaxw/+hMkDEcoq8ASRg/mFgRo=;
+        h=Date:To:From:Subject:From;
+        b=glnZX74yVBPfXvZoafk1OPTwToHO0k/mNtVLU6lS7RZm1Tcf1EZcQcvNku6X2fHQt
+         yKWgVEqQPBozZcKHi+w1wov8CrXf9C7fFUGbT4g24pu4DQlRe0O1RYeQ8kbCDVteMm
+         giCniawg/d5JL7FoYL1B8+oj9YyNmIz72qmKXbhRuX3szOYGjJgubkFHL+UpC9HxYs
+         QfoXghAyOMag4h8iT7NjsiP3gfwnDXWqRbxahM3i9Ak57Uvq+xUBdY4fUr5+T7bZSw
+         /Wdk6b+WkrrIKKxTRS4AzkNK1Ls+WXbmzTYabW7tkjU9TL0TYDu3A1oZFm2Nb89Zql
+         iGMSInVYyuLHQ==
+Message-ID: <1e4f33d7-7eb5-3fb5-e44d-c4652e7cb8c6@kernel.org>
+Date:   Fri, 1 Jul 2022 17:24:22 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621144729.533026-1-yury.norov@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     "open list:MIPS" <linux-mips@vger.kernel.org>
+From:   Greg Ungerer <gerg@kernel.org>
+Subject: "virt_to_phys used for non-linear address" warnings
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 07:47:29AM -0700, Yury Norov wrote:
-> The inner loop in calculate_cpu_foreign_map() walks the whole
-> cpumask to check if we have siblings for a given cpu.
-> 
-> We can just break after a 1st match and avoid useless traversing
-> the rest of mask.
-> 
-> Loongarch has an identical function, so fix it here as well.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Hi,
 
-Ping?
+I am debugging a strange memory problem on a Mediatek MT7621 SoC based
+hardware platform. That problem leads to rare and somewhat random
+oops that are mostly within vma and generic memory functions (often in
+kmem_cache_alloc(), but sometimes other places like unlink_anon_vmas() or
+anon_vma_interval_tree_remove() or vma_interval_tree_remove()).
 
-> ---
-> 
-> It looks like loongarch copied quite a lot from arch/mips/kernel/smp.c.
-> For loongarch folks: Guys, can you consider moving shared code into a
-> shared file(s)?
-> 
->  arch/loongarch/kernel/smp.c | 7 +++----
->  arch/mips/kernel/smp.c      | 7 +++----
->  2 files changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-> index b8c53b755a25..c1c91df3c8ac 100644
-> --- a/arch/loongarch/kernel/smp.c
-> +++ b/arch/loongarch/kernel/smp.c
-> @@ -463,17 +463,16 @@ static inline void set_cpu_core_map(int cpu)
->   */
->  void calculate_cpu_foreign_map(void)
->  {
-> -	int i, k, core_present;
-> +	int i, k;
->  	cpumask_t temp_foreign_map;
->  
->  	/* Re-calculate the mask */
->  	cpumask_clear(&temp_foreign_map);
->  	for_each_online_cpu(i) {
-> -		core_present = 0;
->  		for_each_cpu(k, &temp_foreign_map)
->  			if (cpus_are_siblings(i, k))
-> -				core_present = 1;
-> -		if (!core_present)
-> +				break;
-> +		if (k >= nr_cpu_ids)
->  			cpumask_set_cpu(i, &temp_foreign_map);
->  	}
->  
-> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-> index 1d93b85271ba..a2ce641f5f18 100644
-> --- a/arch/mips/kernel/smp.c
-> +++ b/arch/mips/kernel/smp.c
-> @@ -115,17 +115,16 @@ static inline void set_cpu_core_map(int cpu)
->   */
->  void calculate_cpu_foreign_map(void)
->  {
-> -	int i, k, core_present;
-> +	int i, k;
->  	cpumask_t temp_foreign_map;
->  
->  	/* Re-calculate the mask */
->  	cpumask_clear(&temp_foreign_map);
->  	for_each_online_cpu(i) {
-> -		core_present = 0;
->  		for_each_cpu(k, &temp_foreign_map)
->  			if (cpus_are_siblings(i, k))
-> -				core_present = 1;
-> -		if (!core_present)
-> +				break;
-> +		if (k >= nr_cpu_ids)
->  			cpumask_set_cpu(i, &temp_foreign_map);
->  	}
->  
-> -- 
-> 2.32.0
+To help track this down I enabled a few of the kernels hacking memory
+debug config options. Now this immediately leads to getting this on
+every process fork/exec:
+
+   ------------[ cut here ]------------
+   WARNING: CPU: 0 PID: 1 at arch/mips/mm/physaddr.c:38 __virt_to_phys+0x50/0x84
+   virt_to_phys used for non-linear address: c443e370 (0xbfbd0000)
+   Modules linked in:
+   CPU: 0 PID: 1 Comm: init Not tainted 5.17.0-ac0 #1
+   Stack : 81c70000 7ffbd000 77de5000 81086784 00000000 00000004 00000000 d95b60c8
+           80441c84 81c43654 81b70000 81b60000 804583d8 00000001 80441c28 8045cd00
+           00000000 00000000 81aaf3b4 80441a70 00000187 80441adc 00000000 20306361
+           203a6d6d 81c4d2f5 81c4d31c 74696e69 81b60000 00000001 80441d3c 81b6dbf0
+           82070040 8066f240 81c70000 7ffbd000 00000000 814ff0f4 00000000 81c40000
+           ...
+   Call Trace:
+   [<81008ed0>] show_stack+0x38/0x118
+   [<8198f9e4>] dump_stack_lvl+0x5c/0x7c
+   [<81989300>] __warn+0xc0/0xf4
+   [<819893c0>] warn_slowpath_fmt+0x8c/0xb8
+   [<81025480>] __virt_to_phys+0x50/0x84
+   [<8100bb30>] arch_setup_additional_pages+0x120/0x230
+   [<81239280>] load_elf_binary+0xacc/0x14e0
+   [<811d6788>] bprm_execve+0x288/0x5dc
+   [<811d7240>] kernel_execve+0x130/0x1b4
+   [<81988154>] try_to_run_init_process+0x14/0x4c
+   [<81995e40>] kernel_init+0xe4/0x118
+   [<81003398>] ret_from_kernel_thread+0x14/0x1c
+   
+   ---[ end trace 0000000000000000 ]---
+
+This is caused by this code in arch/mips/kernel/vdso.c, function
+arch_setup_additional_pages():
+
+         /* Map GIC user page. */
+         if (gic_size) {
+                 gic_base = (unsigned long)mips_gic_base + MIPS_GIC_USER_OFS;
+                 gic_pfn = virt_to_phys((void *)gic_base) >> PAGE_SHIFT;
+
+                 ret = io_remap_pfn_range(vma, base, gic_pfn, gic_size,
+                                          pgprot_noncached(vma->vm_page_prot));
+                 if (ret)
+                         goto out;
+         }
+
+That virt_to_phys() is being passed a value assigned from an ioremap().
+According to the comments in io.h, this is not a correct usage of it:
+
+  *     The returned physical address is the physical (CPU) mapping for
+  *     the memory address given. It is only valid to use this function on
+  *     addresses directly mapped or allocated via kmalloc.
+
+So the debug warning is consistent with this comment.
+
+It is trivial to fix this by using __pa() directly here instead of
+virt_to_phys(). So simply doing this fixes it:
+
+--- a/arch/mips/kernel/vdso.c
++++ b/arch/mips/kernel/vdso.c
+@@ -159,7 +159,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+         /* Map GIC user page. */
+         if (gic_size) {
+                 gic_base = (unsigned long)mips_gic_base + MIPS_GIC_USER_OFS;
+-               gic_pfn = virt_to_phys((void *)gic_base) >> PAGE_SHIFT;
++               gic_pfn = __pa(gic_base) >> PAGE_SHIFT;
+  
+                 ret = io_remap_pfn_range(vma, base, gic_pfn, gic_size,
+                                          pgprot_noncached(vma->vm_page_prot));
+
+I am wondering if that is the right approach or if there is a more correct way?
+
+Regards
+Greg
+
