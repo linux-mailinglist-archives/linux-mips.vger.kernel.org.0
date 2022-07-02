@@ -2,135 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002CB563F08
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Jul 2022 10:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F9856426E
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Jul 2022 21:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbiGBIBm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 2 Jul 2022 04:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S232331AbiGBTNt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 Jul 2022 15:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiGBIBm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Jul 2022 04:01:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A1123145;
-        Sat,  2 Jul 2022 01:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 914E8B83267;
-        Sat,  2 Jul 2022 08:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B828FC341C8;
-        Sat,  2 Jul 2022 08:01:33 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V3 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Sat,  2 Jul 2022 16:00:21 +0800
-Message-Id: <20220702080021.1167190-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220702080021.1167190-1-chenhuacai@loongson.cn>
-References: <20220702080021.1167190-1-chenhuacai@loongson.cn>
+        with ESMTP id S229468AbiGBTNs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Jul 2022 15:13:48 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Jul 2022 12:13:46 PDT
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45B1E0D0
+        for <linux-mips@vger.kernel.org>; Sat,  2 Jul 2022 12:13:46 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 20668 invoked from network); 2 Jul 2022 21:07:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1656788824; bh=phIJgjbW9gbdsBNFT7abBY67sM/w1Sze6Xpin3JN2yg=;
+          h=From:To:Subject;
+          b=lPJnN5G0mEYZvYm3IZtGrZhhTtk8L/VLrNfIwoq18o1xT8zLGANmOBnTQB8WuRk3B
+           cxvDS2XORChZREMtzhYA7AeS+4XAx6N2KmK8VNU5kdlTgeY1szqn4O3mfehICR0bsE
+           2jqCMQysUddH+d8gfoCqdju0Pck0JQkhmNJ+QXiA=
+Received: from ip-137-21.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.21])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <tsbogend@alpha.franken.de>; 2 Jul 2022 21:07:04 +0200
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     tsbogend@alpha.franken.de, olek2@wp.pl,
+        martin.blumenstingl@googlemail.com, hauke@hauke-m.de,
+        git@birger-koblitz.de, sander@svanheule.net,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second VPE
+Date:   Sat,  2 Jul 2022 21:07:05 +0200
+Message-Id: <20220702190705.5319-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-WP-MailID: 8a917b0ca8e2bc46da9da215dae9b8bf
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [kXOU]                               
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
+This patch is needed to handle interrupts by the second VPE on
+the Lantiq xRX200, xRX300 and xRX330 SoCs. In these chips, 32 ICU
+interrupts are connected to each hardware line. The SoC supports
+a total of 160 interrupts. Currently changing smp_affinity to the
+second VPE hangs interrupts.
 
-The feature of minimizing overhead of struct page associated with each
-HugeTLB page is implemented on x86_64. However, the infrastructure of
-this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+This problem affects multithreaded SoCs with a custom interrupt
+controller. Chips with 1004Kc core and newer use the MIPS GIC.
 
-To avoid the following build error on LoongArch we should include linux/
-static_key.h in page-flags.h.
+Also CC'ed Birger Koblitz and Sander Vanheule. Both are working
+on support for Realtek RTL930x chips with 34Kc core and Birger
+has added a patch in OpenWRT that also enables all interrupt
+lines. So it looks like this patch is useful for more SoCs.
 
-In file included from ./include/linux/mmzone.h:22,
-from ./include/linux/gfp.h:6,
-from ./include/linux/mm.h:7,
-from arch/loongarch/kernel/asm-offsets.c:9:
-./include/linux/page-flags.h:208:1: warning: data definition has no
-type or storage class
-208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-./include/linux/page-flags.h:209:26: warning: parameter names (without
-types) in function declaration
-209 | hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
-./include/linux/page-flags.h:213:16: error: implicit declaration of
-function 'static_branch_maybe' [-Werror=implicit-function-declaration]
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:213:36: error:
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-use in this function); did you mean
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-./include/linux/page-flags.h:213:36: note: each undeclared identifier
-is reported only once for each function it appears in
-./include/linux/page-flags.h:214:37: error:
-'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-214 | &hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| hugetlb_optimize_vmemmap_enabled
+Tested on lantiq xRX200 and xRX330.
 
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 ---
- arch/loongarch/Kconfig     | 1 +
- include/linux/page-flags.h | 1 +
- 2 files changed, 2 insertions(+)
+ arch/mips/kernel/smp-mt.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 55ab84fd70e5..8e56ca28165e 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -49,6 +49,7 @@ config LOONGARCH
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANTS_NO_INSTR
- 	select BUILDTIME_TABLE_SORT
- 	select COMMON_CLK
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index e66f7aa3191d..28a53ac7aa3e 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/bug.h>
- #include <linux/mmdebug.h>
-+#include <linux/static_key.h>
- #ifndef __GENERATING_BOUNDS_H
- #include <linux/mm_types.h>
- #include <generated/bounds.h>
+diff --git a/arch/mips/kernel/smp-mt.c b/arch/mips/kernel/smp-mt.c
+index 5f04a0141068..f21cd0eb1fa7 100644
+--- a/arch/mips/kernel/smp-mt.c
++++ b/arch/mips/kernel/smp-mt.c
+@@ -113,8 +113,7 @@ static void vsmp_init_secondary(void)
+ 					 STATUSF_IP4 | STATUSF_IP5 |
+ 					 STATUSF_IP6 | STATUSF_IP7);
+ 	else
+-		change_c0_status(ST0_IM, STATUSF_IP0 | STATUSF_IP1 |
+-					 STATUSF_IP6 | STATUSF_IP7);
++		set_c0_status(ST0_IM);
+ }
+ 
+ static void vsmp_smp_finish(void)
 -- 
-2.27.0
+2.30.2
 
