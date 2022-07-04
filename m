@@ -2,103 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A532565508
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 14:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A275D5655ED
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 14:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbiGDMTd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jul 2022 08:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S234215AbiGDMwL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Jul 2022 08:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbiGDMTU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 08:19:20 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7221261A;
-        Mon,  4 Jul 2022 05:18:35 -0700 (PDT)
-Received: from mail-yw1-f180.google.com ([209.85.128.180]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N6t3Z-1nXZSg2Gml-018KQ1; Mon, 04 Jul 2022 14:18:33 +0200
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31bf3656517so79990977b3.12;
-        Mon, 04 Jul 2022 05:18:33 -0700 (PDT)
-X-Gm-Message-State: AJIora9MnvG+ZCrnuUPyPV61A9EoXWDkuxJcOz0NRctoTUQZyCHGfl0z
-        yGFiKtL9/dsdmvgS4rJQ83HTI+1BMU26nMByuio=
-X-Google-Smtp-Source: AGRyM1t524xzXaLIHc9+YLKm6ZLrM8h13HdFno4gZgaj1dmGgvuhogt+hY7ItAhxUJF6ZzYWUGTcd5U54H4EPHTirlY=
-X-Received: by 2002:a81:7742:0:b0:318:35e9:728b with SMTP id
- s63-20020a817742000000b0031835e9728bmr32899958ywc.209.1656937112121; Mon, 04
- Jul 2022 05:18:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220704112526.2492342-1-chenhuacai@loongson.cn> <20220704112526.2492342-5-chenhuacai@loongson.cn>
-In-Reply-To: <20220704112526.2492342-5-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 4 Jul 2022 14:18:15 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
-Message-ID: <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
-Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        with ESMTP id S234263AbiGDMwJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 08:52:09 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F0910FDD;
+        Mon,  4 Jul 2022 05:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656939128; x=1688475128;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ohVPsZxj+uL/Ce5+TfyaWAhNK5BZ0yJWMoxA7PT9z6s=;
+  b=W4+DQ71QpO2SCBO2AG3Xl5kUcvES03PHcfNwlRLPRMh0JBIeiDa+mOB1
+   li9snWwExp5NgHu6UzICPIs0gTWyhMerymS25saCHEhEKdV1XJeuac8Xz
+   cDosJAQu3nAHcDu015JaLP5V7phBLE0UnFUA3jEtJDyhlpeDyro7Kbfs0
+   xckCA+26QaZfUk3cJ4pFY08y8PelXdCc5VErtnvwI1bnUASq+1KejB82e
+   8+Z5G6M5I3aVQRSed7wf51tqh7IWJKe/XI5vBeir0W4EIb6rOhSQBEQ5t
+   jJOCJVvfcChCiKKRTAjmtn73IcKp8XrF6y6/NMsXxpo5uT2+RtyV3pbUt
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="263546124"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="263546124"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 05:52:07 -0700
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="649591127"
+Received: from bclindho-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.49.27])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 05:52:05 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:vy96//DNY04FWech7fVmoPA9D6M9r6k9yAKwRXWgXl6fGdf0uKD
- VvF0SHeIfNRpNsnuTqRXGfCzXECXkmBGwYHZTqoIVjWjt35sbcug/N/4vpyEbAcyw9XlhJH
- wW+0IUyEAX6GVPUOQnq1TIWI+zLciGkeqeb+LsUeCInrH461Zjf1A1yO6bg8LTcFJ4fK4HF
- mTQpz40NIU8v71zMfQgSw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AK2V9EDb880=:HVyuk9RZGtMxTOt6QEKmPF
- l/vGJeiLx1UoWWVWlskohq/dP7eLQ02Vv//2t1ZP6xcKBImNFStqtKealNpTTB0+n/npx3LuN
- JD97PGqwoqV4j1WH/fChLBU4YvcDUvbOwf94X+2hTNvLXMsOhyoKc73rbals/abbEWdKSis4/
- 6mHBIHzEvzSEnM4zWCGozKgsi3yEyoxXAkWs5Lq0Swr9NBIeFXf7NU2y4zf5zsVUL4pBPMrQI
- yz0v8a6SPqxCqYN6DU5RUWUFpdCjnwAHlutyePMbortdLERGEBwduqfxGaSl/4oSrTAEwFNoy
- IEm7Kj+Xjo8N6dOLzCkmQx4/BCH7ISCSRARUIlWrNF0bu9R5s6z/8PHbj96KjEXl7BjNq69hb
- SUEkz/QD16PHXN6TyjBFg8BKUDw76cl9NfTaz7nmuH1ja1Mxp9o0/W7W5cwxrN3NTirO8J4HC
- t65zS62qrUOzeDsST4+T7ADt5ThG0ksImsxkELmzDwudZ9bbcOoVZVq5JLtwa3w6ozqCM3x5V
- 4b0CAIjVcRT3cBI+2levtRLBRxVCJWSGqjqvUIlm4R1mmtz9O5yniSXSVRmy37IXpKYetGip7
- jtm6ZSc8P39bS7kxKdKLQiZ9BG41JhwqPj6ojNVEWHBZYFGNaYnI0f2NgjK0wHReAzWlefDpX
- 4lDIWQTXBmGlcou7pytIk4PIWsC//gq2Nxaj2tIKqWHNgDE1N+OQyZzLVzJ75Y6lDj3Ac5zD0
- S1c7Ugn/ksGZ+XqApccDb76xrkX3g2W14/R3n7S3H0Y/qnkt+N/IJyodIS/vjDa+962K5QKJY
- HsrT9apte7p8onGi5u/DRIBinlIOJQ1H7xcyS9JRWoI6oLiQv4vzgf5kI8imelafCyoanCBIO
- /MYrYtEdHPIecj6oQxCQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH tty-next] MIPS: ath79: Remove one of the identical args in early_printk
+Date:   Mon,  4 Jul 2022 15:51:51 +0300
+Message-Id: <20220704125151.59231-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 1:25 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> To avoid the following build error on LoongArch we should include linux/
-> static_key.h in page-flags.h.
->
-> In file included from ./include/linux/mmzone.h:22,
-> from ./include/linux/gfp.h:6,
-> from ./include/linux/mm.h:7,
-> from arch/loongarch/kernel/asm-offsets.c:9:
-> ./include/linux/page-flags.h:208:1: warning: data definition has no
-> type or storage class
-> 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-> | ^~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-> declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-> ./include/linux/page-flags.h:209:26: warning: parameter names (without
-> types) in function declaration
+prom_putchar_wait() inputs both mask and val but the callers always set
+them to the same value. Thus pass only val.
 
-I wonder if page_fixed_fake_head() should be moved out of line to avoid
-this, it's already nontrivial here, and that would avoid the static key
-in a central header.
+Suggested-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-       Arnd
+---
+This patch applies only to tty-next that has another change this work is
+based on.
+
+ arch/mips/ath79/early_printk.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/arch/mips/ath79/early_printk.c b/arch/mips/ath79/early_printk.c
+index f6d02b425a10..34c4dfdf46b4 100644
+--- a/arch/mips/ath79/early_printk.c
++++ b/arch/mips/ath79/early_printk.c
+@@ -19,13 +19,13 @@
+ 
+ static void (*_prom_putchar)(char);
+ 
+-static inline void prom_putchar_wait(void __iomem *reg, u32 mask, u32 val)
++static inline void prom_putchar_wait(void __iomem *reg, u32 val)
+ {
+ 	u32 t;
+ 
+ 	do {
+ 		t = __raw_readl(reg);
+-		if ((t & mask) == val)
++		if ((t & val) == val)
+ 			break;
+ 	} while (1);
+ }
+@@ -34,23 +34,19 @@ static void prom_putchar_ar71xx(char ch)
+ {
+ 	void __iomem *base = (void __iomem *)(KSEG1ADDR(AR71XX_UART_BASE));
+ 
+-	prom_putchar_wait(base + UART_LSR * 4, UART_LSR_BOTH_EMPTY,
+-			  UART_LSR_BOTH_EMPTY);
++	prom_putchar_wait(base + UART_LSR * 4, UART_LSR_BOTH_EMPTY);
+ 	__raw_writel((unsigned char)ch, base + UART_TX * 4);
+-	prom_putchar_wait(base + UART_LSR * 4, UART_LSR_BOTH_EMPTY,
+-			  UART_LSR_BOTH_EMPTY);
++	prom_putchar_wait(base + UART_LSR * 4, UART_LSR_BOTH_EMPTY);
+ }
+ 
+ static void prom_putchar_ar933x(char ch)
+ {
+ 	void __iomem *base = (void __iomem *)(KSEG1ADDR(AR933X_UART_BASE));
+ 
+-	prom_putchar_wait(base + AR933X_UART_DATA_REG, AR933X_UART_DATA_TX_CSR,
+-			  AR933X_UART_DATA_TX_CSR);
++	prom_putchar_wait(base + AR933X_UART_DATA_REG, AR933X_UART_DATA_TX_CSR);
+ 	__raw_writel(AR933X_UART_DATA_TX_CSR | (unsigned char)ch,
+ 		     base + AR933X_UART_DATA_REG);
+-	prom_putchar_wait(base + AR933X_UART_DATA_REG, AR933X_UART_DATA_TX_CSR,
+-			  AR933X_UART_DATA_TX_CSR);
++	prom_putchar_wait(base + AR933X_UART_DATA_REG, AR933X_UART_DATA_TX_CSR);
+ }
+ 
+ static void prom_putchar_dummy(char ch)
+
+-- 
+tg: (899e836bddb3..) cleanup/ath79-early-params (depends on: tty-next)
