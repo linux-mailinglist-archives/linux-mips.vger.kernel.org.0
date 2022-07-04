@@ -2,108 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B59564E17
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 09:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0565650BF
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 11:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbiGDHAD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jul 2022 03:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S233609AbiGDJ1P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Jul 2022 05:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiGDHAC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 03:00:02 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C892DC2;
-        Mon,  4 Jul 2022 00:00:00 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id r18so10440154edb.9;
-        Mon, 04 Jul 2022 00:00:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lxRbqE6zzxcYx3TuCHfmErH49kGAwmDatQ2HtHuBCXg=;
-        b=e4xJd5kZnkZgUN+9rRlRfeKSR9SVtpqm9VjeRkuR2QHaea84Sm9N1knGYAUH7jtUhH
-         SuuPPTyBSjxsh5YCnjjyAiz7CKLW+/DbPjSXnVeTuDFNfIDrOSTB6tPU0mxjcVjDq5vk
-         TQ4X30bAt10be3imfUvQC2lKQxweIug5hsogcGx1AiiGBigWSbaJgzg5WmcjgNn7u4SQ
-         rrAXbzsYPBNipWwZLlYyxgZT2/4vX9fMUE5ykGJNzqi7vaMY/S+EV03/cLxxxeu4Wega
-         X58C6t62/m5GP4Jjf7CaVokr0KVl0vWeITtsbRxIlmc87AuAqCqCMRHxkLWEGl3E//7w
-         CO8Q==
-X-Gm-Message-State: AJIora/3lWC564pD05QBjEdUYjZ0wHhxDrF2VHjw8JaFc5XDYmdCbtvk
-        42QxasHwniqq7lqDH8hi5xo=
-X-Google-Smtp-Source: AGRyM1thb4nktMfrZE4YLDE20iEVdzXDKH8iaQhzNKvbyFIc6Qop8VDqqoV553XMdKfEgXRtDGrJNQ==
-X-Received: by 2002:a05:6402:350f:b0:437:6618:174a with SMTP id b15-20020a056402350f00b004376618174amr36954962edd.329.1656917998787;
-        Sun, 03 Jul 2022 23:59:58 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id k13-20020a170906a38d00b006fed787478asm13952551ejz.92.2022.07.03.23.59.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 23:59:58 -0700 (PDT)
-Message-ID: <dcd42721-0df1-c42a-dd65-3785d7f233cd@kernel.org>
-Date:   Mon, 4 Jul 2022 08:59:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 6/6] serial: Consolidate BOTH_EMPTY use
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
+        with ESMTP id S231339AbiGDJ1I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 05:27:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF5B874;
+        Mon,  4 Jul 2022 02:27:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09DC6613F9;
+        Mon,  4 Jul 2022 09:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9AECC3411E;
+        Mon,  4 Jul 2022 09:27:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656926826;
+        bh=hH3spFHQdwa+gBgAQj1zYN9yiX7A+GyWbQNkSUNtmqE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tPgH5MviYy9ljQGlgk2YGIiFgQ8NkEu/yXE76JqtS8NDw6dJRXw0NALaVYioW0QRv
+         sO7GRsJSFEvCL37fwZTrUV1KRtLzjUd1qcAjSbNHezIvUyPFhpNOdR7R65xhA1Bzna
+         xdh4ctJKv6zSFXk1dw18xyL9kStkntDYzzEnIPp/Gw4DO5bMUPhipv3D099StIfaYg
+         op2O9GNXgwghxWt0W6k1nPUVzGeYaifFqQdn7NcCRy5D7iijvfoOasn133QL4+KyD7
+         qdeWKZuMu8Hl5DMVRekLenYO0rMF8Cmq8lY0fT/jDIcYYM8DJiIfO1RJD7jq2fzpI6
+         aGn3RxHukrnKg==
+Date:   Mon, 4 Jul 2022 10:26:58 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "speakup@linux-speakup.org" <speakup@linux-speakup.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
-References: <20220621124958.3342-1-ilpo.jarvinen@linux.intel.com>
- <20220621124958.3342-7-ilpo.jarvinen@linux.intel.com>
- <03467516-3962-4ff2-23d2-2b3a1d647c5a@kernel.org>
- <CAHp75VeKhY6dN7j_yXQXUMhOqRwqQ2yN_qF95U9wU6K4uKPdaQ@mail.gmail.com>
- <c7115ff1-2a97-f5a0-a0c2-c7c1064af291@kernel.org>
- <CAHp75Vfsy5yY3saSCvCu87E-arifwEZXUNtFMrMn38gJY2LU0g@mail.gmail.com>
- <CAHp75VdSadbtkH1JeiPuJ_CSBDq82GaRWLvJFd8Egg7poY8Lxw@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAHp75VdSadbtkH1JeiPuJ_CSBDq82GaRWLvJFd8Egg7poY8Lxw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V3 3/4] mm/sparse-vmemmap: Generalise
+ vmemmap_populate_hugepages()
+Message-ID: <20220704092658.GA31220@willie-the-truck>
+References: <20220702080021.1167190-1-chenhuacai@loongson.cn>
+ <20220702080021.1167190-4-chenhuacai@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220702080021.1167190-4-chenhuacai@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23. 06. 22, 12:17, Andy Shevchenko wrote:
-> On Thu, Jun 23, 2022 at 12:15 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
->> On Thu, Jun 23, 2022 at 10:24 AM Jiri Slaby <jirislaby@kernel.org> wrote:
->>> On 23. 06. 22, 10:11, Andy Shevchenko wrote:
->>>>      * prom_putchar_wait() should be implemented using
->>>>         read_poll_timeout_atomic(), incl. failure/timeout handling.
->>>>
->>>> Not sure since it is an early stage and scheduler might not work as
->>>> expected. Conversions to iopoll.h macros bitten us a few times already.
->>>
->>> Except _atomic does not use scheduler :).
->>
->> Sorry for a bit misleading comment, but I chased it down, so this what
->> I had in mind when commenting:
->> be24c6a71ecf ("soc: qcom: rpmh-rsc: Don't use ktime for timeout in
->> write_tcs_reg_sync()")
+On Sat, Jul 02, 2022 at 04:00:20PM +0800, Huacai Chen wrote:
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
 > 
-> ...and this one (specifically for early stages)
+> Generalise vmemmap_populate_hugepages() so ARM64 & X86 & LoongArch can
+> share its implementation.
 > 
-> c4d936efa46d ("Revert "usb: early: convert to readl_poll_timeout_atomic()"")
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/arm64/mm/mmu.c      | 53 ++++++-----------------
+>  arch/loongarch/mm/init.c | 63 ++++++++-------------------
+>  arch/x86/mm/init_64.c    | 92 ++++++++++++++--------------------------
+>  include/linux/mm.h       |  6 +++
+>  mm/sparse-vmemmap.c      | 54 +++++++++++++++++++++++
+>  5 files changed, 124 insertions(+), 144 deletions(-)
+> 
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 626ec32873c6..b080a65c719d 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -1158,49 +1158,24 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>  	return vmemmap_populate_basepages(start, end, node, altmap);
+>  }
+>  #else	/* !ARM64_KERNEL_USES_PMD_MAPS */
+> +void __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> +			       unsigned long addr, unsigned long next)
+> +{
+> +	pmd_set_huge(pmd, __pa(p), __pgprot(PROT_SECT_NORMAL));
+> +}
+> +
+> +int __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> +				unsigned long next)
+> +{
+> +	vmemmap_verify((pte_t *)pmd, node, addr, next);
+> +	return 1;
+> +}
 
-OK, makes sense.
+nit, but please can you use 'pmdp' instead of 'pmd' for the pointers? We're
+pretty consistent elsewhere for arch/arm64 and it makes the READ_ONCE()
+usage easier to follow once functions end up loading the entry.
 
-thanks for pointers,
--- 
-js
+Thanks,
+
+Will
