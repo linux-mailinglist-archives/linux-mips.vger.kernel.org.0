@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26436565DA4
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 20:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7E8565DBC
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 21:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbiGDS47 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jul 2022 14:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S234507AbiGDTEJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Jul 2022 15:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiGDS46 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 14:56:58 -0400
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FB910554
-        for <linux-mips@vger.kernel.org>; Mon,  4 Jul 2022 11:56:56 -0700 (PDT)
+        with ESMTP id S234552AbiGDTDz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 15:03:55 -0400
+Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEE41263D
+        for <linux-mips@vger.kernel.org>; Mon,  4 Jul 2022 12:03:31 -0700 (PDT)
 Received: from pop-os.home ([90.11.190.129])
         by smtp.orange.fr with ESMTPA
-        id 8RFdoQHoiIaWO8RFeo2rr9; Mon, 04 Jul 2022 20:56:54 +0200
+        id 8RM0oVexLeg3p8RM0oCUri; Mon, 04 Jul 2022 21:03:29 +0200
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 04 Jul 2022 20:56:54 +0200
+X-ME-Date: Mon, 04 Jul 2022 21:03:29 +0200
 X-ME-IP: 90.11.190.129
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: math-emu: Use the bitmap API to allocate bitmaps
-Date:   Mon,  4 Jul 2022 20:56:52 +0200
-Message-Id: <dd954ccb2472019c64da0dd3a90d7b39a2fadc98.1656960999.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] MIPS: mm: Use the bitmap API to allocate bitmaps
+Date:   Mon,  4 Jul 2022 21:03:27 +0200
+Message-Id: <4b6493bfee4f1c2d30193df01e67052922703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -45,38 +45,37 @@ Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 
 It is less verbose and it improves the semantic.
 
+While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
+also less verbose.
+
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- arch/mips/math-emu/dsemul.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ arch/mips/mm/context.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/math-emu/dsemul.c b/arch/mips/math-emu/dsemul.c
-index e2d46cb93ca9..e02bd20b60a6 100644
---- a/arch/mips/math-emu/dsemul.c
-+++ b/arch/mips/math-emu/dsemul.c
-@@ -82,11 +82,8 @@ static int alloc_emuframe(void)
+diff --git a/arch/mips/mm/context.c b/arch/mips/mm/context.c
+index b25564090939..966f40066f03 100644
+--- a/arch/mips/mm/context.c
++++ b/arch/mips/mm/context.c
+@@ -67,7 +67,7 @@ static void flush_context(void)
+ 	int cpu;
  
- 	/* Ensure we have an allocation bitmap */
- 	if (!mm_ctx->bd_emupage_allocmap) {
--		mm_ctx->bd_emupage_allocmap =
--			kcalloc(BITS_TO_LONGS(emupage_frame_count),
--					      sizeof(unsigned long),
--				GFP_ATOMIC);
--
-+		mm_ctx->bd_emupage_allocmap = bitmap_zalloc(emupage_frame_count,
-+							    GFP_ATOMIC);
- 		if (!mm_ctx->bd_emupage_allocmap) {
- 			idx = BD_EMUFRAME_NONE;
- 			goto out_unlock;
-@@ -206,7 +203,7 @@ void dsemul_mm_cleanup(struct mm_struct *mm)
- {
- 	mm_context_t *mm_ctx = &mm->context;
+ 	/* Update the list of reserved MMIDs and the MMID bitmap */
+-	bitmap_clear(mmid_map, 0, num_mmids);
++	bitmap_zero(mmid_map, num_mmids);
  
--	kfree(mm_ctx->bd_emupage_allocmap);
-+	bitmap_free(mm_ctx->bd_emupage_allocmap);
- }
+ 	/* Reserve an MMID for kmap/wired entries */
+ 	__set_bit(MMID_KERNEL_WIRED, mmid_map);
+@@ -277,8 +277,7 @@ static int mmid_init(void)
+ 	WARN_ON(num_mmids <= num_possible_cpus());
  
- int mips_dsemul(struct pt_regs *regs, mips_instruction ir,
+ 	atomic64_set(&mmid_version, asid_first_version(0));
+-	mmid_map = kcalloc(BITS_TO_LONGS(num_mmids), sizeof(*mmid_map),
+-			   GFP_KERNEL);
++	mmid_map = bitmap_zalloc(num_mmids, GFP_KERNEL);
+ 	if (!mmid_map)
+ 		panic("Failed to allocate bitmap for %u MMIDs\n", num_mmids);
+ 
 -- 
 2.34.1
 
