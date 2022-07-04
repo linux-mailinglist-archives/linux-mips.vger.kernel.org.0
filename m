@@ -2,113 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0565650BF
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 11:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6222A5651C4
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 12:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbiGDJ1P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jul 2022 05:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S233499AbiGDKLs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Jul 2022 06:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiGDJ1I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 05:27:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF5B874;
-        Mon,  4 Jul 2022 02:27:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09DC6613F9;
-        Mon,  4 Jul 2022 09:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9AECC3411E;
-        Mon,  4 Jul 2022 09:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656926826;
-        bh=hH3spFHQdwa+gBgAQj1zYN9yiX7A+GyWbQNkSUNtmqE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tPgH5MviYy9ljQGlgk2YGIiFgQ8NkEu/yXE76JqtS8NDw6dJRXw0NALaVYioW0QRv
-         sO7GRsJSFEvCL37fwZTrUV1KRtLzjUd1qcAjSbNHezIvUyPFhpNOdR7R65xhA1Bzna
-         xdh4ctJKv6zSFXk1dw18xyL9kStkntDYzzEnIPp/Gw4DO5bMUPhipv3D099StIfaYg
-         op2O9GNXgwghxWt0W6k1nPUVzGeYaifFqQdn7NcCRy5D7iijvfoOasn133QL4+KyD7
-         qdeWKZuMu8Hl5DMVRekLenYO0rMF8Cmq8lY0fT/jDIcYYM8DJiIfO1RJD7jq2fzpI6
-         aGn3RxHukrnKg==
-Date:   Mon, 4 Jul 2022 10:26:58 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Subject: Re: [PATCH V3 3/4] mm/sparse-vmemmap: Generalise
- vmemmap_populate_hugepages()
-Message-ID: <20220704092658.GA31220@willie-the-truck>
-References: <20220702080021.1167190-1-chenhuacai@loongson.cn>
- <20220702080021.1167190-4-chenhuacai@loongson.cn>
+        with ESMTP id S231948AbiGDKLs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 06:11:48 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE53CE26;
+        Mon,  4 Jul 2022 03:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1656929503; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fdDfaJmsBBFfaFN5qYM4oBebDe0q1isIg/MbLGof6RY=;
+        b=tMaJAQYv7wevuKVSWdEwxe7ivU5gM+bbwl++b/klkCY80im+OELuHuxGt9D+1vlPKu4tWU
+        YUvtkWqP7/qdk419/HEs4f3qhOcprXxxBM+flL6wQYeqBG579/OcsbHOckiWsSlRGo/FBc
+        q0AYKUhe90gj0mdJ5eVssHmxmQms8go=
+Date:   Mon, 04 Jul 2022 11:11:34 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] drm/ingenic: Use the highest possible DMA burst size
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, list@opendingux.net,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        stable@vger.kernel.org
+Message-Id: <AZQHER.2A0CO1CY2033@crapouillou.net>
+In-Reply-To: <YsE6mZanHLy9LpBd@ravnborg.org>
+References: <20220702230727.66704-1-paul@crapouillou.net>
+        <YsE6mZanHLy9LpBd@ravnborg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220702080021.1167190-4-chenhuacai@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 04:00:20PM +0800, Huacai Chen wrote:
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
-> 
-> Generalise vmemmap_populate_hugepages() so ARM64 & X86 & LoongArch can
-> share its implementation.
-> 
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/arm64/mm/mmu.c      | 53 ++++++-----------------
->  arch/loongarch/mm/init.c | 63 ++++++++-------------------
->  arch/x86/mm/init_64.c    | 92 ++++++++++++++--------------------------
->  include/linux/mm.h       |  6 +++
->  mm/sparse-vmemmap.c      | 54 +++++++++++++++++++++++
->  5 files changed, 124 insertions(+), 144 deletions(-)
-> 
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index 626ec32873c6..b080a65c719d 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -1158,49 +1158,24 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
->  	return vmemmap_populate_basepages(start, end, node, altmap);
->  }
->  #else	/* !ARM64_KERNEL_USES_PMD_MAPS */
-> +void __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
-> +			       unsigned long addr, unsigned long next)
-> +{
-> +	pmd_set_huge(pmd, __pa(p), __pgprot(PROT_SECT_NORMAL));
-> +}
-> +
-> +int __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
-> +				unsigned long next)
-> +{
-> +	vmemmap_verify((pte_t *)pmd, node, addr, next);
-> +	return 1;
-> +}
+Hi Sam,
 
-nit, but please can you use 'pmdp' instead of 'pmd' for the pointers? We're
-pretty consistent elsewhere for arch/arm64 and it makes the READ_ONCE()
-usage easier to follow once functions end up loading the entry.
+Le dim., juil. 3 2022 at 08:43:37 +0200, Sam Ravnborg=20
+<sam@ravnborg.org> a =E9crit :
+> Hi Paul,
+>=20
+> On Sun, Jul 03, 2022 at 12:07:27AM +0100, Paul Cercueil wrote:
+>>  Until now, when running at the maximum resolution of 1280x720 at=20
+>> 32bpp
+>>  on the JZ4770 SoC the output was garbled, the X/Y position of the
+>>  top-left corner of the framebuffer warping to a random position with
+>>  the whole image being offset accordingly, every time a new frame was
+>>  being submitted.
+>>=20
+>>  This problem can be eliminated by using a bigger burst size for the=20
+>> DMA.
+>=20
+> Are there any alignment constraints of the framebuffer that depends on
+> the burst size? I am hit by this with some atmel IP - which is why I
+> ask.
 
-Thanks,
+I verified this, and everything behaves correctly when the source=20
+address is not aligned to the burst size. So I believe in our case the=20
+DMA is smart enough to auto-select the best burst size, up to the=20
+configured value.
 
-Will
+Cheers,
+-Paul
+
+>=20
+> Patch looks good and is a-b.
+>=20
+>>=20
+>>  Set in each soc_info structure the maximum burst size supported by=20
+>> the
+>>  corresponding SoC, and use it in the driver.
+>>=20
+>>  Set the new value using regmap_update_bits() instead of
+>>  regmap_set_bits(), since we do want to override the old value of the
+>>  burst size. (Note that regmap_set_bits() wasn't really valid before=20
+>> for
+>>  the same reason, but it never seemed to be a problem).
+>>=20
+>>  Cc: <stable@vger.kernel.org>
+>>  Fixes: 90b86fcc47b4 ("DRM: Add KMS driver for the Ingenic JZ47xx=20
+>> SoCs")
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+
+
