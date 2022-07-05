@@ -2,53 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659CE56630E
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 08:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF9F5664A5
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 10:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiGEGWK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Jul 2022 02:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
+        id S231192AbiGEHvp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Jul 2022 03:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGEGWJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 02:22:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB52BCA5;
-        Mon,  4 Jul 2022 23:22:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FAAD61426;
-        Tue,  5 Jul 2022 06:22:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E04EC341D7;
-        Tue,  5 Jul 2022 06:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657002128;
-        bh=Zaf7DjhcD3ZxfJHUz1tOGgDGa4JYJfrWSDwsbtdTNwI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=a6923plIqslsbqyEgJGkAr8COlwhQHlzqDOMUImf0zNEq9HfBY7kyJ31P00pKVrG7
-         y7sOCX7KFkZaKbXr1TBsB4bdPWDPbdUss/s+YWLl5peIIfTQnNr2M9MJNM8bwnRZW4
-         pBP1mWfqbYSTfbLQr0IfiTFeIF0vLC+jWt2IFvckuj94X5lLXreY0OPKMdqj4JP0Ql
-         smnsWL54j9bAu/0Q6bfOaMqEB5kKVAhMB4U0bMIbAk2LT3svlb0Axbi55/JXgywmOj
-         gLpT9G8YpXf0KUjDyEO/m/I2r9HiqXWMGXjvdGjetJDbeHeFEekkqecyZHbQLOGFi+
-         XCBAa5kvP21lg==
-Received: by mail-vs1-f54.google.com with SMTP id h184so8559vsc.3;
-        Mon, 04 Jul 2022 23:22:08 -0700 (PDT)
-X-Gm-Message-State: AJIora8X3yQoioVtRiEwhFu6BMNxFuI66FFq4PuuPsdJy+YonYSJ3S7w
-        3MJnwATXj1IvnxZrPwXOwTEwgenwzm+1qlsaZjM=
-X-Google-Smtp-Source: AGRyM1uR3kDpQ/MbyXcNWqnHFpFRoA+f7XpzR2mn61Kf/oGLc1bqoMRFlPTGI0x9k49ir5CWsNuWr5PQo6T9BiLh8ww=
-X-Received: by 2002:a67:6fc3:0:b0:356:18:32ba with SMTP id k186-20020a676fc3000000b00356001832bamr18421067vsc.43.1657002126922;
- Mon, 04 Jul 2022 23:22:06 -0700 (PDT)
+        with ESMTP id S231171AbiGEHvp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 03:51:45 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05131116C
+        for <linux-mips@vger.kernel.org>; Tue,  5 Jul 2022 00:51:43 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 76so4825527ybd.0
+        for <linux-mips@vger.kernel.org>; Tue, 05 Jul 2022 00:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k8cdnnptoSm5AJC45vIjlcJ8J1DipiYnWtE0ruW2rxs=;
+        b=hrW9cMR7Z3PxWD/FtQwAajFkdScrx1WIecOy3tNPSPFj7ZpT3MS6GjAIcWTagfEmKJ
+         gkd2p1YtA2R+Hh+5XgkXthXfwg2R5jG2gKm0g6phV8Lrz5F4whqrhU83Dj4tyPwZFMtM
+         uh781jvQ7OZBXq+KPR5Hc8P02RQW8jmkhPaUJ/ZwYrOawwLL/FrmV28X7ASFhZjVAiDC
+         4PMU4qslIoAXQOx4rSi7700OVzBPHPOTQk+OIii9voMpdvQNDRlo5aNm95xeq1Ki2eBG
+         hdoFAWundROhfmqT1kj2LM1sDGiWNawV/jwFpZ3ps+48699ORO58C04c2n4NkdSQvBX9
+         lJrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k8cdnnptoSm5AJC45vIjlcJ8J1DipiYnWtE0ruW2rxs=;
+        b=QQwf7ELTvEkF+XRfg/skuv0lZ9YBNKxh0DECuJV3Anm4rbdjU1EIKR63e9ahoM9Tvp
+         ZpnY+JdLT16itlYuZzF1Vtc/LswI+Bmu9zlW96cdyODx7HFAMT4EZ1G9PMTh6rnmfs2p
+         +x8Yholtm5dQ3hyoca+J4EUVMSo2dOxl1XNIQ2riTOrqf44jPTmXXTnf9gcYd336nRJw
+         36xR0Wum4QFTFCo/61VAL+CWhhUMIZXUSXpP0950J2BasMytCREwAjpJpLW2oy5YasKT
+         6DeiNJ5bNLqwwrNIlk3MNgbOv5XreafBWEK8Dc0k91bfnDYTWoyQMgKe+WhvtpHu5NSN
+         o0kw==
+X-Gm-Message-State: AJIora85jwbrgWdyHOlTYAFiN2wxkYJ7wZxCJXOmqUjOyfZiFuRAQMxw
+        c35aPZeR1jstI0RKmixco/tfBK98eZPdMcTsauMvVQ==
+X-Google-Smtp-Source: AGRyM1tcec4ZVozLeG3AHgF0JBmdcEQv61u7/2ayYABYM50nQefJuIIBRyMGNOqvt0ngm0odO3V8Tx51FRXcuMYED+M=
+X-Received: by 2002:a25:4290:0:b0:66e:53b2:56ed with SMTP id
+ p138-20020a254290000000b0066e53b256edmr7670009yba.254.1657007503251; Tue, 05
+ Jul 2022 00:51:43 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
  <20220704112526.2492342-5-chenhuacai@loongson.cn> <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 5 Jul 2022 14:21:56 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
-Message-ID: <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+ <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+In-Reply-To: <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 5 Jul 2022 15:51:06 +0800
+Message-ID: <CAMZfGtXLxPO3jmkKpF7n9Scb=542yrf1taWHZGdPwK-tZsJXgQ@mail.gmail.com>
 Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -64,49 +71,57 @@ Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Muchun Song <songmuchun@bytedance.com>
+        Feiyang Chen <chenfeiyang@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Arnd,
-
-On Mon, Jul 4, 2022 at 8:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, Jul 5, 2022 at 2:22 PM Huacai Chen <chenhuacai@kernel.org> wrote:
 >
-> On Mon, Jul 4, 2022 at 1:25 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > To avoid the following build error on LoongArch we should include linux/
-> > static_key.h in page-flags.h.
+> Hi, Arnd,
+>
+> On Mon, Jul 4, 2022 at 8:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
 > >
-> > In file included from ./include/linux/mmzone.h:22,
-> > from ./include/linux/gfp.h:6,
-> > from ./include/linux/mm.h:7,
-> > from arch/loongarch/kernel/asm-offsets.c:9:
-> > ./include/linux/page-flags.h:208:1: warning: data definition has no
-> > type or storage class
-> > 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-> > | ^~~~~~~~~~~~~~~~~~~~~~~~
-> > ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-> > declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-> > ./include/linux/page-flags.h:209:26: warning: parameter names (without
-> > types) in function declaration
->
-> I wonder if page_fixed_fake_head() should be moved out of line to avoid
-> this, it's already nontrivial here, and that would avoid the static key
-> in a central header.
-I have some consideration here. I think both inline function and
-static key are instruments to make things faster, in other words,
-page_fixed_fake_head() is a performance critical function. If so, it
-is not suitable to move it out of line.
+> > On Mon, Jul 4, 2022 at 1:25 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > To avoid the following build error on LoongArch we should include linux/
+> > > static_key.h in page-flags.h.
+> > >
+> > > In file included from ./include/linux/mmzone.h:22,
+> > > from ./include/linux/gfp.h:6,
+> > > from ./include/linux/mm.h:7,
+> > > from arch/loongarch/kernel/asm-offsets.c:9:
+> > > ./include/linux/page-flags.h:208:1: warning: data definition has no
+> > > type or storage class
+> > > 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> > > | ^~~~~~~~~~~~~~~~~~~~~~~~
+> > > ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> > > declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
+> > > ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> > > types) in function declaration
+> >
+> > I wonder if page_fixed_fake_head() should be moved out of line to avoid
+> > this, it's already nontrivial here, and that would avoid the static key
+> > in a central header.
+> I have some consideration here. I think both inline function and
+> static key are instruments to make things faster, in other words,
+> page_fixed_fake_head() is a performance critical function. If so, it
+> is not suitable to move it out of line.
 
-Huacai
++1
+
+The static key is an optimization when HVO is disabled.
+
+Thanks.
+
 >
->        Arnd
->
+> Huacai
+> >
+> >        Arnd
+> >
