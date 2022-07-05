@@ -2,65 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C241A56662B
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 11:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42F9566837
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 12:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiGEJaN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Jul 2022 05:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
+        id S231937AbiGEKkq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Jul 2022 06:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiGEJ3t (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 05:29:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59D21B7;
-        Tue,  5 Jul 2022 02:29:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91317B816A7;
-        Tue,  5 Jul 2022 09:29:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD127C341C7;
-        Tue,  5 Jul 2022 09:29:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657013385;
-        bh=kGkmp8dPxzCCK114+0OM+AKFI00s3XSfhycOZJPJOlk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ulmzVpFf4aXRHwq+z6RYvnhTexooB8AMl3S7I2TeN59zwM5eunXVPWgFl9cM57OpW
-         bq6hNbJ1xNpiDZ+Exf8NMU8/+15BNEH8FrQViQJJ2SVWdH9Ahk1ZhB7Rrudygq2+J3
-         bR3rdhguoBudEGLYe5xClBPRn4MDtesG1dATflzPN8t6I4Swf5DAmW3Qxe4pvh79Sm
-         TpdEgrft+3/r5kInwNblNRWn4DzPuHFvVvjZDJ7xs4FZZDYrrun1Sc3RqyAiS9bJSi
-         1bujS052C+AeT6ccnqqZWlaIenIvvTFUk579henLIV1MojIa08mDP2VPX5QcBLYoRt
-         LU5PxHa+sIh5A==
-Date:   Tue, 5 Jul 2022 10:29:37 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise
- vmemmap_populate_hugepages()
-Message-ID: <20220705092937.GA552@willie-the-truck>
-References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
- <20220704112526.2492342-4-chenhuacai@loongson.cn>
+        with ESMTP id S230300AbiGEKkq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 06:40:46 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6496415734
+        for <linux-mips@vger.kernel.org>; Tue,  5 Jul 2022 03:40:44 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1o8fyz-0002Jv-00; Tue, 05 Jul 2022 12:40:41 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id CC4C0C01FB; Tue,  5 Jul 2022 12:20:53 +0200 (CEST)
+Date:   Tue, 5 Jul 2022 12:20:53 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Liang He <windhl@126.com>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH] mips: cavium-octeon: Fix missing of_node_put() in
+ octeon2_usb_clocks_start
+Message-ID: <20220705102053.GA9951@alpha.franken.de>
+References: <20220701124112.237902-1-windhl@126.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220704112526.2492342-4-chenhuacai@loongson.cn>
+In-Reply-To: <20220701124112.237902-1-windhl@126.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,151 +41,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
+On Fri, Jul 01, 2022 at 08:41:12PM +0800, Liang He wrote:
+> We should call of_node_put() for the reference 'uctl_node' returned by
+> of_get_parent() which will increase the refcount. Otherwise, there will
+> be a refcount leak bug.
 > 
-> Generalise vmemmap_populate_hugepages() so ARM64 & X86 & LoongArch can
-> share its implementation.
-> 
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Liang He <windhl@126.com>
 > ---
->  arch/arm64/mm/mmu.c      | 53 ++++++-----------------
->  arch/loongarch/mm/init.c | 63 ++++++++-------------------
->  arch/x86/mm/init_64.c    | 92 ++++++++++++++--------------------------
->  include/linux/mm.h       |  6 +++
->  mm/sparse-vmemmap.c      | 54 +++++++++++++++++++++++
->  5 files changed, 124 insertions(+), 144 deletions(-)
+>  arch/mips/cavium-octeon/octeon-platform.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index 626ec32873c6..b080a65c719d 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -1158,49 +1158,24 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
->  	return vmemmap_populate_basepages(start, end, node, altmap);
->  }
->  #else	/* !ARM64_KERNEL_USES_PMD_MAPS */
-> +void __meminit vmemmap_set_pmd(pmd_t *pmdp, void *p, int node,
-> +			       unsigned long addr, unsigned long next)
-> +{
-> +	pmd_set_huge(pmdp, __pa(p), __pgprot(PROT_SECT_NORMAL));
-> +}
-> +
-> +int __meminit vmemmap_check_pmd(pmd_t *pmdp, int node, unsigned long addr,
-> +				unsigned long next)
-> +{
-> +	vmemmap_verify((pte_t *)pmdp, node, addr, next);
-> +	return 1;
-> +}
-> +
->  int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
->  		struct vmem_altmap *altmap)
->  {
-> -	unsigned long addr = start;
-> -	unsigned long next;
-> -	pgd_t *pgdp;
-> -	p4d_t *p4dp;
-> -	pud_t *pudp;
-> -	pmd_t *pmdp;
+> diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
+> index a994022e32c9..ce05c0dd3acd 100644
+> --- a/arch/mips/cavium-octeon/octeon-platform.c
+> +++ b/arch/mips/cavium-octeon/octeon-platform.c
+> @@ -86,11 +86,12 @@ static void octeon2_usb_clocks_start(struct device *dev)
+>  					 "refclk-frequency", &clock_rate);
+>  		if (i) {
+>  			dev_err(dev, "No UCTL \"refclk-frequency\"\n");
+> +			of_node_put(uctl_node);
+>  			goto exit;
+>  		}
+>  		i = of_property_read_string(uctl_node,
+>  					    "refclk-type", &clock_type);
 > -
->  	WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
-> -	do {
-> -		next = pmd_addr_end(addr, end);
-> -
-> -		pgdp = vmemmap_pgd_populate(addr, node);
-> -		if (!pgdp)
-> -			return -ENOMEM;
-> -
-> -		p4dp = vmemmap_p4d_populate(pgdp, addr, node);
-> -		if (!p4dp)
-> -			return -ENOMEM;
-> -
-> -		pudp = vmemmap_pud_populate(p4dp, addr, node);
-> -		if (!pudp)
-> -			return -ENOMEM;
-> -
-> -		pmdp = pmd_offset(pudp, addr);
-> -		if (pmd_none(READ_ONCE(*pmdp))) {
-> -			void *p = NULL;
-> -
-> -			p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
-> -			if (!p) {
-> -				if (vmemmap_populate_basepages(addr, next, node, altmap))
-> -					return -ENOMEM;
-> -				continue;
-> -			}
-> -
-> -			pmd_set_huge(pmdp, __pa(p), __pgprot(PROT_SECT_NORMAL));
-> -		} else
-> -			vmemmap_verify((pte_t *)pmdp, node, addr, next);
-> -	} while (addr = next, addr != end);
-> -
-> -	return 0;
-> +	return vmemmap_populate_hugepages(start, end, node, altmap);
->  }
->  #endif	/* !ARM64_KERNEL_USES_PMD_MAPS */
+> +		of_node_put(uctl_node);
+>  		if (!i && strcmp("crystal", clock_type) == 0)
+>  			is_crystal_clock = true;
+>  	}
+> -- 
+> 2.25.1
 
+applied to mips-next.
 
-I think the arm64 change is mostly ok (thanks!), but I have a question about
-the core code you're introducing:
+Thomas.
 
-> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-> index 33e2a1ceee72..6f2e40bb695d 100644
-> --- a/mm/sparse-vmemmap.c
-> +++ b/mm/sparse-vmemmap.c
-> @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
->  	return vmemmap_populate_range(start, end, node, altmap, NULL);
->  }
->  
-> +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
-> +				      unsigned long addr, unsigned long next)
-> +{
-> +}
-> +
-> +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
-> +				       unsigned long next)
-> +{
-> +	return 0;
-> +}
-> +
-> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
-> +					 int node, struct vmem_altmap *altmap)
-> +{
-> +	unsigned long addr;
-> +	unsigned long next;
-> +	pgd_t *pgd;
-> +	p4d_t *p4d;
-> +	pud_t *pud;
-> +	pmd_t *pmd;
-> +
-> +	for (addr = start; addr < end; addr = next) {
-> +		next = pmd_addr_end(addr, end);
-> +
-> +		pgd = vmemmap_pgd_populate(addr, node);
-> +		if (!pgd)
-> +			return -ENOMEM;
-> +
-> +		p4d = vmemmap_p4d_populate(pgd, addr, node);
-> +		if (!p4d)
-> +			return -ENOMEM;
-> +
-> +		pud = vmemmap_pud_populate(p4d, addr, node);
-> +		if (!pud)
-> +			return -ENOMEM;
-> +
-> +		pmd = pmd_offset(pud, addr);
-> +		if (pmd_none(READ_ONCE(*pmd))) {
-> +			void *p;
-> +
-> +			p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
-> +			if (p) {
-> +				vmemmap_set_pmd(pmd, p, node, addr, next);
-> +				continue;
-> +			} else if (altmap)
-> +				return -ENOMEM; /* no fallback */
-
-Why do you return -ENOMEM if 'altmap' here? That seems to be different to
-what we currently have on arm64 and it's not clear to me why we're happy
-with an altmap for the pmd case, but not for the pte case.
-
-Will
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
