@@ -2,97 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C235664BE
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 10:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343E6566530
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 10:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiGEIMw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Jul 2022 04:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S229967AbiGEIjV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Jul 2022 04:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiGEIMv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 04:12:51 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A114713DE9;
-        Tue,  5 Jul 2022 01:12:48 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.87.24) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 5 Jul 2022
- 11:12:38 +0300
-Subject: Re: [PATCH] MIPS: mm: Use the bitmap API to allocate bitmaps
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>
-References: <4b6493bfee4f1c2d30193df01e67052922703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <4f6901f8-2cf3-bd96-d7d2-cdc6af4245f3@omp.ru>
-Date:   Tue, 5 Jul 2022 11:12:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S229604AbiGEIjU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 04:39:20 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1857163BE
+        for <linux-mips@vger.kernel.org>; Tue,  5 Jul 2022 01:39:19 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id l144so8105072ybl.5
+        for <linux-mips@vger.kernel.org>; Tue, 05 Jul 2022 01:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wZnyPsEVZX6HmXQzS1Foy24/qSSliAvcCxVhRkBUcHs=;
+        b=SEYfGEtMxhAMfqAivJTEH2Kz8wbyh2XsCXYeFtFb1I28PpU+lCPk12AA4R9K6dl/bY
+         woHhjBEVabd/bI0pHf8zsBRzuKo9ccK4QyVnqR4OQOMtx1LaA2a9AxK3wkuZNul/LzQV
+         UM51yjWWue6IUw1bK29hDbsh4AwqTyWZZsxAMqbjOcfiIX594dSUkrN1Z+LfE+LXYOW9
+         WbVktB4yHG4/CR/IBsxUfDoZP5ktqV4FqwcpaZcINT18MM4gCszCXnUDZekNhyzuGtua
+         P2dMbvegXbnzzkLO7dP9z3PzUbofUX0Fv15BJ+c44vzBFlDQt4v4kPDl83LagrfGLi9C
+         xQig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wZnyPsEVZX6HmXQzS1Foy24/qSSliAvcCxVhRkBUcHs=;
+        b=u8cIcv+EGGdvmniz7BQOTWCUlE2i/1OCrOtrUjYXHnay/BL5XxiW0RuML3Zi5ECfWT
+         pyNSsoGPfQIWm0r1rlM7Pt+13FdVLu4nkSsbDg8ZFplde8yHMTbOHYZw0Bw/HevFMtWI
+         05ko8/lbYt4Z8eKZH9XAuGAEBzvAiRw2jKXqhOfxwhu7UGkJcuaHU7Ld9zToZZvFJJx1
+         asSppbngvmogqQtOOq+3gXs0yuizIx+i2d42RQiAzW81lvssQIUmycyaaBJpzjJIbCz2
+         YOMJHQmOWF+576w1odjOUOBf9+sYGUERgIsJtdR3Vt8yb/V78DYLeNRvujPWgZFhi9Ae
+         L1iw==
+X-Gm-Message-State: AJIora+Fo2V/qFBK0A3iMYwqRzec/wHntTVMmp/UJKFKJfrRxN1Aq9Ez
+        76Q4EmqcCBX5G4ybb5oWwZOxq5AKS4FwOk/niG0lQg==
+X-Google-Smtp-Source: AGRyM1sb7EaZDlA3TlP6vCkKVLuCtGyEFUyGiDkCzrHwcXTE7yLWJhhYPQxkfnh364COElsTV8UMrZRX8TXd5VzakYY=
+X-Received: by 2002:a25:8388:0:b0:66e:3afd:9299 with SMTP id
+ t8-20020a258388000000b0066e3afd9299mr12223142ybk.246.1657010358371; Tue, 05
+ Jul 2022 01:39:18 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4b6493bfee4f1c2d30193df01e67052922703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.87.24]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/05/2022 07:42:48
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 171552 [Jul 05 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 492 492 b40b958bfe450bd24190c42292f139f738a48226
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.24 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.87.24
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/05/2022 07:46:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/5/2022 7:09:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-5-chenhuacai@loongson.cn> <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+ <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+ <CAMZfGtXLxPO3jmkKpF7n9Scb=542yrf1taWHZGdPwK-tZsJXgQ@mail.gmail.com> <CAK8P3a14VTkTjRNTWsGmwLDuVm=QPL17_VZ8QkcCYnyQzBjXHA@mail.gmail.com>
+In-Reply-To: <CAK8P3a14VTkTjRNTWsGmwLDuVm=QPL17_VZ8QkcCYnyQzBjXHA@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 5 Jul 2022 16:38:41 +0800
+Message-ID: <CAMZfGtU0n_-Bq95X+_rZjcyeK3QhKSq2t5HRvx5Kw5+tR9h+oA@mail.gmail.com>
+Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On Tue, Jul 5, 2022 at 4:06 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Jul 5, 2022 at 9:51 AM Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > On Tue, Jul 5, 2022 at 2:22 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> > >
+> > > Hi, Arnd,
+> > >
+> > > On Mon, Jul 4, 2022 at 8:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > >
+> > > > On Mon, Jul 4, 2022 at 1:25 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > > To avoid the following build error on LoongArch we should include linux/
+> > > > > static_key.h in page-flags.h.
+> > > > >
+> > > > > In file included from ./include/linux/mmzone.h:22,
+> > > > > from ./include/linux/gfp.h:6,
+> > > > > from ./include/linux/mm.h:7,
+> > > > > from arch/loongarch/kernel/asm-offsets.c:9:
+> > > > > ./include/linux/page-flags.h:208:1: warning: data definition has no
+> > > > > type or storage class
+> > > > > 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> > > > > | ^~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> > > > > declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
+> > > > > ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> > > > > types) in function declaration
+> > > >
+> > > > I wonder if page_fixed_fake_head() should be moved out of line to avoid
+> > > > this, it's already nontrivial here, and that would avoid the static key
+> > > > in a central header.
+> > > I have some consideration here. I think both inline function and
+> > > static key are instruments to make things faster, in other words,
+> > > page_fixed_fake_head() is a performance critical function. If so, it
+> > > is not suitable to move it out of line.
+> >
+> > +1
+> >
+> > The static key is an optimization when HVO is disabled.
+>
+> How about splitting up linux/page_flags.h so the static_key header is
+> only included
+> in those places that use one of the inline functions that depend on it?
+>
 
-On 7/4/22 10:03 PM, Christophe JAILLET wrote:
+How about including the static key header in the scope of
+CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP?
 
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index 465ff35a8c00..4dd005ad43fc 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -205,6 +205,8 @@ enum pageflags {
+ #ifndef __GENERATING_BOUNDS_H
 
-   You don't use bitmap_free() in this patch...
+ #ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
++#include <linux/static_key.h>
++
+ DECLARE_STATIC_KEY_FALSE(hugetlb_optimize_vmemmap_key);
 
-> It is less verbose and it improves the semantic.
-> 
-> While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
-> also less verbose.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-[...]
-
-MBR, Sergey
+ /*
