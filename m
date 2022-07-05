@@ -2,80 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7E8565DBC
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Jul 2022 21:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 659CE56630E
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 08:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbiGDTEJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Jul 2022 15:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S229554AbiGEGWK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Jul 2022 02:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234552AbiGDTDz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Jul 2022 15:03:55 -0400
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEE41263D
-        for <linux-mips@vger.kernel.org>; Mon,  4 Jul 2022 12:03:31 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 8RM0oVexLeg3p8RM0oCUri; Mon, 04 Jul 2022 21:03:29 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 04 Jul 2022 21:03:29 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: mm: Use the bitmap API to allocate bitmaps
-Date:   Mon,  4 Jul 2022 21:03:27 +0200
-Message-Id: <4b6493bfee4f1c2d30193df01e67052922703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229448AbiGEGWJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 02:22:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB52BCA5;
+        Mon,  4 Jul 2022 23:22:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FAAD61426;
+        Tue,  5 Jul 2022 06:22:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E04EC341D7;
+        Tue,  5 Jul 2022 06:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657002128;
+        bh=Zaf7DjhcD3ZxfJHUz1tOGgDGa4JYJfrWSDwsbtdTNwI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a6923plIqslsbqyEgJGkAr8COlwhQHlzqDOMUImf0zNEq9HfBY7kyJ31P00pKVrG7
+         y7sOCX7KFkZaKbXr1TBsB4bdPWDPbdUss/s+YWLl5peIIfTQnNr2M9MJNM8bwnRZW4
+         pBP1mWfqbYSTfbLQr0IfiTFeIF0vLC+jWt2IFvckuj94X5lLXreY0OPKMdqj4JP0Ql
+         smnsWL54j9bAu/0Q6bfOaMqEB5kKVAhMB4U0bMIbAk2LT3svlb0Axbi55/JXgywmOj
+         gLpT9G8YpXf0KUjDyEO/m/I2r9HiqXWMGXjvdGjetJDbeHeFEekkqecyZHbQLOGFi+
+         XCBAa5kvP21lg==
+Received: by mail-vs1-f54.google.com with SMTP id h184so8559vsc.3;
+        Mon, 04 Jul 2022 23:22:08 -0700 (PDT)
+X-Gm-Message-State: AJIora8X3yQoioVtRiEwhFu6BMNxFuI66FFq4PuuPsdJy+YonYSJ3S7w
+        3MJnwATXj1IvnxZrPwXOwTEwgenwzm+1qlsaZjM=
+X-Google-Smtp-Source: AGRyM1uR3kDpQ/MbyXcNWqnHFpFRoA+f7XpzR2mn61Kf/oGLc1bqoMRFlPTGI0x9k49ir5CWsNuWr5PQo6T9BiLh8ww=
+X-Received: by 2002:a67:6fc3:0:b0:356:18:32ba with SMTP id k186-20020a676fc3000000b00356001832bamr18421067vsc.43.1657002126922;
+ Mon, 04 Jul 2022 23:22:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-5-chenhuacai@loongson.cn> <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 5 Jul 2022 14:21:56 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+Message-ID: <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Muchun Song <songmuchun@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+Hi, Arnd,
 
-It is less verbose and it improves the semantic.
+On Mon, Jul 4, 2022 at 8:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Jul 4, 2022 at 1:25 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > To avoid the following build error on LoongArch we should include linux/
+> > static_key.h in page-flags.h.
+> >
+> > In file included from ./include/linux/mmzone.h:22,
+> > from ./include/linux/gfp.h:6,
+> > from ./include/linux/mm.h:7,
+> > from arch/loongarch/kernel/asm-offsets.c:9:
+> > ./include/linux/page-flags.h:208:1: warning: data definition has no
+> > type or storage class
+> > 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> > | ^~~~~~~~~~~~~~~~~~~~~~~~
+> > ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> > declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
+> > ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> > types) in function declaration
+>
+> I wonder if page_fixed_fake_head() should be moved out of line to avoid
+> this, it's already nontrivial here, and that would avoid the static key
+> in a central header.
+I have some consideration here. I think both inline function and
+static key are instruments to make things faster, in other words,
+page_fixed_fake_head() is a performance critical function. If so, it
+is not suitable to move it out of line.
 
-While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
-also less verbose.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- arch/mips/mm/context.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/arch/mips/mm/context.c b/arch/mips/mm/context.c
-index b25564090939..966f40066f03 100644
---- a/arch/mips/mm/context.c
-+++ b/arch/mips/mm/context.c
-@@ -67,7 +67,7 @@ static void flush_context(void)
- 	int cpu;
- 
- 	/* Update the list of reserved MMIDs and the MMID bitmap */
--	bitmap_clear(mmid_map, 0, num_mmids);
-+	bitmap_zero(mmid_map, num_mmids);
- 
- 	/* Reserve an MMID for kmap/wired entries */
- 	__set_bit(MMID_KERNEL_WIRED, mmid_map);
-@@ -277,8 +277,7 @@ static int mmid_init(void)
- 	WARN_ON(num_mmids <= num_possible_cpus());
- 
- 	atomic64_set(&mmid_version, asid_first_version(0));
--	mmid_map = kcalloc(BITS_TO_LONGS(num_mmids), sizeof(*mmid_map),
--			   GFP_KERNEL);
-+	mmid_map = bitmap_zalloc(num_mmids, GFP_KERNEL);
- 	if (!mmid_map)
- 		panic("Failed to allocate bitmap for %u MMIDs\n", num_mmids);
- 
--- 
-2.34.1
-
+Huacai
+>
+>        Arnd
+>
