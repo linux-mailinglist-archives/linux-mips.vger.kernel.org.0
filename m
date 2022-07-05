@@ -2,79 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31F5673C1
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 18:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968505673E0
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Jul 2022 18:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiGEQDG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Jul 2022 12:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S231821AbiGEQKr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Jul 2022 12:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiGEQDF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 12:03:05 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E721839A;
-        Tue,  5 Jul 2022 09:03:04 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id lw20so22462065ejb.4;
-        Tue, 05 Jul 2022 09:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
-        b=XluqUvEc2FFAEeUVR9EHhmnZ4fduhRT7w/m9u0J2BO7tZOwSBo7mn8BaOQgqzoSDjh
-         X0pO9Rj7sIcvIuoe/ROCFriYf+jU1vOTUfqvfCtN125Ylu3zQgqKqEbKSpZrITIomEan
-         BZAau+BMtL5HOpzppw5a+e3jGUrgHgPPfbGc5bsU3OpFMoGuJuoBj847iLPHKCzZpauf
-         jf+2378y/+37186yQm4a00uEwBFAvMwZm17YIt+qATt8ZYGJLJ4pWsc0U3fKbmLSOXLk
-         5+3oyqmZyrGCj6g5F5sm3U2otbom9tA/Hnz9GFjdlZ5PnMVgvCa13m+Igy3HH86a48ZB
-         o7ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
-        b=DdvilV/O8btxcG22IQrFkpZXndg76aZS1DxrHUOQz5yLhLas05SQjsyJD6Jedz6F1g
-         OtUnymw0f+e39RpgJsk42xVFN9iS1odhhbo+dH1I3IyYiGm8OjEb0xsNI1iR5ms+xL5o
-         oEDLyfiztSrr528qwANDg0sEkrU8DYPHIP381AYISiFK6Qh/r9DavbueywtbYZ/UzuZe
-         2piydJZMsGBbjjh0c+1FKC/thEYvWbZ8Qc0vZ7SPss9jkgBpySNHMJwJnAuvKSB2VZNb
-         ng/otydBW7kzdegmGYExFzjEh8DeYsq/8XN08wP++1wTpxbhGuKRDk5iyYWH9Z6sPQdU
-         2AYg==
-X-Gm-Message-State: AJIora+R1CULmGpXCTQjGE6KigdiCazBWoouH6s8nHp6Zmk56FlLPWcO
-        5XPpC96AU0aTPXl/FtZJpEjvGCjhLfprb1/Xeak=
-X-Google-Smtp-Source: AGRyM1s2bR2/fTLYxh4UjqmPZv6LUB0HejEOyCZJAkhG5FfXs1uf2EFDs1t2xo1dxtAeQiITYADdpH1zQ6Q1UVRLsF0=
-X-Received: by 2002:a17:907:2d8c:b0:726:2b37:6d44 with SMTP id
- gt12-20020a1709072d8c00b007262b376d44mr34529009ejc.224.1657036982875; Tue, 05
- Jul 2022 09:03:02 -0700 (PDT)
+        with ESMTP id S229501AbiGEQKq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Jul 2022 12:10:46 -0400
+X-Greylist: delayed 118 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Jul 2022 09:10:44 PDT
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B44D140E3;
+        Tue,  5 Jul 2022 09:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1657037239;
+    s=strato-dkim-0002; d=xenosoft.de;
+    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=PtHy6OokJPrFtoDS0Whqy3V68GshIBOfC24cNcVepSk=;
+    b=RBfOBOXzrCI63W9Rvbhf5BanvIUqHt/d3ZmxcpQi0btZObe9VDQ4qLRQatssvXPhxn
+    V+UCMvezi0yUYjf4cSxB4rfa1hsm26ImuJzoIvJ7z+u0z9DX46bty7ZdpaxTG2L7cn/F
+    CFh/hAygHC0+JkceAg0Elcw8W66VUsYAsgzJFoPBMkqB4Cfb8e37L5lUu+Hbyg+5gnYE
+    QTaODKOKflh3J4Ipd6TQCGCAUX0uYiBOK3IbY3AVDxSHE/JZds7B5MX9HGUgIFNXPUho
+    3MeKiOUah1xoxTXXQ06fptaDeHybL7e5Kz4VOixx9EANdMULh6UUw5jggXTGLPFNbYJ+
+    kvlg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBfio0GngadwjW4dqgkobcHPYDc/BNBepImPPJ"
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a02:8109:8980:4474:3840:b132:e6ea:146]
+    by smtp.strato.de (RZmta 47.46.1 AUTH)
+    with ESMTPSA id icdf6dy65G7HK68
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 5 Jul 2022 18:07:17 +0200 (CEST)
+Message-ID: <76d0db0f-57fe-2985-4916-175d913d99e4@xenosoft.de>
+Date:   Tue, 5 Jul 2022 18:07:17 +0200
 MIME-Version: 1.0
-References: <20220705154708.181258-1-rppt@kernel.org> <20220705154708.181258-15-rppt@kernel.org>
-In-Reply-To: <20220705154708.181258-15-rppt@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 5 Jul 2022 09:03:01 -0700
-Message-ID: <CAMo8Bf+5cN4TYNGs=PXsZuunyZX2xQAdk+nGd5wARP8MuZVXuA@mail.gmail.com>
-Subject: Re: [PATCH v2 14/15] xtensa: drop definition of PGD_ORDER
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] kvm: rename KVM_MAX_VCPU_ID to, KVM_MAX_VCPU_IDS
+Content-Language: de-DE
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Huacai Chen," <chenhuacai@kernel.org>,
+        "Aleksandar Markovic," <aleksandar.qemu.devel@gmail.com>,
+        "Thomas Bogendoerfer," <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Benjamin Herrenschmidt," <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Vitaly, Kuznetsov" <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "R.T.Dickinson" <rtd2@xtra.co.nz>,
+        Darren Stevens <darren@stevens-zone.net>,
+        mad skateman <madskateman@gmail.com>
+References: <6d3333b1-05cc-103b-4bdb-88bec5e3e9fd@xenosoft.de>
+In-Reply-To: <6d3333b1-05cc-103b-4bdb-88bec5e3e9fd@xenosoft.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,29 +83,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 8:48 AM Mike Rapoport <rppt@kernel.org> wrote:
+On 14 September 2021 at 05:59 pm, Christian Zigotzky wrote:
+> Hello Juergen,
+> Hello All,
 >
-> From: Mike Rapoport <rppt@linux.ibm.com>
+> Since the RC1 of kernel 5.13, -smp 2 and -smp 4 don't work with a 
+> virtual e5500 QEMU KVM-HV machine anymore. [1]
+> I see in the serial console, that the uImage doesn't load. I use the 
+> following QEMU command for booting:
 >
-> This is the order of the page table allocation, not the order of a PGD.
-> Since its always hardwired to 0, simply drop it.
-
-it's
-
+> qemu-system-ppc64 -M ppce500 -cpu e5500 -enable-kvm -m 1024 -kernel 
+> uImage -drive format=raw,file=MintPPC32-X5000.img,index=0,if=virtio 
+> -netdev user,id=mynet0 -device virtio-net,netdev=mynet0 -append "rw 
+> root=/dev/vda" -device virtio-vga -device virtio-mouse-pci -device 
+> virtio-keyboard-pci -device pci-ohci,id=newusb -device 
+> usb-audio,bus=newusb.0 -smp 4
 >
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/xtensa/include/asm/pgalloc.h | 2 +-
->  arch/xtensa/include/asm/pgtable.h | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
+> The kernels boot without KVM-HV.
 >
-> diff --git a/arch/xtensa/include/asm/pgalloc.h b/arch/xtensa/include/asm/pgalloc.h
-> index eeb2de3a89e5..7fc0f9126dd3 100644
-> --- a/arch/xtensa/include/asm/pgalloc.h
-> +++ b/arch/xtensa/include/asm/pgalloc.h
+> Summary for KVM-HV:
+>
+> -smp 1 -> works
+> -smp 2 -> doesn't work
+> -smp 3 -> works
+> -smp 4 -> doesn't work
+>
+> I used -smp 4 before the RC1 of kernel 5.13 because my FSL P5040 BookE 
+> machine [2] has 4 cores.
+>
+> Does this patch solve this issue? [3]
+>
+> Thanks,
+> Christian
+>
+> [1] https://lists.ozlabs.org/pipermail/linuxppc-dev/2021-May/229103.html
+> [2] http://wiki.amiga.org/index.php?title=X5000
+> [3] 
+> https://lists.ozlabs.org/pipermail/linuxppc-dev/2021-September/234152.html
+Hello,
 
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Since the RC5 of kernel 5.19, -smp 2 and -smp 4 work again. I don't know 
+which patch has solved the issue.
 
--- 
-Thanks.
--- Max
+Cheers,
+Christian
+
