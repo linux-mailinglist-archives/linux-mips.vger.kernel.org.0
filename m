@@ -2,138 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4610556831B
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 11:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DF8568343
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 11:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbiGFJLR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jul 2022 05:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S231270AbiGFJQq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 6 Jul 2022 05:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiGFJLE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 05:11:04 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E405E252A3;
-        Wed,  6 Jul 2022 02:07:49 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axn+LbUMVi83YMAA--.37951S2;
-        Wed, 06 Jul 2022 17:07:44 +0800 (CST)
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hongchen Zhang <zhanghongchen@loongson.cn>
-Subject: [PATCH] MIPS: fix pmd_mkinvalid
-Date:   Wed,  6 Jul 2022 17:07:36 +0800
-Message-Id: <1657098456-29244-1-git-send-email-zhanghongchen@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Axn+LbUMVi83YMAA--.37951S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw1ftw4DtrW3Ww4DJwb_yoW5Cw1fp3
-        WkAa9YkrW5K34IyFW3tr1ftr15ZrZrKF9Ygryqgr1jya43X397Jrn3G34ktFy8Ja1qvFy8
-        Gr13XFs8GrWxZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK
-        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232565AbiGFJQq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 05:16:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9A01B5
+        for <linux-mips@vger.kernel.org>; Wed,  6 Jul 2022 02:16:45 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o919C-0003MH-IH; Wed, 06 Jul 2022 11:16:38 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o9195-004jQf-K4; Wed, 06 Jul 2022 11:16:35 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o9198-0003QN-9M; Wed, 06 Jul 2022 11:16:34 +0200
+Message-ID: <f28de0c61c06396e36756f2d4f3379fab26abdbf.camel@pengutronix.de>
+Subject: Re: [PATCH RESEND v5 6/8] clk: baikal-t1: Move reset-controls code
+ into a dedicated module
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 06 Jul 2022 11:16:34 +0200
+In-Reply-To: <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
+References: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
+         <20220624141853.7417-7-Sergey.Semin@baikalelectronics.ru>
+         <e0869ae1b10ec19eaf87dc5fa53498f82e7deaac.camel@pengutronix.de>
+         <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
-return true.
-So introduce a _PAGE_PRESENT_INVALID_SHIFT bit to check if a pmd is
-present but invalidated by pmd_mkinvalid.
+Hi Serge,
 
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
----
- arch/mips/include/asm/pgtable-64.h   | 2 +-
- arch/mips/include/asm/pgtable-bits.h | 5 +++++
- arch/mips/include/asm/pgtable.h      | 3 ++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
+On Mi, 2022-07-06 at 01:07 +0300, Serge Semin wrote:
+[...]
+> > What is the reason for separating ccu-rst.c and clk-ccu-rst.c?
+> > 
+> > I expect implementing the reset ops and registering the reset
+> > controller in the same compilation unit would be easier.
+> 
+> From the very beginning of the Baikal-T1 driver live the Clock/Reset functionality
+> has been split up into two parts:
+> 1. ccu-{div,pll}.c - Clock/Reset operations implementation.
+> 2. clk-ccu-{div,pll}.c - Clock/Reset kernel interface implementation.
+> At least for the clk-part it has made the driver much easier to read.
+> Code in 1. provides the interface methods like
+> ccu_{div,pll}_hw_register() to register a clock provider corresponding
+> to the CCU divider/PLL of the particular type. Code in 2. uses these
+> methods to create the CCU Dividers/PLL clock descriptors and register
+> the of-based clocks in the system. The reset functionality was
+> redistributed in the same manner in the framework of the ccu-div.c and
+> clk-ccu-div.c modules.
+> 
+> A similar approach I was trying to utilize in the framework of the
+> separate CCU Resets implementation. Although it turned out to be not as
+> handy as it was for the clock-part due to the different clock and
+> reset subsystems API (clock subsystem provides a single clock
+> source based API, while the reset subsystem expects to have the whole
+> resets controller described). Anyway I've decided to preserve as much
+> similarities as possible for the sake of the code unification and
+> better readability/maintainability. Thus the reset lines control
+> methods have been placed in the ccu-rst.c object file, while the reset
+> control registration has been implemented in the clk-ccu-rst.c module.
 
-diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index 41921ac..1c5ef41 100644
---- a/arch/mips/include/asm/pgtable-64.h
-+++ b/arch/mips/include/asm/pgtable-64.h
-@@ -265,7 +265,7 @@ static inline int pmd_present(pmd_t pmd)
- {
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- 	if (unlikely(pmd_val(pmd) & _PAGE_HUGE))
--		return pmd_val(pmd) & _PAGE_PRESENT;
-+		return pmd_val(pmd) & (_PAGE_PRESENT | _PAGE_PRESENT_INVALID);
- #endif
- 
- 	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
-diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
-index 2362842..3c176a1e 100644
---- a/arch/mips/include/asm/pgtable-bits.h
-+++ b/arch/mips/include/asm/pgtable-bits.h
-@@ -49,6 +49,7 @@ enum pgtable_bits {
- 
- 	/* Used only by software (masked out before writing EntryLo*) */
- 	_PAGE_PRESENT_SHIFT = 24,
-+	_PAGE_PRESENT_INVALID_SHIFT,
- 	_PAGE_WRITE_SHIFT,
- 	_PAGE_ACCESSED_SHIFT,
- 	_PAGE_MODIFIED_SHIFT,
-@@ -80,6 +81,7 @@ enum pgtable_bits {
- 
- 	/* Used only by software (masked out before writing EntryLo*) */
- 	_PAGE_PRESENT_SHIFT = _CACHE_SHIFT + 3,
-+	_PAGE_PRESENT_INVALID_SHIFT,
- 	_PAGE_NO_READ_SHIFT,
- 	_PAGE_WRITE_SHIFT,
- 	_PAGE_ACCESSED_SHIFT,
-@@ -98,6 +100,7 @@ enum pgtable_bits {
- enum pgtable_bits {
- 	/* Used only by software (writes to EntryLo ignored) */
- 	_PAGE_PRESENT_SHIFT,
-+	_PAGE_PRESENT_INVALID_SHIFT,
- 	_PAGE_NO_READ_SHIFT,
- 	_PAGE_WRITE_SHIFT,
- 	_PAGE_ACCESSED_SHIFT,
-@@ -122,6 +125,7 @@ enum pgtable_bits {
- enum pgtable_bits {
- 	/* Used only by software (masked out before writing EntryLo*) */
- 	_PAGE_PRESENT_SHIFT,
-+	_PAGE_PRESENT_INVALID_SHIFT,
- #if !defined(CONFIG_CPU_HAS_RIXI)
- 	_PAGE_NO_READ_SHIFT,
- #endif
-@@ -152,6 +156,7 @@ enum pgtable_bits {
- 
- /* Used only by software */
- #define _PAGE_PRESENT		(1 << _PAGE_PRESENT_SHIFT)
-+#define _PAGE_PRESENT_INVALID	(1 << _PAGE_PRESENT_INVALID_SHIFT)
- #define _PAGE_WRITE		(1 << _PAGE_WRITE_SHIFT)
- #define _PAGE_ACCESSED		(1 << _PAGE_ACCESSED_SHIFT)
- #define _PAGE_MODIFIED		(1 << _PAGE_MODIFIED_SHIFT)
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 374c632..cc80211 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -698,7 +698,8 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- 
- static inline pmd_t pmd_mkinvalid(pmd_t pmd)
- {
--	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
-+	pmd_val(pmd) |= _PAGE_PRESENT_INVALID;
-+	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID);
- 
- 	return pmd;
- }
--- 
-1.8.3.1
+Thank you for the detailed explanation. I think that splitting doesn't
+help readability much in this case, but I realize that may just be a
+matter of preference.
 
+[...]
+> > I don't think this is necessary, see my comments below. Since the reset
+> > ids are contiguous, just setting nr_resets and using the default
+> > .of_xlate should be enough to make sure this is never called with an
+> > invalid id.
+> 
+> Using non-contiguous !Clock! IDs turned to be unexpectedly handy. Due to
+> that design I was able to add the internal clock providers hidden from
+> the DTS users but still visible in the clocks hierarchy. It has made the
+> clocks implementation as detailed as possible and protected from the
+> improper clocks usage. It also simplified a new clock providers adding
+> in future (though there won't be clock sources left undefined in the
+> SoC after this patchset is applied).
+> 
+> All of that made me thinking that the same approach can be useful in
+> the framework of the CCU reset controls implementation too at the very
+> least for the code unification. Although after the next patch in the
+> series is applied there won't be resets left undefined in the
+> Baikal-T1 SoC. So from another side you might be partly right on
+> suggesting to drop the independent reset IDs/descriptors design and
+> just assume the IDs contiguousness.
+> 
+> So could you please confirm that you still insists on dropping it?
+
+Please drop it, then. I don't think there is value in carrying this
+complexity just because it makes the code more similar to the
+neighboring clk code.
+
+I'd prefer to keep the reset ids contiguous, so future hardware should
+just get a different set of contiguous IDs, or new IDs appended
+contiguously as you do in patch 7.
+
+[...]
+> > 
+> > 
+> > 
+> > I would fold this into ccu_rst_hw_unregister().
+> 
+> I disagree in this part. Splitting up the interface methods in a set
+> of the small coherent methods like protagonists and respective
+> antagonists makes the code much easier to read and maintain. So I
+> will insist on having the ccu_rst_free_data() method even if it is
+> left with only a single kfree() function invocation.
+[...]
+> I have to disagree for the same reason as I would preserve the
+> ccu_rst_free_data() method here. Please see my comment above.
+
+I'm fine with that.
+
+> 
+regards
+Philipp
