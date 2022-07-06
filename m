@@ -2,152 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DF8568343
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 11:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8085056845E
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 11:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiGFJQq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 6 Jul 2022 05:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S232807AbiGFJzO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jul 2022 05:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbiGFJQq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 05:16:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9A01B5
-        for <linux-mips@vger.kernel.org>; Wed,  6 Jul 2022 02:16:45 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o919C-0003MH-IH; Wed, 06 Jul 2022 11:16:38 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o9195-004jQf-K4; Wed, 06 Jul 2022 11:16:35 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o9198-0003QN-9M; Wed, 06 Jul 2022 11:16:34 +0200
-Message-ID: <f28de0c61c06396e36756f2d4f3379fab26abdbf.camel@pengutronix.de>
-Subject: Re: [PATCH RESEND v5 6/8] clk: baikal-t1: Move reset-controls code
- into a dedicated module
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 06 Jul 2022 11:16:34 +0200
-In-Reply-To: <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
-References: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
-         <20220624141853.7417-7-Sergey.Semin@baikalelectronics.ru>
-         <e0869ae1b10ec19eaf87dc5fa53498f82e7deaac.camel@pengutronix.de>
-         <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S232034AbiGFJyN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 05:54:13 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA6725281;
+        Wed,  6 Jul 2022 02:54:10 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-10bf634bc50so11683649fac.3;
+        Wed, 06 Jul 2022 02:54:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o8jOPstF035V3JBIGTjyEra8xnCZ4RAIho4NrHeIzoU=;
+        b=ifKui5S5rFjVMq/DNxGGiZYtnihyrIPz+XgGy+287htk2qPkSPTBDT6zU/bqaW0IAj
+         eEIcUuZm8zNyVqggg0vPkfq5SvWboTygMYut/vI30ZWm7OI6knykq5A50cyUN7yxHwbt
+         x3OJkAQz3rS3Y9MtqJ6NwJrgnwi7+6R6OQArw7NoCvrdzt2fl1u+Op6Sk71Eo0mnk7Kf
+         K4jGzZJ9jl69cTwc5fCZkxMTOGQj3eJLQiDqOz0u70kr/hzsHNPD58iNGRUJ3Qra3PtG
+         IF6KKSoTvxIaCco+8PSMr8pK01Kl4c2wWlCyc/+gJQOyWRzB04t4vTh7uCb3o8arKg4q
+         uq5Q==
+X-Gm-Message-State: AJIora8bNvFpKnAMxBIwdfj9hdkzH+LUCtZi660XXnMILcmdqPyTufKv
+        uEDKcQWoKlpivWccpTeeGBiDcGrSKa967ox8
+X-Google-Smtp-Source: AGRyM1uAKY8ZoN6KGv4/toshO1qHFCf+QFQjTKFAVF+YPn4y9ij2Yrnm8jj6CEE8H4m9dwU7r8nybw==
+X-Received: by 2002:a05:6870:b3a7:b0:10c:224c:a0b6 with SMTP id w39-20020a056870b3a700b0010c224ca0b6mr2265078oap.248.1657101249503;
+        Wed, 06 Jul 2022 02:54:09 -0700 (PDT)
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com. [209.85.161.46])
+        by smtp.gmail.com with ESMTPSA id r81-20020acaf354000000b003359fb6609asm8613210oih.22.2022.07.06.02.54.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 02:54:09 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id m26-20020a4abc9a000000b00425cd321033so2843821oop.10;
+        Wed, 06 Jul 2022 02:54:09 -0700 (PDT)
+X-Received: by 2002:a05:6902:50e:b0:66e:7f55:7a66 with SMTP id
+ x14-20020a056902050e00b0066e7f557a66mr6648581ybs.365.1657100796735; Wed, 06
+ Jul 2022 02:46:36 -0700 (PDT)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220608142723.103523089@infradead.org> <20220608144517.124597382@infradead.org>
+In-Reply-To: <20220608144517.124597382@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 6 Jul 2022 11:46:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW4pT+YQfLzLTegFu1M3v9-9vaFDFAama7mc82=x6R__w@mail.gmail.com>
+Message-ID: <CAMuHMdW4pT+YQfLzLTegFu1M3v9-9vaFDFAama7mc82=x6R__w@mail.gmail.com>
+Subject: Re: [PATCH 19/36] objtool/idle: Validate __cpuidle code as noinstr
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, tony@atomide.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, sammy@sammy.net, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Serge,
+On Wed, Jun 8, 2022 at 4:46 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> Idle code is very like entry code in that RCU isn't available. As
+> such, add a little validation.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-On Mi, 2022-07-06 at 01:07 +0300, Serge Semin wrote:
-[...]
-> > What is the reason for separating ccu-rst.c and clk-ccu-rst.c?
-> > 
-> > I expect implementing the reset ops and registering the reset
-> > controller in the same compilation unit would be easier.
-> 
-> From the very beginning of the Baikal-T1 driver live the Clock/Reset functionality
-> has been split up into two parts:
-> 1. ccu-{div,pll}.c - Clock/Reset operations implementation.
-> 2. clk-ccu-{div,pll}.c - Clock/Reset kernel interface implementation.
-> At least for the clk-part it has made the driver much easier to read.
-> Code in 1. provides the interface methods like
-> ccu_{div,pll}_hw_register() to register a clock provider corresponding
-> to the CCU divider/PLL of the particular type. Code in 2. uses these
-> methods to create the CCU Dividers/PLL clock descriptors and register
-> the of-based clocks in the system. The reset functionality was
-> redistributed in the same manner in the framework of the ccu-div.c and
-> clk-ccu-div.c modules.
-> 
-> A similar approach I was trying to utilize in the framework of the
-> separate CCU Resets implementation. Although it turned out to be not as
-> handy as it was for the clock-part due to the different clock and
-> reset subsystems API (clock subsystem provides a single clock
-> source based API, while the reset subsystem expects to have the whole
-> resets controller described). Anyway I've decided to preserve as much
-> similarities as possible for the sake of the code unification and
-> better readability/maintainability. Thus the reset lines control
-> methods have been placed in the ccu-rst.c object file, while the reset
-> control registration has been implemented in the clk-ccu-rst.c module.
+>  arch/m68k/kernel/vmlinux-nommu.lds   |    1 -
+>  arch/m68k/kernel/vmlinux-std.lds     |    1 -
+>  arch/m68k/kernel/vmlinux-sun3.lds    |    1 -
 
-Thank you for the detailed explanation. I think that splitting doesn't
-help readability much in this case, but I realize that may just be a
-matter of preference.
+FWIW
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-[...]
-> > I don't think this is necessary, see my comments below. Since the reset
-> > ids are contiguous, just setting nr_resets and using the default
-> > .of_xlate should be enough to make sure this is never called with an
-> > invalid id.
-> 
-> Using non-contiguous !Clock! IDs turned to be unexpectedly handy. Due to
-> that design I was able to add the internal clock providers hidden from
-> the DTS users but still visible in the clocks hierarchy. It has made the
-> clocks implementation as detailed as possible and protected from the
-> improper clocks usage. It also simplified a new clock providers adding
-> in future (though there won't be clock sources left undefined in the
-> SoC after this patchset is applied).
-> 
-> All of that made me thinking that the same approach can be useful in
-> the framework of the CCU reset controls implementation too at the very
-> least for the code unification. Although after the next patch in the
-> series is applied there won't be resets left undefined in the
-> Baikal-T1 SoC. So from another side you might be partly right on
-> suggesting to drop the independent reset IDs/descriptors design and
-> just assume the IDs contiguousness.
-> 
-> So could you please confirm that you still insists on dropping it?
+Gr{oetje,eeting}s,
 
-Please drop it, then. I don't think there is value in carrying this
-complexity just because it makes the code more similar to the
-neighboring clk code.
+                        Geert
 
-I'd prefer to keep the reset ids contiguous, so future hardware should
-just get a different set of contiguous IDs, or new IDs appended
-contiguously as you do in patch 7.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-[...]
-> > 
-> > 
-> > 
-> > I would fold this into ccu_rst_hw_unregister().
-> 
-> I disagree in this part. Splitting up the interface methods in a set
-> of the small coherent methods like protagonists and respective
-> antagonists makes the code much easier to read and maintain. So I
-> will insist on having the ccu_rst_free_data() method even if it is
-> left with only a single kfree() function invocation.
-[...]
-> I have to disagree for the same reason as I would preserve the
-> ccu_rst_free_data() method here. Please see my comment above.
-
-I'm fine with that.
-
-> 
-regards
-Philipp
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
