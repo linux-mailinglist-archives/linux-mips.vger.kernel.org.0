@@ -2,135 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0358356842C
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 11:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9140568473
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 12:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbiGFJyt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jul 2022 05:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S231913AbiGFJ5Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jul 2022 05:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbiGFJx7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 05:53:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41B424BE8;
-        Wed,  6 Jul 2022 02:53:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34B6E61D40;
-        Wed,  6 Jul 2022 09:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82572C3411C;
-        Wed,  6 Jul 2022 09:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657101218;
-        bh=1+TAW3exq0FTcdqhQcZKOa7G8b91AXQ62ylYG4tiE1s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XZzdP/nE43npYcuU5VLFWOLEu7CAY2xradQzsG53GYYZD4Z1yATQHp7+ZwH7Hmq3e
-         W+oAqxiFLivWkHzeB3SrUROrHF5SpM6jC46XBBkwvwFYowh73cYe2E4MbbCv7phQRA
-         x7Os2L8LYJvB3MfqpNQ7XLbonvqc1qs/8Ku/V7BbQC5BKPLw2n1e4UD4Mb7PXR4iOW
-         byx/YElAuTAFKamDd+nYUQJiYgnF9Qq5ZaBO6Zk0XK4wSLSs6pL3m99jRuCn2pHUST
-         os1Nipx1oaQSeFLP1Eh5WwPQns2LoEglu5+t4HClMojsezlNRz9XaAn+A7xaeQ92aE
-         Au6lEIOEQAfxw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o91iy-005aui-Bc;
-        Wed, 06 Jul 2022 10:53:36 +0100
-Date:   Wed, 06 Jul 2022 10:53:36 +0100
-Message-ID: <87h73u1s9r.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Sander Vanheule <sander@svanheule.net>,
-        Aleksander Jan Bajkowski <olek2@wp.pl>,
-        martin.blumenstingl@googlemail.com, hauke@hauke-m.de,
-        git@birger-koblitz.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second VPE
+        with ESMTP id S232467AbiGFJ5B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 05:57:01 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD9B248F4;
+        Wed,  6 Jul 2022 02:56:59 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id u12so26118876eja.8;
+        Wed, 06 Jul 2022 02:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pwJw4iG5MmI5M9vOBxQQYYpW8UUcING3fwN/HsK0A3s=;
+        b=kwC8kbk09dEP3xxP68XAwezdx0WWeSATpNwDyuveZbSAKEhQfUiJDiqz+lD0kC2D8T
+         /4s3G+fLP/bdfGJffrfO6D75PfYz2GTlVYOK/zzkLDcI4bQAS3qt2CKbv04NdchLcptz
+         nGIksdX+jtnhYF9CJDfhpvzxgdejmUl1Go9leBsD+iX4Nfjc1yNGRYkXW6CI8Jn+5ZDz
+         1Bp6wkqSaAUZ5Psx1d9Pn9V05e0NP48eNvJreUEwmTUGRLRsyF/H80rNVLOE3hIDoXSz
+         5cSBKg9Ixk2kMWU6i9w93rRHjUP7AZ/L2F2uTxdehnjJUgziQjlwg9Mhrvi72cfXQVUL
+         lI+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pwJw4iG5MmI5M9vOBxQQYYpW8UUcING3fwN/HsK0A3s=;
+        b=KML6z8IvvqSh0H1vqTt/TPEHi8EhEaXlTugStllfNtiYn7YUdDTTbL5TYUrDXvYNs9
+         bwomXhY2YC67cOVR0qjRsQH5X1tX6j0qXTD82tnw6GIQNT6Et36XNrfUaGTeZsiMq2ys
+         0CAZdKxISkWrb87LACYFdny4JGH2XETWYOJZI3NOg4dlArXK+cvFxAlh1MdU8l3vSvHv
+         DELybNkKpOgKSdmMs6+712smH3rcmHqhKaxYA0kK7Q7dRSLrQJUaanZZv+K4eZNr/gha
+         0u54qCDzxhsQO60IrEiBAUjOHOgXwwlu5uUkHClhgzZ0h8hov7Asw9Bqc2DdF6FjdP8h
+         pIOQ==
+X-Gm-Message-State: AJIora/hrtB0NLBBpkCuY5dj7tc3HSR7ytOKRxKvP63KMCNmbCzhXBJg
+        58N2NHTaxwl7K/ayEKKU6MFdBgbAFPfkSoRoAdzAx5vcBnQ=
+X-Google-Smtp-Source: AGRyM1sW8fKdWhuNAv1+5imcPo58CW4Wc6VxQSXaW7+SCoFr2m+aku0YGzrMlbLoFs7Iw1xRvCzGf6aAY/BVvDIozWI=
+X-Received: by 2002:a17:906:3f51:b0:712:3945:8c0d with SMTP id
+ f17-20020a1709063f5100b0071239458c0dmr38267927ejj.302.1657101417852; Wed, 06
+ Jul 2022 02:56:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220702190705.5319-1-olek2@wp.pl> <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+ <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
 In-Reply-To: <20220706081901.GA10797@alpha.franken.de>
-References: <20220702190705.5319-1-olek2@wp.pl>
-        <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
-        <87fsjen2kl.wl-maz@kernel.org>
-        <20220706081901.GA10797@alpha.franken.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tsbogend@alpha.franken.de, sander@svanheule.net, olek2@wp.pl, martin.blumenstingl@googlemail.com, hauke@hauke-m.de, git@birger-koblitz.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 6 Jul 2022 11:56:47 +0200
+Message-ID: <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second VPE
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Aleksander Jan Bajkowski <olek2@wp.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 06 Jul 2022 09:19:01 +0100,
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
-> 
-> On Wed, Jul 06, 2022 at 08:05:30AM +0100, Marc Zyngier wrote:
-> > On Sun, 03 Jul 2022 19:15:11 +0100,
-> > Sander Vanheule <sander@svanheule.net> wrote:
-> > > 
-> > > Hi Aleksander,
-> > > 
-> > > Since this is IRQ related: +CC Marc Zyngier
-> > > 
-> > > On Sat, 2022-07-02 at 21:07 +0200, Aleksander Jan Bajkowski wrote:
-> > > > This patch is needed to handle interrupts by the second VPE on
-> > > > the Lantiq xRX200, xRX300 and xRX330 SoCs. In these chips, 32 ICU
-> > > > interrupts are connected to each hardware line. The SoC supports
-> > > > a total of 160 interrupts. Currently changing smp_affinity to the
-> > > > second VPE hangs interrupts.
-> > > > 
-> > > > This problem affects multithreaded SoCs with a custom interrupt
-> > > > controller. Chips with 1004Kc core and newer use the MIPS GIC.
-> > > > 
-> > > > Also CC'ed Birger Koblitz and Sander Vanheule. Both are working
-> > > > on support for Realtek RTL930x chips with 34Kc core and Birger
-> > > > has added a patch in OpenWRT that also enables all interrupt
-> > > > lines. So it looks like this patch is useful for more SoCs.
-> > > > 
-> > > > Tested on lantiq xRX200 and xRX330.
-> > > > 
-> > > > Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-> > > 
-> > > Thanks for bringing up this issue. Like you say OpenWrt carries a
-> > > similar patch, and I also carry a patch on my tree to enable all CPU
-> > > IRQ lines.
-> > > 
-> > > Indiscriminately enabling all IRQ lines doesn't sit quite right with
-> > > me though, since I would expect these to be enabled
-> > > on-demand. I.e. when a peripheral requests an IRQ, or when an IRQ
-> > > controller is cascaded into one of the CPU's interrupt lines. If I
-> > > understand correctly, the IRQ mask/unmask functions in
-> > > drivers/irqchip/irq-mips-cpu.c should do this.
-> > 
+Hi Thomas,
+
+On Wed, Jul 6, 2022 at 11:42 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+[...]
 > > But this is only enabling interrupts at the CPU level, right? And the
 > > irqchip is still in control of the masking of the individual
 > > interrupts?
-> 
+>
 > in the Lantiq case yes
-> 
+>
 > > If both assertions are true, then this patch seems OK. If it just let
 > > any interrupt through without any control, then this is wrong.
-> > 
+> >
 > > So which one is it?
-> 
+>
 > if there isn't an additional irqchip connected to the cpu interrupt lines,
 > this patch will cause problems.
+on Lantiq xRX200 SoCs (34Kc with two VPEs) we basically have:
+  cpu_irqc: interrupt-controller {
+      compatible = "mti,cpu-interrupt-controller";
 
-And that's what the irq-mips-cpu driver should solve, right? In this
-case, what's the problem with adopting this driver for the Lantiq
-platform (and all other ones using the same CPU)?
+      interrupt-controller;
+      #interrupt-cells = <1>;
+  };
 
-	M.
+  &icu {
+      compatible = "lantiq,icu";
 
--- 
-Without deviation from the norm, progress is not possible.
+      interrupt-parent = <&cpu_irqc>;
+      interrupts = <2>, <3>, <4>, <5>, <6>;
+
+      interrupt-controller;
+      #interrupt-cells = <1>;
+  }
+meaning: the Lantiq ICU interrupt controller provides 5*32 interrupt
+lines through 5 MIPS CPU interrupt lines
+
+Without this patch all interrupts are fine on VPE 0 and with SMP disabled.
+The ICU interrupt controller can route interrupts either to VPE 0 or VPE 1.
+Routing to VPE 1 is the problem: only the upper-most 32 interrupt
+lines (connected to MIPS CPU interrupt line 6) are working, all other
+interrupts never arrive on VPE 1. This is because MIPS CPU interrupt
+line is enabled, even before Aleksander's patch.
+
+With Aleksander's patch all 5*32 interrupts (at least all the ones I
+have tested) can be routed to VPE 1 as well.
+I understand that this doesn't mean that Aleksander's patch is
+automatically correct. My two main questions are:
+- why can MIPS CPU interrupt 6 and 7 be enabled unconditionally while
+2-5 cannot be enabled unconditionally?
+- seeing that there's also a mips_gic_present() check in the opposite
+case of what Aleksander's patch modifies: does this indicate that
+unmasking CPU interrupt lines for VPE 1 is not handled by the MIPS CPU
+interrupt controller driver at all at this point (and if so: do you
+have any suggestions how to properly fix this)?
+
+
+Best regards,
+Martin
