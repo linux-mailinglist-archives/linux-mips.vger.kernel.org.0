@@ -2,372 +2,178 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473215694BB
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 23:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C41156950F
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 00:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiGFVxo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jul 2022 17:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S234406AbiGFWKc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jul 2022 18:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbiGFVxn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 17:53:43 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44E126AF1;
-        Wed,  6 Jul 2022 14:53:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1657144419; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MYEVjZzoNtTCJiZr8vDMG0/wpLNhJ5jPks4vAbJZdFc=;
-        b=oUJBhL+KMj6Oa0IFZo5sY9BCxn0vgCsmhLQqf+PTtO7pV8BX5B0Su8ewwMh7YusXEBzgL+
-        tZ0t1TIba7JXNsIdbvUt4TNUARs9Dyo5XUROQXbwU76OB7kE+2snkjzOzOSn9kZgc2uW46
-        +Vs+6/AAw2cE/Ysf/zbdk4chd9W2dpQ=
-Date:   Wed, 06 Jul 2022 22:53:29 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 03/11] ASoC: jz4740-i2s: Convert to regmap API
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <5TCMER.XTCEJKYW8UD9@crapouillou.net>
-In-Reply-To: <20220706211330.120198-4-aidanmacdonald.0x0@gmail.com>
-References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
-        <20220706211330.120198-4-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S234300AbiGFWKY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 18:10:24 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6647E29806;
+        Wed,  6 Jul 2022 15:10:23 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id e12so28127146lfr.6;
+        Wed, 06 Jul 2022 15:10:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f3I0RW+TU+Dt1P645glOi8M5+ymvA2PdtgHWL6EUBTE=;
+        b=Lo5nMyGxSyr473d8zWRCifaxkZv9q9B33HlT6R/uatHkTgi/Ft2Tmc0A2fLXEkCCUR
+         r8cqtI0xnY7ZyFflZ3z1L0Luv9qg2voj7DvhbSIQiisRH/Erl6W4zFJzCUGi6M6YGU+y
+         j8Z7VpK3mI/z2Qu9UZ5iEs7ynlyo8w198ZaKq5FHE2lhHMDY9uHBwGjqTuvD0vTEkqwr
+         REh7mswNrJZjAWUgy08Y/2gRETVWY2+FV3L2EDW+XmgopShuGGoHkY3bX2iS4IzFQLTr
+         q97HWckBTd3pF5ToAylftmwEtuNZHftGbjXCy2xIsavUPpP66xamCoPF7mP4+6eJ1C2d
+         2bxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f3I0RW+TU+Dt1P645glOi8M5+ymvA2PdtgHWL6EUBTE=;
+        b=rObUz8QR52fnfshg9a/VKrGjE5Yw0UZgyCx2A9iM8Aw/jcnTnEqr/y6D6hbeDdvF19
+         nNf4iLYXFIuYVfXC1O2PgsLiCvLal+fDNQXy/Gn9969YKGd8/aEcmX/6BcwRdDlS6FFM
+         PofOEG2/j4RKm53HFWfCUQTNV1uJc2y0kjm+fe4oKMYgqoyE2xbo7aq8jEAcHwpRcg9q
+         fULovJ9L8wK/+WET+7VG5JNYlaEmDZ+eQuNhvZcw9bvGzw73gPl0IRvlkQf1/GKo2+2J
+         lCcwpiIx5YaTYWfpRygjSrI/rTX1I/k+JTk/5M4Z/fwE8fxHiyXhc8HjRPB4tjqsHlw0
+         Shhw==
+X-Gm-Message-State: AJIora+HBVEbZsGFwDuJQ1Mwpvza1FjlAT3DDcu009abfQ5Dx6W6DYJV
+        CGzVUX4XRnTTXOADyDpvZ0w=
+X-Google-Smtp-Source: AGRyM1tB+RlfKxXF0voWtTSuQ8A9WCh00/hQLi3fR0Iv3n7cqMx/h4hcrfYaL6u1ivl3sQgKiJNlZQ==
+X-Received: by 2002:a05:6512:3d9f:b0:47f:9e4f:adb1 with SMTP id k31-20020a0565123d9f00b0047f9e4fadb1mr26345755lfv.340.1657145421474;
+        Wed, 06 Jul 2022 15:10:21 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id c23-20020a056512325700b0047f70a0b8ffsm6475602lfr.20.2022.07.06.15.10.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 15:10:20 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 01:10:18 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 6/8] clk: baikal-t1: Move reset-controls code
+ into a dedicated module
+Message-ID: <20220706221018.3swtmotaqggww4xu@mobilestation>
+References: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624141853.7417-7-Sergey.Semin@baikalelectronics.ru>
+ <e0869ae1b10ec19eaf87dc5fa53498f82e7deaac.camel@pengutronix.de>
+ <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
+ <f28de0c61c06396e36756f2d4f3379fab26abdbf.camel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f28de0c61c06396e36756f2d4f3379fab26abdbf.camel@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aidan,
+On Wed, Jul 06, 2022 at 11:16:34AM +0200, Philipp Zabel wrote:
+> Hi Serge,
+> 
+> On Mi, 2022-07-06 at 01:07 +0300, Serge Semin wrote:
+> [...]
+> > > What is the reason for separating ccu-rst.c and clk-ccu-rst.c?
+> > > 
+> > > I expect implementing the reset ops and registering the reset
+> > > controller in the same compilation unit would be easier.
+> > 
+> > From the very beginning of the Baikal-T1 driver live the Clock/Reset functionality
+> > has been split up into two parts:
+> > 1. ccu-{div,pll}.c - Clock/Reset operations implementation.
+> > 2. clk-ccu-{div,pll}.c - Clock/Reset kernel interface implementation.
+> > At least for the clk-part it has made the driver much easier to read.
+> > Code in 1. provides the interface methods like
+> > ccu_{div,pll}_hw_register() to register a clock provider corresponding
+> > to the CCU divider/PLL of the particular type. Code in 2. uses these
+> > methods to create the CCU Dividers/PLL clock descriptors and register
+> > the of-based clocks in the system. The reset functionality was
+> > redistributed in the same manner in the framework of the ccu-div.c and
+> > clk-ccu-div.c modules.
+> > 
+> > A similar approach I was trying to utilize in the framework of the
+> > separate CCU Resets implementation. Although it turned out to be not as
+> > handy as it was for the clock-part due to the different clock and
+> > reset subsystems API (clock subsystem provides a single clock
+> > source based API, while the reset subsystem expects to have the whole
+> > resets controller described). Anyway I've decided to preserve as much
+> > similarities as possible for the sake of the code unification and
+> > better readability/maintainability. Thus the reset lines control
+> > methods have been placed in the ccu-rst.c object file, while the reset
+> > control registration has been implemented in the clk-ccu-rst.c module.
+> 
+> Thank you for the detailed explanation. I think that splitting doesn't
+> help readability much in this case, but I realize that may just be a
+> matter of preference.
+> 
+> [...]
+> > > I don't think this is necessary, see my comments below. Since the reset
+> > > ids are contiguous, just setting nr_resets and using the default
+> > > .of_xlate should be enough to make sure this is never called with an
+> > > invalid id.
+> > 
+> > Using non-contiguous !Clock! IDs turned to be unexpectedly handy. Due to
+> > that design I was able to add the internal clock providers hidden from
+> > the DTS users but still visible in the clocks hierarchy. It has made the
+> > clocks implementation as detailed as possible and protected from the
+> > improper clocks usage. It also simplified a new clock providers adding
+> > in future (though there won't be clock sources left undefined in the
+> > SoC after this patchset is applied).
+> > 
+> > All of that made me thinking that the same approach can be useful in
+> > the framework of the CCU reset controls implementation too at the very
+> > least for the code unification. Although after the next patch in the
+> > series is applied there won't be resets left undefined in the
+> > Baikal-T1 SoC. So from another side you might be partly right on
+> > suggesting to drop the independent reset IDs/descriptors design and
+> > just assume the IDs contiguousness.
+> > 
+> > So could you please confirm that you still insists on dropping it?
+> 
 
-Le mer., juil. 6 2022 at 22:13:22 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Using regmap for accessing the AIC registers makes the driver a
-> little easier to read, and later refactors can take advantage of
-> regmap APIs to further simplify the driver.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  sound/soc/jz4740/Kconfig      |  1 +
->  sound/soc/jz4740/jz4740-i2s.c | 99=20
-> +++++++++++++++--------------------
->  2 files changed, 42 insertions(+), 58 deletions(-)
->=20
-> diff --git a/sound/soc/jz4740/Kconfig b/sound/soc/jz4740/Kconfig
-> index e72f826062e9..dd3b4507fbe6 100644
-> --- a/sound/soc/jz4740/Kconfig
-> +++ b/sound/soc/jz4740/Kconfig
-> @@ -3,6 +3,7 @@ config SND_JZ4740_SOC_I2S
->  	tristate "SoC Audio (I2S protocol) for Ingenic JZ4740 SoC"
->  	depends on MIPS || COMPILE_TEST
->  	depends on HAS_IOMEM
-> +	select REGMAP_MMIO
->  	select SND_SOC_GENERIC_DMAENGINE_PCM
->  	help
->  	  Say Y if you want to use I2S protocol and I2S codec on Ingenic=20
-> JZ4740
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index ecd8df70d39c..66a901f56392 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -9,6 +9,7 @@
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/platform_device.h>
-> +#include <linux/regmap.h>
->  #include <linux/slab.h>
->=20
->  #include <linux/clk.h>
-> @@ -94,7 +95,7 @@ struct i2s_soc_info {
->=20
->  struct jz4740_i2s {
->  	struct resource *mem;
-> -	void __iomem *base;
-> +	struct regmap *regmap;
->=20
->  	struct clk *clk_aic;
->  	struct clk *clk_i2s;
-> @@ -105,39 +106,24 @@ struct jz4740_i2s {
->  	const struct i2s_soc_info *soc_info;
->  };
->=20
-> -static inline uint32_t jz4740_i2s_read(const struct jz4740_i2s *i2s,
-> -	unsigned int reg)
-> -{
-> -	return readl(i2s->base + reg);
-> -}
-> -
-> -static inline void jz4740_i2s_write(const struct jz4740_i2s *i2s,
-> -	unsigned int reg, uint32_t value)
-> -{
-> -	writel(value, i2s->base + reg);
-> -}
-> -
->  static int jz4740_i2s_startup(struct snd_pcm_substream *substream,
->  	struct snd_soc_dai *dai)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -	uint32_t conf, ctrl;
->  	int ret;
->=20
->  	if (snd_soc_dai_active(dai))
->  		return 0;
->=20
-> -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> -	ctrl |=3D JZ_AIC_CTRL_FLUSH;
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> +	regmap_write_bits(i2s->regmap, JZ_REG_AIC_CTRL,
-> +			  JZ_AIC_CTRL_FLUSH, JZ_AIC_CTRL_FLUSH);
+> Please drop it, then. I don't think there is value in carrying this
+> complexity just because it makes the code more similar to the
+> neighboring clk code.
+> 
+> I'd prefer to keep the reset ids contiguous, so future hardware should
+> just get a different set of contiguous IDs, or new IDs appended
+> contiguously as you do in patch 7.
 
-I don't think you need regmap_write_bits() here, since there is no=20
-cache to bypass. You could use regmap_update_bits(), or even better,=20
-regmap_set_bits().
+Agreed then. I'll update the patches and resend the series shortly.
+Thank you very much for review.
 
->=20
->  	ret =3D clk_prepare_enable(i2s->clk_i2s);
->  	if (ret)
->  		return ret;
->=20
-> -	conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -	conf |=3D JZ_AIC_CONF_ENABLE;
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> +	regmap_update_bits(i2s->regmap, JZ_REG_AIC_CONF,
-> +			   JZ_AIC_CONF_ENABLE, JZ_AIC_CONF_ENABLE);
+-Sergey
 
-Use regmap_set_bits() when you want to set all the bits of the mask.
-
->=20
->  	return 0;
->  }
-> @@ -146,14 +132,12 @@ static void jz4740_i2s_shutdown(struct=20
-> snd_pcm_substream *substream,
->  	struct snd_soc_dai *dai)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -	uint32_t conf;
->=20
->  	if (snd_soc_dai_active(dai))
->  		return;
->=20
-> -	conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -	conf &=3D ~JZ_AIC_CONF_ENABLE;
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> +	regmap_update_bits(i2s->regmap, JZ_REG_AIC_CONF,
-> +			   JZ_AIC_CONF_ENABLE, 0);
-
-Use regmap_clear_bits() when you want to clear all bits of the mask.
-
-Otherwise, looks fairly good!
-
-Cheers,
--Paul
-
->=20
->  	clk_disable_unprepare(i2s->clk_i2s);
->  }
-> @@ -162,8 +146,6 @@ static int jz4740_i2s_trigger(struct=20
-> snd_pcm_substream *substream, int cmd,
->  	struct snd_soc_dai *dai)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -
-> -	uint32_t ctrl;
->  	uint32_t mask;
->=20
->  	if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
-> @@ -171,38 +153,30 @@ static int jz4740_i2s_trigger(struct=20
-> snd_pcm_substream *substream, int cmd,
->  	else
->  		mask =3D JZ_AIC_CTRL_ENABLE_CAPTURE | JZ_AIC_CTRL_ENABLE_RX_DMA;
->=20
-> -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> -
->  	switch (cmd) {
->  	case SNDRV_PCM_TRIGGER_START:
->  	case SNDRV_PCM_TRIGGER_RESUME:
->  	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-> -		ctrl |=3D mask;
-> +		regmap_update_bits(i2s->regmap, JZ_REG_AIC_CTRL, mask, mask);
->  		break;
->  	case SNDRV_PCM_TRIGGER_STOP:
->  	case SNDRV_PCM_TRIGGER_SUSPEND:
->  	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-> -		ctrl &=3D ~mask;
-> +		regmap_update_bits(i2s->regmap, JZ_REG_AIC_CTRL, mask, 0);
->  		break;
->  	default:
->  		return -EINVAL;
->  	}
->=20
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> -
->  	return 0;
->  }
->=20
->  static int jz4740_i2s_set_fmt(struct snd_soc_dai *dai, unsigned int=20
-> fmt)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -
-> -	uint32_t format =3D 0;
-> -	uint32_t conf;
-> -
-> -	conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -
-> -	conf &=3D ~(JZ_AIC_CONF_BIT_CLK_MASTER | JZ_AIC_CONF_SYNC_CLK_MASTER);
-> +	const unsigned int conf_mask =3D JZ_AIC_CONF_BIT_CLK_MASTER |
-> +				       JZ_AIC_CONF_SYNC_CLK_MASTER;
-> +	unsigned int conf =3D 0, format =3D 0;
->=20
->  	switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
->  	case SND_SOC_DAIFMT_BP_FP:
-> @@ -238,8 +212,8 @@ static int jz4740_i2s_set_fmt(struct snd_soc_dai=20
-> *dai, unsigned int fmt)
->  		return -EINVAL;
->  	}
->=20
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_I2S_FMT, format);
-> +	regmap_update_bits(i2s->regmap, JZ_REG_AIC_CONF, conf_mask, conf);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_I2S_FMT, format);
->=20
->  	return 0;
->  }
-> @@ -252,9 +226,9 @@ static int jz4740_i2s_hw_params(struct=20
-> snd_pcm_substream *substream,
->  	uint32_t ctrl, div_reg;
->  	int div;
->=20
-> -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> +	regmap_read(i2s->regmap, JZ_REG_AIC_CTRL, &ctrl);
-> +	regmap_read(i2s->regmap, JZ_REG_AIC_CLK_DIV, &div_reg);
->=20
-> -	div_reg =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CLK_DIV);
->  	div =3D clk_get_rate(i2s->clk_i2s) / (64 * params_rate(params));
->=20
->  	switch (params_format(params)) {
-> @@ -291,8 +265,8 @@ static int jz4740_i2s_hw_params(struct=20
-> snd_pcm_substream *substream,
->  		}
->  	}
->=20
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CLK_DIV, div_reg);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CTRL, ctrl);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CLK_DIV, div_reg);
->=20
->  	return 0;
->  }
-> @@ -329,12 +303,10 @@ static int jz4740_i2s_set_sysclk(struct=20
-> snd_soc_dai *dai, int clk_id,
->  static int jz4740_i2s_suspend(struct snd_soc_component *component)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
-> -	uint32_t conf;
->=20
->  	if (snd_soc_component_active(component)) {
-> -		conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -		conf &=3D ~JZ_AIC_CONF_ENABLE;
-> -		jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> +		regmap_update_bits(i2s->regmap, JZ_REG_AIC_CONF,
-> +				   JZ_AIC_CONF_ENABLE, 0);
->=20
->  		clk_disable_unprepare(i2s->clk_i2s);
->  	}
-> @@ -347,7 +319,6 @@ static int jz4740_i2s_suspend(struct=20
-> snd_soc_component *component)
->  static int jz4740_i2s_resume(struct snd_soc_component *component)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
-> -	uint32_t conf;
->  	int ret;
->=20
->  	ret =3D clk_prepare_enable(i2s->clk_aic);
-> @@ -361,9 +332,8 @@ static int jz4740_i2s_resume(struct=20
-> snd_soc_component *component)
->  			return ret;
->  		}
->=20
-> -		conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -		conf |=3D JZ_AIC_CONF_ENABLE;
-> -		jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> +		regmap_update_bits(i2s->regmap, JZ_REG_AIC_CONF,
-> +				   JZ_AIC_CONF_ENABLE, JZ_AIC_CONF_ENABLE);
->  	}
->=20
->  	return 0;
-> @@ -396,8 +366,8 @@ static int jz4740_i2s_dai_probe(struct=20
-> snd_soc_dai *dai)
->  			JZ_AIC_CONF_INTERNAL_CODEC;
->  	}
->=20
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, conf);
->=20
->  	return 0;
->  }
-> @@ -495,11 +465,19 @@ static const struct of_device_id=20
-> jz4740_of_matches[] =3D {
->  };
->  MODULE_DEVICE_TABLE(of, jz4740_of_matches);
->=20
-> +static const struct regmap_config jz4740_i2s_regmap_config =3D {
-> +	.reg_bits	=3D 32,
-> +	.reg_stride	=3D 4,
-> +	.val_bits	=3D 32,
-> +	.max_register	=3D JZ_REG_AIC_FIFO,
-> +};
-> +
->  static int jz4740_i2s_dev_probe(struct platform_device *pdev)
->  {
->  	struct device *dev =3D &pdev->dev;
->  	struct jz4740_i2s *i2s;
->  	struct resource *mem;
-> +	void __iomem *regs;
->  	int ret;
->=20
->  	i2s =3D devm_kzalloc(dev, sizeof(*i2s), GFP_KERNEL);
-> @@ -508,9 +486,9 @@ static int jz4740_i2s_dev_probe(struct=20
-> platform_device *pdev)
->=20
->  	i2s->soc_info =3D device_get_match_data(dev);
->=20
-> -	i2s->base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
-> -	if (IS_ERR(i2s->base))
-> -		return PTR_ERR(i2s->base);
-> +	regs =3D devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
-> +	if (IS_ERR(regs))
-> +		return PTR_ERR(regs);
->=20
->  	i2s->playback_dma_data.maxburst =3D 16;
->  	i2s->playback_dma_data.addr =3D mem->start + JZ_REG_AIC_FIFO;
-> @@ -526,6 +504,11 @@ static int jz4740_i2s_dev_probe(struct=20
-> platform_device *pdev)
->  	if (IS_ERR(i2s->clk_i2s))
->  		return PTR_ERR(i2s->clk_i2s);
->=20
-> +	i2s->regmap =3D devm_regmap_init_mmio(&pdev->dev, regs,
-> +					    &jz4740_i2s_regmap_config);
-> +	if (IS_ERR(i2s->regmap))
-> +		return PTR_ERR(i2s->regmap);
-> +
->  	platform_set_drvdata(pdev, i2s);
->=20
->  	ret =3D devm_snd_soc_register_component(dev, &jz4740_i2s_component,
-> --
-> 2.35.1
->=20
-
-
+> 
+> [...]
+> > > 
+> > > 
+> > > 
+> > > I would fold this into ccu_rst_hw_unregister().
+> > 
+> > I disagree in this part. Splitting up the interface methods in a set
+> > of the small coherent methods like protagonists and respective
+> > antagonists makes the code much easier to read and maintain. So I
+> > will insist on having the ccu_rst_free_data() method even if it is
+> > left with only a single kfree() function invocation.
+> [...]
+> > I have to disagree for the same reason as I would preserve the
+> > ccu_rst_free_data() method here. Please see my comment above.
+> 
+> I'm fine with that.
+> 
+> > 
+> regards
+> Philipp
