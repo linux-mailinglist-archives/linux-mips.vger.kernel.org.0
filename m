@@ -2,106 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE034567F7C
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 09:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9FF567F80
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 09:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiGFHFi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jul 2022 03:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S231414AbiGFHGB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jul 2022 03:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiGFHFX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 03:05:23 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B019922536;
-        Wed,  6 Jul 2022 00:05:20 -0700 (PDT)
-Received: from mail-yw1-f174.google.com ([209.85.128.174]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MQMm9-1nvYz6481J-00MIfJ; Wed, 06 Jul 2022 09:05:18 +0200
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31c86fe1dddso83275417b3.1;
-        Wed, 06 Jul 2022 00:05:15 -0700 (PDT)
-X-Gm-Message-State: AJIora/yyXFuxC0iH8udXG4GKzeQDfZVFj5/5/aXY+3OG8rcG8jffJLV
-        2V+NVKVyV6CbxZT52ddqge0oe5EQDCQFt7Y66jU=
-X-Google-Smtp-Source: AGRyM1sFkLoTiaaVIBkcDzO6lGV11chQSm3x6oRhEtv1xOtqIu5uDObFEe7OPQNG4jMZlSfDIkbGiGD4cv9otOB20XA=
-X-Received: by 2002:a81:f8f:0:b0:31c:bd9f:31ce with SMTP id
- 137-20020a810f8f000000b0031cbd9f31cemr10731679ywp.347.1657091114041; Wed, 06
- Jul 2022 00:05:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220630051630.1718927-1-anshuman.khandual@arm.com>
- <8a6ccbae-7d7c-6e08-cc28-eeb649f86112@arm.com> <85fff3f6-373f-3e6a-325e-0fa8ad46273a@csgroup.eu>
-In-Reply-To: <85fff3f6-373f-3e6a-325e-0fa8ad46273a@csgroup.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 6 Jul 2022 09:04:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1gb1Xrg4AGnncFpN=aDxVKfjkt1TmSvZXXADZTv7eE-g@mail.gmail.com>
-Message-ID: <CAK8P3a1gb1Xrg4AGnncFpN=aDxVKfjkt1TmSvZXXADZTv7eE-g@mail.gmail.com>
-Subject: Re: [PATCH V6 00/26] mm/mmap: Drop __SXXX/__PXXX macros from across platforms
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:eoj/BCXKdmN3+Jtii2tnT9++PxDX3Qg7gtjTIvPC9UxI/6aBcxJ
- tTae1o1xAarRHKJSP3rYt1b1/eDeegzTy0D2zVasyMJuuUa+41stGutBBXc1JX0IWj+OuEm
- 4ASghrYondSGEJVdD4r91TCAANQlj5byQGbFpEa9jhmxGwVvHYU/Vtoar9ZPDQqoHW43WeM
- R3ozEe+h4nV01gc2XgZ2Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:prrS9+g5wIQ=:AH9lcMoXqt1xOcLbdnz0v3
- FlSve9D0sISO715668G4rmmOOym/lRAuFwSwKOrEgM87WsNd50hr6zzm6CkRQaWsQNRfb3JMD
- pcZW7ztueF93/tWxu/udv1r5lnePhIz3byRArXnmXPWihtuIM7AQ9Ky3KkRQOmYKT78as29UQ
- r0cGiEnz6bcQpvcqYSjK3TJdLhS7PpmL3x90cG6xm+NZ6gIxuJEClno37wYHSZUPbBMVs/C9A
- IOAAi+/oi7gWMWmtjHJarqw8Y+I2uYCh9CrF0dt8bUjvuK2QFTKEwKPEsaHgVWA42u9wlem+y
- 4sIgHUzW0/TuymIwELBXL/ElFVOdfLORt8KL4MTwAICBILbSZS3XVWwMDkjgBf8D4QCI5c+R9
- 00HOPOriisiG7YnK8L6mjd+xGcjfeCvzVC9XOhM+28BR7CteM5su05ac/6hzrpkJLyILrKNRs
- HvaTSN1FwRqUy9Kj+WI1P6jXqu8d2IBxZMLKsnAXha4VVlcdtrH2kDJLkchXUmu8Y/f31xGor
- TVUj0G1hyIitAC5nxF36puqdvyGzqw1EjycEk73/bwY8lkE1YYSQMhVTNIdROMV1pqvwgLPdl
- IaRqUJkq0ZbXME5jinzrOPR2K+0f/rNmGTOO72ZJ2xElw39Q0uqHGgmN6++BKG4JNqK9MlBbi
- DSfhIbUxaRzTzPoPxj2i8ePp+cVwJBWGqB9PqvGAd6DX6y27uTIL9evkQviyXz4YCMv3vnrFq
- lsDcsJpMxdcr5+T5dz0YqL8w/tJakl/IqUgEw6m0VYya+EPCL+0rI2VwcHBY2Xj2z72Kibici
- 54Y/uROUkJKI0rqrBWN7XoacPQ1MfP1Mq5mgKzoRwHNbT+W58ZL9IU8OR3lzsTjY6dj34FUgG
- OKtnA6/3GxUCV6shdv1Q==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S231368AbiGFHFh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 03:05:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B997222A5;
+        Wed,  6 Jul 2022 00:05:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECDB9B81AE8;
+        Wed,  6 Jul 2022 07:05:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59F6C3411C;
+        Wed,  6 Jul 2022 07:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657091133;
+        bh=oQFTV82o01nns7iJnvxF0Gz1JyoZvICeGttjRj2CI+A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oElfMAsGtjX9+8EiwskrKtK8LY95zSBUNn5vU0cEBJs6C6orPDv3QLWLJoKFLMmQ3
+         DGidFNb84VGisgtn/wc3a1KMc96cfZspoN/V3kS9Md870MJaW8zxFZ5+QzdGda+ct3
+         h1b+R9IH3qW0jHrwgGeGsqFDbb99ImDdFHIut9/XJjbfz23qGaPJmHnfPdFMH97hDW
+         LZFYTeUJBg6ABG5+xK+/hcWetpY+/69PGfObCzkXpTBt6ldf+RJ3WWZXNNnYjUsecy
+         m1EgK6bHlgMzJRkQH8cIgS0aeyZ4hPgZmzeifZkaZnhwfmPIfdt8tIy5241NGlBkCG
+         yTuiBmF8j2KIA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o8z6J-005YIB-HU;
+        Wed, 06 Jul 2022 08:05:31 +0100
+Date:   Wed, 06 Jul 2022 08:05:30 +0100
+Message-ID: <87fsjen2kl.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>, tsbogend@alpha.franken.de,
+        martin.blumenstingl@googlemail.com, hauke@hauke-m.de,
+        git@birger-koblitz.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second VPE
+In-Reply-To: <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+References: <20220702190705.5319-1-olek2@wp.pl>
+        <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: sander@svanheule.net, olek2@wp.pl, tsbogend@alpha.franken.de, martin.blumenstingl@googlemail.com, hauke@hauke-m.de, git@birger-koblitz.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 8:33 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
+On Sun, 03 Jul 2022 19:15:11 +0100,
+Sander Vanheule <sander@svanheule.net> wrote:
+> 
+> Hi Aleksander,
+> 
+> Since this is IRQ related: +CC Marc Zyngier
+> 
+> On Sat, 2022-07-02 at 21:07 +0200, Aleksander Jan Bajkowski wrote:
+> > This patch is needed to handle interrupts by the second VPE on
+> > the Lantiq xRX200, xRX300 and xRX330 SoCs. In these chips, 32 ICU
+> > interrupts are connected to each hardware line. The SoC supports
+> > a total of 160 interrupts. Currently changing smp_affinity to the
+> > second VPE hangs interrupts.
+> > 
+> > This problem affects multithreaded SoCs with a custom interrupt
+> > controller. Chips with 1004Kc core and newer use the MIPS GIC.
+> > 
+> > Also CC'ed Birger Koblitz and Sander Vanheule. Both are working
+> > on support for Realtek RTL930x chips with 34Kc core and Birger
+> > has added a patch in OpenWRT that also enables all interrupt
+> > lines. So it looks like this patch is useful for more SoCs.
+> > 
+> > Tested on lantiq xRX200 and xRX330.
+> > 
+> > Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> 
+> Thanks for bringing up this issue. Like you say OpenWrt carries a
+> similar patch, and I also carry a patch on my tree to enable all CPU
+> IRQ lines.
+> 
+> Indiscriminately enabling all IRQ lines doesn't sit quite right with
+> me though, since I would expect these to be enabled
+> on-demand. I.e. when a peripheral requests an IRQ, or when an IRQ
+> controller is cascaded into one of the CPU's interrupt lines. If I
+> understand correctly, the IRQ mask/unmask functions in
+> drivers/irqchip/irq-mips-cpu.c should do this.
 
-> As far as I can see in Kconfig, CONFIG_MMU is user selectable on the
-> following architectures:
-> - ARM
-> - M68K
-> - RISCV
-> - SH
->
-> And is disabled by default on XTENSA.
+But this is only enabling interrupts at the CPU level, right? And the
+irqchip is still in control of the masking of the individual
+interrupts?
 
-Right, the list is complete, though it's also default-enabled for
-every CPU core on xtensa, and you can only disable it for
-"custom" CPU cores.
+If both assertions are true, then this patch seems OK. If it just let
+any interrupt through without any control, then this is wrong.
 
-        Arnd
+So which one is it?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
