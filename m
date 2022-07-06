@@ -2,162 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F42568256
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 11:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4610556831B
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Jul 2022 11:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiGFI7s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Jul 2022 04:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
+        id S232512AbiGFJLR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Jul 2022 05:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiGFI7n (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 04:59:43 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E044619C2C;
-        Wed,  6 Jul 2022 01:59:39 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0VIXd7l-_1657097967;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIXd7l-_1657097967)
-          by smtp.aliyun-inc.com;
-          Wed, 06 Jul 2022 16:59:29 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
-        monstr@monstr.eu, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        baolin.wang@linux.alibaba.com, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] mm: Add kernel PTE level pagetable pages account
-Date:   Wed,  6 Jul 2022 16:59:17 +0800
-Message-Id: <398ead25695e530f766849be5edafaf62c1c864d.1657096412.git.baolin.wang@linux.alibaba.com>
+        with ESMTP id S233182AbiGFJLE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Jul 2022 05:11:04 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E405E252A3;
+        Wed,  6 Jul 2022 02:07:49 -0700 (PDT)
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axn+LbUMVi83YMAA--.37951S2;
+        Wed, 06 Jul 2022 17:07:44 +0800 (CST)
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongchen Zhang <zhanghongchen@loongson.cn>
+Subject: [PATCH] MIPS: fix pmd_mkinvalid
+Date:   Wed,  6 Jul 2022 17:07:36 +0800
+Message-Id: <1657098456-29244-1-git-send-email-zhanghongchen@loongson.cn>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf9Axn+LbUMVi83YMAA--.37951S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw1ftw4DtrW3Ww4DJwb_yoW5Cw1fp3
+        WkAa9YkrW5K34IyFW3tr1ftr15ZrZrKF9Ygryqgr1jya43X397Jrn3G34ktFy8Ja1qvFy8
+        Gr13XFs8GrWxZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now the kernel PTE level ptes are always protected by mm->page_table_lock
-instead of split pagetable lock, so the kernel PTE level pagetable pages
-are not accounted. Especially the vmalloc()/vmap() can consume lots of
-kernel pagetable, so to get an accurate pagetable accounting, calling new
-helpers page_{set,clear}_pgtable() when allocating or freeing a kernel
-PTE level pagetable page.
+When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
+return true.
+So introduce a _PAGE_PRESENT_INVALID_SHIFT bit to check if a pmd is
+present but invalidated by pmd_mkinvalid.
 
-Meanwhile converting architectures to use corresponding generic PTE pagetable
-allocation and freeing functions.
-
-Note this patch only adds accounting to the page tables allocated after boot.
-
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
 ---
- arch/csky/include/asm/pgalloc.h |  2 +-
- arch/microblaze/mm/pgtable.c    |  2 +-
- arch/openrisc/mm/ioremap.c      |  2 +-
- arch/x86/mm/pgtable.c           |  2 +-
- include/asm-generic/pgalloc.h   | 14 ++++++++++++--
- 5 files changed, 16 insertions(+), 6 deletions(-)
+ arch/mips/include/asm/pgtable-64.h   | 2 +-
+ arch/mips/include/asm/pgtable-bits.h | 5 +++++
+ arch/mips/include/asm/pgtable.h      | 3 ++-
+ 3 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/csky/include/asm/pgalloc.h b/arch/csky/include/asm/pgalloc.h
-index 7d57e5d..56f8d25 100644
---- a/arch/csky/include/asm/pgalloc.h
-+++ b/arch/csky/include/asm/pgalloc.h
-@@ -29,7 +29,7 @@ static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
- 	pte_t *pte;
- 	unsigned long i;
- 
--	pte = (pte_t *) __get_free_page(GFP_KERNEL);
-+	pte = __pte_alloc_one_kernel(mm);
- 	if (!pte)
- 		return NULL;
- 
-diff --git a/arch/microblaze/mm/pgtable.c b/arch/microblaze/mm/pgtable.c
-index 9f73265..e96dd1b 100644
---- a/arch/microblaze/mm/pgtable.c
-+++ b/arch/microblaze/mm/pgtable.c
-@@ -245,7 +245,7 @@ unsigned long iopa(unsigned long addr)
- __ref pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index 41921ac..1c5ef41 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -265,7 +265,7 @@ static inline int pmd_present(pmd_t pmd)
  {
- 	if (mem_init_done)
--		return (pte_t *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
-+		return __pte_alloc_one_kernel(mm);
- 	else
- 		return memblock_alloc_try_nid(PAGE_SIZE, PAGE_SIZE,
- 					      MEMBLOCK_LOW_LIMIT,
-diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-index daae13a..3453acc 100644
---- a/arch/openrisc/mm/ioremap.c
-+++ b/arch/openrisc/mm/ioremap.c
-@@ -118,7 +118,7 @@ pte_t __ref *pte_alloc_one_kernel(struct mm_struct *mm)
- 	pte_t *pte;
+ #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ 	if (unlikely(pmd_val(pmd) & _PAGE_HUGE))
+-		return pmd_val(pmd) & _PAGE_PRESENT;
++		return pmd_val(pmd) & (_PAGE_PRESENT | _PAGE_PRESENT_INVALID);
+ #endif
  
- 	if (likely(mem_init_done)) {
--		pte = (pte_t *)get_zeroed_page(GFP_KERNEL);
-+		pte = __pte_alloc_one_kernel(mm);
- 	} else {
- 		pte = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
- 		if (!pte)
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index ea39670..20f3076 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -858,7 +858,7 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
- 	/* INVLPG to clear all paging-structure caches */
- 	flush_tlb_kernel_range(addr, addr + PAGE_SIZE-1);
+ 	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
+diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
+index 2362842..3c176a1e 100644
+--- a/arch/mips/include/asm/pgtable-bits.h
++++ b/arch/mips/include/asm/pgtable-bits.h
+@@ -49,6 +49,7 @@ enum pgtable_bits {
  
--	free_page((unsigned long)pte);
-+	pte_free_kernel(NULL, pte);
+ 	/* Used only by software (masked out before writing EntryLo*) */
+ 	_PAGE_PRESENT_SHIFT = 24,
++	_PAGE_PRESENT_INVALID_SHIFT,
+ 	_PAGE_WRITE_SHIFT,
+ 	_PAGE_ACCESSED_SHIFT,
+ 	_PAGE_MODIFIED_SHIFT,
+@@ -80,6 +81,7 @@ enum pgtable_bits {
  
- 	return 1;
- }
-diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-index 8ce8d7c..cd8420f 100644
---- a/include/asm-generic/pgalloc.h
-+++ b/include/asm-generic/pgalloc.h
-@@ -18,7 +18,14 @@
-  */
- static inline pte_t *__pte_alloc_one_kernel(struct mm_struct *mm)
+ 	/* Used only by software (masked out before writing EntryLo*) */
+ 	_PAGE_PRESENT_SHIFT = _CACHE_SHIFT + 3,
++	_PAGE_PRESENT_INVALID_SHIFT,
+ 	_PAGE_NO_READ_SHIFT,
+ 	_PAGE_WRITE_SHIFT,
+ 	_PAGE_ACCESSED_SHIFT,
+@@ -98,6 +100,7 @@ enum pgtable_bits {
+ enum pgtable_bits {
+ 	/* Used only by software (writes to EntryLo ignored) */
+ 	_PAGE_PRESENT_SHIFT,
++	_PAGE_PRESENT_INVALID_SHIFT,
+ 	_PAGE_NO_READ_SHIFT,
+ 	_PAGE_WRITE_SHIFT,
+ 	_PAGE_ACCESSED_SHIFT,
+@@ -122,6 +125,7 @@ enum pgtable_bits {
+ enum pgtable_bits {
+ 	/* Used only by software (masked out before writing EntryLo*) */
+ 	_PAGE_PRESENT_SHIFT,
++	_PAGE_PRESENT_INVALID_SHIFT,
+ #if !defined(CONFIG_CPU_HAS_RIXI)
+ 	_PAGE_NO_READ_SHIFT,
+ #endif
+@@ -152,6 +156,7 @@ enum pgtable_bits {
+ 
+ /* Used only by software */
+ #define _PAGE_PRESENT		(1 << _PAGE_PRESENT_SHIFT)
++#define _PAGE_PRESENT_INVALID	(1 << _PAGE_PRESENT_INVALID_SHIFT)
+ #define _PAGE_WRITE		(1 << _PAGE_WRITE_SHIFT)
+ #define _PAGE_ACCESSED		(1 << _PAGE_ACCESSED_SHIFT)
+ #define _PAGE_MODIFIED		(1 << _PAGE_MODIFIED_SHIFT)
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 374c632..cc80211 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -698,7 +698,8 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+ 
+ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
  {
--	return (pte_t *)__get_free_page(GFP_PGTABLE_KERNEL);
-+	struct page *page;
-+	gfp_t gfp = GFP_PGTABLE_KERNEL;
-+
-+	page = alloc_pages(gfp, 0);
-+	if (!page)
-+		return NULL;
-+	page_set_pgtable(page);
-+	return (pte_t *)page_address(page);
- }
+-	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
++	pmd_val(pmd) |= _PAGE_PRESENT_INVALID;
++	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID);
  
- #ifndef __HAVE_ARCH_PTE_ALLOC_ONE_KERNEL
-@@ -41,7 +48,10 @@ static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
-  */
- static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
- {
--	free_page((unsigned long)pte);
-+	struct page *page = virt_to_page(pte);
-+
-+	page_clear_pgtable(page);
-+	__free_page(page);
+ 	return pmd;
  }
- 
- /**
 -- 
 1.8.3.1
 
