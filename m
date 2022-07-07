@@ -2,123 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF64F56A5C8
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 16:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7475156A6BE
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 17:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235523AbiGGOqy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Jul 2022 10:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S235846AbiGGPMt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Jul 2022 11:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbiGGOqx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 10:46:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CE82FFCB;
-        Thu,  7 Jul 2022 07:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657205213; x=1688741213;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KZoOhYr8rZQDf+CrGeMco6Jgl7zOhXbo9W38e2RlFZY=;
-  b=hNFXZqPDVnyhUk1GuJEIZQVPloNRoGZHxvrqdmEmGtnoIQljEEg3ornY
-   Kfd4ydF4NV+3kiJTdnU/76Lkt8FAPMPAwwnrgvs2/rX12IBXpgGAZq1ik
-   ZUjn3BIWRRi03YCgI0ihp28cnkpM4sKikyUjRbiiXKPxOG1RoCgOpt7po
-   VFL7mw5AsENeNhf37qRYancbXw07x2KWh/D4OoIJIHNQp7gILmU5dpKhH
-   byI8d/arwY2NiZIOZfMP0GrfhsE/aQSpRFEbTJboXjz5a99J0mBBSVCOQ
-   e1CwvXMEVPBJEKmef7SZDFtEPbbYIcvqGEhhwyHRky8xTcRw72Cy9Jg9h
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="282793101"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="282793101"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 07:46:52 -0700
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="568544278"
-Received: from nmajidi-mobl.amr.corp.intel.com (HELO [10.251.17.238]) ([10.251.17.238])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 07:46:51 -0700
-Message-ID: <8821beda-4d60-4d01-b5c8-1629a19c7f0d@intel.com>
-Date:   Thu, 7 Jul 2022 07:44:39 -0700
+        with ESMTP id S231753AbiGGPMs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 11:12:48 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF432B199
+        for <linux-mips@vger.kernel.org>; Thu,  7 Jul 2022 08:12:45 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id ED5052F6E0D;
+        Thu,  7 Jul 2022 17:12:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1657206763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yyh/5lNVuEw7BeBKEgILa47+nLSXZrJB+DRzXHEONXE=;
+        b=2Qpm++Lka0nsO5CtJVS7ivgl3S1xoy86MVdZhHPUzQorJBvJLHCUQbUs0a0W8xPa7leOe3
+        UQPuZvGEjqNwt8gaOfGVcO8Nrp81m4zCH40/EgoQGjUvOPuEzaF6cZSL8xPcaWCTL1d/kr
+        agL1ULMFVKm6s8HfTVM5iOjT/b5H6x8H2I9zZBaPMeiig5sffDrYUSKG7G5jU9N1U3bWOm
+        STM3JSvmNRMtFjE9R+B834vDW8cBt7izw1VIo0YWlI/hD+2yIZZJ1tXOv0cwqlDm9j6K/q
+        dXu3ByIH0U+ZdIq4uxvVcs1O3HM973pJYCW3gHrf6lTsxy2fOV+foqVum94T7Q==
+Message-ID: <468a2c8578d099eef0e0106fe273f73f5d70ef94.camel@svanheule.net>
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
+ VPE
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Aleksander Jan Bajkowski <olek2@wp.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 07 Jul 2022 17:12:42 +0200
+In-Reply-To: <20220707143930.GA14693@alpha.franken.de>
+References: <20220702190705.5319-1-olek2@wp.pl>
+         <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+         <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
+         <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
+         <20220707100630.GC9894@alpha.franken.de>
+         <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
+         <20220707143930.GA14693@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 0/3] Add PUD and kernel PTE level pagetable account
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
-        monstr@monstr.eu, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
- <d2d58cc2-7e6d-aa2d-3096-a500ce321494@intel.com>
- <ef376131-bf5f-7e5b-ea1b-1e8f64a6d060@linux.alibaba.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <ef376131-bf5f-7e5b-ea1b-1e8f64a6d060@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/7/22 04:32, Baolin Wang wrote:
-> On 7/6/2022 11:48 PM, Dave Hansen wrote:
->> On 7/6/22 01:59, Baolin Wang wrote:
->>> Now we will miss to account the PUD level pagetable and kernel PTE level
->>> pagetable, as well as missing to set the PG_table flags for these
->>> pagetable
->>> pages, which will get an inaccurate pagetable accounting, and miss
->>> PageTable() validation in some cases. So this patch set introduces new
->>> helpers to help to account PUD and kernel PTE pagetable pages.
->>
->> Could you explain the motivation for this series a bit more?  Is there a
->> real-world problem that this fixes?
-> 
-> Not fix real problem. The motivation is that making the pagetable
-> accounting more accurate, which helps us to analyse the consumption of
-> the pagetable pages in some cases, and maybe help to do some empty
-> pagetable reclaiming in future.
+On Thu, 2022-07-07 at 16:39 +0200, Thomas Bogendoerfer wrote:
+> On Thu, Jul 07, 2022 at 02:57:15PM +0200, Martin Blumenstingl wrote:
+> > On Thu, Jul 7, 2022 at 12:11 PM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > [...]
+> > > > - why can MIPS CPU interrupt 6 and 7 be enabled unconditionally whi=
+le
+> > > > 2-5 cannot be enabled unconditionally?
+> > >=20
+> > > 7 is timer interrupt and is usually wired for 34K cpus and 6 is
+> > > performance counter hopefully handled as well. And I agree that
+> > > this still isn't the best approach here
+> > Thanks for this explanation!
+> >=20
+> > > > - seeing that there's also a mips_gic_present() check in the opposi=
+te
+> > > > case of what Aleksander's patch modifies: does this indicate that
+> > > > unmasking CPU interrupt lines for VPE 1 is not handled by the MIPS =
+CPU
+> > > > interrupt controller driver at all at this point (and if so: do you
+> > > > have any suggestions how to properly fix this)?
+> > >=20
+> > > I haven't checked how GIC is integrated. Iirc it does something simil=
+air
+> > > to Lantiq's irq controller and hides all CPU internal interrupts behi=
+nd
+> > > it.
+> > >=20
+> > > So I see two solutions for your problem.
+> > >=20
+> > > 1. Add "mti,cpu-interrupt-controller" to the DT and wire it up
+> > I think this is the preferred way. I tried this before (if you are
+> > curious, see [0] and [1]) and it didn't work.
+> > Are you aware of any MIPS SoC with upstream drivers which do have
+> > working IRQs on VPE 1?
+>=20
+> I don't know of such SoC. Looking at the comment in vsmp_init_secondary()
+>=20
+> /* This is Malta specific: IPI,performance and timer interrupts */
+>=20
+> there is probably some Malta board using it.
+>=20
+> > Or can you point me to the code in
+> > drivers/irqchip/irq-mips-cpu.c that's responsible for enabling the
+> > interrupts on VPE 1 (is it simply unmask_mips_irq)?
+>=20
+> IMHO there is the problem, irq-mips-cpu.c can only do CPU irq operations
+> on the same CPU. I've checked MIPS MT specs and it's possible do
+> modify CP0 registers between VPEs. Using that needs changes in
+> irq-mips-cpu.c. But mabye that's not woth the effort as probably
+> all SMP cabable platforms have some multi processort capable
+> interrupt controller implemented.
 
-This accounting isn't free.  It costs storage (and also parts of
-cachelines) in each mm and CPU time to maintain it, plus maintainer
-eyeballs to maintain.  PUD pages are also fundamentally (on x86 at
-least) 0.0004% of the overhead of PTE and 0.2% of the overhead of PMD
-pages unless someone is using gigantic hugetlbfs mappings.
+Maybe I'm not getting this right, but as I understand vsmp_init_secondary()=
+ is
+run on VPE1, changing the local c0_status on that VPE. When unmask_mips_irq=
+() is
+called from code running on VPE1, I would expect it does the same thing: en=
+able
+the requested irq on VPE1 by modifying the local c0_status register.
 
-Even with 1G gigantic pages, you would need a quarter of a million
-(well, 262144 or 512*512) mappings of one 1G page to consume 1G of
-memory on PUD pages.
+Since these IRQs can be configured VPE, aren't these then also per-cpu
+interrupts? I have been wondering if a cascaded IRQ controller needs to tak=
+e
+special care with such per-cpu interrupts, but haven't been able to figure =
+that
+out until now.
 
-That just doesn't seem like something anyone is likely to actually do in
-practice.  That makes the benefits of the PUD portion of this series
-rather unclear in the real world.
+Sorry if the above doesn't make much sense, but like Aleksander I've been
+struggling with this and would like to understand what the proper solution =
+is.
 
-As for the kernel page tables, I'm not really aware of them causing any
-problems.  We have a pretty good idea how much space they consume from
-the DirectMap* entries in meminfo:
+Best,
+Sander
 
-	DirectMap4k:     2262720 kB
-	DirectMap2M:    40507392 kB
-	DirectMap1G:    24117248 kB
-
-as well as our page table debugging infrastructure.  I haven't found
-myself dying for more specific info on them.
-
-So, nothing in this series seems like a *BAD* idea, but I'm not sure in
-the end it solves more problems than it creates.
+> I thought about another way solve the issue. By introducing a
+> new function in smp-mt.c which sets the value of the interrupt
+> mask for the secondary CPU, which is then used in vsmp_init_secondary().
+> Not sure if this is worth the effort compared to a .boot_secondary
+> override.
+>=20
+> Thomas.
+>=20
 
