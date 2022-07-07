@@ -2,39 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D314D569EA3
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 11:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949E3569EB7
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 11:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiGGJiF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Jul 2022 05:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
+        id S234977AbiGGJkn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Jul 2022 05:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiGGJiD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 05:38:03 -0400
+        with ESMTP id S235257AbiGGJkl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 05:40:41 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D6D4505C;
-        Thu,  7 Jul 2022 02:38:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFC313D30;
+        Thu,  7 Jul 2022 02:40:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1657186680; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1657186839; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kXIlb6hdJqwtDzPJXzLaKXuJUAGqwuysqFCgGoS6L9w=;
-        b=NKmYCqFt+Bn8O5D8zNt1stEVUcLMJ7FFoyccHrpplWfWGAESaQJEK3TE3fjxpPWPw8ONIu
-        nf1ZpMQezjE6AGoRvyNUsoBGTqXM+YDCpHOsJaYgPQdcEBsrW4/JIoiG1eHRwFFCA0acF0
-        BtHJn3OyliNtw4dXcHcKuDRuodF9K6U=
-Date:   Thu, 07 Jul 2022 10:37:49 +0100
+        bh=Tyen7txTUb5pq9zQQGZmuWYUpttgvf+WfkbcsWB8ZG4=;
+        b=MaSHGdQBI+VAXUZX/C8tnXzbfL4brntQ/nxoaJhWbkMP80u3mi4YyKlBfABfFtTD1DgVaq
+        RRtbfxPfeOdL3JfrQM+gxQ2nJORDBvRcPovkKaZH5TDuUsRzxDGKwbfsFSXkurOOk4Z/m7
+        6PWG8VIiSZuXOYD/L4CSukqEkAo+8BA=
+Date:   Thu, 07 Jul 2022 10:40:29 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 05/11] ASoC: jz4740-i2s: Remove unused SoC version IDs
+Subject: Re: [PATCH 06/11] ASoC: jz4740-i2s: Use FIELD_PREP() macros in
+ hw_params callback
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
         tiwai@suse.com, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <1F9NER.E4VHP6MF1K5A2@crapouillou.net>
-In-Reply-To: <20220706211330.120198-6-aidanmacdonald.0x0@gmail.com>
+Message-Id: <HJ9NER.R0SNUFB7SCZ52@crapouillou.net>
+In-Reply-To: <20220706211330.120198-7-aidanmacdonald.0x0@gmail.com>
 References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
-        <20220706211330.120198-6-aidanmacdonald.0x0@gmail.com>
+        <20220706211330.120198-7-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -49,11 +50,10 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-Le mer., juil. 6 2022 at 22:13:24 +0100, Aidan MacDonald=20
+Le mer., juil. 6 2022 at 22:13:25 +0100, Aidan MacDonald=20
 <aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Using version IDs makes the code hard to follow -- it's better to
-> describe the functional differences between SoCs instead. Remove
-> the IDs since they're no longer used.
+> Get rid of a couple of macros and improve readability by using
+> FIELD_PREP() and GENMASK() for the sample size setting.
 >=20
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
@@ -63,66 +63,68 @@ Cheers,
 -Paul
 
 > ---
->  sound/soc/jz4740/jz4740-i2s.c | 12 ------------
->  1 file changed, 12 deletions(-)
+>  sound/soc/jz4740/jz4740-i2s.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
 >=20
 > diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
 > b/sound/soc/jz4740/jz4740-i2s.c
-> index cbb89f724f64..8bb9449d13d3 100644
+> index 8bb9449d13d3..3c3cf78bf848 100644
 > --- a/sound/soc/jz4740/jz4740-i2s.c
 > +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -81,15 +81,7 @@
->  #define I2SDIV_IDV_SHIFT 8
->  #define I2SDIV_IDV_MASK (0xf << I2SDIV_IDV_SHIFT)
+> @@ -3,6 +3,7 @@
+>   *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
+>   */
 >=20
-> -enum jz47xx_i2s_version {
-> -	JZ_I2S_JZ4740,
-> -	JZ_I2S_JZ4760,
-> -	JZ_I2S_JZ4770,
-> -	JZ_I2S_JZ4780,
-> -};
+> +#include <linux/bitfield.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+>  #include <linux/kernel.h>
+> @@ -49,8 +50,8 @@
+>  #define JZ4760_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET 24
+>  #define JZ4760_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET 16
+>=20
+> -#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK (0x7 << 19)
+> -#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK (0x7 << 16)
+> +#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE GENMASK(21, 19)
+> +#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE GENMASK(18, 16)
+>  #define JZ_AIC_CTRL_ENABLE_RX_DMA BIT(15)
+>  #define JZ_AIC_CTRL_ENABLE_TX_DMA BIT(14)
+>  #define JZ_AIC_CTRL_MONO_TO_STEREO BIT(11)
+> @@ -65,9 +66,6 @@
+>  #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
+>  #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
+>=20
+> -#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
+> -#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
 > -
->  struct i2s_soc_info {
-> -	enum jz47xx_i2s_version version;
->  	struct snd_soc_dai_driver *dai;
+>  #define JZ_AIC_I2S_FMT_DISABLE_BIT_CLK BIT(12)
+>  #define JZ_AIC_I2S_FMT_DISABLE_BIT_ICLK BIT(13)
+>  #define JZ_AIC_I2S_FMT_ENABLE_SYS_CLK BIT(4)
+> @@ -245,8 +243,9 @@ static int jz4740_i2s_hw_params(struct=20
+> snd_pcm_substream *substream,
+>  	}
 >=20
->  	struct reg_field field_rx_fifo_thresh;
-> @@ -406,7 +398,6 @@ static struct snd_soc_dai_driver jz4740_i2s_dai =3D=20
-> {
->  };
+>  	if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK) {
+> -		ctrl &=3D ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK;
+> -		ctrl |=3D sample_size << JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET;
+> +		ctrl &=3D ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE;
+> +		ctrl |=3D FIELD_PREP(JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE, sample_size);
+> +
+>  		if (params_channels(params) =3D=3D 1)
+>  			ctrl |=3D JZ_AIC_CTRL_MONO_TO_STEREO;
+>  		else
+> @@ -254,8 +253,8 @@ static int jz4740_i2s_hw_params(struct=20
+> snd_pcm_substream *substream,
 >=20
->  static const struct i2s_soc_info jz4740_i2s_soc_info =3D {
-> -	.version =3D JZ_I2S_JZ4740,
->  	.dai =3D &jz4740_i2s_dai,
->  	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 12, 15),
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
-> @@ -415,7 +406,6 @@ static const struct i2s_soc_info=20
-> jz4740_i2s_soc_info =3D {
->  };
+>  		div_field =3D i2s->field_i2sdiv_playback;
+>  	} else {
+> -		ctrl &=3D ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK;
+> -		ctrl |=3D sample_size << JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET;
+> +		ctrl &=3D ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE;
+> +		ctrl |=3D FIELD_PREP(JZ_AIC_CTRL_INPUT_SAMPLE_SIZE, sample_size);
 >=20
->  static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
-> -	.version =3D JZ_I2S_JZ4760,
->  	.dai =3D &jz4740_i2s_dai,
->  	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
-> @@ -442,7 +432,6 @@ static struct snd_soc_dai_driver jz4770_i2s_dai =3D=20
-> {
->  };
->=20
->  static const struct i2s_soc_info jz4770_i2s_soc_info =3D {
-> -	.version =3D JZ_I2S_JZ4770,
->  	.dai =3D &jz4770_i2s_dai,
->  	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
-> @@ -451,7 +440,6 @@ static const struct i2s_soc_info=20
-> jz4770_i2s_soc_info =3D {
->  };
->=20
->  static const struct i2s_soc_info jz4780_i2s_soc_info =3D {
-> -	.version =3D JZ_I2S_JZ4780,
->  	.dai =3D &jz4770_i2s_dai,
->  	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>  		div_field =3D i2s->field_i2sdiv_capture;
+>  	}
 > --
 > 2.35.1
 >=20
