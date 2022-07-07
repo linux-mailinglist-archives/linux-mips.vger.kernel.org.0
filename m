@@ -2,61 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437F556ACB2
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 22:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE3F56ACD3
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 22:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiGGU2H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Jul 2022 16:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
+        id S235850AbiGGUhv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Jul 2022 16:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235709AbiGGU2G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 16:28:06 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5672559D;
-        Thu,  7 Jul 2022 13:28:05 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id a15so21622478pfv.13;
-        Thu, 07 Jul 2022 13:28:05 -0700 (PDT)
+        with ESMTP id S231875AbiGGUhu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 16:37:50 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6312A94D;
+        Thu,  7 Jul 2022 13:37:49 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y9so7478973pff.12;
+        Thu, 07 Jul 2022 13:37:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RngVt0W9Nt0ARR4BcBhKZM+Jx2aWfm3fgCdPS5bV+Y4=;
-        b=aWunEcvKQJyhExfqZiqVwOOoWTqIVARGMm5+/PMlM829wUxhP5oYEjg6QTXQJK3681
-         oTVksPwG90x9KMt4Cb/wyHxZr1hbWhbnMETFb9/k1vZtJMb/ZBp/DDnTubgKv12EF7f6
-         q82eID7oHS+OfVg9umN2LrxQgQbkCfI/qMM95ykI3RYTtPoITV5DITPRfF3lyA1FVwKg
-         ZN4Fr/tZ2/KZGS4rzvm7RsOUkhCO2eLWAKFVWHCtL8nUO1q/xsH+05mEDUG+eq0qQucQ
-         1upUrjLboxzVv3v049jj3cx+j6EFT4xEROMQjEmXhFKYc8yT6+4S8Pj/whkFQrqv80Z+
-         iIcg==
+        bh=+geEsEXr8SYIv24S/+eDc33ess9qsrayZqcANcvXgxw=;
+        b=VQ4iWKkEgwYAVHDsVofS+De2Stdpz49igJRUooGZGzFhW+rnPkJDhZ3w+qzpF8dRrN
+         ImyxFh89+jfATPO9uaAuCgJI7BxoAzhWUCGDjB4F6mRRtCA9Ek61LHBEVZ9rGm2ReYZ9
+         /Q0C+ioUtuZsXpCZdi4174xUQn32UUoQO4RonGoQG8Vw78nD9y1xTjxYdgbF1AbpaiTd
+         KIQ+hxdxzMmw5HGkrwOcWdY8Qa/wDQpFrl8Q3OtCA7q3K+aQVDujGQgRvHZuvCFW1Otb
+         AYoxKi4SsZX2DHYV4hwjjr6th51zMU5jjMTTxh5C9c0Gcpm3wtp6wMcMc4gamQWpCmdh
+         jsBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RngVt0W9Nt0ARR4BcBhKZM+Jx2aWfm3fgCdPS5bV+Y4=;
-        b=I7G7seXSqBjWiJt5fjfrx6URj0UeUkr3b7av/YZc2IQY0wwdzjnY+w6tl5x3YC60Vf
-         49WMN5TVEsTZUCD8mlMmb9VJrPxSQP4E/VbylB21+Gt+K50K/X7cJf4ALNzqGp0ooxkB
-         Ozz8ne/fRjQAkhdExPv+Z6NtEwUw2warMyqNhT21JpefYeNBYfePNvpg1XmDKH11bN61
-         GvVyEpwu7yuYdDR4YLBC7voxnZhvFa4GHlxCS5BCkcaCSN2SZresJznx6uPPtEzphP7H
-         6fi1KrYJ0uaHdxNajhz5QZRkTOcNKM7GMqOwXZiNQ/wnZHuBMrFCyG73nTKbizzg11j+
-         tXqA==
-X-Gm-Message-State: AJIora92ruE12T2/uid+uXH/WIk0VV2ykRDUTnWfXgLVwD2ybIseodjN
-        UyMZTx64eZFokm9Tu4LpCAEHnZHJxhI=
-X-Google-Smtp-Source: AGRyM1sGHjVGGPl+1Zu4PflHFpbSK5D/TJSxSO3bHaJ6b9kaVIDdHHwyY4GSY5zykYIo7Ml7MtABHA==
-X-Received: by 2002:a17:90b:4ac1:b0:1ef:c1ba:e73e with SMTP id mh1-20020a17090b4ac100b001efc1bae73emr7315056pjb.47.1657225684923;
-        Thu, 07 Jul 2022 13:28:04 -0700 (PDT)
+        bh=+geEsEXr8SYIv24S/+eDc33ess9qsrayZqcANcvXgxw=;
+        b=D9kJYnHfCkBl8LbU9mvv4O++ERPz76JTUMj6PYI9zrY4wFovQ3OEV4qp8q32+C0i0Z
+         J7PQpV+BwDy/Xr65lSLhMBoHNgUYihvXiynJ53vpVDTFyNZoN1O5BkWnDQfzj9AUbeM3
+         6Apb3E/ZsTFn2+rI8jXtkSAnQrdXIdWdgIjkHoim45IztsUF69ngcWXqtPm1Uz+L43la
+         kG55F2YewzlWVxVBGLdDrQ/vwA9KZzjG1tgi9CrRRoSwfsd6HyqNj/ijICK2pBQVlgzp
+         /F+Ymnc0Er8I3gi3AkD6loHt5ok+5wL2RzG+7NqnvxnJKbeAYzdNI9pk87CgLA9q91pi
+         mnlg==
+X-Gm-Message-State: AJIora9GcYpmSPb/Azq+asWdKsPKqnaYFaQbWGzK27XzerDLcx6b9w7c
+        EmW+CB5vcj5Qxu4aMwUKNEfao22NIho=
+X-Google-Smtp-Source: AGRyM1uX7UEfMdlbOZw1Vu4ZA+9y37oWzOBkOMoP6JqDlrfnmm3/EKgu/Zq7rT0MVALJ6iPkwyYcyQ==
+X-Received: by 2002:a05:6a00:3307:b0:527:cbdc:d7dc with SMTP id cq7-20020a056a00330700b00527cbdcd7dcmr52757734pfb.85.1657226268866;
+        Thu, 07 Jul 2022 13:37:48 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h14-20020aa796ce000000b005281d926733sm14716804pfq.199.2022.07.07.13.28.03
+        by smtp.gmail.com with ESMTPSA id lt6-20020a17090b354600b001efb6d18b8dsm3987713pjb.8.2022.07.07.13.37.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 13:28:04 -0700 (PDT)
+        Thu, 07 Jul 2022 13:37:48 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Ungerer <gerg@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] MIPS: vdso: Utilize __pa() for gic_pfn
-Date:   Thu,  7 Jul 2022 13:27:58 -0700
-Message-Id: <20220707202759.1224809-1-f.fainelli@gmail.com>
+Subject: [PATCH] MIPS: Make phys_to_virt utilize __va()
+Date:   Thu,  7 Jul 2022 13:37:42 -0700
+Message-Id: <20220707203743.1226302-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,33 +68,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The GIC user offset is mapped into every process' virtual address and is
-therefore part of the hot-path of arch_setup_additional_pages(). Utilize
-__pa() such that we are more optimal even when CONFIG_DEBUG_VIRTUAL is
-enabled, and while at it utilize PFN_DOWN() instead of open-coding the
-right shift by PAGE_SHIFT.
+The implementation is exactly the same, so avoid open-coding it in two
+different locations.
 
-Reported-by: Greg Ungerer <gerg@kernel.org>
-Suggested-by: Serge Semin <fancer.lancer@gmail.com>
-Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- arch/mips/kernel/vdso.c | 2 +-
+ arch/mips/include/asm/io.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-index 3d0cf471f2fe..b2cc2c2dd4bf 100644
---- a/arch/mips/kernel/vdso.c
-+++ b/arch/mips/kernel/vdso.c
-@@ -159,7 +159,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	/* Map GIC user page. */
- 	if (gic_size) {
- 		gic_base = (unsigned long)mips_gic_base + MIPS_GIC_USER_OFS;
--		gic_pfn = virt_to_phys((void *)gic_base) >> PAGE_SHIFT;
-+		gic_pfn = PFN_DOWN(__pa(gic_base));
+diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+index 6f5c86d2bab4..880048a54362 100644
+--- a/arch/mips/include/asm/io.h
++++ b/arch/mips/include/asm/io.h
+@@ -131,7 +131,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
+  */
+ static inline void * phys_to_virt(unsigned long address)
+ {
+-	return (void *)(address + PAGE_OFFSET - PHYS_OFFSET);
++	return __va(address);
+ }
  
- 		ret = io_remap_pfn_range(vma, base, gic_pfn, gic_size,
- 					 pgprot_noncached(vma->vm_page_prot));
+ /*
 -- 
 2.25.1
 
