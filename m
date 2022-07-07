@@ -2,235 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C31B56A047
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 12:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A29D56A0EC
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Jul 2022 13:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234945AbiGGKpo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Jul 2022 06:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S235084AbiGGLMx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Jul 2022 07:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234834AbiGGKpn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 06:45:43 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDAD4D4C0;
-        Thu,  7 Jul 2022 03:45:41 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id y18so10859731ljj.6;
-        Thu, 07 Jul 2022 03:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WY98p2xpQdOFXmhJtt3xHyGiLiAUhi6XRf4hr9Uc3Wg=;
-        b=b6GFfkBqjaMf2ocm+NmB4Pdq8BftwMkyn64oPaQ4MV4pvFzFkwxMEQeq6P80Hm4/xV
-         qZ+8LuyU5wRQNERGgQNFjcHh58vvfaC0ptqNORWmxffraiT9/DjbcHTSFTsFBlux58Ot
-         XhtqsfAx1Sa2gM/tjlsL0QsZtd9LNBgjw9CnnsV557EhbpHb9gCv8v2p+Oj+GmTrlkqp
-         mUp+nL+5dVYNjaxqq1uCJh+k/gsHSTvygVI9uMaKcsKBGCdHzMWvDPsDHQivCRNcB3z5
-         282ePxgRE2AokBxYCEN4Y+8PqCSOtSZbzmUbIGk4eL7kv/uEwV39B6EvqmW8CS1gOdOi
-         UC1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WY98p2xpQdOFXmhJtt3xHyGiLiAUhi6XRf4hr9Uc3Wg=;
-        b=5Eo/0Z9lE0dnEeA9CuAdzgT3ij2ITH1jbtYNGQ3ygRTp6jZ+ZR9exxaGcxsdWLOp43
-         QEfLLPrepVslpODTt1c/qMl2IB5pR1uJbrnRoxK3I/RrgsGUtsG5sjFEaxpM0rxv7VZB
-         6yFa4tvQySbXnXgQdXI5P2XVZ2T838olFWqvhX7ardxLCW9rniWNuC3chL9ntyBbv9VU
-         gTJ+ctTszv+uIF5a1LzpKx5VHuD6KJjeLh9OGF4MPEtyXszsyNiZB4rrTWvvgA8ipBpo
-         qsruG5dF5+MsgNhHJ+lXuQf0T4SFgwiFleFinWHRUzJWDuzuCYv0LZ4ZX6Bb70Rb0PS8
-         AQpg==
-X-Gm-Message-State: AJIora+KWHbZBHMQ09F9agduePiLBnsypQP2ImH/lJvQ7Ytt3b/WMIi9
-        7Ccx7XfzwyGkgpAJZ45OVhc=
-X-Google-Smtp-Source: AGRyM1u/4QG+lv01OuNQRv5dICfp1iMojBGdOQCB054Of0nHO6eJIDlEiA+XLi20gZMrDBLB66OBnA==
-X-Received: by 2002:a05:651c:158a:b0:25d:1cc9:3ce7 with SMTP id h10-20020a05651c158a00b0025d1cc93ce7mr13652854ljq.450.1657190739851;
-        Thu, 07 Jul 2022 03:45:39 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id g2-20020a056512118200b0047f701f6d09sm6766233lfr.184.2022.07.07.03.45.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 03:45:37 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 13:45:33 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Chris Zankel <chris@zankel.net>,
-        Colin Ian King <colin.king@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Juergen Gross <jgross@suse.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Maximilian Heyne <mheyne@amazon.de>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@stackframe.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Wei Liu <wei.liu@kernel.org>, Wei Xu <xuwei5@hisilicon.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-hyperv@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, xen-devel@lists.xenproject.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 1/8] irqchip/mips-gic: Only register IPI domain when
- SMP is enabled
-Message-ID: <20220707104533.7iakliv2f5i2qi33@mobilestation>
-References: <20220701200056.46555-1-samuel@sholland.org>
- <20220701200056.46555-2-samuel@sholland.org>
- <20220705135243.ydbwfo4kois64elr@mobilestation>
- <87czehmiwt.wl-maz@kernel.org>
+        with ESMTP id S234746AbiGGLMw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 07:12:52 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C0AD32EDF;
+        Thu,  7 Jul 2022 04:12:50 -0700 (PDT)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxaeCxv8ZiOf0OAA--.37662S3;
+        Thu, 07 Jul 2022 19:12:49 +0800 (CST)
+Subject: Re: [PATCH] MIPS: fix pmd_mkinvalid
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1657181495-33004-1-git-send-email-zhanghongchen@loongson.cn>
+ <20220707092206.GA9894@alpha.franken.de>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <bfb97f6b-7a39-8253-bc14-08f2f54ed312@loongson.cn>
+Date:   Thu, 7 Jul 2022 19:12:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czehmiwt.wl-maz@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220707092206.GA9894@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxaeCxv8ZiOf0OAA--.37662S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruw43Aw4kXF1kGF1UWry8Xwb_yoWDtwc_uF
+        s2kr4rGw1DZa1rKFWUKw47ZrySkrZrJrW8X34kWrsF9FWkWan5Ar4qg3sFg3WkCws5JFyU
+        CF98uFy2qryI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbx8YjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc2xS
+        Y4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bOoG
+        dUUUUU=
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 09:22:26AM +0100, Marc Zyngier wrote:
-> On Tue, 05 Jul 2022 14:52:43 +0100,
-> Serge Semin <fancer.lancer@gmail.com> wrote:
-> > 
-> > Hi Samuel
-> > 
-> > On Fri, Jul 01, 2022 at 03:00:49PM -0500, Samuel Holland wrote:
-> > > The MIPS GIC irqchip driver may be selected in a uniprocessor
-> > > configuration, but it unconditionally registers an IPI domain.
-> > > 
-> > > Limit the part of the driver dealing with IPIs to only be compiled when
-> > > GENERIC_IRQ_IPI is enabled, which corresponds to an SMP configuration.
-> > 
-> > Thanks for the patch. Some comment is below.
-> > 
-> > > 
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Samuel Holland <samuel@sholland.org>
-> > > ---
-> > > 
-> > > Changes in v3:
-> > >  - New patch to fix build errors in uniprocessor MIPS configs
-> > > 
-> > >  drivers/irqchip/Kconfig        |  3 +-
-> > >  drivers/irqchip/irq-mips-gic.c | 80 +++++++++++++++++++++++-----------
-> > >  2 files changed, 56 insertions(+), 27 deletions(-)
-> > > 
-> > > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> > > index 1f23a6be7d88..d26a4ff7c99f 100644
-> > > --- a/drivers/irqchip/Kconfig
-> > > +++ b/drivers/irqchip/Kconfig
-> > > @@ -322,7 +322,8 @@ config KEYSTONE_IRQ
-> > >  
-> > >  config MIPS_GIC
-> > >  	bool
-> > > -	select GENERIC_IRQ_IPI
-> > > +	select GENERIC_IRQ_IPI if SMP
-> > 
-> > > +	select IRQ_DOMAIN_HIERARCHY
-> > 
-> > It seems to me that the IRQ domains hierarchy is supposed to be
-> > created only if IPI is required. At least that's what the MIPS GIC
-> > driver implies. Thus we can go further and CONFIG_IRQ_DOMAIN_HIERARCHY
-> > ifdef-out the gic_irq_domain_alloc() and gic_irq_domain_free()
-> > methods definition together with the initialization:
-> > 
-> >  static const struct irq_domain_ops gic_irq_domain_ops = {
-> >  	.xlate = gic_irq_domain_xlate,
-> > +#ifdef CONFIG_IRQ_DOMAIN_HIERARCHY
-> >  	.alloc = gic_irq_domain_alloc,
-> >  	.free = gic_irq_domain_free,
-> > +#endif
-> >  	.map = gic_irq_domain_map,
-> > };
-> > 
-> > If the GENERIC_IRQ_IPI config is enabled, CONFIG_IRQ_DOMAIN_HIERARCHY
-> > will be automatically selected (see the config definition in
-> > kernel/irq/Kconfig). If the IRQs hierarchy is needed for some another
-> > functionality like GENERIC_MSI_IRQ_DOMAIN or GPIOs then they will
-> > explicitly enable the IRQ_DOMAIN_HIERARCHY config thus activating the
-> > denoted .alloc and .free methods definitions.
-> > 
-> > To sum up you can get rid of the IRQ_DOMAIN_HIERARCHY config
-> > force-select from this patch and make the MIPS GIC driver code a bit
-> > more coherent.
-> > 
-> > @Marc, please correct me if were wrong.
+On 2022/7/7 下午5:22, Thomas Bogendoerfer wrote:
+> On Thu, Jul 07, 2022 at 04:11:35PM +0800, Hongchen Zhang wrote:
+>> When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
+>> return true.
+>> So introduce a _PMD_PRESENT_INVALID_SHIFT bit to check if a pmd is
+>> present but invalidated by pmd_mkinvalid.
+> 
+> What problem are you trying to fix ? What are the symptoms ?
+> 
+>> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> the test robot showed problems with your last version of the patch,
+> which hasn't been integrated into at least the MIPS tree, so no
+> need to that.
+> 
+> Thomas.
 > 
 
-> Either way probably works correctly, but Samuel's approach is more
-> readable IMO. It is far easier to reason about a high-level feature
-> (GENERIC_IRQ_IPI) than an implementation detail (IRQ_DOMAIN_HIERARCHY).
-> 
+Hi Thomas,
+   The idea come from the commit:
+   b65399f6111b(arm64/mm: Change THP helpers to comply with generic MM 
+  semantics).
+   There is an problem now:
+	    CPU 0		CPU 1
+	pmdp_invalidate		do_page_fault		
+	...			  __handle_mm_fault
+				    is_swap_pmd == true
+				    trigger VM_BUG_ON() ?
+	set_pmd_at
+   the reason is that pmd_present return true,after this commit
+   pmd_present will return false,and the VM_BUG_ON will not be triggered.
+   Like arm64 does,we can introduce a new bit to fix this.
 
-The main idea of my comment was to get rid of the forcible
-IRQ_DOMAIN_HIERARCHY config selection, because the basic part of the
-driver doesn't depends on the hierarchical IRQ-domains functionality.
-It's needed only for IPIs and implicitly for the lower level IRQ
-device drivers like GPIO or PCIe-controllers, which explicitly enable
-the IRQ_DOMAIN_HIERARCHY config anyway. That's why instead of forcible
-IRQ_DOMAIN_HIERARCHY config selection (see Samuel patch) I suggested
-to make the corresponding functionality defined under the
-IRQ_DOMAIN_HIERARCHY config ifdefs, thus having the driver capable of
-creating the hierarchical IRQs domains only if it's required.
+Thanks.
 
-> If you really want to save a handful of bytes, you can make the
-> callbacks conditional on GENERIC_IRQ_IPI, and be done with it.
-
-AFAIU I can't in this case. It must be either IRQ_DOMAIN_HIERARCHY
-ifdefs or explicit IRQ_DOMAIN_HIERARCHY select. There can be non-SMP
-(UP) systems with no need in IPIs but for instance having a GPIO or
-PCIe controller which require the hierarchical IRQ-domains support of
-the parental IRQ controller. So making the callbacks definition
-depended on the GENERIC_IRQ_IPI config state will break the driver for
-these systems. That's why I suggested to use
-CONFIG_IRQ_DOMAIN_HIERARCHY which activates the hierarchical IRQ
-domains support in the IRQ-chip system (see the irq_domain_ops
-structure conditional fields definition) and shall we have the
-suggested approach implemented in the MIPS GIC driver.
-
--Sergey
-
-> But this can come as an additional patch.
-> 
-> Thanks,
-> 
-> 	M.
-> 
-> -- 
-> Without deviation from the norm, progress is not possible.
