@@ -2,114 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794E156AE12
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Jul 2022 00:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2E656AF8A
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Jul 2022 03:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236212AbiGGWEn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Jul 2022 18:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S235956AbiGHAoT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Jul 2022 20:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbiGGWEm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 18:04:42 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5582B1BA;
-        Thu,  7 Jul 2022 15:04:42 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id r1so14812684plo.10;
-        Thu, 07 Jul 2022 15:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gztFolpOjRs4gmw4YebA1BI/HHxjQgQpOSAd6qju7xs=;
-        b=Z8eC2jZYCCpsvpiFBwV8ezW4pTFcWXnuy4sU831z78Xw+eF12FHvT0C2Kbz1gB1tet
-         8e+3l1eOph7TsvljIRIpRFvfWLcYyNds0Ibml5x4sqsBq+kkQDZOMoKqclWaKadDDsx7
-         zAqmVo3UFPHxJx9vavKR09fU255eaYmJ9atsnlO4G1nqf1wH8l47fCagot3rlMmdhrYt
-         m1ktZvRXXvI+Smkfq/d3Xq4/+mH9noax2vvnKD2zfWFOQuAkn9eqnt/uAQMFccY8GVnB
-         zcHRQjIbpWjVTuQCegTfdseg1FpOTSdvZcyAnFiZtPu/ZIZMgqtNQL9oKmsV3XncMFc6
-         DnCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gztFolpOjRs4gmw4YebA1BI/HHxjQgQpOSAd6qju7xs=;
-        b=PhjErnBLeUmU22dcVL3qTW+hAknwyph+AU0BFJ4/oe/yOH//NfVn6+WmX1FLQtVD0I
-         0i5AfWiePC2vgZfCbF/9d3p2IMXEh44AvPmez/pPbWBYkaSperJwKsg6SdVKW0azaSTa
-         BNwN3VglyiohljZ6T8xpCp1sj8Eekxf6vGSY4hLQN4H8uayVSGiztKiyMkDz2RwzAtCI
-         7AZwFfolBVBLv971LD14yRu/yYRLzcGiVg+5jd1LgC/jNniteSu//479nV1stCvTz271
-         OgOfCD9rP1+RrDaG0WuuLKRWdrBMl1X2XJKrtLBCMD89Jexz5dU5DIqIbKSsE/z6fsUV
-         qyvg==
-X-Gm-Message-State: AJIora8Mr9Rtyii4aqHRHA7LCl5nYqxPSyRkwA5+AYNJUho5art+Xnk2
-        2T1Z/T4TZIsvS5ZyUgZ7wqH7d7kWxQQ=
-X-Google-Smtp-Source: AGRyM1t+qWzNHY3hylQUhEZteb+eFoihq4G6o91pFz6/yQ9b9r56kmL2IFHUDSiHcWt0pWGi9QmZYw==
-X-Received: by 2002:a17:90b:2384:b0:1ef:8506:374e with SMTP id mr4-20020a17090b238400b001ef8506374emr7688335pjb.99.1657231474622;
-        Thu, 07 Jul 2022 15:04:34 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id cu7-20020a056a00448700b00525373aac7csm27239922pfb.26.2022.07.07.15.04.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 15:04:34 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     fancer.lancer@gmail.com, gerg@kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC] MIPS: Enable ARCH_HAS_DEBUG_VIRTUAL for 64-bit
-Date:   Thu,  7 Jul 2022 15:04:27 -0700
-Message-Id: <20220707220428.1731083-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229572AbiGHAoS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Jul 2022 20:44:18 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EE470E5B;
+        Thu,  7 Jul 2022 17:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657241057; x=1688777057;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c+P6YDMV9PRWXetSgJx/P+CHVW6L1Bzzbpwgy+7i05E=;
+  b=dKmy3z646rV18FCgEKYYffcZEFS/PI4oHSyb5xdW24i32NIZ4alEx1S/
+   rVM9ukpIU4zr03jzGsmJmFiU90SOYCrgzh9SVQ6dFF1H3kk0tjbuYzlXU
+   5FH73ZKzbn1DKnztunYYJT26fmRaAt/W9BBuqPRTPkT31W0dmRycqX/KG
+   Kd3KB1zteF5qVmC2ZRMlBeN84pU07oWM/O9ATNq9LK7YLmK2ZztiV7RxC
+   1bfJAt8QiMGVxkngMz/BC1XsQPmg5NbZiRPrsZoKnmN6kDO9QkpauOupU
+   UoQueqD6TaDWji288QA9hzWSAgCmwZhPn2IV8FlUak9gkkR96D98XKbUo
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="309715477"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="309715477"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 17:44:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="626521925"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Jul 2022 17:44:14 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9c6P-000Mfb-PJ;
+        Fri, 08 Jul 2022 00:44:13 +0000
+Date:   Fri, 8 Jul 2022 08:43:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     kbuild-all@lists.01.org, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] ASoC: jz4740-i2s: Refactor DAI probe/remove ops
+ as component ops
+Message-ID: <202207080814.p8h1it9G-lkp@intel.com>
+References: <20220707194655.312892-12-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707194655.312892-12-aidanmacdonald.0x0@gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Update __debug_virt_addr_valid() to check for a virtual address'
-validity below CKSSEG and remove the !64BIT dependency on
-ARCH_HAS_DEBUG_VIRTUAL to make DEBUG_VIRTUAL selectable.
+Hi Aidan,
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
-This requires the previous patch to be applied for this to work cleanly.
+Thank you for the patch! Yet something to improve:
 
- arch/mips/Kconfig       | 2 +-
- arch/mips/mm/physaddr.c | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+[auto build test ERROR on broonie-sound/for-next]
+[cannot apply to linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index db09d45d59ec..ddb6bde8fa1f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -5,7 +5,7 @@ config MIPS
- 	select ARCH_32BIT_OFF_T if !64BIT
- 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
- 	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 140000
--	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
-+	select ARCH_HAS_DEBUG_VIRTUAL
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
-diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
-index a82f8f57a652..3076238943d3 100644
---- a/arch/mips/mm/physaddr.c
-+++ b/arch/mips/mm/physaddr.c
-@@ -31,7 +31,11 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
- 	if (x == MAX_DMA_ADDRESS)
- 		return true;
- 
-+#ifdef CONFIG_64BIT
-+	return KSEGX(x) < CKSSEG;
-+#else
- 	return KSEGX(x) < KSEG2;
-+#endif
- }
- 
- phys_addr_t __virt_to_phys(volatile const void *x)
+url:    https://github.com/intel-lab-lkp/linux/commits/Aidan-MacDonald/ASoC-cleanups-and-improvements-for-jz4740-i2s/20220708-034953
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: s390-randconfig-m031-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080814.p8h1it9G-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d990302616fcc22f1e2a3b963c25fdec9d787251
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aidan-MacDonald/ASoC-cleanups-and-improvements-for-jz4740-i2s/20220708-034953
+        git checkout d990302616fcc22f1e2a3b963c25fdec9d787251
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash sound/soc/jz4740/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   sound/soc/jz4740/jz4740-i2s.c: In function 'jz4740_i2s_probe':
+>> sound/soc/jz4740/jz4740-i2s.c:442:9: error: 'ret' undeclared (first use in this function); did you mean 'net'?
+     442 |         ret = clk_prepare_enable(i2s->clk_aic);
+         |         ^~~
+         |         net
+   sound/soc/jz4740/jz4740-i2s.c:442:9: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +442 sound/soc/jz4740/jz4740-i2s.c
+
+   437	
+   438	static int jz4740_i2s_probe(struct snd_soc_component *component)
+   439	{
+   440		struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
+   441	
+ > 442		ret = clk_prepare_enable(i2s->clk_aic);
+   443		if (ret)
+   444			return ret;
+   445	
+   446		regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
+   447	
+   448		regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
+   449			     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+   450			     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
+   451	
+   452		regmap_field_write(i2s->field_rx_fifo_thresh, 7);
+   453		regmap_field_write(i2s->field_tx_fifo_thresh, 8);
+   454	
+   455		return 0;
+   456	}
+   457	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
