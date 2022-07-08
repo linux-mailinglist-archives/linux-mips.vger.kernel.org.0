@@ -2,64 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BE756B928
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Jul 2022 14:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA9256B9D4
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Jul 2022 14:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237346AbiGHL65 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Jul 2022 07:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S238157AbiGHMfE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Jul 2022 08:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237509AbiGHL64 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Jul 2022 07:58:56 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DA49A69F;
-        Fri,  8 Jul 2022 04:58:55 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bf9so12728079lfb.13;
-        Fri, 08 Jul 2022 04:58:55 -0700 (PDT)
+        with ESMTP id S238143AbiGHMfA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Jul 2022 08:35:00 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3123879692;
+        Fri,  8 Jul 2022 05:34:59 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id a11so25762998ljb.5;
+        Fri, 08 Jul 2022 05:34:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=FpBSCA3uZ1qD6QzdKwkZAqZgGkjusbAbzf1QWhDabko=;
-        b=Fs/fvFTCVTRQSGhf7mxK921gbeoirfQfyYvyiO3m7JEqDIPkSCh71mIVtFx+ASt2Tq
-         f9aUfxWCy2FrppSsAIQuIOVVuY6pcXAYgbvX39SkquNGCktXyf6QNsxDLOmdk7u3tW9K
-         07rsgG1icB1AvnxPznHSB/M6xOoAEuLHpXQydH07v3VFwSWyKEjrZ7JtMkaWgZUZEkvy
-         I1iQEKSAUNkWfCukat4sOXw3mVd1qxBzHEvPJF5tS6/GvI23962OAg1l0+Os11oqBYNn
-         lLZ6EbS4BKuW0pzgITghmG+o8p2quB3hhsDjPQSF2wmsZnGBBAX0dhXYlUlmCbPN9k98
-         iHIA==
+        bh=kvgTqdQjxH2uleYeYoM+LdF54XELxeDYcQEtIsJKsUo=;
+        b=FZ1KJntd4lKxixBfrdLSiQrDjABP5gyyoB9X310uzRt/9Ev3GGHIyhqrdmWz0XNfX/
+         FG7f7oad84IyjH9F0C9PR7YA3pm36FEzvdLgGh6z3lZ7NwC+MGrC+WxzcKvPLO+YrAE9
+         Vk6aqeYreAiK+rVwd+/xFqDAk+vcC1dI9Ue45JBDD0A7h/cq05EitWicGjKm1BhJlc3O
+         Ub667sk5b+QX0vU9Re0M+gcXyqNylkyBQdLpSJoKrlYV5rckffp8+eclfzWWxktgA509
+         1M6v3ELrhZSFyyhiHRuV/qp5UUH+hL8pI+M6khHvWlxz3sx5h55t+UFbrzG9JeNYB6ke
+         9vYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=FpBSCA3uZ1qD6QzdKwkZAqZgGkjusbAbzf1QWhDabko=;
-        b=Kw4q9e3Yac2lVDv/yhdUaS9kco9lL6Mvsk05RDGEUUMsRrrIuQzwK3BZ+xNdHUi5NX
-         u0PL39kSdnonNUIOBcd2nQ0uVhjjM1p+4iy6h+wT4Y4aOlO2nIaO74VszjvbgZ1RfLJs
-         /PeU/+Xrgx/MV3AVJpkP8NmTuCYwGnc7rM6HFDU+KcCzVs7XamlqFXRQhXJ7vjg7M8vM
-         ElBWBdi03BcDA+tPDEalomy+n4v3emuWiwsTmjj23rtDqN+GLtA4VU2daGJYjp9wMIg2
-         /gYKi5ykEJr1HsZ1sBAxpSs4r6U8k8DjvOxhuwrvVe6cPtE/QQZKmKdn/3JcAcs0Y7BX
-         SQDQ==
-X-Gm-Message-State: AJIora+B1h68jOQyR0Gk9c3JaEa4h/HzHuvPZByfUnjVjsZbSvtHbc17
-        E5Gj7ex8uaUGaqW4g6658ZLy3QVYF354qA==
-X-Google-Smtp-Source: AGRyM1sXxLaUp60Rft57xTvCYRK0vwK57cvWbGq2ok6kJsKfghrHamIOijenFM2SM9hE9u3CRHa9jQ==
-X-Received: by 2002:a05:6512:3e09:b0:482:bbd4:9657 with SMTP id i9-20020a0565123e0900b00482bbd49657mr2154038lfv.86.1657281533996;
-        Fri, 08 Jul 2022 04:58:53 -0700 (PDT)
+        bh=kvgTqdQjxH2uleYeYoM+LdF54XELxeDYcQEtIsJKsUo=;
+        b=7mjDRx2chpKJ0rsxrWISsB/1POOBFEy/rXgiIg0df6t/lSQoZFtUCDiv8cCPwnQ0WF
+         qmDFffVS4mTz5WjMZncrarChGjd2w/Q00wmmGBCYFOecGnk1SSn2r2JbqxvKeTSOGMam
+         VpwNnrXOZVkSOpSzFVdJDdgUZ2pZHgbbB9I34AePsEAgAN0120kSzNYNgz2QPOkil3l3
+         4XN+rFPJJniFCWEsAgWKUZO2ZTbX8MSX4982tCSCT/q3Kb7Rb7AYbEOa/zMubtyp4pc4
+         QOTDmcGjBVv7+9u9nK8XrCnNoyO6hV0PQY3QdFD2UsEWd/n8/qi8oBQPXlQX9xYeg24s
+         hNuA==
+X-Gm-Message-State: AJIora+wRIHkCUQ3xMrByXIxL96Wa/2l26wRPzoeJCKZFlXQw/+4OBih
+        uvZm3/T6diOpyl+pzD14aWQ=
+X-Google-Smtp-Source: AGRyM1tGe3lSnhDZc16pdwUzPBuYWe2//F/i/yPXT5QRFPbTSyTH/CKSzguYluqIngsyolqoYDjzzA==
+X-Received: by 2002:a2e:95d3:0:b0:25d:543f:78d3 with SMTP id y19-20020a2e95d3000000b0025d543f78d3mr1809812ljh.344.1657283697449;
+        Fri, 08 Jul 2022 05:34:57 -0700 (PDT)
 Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id v3-20020a2e9903000000b0025d382331d8sm2027632lji.120.2022.07.08.04.58.52
+        by smtp.gmail.com with ESMTPSA id p11-20020a056512234b00b0047f6b4a53cdsm7378222lfu.172.2022.07.08.05.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 04:58:53 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 14:58:51 +0300
+        Fri, 08 Jul 2022 05:34:56 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 15:34:54 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mips@vger.kernel.org, gerg@kernel.org,
+Cc:     linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Fixed __debug_virt_addr_valid()
-Message-ID: <20220708115851.ejsooiilxcopkoei@mobilestation>
-References: <20220707215237.1730283-1-f.fainelli@gmail.com>
+Subject: Re: [PATCH] MIPS: Make phys_to_virt utilize __va()
+Message-ID: <20220708123454.mj7f3gdzk3ct6seb@mobilestation>
+References: <20220707203743.1226302-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707215237.1730283-1-f.fainelli@gmail.com>
+In-Reply-To: <20220707203743.1226302-1-f.fainelli@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,61 +70,37 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 02:52:36PM -0700, Florian Fainelli wrote:
-> It is permissible for kernel code to call virt_to_phys() against virtual
-> addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
-> types. Add a final condition that ensures that the virtual address is
-> below KSEG2.
+On Thu, Jul 07, 2022 at 01:37:42PM -0700, Florian Fainelli wrote:
+> The implementation is exactly the same, so avoid open-coding it in two
+> different locations.
 > 
-> Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
 > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  arch/mips/mm/physaddr.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
-> index a1ced5e44951..a82f8f57a652 100644
-> --- a/arch/mips/mm/physaddr.c
-> +++ b/arch/mips/mm/physaddr.c
-> @@ -5,6 +5,7 @@
->  #include <linux/mmdebug.h>
->  #include <linux/mm.h>
->  
-> +#include <asm/addrspace.h>
->  #include <asm/sections.h>
->  #include <asm/io.h>
->  #include <asm/page.h>
-> @@ -30,7 +31,7 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
->  	if (x == MAX_DMA_ADDRESS)
->  		return true;
->  
 
-> -	return false;
-> +	return KSEGX(x) < KSEG2;
+Seems reasonable. Thanks.
 
-With this do we really need the high_memory-based conditionals in this
-method?
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 
-If the line above is the only way to take the uncached segment into
-account then can we reduce the whole method to:
-static inline bool __debug_virt_addr_valid {
-	return x >= PAGE_OFFSET && KSEGX(x) < KSEG2;
-}
-?
-
-Though this still may be invalid for EVA systems, like malta (see
-arch/mips/include/asm/mach-malta/spaces.h).
-
-Note AFAICS if EVA is enabled, highmem is implied to be disabled (see
-the CPU_MIPS32_3_5_EVA config utilization and HIGHMEM config
-dependencies). Thus all the memory is supposed to be linearly mapped
-in that case.
+*Note it now looks exactly as the generic phys_to_virt().
 
 -Sergey
 
+> ---
+>  arch/mips/include/asm/io.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> index 6f5c86d2bab4..880048a54362 100644
+> --- a/arch/mips/include/asm/io.h
+> +++ b/arch/mips/include/asm/io.h
+> @@ -131,7 +131,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
+>   */
+>  static inline void * phys_to_virt(unsigned long address)
+>  {
+> -	return (void *)(address + PAGE_OFFSET - PHYS_OFFSET);
+> +	return __va(address);
 >  }
 >  
->  phys_addr_t __virt_to_phys(volatile const void *x)
+>  /*
 > -- 
 > 2.25.1
 > 
