@@ -2,101 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1CD56C31D
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Jul 2022 01:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B7456C80E
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Jul 2022 10:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240350AbiGHUzY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Jul 2022 16:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
+        id S229475AbiGIIbw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Jul 2022 04:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240388AbiGHUzJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Jul 2022 16:55:09 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ED021833;
-        Fri,  8 Jul 2022 13:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1657313667; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/je/yixPYeA/QHCrkMiLMxqQF45GlsX63kQIV1/14JU=;
-        b=N5DYcY6vfio+hGOYhjp5KGAwIn0xck8GrJpptyYgr9A91DSQmVmuginnSV4Tm1tHgHorjd
-        GRdvIpaxt+DL7FnRb4LbfStQe34uwvlnsGWaWwcYODG2lPUjTLRv0YmqTLctf6/TOQavsq
-        bZ5+cg9MeLHh8hcb+Wsy+QSRfyEqE2k=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
+        with ESMTP id S229454AbiGIIbv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jul 2022 04:31:51 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8977566AC2
+        for <linux-mips@vger.kernel.org>; Sat,  9 Jul 2022 01:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=mO4Lux4zExqJwsq693AgROuTl+x+kJdHNbYuPHKBSt4=;
+        b=TgVX/ijFEvLZEAqewwRTuyPLSpy25GpVpFYJQKtA8fSYi5/MA0aNiH7u2/YEYlkiQoa6P7ORPk6PG
+         yOZWahlzVNMziT/ht5UMBtysZT773tSz69WcQwX5+dpfwmO/jUAtMNc+rxn/5vS9c+gc7+20uZP3Dk
+         ZJDw7fVFLkItZnveY70UQbGYe2Vow5SSniP6aJKrUUbkrSsOjkqmE4zxLTg9MlQbFB6+ZboyeAqFDu
+         DMxtTpXco05ux0xRTZMnnAHWhL5rz0aPeUrDLSbIEFjCWkePOuAxphr804WR4N2R1cO5RvEsrks+tW
+         tO1dnb8c1kCYG1n3bkdfOvHyvTpU1jA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=mO4Lux4zExqJwsq693AgROuTl+x+kJdHNbYuPHKBSt4=;
+        b=w9p/xLtYiE38/MV3LPBUup56d572jke4BSd/+BvCTTJzjswWF+S0dSaRFE3NsFFCB3Y8WIOTP/EFY
+         sICDM1ZCQ==
+X-HalOne-Cookie: 7fd59b46a51611b99b6b071a385538c9ebf1830c
+X-HalOne-ID: 91d73c41-ff61-11ec-823c-d0431ea8bb10
+Received: from mailproxy4.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 91d73c41-ff61-11ec-823c-d0431ea8bb10;
+        Sat, 09 Jul 2022 08:31:46 +0000 (UTC)
+Date:   Sat, 9 Jul 2022 10:31:45 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Christophe Branchereau <cbranchereau@gmail.com>,
         list@opendingux.net, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 6/6] drm/ingenic: Use the new PM macros
-Date:   Fri,  8 Jul 2022 21:54:06 +0100
-Message-Id: <20220708205406.96473-7-paul@crapouillou.net>
-In-Reply-To: <20220708205406.96473-1-paul@crapouillou.net>
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH 0/6] drm/ingenic: JZ4760(B) support and random changes
+Message-ID: <Ysk88cZO1iQhX/I2@ravnborg.org>
 References: <20220708205406.96473-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708205406.96473-1-paul@crapouillou.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-- Use DEFINE_SIMPLE_DEV_PM_OPS() instead of the SIMPLE_DEV_PM_OPS()
-  macro. This makes it possible to remove the __maybe_unused flags on
-  the callback functions.
-- Since we only have callbacks for suspend/resume, we can conditionally
-  compile the dev_pm_ops structure for when CONFIG_PM_SLEEP is enabled;
-  so use the pm_sleep_ptr() macro instead of pm_ptr().
+Hi Paul,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+On Fri, Jul 08, 2022 at 09:54:00PM +0100, Paul Cercueil wrote:
+> Hi,
+> 
+> A small set of changes to the ingenic-drm driver.
+> 
+> The most notable thing is that ingenic-ipu is now its own platform
+> driver.
+It would be nice to know what is achieved by this change, I could
+see the code being a tad simpler, but the cost was more EXPORTs.
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 98ff038d95d6..d5dcff59b9a8 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -1470,21 +1470,22 @@ static int ingenic_drm_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int __maybe_unused ingenic_drm_suspend(struct device *dev)
-+static int ingenic_drm_suspend(struct device *dev)
- {
- 	struct ingenic_drm *priv = dev_get_drvdata(dev);
- 
- 	return drm_mode_config_helper_suspend(&priv->drm);
- }
- 
--static int __maybe_unused ingenic_drm_resume(struct device *dev)
-+static int ingenic_drm_resume(struct device *dev)
- {
- 	struct ingenic_drm *priv = dev_get_drvdata(dev);
- 
- 	return drm_mode_config_helper_resume(&priv->drm);
- }
- 
--static SIMPLE_DEV_PM_OPS(ingenic_drm_pm_ops, ingenic_drm_suspend, ingenic_drm_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(ingenic_drm_pm_ops,
-+				ingenic_drm_suspend, ingenic_drm_resume);
- 
- static const u32 jz4740_formats[] = {
- 	DRM_FORMAT_XRGB1555,
-@@ -1615,7 +1616,7 @@ MODULE_DEVICE_TABLE(of, ingenic_drm_of_match);
- static struct platform_driver ingenic_drm_driver = {
- 	.driver = {
- 		.name = "ingenic-drm",
--		.pm = pm_ptr(&ingenic_drm_pm_ops),
-+		.pm = pm_sleep_ptr(&ingenic_drm_pm_ops),
- 		.of_match_table = of_match_ptr(ingenic_drm_of_match),
- 	},
- 	.probe = ingenic_drm_probe,
--- 
-2.35.1
+With the added explanation, which you can add when applying, all patches are:
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
 
+	Sam
