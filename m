@@ -2,80 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF7B56C90C
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Jul 2022 12:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BA056CABC
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Jul 2022 18:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiGIKnl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Jul 2022 06:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S229490AbiGIQtq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Jul 2022 12:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiGIKnk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jul 2022 06:43:40 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81769BC98;
-        Sat,  9 Jul 2022 03:43:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1657363417; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HZm4gVWjiDEO5u30RuW6VoyxTvmlC8q+Qpm+4tGQ74c=;
-        b=RGYSTeN8yc1avmOrmXEF+5G8x0qBiLTYlaLGRTfv0Ur08nsmZIN1nQxFVg8sxhc5jgT/23
-        IAres0EXXDFv6C4qMzlSVyxiRiO0wanAYIP+cvBF3mdZimJ043vuUB+zjwrV/GN7GtooZl
-        8qxjC9mvgSbDa8qr4SiG6c1CC4I7nEE=
-Date:   Sat, 09 Jul 2022 11:43:27 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 0/6] drm/ingenic: JZ4760(B) support and random changes
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        list@opendingux.net, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Message-Id: <FS1RER.IMGKHPGOL0LF1@crapouillou.net>
-In-Reply-To: <Ysk88cZO1iQhX/I2@ravnborg.org>
-References: <20220708205406.96473-1-paul@crapouillou.net>
-        <Ysk88cZO1iQhX/I2@ravnborg.org>
+        with ESMTP id S229447AbiGIQtq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jul 2022 12:49:46 -0400
+X-Greylist: delayed 2278 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 09 Jul 2022 09:49:44 PDT
+Received: from wp175.webpack.hosteurope.de (wp175.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:84b6::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B394027162;
+        Sat,  9 Jul 2022 09:49:44 -0700 (PDT)
+Received: from p54bc6cd6.dip0.t-ipconnect.de ([84.188.108.214] helo=[192.168.1.113]); authenticated
+        by wp175.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oAD3W-0007uY-BP; Sat, 09 Jul 2022 18:11:42 +0200
+Message-ID: <ea64c33f-9fc5-7c24-a101-da5d605863e1@birger-koblitz.de>
+Date:   Sat, 9 Jul 2022 18:11:41 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
+ VPE
+Content-Language: en-US
+To:     Sander Vanheule <sander@svanheule.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Aleksander Jan Bajkowski <olek2@wp.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220702190705.5319-1-olek2@wp.pl>
+ <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+ <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
+ <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
+ <20220707100630.GC9894@alpha.franken.de>
+ <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
+ <20220707143930.GA14693@alpha.franken.de>
+ <468a2c8578d099eef0e0106fe273f73f5d70ef94.camel@svanheule.net>
+From:   Birger Koblitz <git@birger-koblitz.de>
+In-Reply-To: <468a2c8578d099eef0e0106fe273f73f5d70ef94.camel@svanheule.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;git@birger-koblitz.de;1657385384;a94bfab7;
+X-HE-SMSGID: 1oAD3W-0007uY-BP
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sam,
+Hi,
 
-Le sam., juil. 9 2022 at 10:31:45 +0200, Sam Ravnborg=20
-<sam@ravnborg.org> a =C3=A9crit :
-> Hi Paul,
->=20
-> On Fri, Jul 08, 2022 at 09:54:00PM +0100, Paul Cercueil wrote:
->>  Hi,
->>=20
->>  A small set of changes to the ingenic-drm driver.
->>=20
->>  The most notable thing is that ingenic-ipu is now its own platform
->>  driver.
-> It would be nice to know what is achieved by this change, I could
-> see the code being a tad simpler, but the cost was more EXPORTs.
+On 7/7/22 17:12, Sander Vanheule wrote:
+> On Thu, 2022-07-07 at 16:39 +0200, Thomas Bogendoerfer wrote:
+>> On Thu, Jul 07, 2022 at 02:57:15PM +0200, Martin Blumenstingl wrote:
 
-Well=E2=80=A6 we now have two separate drivers instead of one driver that=20
-deals with two different devices. I thought the benefit here was=20
-obvious.
+>> IMHO there is the problem, irq-mips-cpu.c can only do CPU irq operations
+>> on the same CPU. I've checked MIPS MT specs and it's possible do
+>> modify CP0 registers between VPEs. Using that needs changes in
+>> irq-mips-cpu.c. But mabye that's not woth the effort as probably
+>> all SMP cabable platforms have some multi processort capable
+>> interrupt controller implemented.
+Not sure I can be of much help. That the patch works on the RTL SoCs is 
+mostly empirical and was found in the vendor code.
 
-> With the added explanation, which you can add when applying, all=20
-> patches are:
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+My understanding from the MIPS documentation is that it is not specified 
+what happens when a multi VPE capable IRQ controller triggers CPU 
+interrupts: if multiple VPEs are possible targets, then it is not 
+defined whether one of them gets them (and which one), multiple, or all. 
+So trying to control what happens between VPEs is probably SoC-dependent 
+functionality.
 
-I'll apply the other ones and keep this patch for a V2. You made me=20
-realize that I could use namespaced exports instead of global ones.
-
-Thanks,
--Paul
-
-
+Cheers,
+   Birger
