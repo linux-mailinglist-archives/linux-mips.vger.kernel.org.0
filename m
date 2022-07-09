@@ -2,76 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F90B56C848
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Jul 2022 11:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF7B56C90C
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Jul 2022 12:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbiGIJUb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Jul 2022 05:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S229568AbiGIKnl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Jul 2022 06:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiGIJU2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jul 2022 05:20:28 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C44666AC1
-        for <linux-mips@vger.kernel.org>; Sat,  9 Jul 2022 02:20:23 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id l23so1339910ejr.5
-        for <linux-mips@vger.kernel.org>; Sat, 09 Jul 2022 02:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=TKvyPiNZ+anjmYa10tWJwFVa+LgbgMa6tcU0LfkkBNI=;
-        b=Rw4EfubfZ/faCl4SO4kGUHTsF29gYmjUZN5r9EX2QvJZu1MCNedG9zlXeV2AhFrD+e
-         SXaisYWxi2fUxcpk19A/i7AtZbMpv3lr7KUgXbxpkLIIUEJyCshVIYNhva/EaDsmb0pp
-         34YplPkczi2T6yFHhiVl87ULuueLNlq21qgKhbgzefk/zgF3MSAJ/EB94FuyhPSFpwaS
-         LQjwd8/JA89CMxd1TzBKztR50rgjHQG/1pn1q4sYpKoJjmXYoL3DuCwTrbCj9+TXy7u2
-         AhJgLh9STUmqhDuCm1GQgtrOxx/JMJRJrDLbc1QMj3bXzNJMrA0fbQKeShJ/tnNmoYAB
-         5OTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=TKvyPiNZ+anjmYa10tWJwFVa+LgbgMa6tcU0LfkkBNI=;
-        b=Gc+rkO+ycHc3HyB+9TTS3BsPDaogIlzwix7mL/ficXunFV8rGjxmvblFzQWoRlcqyn
-         si75lMS2m5sncszRFTgcvmxEknAOawRiP68hQWfh75AfMhLeCnO4UyP5o/egIfzhgJp/
-         c0nYPC2OtE3qXeHdIKGd2Yt5QcLz5G0iVs+edTLsPW28p2tvnC9pcoB3bg53eKO6i/03
-         cqjtxxOZqt/+yFR4IL7KgdidNknfmGKVqe0MfbWeCn7zEoa0h6P2qfGV0iUmq+5Z0mIg
-         jHZ1hOZAgWvr4cQ2LnPwtCKBu1skwrdQIvcOTSMD/gnevDtvJydXu749E8CxChcS0MIr
-         pjAg==
-X-Gm-Message-State: AJIora/2HWBoFRMuhbf1WM9I22mDxFGBcvioW9KmSi+dDYlcpZ8PmuoU
-        aO3wNecAhTUqIWiFYoHiYJ3IyjLZesQGpnti1RQ=
-X-Google-Smtp-Source: AGRyM1u+lkUomLC9sj7m2S98v3aFMbUcPQRo+XYLcmPa7mGw7szcEoVya6ud7PjqcZccMjpswFD4wRZfo1uSn8ZwKfk=
-X-Received: by 2002:a17:907:1c8f:b0:6e8:f898:63bb with SMTP id
- nb15-20020a1709071c8f00b006e8f89863bbmr8101819ejc.721.1657358421741; Sat, 09
- Jul 2022 02:20:21 -0700 (PDT)
+        with ESMTP id S229558AbiGIKnk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Jul 2022 06:43:40 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81769BC98;
+        Sat,  9 Jul 2022 03:43:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1657363417; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HZm4gVWjiDEO5u30RuW6VoyxTvmlC8q+Qpm+4tGQ74c=;
+        b=RGYSTeN8yc1avmOrmXEF+5G8x0qBiLTYlaLGRTfv0Ur08nsmZIN1nQxFVg8sxhc5jgT/23
+        IAres0EXXDFv6C4qMzlSVyxiRiO0wanAYIP+cvBF3mdZimJ043vuUB+zjwrV/GN7GtooZl
+        8qxjC9mvgSbDa8qr4SiG6c1CC4I7nEE=
+Date:   Sat, 09 Jul 2022 11:43:27 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 0/6] drm/ingenic: JZ4760(B) support and random changes
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        list@opendingux.net, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <FS1RER.IMGKHPGOL0LF1@crapouillou.net>
+In-Reply-To: <Ysk88cZO1iQhX/I2@ravnborg.org>
+References: <20220708205406.96473-1-paul@crapouillou.net>
+        <Ysk88cZO1iQhX/I2@ravnborg.org>
 MIME-Version: 1.0
-Received: by 2002:a17:907:a40c:0:0:0:0 with HTTP; Sat, 9 Jul 2022 02:20:21
- -0700 (PDT)
-From:   John Jacob <jjacobvsusa@gmail.com>
-Date:   Sat, 9 Jul 2022 12:20:21 +0300
-Message-ID: <CAKZDKkCKN5p+6LNhGP=88n5ZYzzERAMdH-XX-DunqQw+dsw0iQ@mail.gmail.com>
-Subject: Confirm Receipt
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Dear,
+Hi Sam,
 
-I am Daniel Affum a retired civil servant i have a  business to
-discuss with you from the Eastern part of Africa aimed at agreed
-percentage upon your acceptance of my hand in business and friendship.
-Kindly respond to me if you are interested to partner with me for an
-update.Very important.
+Le sam., juil. 9 2022 at 10:31:45 +0200, Sam Ravnborg=20
+<sam@ravnborg.org> a =C3=A9crit :
+> Hi Paul,
+>=20
+> On Fri, Jul 08, 2022 at 09:54:00PM +0100, Paul Cercueil wrote:
+>>  Hi,
+>>=20
+>>  A small set of changes to the ingenic-drm driver.
+>>=20
+>>  The most notable thing is that ingenic-ipu is now its own platform
+>>  driver.
+> It would be nice to know what is achieved by this change, I could
+> see the code being a tad simpler, but the cost was more EXPORTs.
 
-Yours Sincerely,
-Jacob John.
-For,
-Daniel Affum.
-Reply to: danielaffum005@yahoo.com
+Well=E2=80=A6 we now have two separate drivers instead of one driver that=20
+deals with two different devices. I thought the benefit here was=20
+obvious.
+
+> With the added explanation, which you can add when applying, all=20
+> patches are:
+> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+
+I'll apply the other ones and keep this patch for a V2. You made me=20
+realize that I could use namespaced exports instead of global ones.
+
+Thanks,
+-Paul
+
+
