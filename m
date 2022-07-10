@@ -2,87 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E525F56CFED
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Jul 2022 18:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9ADF56D0AA
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Jul 2022 20:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiGJQGN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Jul 2022 12:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S229463AbiGJSBq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Jul 2022 14:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGJQGN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jul 2022 12:06:13 -0400
-X-Greylist: delayed 954 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 10 Jul 2022 09:06:07 PDT
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 066E012ACD;
-        Sun, 10 Jul 2022 09:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Vn4na
-        ovKTOZQthrjfaP/ehRTLiCmrzMOGVk+9JX62aE=; b=F1KUBvAfY9Xhge8HUoIqp
-        s2QIWtrjjeAKg2hkUhMwfBxsnSqZ0aIwppfw1HjZww0WrR9C5Quvz7/4gLXPb+sB
-        SdNdDxgEV2KkhlFPGxz2Wrd7/ox15HG8Eh2A8615v7nyiYdXuLp3A11srtXuauoM
-        IuKWgXc4jKalDUZjR1qcVE=
-Received: from localhost.localdomain (unknown [123.58.221.99])
-        by smtp5 (Coremail) with SMTP id HdxpCgCHlzED9cpiFZjPNQ--.1936S2;
-        Sun, 10 Jul 2022 23:49:25 +0800 (CST)
-From:   williamsukatube@163.com
-To:     arinc.unal@arinc9.com, sergio.paracuellos@gmail.com,
-        linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     William Dean <williamsukatube@gmail.com>,
-        Hacash Robot <hacashRobot@santino.com>
-Subject: [PATCH] pinctrl: ralink: Check for null return of devm_kcalloc
-Date:   Sun, 10 Jul 2022 23:49:22 +0800
-Message-Id: <20220710154922.2610876-1-williamsukatube@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229534AbiGJSBn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jul 2022 14:01:43 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 237F712772
+        for <linux-mips@vger.kernel.org>; Sun, 10 Jul 2022 11:01:42 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oAbFU-00024n-00
+        for linux-mips@vger.kernel.org; Sun, 10 Jul 2022 20:01:40 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 6534DC033B; Sun, 10 Jul 2022 20:01:26 +0200 (CEST)
+Date:   Sun, 10 Jul 2022 20:01:26 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Remove VR41xx support
+Message-ID: <20220710180126.GA6130@alpha.franken.de>
+References: <20220705164632.97942-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgCHlzED9cpiFZjPNQ--.1936S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZrW7Zw48Xw1fKw4fKryDKFg_yoW8JF4xpF
-        43ur15Ary5JrsrZFWjywnrZry3Wa18KrW3Ga4j9rZFvF45Aas7Cay5Krs2qrWDCrWkuw13
-        tr4aq342gFykAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07b4_-dUUUUU=
-X-Originating-IP: [123.58.221.99]
-X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbBiAY6g1aECCBQGAAAsF
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705164632.97942-1-tsbogend@alpha.franken.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+On Tue, Jul 05, 2022 at 06:46:25PM +0200, Thomas Bogendoerfer wrote:
+> No (active) developer owns this hardware, so let's remove Linux support.
+> 
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+>  arch/mips/Kbuild.platforms              |   1 -
+>  arch/mips/Kconfig                       |  23 -
+>  arch/mips/Makefile                      |   1 -
+>  arch/mips/configs/capcella_defconfig    |  91 ---
+>  arch/mips/configs/e55_defconfig         |  37 --
+>  arch/mips/configs/mpc30x_defconfig      |  53 --
+>  arch/mips/configs/tb0219_defconfig      |  76 ---
+>  arch/mips/configs/tb0226_defconfig      |  71 ---
+>  arch/mips/configs/tb0287_defconfig      |  84 ---
+>  arch/mips/configs/workpad_defconfig     |  67 ---
+>  arch/mips/include/asm/cpu-type.h        |  11 -
+>  arch/mips/include/asm/cpu.h             |   3 +-
+>  arch/mips/include/asm/mach-vr41xx/irq.h |   9 -
+>  arch/mips/include/asm/mipsregs.h        |  14 -
+>  arch/mips/include/asm/pgtable-32.h      |   5 -
+>  arch/mips/include/asm/pgtable-64.h      |   5 -
+>  arch/mips/include/asm/vermagic.h        |   2 -
+>  arch/mips/include/asm/vr41xx/capcella.h |  30 -
+>  arch/mips/include/asm/vr41xx/giu.h      |  41 --
+>  arch/mips/include/asm/vr41xx/irq.h      |  97 ----
+>  arch/mips/include/asm/vr41xx/mpc30x.h   |  24 -
+>  arch/mips/include/asm/vr41xx/pci.h      |  77 ---
+>  arch/mips/include/asm/vr41xx/siu.h      |  45 --
+>  arch/mips/include/asm/vr41xx/tb0219.h   |  29 -
+>  arch/mips/include/asm/vr41xx/tb0226.h   |  30 -
+>  arch/mips/include/asm/vr41xx/tb0287.h   |  30 -
+>  arch/mips/include/asm/vr41xx/vr41xx.h   | 148 -----
+>  arch/mips/kernel/cpu-probe.c            |  40 --
+>  arch/mips/lib/dump_tlb.c                |   8 -
+>  arch/mips/mm/c-r4k.c                    |  44 --
+>  arch/mips/mm/tlbex.c                    |  35 --
+>  arch/mips/pci/Makefile                  |   6 -
+>  arch/mips/pci/fixup-capcella.c          |  37 --
+>  arch/mips/pci/fixup-mpc30x.c            |  36 --
+>  arch/mips/pci/fixup-tb0219.c            |  38 --
+>  arch/mips/pci/fixup-tb0226.c            |  73 ---
+>  arch/mips/pci/fixup-tb0287.c            |  52 --
+>  arch/mips/pci/ops-vr41xx.c              | 113 ----
+>  arch/mips/pci/pci-vr41xx.c              | 309 ----------
+>  arch/mips/pci/pci-vr41xx.h              | 141 -----
+>  arch/mips/vr41xx/Kconfig                | 104 ----
+>  arch/mips/vr41xx/Makefile               |   5 -
+>  arch/mips/vr41xx/Platform               |  29 -
+>  arch/mips/vr41xx/casio-e55/Makefile     |   6 -
+>  arch/mips/vr41xx/casio-e55/setup.c      |  27 -
+>  arch/mips/vr41xx/common/Makefile        |   6 -
+>  arch/mips/vr41xx/common/bcu.c           | 210 -------
+>  arch/mips/vr41xx/common/cmu.c           | 242 --------
+>  arch/mips/vr41xx/common/giu.c           | 110 ----
+>  arch/mips/vr41xx/common/icu.c           | 714 ------------------------
+>  arch/mips/vr41xx/common/init.c          |  60 --
+>  arch/mips/vr41xx/common/irq.c           | 106 ----
+>  arch/mips/vr41xx/common/pmu.c           | 123 ----
+>  arch/mips/vr41xx/common/rtc.c           | 105 ----
+>  arch/mips/vr41xx/common/siu.c           | 142 -----
+>  arch/mips/vr41xx/common/type.c          |  11 -
+>  arch/mips/vr41xx/ibm-workpad/Makefile   |   6 -
+>  arch/mips/vr41xx/ibm-workpad/setup.c    |  27 -
+>  58 files changed, 1 insertion(+), 4068 deletions(-)
+>  delete mode 100644 arch/mips/configs/capcella_defconfig
+>  delete mode 100644 arch/mips/configs/e55_defconfig
+>  delete mode 100644 arch/mips/configs/mpc30x_defconfig
+>  delete mode 100644 arch/mips/configs/tb0219_defconfig
+>  delete mode 100644 arch/mips/configs/tb0226_defconfig
+>  delete mode 100644 arch/mips/configs/tb0287_defconfig
+>  delete mode 100644 arch/mips/configs/workpad_defconfig
+>  delete mode 100644 arch/mips/include/asm/mach-vr41xx/irq.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/capcella.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/giu.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/irq.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/mpc30x.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/pci.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/siu.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/tb0219.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/tb0226.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/tb0287.h
+>  delete mode 100644 arch/mips/include/asm/vr41xx/vr41xx.h
+>  delete mode 100644 arch/mips/pci/fixup-capcella.c
+>  delete mode 100644 arch/mips/pci/fixup-mpc30x.c
+>  delete mode 100644 arch/mips/pci/fixup-tb0219.c
+>  delete mode 100644 arch/mips/pci/fixup-tb0226.c
+>  delete mode 100644 arch/mips/pci/fixup-tb0287.c
+>  delete mode 100644 arch/mips/pci/ops-vr41xx.c
+>  delete mode 100644 arch/mips/pci/pci-vr41xx.c
+>  delete mode 100644 arch/mips/pci/pci-vr41xx.h
+>  delete mode 100644 arch/mips/vr41xx/Kconfig
+>  delete mode 100644 arch/mips/vr41xx/Makefile
+>  delete mode 100644 arch/mips/vr41xx/Platform
+>  delete mode 100644 arch/mips/vr41xx/casio-e55/Makefile
+>  delete mode 100644 arch/mips/vr41xx/casio-e55/setup.c
+>  delete mode 100644 arch/mips/vr41xx/common/Makefile
+>  delete mode 100644 arch/mips/vr41xx/common/bcu.c
+>  delete mode 100644 arch/mips/vr41xx/common/cmu.c
+>  delete mode 100644 arch/mips/vr41xx/common/giu.c
+>  delete mode 100644 arch/mips/vr41xx/common/icu.c
+>  delete mode 100644 arch/mips/vr41xx/common/init.c
+>  delete mode 100644 arch/mips/vr41xx/common/irq.c
+>  delete mode 100644 arch/mips/vr41xx/common/pmu.c
+>  delete mode 100644 arch/mips/vr41xx/common/rtc.c
+>  delete mode 100644 arch/mips/vr41xx/common/siu.c
+>  delete mode 100644 arch/mips/vr41xx/common/type.c
+>  delete mode 100644 arch/mips/vr41xx/ibm-workpad/Makefile
+>  delete mode 100644 arch/mips/vr41xx/ibm-workpad/setup.c
 
-Because of the possible failure of the allocation, data->domains might
-be NULL pointer and will cause the dereference of the NULL pointer
-later.
-Therefore, it might be better to check it and directly return -ENOMEM
-without releasing data manually if fails, because the comment of the
-devm_kmalloc() says "Memory allocated with this function is
-automatically freed on driver detach.".
+just a ping to linux-mips since original made it their because of
+size. If nobody objects I'm going to apply this patch for v4.20.
 
-Fixes: a86854d0c599b ("treewide: devm_kzalloc() -> devm_kcalloc()")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
----
- drivers/pinctrl/ralink/pinctrl-ralink.c | 2 ++
- 1 file changed, 2 insertions(+)
+Full patch is here
 
-diff --git a/drivers/pinctrl/ralink/pinctrl-ralink.c b/drivers/pinctrl/ralink/pinctrl-ralink.c
-index 63429a287434..770862f45b3f 100644
---- a/drivers/pinctrl/ralink/pinctrl-ralink.c
-+++ b/drivers/pinctrl/ralink/pinctrl-ralink.c
-@@ -266,6 +266,8 @@ static int ralink_pinctrl_pins(struct ralink_priv *p)
- 						p->func[i]->pin_count,
- 						sizeof(int),
- 						GFP_KERNEL);
-+		if (!p->func[i]->pins)
-+			return -ENOMEM;
- 		for (j = 0; j < p->func[i]->pin_count; j++)
- 			p->func[i]->pins[j] = p->func[i]->pin_first + j;
- 
+https://lore.kernel.org/all/20220705164632.97942-1-tsbogend@alpha.franken.de/
+
+Thomas.
+
 -- 
-2.25.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
