@@ -2,94 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F6456CF7C
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Jul 2022 16:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E525F56CFED
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Jul 2022 18:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiGJOnj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Jul 2022 10:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S229543AbiGJQGN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Jul 2022 12:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiGJOng (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jul 2022 10:43:36 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C85D2B8
-        for <linux-mips@vger.kernel.org>; Sun, 10 Jul 2022 07:43:31 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 19so3582251ljz.4
-        for <linux-mips@vger.kernel.org>; Sun, 10 Jul 2022 07:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=19MhE5ZfrhXv+XYWE6FLNmmTUzoahjHoCzilM+giJ+k=;
-        b=a6NBszHDHT2cYh8kUOScD2ibqpT7ddU8tPcRl7sHY3jNSJ67rLDQhZaKXkmpA9VE4J
-         djRGj6ZfDFIzZ3DaWFRWpNWAQKCeVRmgoxOaE5GXzYb7UqQDz4k8eJXO6qeo0GjeervX
-         09kLWWT8N2WdlFT8TWP2nz0zll+8m50DANAXC316JkJvnYWJVSALekLWrpwcjz0XJIpE
-         uT+7UF5KJSTFq9hJ2zH95LlIPbOCiTG6e+OcfIY1Nh210xV0hyFi6mOYmCquA9um8YAw
-         bDTQTHHesldrsCGKGNQjAmmGh0Kpkotdrsw7tKmwupKa7ISfRoiBR9TwGb9tVCUNa6a1
-         nq8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=19MhE5ZfrhXv+XYWE6FLNmmTUzoahjHoCzilM+giJ+k=;
-        b=xdMs7NsYNFKxWuKMfbmW5UdpC0lZgP/40yYvqebQYvHWQB20yahZ1s5qQijqrHe3w6
-         9TkSL8SaILNAUrTF8R7HgepSbRF/MS4hzEMGXqB/LX09oy1JTVgXZTcbGOq8pv+pkjJP
-         WqB5ByWEjShgyVCzOWsOyWucEtIMRnk5O6FSe+0svb5YCHTfAkOMRTo3zjAqDt6MpUKv
-         /XeqEWicfUk0gfIcqxdaAc+BzXhAxYmP3+CijkybP2LclhacPUd8kyx1amligtinTmYX
-         rexIUW0R5rX7lnPzW7qD/jzVBP2JTi0nooPMe3chJBNLp5j9XEnzOR8wAG9pIshocLPu
-         m5LQ==
-X-Gm-Message-State: AJIora+I0aLZLWbhg5+E7NnOJ/rCMbB+NDY4VtbOAvGucZmHMqFTn4Xv
-        ccCDtkGpYsWX3PqzTHyssSHg5w==
-X-Google-Smtp-Source: AGRyM1tJ59Oz9cXf8kXE8WHZfYzZXD2CdrY2JUdL5IwSncxq0RpO5KsqvhUTSVlUVMmSv/rTAHqY9A==
-X-Received: by 2002:a2e:a54a:0:b0:25a:6609:835a with SMTP id e10-20020a2ea54a000000b0025a6609835amr7310297ljn.408.1657464209307;
-        Sun, 10 Jul 2022 07:43:29 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cac-200.bb.online.no. [88.92.172.200])
-        by smtp.gmail.com with ESMTPSA id c21-20020a056512325500b0047255d21132sm960283lfr.97.2022.07.10.07.43.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Jul 2022 07:43:28 -0700 (PDT)
-Message-ID: <b2bf6fed-2f98-da42-076f-9a4ef3b13fd5@linaro.org>
-Date:   Sun, 10 Jul 2022 16:43:26 +0200
+        with ESMTP id S229477AbiGJQGN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jul 2022 12:06:13 -0400
+X-Greylist: delayed 954 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 10 Jul 2022 09:06:07 PDT
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 066E012ACD;
+        Sun, 10 Jul 2022 09:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Vn4na
+        ovKTOZQthrjfaP/ehRTLiCmrzMOGVk+9JX62aE=; b=F1KUBvAfY9Xhge8HUoIqp
+        s2QIWtrjjeAKg2hkUhMwfBxsnSqZ0aIwppfw1HjZww0WrR9C5Quvz7/4gLXPb+sB
+        SdNdDxgEV2KkhlFPGxz2Wrd7/ox15HG8Eh2A8615v7nyiYdXuLp3A11srtXuauoM
+        IuKWgXc4jKalDUZjR1qcVE=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp5 (Coremail) with SMTP id HdxpCgCHlzED9cpiFZjPNQ--.1936S2;
+        Sun, 10 Jul 2022 23:49:25 +0800 (CST)
+From:   williamsukatube@163.com
+To:     arinc.unal@arinc9.com, sergio.paracuellos@gmail.com,
+        linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH] pinctrl: ralink: Check for null return of devm_kcalloc
+Date:   Sun, 10 Jul 2022 23:49:22 +0800
+Message-Id: <20220710154922.2610876-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/6] dt-bindings/display: ingenic: Add compatible string
- for the JZ4760(B)
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        list@opendingux.net, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-References: <20220708205406.96473-1-paul@crapouillou.net>
- <20220708205406.96473-2-paul@crapouillou.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220708205406.96473-2-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgCHlzED9cpiFZjPNQ--.1936S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZrW7Zw48Xw1fKw4fKryDKFg_yoW8JF4xpF
+        43ur15Ary5JrsrZFWjywnrZry3Wa18KrW3Ga4j9rZFvF45Aas7Cay5Krs2qrWDCrWkuw13
+        tr4aq342gFykAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07b4_-dUUUUU=
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbBiAY6g1aECCBQGAAAsF
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 08/07/2022 22:54, Paul Cercueil wrote:
-> Add compatible strings for the LCD controllers found in the JZ4760 and
-> JZ4760B SoCs from Ingenic.
-> 
+From: William Dean <williamsukatube@gmail.com>
 
+Because of the possible failure of the allocation, data->domains might
+be NULL pointer and will cause the dereference of the NULL pointer
+later.
+Therefore, it might be better to check it and directly return -ENOMEM
+without releasing data manually if fails, because the comment of the
+devm_kmalloc() says "Memory allocated with this function is
+automatically freed on driver detach.".
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: a86854d0c599b ("treewide: devm_kzalloc() -> devm_kcalloc()")
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+ drivers/pinctrl/ralink/pinctrl-ralink.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/pinctrl/ralink/pinctrl-ralink.c b/drivers/pinctrl/ralink/pinctrl-ralink.c
+index 63429a287434..770862f45b3f 100644
+--- a/drivers/pinctrl/ralink/pinctrl-ralink.c
++++ b/drivers/pinctrl/ralink/pinctrl-ralink.c
+@@ -266,6 +266,8 @@ static int ralink_pinctrl_pins(struct ralink_priv *p)
+ 						p->func[i]->pin_count,
+ 						sizeof(int),
+ 						GFP_KERNEL);
++		if (!p->func[i]->pins)
++			return -ENOMEM;
+ 		for (j = 0; j < p->func[i]->pin_count; j++)
+ 			p->func[i]->pins[j] = p->func[i]->pin_first + j;
+ 
+-- 
+2.25.1
 
-Best regards,
-Krzysztof
