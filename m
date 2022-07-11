@@ -2,162 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ADF56D0AA
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Jul 2022 20:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8014056D376
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Jul 2022 05:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiGJSBq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Jul 2022 14:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S229697AbiGKDql (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Jul 2022 23:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiGJSBn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jul 2022 14:01:43 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 237F712772
-        for <linux-mips@vger.kernel.org>; Sun, 10 Jul 2022 11:01:42 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oAbFU-00024n-00
-        for linux-mips@vger.kernel.org; Sun, 10 Jul 2022 20:01:40 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 6534DC033B; Sun, 10 Jul 2022 20:01:26 +0200 (CEST)
-Date:   Sun, 10 Jul 2022 20:01:26 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Remove VR41xx support
-Message-ID: <20220710180126.GA6130@alpha.franken.de>
-References: <20220705164632.97942-1-tsbogend@alpha.franken.de>
+        with ESMTP id S229450AbiGKDqj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Jul 2022 23:46:39 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C9C12A9C;
+        Sun, 10 Jul 2022 20:46:38 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id r6so964693plg.3;
+        Sun, 10 Jul 2022 20:46:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qmBhjPhdel7Ory0h+LtHmaoT8CpQHwHtjRSzAczsGS8=;
+        b=UY5oZcsZHFdGH9KcetDN8dqr2Mf0qiwqMqlLdkQ+0PNZPPWK8nytWfBrVg68lCyEAN
+         jrVXhCD+p/9vhueaNcEswnstaaqhbi96KvKB1URC0IEAGTbb7bQ3L2sJKv8fP4/q3fdz
+         qnhDuiRe5eJunmVyfmUC7y6G6huMy6rKKY2vpo7MUN+GN+8Yg69bDGSpiExtmJG6nmwc
+         HGrj6W5Zy4EILKOUdTTBtFEUayRpo9P6vRZIShjByCsnQmdWy7cHknQIBwTn6y+6JaHt
+         7Jslc7TiuDWWVL3D1WVwoeXWF4xp0s+zIBfTFhbW89tgNx9jEYuB6VyOj7QkOyyjH+tF
+         MEOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qmBhjPhdel7Ory0h+LtHmaoT8CpQHwHtjRSzAczsGS8=;
+        b=lW5XsM5Ug36xO2IG5WEDJ05OaLK0lJUFbyFcnZ+M9IrMk7oKMUvxPcYektebMRiiWl
+         6kgcY/6e7/mqfr05N47emBXPmi3GAaG5AMNL0e6chQInCkHBmsg/KzwbpYmYZvBZtRPH
+         HrtKYMl/SrENWMvE2yxVjCC0nrK77Svtih0104wgJ962pKeo0KA7MxNOOlgH1L+361sF
+         plWcSucp8trLUL0f3d6ygFnfFPB89aR1ZArQ+s5GjlzHshFyzxaGdtz5EhEMb6uAbhct
+         S8o40QAGJ/JiJFSsPg1yrkCMGJnRqxN6jKvQIz2Gt2N2L4OP381u4klGqu+RbP8taPgT
+         qLYw==
+X-Gm-Message-State: AJIora9nE8xLPrP8dHA3WUflrwnWfEU5CkMwnt+n+tGg2g+/imONtWp+
+        PvL2bclOOjtx5p/zl6xzvBk=
+X-Google-Smtp-Source: AGRyM1uXqBxzEnWgTK+S6bqpqoqltGNYamS7CTaFawotYp6lLuQkplQPx4DboSyk03U1rFf9/7Vqqw==
+X-Received: by 2002:a17:90b:1b48:b0:1ef:a90d:eae1 with SMTP id nv8-20020a17090b1b4800b001efa90deae1mr15050227pjb.68.1657511198328;
+        Sun, 10 Jul 2022 20:46:38 -0700 (PDT)
+Received: from localhost.localdomain (47-72-206-164.dsl.dyn.ihug.co.nz. [47.72.206.164])
+        by smtp.gmail.com with ESMTPSA id a13-20020a170902eccd00b001664d88aab3sm3447949plh.240.2022.07.10.20.46.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 20:46:37 -0700 (PDT)
+From:   Barry Song <21cnbao@gmail.com>
+To:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, linux-doc@vger.kernel.org
+Cc:     corbet@lwn.net, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        Barry Song <21cnbao@gmail.com>
+Subject: [PATCH v2 0/4] mm: arm64: bring up BATCHED_UNMAP_TLB_FLUSH
+Date:   Mon, 11 Jul 2022 15:46:11 +1200
+Message-Id: <20220711034615.482895-1-21cnbao@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705164632.97942-1-tsbogend@alpha.franken.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 06:46:25PM +0200, Thomas Bogendoerfer wrote:
-> No (active) developer owns this hardware, so let's remove Linux support.
-> 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->  arch/mips/Kbuild.platforms              |   1 -
->  arch/mips/Kconfig                       |  23 -
->  arch/mips/Makefile                      |   1 -
->  arch/mips/configs/capcella_defconfig    |  91 ---
->  arch/mips/configs/e55_defconfig         |  37 --
->  arch/mips/configs/mpc30x_defconfig      |  53 --
->  arch/mips/configs/tb0219_defconfig      |  76 ---
->  arch/mips/configs/tb0226_defconfig      |  71 ---
->  arch/mips/configs/tb0287_defconfig      |  84 ---
->  arch/mips/configs/workpad_defconfig     |  67 ---
->  arch/mips/include/asm/cpu-type.h        |  11 -
->  arch/mips/include/asm/cpu.h             |   3 +-
->  arch/mips/include/asm/mach-vr41xx/irq.h |   9 -
->  arch/mips/include/asm/mipsregs.h        |  14 -
->  arch/mips/include/asm/pgtable-32.h      |   5 -
->  arch/mips/include/asm/pgtable-64.h      |   5 -
->  arch/mips/include/asm/vermagic.h        |   2 -
->  arch/mips/include/asm/vr41xx/capcella.h |  30 -
->  arch/mips/include/asm/vr41xx/giu.h      |  41 --
->  arch/mips/include/asm/vr41xx/irq.h      |  97 ----
->  arch/mips/include/asm/vr41xx/mpc30x.h   |  24 -
->  arch/mips/include/asm/vr41xx/pci.h      |  77 ---
->  arch/mips/include/asm/vr41xx/siu.h      |  45 --
->  arch/mips/include/asm/vr41xx/tb0219.h   |  29 -
->  arch/mips/include/asm/vr41xx/tb0226.h   |  30 -
->  arch/mips/include/asm/vr41xx/tb0287.h   |  30 -
->  arch/mips/include/asm/vr41xx/vr41xx.h   | 148 -----
->  arch/mips/kernel/cpu-probe.c            |  40 --
->  arch/mips/lib/dump_tlb.c                |   8 -
->  arch/mips/mm/c-r4k.c                    |  44 --
->  arch/mips/mm/tlbex.c                    |  35 --
->  arch/mips/pci/Makefile                  |   6 -
->  arch/mips/pci/fixup-capcella.c          |  37 --
->  arch/mips/pci/fixup-mpc30x.c            |  36 --
->  arch/mips/pci/fixup-tb0219.c            |  38 --
->  arch/mips/pci/fixup-tb0226.c            |  73 ---
->  arch/mips/pci/fixup-tb0287.c            |  52 --
->  arch/mips/pci/ops-vr41xx.c              | 113 ----
->  arch/mips/pci/pci-vr41xx.c              | 309 ----------
->  arch/mips/pci/pci-vr41xx.h              | 141 -----
->  arch/mips/vr41xx/Kconfig                | 104 ----
->  arch/mips/vr41xx/Makefile               |   5 -
->  arch/mips/vr41xx/Platform               |  29 -
->  arch/mips/vr41xx/casio-e55/Makefile     |   6 -
->  arch/mips/vr41xx/casio-e55/setup.c      |  27 -
->  arch/mips/vr41xx/common/Makefile        |   6 -
->  arch/mips/vr41xx/common/bcu.c           | 210 -------
->  arch/mips/vr41xx/common/cmu.c           | 242 --------
->  arch/mips/vr41xx/common/giu.c           | 110 ----
->  arch/mips/vr41xx/common/icu.c           | 714 ------------------------
->  arch/mips/vr41xx/common/init.c          |  60 --
->  arch/mips/vr41xx/common/irq.c           | 106 ----
->  arch/mips/vr41xx/common/pmu.c           | 123 ----
->  arch/mips/vr41xx/common/rtc.c           | 105 ----
->  arch/mips/vr41xx/common/siu.c           | 142 -----
->  arch/mips/vr41xx/common/type.c          |  11 -
->  arch/mips/vr41xx/ibm-workpad/Makefile   |   6 -
->  arch/mips/vr41xx/ibm-workpad/setup.c    |  27 -
->  58 files changed, 1 insertion(+), 4068 deletions(-)
->  delete mode 100644 arch/mips/configs/capcella_defconfig
->  delete mode 100644 arch/mips/configs/e55_defconfig
->  delete mode 100644 arch/mips/configs/mpc30x_defconfig
->  delete mode 100644 arch/mips/configs/tb0219_defconfig
->  delete mode 100644 arch/mips/configs/tb0226_defconfig
->  delete mode 100644 arch/mips/configs/tb0287_defconfig
->  delete mode 100644 arch/mips/configs/workpad_defconfig
->  delete mode 100644 arch/mips/include/asm/mach-vr41xx/irq.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/capcella.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/giu.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/irq.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/mpc30x.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/pci.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/siu.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/tb0219.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/tb0226.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/tb0287.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/vr41xx.h
->  delete mode 100644 arch/mips/pci/fixup-capcella.c
->  delete mode 100644 arch/mips/pci/fixup-mpc30x.c
->  delete mode 100644 arch/mips/pci/fixup-tb0219.c
->  delete mode 100644 arch/mips/pci/fixup-tb0226.c
->  delete mode 100644 arch/mips/pci/fixup-tb0287.c
->  delete mode 100644 arch/mips/pci/ops-vr41xx.c
->  delete mode 100644 arch/mips/pci/pci-vr41xx.c
->  delete mode 100644 arch/mips/pci/pci-vr41xx.h
->  delete mode 100644 arch/mips/vr41xx/Kconfig
->  delete mode 100644 arch/mips/vr41xx/Makefile
->  delete mode 100644 arch/mips/vr41xx/Platform
->  delete mode 100644 arch/mips/vr41xx/casio-e55/Makefile
->  delete mode 100644 arch/mips/vr41xx/casio-e55/setup.c
->  delete mode 100644 arch/mips/vr41xx/common/Makefile
->  delete mode 100644 arch/mips/vr41xx/common/bcu.c
->  delete mode 100644 arch/mips/vr41xx/common/cmu.c
->  delete mode 100644 arch/mips/vr41xx/common/giu.c
->  delete mode 100644 arch/mips/vr41xx/common/icu.c
->  delete mode 100644 arch/mips/vr41xx/common/init.c
->  delete mode 100644 arch/mips/vr41xx/common/irq.c
->  delete mode 100644 arch/mips/vr41xx/common/pmu.c
->  delete mode 100644 arch/mips/vr41xx/common/rtc.c
->  delete mode 100644 arch/mips/vr41xx/common/siu.c
->  delete mode 100644 arch/mips/vr41xx/common/type.c
->  delete mode 100644 arch/mips/vr41xx/ibm-workpad/Makefile
->  delete mode 100644 arch/mips/vr41xx/ibm-workpad/setup.c
+Though ARM64 has the hardware to do tlb shootdown, the hardware
+broadcasting is not free.
+A simplest micro benchmark shows even on snapdragon 888 with only
+8 cores, the overhead for ptep_clear_flush is huge even for paging
+out one page mapped by only one process:
+5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
 
-just a ping to linux-mips since original made it their because of
-size. If nobody objects I'm going to apply this patch for v4.20.
+While pages are mapped by multiple processes or HW has more CPUs,
+the cost should become even higher due to the bad scalability of
+tlb shootdown.
 
-Full patch is here
+The same benchmark can result in 16.99% CPU consumption on ARM64
+server with around 100 cores according to Yicong's test on patch
+4/4.
 
-https://lore.kernel.org/all/20220705164632.97942-1-tsbogend@alpha.franken.de/
+This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+1. only send tlbi instructions in the first stage -
+	arch_tlbbatch_add_mm()
+2. wait for the completion of tlbi by dsb while doing tlbbatch
+	sync in arch_tlbbatch_flush()
+My testing on snapdragon shows the overhead of ptep_clear_flush
+is removed by the patchset. The micro benchmark becomes 5% faster
+even for one page mapped by single process on snapdragon 888.
 
-Thomas.
+
+-v2:
+1. Collected Yicong's test result on kunpeng920 ARM64 server;
+2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+   according to the comments of Peter Zijlstra and Dave Hansen
+3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+   is empty according to the comments of Nadav Amit
+
+Thanks, Yicong, Peter, Dave and Nadav for your testing or reviewing
+, and comments.
+
+-v1:
+https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+
+Barry Song (4):
+  Revert "Documentation/features: mark BATCHED_UNMAP_TLB_FLUSH doesn't
+    apply to ARM64"
+  mm: rmap: Allow platforms without mm_cpumask to defer TLB flush
+  mm: rmap: Extend tlbbatch APIs to fit new platforms
+  arm64: support batched/deferred tlb shootdown during page reclamation
+
+ Documentation/features/arch-support.txt       |  1 -
+ .../features/vm/TLB/arch-support.txt          |  2 +-
+ arch/arm/Kconfig                              |  1 +
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/tlbbatch.h             | 12 ++++++++++
+ arch/arm64/include/asm/tlbflush.h             | 23 +++++++++++++++++--
+ arch/loongarch/Kconfig                        |  1 +
+ arch/mips/Kconfig                             |  1 +
+ arch/openrisc/Kconfig                         |  1 +
+ arch/powerpc/Kconfig                          |  1 +
+ arch/riscv/Kconfig                            |  1 +
+ arch/s390/Kconfig                             |  1 +
+ arch/um/Kconfig                               |  1 +
+ arch/x86/Kconfig                              |  1 +
+ arch/x86/include/asm/tlbflush.h               |  3 ++-
+ mm/Kconfig                                    |  3 +++
+ mm/rmap.c                                     | 14 +++++++----
+ 17 files changed, 59 insertions(+), 9 deletions(-)
+ create mode 100644 arch/arm64/include/asm/tlbbatch.h
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.25.1
+
