@@ -2,66 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD1057261C
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Jul 2022 21:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E8B57273B
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Jul 2022 22:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234551AbiGLTmF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Jul 2022 15:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S229681AbiGLU2t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Jul 2022 16:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiGLTlk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jul 2022 15:41:40 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10009B96AE
-        for <linux-mips@vger.kernel.org>; Tue, 12 Jul 2022 12:19:17 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id p6so8213248ljc.8
-        for <linux-mips@vger.kernel.org>; Tue, 12 Jul 2022 12:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sudomaker-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:from
-         :subject:content-transfer-encoding;
-        bh=rAw2fbAjZCbgFWVk42JEvLOJIV05KOpAjPWfL9HC23U=;
-        b=FMO2tingnx4hgnSCFlgQyoTAafxs0BkqnSSOgEdUPIduw+TKZ0Ggm2F8jCw972EPSW
-         xE8ExGSLB9celVi8nakXRpkmkkMbMuQAwbpNHHwmoK7oI4SFgwDZWmLsulYS2C8oyJ/d
-         tNBlMH8jKSsnnREYZfIsrSsI2b7lQvyrvuxF0KMhSoV3zsB305hY9eseIDPBaR8/tHUj
-         BS2h0rYwIhDtKrNP3SXSm69kuXTFaOcVfyN8F4QFproM8x4MuPfOKCkaEMqL85HkP+QO
-         ESwJufd57A8LfYvCBILTCDV0wpg+Y4nG1ihQDYMPIM0vCzsl356AKZ6mWlgSQzaq31OM
-         RXXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:from:subject:content-transfer-encoding;
-        bh=rAw2fbAjZCbgFWVk42JEvLOJIV05KOpAjPWfL9HC23U=;
-        b=x8Qgn/TO7d8yA5xIJjRLhV0QFyNCUj62Oq4fblEWwruNq6NXh4EiUkU6yEFN93BUH3
-         5YrmYE8YInaIu21GqXXvCjcrQX/XpYi7CoYBMxWp4qiblLxan7cVIzMVa2EdwBb36nke
-         n/WkWZW0wf5+zPqDQJSXPGnlEUMkzH7sPhJumVD3xJNW79XBBUPZcQXQYc3AJpMFYQw4
-         OTfmod5NgBebDDbJlho6oK6HDcw6pneosWADX7RalT0TJz0Onab8makZjeJydyN94y5K
-         ShIlcDjM+bt0wTWH+bO7Kk+ekgqVzUN4mKYgeHuXzQoRlNj/TqSrvY12Qq/MONwwocAq
-         lFxQ==
-X-Gm-Message-State: AJIora98GfAxPyiPcCGs/OswbmyjB2nS3b72fFfDzYHciKpYfjFVBPLW
-        GhOxPFNFrICdhcJVS6XnykV9cZnIAXG9jjJb
-X-Google-Smtp-Source: AGRyM1uQEtbrjesRMa9o76e+hNddul/1mStQTJjV4vmRpZ9SjEExZteIv+LAQomxQheRBJTCbINNsA==
-X-Received: by 2002:a2e:908e:0:b0:25d:53c2:5395 with SMTP id l14-20020a2e908e000000b0025d53c25395mr13684130ljg.120.1657653555061;
-        Tue, 12 Jul 2022 12:19:15 -0700 (PDT)
-Received: from [172.16.24.11] ([185.230.126.10])
-        by smtp.gmail.com with ESMTPSA id q5-20020a056512210500b00489ed49d243sm673397lfr.260.2022.07.12.12.19.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 12:19:14 -0700 (PDT)
-Message-ID: <e58406ce-a79b-fe91-9587-09e87953d0ab@sudomaker.com>
-Date:   Wed, 13 Jul 2022 03:19:32 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        with ESMTP id S229700AbiGLU2s (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jul 2022 16:28:48 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EB921252
+        for <linux-mips@vger.kernel.org>; Tue, 12 Jul 2022 13:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1657657722; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P6AF5YfII0kqwpEWbII933myZBkIuec0Ljvi7Xb7dpQ=;
+        b=CpvGwsfOScDg4MwOP83c7t9QT7c/H97TJCGhXMTiLc2XFwKMjp1FvLcGwLlkt9fWSRRGc0
+        4VPkpryo3UuVAOwYWw9WCtMXq3chuLz4SSxptNwEb6nqD5FNDPg3l++he4JH4nLXcd0459
+        fb0utqRZE3nMLux2B6qHNUD0M64CSks=
+Date:   Tue, 12 Jul 2022 21:28:27 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: RFC: Proper suspend-to-ram implementation of Ingenic SoCs
+To:     Mike Yang <reimu@sudomaker.com>
+Cc:     linux-mips@vger.kernel.org,
         Zhou Yanjie <zhouyanjie@wanyeetech.com>,
         aidanmacdonald.0x0@gmail.com
-From:   Mike Yang <reimu@sudomaker.com>
-Subject: RFC: Proper suspend-to-ram implementation of Ingenic SoCs
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <FVCXER.DV642VYMZNVS1@crapouillou.net>
+In-Reply-To: <e58406ce-a79b-fe91-9587-09e87953d0ab@sudomaker.com>
+References: <e58406ce-a79b-fe91-9587-09e87953d0ab@sudomaker.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +46,77 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The suspend-to-ram implementation of Ingenic SoCs in the current kernel i=
-s nowhere near usable, especially for the X series SoCs. Since it involve=
-s turning off CPU core power and putting DRAM into self-refresh mode, thi=
-ngs are a bit complicated. Turning off CPU core power means all register =
-files and cache contents are lost. Putting DRAM into self-refresh mode me=
-ans it will no longer respond to bus transactions.
+Hi Mike,
 
-I ported the implementation from Ingenic's 3.10 kernel to 5.18, and it wo=
-rked. But it involves a separate piece of executable code, and apparently=
- there's no way to eliminate it. During pm_enter(), various CPM registers=
- are configured to turn off CPU core and put DRAM into self-refresh upon =
-issuing the "wait" instruction, this piece of executable code will be cop=
-ied to the on-chip SRAM, and its entry address will be written into the C=
-PM.SLPC register. Then, cache will be flushed and CPU register files (inc=
-l. CP0, CP1 stuff) will also be saved in the SRAM. Finally, the "wait" in=
-struction will be issued, and the suspend procedure completed. When any e=
-xternal events trigger a resume, the CPU is powered on, and immediately j=
-umps to the PC stored in CPM.SLPC, and starts executing the piece of code=
-=2E The code will perform the usual crt0 stuff on MIPS machines, reconfig=
-ure the DRAM into normal mode, and finally restore the register files. Th=
-en the control flow goes back to pm_enter(), and the resume procedure is =
-completed.
+Le mer., juil. 13 2022 at 03:19:32 +0800, Mike Yang=20
+<reimu@sudomaker.com> a =E9crit :
+> The suspend-to-ram implementation of Ingenic SoCs in the current=20
+> kernel is nowhere near usable, especially for the X series SoCs.=20
+> Since it involves turning off CPU core power and putting DRAM into=20
+> self-refresh mode, things are a bit complicated. Turning off CPU core=20
+> power means all register files and cache contents are lost. Putting=20
+> DRAM into self-refresh mode means it will no longer respond to bus=20
+> transactions.
 
-The suspend-to-ram really saves a lot of power. For my particular board, =
-the idle power consumption is about 0.24W (1.25V Vcore, 1.2GHz, 1000Hz, p=
-reempt). After suspend-to-ram, it drops to only 0.045W.
+Suspend-to-RAM is well-tested and has been working fine for ages on all=20
+JZ SoCs, so I wouldn't call it "nowhere near usable". Zhou also=20
+implemented it on X-series SoCs.
 
-So here are my questions:
-1. I don't see a way to eliminate the piece of executable code in SRAM. I=
-s there any other ways?
-2. If we can't eliminate the code in SRAM, what's the accepted way of int=
-egrating it into the kernel tree?
-3. If the hardware doesn't have 32k crystal connected, or the RTC is stri=
-pped off (e.g. X1501), some CPM registers need to be configured different=
-ly. How could we provide this configuration?
+> I ported the implementation from Ingenic's 3.10 kernel to 5.18, and=20
+> it worked. But it involves a separate piece of executable code, and=20
+> apparently there's no way to eliminate it. During pm_enter(), various=20
+> CPM registers are configured to turn off CPU core and put DRAM into=20
+> self-refresh upon issuing the "wait" instruction, this piece of=20
+> executable code will be copied to the on-chip SRAM, and its entry=20
+> address will be written into the CPM.SLPC register. Then, cache will=20
+> be flushed and CPU register files (incl. CP0, CP1 stuff) will also be=20
+> saved in the SRAM. Finally, the "wait" instruction will be issued,=20
+> and the suspend procedure completed. When any external events trigger=20
+> a resume, the CPU is powered on, and immediately jumps to the PC=20
+> stored in CPM.SLPC, and starts executing the piece of code. The code=20
+> will perform the usual crt0 stuff on MIPS machines, reconfigure the=20
+> DRAM into normal mode, and finally restore the register files. Then=20
+> the control flow goes back to pm_enter(), and the resume procedure is=20
+> completed.
+
+This sounds extremely complex and way overkill. But you don't need any=20
+of this.
+
+> The suspend-to-ram really saves a lot of power. For my particular=20
+> board, the idle power consumption is about 0.24W (1.25V Vcore,=20
+> 1.2GHz, 1000Hz, preempt). After suspend-to-ram, it drops to only=20
+> 0.045W.
+
+Yes, doesn't surprise me. The RG-350 (JZ4770 based) can last about ~6=20
+hours of up-time, and when put  to sleep it will survive a few weeks.
+
+> So here are my questions:
+> 1. I don't see a way to eliminate the piece of executable code in=20
+> SRAM. Is there any other ways?
+
+There is what's already implemented, yes. When triggering a suspend,=20
+the CPM.LCR.LPM setting is set to SLEEP mode=20
+(drivers/clk/ingenic/pm.c), then the ingenic_pm_enter() function=20
+(arch/mips/generic/board-ingenic.c) just executes the "wait" CPU=20
+instruction to put the CPU to sleep. All clocks but the RTC one are=20
+disabled until an interrupt is raised.
+
+> 2. If we can't eliminate the code in SRAM, what's the accepted way of=20
+> integrating it into the kernel tree?
+
+Already upstream :)
+
+> 3. If the hardware doesn't have 32k crystal connected, or the RTC is=20
+> stripped off (e.g. X1501), some CPM registers need to be configured=20
+> differently. How could we provide this configuration?
+
+It's already supported. The RTC clock can be re-parented (in device=20
+tree) to the EXT/512 clock, which is (as its name suggests) derived=20
+from the external EXT oscillator.
+
+Hopefully I answered all your questions.
+
+Cheers,
+-Paul
 
 
-Regards,
-Mike
