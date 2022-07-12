@@ -2,108 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BBD5713CB
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Jul 2022 10:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A95B571378
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Jul 2022 09:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbiGLIBU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Jul 2022 04:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S232399AbiGLHwY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Jul 2022 03:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiGLIBT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jul 2022 04:01:19 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27EAC24958;
-        Tue, 12 Jul 2022 01:01:18 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oBApZ-0000Vp-00; Tue, 12 Jul 2022 10:01:17 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 41528C035A; Tue, 12 Jul 2022 09:30:01 +0200 (CEST)
-Date:   Tue, 12 Jul 2022 09:30:01 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
-        gerg@kernel.org, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Fixed __debug_virt_addr_valid()
-Message-ID: <20220712073001.GA6980@alpha.franken.de>
-References: <20220707215237.1730283-1-f.fainelli@gmail.com>
- <20220711083848.GE6084@alpha.franken.de>
- <20220711104052.ddefbgd34xbbjykg@mobilestation>
- <20220711112740.GA12918@alpha.franken.de>
- <20220711112953.j4dwany3i77df4xe@mobilestation>
- <7fb06e9c-6405-9bee-5eda-7dbd56511e2c@gmail.com>
+        with ESMTP id S232388AbiGLHwV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jul 2022 03:52:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8099D502;
+        Tue, 12 Jul 2022 00:52:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF0FDB81614;
+        Tue, 12 Jul 2022 07:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD2EC3411E;
+        Tue, 12 Jul 2022 07:52:12 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>, stable@vger.kernel.org
+Subject: [PATCH 1/6] MIPS: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
+Date:   Tue, 12 Jul 2022 15:52:50 +0800
+Message-Id: <20220712075255.1345991-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7fb06e9c-6405-9bee-5eda-7dbd56511e2c@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 05:02:51PM -0700, Florian Fainelli wrote:
-> On 7/11/2022 4:29 AM, Serge Semin wrote:
-> > On Mon, Jul 11, 2022 at 01:27:40PM +0200, Thomas Bogendoerfer wrote:
-> > > On Mon, Jul 11, 2022 at 01:40:52PM +0300, Serge Semin wrote:
-> > > > On Mon, Jul 11, 2022 at 10:38:48AM +0200, Thomas Bogendoerfer wrote:
-> > > > > On Thu, Jul 07, 2022 at 02:52:36PM -0700, Florian Fainelli wrote:
-> > > > > > It is permissible for kernel code to call virt_to_phys() against virtual
-> > > > > > addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
-> > > > > > types. Add a final condition that ensures that the virtual address is
-> > > > > > below KSEG2.
-> > > > > > 
-> > > > > > Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
-> > > > > > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> > > > > > ---
-> > > > > >   arch/mips/mm/physaddr.c | 3 ++-
-> > > > > >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > > > 
-> > > > > > diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
-> > > > > > index a1ced5e44951..a82f8f57a652 100644
-> > > > > > --- a/arch/mips/mm/physaddr.c
-> > > > > > +++ b/arch/mips/mm/physaddr.c
-> > > > > > @@ -5,6 +5,7 @@
-> > > > > >   #include <linux/mmdebug.h>
-> > > > > >   #include <linux/mm.h>
-> > > > > > +#include <asm/addrspace.h>
-> > > > > >   #include <asm/sections.h>
-> > > > > >   #include <asm/io.h>
-> > > > > >   #include <asm/page.h>
-> > > > > > @@ -30,7 +31,7 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
-> > > > > >   	if (x == MAX_DMA_ADDRESS)
-> > > > > >   		return true;
-> > > > > > -	return false;
-> > > > > > +	return KSEGX(x) < KSEG2;
-> > > > > >   }
-> > > > > >   phys_addr_t __virt_to_phys(volatile const void *x)
-> > > > > > -- 
-> > > > > > 2.25.1
-> > > > > 
-> > > > 
-> > > > > applied to mips-next.
-> > > > 
-> > > > Are you sure it was ready to be applied?
-> > > > Link: https://lore.kernel.org/linux-mips/20220708115851.ejsooiilxcopkoei@mobilestation/
-> > > 
-> > 
-> > > your comment sounded like optimizing, which can be done later on, so
-> > > I assumed it ready.
-> > 
-> > What about Malta and EVA?
-> 
-> Sergey's comment definitively need to be addressed, and I would not see the
-> point in making an incremental change to a wrong fix. Can you drop that
-> patch for now? Thanks!
+When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
+cpu_max_bits_warn() generates a runtime warning similar as below while
+we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
+instead of NR_CPUS to iterate CPUs.
 
-dropped.
+[    3.052463] ------------[ cut here ]------------
+[    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
+[    3.070072] Modules linked in: efivarfs autofs4
+[    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
+[    3.084034] Hardware name: Loongson Loongson-3A4000-7A1000-1w-V0.1-CRB/Loongson-LS3A4000-7A1000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V2.0.04082-beta7 04/27
+[    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
+[    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
+[    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
+[    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
+[    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
+[    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
+[    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
+[    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
+[    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
+[    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
+[    3.195868]         ...
+[    3.199917] Call Trace:
+[    3.203941] [<98000000002086d8>] show_stack+0x38/0x14c
+[    3.210666] [<9800000000cf846c>] dump_stack_lvl+0x60/0x88
+[    3.217625] [<980000000023d268>] __warn+0xd0/0x100
+[    3.223958] [<9800000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
+[    3.231150] [<9800000000210220>] show_cpuinfo+0x5e8/0x5f0
+[    3.238080] [<98000000004f578c>] seq_read_iter+0x354/0x4b4
+[    3.245098] [<98000000004c2e90>] new_sync_read+0x17c/0x1c4
+[    3.252114] [<98000000004c5174>] vfs_read+0x138/0x1d0
+[    3.258694] [<98000000004c55f8>] ksys_read+0x70/0x100
+[    3.265265] [<9800000000cfde9c>] do_syscall+0x7c/0x94
+[    3.271820] [<9800000000202fe4>] handle_syscall+0xc4/0x160
+[    3.281824] ---[ end trace 8b484262b4b8c24c ]---
 
-Thomas.
+Cc: stable@vger.kernel.org
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/mips/kernel/proc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+index 4184d641f05e..33a02f3814f5 100644
+--- a/arch/mips/kernel/proc.c
++++ b/arch/mips/kernel/proc.c
+@@ -172,7 +172,7 @@ static void *c_start(struct seq_file *m, loff_t *pos)
+ {
+ 	unsigned long i = *pos;
+ 
+-	return i < NR_CPUS ? (void *) (i + 1) : NULL;
++	return i < nr_cpu_ids ? (void *) (i + 1) : NULL;
+ }
+ 
+ static void *c_next(struct seq_file *m, void *v, loff_t *pos)
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.31.1
+
