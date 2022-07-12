@@ -2,101 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0517B571657
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Jul 2022 12:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700DA5716F8
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Jul 2022 12:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbiGLKBM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Jul 2022 06:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
+        id S232467AbiGLKPv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Jul 2022 06:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiGLKBL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jul 2022 06:01:11 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BD672B63D;
-        Tue, 12 Jul 2022 03:01:09 -0700 (PDT)
-Received: from [10.180.13.185] (unknown [10.180.13.185])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxCeFkRs1iBggZAA--.55841S3;
-        Tue, 12 Jul 2022 18:01:08 +0800 (CST)
-Subject: Re: [PATCH] MIPS: fix pmd_mkinvalid
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1657181495-33004-1-git-send-email-zhanghongchen@loongson.cn>
- <20220707092206.GA9894@alpha.franken.de>
- <bfb97f6b-7a39-8253-bc14-08f2f54ed312@loongson.cn>
-Message-ID: <0fd4e823-493f-07f0-08d5-f4a22491b602@loongson.cn>
-Date:   Tue, 12 Jul 2022 18:01:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S230316AbiGLKPu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jul 2022 06:15:50 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CB8AB7F2;
+        Tue, 12 Jul 2022 03:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1657620946; bh=Qy2aD4jae7WRAGs22QTr9i9ghQ5lCrNooZtoNWm8ScQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RRtr77MUySNcX97jwUMcUn+6qBESgQgGDvXyiPq9xzL21rjz6fFV4uiAczcvP2r+M
+         tOp9Fdl1WwRfL/6Ot/Yq/DSEzMxi0yWymcwedsaYrD80zX6hknS1JceruJ+Ms3p1M+
+         gQMt0vUkYqd4dM1/vKkbWytp2ocxqylhnyzbR0PM=
+Received: from [100.100.57.190] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 763A1607C5;
+        Tue, 12 Jul 2022 18:15:45 +0800 (CST)
+Message-ID: <c8c959fa-f17d-f0dd-6a8d-e0b0ce622f3a@xen0n.name>
+Date:   Tue, 12 Jul 2022 18:15:44 +0800
 MIME-Version: 1.0
-In-Reply-To: <bfb97f6b-7a39-8253-bc14-08f2f54ed312@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0)
+ Gecko/20100101 Thunderbird/104.0a1
+Subject: Re: [PATCH 3/6] M68K: cpuinfo: Fix a warning for
+ CONFIG_CPUMASK_OFFSTACK
 Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michal Simek <monstr@monstr.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        stable <stable@vger.kernel.org>
+References: <20220712075255.1345991-1-chenhuacai@loongson.cn>
+ <20220712075255.1345991-3-chenhuacai@loongson.cn>
+ <CAMuHMdUazqHLbc80vpZ+Msg9A3j5aPJ3fx+CdCG3kuWDSf8WSw@mail.gmail.com>
+ <CAAhV-H775jXMbcR9j=oLBuHo1PfFziZSUQWttJAEw20sUt+GAA@mail.gmail.com>
+ <CAMuHMdUHbepd974u5iox3BcOyo_Q2ZgT-znruk+WCt+HMQ_Lgw@mail.gmail.com>
+ <CAAhV-H78Fi0aE-h5MOgRa5L+Jt7D0wG0nLcYzx45jVney8T1BQ@mail.gmail.com>
+ <CAMuHMdVXFmKR4LuXHYRrSk3Q0VRqATGbsM512DxayWCPCE-wvg@mail.gmail.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <CAMuHMdVXFmKR4LuXHYRrSk3Q0VRqATGbsM512DxayWCPCE-wvg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxCeFkRs1iBggZAA--.55841S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ary8Zw4xZrW7JrW7Gw48WFg_yoW8Xr4xpF
-        y0yF48JrWDtFn7Gr4xtr1DJFyYyw15tw15Grn8JFyUAay8Xr92qr4UX3yq93y7JF48Wr15
-        JF4aqFW7Zw1UJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
-        c2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWU
-        AwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xUgg_TUUUUU
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022/7/7 下午7:12, Hongchen Zhang wrote:
-> On 2022/7/7 下午5:22, Thomas Bogendoerfer wrote:
->> On Thu, Jul 07, 2022 at 04:11:35PM +0800, Hongchen Zhang wrote:
->>> When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
->>> return true.
->>> So introduce a _PMD_PRESENT_INVALID_SHIFT bit to check if a pmd is
->>> present but invalidated by pmd_mkinvalid.
->>
->> What problem are you trying to fix ? What are the symptoms ?
->>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>
->> the test robot showed problems with your last version of the patch,
->> which hasn't been integrated into at least the MIPS tree, so no
->> need to that.
->>
->> Thomas.
->>
-> 
-> Hi Thomas,
->    The idea come from the commit:
->    b65399f6111b(arm64/mm: Change THP helpers to comply with generic MM 
->   semantics).
->    There is an problem now:
->          CPU 0        CPU 1
->      pmdp_invalidate        do_page_fault
->      ...              __handle_mm_fault
->                      is_swap_pmd == true
->                      trigger VM_BUG_ON() ?
->      set_pmd_at
->    the reason is that pmd_present return true,after this commit
->    pmd_present will return false,and the VM_BUG_ON will not be triggered.
->    Like arm64 does,we can introduce a new bit to fix this.
-> 
-> Thanks.
-Hi Thomas,
-  Is there problem of this patch? What's your opinion of this patch?
+Hi Geert and Huacai,
 
-Thanks
+On 2022/7/12 17:13, Geert Uytterhoeven wrote:
+> Hi Huacai,
+>
+> On Tue, Jul 12, 2022 at 11:08 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+>> On Tue, Jul 12, 2022 at 5:01 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>> On Tue, Jul 12, 2022 at 10:53 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+>>>> On Tue, Jul 12, 2022 at 4:33 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>>> On Tue, Jul 12, 2022 at 9:53 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>>>>>> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
+>>>>> DEBUG_PER_CPU_MAPS depends on SMP, which is not supported on m68k,
+>>>>> and thus cannot be enabled.
+>>>> This patch is derived from MIPS and LoongArch, I search all
+>>>> architectures and change those that look the same as MIPS and
+>>>> LoongArch.
+>>>> And the warning message below is also a copy-paste from LoongArch, sorry.
+>>>>
+>>>> Since M68K doesn't support SMP, then this patch seems to make no
+>>>> difference, but does it make sense to keep consistency across all
+>>>> architectures?
+>>> Yes, having consistency is good.  But that should be mentioned in the
+>>> patch description, instead of a scary warning CCed to stable ;-)
+>>>
+>>> BTW, you probably want to update the other copy of c_start() in
+>>> arch/m68k/kernel/setup_mm.c, too.
+>> For no-SMP architectures, it seems c_start() in
+>> arch/m68k/kernel/setup_mm.c is more reasonable (just use 1, neither
+>> NR_CPUS, nor nr_cpu_ids)?
+> The advantage of using nr_cpu_ids() is that this is one place less
+> to update when adding SMP support later...
+
+Hmm, so I've been watching m68k development lately (although not as 
+closely as I'd like to, due to lack of vintage hardware at hand), given 
+the current amazing  momentum all the hobbyists/developers have been 
+contributing to, SMP is well within reach...
+
+But judging from the intent of this patch series (fixing WARNs on 
+certain configs), and that the triggering condition is currently 
+impossible on m68k (and other non-SMP) platforms, I think cleanups for 
+such arches could come as a separate patch series later. I think the 
+m68k refactoring is reasonable after all, due to my observation above, 
+but for the other non-SMP arches we may want to wait for the respective 
+maintainers' opinions.
 
