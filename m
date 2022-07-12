@@ -2,134 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679255720CF
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Jul 2022 18:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD1057261C
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Jul 2022 21:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiGLQ2K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Jul 2022 12:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S234551AbiGLTmF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Jul 2022 15:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbiGLQ2I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jul 2022 12:28:08 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92C3CB458;
-        Tue, 12 Jul 2022 09:28:05 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id p9so8171567pjd.3;
-        Tue, 12 Jul 2022 09:28:05 -0700 (PDT)
+        with ESMTP id S233781AbiGLTlk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Jul 2022 15:41:40 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10009B96AE
+        for <linux-mips@vger.kernel.org>; Tue, 12 Jul 2022 12:19:17 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id p6so8213248ljc.8
+        for <linux-mips@vger.kernel.org>; Tue, 12 Jul 2022 12:19:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=crFxvZBUeNdiMcKsNl1tCyBaKxqrHCwq98wDUXGAXHQ=;
-        b=n/Lu8ESbMmF1p4SAf0ZpXbdAg5QeJld8BqIuFkEveqkWvIBhbSjGtpUToCacuWMSJO
-         ir+p19zBiY1LCaqkTHPlINgm41iDtIkPYXekdhf7d4iLGZNv/spNiz0teQ9NaXwDoO1/
-         ib09iREDJScvy0z0kNzcrVC4AE+8ofhWAsRtyIGyLXLKWDjRagEqrYhan0JHrkOYmrx1
-         a9G2fpapPeHbafDFrIBSfU6JRysxr09uXay07dVqUBIBwSCe4rYCOIoSbKabxntm/JyY
-         k1w86Aww4TIUscOrUfuZEa6JUQUtwHYBqYdKOj+K+FafGE4D33nHrI4rJBeLedHXc5AE
-         9SZw==
+        d=sudomaker-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:from
+         :subject:content-transfer-encoding;
+        bh=rAw2fbAjZCbgFWVk42JEvLOJIV05KOpAjPWfL9HC23U=;
+        b=FMO2tingnx4hgnSCFlgQyoTAafxs0BkqnSSOgEdUPIduw+TKZ0Ggm2F8jCw972EPSW
+         xE8ExGSLB9celVi8nakXRpkmkkMbMuQAwbpNHHwmoK7oI4SFgwDZWmLsulYS2C8oyJ/d
+         tNBlMH8jKSsnnREYZfIsrSsI2b7lQvyrvuxF0KMhSoV3zsB305hY9eseIDPBaR8/tHUj
+         BS2h0rYwIhDtKrNP3SXSm69kuXTFaOcVfyN8F4QFproM8x4MuPfOKCkaEMqL85HkP+QO
+         ESwJufd57A8LfYvCBILTCDV0wpg+Y4nG1ihQDYMPIM0vCzsl356AKZ6mWlgSQzaq31OM
+         RXXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=crFxvZBUeNdiMcKsNl1tCyBaKxqrHCwq98wDUXGAXHQ=;
-        b=VaEav7M1+yulL/jG6fCDYHFqONUT5dfPl0P2SWNWIdLbZbcJRi+NFqFj+jUwstpq7h
-         KzfTqQl4d1ri4bGSM6GR8yBeix0KY+wbuzzKqEmbNNz1ngLixiBzitObSwdBq0J6lQg0
-         aTJdSSE3bzRlavoBXG49H6zgsu4iUUGPmb98omA1WN/t9lrlSHC7eNCZ35X6vKhWE9fZ
-         VCbi1dykagRjWPA/wTK6j9sLwqrfbcdrsjgq1AXg2lNXdXgSyynapftSdEaMV2l3XwsT
-         vi06jBGz45EhgvBeIQ7p6EAfRsw9LK4B+hsoMaqWS3Tsnh+MBi0KMbv9/bJ0vHJORCeU
-         H3iA==
-X-Gm-Message-State: AJIora9iQb/TBC3+2CMtEqGJSmAnmixeGz1qlBfwAH4s72W1uqRfhibV
-        gNGPUEjGm4deXYa1PmBzn5BlPwj6Vlc=
-X-Google-Smtp-Source: AGRyM1v1RP/gA8qxjpoMj4J4scGE56YoViiod55ezbdPizAI1jMFBuUbLNAIMwGUECe/3U98NU0kMQ==
-X-Received: by 2002:a17:902:7e8f:b0:16c:eb4:a52a with SMTP id z15-20020a1709027e8f00b0016c0eb4a52amr24837698pla.19.1657643285396;
-        Tue, 12 Jul 2022 09:28:05 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d21-20020a63fd15000000b0040ca587fe0fsm6289487pgh.63.2022.07.12.09.28.03
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:from:subject:content-transfer-encoding;
+        bh=rAw2fbAjZCbgFWVk42JEvLOJIV05KOpAjPWfL9HC23U=;
+        b=x8Qgn/TO7d8yA5xIJjRLhV0QFyNCUj62Oq4fblEWwruNq6NXh4EiUkU6yEFN93BUH3
+         5YrmYE8YInaIu21GqXXvCjcrQX/XpYi7CoYBMxWp4qiblLxan7cVIzMVa2EdwBb36nke
+         n/WkWZW0wf5+zPqDQJSXPGnlEUMkzH7sPhJumVD3xJNW79XBBUPZcQXQYc3AJpMFYQw4
+         OTfmod5NgBebDDbJlho6oK6HDcw6pneosWADX7RalT0TJz0Onab8makZjeJydyN94y5K
+         ShIlcDjM+bt0wTWH+bO7Kk+ekgqVzUN4mKYgeHuXzQoRlNj/TqSrvY12Qq/MONwwocAq
+         lFxQ==
+X-Gm-Message-State: AJIora98GfAxPyiPcCGs/OswbmyjB2nS3b72fFfDzYHciKpYfjFVBPLW
+        GhOxPFNFrICdhcJVS6XnykV9cZnIAXG9jjJb
+X-Google-Smtp-Source: AGRyM1uQEtbrjesRMa9o76e+hNddul/1mStQTJjV4vmRpZ9SjEExZteIv+LAQomxQheRBJTCbINNsA==
+X-Received: by 2002:a2e:908e:0:b0:25d:53c2:5395 with SMTP id l14-20020a2e908e000000b0025d53c25395mr13684130ljg.120.1657653555061;
+        Tue, 12 Jul 2022 12:19:15 -0700 (PDT)
+Received: from [172.16.24.11] ([185.230.126.10])
+        by smtp.gmail.com with ESMTPSA id q5-20020a056512210500b00489ed49d243sm673397lfr.260.2022.07.12.12.19.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 09:28:04 -0700 (PDT)
-Message-ID: <a6d8fc0f-38bd-6afe-ef45-42ce3ee6c136@gmail.com>
-Date:   Tue, 12 Jul 2022 09:28:02 -0700
+        Tue, 12 Jul 2022 12:19:14 -0700 (PDT)
+Message-ID: <e58406ce-a79b-fe91-9587-09e87953d0ab@sudomaker.com>
+Date:   Wed, 13 Jul 2022 03:19:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] MIPS: Fixed __debug_virt_addr_valid()
+ Thunderbird/91.8.0
 Content-Language: en-US
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     linux-mips@vger.kernel.org, gerg@kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220707215237.1730283-1-f.fainelli@gmail.com>
- <20220708115851.ejsooiilxcopkoei@mobilestation>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220708115851.ejsooiilxcopkoei@mobilestation>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>,
+        aidanmacdonald.0x0@gmail.com
+From:   Mike Yang <reimu@sudomaker.com>
+Subject: RFC: Proper suspend-to-ram implementation of Ingenic SoCs
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/8/22 04:58, Serge Semin wrote:
-> On Thu, Jul 07, 2022 at 02:52:36PM -0700, Florian Fainelli wrote:
->> It is permissible for kernel code to call virt_to_phys() against virtual
->> addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
->> types. Add a final condition that ensures that the virtual address is
->> below KSEG2.
->>
->> Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>   arch/mips/mm/physaddr.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
->> index a1ced5e44951..a82f8f57a652 100644
->> --- a/arch/mips/mm/physaddr.c
->> +++ b/arch/mips/mm/physaddr.c
->> @@ -5,6 +5,7 @@
->>   #include <linux/mmdebug.h>
->>   #include <linux/mm.h>
->>   
->> +#include <asm/addrspace.h>
->>   #include <asm/sections.h>
->>   #include <asm/io.h>
->>   #include <asm/page.h>
->> @@ -30,7 +31,7 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
->>   	if (x == MAX_DMA_ADDRESS)
->>   		return true;
->>   
-> 
->> -	return false;
->> +	return KSEGX(x) < KSEG2;
-> 
-> With this do we really need the high_memory-based conditionals in this
-> method?
-> 
-> If the line above is the only way to take the uncached segment into
-> account then can we reduce the whole method to:
-> static inline bool __debug_virt_addr_valid {
-> 	return x >= PAGE_OFFSET && KSEGX(x) < KSEG2;
-> }
-> ?
-> 
-> Though this still may be invalid for EVA systems, like malta (see
-> arch/mips/include/asm/mach-malta/spaces.h).
-> 
-> Note AFAICS if EVA is enabled, highmem is implied to be disabled (see
-> the CPU_MIPS32_3_5_EVA config utilization and HIGHMEM config
-> dependencies). Thus all the memory is supposed to be linearly mapped
-> in that case.
+The suspend-to-ram implementation of Ingenic SoCs in the current kernel i=
+s nowhere near usable, especially for the X series SoCs. Since it involve=
+s turning off CPU core power and putting DRAM into self-refresh mode, thi=
+ngs are a bit complicated. Turning off CPU core power means all register =
+files and cache contents are lost. Putting DRAM into self-refresh mode me=
+ans it will no longer respond to bus transactions.
 
-OK, so if all of the memory is linearly mapped, then I am not too sure 
-what we will be able to check, which is in essence pretty similar to 
-what happens on MIPS64, right?
+I ported the implementation from Ingenic's 3.10 kernel to 5.18, and it wo=
+rked. But it involves a separate piece of executable code, and apparently=
+ there's no way to eliminate it. During pm_enter(), various CPM registers=
+ are configured to turn off CPU core and put DRAM into self-refresh upon =
+issuing the "wait" instruction, this piece of executable code will be cop=
+ied to the on-chip SRAM, and its entry address will be written into the C=
+PM.SLPC register. Then, cache will be flushed and CPU register files (inc=
+l. CP0, CP1 stuff) will also be saved in the SRAM. Finally, the "wait" in=
+struction will be issued, and the suspend procedure completed. When any e=
+xternal events trigger a resume, the CPU is powered on, and immediately j=
+umps to the PC stored in CPM.SLPC, and starts executing the piece of code=
+=2E The code will perform the usual crt0 stuff on MIPS machines, reconfig=
+ure the DRAM into normal mode, and finally restore the register files. Th=
+en the control flow goes back to pm_enter(), and the resume procedure is =
+completed.
 
-Maybe DEBUG_VIRTUAL should depend on !EVA as well?
--- 
-Florian
+The suspend-to-ram really saves a lot of power. For my particular board, =
+the idle power consumption is about 0.24W (1.25V Vcore, 1.2GHz, 1000Hz, p=
+reempt). After suspend-to-ram, it drops to only 0.045W.
+
+So here are my questions:
+1. I don't see a way to eliminate the piece of executable code in SRAM. I=
+s there any other ways?
+2. If we can't eliminate the code in SRAM, what's the accepted way of int=
+egrating it into the kernel tree?
+3. If the hardware doesn't have 32k crystal connected, or the RTC is stri=
+pped off (e.g. X1501), some CPM registers need to be configured different=
+ly. How could we provide this configuration?
+
+
+Regards,
+Mike
