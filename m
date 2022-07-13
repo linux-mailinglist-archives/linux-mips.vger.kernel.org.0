@@ -2,163 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58513572EA1
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Jul 2022 09:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3527573568
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Jul 2022 13:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiGMHBe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Jul 2022 03:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S230450AbiGMLbP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Jul 2022 07:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234394AbiGMHBe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Jul 2022 03:01:34 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063D6E0F58;
-        Wed, 13 Jul 2022 00:01:33 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bu42so17654619lfb.0;
-        Wed, 13 Jul 2022 00:01:32 -0700 (PDT)
+        with ESMTP id S229640AbiGMLbO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Jul 2022 07:31:14 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59972102700
+        for <linux-mips@vger.kernel.org>; Wed, 13 Jul 2022 04:31:13 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so1057692wme.0
+        for <linux-mips@vger.kernel.org>; Wed, 13 Jul 2022 04:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vliNERNywb3iwRIItRAhoA2xAjfhrab9oJ+vM898EyQ=;
-        b=AdgzODjZzQcchhHjCeipY5ZyiX13i6VTG3vcg6/W8bh+XtLSMyQyUQDC4TyKYUEkj7
-         vk0UyVWIhVnPLHRsql6U4nMLhKSTOJsTFuTE0gc16gEZvyHxEsE8s5UXjhE/J5M5+EhX
-         s6p8w5CIHc83IL/FCH9NTd47e/NqarpT/3q8fqDiawIbhfnWfTR3FE7ydksIDiDvHS3I
-         Z0te9i3aLIAqVcny6U5zc3BVBFHnWPeRKUtHdp1ayvqqWxDYhoCUSj+F1Y8L18tZb5US
-         Gv3Jh0lI5hST41ux0r9T+Pv9nYQ+3qRWPN9wMClXa8+1w4Y+KOedB6Su+mOxot+rCYJR
-         o0RQ==
+        d=sudomaker-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XHIGiUKYBQ2BmBX53hAL/PUb45Dazt3qNy/qRDBZNkU=;
+        b=2lygF/6vtdnj2q9NF/wuQ4/Br7ccxLv0jPMzBXVqUESbHYY31Rxiw37Q1PtI4C2+iI
+         D4k15Fuo7FAVIrIYzHHWFjA9hp7z46sUDkCM66KEke0q4ymFApp9EdF5qvZ7rlixOPrP
+         bzxS1B82MPpkf1NTf0RumuPze3PB2E15Lf6LLMDQCFNqltlhU8V97Cw0VeVovdZBw2XV
+         D9oKTGubLmfe2j3F7EPQ1Htuo+9OrgbaSmT4wOLndZnvpPyh6/Ha0VP0YJpvOeYtcY4Z
+         K/nArTtKZMl+ApO6wO/KcU9Atql/OaeLnwdIJ2c9sInkP2scVNwsfVZbZa7z3dJwkDhX
+         5JlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vliNERNywb3iwRIItRAhoA2xAjfhrab9oJ+vM898EyQ=;
-        b=Ihlyr9raaEFhd9NntnuAZqMikFB2ueGpUfw8QwLGBNSDzsDz0FoKlGAOoCW/ktSF+g
-         WxfinWBm7d2TVx6/GIk/zSC5yO46M0AvBr2dKGmkJURaDMZzBehDkZwonchouUL3CaxZ
-         HQf4vaLxgwukVf1ML4H4Krruhj8JlSe2oqZkvo8kp1nz0hqw7wtbLRpDdtNla9U62tUq
-         uNuAcf47aYX8SnWGtnLvHceYLgzDa4+VWYBfACQ/R6obUPfEIbehtjL09/Zrd/WfqY/o
-         vrob44rvZcg5EKvJANEEoyWUErW9avYtSQX7f1qwoFw/eGrOOqguDcPqBofkHVogjt+H
-         fvXw==
-X-Gm-Message-State: AJIora9qImO6aVoBub4GJ+Dm1c/w/0aPslDTNkKPdAbG4oaOb7MW26TM
-        LmB7UPpc85NIbnQ2Kq0SfXA=
-X-Google-Smtp-Source: AGRyM1slomrYLGbn8zYKsp6aV+ffH2Ud1E+iIVGRjPVls2bS7fk93IpkCwnskUOh+sgFIfP8PHmznw==
-X-Received: by 2002:a05:6512:3c3:b0:47d:ab07:50e7 with SMTP id w3-20020a05651203c300b0047dab0750e7mr1022115lfp.261.1657695691229;
-        Wed, 13 Jul 2022 00:01:31 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id e20-20020a05651236d400b00489e0df379dsm1579000lfs.108.2022.07.13.00.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 00:01:30 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 10:01:28 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mips@vger.kernel.org, gerg@kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Fixed __debug_virt_addr_valid()
-Message-ID: <20220713070128.lzcwgimruq7xjadi@mobilestation>
-References: <20220707215237.1730283-1-f.fainelli@gmail.com>
- <20220708115851.ejsooiilxcopkoei@mobilestation>
- <a6d8fc0f-38bd-6afe-ef45-42ce3ee6c136@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XHIGiUKYBQ2BmBX53hAL/PUb45Dazt3qNy/qRDBZNkU=;
+        b=ZQQPkJ4HtIVxbCeXr6MKDrVU+0VboUMev6CZZTD07y44JOofBGxRIybDHOg0pM1iby
+         LBSzB/5+oACjetGXEOxI+Q6Ym4IZRlbXYiQdxRM0i/yWJgZvP5WvIA9KtYomXvkvqmMq
+         7S/9dFh6s3xBlIpqL3oj3FMKs8hTrkp1Tn8WeS8QsOhCZlNXuSqE0nLdv2SiWChQtYOB
+         TsPtnkuh3z0EIjl9iyJRgrOV91ZjEH728goY4SAy5P/dfx0a+9Q8KA0CG7x826TKgjjd
+         wh0r9ss/nc1/6zyauieaMgQBPzBMA5RkL/l0shjBDHWfSjI2xCAWlO3NlsoMqXiBTcxb
+         Bu9w==
+X-Gm-Message-State: AJIora9Y0DnQ8zW0krr4N1Avwhl1MCx6UtiUX3LT+cx00d1R4AevsFU+
+        pBOJ0Ym40TI5yk3CHcaiR9DYAWd9jUppkYgT
+X-Google-Smtp-Source: AGRyM1vWcDqRwM7GrLQp91MInOMmAaX5t3L17vth6rst5I2U+ovcM30cPeRb8r04ALOTM8e0raG8hg==
+X-Received: by 2002:a05:600c:348d:b0:3a2:d019:2366 with SMTP id a13-20020a05600c348d00b003a2d0192366mr9177640wmq.187.1657711871842;
+        Wed, 13 Jul 2022 04:31:11 -0700 (PDT)
+Received: from [172.16.24.11] ([185.230.126.10])
+        by smtp.gmail.com with ESMTPSA id b10-20020a5d634a000000b0021b89f8662esm11110299wrw.13.2022.07.13.04.31.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 04:31:11 -0700 (PDT)
+Message-ID: <13337393-f416-0a0f-a835-58035a3a3203@sudomaker.com>
+Date:   Wed, 13 Jul 2022 19:31:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a6d8fc0f-38bd-6afe-ef45-42ce3ee6c136@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: RFC: Proper suspend-to-ram implementation of Ingenic SoCs
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     linux-mips@vger.kernel.org,
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>,
+        aidanmacdonald.0x0@gmail.com
+References: <e58406ce-a79b-fe91-9587-09e87953d0ab@sudomaker.com>
+ <FVCXER.DV642VYMZNVS1@crapouillou.net>
+ <41070648-3651-a6c4-4888-c142408f3e85@sudomaker.com>
+ <M1IXER.NDAP4RWR4EQZ1@crapouillou.net>
+From:   Mike Yang <reimu@sudomaker.com>
+In-Reply-To: <M1IXER.NDAP4RWR4EQZ1@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 09:28:02AM -0700, Florian Fainelli wrote:
-> On 7/8/22 04:58, Serge Semin wrote:
-> > On Thu, Jul 07, 2022 at 02:52:36PM -0700, Florian Fainelli wrote:
-> > > It is permissible for kernel code to call virt_to_phys() against virtual
-> > > addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
-> > > types. Add a final condition that ensures that the virtual address is
-> > > below KSEG2.
-> > > 
-> > > Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
-> > > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> > > ---
-> > >   arch/mips/mm/physaddr.c | 3 ++-
-> > >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
-> > > index a1ced5e44951..a82f8f57a652 100644
-> > > --- a/arch/mips/mm/physaddr.c
-> > > +++ b/arch/mips/mm/physaddr.c
-> > > @@ -5,6 +5,7 @@
-> > >   #include <linux/mmdebug.h>
-> > >   #include <linux/mm.h>
-> > > +#include <asm/addrspace.h>
-> > >   #include <asm/sections.h>
-> > >   #include <asm/io.h>
-> > >   #include <asm/page.h>
-> > > @@ -30,7 +31,7 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
-> > >   	if (x == MAX_DMA_ADDRESS)
-> > >   		return true;
-> > 
-> > > -	return false;
-> > > +	return KSEGX(x) < KSEG2;
-> > 
-> > With this do we really need the high_memory-based conditionals in this
-> > method?
-> > 
-> > If the line above is the only way to take the uncached segment into
-> > account then can we reduce the whole method to:
-> > static inline bool __debug_virt_addr_valid {
-> > 	return x >= PAGE_OFFSET && KSEGX(x) < KSEG2;
-> > }
-> > ?
-> > 
-> > Though this still may be invalid for EVA systems, like malta (see
-> > arch/mips/include/asm/mach-malta/spaces.h).
-> > 
-> > Note AFAICS if EVA is enabled, highmem is implied to be disabled (see
-> > the CPU_MIPS32_3_5_EVA config utilization and HIGHMEM config
-> > dependencies). Thus all the memory is supposed to be linearly mapped
-> > in that case.
+Hi Paul,
+
+
+On 7/13/22 06:20, Paul Cercueil wrote:
 > 
+> 
+> Le mer., juil. 13 2022 at 04:51:05 +0800, Mike Yang <reimu@sudomaker.com> a écrit :
+>> Hi Paul,
+>>
+>> Thanks for the information.
+>>
+>>
+>> On 7/13/22 04:28, Paul Cercueil wrote:
+>>>  Hi Mike,
+>>>
+>>>  Le mer., juil. 13 2022 at 03:19:32 +0800, Mike Yang <reimu@sudomaker.com> a écrit :
+>>>>  The suspend-to-ram implementation of Ingenic SoCs in the current kernel is nowhere near usable, especially for the X series SoCs. Since it involves turning off CPU core power and putting DRAM into self-refresh mode, things are a bit complicated. Turning off CPU core power means all register files and cache contents are lost. Putting DRAM into self-refresh mode means it will no longer respond to bus transactions.
+>>>
+>>>  Suspend-to-RAM is well-tested and has been working fine for ages on all JZ SoCs, so I wouldn't call it "nowhere near usable". Zhou also implemented it on X-series SoCs.
+>>
+>> With the vanilla 5.18 kernel, the system will simply become unresponsive after typing "echo mem > /sys/power/state". It won't respond to WKUP and other interrupt-enabled GPIO pins. The power consumption is a bit lower, but nowhere near 0.045W. The behavior is the same for X1000(E) and X1501.
+> 
+> Well, do you know why it fails? Did you try to debug it? Does it still become unresponsive if you comment the "wait" instruction?
+> 
+> It's a bit early to talk about power consumption if it doesn't suspend properly yet.
 
-> OK, so if all of the memory is linearly mapped, then I am not too sure what
-> we will be able to check, which is in essence pretty similar to what happens
-> on MIPS64, right?
-
-Essence is right, but in general situation is more complicated.
-Basically EVA (seems like a Bible reference...) provides a way to
-change the traditional MIPS memory address space to pretty much any
-within 4GB virtual-to-physical address mapping. Most importantly it
-can be used to eliminate the limitation of having just 512MB of the
-directly mapped memory in kernel.
-
-Anyway neither MIPS HIGHMEM kernel config nor the Malta's EVA mode
-don't imply having high-memory enabled in case of EVAs. Most likely
-the constraint has been set due to the MIPS arch code too much relying
-on the traditional address space mapping. So the high-memory part just
-wasn't fixed to be properly working in that case, while the CPU
-MMU-type segments can still be defined for EVA. As the comment in the
-Malta spaces.h header file says HIGHMEM_START is preserved just for
-the correct high-mem macros arithmetics.
-
-Just to note. Lack of high-memory in case of EVA is a big drawback
-because some physical memory gets to be unavailable. At the very least
-512MB segment must be preserved for the uncached kernel region for
-MMIOs. Not to say that XPA won't work without high-memory. So it's
-either XPA (greater than 4GB physical memory) or EVA (up to 3.5GB
-directly mapped kernel memory). So annoying.
+If I comment the "wait" instruction, it will exit the suspend process immediately. And yes, I don't think it suspended properly.
 
 > 
-> Maybe DEBUG_VIRTUAL should depend on !EVA as well?
+>> I asked Dr. Zhou about this in person and he said he never tested the suspend-to-ram, nor he confirmed it working.
+>>
+>>>
+>>>>  I ported the implementation from Ingenic's 3.10 kernel to 5.18, and it worked. But it involves a separate piece of executable code, and apparently there's no way to eliminate it. During pm_enter(), various CPM registers are configured to turn off CPU core and put DRAM into self-refresh upon issuing the "wait" instruction, this piece of executable code will be copied to the on-chip SRAM, and its entry address will be written into the CPM.SLPC register. Then, cache will be flushed and CPU register files (incl. CP0, CP1 stuff) will also be saved in the SRAM. Finally, the "wait" instruction will be issued, and the suspend procedure completed. When any external events trigger a resume, the CPU is powered on, and immediately jumps to the PC stored in CPM.SLPC, and starts executing the piece of code. The code will perform the usual crt0 stuff on MIPS machines, reconfigure the DRAM into normal mode, and finally restore the register files. Then the control flow goes back to
+>>>>  pm_enter(), and the resume procedure is completed.
+>>>
+>>>  This sounds extremely complex and way overkill. But you don't need any of this.
+>>>
+>>>>  The suspend-to-ram really saves a lot of power. For my particular board, the idle power consumption is about 0.24W (1.25V Vcore, 1.2GHz, 1000Hz, preempt). After suspend-to-ram, it drops to only 0.045W.
+>>>
+>>>  Yes, doesn't surprise me. The RG-350 (JZ4770 based) can last about ~6 hours of up-time, and when put  to sleep it will survive a few weeks.
+>>>
+>>>>  So here are my questions:
+>>>>  1. I don't see a way to eliminate the piece of executable code in SRAM. Is there any other ways?
+>>>
+>>>  There is what's already implemented, yes. When triggering a suspend, the CPM.LCR.LPM setting is set to SLEEP mode (drivers/clk/ingenic/pm.c), then the ingenic_pm_enter() function (arch/mips/generic/board-ingenic.c) just executes the "wait" CPU instruction to put the CPU to sleep. All clocks but the RTC one are disabled until an interrupt is raised.
+>>>
+>>>>  2. If we can't eliminate the code in SRAM, what's the accepted way of integrating it into the kernel tree?
+>>>
+>>>  Already upstream :)
+>>>
+>>>>  3. If the hardware doesn't have 32k crystal connected, or the RTC is stripped off (e.g. X1501), some CPM registers need to be configured differently. How could we provide this configuration?
+>>>
+>>>  It's already supported. The RTC clock can be re-parented (in device tree) to the EXT/512 clock, which is (as its name suggests) derived from the external EXT oscillator.
+>>>
+>>>  Hopefully I answered all your questions.
+>>>
+>>>  Cheers,
+>>>  -Paul
+>>>
+>>>
+>>
+>> I'm afraid the above didn't work for me. Have you tested suspend-to-ram in person on a X series SoC?
+> 
+> I didn't test on X-series, I mostly work with JZ. But that part of the design didn't change since the JZ4740.
+> 
+> Cheers,
+> -Paul
+> 
+> 
 
-In that case the debug-version of __phys_addr_symbol() will be
-unavailable too. I would rather suggest to fix the
-__debug_virt_addr_valid() method implementation to at least returning
-always true in case of EVA or !HIGHMEM.
 
--Sergey
+To be honest, I never owned a board with a JZ series SoC. And sorry for assuming the suspend-to-ram is unusable on all Ingenic SoCs. IIRC, all the JZ series SoCs have external DRAM, while the X series SoCs have internal DRAM. Also Ingenic advertised the power saving features of the X series SoCs heavily. Things might be different since it may involve additional power management.
 
-> -- 
-> Florian
+
+
+At the time of writing the last sentence of the email, Dr. Zhou just pointed out that it may has something to do with the secure boot feature introduced in the X series SoC, although the feature is not enabled. I already mailed my X1000E & X1501 boards to Dr. Zhou for further tests. You may want to get a X1000(E) board (e.g. halley2) and test this by yourself.
+
+
+Regards,
+Mike
