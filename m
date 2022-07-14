@@ -2,156 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1558573E5C
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Jul 2022 22:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF2D574140
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Jul 2022 04:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236931AbiGMU5T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Jul 2022 16:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
+        id S230399AbiGNCH0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Jul 2022 22:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235042AbiGMU5S (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Jul 2022 16:57:18 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30976CD9
-        for <linux-mips@vger.kernel.org>; Wed, 13 Jul 2022 13:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1657745833; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G7XkYy96DNFlhSHPiCHo0d1+HJdQxhiPmF9oOysh/Jo=;
-        b=w4F32DlAZn9/wN/yO0w6PD6iolms1gJuQcbdmsM+rI98LwVRTFRbewtXtQ5JXSvoU77/oh
-        1cCDSCpBM92kVOQFkQ3dj1cz4W/15R1JROX80KBL/91ZmoZIrCeabFoKgQoepBgshZFCI3
-        +RLyx1BlMXt+xpZRtanVGzxx01FSkRY=
-Date:   Wed, 13 Jul 2022 21:57:04 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: RFC: Proper suspend-to-ram implementation of Ingenic SoCs
-To:     Mike Yang <reimu@sudomaker.com>
-Cc:     linux-mips@vger.kernel.org,
-        Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-        aidanmacdonald.0x0@gmail.com
-Message-Id: <4V8ZER.Y1888BONB1P@crapouillou.net>
-In-Reply-To: <6e1d1815-31d5-da55-f601-cce788a836c7@sudomaker.com>
-References: <e58406ce-a79b-fe91-9587-09e87953d0ab@sudomaker.com>
-        <FVCXER.DV642VYMZNVS1@crapouillou.net>
-        <41070648-3651-a6c4-4888-c142408f3e85@sudomaker.com>
-        <M1IXER.NDAP4RWR4EQZ1@crapouillou.net>
-        <13337393-f416-0a0f-a835-58035a3a3203@sudomaker.com>
-        <DIVYER.Y90Y2FPIT9K8@crapouillou.net>
-        <6e1d1815-31d5-da55-f601-cce788a836c7@sudomaker.com>
+        with ESMTP id S230201AbiGNCHZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Jul 2022 22:07:25 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACD12314C;
+        Wed, 13 Jul 2022 19:07:24 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id r25so152474uap.7;
+        Wed, 13 Jul 2022 19:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NpLH38IQjk7redhO9PrQcXlLl1raddOqHif56KP33pc=;
+        b=gJ/Poz6fnHmy6tw3/ekjOTdZC6WAanr/z9pOUQdssMiy7McyExvpdd2WUfWAj5C8de
+         TncoEwlo8JJLiUN9u6ikmdNggPa0I8xHqcrzSFyA8+4axrtQt1keJ3CngNjRaLncRycp
+         qQwcp767wZ15QiyGPZzbaIaVB7YDgBsPq6aKOkidU3/YYJI9s6YTbbDDpyvbGvociREx
+         d54hnyqMsAqBySNzMiQPlt7aNjoilHYVamiweBh9OT8UgjMxk8qBjyBkfRVI/cBrDttl
+         e0diMOgIGJYy6CfzH7aYgBRsDb70meGOSPVAWYLpYBJ5O+5isELaxkVSWBkr3TqqsNUZ
+         J84g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NpLH38IQjk7redhO9PrQcXlLl1raddOqHif56KP33pc=;
+        b=jCF6pb9FI9vjZJAtgwyzs5AOiQOz6a/I/wZWuv0AJKR3VsIYY0S+v3TCBwiZsTUSuv
+         f1Fz3EhLzOVq/NpoylO/A2hSRIKfnzULMDgIR7bg46cRoVGQZuz2iZTT4Z0ai4h2mRJe
+         OvUcW77drccSqX9FJGpl+JyqW7peFvzmv3VpZcI/gEwtphmxd5/Go9hSa5bJoEUuUieq
+         gj+3uByVAisBkNTlP0b0O6nDwmSiancaLgkK+T+QjU4rhZLZ5xjNGupXc6D8PSdHgsga
+         9qpH/tsfluFOQv+/rUi5+/HNwYIzlmMs4RnOlpvyxw+k2JKOApQFopnU2L+zdaGmIpuL
+         FwRQ==
+X-Gm-Message-State: AJIora9t/UrodRBa0g4JVBuNKvgw4xT5tW0ch4RoHgM0s6X6lKVQuf3V
+        K1gHAG3YYhARqQ+X/arqzP1ILHIKjVVp5zCZCDiy77J1gzhANwDD
+X-Google-Smtp-Source: AGRyM1vFQyB5NO+1tpFvYvLDE44n1imGoxyRKDVxoA97HOyDWY4NrzjwmwdLmSMIFxgFLR+iBY3k18fU4R1SCofoqMw=
+X-Received: by 2002:ab0:6798:0:b0:382:d9f4:8d0 with SMTP id
+ v24-20020ab06798000000b00382d9f408d0mr2611303uar.63.1657764443460; Wed, 13
+ Jul 2022 19:07:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <20220712075255.1345991-1-chenhuacai@loongson.cn>
+ <20220712075255.1345991-3-chenhuacai@loongson.cn> <CAMuHMdUazqHLbc80vpZ+Msg9A3j5aPJ3fx+CdCG3kuWDSf8WSw@mail.gmail.com>
+ <CAAhV-H775jXMbcR9j=oLBuHo1PfFziZSUQWttJAEw20sUt+GAA@mail.gmail.com>
+ <CAMuHMdUHbepd974u5iox3BcOyo_Q2ZgT-znruk+WCt+HMQ_Lgw@mail.gmail.com>
+ <CAAhV-H78Fi0aE-h5MOgRa5L+Jt7D0wG0nLcYzx45jVney8T1BQ@mail.gmail.com>
+ <CAMuHMdVXFmKR4LuXHYRrSk3Q0VRqATGbsM512DxayWCPCE-wvg@mail.gmail.com> <c8c959fa-f17d-f0dd-6a8d-e0b0ce622f3a@xen0n.name>
+In-Reply-To: <c8c959fa-f17d-f0dd-6a8d-e0b0ce622f3a@xen0n.name>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 14 Jul 2022 10:07:10 +0800
+Message-ID: <CAAhV-H6g5nLGJMz0ZsZqC5-73VSGffVdc6r0=3HHBo3Z8PQOBg@mail.gmail.com>
+Subject: Re: [PATCH 3/6] M68K: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michal Simek <monstr@monstr.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi, all,
 
+On Tue, Jul 12, 2022 at 6:15 PM WANG Xuerui <kernel@xen0n.name> wrote:
+>
+> Hi Geert and Huacai,
+>
+> On 2022/7/12 17:13, Geert Uytterhoeven wrote:
+> > Hi Huacai,
+> >
+> > On Tue, Jul 12, 2022 at 11:08 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> >> On Tue, Jul 12, 2022 at 5:01 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >>> On Tue, Jul 12, 2022 at 10:53 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> >>>> On Tue, Jul 12, 2022 at 4:33 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >>>>> On Tue, Jul 12, 2022 at 9:53 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >>>>>> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
+> >>>>> DEBUG_PER_CPU_MAPS depends on SMP, which is not supported on m68k,
+> >>>>> and thus cannot be enabled.
+> >>>> This patch is derived from MIPS and LoongArch, I search all
+> >>>> architectures and change those that look the same as MIPS and
+> >>>> LoongArch.
+> >>>> And the warning message below is also a copy-paste from LoongArch, sorry.
+> >>>>
+> >>>> Since M68K doesn't support SMP, then this patch seems to make no
+> >>>> difference, but does it make sense to keep consistency across all
+> >>>> architectures?
+> >>> Yes, having consistency is good.  But that should be mentioned in the
+> >>> patch description, instead of a scary warning CCed to stable ;-)
+> >>>
+> >>> BTW, you probably want to update the other copy of c_start() in
+> >>> arch/m68k/kernel/setup_mm.c, too.
+> >> For no-SMP architectures, it seems c_start() in
+> >> arch/m68k/kernel/setup_mm.c is more reasonable (just use 1, neither
+> >> NR_CPUS, nor nr_cpu_ids)?
+> > The advantage of using nr_cpu_ids() is that this is one place less
+> > to update when adding SMP support later...
+>
+> Hmm, so I've been watching m68k development lately (although not as
+> closely as I'd like to, due to lack of vintage hardware at hand), given
+> the current amazing  momentum all the hobbyists/developers have been
+> contributing to, SMP is well within reach...
+>
+> But judging from the intent of this patch series (fixing WARNs on
+> certain configs), and that the triggering condition is currently
+> impossible on m68k (and other non-SMP) platforms, I think cleanups for
+> such arches could come as a separate patch series later. I think the
+> m68k refactoring is reasonable after all, due to my observation above,
+> but for the other non-SMP arches we may want to wait for the respective
+> maintainers' opinions.
+It seems that the best solution is only fix architectures with SMP
+support and leave others (m68k, microblaze, um) as is. :)
 
-Le jeu., juil. 14 2022 at 03:44:34 +0800, Mike Yang=20
-<reimu@sudomaker.com> a =E9crit :
-> Hi Paul,
->=20
-> On 7/14/22 00:08, Paul Cercueil wrote:
->>  Hi Mike,
->>  [...]
->>=20
->>>  If I comment the "wait" instruction, it will exit the suspend=20
->>> process immediately. And yes, I don't think it suspended properly.
->>=20
->>  Ok. I was suggesting to try that since it would show if the crash=20
->> happens when a particular device gets suspended.
->>=20
->>  Are you certain that your wakeup IRQ is unmasked?
->=20
-> I'm not sure. Which register should I check?
-
-Check the IMCR0 / IMCR1 registers. Everything should be masked except=20
-your wakeup source. If your wakeup source is a GPIO, also check that=20
-the mask register that corresponds to your GPIO.
-
->>=20
->>  [...]
->>=20
->>>>>>   I'm afraid the above didn't work for me. Have you tested=20
->>>>>> suspend-to-ram in person on a X series SoC?
->>>>=20
->>>>   I didn't test on X-series, I mostly work with JZ. But that part=20
->>>> of the design didn't change since the JZ4740.
->>>>=20
->>>>   Cheers,
->>>>   -Paul
->>>>=20
->>>>=20
->>>=20
->>>=20
->>>  To be honest, I never owned a board with a JZ series SoC. And=20
->>> sorry for assuming the suspend-to-ram is unusable on all Ingenic=20
->>> SoCs. IIRC, all the JZ series SoCs have external DRAM, while the X=20
->>> series SoCs have internal DRAM. Also Ingenic advertised the power=20
->>> saving features of the X series SoCs heavily. Things might be=20
->>> different since it may involve additional power management.
->>=20
->>  Even if the 3.x method you were describing works, the currently=20
->> upstream method should work as well, and if it doesn't, we probably=20
->> should try to figure why.
->>=20
->>  I remember doing some tests on the JZ4770 some years ago, and I=20
->> would get a power consumption of 7mA when suspended - that's for the=20
->> whole board, measured at the 3.7V battery, so about 0.026 W. The=20
->> only things powered ON then are the RAM chips and the SoC's RTC=20
->> module.
->>=20
->>>  At the time of writing the last sentence of the email, Dr. Zhou=20
->>> just pointed out that it may has something to do with the secure=20
->>> boot feature introduced in the X series SoC, although the feature=20
->>> is not enabled. I already mailed my X1000E & X1501 boards to Dr.=20
->>> Zhou for further tests. You may want to get a X1000(E) board (e.g.=20
->>> halley2) and test this by yourself.
->>=20
->>  I do have a Cu1000-Neo board, but I have never used it, I wouldn't=20
->> know how to test this.
->>=20
->>  Cheers,
->>  -Paul
->>=20
->>=20
->=20
-> Earlier today, Dr. Zhou and I talked to a senior engineer from=20
-> Ingenic. He said an extra piece of code is necessary for the X=20
-> series, and more CPM registers (other than LPM) are needed to be=20
-> configured. The X series can't reconfigure the DRAM to exit=20
-> self-refresh mode by themselves. He also said, if we really don't=20
-> want to put the code inside the kernel, it's possible to store the=20
-> $pc somewhere in the RAM and modify UBoot SPL to do additional checks=20
-> (e.g. P0 powerup flag) and jump back to the $pc after reconfiguring=20
-> DRAM. I'm not sure if this will work, since the core will boot=20
-> straight from the BROM, and the SFC and/or MSC peripherals will be=20
-> reconfigured before it can load SPL again into the SRAM. It may cause=20
-> confusion to the kernel SFC/MSC drivers. From his words, we can have=20
-> another method: incorporate the code inside UBoot and write it to the=20
-> SRAM prior to booting the kernel. What's your opinion?
-
-The X1000 has more CPM registers and do support turning the CPU=20
-completely off, which is new compared to the JZ4780, so that part is=20
-true. However, the regular method to enter SLEEP mode is still=20
-described in the X1000, X1830 and X2000 programming manuals, and it's=20
-the exact same method described in the JZ4780 and even in the JZ4740=20
-programming manuals. So allow me to doubt.
-
-Knowing that Ingenic's 3.x kernel implements the "complete shutdown"=20
-sleep mode, I would think that this is why your senior engineer said=20
-that an extra piece of code is necessary - because that's how they=20
-implemented it. But that does not mean that it is required, and nothing=20
-in any of the X-series programming manuals suggests that it is required.
-
-Cheers,
--Paul
-
-
+Huacai
+>
