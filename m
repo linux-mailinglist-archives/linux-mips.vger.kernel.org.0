@@ -2,159 +2,263 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E902574220
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Jul 2022 06:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E266574408
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Jul 2022 06:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiGNEOO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Jul 2022 00:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S237642AbiGNE7H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Jul 2022 00:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGNEOM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Jul 2022 00:14:12 -0400
-Received: from out28-219.mail.aliyun.com (out28-219.mail.aliyun.com [115.124.28.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882A0193D4
-        for <linux-mips@vger.kernel.org>; Wed, 13 Jul 2022 21:14:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0745075|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.108032-0.0011757-0.890793;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.OS9Vhfr_1657772047;
-Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.OS9Vhfr_1657772047)
-          by smtp.aliyun-inc.com;
-          Thu, 14 Jul 2022 12:14:08 +0800
-Subject: Re: RFC: Proper suspend-to-ram implementation of Ingenic SoCs
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Mike Yang <reimu@sudomaker.com>
-Cc:     linux-mips@vger.kernel.org, aidanmacdonald.0x0@gmail.com
-References: <e58406ce-a79b-fe91-9587-09e87953d0ab@sudomaker.com>
- <FVCXER.DV642VYMZNVS1@crapouillou.net>
- <41070648-3651-a6c4-4888-c142408f3e85@sudomaker.com>
- <M1IXER.NDAP4RWR4EQZ1@crapouillou.net>
- <13337393-f416-0a0f-a835-58035a3a3203@sudomaker.com>
- <DIVYER.Y90Y2FPIT9K8@crapouillou.net>
- <6e1d1815-31d5-da55-f601-cce788a836c7@sudomaker.com>
- <4V8ZER.Y1888BONB1P@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <e2bd1935-b7c6-0023-7a34-c896ca7a9463@wanyeetech.com>
-Date:   Thu, 14 Jul 2022 12:14:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S235107AbiGNE6Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Jul 2022 00:58:25 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAE620F7D;
+        Wed, 13 Jul 2022 21:51:58 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id y8so934084eda.3;
+        Wed, 13 Jul 2022 21:51:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hW7IbWPmYdn2d1NNnyMMYZo7sUWhfXMc3EeZopJnd9s=;
+        b=ixpskF3es1ZmyzgNugOOlVGXEXU01wH8x+O+9c0Hn53VnayTkfg7B02WDNC5tIrO7l
+         iEwg3ca5x42mE2uIM8nqQUrXVwXLpT6ULvvEDEhDoQovcbWbHLnoAwOv78ubyxnHhjrc
+         b+F58wCwdRfZkdz4PEAGwhDlQaXN17a/dAqjH7lRr9IZR6Oxl15yDJPqx5DZqhd1LDca
+         m3K9L9Ce8HJHQ3yTYC00bD8m8HCeZVO9kN8Rn4LXDKPCB1TSqsZxNf0zJQAMyjXyiJ7g
+         cpQu1lJzObpQ/9Off5+y4JJmm1YPuTUAuigqbDyhvyv4ipfIih1IQ2OiwKFqjfHfMEIL
+         9Opw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hW7IbWPmYdn2d1NNnyMMYZo7sUWhfXMc3EeZopJnd9s=;
+        b=0XNZ6edX/MlZJnCPHdL8URHGPkZlkdWgERrUzeNnvPPFcpgLsJuW6U4Hdh22Tuza17
+         qE/3VQ9BaZOR6EOZCkR2DqUHEm/Oz30c/0Z0W8ZEqyU7tDsATe8jbTus02NLG3Nl1ZS/
+         17oLl4eUR11yBWSqdRGhoJhXpuK/svscV8KgI6vlRXTccT4KLFCe56JAYR7EYz+4Lt50
+         HqW4p0L1EAP+ySYwp2DrAhqGlzUtG5bG/WtyOI0AaQCIt28I/2Wx0kkppmY9c9yFRnRM
+         6+Brv1Ddh2hSz6zy/WTjJpEHdi7uRXq0FvLb8xg6F3MKIez1N19/9k4mQmHGLW48d/yo
+         a4eQ==
+X-Gm-Message-State: AJIora+ALb0YArjHF1GQ908mdTKp1cpMUwFZ2pxjq6f4/icpj+lWSgSA
+        cwDojxe4epbQpPhlBGPJh7J5L1T1QJpHwdekxJM=
+X-Google-Smtp-Source: AGRyM1sCekI8nbaSkEz0wXp62jC4NmfsPr1d7cEeKiuuhPUbnQAKxU8DeX6rgQmQqaqEEOVW9HUjdoQGawmviSj4Nuo=
+X-Received: by 2002:aa7:db9a:0:b0:43a:76bf:5401 with SMTP id
+ u26-20020aa7db9a000000b0043a76bf5401mr9638511edt.244.1657774317014; Wed, 13
+ Jul 2022 21:51:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4V8ZER.Y1888BONB1P@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+References: <20220711034615.482895-1-21cnbao@gmail.com> <24f5e25b-3946-b92a-975b-c34688005398@linux.alibaba.com>
+In-Reply-To: <24f5e25b-3946-b92a-975b-c34688005398@linux.alibaba.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Thu, 14 Jul 2022 16:51:45 +1200
+Message-ID: <CAGsJ_4zjnmQV6LT3yo--K-qD-92=hBmgfK121=n-Y0oEFX8RnQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] mm: arm64: bring up BATCHED_UNMAP_TLB_FLUSH
+To:     xhao@linux.alibaba.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>, x86 <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Darren Hart <darren@os.amperecomputing.com>,
+        Yicong Yang <yangyicong@hisilicon.com>, huzhanyuan@oppo.com,
+        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        real mz <realmz6@gmail.com>, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Thu, Jul 14, 2022 at 3:29 PM Xin Hao <xhao@linux.alibaba.com> wrote:
+>
+> Hi barry.
+>
+> I do some test on Kunpeng arm64 machine use Unixbench.
+>
+> The test  result as below.
+>
+> One core, we can see the performance improvement above +30%.
 
-On 2022/7/14 上午4:57, Paul Cercueil wrote:
+I am really pleased to see the 30%+ improvement on unixbench on single core.
+
+> ./Run -c 1 -i 1 shell1
+> w/o
+> System Benchmarks Partial Index              BASELINE RESULT INDEX
+> Shell Scripts (1 concurrent)                     42.4 5481.0 1292.7
+> ========
+> System Benchmarks Index Score (Partial Only)                         1292.7
+>
+> w/
+> System Benchmarks Partial Index              BASELINE RESULT INDEX
+> Shell Scripts (1 concurrent)                     42.4 6974.6 1645.0
+> ========
+> System Benchmarks Index Score (Partial Only)                         1645.0
 >
 >
-> Le jeu., juil. 14 2022 at 03:44:34 +0800, Mike Yang 
-> <reimu@sudomaker.com> a écrit :
->> Hi Paul,
->>
->> On 7/14/22 00:08, Paul Cercueil wrote:
->>>  Hi Mike,
->>>  [...]
->>>
->>>>  If I comment the "wait" instruction, it will exit the suspend 
->>>> process immediately. And yes, I don't think it suspended properly.
->>>
->>>  Ok. I was suggesting to try that since it would show if the crash 
->>> happens when a particular device gets suspended.
->>>
->>>  Are you certain that your wakeup IRQ is unmasked?
->>
->> I'm not sure. Which register should I check?
+> But with whole cores, there have little performance degradation above -5%
+
+That is sad as we might get more concurrency between mprotect(), madvise(),
+mremap(), zap_pte_range() and the deferred tlbi.
+
 >
-> Check the IMCR0 / IMCR1 registers. Everything should be masked except 
-> your wakeup source. If your wakeup source is a GPIO, also check that 
-> the mask register that corresponds to your GPIO.
+> ./Run -c 96 -i 1 shell1
+> w/o
+> Shell Scripts (1 concurrent)                  80765.5 lpm   (60.0 s, 1
+> samples)
+> System Benchmarks Partial Index              BASELINE RESULT INDEX
+> Shell Scripts (1 concurrent)                     42.4 80765.5 19048.5
+> ========
+> System Benchmarks Index Score (Partial Only)                        19048.5
+>
+> w
+> Shell Scripts (1 concurrent)                  76333.6 lpm   (60.0 s, 1
+> samples)
+> System Benchmarks Partial Index              BASELINE RESULT INDEX
+> Shell Scripts (1 concurrent)                     42.4 76333.6 18003.2
+> ========
+> System Benchmarks Index Score (Partial Only)                        18003.2
+>
+> ----------------------------------------------------------------------------------------------
+>
+>
+> After discuss with you, and do some changes in the patch.
+>
+> ndex a52381a680db..1ecba81f1277 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -727,7 +727,11 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
+>          int flushed = batch >> TLB_FLUSH_BATCH_FLUSHED_SHIFT;
+>
+>          if (pending != flushed) {
+> +#ifdef CONFIG_ARCH_HAS_MM_CPUMASK
+>                  flush_tlb_mm(mm);
+> +#else
+> +               dsb(ish);
+> +#endif
 >
 
-Do you mean ICMR0 and ICMR1 in  the Interrupt Controller?
+i was guessing the problem might be flush_tlb_batched_pending()
+so i asked you to change this to verify my guess.
 
+     /*
+>                   * If the new TLB flushing is pending during flushing, leave
+>                   * mm->tlb_flush_batched as is, to avoid losing flushing.
+>
+> there have a performance improvement with whole cores, above +30%
 
->>>
->>>  [...]
->>>
->>>>>>>   I'm afraid the above didn't work for me. Have you tested 
->>>>>>> suspend-to-ram in person on a X series SoC?
->>>>>
->>>>>   I didn't test on X-series, I mostly work with JZ. But that part 
->>>>> of the design didn't change since the JZ4740.
->>>>>
->>>>>   Cheers,
->>>>>   -Paul
->>>>>
->>>>>
->>>>
->>>>
->>>>  To be honest, I never owned a board with a JZ series SoC. And 
->>>> sorry for assuming the suspend-to-ram is unusable on all Ingenic 
->>>> SoCs. IIRC, all the JZ series SoCs have external DRAM, while the X 
->>>> series SoCs have internal DRAM. Also Ingenic advertised the power 
->>>> saving features of the X series SoCs heavily. Things might be 
->>>> different since it may involve additional power management.
->>>
->>>  Even if the 3.x method you were describing works, the currently 
->>> upstream method should work as well, and if it doesn't, we probably 
->>> should try to figure why.
->>>
->>>  I remember doing some tests on the JZ4770 some years ago, and I 
->>> would get a power consumption of 7mA when suspended - that's for the 
->>> whole board, measured at the 3.7V battery, so about 0.026 W. The 
->>> only things powered ON then are the RAM chips and the SoC's RTC module.
->>>
->>>>  At the time of writing the last sentence of the email, Dr. Zhou 
->>>> just pointed out that it may has something to do with the secure 
->>>> boot feature introduced in the X series SoC, although the feature 
->>>> is not enabled. I already mailed my X1000E & X1501 boards to Dr. 
->>>> Zhou for further tests. You may want to get a X1000(E) board (e.g. 
->>>> halley2) and test this by yourself.
->>>
->>>  I do have a Cu1000-Neo board, but I have never used it, I wouldn't 
->>> know how to test this.
->>>
->>>  Cheers,
->>>  -Paul
->>>
->>>
->>
->> Earlier today, Dr. Zhou and I talked to a senior engineer from 
->> Ingenic. He said an extra piece of code is necessary for the X 
->> series, and more CPM registers (other than LPM) are needed to be 
->> configured. The X series can't reconfigure the DRAM to exit 
->> self-refresh mode by themselves. He also said, if we really don't 
->> want to put the code inside the kernel, it's possible to store the 
->> $pc somewhere in the RAM and modify UBoot SPL to do additional checks 
->> (e.g. P0 powerup flag) and jump back to the $pc after reconfiguring 
->> DRAM. I'm not sure if this will work, since the core will boot 
->> straight from the BROM, and the SFC and/or MSC peripherals will be 
->> reconfigured before it can load SPL again into the SRAM. It may cause 
->> confusion to the kernel SFC/MSC drivers. From his words, we can have 
->> another method: incorporate the code inside UBoot and write it to the 
->> SRAM prior to booting the kernel. What's your opinion?
+But I don't think it is a proper patch. There is no guarantee the cpu calling
+flush_tlb_batched_pending is exactly the cpu sending the deferred
+tlbi. so the solution is unsafe. But since this temporary code can bring the
+30%+ performance improvement back for high concurrency, we have huge
+potential to finally make it.
+
+Unfortunately I don't have an arm64 server to debug on this. I only have
+8 cores which are unlikely to reproduce regression which happens in
+high concurrency with 96 parallel tasks.
+
+So I'd ask if @yicong or someone else working on kunpeng or other
+arm64 servers  is able to actually debug and figure out a proper
+patch for this, then add the patch as 5/5 into this series?
+
 >
-> The X1000 has more CPM registers and do support turning the CPU 
-> completely off, which is new compared to the JZ4780, so that part is 
-> true. However, the regular method to enter SLEEP mode is still 
-> described in the X1000, X1830 and X2000 programming manuals, and it's 
-> the exact same method described in the JZ4780 and even in the JZ4740 
-> programming manuals. So allow me to doubt.
+> ./Run -c 96 -i 1 shell1
+> 96 CPUs in system; running 96 parallel copies of tests
 >
-> Knowing that Ingenic's 3.x kernel implements the "complete shutdown" 
-> sleep mode, I would think that this is why your senior engineer said 
-> that an extra piece of code is necessary - because that's how they 
-> implemented it. But that does not mean that it is required, and 
-> nothing in any of the X-series programming manuals suggests that it is 
-> required.
+> Shell Scripts (1 concurrent)                 109229.0 lpm   (60.0 s, 1 samples)
+> System Benchmarks Partial Index              BASELINE       RESULT    INDEX
+> Shell Scripts (1 concurrent)                     42.4     109229.0  25761.6
+>                                                                     ========
+> System Benchmarks Index Score (Partial Only)                        25761.6
 >
-> Cheers,
-> -Paul
 >
+> Tested-by: Xin Hao<xhao@linux.alibaba.com>
+
+Thanks for your testing!
+
+>
+> Looking forward to your next version patch.
+>
+> On 7/11/22 11:46 AM, Barry Song wrote:
+> > Though ARM64 has the hardware to do tlb shootdown, the hardware
+> > broadcasting is not free.
+> > A simplest micro benchmark shows even on snapdragon 888 with only
+> > 8 cores, the overhead for ptep_clear_flush is huge even for paging
+> > out one page mapped by only one process:
+> > 5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+> >
+> > While pages are mapped by multiple processes or HW has more CPUs,
+> > the cost should become even higher due to the bad scalability of
+> > tlb shootdown.
+> >
+> > The same benchmark can result in 16.99% CPU consumption on ARM64
+> > server with around 100 cores according to Yicong's test on patch
+> > 4/4.
+> >
+> > This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+> > 1. only send tlbi instructions in the first stage -
+> >       arch_tlbbatch_add_mm()
+> > 2. wait for the completion of tlbi by dsb while doing tlbbatch
+> >       sync in arch_tlbbatch_flush()
+> > My testing on snapdragon shows the overhead of ptep_clear_flush
+> > is removed by the patchset. The micro benchmark becomes 5% faster
+> > even for one page mapped by single process on snapdragon 888.
+> >
+> >
+> > -v2:
+> > 1. Collected Yicong's test result on kunpeng920 ARM64 server;
+> > 2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+> >     according to the comments of Peter Zijlstra and Dave Hansen
+> > 3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+> >     is empty according to the comments of Nadav Amit
+> >
+> > Thanks, Yicong, Peter, Dave and Nadav for your testing or reviewing
+> > , and comments.
+> >
+> > -v1:
+> > https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+> >
+> > Barry Song (4):
+> >    Revert "Documentation/features: mark BATCHED_UNMAP_TLB_FLUSH doesn't
+> >      apply to ARM64"
+> >    mm: rmap: Allow platforms without mm_cpumask to defer TLB flush
+> >    mm: rmap: Extend tlbbatch APIs to fit new platforms
+> >    arm64: support batched/deferred tlb shootdown during page reclamation
+> >
+> >   Documentation/features/arch-support.txt       |  1 -
+> >   .../features/vm/TLB/arch-support.txt          |  2 +-
+> >   arch/arm/Kconfig                              |  1 +
+> >   arch/arm64/Kconfig                            |  1 +
+> >   arch/arm64/include/asm/tlbbatch.h             | 12 ++++++++++
+> >   arch/arm64/include/asm/tlbflush.h             | 23 +++++++++++++++++--
+> >   arch/loongarch/Kconfig                        |  1 +
+> >   arch/mips/Kconfig                             |  1 +
+> >   arch/openrisc/Kconfig                         |  1 +
+> >   arch/powerpc/Kconfig                          |  1 +
+> >   arch/riscv/Kconfig                            |  1 +
+> >   arch/s390/Kconfig                             |  1 +
+> >   arch/um/Kconfig                               |  1 +
+> >   arch/x86/Kconfig                              |  1 +
+> >   arch/x86/include/asm/tlbflush.h               |  3 ++-
+> >   mm/Kconfig                                    |  3 +++
+> >   mm/rmap.c                                     | 14 +++++++----
+> >   17 files changed, 59 insertions(+), 9 deletions(-)
+> >   create mode 100644 arch/arm64/include/asm/tlbbatch.h
+> >
+> --
+> Best Regards!
+> Xin Hao
+>
+
+Thanks
+Barry
