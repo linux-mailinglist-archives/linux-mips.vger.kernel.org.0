@@ -2,82 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E17D575057
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Jul 2022 16:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E876757509A
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Jul 2022 16:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240076AbiGNOHU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Jul 2022 10:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S240125AbiGNORo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Jul 2022 10:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240200AbiGNOHR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Jul 2022 10:07:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD15388
-        for <linux-mips@vger.kernel.org>; Thu, 14 Jul 2022 07:07:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55CFFB824E6
-        for <linux-mips@vger.kernel.org>; Thu, 14 Jul 2022 14:07:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C3EC34114;
-        Thu, 14 Jul 2022 14:07:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657807633;
-        bh=kRx26AxO23Zw8Y7aYXnPPS/liO8eqKqGSD3Lqybvb+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kf0ZPk1/3q22yIlhyOP28HwWbdgSIF6MTZdN8rgoVhsfWXVvccWkj/reEF+5vKZGc
-         M712mFFfrFPAFlF/r/0OjtXdiVn3T5u2U7vs5euvn0q48c4UuxHm9kzmL0KLlg0g1X
-         ml/cscR/jfqHE07A7dGFmW+OscojTKxk0mbeU1NU=
-Date:   Thu, 14 Jul 2022 15:31:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     sohu0106 <sohu0106@126.com>
-Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        security@kernel.org
-Subject: Re: buffer overflow in vpe_write() function of arch/mips/kernel/vpe.c
-Message-ID: <YtAamKIXPQ1aNJx9@kroah.com>
-References: <71b5d25.71d1.181fcd701cf.Coremail.sohu0106@126.com>
+        with ESMTP id S239397AbiGNORf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Jul 2022 10:17:35 -0400
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90F716393C
+        for <linux-mips@vger.kernel.org>; Thu, 14 Jul 2022 07:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=snhiz
+        waPBUhfnCTmn/gap4giwBuCuZ53qOkKj8jmInM=; b=I7lvqWrWLLtviRY74iHvH
+        yse4BDVU9wLYEw8/QqmU2UrrH0JIyvaX8DlO+r9MeeqnA5lLe4cApY3psY9fmnkt
+        5CxanPS822v5oaxRXYDwNsFoH5qVRabHafXjFZvNQ/HL20urq1mk9g4GjfRFCk18
+        JJMwEQ2L1+eq8bH6bpugMk=
+Received: from test.pnp.gw (unknown [218.247.43.97])
+        by smtp8 (Coremail) with SMTP id NORpCgDXNZpiJdBi6XiDHw--.63493S2;
+        Thu, 14 Jul 2022 22:17:07 +0800 (CST)
+From:   Ning Qiang <sohu0106@126.com>
+To:     dan.carpenter@oracle.com, sohu0106@126.com
+Cc:     greg@kroah.com, security@kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de
+Subject: [PATCH] MIPS: vpe: fix integer overflow in vpe_write()
+Date:   Thu, 14 Jul 2022 22:17:05 +0800
+Message-Id: <20220714141705.2375-1-sohu0106@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <71b5d25.71d1.181fcd701cf.Coremail.sohu0106@126.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NORpCgDXNZpiJdBi6XiDHw--.63493S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GF43trWDXw1rtF18tw17GFg_yoWfKFXEkr
+        yqvw48Cr45Aw1UXry7K39Ygr15KayftFZaywn8uryYy34rXryFyay8G3sYgw1DXrn5tFZa
+        v34rursrCFsrKjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRipuWtUUUUU==
+X-Originating-IP: [218.247.43.97]
+X-CM-SenderInfo: pvrk3iqrqwqiyswou0bp/xtbBGhM+Hl-HZf4clgAAsg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 09:12:38PM +0800, sohu0106 wrote:
-> 
-> In the vpe_write function of arch/mips/kernel/vpe.c, parameter "size_t count" is pass by userland, if "count" is very large, it will bypass the check of "if ((count + v->len) > v->plen)".(such as count=0xffffffffffffffff). Then it will lead to buffer overflow in "copy_from_user(v->pbuffer + v->len, buffer, count)".
-> 
-> 
-> diff --git a/arch/mips/kernel/vpe.c_org b/arch/mips/kernel/vpe.c
-> index d0d832a..bd1f826 100644
-> --- a/arch/mips/kernel/vpe.c_org
-> +++ b/arch/mips/kernel/vpe.c
-> @@ -871,7 +871,7 @@ static ssize_t vpe_write(struct file *file, co  nst char __user *buffer,
->         if (v == NULL)
->                 return -ENODEV;
-> 
-> -       if ((count + v->len) > v->plen) {
-> +       if ((count + v->len) > v->plen || count + v->len > v->len)   {
->                 pr_warn("VPE loader: elf size too big. Perhaps str  ip unneeded symbols\n");
->                 return -ENOMEM;
->         }
-> 
+In the vpe_write function of arch/mips/kernel/vpe.c,parameter "size_t
+count" is pass by userland, if "count" is very large, it will bypass
+the check of "if ((count + v->len) > v->plen)".(such as
+count=0xffffffffffffffff). Then it will lead to buffer overflow in
+"copy_from_user(v->pbuffer + v->len, buffer, count)".
 
-Note, there is no need to cc: security@k.o when you also cc: public
-mailing lists, as the developers there should handle the issue.
+Signed-off-by: Ning Qiang <sohu0106@126.com>
+---
+ arch/mips/kernel/vpe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also, your patch is corrupted with whitespace turned into spaces, making
-it impossible to apply, and you forgot a signed-off-by line.  Try
-running scripts/checkpatch.pl on your patches before sending them out,
-that will catch things like this.
+diff --git a/arch/mips/kernel/vpe.c b/arch/mips/kernel/vpe.c
+index 13294972707b..1529e755200d 100644
+--- a/arch/mips/kernel/vpe.c
++++ b/arch/mips/kernel/vpe.c
+@@ -849,7 +849,7 @@ static ssize_t vpe_write(struct file *file, const char __user *buffer,
+ 	if (v == NULL)
+ 		return -ENODEV;
+ 
+-	if ((count + v->len) > v->plen) {
++	if ((count + v->len) > v->plen || count + v->len < v->len) {
+ 		pr_warn("VPE loader: elf size too big. Perhaps strip unneeded symbols\n");
+ 		return -ENOMEM;
+ 	}
+-- 
+2.25.1
 
-thanks,
-
-greg k-h
