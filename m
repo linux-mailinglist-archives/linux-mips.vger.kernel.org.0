@@ -2,135 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3131D5759D9
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Jul 2022 05:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80390575D69
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Jul 2022 10:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbiGODNQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Jul 2022 23:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S231954AbiGOI1J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Jul 2022 04:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiGODNQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Jul 2022 23:13:16 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A052CC91;
-        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 23so3273293pgc.8;
-        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
-        b=d6rOttoave+cYYycQLZVtn7+6/EvvZMoC4KlEKnu5+Iy0CvIZB6RZvM+yDNYgjVsg2
-         zExWP1Kt2mvHL2caS42uLQwLfFdIGT+vt+VNkOv6EFVEz1IJ1Ei1z/SUwomvWvL9yqs/
-         LsfjR3vwcHDm1bfvDdBsjVXVCIzYFoJ6KMcatcAC61WXc2/vMcOjiKCXnv0z+ZYpPW1D
-         29300GYk48m1QvWYlTwrWUJ2ga8Ap1QJw6DN92YdxZnF6aT4PwJr+48L7OzWyifSHnIo
-         bBliGjA2A7iI1JHvd2yG0VTITazqxx3xOm38zhCb9ZIUiYeXEPs2TlvdcILgJvPCljIq
-         R2+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
-        b=QN1KHrm48rAJD5fzBNOgZjhfCzLL8XI17G9WwVqedi0xmXJr+o4BaGjxNFXWcshhUC
-         CmHS6PrTCfGBrnbZ9z4vGHmXJ+SL//YgSGSzEtX6lBI19hHyXLtjSBs9HctMfkGtO8ml
-         0X9hX9AlLkBpQXtn1QQ5jdSmNs+WGL0Jk1Lk3arotJV5+ANfLEgRLd7sS7cRoK04QdK5
-         b3hxuKptjV7JNBQnFwgpsHI5UcaJeOqyfLIA1IDX2EmNzpCp490SxVhvM69ihquIZeOd
-         rPXrHv86Nkbp/d28j3C/DMopZHJJHhmRfkIGHsxWayrIdb6LHd94G3taAg8koCq+59N7
-         L0+Q==
-X-Gm-Message-State: AJIora/SCLgVhagKduoZ2Bldj4py96FUWu4qtip08JTEn/nvRD2iAyXq
-        /rHgr7ZE3NSmYeZkhSv0VcQ+s5MPcxY=
-X-Google-Smtp-Source: AGRyM1vK5uqkhNs5DYoiUnUKiOfj2RRKOpP4xHProAEOYr/w1Br1ZQPpNcitPwDkSe+/qgFCXMCFZg==
-X-Received: by 2002:a63:2051:0:b0:412:6d61:ab0a with SMTP id r17-20020a632051000000b004126d61ab0amr10627004pgm.52.1657854794876;
-        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016c6a6d8967sm2236563plh.83.2022.07.14.20.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
-Message-ID: <d95d1afe-655c-3526-0c7e-949dfad8c6ba@gmail.com>
-Date:   Thu, 14 Jul 2022 20:13:12 -0700
+        with ESMTP id S229560AbiGOI1J (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Jul 2022 04:27:09 -0400
+X-Greylist: delayed 489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Jul 2022 01:27:09 PDT
+Received: from mail.connexion24.pl (mail.connexion24.pl [141.94.21.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073A9255A9
+        for <linux-mips@vger.kernel.org>; Fri, 15 Jul 2022 01:27:08 -0700 (PDT)
+Received: by mail.connexion24.pl (Postfix, from userid 1002)
+        id 1FE8AA87DD; Fri, 15 Jul 2022 08:16:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=connexion24.pl;
+        s=mail; t=1657873075;
+        bh=ChRcLNpIfKnVgp03/tSyWuRw1tWSTk/OEiEnuZMWs58=;
+        h=Date:From:To:Subject:From;
+        b=ANUfElsvaq3qDYCt+Kbg6I66sqjeTT7CGYb6dDhKY76241qUygv2ybnytAdLHxgsW
+         p3aTgiG7jo1Q/rIfNZtLK6lbA5Xr5PSUb1WnbBlu7dmyQuRLBVRNrZJe2Y7Vf8HvKf
+         pbeB/rp7oP4owvYreEdupi7Wg17v9YFg5AtoDRt3DsvwDdPnbZhadJmnmNhIpic3Da
+         WGVUV7Wz6iFu4x8KLrMsLnpTqtUnD/XRToliA9tHU2+QOHiNTnmQxaRXko4rMWv7Qa
+         g1VQJLjxnMLNbuUig+t1rk/QtR7yby3CyHfYEB1v7RFFfVDS4g1Kqtp8VbubZMPrlz
+         nhx0ys43JcVkQ==
+Received: by mail.connexion24.pl for <linux-mips@vger.kernel.org>; Fri, 15 Jul 2022 08:16:12 GMT
+Message-ID: <20220715064500-0.1.4m.etjq.0.r70qybb9yz@connexion24.pl>
+Date:   Fri, 15 Jul 2022 08:16:12 GMT
+From:   "Norbert Karecki" <norbert.karecki@connexion24.pl>
+To:     <linux-mips@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.connexion24.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH V12 01/20] uapi: simplify __ARCH_FLOCK{,64}_PAD a little
-Content-Language: en-US
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
-        naresh.kamboju@linaro.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        heiko@sntech.de
-References: <20220405071314.3225832-1-guoren@kernel.org>
- <20220405071314.3225832-2-guoren@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220405071314.3225832-2-guoren@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL,SPF_HELO_NONE,
+        SPF_PASS,URIBL_SBL_A autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Dzie=C5=84 dobry,
+
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
+
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
 
-On 4/5/2022 12:12 AM, guoren@kernel.org wrote:
-> From: Christoph Hellwig <hch@lst.de>
-> 
-> Don't bother to define the symbols empty, just don't use them.
-> That makes the intent a little more clear.
-> 
-> Remove the unused HAVE_ARCH_STRUCT_FLOCK64 define and merge the
-> 32-bit mips struct flock into the generic one.
-> 
-> Add a new __ARCH_FLOCK_EXTRA_SYSID macro following the style of
-> __ARCH_FLOCK_PAD to avoid having a separate definition just for
-> one architecture.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-Being late to this, but this breaks the perf build for me using a MIPS 
-toolchain with the following:
-
-   CC 
-/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
-In file included from 
-../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
-                  from ../include/uapi/linux/fcntl.h:5,
-                  from trace/beauty/fcntl.c:10:
-../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of 
-'struct flock'
-  struct flock {
-         ^~~~~
-In file included from ../include/uapi/linux/fcntl.h:5,
-                  from trace/beauty/fcntl.c:10:
-../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8: 
-note: originally defined here
-  struct flock {
-         ^~~~~
-make[6]: *** 
-[/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/build/Makefile.build:97: 
-/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o] 
-Error 1
-
-the kernel headers are set to 4.1.31 which is arguably old but 
-toolchains using newer kernel headers do not fare much better either 
-unfortunately as I tried a toolchain with kernel headers 4.9.x.
-
-I will start doing more regular MIPS builds of the perf tools since that 
-seems to escape our testing.
-
-Thanks!
--- 
-Florian
+Pozdrawiam,
+Norbert Karecki
