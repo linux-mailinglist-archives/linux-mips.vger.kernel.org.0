@@ -2,160 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926F9576912
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Jul 2022 23:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBD6577261
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Jul 2022 01:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiGOVkU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Jul 2022 17:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S232637AbiGPXXD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 16 Jul 2022 19:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbiGOVkT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Jul 2022 17:40:19 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731E287F45
-        for <linux-mips@vger.kernel.org>; Fri, 15 Jul 2022 14:40:17 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id j1so3969698wrs.4
-        for <linux-mips@vger.kernel.org>; Fri, 15 Jul 2022 14:40:17 -0700 (PDT)
+        with ESMTP id S233033AbiGPXWy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Jul 2022 19:22:54 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C35611826;
+        Sat, 16 Jul 2022 16:21:03 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o15so8688919pjh.1;
+        Sat, 16 Jul 2022 16:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=J6BSJtpNWZ2Z1cUANVaPa8k/01zDYr+V4xutkYf54NQ=;
-        b=EiZ/Jmkz5DdkNRwJGtK9gVoZ3BcJ8ejMk3yeeSneUGJiCM2csICY8AdW61vGapRVcY
-         UVEs2lvDUtUmSWhTy5Riy+DiODr1rNBvvUK4wbrRLT25XjOXefr0/051txgAy4PBorpi
-         GKNcSgswr6pLYwYHFSVzvB34JMrg+jT1ikpzno4L0ZOP0gQXJvWnMhCAGwkPbk+zk4T6
-         NHUHFy/WsEuLp1Gd3GTwIoolQEUdfvT1tqqUGbfp80W8fFmVfSTmouc1u2k89r7uyeR9
-         nYK4zK2wqlmEsLRHEwqRtcub6mC9oo2ROYXHqnHla+d+LumXFIkgFPThdJfozfzXSQFb
-         VGhA==
+        bh=6Lujf1vjjpR4foXbN5bgN3Hs30sniIkF599g7wlKOBQ=;
+        b=afJ5B8n3Efj0vZiNhW3XG5MYLzNKjqROPIDDKlOhtBJQzFemzmYA8ZxyKh/ydoPc2r
+         VD4DkeYgmLoQIn7MzMrjhU9ysrp651Xdhdgo3hr5QfhRq8nN3ZDIzgAD7sU9e+ixBCku
+         mqRNFPzOZHu/TENAPPVc3DrgFsdNxsGzxcVUXA8ZDS+IyxzJXI+AgHvY9U/8S4DhOMlI
+         wdiWnFeAKtoZkRSAZ+JdbBPTAYxnqHq9/WXs86J5/SZy9G17wXVkAOnrsP2UQCLFNGsK
+         4NAWACLUuoANVeMvWwZMn+JIDlWuxnEYyAS3JdAYKJdDXl4Gh3qG+hwG0AVvXPfdyPI0
+         7b1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=J6BSJtpNWZ2Z1cUANVaPa8k/01zDYr+V4xutkYf54NQ=;
-        b=uPzVKuEhSI3r2f6XAYXUZj52tpdm89pTmO3129lUdadPlThls9Vx9KEffFWmi94zpj
-         vGgla0xt4/V4s9V7QjqR4NkMyLmvMWX9Q9A7cYDgESd7x6+7QGitRYv8DdJAt/w89reD
-         ka0SS9QXVJhLUH8iWZ0BSJ4OMgc0NkJrJ3jOtFxo5JHmVQyVALnvOSrwWdQqNK8CM+vm
-         dLJioQRkBVCepkz0xIHbgMzlXv3GBcaRMr9KAMN001ZpSHNS389pe7NdboSmfLehC5xu
-         xi9Y6FL7iI05mefNlzFWA7fmb23pfw/Qa7ljDlAWXi3KNiPGsNSRDLYj0m1y8X/sFHhG
-         kRCQ==
-X-Gm-Message-State: AJIora+w6x9ocBVOtC61kWlJWMm5FygHPbT57bV9VHc6bcD324+TOJ6W
-        jQ5I+YWry+e0j1GbalZoJkhlcw==
-X-Google-Smtp-Source: AGRyM1vl55wMLC6v4FE7361A1EgLL5IjuxGDiU+pOGyn8ZoWrdHGmzM+ZMQkW7lv66vojAGIB7e/MQ==
-X-Received: by 2002:a5d:4e04:0:b0:21d:6ec3:38a2 with SMTP id p4-20020a5d4e04000000b0021d6ec338a2mr14182586wrt.362.1657921215858;
-        Fri, 15 Jul 2022 14:40:15 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:a223:f4b3:40c9:43fa? ([2a05:6e02:1041:c10:a223:f4b3:40c9:43fa])
-        by smtp.googlemail.com with ESMTPSA id j27-20020a05600c1c1b00b0039c4ba160absm17678280wms.2.2022.07.15.14.40.12
+        bh=6Lujf1vjjpR4foXbN5bgN3Hs30sniIkF599g7wlKOBQ=;
+        b=dNMe5YHqP93kKpxPCLfAtfxW+w2RpiIMyi0jZ8986H2R0mGV9/hSyzzHq5LCLMtfnd
+         XDMSq3huuQV2Fh83dJiW3y1wc5ehVGkTbI4TXur5bhLUMF1M32Z0OQPdhZmH7cYhubkL
+         bfzFQq4O8WO9uMF3PJRcRnj0NKv+B7HE6tYZ87LChRWauMT6k5XGdJhwRObyTPlOmLxP
+         i1EZ8b1BFKL6sNvL6ZpYXoB1X95Nydn/EGgHVb7MdhEF1685Vksw6Y6y5vam3mGg7bIR
+         ZqyG5MlVRMkXjnK5O3AexpfwSuMmGQNBdGST9F4Y0Aj6YLU4ORhnB0v6ZmiNSCy7R6Ta
+         4J0A==
+X-Gm-Message-State: AJIora+hSRb7wXKskEJtNuYs2Q+uXKFNS6MNQuKIwZc+Typ8hQpA1Jst
+        h4OYGkFk3BwxmuSzdUoYayoWyBQypGE=
+X-Google-Smtp-Source: AGRyM1vOzZdM3a33bUnAbTJcBI7b9OKriE+uVyKu8lm6JhHM285LWF+zuzFdz3DxaowA2HExgRCgzA==
+X-Received: by 2002:a17:902:eb8e:b0:16c:5764:7dc0 with SMTP id q14-20020a170902eb8e00b0016c57647dc0mr21552372plg.63.1658013662622;
+        Sat, 16 Jul 2022 16:21:02 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:22cf:30ff:fe38:5254? ([2600:8802:b00:4a48:22cf:30ff:fe38:5254])
+        by smtp.googlemail.com with ESMTPSA id j6-20020a17090a318600b001ece32cbec9sm8182604pjb.24.2022.07.16.16.21.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 14:40:15 -0700 (PDT)
-Message-ID: <563e92de-68aa-7382-2564-c1ccc270c571@linaro.org>
-Date:   Fri, 15 Jul 2022 23:40:11 +0200
+        Sat, 16 Jul 2022 16:21:01 -0700 (PDT)
+Message-ID: <846d3845-1536-3306-b68d-d0097a2ff8ff@gmail.com>
+Date:   Sat, 16 Jul 2022 16:21:00 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 06/15] thermal: qcom: qcom-spmi-adc-tm5: convert to IIO
- fwnode API
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] tools: Fixed MIPS builds due to struct flock
+ re-definition
 Content-Language: en-US
-To:     =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        openbmc@lists.ozlabs.org, linux-imx@nxp.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-iio@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        chrome-platform@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     Gwendal Grignou <gwendal@chromium.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Patrick Venture <venture@google.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Benson Leung <bleung@chromium.org>,
-        Nancy Yuen <yuenn@google.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andy Gross <agross@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Jishnu Prakash <quic_jprakash@quicinc.com>
-References: <20220715122903.332535-1-nuno.sa@analog.com>
- <20220715122903.332535-7-nuno.sa@analog.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220715122903.332535-7-nuno.sa@analog.com>
+To:     linux-kernel@vger.kernel.org, hch@lst.de,
+        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Cc:     nathan@kernel.org, naresh.kamboju@linaro.org, heiko@sntech.de,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Guo Ren <guoren@kernel.org>
+References: <20220715185551.3951955-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220715185551.3951955-1-f.fainelli@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 15/07/2022 14:28, Nuno Sá wrote:
-> Make usage of the new firmware agnostic API
-> 'devm_of_iio_channel_get_by_name()' to get the IIO channel.
+Le 15/07/2022 à 11:55, Florian Fainelli a écrit :
+> Building perf for MIPS failed after 9f79b8b72339 ("uapi: simplify
+> __ARCH_FLOCK{,64}_PAD a little") with the following error:
 > 
-> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
+>    CC
+> /home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
+> In file included from
+> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
+>                   from ../include/uapi/linux/fcntl.h:5,
+>                   from trace/beauty/fcntl.c:10:
+> ../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of
+> 'struct flock'
+>   struct flock {
+>          ^~~~~
+> In file included from ../include/uapi/linux/fcntl.h:5,
+>                   from trace/beauty/fcntl.c:10:
+> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8:
+> note: originally defined here
+>   struct flock {
+>          ^~~~~
+> 
+> This is due to the local copy under
+> tools/include/uapi/asm-generic/fcntl.h including the toolchain's kernel
+> headers which already define 'struct flock' and define
+> HAVE_ARCH_STRUCT_FLOCK to future inclusions make a decision as to
+> whether re-defining 'struct flock' is appropriate or not.
+> 
+> Make sure what do not re-define 'struct flock'
+> when HAVE_ARCH_STRUCT_FLOCK is already defined.
+> 
+> Fixes: 9f79b8b72339 ("uapi: simplify __ARCH_FLOCK{,64}_PAD a little")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->   drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> index d9c9c975f931..0b8543c627f0 100644
-> --- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> @@ -825,7 +825,8 @@ static int adc_tm5_get_dt_channel_data(struct adc_tm5_chip *adc_tm,
->   	}
->   	channel->adc_channel = args.args[0];
->   
-> -	channel->iio = devm_of_iio_channel_get_by_name(adc_tm->dev, node, NULL);
-> +	channel->iio = devm_fwnode_iio_channel_get_by_name(adc_tm->dev,
-> +							   of_fwnode_handle(node), NULL);
->   	if (IS_ERR(channel->iio)) {
->   		ret = PTR_ERR(channel->iio);
->   		if (ret != -EPROBE_DEFER)
 
-
+Any chance to apply this patch prior to v5.19 being final? Thanks!
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Florian
