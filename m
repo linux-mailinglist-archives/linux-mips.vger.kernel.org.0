@@ -2,73 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034E0579D81
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Jul 2022 14:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2FC579FD6
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Jul 2022 15:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241993AbiGSMwH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Jul 2022 08:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
+        id S237797AbiGSNkJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Jul 2022 09:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241612AbiGSMuz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Jul 2022 08:50:55 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4025926C;
-        Tue, 19 Jul 2022 05:20:01 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1658233113tf3r0e4k
-Received: from localhost.localdomain ( [171.223.96.21])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 19 Jul 2022 20:18:32 +0800 (CST)
-X-QQ-SSF: 01000000002000F0U000B00A0000020
-X-QQ-FEAT: bQsUcYFpAAZCL2K0fSWXqSFtpi8ZcffXy0TgbFPYGm0V4LCUMvUBbQin92pm6
-        nrtiZHhtFFcJLhNG8O4Sn+pV4ThKUbAdyoYuX06CE6OtxxYUpQ2mpcq0Ig9Fs4/ltV5+5QX
-        IE5wHbNJysFeDsdqcWtUVPQMOb6YBddIe8HyWRn7UIrC9Zo1siUUutohpux3cEviUVrl/4Y
-        RPJRk3aMVxgYN0jabtH9bo+5IEJ3N/EfI166UkOp28zSKXzmPnwkELIfFhwKDEJRaPGzyLO
-        qi55iIaOViJabhfPzFP08Ht0ut1WqHIzMdERy55bEg5uu3kH00WYEYr0qjcPadvZUlqELdm
-        R1nI/hGYeSX1hvtuKs0KWpeC4Pqc4NI3o+Qd6PxPCA8N1pS37zAJcRqR/QsBcxpHUB7X4gy
-        mQJI3hrZcE0=
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     maz@kernel.org
+        with ESMTP id S239748AbiGSNjy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Jul 2022 09:39:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28EA92851;
+        Tue, 19 Jul 2022 05:54:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E10260F14;
+        Tue, 19 Jul 2022 12:54:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DE3AC341C6;
+        Tue, 19 Jul 2022 12:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658235240;
+        bh=wimzxRykBtnqIHFWMs1YPyxlGEDxWieta+wn3MADzQs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sy5yjeEuRYrzzth2U2tpOqNBel/PPjkovMHt79eqit3lUfkRyWUwCkjnzOwq9Jcl7
+         wjC3UutjyJVcQ35s5jIkQ4SSM9fA4bQJ62ZJDXChKVNNQQHKQTW0gcFf9ME0dSXdhE
+         axyT86yY5kGNFZ/9zBuSksfCzkElY5ZWPCviv9xclo4SCVaQu/YJkZBkNgjgMKh1lb
+         UvuAWfrKqwOwrwb/8jAmZ8lWgbjYb4A9mA232t0m7ix+dFxDYuyMfLg4oQ9wyc5wcF
+         tSj7T5qviaJILYpKcYxWVQNK3tCl2JfevKl5W4PWC0JIaOwOdht9Rs6LjZKgVf/goQ
+         s8iby+t/tt9hQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDmje-008VXz-CJ;
+        Tue, 19 Jul 2022 13:53:58 +0100
+Date:   Tue, 19 Jul 2022 13:53:58 +0100
+Message-ID: <87cze1z2jd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jason Wang <wangborong@cdjrlc.com>
 Cc:     tsbogend@alpha.franken.de, fancer.lancer@gmail.com,
         tglx@linutronix.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] irqchip/mips-gic: Fix comment typo
-Date:   Sat, 16 Jul 2022 12:16:19 +0800
-Message-Id: <20220716041619.33629-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/mips-gic: Fix comment typo
+In-Reply-To: <20220716041619.33629-1-wangborong@cdjrlc.com>
+References: <20220716041619.33629-1-wangborong@cdjrlc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: wangborong@cdjrlc.com, tsbogend@alpha.franken.de, fancer.lancer@gmail.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The double `the' is duplicated in the comment, remove one.
+On Sat, 16 Jul 2022 05:16:19 +0100,
+Jason Wang <wangborong@cdjrlc.com> wrote:
+> 
+> The double `the' is duplicated in the comment, remove one.
+> 
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  drivers/irqchip/irq-mips-gic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+> index 8a9efb6ae587..9464af4b53e7 100644
+> --- a/drivers/irqchip/irq-mips-gic.c
+> +++ b/drivers/irqchip/irq-mips-gic.c
+> @@ -494,7 +494,7 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
+>  	map = GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin;
+>  
+>  	/*
+> -	 * If adding support for more per-cpu interrupts, keep the the
+> +	 * If adding support for more per-cpu interrupts, keep the
+>  	 * array in gic_all_vpes_irq_cpu_online() in sync.
+>  	 */
+>  	switch (intr) {
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/irqchip/irq-mips-gic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please send those as a series, not as one patch every other day.
 
-diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index 8a9efb6ae587..9464af4b53e7 100644
---- a/drivers/irqchip/irq-mips-gic.c
-+++ b/drivers/irqchip/irq-mips-gic.c
-@@ -494,7 +494,7 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
- 	map = GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin;
- 
- 	/*
--	 * If adding support for more per-cpu interrupts, keep the the
-+	 * If adding support for more per-cpu interrupts, keep the
- 	 * array in gic_all_vpes_irq_cpu_online() in sync.
- 	 */
- 	switch (intr) {
+	M.
+
 -- 
-2.35.1
-
+Without deviation from the norm, progress is not possible.
