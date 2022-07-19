@@ -2,105 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419A5578606
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Jul 2022 17:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEC0578F1F
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Jul 2022 02:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbiGRPGc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Jul 2022 11:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
+        id S236528AbiGSARf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Jul 2022 20:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiGRPGb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Jul 2022 11:06:31 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBD9252A2;
-        Mon, 18 Jul 2022 08:06:29 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.79.59) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 18 Jul
- 2022 18:06:20 +0300
-Subject: Re: [PATCH] MIPS: Fix comment typo
-To:     Jason Wang <wangborong@cdjrlc.com>, <zajec5@gmail.com>
-CC:     <hauke@hauke-m.de>, <tsbogend@alpha.franken.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220715043950.18378-1-wangborong@cdjrlc.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <70df8f6b-a424-b8b5-a7ef-769ec38ba404@omp.ru>
-Date:   Mon, 18 Jul 2022 18:06:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S233926AbiGSARf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Jul 2022 20:17:35 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A372F6349;
+        Mon, 18 Jul 2022 17:17:33 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id 5so10495006plk.9;
+        Mon, 18 Jul 2022 17:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=7Voy8x4hq/Io3/fC7rr8/pnXiYjGneXM+CTyZShqxH0=;
+        b=hg/ZsqiKtd+dN+FrNe3IqgScPtci1LI9Q3LC+WpsP2UaYsfKeWKF1FIuGT/ZRrR0V7
+         wEg4GyZAqCsju630oexwPaR6TQ+mtCZsWDjNkfKY8GDy+NysH3WpwodEWrcjkrJjmWB7
+         KSF+N1alVcbh4uE9cvuPrBZvVgmXxJIak4SN9bBAP1Ya6am3dZBBntBL0XebRr7aMwOE
+         h9xLUk4Rdpg2YxFhD+D23KLlRPmVimufYmQdZp4JYZVKJqLXstRGxLW7KkH09VZtmbHs
+         VrfDs4M/JoR2IoWivnXyK3RYeZ/hUjHYXtYf0MvVt6Anm9g4o/hNXT4LYf0O/Md+zbz3
+         umFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=7Voy8x4hq/Io3/fC7rr8/pnXiYjGneXM+CTyZShqxH0=;
+        b=UM4yMMwJjgUX5EObkzMLh5FMDLFPawD016q1An2o/OemGuQMtp+Wukc6aNXrzdda/K
+         qM9LO38/XSyBeNc2EA58lGfU8Y6SljdFnIXoL7sPAU9DZeLhftoIaDCo6n0CxCJpuGAv
+         2DJdWmZv6+5AdJqTINIWVr/YEufergb3cYT1XVoeXpJXCc58KpAio+BYl7tzNfy/O/DQ
+         wcjlkr+qeE2fuFZ79hcgjoEkmMqmbpEEcCq5+Sqwshg41aye0C76hWSqaUs5fecBrmXn
+         3Dth6XaS3F/AkhJrD8TQAQVRzvOLxJrmWf7iIutl0olejK4pdz8SB0o/Y4JwGhGVeRpF
+         KBdw==
+X-Gm-Message-State: AJIora9lthf3LYES+tqtrCWmIOhuE9OBISZd1AxyJkcTL3mLHZ80ijXz
+        3oQJeWR2A6RMI+yfIzCRZcsW/Ml4JE0=
+X-Google-Smtp-Source: AGRyM1tfLsy5d8QCz/p9MQZe8MQUjPHkRe2mGXMkYgff5fn2Li3xTmOK5b1B+yQ9mo3Kfy5LMCmAIg==
+X-Received: by 2002:a17:90b:4c86:b0:1f0:3255:542e with SMTP id my6-20020a17090b4c8600b001f03255542emr35116557pjb.119.1658189852793;
+        Mon, 18 Jul 2022 17:17:32 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id a8-20020a1709027e4800b0016cbb46806asm9073697pln.278.2022.07.18.17.17.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 17:17:32 -0700 (PDT)
+Message-ID: <643cdbc4-b539-f99f-6f3b-d3c5895d6038@gmail.com>
+Date:   Mon, 18 Jul 2022 17:17:31 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220715043950.18378-1-wangborong@cdjrlc.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH] tools: Fixed MIPS builds due to struct flock
+ re-definition
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.79.59]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/18/2022 14:49:17
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 171814 [Jul 18 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 493 493 c80a237886b75a8eec705b487193915475443854
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.59 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.59
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/18/2022 14:52:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/18/2022 12:38:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org, hch@lst.de,
+        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Cc:     nathan@kernel.org, naresh.kamboju@linaro.org, heiko@sntech.de,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Guo Ren <guoren@kernel.org>
+References: <20220715185551.3951955-1-f.fainelli@gmail.com>
+ <846d3845-1536-3306-b68d-d0097a2ff8ff@gmail.com>
+In-Reply-To: <846d3845-1536-3306-b68d-d0097a2ff8ff@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/15/22 7:39 AM, Jason Wang wrote:
 
-> The double `that' is duplicated in line 72, remove one.
+
+On 7/16/2022 4:21 PM, Florian Fainelli wrote:
+> Le 15/07/2022 à 11:55, Florian Fainelli a écrit :
+>> Building perf for MIPS failed after 9f79b8b72339 ("uapi: simplify
+>> __ARCH_FLOCK{,64}_PAD a little") with the following error:
+>>
+>>    CC
+>> /home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
+>> In file included from
+>> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
+>>                   from ../include/uapi/linux/fcntl.h:5,
+>>                   from trace/beauty/fcntl.c:10:
+>> ../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of
+>> 'struct flock'
+>>   struct flock {
+>>          ^~~~~
+>> In file included from ../include/uapi/linux/fcntl.h:5,
+>>                   from trace/beauty/fcntl.c:10:
+>> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8:
+>> note: originally defined here
+>>   struct flock {
+>>          ^~~~~
+>>
+>> This is due to the local copy under
+>> tools/include/uapi/asm-generic/fcntl.h including the toolchain's kernel
+>> headers which already define 'struct flock' and define
+>> HAVE_ARCH_STRUCT_FLOCK to future inclusions make a decision as to
+>> whether re-defining 'struct flock' is appropriate or not.
+>>
+>> Make sure what do not re-define 'struct flock'
+>> when HAVE_ARCH_STRUCT_FLOCK is already defined.
+>>
+>> Fixes: 9f79b8b72339 ("uapi: simplify __ARCH_FLOCK{,64}_PAD a little")
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
 > 
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-> ---
->  arch/mips/bcm47xx/prom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-> index 0a63721d0fbf..bcb9c90ea041 100644
-> --- a/arch/mips/bcm47xx/prom.c
-> +++ b/arch/mips/bcm47xx/prom.c
-> @@ -69,7 +69,7 @@ static __init void prom_init_mem(void)
->  	 * call them at the beginning of the boot.
->  	 *
->  	 * BCM47XX uses 128MB for addressing the ram, if the system contains
-> -	 * less that that amount of ram it remaps the ram more often into the
+> Any chance to apply this patch prior to v5.19 being final? Thanks!
 
-   Clearly, we have a typo here: s/that that/than that/...
-
-> +	 * less that amount of ram it remaps the ram more often into the
->  	 * available space.
->  	 */
->  
-
-MBR, Sergey
+Ping?
+-- 
+Florian
