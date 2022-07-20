@@ -2,387 +2,394 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BF457B61B
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 14:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A5D57B735
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 15:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiGTMGC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Jul 2022 08:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S231892AbiGTNUB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Jul 2022 09:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240268AbiGTMFm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 08:05:42 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B250EDE86;
-        Wed, 20 Jul 2022 05:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1658318740; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pKQ8pfnHbMGbCFyvBQ/Xi/sy+on6kXat057Y41fr80s=;
-        b=bSPjsAlPu7fTzEcESRJOnHRDhl4uF/33tlekWDYARfVlxKxx2xvNeJQe73VV6RT7coFQOg
-        4HTKLSk6fo8e97yrwkj4Hq7bQjJeWCMZTzXj7ZL1Q039m2l/jCznzqkeFHCqbK9yCzsqZu
-        mX/sdeGH3b2Pmj8YS2uB/0Me83bFaD8=
-Date:   Wed, 20 Jul 2022 13:05:30 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 03/11] ASoC: jz4740-i2s: Convert to regmap API
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <6XIBFR.DWB7G32Y0ZZG@crapouillou.net>
-In-Reply-To: <20220708160244.21933-4-aidanmacdonald.0x0@gmail.com>
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-4-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S229994AbiGTNT7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 09:19:59 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4388481FD;
+        Wed, 20 Jul 2022 06:19:53 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id v21so14932481plo.0;
+        Wed, 20 Jul 2022 06:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=tk4oMrpzapWWhoI3Kig5dOA0vlyKb6/i+EOqjgC5cCU=;
+        b=pQntbHItc5MVnlIvmA0KJD5lIHl648MGkmwsPTxum8yDwQjSop+uHi++PtOZkCYi7n
+         EgxQwhqjN7qcglRkdra7pxQtaFomBMbtYftoiSVVlnzfNoaBLYTLhgKn3sYI+2EdXf6O
+         h6U1ZeaogPNQIy57v05WrHDLFWUiIeUmR4fS1tPeQjF3/oxFqOnHXVkYUWZF02XHGpVN
+         niyciBIdRPzdVcEoY8gg3lRZPFxS6jRZY9i7DN98k2qpQJ5sK5dyLW5FdrwrX1b0/zRu
+         MuMQ0wqS2NE1LVfEBijlNYf2GC7F7MTeUnHLUY4p5Sz/CExHxgDkOYoYrL9++bLtjfpy
+         e2Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tk4oMrpzapWWhoI3Kig5dOA0vlyKb6/i+EOqjgC5cCU=;
+        b=TBr/XyaUE2zTUxQnQH2WZHDxF8X467/hjYzSm1gAXmdOZsIt4JOncENQlOl4BW7N/S
+         aAyHqPMAMqnknokHc8Gf0THB2aOAGu0M1OsDFjugjBuEVjkmMqeAKNh7j6+sX9Ybq5jr
+         2NUSWx/7Yv5uz3exwU7gBWC9eO1bLzc/otZDTF3+HmhUmLwmVCaX78WG1oEf/vroSKWE
+         r/272MJTiRTWAdR6XycNvKBCMEDkbzcfnPz+rj+IyhORwLTwnQm5kLQoQUzusgJmNx3E
+         uUlTbVvSCfnYaGwcMcI6vC3TSV6qpP9DipB3q4laAVPR3NmK8honhP933pqKdFvULZgV
+         gpDQ==
+X-Gm-Message-State: AJIora9UJV4NQjoR7b/Zgz+Y4HEUyKBLDl/loySZS0JevBZjI4Y+gm6K
+        EACTznY8+SL6SrktpAwR+oc2uDeMBBWZqw==
+X-Google-Smtp-Source: AGRyM1uzmJLBbqdg3uG1g61oePzcT8xAPw/4xhbfrBIxelPixRjac8AbChKR5CIBlccSSFRlyue9aA==
+X-Received: by 2002:a17:902:ea09:b0:16c:3f7a:adf7 with SMTP id s9-20020a170902ea0900b0016c3f7aadf7mr39051912plg.103.1658323192919;
+        Wed, 20 Jul 2022 06:19:52 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id l16-20020a63ea50000000b0041a13b1d451sm6468900pgk.59.2022.07.20.06.19.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 06:19:52 -0700 (PDT)
+From:   Stafford Horne <shorne@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Stafford Horne <shorne@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Nick Child <nick.child@ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH v4 1/3] PCI: Remove pci_get_legacy_ide_irq and asm-generic/pci.h
+Date:   Wed, 20 Jul 2022 22:19:32 +0900
+Message-Id: <20220720131934.373932-2-shorne@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220720131934.373932-1-shorne@gmail.com>
+References: <20220720131934.373932-1-shorne@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aidan,
+The definition of the pci header function pci_get_legacy_ide_irq is only
+used in platforms that support PNP.  So many of the architecutres where
+it is defined do not use it.  This also means we can remove
+asm-generic/pci.h as all it provides is a definition of
+pci_get_legacy_ide_irq.
 
-I guess this patch will change if you update patch #1 with my feedback.=20
-So if a V5 is needed I'll review it then.
+Where referenced, replace the usage of pci_get_legacy_ide_irq with the
+libata.h macros ATA_PRIMARY_IRQ and ATA_SECONDARY_IRQ which provide the
+same functionality.  This allows removing pci_get_legacy_ide_irq from
+headers where it is no longer used.
 
-Cheers,
--Paul
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Pierre Morel <pmorel@linux.ibm.com>
+Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Stafford Horne <shorne@gmail.com>
+---
 
+Since v3:
+ - Further remove the definictions of pci_get_legacy_ide_irq from x86 and use
+   the libata macros.
+ - Add Acked-bys.
 
-Le ven., juil. 8 2022 at 17:02:36 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Using regmap for accessing the AIC registers makes the driver a
-> little easier to read, and later refactors can take advantage of
-> regmap APIs to further simplify the driver.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  sound/soc/jz4740/Kconfig      |   1 +
->  sound/soc/jz4740/jz4740-i2s.c | 107=20
-> +++++++++++++---------------------
->  2 files changed, 40 insertions(+), 68 deletions(-)
->=20
-> diff --git a/sound/soc/jz4740/Kconfig b/sound/soc/jz4740/Kconfig
-> index e72f826062e9..dd3b4507fbe6 100644
-> --- a/sound/soc/jz4740/Kconfig
-> +++ b/sound/soc/jz4740/Kconfig
-> @@ -3,6 +3,7 @@ config SND_JZ4740_SOC_I2S
->  	tristate "SoC Audio (I2S protocol) for Ingenic JZ4740 SoC"
->  	depends on MIPS || COMPILE_TEST
->  	depends on HAS_IOMEM
-> +	select REGMAP_MMIO
->  	select SND_SOC_GENERIC_DMAENGINE_PCM
->  	help
->  	  Say Y if you want to use I2S protocol and I2S codec on Ingenic=20
-> JZ4740
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index adf896333584..1393b383a886 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -9,6 +9,7 @@
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/platform_device.h>
-> +#include <linux/regmap.h>
->  #include <linux/slab.h>
->=20
->  #include <linux/clk.h>
-> @@ -98,7 +99,7 @@ struct i2s_soc_info {
->  };
->=20
->  struct jz4740_i2s {
-> -	void __iomem *base;
-> +	struct regmap *regmap;
->=20
->  	struct clk *clk_aic;
->  	struct clk *clk_i2s;
-> @@ -109,23 +110,10 @@ struct jz4740_i2s {
->  	const struct i2s_soc_info *soc_info;
->  };
->=20
-> -static inline uint32_t jz4740_i2s_read(const struct jz4740_i2s *i2s,
-> -	unsigned int reg)
-> -{
-> -	return readl(i2s->base + reg);
-> -}
-> -
-> -static inline void jz4740_i2s_write(const struct jz4740_i2s *i2s,
-> -	unsigned int reg, uint32_t value)
-> -{
-> -	writel(value, i2s->base + reg);
-> -}
-> -
->  static int jz4740_i2s_startup(struct snd_pcm_substream *substream,
->  	struct snd_soc_dai *dai)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -	uint32_t conf, ctrl;
->  	int ret;
->=20
->  	/*
-> @@ -133,14 +121,10 @@ static int jz4740_i2s_startup(struct=20
-> snd_pcm_substream *substream,
->  	 * FIFO that is starting up.
->  	 */
->  	if (!i2s->soc_info->shared_fifo_flush) {
-> -		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> -
->  		if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
-> -			ctrl |=3D JZ4760_AIC_CTRL_TFLUSH;
-> +			regmap_set_bits(i2s->regmap, JZ_REG_AIC_CTRL,=20
-> JZ4760_AIC_CTRL_TFLUSH);
->  		else
-> -			ctrl |=3D JZ4760_AIC_CTRL_RFLUSH;
-> -
-> -		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> +			regmap_set_bits(i2s->regmap, JZ_REG_AIC_CTRL,=20
-> JZ4760_AIC_CTRL_RFLUSH);
->  	}
->=20
->  	if (snd_soc_dai_active(dai))
-> @@ -150,20 +134,14 @@ static int jz4740_i2s_startup(struct=20
-> snd_pcm_substream *substream,
->  	 * When there is a shared flush bit for both FIFOs we can
->  	 * only flush the FIFOs if no other stream has started.
->  	 */
-> -	if (i2s->soc_info->shared_fifo_flush) {
-> -		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> -		ctrl |=3D JZ_AIC_CTRL_FLUSH;
-> -		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> -	}
-> +	if (i2s->soc_info->shared_fifo_flush)
-> +		regmap_set_bits(i2s->regmap, JZ_REG_AIC_CTRL, JZ_AIC_CTRL_FLUSH);
->=20
->  	ret =3D clk_prepare_enable(i2s->clk_i2s);
->  	if (ret)
->  		return ret;
->=20
-> -	conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -	conf |=3D JZ_AIC_CONF_ENABLE;
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> -
-> +	regmap_set_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
->  	return 0;
->  }
->=20
-> @@ -171,14 +149,11 @@ static void jz4740_i2s_shutdown(struct=20
-> snd_pcm_substream *substream,
->  	struct snd_soc_dai *dai)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -	uint32_t conf;
->=20
->  	if (snd_soc_dai_active(dai))
->  		return;
->=20
-> -	conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -	conf &=3D ~JZ_AIC_CONF_ENABLE;
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> +	regmap_clear_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
->=20
->  	clk_disable_unprepare(i2s->clk_i2s);
->  }
-> @@ -187,8 +162,6 @@ static int jz4740_i2s_trigger(struct=20
-> snd_pcm_substream *substream, int cmd,
->  	struct snd_soc_dai *dai)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -
-> -	uint32_t ctrl;
->  	uint32_t mask;
->=20
->  	if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
-> @@ -196,38 +169,30 @@ static int jz4740_i2s_trigger(struct=20
-> snd_pcm_substream *substream, int cmd,
->  	else
->  		mask =3D JZ_AIC_CTRL_ENABLE_CAPTURE | JZ_AIC_CTRL_ENABLE_RX_DMA;
->=20
-> -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> -
->  	switch (cmd) {
->  	case SNDRV_PCM_TRIGGER_START:
->  	case SNDRV_PCM_TRIGGER_RESUME:
->  	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-> -		ctrl |=3D mask;
-> +		regmap_set_bits(i2s->regmap, JZ_REG_AIC_CTRL, mask);
->  		break;
->  	case SNDRV_PCM_TRIGGER_STOP:
->  	case SNDRV_PCM_TRIGGER_SUSPEND:
->  	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-> -		ctrl &=3D ~mask;
-> +		regmap_clear_bits(i2s->regmap, JZ_REG_AIC_CTRL, mask);
->  		break;
->  	default:
->  		return -EINVAL;
->  	}
->=20
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> -
->  	return 0;
->  }
->=20
->  static int jz4740_i2s_set_fmt(struct snd_soc_dai *dai, unsigned int=20
-> fmt)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -
-> -	uint32_t format =3D 0;
-> -	uint32_t conf;
-> -
-> -	conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -
-> -	conf &=3D ~(JZ_AIC_CONF_BIT_CLK_MASTER | JZ_AIC_CONF_SYNC_CLK_MASTER);
-> +	const unsigned int conf_mask =3D JZ_AIC_CONF_BIT_CLK_MASTER |
-> +				       JZ_AIC_CONF_SYNC_CLK_MASTER;
-> +	unsigned int conf =3D 0, format =3D 0;
->=20
->  	switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
->  	case SND_SOC_DAIFMT_BP_FP:
-> @@ -263,8 +228,8 @@ static int jz4740_i2s_set_fmt(struct snd_soc_dai=20
-> *dai, unsigned int fmt)
->  		return -EINVAL;
->  	}
->=20
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_I2S_FMT, format);
-> +	regmap_update_bits(i2s->regmap, JZ_REG_AIC_CONF, conf_mask, conf);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_I2S_FMT, format);
->=20
->  	return 0;
->  }
-> @@ -277,9 +242,9 @@ static int jz4740_i2s_hw_params(struct=20
-> snd_pcm_substream *substream,
->  	uint32_t ctrl, div_reg;
->  	int div;
->=20
-> -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> +	regmap_read(i2s->regmap, JZ_REG_AIC_CTRL, &ctrl);
-> +	regmap_read(i2s->regmap, JZ_REG_AIC_CLK_DIV, &div_reg);
->=20
-> -	div_reg =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CLK_DIV);
->  	div =3D clk_get_rate(i2s->clk_i2s) / (64 * params_rate(params));
->=20
->  	switch (params_format(params)) {
-> @@ -316,8 +281,8 @@ static int jz4740_i2s_hw_params(struct=20
-> snd_pcm_substream *substream,
->  		}
->  	}
->=20
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CLK_DIV, div_reg);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CTRL, ctrl);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CLK_DIV, div_reg);
->=20
->  	return 0;
->  }
-> @@ -354,13 +319,9 @@ static int jz4740_i2s_set_sysclk(struct=20
-> snd_soc_dai *dai, int clk_id,
->  static int jz4740_i2s_suspend(struct snd_soc_component *component)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
-> -	uint32_t conf;
->=20
->  	if (snd_soc_component_active(component)) {
-> -		conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -		conf &=3D ~JZ_AIC_CONF_ENABLE;
-> -		jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> -
-> +		regmap_clear_bits(i2s->regmap, JZ_REG_AIC_CONF,=20
-> JZ_AIC_CONF_ENABLE);
->  		clk_disable_unprepare(i2s->clk_i2s);
->  	}
->=20
-> @@ -372,7 +333,6 @@ static int jz4740_i2s_suspend(struct=20
-> snd_soc_component *component)
->  static int jz4740_i2s_resume(struct snd_soc_component *component)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
-> -	uint32_t conf;
->  	int ret;
->=20
->  	ret =3D clk_prepare_enable(i2s->clk_aic);
-> @@ -386,9 +346,7 @@ static int jz4740_i2s_resume(struct=20
-> snd_soc_component *component)
->  			return ret;
->  		}
->=20
-> -		conf =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CONF);
-> -		conf |=3D JZ_AIC_CONF_ENABLE;
-> -		jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> +		regmap_set_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
->  	}
->=20
->  	return 0;
-> @@ -421,8 +379,8 @@ static int jz4740_i2s_dai_probe(struct=20
-> snd_soc_dai *dai)
->  			JZ_AIC_CONF_INTERNAL_CODEC;
->  	}
->=20
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CONF, conf);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, conf);
->=20
->  	return 0;
->  }
-> @@ -521,11 +479,19 @@ static const struct of_device_id=20
-> jz4740_of_matches[] =3D {
->  };
->  MODULE_DEVICE_TABLE(of, jz4740_of_matches);
->=20
-> +static const struct regmap_config jz4740_i2s_regmap_config =3D {
-> +	.reg_bits	=3D 32,
-> +	.reg_stride	=3D 4,
-> +	.val_bits	=3D 32,
-> +	.max_register	=3D JZ_REG_AIC_FIFO,
-> +};
-> +
->  static int jz4740_i2s_dev_probe(struct platform_device *pdev)
->  {
->  	struct device *dev =3D &pdev->dev;
->  	struct jz4740_i2s *i2s;
->  	struct resource *mem;
-> +	void __iomem *regs;
->  	int ret;
->=20
->  	i2s =3D devm_kzalloc(dev, sizeof(*i2s), GFP_KERNEL);
-> @@ -534,9 +500,9 @@ static int jz4740_i2s_dev_probe(struct=20
-> platform_device *pdev)
->=20
->  	i2s->soc_info =3D device_get_match_data(dev);
->=20
-> -	i2s->base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
-> -	if (IS_ERR(i2s->base))
-> -		return PTR_ERR(i2s->base);
-> +	regs =3D devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
-> +	if (IS_ERR(regs))
-> +		return PTR_ERR(regs);
->=20
->  	i2s->playback_dma_data.maxburst =3D 16;
->  	i2s->playback_dma_data.addr =3D mem->start + JZ_REG_AIC_FIFO;
-> @@ -552,6 +518,11 @@ static int jz4740_i2s_dev_probe(struct=20
-> platform_device *pdev)
->  	if (IS_ERR(i2s->clk_i2s))
->  		return PTR_ERR(i2s->clk_i2s);
->=20
-> +	i2s->regmap =3D devm_regmap_init_mmio(&pdev->dev, regs,
-> +					    &jz4740_i2s_regmap_config);
-> +	if (IS_ERR(i2s->regmap))
-> +		return PTR_ERR(i2s->regmap);
-> +
->  	platform_set_drvdata(pdev, i2s);
->=20
->  	ret =3D devm_snd_soc_register_component(dev, &jz4740_i2s_component,
-> --
-> 2.35.1
->=20
+ arch/alpha/include/asm/pci.h   |  6 ------
+ arch/arm/include/asm/pci.h     |  5 -----
+ arch/arm64/include/asm/pci.h   |  6 ------
+ arch/ia64/include/asm/pci.h    |  6 ------
+ arch/m68k/include/asm/pci.h    |  2 --
+ arch/mips/include/asm/pci.h    |  6 ------
+ arch/parisc/include/asm/pci.h  |  5 -----
+ arch/powerpc/include/asm/pci.h |  1 -
+ arch/s390/include/asm/pci.h    |  1 -
+ arch/sh/include/asm/pci.h      |  6 ------
+ arch/sparc/include/asm/pci.h   |  9 ---------
+ arch/x86/include/asm/pci.h     |  3 ---
+ arch/xtensa/include/asm/pci.h  |  3 ---
+ drivers/pnp/resource.c         |  5 +++--
+ include/asm-generic/pci.h      | 17 -----------------
+ 15 files changed, 3 insertions(+), 78 deletions(-)
+ delete mode 100644 include/asm-generic/pci.h
 
+diff --git a/arch/alpha/include/asm/pci.h b/arch/alpha/include/asm/pci.h
+index cf6bc1e64d66..6312656279d7 100644
+--- a/arch/alpha/include/asm/pci.h
++++ b/arch/alpha/include/asm/pci.h
+@@ -56,12 +56,6 @@ struct pci_controller {
+ 
+ /* IOMMU controls.  */
+ 
+-/* TODO: integrate with include/asm-generic/pci.h ? */
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	return channel ? 15 : 14;
+-}
+-
+ #define pci_domain_nr(bus) ((struct pci_controller *)(bus)->sysdata)->index
+ 
+ static inline int pci_proc_domain(struct pci_bus *bus)
+diff --git a/arch/arm/include/asm/pci.h b/arch/arm/include/asm/pci.h
+index 68e6f25784a4..5916b88d4c94 100644
+--- a/arch/arm/include/asm/pci.h
++++ b/arch/arm/include/asm/pci.h
+@@ -22,11 +22,6 @@ static inline int pci_proc_domain(struct pci_bus *bus)
+ #define HAVE_PCI_MMAP
+ #define ARCH_GENERIC_PCI_MMAP_RESOURCE
+ 
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	return channel ? 15 : 14;
+-}
+-
+ extern void pcibios_report_status(unsigned int status_mask, int warn);
+ 
+ #endif /* __KERNEL__ */
+diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
+index b33ca260e3c9..0aebc3488c32 100644
+--- a/arch/arm64/include/asm/pci.h
++++ b/arch/arm64/include/asm/pci.h
+@@ -23,12 +23,6 @@
+ extern int isa_dma_bridge_buggy;
+ 
+ #ifdef CONFIG_PCI
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	/* no legacy IRQ on arm64 */
+-	return -ENODEV;
+-}
+-
+ static inline int pci_proc_domain(struct pci_bus *bus)
+ {
+ 	return 1;
+diff --git a/arch/ia64/include/asm/pci.h b/arch/ia64/include/asm/pci.h
+index 8c163d1d0189..fa8f545c24c9 100644
+--- a/arch/ia64/include/asm/pci.h
++++ b/arch/ia64/include/asm/pci.h
+@@ -63,10 +63,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
+ 	return (pci_domain_nr(bus) != 0);
+ }
+ 
+-#define HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	return channel ? isa_irq_to_vector(15) : isa_irq_to_vector(14);
+-}
+-
+ #endif /* _ASM_IA64_PCI_H */
+diff --git a/arch/m68k/include/asm/pci.h b/arch/m68k/include/asm/pci.h
+index 5a4bc223743b..ccdfa0dc8413 100644
+--- a/arch/m68k/include/asm/pci.h
++++ b/arch/m68k/include/asm/pci.h
+@@ -2,8 +2,6 @@
+ #ifndef _ASM_M68K_PCI_H
+ #define _ASM_M68K_PCI_H
+ 
+-#include <asm-generic/pci.h>
+-
+ #define	pcibios_assign_all_busses()	1
+ 
+ #define	PCIBIOS_MIN_IO		0x00000100
+diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+index 9ffc8192adae..3fd6e22c108b 100644
+--- a/arch/mips/include/asm/pci.h
++++ b/arch/mips/include/asm/pci.h
+@@ -139,10 +139,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
+ /* Do platform specific device initialization at pci_enable_device() time */
+ extern int pcibios_plat_dev_init(struct pci_dev *dev);
+ 
+-/* Chances are this interrupt is wired PC-style ...  */
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	return channel ? 15 : 14;
+-}
+-
+ #endif /* _ASM_PCI_H */
+diff --git a/arch/parisc/include/asm/pci.h b/arch/parisc/include/asm/pci.h
+index f14465b84de4..127ed5021ae3 100644
+--- a/arch/parisc/include/asm/pci.h
++++ b/arch/parisc/include/asm/pci.h
+@@ -162,11 +162,6 @@ extern void pcibios_init_bridge(struct pci_dev *);
+ #define PCIBIOS_MIN_IO          0x10
+ #define PCIBIOS_MIN_MEM         0x1000 /* NBPG - but pci/setup-res.c dies */
+ 
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	return channel ? 15 : 14;
+-}
+-
+ #define HAVE_PCI_MMAP
+ #define ARCH_GENERIC_PCI_MMAP_RESOURCE
+ 
+diff --git a/arch/powerpc/include/asm/pci.h b/arch/powerpc/include/asm/pci.h
+index 915d6ee4b40a..f9da506751bb 100644
+--- a/arch/powerpc/include/asm/pci.h
++++ b/arch/powerpc/include/asm/pci.h
+@@ -39,7 +39,6 @@
+ #define pcibios_assign_all_busses() \
+ 	(pci_has_flag(PCI_REASSIGN_ALL_BUS))
+ 
+-#define HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
+ static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+ {
+ 	if (ppc_md.pci_get_legacy_ide_irq)
+diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+index fdb9745ee998..5889ddcbc374 100644
+--- a/arch/s390/include/asm/pci.h
++++ b/arch/s390/include/asm/pci.h
+@@ -6,7 +6,6 @@
+ #include <linux/mutex.h>
+ #include <linux/iommu.h>
+ #include <linux/pci_hotplug.h>
+-#include <asm-generic/pci.h>
+ #include <asm/pci_clp.h>
+ #include <asm/pci_debug.h>
+ #include <asm/sclp.h>
+diff --git a/arch/sh/include/asm/pci.h b/arch/sh/include/asm/pci.h
+index ad22e88c6657..54c30126ea17 100644
+--- a/arch/sh/include/asm/pci.h
++++ b/arch/sh/include/asm/pci.h
+@@ -88,10 +88,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
+ 	return hose->need_domain_info;
+ }
+ 
+-/* Chances are this interrupt is wired PC-style ...  */
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	return channel ? 15 : 14;
+-}
+-
+ #endif /* __ASM_SH_PCI_H */
+diff --git a/arch/sparc/include/asm/pci.h b/arch/sparc/include/asm/pci.h
+index 4deddf430e5d..0c58f65bd172 100644
+--- a/arch/sparc/include/asm/pci.h
++++ b/arch/sparc/include/asm/pci.h
+@@ -40,13 +40,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
+ #define get_pci_unmapped_area get_fb_unmapped_area
+ #endif /* CONFIG_SPARC64 */
+ 
+-#if defined(CONFIG_SPARC64) || defined(CONFIG_LEON_PCI)
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	return PCI_IRQ_NONE;
+-}
+-#else
+-#include <asm-generic/pci.h>
+-#endif
+-
+ #endif /* ___ASM_SPARC_PCI_H */
+diff --git a/arch/x86/include/asm/pci.h b/arch/x86/include/asm/pci.h
+index f3fd5928bcbb..736793d65bcb 100644
+--- a/arch/x86/include/asm/pci.h
++++ b/arch/x86/include/asm/pci.h
+@@ -105,9 +105,6 @@ static inline void early_quirks(void) { }
+ 
+ extern void pci_iommu_alloc(void);
+ 
+-/* generic pci stuff */
+-#include <asm-generic/pci.h>
+-
+ #ifdef CONFIG_NUMA
+ /* Returns the node based on pci bus */
+ static inline int __pcibus_to_node(const struct pci_bus *bus)
+diff --git a/arch/xtensa/include/asm/pci.h b/arch/xtensa/include/asm/pci.h
+index 8e2b48a268db..b56de9635b6c 100644
+--- a/arch/xtensa/include/asm/pci.h
++++ b/arch/xtensa/include/asm/pci.h
+@@ -43,7 +43,4 @@
+ #define ARCH_GENERIC_PCI_MMAP_RESOURCE	1
+ #define arch_can_pci_mmap_io()		1
+ 
+-/* Generic PCI */
+-#include <asm-generic/pci.h>
+-
+ #endif	/* _XTENSA_PCI_H */
+diff --git a/drivers/pnp/resource.c b/drivers/pnp/resource.c
+index 2fa0f7d55259..8f7695624c8c 100644
+--- a/drivers/pnp/resource.c
++++ b/drivers/pnp/resource.c
+@@ -17,6 +17,7 @@
+ #include <asm/dma.h>
+ #include <asm/irq.h>
+ #include <linux/pci.h>
++#include <linux/libata.h>
+ #include <linux/ioport.h>
+ #include <linux/init.h>
+ 
+@@ -322,8 +323,8 @@ static int pci_dev_uses_irq(struct pnp_dev *pnp, struct pci_dev *pci,
+ 		 * treat the compatibility IRQs as busy.
+ 		 */
+ 		if ((progif & 0x5) != 0x5)
+-			if (pci_get_legacy_ide_irq(pci, 0) == irq ||
+-			    pci_get_legacy_ide_irq(pci, 1) == irq) {
++			if (ATA_PRIMARY_IRQ(pci) == irq ||
++			    ATA_SECONDARY_IRQ(pci) == irq) {
+ 				pnp_dbg(&pnp->dev, "  legacy IDE device %s "
+ 					"using irq %d\n", pci_name(pci), irq);
+ 				return 1;
+diff --git a/include/asm-generic/pci.h b/include/asm-generic/pci.h
+deleted file mode 100644
+index 6bb3cd3d695a..000000000000
+--- a/include/asm-generic/pci.h
++++ /dev/null
+@@ -1,17 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * linux/include/asm-generic/pci.h
+- *
+- *  Copyright (C) 2003 Russell King
+- */
+-#ifndef _ASM_GENERIC_PCI_H
+-#define _ASM_GENERIC_PCI_H
+-
+-#ifndef HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
+-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+-{
+-	return channel ? 15 : 14;
+-}
+-#endif /* HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ */
+-
+-#endif /* _ASM_GENERIC_PCI_H */
+-- 
+2.36.1
 
