@@ -2,200 +2,169 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2896B57B53B
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 13:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6C557B5BA
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 13:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237151AbiGTLSo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Jul 2022 07:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S230258AbiGTLom (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Jul 2022 07:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGTLSn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 07:18:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D37E1E3E4;
-        Wed, 20 Jul 2022 04:18:42 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id y8so23343877eda.3;
-        Wed, 20 Jul 2022 04:18:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SCL8okDV1rxEb5OCfF/iJQrOA6O3ijjSdt2qrtLkaoY=;
-        b=HN0PHqtDTEFErT55MLznU/7DJVnNowu7VaLykhAMfAnLWk/VT8gi4qzgtp9RJcbF/o
-         xOfjgYsWFeyQ24aNVQEst955WXhe8zBFER8rT59BUViD3iVFwkhtDVrovfrWMl32Ty7G
-         IfhTsvQqiZxJpeCFF3n7PV77bWy6eo/eBTWQ8uhCaQE0Li7hApTkwmqB+0welO+95tS2
-         i7FBYJuKNtB+pIaYfppPtkOXE3ASK9lYlO6FrRrvflKOTDVaChFa3IpawV0QNs4c7EKZ
-         otHf7eboGEVPuIYN7dagTcCnNVB2Zp2oJoMN+Tla5kEs2Lyrow5l0oXsFex3oKiLQhNm
-         +7Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SCL8okDV1rxEb5OCfF/iJQrOA6O3ijjSdt2qrtLkaoY=;
-        b=oFcj2lRcgfdfTHEJ01EEle816fYYkUEd/IhsgJZcClAS6ONGCvym7wErDqbs7RJdxS
-         xtjQGbs4dtPVMV6oM5gmJBPyyZDsQtoFGcIEuAd6ecDQxQ2FZSLNoj5+T0PIwYrEypN8
-         FxaSE78KGW/F+kGngh2ytPrYfjV31tYyEvsbEL1UnYqTHgKl7zgsjpyd5i5UpvYPu2AL
-         5LuCZWd4Gz+F7DfbBEzhh2luvCBAAr8ek4NYIMhh83+l3nyWqlg8bLE4EfhmjOcvRC9m
-         Gg+IwImSKXSukgb/qGCRR/29o/qWtW9fyLYDAGqZJNnIpA+dM5evjyf4RRXUxOlycQm9
-         SDWQ==
-X-Gm-Message-State: AJIora/1iv/28OwApAT7dolcGxnnIiUccl7xgmM48JlU3FP8nqWkYIqH
-        2HQio7DNbZX6NQDCWkHP3dyWrOBvTvjQxRPMo5c=
-X-Google-Smtp-Source: AGRyM1ss32678rw5+Nj7lJWknUm7P5YwIjqTzH08oVGiKCY3rvlOfMOyXALe2jVxcbqf5uWwnqbhiqF3URmzQ/t+nDw=
-X-Received: by 2002:a05:6402:d53:b0:43b:a0cf:d970 with SMTP id
- ec19-20020a0564020d5300b0043ba0cfd970mr8335292edb.277.1658315920799; Wed, 20
- Jul 2022 04:18:40 -0700 (PDT)
+        with ESMTP id S229712AbiGTLom (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 07:44:42 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA51459B1;
+        Wed, 20 Jul 2022 04:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1658317473; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gfVrDHEaoRWXZN/HPQzTExDiPVvqkM20tNaJY4XTG7k=;
+        b=pmPNW73SsabPhfkXe2GuaO61RJcyuQJkm6+2r6XRpoftHet7iBhMA/kK6MoZm71fxlgAqU
+        GtJSNQlvwU5zitRxPk770YVdDWy26wAit7edFN6EJ6fQhXOtoXPD/pxCN9T9+D+VzSatGd
+        rMYf2pWJsnKmQbjXbACt4m9i6azetrM=
+Date:   Wed, 20 Jul 2022 12:44:18 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 01/11] ASoC: jz4740-i2s: Handle independent FIFO flush
+ bits
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Message-Id: <UXHBFR.6W2XPUNX040K1@crapouillou.net>
+In-Reply-To: <20220708160244.21933-2-aidanmacdonald.0x0@gmail.com>
+References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
+        <20220708160244.21933-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-References: <20220711034615.482895-1-21cnbao@gmail.com> <24f5e25b-3946-b92a-975b-c34688005398@linux.alibaba.com>
- <CAGsJ_4zjnmQV6LT3yo--K-qD-92=hBmgfK121=n-Y0oEFX8RnQ@mail.gmail.com> <8e603deb-7023-5de5-c958-8911971aec24@huawei.com>
-In-Reply-To: <8e603deb-7023-5de5-c958-8911971aec24@huawei.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Wed, 20 Jul 2022 23:18:29 +1200
-Message-ID: <CAGsJ_4x9hLbXGMU737SShZGS89_4zywyhvkcRfz3W5s_p7O1PA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] mm: arm64: bring up BATCHED_UNMAP_TLB_FLUSH
-To:     Yicong Yang <yangyicong@huawei.com>, xhao@linux.alibaba.com
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>, x86 <x86@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Darren Hart <darren@os.amperecomputing.com>,
-        huzhanyuan@oppo.com,
-        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        real mz <realmz6@gmail.com>, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "tiantao (H)" <tiantao6@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 1:28 AM Yicong Yang <yangyicong@huawei.com> wrote:
->
-> On 2022/7/14 12:51, Barry Song wrote:
-> > On Thu, Jul 14, 2022 at 3:29 PM Xin Hao <xhao@linux.alibaba.com> wrote:
-> >>
-> >> Hi barry.
-> >>
-> >> I do some test on Kunpeng arm64 machine use Unixbench.
-> >>
-> >> The test  result as below.
-> >>
-> >> One core, we can see the performance improvement above +30%.
-> >
-> > I am really pleased to see the 30%+ improvement on unixbench on single core.
-> >
-> >> ./Run -c 1 -i 1 shell1
-> >> w/o
-> >> System Benchmarks Partial Index              BASELINE RESULT INDEX
-> >> Shell Scripts (1 concurrent)                     42.4 5481.0 1292.7
-> >> ========
-> >> System Benchmarks Index Score (Partial Only)                         1292.7
-> >>
-> >> w/
-> >> System Benchmarks Partial Index              BASELINE RESULT INDEX
-> >> Shell Scripts (1 concurrent)                     42.4 6974.6 1645.0
-> >> ========
-> >> System Benchmarks Index Score (Partial Only)                         1645.0
-> >>
-> >>
-> >> But with whole cores, there have little performance degradation above -5%
-> >
-> > That is sad as we might get more concurrency between mprotect(), madvise(),
-> > mremap(), zap_pte_range() and the deferred tlbi.
-> >
-> >>
-> >> ./Run -c 96 -i 1 shell1
-> >> w/o
-> >> Shell Scripts (1 concurrent)                  80765.5 lpm   (60.0 s, 1
-> >> samples)
-> >> System Benchmarks Partial Index              BASELINE RESULT INDEX
-> >> Shell Scripts (1 concurrent)                     42.4 80765.5 19048.5
-> >> ========
-> >> System Benchmarks Index Score (Partial Only)                        19048.5
-> >>
-> >> w
-> >> Shell Scripts (1 concurrent)                  76333.6 lpm   (60.0 s, 1
-> >> samples)
-> >> System Benchmarks Partial Index              BASELINE RESULT INDEX
-> >> Shell Scripts (1 concurrent)                     42.4 76333.6 18003.2
-> >> ========
-> >> System Benchmarks Index Score (Partial Only)                        18003.2
-> >>
-> >> ----------------------------------------------------------------------------------------------
-> >>
-> >>
-> >> After discuss with you, and do some changes in the patch.
-> >>
-> >> ndex a52381a680db..1ecba81f1277 100644
-> >> --- a/mm/rmap.c
-> >> +++ b/mm/rmap.c
-> >> @@ -727,7 +727,11 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
-> >>          int flushed = batch >> TLB_FLUSH_BATCH_FLUSHED_SHIFT;
-> >>
-> >>          if (pending != flushed) {
-> >> +#ifdef CONFIG_ARCH_HAS_MM_CPUMASK
-> >>                  flush_tlb_mm(mm);
-> >> +#else
-> >> +               dsb(ish);
-> >> +#endif
-> >>
-> >
-> > i was guessing the problem might be flush_tlb_batched_pending()
-> > so i asked you to change this to verify my guess.
-> >
->
-> flush_tlb_batched_pending() looks like the critical path for this issue then the code
-> above can mitigate this.
->
-> I cannot reproduce this on a 2P 128C Kunpeng920 server. The kernel is based on the
-> v5.19-rc6 and unixbench of version 5.1.3. The result of `./Run -c 128 -i 1 shell1` is:
->       iter-1      iter-2     iter-3
-> w/o  17708.1     17637.1    17630.1
-> w    17766.0     17752.3    17861.7
->
-> And flush_tlb_batched_pending()isn't the hot spot with the patch:
->    7.00%  sh        [kernel.kallsyms]      [k] ptep_clear_flush
->    4.17%  sh        [kernel.kallsyms]      [k] ptep_set_access_flags
->    2.43%  multi.sh  [kernel.kallsyms]      [k] ptep_clear_flush
->    1.98%  sh        [kernel.kallsyms]      [k] _raw_spin_unlock_irqrestore
->    1.69%  sh        [kernel.kallsyms]      [k] next_uptodate_page
->    1.66%  sort      [kernel.kallsyms]      [k] ptep_clear_flush
->    1.56%  multi.sh  [kernel.kallsyms]      [k] ptep_set_access_flags
->    1.27%  sh        [kernel.kallsyms]      [k] page_counter_cancel
->    1.11%  sh        [kernel.kallsyms]      [k] page_remove_rmap
->    1.06%  sh        [kernel.kallsyms]      [k] perf_event_alloc
->
-> Hi Xin Hao,
->
-> I'm not sure the test setup as well as the config is same with yours. (96C vs 128C
-> should not be the reason I think). Did you check that the 5% is a fluctuation or
-> not? It'll be helpful if more information provided for reproducing this issue.
->
-> Thanks.
+Hi Aidan,
 
-I guess that is because  "./Run -c 1 -i 1 shell1" isn't an application
-stressed on
-memory. Hi Xin, in what kinds of configurations can we reproduce your test
-result?
+Le ven., juil. 8 2022 at 17:02:34 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> On the JZ4740, there is a single bit that flushes (empties) both
+> the transmit and receive FIFO. Later SoCs have independent flush
+> bits for each FIFO, which allows us to flush the right FIFO when
+> starting up a stream.
+>=20
+> This also fixes a bug: since we were only setting the JZ4740's
+> flush bit, which corresponds to the TX FIFO flush bit on other
+> SoCs, other SoCs were not having their RX FIFO flushed at all.
+>=20
+> Fixes: 967beb2e8777 ("ASoC: jz4740: Add jz4780 support")
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  sound/soc/jz4740/jz4740-i2s.c | 33 ++++++++++++++++++++++++++++++---
+>  1 file changed, 30 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
+> b/sound/soc/jz4740/jz4740-i2s.c
+> index ecd8df70d39c..576f31f9d734 100644
+> --- a/sound/soc/jz4740/jz4740-i2s.c
+> +++ b/sound/soc/jz4740/jz4740-i2s.c
+> @@ -64,6 +64,9 @@
+>  #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
+>  #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
+>=20
+> +#define JZ4760_AIC_CTRL_TFLUSH BIT(8)
+> +#define JZ4760_AIC_CTRL_RFLUSH BIT(7)
 
-As I suppose tlbbatch will mainly affect the performance of user scenarios
-which require memory page-out/page-in like reclaiming file/anon pages.
-"./Run -c 1 -i 1 shell1" on a system with sufficient free memory won't be
-affected by tlbbatch at all, I believe.
+Just rename JZ_AIC_CTRL_FLUSH to JZ_AIC_CTRL_TFLUSH and introduce=20
+JZ_AIC_CTRL_RLUSH.
 
-Thanks
-Barry
+> +
+>  #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
+>  #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
+>=20
+> @@ -90,6 +93,8 @@ enum jz47xx_i2s_version {
+>  struct i2s_soc_info {
+>  	enum jz47xx_i2s_version version;
+>  	struct snd_soc_dai_driver *dai;
+> +
+> +	bool shared_fifo_flush;
+>  };
+>=20
+>  struct jz4740_i2s {
+> @@ -124,12 +129,33 @@ static int jz4740_i2s_startup(struct=20
+> snd_pcm_substream *substream,
+>  	uint32_t conf, ctrl;
+>  	int ret;
+>=20
+> +	/*
+> +	 * When we can flush FIFOs independently, only flush the
+> +	 * FIFO that is starting up.
+> +	 */
+> +	if (!i2s->soc_info->shared_fifo_flush) {
+> +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+> +
+> +		if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
+> +			ctrl |=3D JZ4760_AIC_CTRL_TFLUSH;
+> +		else
+> +			ctrl |=3D JZ4760_AIC_CTRL_RFLUSH;
+> +
+> +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+> +	}
+
+Wouldn't it be simpler to do one single if/else? And hy is one checked=20
+before the (snd_soc_dai_active(dai)) check, and the other is checked=20
+after?
+
+You could do something like this:
+
+ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+
+if (i2s->soc_info->shared_fifo_flush ||
+    substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK) {
+    ctrl |=3D JZ_AIC_CTRL_TFLUSH;
+} else {
+    ctrl |=3D JZ_AIC_CTRL_RFLUSH;
+}
+
+jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+
+Cheers,
+-Paul
+
+> +
+>  	if (snd_soc_dai_active(dai))
+>  		return 0;
+>=20
+> -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+> -	ctrl |=3D JZ_AIC_CTRL_FLUSH;
+> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+> +	/*
+> +	 * When there is a shared flush bit for both FIFOs we can
+> +	 * only flush the FIFOs if no other stream has started.
+> +	 */
+> +	if (i2s->soc_info->shared_fifo_flush) {
+> +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+> +		ctrl |=3D JZ_AIC_CTRL_FLUSH;
+> +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+> +	}
+>=20
+>  	ret =3D clk_prepare_enable(i2s->clk_i2s);
+>  	if (ret)
+> @@ -444,6 +470,7 @@ static struct snd_soc_dai_driver jz4740_i2s_dai =3D=20
+> {
+>  static const struct i2s_soc_info jz4740_i2s_soc_info =3D {
+>  	.version =3D JZ_I2S_JZ4740,
+>  	.dai =3D &jz4740_i2s_dai,
+> +	.shared_fifo_flush =3D true,
+>  };
+>=20
+>  static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
+> --
+> 2.35.1
+>=20
+
+
