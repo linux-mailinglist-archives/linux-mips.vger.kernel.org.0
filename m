@@ -2,205 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B328857B8A8
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 16:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2868D57BCE3
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 19:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiGTOmB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Jul 2022 10:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S234028AbiGTRkb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Jul 2022 13:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiGTOmA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 10:42:00 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124D54D805;
-        Wed, 20 Jul 2022 07:41:59 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id z13so6867956wro.13;
-        Wed, 20 Jul 2022 07:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=pmQh8wJ3rGOyskLRKw3GBidQJ3GYaUH4Sf2DdWGq4sA=;
-        b=IwQ7xMGJH9hbQNGwL26KWu6TnEsH/DFR2NYp+KoJqhsfbXwh25rvNG2C3eBFsY90Gj
-         x67YC2EVFMpdPktx7wptxhRMj3AbKXR6t64vD/f8PRQ7VZFp2btgHKu23QDXGgPX8i7K
-         YOuqbpkpM34IT2FR5xL04/LtbBlfnlGBynGP0PZP19h6s11gAGaj98V9uzvfTfI7Ghxd
-         W0yy6WPhS93h+NVdxkE51ezx+S/WjvLDGFHX5x/DSNCtpyibgBhMwDN3PX1kRbqBq7tf
-         fpGX+WkqY1ngjLiDWcEFM9t2/VpBCQmK0sZKg1INu76InRBenbC4zt4w7OezAcqXRf0t
-         jgiQ==
+        with ESMTP id S232685AbiGTRka (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 13:40:30 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BF92A241;
+        Wed, 20 Jul 2022 10:40:29 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id u12so1649231qtk.0;
+        Wed, 20 Jul 2022 10:40:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=pmQh8wJ3rGOyskLRKw3GBidQJ3GYaUH4Sf2DdWGq4sA=;
-        b=oA5h0h3QSaYVL+h6P1Y78AkujIzMyoyFyGEiyZZ64XHLfQ5Sq+XXlA/5iM6M+5Y9Bd
-         2BaOV0Ng7KGKnOvAiEHFN8MhYxWOuQs4t//XhbVOFn+8u05Qd342U5X7x+XNO6XjZKfy
-         eeHFngov2G5g+ioAuDduYQdP9Dzg+9kBqfE1XW452uIJR8IwgAQ84JoF2zD6ggBWres0
-         xwJfwyHO21dyMja6T8oXBnR3nbIzRR796L/KHu5CQCfspSavzsqQK8ZFKewGyAM6PkeK
-         uBddZDCM7rFjs4uKsCgSeufpPb4DmBG40wAZP19bUQ9nWjh9ypeof7yKCfAQadTA7W9r
-         DvyQ==
-X-Gm-Message-State: AJIora+VtOF/na46BTeSjQtC3mf3SHGtjhz3m3bMXZY+WnYINEadtfY2
-        0xPD3tY2l8imAtFSCINFJ04=
-X-Google-Smtp-Source: AGRyM1u8peSbDCPQD4pilAW2W4aTHPMOVo5SYnm6jIVyGgpq+8SaeL+2JrcT50gIumK0HO8Dg7b0Cw==
-X-Received: by 2002:a05:6000:702:b0:21d:7f65:f1b5 with SMTP id bs2-20020a056000070200b0021d7f65f1b5mr30722788wrb.555.1658328117483;
-        Wed, 20 Jul 2022 07:41:57 -0700 (PDT)
-Received: from localhost (92.40.203.135.threembb.co.uk. [92.40.203.135])
-        by smtp.gmail.com with ESMTPSA id a20-20020a05600c225400b003a32167b8d4sm2714699wmm.13.2022.07.20.07.41.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 07:41:56 -0700 (PDT)
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
- <20220708160244.21933-2-aidanmacdonald.0x0@gmail.com>
- <UXHBFR.6W2XPUNX040K1@crapouillou.net>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 01/11] ASoC: jz4740-i2s: Handle independent FIFO
- flush bits
-In-reply-to: <UXHBFR.6W2XPUNX040K1@crapouillou.net>
-Date:   Wed, 20 Jul 2022 15:43:06 +0100
-Message-ID: <KM3aQuHkqtNZOgfaFAVA54klqcIZBA4X@localhost>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PmcZJKXW5L1h76Y7jDvbkfD3n85Nfb/cTZUz3jaZfpo=;
+        b=IPjEJxNrYKP/bAlPgxKrn9FRbVKtzEunsywWgj6Ah5b2RkACwEAkC9UR3zFDDBuGCf
+         DmR2Tria1RLN9CtkfNsyxYmmIVc7LqeCC0PPw1ie4atvpQKIws0vBKhVN2NoXwCo6Iu3
+         6pi3IWLHoNY++xp3S8EJdXkRSrg6SCZne70H354F+qWvVyz12PztKFB0AJuVKzwXQC6z
+         W+9/NatlcBA6ngOBQsGZU905K0CGJEHQbKn+mm7DAuE38BJhiKHkfqulCvF7CfYYoscW
+         zDt6uR/kHv/q8ff5orI6JiHpXMzqXg6L6dPJvNNSMLU/ozAufiz2HcHBxZ3e11S4Uilw
+         xljA==
+X-Gm-Message-State: AJIora/NodvMzBgl4OHy4tqkS3vMy+2Yvabf/5xoRajZ1W9oiDUaFc08
+        ZKDwIcI85P7lvk6Xz5nMMjd4wW++ToamFa1M
+X-Google-Smtp-Source: AGRyM1s9l8OS7ZCQgfbMTab10+PGIrLc1fxawXk5LNRiK0T4+LYGriYHhmB3sDRnu/Jk9uLMG6tKGA==
+X-Received: by 2002:ac8:5a41:0:b0:31f:280:b7ca with SMTP id o1-20020ac85a41000000b0031f0280b7camr6179579qta.518.1658338828709;
+        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id bq7-20020a05620a468700b006b578ff5dfasm5045912qkb.41.2022.07.20.10.40.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id 75so33323451ybf.4;
+        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
+X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
+ r1-20020a5b06c1000000b00669a7c34c33mr36151263ybq.543.1658338827759; Wed, 20
+ Jul 2022 10:40:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220720131934.373932-1-shorne@gmail.com> <20220720131934.373932-3-shorne@gmail.com>
+In-Reply-To: <20220720131934.373932-3-shorne@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 20 Jul 2022 19:40:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX7_CSQd14tGPfL7R7V0h6AwNi7bVDCWhcdNoZV_md4bw@mail.gmail.com>
+Message-ID: <CAMuHMdX7_CSQd14tGPfL7R7V0h6AwNi7bVDCWhcdNoZV_md4bw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] PCI: Move isa_dma_bridge_buggy out of dma.h
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-Paul Cercueil <paul@crapouillou.net> writes:
-
-> Hi Aidan,
+On Wed, Jul 20, 2022 at 3:20 PM Stafford Horne <shorne@gmail.com> wrote:
+> During recent PCI cleanups we noticed that the isa_dma_bridge_buggy
+> symbol supported by all architectures is actually only used for x86_32.
 >
-> Le ven., juil. 8 2022 at 17:02:34 +0100, Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
->> On the JZ4740, there is a single bit that flushes (empties) both
->> the transmit and receive FIFO. Later SoCs have independent flush
->> bits for each FIFO, which allows us to flush the right FIFO when
->> starting up a stream.
->> This also fixes a bug: since we were only setting the JZ4740's
->> flush bit, which corresponds to the TX FIFO flush bit on other
->> SoCs, other SoCs were not having their RX FIFO flushed at all.
->> Fixes: 967beb2e8777 ("ASoC: jz4740: Add jz4780 support")
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>  sound/soc/jz4740/jz4740-i2s.c | 33 ++++++++++++++++++++++++++++++---
->>  1 file changed, 30 insertions(+), 3 deletions(-)
->> diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s=
-.c
->> index ecd8df70d39c..576f31f9d734 100644
->> --- a/sound/soc/jz4740/jz4740-i2s.c
->> +++ b/sound/soc/jz4740/jz4740-i2s.c
->> @@ -64,6 +64,9 @@
->>  #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
->>  #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
->> +#define JZ4760_AIC_CTRL_TFLUSH BIT(8)
->> +#define JZ4760_AIC_CTRL_RFLUSH BIT(7)
+> This patch moves the symbol out of all architectures limiting usage to
+> only x86_32.  This is possible because only x86_32 platforms or quirks
+> existing in PCI devices supported on x86_32 ever set this.  A new global
+> header linux/isa-dma.h is added to provide a common place to maintain
+> the definition.
 >
-> Just rename JZ_AIC_CTRL_FLUSH to JZ_AIC_CTRL_TFLUSH and introduce
-> JZ_AIC_CTRL_RLUSH.
->
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Suggested-by: Christoph Hellwig <hch@infradead.org>
+> Signed-off-by: Stafford Horne <shorne@gmail.com>
+> ---
+> Since v3:
+>  - New patch.
 
-According to the JZ4740 programming manual JZ_AIC_CTRL_FLUSH flushes
-both FIFOs, so it's not equivalent JZ4760_AIC_CTRL_TFLUSH. I don't
-think it's a good idea to confuse the two, or we'd need comments to
-explain why JZ4740 uses TFLUSH but not RFLUSH.
+>  arch/m68k/include/asm/dma.h            |  6 ------
 
->> +
->>  #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
->>  #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
->> @@ -90,6 +93,8 @@ enum jz47xx_i2s_version {
->>  struct i2s_soc_info {
->>  	enum jz47xx_i2s_version version;
->>  	struct snd_soc_dai_driver *dai;
->> +
->> +	bool shared_fifo_flush;
->>  };
->>  struct jz4740_i2s {
->> @@ -124,12 +129,33 @@ static int jz4740_i2s_startup(struct snd_pcm_subst=
-ream
->> *substream,
->>  	uint32_t conf, ctrl;
->>  	int ret;
->> +	/*
->> +	 * When we can flush FIFOs independently, only flush the
->> +	 * FIFO that is starting up.
->> +	 */
->> +	if (!i2s->soc_info->shared_fifo_flush) {
->> +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
->> +
->> +		if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
->> +			ctrl |=3D JZ4760_AIC_CTRL_TFLUSH;
->> +		else
->> +			ctrl |=3D JZ4760_AIC_CTRL_RFLUSH;
->> +
->> +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
->> +	}
->
-> Wouldn't it be simpler to do one single if/else? And hy is one checked be=
-fore
-> the (snd_soc_dai_active(dai)) check, and the other is checked after?
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-snd_soc_dai_active() is essentially checking if there's an active
-substream. Eg. if no streams are open and you start playback, then
-the DAI will be inactive. If you then start capture while playback is
-running, the DAI is already active.
+Gr{oetje,eeting}s,
 
-With a shared flush bit we can only flush if there are no other active
-substreams (because we don't want to disturb the active stream by
-flushing the FIFO) so it goes after the snd_soc_dai_active() check.
+                        Geert
 
-When the FIFOs can be separately flushed, flushing can be done before
-the check because it won't disturb any active substream.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> You could do something like this:
->
-> ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
->
-> if (i2s->soc_info->shared_fifo_flush ||
->    substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK) {
->    ctrl |=3D JZ_AIC_CTRL_TFLUSH;
-> } else {
->    ctrl |=3D JZ_AIC_CTRL_RFLUSH;
-> }
->
-> jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
->
-> Cheers,
-> -Paul
->
-
->> +
->>  	if (snd_soc_dai_active(dai))
->>  		return 0;
->> -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
->> -	ctrl |=3D JZ_AIC_CTRL_FLUSH;
->> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
->> +	/*
->> +	 * When there is a shared flush bit for both FIFOs we can
->> +	 * only flush the FIFOs if no other stream has started.
->> +	 */
->> +	if (i2s->soc_info->shared_fifo_flush) {
->> +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
->> +		ctrl |=3D JZ_AIC_CTRL_FLUSH;
->> +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
->> +	}
->>  	ret =3D clk_prepare_enable(i2s->clk_i2s);
->>  	if (ret)
->> @@ -444,6 +470,7 @@ static struct snd_soc_dai_driver jz4740_i2s_dai =3D {
->>  static const struct i2s_soc_info jz4740_i2s_soc_info =3D {
->>  	.version =3D JZ_I2S_JZ4740,
->>  	.dai =3D &jz4740_i2s_dai,
->> +	.shared_fifo_flush =3D true,
->>  };
->>  static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
->> --
->> 2.35.1
->>=20
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
