@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E0957B608
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 13:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6886257B615
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 14:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbiGTL6e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Jul 2022 07:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
+        id S234432AbiGTMEP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Jul 2022 08:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbiGTL6d (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 07:58:33 -0400
+        with ESMTP id S232187AbiGTMEP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 08:04:15 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978C272ED0;
-        Wed, 20 Jul 2022 04:58:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793456B241;
+        Wed, 20 Jul 2022 05:04:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1658318311; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1658318652; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KPPCh6LnPww+kbqa2Z9TXCT7MqlxqoEk5GKe4eZg+d0=;
-        b=PusYh3vGIr5JCPPDBQ8btI6tloV/wi1FD8zh2hjxM8uwjCti0yfNjmhO5GKnJTh5bTfvKa
-        HDX7u8KKHaMyJ/O8lI7mNxbJowK6byOGJ9D2+YACKn525LYwz/0ZbIDUWSbhCs9N0pSIiR
-        +lS+gbFz6RpgFLuOjtkBMjrLqvP6Ltc=
-Date:   Wed, 20 Jul 2022 12:58:19 +0100
+        bh=RnfcxwjD5VEqdAApN8ZMGAAkgvJHjWCm9p0n29wZyrM=;
+        b=BfHJXcPl0gTqQpDrY09cVTdgChK8nlMPusOWuVwRkxOdgl3gPDJiEk39+/L/vctWhsB/9g
+        aCx/QmdduNUuDfR6YmIXqok2/foWS6RpP88WwvPja6pTjk/qeP4blL2pCLloi6H9ucXxpt
+        9oBSxvVdZRNcM+pCfFT2pnJbNPrS3/o=
+Date:   Wed, 20 Jul 2022 13:04:00 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 10/11] ASoC: jz4740-i2s: Move component functions near
- the component driver
+Subject: Re: [PATCH v4 11/11] ASoC: jz4740-i2s: Refactor DAI probe/remove ops
+ as component ops
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
         tiwai@suse.com, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <7LIBFR.71QJ7EA1306B1@crapouillou.net>
-In-Reply-To: <20220708160244.21933-11-aidanmacdonald.0x0@gmail.com>
+Message-Id: <OUIBFR.VWH85QRTE1NF3@crapouillou.net>
+In-Reply-To: <20220708160244.21933-12-aidanmacdonald.0x0@gmail.com>
 References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-11-aidanmacdonald.0x0@gmail.com>
+        <20220708160244.21933-12-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -50,98 +50,88 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Aidan,
 
-Le ven., juil. 8 2022 at 17:02:43 +0100, Aidan MacDonald=20
+Le ven., juil. 8 2022 at 17:02:44 +0100, Aidan MacDonald=20
 <aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Move the component suspend/resume functions near the definition
-> of the component driver to emphasize that they're unrelated to
-> the DAI functions.
+> Move most of the DAI probe/remove logic into component ops.
+> This makes things more consistent because the AIC clock is
+> now managed solely from the component side. And it makes it
+> easier to add codec switching support later on.
 >=20
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-I'm not really fond of moving code like that, so I'll leave Mark with=20
-the liberty to take or not this patch.
-
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
 Cheers,
 -Paul
 
 > ---
->  sound/soc/jz4740/jz4740-i2s.c | 72=20
-> +++++++++++++++++------------------
->  1 file changed, 36 insertions(+), 36 deletions(-)
+>  sound/soc/jz4740/jz4740-i2s.c | 54=20
+> +++++++++++++++++++----------------
+>  1 file changed, 30 insertions(+), 24 deletions(-)
 >=20
 > diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
 > b/sound/soc/jz4740/jz4740-i2s.c
-> index 70b9d28a40ce..5db73f12efcf 100644
+> index 5db73f12efcf..d99a19bc5166 100644
 > --- a/sound/soc/jz4740/jz4740-i2s.c
 > +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -303,42 +303,6 @@ static int jz4740_i2s_set_sysclk(struct=20
+> @@ -306,32 +306,10 @@ static int jz4740_i2s_set_sysclk(struct=20
 > snd_soc_dai *dai, int clk_id,
->  	return ret;
->  }
->=20
-> -static int jz4740_i2s_suspend(struct snd_soc_component *component)
-> -{
-> -	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
-> -
-> -	if (snd_soc_component_active(component)) {
-> -		regmap_clear_bits(i2s->regmap, JZ_REG_AIC_CONF,=20
-> JZ_AIC_CONF_ENABLE);
-> -		clk_disable_unprepare(i2s->clk_i2s);
-> -	}
-> -
-> -	clk_disable_unprepare(i2s->clk_aic);
-> -
-> -	return 0;
-> -}
-> -
-> -static int jz4740_i2s_resume(struct snd_soc_component *component)
-> -{
-> -	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
+>  static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
+>  {
+>  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
 > -	int ret;
 > -
 > -	ret =3D clk_prepare_enable(i2s->clk_aic);
 > -	if (ret)
 > -		return ret;
+>=20
+>  	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
+>  		&i2s->capture_dma_data);
+>=20
+> -	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
 > -
-> -	if (snd_soc_component_active(component)) {
-> -		ret =3D clk_prepare_enable(i2s->clk_i2s);
-> -		if (ret) {
-> -			clk_disable_unprepare(i2s->clk_aic);
-> -			return ret;
-> -		}
+> -	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
+> -		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+> -		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
 > -
-> -		regmap_set_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
-> -	}
+> -	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
+> -	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
 > -
 > -	return 0;
 > -}
 > -
->  static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> @@ -459,6 +423,42 @@ static const struct i2s_soc_info=20
-> jz4780_i2s_soc_info =3D {
->  	.pll_clk_name		=3D "pll half",
->  };
+> -static int jz4740_i2s_dai_remove(struct snd_soc_dai *dai)
+> -{
+> -	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
+> -
+> -	clk_disable_unprepare(i2s->clk_aic);
+>  	return 0;
+>  }
 >=20
-> +static int jz4740_i2s_suspend(struct snd_soc_component *component)
-> +{
-> +	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
-> +
-> +	if (snd_soc_component_active(component)) {
-> +		regmap_clear_bits(i2s->regmap, JZ_REG_AIC_CONF,=20
-> JZ_AIC_CONF_ENABLE);
-> +		clk_disable_unprepare(i2s->clk_i2s);
-> +	}
-> +
-> +	clk_disable_unprepare(i2s->clk_aic);
-> +
-> +	return 0;
-> +}
-> +
-> +static int jz4740_i2s_resume(struct snd_soc_component *component)
+> @@ -351,7 +329,6 @@ static const struct snd_soc_dai_ops=20
+> jz4740_i2s_dai_ops =3D {
+>=20
+>  static struct snd_soc_dai_driver jz4740_i2s_dai =3D {
+>  	.probe =3D jz4740_i2s_dai_probe,
+> -	.remove =3D jz4740_i2s_dai_remove,
+>  	.playback =3D {
+>  		.channels_min =3D 1,
+>  		.channels_max =3D 2,
+> @@ -389,7 +366,6 @@ static const struct i2s_soc_info=20
+> jz4760_i2s_soc_info =3D {
+>=20
+>  static struct snd_soc_dai_driver jz4770_i2s_dai =3D {
+>  	.probe =3D jz4740_i2s_dai_probe,
+> -	.remove =3D jz4740_i2s_dai_remove,
+>  	.playback =3D {
+>  		.channels_min =3D 1,
+>  		.channels_max =3D 2,
+> @@ -459,8 +435,38 @@ static int jz4740_i2s_resume(struct=20
+> snd_soc_component *component)
+>  	return 0;
+>  }
+>=20
+> +static int jz4740_i2s_probe(struct snd_soc_component *component)
 > +{
 > +	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
 > +	int ret;
@@ -150,22 +140,32 @@ Cheers,
 > +	if (ret)
 > +		return ret;
 > +
-> +	if (snd_soc_component_active(component)) {
-> +		ret =3D clk_prepare_enable(i2s->clk_i2s);
-> +		if (ret) {
-> +			clk_disable_unprepare(i2s->clk_aic);
-> +			return ret;
-> +		}
+> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
 > +
-> +		regmap_set_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
-> +	}
+> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
+> +		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+> +		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
+> +
+> +	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
+> +	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
 > +
 > +	return 0;
 > +}
 > +
+> +static void jz4740_i2s_remove(struct snd_soc_component *component)
+> +{
+> +	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
+> +
+> +	clk_disable_unprepare(i2s->clk_aic);
+> +}
+> +
 >  static const struct snd_soc_component_driver jz4740_i2s_component =3D {
 >  	.name			=3D "jz4740-i2s",
+> +	.probe			=3D jz4740_i2s_probe,
+> +	.remove			=3D jz4740_i2s_remove,
 >  	.suspend		=3D jz4740_i2s_suspend,
+>  	.resume			=3D jz4740_i2s_resume,
+>  	.legacy_dai_naming	=3D 1,
 > --
 > 2.35.1
 >=20
