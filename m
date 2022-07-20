@@ -2,53 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2868D57BCE3
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 19:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0940E57BCFA
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 19:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234028AbiGTRkb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Jul 2022 13:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S229752AbiGTRmb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Jul 2022 13:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbiGTRka (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 13:40:30 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BF92A241;
-        Wed, 20 Jul 2022 10:40:29 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id u12so1649231qtk.0;
-        Wed, 20 Jul 2022 10:40:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PmcZJKXW5L1h76Y7jDvbkfD3n85Nfb/cTZUz3jaZfpo=;
-        b=IPjEJxNrYKP/bAlPgxKrn9FRbVKtzEunsywWgj6Ah5b2RkACwEAkC9UR3zFDDBuGCf
-         DmR2Tria1RLN9CtkfNsyxYmmIVc7LqeCC0PPw1ie4atvpQKIws0vBKhVN2NoXwCo6Iu3
-         6pi3IWLHoNY++xp3S8EJdXkRSrg6SCZne70H354F+qWvVyz12PztKFB0AJuVKzwXQC6z
-         W+9/NatlcBA6ngOBQsGZU905K0CGJEHQbKn+mm7DAuE38BJhiKHkfqulCvF7CfYYoscW
-         zDt6uR/kHv/q8ff5orI6JiHpXMzqXg6L6dPJvNNSMLU/ozAufiz2HcHBxZ3e11S4Uilw
-         xljA==
-X-Gm-Message-State: AJIora/NodvMzBgl4OHy4tqkS3vMy+2Yvabf/5xoRajZ1W9oiDUaFc08
-        ZKDwIcI85P7lvk6Xz5nMMjd4wW++ToamFa1M
-X-Google-Smtp-Source: AGRyM1s9l8OS7ZCQgfbMTab10+PGIrLc1fxawXk5LNRiK0T4+LYGriYHhmB3sDRnu/Jk9uLMG6tKGA==
-X-Received: by 2002:ac8:5a41:0:b0:31f:280:b7ca with SMTP id o1-20020ac85a41000000b0031f0280b7camr6179579qta.518.1658338828709;
-        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id bq7-20020a05620a468700b006b578ff5dfasm5045912qkb.41.2022.07.20.10.40.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 75so33323451ybf.4;
-        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
-X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
- r1-20020a5b06c1000000b00669a7c34c33mr36151263ybq.543.1658338827759; Wed, 20
- Jul 2022 10:40:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220720131934.373932-1-shorne@gmail.com> <20220720131934.373932-3-shorne@gmail.com>
-In-Reply-To: <20220720131934.373932-3-shorne@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 20 Jul 2022 19:40:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX7_CSQd14tGPfL7R7V0h6AwNi7bVDCWhcdNoZV_md4bw@mail.gmail.com>
-Message-ID: <CAMuHMdX7_CSQd14tGPfL7R7V0h6AwNi7bVDCWhcdNoZV_md4bw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] PCI: Move isa_dma_bridge_buggy out of dma.h
+        with ESMTP id S229618AbiGTRma (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 13:42:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECBF43E55;
+        Wed, 20 Jul 2022 10:42:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=2rSAiUGaxhl5GiQNkevi7FT3Eu
+        oFi3t8oDDYv4tYthoJZObu5RAVdChzLc5kXcdS3yRuhYFdjIjcZClXaZYuDc87JZwUu5GiY1aYUWW
+        ou1/+WwAtYRLE3WMCGyN9OMmI7korRiRPxqavWTJiXadQoQFXdbyseLF9vnKAeCgNvVwj+f44qDzd
+        dSabyG6xdDBthHR+4c2+oSKP458OHShOBXgTmuC/IbjSx4tdZFMqwJdq+81uw1+a8U+y9JOl3gjg0
+        IFdeBmLGYrl7Ye5mw/cb1wzyCjDAB6r8sbxY2kFORmOeMz4VzJnHb8ZFgYrsg7NJ/998p0J1R7RgX
+        zIiPty1A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEDi7-008mLl-Ev; Wed, 20 Jul 2022 17:42:11 +0000
+Date:   Wed, 20 Jul 2022 10:42:11 -0700
+From:   Christoph Hellwig <hch@infradead.org>
 To:     Stafford Horne <shorne@gmail.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Christoph Hellwig <hch@infradead.org>,
@@ -57,6 +36,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Matt Turner <mattst88@gmail.com>,
         Vineet Gupta <vgupta@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
@@ -74,8 +54,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         Ian Abbott <abbotti@mev.co.uk>,
@@ -86,60 +65,31 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Greg Ungerer <gerg@linux-m68k.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-pci@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v4 2/3] PCI: Move isa_dma_bridge_buggy out of dma.h
+Message-ID: <Ytg+c8F4IIVbije9@infradead.org>
+References: <20220720131934.373932-1-shorne@gmail.com>
+ <20220720131934.373932-3-shorne@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720131934.373932-3-shorne@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 3:20 PM Stafford Horne <shorne@gmail.com> wrote:
-> During recent PCI cleanups we noticed that the isa_dma_bridge_buggy
-> symbol supported by all architectures is actually only used for x86_32.
->
-> This patch moves the symbol out of all architectures limiting usage to
-> only x86_32.  This is possible because only x86_32 platforms or quirks
-> existing in PCI devices supported on x86_32 ever set this.  A new global
-> header linux/isa-dma.h is added to provide a common place to maintain
-> the definition.
->
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Suggested-by: Christoph Hellwig <hch@infradead.org>
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
-> ---
-> Since v3:
->  - New patch.
+Looks good:
 
->  arch/m68k/include/asm/dma.h            |  6 ------
-
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Christoph Hellwig <hch@lst.de>
