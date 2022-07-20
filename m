@@ -2,97 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A749A57BD0E
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Jul 2022 19:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6641B57C0AD
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Jul 2022 01:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbiGTRnn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Jul 2022 13:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        id S231483AbiGTXMV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Jul 2022 19:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGTRnk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 13:43:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69B848E88;
-        Wed, 20 Jul 2022 10:43:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=ud/J0sBp4WvQan86X0B396DoWt
-        XvbxlyIGi6vo1wobokFAbidmtnnQXU3j4yAeDtrOCqpZDngaD3xxJne84/OLuZMOtBI0r005mQgBF
-        DdDoVC5HgChuuAAO3sHGynh14NoOKiIXm5t4DibPm3oayQgekE25NDF4xtLigZVAQ2Njmwu6gkyaD
-        ssVbjhn4nAlypq0C8lkV1MklYFoQpTLbUOn+KYhwQIXcY5hTwGw5P1T2C4zFcwIb0qYTG1Z/huXhI
-        /1f+UUyIDqcHLc6IqDrlkwhdcR12z7SKJVqNISeIURQkOu0X4aX5a2XpiIid7z7MciA801M2r2MIv
-        83a/10RA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEDjJ-008nHG-0T; Wed, 20 Jul 2022 17:43:25 +0000
-Date:   Wed, 20 Jul 2022 10:43:24 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Nick Child <nick.child@ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] PCI: Remove pci_get_legacy_ide_irq and
- asm-generic/pci.h
-Message-ID: <Ytg+vPSl+oBGtSRZ@infradead.org>
-References: <20220720131934.373932-1-shorne@gmail.com>
- <20220720131934.373932-2-shorne@gmail.com>
+        with ESMTP id S231583AbiGTXMU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Jul 2022 19:12:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C934B0D0;
+        Wed, 20 Jul 2022 16:12:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69747B8222C;
+        Wed, 20 Jul 2022 23:12:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04523C341D0;
+        Wed, 20 Jul 2022 23:12:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658358736;
+        bh=tkIAwLdRLlKrtzjlA/APq42GsWiNdQp09ixV23X/Y0A=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ffPRcU+OPp7EMgkx+QqIwS+b6gFBjuR7vxPCXU1BDNgOc0WFvq0UBKI/w6vtF8t7v
+         WhaW+BWSJP6FgFJFkC/ujfH8SeNoOCIUjfTcsGhNziirtxP3ZDX5GgU7KcjSMVvnFX
+         jieK5b5NMA5hPP1D1Eua17LNp7WMwOijLJ/XNx35ZT7xAwag+rjdWDWYIaSg4jNCwB
+         +VPeAcxblFpRgPMXpgor10j7ln720X0Gc8F0bP9jppUFNRen2/u2/3D4LJqHtWsCoR
+         GGg+VMWJfmGAnugQM2JYeD8ggQY8DXozrLjEMaP0XieToVXxeOvlu9BaioLk8sbpnY
+         e0LQVNOVpsHBQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     perex@perex.cz, tiwai@suse.com, paul@crapouillou.net,
+        lgirdwood@gmail.com, aidanmacdonald.0x0@gmail.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+In-Reply-To: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
+References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
+Subject: Re: (subset) [PATCH v4 00/11] ASoC: cleanups and improvements for jz4740-i2s
+Message-Id: <165835873474.1007579.2143422827851423635.b4-ty@kernel.org>
+Date:   Thu, 21 Jul 2022 00:12:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220720131934.373932-2-shorne@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Looks good:
+On Fri, 8 Jul 2022 17:02:33 +0100, Aidan MacDonald wrote:
+> This series is a preparatory cleanup of the jz4740-i2s driver before
+> adding support for a new SoC. The two improvements are lifting
+> unnecessary restrictions on sample rates and formats -- the existing
+> ones appear to be derived from the limitations of the JZ4740's internal
+> codec and don't reflect the actual capabilities of the I2S controller.
+> 
+> I'm unable to test the series on any JZ47xx SoCs, but I have tested
+> on an X1000 (which is the SoC I'll be adding in a followup series).
+> 
+> [...]
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[02/11] ASoC: jz4740-i2s: Remove unused 'mem' resource
+        commit: cd57272c4e686d4ad2d2e775a40a3eac9f96ec7c
+[04/11] ASoC: jz4740-i2s: Simplify using regmap fields
+        (no commit info)
+[05/11] ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+        (no commit info)
+[06/11] ASoC: jz4740-i2s: Align macro values and sort includes
+        (no commit info)
+[07/11] ASoC: jz4740-i2s: Make the PLL clock name SoC-specific
+        (no commit info)
+[08/11] ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
+        (no commit info)
+[09/11] ASoC: jz4740-i2s: Support continuous sample rate
+        (no commit info)
+[10/11] ASoC: jz4740-i2s: Move component functions near the component driver
+        (no commit info)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
