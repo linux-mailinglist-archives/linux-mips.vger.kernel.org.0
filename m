@@ -2,391 +2,211 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF9B57C840
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Jul 2022 11:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083E857C893
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Jul 2022 12:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbiGUJ4K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Jul 2022 05:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S233041AbiGUKI2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Jul 2022 06:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiGUJ4I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Jul 2022 05:56:08 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2955C1F2D3;
-        Thu, 21 Jul 2022 02:56:07 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 64so1873981ybt.12;
-        Thu, 21 Jul 2022 02:56:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ANVQjRLj94qjQOscYLBb9UlJmEmjYMw+jneTE9rf+Lg=;
-        b=jVg1KHKuSp7fNToa6sQizCLxerUw82cA0o7L2liXbAdC7N8kcA2THFToDxfPfyev+3
-         XULgDCbnt9Y7fBrygrQlM9oMVkUKV4ol0vEDS8d2Nr89B6Yyh01Pz+XBNYKXZu1lp5EF
-         K0vCEqwwJdGMMf1JcCMASfubu+CTiQIpm5ysbsFWrhefi2HzysW6hl/XzwW9GSif2xPU
-         YI/MbykRnWCgj+RFnGeAZ8xbkeQxL1baFGF/c6xWiRmyi+GUeang1iZ2a+2Vi5DR3nhJ
-         ubk/We23abVQ27lBDj34FGJyJkIM2jyUgETQI3NMP+AqAZzTF5WLAL56Bl0Fj89snL9U
-         s8HA==
-X-Gm-Message-State: AJIora9fP4sIGhIabwuHcMrLDbs0EMsweH7PDUJ1ngd7ayW5eTaKjY/B
-        Po5jzgUD0kSW965D2jTXM9EV6jab57MXXPnxUDLfVF6W
-X-Google-Smtp-Source: AGRyM1t8kFQjQEDBkr07pO16L3OXL1cNKoJ1y/rLmHj/g8TgqsT4OJy2z2Wny8VxGZcQFsLVkuoLWVLyBG1u3U7oigA=
-X-Received: by 2002:a05:6902:1541:b0:670:ac02:58c3 with SMTP id
- r1-20020a056902154100b00670ac0258c3mr4661901ybu.622.1658397366294; Thu, 21
- Jul 2022 02:56:06 -0700 (PDT)
+        with ESMTP id S232939AbiGUKI2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Jul 2022 06:08:28 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63693691D2;
+        Thu, 21 Jul 2022 03:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1658398105; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zr0w1O3lZ0yYDNjjfrSSdrZWx1dvMhV92UH4jm6Fo5I=;
+        b=4CWAPyjGKsXTwOQ9CFMAFIJjwPH42tynqPn0HHDXMYCujBxsGSV4zyefky40XMaYyCR4zV
+        d706479PBxSxyD29/rk7dj3bnBzbF5fM0HDnoc5aP23lwF4MwNcF3f6EprNlAxxTu/JdqD
+        iK4bNfGv/4cuUE8UdQJ11M2U16X0wFA=
+Date:   Thu, 21 Jul 2022 11:08:14 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 01/11] ASoC: jz4740-i2s: Handle independent FIFO flush
+ bits
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Message-Id: <Q58DFR.835FR3DH8BFV@crapouillou.net>
+In-Reply-To: <KM3aQuHkqtNZOgfaFAVA54klqcIZBA4X@localhost>
+References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
+        <20220708160244.21933-2-aidanmacdonald.0x0@gmail.com>
+        <UXHBFR.6W2XPUNX040K1@crapouillou.net>
+        <KM3aQuHkqtNZOgfaFAVA54klqcIZBA4X@localhost>
 MIME-Version: 1.0
-References: <20220720131934.373932-1-shorne@gmail.com> <20220720131934.373932-2-shorne@gmail.com>
-In-Reply-To: <20220720131934.373932-2-shorne@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Jul 2022 11:55:54 +0200
-Message-ID: <CAJZ5v0ghRHcJ-6dAxBMq55tbftnvdMrKvi1Kq-ZDZF1g7KzLyA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] PCI: Remove pci_get_legacy_ide_irq and asm-generic/pci.h
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Nick Child <nick.child@ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-alpha@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 3:20 PM Stafford Horne <shorne@gmail.com> wrote:
->
-> The definition of the pci header function pci_get_legacy_ide_irq is only
-> used in platforms that support PNP.  So many of the architecutres where
-> it is defined do not use it.  This also means we can remove
-> asm-generic/pci.h as all it provides is a definition of
-> pci_get_legacy_ide_irq.
->
-> Where referenced, replace the usage of pci_get_legacy_ide_irq with the
-> libata.h macros ATA_PRIMARY_IRQ and ATA_SECONDARY_IRQ which provide the
-> same functionality.  This allows removing pci_get_legacy_ide_irq from
-> headers where it is no longer used.
->
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Acked-by: Pierre Morel <pmorel@linux.ibm.com>
-> Co-developed-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
+Hi Aidan,
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Le mer., juil. 20 2022 at 15:43:06 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+>=20
+> Paul Cercueil <paul@crapouillou.net> writes:
+>=20
+>>  Hi Aidan,
+>>=20
+>>  Le ven., juil. 8 2022 at 17:02:34 +0100, Aidan MacDonald
+>>  <aidanmacdonald.0x0@gmail.com> a =E9crit :
+>>>  On the JZ4740, there is a single bit that flushes (empties) both
+>>>  the transmit and receive FIFO. Later SoCs have independent flush
+>>>  bits for each FIFO, which allows us to flush the right FIFO when
+>>>  starting up a stream.
+>>>  This also fixes a bug: since we were only setting the JZ4740's
+>>>  flush bit, which corresponds to the TX FIFO flush bit on other
+>>>  SoCs, other SoCs were not having their RX FIFO flushed at all.
+>>>  Fixes: 967beb2e8777 ("ASoC: jz4740: Add jz4780 support")
+>>>  Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>>>  ---
+>>>   sound/soc/jz4740/jz4740-i2s.c | 33=20
+>>> ++++++++++++++++++++++++++++++---
+>>>   1 file changed, 30 insertions(+), 3 deletions(-)
+>>>  diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
+>>> b/sound/soc/jz4740/jz4740-i2s.c
+>>>  index ecd8df70d39c..576f31f9d734 100644
+>>>  --- a/sound/soc/jz4740/jz4740-i2s.c
+>>>  +++ b/sound/soc/jz4740/jz4740-i2s.c
+>>>  @@ -64,6 +64,9 @@
+>>>   #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
+>>>   #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
+>>>  +#define JZ4760_AIC_CTRL_TFLUSH BIT(8)
+>>>  +#define JZ4760_AIC_CTRL_RFLUSH BIT(7)
+>>=20
+>>  Just rename JZ_AIC_CTRL_FLUSH to JZ_AIC_CTRL_TFLUSH and introduce
+>>  JZ_AIC_CTRL_RLUSH.
+>>=20
+>=20
+> According to the JZ4740 programming manual JZ_AIC_CTRL_FLUSH flushes
+> both FIFOs, so it's not equivalent JZ4760_AIC_CTRL_TFLUSH. I don't
+> think it's a good idea to confuse the two, or we'd need comments to
+> explain why JZ4740 uses TFLUSH but not RFLUSH.
 
-> ---
->
-> Since v3:
->  - Further remove the definictions of pci_get_legacy_ide_irq from x86 and use
->    the libata macros.
->  - Add Acked-bys.
->
->  arch/alpha/include/asm/pci.h   |  6 ------
->  arch/arm/include/asm/pci.h     |  5 -----
->  arch/arm64/include/asm/pci.h   |  6 ------
->  arch/ia64/include/asm/pci.h    |  6 ------
->  arch/m68k/include/asm/pci.h    |  2 --
->  arch/mips/include/asm/pci.h    |  6 ------
->  arch/parisc/include/asm/pci.h  |  5 -----
->  arch/powerpc/include/asm/pci.h |  1 -
->  arch/s390/include/asm/pci.h    |  1 -
->  arch/sh/include/asm/pci.h      |  6 ------
->  arch/sparc/include/asm/pci.h   |  9 ---------
->  arch/x86/include/asm/pci.h     |  3 ---
->  arch/xtensa/include/asm/pci.h  |  3 ---
->  drivers/pnp/resource.c         |  5 +++--
->  include/asm-generic/pci.h      | 17 -----------------
->  15 files changed, 3 insertions(+), 78 deletions(-)
->  delete mode 100644 include/asm-generic/pci.h
->
-> diff --git a/arch/alpha/include/asm/pci.h b/arch/alpha/include/asm/pci.h
-> index cf6bc1e64d66..6312656279d7 100644
-> --- a/arch/alpha/include/asm/pci.h
-> +++ b/arch/alpha/include/asm/pci.h
-> @@ -56,12 +56,6 @@ struct pci_controller {
->
->  /* IOMMU controls.  */
->
-> -/* TODO: integrate with include/asm-generic/pci.h ? */
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       return channel ? 15 : 14;
-> -}
-> -
->  #define pci_domain_nr(bus) ((struct pci_controller *)(bus)->sysdata)->index
->
->  static inline int pci_proc_domain(struct pci_bus *bus)
-> diff --git a/arch/arm/include/asm/pci.h b/arch/arm/include/asm/pci.h
-> index 68e6f25784a4..5916b88d4c94 100644
-> --- a/arch/arm/include/asm/pci.h
-> +++ b/arch/arm/include/asm/pci.h
-> @@ -22,11 +22,6 @@ static inline int pci_proc_domain(struct pci_bus *bus)
->  #define HAVE_PCI_MMAP
->  #define ARCH_GENERIC_PCI_MMAP_RESOURCE
->
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       return channel ? 15 : 14;
-> -}
-> -
->  extern void pcibios_report_status(unsigned int status_mask, int warn);
->
->  #endif /* __KERNEL__ */
-> diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
-> index b33ca260e3c9..0aebc3488c32 100644
-> --- a/arch/arm64/include/asm/pci.h
-> +++ b/arch/arm64/include/asm/pci.h
-> @@ -23,12 +23,6 @@
->  extern int isa_dma_bridge_buggy;
->
->  #ifdef CONFIG_PCI
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       /* no legacy IRQ on arm64 */
-> -       return -ENODEV;
-> -}
-> -
->  static inline int pci_proc_domain(struct pci_bus *bus)
->  {
->         return 1;
-> diff --git a/arch/ia64/include/asm/pci.h b/arch/ia64/include/asm/pci.h
-> index 8c163d1d0189..fa8f545c24c9 100644
-> --- a/arch/ia64/include/asm/pci.h
-> +++ b/arch/ia64/include/asm/pci.h
-> @@ -63,10 +63,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
->         return (pci_domain_nr(bus) != 0);
->  }
->
-> -#define HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       return channel ? isa_irq_to_vector(15) : isa_irq_to_vector(14);
-> -}
-> -
->  #endif /* _ASM_IA64_PCI_H */
-> diff --git a/arch/m68k/include/asm/pci.h b/arch/m68k/include/asm/pci.h
-> index 5a4bc223743b..ccdfa0dc8413 100644
-> --- a/arch/m68k/include/asm/pci.h
-> +++ b/arch/m68k/include/asm/pci.h
-> @@ -2,8 +2,6 @@
->  #ifndef _ASM_M68K_PCI_H
->  #define _ASM_M68K_PCI_H
->
-> -#include <asm-generic/pci.h>
-> -
->  #define        pcibios_assign_all_busses()     1
->
->  #define        PCIBIOS_MIN_IO          0x00000100
-> diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
-> index 9ffc8192adae..3fd6e22c108b 100644
-> --- a/arch/mips/include/asm/pci.h
-> +++ b/arch/mips/include/asm/pci.h
-> @@ -139,10 +139,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
->  /* Do platform specific device initialization at pci_enable_device() time */
->  extern int pcibios_plat_dev_init(struct pci_dev *dev);
->
-> -/* Chances are this interrupt is wired PC-style ...  */
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       return channel ? 15 : 14;
-> -}
-> -
->  #endif /* _ASM_PCI_H */
-> diff --git a/arch/parisc/include/asm/pci.h b/arch/parisc/include/asm/pci.h
-> index f14465b84de4..127ed5021ae3 100644
-> --- a/arch/parisc/include/asm/pci.h
-> +++ b/arch/parisc/include/asm/pci.h
-> @@ -162,11 +162,6 @@ extern void pcibios_init_bridge(struct pci_dev *);
->  #define PCIBIOS_MIN_IO          0x10
->  #define PCIBIOS_MIN_MEM         0x1000 /* NBPG - but pci/setup-res.c dies */
->
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       return channel ? 15 : 14;
-> -}
-> -
->  #define HAVE_PCI_MMAP
->  #define ARCH_GENERIC_PCI_MMAP_RESOURCE
->
-> diff --git a/arch/powerpc/include/asm/pci.h b/arch/powerpc/include/asm/pci.h
-> index 915d6ee4b40a..f9da506751bb 100644
-> --- a/arch/powerpc/include/asm/pci.h
-> +++ b/arch/powerpc/include/asm/pci.h
-> @@ -39,7 +39,6 @@
->  #define pcibios_assign_all_busses() \
->         (pci_has_flag(PCI_REASSIGN_ALL_BUS))
->
-> -#define HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
->  static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
->  {
->         if (ppc_md.pci_get_legacy_ide_irq)
-> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> index fdb9745ee998..5889ddcbc374 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -6,7 +6,6 @@
->  #include <linux/mutex.h>
->  #include <linux/iommu.h>
->  #include <linux/pci_hotplug.h>
-> -#include <asm-generic/pci.h>
->  #include <asm/pci_clp.h>
->  #include <asm/pci_debug.h>
->  #include <asm/sclp.h>
-> diff --git a/arch/sh/include/asm/pci.h b/arch/sh/include/asm/pci.h
-> index ad22e88c6657..54c30126ea17 100644
-> --- a/arch/sh/include/asm/pci.h
-> +++ b/arch/sh/include/asm/pci.h
-> @@ -88,10 +88,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
->         return hose->need_domain_info;
->  }
->
-> -/* Chances are this interrupt is wired PC-style ...  */
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       return channel ? 15 : 14;
-> -}
-> -
->  #endif /* __ASM_SH_PCI_H */
-> diff --git a/arch/sparc/include/asm/pci.h b/arch/sparc/include/asm/pci.h
-> index 4deddf430e5d..0c58f65bd172 100644
-> --- a/arch/sparc/include/asm/pci.h
-> +++ b/arch/sparc/include/asm/pci.h
-> @@ -40,13 +40,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
->  #define get_pci_unmapped_area get_fb_unmapped_area
->  #endif /* CONFIG_SPARC64 */
->
-> -#if defined(CONFIG_SPARC64) || defined(CONFIG_LEON_PCI)
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       return PCI_IRQ_NONE;
-> -}
-> -#else
-> -#include <asm-generic/pci.h>
-> -#endif
-> -
->  #endif /* ___ASM_SPARC_PCI_H */
-> diff --git a/arch/x86/include/asm/pci.h b/arch/x86/include/asm/pci.h
-> index f3fd5928bcbb..736793d65bcb 100644
-> --- a/arch/x86/include/asm/pci.h
-> +++ b/arch/x86/include/asm/pci.h
-> @@ -105,9 +105,6 @@ static inline void early_quirks(void) { }
->
->  extern void pci_iommu_alloc(void);
->
-> -/* generic pci stuff */
-> -#include <asm-generic/pci.h>
-> -
->  #ifdef CONFIG_NUMA
->  /* Returns the node based on pci bus */
->  static inline int __pcibus_to_node(const struct pci_bus *bus)
-> diff --git a/arch/xtensa/include/asm/pci.h b/arch/xtensa/include/asm/pci.h
-> index 8e2b48a268db..b56de9635b6c 100644
-> --- a/arch/xtensa/include/asm/pci.h
-> +++ b/arch/xtensa/include/asm/pci.h
-> @@ -43,7 +43,4 @@
->  #define ARCH_GENERIC_PCI_MMAP_RESOURCE 1
->  #define arch_can_pci_mmap_io()         1
->
-> -/* Generic PCI */
-> -#include <asm-generic/pci.h>
-> -
->  #endif /* _XTENSA_PCI_H */
-> diff --git a/drivers/pnp/resource.c b/drivers/pnp/resource.c
-> index 2fa0f7d55259..8f7695624c8c 100644
-> --- a/drivers/pnp/resource.c
-> +++ b/drivers/pnp/resource.c
-> @@ -17,6 +17,7 @@
->  #include <asm/dma.h>
->  #include <asm/irq.h>
->  #include <linux/pci.h>
-> +#include <linux/libata.h>
->  #include <linux/ioport.h>
->  #include <linux/init.h>
->
-> @@ -322,8 +323,8 @@ static int pci_dev_uses_irq(struct pnp_dev *pnp, struct pci_dev *pci,
->                  * treat the compatibility IRQs as busy.
->                  */
->                 if ((progif & 0x5) != 0x5)
-> -                       if (pci_get_legacy_ide_irq(pci, 0) == irq ||
-> -                           pci_get_legacy_ide_irq(pci, 1) == irq) {
-> +                       if (ATA_PRIMARY_IRQ(pci) == irq ||
-> +                           ATA_SECONDARY_IRQ(pci) == irq) {
->                                 pnp_dbg(&pnp->dev, "  legacy IDE device %s "
->                                         "using irq %d\n", pci_name(pci), irq);
->                                 return 1;
-> diff --git a/include/asm-generic/pci.h b/include/asm-generic/pci.h
-> deleted file mode 100644
-> index 6bb3cd3d695a..000000000000
-> --- a/include/asm-generic/pci.h
-> +++ /dev/null
-> @@ -1,17 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -/*
-> - * linux/include/asm-generic/pci.h
-> - *
-> - *  Copyright (C) 2003 Russell King
-> - */
-> -#ifndef _ASM_GENERIC_PCI_H
-> -#define _ASM_GENERIC_PCI_H
-> -
-> -#ifndef HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -       return channel ? 15 : 14;
-> -}
-> -#endif /* HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ */
-> -
-> -#endif /* _ASM_GENERIC_PCI_H */
-> --
-> 2.36.1
->
+"shared_fifo_flush" is pretty much self-explanatory though. It then=20
+becomes obvious looking at the code that when this flag is set, TFLUSH=20
+flushes both FIFOs.
+
+If you prefer... you can #define JZ_AIC_CTRL_FLUSH JZ_AIC_CTRL_TFLUSH.=20
+I don't like the JZ4760 prefix, this is in no way specific to the=20
+JZ4760.
+
+>=20
+>>>  +
+>>>   #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
+>>>   #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
+>>>  @@ -90,6 +93,8 @@ enum jz47xx_i2s_version {
+>>>   struct i2s_soc_info {
+>>>   	enum jz47xx_i2s_version version;
+>>>   	struct snd_soc_dai_driver *dai;
+>>>  +
+>>>  +	bool shared_fifo_flush;
+>>>   };
+>>>   struct jz4740_i2s {
+>>>  @@ -124,12 +129,33 @@ static int jz4740_i2s_startup(struct=20
+>>> snd_pcm_substream
+>>>  *substream,
+>>>   	uint32_t conf, ctrl;
+>>>   	int ret;
+>>>  +	/*
+>>>  +	 * When we can flush FIFOs independently, only flush the
+>>>  +	 * FIFO that is starting up.
+>>>  +	 */
+>>>  +	if (!i2s->soc_info->shared_fifo_flush) {
+>>>  +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+>>>  +
+>>>  +		if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
+>>>  +			ctrl |=3D JZ4760_AIC_CTRL_TFLUSH;
+>>>  +		else
+>>>  +			ctrl |=3D JZ4760_AIC_CTRL_RFLUSH;
+>>>  +
+>>>  +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+>>>  +	}
+>>=20
+>>  Wouldn't it be simpler to do one single if/else? And hy is one=20
+>> checked before
+>>  the (snd_soc_dai_active(dai)) check, and the other is checked after?
+>=20
+> snd_soc_dai_active() is essentially checking if there's an active
+> substream. Eg. if no streams are open and you start playback, then
+> the DAI will be inactive. If you then start capture while playback is
+> running, the DAI is already active.
+>=20
+> With a shared flush bit we can only flush if there are no other active
+> substreams (because we don't want to disturb the active stream by
+> flushing the FIFO) so it goes after the snd_soc_dai_active() check.
+>=20
+> When the FIFOs can be separately flushed, flushing can be done before
+> the check because it won't disturb any active substream.
+
+Ok. It makes sense then. Please add some info about this in the commit=20
+message, because it really wasn't obvious to me.
+
+You should maybe factorize the read-modify-write into its own function.=20
+I know this gets eventually modified by [03/11], but this [01/11] is a=20
+bugfix so it will be applied to older kernels, and I'd rather not have=20
+duplicated code there.
+
+Cheers,
+-Paul
+
+>=20
+>>  You could do something like this:
+>>=20
+>>  ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+>>=20
+>>  if (i2s->soc_info->shared_fifo_flush ||
+>>     substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK) {
+>>     ctrl |=3D JZ_AIC_CTRL_TFLUSH;
+>>  } else {
+>>     ctrl |=3D JZ_AIC_CTRL_RFLUSH;
+>>  }
+>>=20
+>>  jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+>>=20
+>>  Cheers,
+>>  -Paul
+>>=20
+>=20
+>>>  +
+>>>   	if (snd_soc_dai_active(dai))
+>>>   		return 0;
+>>>  -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+>>>  -	ctrl |=3D JZ_AIC_CTRL_FLUSH;
+>>>  -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+>>>  +	/*
+>>>  +	 * When there is a shared flush bit for both FIFOs we can
+>>>  +	 * only flush the FIFOs if no other stream has started.
+>>>  +	 */
+>>>  +	if (i2s->soc_info->shared_fifo_flush) {
+>>>  +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+>>>  +		ctrl |=3D JZ_AIC_CTRL_FLUSH;
+>>>  +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+>>>  +	}
+>>>   	ret =3D clk_prepare_enable(i2s->clk_i2s);
+>>>   	if (ret)
+>>>  @@ -444,6 +470,7 @@ static struct snd_soc_dai_driver=20
+>>> jz4740_i2s_dai =3D {
+>>>   static const struct i2s_soc_info jz4740_i2s_soc_info =3D {
+>>>   	.version =3D JZ_I2S_JZ4740,
+>>>   	.dai =3D &jz4740_i2s_dai,
+>>>  +	.shared_fifo_flush =3D true,
+>>>   };
+>>>   static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
+>>>  --
+>>>  2.35.1
+>>>=20
+>=20
+
+
