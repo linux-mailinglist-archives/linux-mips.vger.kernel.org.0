@@ -2,83 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A34757DE25
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Jul 2022 11:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5904357DDFC
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Jul 2022 11:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbiGVJPx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Jul 2022 05:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S236123AbiGVJ0A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Jul 2022 05:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235603AbiGVJPL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Jul 2022 05:15:11 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98786AF968;
-        Fri, 22 Jul 2022 02:11:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=91/Cz
-        mrD4UcYML5SAR5j+BLCyBjt7JlxCwJDNjNiLWU=; b=LwPBn9yS3DiBcL7TB1K++
-        VAS7FGnkEown749bm1RuE4o5TAS9H399G44V1ChN525XvorcA/HxaZB/ykQDMmsO
-        uoF5MnFAFVMbgcBsTE/3BTu+Eit6HcAJlUKbm90r9OLlOolfFo5lJ1FKeJKIV4v3
-        46crBEiAbOzZokLjoSKn/I=
-Received: from localhost.localdomain (unknown [123.58.221.99])
-        by smtp3 (Coremail) with SMTP id G9xpCgAHyoN4adpiosiOQg--.7264S2;
-        Fri, 22 Jul 2022 17:10:18 +0800 (CST)
-From:   williamsukatube@163.com
-To:     tglx@linutronix.de, maz@kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, fancer.lancer@gmail.com,
-        William Dean <williamsukatube@gmail.com>,
-        Hacash Robot <hacashRobot@santino.com>
-Subject: [PATCH] irqchip: mips-gic: check the return value of ioremap() in gic_of_init()
-Date:   Fri, 22 Jul 2022 17:10:08 +0800
-Message-Id: <20220722091008.2937238-1-williamsukatube@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S236361AbiGVJZd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Jul 2022 05:25:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7C2C5D63;
+        Fri, 22 Jul 2022 02:16:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8147EB827B7;
+        Fri, 22 Jul 2022 09:16:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E7CC341C6;
+        Fri, 22 Jul 2022 09:16:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658481372;
+        bh=+MdnIBEBIPvCfL0UO13oheMzgvW0x0ZU/P8ra2XGuic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rlAtZjYk4YLxZerW3Gw+L9EsV8S+0KUHFSFEfWQJAWGwX8LIUQXTtr+Hypq/IRSL6
+         gCuaaAK7vUwsLQOeXljYmU4fUx9+fxxJOhVCrphK+ogWPcS8b7vO8cC8EilpAai/Ok
+         puvpJEocCUFS1UzrfhqOEtd7NpuYb5aEjSL7ebZqcLMYxtOFtfgHSwBxRdxTf+SmM/
+         XRFaI15q1RMXuIc5QMYMLglNyIuOjqIzIe7kmoK7189EVgKrhqNx9sBY4J2YKv6HNz
+         Q4W7b2aIjj7uaUDPsBxLHYegdH5P7rgs1x5oHsS2KVBjKXZiIvM95K7f9QQiYGbC8v
+         IMa1+X6PvjVWw==
+Date:   Fri, 22 Jul 2022 10:16:05 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V5 3/4] mm/sparse-vmemmap: Generalise
+ vmemmap_populate_hugepages()
+Message-ID: <20220722091604.GD18125@willie-the-truck>
+References: <20220721130419.1904711-1-chenhuacai@loongson.cn>
+ <20220721130419.1904711-4-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgAHyoN4adpiosiOQg--.7264S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtFWrAFW8ZF47Jw1kGr1rWFg_yoWDGrgE93
-        WYgFZxAFW8Ar18GFW7WrW7Z34UJ34kuF1vgr48ta43XrWxuw4xGr1avr15X3WUWFn2krZ8
-        CrZ5Z34IyF17AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5t73PUUUUU==
-X-Originating-IP: [123.58.221.99]
-X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbB6BNGg2BHJoYekAAAs3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721130419.1904711-4-chenhuacai@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+On Thu, Jul 21, 2022 at 09:04:18PM +0800, Huacai Chen wrote:
+> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> index 0abcb0a5f1b5..eafd084b8e19 100644
+> --- a/mm/sparse-vmemmap.c
+> +++ b/mm/sparse-vmemmap.c
+> @@ -694,6 +694,69 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
+>  	return vmemmap_populate_range(start, end, node, altmap, NULL);
+>  }
+>  
+> +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> +				      unsigned long addr, unsigned long next)
+> +{
+> +}
+> +
+> +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> +				       unsigned long next)
+> +{
+> +	return 0;
+> +}
+> +
+> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> +					 int node, struct vmem_altmap *altmap)
+> +{
+> +	unsigned long addr;
+> +	unsigned long next;
+> +	pgd_t *pgd;
+> +	p4d_t *p4d;
+> +	pud_t *pud;
+> +	pmd_t *pmd;
+> +
+> +	for (addr = start; addr < end; addr = next) {
+> +		next = pmd_addr_end(addr, end);
+> +
+> +		pgd = vmemmap_pgd_populate(addr, node);
+> +		if (!pgd)
+> +			return -ENOMEM;
+> +
+> +		p4d = vmemmap_p4d_populate(pgd, addr, node);
+> +		if (!p4d)
+> +			return -ENOMEM;
+> +
+> +		pud = vmemmap_pud_populate(p4d, addr, node);
+> +		if (!pud)
+> +			return -ENOMEM;
+> +
+> +		pmd = pmd_offset(pud, addr);
+> +		if (pmd_none(READ_ONCE(*pmd))) {
+> +			void *p;
+> +
+> +			p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> +			if (p) {
+> +				vmemmap_set_pmd(pmd, p, node, addr, next);
+> +				continue;
+> +			} else if (altmap) {
+> +				/*
+> +				 * No fallback: In any case we care about, the
+> +				 * altmap should be reasonably sized and aligned
+> +				 * such that vmemmap_alloc_block_buf() will always
+> +				 * succeed. If there is no more space in the altmap
+> +				 * and we'd have to fallback to PTE (highly unlikely).
 
-The function ioremap() in gic_of_init() can fail, so
-its return value should be checked.
+Can you tweak the last couple of sentences please, as they don't make sense
+to me? To be specific, I'd suggest replacing:
 
-Fixes: 4bdc0d676a643 ("remove ioremap_nocache and devm_ioremap_nocache")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
----
- drivers/irqchip/irq-mips-gic.c | 4 ++++
- 1 file changed, 4 insertions(+)
+  "If there is no more space in the altmap and we'd have to fallback to PTE
+  (highly unlikely). That could indicate an altmap-size configuration
+  issue."
 
-diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index ff89b36267dd..a1f6d955794a 100644
---- a/drivers/irqchip/irq-mips-gic.c
-+++ b/drivers/irqchip/irq-mips-gic.c
-@@ -734,6 +734,10 @@ static int __init gic_of_init(struct device_node *node,
- 	}
- 
- 	mips_gic_base = ioremap(gic_base, gic_len);
-+	if (!mips_gic_base) {
-+		pr_err("Failed to ioremap gic_base\n");
-+		return -ENOMEM;
-+	}
- 
- 	gicconfig = read_gic_config();
- 	gic_shared_intrs = FIELD_GET(GIC_CONFIG_NUMINTERRUPTS, gicconfig);
--- 
-2.25.1
+with something like:
 
+  "For consistency with the PTE case, return an error here as failure could
+   indicate a configuration issue with the size of the altmap."
+
+With that:
+
+Acked-by: Will Deacon <will@kernel.org>
+
+Will
