@@ -2,62 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5904357DDFC
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Jul 2022 11:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EEA57DE31
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Jul 2022 11:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236123AbiGVJ0A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Jul 2022 05:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S236614AbiGVJdG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Jul 2022 05:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236361AbiGVJZd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Jul 2022 05:25:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7C2C5D63;
-        Fri, 22 Jul 2022 02:16:15 -0700 (PDT)
+        with ESMTP id S236203AbiGVJcp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Jul 2022 05:32:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E45BB8F9;
+        Fri, 22 Jul 2022 02:21:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8147EB827B7;
-        Fri, 22 Jul 2022 09:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E7CC341C6;
-        Fri, 22 Jul 2022 09:16:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A827461F84;
+        Fri, 22 Jul 2022 09:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 184D8C341C6;
+        Fri, 22 Jul 2022 09:21:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658481372;
-        bh=+MdnIBEBIPvCfL0UO13oheMzgvW0x0ZU/P8ra2XGuic=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rlAtZjYk4YLxZerW3Gw+L9EsV8S+0KUHFSFEfWQJAWGwX8LIUQXTtr+Hypq/IRSL6
-         gCuaaAK7vUwsLQOeXljYmU4fUx9+fxxJOhVCrphK+ogWPcS8b7vO8cC8EilpAai/Ok
-         puvpJEocCUFS1UzrfhqOEtd7NpuYb5aEjSL7ebZqcLMYxtOFtfgHSwBxRdxTf+SmM/
-         XRFaI15q1RMXuIc5QMYMLglNyIuOjqIzIe7kmoK7189EVgKrhqNx9sBY4J2YKv6HNz
-         Q4W7b2aIjj7uaUDPsBxLHYegdH5P7rgs1x5oHsS2KVBjKXZiIvM95K7f9QQiYGbC8v
-         IMa1+X6PvjVWw==
-Date:   Fri, 22 Jul 2022 10:16:05 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Subject: Re: [PATCH V5 3/4] mm/sparse-vmemmap: Generalise
- vmemmap_populate_hugepages()
-Message-ID: <20220722091604.GD18125@willie-the-truck>
-References: <20220721130419.1904711-1-chenhuacai@loongson.cn>
- <20220721130419.1904711-4-chenhuacai@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721130419.1904711-4-chenhuacai@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        s=k20201202; t=1658481690;
+        bh=+kLz+9I3CzRyBr/p3N3DpSDgxlfeXpQnryZXRa3g5iA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EWruO1UOu79Eul2pZU0BWcZugZRvcm26bIFPyMC6FpsIJVMiHqjtx58bFKLEVhlbq
+         eTdXTGnBG3Un/vkuISRd5nmKXcO3tRW/irFoQagEJGtnDIKRcayRmVvihuZMpdLPxa
+         ll0RWs09RsMxi1ulxkwWFEu5eFFMd1dZadMA9TTXaWxW299+Yo+kutKU9omhfSjKSA
+         Wido05A6D/CX+qOiDXk3XytfA9bUE2P7Brm1/c9CKafuEuOiyvHh4FzzuXebfxb6+y
+         294I0YdlWVQL+ozrB+LSYccwLqmiIlyEP75YjfnD8d2SMk/auLRkLsEVRukr0Frq7R
+         ADciHZoGYwr6g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oEoqb-009Ibw-Uc;
+        Fri, 22 Jul 2022 10:21:27 +0100
+Date:   Fri, 22 Jul 2022 10:21:25 +0100
+Message-ID: <87mtd1y02y.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     williamsukatube@163.com
+Cc:     tglx@linutronix.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        fancer.lancer@gmail.com, William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: Re: [PATCH] irqchip: mips-gic: check the return value of ioremap() in gic_of_init()
+In-Reply-To: <20220722091008.2937238-1-williamsukatube@163.com>
+References: <20220722091008.2937238-1-williamsukatube@163.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: williamsukatube@163.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de, fancer.lancer@gmail.com, williamsukatube@gmail.com, hacashRobot@santino.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,81 +66,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 09:04:18PM +0800, Huacai Chen wrote:
-> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-> index 0abcb0a5f1b5..eafd084b8e19 100644
-> --- a/mm/sparse-vmemmap.c
-> +++ b/mm/sparse-vmemmap.c
-> @@ -694,6 +694,69 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
->  	return vmemmap_populate_range(start, end, node, altmap, NULL);
->  }
+On Fri, 22 Jul 2022 10:10:08 +0100,
+williamsukatube@163.com wrote:
+> 
+> From: William Dean <williamsukatube@gmail.com>
+> 
+> The function ioremap() in gic_of_init() can fail, so
+> its return value should be checked.
+> 
+> Fixes: 4bdc0d676a643 ("remove ioremap_nocache and devm_ioremap_nocache")
+
+Erm... No. The issue was definitely there before (just look at the
+patch you quote here).
+
+> Reported-by: Hacash Robot <hacashRobot@santino.com>
+> Signed-off-by: William Dean <williamsukatube@gmail.com>
+
+If sending from a different address, please add a SoB that matches the
+address you are using.
+
+> ---
+>  drivers/irqchip/irq-mips-gic.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+> index ff89b36267dd..a1f6d955794a 100644
+> --- a/drivers/irqchip/irq-mips-gic.c
+> +++ b/drivers/irqchip/irq-mips-gic.c
+> @@ -734,6 +734,10 @@ static int __init gic_of_init(struct device_node *node,
+>  	}
 >  
-> +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
-> +				      unsigned long addr, unsigned long next)
-> +{
-> +}
-> +
-> +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
-> +				       unsigned long next)
-> +{
-> +	return 0;
-> +}
-> +
-> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
-> +					 int node, struct vmem_altmap *altmap)
-> +{
-> +	unsigned long addr;
-> +	unsigned long next;
-> +	pgd_t *pgd;
-> +	p4d_t *p4d;
-> +	pud_t *pud;
-> +	pmd_t *pmd;
-> +
-> +	for (addr = start; addr < end; addr = next) {
-> +		next = pmd_addr_end(addr, end);
-> +
-> +		pgd = vmemmap_pgd_populate(addr, node);
-> +		if (!pgd)
-> +			return -ENOMEM;
-> +
-> +		p4d = vmemmap_p4d_populate(pgd, addr, node);
-> +		if (!p4d)
-> +			return -ENOMEM;
-> +
-> +		pud = vmemmap_pud_populate(p4d, addr, node);
-> +		if (!pud)
-> +			return -ENOMEM;
-> +
-> +		pmd = pmd_offset(pud, addr);
-> +		if (pmd_none(READ_ONCE(*pmd))) {
-> +			void *p;
-> +
-> +			p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
-> +			if (p) {
-> +				vmemmap_set_pmd(pmd, p, node, addr, next);
-> +				continue;
-> +			} else if (altmap) {
-> +				/*
-> +				 * No fallback: In any case we care about, the
-> +				 * altmap should be reasonably sized and aligned
-> +				 * such that vmemmap_alloc_block_buf() will always
-> +				 * succeed. If there is no more space in the altmap
-> +				 * and we'd have to fallback to PTE (highly unlikely).
+>  	mips_gic_base = ioremap(gic_base, gic_len);
+> +	if (!mips_gic_base) {
+> +		pr_err("Failed to ioremap gic_base\n");
+> +		return -ENOMEM;
+> +	}
+>  
+>  	gicconfig = read_gic_config();
+>  	gic_shared_intrs = FIELD_GET(GIC_CONFIG_NUMINTERRUPTS, gicconfig);
 
-Can you tweak the last couple of sentences please, as they don't make sense
-to me? To be specific, I'd suggest replacing:
+Thanks,
 
-  "If there is no more space in the altmap and we'd have to fallback to PTE
-  (highly unlikely). That could indicate an altmap-size configuration
-  issue."
+	M.
 
-with something like:
-
-  "For consistency with the PTE case, return an error here as failure could
-   indicate a configuration issue with the size of the altmap."
-
-With that:
-
-Acked-by: Will Deacon <will@kernel.org>
-
-Will
+-- 
+Without deviation from the norm, progress is not possible.
