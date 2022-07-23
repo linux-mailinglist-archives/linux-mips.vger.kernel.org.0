@@ -2,183 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D12157ED06
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Jul 2022 11:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5285557EE90
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Jul 2022 12:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237210AbiGWJW6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Jul 2022 05:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S239510AbiGWKM6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Jul 2022 06:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiGWJW5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Jul 2022 05:22:57 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74ED8101E7;
-        Sat, 23 Jul 2022 02:22:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=25;SR=0;TI=SMTPD_---0VK94Ta0_1658568166;
-Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VK94Ta0_1658568166)
-          by smtp.aliyun-inc.com;
-          Sat, 23 Jul 2022 17:22:48 +0800
-From:   xhao@linux.alibaba.com
-Reply-To: xhao@linux.alibaba.com
-Subject: Re: [PATCH v2 0/4] mm: arm64: bring up BATCHED_UNMAP_TLB_FLUSH
-To:     Barry Song <21cnbao@gmail.com>, Yicong Yang <yangyicong@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>, x86 <x86@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Darren Hart <darren@os.amperecomputing.com>,
-        huzhanyuan@oppo.com,
-        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        real mz <realmz6@gmail.com>, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "tiantao (H)" <tiantao6@hisilicon.com>
-References: <20220711034615.482895-1-21cnbao@gmail.com>
- <24f5e25b-3946-b92a-975b-c34688005398@linux.alibaba.com>
- <CAGsJ_4zjnmQV6LT3yo--K-qD-92=hBmgfK121=n-Y0oEFX8RnQ@mail.gmail.com>
- <8e603deb-7023-5de5-c958-8911971aec24@huawei.com>
- <CAGsJ_4x9hLbXGMU737SShZGS89_4zywyhvkcRfz3W5s_p7O1PA@mail.gmail.com>
-Message-ID: <3ac4b1a3-8067-3edb-be4f-326e2a4943ed@linux.alibaba.com>
-Date:   Sat, 23 Jul 2022 17:22:45 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        with ESMTP id S239039AbiGWKMn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Jul 2022 06:12:43 -0400
+Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DF3AD2C31;
+        Sat, 23 Jul 2022 03:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=wM/Zg
+        eEXEMc6sruVtkovWHuCByrjUkw3xuMCX7v3yss=; b=jkZjnVugzhSTujONx6O3N
+        HnOg1JCy6HNrRztipMFB5cUHCDJpOspJut8zeGWoqcOOAUEgtXW8mAQcLYOd6WWZ
+        DZOEbuDwDcnSMRNRPkcE9GrIQT8YyZ96OquD0wT+75ukSj5UWZHhib1CYTFvvxSt
+        uOiX/ZAJoxT12UkSSrvOn0=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp14 (Coremail) with SMTP id EsCowADHB9T8xttiEWurOg--.13020S2;
+        Sat, 23 Jul 2022 18:01:35 +0800 (CST)
+From:   williamsukatube@163.com
+To:     tglx@linutronix.de, maz@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, fancer.lancer@gmail.com,
+        William Dean <williamsukatube@163.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH v2] irqchip: mips-gic: check the return value of ioremap() in gic_of_init()
+Date:   Sat, 23 Jul 2022 18:01:28 +0800
+Message-Id: <20220723100128.2964304-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAGsJ_4x9hLbXGMU737SShZGS89_4zywyhvkcRfz3W5s_p7O1PA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EsCowADHB9T8xttiEWurOg--.13020S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtry5tr13GF1rZrWruFy3Arb_yoWfuFbE93
+        WqgFZ3AFW0vF18GFW7WFW7XFyUJwn7uFn5urWkta4fXrWfuw4xGr9xuwn8Xa4rXF1Iyr98
+        CFZ5ZryIyF17AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8Jrc3UUUUU==
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/1tbiUQlHg2DEOr2dEAABsz
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: William Dean <williamsukatube@163.com>
 
-On 7/20/22 7:18 PM, Barry Song wrote:
-> On Tue, Jul 19, 2022 at 1:28 AM Yicong Yang <yangyicong@huawei.com> wrote:
->> On 2022/7/14 12:51, Barry Song wrote:
->>> On Thu, Jul 14, 2022 at 3:29 PM Xin Hao <xhao@linux.alibaba.com> wrote:
->>>> Hi barry.
->>>>
->>>> I do some test on Kunpeng arm64 machine use Unixbench.
->>>>
->>>> The test  result as below.
->>>>
->>>> One core, we can see the performance improvement above +30%.
->>> I am really pleased to see the 30%+ improvement on unixbench on single core.
->>>
->>>> ./Run -c 1 -i 1 shell1
->>>> w/o
->>>> System Benchmarks Partial Index              BASELINE RESULT INDEX
->>>> Shell Scripts (1 concurrent)                     42.4 5481.0 1292.7
->>>> ========
->>>> System Benchmarks Index Score (Partial Only)                         1292.7
->>>>
->>>> w/
->>>> System Benchmarks Partial Index              BASELINE RESULT INDEX
->>>> Shell Scripts (1 concurrent)                     42.4 6974.6 1645.0
->>>> ========
->>>> System Benchmarks Index Score (Partial Only)                         1645.0
->>>>
->>>>
->>>> But with whole cores, there have little performance degradation above -5%
->>> That is sad as we might get more concurrency between mprotect(), madvise(),
->>> mremap(), zap_pte_range() and the deferred tlbi.
->>>
->>>> ./Run -c 96 -i 1 shell1
->>>> w/o
->>>> Shell Scripts (1 concurrent)                  80765.5 lpm   (60.0 s, 1
->>>> samples)
->>>> System Benchmarks Partial Index              BASELINE RESULT INDEX
->>>> Shell Scripts (1 concurrent)                     42.4 80765.5 19048.5
->>>> ========
->>>> System Benchmarks Index Score (Partial Only)                        19048.5
->>>>
->>>> w
->>>> Shell Scripts (1 concurrent)                  76333.6 lpm   (60.0 s, 1
->>>> samples)
->>>> System Benchmarks Partial Index              BASELINE RESULT INDEX
->>>> Shell Scripts (1 concurrent)                     42.4 76333.6 18003.2
->>>> ========
->>>> System Benchmarks Index Score (Partial Only)                        18003.2
->>>>
->>>> ----------------------------------------------------------------------------------------------
->>>>
->>>>
->>>> After discuss with you, and do some changes in the patch.
->>>>
->>>> ndex a52381a680db..1ecba81f1277 100644
->>>> --- a/mm/rmap.c
->>>> +++ b/mm/rmap.c
->>>> @@ -727,7 +727,11 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
->>>>           int flushed = batch >> TLB_FLUSH_BATCH_FLUSHED_SHIFT;
->>>>
->>>>           if (pending != flushed) {
->>>> +#ifdef CONFIG_ARCH_HAS_MM_CPUMASK
->>>>                   flush_tlb_mm(mm);
->>>> +#else
->>>> +               dsb(ish);
->>>> +#endif
->>>>
->>> i was guessing the problem might be flush_tlb_batched_pending()
->>> so i asked you to change this to verify my guess.
->>>
->> flush_tlb_batched_pending() looks like the critical path for this issue then the code
->> above can mitigate this.
->>
->> I cannot reproduce this on a 2P 128C Kunpeng920 server. The kernel is based on the
->> v5.19-rc6 and unixbench of version 5.1.3. The result of `./Run -c 128 -i 1 shell1` is:
->>        iter-1      iter-2     iter-3
->> w/o  17708.1     17637.1    17630.1
->> w    17766.0     17752.3    17861.7
->>
->> And flush_tlb_batched_pending()isn't the hot spot with the patch:
->>     7.00%  sh        [kernel.kallsyms]      [k] ptep_clear_flush
->>     4.17%  sh        [kernel.kallsyms]      [k] ptep_set_access_flags
->>     2.43%  multi.sh  [kernel.kallsyms]      [k] ptep_clear_flush
->>     1.98%  sh        [kernel.kallsyms]      [k] _raw_spin_unlock_irqrestore
->>     1.69%  sh        [kernel.kallsyms]      [k] next_uptodate_page
->>     1.66%  sort      [kernel.kallsyms]      [k] ptep_clear_flush
->>     1.56%  multi.sh  [kernel.kallsyms]      [k] ptep_set_access_flags
->>     1.27%  sh        [kernel.kallsyms]      [k] page_counter_cancel
->>     1.11%  sh        [kernel.kallsyms]      [k] page_remove_rmap
->>     1.06%  sh        [kernel.kallsyms]      [k] perf_event_alloc
->>
->> Hi Xin Hao,
->>
->> I'm not sure the test setup as well as the config is same with yours. (96C vs 128C
->> should not be the reason I think). Did you check that the 5% is a fluctuation or
->> not? It'll be helpful if more information provided for reproducing this issue.
->>
->> Thanks.
-> I guess that is because  "./Run -c 1 -i 1 shell1" isn't an application
-> stressed on
-> memory. Hi Xin, in what kinds of configurations can we reproduce your test
-> result?
+The function ioremap() in gic_of_init() can fail, so
+its return value should be checked.
 
-Oh, my fault, I do the test is not based on the lastest upstream kernel, there maybe some impact here,
-i will do a new test on the lastest kernel.
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@163.com>
+---
+v2: delete fixes tag and correct SoB tag
 
-> As I suppose tlbbatch will mainly affect the performance of user scenarios
-> which require memory page-out/page-in like reclaiming file/anon pages.
-> "./Run -c 1 -i 1 shell1" on a system with sufficient free memory won't be
-> affected by tlbbatch at all, I believe.
->
-> Thanks
-> Barry
+ drivers/irqchip/irq-mips-gic.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+index ff89b36267dd..a1f6d955794a 100644
+--- a/drivers/irqchip/irq-mips-gic.c
++++ b/drivers/irqchip/irq-mips-gic.c
+@@ -734,6 +734,10 @@ static int __init gic_of_init(struct device_node *node,
+ 	}
+ 
+ 	mips_gic_base = ioremap(gic_base, gic_len);
++	if (!mips_gic_base) {
++		pr_err("Failed to ioremap gic_base\n");
++		return -ENOMEM;
++	}
+ 
+ 	gicconfig = read_gic_config();
+ 	gic_shared_intrs = FIELD_GET(GIC_CONFIG_NUMINTERRUPTS, gicconfig);
 -- 
-Best Regards!
-Xin Hao
+2.25.1
 
