@@ -2,60 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F3757F0BB
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Jul 2022 19:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C947657F0F7
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Jul 2022 20:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237872AbiGWRnL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Jul 2022 13:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S238341AbiGWSrV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Jul 2022 14:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbiGWRnL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Jul 2022 13:43:11 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B8F14D10
-        for <linux-mips@vger.kernel.org>; Sat, 23 Jul 2022 10:43:09 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id m12so11174449lfj.4
-        for <linux-mips@vger.kernel.org>; Sat, 23 Jul 2022 10:43:09 -0700 (PDT)
+        with ESMTP id S232822AbiGWSrU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Jul 2022 14:47:20 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D237A183A7
+        for <linux-mips@vger.kernel.org>; Sat, 23 Jul 2022 11:47:19 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id f11so6939287pgj.7
+        for <linux-mips@vger.kernel.org>; Sat, 23 Jul 2022 11:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=sudomaker-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HlHphoZuLPE3CLbqX5TxLcWzRpVyhW7sASqwVEBH1/M=;
-        b=CNGVPQBLY5Tr6aU6+prX28HGV6JBxo6xYQGD3TwyVH/5Jsc9WiP/seiZr0xjNFagpw
-         qzRG0jG3xVioEbFWKJcoXdddNRpYNkqxufPKSXUXcxfQh5HBTBrVLWl9Zue1PngXLl93
-         uOfX2gN9Ifd9Rs03FlUm6xePYlb0vSvW85v03WSNSPDKz4VkznKkD7g+FTd25k2mi1+c
-         9xBO0TTvqnc+3vjghW3VUpFB+0+aKwuVx55F8cuDBno+IlJfOGRgpo+A2d9cfeGeKYod
-         UV9JgxC+dlqX2VoZsCWJtl8XiB7DWtqfZIauLLwW5B4tjTjXx9cDGg5kOEOHFgtzzvh9
-         fmRg==
+        bh=rsPZ3UqbP1l4DXR/Tzlf3U3kRDsFMBo5YFbvYGqZy2I=;
+        b=bVkOWnq0tkioZ9fnbzZDHzlJG1CDmxY4gphW04FvQO8G7UWdyXyK5Jd+jg4CdK9zh9
+         PfjWs6VRu4RV0QjXvroA+QEpIA7QY30xpCN8T991BsrRxMFH9Sh39EBSxxCeuxGvAJzY
+         UVJJic2IqkXRPyLKgzyyzxmvQg9bF5Vf/3eiAoRSZ1V9DXjwvMHFjVl7LH49Rel+JxGp
+         pl8Z1vDW04v0twYFMijKhy3Jls37IAVV/jmtzur3c3jFBlQ5G6dJ4WiDF8GYVpfLs6TQ
+         xsO1G2rk6yPQQ13LgWktZ6GBqadQ2vzWYDLJBHrPD0xSmuRZlEf6HUBJBkvCTSsr5rNF
+         mrPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HlHphoZuLPE3CLbqX5TxLcWzRpVyhW7sASqwVEBH1/M=;
-        b=phGz954JXnCPjLNE7L1aFoMTi/eJ98gT9elZJJApILnC4sdnk84drasvJ7K4rT8XEf
-         TWFgb1do5oiN4rN6cvLDbil81310JU8/migI+rBakSDkgFSac3Ye4Q45sfNqTiG+81LL
-         Jw5hXUjEwtYHuAEq8bVOZGtSm86s/Oa4LAfXNw5CvSSG4cjoD/Q+o5FPot9MIQWn8+4K
-         D2bnXYE+Ic50ENJjzrhnL5xruoMHXR7PTk/s3g1MEJ4nqitoJx/5FOQuv+N2HFun6rNh
-         Ww3pgOnopQBmYzJwEn1jTRLBs+SNU6OZSk2PEnPjlQGo/UqXv0DlMNlHBPhW0YPIlsZr
-         vVmQ==
-X-Gm-Message-State: AJIora9Juf6Zum2jzpz6p39ox8xUY6V/rCkKhWXzZhERy0ogvq6Qrndb
-        HkDk4LtYfwKhkm3v2D7Cdo+GuA==
-X-Google-Smtp-Source: AGRyM1uQNl3x42KCq0cGc9OqDnR54QTGrXDVh1wXSEUelvPCIfB7qPr5bBayswnv+Tpu0ay0JGCmIw==
-X-Received: by 2002:a05:6512:3e0a:b0:489:e50b:1dc9 with SMTP id i10-20020a0565123e0a00b00489e50b1dc9mr2119685lfv.321.1658598187752;
-        Sat, 23 Jul 2022 10:43:07 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b00482bdd14fdfsm1770938lfr.32.2022.07.23.10.43.05
+        bh=rsPZ3UqbP1l4DXR/Tzlf3U3kRDsFMBo5YFbvYGqZy2I=;
+        b=tDyrBnPhUgFIQA/D/0yElcnOBl/0vjOWs5WDENy6H61jjm5gxntJ/3cm+eY73f8QXR
+         07IIMpDnXOWxgkgx9rJMN5JvbIu+891B4R52Pcuo4TN+UnrOXHnxXcbhUxZ+0Gp02Yo9
+         Pwoz7n9a6RXKAWN9wxsm6rllTaMqSU++p+mOYQiWqQC+4l5m4gpB7IQi6qv/CID74cWK
+         OBuyuhIW36KO9+MiWSIsU/kU/5wyKnr9uXR0T4gqZvt51sJPHt6ddk+vB09TtHnr8C6+
+         nxZ2tSmgxmWNasJTu24U4IVyaDCJpOiAn0NpYFbfj2GMhk3aj2sDqqIMWOvpgINeFly7
+         WVrQ==
+X-Gm-Message-State: AJIora+NbsrnxmwzB5DqirtDlcC2xJzSYBXzux61cSYQGj6upops6R7u
+        HFHJfG+HqDCKrtxT7vxA2/kJ9Q==
+X-Google-Smtp-Source: AGRyM1vQleftizVLXtsyJEZpL+3neARgOltR9mQLjOc8T9CFophol9eh39QEwr/9Qs0tk1aR4aif4A==
+X-Received: by 2002:a63:eb02:0:b0:41a:716c:bfb1 with SMTP id t2-20020a63eb02000000b0041a716cbfb1mr4915469pgh.198.1658602039237;
+        Sat, 23 Jul 2022 11:47:19 -0700 (PDT)
+Received: from [172.16.24.11] ([188.214.106.178])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170903110900b0016be4d78792sm6054287plh.257.2022.07.23.11.47.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jul 2022 10:43:07 -0700 (PDT)
-Message-ID: <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
-Date:   Sat, 23 Jul 2022 19:43:05 +0200
+        Sat, 23 Jul 2022 11:47:18 -0700 (PDT)
+Message-ID: <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
+Date:   Sun, 24 Jul 2022 02:47:14 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+ Thunderbird/91.8.0
 Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
 Content-Language: en-US
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>,
         tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
         miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
         broonie@kernel.org, robh+dt@kernel.org,
@@ -65,73 +66,94 @@ Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
         tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
         aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
-        reimu@sudomaker.com
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com
 References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
  <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
  <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
  <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
+ <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
+From:   Mike Yang <reimu@sudomaker.com>
+In-Reply-To: <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23/07/2022 18:50, Zhou Yanjie wrote:
-> Hi Krzysztof,
+On 7/24/22 01:43, Krzysztof Kozlowski wrote:
+> On 23/07/2022 18:50, Zhou Yanjie wrote:
+>> Hi Krzysztof,
+>>
+>> On 2022/7/23 上午1:46, Krzysztof Kozlowski wrote:
+>>> On 22/07/2022 18:48, 周琰杰 (Zhou Yanjie) wrote:
+>>>> Add the SFC bindings for the X1000 SoC, the X1600 SoC, the X1830 SoC,
+>>>> and the X2000 SoC from Ingenic.
+>>>>
+>>>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>>> ---
+>>>>   .../devicetree/bindings/spi/ingenic,sfc.yaml       | 64 ++++++++++++++++++++++
+>>>>   1 file changed, 64 insertions(+)
+>>>>   create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>>> new file mode 100644
+>>>> index 00000000..b7c4cf4
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+>>>> @@ -0,0 +1,64 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/spi/ingenic,sfc.yaml#
+>>> File name should be rather based on first compatible, so
+>>> ingenic,x1000-sfc.yaml
+>>
+>>
+>> No offense, does it really need to be named that way?
+>> I can't seem to find documentation with instructions on this :(
+>>
+>> The use of "ingenic,sfc.yaml" indicates that this is the documentation
+>> for the SFC module for all Ingenic SoCs, without misleading people into
+>> thinking it's only for a specific model of SoC. And there seem to be many
+>> other yaml documents that use similar names (eg. fsl,spi-fsl-qspi.yaml,
+>> spi-rockchip.yaml, spi-nxp-fspi.yaml, ingenic,spi.yaml, spi-sifive.yaml,
+>> omap-spi.yaml), maybe these yaml files that are not named with first
+>> compatible are also for the same consideration. :)
 > 
-> On 2022/7/23 上午1:46, Krzysztof Kozlowski wrote:
->> On 22/07/2022 18:48, 周琰杰 (Zhou Yanjie) wrote:
->>> Add the SFC bindings for the X1000 SoC, the X1600 SoC, the X1830 SoC,
->>> and the X2000 SoC from Ingenic.
->>>
->>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->>> ---
->>>   .../devicetree/bindings/spi/ingenic,sfc.yaml       | 64 ++++++++++++++++++++++
->>>   1 file changed, 64 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
->>> new file mode 100644
->>> index 00000000..b7c4cf4
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
->>> @@ -0,0 +1,64 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/spi/ingenic,sfc.yaml#
->> File name should be rather based on first compatible, so
->> ingenic,x1000-sfc.yaml
+> We have many bad examples, many poor patterns and they are never an
+> argument to add one more bad pattern.
+
+Zhou already mentioned he was unable find the naming guidelines of these .yaml files.
+
+Apparently you think it's unacceptable for new contributors of a certain subsystem to use existing code as examples, and/or they're responsible for figuring out what's a good example and what's a bad one in the existing codebase.
+
+> 
+> It might never grow to new devices (because they might be different), so
+> that is not really an argument.
+
+It is an argument. A very valid one.
+
+"they *might* be different". You may want to get your hands on real hardware and try another word. Or at least read the datasheets instead of believing your imagination.
+
+I would enjoy duplicating the st,stm32-spi.yaml into st,stm32{f,h}{0..7}-spi.yaml if I'm bored at a Sunday afternoon.
+
+> 
+> All bindings are to follow this rule, so I don't understand why you
+> think it is an exception for you?
+
+Zhou didn't ask you to make an exception. They have a valid point and they're asking why.
+
+You may want to avoid further incidents of this kind by stop being bossy and actually writing a guideline of naming these .yaml files and publish it somewhere online.
+
 > 
 > 
-> No offense, does it really need to be named that way?
-> I can't seem to find documentation with instructions on this :(
-> 
-> The use of "ingenic,sfc.yaml" indicates that this is the documentation
-> for the SFC module for all Ingenic SoCs, without misleading people into
-> thinking it's only for a specific model of SoC. And there seem to be many
-> other yaml documents that use similar names (eg. fsl,spi-fsl-qspi.yaml,
-> spi-rockchip.yaml, spi-nxp-fspi.yaml, ingenic,spi.yaml, spi-sifive.yaml,
-> omap-spi.yaml), maybe these yaml files that are not named with first
-> compatible are also for the same consideration. :)
-
-We have many bad examples, many poor patterns and they are never an
-argument to add one more bad pattern.
-
-It might never grow to new devices (because they might be different), so
-that is not really an argument.
-
-All bindings are to follow this rule, so I don't understand why you
-think it is an exception for you?
-
+> Best regards,
+> Krzysztof
 
 Best regards,
-Krzysztof
+Mike Yang
