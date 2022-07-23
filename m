@@ -2,87 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6C557ECBF
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Jul 2022 10:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E343557ECEE
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Jul 2022 11:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237161AbiGWIae (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Jul 2022 04:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
+        id S235137AbiGWJK1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Jul 2022 05:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237150AbiGWIad (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Jul 2022 04:30:33 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153E51836A;
-        Sat, 23 Jul 2022 01:30:29 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.80.87) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 23 Jul
- 2022 11:30:17 +0300
-Subject: Re: [PATCH 1/3] mtd: spi-nor: Use the spi-mem poll status APIs.
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, <tudor.ambarus@microchip.com>,
-        <p.yadav@ti.com>, <michael@walle.cc>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>, <broonie@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <aidanmacdonald.0x0@gmail.com>,
-        <tmn505@gmail.com>, <paul@crapouillou.net>,
-        <dongsheng.qiu@ingenic.com>, <aric.pzqi@ingenic.com>,
-        <rick.tyliu@ingenic.com>, <jinghui.liu@ingenic.com>,
-        <sernia.zhou@foxmail.com>, <reimu@sudomaker.com>
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1658508510-15400-2-git-send-email-zhouyanjie@wanyeetech.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <1926ce77-6de0-0d87-d676-6ae93fa5c527@omp.ru>
-Date:   Sat, 23 Jul 2022 11:30:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <1658508510-15400-2-git-send-email-zhouyanjie@wanyeetech.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [31.173.80.87]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/23/2022 08:13:55
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 171890 [Jul 23 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 493 493 c80a237886b75a8eec705b487193915475443854
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.87 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.87 in (user) dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;31.173.80.87:7.7.3,7.4.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: {Track_Chinese_Simplified, text}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.80.87
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/23/2022 08:17:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/23/2022 6:36:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        with ESMTP id S231272AbiGWJK0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Jul 2022 05:10:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C59B7663;
+        Sat, 23 Jul 2022 02:10:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1790B82C18;
+        Sat, 23 Jul 2022 09:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94BB2C341C0;
+        Sat, 23 Jul 2022 09:10:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658567422;
+        bh=vFrd/H8zW4hCO4fFUiAu/WJ/KqGbXHTrFQ20cwdiKCE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Fk4w3UlWVXeaErCqbjt+L1lf3ygfMwvG4KgK/LGA1nccvWXfeAYTCxsnkLbsJSBm7
+         koBfAYJLeVULaFz4ZBUCpy+xq5P0rzmYnbQmsEXctvI7uWvzD7/b160oSo2z8Sw3mo
+         hywOITj6Ws8+O6TthsGnXi4B2xMVYqoM0d8FyatefkUpgU/CSwiXJLIgh99vnLq+yk
+         RFWgvbC6TxwBO1Hkw3PLt4VdyqSv3+zpUd92OuZhQtkYN5rTzgRmMcLXfzNTVIGbUr
+         xLAhAK9DtYSECYHix1ylbx1jxHqUjrpQDXjNT02h1taJYmDsI3IAd9pifW9tfHfOKC
+         IqUR7MJpHlJWA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oFB9Q-009Vj4-2V;
+        Sat, 23 Jul 2022 10:10:20 +0100
+Date:   Sat, 23 Jul 2022 10:10:19 +0100
+Message-ID: <87h738xkhw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     William Dean <williamsukatube@gmail.com>
+Cc:     williamsukatube@163.com, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, fancer.lancer@gmail.com,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: Re: [PATCH] irqchip: mips-gic: check the return value of ioremap() in gic_of_init()
+In-Reply-To: <CAK6EE7=AWA1fV6j7903V-PTFnUDa70itkbkxv7vBVNrRGAoV+w@mail.gmail.com>
+References: <20220722091008.2937238-1-williamsukatube@163.com>
+        <87mtd1y02y.wl-maz@kernel.org>
+        <CAK6EE7=AWA1fV6j7903V-PTFnUDa70itkbkxv7vBVNrRGAoV+w@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: williamsukatube@gmail.com, williamsukatube@163.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de, fancer.lancer@gmail.com, hacashRobot@santino.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,51 +68,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
-
-On 7/22/22 7:48 PM, 周琰杰 (Zhou Yanjie) wrote:
-
-> With advanced controllers (such as Ingenic SFC), it is possible to poll
-> the status register of the device. This could be done to offload the CPU
-> during a erase or write operation. Make use of spi-mem poll status APIs
-> to handle this feature.
+On Sat, 23 Jul 2022 03:57:18 +0100,
+William Dean <williamsukatube@gmail.com> wrote:
 > 
-> Previously, when erasing large area (e.g. 32MiB), in non-offload case,
-> CPU load could reach ~90% and would generate ~3.92 million interrupts,
-> now it decrease to ~15% CPU load and 0.15 million interrupts.
+> Thans for your advice.
 > 
-> This should also fix the high CPU usage for system which don't have a
-> dedicated poll status block logic (decrease to ~80% CPU load and ~1.61
-> million interrupts.).
+> > Erm... No. The issue was definitely there before (just look at the
+> > patch you quote here).
 > 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
->  drivers/mtd/spi-nor/core.c | 42 ++++++++++++++++++++++++++++++++----------
->  1 file changed, 32 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 502967c..6a31132 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -617,19 +617,41 @@ static int spi_nor_wait_till_ready_with_timeout(struct spi_nor *nor,
->  	unsigned long deadline;
->  	int timeout = 0, ret;
->  
-> -	deadline = jiffies + timeout_jiffies;
-> +	if (nor->spimem && !nor->params->ready) {
-> +		struct spi_mem_op op = SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDSR, 0),
-> +						       SPI_MEM_OP_NO_ADDR,
-> +						       SPI_MEM_OP_NO_DUMMY,
-> +						       SPI_MEM_OP_DATA_IN(1, nor->bouncebuf, 0));
+> Do you mean that I wrote the fixes-tag wrong?  I just checked it, it was
+> introduced by the earlier commit fbea754123ae5d9678295398c98e91f1b2159e5b,
+> if you mean that, I will send patch v2
 
-   Strange indentation...
+Not even that. Here's what this patch has:
 
-[...]
-> +		return spi_mem_poll_status(nor->spimem, &op, SR_WIP, 0, 0, 10,
-> +						       jiffies_to_msecs(timeout_jiffies));
+-       mips_gic_base = ioremap_nocache(gic_base_addr, gic_addrspace_size);
++       if (mips_cm_present()) {
++               write_gcr_gic_base(gic_base | CM_GCR_GIC_BASE_GICEN);
++               /* Ensure GIC region is enabled before trying to access it */
++               __sync();
++       }
++
++       mips_gic_base = ioremap_nocache(gic_base, gic_len);
+ 
+        gicconfig = read_gic_config();
+        gic_shared_intrs = gicconfig & GIC_CONFIG_NUMINTERRUPTS;
 
-   Here as well...
+Still no check for the ioremap result. You can actually trace it all
+the way down to 39b8d5254246a ("[MIPS] Add support for MIPS CMP
+platform."), which introduced that code initially. But is it worth
+referencing such an old commit? No.
 
-[...]
+To be honest, given how early this code executes, failing to ioremap
+something is utterly unlikely, and adding the check is mostly about
+being pedantic.
 
-MBR, Sergey
+It is also worth noting that most of the use of this variable are
+guarded by mips_gic_present(), which actually checks for mips_gic_base
+being NULL and that the driver actually *ignores* such mapping.
+
+Given that, I'm not sure this deserves an actual Fixes: tag. This is
+completely harmless. Just resend the patch with a correct SoB, and
+I'll queue it.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
