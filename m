@@ -2,53 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C81581097
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Jul 2022 11:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DA5582A45
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Jul 2022 18:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbiGZJ71 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Jul 2022 05:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S233540AbiG0QHl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Jul 2022 12:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiGZJ70 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Jul 2022 05:59:26 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07olkn2105.outbound.protection.outlook.com [40.92.15.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE042F03B;
-        Tue, 26 Jul 2022 02:59:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EW7PU43l/Ea3htRyUtBjaLhEdR7tw4c2KqitEuGL2sj2L3d3a39WjawObZ3DUXQQvaFeRAltiasA2BHkEf/NLNZ5qBEQUcLD6TVpxb16Q+bBVPQ8OEhmIzMGp5Dn/2bo7mnlz4e0QH8Mfr6OrSv/2DDp51AiWl91xQmBGcVwaZfuNA1tq/VBwHrMc0ldWV2EWu6JCN5wdTd61uOUwHuIeBI4GCFEg+aqzEbOaUgfn8a8ROSZDS85AMDTdyLk2qbfMk6+MzuwJBqMomB4lWZluHIv++kneXHxoaqtoWOtNwHX5ts9RkDeen0fWarJ7SPSqslGfSpEFr2UazCmvG4tig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ShlT19q2N07oTs6AckZDhc7JJpLVxdctyDbRaQ3H50A=;
- b=DzEMN+98T8VXGoMeYFwY4QtNKsDj9JmDGQne4Ti6dD5p6EbZyPQa1AiT1yIeqQmFxHId6UOzNoKoCdIKqX5NffL/g9nhZWguIUf0g7U6WOn1BnnIaJJV1ieua84peFBalwfKIU74pjdbvlz6auiBtfDmgRiG8DQVoMLy6TPkFmmVpFhxoEk+LIqme5IpEV2BTDnRBlraVx5yha9t755faXlhQf6sWmbNztlFrb4mGF7lgqA4udBRyqCxRAN+UQJywcwnwF59scMhMldb+J+CEjk/Fg4nV+LSGuH8I/F/ny+9Qvjqo6DfRRjQHyyWgngzFbU07sSJHAirUOkCiszEgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ShlT19q2N07oTs6AckZDhc7JJpLVxdctyDbRaQ3H50A=;
- b=MRy3ofc1vhinTF8YfvfHNNj+SpbATChUy2aEC2R99Pk4wNPFgJm7FFDh0CN9saZxp/Q9++Z71ODoWQ7x1BQGmcZjRoP0rtzxOvg5hfSt1qs5b5eCLeC5Ypr3GI2EWFgRWReItO+aw6C7IQvdaJG9Z7qDs7dCgXd/ZSEcokBQaBb8kuS+VsqKbMYpDKWxREjsSBdJtml95fNg9/QoDtnTUpROBaEV+cfHRAz+kNud984Yt+5g9ysfnPghYkpXTYZ+ndDZFEhrzaHRLVU4nl2hXQOcV4HvhVEWa03sxy6nsWvjZXJfhNhxJXfXpG1u/pu5dk/hhj1akFkrj8ZRSKsCqw==
-Received: from MN2PR17MB3375.namprd17.prod.outlook.com (2603:10b6:208:13c::25)
- by BY3PR17MB5681.namprd17.prod.outlook.com (2603:10b6:a03:3cc::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.25; Tue, 26 Jul
- 2022 09:59:21 +0000
-Received: from MN2PR17MB3375.namprd17.prod.outlook.com
- ([fe80::3409:88f8:6069:ccba]) by MN2PR17MB3375.namprd17.prod.outlook.com
- ([fe80::3409:88f8:6069:ccba%3]) with mapi id 15.20.5458.025; Tue, 26 Jul 2022
- 09:59:20 +0000
-From:   Vanessa Page <Vebpe@outlook.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-CC:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        "joel.peshkin@broadcom.com" <joel.peshkin@broadcom.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        with ESMTP id S232297AbiG0QHk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Jul 2022 12:07:40 -0400
+X-Greylist: delayed 10803 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Jul 2022 09:07:37 PDT
+Received: from 7.mo575.mail-out.ovh.net (7.mo575.mail-out.ovh.net [46.105.63.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA692CDF8
+        for <linux-mips@vger.kernel.org>; Wed, 27 Jul 2022 09:07:37 -0700 (PDT)
+Received: from player692.ha.ovh.net (unknown [10.110.103.195])
+        by mo575.mail-out.ovh.net (Postfix) with ESMTP id 56B2A24F7C
+        for <linux-mips@vger.kernel.org>; Wed, 27 Jul 2022 12:32:16 +0000 (UTC)
+Received: from RCM-web1.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player692.ha.ovh.net (Postfix) with ESMTPSA id 08DA82CE188E7;
+        Wed, 27 Jul 2022 12:31:45 +0000 (UTC)
+MIME-Version: 1.0
+Date:   Wed, 27 Jul 2022 14:31:45 +0200
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com, f.fainelli@gmail.com,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        "dan.beygelman@broadcom.com" <dan.beygelman@broadcom.com>,
-        "anand.gore@broadcom.com" <anand.gore@broadcom.com>,
-        "kursad.oney@broadcom.com" <kursad.oney@broadcom.com>,
-        "rafal@milecki.pl" <rafal@milecki.pl>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, krzysztof.kozlowski@linaro.org,
         Guenter Roeck <linux@roeck-us.net>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -57,109 +39,248 @@ CC:     William Zhang <william.zhang@broadcom.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Vinod Koul <vkoul@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY DEVICES (MTD)" 
-        <linux-mtd@lists.infradead.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
-        <linux-mips@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
 Subject: Re: [PATCH v2 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
  ARCH_BCMBCA
-Thread-Topic: [PATCH v2 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
- ARCH_BCMBCA
-Thread-Index: AQHYn+uxAbB9TwTL6U6uXQZJxy0Tvq2QU3IAgAAZdsw=
-Date:   Tue, 26 Jul 2022 09:59:20 +0000
-Message-ID: <MN2PR17MB33752B92BF227C5288B51C2CB8949@MN2PR17MB3375.namprd17.prod.outlook.com>
+In-Reply-To: <20220725055402.6013-7-william.zhang@broadcom.com>
 References: <20220725055402.6013-1-william.zhang@broadcom.com>
-         <20220725055402.6013-7-william.zhang@broadcom.com>
- <55668d62aad8feedb7fa78f410f4f71ecfce8c98.camel@pengutronix.de>
-In-Reply-To: <55668d62aad8feedb7fa78f410f4f71ecfce8c98.camel@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-tmn:  [raj1UmtPwuQtfdiq+c3IiZem6Z8ALjhxv4+VFCoEmUREoqhJy3lpG7OUXVrXXwm3MBcekyLRAF8=]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f712d961-22d6-4cde-f000-08da6eed82f5
-x-ms-traffictypediagnostic: BY3PR17MB5681:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wcqTzd4eWB/95+ELGO/TfSGBCeZxaQTRHCIMRmL79lDoKcqcWZIB2ufXnoh+BMdif2nPj9xoI67UzH2uAHu7xtvyfxY6BOufT1Km7d71mOk15F2qFVQZpzeZNpCBXP15r0n6Tm7PgvKM3aW8u0K1bnNjd8th9DNOcoDwXrkRbAUHcDTwew+SYB+GaBy+tEjK9ILXKc0wjaAiXgJMA57/3ebpvOgQBN52uT8uYkrTeONGph0Jt/rjGvxnQpF2/n1GNy567FbDMq/fA3WobgIja7/862pHDa6+4fLPZqgxW9IXKLmcOfq+XfgoAK27wgDUFVjScRq0rShlkBTfrHIuT7FMDLReT2fBdyu1xHT5tIVbIitv0rEKx5W6Znr7aZF3JjUM6PC+qEQLOaxzKlhCW6GLbY0lZ+uh2bXjpVf9SlaBJXPEtwgyu0yanTcsD2GXdGFfSta1A9wvGKaQM1zFsLI7eWEWihs7Ar9+rvnd5fCZNmfzK/2FGnMuh/AF3lnrBmzBFWlZo6lpuEpCppSV3xSh9HBj6tnJyYMaKl6qzU0PbZxnfuBC+QmrIl3c7cUcOBypurBQgnMM/ChiF6R5p6TUyPbrYqF4vMWCyTmpoKuznfsif1c89S6grXGO1eECaN37sB+fhCqTs+RXM52UdIJf8Z3BX/xU3Ksj+FSMeqoaBGSB0v+Bld0+7hJFPebK
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SEJ1SC9iQ2gyQkxRckx2ZGpJZDZkZllRYjl6cXNQVWZUQk9BTHVySEMyK2xN?=
- =?utf-8?B?TExFUXlrLzZYYnFBc3dCVTJNT1FqeW5mVFREZzE2a3lDTUd5ckxIN1NIQTBB?=
- =?utf-8?B?TzdnTi9yUFFIZys4Q1A3UjJRUWtwMGtNdWY4RjVTS1h2TGlVY1JqcFdGSmxl?=
- =?utf-8?B?M1JWbzhnWFhnZU4wdjRGVHcwc3ZnWDJtU2pJcHhqRGNHSTdDM0tvT1FRMWJO?=
- =?utf-8?B?T3EwcFRRR2VRVVF5L1ZRbXdzbEVEcE15UXhINlFyNEJoSjJydHptYk5tdEVV?=
- =?utf-8?B?akpialpNK2FESFIwQ3A4dkNMTWxOZVphWW9qSkN4M1FNK1lRaG81SHBsblk4?=
- =?utf-8?B?NVA4VWh4UlE5cE5TbXpJM0lFSndxeW04TGIrUnB1bkZIS1p3aGt4bXA1bE43?=
- =?utf-8?B?R1Zvd3dOV0JGSGtxMkVTVDFzYklHNXlJQWk0T1Uza1dTYkYza1FXTVROZkg1?=
- =?utf-8?B?YWpHZks3Z3FRSHYrRmVFZTEvM1FTQVNkckRCSXhneVFWaG11VTVmSTgyRmZK?=
- =?utf-8?B?M04rdTF3cTNxNmViT1FSQTNQUzdOMHAwaUoyUmtBUVlIaGVNNGcrVWRnbEE4?=
- =?utf-8?B?VjAzNkdlSVVrVWpiUGEwd01taTdrUUZGeFV0d3pMUS90S2FCamNKd2IyVENY?=
- =?utf-8?B?cWlpMm9oeGZuOVl5QzZiRVBVVGJDL09LZkQvSFhocFpUb2xrMlVyZnRoZ055?=
- =?utf-8?B?NXBIdWkyQlhna1hjSTJXOEtYWFZLMkVrMDlYdUdaUWNtOFg4VjlUdGNMN0Z2?=
- =?utf-8?B?MEQ2OWJUVFNJTmdhTExGK1NPREpxRnFycXlUN2Z0UUtiaTkxRE1VWDA5N3B0?=
- =?utf-8?B?VkxoY2k0Z04yZEI0VEs5TFVzR0VvRXhLKzhtYzdUZFJ2Vzl0d01QdVgzMUho?=
- =?utf-8?B?OHYraEZRMTR5bmRlcGRhVTVJRmxTbHE0MHNRYzFUS2tnTjM0MS92U2hKTGUx?=
- =?utf-8?B?RVphd1B0OWU3NHowSDBnVXpMZ3pKY293TTVxUkNNZXRCWkl3MlNGcDhRZWlZ?=
- =?utf-8?B?aWVJSlZ2QXp1bUw0enlWVnB0bmVtY0RKWFQxZFJxTS9ONktvcjRFNWFIWGl6?=
- =?utf-8?B?cm9TR0tsbUJ2eDFiWTdoUnc1TFZyRks5Y2hlbGpvalJVRXVPZG0ycFVJY2NI?=
- =?utf-8?B?T2JJemZFa0dkZ0pjMWFZTVRFZFp1bjlucEhmYkhMeTdtZWtKMU9FclpEQ1Jq?=
- =?utf-8?B?RlQ0VzNPTkQ2ZFdEbXdhMmFOdzVzaFkwS2tnSnhQd09SNzkrQUhYTjQ0WDha?=
- =?utf-8?B?WXc4cEd5bEc4cWZESXg2WndHOWlwRERBUElsNFUwM1pscWJCZjBiL0RJb3px?=
- =?utf-8?B?bEt1TzZFblhOR0tzd005K0VQU0ltQjdkZnB1OEMxWHl5RjRlL1hBbzd2aXV6?=
- =?utf-8?B?cERiYmNUOUdXalQrMG9xcnJleloyTXVMQmZGSkJaYWtBcEpRWmhablRqTDF4?=
- =?utf-8?B?RXNaMlBrS09jc01wVUFCdnRWUFE5ajFjWm15T3d6WkF5aVZqQlloc1NrNVN0?=
- =?utf-8?B?STZDaG41d3RvUVVrUmp2dmdOeVhiRjZtOW50ZDQ0L2psQTVORGVNVkFVUkxG?=
- =?utf-8?B?L2lzb0hDY0wybytteis2ajlMektSTUtkTnhCTHdqekdVU3BBQ3I2enNYbTQx?=
- =?utf-8?B?Q0p6S0l4VkFTdnBnOTB4aS9UV3ZySHlpQkJzazdJQ1ZmMjk3emVBRERSMVRG?=
- =?utf-8?B?L1JkN0FlMnl0RHNpNGpSOU92MWY4T3BESEozbWVyNnJ3VGE5SUVVNzd2T0hS?=
- =?utf-8?Q?vE1+ni485rTpmA/COIf9MNpe0bwMVOCbkuJFhEM?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR17MB3375.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: f712d961-22d6-4cde-f000-08da6eed82f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jul 2022 09:59:20.9650
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR17MB5681
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20220725055402.6013-7-william.zhang@broadcom.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <63797827553783061a0ad5e897ed6538@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 3481282513174571860
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduvddgheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeetgfekfeduveehuedvgeefhffhieevhfejteeggfefieevffdtueeukedugeelieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrieelvddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhe
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-VGhpcyBpcyBzdHVwaWQgDQoNClNlbnQgZnJvbSBteSBpUGhvbmUNCg0KPiBPbiBKdWwgMjYsIDIw
-MjIsIGF0IDQ6MzEgQU0sIFBoaWxpcHAgWmFiZWwgPHAuemFiZWxAcGVuZ3V0cm9uaXguZGU+IHdy
-b3RlOg0KPiANCj4g77u/T24gU28sIDIwMjItMDctMjQgYXQgMjI6NTMgLTA3MDAsIFdpbGxpYW0g
-Wmhhbmcgd3JvdGU6DQo+PiBXaXRoIEJyb2FkY29tIEJyb2FkYmFuZCBhcmNoIEFSQ0hfQkNNQkNB
-IHN1cHBvcnRlZCBpbiB0aGUga2VybmVsLCB0aGlzDQo+PiBwYXRjaCBzZXJpZXMgbWlncmF0ZSB0
-aGUgQVJDSF9CQ000OTA4IHN5bWJvbCB0byBBUkNIX0JDTUJDQS4gSGVuY2UNCj4+IHJlcGxhY2Ug
-QVJDSF9CQ000OTA4IHdpdGggQVJDSF9CQ01CQ0EgaW4gc3Vic3lzdGVtIEtjb25maWcgZmlsZXMu
-DQo+PiANCj4+IFNpZ25lZC1vZmYtYnk6IFdpbGxpYW0gWmhhbmcgPHdpbGxpYW0uemhhbmdAYnJv
-YWRjb20uY29tPg0KPj4gQWNrZWQtYnk6IEd1ZW50ZXIgUm9lY2sgPGxpbnV4QHJvZWNrLXVzLm5l
-dD4gKGZvciB3YXRjaGRvZykNCj4+IEFja2VkLWJ5OiBCam9ybiBIZWxnYWFzIDxiaGVsZ2Fhc0Bn
-b29nbGUuY29tPiAoZm9yIGRyaXZlcnMvcGNpKQ0KPiANCj4gQWNrZWQtYnk6IFBoaWxpcHAgWmFi
-ZWwgPHAuemFiZWxAcGVuZ3V0cm9uaXguZGU+IChmb3IgcmVzZXQpDQo+IA0KPiByZWdhcmRzDQo+
-IFBoaWxpcHANCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXw0KPiBMaW51eCBNVEQgZGlzY3Vzc2lvbiBtYWlsaW5nIGxpc3QNCj4gaHR0
-cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1tdGQvDQo=
+On 2022-07-25 07:53, William Zhang wrote:
+> With Broadcom Broadband arch ARCH_BCMBCA supported in the kernel, this
+> patch series migrate the ARCH_BCM4908 symbol to ARCH_BCMBCA. Hence
+> replace ARCH_BCM4908 with ARCH_BCMBCA in subsystem Kconfig files.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> Acked-by: Guenter Roeck <linux@roeck-us.net> (for watchdog)
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com> (for drivers/pci)
+
+I still think it may be a bad idea for all below drivers. Please see my
+previous e-mail:
+Re: [RESEND PATCH 6/9] arm64: bcmbca: Make BCM4908 drivers depend on 
+ARCH_BCMBCA
+https://lore.kernel.org/linux-arm-kernel/eee8c85652e6dac69420a876d03f67c4@milecki.pl/
+
+I think we should:
+1. Keep ARCH_BCM4908 for 4908 specific drivers (e.g. mtd, pinctrl, net)
+2. Use ARCH_BCMBCA for more generic drivers (e.g. I2C, PCI,serial, WD)
+
+
+> Changes in v2:
+> - Add Acked-by tags
+> - Update commit message with more details
+> 
+>  drivers/i2c/busses/Kconfig            | 4 ++--
+>  drivers/mtd/parsers/Kconfig           | 6 +++---
+>  drivers/net/ethernet/broadcom/Kconfig | 4 ++--
+>  drivers/pci/controller/Kconfig        | 2 +-
+>  drivers/phy/broadcom/Kconfig          | 4 ++--
+>  drivers/pinctrl/bcm/Kconfig           | 4 ++--
+>  drivers/reset/Kconfig                 | 2 +-
+>  drivers/soc/bcm/bcm63xx/Kconfig       | 4 ++--
+>  drivers/tty/serial/Kconfig            | 4 ++--
+>  drivers/watchdog/Kconfig              | 2 +-
+>  10 files changed, 18 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 45a4e9f1b639..fd9a4dd01997 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -487,8 +487,8 @@ config I2C_BCM_KONA
+> 
+>  config I2C_BRCMSTB
+>  	tristate "BRCM Settop/DSL I2C controller"
+> -	depends on ARCH_BCM2835 || ARCH_BCM4908 || ARCH_BCMBCA || \
+> -		   ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
+> +	depends on ARCH_BCM2835 || ARCH_BCMBCA || ARCH_BRCMSTB || \
+> +		   BMIPS_GENERIC || COMPILE_TEST
+>  	default y
+>  	help
+>  	  If you say yes to this option, support will be included for the
+> diff --git a/drivers/mtd/parsers/Kconfig b/drivers/mtd/parsers/Kconfig
+> index b43df73927a0..d6db655a1d24 100644
+> --- a/drivers/mtd/parsers/Kconfig
+> +++ b/drivers/mtd/parsers/Kconfig
+> @@ -69,8 +69,8 @@ config MTD_OF_PARTS
+> 
+>  config MTD_OF_PARTS_BCM4908
+>  	bool "BCM4908 partitioning support"
+> -	depends on MTD_OF_PARTS && (ARCH_BCM4908 || COMPILE_TEST)
+> -	default ARCH_BCM4908
+> +	depends on MTD_OF_PARTS && (ARCH_BCMBCA || COMPILE_TEST)
+> +	default ARCH_BCMBCA
+>  	help
+>  	  This provides partitions parser for BCM4908 family devices
+>  	  that can have multiple "firmware" partitions. It takes care of
+> @@ -78,7 +78,7 @@ config MTD_OF_PARTS_BCM4908
+> 
+>  config MTD_OF_PARTS_LINKSYS_NS
+>  	bool "Linksys Northstar partitioning support"
+> -	depends on MTD_OF_PARTS && (ARCH_BCM_5301X || ARCH_BCM4908 || 
+> COMPILE_TEST)
+> +	depends on MTD_OF_PARTS && (ARCH_BCM_5301X || ARCH_BCMBCA || 
+> COMPILE_TEST)
+>  	default ARCH_BCM_5301X
+>  	help
+>  	  This provides partitions parser for Linksys devices based on 
+> Broadcom
+> diff --git a/drivers/net/ethernet/broadcom/Kconfig
+> b/drivers/net/ethernet/broadcom/Kconfig
+> index 56e0fb07aec7..f4e1ca68d831 100644
+> --- a/drivers/net/ethernet/broadcom/Kconfig
+> +++ b/drivers/net/ethernet/broadcom/Kconfig
+> @@ -53,8 +53,8 @@ config B44_PCI
+> 
+>  config BCM4908_ENET
+>  	tristate "Broadcom BCM4908 internal mac support"
+> -	depends on ARCH_BCM4908 || COMPILE_TEST
+> -	default y if ARCH_BCM4908
+> +	depends on ARCH_BCMBCA || COMPILE_TEST
+> +	default y if ARCH_BCMBCA
+>  	help
+>  	  This driver supports Ethernet controller integrated into Broadcom
+>  	  BCM4908 family SoCs.
+> diff --git a/drivers/pci/controller/Kconfig 
+> b/drivers/pci/controller/Kconfig
+> index d1c5fcf00a8a..bfd9bac37e24 100644
+> --- a/drivers/pci/controller/Kconfig
+> +++ b/drivers/pci/controller/Kconfig
+> @@ -274,7 +274,7 @@ config VMD
+> 
+>  config PCIE_BRCMSTB
+>  	tristate "Broadcom Brcmstb PCIe host controller"
+> -	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCM4908 || \
+> +	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCMBCA || \
+>  		   BMIPS_GENERIC || COMPILE_TEST
+>  	depends on OF
+>  	depends on PCI_MSI_IRQ_DOMAIN
+> diff --git a/drivers/phy/broadcom/Kconfig 
+> b/drivers/phy/broadcom/Kconfig
+> index 93a6a8ee4716..1d89a2fd9b79 100644
+> --- a/drivers/phy/broadcom/Kconfig
+> +++ b/drivers/phy/broadcom/Kconfig
+> @@ -93,11 +93,11 @@ config PHY_BRCM_SATA
+> 
+>  config PHY_BRCM_USB
+>  	tristate "Broadcom STB USB PHY driver"
+> -	depends on ARCH_BCM4908 || ARCH_BRCMSTB || COMPILE_TEST
+> +	depends on ARCH_BCMBCA || ARCH_BRCMSTB || COMPILE_TEST
+>  	depends on OF
+>  	select GENERIC_PHY
+>  	select SOC_BRCMSTB if ARCH_BRCMSTB
+> -	default ARCH_BCM4908 || ARCH_BRCMSTB
+> +	default ARCH_BCMBCA || ARCH_BRCMSTB
+>  	help
+>  	  Enable this to support the Broadcom STB USB PHY.
+>  	  This driver is required by the USB XHCI, EHCI and OHCI
+> diff --git a/drivers/pinctrl/bcm/Kconfig b/drivers/pinctrl/bcm/Kconfig
+> index 8f4d89806fcb..35b51ce4298e 100644
+> --- a/drivers/pinctrl/bcm/Kconfig
+> +++ b/drivers/pinctrl/bcm/Kconfig
+> @@ -31,13 +31,13 @@ config PINCTRL_BCM2835
+> 
+>  config PINCTRL_BCM4908
+>  	tristate "Broadcom BCM4908 pinmux driver"
+> -	depends on OF && (ARCH_BCM4908 || COMPILE_TEST)
+> +	depends on OF && (ARCH_BCMBCA || COMPILE_TEST)
+>  	select PINMUX
+>  	select PINCONF
+>  	select GENERIC_PINCONF
+>  	select GENERIC_PINCTRL_GROUPS
+>  	select GENERIC_PINMUX_FUNCTIONS
+> -	default ARCH_BCM4908
+> +	default ARCH_BCMBCA
+>  	help
+>  	  Driver for BCM4908 family SoCs with integrated pin controller.
+> 
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index f9a7cee01659..7ae71535fe2a 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -201,7 +201,7 @@ config RESET_SCMI
+> 
+>  config RESET_SIMPLE
+>  	bool "Simple Reset Controller Driver" if COMPILE_TEST || EXPERT
+> -	default ARCH_ASPEED || ARCH_BCM4908 || ARCH_BITMAIN || ARCH_REALTEK
+> || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
+> +	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK
+> || ARCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
+>  	help
+>  	  This enables a simple reset controller driver for reset lines that
+>  	  that can be asserted and deasserted by toggling bits in a 
+> contiguous,
+> diff --git a/drivers/soc/bcm/bcm63xx/Kconfig 
+> b/drivers/soc/bcm/bcm63xx/Kconfig
+> index 9e501c8ac5ce..355c34482076 100644
+> --- a/drivers/soc/bcm/bcm63xx/Kconfig
+> +++ b/drivers/soc/bcm/bcm63xx/Kconfig
+> @@ -13,8 +13,8 @@ endif # SOC_BCM63XX
+> 
+>  config BCM_PMB
+>  	bool "Broadcom PMB (Power Management Bus) driver"
+> -	depends on ARCH_BCM4908 || (COMPILE_TEST && OF)
+> -	default ARCH_BCM4908
+> +	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
+> +	default ARCH_BCMBCA
+>  	select PM_GENERIC_DOMAINS if PM
+>  	help
+>  	  This enables support for the Broadcom's PMB (Power Management Bus) 
+> that
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index e3279544b03c..f32bb01c3feb 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -1100,8 +1100,8 @@ config SERIAL_TIMBERDALE
+>  config SERIAL_BCM63XX
+>  	tristate "Broadcom BCM63xx/BCM33xx UART support"
+>  	select SERIAL_CORE
+> -	depends on ARCH_BCM4908 || ARCH_BCMBCA || BCM63XX || BMIPS_GENERIC
+> || COMPILE_TEST
+> -	default ARCH_BCM4908 || ARCH_BCMBCA || BCM63XX || BMIPS_GENERIC
+> +	depends on ARCH_BCMBCA || BCM63XX || BMIPS_GENERIC || COMPILE_TEST
+> +	default ARCH_BCMBCA || BCM63XX || BMIPS_GENERIC
+>  	help
+>  	  This enables the driver for the onchip UART core found on
+>  	  the following chipsets:
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 32fd37698932..1f85ec8a4b3b 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1798,7 +1798,7 @@ config BCM7038_WDT
+>  	tristate "BCM63xx/BCM7038 Watchdog"
+>  	select WATCHDOG_CORE
+>  	depends on HAS_IOMEM
+> -	depends on ARCH_BCM4908 || ARCH_BRCMSTB || BMIPS_GENERIC || BCM63XX
+> || COMPILE_TEST
+> +	depends on ARCH_BCMBCA || ARCH_BRCMSTB || BMIPS_GENERIC || BCM63XX
+> || COMPILE_TEST
+>  	help
+>  	  Watchdog driver for the built-in hardware in Broadcom 7038 and
+>  	  later SoCs used in set-top boxes.  BCM7038 was made public
