@@ -2,89 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB1958665B
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Aug 2022 10:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C63586670
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Aug 2022 10:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiHAI3x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Aug 2022 04:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S230162AbiHAIhQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 1 Aug 2022 04:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiHAI3v (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Aug 2022 04:29:51 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A0733353
-        for <linux-mips@vger.kernel.org>; Mon,  1 Aug 2022 01:29:50 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id c131so17789961ybf.9
-        for <linux-mips@vger.kernel.org>; Mon, 01 Aug 2022 01:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=PoF0Ci5N9+P5vYJClJnP46fqwkRugCMEdayMpX55RVc=;
-        b=TnrJjFyXLTNPi360h6fyymw4nUxCWdxXdualQte6JR6wqIbahekZgdUy/Net5tiDdw
-         tsAagUVgD68hlmRx5af+UZ+YwGCJmnXzaXZo4zp9HqN0K7SUxWVbY7v27Tcz89he8Nm+
-         UmeGiLisUScNNCdG0Nr+AmOlLzmi2YufXurOgw05854P0U7t4zApndSnU0Oc82XNPcOC
-         4r1uTuHzLrbCrZw/lm82H2K0qb22RGnqFBKGQaFRcmGZVmtNWGvmPsl1h8785p767MQZ
-         Jaq/sdlWr3QuSjxLp7dRdw1bUb+QfyhroCJoqg5T/20zbXxXA5Y+/ewjGYUi5ioOBDMv
-         QyWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=PoF0Ci5N9+P5vYJClJnP46fqwkRugCMEdayMpX55RVc=;
-        b=BxdurIMJsI+LBRRojGV3bnlKRwpXJJR+nWKEbyI8D/CuFJEkIzXW2wKYnVCg2Hu46C
-         l1T5cm4/xOmnxBjUymplsJujmKWy8984hq5eNNH+hjJNPEunRk1zneYl4+NYo7lD/VMn
-         PTqELimH70QCDDgbTIB7lvUjVOLbl5sA/gdXMip2ZTX81/y7pgWYOh8IUvz1cszVJOuM
-         ARzHsZU3IzJxP23Vh1xapj0Xqp/f2ldIllj+X6YrEz2ByHvh09MGuz/lcY2p2imiP8jl
-         ZacsixO7qXUS3bMluvERErSVTxXO8RFvi9FtURBqKGNHhWs5QUrLMIXJ9pFbYW8Ht0Mf
-         AeeA==
-X-Gm-Message-State: ACgBeo3PZI/TITxkKe+s0ttgKK6c4D8s0z23MSuNeWqlOIlLBu7S+fty
-        lRjuoE79vALkMnUqhxAxEnxc0co1lXUyDRWMvyo=
-X-Google-Smtp-Source: AA6agR7qOcUgzUivPDGmqcz/fLsrAWEHUF7bniIcRt2aLzWmDTm2f3doRDHrC0o0eQXgkfh0xYyg64r6fKxka4y8YwQ=
-X-Received: by 2002:a25:814b:0:b0:670:8018:ce99 with SMTP id
- j11-20020a25814b000000b006708018ce99mr10047724ybm.621.1659342589485; Mon, 01
- Aug 2022 01:29:49 -0700 (PDT)
+        with ESMTP id S229689AbiHAIhP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Aug 2022 04:37:15 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 282952E9F4
+        for <linux-mips@vger.kernel.org>; Mon,  1 Aug 2022 01:37:13 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-60-CksiPPRtPA6w1mXQckakNQ-1; Mon, 01 Aug 2022 09:37:09 +0100
+X-MC-Unique: CksiPPRtPA6w1mXQckakNQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 1 Aug 2022 09:37:04 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 1 Aug 2022 09:37:04 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Stephen Hemminger' <stephen@networkplumber.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Pablo Neira Ayuso" <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        "Florian Westphal" <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "Akhmat Karakotov" <hmukos@yandex-team.ru>,
+        Antoine Tenart <atenart@kernel.org>,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        Juergen Gross <jgross@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Chen Yu <yu.c.chen@intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        "Suma Hegde" <suma.hegde@amd.com>,
+        =?iso-8859-1?Q?Pali_Roh=E1r?= <pali@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Scott Wood <oss@buserror.net>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        "Kuniyuki Iwashima" <kuniyu@amazon.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "Stefano Garzarella" <sgarzare@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Wang Qing" <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
+        Benjamin Poirier <bpoirier@nvidia.com>,
+        Victor Erminpour <victor.erminpour@oracle.com>,
+        "GONG, Ruiqi" <gongruiqi1@huawei.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
+        "open list:NETFILTER" <coreteam@netfilter.org>
+Subject: RE: [RFC] Remove DECNET support from kernel
+Thread-Topic: [RFC] Remove DECNET support from kernel
+Thread-Index: AQHYpREB8DXx1AZd/0ac5Son0/agPK2ZuBOg
+Date:   Mon, 1 Aug 2022 08:37:03 +0000
+Message-ID: <c43f221d8e824cd2bf9746596423befc@AcuMS.aculab.com>
+References: <20220731190646.97039-1-stephen@networkplumber.org>
+In-Reply-To: <20220731190646.97039-1-stephen@networkplumber.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Received: by 2002:a05:7010:3d21:b0:2ec:5190:202f with HTTP; Mon, 1 Aug 2022
- 01:29:49 -0700 (PDT)
-Reply-To: mr.alabbashadi@gmail.com
-From:   Abbas hadi <groseilboudou67@gmail.com>
-Date:   Mon, 1 Aug 2022 01:29:49 -0700
-Message-ID: <CAO-bv6tHvtHdbWN1onvh+oxXeLaMhFohSAE1BuO4bC2w0g225g@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Greetings,
+From: Stephen Hemminger
+> Sent: 31 July 2022 20:06
+> To: netdev@vger.kernel.org
+> 
+> Decnet is an obsolete network protocol that receives more attention
+> from kernel janitors than users. It belongs in computer protocol
+> history museum not in Linux kernel.
+> 
+> It has been Orphaned in kernel since 2010.
+> And the documentation link on Sourceforge says it is abandoned there.
 
-I have a Mutual/Beneficial Business Project that would be beneficial
-to you. I only have two questions to ask of you, if you are
-interested.
+It was pretty much obsolete when I was writing ethernet drivers
+in the early 1990's.
+Sort of surprising support ever got into Linux in the first place!
 
-1. Can you handle this project?
-2. Can I give you this trust?
+Remember it requires the ethernet MAC address be set to a
+locally assigned value that is the machine's 'node number'.
 
-Please note that the deal requires high level of maturity, honesty and
-secrecy. This will involve moving some money from my office, on trust
-to your hands or bank account. Also note that i will do everything to
-make sure that the money is moved as a purely legitimate fund, so you
-will not be exposed to any risk.
+Does this remove some/most/all of the [gs]et_sockopt() calls
+where the length is ignored/
 
-I request for your full co-operation. I will give you details and
-procedure when I receive your reply, to commence this transaction, I
-require you to immediately indicate your interest by a return reply.
+	David
 
-I will be waiting for your response in a timely manner.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Best Regard,
-
-Al'Abbas Hadi
