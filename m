@@ -2,44 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B48F58D89B
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Aug 2022 14:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617C058DECB
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Aug 2022 20:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243061AbiHIMIk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Aug 2022 08:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        id S1343890AbiHISXZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Aug 2022 14:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234068AbiHIMIj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Aug 2022 08:08:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756A8248E3;
-        Tue,  9 Aug 2022 05:08:38 -0700 (PDT)
+        with ESMTP id S1346307AbiHISVD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Aug 2022 14:21:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842D030F42;
+        Tue,  9 Aug 2022 11:07:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DC49FCE13A1;
-        Tue,  9 Aug 2022 12:08:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFEDC433D6;
-        Tue,  9 Aug 2022 12:08:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660046915;
-        bh=tQpfWG7zuVH534A9iJhM+o2JAdiqZG5gW5+/sTvJ0hI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PxmP0VuiQu5GH/0EZLswL6SXVlspr3F/1ACb3WgXZhFEZKLc2N+UABpbUcFQLY8yX
-         X6++Lx9tU6/eBSrCuIkyv705J87wNVAwSwAZrUedhB0G3h4UPRm1cfmH9OebH5SP5R
-         4VQZe3mY8mkSFQLfuZNJdN5Y8ZGj0NfiBY6oPIGQ=
-Date:   Tue, 9 Aug 2022 14:08:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsbogend@alpha.franken.de, linux-api@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Expose prid and globalnumber to sysfs
-Message-ID: <YvJOQC7eQBjsHWct@kroah.com>
-References: <20220809113444.17757-1-jiaxun.yang@flygoat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AE8EB818D8;
+        Tue,  9 Aug 2022 18:07:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE785C43470;
+        Tue,  9 Aug 2022 18:07:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660068420;
+        bh=2EdjzasIB09m+gY3gToosq99knMnczwU9bRriEj/PHU=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=c1B7ErLrUkL2D0AfWZ630nEllP0wRB5x2SrJ/43UfDEoqJ8KUfFWubojQSoA05sLB
+         q/P7JrySK0pw+C1zV4u3bdXr/WicT0eT8eZFe25OvEbRZwXLTDh6GpBzU47NZ4X+VX
+         0vb40g8RtiQV+V2Ubbfe8G4D7Vmr5NZiutl3u2Q5xbl7ObyEvNZviib8IWWIaAQkeu
+         6dEetgrnGfD8PKc5U9WDQoqktd0mkCaAJosBrdhiORlBsEfYc8cDkU9+gcCj2tW6Zd
+         6JwH8yOyhnZEjsA4A/wcrJeDWtb9EYvvYEMKeYI/wBoG5Q3nFesHO78ufd6kfE5VGM
+         EKNIpDMOp21vg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809113444.17757-1-jiaxun.yang@flygoat.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <d92dd996-6961-5291-9504-1fe284b40dd6@gmail.com>
+References: <20220419051114.1569291-1-seanga2@gmail.com> <d92dd996-6961-5291-9504-1fe284b40dd6@gmail.com>
+Subject: Re: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Du Huanpeng <dhu@hodcarrier.org>,
+        Yang Ling <gnaygnil@gmail.com>
+To:     Sean Anderson <seanga2@gmail.com>, linux-clk@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Date:   Tue, 09 Aug 2022 11:06:58 -0700
+User-Agent: alot/0.10
+Message-Id: <20220809180700.BE785C43470@smtp.kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -50,77 +57,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 11:34:44AM +0000, Jiaxun Yang wrote:
-> Some application would like to know precise model and rev of processor
-> to do errata workaround or optimization.
-> 
-> Expose them in sysfs as:
-> /sys/devices/system/cpu/cpuX/regs/identification/prid
-> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-> 
-> Reusing AArch64 CPU registers directory.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  .../ABI/testing/sysfs-devices-system-cpu      | 11 +++
->  arch/mips/kernel/topology.c                   | 96 +++++++++++++++++++
->  2 files changed, 107 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> index 5bf61881f012..adf855e7bb9b 100644
-> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> @@ -512,6 +512,17 @@ Description:	information about CPUs heterogeneity.
->  
->  		cpu_capacity: capacity of cpuX.
->  
-> +What:		/sys/devices/system/cpu/cpuX/regs/
-> +		/sys/devices/system/cpu/cpuX/regs/identification/
-> +		/sys/devices/system/cpu/cpuX/regs/identification/prid
-> +		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-> +Date:		Augest 2022
-> +Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
-> +Description:	MIPS CPU registers
-> +
-> +		'identification' directory exposes the Processor ID and Global Number
-> +		registers for identifying model and revision of the CPU.
-> +
->  What:		/sys/devices/system/cpu/vulnerabilities
->  		/sys/devices/system/cpu/vulnerabilities/meltdown
->  		/sys/devices/system/cpu/vulnerabilities/spectre_v1
-> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
-> index 9429d85a4703..90b5136afb63 100644
-> --- a/arch/mips/kernel/topology.c
-> +++ b/arch/mips/kernel/topology.c
-> @@ -5,6 +5,8 @@
->  #include <linux/node.h>
->  #include <linux/nodemask.h>
->  #include <linux/percpu.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/smp.h>
->  
->  static DEFINE_PER_CPU(struct cpu, cpu_devices);
->  
-> @@ -26,3 +28,97 @@ static int __init topology_init(void)
->  }
->  
->  subsys_initcall(topology_init);
-> +
-> +static struct kobj_type cpuregs_kobj_type = {
-> +	.sysfs_ops = &kobj_sysfs_ops,
-> +};
-> +
-> +struct cpureg {
-> +	struct kobject kobj;
-> +	struct cpuinfo_mips *info;
-> +};
-> +static DEFINE_PER_CPU(struct cpureg, cpuregs);
+Quoting Sean Anderson (2022-08-03 16:28:41)
+> On 4/19/22 1:11 AM, Sean Anderson wrote:
+> >  =20
+> >       pll =3D __raw_readl(LS1X_CLK_PLL_FREQ);
+> > -     rate =3D ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
+> > +     rate =3D (pll & 0xff00) + ((pll >> 16) & 0xff);
+> >       rate *=3D OSC;
+> > -     rate >>=3D 2;
+> > +     rate >>=3D 10;
+> >  =20
+> >       return rate;
+> >   }
+> >=20
+>=20
+> Since there have been no objections, can we apply this?
+>=20
 
-static kobjects are nothing you should ever create willingly.  That's a
-dynamic reference counted structure being declared on the "stack"?
-
-Please no.
-
-thanks,
-
-greg k-h
+Can you resend it? I can apply it after the merge window closes next
+week.
