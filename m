@@ -2,65 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE8E58E7E3
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Aug 2022 09:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDAF58E950
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Aug 2022 11:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiHJHg3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Aug 2022 03:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S231960AbiHJJLw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Aug 2022 05:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiHJHg2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Aug 2022 03:36:28 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCB06A4B8;
-        Wed, 10 Aug 2022 00:36:27 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id a11so7356695wmq.3;
-        Wed, 10 Aug 2022 00:36:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=eJBkzOrmLOIDc79l2XYc3mJAo9MM8wnZ1YSqg5TWx9o=;
-        b=oIOQ0bKPExWnUNtP3lcpXyP7kn2UFnNx7cr5Pw8obZCPvWs/kh3gEQVarasX78LBMa
-         wHf53uiERT/niEl36koz3VcV5qUcvx16Oli/QjF73YQGhmPFVBo2teB0Uah1MAhiwE/H
-         j6Mti1zZefsOOiBJS0mM00dCez0/+Kc7uXb00iM+MvbKaC7HNjNSwZzVpXFDYCYQfGQG
-         774BzLZYwtSj61VktpdADx+GJv6sW9j2pjzRl+Ggu8Z2g0dLoAIwQ3hFRizxZ8mu/mF5
-         pihzhahUZahuCjs6uidpyJWjMfXJEd35JgkhJkKctCopOlzGtKjUoQ+cNctJ5fw8USH/
-         foGA==
-X-Gm-Message-State: ACgBeo3HoQ6z8DRMjPsHfmT0xrIwJt0LAuAfs/cnA7Y6fFsgBbbm423F
-        Xo34wy+bx2UPIKT8LGaHRNo=
-X-Google-Smtp-Source: AA6agR6ylREFulxvOxgaDyFkAmvie2x1L33dS/ekhMOxj4MO3YvHtCuJRDWsjpmkPh/ogLm0hwQn7w==
-X-Received: by 2002:a05:600c:1d0b:b0:3a5:5035:28a8 with SMTP id l11-20020a05600c1d0b00b003a5503528a8mr1474658wms.114.1660116986315;
-        Wed, 10 Aug 2022 00:36:26 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b0021e491fd250sm15691631wrv.89.2022.08.10.00.36.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 00:36:25 -0700 (PDT)
-Message-ID: <8576aef3-37e4-8bae-bab5-08f82a78efd3@kernel.org>
-Date:   Wed, 10 Aug 2022 09:36:24 +0200
+        with ESMTP id S230429AbiHJJLw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Aug 2022 05:11:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C4C86C1F;
+        Wed, 10 Aug 2022 02:11:50 -0700 (PDT)
+Received: from mail-ej1-f42.google.com ([209.85.218.42]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MYvTy-1nqmns3uuO-00UqaB; Wed, 10 Aug 2022 11:11:48 +0200
+Received: by mail-ej1-f42.google.com with SMTP id dc19so26493172ejb.12;
+        Wed, 10 Aug 2022 02:11:48 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0K7XE9U1+ayLNTMZ+rWY2o0cgH32BBrwkLPxNuKT9D0wtqzp1Y
+        n31gAi+T1YQLUkd+xGdxOUSQEwis8N17Udj3Aok=
+X-Google-Smtp-Source: AA6agR54UqR5KkP1nrlq8rv8pS4O149IPA0hIzpCIiH6gOpPCAZBchAVTdP8Kkuc+/cGpEwZbfM+QiK1g5NDj4jquFo=
+X-Received: by 2002:a17:907:1c9d:b0:732:f9da:aa51 with SMTP id
+ nb29-20020a1709071c9d00b00732f9daaa51mr4259542ejc.654.1660122708604; Wed, 10
+ Aug 2022 02:11:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
+References: <20220426175436.417283-1-kuba@kernel.org> <20220426175436.417283-4-kuba@kernel.org>
+ <8576aef3-37e4-8bae-bab5-08f82a78efd3@kernel.org>
+In-Reply-To: <8576aef3-37e4-8bae-bab5-08f82a78efd3@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 10 Aug 2022 11:11:32 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a01yfeg-3QO=MeDG7JzXEsTGxK+vMpFJ83SGwPto4AOxw@mail.gmail.com>
+Message-ID: <CAK8P3a01yfeg-3QO=MeDG7JzXEsTGxK+vMpFJ83SGwPto4AOxw@mail.gmail.com>
 Subject: Re: [PATCH net-next 3/6] net: atm: remove support for ZeitNet ZN122x
  ATM devices
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, Chas Williams <3chas3@gmail.com>,
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        Chas Williams <3chas3@gmail.com>,
         linux-atm-general@lists.sourceforge.net,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, arnd@arndb.de
-References: <20220426175436.417283-1-kuba@kernel.org>
- <20220426175436.417283-4-kuba@kernel.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220426175436.417283-4-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:rlUgDwpljBmsDj7uc4yIqEt8ujtjVlTjLMlUVcO8f62yaAWqhvB
+ lnCrKsjSyntNhQb0W24QUt1r2KnnqauWOV84fmhaghq52TqU57+6sM0G/I/dsQNo5M0AVZe
+ /HB87cS6eKmTO0MmgwXCP/fARwVBQXIH/48IBn3ZGNZY1a9/cNb01G2OiPH/3htn+7B56X4
+ N0+IKA9Il5VAZixSXCRwg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BBInhWANcsA=:euyLimCkXAysWjFlrG45rZ
+ qlHxapK4ff35SwnRiLpsZl2PtvakRa3UJRZr7LyNKzIZI2Giojio604vVG3RbRm9BUOg7ZmEN
+ c61P3HBZGzqb66+Dd4cqq9sV5gxKMqoHAdpifFrU8101RS4p+0WifOMxNrQyBGB4WcmRxLtmG
+ nFbmkhyTA8RD73dOPVj3/+bPO5zrAP9J0CNg8x1nNVeq/XvrwI9r/SyjXJJtnIbBxf+FjLDxC
+ TGW1t57hUZkQvnSpkvjhYXPp8Xd/rStzk+Qk00qMx3b/t4IBgwID5k8Ui5rIjVUV89YUufP7u
+ w+d8MxM3wBUSeejSIyD+5yPgf+mZf2fkS0mY5GmPNK/E/p0fPNs2F8xoJuNOy2xTo04MWGFPy
+ QAXD0K38v0e0mkJuQaKSd2BPgyevqapaIZ1o0S07qwtHlJQwjqtgxmNtTZ47JWF7rc0aZvS+u
+ J7teQ1q5EqQOjXW5uGojjCma+y3UfcEySNArtWWA7SPmlq5CA134J1sD2jG9Sy795r3I6Img0
+ LbzQOJ4r0MBrMBLLFmfPySDbjwxDYzheIUf6jySdESHSRX/SYeGJDSwBq7wJvKIefjEmh+15K
+ sFS2h0HhAQBOK72/+aPeS8GRWrhOOvqLdrOc+nEV/klCIoIiF4TK1I0PyYFeLuaUrnWmgnGpJ
+ 19KubxrLhxYnrf0yy10ushkVRDLI99gojAPTOcZMbGbnUGIfxhsOL+M9NwLjnthnNE6u2FA+/
+ 8vGLZZnXwoVeDH6e4P10sR/ljvo1XiTfEVg5TA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,76 +68,28 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 26. 04. 22, 19:54, Jakub Kicinski wrote:
-> This driver received nothing but automated fixes in the last 15 years.
-> Since it's using virt_to_bus it's unlikely to be used on any modern
-> platform.
-...
->   delete mode 100644 include/uapi/linux/atm_zatm.h
+On Wed, Aug 10, 2022 at 9:36 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+>
+> On 26. 04. 22, 19:54, Jakub Kicinski wrote:
+> > This driver received nothing but automated fixes in the last 15 years.
+> > Since it's using virt_to_bus it's unlikely to be used on any modern
+> > platform.
+> ...
+> >   delete mode 100644 include/uapi/linux/atm_zatm.h
+>
+> This unfortunately breaks linux-atm:
+> zntune.c:18:10: fatal error: linux/atm_zatm.h: No such file or directory
+>
+> The source does also:
+> ioctl(s,ZATM_SETPOOL,&sioc)
+> ioctl(s,zero ? ZATM_GETPOOLZ : ZATM_GETPOOL,&sioc)
+> etc.
+>
+> So we should likely revert the below:
 
-This unfortunately breaks linux-atm:
-zntune.c:18:10: fatal error: linux/atm_zatm.h: No such file or directory
+I suppose there is no chance of also getting the linux-atm package updated
+to not include those source files, right? The last release I found on
+sourceforge
+is 12 years old, but maybe I was looking in the wrong place.
 
-The source does also:
-ioctl(s,ZATM_SETPOOL,&sioc)
-ioctl(s,zero ? ZATM_GETPOOLZ : ZATM_GETPOOL,&sioc)
-etc.
-
-So we should likely revert the below:
-
-> --- a/include/uapi/linux/atm_zatm.h
-> +++ /dev/null
-> @@ -1,47 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> -/* atm_zatm.h - Driver-specific declarations of the ZATM driver (for use by
-> -		driver-specific utilities) */
-> -
-> -/* Written 1995-1999 by Werner Almesberger, EPFL LRC/ICA */
-> -
-> -
-> -#ifndef LINUX_ATM_ZATM_H
-> -#define LINUX_ATM_ZATM_H
-> -
-> -/*
-> - * Note: non-kernel programs including this file must also include
-> - * sys/types.h for struct timeval
-> - */
-> -
-> -#include <linux/atmapi.h>
-> -#include <linux/atmioc.h>
-> -
-> -#define ZATM_GETPOOL	_IOW('a',ATMIOC_SARPRV+1,struct atmif_sioc)
-> -						/* get pool statistics */
-> -#define ZATM_GETPOOLZ	_IOW('a',ATMIOC_SARPRV+2,struct atmif_sioc)
-> -						/* get statistics and zero */
-> -#define ZATM_SETPOOL	_IOW('a',ATMIOC_SARPRV+3,struct atmif_sioc)
-> -						/* set pool parameters */
-> -
-> -struct zatm_pool_info {
-> -	int ref_count;			/* free buffer pool usage counters */
-> -	int low_water,high_water;	/* refill parameters */
-> -	int rqa_count,rqu_count;	/* queue condition counters */
-> -	int offset,next_off;		/* alignment optimizations: offset */
-> -	int next_cnt,next_thres;	/* repetition counter and threshold */
-> -};
-> -
-> -struct zatm_pool_req {
-> -	int pool_num;			/* pool number */
-> -	struct zatm_pool_info info;	/* actual information */
-> -};
-> -
-> -#define ZATM_OAM_POOL		0	/* free buffer pool for OAM cells */
-> -#define ZATM_AAL0_POOL		1	/* free buffer pool for AAL0 cells */
-> -#define ZATM_AAL5_POOL_BASE	2	/* first AAL5 free buffer pool */
-> -#define ZATM_LAST_POOL	ZATM_AAL5_POOL_BASE+10 /* max. 64 kB */
-> -
-> -#define ZATM_TIMER_HISTORY_SIZE	16	/* number of timer adjustments to
-> -					   record; must be 2^n */
-> -
-> -#endif
-
-thanks,
--- 
-js
-suse labs
-
+          Arnd
