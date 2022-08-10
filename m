@@ -2,49 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B19058E3E8
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Aug 2022 01:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB5358E76C
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Aug 2022 08:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiHIX4Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Aug 2022 19:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S231217AbiHJGwb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Aug 2022 02:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiHIX4O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Aug 2022 19:56:14 -0400
-Received: from toro.compassinternetsolutions.com (unknown [138.128.241.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364E55C356
-        for <linux-mips@vger.kernel.org>; Tue,  9 Aug 2022 16:56:12 -0700 (PDT)
-Received: from towingselectedto by toro.compassinternetsolutions.com with local (Exim 4.95)
-        (envelope-from <towingselectedto@toro.compassinternetsolutions.com>)
-        id 1oLZ51-00DhAl-Sq
+        with ESMTP id S231400AbiHJGwb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Aug 2022 02:52:31 -0400
+X-Greylist: delayed 4053 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 Aug 2022 23:52:28 PDT
+Received: from bk-medien.net (bk-medien.net [164.132.13.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91A871BEB
+        for <linux-mips@vger.kernel.org>; Tue,  9 Aug 2022 23:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=bk-medien.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:From:Date:Subject:To:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=NSDYXwnBrVI21aycI4zRjljbAqjziR93MV0ht6OxBVk=; b=GCJSRoem1w+iBDpEopFhycjVjJ
+        bBhHVAzbtLyCOSszKXGCDix+GugdCM5wK6OYeL/iZgVwpfLGcz+B7p8yJbaoit7B7A+lWnmbj0GEo
+        AJuvWe8CAibDSuPQv5hvxeCYXn810afQZmbxVWlK7WvGuseRicOXcSPxnxhH5tL2LTmZd4KrSDzZt
+        P2NvEO0zSOgH3alGMaocyguPmbBknAiU7yl+0zw60PF9f7n2/Z1gXyS8G8a6XdHegLsyYyGcvPZAh
+        7Zo2EvmqFmrxqmiHE+8kKvXU32Nq2muEw0lIkJHfPTGFvcmftTMCMtwb1nLKqAlzV0W/W87LUSmZb
+        zKU+q8zw==;
+Received: from xxxedien by whm02.nmkr-hosting.at with local (Exim 4.95)
+        (envelope-from <xxxedien@whm02.nmkr-hosting.at>)
+        id 1oLeWT-0006ZB-VN
         for linux-mips@vger.kernel.org;
-        Tue, 09 Aug 2022 19:56:11 -0400
+        Wed, 10 Aug 2022 05:44:54 +0000
 To:     linux-mips@vger.kernel.org
-Subject: Subject: FINANZKRISE KANN SIE REICH MACHEN!
-X-PHP-Script: www.selectedtowing.com/index.php for 156.146.63.147, 156.146.63.147
-Date:   Tue, 9 Aug 2022 23:56:11 +0000
-From:   Selected Towing <wordpress@selectedtowing.com>
-Reply-To: arnaldo@coinso.com
-Message-ID: <JudO8Azfo9aq29YxTFJVz6OUcCEMLo0OCMGH0WZgYE@www.selectedtowing.com>
-X-Mailer: PHPMailer 6.5.0 (https://github.com/PHPMailer/PHPMailer)
+Subject: =?us-ascii?Q?Der_Ruckgang_der_Kryptowahrung_macht_Sie_zum_Mi?=  =?us-ascii?Q?lliardar?=
+X-PHP-Script: bk-medien.net/index.php for 156.146.63.147
+X-PHP-Originating-Script: 1016:PHPMailer.php
+Date:   Wed, 10 Aug 2022 05:44:53 +0000
+From:   CharlesSap <linux-mips@vger.kernel.org>
+Message-ID: <yFfMjK5EEtEvz1Q72mT0LLIXX96qzYS0ZaJLg4@bk-medien.net>
+X-Mailer: PHPMailer 6.5.3 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - toro.compassinternetsolutions.com
+X-AntiAbuse: Primary Hostname - whm02.nmkr-hosting.at
 X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [1064 996] / [47 12]
-X-AntiAbuse: Sender Address Domain - toro.compassinternetsolutions.com
-X-Get-Message-Sender-Via: toro.compassinternetsolutions.com: authenticated_id: towingselectedto/from_h
-X-Authenticated-Sender: toro.compassinternetsolutions.com: wordpress@selectedtowing.com
+X-AntiAbuse: Originator/Caller UID/GID - [1016 993] / [47 12]
+X-AntiAbuse: Sender Address Domain - whm02.nmkr-hosting.at
+X-Get-Message-Sender-Via: whm02.nmkr-hosting.at: authenticated_id: xxxedien/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: whm02.nmkr-hosting.at: xxxedien
 X-Source: 
 X-Source-Args: 
-X-Source-Dir: selectedtowing.com:/public_html
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,
-        HEADER_FROM_DIFFERENT_DOMAINS,MAY_BE_FORGED,PHP_SCRIPT,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Source-Dir: 
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,PHP_SCRIPT,
+        RCVD_IN_VALIDITY_RPBL,SCC_BODY_URI_ONLY,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [164.132.13.169 listed in bl.score.senderscore.com]
+        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
+        *      mail domains are different
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.3 PHP_SCRIPT Sent by PHP script
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.3 SCC_BODY_URI_ONLY No description available.
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,8 +80,5 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 Message Body:
-Der Preisverfall von Bitcoin macht Sie zum Millionar https://telegra.ph/Passives-Einkommen-und-7500000-Euro-auf-KryptowГ¤hrung-248426-08-09-2
-
---
-This e-mail was sent from a contact form on Selected Towing (http://www.selectedtowing.com)
+DIE WELTFINANZKRISE KANN SIE SEHR REICH MACHEN! https://telegra.ph/Passives-Einkommen-und-7500000-Euro-auf-KryptowГ¤hrung-870034-08-09
 
