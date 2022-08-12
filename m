@@ -2,97 +2,183 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9118591132
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Aug 2022 15:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA1E591419
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Aug 2022 18:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238061AbiHLNKA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 12 Aug 2022 09:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S237771AbiHLQna (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 12 Aug 2022 12:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbiHLNJ7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Aug 2022 09:09:59 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A6289CE3
-        for <linux-mips@vger.kernel.org>; Fri, 12 Aug 2022 06:09:55 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id fy5so1968723ejc.3
-        for <linux-mips@vger.kernel.org>; Fri, 12 Aug 2022 06:09:55 -0700 (PDT)
+        with ESMTP id S229664AbiHLQn3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Aug 2022 12:43:29 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCCCA7A92;
+        Fri, 12 Aug 2022 09:43:28 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id e28so1176631qts.1;
+        Fri, 12 Aug 2022 09:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=C+z24Pl7od6xO10XmMEfecsYemTIfW+XARlPRi62dVY=;
-        b=DS60iJzfIvBYrZGyRNDnjLzZ+f63DwU/shhs5+AfgcxLnc4z5hKPxy9w5R/HgllZZQ
-         N6zLld5rp+WFErwNzDNAeb032jL6x9peM/Y+riLDEnb+ZyvlpGS3Lc54C7jAALrW17hf
-         VYqGKa1vPRN/te/Vzc/fdk2f09m0Ey8Ykf3iAVV4aqK2QEtYlimFPel0e4f31H8EFmO6
-         /vVP99ALEEj+o6h8mDx0sEQmie5WFB/G9w413t4mTHDijy2t4gB5FpJmEBKty9W2I0tW
-         aidCtcNnw7V537UEWEr5xgIQ8sv5OMydhGj5a4qVCEU241sWwAY4a5d1bjtv5TlxOjj/
-         /cIw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=3USZWIN42TMGW91mrZdIe2fOGVO44/PRBAX2ZkSHa9w=;
+        b=bV0o69XoHBOqPCgIjzUOW10xtQdByRjPI8METXiHSn32z7hV1Gp+iiGBe/3hHzXpKO
+         MMax4ggbZUCPWuRnN7F9gcfZAr6fOi6xaX6qJX99iko/ctonw+QmsU6SOF41kPuIstlb
+         1uqrks7uc/qy4gEi+Apy2uCw9mxxie1hkHGSetObOHPW0ChEhotmHjG2bIGsXG4PDNLj
+         c8VfC1A2F2n+uIos2AXHdZduKMp82GK6oOwBzRDf5ZeKmFbCs/iwHA+4wtJQK/vaAbRG
+         xKCFR60j0DtgHKcUAW/xGTKSOm7A1H2CJKwoWgFsh03tnZJAp2jLkPSYUEW0N4vse0Tq
+         t1YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=C+z24Pl7od6xO10XmMEfecsYemTIfW+XARlPRi62dVY=;
-        b=va7Fdi0RQzZWt1pRJlcLcLmaOMH6zX7iw2mYjUTsgFPSnx7/9FII6sTYcCwKlKjroa
-         SUv7f/CQuHFB8Mmt5EAZ7ua9PLn+VFEduZmZ/78FdhjIKMDt6iOwJTfnAGJ+0h4aIln0
-         ZngO45/jXlDU/WBM6Nxx54h9uatW/wC0swP7LZTCRpyEQgaoAhbUkivNQn7O/Qq3J4kd
-         NpKIKiCg7ZmEDDk/bdc3bBPH6uvIWQRxzacOdvIFVfWy5D524kLayp2JuV6c0F2V2yCO
-         FuaazvMDetxI+HmY37nZA5VusIIQDELEBN5O4P1wkG+V9pIula5t5ynvayS3Wl4FjUoW
-         ya8w==
-X-Gm-Message-State: ACgBeo2oGszE9EZpBQCvwWKbisG3rMeWP0uMhvbQ+rAE+JQPxe6bX8Wq
-        UU/uMHnKyZVLe9dvNpckYE3m25N+jir8SqluzQ==
-X-Google-Smtp-Source: AA6agR5y9mYON0VH9tIa0uR00Niww9mJ9oECkXszD9F0TKsNPtMpuc94sysc6LX5J4EecJeWJL8GCmpGIEYAwxMmbYc=
-X-Received: by 2002:a17:906:ef8b:b0:730:e14f:d762 with SMTP id
- ze11-20020a170906ef8b00b00730e14fd762mr2697801ejb.519.1660309793770; Fri, 12
- Aug 2022 06:09:53 -0700 (PDT)
+        bh=3USZWIN42TMGW91mrZdIe2fOGVO44/PRBAX2ZkSHa9w=;
+        b=Rvx2P1Le+JbqjI4kt5Xa5XZawhO7HA1DHTUOQ8R9ES46kektDBF4eV38tUlG05TV+G
+         0C4+tfzqhNJvrTqAxhIPRXvxuIohpEwh5TJ7CL8FGL0c7leRHwoMWbSNVtqXJ6oHTaxG
+         HMnSTKYTfcZi2YYnKsgUj2sMfRGkM4NNgSzsK9K/ulnuH91USIWXnzJZhYwhkM43kqsz
+         WPTPqY3wIg4M0aiqFXn5ygAeBIyjTs+Pk8cxwHUF9w/AbtkurtnWnB7nLiiJofZ3dvHy
+         dl+mJvoAhaRWPluVQdV+DTBG0F+ZqJKyZuckmUxOezr1HmPFQ3+z4w4ojafOjHQB6Z1t
+         GACw==
+X-Gm-Message-State: ACgBeo3n2FKLeE36W8WabpBZcrdrqvFL9HRrE+bxYbCtLulcnL2b1tsC
+        ozlGx3joCAzHUwj0twu2mOU=
+X-Google-Smtp-Source: AA6agR7FB9sjnJbz8bxM0fTIOs1CUGgdBpX/1WCCHOxG/ZfhC2Lu+d4G/6t1d5cOPCfSS1GTViBSsg==
+X-Received: by 2002:a05:622a:48f:b0:343:6db4:d3b1 with SMTP id p15-20020a05622a048f00b003436db4d3b1mr4216701qtx.202.1660322607234;
+        Fri, 12 Aug 2022 09:43:27 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id c9-20020ac85a89000000b0033aac3da27dsm2259925qtc.19.2022.08.12.09.43.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 09:43:26 -0700 (PDT)
+Message-ID: <ac5e544a-a9d7-37c7-3d0b-65e706d544a0@gmail.com>
+Date:   Fri, 12 Aug 2022 09:43:24 -0700
 MIME-Version: 1.0
-Received: by 2002:a17:906:a219:b0:730:8814:715 with HTTP; Fri, 12 Aug 2022
- 06:09:53 -0700 (PDT)
-Reply-To: paulmichael7787@gmail.com
-From:   paul michael <edrichard113@gmail.com>
-Date:   Fri, 12 Aug 2022 14:09:53 +0100
-Message-ID: <CAK5-vuV=aDbsG+UW42LOQE-A1QAAB9c334p=-9M7vqsXY3ADPw@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5038]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [edrichard113[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [edrichard113[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [paulmichael7787[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] MIPS: Expose prid and globalnumber to sysfs
+Content-Language: en-US
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, linux-api@vger.kernel.org
+References: <20220811101236.1925-1-jiaxun.yang@flygoat.com>
+ <66e7f45b-2292-f76e-b9a1-3db2af8c24a9@gmail.com>
+ <2ED0B1C9-07AB-4DE3-BC85-F490FA94785F@flygoat.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <2ED0B1C9-07AB-4DE3-BC85-F490FA94785F@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Every time I retest your email, it tells me to check with my ISP or
-Log onto incoming mail server (POP3): Your e-mail server rejected .
-Kindly verify if your email is still valid for us to talk.
+On 8/12/22 03:29, Jiaxun Yang wrote:
+> 
+> 
+>> 2022年8月12日 03:21，Florian Fainelli <f.fainelli@gmail.com 
+>> <mailto:f.fainelli@gmail.com>> 写道：
+>>
+>>
+>>
+>> On 8/11/2022 3:12 AM, Jiaxun Yang wrote:
+>>> Some application would like to know precise model and rev of processor
+>>> to do errata workaround or optimization.
+>>> Expose them in sysfs as:
+>>> /sys/devices/system/cpu/cpuX/regs/identification/prid
+>>> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+>>> Reusing AArch64 CPU registers directory.
+>>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com 
+>>> <mailto:jiaxun.yang@flygoat.com>>
+>>> ---
+>>> v2: Drop static qualifier for kobj (gregkh)
+>>> ---
+>>>  .../ABI/testing/sysfs-devices-system-cpu      | 11 +++
+>>>  arch/mips/kernel/topology.c                   | 96 +++++++++++++++++++
+>>>  2 files changed, 107 insertions(+)
+>>> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu 
+>>> b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>> index 5bf61881f012..adf855e7bb9b 100644
+>>> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>> @@ -512,6 +512,17 @@ Description:information about CPUs heterogeneity.
+>>> cpu_capacity: capacity of cpuX.
+>>>  +What:/sys/devices/system/cpu/cpuX/regs/
+>>> +/sys/devices/system/cpu/cpuX/regs/identification/
+>>> +/sys/devices/system/cpu/cpuX/regs/identification/prid
+>>> +/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+>>> +Date:Augest 2022
+>>
+>> typo: August
+> 
+> Thanks, good catch :-)
+> 
+>>
+>>> +Contact:Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org 
+>>> <mailto:linux-mips@vger.kernel.org>>
+>>> +Description:MIPS CPU registers
+>>> +
+>>> +'identification' directory exposes the Processor ID and Global Number
+>>> +registers for identifying model and revision of the CPU.
+>>> +
+>>>  What:/sys/devices/system/cpu/vulnerabilities
+>>> /sys/devices/system/cpu/vulnerabilities/meltdown
+>>> /sys/devices/system/cpu/vulnerabilities/spectre_v1
+>>> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
+>>> index 9429d85a4703..0e3730f3c00f 100644
+>>> --- a/arch/mips/kernel/topology.c
+>>> +++ b/arch/mips/kernel/topology.c
+>>> @@ -5,6 +5,8 @@
+>>>  #include <linux/node.h>
+>>>  #include <linux/nodemask.h>
+>>>  #include <linux/percpu.h>
+>>> +#include <linux/seq_file.h>
+>>> +#include <linux/smp.h>
+>>>    static DEFINE_PER_CPU(struct cpu, cpu_devices);
+>>>  @@ -26,3 +28,97 @@ static int __init topology_init(void)
+>>>  }
+>>>    subsys_initcall(topology_init);
+>>> +
+>>> +static struct kobj_type cpuregs_kobj_type = {
+>>> +.sysfs_ops = &kobj_sysfs_ops,
+>>> +};
+>>> +
+>>> +struct cpureg {
+>>> +struct kobject kobj;
+>>> +struct cpuinfo_mips *info;
+>>> +};
+>>> +DEFINE_PER_CPU(struct cpureg, cpuregs);
+>>> +
+>>> +#define kobj_to_cpureg(kobj)container_of(kobj, struct cpureg, kobj)
+>>> +#define CPUREGS_ATTR_RO(_name, _field)\
+>>> +static ssize_t _name##_show(struct kobject *kobj,\
+>>> +struct kobj_attribute *attr, char *buf)\
+>>> +{\
+>>> +struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;\
+>>> +\
+>>> +return sprintf(buf, "0x%08x\n", info->_field);\
+>>
+>> Would not you be able to simplify this greatly with just:
+>>
+>> struct cpuinfo_mips *info = current_cpu_data;
+> 
+> Because some fields in PRID and globalnumber are not consistent between 
+> cores
+> so it needs to be per CPU.
+
+Yes my bad, I was thinking that you could simplify things by always 
+getting the registers of the CPU you are running on, but you need to 
+create those attributes for each CPU in the system and ensure that they 
+do resolve to the actual cpuinfo_mips of said CPU, such that when you do:
+
+cat /sys/device/system/cpu/cpu*/regs/prid
+
+we do return the actual information of that CPU number, not the one from 
+the CPU we are on.
+
+Thanks!
+-- 
+Florian
