@@ -2,44 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C661F592377
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Aug 2022 18:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294E759240A
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Aug 2022 18:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241244AbiHNQWC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 Aug 2022 12:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
+        id S229980AbiHNQ1t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 Aug 2022 12:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240811AbiHNQVh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Aug 2022 12:21:37 -0400
+        with ESMTP id S242018AbiHNQ0f (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Aug 2022 12:26:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2FD140C6;
-        Sun, 14 Aug 2022 09:19:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A466119C06;
+        Sun, 14 Aug 2022 09:23:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11B70B80B3F;
-        Sun, 14 Aug 2022 16:19:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C4CC433D6;
-        Sun, 14 Aug 2022 16:19:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B976B80B86;
+        Sun, 14 Aug 2022 16:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035C7C433C1;
+        Sun, 14 Aug 2022 16:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660493995;
-        bh=G31bJPoYMv94cqbiSEOGE7aQCgluitafdoR37mIssKs=;
+        s=k20201202; t=1660494201;
+        bh=pVh0kY2dRG6Xb0FG85icTj2NW55fBngQJ94RJpxzoGQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P5bkio9VbD4KX+wDvb7pCW/0YH0jtek5LUbWVP1HKu6+whUtnk+T9hmoXWLWKjiJ4
-         +rAtT2S18MybqBc9TKvjVVMdcNZJSj25h+k9qcq3+yhu1KtGAcmjM8T0Iydiv2XTy5
-         dHoZBdHDu+slAbQi6Qem87XkZpSFwaW7oOetwJL58yku/Fqe5LUontYc9icYhpiKeC
-         GSA53kz01NaI4cDO4ESxz7y5tpCYuWvAukFEEaBXvZUp6lEYiu1yfhLD/3q+hfw4FD
-         RrNwjTqfSz2NOqbQN8FMbpy39Ud0TChExrluKKm81ESz3QVvOQ+u+VS9+PomIcg954
-         6nXgNOa6XUuRw==
+        b=Bov+EfIjR+vFYpJM22MvIQtmozjkkUDBS5lzXVB8CqR220d6+NoMFdiwDZcHopLe1
+         +oOj1OJOhIJdMzy+iXLHPuuoaeSs+ZYxafmFNvvumx8NOMa+GwukPu4SAydhCB3KcW
+         BzpjJzPJu7fVtV+SCedFs4DqN27fr8LbdPSm1zg8lC/uKhWDg6Ealr8UCOu6Y5MozB
+         dr85QLSFMB61bCptpGSO3oxBJz4ILZRdymUTIxEtO7Nu051arDsREgwE1YJFhIbtjn
+         vCOy9ihYrK7Wq3z2FluE6havOW+SWk4TfgGTzcqI9GxfGM+YdFknue3azCL9KMcXTp
+         MtZANNjPDYHjw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Liang He <windhl@126.com>,
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, ye.guojin@zte.com.cn,
-        linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 06/48] mips: cavium-octeon: Fix missing of_node_put() in octeon2_usb_clocks_start
-Date:   Sun, 14 Aug 2022 12:18:59 -0400
-Message-Id: <20220814161943.2394452-6-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, ndesaulniers@google.com,
+        macro@orcam.me.uk, linux-mips@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.19 46/48] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
+Date:   Sun, 14 Aug 2022 12:19:39 -0400
+Message-Id: <20220814161943.2394452-46-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220814161943.2394452-1-sashal@kernel.org>
 References: <20220814161943.2394452-1-sashal@kernel.org>
@@ -57,39 +58,68 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 7a9f743ceead60ed454c46fbc3085ee9a79cbebb ]
+[ Upstream commit 74de14fe05dd6b151d73cb0c73c8ec874cbdcde6 ]
 
-We should call of_node_put() for the reference 'uctl_node' returned by
-of_get_parent() which will increase the refcount. Otherwise, there will
-be a refcount leak bug.
+When CONFIG_XPA is enabled, Clang warns:
 
-Signed-off-by: Liang He <windhl@126.com>
+  arch/mips/mm/tlbex.c:629:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+          if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
+                              ^
+  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+                                     ^
+  arch/mips/mm/tlbex.c:2568:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+          if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
+                                ^
+  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+                                     ^
+  2 errors generated.
+
+_PAGE_NO_EXEC can be '0' or '1 << _PAGE_NO_EXEC_SHIFT' depending on the
+build and runtime configuration, which is what the negation operators
+are trying to convey. To silence the warning, explicitly compare against
+0 so the result of the '<<' operator is not implicitly converted to a
+boolean.
+
+According to its documentation, GCC enables -Wint-in-bool-context with
+-Wall but this warning is not visible when building the same
+configuration with GCC. It appears GCC only warns when compiling C++,
+not C, although the documentation makes no note of this:
+https://godbolt.org/z/x39q3brxf
+
+Reported-by: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/cavium-octeon/octeon-platform.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/mm/tlbex.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
-index a994022e32c9..ce05c0dd3acd 100644
---- a/arch/mips/cavium-octeon/octeon-platform.c
-+++ b/arch/mips/cavium-octeon/octeon-platform.c
-@@ -86,11 +86,12 @@ static void octeon2_usb_clocks_start(struct device *dev)
- 					 "refclk-frequency", &clock_rate);
- 		if (i) {
- 			dev_err(dev, "No UCTL \"refclk-frequency\"\n");
-+			of_node_put(uctl_node);
- 			goto exit;
- 		}
- 		i = of_property_read_string(uctl_node,
- 					    "refclk-type", &clock_type);
--
-+		of_node_put(uctl_node);
- 		if (!i && strcmp("crystal", clock_type) == 0)
- 			is_crystal_clock = true;
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index 8dbbd99fc7e8..be4d4670d649 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -626,7 +626,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
+ 		return;
  	}
+ 
+-	if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
++	if (cpu_has_rixi && _PAGE_NO_EXEC != 0) {
+ 		if (fill_includes_sw_bits) {
+ 			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
+ 		} else {
+@@ -2565,7 +2565,7 @@ static void check_pabits(void)
+ 	unsigned long entry;
+ 	unsigned pabits, fillbits;
+ 
+-	if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
++	if (!cpu_has_rixi || _PAGE_NO_EXEC == 0) {
+ 		/*
+ 		 * We'll only be making use of the fact that we can rotate bits
+ 		 * into the fill if the CPU supports RIXI, so don't bother
 -- 
 2.35.1
 
