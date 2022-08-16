@@ -2,121 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE44595A61
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Aug 2022 13:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A63595B3E
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Aug 2022 14:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234967AbiHPLkX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Aug 2022 07:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S233555AbiHPMGd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Aug 2022 08:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234843AbiHPLkA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Aug 2022 07:40:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6CA101E8;
-        Tue, 16 Aug 2022 04:07:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8EC0B8169F;
-        Tue, 16 Aug 2022 11:07:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7580DC43143;
-        Tue, 16 Aug 2022 11:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660648059;
-        bh=4MGnUkOgJK43wRliQHo1gFwCDv8iRH3dd6NYX9GNPIw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R3ovARCdESQqVaYpRUbH6uXKRwjXj+Vm+LnYM+P15vzzUy7GoD8QStsOlasG65hr7
-         UoJPlBJ40zGKn/Cq2RgcziJbvZ/wqz8rnVdwC/s5xzqrXE/TulNExtKKI2ik12urWa
-         OcOun3Ljy4hg6OycARvqUM/qiAQRpGtwt//b/KkTRcAjBgWEEsoE3KHktQRw5bw9sx
-         KndrPWBid8D3oehdLbPWj5iKgMxfqcd2S2p7IHCRpL+mBTUnGyA1dbpy9z+1Mb9I1K
-         +jcbog+0fnxkF50r4fGMC1KM186utajlGvqpaZmFkmPtRrLlIQN/N6HVD8kBam9zBN
-         GijK15UGbxb2Q==
-Received: by mail-vs1-f48.google.com with SMTP id o123so9749219vsc.3;
-        Tue, 16 Aug 2022 04:07:39 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2joEZUgvDzhwfLo8D3//M3wvjOMbZpqj+XDjcw/w4uuAcFY15L
-        0Tb4yXxMMz1CsgBmv9fGWFVC4Q94Ow9u/Eat/6I=
-X-Google-Smtp-Source: AA6agR6jPSaNNOF5k9aH9Wvt0lAB54bLIxg5uSvrINyZxUK1+FmKqYfk1bSdzRgwlPgw75Neoa0irEIOwci8GPjPWYs=
-X-Received: by 2002:a05:6102:b14:b0:38a:88dd:c169 with SMTP id
- b20-20020a0561020b1400b0038a88ddc169mr8394631vst.84.1660648058275; Tue, 16
- Aug 2022 04:07:38 -0700 (PDT)
+        with ESMTP id S235192AbiHPMFs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Aug 2022 08:05:48 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66623578A7;
+        Tue, 16 Aug 2022 04:55:19 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id C35195C01D2;
+        Tue, 16 Aug 2022 07:55:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 16 Aug 2022 07:55:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660650918; x=1660737318; bh=4Ybgh31u0I
+        +7D7+hcoMIGJWFz0aze/c+ECeecGK4vmQ=; b=BGohKPFWPDuGkhKTFsvsY31hIJ
+        o0Mo+enhrCTvBsuCbgisMT7mP3Htz80+i7X8sbsmACdmXVZPO0LKnNaa17v/JwOi
+        so2V8mrNu1MEPb1bbyXoRtvXwb2O11gr5fnnaVj6ISf4MisGgFXPSNVAwWkFgHJM
+        qu8ORQWDuQa/Te5x1JSAs7Gy7WCt+CGRpIlv8LrmpLej2ThQaD0JRr1N5ThBCr/T
+        2XgTziCW+uCCUydjeUSmFeuf5793zJbU/d71h1Dkw7UbZlieSNvZn3h28zngVYbm
+        2rkEh4QvH85L+i9jl6T7XjTYK2PsqtArCFWu6l6llR6Tyj2peNZ4uXFgu4YQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660650918; x=1660737318; bh=4Ybgh31u0I+7D7+hcoMIGJWFz0az
+        e/c+ECeecGK4vmQ=; b=0Y6F42MdGNPSbYV/D8ydjq+I6dZQ/9k3BE+C3LW0V2QD
+        R99Sj3iTqNsdzk+/w0p9suwTzJUaE1YNHuBZsajkXZ/m6POyXqsddVrpTxH48/Fq
+        EmwK6ogWk8/AV1L3eOm1sV2u5ixFD5100I/zv8n35rzgpmnZHyfabMcf9yaY0Pn+
+        1ZbJY6GQGy+f/qUa1zq45szCH4i8xZXiCKXFHFX3jRUhOmh7ZfoeMy6tQ+Z11d2n
+        +0Nv28bvh8a0UwvcdsNwS3bQDHG8XDu+vAI/D4cpxPzpY2U7U2QY0kYFH9qt+++5
+        /gn61yi3+Gv5NOKIBXAiMhAeb7kIc2TqerpXWXiIsw==
+X-ME-Sender: <xms:poX7YnPXIFD44GWmeBgYyED6dl3iCLdrMBjA21VfYC3HtJiu3U8c6w>
+    <xme:poX7Yh8qhz93RbUgPwceHlk6HPZfC76hZpSKnVqX1hDhgVY2Md6yug8qEUKELnYKt
+    xpkTOsI2aC2RA>
+X-ME-Received: <xmr:poX7YmQhWSpC-qgJ-4kN4CRF8KnYESvfLwL_kYmZlSlGErx2RHkDo2KLtskNev8gmQdKdGFoFYStAAf5HCe90Cz4xsn8w7OP>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepjefhle
+    ffjeekjeehtefgieegkeeuueduvdevkeejkeeugefgvdfhfeetleeggfdvnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:poX7Yrt7BuH2UxyQ7t8K5GdXgZY8Ng0btdtktAaDOoL4mBGTH0foAQ>
+    <xmx:poX7Yvd0lBmOm9NRhqFWqHugSluIP0rtEh90YCL5bdkKvEgU24UV5A>
+    <xmx:poX7Yn1T5stPzRYGCakkqKwuxsy8dJQr7m11RlIAcSrgPZ-7lJtiwQ>
+    <xmx:poX7YgUz7tei6B1wuPdRxJP_--5SN2n7LNDE8xabcfK9w8GnRMUkgw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Aug 2022 07:55:17 -0400 (EDT)
+Date:   Tue, 16 Aug 2022 13:55:15 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, linux-api@vger.kernel.org,
+        f.fainelli@gmail.com
+Subject: Re: [PATCH v4] MIPS: Expose prid and globalnumber to sysfs
+Message-ID: <YvuFoyUVyjUdJNPf@kroah.com>
+References: <20220816091258.9571-1-jiaxun.yang@flygoat.com>
+ <YvthfQUfv0TiO/bK@kroah.com>
+ <BA886B5F-EE3B-4227-AC3C-E7FBAAA98ECB@flygoat.com>
 MIME-Version: 1.0
-References: <20220815143959.1511278-1-zi.yan@sent.com> <Yvtxv2jywm3+Q3ut@arm.com>
-In-Reply-To: <Yvtxv2jywm3+Q3ut@arm.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 16 Aug 2022 19:07:24 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6Np=L9JcrGjh8zy1Kxb8b9f_dzD00kgV6odzZV-L5pbA@mail.gmail.com>
-Message-ID: <CAAhV-H6Np=L9JcrGjh8zy1Kxb8b9f_dzD00kgV6odzZV-L5pbA@mail.gmail.com>
-Subject: Re: [PATCH] arch: mm: rename FORCE_MAX_ZONEORDER to ARCH_FORCE_MAX_ORDER
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Zi Yan <ziy@nvidia.com>, Linux-MM <linux-mm@kvack.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Qin Jian <qinjian@cqplus1.com>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-oxnas@groups.io, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BA886B5F-EE3B-4227-AC3C-E7FBAAA98ECB@flygoat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-For LoongArch:
+On Tue, Aug 16, 2022 at 12:43:52PM +0100, Jiaxun Yang wrote:
 
-Acked-by: Huacai Chen <chenhuacai@kernel.org>
+<snip>
 
-On Tue, Aug 16, 2022 at 6:30 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Mon, Aug 15, 2022 at 10:39:59AM -0400, Zi Yan wrote:
-> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > index 571cc234d0b3..c6fcd8746f60 100644
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -1401,7 +1401,7 @@ config XEN
-> >       help
-> >         Say Y if you want to run Linux in a Virtual Machine on Xen on ARM64.
-> >
-> > -config FORCE_MAX_ZONEORDER
-> > +config ARCH_FORCE_MAX_ORDER
-> >       int
-> >       default "14" if ARM64_64K_PAGES
-> >       default "12" if ARM64_16K_PAGES
->
-> For arm64:
->
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Sorry, html email will be rejected by the mailing list, please resend
+after fixing up your email client.
+
+thanks,
+
+greg k-h
