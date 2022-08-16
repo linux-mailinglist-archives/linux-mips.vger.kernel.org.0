@@ -2,127 +2,249 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C54595577
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Aug 2022 10:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079B1595780
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Aug 2022 12:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbiHPIm0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Aug 2022 04:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S234301AbiHPKHI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Aug 2022 06:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbiHPImB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Aug 2022 04:42:01 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5CA120B2;
-        Mon, 15 Aug 2022 23:46:38 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id mn10so2503639qvb.10;
-        Mon, 15 Aug 2022 23:46:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=mQKxHhlVCpHcdp8dQEIScJFQsrh06tzn535mwalxKj0=;
-        b=7FbR1r7n2I5aPAq7Hg56T1pgoMtTwe1Yj5gkKrFH99WJJUndpXTPtMJGMoSRTSKCSP
-         mQQsnDwqnqybhIBq5/YP8NIgB1Mn36TWofUhtAeYeQWA4YWAKDIq1xQ01+urVyINAuYw
-         MNxADnkakoxLLrVWOeewcTdcO2FUDKgmYkYjfN6W1H3Z2Scj94wewwLzwfMYOaQ/VNs3
-         6cG4PsWUsevJdJ/OcgQXDJpR6jN190NfnLXVw/L6p9JyGz+NbQojxU/W+o0EhGrRrJ8S
-         bt6GDMRVlzhfxHsDqimaqjsBz9lDSyy6/8nExqBIif8I3HH58cniPij4eshv/DPpIwoi
-         IDMQ==
-X-Gm-Message-State: ACgBeo3nlekMkqpHUiB9cT8Vzf83NJlD10MA6/JJDwYuXKQvIQv+7M/R
-        u7jXW7EekRFOVYYYwLoUh7TBKjWxp5imSw==
-X-Google-Smtp-Source: AA6agR6MvS0/rMglc3x2FMGmqy58aKJ19CD3Kda50Do7FFQCLDgjn6VdqlH4O4wHUVpoAP/Ve1UoQA==
-X-Received: by 2002:a0c:a992:0:b0:492:b5b8:faad with SMTP id a18-20020a0ca992000000b00492b5b8faadmr5702649qvb.33.1660632397006;
-        Mon, 15 Aug 2022 23:46:37 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id h5-20020a05620a284500b006b9a24dc9d7sm10377617qkp.7.2022.08.15.23.46.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 23:46:34 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-32194238c77so127605097b3.4;
-        Mon, 15 Aug 2022 23:46:31 -0700 (PDT)
-X-Received: by 2002:a05:6902:100a:b0:676:ed53:25b0 with SMTP id
- w10-20020a056902100a00b00676ed5325b0mr13356288ybt.365.1660632391068; Mon, 15
- Aug 2022 23:46:31 -0700 (PDT)
+        with ESMTP id S234312AbiHPKGs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Aug 2022 06:06:48 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C10D6C13B;
+        Tue, 16 Aug 2022 02:13:09 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B97AD5C023C;
+        Tue, 16 Aug 2022 05:13:06 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 16 Aug 2022 05:13:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1660641186; x=1660727586; bh=8a1Us8uLfYqD/kfLMEoeT8k8O
+        knxiZLX1kGLg+OrAM4=; b=r6H+8a3y5yj7F0UBxWS3xmNGJ4AZCoV08iA9aYSiG
+        iIUMD0BVkiArJeidyP3+THHDgukkHtiYS2rV2+5jEczyQJWOJxa+ZTlU/LZywIWS
+        jIn0WD0vtvdAsrpKUe75BD5Vx/SgInIM8oyeFBWYjnul23Yq+Jc1VhQXQITkEX9X
+        8zs6nw70KAkOukTTHFd4WAytOG+3ydSI1JQuJTvF9oLI9+cHiDr15mPHkj3ROJsn
+        GzolNxC7i1+u7A9MSZNbGTYdtofb7F5t4LMWGpcCg3ovJpYAwi+ENSePxTE1uFI4
+        GcG0mtNLrBJAjou8YRD3LVd+XUzGW770AE4pH7tIXRvrA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660641186; x=1660727586; bh=8a1Us8uLfYqD/kfLMEoeT8k8OknxiZLX1kG
+        Lg+OrAM4=; b=wrYGYkzDiCXY2jq9yVfNlwFSOW1/NZDsNT4xf02gU7Drm1Ei1QJ
+        NJiG9y7Vqv95PxaclaFAxVInyTQjKlZScb4tpZip+4HPtydJDOre9VjpLJjZQUbY
+        vMaNQm3i3OrdILpnDNqtBLyKJ/gnptxLxMo8UZ+Nnc8RB4EDuTbaat4f7Eha2+VK
+        dbVzXpccV2JY2643CcTGcd97TU5fz1msF9n5JBFo6E7VgKk92FrTeX/vREcE6mr1
+        1TzcvdmZPxzFpDa3F/Piz+LcbnzQ3zrQbljtlPw7k4Ds7tGE8TVCoYa8lFtP6c65
+        qBsGmMExD8Tcxq8R3qp4HMEQbsmvRQnt9dw==
+X-ME-Sender: <xms:ol_7YgtxxlMA42cgcxr0bVkHAmattxopCO_l9CI8J6QblsGfqubOUw>
+    <xme:ol_7YtcfKP1ox8rn6hoG4fMB6BPI6kxmW4owEBEs35Z21K-I0_jPQkwtT8nKngl2x
+    OYWqvRumZocdqE_GTU>
+X-ME-Received: <xmr:ol_7YrwQRZpYNfse4O4jlQKtMJOfkvzWMHvHCsT_fjOyjKHnK_N75aEm_uHQNvn008a8o0B_WTaTdQldztknVG5Gw2HKWZEKfFlGf80nNQ-4x2TIItzR7JfG>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgedgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:ol_7YjN0pHaGH713wYRLYfbjQbtuSU04CsZyS0JOSOEjfhTJMUmyPg>
+    <xmx:ol_7Yg8Qs9kdGRzPVQJgiJ8YxL0TNtXbWC_ML7BEiVc2SQR5IKYjSA>
+    <xmx:ol_7YrXsZeKZ0I5zREdmRUXKuaHtn1heGrrn8czkR53XWaFV4WJw2w>
+    <xmx:ol_7Yvkeo-Dttf3JulnEP_ywlgJvVFLVbZJRVwrNLQ51D415F7pWaQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Aug 2022 05:13:05 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-api@vger.kernel.org, greg@kroah.com, f.fainelli@gmail.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v4] MIPS: Expose prid and globalnumber to sysfs
+Date:   Tue, 16 Aug 2022 09:12:58 +0000
+Message-Id: <20220816091258.9571-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220815143959.1511278-1-zi.yan@sent.com>
-In-Reply-To: <20220815143959.1511278-1-zi.yan@sent.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 16 Aug 2022 08:46:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWohdUZxi3A=H1wqY4rYrLD-ME6mmhWb6Z-udovd=1BhQ@mail.gmail.com>
-Message-ID: <CAMuHMdWohdUZxi3A=H1wqY4rYrLD-ME6mmhWb6Z-udovd=1BhQ@mail.gmail.com>
-Subject: Re: [PATCH] arch: mm: rename FORCE_MAX_ZONEORDER to ARCH_FORCE_MAX_ORDER
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-oxnas@groups.io, linux-csky@vger.kernel.org,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        loongarch@lists.linux.dev,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 4:40 PM Zi Yan <zi.yan@sent.com> wrote:
-> From: Zi Yan <ziy@nvidia.com>
->
-> This Kconfig option is used by individual arch to set its desired
-> MAX_ORDER. Rename it to reflect its actual use.
->
-> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+Some application would like to know precise model and rev of processor
+to do errata workaround or optimization.
 
->  arch/m68k/Kconfig.cpu                        | 2 +-
+Expose them in sysfs as:
+/sys/devices/system/cpu/cpuX/regs/identification/prid
+/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reusing AArch64 CPU registers directory.
 
-Gr{oetje,eeting}s,
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+v2: Drop static qualifier for kobj (gregkh)
+v3: Use kzalloc to allocate struct cpuregs.
+    note: When Greg mentioned about static I was thinking about
+    static qualifier of percpu variable. After reading documents
+    again it turns out kobjs should be allocated at runtime. Arm64's
+    cpuinfo kobj is also on a percpu variable... I guess that was a
+    intentional use?
+v4: Properly handle err of kobj creation. (gregkh)
+---
+ .../ABI/testing/sysfs-devices-system-cpu      |  11 ++
+ arch/mips/kernel/topology.c                   | 103 ++++++++++++++++++
+ 2 files changed, 114 insertions(+)
 
-                        Geert
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index 5bf61881f012..adf855e7bb9b 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -512,6 +512,17 @@ Description:	information about CPUs heterogeneity.
+ 
+ 		cpu_capacity: capacity of cpuX.
+ 
++What:		/sys/devices/system/cpu/cpuX/regs/
++		/sys/devices/system/cpu/cpuX/regs/identification/
++		/sys/devices/system/cpu/cpuX/regs/identification/prid
++		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
++Date:		Augest 2022
++Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
++Description:	MIPS CPU registers
++
++		'identification' directory exposes the Processor ID and Global Number
++		registers for identifying model and revision of the CPU.
++
+ What:		/sys/devices/system/cpu/vulnerabilities
+ 		/sys/devices/system/cpu/vulnerabilities/meltdown
+ 		/sys/devices/system/cpu/vulnerabilities/spectre_v1
+diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
+index 9429d85a4703..45a15eda651a 100644
+--- a/arch/mips/kernel/topology.c
++++ b/arch/mips/kernel/topology.c
+@@ -5,6 +5,8 @@
+ #include <linux/node.h>
+ #include <linux/nodemask.h>
+ #include <linux/percpu.h>
++#include <linux/seq_file.h>
++#include <linux/smp.h>
+ 
+ static DEFINE_PER_CPU(struct cpu, cpu_devices);
+ 
+@@ -26,3 +28,104 @@ static int __init topology_init(void)
+ }
+ 
+ subsys_initcall(topology_init);
++
++static struct kobj_type cpuregs_kobj_type = {
++	.sysfs_ops = &kobj_sysfs_ops,
++};
++
++struct cpureg {
++	struct kobject kobj;
++	struct cpuinfo_mips *info;
++};
++static DEFINE_PER_CPU(struct cpureg *, cpuregs);
++
++#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
++#define CPUREGS_ATTR_RO(_name, _field)						\
++	static ssize_t _name##_show(struct kobject *kobj,			\
++			struct kobj_attribute *attr, char *buf)			\
++	{									\
++		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
++										\
++		return sprintf(buf, "0x%08x\n", info->_field);	\
++	}									\
++	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
++
++CPUREGS_ATTR_RO(prid, processor_id);
++CPUREGS_ATTR_RO(globalnumber, globalnumber);
++
++static struct attribute *cpuregs_id_attrs[] = {
++	&cpuregs_attr_prid.attr,
++	&cpuregs_attr_globalnumber.attr,
++	NULL
++};
++
++static const struct attribute_group cpuregs_attr_group = {
++	.attrs = cpuregs_id_attrs,
++	.name = "identification"
++};
++
++static int cpuregs_cpu_online(unsigned int cpu)
++{
++	int rc;
++	struct device *dev;
++	struct cpureg *reg;
++
++	dev = get_cpu_device(cpu);
++	if (!dev) {
++		rc = -ENODEV;
++		goto out;
++	}
++	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
++	if (!reg) {
++		rc = -ENOMEM;
++		goto out;
++	}
++	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
++					&dev->kobj, "regs");
++	if (rc)
++		goto out_kfree;
++	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
++	if (rc)
++		goto out_kobj;
++
++	return 0;
++out_kobj:
++	kobject_put(&reg->kobj);
++out_kfree:
++	kfree(reg);
++out:
++	return rc;
++}
++
++static int cpuregs_cpu_offline(unsigned int cpu)
++{
++	struct device *dev;
++	struct cpureg *reg = per_cpu(cpuregs, cpu);
++
++	dev = get_cpu_device(cpu);
++	if (!dev || !reg)
++		return -ENODEV;
++	if (reg->kobj.parent) {
++		sysfs_remove_group(&reg->kobj, &cpuregs_attr_group);
++		kobject_put(&reg->kobj);
++	}
++	kfree(reg);
++
++	return 0;
++}
++
++static int __init cpuinfo_regs_init(void)
++{
++	int ret;
++
++
++	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "mips/topology:online",
++				cpuregs_cpu_online, cpuregs_cpu_offline);
++	if (ret < 0) {
++		pr_err("cpuinfo: failed to register hotplug callbacks.\n");
++		return ret;
++	}
++	return 0;
++}
++
++device_initcall(cpuinfo_regs_init);
+-- 
+2.34.1
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
