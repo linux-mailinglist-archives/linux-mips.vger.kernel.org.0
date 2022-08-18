@@ -2,108 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35CD597DC1
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Aug 2022 07:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E97A597EFE
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Aug 2022 09:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243140AbiHRFAf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Aug 2022 01:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
+        id S243783AbiHRHJN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Aug 2022 03:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243474AbiHRFAe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Aug 2022 01:00:34 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722A698582;
-        Wed, 17 Aug 2022 22:00:31 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id q16so429466pgq.6;
-        Wed, 17 Aug 2022 22:00:31 -0700 (PDT)
+        with ESMTP id S241769AbiHRHJI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Aug 2022 03:09:08 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE81885AB1
+        for <linux-mips@vger.kernel.org>; Thu, 18 Aug 2022 00:09:06 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id gb36so1573940ejc.10
+        for <linux-mips@vger.kernel.org>; Thu, 18 Aug 2022 00:09:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=s4xeiciv0oEXOOrELlvavMW1V2yOoGFDn06W9jus6bc=;
-        b=hTtv51oheeUktD5EFDVqEtImldmicU2cDDbVGBc85sv+/4bhVXVp7z0Sun9nTVinS3
-         QtUGyFpI8+CzPlEHLXgxI99OlpCiUZ5o/hxx9H1BDZGL55KzjcT79mHUPthUX2qLAlJI
-         yWZYrjyW0drfsDM0vNtrHc1iehdf6H6cVTRrq9pFWAk0Dsr52dQk34PXnBv6Gi61WMWw
-         ju6L+Nqzsz/vI6KRcpmf26zcjksrJC5TonHdCQSOtXAD+3T6OKWYAREqlVgWxtA3vlUd
-         1fWZ9Towj5Zcu62OjzWQeNVJDLqF7678cKLKAUOg72y9rGOH0Xs78f5tiQZUmcjM6kIE
-         Ba8g==
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=uB1dny6tZXinATmuz0fIf4H2QaK3MjZ8vYEWovRHfu4=;
+        b=8WejKLL+aMqLWC0O3FQnTQmsIGmJCsnGHI2BDlBU8o4VWw/LcfeBgWzHmX3qQ0kNdP
+         i2wsCNg8dEG2PeAx3BljZBM7q9E11q3FuTEevJM6v/fsy6yCCds3XLZ0KNJgMEwickhT
+         5pX++joOCNvyGmso9a/ojzehd7Cu+02vF5ZdH+w627ZOLQGf12vEwqgwdFkq2GSxyk3o
+         qKVx23t5WYxxqDzVDlUxryvOZHIM45E9l9h0uZxMmePvFva3B4rfwF+trq833C+5x8YJ
+         SqjNNHj/sd925+/MH11H9yWzWNmxhAGk+W5tp0j6FKddjOmqYwdrEqQ2VLWtuHStlIh3
+         ns3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=s4xeiciv0oEXOOrELlvavMW1V2yOoGFDn06W9jus6bc=;
-        b=DBEZq20DxPAnKXy47p05nScq7BDNLObbFdZL52mTFD1p1NeQ891lHQTLHhxZU8MX4r
-         A57nPRoUb2dCo+OcgUTsHEyW1dW6t7Q1yV+YDL99kHme5uOdYC48Azr+bSWW4PmnYywY
-         C4N6lX8+9J4c5RlJMxtTQIyti+8HAjM9Kn4d5CK0jK760PwE8ViU+cmIshnbEaAqVcwK
-         ZyKafi6+c01e3zG9ejJK6b65IdltGfSlhwE+XEMovxvc94FzhbkQ3MoRcRLShxj52WRF
-         cINGDAjZNoj1s5PcHSDmysLw7Sn7dF9VmH6He8sKZMxgOd27d/YsdMlg9zF3Gxv/Y9vd
-         LjUg==
-X-Gm-Message-State: ACgBeo1KWYs9NVY5q6W7M6RTK1+EKRTH4ZThRjXXhj5DnBlT3tD++38k
-        vy2OCcE5BXYENzSfeJ1tNpTBzmWdt6bOSMbZ
-X-Google-Smtp-Source: AA6agR4IVipj31ziauof72LTquHFfXMds+VCSZdiBCDU2gIx2meR1drcHbM96e327IbBFmQ+9IrWDA==
-X-Received: by 2002:a63:5a1c:0:b0:429:9ad7:c725 with SMTP id o28-20020a635a1c000000b004299ad7c725mr1206385pgb.608.1660798830646;
-        Wed, 17 Aug 2022 22:00:30 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.. ([136.175.179.175])
-        by smtp.gmail.com with ESMTPSA id q15-20020a17090311cf00b00172b0272f1asm349283plh.51.2022.08.17.22.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 22:00:30 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Kelvin Cheung <keguang.zhang@gmail.com>
-Subject: [PATCH] MIPS: loongson32: Fix the validation failure of LS1B & LS1C Ethernet PHY
-Date:   Thu, 18 Aug 2022 13:00:19 +0800
-Message-Id: <20220818050019.1924408-1-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=uB1dny6tZXinATmuz0fIf4H2QaK3MjZ8vYEWovRHfu4=;
+        b=2ycN6O3/eGKbVS/1zLNVm7U/D7gU/PrN+Z/SqbjqqcIUtnZeIe/S6dQRxl2JqEYe00
+         wwLFx61U903Qls55xcCUSwOB/M8PuCfSpHHKuLN4OHWWIjoHaLFuognaEB9TqO85q7To
+         3puX4XCBt7OGOi8/Ak39xZ2kRC+95u1+CWPtLSBm81J/wwkMZggLrEMJ4BRy58qmcntd
+         +V27aJnMzgZffZL4NJqXODXORVbkJ8OY2GHH4KdjXW4xGesRvqCYqjdMykl20jpRRlCP
+         GHST9HSuEAfBKt+yl91+fBmOp46D/n2c6IzEKPW9/GJKT1JDM1GVo3PLVWtj8bCkMEUN
+         K+eg==
+X-Gm-Message-State: ACgBeo0CYFD34DKUe+69RaIlJIuCFJOMcctRuGvgyQQ2OsWdF2/QIJ3g
+        8lDHgcDVe0Tmtzv77fCILc+Yag==
+X-Google-Smtp-Source: AA6agR6L6Nq587p/lJCgXhHMIohS0fuUSvnisu370SwFRdqGr62Y3rWmL+GZ/dHscdaOTusJwrlmKQ==
+X-Received: by 2002:a17:906:6a2a:b0:730:a3f1:aee with SMTP id qw42-20020a1709066a2a00b00730a3f10aeemr1105108ejc.387.1660806544983;
+        Thu, 18 Aug 2022 00:09:04 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id f28-20020a056402329c00b004418c7d633bsm594454eda.18.2022.08.18.00.09.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 00:09:04 -0700 (PDT)
+Message-ID: <10091e35-491a-c10f-35ec-044357f09e3e@blackwall.org>
+Date:   Thu, 18 Aug 2022 10:09:00 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net-next] Remove DECnet support from kernel
+Content-Language: en-US
+To:     Stephen Hemminger <stephen@networkplumber.org>,
+        netdev@vger.kernel.org
+Cc:     David Ahern <dsahern@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Akhmat Karakotov <hmukos@yandex-team.ru>,
+        Antoine Tenart <atenart@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Suma Hegde <suma.hegde@amd.com>, Chen Yu <yu.c.chen@intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kees Cook <keescook@chromium.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
+        "open list:NETFILTER" <coreteam@netfilter.org>
+References: <20220818004357.375695-1-stephen@networkplumber.org>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220818004357.375695-1-stephen@networkplumber.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Kelvin Cheung <keguang.zhang@gmail.com>
+On 18/08/2022 03:43, Stephen Hemminger wrote:
+> DECnet is an obsolete network protocol that receives more attention
+> from kernel janitors than users. It belongs in computer protocol
+> history museum not in Linux kernel.
+> 
+> It has been "Orphaned" in kernel since 2010. The iproute2 support
+> for DECnet was dropped in 5.0 release. The documentation link on
+> Sourceforge says it is abandoned there as well.
+> 
+> Leave the UAPI alone to keep userspace programs compiling.
+> This means that there is still an empty neighbour table
+> for AF_DECNET.
+> 
+> The table of /proc/sys/net entries was updated to match
+> current directories and reformatted to be alphabetical.
+> 
+> Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+> Acked-by: David Ahern <dsahern@kernel.org>
+> ---
+> 
+> Incorporates feedback from the initial RFC.
+> The MPLS neighbour table to family table is left alone.
+> 
 
-The Ethernet of LS1B/LS1C doesn't work due to the stmmac driver
-using phylink_generic_validate() instead of stmmac_validate().
-Moreover the driver assumes the PHY interface mode
-passed in platform data is always supported.
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
 
-stmmaceth stmmaceth.0 eth0: validation of gmii with support 00000000,00000000,000062cf and advertisement 00000000,00000000,000062cf failed: -EINVAL
-stmmaceth stmmaceth.0 eth0: stmmac_open: Cannot attach to PHY (error: -22)
 
-This patch sets phy_interface field of platform data.
 
-Fixes: 04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate()")
-Fixes: d194923d51c9 ("net: stmmac: fill in supported_interfaces")
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
----
- arch/mips/loongson32/common/platform.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
-index 794c96c2a4cd..741aace80b80 100644
---- a/arch/mips/loongson32/common/platform.c
-+++ b/arch/mips/loongson32/common/platform.c
-@@ -147,8 +147,10 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata = {
- 	.phy_addr		= -1,
- #if defined(CONFIG_LOONGSON1_LS1B)
- 	.interface		= PHY_INTERFACE_MODE_MII,
-+	.phy_interface		= PHY_INTERFACE_MODE_MII,
- #elif defined(CONFIG_LOONGSON1_LS1C)
- 	.interface		= PHY_INTERFACE_MODE_RMII,
-+	.phy_interface		= PHY_INTERFACE_MODE_RMII,
- #endif
- 	.mdio_bus_data		= &ls1x_mdio_bus_data,
- 	.dma_cfg		= &ls1x_eth_dma_cfg,
-
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
--- 
-2.34.1
 
