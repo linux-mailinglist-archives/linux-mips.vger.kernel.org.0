@@ -2,121 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02036599DD3
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Aug 2022 16:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0FA59A3EF
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Aug 2022 20:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349377AbiHSO5P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Aug 2022 10:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S1354288AbiHSRwA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Aug 2022 13:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349172AbiHSO5O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Aug 2022 10:57:14 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F342C64C4;
-        Fri, 19 Aug 2022 07:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SYqd0jVvSqn0LYdbb0mNobM+NLD0i8990uNItjrpJW0=; b=p8X1gMssAFqz7Cj5E1IU3EN3xz
-        t/snbLEyJv1XAdu4J+MpAgDpW86NPkUeqqsmS64YxuYIDoz1/0nSwGnJ4A7MRHs6v4/DfY13yylRH
-        yTpJ3gDO1i4G6ew5SrDgljBdNE61ShqeAK0joibG/N9CQrD4C5DO+D+oHobsM0kWRo/T88yRl68DM
-        ivZpQK7KoicNncKbbL3cMwzclIbdo4NBfFt8WVkYbV7Yt9Ti+iBnKi0iAa3qakANtULKlnjVs0VPW
-        qMm4R7XYp2iFBesGctz7KWjgzPu53WYvs3CSQtaYwSCE20OErGTcffzJDbyUtNOmEl2QCsbCVzRVd
-        fg0lrl+g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33852)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oP3PW-0007vG-Sl; Fri, 19 Aug 2022 15:55:47 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oP3PE-0007s8-Jr; Fri, 19 Aug 2022 15:55:28 +0100
-Date:   Fri, 19 Aug 2022 15:55:28 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
-Message-ID: <Yv+kYPnf8c6rLXgN@shell.armlinux.org.uk>
-References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+        with ESMTP id S1354844AbiHSRvp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Aug 2022 13:51:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9F8DEA8;
+        Fri, 19 Aug 2022 10:25:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C8FE615F4;
+        Fri, 19 Aug 2022 17:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F3EC433C1;
+        Fri, 19 Aug 2022 17:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660929905;
+        bh=pJy89UL2aRemfC7jlH+uSwmGjw0ghtM9kl28iT97o9U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nMhMPwSvVk8CRDTKIdfKgz8CS89NYOOBn1cRIyeZMy2CzngagzW4mY53RYpFvQ+5T
+         3eMaq83HbMRdn7ONSA82hRNNoQtbmxnWOusqoRpMncYxsJSJZ2NTv4+eckkKmQ6pk/
+         9sZRNAeMjzkLKIptLPDuKAS+8E8NCLwYFRC/4qyooWFpIaZQF7BELmMZFKWmhZCkhR
+         T9wugX9d6C+hMZMxRhGg7EnzkkXn9fr1i3cKK2h5N0SVj6No3WkUPzjIQMuRNLAt1j
+         HOvsj6POtzjy4iNIVyi3zF9s+3UZeZGBKfDCvjAOKJnbN75foqVMgKz+IkJPERQTCE
+         /35JYlh//09kg==
+Date:   Fri, 19 Aug 2022 18:35:40 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Artur Rojek <contact@artur-rojek.eu>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>
+Subject: Re: [PATCH 2/4] iio: add iio_channel_cb_get_iio_buffer helper
+Message-ID: <20220819183540.5f043ab4@jic23-huawei>
+In-Reply-To: <CAHp75VcrM53+GW8qN4H-8kxuBRStAXjpt5F7YD5R2nHhh-Wiww@mail.gmail.com>
+References: <20220817105643.95710-1-contact@artur-rojek.eu>
+        <20220817105643.95710-3-contact@artur-rojek.eu>
+        <CAHp75VcrM53+GW8qN4H-8kxuBRStAXjpt5F7YD5R2nHhh-Wiww@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 09:44:06AM +0800, Kefeng Wang wrote:
-> Only x86 has own release_thread(), introduce a new weak
-> release_thread() function to clean empty definitions in
-> other ARCHs.
+On Fri, 19 Aug 2022 11:14:04 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+
+> On Wed, Aug 17, 2022 at 1:58 PM Artur Rojek <contact@artur-rojek.eu> wrote:
+> >
+> > Introduce a helper function to retrieve an iio_buffer from
+> > iio_cb_buffer.
+> >
+> > This is useful for consumers that need to extract metadata about
+> > the buffer, e.g. get the channel offsets.  
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-...
->  arch/arm/include/asm/processor.h        | 3 ---
->  arch/arm/kernel/process.c               | 4 ----
+> I'm wondering if we should start using the IIO namespace for new
+> exported symbols.
+> 
 
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+I'd rather not jump ahead with that because I want to come up
+with a coherent set of IIO namespaces to separate core / drivers / consumers
+and platform type code (there's a bit of that left) plus maybe even trigger
+and buffer implementations.  We should probably get on with that though!
 
-Thanks!
+Jonathan
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
