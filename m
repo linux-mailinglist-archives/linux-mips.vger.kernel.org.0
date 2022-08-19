@@ -2,104 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D95599750
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Aug 2022 10:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FFF5998EC
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Aug 2022 11:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347507AbiHSIWG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Aug 2022 04:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
+        id S1348183AbiHSJkp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Aug 2022 05:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236670AbiHSIWF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Aug 2022 04:22:05 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0FE564C8;
-        Fri, 19 Aug 2022 01:22:05 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id b9so2832052qka.2;
-        Fri, 19 Aug 2022 01:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=jHoxLhPLeEqo5obusQoaXzvVIEivg5rvRbhCPfTpXxk=;
-        b=hc2mxNwi7xDgAVhriVTXaY/sUTFcIriBvXnIpSgHTw274P/ItF71a5Wqt0x87EIzqj
-         XM6uUUIWb3xc7Z8oZD8vW3thZn/fQF1af0Hofgb+VpO5S/TbpMQyKYOhrEOj5bMn4Lqk
-         UHVDOVUMtAZgVRG7+uNpXgtuGfTeOTBHo5FpAE9Ddu1oMm+zwpjxnNbhVbio5o7WwQKh
-         EVk3WmnnYS6Ikhhzme/7YZFlKejKMOHXkmR/1llPfAk29sD9E1m9horSF9qAJpDFbbLY
-         IbTfDzLPS+1lklKNMsjJL2R717q5278ir0ZZj3/vjVC5ZSBqjNDPhR/zfALEVaKd7oTC
-         +BnQ==
+        with ESMTP id S1348182AbiHSJkj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Aug 2022 05:40:39 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4626DE3437;
+        Fri, 19 Aug 2022 02:40:38 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id c20so2922846qtw.8;
+        Fri, 19 Aug 2022 02:40:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=jHoxLhPLeEqo5obusQoaXzvVIEivg5rvRbhCPfTpXxk=;
-        b=ZNW7MOloHs1XLIcJHZm0JeTVnW0i9HFrYlh+cjPKXs8qoB6gIPELGgv3RcCrSnH13+
-         9S4/Q6ODQwpdLE0AuOZgL8+gOe37/TTroSw468Z0aEDG2P3kCjB7rL0goD6AsvOTfjeu
-         hJB4MDe1feCqlf2M2DhSwFSZR39WUAPtCcIHFizu8L5zu+q15GINYvtBuggjDmAw/XjU
-         SxBg47guwdlgRkpcecm6/s2nTK6HW69kLwvGIoQBoeSfZMKxlke5Qfy9sTawNaqhadvF
-         IA3eCypDD6dQy9m0Y5dXfULE3saCL9UlmC3OGAlcbDuEPHvV5cxGz6rEuT7Wvm3eqd3g
-         an1g==
-X-Gm-Message-State: ACgBeo3llkbHgRqmuqdUuQev3IcJab7QCtyxwfj7iZWNZq39Fvr2tcCk
-        yYX0s4jQe2gde8gG3Cgf0kWrErW4FbwPZA1rywU=
-X-Google-Smtp-Source: AA6agR5eBbcKfnSc1FfOQbvYZmxUL3i/M2eCIy+d+iFu3GX882tOnfG70TQ+MOqjdMKbQQtt0KbIJ113x3c/7NXmE9o=
-X-Received: by 2002:a05:620a:2809:b0:6b6:5908:316e with SMTP id
- f9-20020a05620a280900b006b65908316emr4607045qkp.734.1660897324141; Fri, 19
- Aug 2022 01:22:04 -0700 (PDT)
+        bh=bRymBzdXlfqAZ/An0FhEAiaTJ5r51uvoXyU3bQ2b9Zs=;
+        b=ySmYlGfelih9ma1VmAxcSdV2j3otz/FeGG5EeWXdVElvpGUr9Hr42NdeIGCM5Tcd7L
+         Nsnxq8GX+VFhHvDcTeHdJIsOVBnt2SR1MrllbK8wk/qnYx+jAbIl/QnnzwjTaTnfbLVO
+         ZRCPnQm9QBXWNUruQZJS+Nh5LBzxJAhmYnpV9bFbMcKUfVgQNKWKuwyeSPfzlaxIDdtC
+         hQ0XQej6BoMUbWBJI03EciGnYb5Wp7+ewnTFbvh1lG1QJAUor7CKlSgkHP0MujDGryO1
+         +YnnIwzBq9TLR2OUXBIKQghV7sNoluUZxJyAyGnD0IQ5HqW8FnIMh7L+o0jSCyUq4+JP
+         LX+A==
+X-Gm-Message-State: ACgBeo1zpDHwPqi9BX+g5xSFYB0FGFC9QKzQVQ231LnVqforRD0RJB3k
+        c/qTv1P2kUgyN48XeJqeu1kRtX7EsbKpJDYA
+X-Google-Smtp-Source: AA6agR44Yq7CZ3A8CnKudOZR8WT3gwoEj9NlldcSXCTtHZrfcBV5KAE6N5v6b4h6GzecCIApIf8eFQ==
+X-Received: by 2002:a05:622a:1343:b0:343:5b7:ffb with SMTP id w3-20020a05622a134300b0034305b70ffbmr5857432qtk.91.1660902037252;
+        Fri, 19 Aug 2022 02:40:37 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id x26-20020a05620a0b5a00b006b5e1aeb777sm3284531qkg.43.2022.08.19.02.40.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 02:40:36 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-32a09b909f6so108103527b3.0;
+        Fri, 19 Aug 2022 02:40:36 -0700 (PDT)
+X-Received: by 2002:a25:250b:0:b0:68f:425b:3ee0 with SMTP id
+ l11-20020a25250b000000b0068f425b3ee0mr6898469ybl.89.1660902025045; Fri, 19
+ Aug 2022 02:40:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220817105643.95710-1-contact@artur-rojek.eu> <20220817105643.95710-5-contact@artur-rojek.eu>
-In-Reply-To: <20220817105643.95710-5-contact@artur-rojek.eu>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 19 Aug 2022 11:21:28 +0300
-Message-ID: <CAHp75Vf=GpC6qv9bQNJ0ED8_aYJ9XNzD4e=1TWVVB6mraQcvHg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] input: joystick: Fix buffer data parsing
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
+References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 19 Aug 2022 11:40:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUd5Ww-mtpymykuahHWD+S62Z8qiBMVx8y4okouuzTCAg@mail.gmail.com>
+Message-ID: <CAMuHMdUd5Ww-mtpymykuahHWD+S62Z8qiBMVx8y4okouuzTCAg@mail.gmail.com>
+Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>
+        arcml <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        loongarch@lists.linux.dev,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 1:58 PM Artur Rojek <contact@artur-rojek.eu> wrote:
+Hi Kefeng,
+
+On Fri, Aug 19, 2022 at 3:39 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+> Only x86 has own release_thread(), introduce a new weak
+> release_thread() function to clean empty definitions in
+> other ARCHs.
 >
-> Don't try to access buffer data of a channel by its scan index. Instead,
-> use the newly introduced `iio_find_channel_offset_in_buffer` to get the
-> correct data offset.
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+
+>  arch/m68k/include/asm/processor.h       | 5 -----
+
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -183,6 +183,10 @@ void put_task_struct_rcu_user(struct task_struct *task)
+>                 call_rcu(&task->rcu, delayed_put_task_struct);
+>  }
 >
-> The scan index of a channel does not represent its position in a buffer,
-> as the buffer will contain data for enabled channels only, affecting
-> data offsets and alignment.
+> +void __weak release_thread(struct task_struct *dead_task)
+> +{
+> +}
 
-> Fixes: 2c2b364fddd5 ("Input: joystick - add ADC attached joystick driver.")
+As the default implementation is empty, it might be better to keep
+this as a static inline function, protected by #ifndef release_thread,
+and let x86 #define release_thread.
 
-You may not use Fixes here because it has dependencies. The possible
-solutions are:
-1/
-a) create a real fix for the existing code;
-b) refactor it.
+> +
+>  void release_task(struct task_struct *p)
+>  {
+>         struct task_struct *leader;
 
-2/
- put the Fixes tag to all dependencies (which is questionable).
+Gr{oetje,eeting}s,
 
+                        Geert
 
-> Reported-by: Chris Morgan <macromorgan@hotmail.com>
-> Tested-by: Paul Cercueil <paul@crapouillou.net>
-> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Try to keep tags in chronological order, I do not believe the change
-may be tested before it has been created.
-
--- 
-With Best Regards,
-Andy Shevchenko
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
