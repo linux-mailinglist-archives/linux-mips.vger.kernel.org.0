@@ -2,101 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EAD599A0E
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Aug 2022 12:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46DA599A0D
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Aug 2022 12:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347836AbiHSKdW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Aug 2022 06:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
+        id S1348370AbiHSKgL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Aug 2022 06:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347614AbiHSKdV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Aug 2022 06:33:21 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74A32B4;
-        Fri, 19 Aug 2022 03:33:14 -0700 (PDT)
+        with ESMTP id S1348128AbiHSKgK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Aug 2022 06:36:10 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621AEF2428;
+        Fri, 19 Aug 2022 03:36:08 -0700 (PDT)
 Received: (Authenticated sender: contact@artur-rojek.eu)
-        by mail.gandi.net (Postfix) with ESMTPA id 40ECBE000B;
-        Fri, 19 Aug 2022 10:33:09 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id 169CA4000C;
+        Fri, 19 Aug 2022 10:36:05 +0000 (UTC)
 MIME-Version: 1.0
-Date:   Fri, 19 Aug 2022 12:33:08 +0200
+Date:   Fri, 19 Aug 2022 12:36:05 +0200
 From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Chris Morgan <macromorgan@hotmail.com>
 Cc:     Paul Cercueil <paul@crapouillou.net>,
         Jonathan Cameron <jic23@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>
-Subject: Re: [PATCH 3/4] iio: add helper function for reading channel offset
- in buffer
-In-Reply-To: <CAHp75VeierGKV7BqF+y-vxramA4nk24LOSPRxgmjots_amkg-w@mail.gmail.com>
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH 0/4] iio/adc-joystick: buffer data parsing fixes
+In-Reply-To: <SN6PR06MB534245440C9A0EA1E0C11B12A56D9@SN6PR06MB5342.namprd06.prod.outlook.com>
 References: <20220817105643.95710-1-contact@artur-rojek.eu>
- <20220817105643.95710-4-contact@artur-rojek.eu>
- <CAHp75VeierGKV7BqF+y-vxramA4nk24LOSPRxgmjots_amkg-w@mail.gmail.com>
-Message-ID: <a9b3f2b469e26d13f1c37a6f10373e24@artur-rojek.eu>
+ <SN6PR06MB534245440C9A0EA1E0C11B12A56D9@SN6PR06MB5342.namprd06.prod.outlook.com>
+Message-ID: <085417ff80442dd7cc74e88d35423054@artur-rojek.eu>
 X-Sender: contact@artur-rojek.eu
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022-08-19 10:17, Andy Shevchenko wrote:
-> On Wed, Aug 17, 2022 at 1:58 PM Artur Rojek <contact@artur-rojek.eu> 
-> wrote:
+On 2022-08-18 20:28, Chris Morgan wrote:
+> On Wed, Aug 17, 2022 at 12:56:39PM +0200, Artur Rojek wrote:
+>> Hi all,
 >> 
->> This is useful for consumers that wish to parse raw buffer data.
+>> this patch set fixes the way channel data is being parsed in the
+>> adc-joystick driver. To achieve that, it also introduces helpers in 
+>> the
+>> IIO subsystem. As a side effect of those changes, a bug in ingenic-adc
+>> has been exposed, which this patch set promptly rectifies.
+>> 
+>> Tested on GCW Zero (by me) and on Anbernic RG350 (by Paul).
+>> 
+>> Chris:
+>> As you have originally reported the issue, would you be able to test
+>> the above changes on your setup (Odroid Go Advance, was it)?
 > 
-> ...
+> I can confirm this fixes the issue I experienced, I can see both
+> channels of the joystick now when using an hrtimer as a trigger.
 > 
->> +int iio_find_channel_offset_in_buffer(struct iio_dev *indio_dev,
->> +                                     const struct iio_chan_spec 
->> *chan,
->> +                                     struct iio_buffer *buffer)
->> +{
->> +       int length, offset = 0;
->> +       unsigned int si;
->> +
->> +       if (chan->scan_index < 0 ||
->> +           !test_bit(chan->scan_index, buffer->scan_mask)) {
->> +               return -EINVAL;
->> +       }
+> This patch also does not interfere with the polling work in progress,
+> as that still works as expected too (polling work is still desired
+> though).
 > 
-> Have you run checkpatch? The {} are redundant. But personally I would
-> split this into two separate conditionals.
-I did run checkpatch on it - all patches were ready for submission.
-I don't find the {} redundant for multi-line statements, like this one,
-and I personally prefer to check conditions that return the same error
-type together.
+> Thank you.
+Perfect, thanks for testing!
+
+Can I add your Tested-by for v2 of this patchset?
+
+Cheers,
+Artur
 > 
->> +       for (si = 0; si < chan->scan_index; ++si) {
-> 
-> Just a side crying: where did you, people, get this pre-increment 
-> pattern from?!
-> 
->> +               if (!test_bit(si, buffer->scan_mask))
->> +                       continue;
-> 
-> NIH for_each_set_bit()
-> 
->> +               length = iio_storage_bytes_for_si(indio_dev, si);
->> +
->> +               /* Account for channel alignment. */
->> +               if (offset % length)
->> +                       offset += length - (offset % length);
->> +               offset += length;
->> +       }
->> +
->> +       return offset;
->> +}
->> +EXPORT_SYMBOL_GPL(iio_find_channel_offset_in_buffer);
-> 
-> Same Q as per previous patch: IIO namespace?
+>> 
+>> Artur Rojek (4):
+>>   iio/adc: ingenic: fix channel offsets in buffer
+>>   iio: add iio_channel_cb_get_iio_buffer helper
+>>   iio: add helper function for reading channel offset in buffer
+>>   input: joystick: Fix buffer data parsing
+>> 
+>>  drivers/iio/adc/ingenic-adc.c               |  7 +++---
+>>  drivers/iio/buffer/industrialio-buffer-cb.c |  7 ++++++
+>>  drivers/iio/industrialio-buffer.c           | 28 
+>> +++++++++++++++++++++
+>>  drivers/input/joystick/adc-joystick.c       | 26 ++++++++++++-------
+>>  include/linux/iio/buffer.h                  |  4 +++
+>>  include/linux/iio/consumer.h                | 12 +++++++++
+>>  6 files changed, 71 insertions(+), 13 deletions(-)
+>> 
+>> --
+>> 2.37.2
+>> 
