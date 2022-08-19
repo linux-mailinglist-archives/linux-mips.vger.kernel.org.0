@@ -2,68 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCCD599668
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Aug 2022 09:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFC359970E
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Aug 2022 10:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343639AbiHSHwS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Aug 2022 03:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
+        id S1346304AbiHSINR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Aug 2022 04:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347259AbiHSHwR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Aug 2022 03:52:17 -0400
-Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44418E3C22
-        for <linux-mips@vger.kernel.org>; Fri, 19 Aug 2022 00:52:17 -0700 (PDT)
-Received: by mail.fadrush.pl (Postfix, from userid 1002)
-        id 7E66B2284F; Fri, 19 Aug 2022 07:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
-        t=1660895535; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
-        h=Date:From:To:Subject:From;
-        b=g6aer095tlmQ4SADyWUWju+S1eq6Sx99hfmNBcmlH7W2toR/FeK7p9eRcvtAG3V2w
-         P9l0cWaDlOC/R3lE3HsrCm2KHTYIXacsrLloQvN260CbfWc7v+Q3CTOB8HNGAzmGAv
-         zMEvDW5V86T2ni8d8qff2D8wNHzQXSCxfBu+uTKW1Ql4dFGu/W43VOr0/MjZbUKiCf
-         UN8ySbZBd1HHtqr5CS+YS6TmUuwrPwYcfliZLVR3zWYnQgkrnGvUQoX+b3+uCFDcTM
-         VeH4Q6GN/ad/y2Wk2xkVhae7KWi+zYia/fZEu0ie6NQh8AlgM7ImIl9g98KldKufzr
-         CkWwPRqjQqOig==
-Received: by mail.fadrush.pl for <linux-mips@vger.kernel.org>; Fri, 19 Aug 2022 07:51:16 GMT
-Message-ID: <20220819064500-0.1.14.8p4v.0.f5s30cl4xm@fadrush.pl>
-Date:   Fri, 19 Aug 2022 07:51:16 GMT
-From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
-To:     <linux-mips@vger.kernel.org>
-Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
-X-Mailer: mail.fadrush.pl
+        with ESMTP id S1345238AbiHSINQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Aug 2022 04:13:16 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB7F109F;
+        Fri, 19 Aug 2022 01:13:15 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id de16so515099qvb.12;
+        Fri, 19 Aug 2022 01:13:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8xRjWWqTqJR71ec9sr3LoeTgstJo+nK7ZM6OvQ/WbBc=;
+        b=DVv0rr+qy4mLu7yexcLS+HJNtsHJ5+uslwUhZzVTnQQFiAKL9OM3zDTELcxcOToPeK
+         JrX1c8AJSS+/htimLfCCSJSdlCqa6weM2cWriohpw+0gwek/ZFhlCR4sgCSAbG8hEsNn
+         5PQDvRHxPIqwQcUZxQlAV6MBazpbb4KGkoyuw5F56e5mTrFFEqtZqDEyoCwjY632jo1x
+         o35r1L530rnrkj8B/g/iS1LGckhsUZ+/disp4ieZ+YNapGpgXWMWP922BEzAO0FLg3DH
+         boKUdURD6zToLF/Ax/xHu3uwIe/biNd/GfXXNztp2t0/okr9wObJYoZR23HX2TPmkJF1
+         VnmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8xRjWWqTqJR71ec9sr3LoeTgstJo+nK7ZM6OvQ/WbBc=;
+        b=erDCfnfy+PPohWSlm7ma0QWN0oD42r89B4Qy+7k8b9l49nEGRA16RCB6JIMvITK42W
+         iHhaHnv69Or/I5oTd7jJTK72k9eylpTL8pZXulnQOBaveAqrpjEShrNWseokrnExJYwE
+         unirH73SWsLj5Z+ARHoztFjGOhJYr6iilO9AwdLe+PeLFLU9T6zL9B4JErI8kuEGII+G
+         JE1366dfeB5Ba3h1k5XjgjihAVOoR7tI6MEBz5csbXw8/UJ8/+GsTd+PSirVBtBzsuNi
+         lglFaSr99exB/OQv+mB8CQmtKCLlnxq2nueuyWPtCdclFDXIOyKbkT2Z/6GrRMn4yZot
+         C8bw==
+X-Gm-Message-State: ACgBeo3a0Wkxr/BW37BDRB7rQGbYtOUjxQClQXad5rLbwBHYj4X4IxFz
+        WG1WywVs2qZ/L+t+dB6OFjub4DrbvjL0O3uIr14=
+X-Google-Smtp-Source: AA6agR7QeiiF9Fgn1+vYz0KTXJWVLHlcW9SAYPPFMlNenPsnnpM60xdb5eSHvet6ReebGjdcFjQAiwGzbcjgWETfc2g=
+X-Received: by 2002:a05:6214:d07:b0:476:c32f:f4f4 with SMTP id
+ 7-20020a0562140d0700b00476c32ff4f4mr5460234qvh.11.1660896794198; Fri, 19 Aug
+ 2022 01:13:14 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220817105643.95710-1-contact@artur-rojek.eu> <20220817105643.95710-2-contact@artur-rojek.eu>
+In-Reply-To: <20220817105643.95710-2-contact@artur-rojek.eu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 19 Aug 2022 11:12:38 +0300
+Message-ID: <CAHp75Vd49aCKkK+KvmxJrW2mKk7=VgtSBCTYE9umOhZhc4Y8FA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] iio/adc: ingenic: fix channel offsets in buffer
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Wed, Aug 17, 2022 at 1:58 PM Artur Rojek <contact@artur-rojek.eu> wrote:
+>
+> Consumers expect the buffer to only contain enabled channels. While
+> preparing the buffer, the driver also (incorrectly) inserts empty data
+> for disabled channels, causing the enabled channels to appear at wrong
+> offsets. Fix that.
 
-kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
-proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
-stwa firmie stabilny rozw=C3=B3j.=20
+What consumers? Have you tested on all of them? Please, elaborate. It
+might be that some of them have to be fixed. In such case you need to
+report the issue to their respective channels and put the
+corresponding links here.
 
-Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
-a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
-nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
-po rozwoju firmy.
+P.S. It doesn't mean I'm against the patch.
 
-Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
-nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
-adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
-j=C4=85 je innym.
-
-Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
-o=C5=9Bwiadczonego doradcy finansowego?
-
-
-Pozdrawiam
-Jakub Olejniczak
+-- 
+With Best Regards,
+Andy Shevchenko
