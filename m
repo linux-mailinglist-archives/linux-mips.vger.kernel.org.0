@@ -2,159 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F7859B5B3
-	for <lists+linux-mips@lfdr.de>; Sun, 21 Aug 2022 19:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54DC59B608
+	for <lists+linux-mips@lfdr.de>; Sun, 21 Aug 2022 20:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiHURm7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 21 Aug 2022 13:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S230047AbiHUSgK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 21 Aug 2022 14:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiHURm5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 21 Aug 2022 13:42:57 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE47721823;
-        Sun, 21 Aug 2022 10:42:53 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id b5so6395216wrr.5;
-        Sun, 21 Aug 2022 10:42:53 -0700 (PDT)
+        with ESMTP id S229652AbiHUSgJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 21 Aug 2022 14:36:09 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F129A192A3;
+        Sun, 21 Aug 2022 11:36:03 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id l1so11980842lfk.8;
+        Sun, 21 Aug 2022 11:36:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=7Nrg8mvlqxFEJfzKh/tw2+dBWE8D/s98GD2ZnmZvMl4=;
-        b=F0ptjTbxLv2NJaVf2gvBlBshDMfCokLJPPMsIV35UHBlxVECPPma43FPvPitouEYuo
-         8dgtnhsmPRFBvIO948wmtVOueVdGaHu/6efegZ+eBz+dquE2oOi9XMsurik6HL7oB6MX
-         jV8pUVxH3f1RrwF0NH6pncq2tH6AwoMHlp65ZDTNCyiT6v1mar/Hou3sFmBJRov6RKag
-         O1el0UDp9u/+GhEvUUZhnnL+z+SJXn9IfDfG4Dlp/Iuz3gqoHz6wEPHD+abHkg+f2q3v
-         w/lO0XWXR94cHio73ZqXyXjLv1uGE7J2Xgag56CksB4nH92y765Uk+pyJbn+nJIZ5N3k
-         uDSQ==
+        bh=sWYRCKPzZNUJ326QE37gGcrO9oc82QKCR1L4KO18yAo=;
+        b=pOc6suRiQkBz2Vp98NTIR54smqmqCQJ5g05e+LES9vIwk1/jawZb1PuCuAoj0lSTFk
+         wHgDbIzMlZkhq3q2THxA6Xc6We3lp6zHweD0ddVT6a4XbybOK+4c6m6WyTVJzJEsrhtS
+         +X+JeUCxO2xOpz+rtHvWnXpS3MkybRQcJPnJQS1/Cs92NbM0If8DZGB1ikvt9yVtRKfU
+         XQW6GYfNSdGORrwf8KUHWK62fEvKP+Ew2b2Tg/QAX8RFMtVKdvH7nol7cmBJafWSeUrw
+         FM4pgbBI8xxuR/PFnCZxjrfjmns9kj+12hDIl/rpxyzbgJYj81fUZPeAL4STVZMC4Srb
+         Rm7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=7Nrg8mvlqxFEJfzKh/tw2+dBWE8D/s98GD2ZnmZvMl4=;
-        b=wGX9SubZqi99/Ue3MgCKY3zxmsKb3MbnLb5/NwjxQpfZ5wzQmav5jjGeUc887aHKG4
-         rb1quJkyuDQV0w16GRoEqaC5GKtUWApRXiZ6SpWp2kVE+isc5HhWymU1P5gbmW/9rh6g
-         EuGnLJgqy31tUjF+OdqiMOH8zk08mK8ED/Z3sflQbo/YaBgSVwAiCBHWJ6+ZQI9HrDx+
-         nnVNX9ivFukySPjcqM9Df1TAIHvZTN/OaO7RL2ckutH6yN9K1GOts/zDsQxIIZSOZBKB
-         frVQ2VBy6h5LSVspcfzXODjQB1YWV6i+OshAtaElfnQP1PL1IduiKttThm30nyJectxt
-         CAsA==
-X-Gm-Message-State: ACgBeo3r87zs85hxGEUbeTgUNSAquEv54tMpf8lZSjYW7YwxyqZW3dsB
-        0BnN+1jJ+OwrJS44ytpizFU=
-X-Google-Smtp-Source: AA6agR6ii5ETBOVbnXGvrEQ2XHp9wCOCZjRgmUsSrgmsT/hEBxdRm1IL0twc5nHL0nICTG/92OzUKA==
-X-Received: by 2002:a05:6000:993:b0:222:d509:4b5b with SMTP id by19-20020a056000099300b00222d5094b5bmr9262211wrb.52.1661103772368;
-        Sun, 21 Aug 2022 10:42:52 -0700 (PDT)
-Received: from localhost ([2a03:b0c0:1:d0::dee:c001])
-        by smtp.gmail.com with ESMTPSA id t24-20020a1c7718000000b003a643ac2b08sm6876286wmi.8.2022.08.21.10.42.51
+        bh=sWYRCKPzZNUJ326QE37gGcrO9oc82QKCR1L4KO18yAo=;
+        b=ttlW8dfe+qhvgq/waCPFjR3rKhAJmx1TQLpDqnpwo/T6AgUKeD6isfdQ+3iS7SF/uR
+         +at5ditzJ5Gkqu0LJqgT3RPHHwmXWYOxBjYPdqWXUu+QZ14EA/nmqg/TSI/gqTy79eOU
+         +oWeHkuwewqOcuskyI1qZElXoHsoYxFh9F9EO15khwJDYzXmpKCLanOJlo0QKrl+fZgS
+         sxqX5919LRj1kKNPxkACn02V8yxd1mIw+Zrmyp6dbChu4uPWiSKY8O/uXByWfg8LpIcn
+         RqkiIenAOw3b+18IG/VU+86Ic3AZSs+5U+jtrvVN/Efqo/nFBflxaDkK7rgULbUpjrxT
+         CqOQ==
+X-Gm-Message-State: ACgBeo0PW172GGIv76egqt2Q16kAL+nY+nEStmlvswHdB4FpVk8htk8Z
+        U1dcozFaEauPmoVqIOqO+nNW2JkecneLyQ==
+X-Google-Smtp-Source: AA6agR5uMdLClrtMrGoVxtRJ7XAYtoRKdZwhTJ+dBE6NThLMmCjqZTmatid5GB4/oxWUGTmcMF06FA==
+X-Received: by 2002:a05:6512:110e:b0:48f:b9bf:8f4a with SMTP id l14-20020a056512110e00b0048fb9bf8f4amr6134901lfg.676.1661106962233;
+        Sun, 21 Aug 2022 11:36:02 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id x6-20020a056512078600b00492348c5ccesm792461lfr.281.2022.08.21.11.36.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 10:42:51 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 17:42:51 +0000
-From:   Stafford Horne <shorne@gmail.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
-Message-ID: <YwJum2c1I8JhY0B8@oscomms1>
-References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+        Sun, 21 Aug 2022 11:36:01 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 21:35:59 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Cc:     tglx@linutronix.de, maz@kernel.org, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/mips-gic: Fix typo in irq-mips-gic.c
+Message-ID: <20220821183559.pnduerff7nq76sfj@mobilestation>
+References: <20220811151657.10242-1-dengshaomin@cdjrlc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20220811151657.10242-1-dengshaomin@cdjrlc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 09:44:06AM +0800, Kefeng Wang wrote:
-> Only x86 has own release_thread(), introduce a new weak
-> release_thread() function to clean empty definitions in
-> other ARCHs.
+On Thu, Aug 11, 2022 at 11:16:57AM -0400, Shaomin Deng wrote:
+> Remove the rebundant word "the" in comments.
+
+Right. Thanks.
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Sergey
+
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
 > ---
-
->  arch/openrisc/include/asm/processor.h   | 1 -
->  arch/openrisc/kernel/process.c          | 4 ----
-
-> diff --git a/arch/openrisc/include/asm/processor.h b/arch/openrisc/include/asm/processor.h
-> index aa1699c18add..ed9efb430afa 100644
-> --- a/arch/openrisc/include/asm/processor.h
-> +++ b/arch/openrisc/include/asm/processor.h
-> @@ -72,7 +72,6 @@ struct thread_struct {
+>  drivers/irqchip/irq-mips-gic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+> index ff89b36267dd..53daac318ccd 100644
+> --- a/drivers/irqchip/irq-mips-gic.c
+> +++ b/drivers/irqchip/irq-mips-gic.c
+> @@ -490,7 +490,7 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
+>  	map = GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin;
 >  
->  
->  void start_thread(struct pt_regs *regs, unsigned long nip, unsigned long sp);
-> -void release_thread(struct task_struct *);
->  unsigned long __get_wchan(struct task_struct *p);
->  
->  #define cpu_relax()     barrier()
-> diff --git a/arch/openrisc/kernel/process.c b/arch/openrisc/kernel/process.c
-> index 52dc983ddeba..f94b5ec06786 100644
-> --- a/arch/openrisc/kernel/process.c
-> +++ b/arch/openrisc/kernel/process.c
-> @@ -125,10 +125,6 @@ void show_regs(struct pt_regs *regs)
->  	show_registers(regs);
->  }
->  
-> -void release_thread(struct task_struct *dead_task)
-> -{
-> -}
-> -
->  /*
->   * Copy the thread-specific (arch specific) info from the current
->   * process to the new one p
-
-For OpenRISC bits.
-
-Acked-by: Stafford Horne <shorne@gmail.com>
+>  	/*
+> -	 * If adding support for more per-cpu interrupts, keep the the
+> +	 * If adding support for more per-cpu interrupts, keep the
+>  	 * array in gic_all_vpes_irq_cpu_online() in sync.
+>  	 */
+>  	switch (intr) {
+> -- 
+> 2.35.1
+> 
