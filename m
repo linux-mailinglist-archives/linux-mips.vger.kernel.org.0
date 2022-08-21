@@ -2,236 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2478059B58F
-	for <lists+linux-mips@lfdr.de>; Sun, 21 Aug 2022 19:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F7859B5B3
+	for <lists+linux-mips@lfdr.de>; Sun, 21 Aug 2022 19:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiHURKi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 21 Aug 2022 13:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S230129AbiHURm7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 21 Aug 2022 13:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiHURKh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 21 Aug 2022 13:10:37 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40BD21E07;
-        Sun, 21 Aug 2022 10:10:35 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id z25so12373258lfr.2;
-        Sun, 21 Aug 2022 10:10:35 -0700 (PDT)
+        with ESMTP id S229690AbiHURm5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 21 Aug 2022 13:42:57 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE47721823;
+        Sun, 21 Aug 2022 10:42:53 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id b5so6395216wrr.5;
+        Sun, 21 Aug 2022 10:42:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=gkDywoHZRPVGe0t/An1sAO7svRm9ofbrcAxnP8XLUW4=;
-        b=dQQa5eSRkyVKEs/v/BaAk2ipgZ2JYLpG9VeAKF8odPdpWwhlWD7pbdjqxvkguSt0Im
-         5NoepCadkFN8PwoHCJ8NqqhD02PcQPc4gP93VDc+7Kd+b5hchCE9CFznLAVsI0j00sjO
-         Qt3q1xTYVFyF4d4DUdP5KktfCZqqi1Hv3DcRBdE4PkjrOYjn+Oln1IubLUC922Ad7fmB
-         7cZ1STK/BPJtJ68fRdbRWsQquAdFy/UTZG3OlBom+SkBCACpJ5f+S5rNXTuM/ZiUGDCg
-         r6wICF9fR0iQ3O6hDn6oGsJPaH5cB1KVnhwpdGlXjQGJVp8uc0PnOFrXmJEaX0okYXg7
-         Ghdw==
+        bh=7Nrg8mvlqxFEJfzKh/tw2+dBWE8D/s98GD2ZnmZvMl4=;
+        b=F0ptjTbxLv2NJaVf2gvBlBshDMfCokLJPPMsIV35UHBlxVECPPma43FPvPitouEYuo
+         8dgtnhsmPRFBvIO948wmtVOueVdGaHu/6efegZ+eBz+dquE2oOi9XMsurik6HL7oB6MX
+         jV8pUVxH3f1RrwF0NH6pncq2tH6AwoMHlp65ZDTNCyiT6v1mar/Hou3sFmBJRov6RKag
+         O1el0UDp9u/+GhEvUUZhnnL+z+SJXn9IfDfG4Dlp/Iuz3gqoHz6wEPHD+abHkg+f2q3v
+         w/lO0XWXR94cHio73ZqXyXjLv1uGE7J2Xgag56CksB4nH92y765Uk+pyJbn+nJIZ5N3k
+         uDSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=gkDywoHZRPVGe0t/An1sAO7svRm9ofbrcAxnP8XLUW4=;
-        b=QmemyI/dU9ihvbG8STITLMuVi9Met4VOc9dByUyg3rSsiKpv0wmn09chfhQfw7FRtS
-         II38VYRhhS33hQcwVLBIsfR615AlzxZOZLVAkRWSnnkQL/0RO63o6xVeOsCvLkLkMDEs
-         HIFFbPa7kW+SPQKoRiDYQLqo5Viem1744Fm0AfLpVOj6KghR4wBGoOl81Zk67TlFBcfd
-         YHAM77Zjm/sdJ+CvxLgCdPpbqacvj+8KuWZHl18c1dwwIYH21cHHdYJJ7M3AhL4cksM8
-         GDjDsXywHxsL2y5gA1AFZ4vQrvNSIRI24XEooRAGON80oVEk8649fQAfEhmpRnZValI7
-         v3XA==
-X-Gm-Message-State: ACgBeo3/Cr7HV7hB/5Fbz4n4PtZSSivb0mz8IEqX5dIXRzAHxeC5r1d5
-        C56JsP8hWLK4KbQlUF3HZJ9ZSjop5U4=
-X-Google-Smtp-Source: AA6agR5DyV3vrdphglQVGqlJ7BeORB96GXGVGqPPFAVbIFaavJqL+W2fiC5uyAjn2PMi7NXWc1WWlA==
-X-Received: by 2002:a05:6512:b01:b0:48b:a065:2a8b with SMTP id w1-20020a0565120b0100b0048ba0652a8bmr5566241lfu.401.1661101833499;
-        Sun, 21 Aug 2022 10:10:33 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id y15-20020a19640f000000b0048a9603399csm1555076lfb.116.2022.08.21.10.10.31
+        bh=7Nrg8mvlqxFEJfzKh/tw2+dBWE8D/s98GD2ZnmZvMl4=;
+        b=wGX9SubZqi99/Ue3MgCKY3zxmsKb3MbnLb5/NwjxQpfZ5wzQmav5jjGeUc887aHKG4
+         rb1quJkyuDQV0w16GRoEqaC5GKtUWApRXiZ6SpWp2kVE+isc5HhWymU1P5gbmW/9rh6g
+         EuGnLJgqy31tUjF+OdqiMOH8zk08mK8ED/Z3sflQbo/YaBgSVwAiCBHWJ6+ZQI9HrDx+
+         nnVNX9ivFukySPjcqM9Df1TAIHvZTN/OaO7RL2ckutH6yN9K1GOts/zDsQxIIZSOZBKB
+         frVQ2VBy6h5LSVspcfzXODjQB1YWV6i+OshAtaElfnQP1PL1IduiKttThm30nyJectxt
+         CAsA==
+X-Gm-Message-State: ACgBeo3r87zs85hxGEUbeTgUNSAquEv54tMpf8lZSjYW7YwxyqZW3dsB
+        0BnN+1jJ+OwrJS44ytpizFU=
+X-Google-Smtp-Source: AA6agR6ii5ETBOVbnXGvrEQ2XHp9wCOCZjRgmUsSrgmsT/hEBxdRm1IL0twc5nHL0nICTG/92OzUKA==
+X-Received: by 2002:a05:6000:993:b0:222:d509:4b5b with SMTP id by19-20020a056000099300b00222d5094b5bmr9262211wrb.52.1661103772368;
+        Sun, 21 Aug 2022 10:42:52 -0700 (PDT)
+Received: from localhost ([2a03:b0c0:1:d0::dee:c001])
+        by smtp.gmail.com with ESMTPSA id t24-20020a1c7718000000b003a643ac2b08sm6876286wmi.8.2022.08.21.10.42.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 10:10:32 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 20:10:30 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sun, 21 Aug 2022 10:42:51 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 17:42:51 +0000
+From:   Stafford Horne <shorne@gmail.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] MIPS: loongson32: Fix the validation failure of LS1B &
- LS1C Ethernet PHY
-Message-ID: <20220821171030.wc343w6zmrtcz5to@mobilestation>
-References: <20220818050019.1924408-1-keguang.zhang@gmail.com>
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        akpm@linux-foundation.org
+Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
+Message-ID: <YwJum2c1I8JhY0B8@oscomms1>
+References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="5vggqndsialimfdn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220818050019.1924408-1-keguang.zhang@gmail.com>
+In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
---5vggqndsialimfdn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hello Keguang
-
-On Thu, Aug 18, 2022 at 01:00:19PM +0800, Keguang Zhang wrote:
-> From: Kelvin Cheung <keguang.zhang@gmail.com>
+On Fri, Aug 19, 2022 at 09:44:06AM +0800, Kefeng Wang wrote:
+> Only x86 has own release_thread(), introduce a new weak
+> release_thread() function to clean empty definitions in
+> other ARCHs.
 > 
-> The Ethernet of LS1B/LS1C doesn't work due to the stmmac driver
-> using phylink_generic_validate() instead of stmmac_validate().
-> Moreover the driver assumes the PHY interface mode
-> passed in platform data is always supported.
-> 
-> stmmaceth stmmaceth.0 eth0: validation of gmii with support 00000000,00000000,000062cf and advertisement 00000000,00000000,000062cf failed: -EINVAL
-> stmmaceth stmmaceth.0 eth0: stmmac_open: Cannot attach to PHY (error: -22)
-> 
-> This patch sets phy_interface field of platform data.
-
-I've got a similar fix in my repo, though didn't have a chance to test
-it out due to lacking any loongson hardware. I've discovered the
-issues on my still going way of the STMMAC driver refactoring. Anyway
-IMO the problem is a bit different than you describe and should be
-fixed in a bit different way. Please see a patch attached to this
-email. Could you test it out on your hw? If it fixes the problem you
-can resend it as v2 patch.
-
--Sergey
-
-> 
-> Fixes: 04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate()")
-> Fixes: d194923d51c9 ("net: stmmac: fill in supported_interfaces")
-> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 > ---
->  arch/mips/loongson32/common/platform.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
-> index 794c96c2a4cd..741aace80b80 100644
-> --- a/arch/mips/loongson32/common/platform.c
-> +++ b/arch/mips/loongson32/common/platform.c
-> @@ -147,8 +147,10 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata = {
->  	.phy_addr		= -1,
->  #if defined(CONFIG_LOONGSON1_LS1B)
->  	.interface		= PHY_INTERFACE_MODE_MII,
-> +	.phy_interface		= PHY_INTERFACE_MODE_MII,
->  #elif defined(CONFIG_LOONGSON1_LS1C)
->  	.interface		= PHY_INTERFACE_MODE_RMII,
-> +	.phy_interface		= PHY_INTERFACE_MODE_RMII,
->  #endif
->  	.mdio_bus_data		= &ls1x_mdio_bus_data,
->  	.dma_cfg		= &ls1x_eth_dma_cfg,
-> 
-> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-> -- 
-> 2.34.1
-> 
 
---5vggqndsialimfdn
-Content-Type: text/x-patch; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-MIPS-Loongson32-Fix-PHY-mode-being-left-unspecified.patch"
+>  arch/openrisc/include/asm/processor.h   | 1 -
+>  arch/openrisc/kernel/process.c          | 4 ----
 
-From 37a0bdea8d67ef28f55878b494ddcbaab632888c Mon Sep 17 00:00:00 2001
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Date: Fri, 24 Sep 2021 17:33:19 +0300
-Subject: [PATCH] MIPS: Loongson32: Fix PHY-mode being left unspecified
+> diff --git a/arch/openrisc/include/asm/processor.h b/arch/openrisc/include/asm/processor.h
+> index aa1699c18add..ed9efb430afa 100644
+> --- a/arch/openrisc/include/asm/processor.h
+> +++ b/arch/openrisc/include/asm/processor.h
+> @@ -72,7 +72,6 @@ struct thread_struct {
+>  
+>  
+>  void start_thread(struct pt_regs *regs, unsigned long nip, unsigned long sp);
+> -void release_thread(struct task_struct *);
+>  unsigned long __get_wchan(struct task_struct *p);
+>  
+>  #define cpu_relax()     barrier()
+> diff --git a/arch/openrisc/kernel/process.c b/arch/openrisc/kernel/process.c
+> index 52dc983ddeba..f94b5ec06786 100644
+> --- a/arch/openrisc/kernel/process.c
+> +++ b/arch/openrisc/kernel/process.c
+> @@ -125,10 +125,6 @@ void show_regs(struct pt_regs *regs)
+>  	show_registers(regs);
+>  }
+>  
+> -void release_thread(struct task_struct *dead_task)
+> -{
+> -}
+> -
+>  /*
+>   * Copy the thread-specific (arch specific) info from the current
+>   * process to the new one p
 
-commit 0060c8783330 ("net: stmmac: implement support for passive mode
-converters via dt") has changed the plat->interface field semantics from
-containing the PHY-mode to specifying the MAC-PCS interface mode. Due to
-that the loongson32 platform code will leave the phylink interface
-uninitialized with the PHY-mode intended by the means of the actual
-platform setup. The commit-author most likely has just missed the
-arch-specific code to fix. Let's mend the Loongson32 platform code then by
-assigning the PHY-mode to the phy_interface field of the STMMAC platform
-data.
+For OpenRISC bits.
 
-Fixes: 0060c8783330 ("net: stmmac: implement support for passive mode converters via dt")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
----
-
-Note I don't have a Loongson32 hardware at hand to test it out. But the
-bug in here seems to be more than probable. Thus I've taken a liberty to
-post the fix. Should you not find a bug presented in there, just ignore
-the patch.
----
- arch/mips/loongson32/common/platform.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
-index 794c96c2a4cd..311dc1580bbd 100644
---- a/arch/mips/loongson32/common/platform.c
-+++ b/arch/mips/loongson32/common/platform.c
-@@ -98,7 +98,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
- 	if (plat_dat->bus_id) {
- 		__raw_writel(__raw_readl(LS1X_MUX_CTRL0) | GMAC1_USE_UART1 |
- 			     GMAC1_USE_UART0, LS1X_MUX_CTRL0);
--		switch (plat_dat->interface) {
-+		switch (plat_dat->phy_interface) {
- 		case PHY_INTERFACE_MODE_RGMII:
- 			val &= ~(GMAC1_USE_TXCLK | GMAC1_USE_PWM23);
- 			break;
-@@ -107,12 +107,12 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
- 			break;
- 		default:
- 			pr_err("unsupported mii mode %d\n",
--			       plat_dat->interface);
-+			       plat_dat->phy_interface);
- 			return -ENOTSUPP;
- 		}
- 		val &= ~GMAC1_SHUT;
- 	} else {
--		switch (plat_dat->interface) {
-+		switch (plat_dat->phy_interface) {
- 		case PHY_INTERFACE_MODE_RGMII:
- 			val &= ~(GMAC0_USE_TXCLK | GMAC0_USE_PWM01);
- 			break;
-@@ -121,7 +121,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
- 			break;
- 		default:
- 			pr_err("unsupported mii mode %d\n",
--			       plat_dat->interface);
-+			       plat_dat->phy_interface);
- 			return -ENOTSUPP;
- 		}
- 		val &= ~GMAC0_SHUT;
-@@ -131,7 +131,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
- 	plat_dat = dev_get_platdata(&pdev->dev);
- 
- 	val &= ~PHY_INTF_SELI;
--	if (plat_dat->interface == PHY_INTERFACE_MODE_RMII)
-+	if (plat_dat->phy_interface == PHY_INTERFACE_MODE_RMII)
- 		val |= 0x4 << PHY_INTF_SELI_SHIFT;
- 	__raw_writel(val, LS1X_MUX_CTRL1);
- 
-@@ -146,9 +146,9 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata = {
- 	.bus_id			= 0,
- 	.phy_addr		= -1,
- #if defined(CONFIG_LOONGSON1_LS1B)
--	.interface		= PHY_INTERFACE_MODE_MII,
-+	.phy_interface		= PHY_INTERFACE_MODE_MII,
- #elif defined(CONFIG_LOONGSON1_LS1C)
--	.interface		= PHY_INTERFACE_MODE_RMII,
-+	.phy_interface		= PHY_INTERFACE_MODE_RMII,
- #endif
- 	.mdio_bus_data		= &ls1x_mdio_bus_data,
- 	.dma_cfg		= &ls1x_eth_dma_cfg,
-@@ -186,7 +186,7 @@ struct platform_device ls1x_eth0_pdev = {
- static struct plat_stmmacenet_data ls1x_eth1_pdata = {
- 	.bus_id			= 1,
- 	.phy_addr		= -1,
--	.interface		= PHY_INTERFACE_MODE_MII,
-+	.phy_interface		= PHY_INTERFACE_MODE_MII,
- 	.mdio_bus_data		= &ls1x_mdio_bus_data,
- 	.dma_cfg		= &ls1x_eth_dma_cfg,
- 	.has_gmac		= 1,
--- 
-2.35.1
-
-
---5vggqndsialimfdn--
+Acked-by: Stafford Horne <shorne@gmail.com>
