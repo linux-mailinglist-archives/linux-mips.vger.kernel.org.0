@@ -2,71 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8938B59B994
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Aug 2022 08:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A678659BB6B
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Aug 2022 10:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbiHVGc0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Aug 2022 02:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
+        id S233956AbiHVIXt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Aug 2022 04:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbiHVGcO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Aug 2022 02:32:14 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A162286D3
-        for <linux-mips@vger.kernel.org>; Sun, 21 Aug 2022 23:32:09 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id e20so11415375wri.13
-        for <linux-mips@vger.kernel.org>; Sun, 21 Aug 2022 23:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=o31t8HDG7QptfeLJ+04Jkz8j9NFHlDWTE2XxPfy4mY4=;
-        b=FrYubPa5iRhzf+WrRPsmiY5vXh9yxeGqcT0p84Sdu/VMPFizo2ximY48tx9ylUHZED
-         mPTBYvFdQSWyQvZFeiwO+ZxRcjtLQByT4adG/DoNeZBMtMz8P1WBGCNUfwXOknCVageC
-         gOsO411NxXs0bFn/r4hWP6vZOvFFR4JKHsjmj17OEFnj3UyoPLJL3/F0BAPtvb3VrkKu
-         kt20y5+o7H2J6gAggdKUcj8w21Ihg/D6nYx+sWVa7eEOorpRHZwPseeMvJY9pUuIFhbk
-         K7EW0i+70qlXOgawP99bZ1X3czl9u7y6nzREE0Ep8RS/WLsefyESE2bvTvChiDPA3pa9
-         MIHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=o31t8HDG7QptfeLJ+04Jkz8j9NFHlDWTE2XxPfy4mY4=;
-        b=S44AA167mE90AV/SMMT44d9ZJqItmYVsISlm+QOWiUtszHQIwY/DTcojYYYmLBLKpb
-         rYD08Vc9zDOTSadGahEpBzLi5b1e5cmR4oo2OEUmQKyktObw5aUvI2yUTI52hnWafuT5
-         EzdtcUFrGbVo3OOWN/GCvBYTQn3jLr4PRAd1ArHFjxZjSQVUIXQxjMwLhK6lAAYWuCN6
-         2KRALE+tTKQzKG4vuumT1xFdqv4NwyDkFMNAAN3mpLd+9YWyZkGuJDGqyaCVIYxWDgTy
-         STOeVnKaDSYznRjCzgY5pFam/cJ58OT+ET6krn87EwzJOIlFq0zgVELyWo1ubcvBC0/1
-         q4WA==
-X-Gm-Message-State: ACgBeo0xq6FRbugFsx+TfBdbD5BCbogsakJn9GwENBlnWgp+rVTTY8zK
-        NQITRdviywNd63WC7oVLtxC1T4Qw6qL6kUkfr7w=
-X-Google-Smtp-Source: AA6agR6NTSbaljBeT6nBHwpsZV+iFEjaf84R55z0GxoNRdmBRntcrfv1xOl7luJnB44WOhlEhx6CPLwQoMYUPfF5qd0=
-X-Received: by 2002:a5d:4ad2:0:b0:225:285e:3ec1 with SMTP id
- y18-20020a5d4ad2000000b00225285e3ec1mr9924326wrs.24.1661149927923; Sun, 21
- Aug 2022 23:32:07 -0700 (PDT)
+        with ESMTP id S233354AbiHVIXp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Aug 2022 04:23:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7CB615A;
+        Mon, 22 Aug 2022 01:23:32 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MB50n281BznTgN;
+        Mon, 22 Aug 2022 16:21:13 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 16:23:29 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-doc@vger.kernel.org>
+CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
+        <linux-kernel@vger.kernel.org>, <darren@os.amperecomputing.com>,
+        <yangyicong@hisilicon.com>, <huzhanyuan@oppo.com>,
+        <lipeifeng@oppo.com>, <zhangshiming@oppo.com>, <guojian@oppo.com>,
+        <realmz6@gmail.com>, <linux-mips@vger.kernel.org>,
+        <openrisc@lists.librecores.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        Barry Song <21cnbao@gmail.com>, <wangkefeng.wang@huawei.com>,
+        <xhao@linux.alibaba.com>, <prime.zeng@hisilicon.com>,
+        <anshuman.khandual@arm.com>
+Subject: [PATCH v3 0/4] mm: arm64: bring up BATCHED_UNMAP_TLB_FLUSH
+Date:   Mon, 22 Aug 2022 16:21:16 +0800
+Message-ID: <20220822082120.8347-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Received: by 2002:a5d:5444:0:0:0:0:0 with HTTP; Sun, 21 Aug 2022 23:32:07
- -0700 (PDT)
-Reply-To: maddahabdwabbo@gmail.com
-From:   Abd-jaafari Maddah <sheishenalyeshmanbetovichu@gmail.com>
-Date:   Sun, 21 Aug 2022 23:32:07 -0700
-Message-ID: <CALX-7+0_G-U-D9doENGdbc90dSeV5o=VML+dqaJkbMJ9UiPshQ@mail.gmail.com>
-Subject: Why No Response Yet?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Yicong Yang <yangyicong@hisilicon.com>
+
+Though ARM64 has the hardware to do tlb shootdown, the hardware
+broadcasting is not free.
+A simplest micro benchmark shows even on snapdragon 888 with only
+8 cores, the overhead for ptep_clear_flush is huge even for paging
+out one page mapped by only one process:
+5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+
+While pages are mapped by multiple processes or HW has more CPUs,
+the cost should become even higher due to the bad scalability of
+tlb shootdown.
+
+The same benchmark can result in 16.99% CPU consumption on ARM64
+server with around 100 cores according to Yicong's test on patch
+4/4.
+
+This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+1. only send tlbi instructions in the first stage -
+	arch_tlbbatch_add_mm()
+2. wait for the completion of tlbi by dsb while doing tlbbatch
+	sync in arch_tlbbatch_flush()
+My testing on snapdragon shows the overhead of ptep_clear_flush
+is removed by the patchset. The micro benchmark becomes 5% faster
+even for one page mapped by single process on snapdragon 888.
+
+-v3:
+1. Declare arch's tlbbatch defer support by arch_tlbbatch_should_defer() instead
+   of ARCH_HAS_MM_CPUMASK, per Barry and Kefeng
+2. Add Tested-by from Xin Hao
+Link: https://lore.kernel.org/linux-mm/20220711034615.482895-1-21cnbao@gmail.com/
+
+-v2:
+1. Collected Yicong's test result on kunpeng920 ARM64 server;
+2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+   according to the comments of Peter Zijlstra and Dave Hansen
+3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+   is empty according to the comments of Nadav Amit
+
+Thanks, Peter, Dave and Nadav for your testing or reviewing
+, and comments.
+
+-v1:
+https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+
+Anshuman Khandual (1):
+  mm/tlbbatch: Introduce arch_tlbbatch_should_defer()
+
+Barry Song (3):
+  Revert "Documentation/features: mark BATCHED_UNMAP_TLB_FLUSH doesn't
+    apply to ARM64"
+  mm: rmap: Extend tlbbatch APIs to fit new platforms
+  arm64: support batched/deferred tlb shootdown during page reclamation
+
+ Documentation/features/arch-support.txt       |  1 -
+ .../features/vm/TLB/arch-support.txt          |  2 +-
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/tlbbatch.h             | 12 ++++++++
+ arch/arm64/include/asm/tlbflush.h             | 28 +++++++++++++++++--
+ arch/x86/include/asm/tlbflush.h               | 15 +++++++++-
+ mm/rmap.c                                     | 19 +++++--------
+ 7 files changed, 61 insertions(+), 17 deletions(-)
+ create mode 100644 arch/arm64/include/asm/tlbbatch.h
+
 -- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am writing
-you again,it's important we discuss.
-Am waiting,
-Abd-Jafaari Maddah
+2.24.0
+
