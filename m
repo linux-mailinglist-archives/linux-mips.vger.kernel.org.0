@@ -2,172 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F6059BC40
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Aug 2022 11:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B0759BD1F
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Aug 2022 11:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbiHVJFg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Aug 2022 05:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S233296AbiHVJtY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Aug 2022 05:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbiHVJD2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Aug 2022 05:03:28 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B882184;
-        Mon, 22 Aug 2022 02:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1661158992; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/BpMnlAU7QlyBal9Ml6AXqdPCMk964dk628E6HF4/7I=;
-        b=z5Yz2KFwTThKueUxoAnnOk9yOk04UN7nLhbmXbIlW1warVc0D4xrttnlNAVSk7baD7iFR7
-        0ZSbxN00/MxyG6lohewdN29dLIRtLhxOqdNguvecWRD1jqUU1X4+lOdAhSzi2UuKMjcMz8
-        HCM10Rx9l1Sy//CbEj0YO/PDdxmxv6M=
-Date:   Mon, 22 Aug 2022 11:03:03 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 4/4] input: joystick: Fix buffer data parsing
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Message-Id: <3HE0HR.IPKJTTCKEJUA1@crapouillou.net>
-In-Reply-To: <20220819185339.7f488ad8@jic23-huawei>
-References: <20220817105643.95710-1-contact@artur-rojek.eu>
-        <20220817105643.95710-5-contact@artur-rojek.eu>
-        <20220819185339.7f488ad8@jic23-huawei>
+        with ESMTP id S229687AbiHVJtY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Aug 2022 05:49:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B9D629821;
+        Mon, 22 Aug 2022 02:49:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA29213D5;
+        Mon, 22 Aug 2022 02:49:24 -0700 (PDT)
+Received: from [10.57.15.77] (unknown [10.57.15.77])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 536F13F718;
+        Mon, 22 Aug 2022 02:49:15 -0700 (PDT)
+Message-ID: <f8c743d8-fcbe-4ef7-5f86-d63086552ffd@arm.com>
+Date:   Mon, 22 Aug 2022 10:49:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 4/4] swiotlb: panic if nslabs is too small
+Content-Language: en-GB
+To:     Yu Zhao <yuzhao@google.com>, dongli.zhang@oracle.com
+Cc:     ak@linux.intel.com, akpm@linux-foundation.org,
+        alexander.sverdlin@nokia.com, andi.kleen@intel.com, bp@alien8.de,
+        bp@suse.de, cminyard@mvista.com, corbet@lwn.net,
+        damien.lemoal@opensource.wdc.com, dave.hansen@linux.intel.com,
+        hch@infradead.org, iommu@lists.linux-foundation.org,
+        joe.jin@oracle.com, joe@perches.com, keescook@chromium.org,
+        kirill.shutemov@intel.com, kys@microsoft.com,
+        linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        ltykernel@gmail.com, michael.h.kelley@microsoft.com,
+        mingo@redhat.com, m.szyprowski@samsung.com, parri.andrea@gmail.com,
+        paulmck@kernel.org, pmladek@suse.com, rdunlap@infradead.org,
+        tglx@linutronix.de, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, tsbogend@alpha.franken.de,
+        vkuznets@redhat.com, wei.liu@kernel.org, x86@kernel.org
+References: <20220611082514.37112-5-dongli.zhang@oracle.com>
+ <20220820012031.1285979-1-yuzhao@google.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220820012031.1285979-1-yuzhao@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jonathan,
+On 2022-08-20 02:20, Yu Zhao wrote:
+>> Panic on purpose if nslabs is too small, in order to sync with the remap
+>> retry logic.
+>>
+>> In addition, print the number of bytes for tlb alloc failure.
+>>
+>> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+>> ---
+>>   kernel/dma/swiotlb.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+>> index fd21f4162f4b..1758b724c7a8 100644
+>> --- a/kernel/dma/swiotlb.c
+>> +++ b/kernel/dma/swiotlb.c
+>> @@ -242,6 +242,9 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
+>>   	if (swiotlb_force_disable)
+>>   		return;
+>>   
+>> +	if (nslabs < IO_TLB_MIN_SLABS)
+>> +		panic("%s: nslabs = %lu too small\n", __func__, nslabs);
+> 
+> Hi,
+> 
+> This patch breaks MIPS. Please take a look. Thanks.
 
-Le ven., ao=FBt 19 2022 at 18:53:39 +0100, Jonathan Cameron=20
-<jic23@kernel.org> a =E9crit :
-> On Wed, 17 Aug 2022 12:56:43 +0200
-> Artur Rojek <contact@artur-rojek.eu> wrote:
->=20
->>  Don't try to access buffer data of a channel by its scan index.=20
->> Instead,
->>  use the newly introduced `iio_find_channel_offset_in_buffer` to get=20
->> the
->>  correct data offset.
->>=20
->>  The scan index of a channel does not represent its position in a=20
->> buffer,
->>  as the buffer will contain data for enabled channels only, affecting
->>  data offsets and alignment.
->>=20
->>  Fixes: 2c2b364fddd5 ("Input: joystick - add ADC attached joystick=20
->> driver.")
->>  Reported-by: Chris Morgan <macromorgan@hotmail.com>
->>  Tested-by: Paul Cercueil <paul@crapouillou.net>
->>  Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
->>  ---
->>   drivers/input/joystick/adc-joystick.c | 26=20
->> +++++++++++++++++---------
->>   1 file changed, 17 insertions(+), 9 deletions(-)
->>=20
->>  diff --git a/drivers/input/joystick/adc-joystick.c=20
->> b/drivers/input/joystick/adc-joystick.c
->>  index c0deff5d4282..aed853ebe1d1 100644
->>  --- a/drivers/input/joystick/adc-joystick.c
->>  +++ b/drivers/input/joystick/adc-joystick.c
->>  @@ -6,6 +6,7 @@
->>   #include <linux/ctype.h>
->>   #include <linux/input.h>
->>   #include <linux/iio/iio.h>
->>  +#include <linux/iio/buffer.h>
->>   #include <linux/iio/consumer.h>
->>   #include <linux/module.h>
->>   #include <linux/platform_device.h>
->>  @@ -46,36 +47,43 @@ static void adc_joystick_poll(struct input_dev=20
->> *input)
->>   static int adc_joystick_handle(const void *data, void *private)
->>   {
->>   	struct adc_joystick *joy =3D private;
->>  +	struct iio_buffer *buffer;
->>   	enum iio_endian endianness;
->>  -	int bytes, msb, val, idx, i;
->>  -	const u16 *data_u16;
->>  +	int bytes, msb, val, off;
->>  +	const u8 *chan_data;
->>  +	unsigned int i;
->>   	bool sign;
->>=20
->>   	bytes =3D joy->chans[0].channel->scan_type.storagebits >> 3;
->>=20
->>   	for (i =3D 0; i < joy->num_chans; ++i) {
->>  -		idx =3D joy->chans[i].channel->scan_index;
->>   		endianness =3D joy->chans[i].channel->scan_type.endianness;
->>   		msb =3D joy->chans[i].channel->scan_type.realbits - 1;
->>   		sign =3D tolower(joy->chans[i].channel->scan_type.sign) =3D=3D 's';
->>  +		buffer =3D iio_channel_cb_get_iio_buffer(joy->buffer);
->>  +		off =3D iio_find_channel_offset_in_buffer(joy->chans[i].indio_dev,
->>  +							joy->chans[i].channel,
->>  +							buffer);
->=20
-> With this call replaced with one that instead uses
->=20
-> 		off =3D iio_find_channel_offset_in_buffer(joy->chans, i);
->=20
-> which I'm fairly sure is enough via the info in chans[x]->channel to=20
-> establish this offset.
->=20
-> All is good, though you should probably cache it as doing that maths=20
-> every
-> time seems excessive.
->=20
->=20
->>  +		if (off < 0)
->>  +			return off;
->>  +
->>  +		chan_data =3D (const u8 *)data + off;
->>=20
->>   		switch (bytes) {
->>   		case 1:
->>  -			val =3D ((const u8 *)data)[idx];
->>  +			val =3D *chan_data;
->>   			break;
->>   		case 2:
->>  -			data_u16 =3D (const u16 *)data + idx;
->>  -
->>   			/*
->>   			 * Data is aligned to the sample size by IIO core.
->>   			 * Call `get_unaligned_xe16` to hide type casting.
->>   			 */
->>   			if (endianness =3D=3D IIO_BE)
->>  -				val =3D get_unaligned_be16(data_u16);
->>  +				val =3D get_unaligned_be16(chan_data);
->=20
-> I obviously missed this previously but these are aligned so we don't=20
-> need the
-> unaligned form.
+Hmm, it's possible this might be quietly fixed by 20347fca71a3, but 
+either way I'm not sure why we would need to panic *before* we've even 
+tried to allocate anything, when we could simply return with no harm 
+done? If we've ended up calculating (or being told) a buffer size which 
+is too small to be usable, that should be no different to disabling 
+SWIOTLB entirely.
 
-Yes, the comment above says that it's used to hide type casting.
+Historically, passing "swiotlb=1" on the command line has been used to 
+save memory when the user knows SWIOTLB isn't needed. That should 
+definitely not be allowed to start panicking.
 
-Cheers,
--Paul
+(once again, another patch which was not CCed to the correct reviewers, 
+sigh...)
 
->>   			else if (endianness =3D=3D IIO_LE)
->>  -				val =3D get_unaligned_le16(data_u16);
->>  +				val =3D get_unaligned_le16(chan_data);
->>   			else /* IIO_CPU */
->>  -				val =3D *data_u16;
->>  +				val =3D *(const u16 *)chan_data;
->>   			break;
->>   		default:
->>   			return -EINVAL;
->=20
+Thanks,
+Robin.
 
-
+> On v5.19.0:
+>    Linux version 5.19.0 (builder@buildhost) (mips64-openwrt-linux-musl-gcc (OpenWrt GCC 11.2.0 r19590-042d558536) 11.2.0, GNU ld (GNU Binutils) 2.37) #0 SMP Sun Jul 31 15:12:47 2022
+>    Skipping L2 locking due to reduced L2 cache size
+>    CVMSEG size: 0 cache lines (0 bytes)
+>    printk: bootconsole [early0] enabled
+>    CPU0 revision is: 000d9301 (Cavium Octeon II)
+>    Kernel sections are not in the memory maps
+>    Wasting 278528 bytes for tracking 4352 unused pages
+>    Initrd not found or empty - disabling initrd
+>    Using appended Device Tree.
+>    software IO TLB: SWIOTLB bounce buffer size adjusted to 0MB
+>    software IO TLB: mapped [mem 0x0000000004b0c000-0x0000000004b4c000] (0MB)
+> 
+> On v6.0-rc1, with
+>    commit 0bf28fc40d89 ("swiotlb: panic if nslabs is too small")
+>    commit 20347fca71a3 ("swiotlb: split up the global swiotlb lock")
+>    commit 534ea58b3ceb ("Revert "MIPS: octeon: Remove vestiges of CONFIG_CAVIUM_RESERVE32"")
+> 
+>    Linux version 6.0.0-rc1 (builder@buildhost) (mips64-openwrt-linux-musl-gcc (OpenWrt GCC 11.2.0 r19590-042d558536) 11.2.0, GNU ld (GNU Binutils) 2.37) #0 SMP Sun Jul 31 15:12:47 2022
+>    Failed to allocate CAVIUM_RESERVE32 memory area
+>    Skipping L2 locking due to reduced L2 cache size
+>    CVMSEG size: 0 cache lines (0 bytes)
+>    printk: bootconsole [early0] enabled
+>    CPU0 revision is: 000d9301 (Cavium Octeon II)
+>    Kernel sections are not in the memory maps
+>    Wasting 278528 bytes for tracking 4352 unused pages
+>    Initrd not found or empty - disabling initrd
+>    Using appended Device Tree.
+>    software IO TLB: SWIOTLB bounce buffer size adjusted to 0MB
+>    software IO TLB: area num 1.
+>    Kernel panic - not syncing: swiotlb_init_remap: nslabs = 128 too small
+> 
+> On v6.0-rc1, with
+>    commit 20347fca71a3 ("swiotlb: split up the global swiotlb lock")
+>    commit 534ea58b3ceb ("Revert "MIPS: octeon: Remove vestiges of CONFIG_CAVIUM_RESERVE32"")
+> 
+>    Linux version 6.0.0-rc1+ (builder@buildhost) (mips64-openwrt-linux-musl-gcc (OpenWrt GCC 11.2.0 r19590-042d558536) 11.2.0, GNU ld (GNU Binutils) 2.37) #0 SMP Sun Jul 31 15:12:47 2022
+>    Failed to allocate CAVIUM_RESERVE32 memory area
+>    Skipping L2 locking due to reduced L2 cache size
+>    CVMSEG size: 0 cache lines (0 bytes)
+>    printk: bootconsole [early0] enabled
+>    CPU0 revision is: 000d9301 (Cavium Octeon II)
+>    Kernel sections are not in the memory maps
+>    Wasting 278528 bytes for tracking 4352 unused pages
+>    Initrd not found or empty - disabling initrd
+>    Using appended Device Tree.
+>    software IO TLB: SWIOTLB bounce buffer size adjusted to 0MB
+>    software IO TLB: area num 1.
+>    software IO TLB: mapped [mem 0x0000000004c0c000-0x0000000004c4c000] (0MB)
