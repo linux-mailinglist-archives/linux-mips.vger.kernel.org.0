@@ -2,284 +2,172 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E6159BB72
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Aug 2022 10:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F6059BC40
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Aug 2022 11:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbiHVIX6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Aug 2022 04:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
+        id S234151AbiHVJFg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Aug 2022 05:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233909AbiHVIXp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Aug 2022 04:23:45 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9949FE7;
-        Mon, 22 Aug 2022 01:23:34 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MB4zm2lylzlWHZ;
-        Mon, 22 Aug 2022 16:20:20 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 22 Aug 2022 16:23:31 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-doc@vger.kernel.org>
-CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
-        <linux-kernel@vger.kernel.org>, <darren@os.amperecomputing.com>,
-        <yangyicong@hisilicon.com>, <huzhanyuan@oppo.com>,
-        <lipeifeng@oppo.com>, <zhangshiming@oppo.com>, <guojian@oppo.com>,
-        <realmz6@gmail.com>, <linux-mips@vger.kernel.org>,
-        <openrisc@lists.librecores.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        Barry Song <21cnbao@gmail.com>, <wangkefeng.wang@huawei.com>,
-        <xhao@linux.alibaba.com>, <prime.zeng@hisilicon.com>,
-        <anshuman.khandual@arm.com>, Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown during page reclamation
-Date:   Mon, 22 Aug 2022 16:21:20 +0800
-Message-ID: <20220822082120.8347-5-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220822082120.8347-1-yangyicong@huawei.com>
-References: <20220822082120.8347-1-yangyicong@huawei.com>
+        with ESMTP id S234143AbiHVJD2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Aug 2022 05:03:28 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B882184;
+        Mon, 22 Aug 2022 02:03:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1661158992; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/BpMnlAU7QlyBal9Ml6AXqdPCMk964dk628E6HF4/7I=;
+        b=z5Yz2KFwTThKueUxoAnnOk9yOk04UN7nLhbmXbIlW1warVc0D4xrttnlNAVSk7baD7iFR7
+        0ZSbxN00/MxyG6lohewdN29dLIRtLhxOqdNguvecWRD1jqUU1X4+lOdAhSzi2UuKMjcMz8
+        HCM10Rx9l1Sy//CbEj0YO/PDdxmxv6M=
+Date:   Mon, 22 Aug 2022 11:03:03 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 4/4] input: joystick: Fix buffer data parsing
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Artur Rojek <contact@artur-rojek.eu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Message-Id: <3HE0HR.IPKJTTCKEJUA1@crapouillou.net>
+In-Reply-To: <20220819185339.7f488ad8@jic23-huawei>
+References: <20220817105643.95710-1-contact@artur-rojek.eu>
+        <20220817105643.95710-5-contact@artur-rojek.eu>
+        <20220819185339.7f488ad8@jic23-huawei>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Barry Song <v-songbaohua@oppo.com>
+Hi Jonathan,
 
-on x86, batched and deferred tlb shootdown has lead to 90%
-performance increase on tlb shootdown. on arm64, HW can do
-tlb shootdown without software IPI. But sync tlbi is still
-quite expensive.
+Le ven., ao=FBt 19 2022 at 18:53:39 +0100, Jonathan Cameron=20
+<jic23@kernel.org> a =E9crit :
+> On Wed, 17 Aug 2022 12:56:43 +0200
+> Artur Rojek <contact@artur-rojek.eu> wrote:
+>=20
+>>  Don't try to access buffer data of a channel by its scan index.=20
+>> Instead,
+>>  use the newly introduced `iio_find_channel_offset_in_buffer` to get=20
+>> the
+>>  correct data offset.
+>>=20
+>>  The scan index of a channel does not represent its position in a=20
+>> buffer,
+>>  as the buffer will contain data for enabled channels only, affecting
+>>  data offsets and alignment.
+>>=20
+>>  Fixes: 2c2b364fddd5 ("Input: joystick - add ADC attached joystick=20
+>> driver.")
+>>  Reported-by: Chris Morgan <macromorgan@hotmail.com>
+>>  Tested-by: Paul Cercueil <paul@crapouillou.net>
+>>  Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+>>  ---
+>>   drivers/input/joystick/adc-joystick.c | 26=20
+>> +++++++++++++++++---------
+>>   1 file changed, 17 insertions(+), 9 deletions(-)
+>>=20
+>>  diff --git a/drivers/input/joystick/adc-joystick.c=20
+>> b/drivers/input/joystick/adc-joystick.c
+>>  index c0deff5d4282..aed853ebe1d1 100644
+>>  --- a/drivers/input/joystick/adc-joystick.c
+>>  +++ b/drivers/input/joystick/adc-joystick.c
+>>  @@ -6,6 +6,7 @@
+>>   #include <linux/ctype.h>
+>>   #include <linux/input.h>
+>>   #include <linux/iio/iio.h>
+>>  +#include <linux/iio/buffer.h>
+>>   #include <linux/iio/consumer.h>
+>>   #include <linux/module.h>
+>>   #include <linux/platform_device.h>
+>>  @@ -46,36 +47,43 @@ static void adc_joystick_poll(struct input_dev=20
+>> *input)
+>>   static int adc_joystick_handle(const void *data, void *private)
+>>   {
+>>   	struct adc_joystick *joy =3D private;
+>>  +	struct iio_buffer *buffer;
+>>   	enum iio_endian endianness;
+>>  -	int bytes, msb, val, idx, i;
+>>  -	const u16 *data_u16;
+>>  +	int bytes, msb, val, off;
+>>  +	const u8 *chan_data;
+>>  +	unsigned int i;
+>>   	bool sign;
+>>=20
+>>   	bytes =3D joy->chans[0].channel->scan_type.storagebits >> 3;
+>>=20
+>>   	for (i =3D 0; i < joy->num_chans; ++i) {
+>>  -		idx =3D joy->chans[i].channel->scan_index;
+>>   		endianness =3D joy->chans[i].channel->scan_type.endianness;
+>>   		msb =3D joy->chans[i].channel->scan_type.realbits - 1;
+>>   		sign =3D tolower(joy->chans[i].channel->scan_type.sign) =3D=3D 's';
+>>  +		buffer =3D iio_channel_cb_get_iio_buffer(joy->buffer);
+>>  +		off =3D iio_find_channel_offset_in_buffer(joy->chans[i].indio_dev,
+>>  +							joy->chans[i].channel,
+>>  +							buffer);
+>=20
+> With this call replaced with one that instead uses
+>=20
+> 		off =3D iio_find_channel_offset_in_buffer(joy->chans, i);
+>=20
+> which I'm fairly sure is enough via the info in chans[x]->channel to=20
+> establish this offset.
+>=20
+> All is good, though you should probably cache it as doing that maths=20
+> every
+> time seems excessive.
+>=20
+>=20
+>>  +		if (off < 0)
+>>  +			return off;
+>>  +
+>>  +		chan_data =3D (const u8 *)data + off;
+>>=20
+>>   		switch (bytes) {
+>>   		case 1:
+>>  -			val =3D ((const u8 *)data)[idx];
+>>  +			val =3D *chan_data;
+>>   			break;
+>>   		case 2:
+>>  -			data_u16 =3D (const u16 *)data + idx;
+>>  -
+>>   			/*
+>>   			 * Data is aligned to the sample size by IIO core.
+>>   			 * Call `get_unaligned_xe16` to hide type casting.
+>>   			 */
+>>   			if (endianness =3D=3D IIO_BE)
+>>  -				val =3D get_unaligned_be16(data_u16);
+>>  +				val =3D get_unaligned_be16(chan_data);
+>=20
+> I obviously missed this previously but these are aligned so we don't=20
+> need the
+> unaligned form.
 
-Even running a simplest program which requires swapout can
-prove this is true,
- #include <sys/types.h>
- #include <unistd.h>
- #include <sys/mman.h>
- #include <string.h>
+Yes, the comment above says that it's used to hide type casting.
 
- int main()
- {
- #define SIZE (1 * 1024 * 1024)
-         volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
-                                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+Cheers,
+-Paul
 
-         memset(p, 0x88, SIZE);
+>>   			else if (endianness =3D=3D IIO_LE)
+>>  -				val =3D get_unaligned_le16(data_u16);
+>>  +				val =3D get_unaligned_le16(chan_data);
+>>   			else /* IIO_CPU */
+>>  -				val =3D *data_u16;
+>>  +				val =3D *(const u16 *)chan_data;
+>>   			break;
+>>   		default:
+>>   			return -EINVAL;
+>=20
 
-         for (int k = 0; k < 10000; k++) {
-                 /* swap in */
-                 for (int i = 0; i < SIZE; i += 4096) {
-                         (void)p[i];
-                 }
-
-                 /* swap out */
-                 madvise(p, SIZE, MADV_PAGEOUT);
-         }
- }
-
-Perf result on snapdragon 888 with 8 cores by using zRAM
-as the swap block device.
-
- ~ # perf record taskset -c 4 ./a.out
- [ perf record: Woken up 10 times to write data ]
- [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
- ~ # perf report
- # To display the perf.data header info, please use --header/--header-only options.
- # To display the perf.data header info, please use --header/--header-only options.
- #
- #
- # Total Lost Samples: 0
- #
- # Samples: 60K of event 'cycles'
- # Event count (approx.): 35706225414
- #
- # Overhead  Command  Shared Object      Symbol
- # ........  .......  .................  .............................................................................
- #
-    21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
-     8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
-     6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
-     6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
-     5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
-     3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
-     3.49%  a.out    [kernel.kallsyms]  [k] memset64
-     1.63%  a.out    [kernel.kallsyms]  [k] clear_page
-     1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
-     1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
-     1.23%  a.out    [kernel.kallsyms]  [k] xas_load
-     1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
-
-ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
-swapping in/out a page mapped by only one process. If the
-page is mapped by multiple processes, typically, like more
-than 100 on a phone, the overhead would be much higher as
-we have to run tlb flush 100 times for one single page.
-Plus, tlb flush overhead will increase with the number
-of CPU cores due to the bad scalability of tlb shootdown
-in HW, so those ARM64 servers should expect much higher
-overhead.
-
-Further perf annonate shows 95% cpu time of ptep_clear_flush
-is actually used by the final dsb() to wait for the completion
-of tlb flush. This provides us a very good chance to leverage
-the existing batched tlb in kernel. The minimum modification
-is that we only send async tlbi in the first stage and we send
-dsb while we have to sync in the second stage.
-
-With the above simplest micro benchmark, collapsed time to
-finish the program decreases around 5%.
-
-Typical collapsed time w/o patch:
- ~ # time taskset -c 4 ./a.out
- 0.21user 14.34system 0:14.69elapsed
-w/ patch:
- ~ # time taskset -c 4 ./a.out
- 0.22user 13.45system 0:13.80elapsed
-
-Also, Yicong Yang added the following observation.
-	Tested with benchmark in the commit on Kunpeng920 arm64 server,
-	observed an improvement around 12.5% with command
-	`time ./swap_bench`.
-		w/o		w/
-	real	0m13.460s	0m11.771s
-	user	0m0.248s	0m0.279s
-	sys	0m12.039s	0m11.458s
-
-	Originally it's noticed a 16.99% overhead of ptep_clear_flush()
-	which has been eliminated by this patch:
-
-	[root@localhost yang]# perf record -- ./swap_bench && perf report
-	[...]
-	16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
-
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Nadav Amit <namit@vmware.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Tested-by: Xin Hao <xhao@linux.alibaba.com>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- .../features/vm/TLB/arch-support.txt          |  2 +-
- arch/arm64/Kconfig                            |  1 +
- arch/arm64/include/asm/tlbbatch.h             | 12 ++++++++
- arch/arm64/include/asm/tlbflush.h             | 28 +++++++++++++++++--
- 4 files changed, 40 insertions(+), 3 deletions(-)
- create mode 100644 arch/arm64/include/asm/tlbbatch.h
-
-diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
-index 1c009312b9c1..2caf815d7c6c 100644
---- a/Documentation/features/vm/TLB/arch-support.txt
-+++ b/Documentation/features/vm/TLB/arch-support.txt
-@@ -9,7 +9,7 @@
-     |       alpha: | TODO |
-     |         arc: | TODO |
-     |         arm: | TODO |
--    |       arm64: | TODO |
-+    |       arm64: |  ok  |
-     |        csky: | TODO |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 571cc234d0b3..09d45cd6d665 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -93,6 +93,7 @@ config ARM64
- 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
-+	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
- 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
- 	select ARCH_WANT_DEFAULT_BPF_JIT
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
-new file mode 100644
-index 000000000000..fedb0b87b8db
---- /dev/null
-+++ b/arch/arm64/include/asm/tlbbatch.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ARCH_ARM64_TLBBATCH_H
-+#define _ARCH_ARM64_TLBBATCH_H
-+
-+struct arch_tlbflush_unmap_batch {
-+	/*
-+	 * For arm64, HW can do tlb shootdown, so we don't
-+	 * need to record cpumask for sending IPI
-+	 */
-+};
-+
-+#endif /* _ARCH_ARM64_TLBBATCH_H */
-diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-index 412a3b9a3c25..23cbc987321a 100644
---- a/arch/arm64/include/asm/tlbflush.h
-+++ b/arch/arm64/include/asm/tlbflush.h
-@@ -254,17 +254,24 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
- 	dsb(ish);
- }
- 
--static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+
-+static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
- 					 unsigned long uaddr)
- {
- 	unsigned long addr;
- 
- 	dsb(ishst);
--	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
-+	addr = __TLBI_VADDR(uaddr, ASID(mm));
- 	__tlbi(vale1is, addr);
- 	__tlbi_user(vale1is, addr);
- }
- 
-+static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+					 unsigned long uaddr)
-+{
-+	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
-+}
-+
- static inline void flush_tlb_page(struct vm_area_struct *vma,
- 				  unsigned long uaddr)
- {
-@@ -272,6 +279,23 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
- 	dsb(ish);
- }
- 
-+static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-+{
-+	return true;
-+}
-+
-+static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
-+					struct mm_struct *mm,
-+					unsigned long uaddr)
-+{
-+	__flush_tlb_page_nosync(mm, uaddr);
-+}
-+
-+static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
-+{
-+	dsb(ish);
-+}
-+
- /*
-  * This is meant to avoid soft lock-ups on large TLB flushing ranges and not
-  * necessarily a performance improvement.
--- 
-2.24.0
 
