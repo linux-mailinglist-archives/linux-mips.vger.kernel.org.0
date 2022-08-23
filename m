@@ -2,72 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E73959CF89
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Aug 2022 05:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7CB59D0FB
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Aug 2022 08:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240131AbiHWDff (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Aug 2022 23:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S240436AbiHWGBK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Aug 2022 02:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240148AbiHWDfe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Aug 2022 23:35:34 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175385301F;
-        Mon, 22 Aug 2022 20:35:33 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id cb8so9526759qtb.0;
-        Mon, 22 Aug 2022 20:35:33 -0700 (PDT)
+        with ESMTP id S240407AbiHWGBJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 02:01:09 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2123.outbound.protection.outlook.com [40.107.243.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E24D5FAC5;
+        Mon, 22 Aug 2022 23:01:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C7ng91bZGLBV50amqUpTwZwFFcbejMn9o8m7VCfi+cAmxGx2SlHjIkArCmMW+WpD+UAoEneRaT8wWQH5FKGmI24M3TwyMxnV42Et+vwhhSDkhKsi+jA5NXQTQZDvtLqaPlwgieosgmrP08+2l5ZKRSJMViRkTDxms7p+XkWakCPjYPiYrLotFPeyIJfBffHE+78JXPJ4era8iqlGExQK8wITwlXfLD5B5hlgPd7gnjTizI4SY/SmLBjJPYWqDJB18qOZW+4M5gzyb0NhhOAZgMhqY9QHwViJMoyjFlQdSLMJu1l4ilsmN3xIy7QSYifZki9QXz1TxCs50nIl+Y/YoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nTI6ERXpUggPlaCF04Mz5GTR5X4F0mYcdg9kdQjA/Uo=;
+ b=HLdwX/k+csXpKnsttOIjYZYTj3iuyi3qBtgnq+Cz3R7UyO4l+xfFuMbOU7kySfIHhXQsov0ieBBrW8bGEVelRmYKc3pAOv20iMTvbgTYOzdA5giV15ro5ZuAirxrROd4TFHai5rzplr8ccrgyYowGQ5w0QL125fmEqNxTqWkVnd/NzXBlR7bfu/SMDcVrqlQ6jUNqqwCpXQQ1ODHFtpAAKc3Xi1CS/GTCddbRrNz3Gs4YYkssQZPrAcJOVis5iCOR27DMwTV1saEdFf9aKcTBMFFjiv5A8aRbgdbHDjcM9UoSX3VMwj/2dxtBD4Hk0pIwxE1Assh8C1mfDKwq3OmBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=S7kkoLuNhQ00abOUTZOeGzFT/B6ZjSVP0n1Y49zWBjQ=;
-        b=JdTkhWq1vq+LJ6+lCIrFJjrhYkNLpB3dYW7fjICh6fjyiKOWM5MQLNWF3y3E7y4mNM
-         icWNHGy8KqSnVgv6UxpjNTaeKehtzUalGYzFtdcreTTdJ2Zv5CXRt/MtMk7HbBxl31p3
-         zdq+7t7iVd1tiQUXg2X/8HIhyVjOTJT3DGHPO13yL3G5VqfhMbees8g389+bPst4HlUd
-         SONn+ODQAeoo5ObgotrnfZFn/Fk+diXJn3quomTAk/BGPq7n6KdvwJQuWMdGqRk36qi9
-         a3F7akbRgbygjCv/k/eWsEmSfd0W9b7C/+SsBO6xBJtEkbfgQVbW9p5zJkM5gCu1mJJu
-         T1HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=S7kkoLuNhQ00abOUTZOeGzFT/B6ZjSVP0n1Y49zWBjQ=;
-        b=i8zTs1mLDRDups38A1zDxSnNhLVLxjGyKIpWLKiOV5a3uarDRmmpGmHhh3vv3W2Cf4
-         HvFu6XcubSrqHzpUIcgiBleLH/jnx17rW9POIY992E5Avpr8mSdMGkxG+3RuMJW5CbB1
-         N9izHdCSYkuQujyizpWUbD3YbATRjmRC11uNAw5NdmgNYSapvo1iDD7IxrMKDY0UCh/v
-         YVqpg+OzUwwH2lLIcRXSIs8AaYfsfGmTaXQcFZA1hBjPL8fmqqoA7WCV53Z3qUCmHCQR
-         ckU009+yg0WZtg9jRkztz9EBzfFbRxXO/P0rLTtr1kx0eo19vRUccdV6fmJNh1JT91k6
-         Wb9Q==
-X-Gm-Message-State: ACgBeo26KVmUa2hJtfl1bDXtva94SloRAS/JIgAo//N3AFc7dCuiNNup
-        oMtdJZoa0VLALWzqS8g5+GxM/4o/Irk=
-X-Google-Smtp-Source: AA6agR5f3PUrASfnlz3yFpIlcpQDfUGYTTtFf82i3OjcmEdO41o7MDFECKT9CC/XSNDydlE2DYHNkw==
-X-Received: by 2002:ac8:5c89:0:b0:343:4e44:3dbe with SMTP id r9-20020ac85c89000000b003434e443dbemr17715136qta.531.1661225732213;
-        Mon, 22 Aug 2022 20:35:32 -0700 (PDT)
-Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with ESMTPSA id bp37-20020a05620a45a500b006b9c355ed75sm11575583qkb.70.2022.08.22.20.35.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 20:35:31 -0700 (PDT)
-Subject: Re: [RESEND PATCH] clk: ls1c: Fix PLL rate calculation
-To:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     Yang Ling <gnaygnil@gmail.com>, linux-kernel@vger.kernel.org,
-        Kelvin Cheung <keguang.zhang@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Du Huanpeng <dhu@hodcarrier.org>
-References: <20220823033414.198525-1-seanga2@gmail.com>
-From:   Sean Anderson <seanga2@gmail.com>
-Message-ID: <a43019fd-67c4-022a-83ac-40f0302c7cf4@gmail.com>
-Date:   Mon, 22 Aug 2022 23:35:31 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nTI6ERXpUggPlaCF04Mz5GTR5X4F0mYcdg9kdQjA/Uo=;
+ b=Re+8hnpz6tXEQiRcfsljt2QlF7YcsGOIxSrvdPTxFisvxKwm7m45uVY4PMBtlRRaSuGDaOMv8jYTfN2AiIB5jbupDXpFqvfgwKClQsza6HDufyM9ShVUxw5fbFA67UNFU5D76MsQsnZSBjUYLlgZ2wDcjaE9gRBumzACQUTB4eg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BYAPR10MB2984.namprd10.prod.outlook.com
+ (2603:10b6:a03:8f::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Tue, 23 Aug
+ 2022 06:01:04 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b869:6c52:7a8d:ddee]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b869:6c52:7a8d:ddee%4]) with mapi id 15.20.5504.028; Tue, 23 Aug 2022
+ 06:01:04 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: [PATCH v1 0/1] Convert phy-ocelot-serdes documentation to YAML
+Date:   Mon, 22 Aug 2022 23:00:51 -0700
+Message-Id: <20220823060052.3921849-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0024.namprd03.prod.outlook.com
+ (2603:10b6:a03:33a::29) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-In-Reply-To: <20220823033414.198525-1-seanga2@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 246cbf13-8080-4776-a82a-08da84ccdcb0
+X-MS-TrafficTypeDiagnostic: BYAPR10MB2984:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e1ymk9EismCzfN2JKPI8ijUgAh+PjkQe7Kd/UBn3t7fQbz7VG/zM8KJwViyh07/Y3Am+zmrw7QszQ0jmLkjrlvHBey1q+/G41l4MdFxpbt8xfWzUTVcsAB4YnbSyAxVLyy5pA9hVlJI1mHYq6I60fueM//aONHEDGOVnc7YroelrRqlf6B8bsB8EgmDC4H0331lsodeTguoQY+B9+iLCAZ8sRKWKqdp0zyK1szGerjMbk39RJVhgT4XJ+5fpFLSXkQA4ab86wd/NHtbpD4AFpc49wWXM8hUcTOfv5w/wObVsJ/75hTVbcYLWprlSRb71wSmXXAMn5hEfNVSKfDuH5cAp/bjkF6LeObBmtTH07w2wu8TIqx4PvNgzsTxCWoTneNiaLpPJZKnMh1c+PJe43wf4and8OhRfv/sfFKc+ixKaMb9my/i6reO1t7vn0qMmpgvnX/eVbFGXZg5nOBqIdpNl6IDw88p6WHRBpD91niOrhnoS1ec3AicurQhWLcw6nswrpja9/pQfFh3g/xUsLdXqwbqTIWj1Cgii30m27lVqNbYmZdJIdbcsoMbbfVTx+Nk+SGfvt/3dpQwlBEK0DTMvKaY025AzBVOE2Pho5STp13m+wxlqwR9BPIZerdHWXsZxAg4tZYJagl2GJ3qU4exwFLHHOy2YY5zUmBgXzuWG6N0DhvoqA90RZWDYwoqHotw6zzxZXnOYxff8DIobjsv18QvkmUKZcGLtwP2uf6fPxtG2JISP+CsiNqQ1Ol1r
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(366004)(39830400003)(396003)(376002)(86362001)(1076003)(186003)(2616005)(38350700002)(38100700002)(83380400001)(4744005)(44832011)(8936002)(7416002)(5660300002)(4326008)(66946007)(66556008)(8676002)(66476007)(2906002)(36756003)(41300700001)(478600001)(6486002)(6512007)(26005)(52116002)(6506007)(6666004)(316002)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zcykDPyYLbOedI9jqHHPnYkk9ZR6S8OLTidGudVYOcH3w8XK5NER3WkqN8M4?=
+ =?us-ascii?Q?GiKzezj0qrRvYwK1FhfUNRfOU35MgOwWY+COMfg10jxXTW0KghrYWDzT1Cnw?=
+ =?us-ascii?Q?+G5aCdWKnvNGle/2X/aZrdPexmoQ9o6a9soP1VQtcnsXC3N6rNGr+S9EN+vl?=
+ =?us-ascii?Q?m8iNzemObbWXZHIKHmq7KIkp7Y2ZdG7ZSyDBOBae+fUcKuExIyHi4Vd6RxGO?=
+ =?us-ascii?Q?DsB+XT66Bm8KA/BFjkxd7ISno6nSebIxii3Va8Ku4smLTYDkjEHDxVEK7xmY?=
+ =?us-ascii?Q?IvPYzEl7KlnHVCsFzNPEc27vHJiClDPaDGD36J+a+RKuddruUxZr4tNuDmI9?=
+ =?us-ascii?Q?Pq4kae+iu7u05KWIl1An60NehxZukGMVO6dTpC8Zd4YsEaPDM2oWfl9hPsvv?=
+ =?us-ascii?Q?xgK7hOMrJo21b8kWxMcVcuKhtJzq038SlE2pGVa1a91MGkJDYvAe72yMuZ1p?=
+ =?us-ascii?Q?vaCim+QNs0c50khY+XrMDM35e6euDNAfms/073uE1OSb4k/oVHvyj100zFlO?=
+ =?us-ascii?Q?t0fNoMtxQ1cWVCMF7cZ23SRcSDAsTnvEIzFDZ6InfqP/vDJ7S+YZ9nj4A6IJ?=
+ =?us-ascii?Q?FZP3FJ0LKRdDRDQuGa2Gr6h+dyoVTQAsi5I1+/6iZHEN1Hv+E5G6THZXdKH0?=
+ =?us-ascii?Q?TtTWMy85Pqf+GuYUmS8AeQYEsabxOzlEPCqb9KTKQvjhJBiONAXTMwioYG4T?=
+ =?us-ascii?Q?eWXt42PL901VbMjG9tPMAIM5/V/Nzk9219UwiY143TBLgHUUnjcv3vOjsFuQ?=
+ =?us-ascii?Q?ZD/G2bWESWfPqIQN1/yP5FhBvAzRVovpNHeP+nRU/7rZRbwmGcYzJmMY/GxW?=
+ =?us-ascii?Q?LHm0I5/P08Q60E3896mROwDURVlXcofFn8/9zp3H1gSR4MOvID/0xLO7whYq?=
+ =?us-ascii?Q?mV3Ivw0pfHmUwEY4BdWDMPBLTT9SXL/XoVi9Zl2WEjI6GJdXc1mE4gUJbMJ+?=
+ =?us-ascii?Q?sBNFw08gyYYDranVz4679HCtTPxTbRtDQSwBwudtGF3OJQbZXnxitZkRInkA?=
+ =?us-ascii?Q?EhG/FHVFjyPbzfuxr72mVWvjZMyopVdpj48L2dmtInUBBVMgV62PGg4GllGV?=
+ =?us-ascii?Q?k/RoXVAuhGbCF/PEiaDiyyAfh02Q/Jl4k6yt+VW6tWiL1Q9RSS3AkcEPaKV3?=
+ =?us-ascii?Q?B59WqsO8amdgqYB0RMpi/b5C2lVul23ghGfhUCrKQ1fSujp+8gJWGKoPMSIy?=
+ =?us-ascii?Q?8sFqmt8kHAAGtf+xbHLoOCTYOK5/eypsP14aocieW8sSDqTzIzriyHzeP6GF?=
+ =?us-ascii?Q?FyDS4UazUSM5YVGQsV54SO2YuA/Rv29L+ESOj3tpjUJYIvms4+BR2sB1wqF1?=
+ =?us-ascii?Q?huPbVss4Hc7Pm4tslX2BxulgHSjtuYTH50tJgU5vIeAwq/XuaozINhXPSR1S?=
+ =?us-ascii?Q?QYwidl1cfdZsH2kQ72xDICFEMbKSV9HdbtrfBlPB/AjInHlDF/RqXJ4GYzvd?=
+ =?us-ascii?Q?y6d8kD4D+Pc6iApvVZJEryj0RYeNWtXquUw31okCFSAasOEcdO9yfXBer5v5?=
+ =?us-ascii?Q?E8uPl8hoI1Nn9BARStQpP0h2qZoXQAV2vVrnmz430S8HeXJHWKpaGhE/2j3p?=
+ =?us-ascii?Q?ssidPi3GTxFuWBMiA9T1y+x7a7+Jm2zzZkznJNWlhViNxUBfpgL4x1V2QBfT?=
+ =?us-ascii?Q?tw=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 246cbf13-8080-4776-a82a-08da84ccdcb0
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 06:01:03.9449
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8Jc6eQee4bQzvR/xsVgfHZThEDKvO/fFIz9d6MehvS0IBoyAu2cDmdHoxZ+XJwP7RQ4la7QGuwMpvMMYzGCXV/KMVtm9lNUBJwAlR0rXa0I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2984
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,134 +116,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/22/22 11:34 PM, Sean Anderson wrote:
-> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1],=
- I
-> noticed the following calculation, which is copied from
-> drivers/clk/loongson1/clk-loongson1c.c:
->=20
-> ulong ls1c300_pll_get_rate(struct clk *clk)
-> {
-> 	unsigned int mult;
-> 	long long parent_rate;
-> 	void *base;
-> 	unsigned int val;
->=20
-> 	parent_rate =3D clk_get_parent_rate(clk);
-> 	base =3D (void *)clk->data;
->=20
-> 	val =3D readl(base + START_FREQ);
-> 	mult =3D FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
-> 	return (mult * parent_rate) / 4;
-> }
->=20
-> I would like to examine the use of M_PLL and FRAC_N to calculate the mu=
-ltiplier
-> for the PLL. The datasheet has the following to say:
->=20
-> START_FREQ =E4=BD=8D    =E7=BC=BA=E7=9C=81=E5=80=BC      =E6=8F=8F=E8=BF=
-=B0
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> FRAC_N     23:16 0           PLL =E5=80=8D=E9=A2=91=E7=B3=BB=E6=95=B0=E7=
-=9A=84=E5=B0=8F=E6=95=B0=E9=83=A8=E5=88=86
->=20
->                   =E7=94=B1          PLL =E5=80=8D=E9=A2=91=E7=B3=BB=E6=
-=95=B0=E7=9A=84=E6=95=B4=E6=95=B0=E9=83=A8=E5=88=86
-> M_PLL      15:8  NAND_D[3:0] (=E7=90=86=E8=AE=BA=E5=8F=AF=E4=BB=A5=E8=BE=
-=BE=E5=88=B0 255=EF=BC=8C=E5=BB=BA=E8=AE=AE=E4=B8=8D=E8=A6=81=E8=B6=85=E8=
-=BF=87 100)
->                   =E9=85=8D=E7=BD=AE
->=20
-> which according to google translate means
->=20
-> START_FREQ Bits  Default       Description
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> FRAC_N     23:16 0             Fractional part of the PLL multiplicatio=
-n factor
->=20
->                   Depends on    Integer part of PLL multiplication fact=
-or
-> M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] i=
-t is
->                   configuration  recommended not to exceed 100)
->=20
-> So just based on this description, I would expect that the formula to b=
-e
-> something like
->=20
-> 	rate =3D parent * (256 * M_PLL + FRAC_N) / 256 / 4
->=20
-> However, the datasheet also gives the following formula:
->=20
-> 	rate =3D parent * (M_PLL + FRAC_N) / 4
->=20
-> which is what the Linux driver has implemented. I find this very unusua=
-l.
-> First, the datasheet specifically says that these fields are the intege=
-r and
-> fractional parts of the multiplier. Second, I think such a construct do=
-es not
-> easily map to traditional PLL building blocks. Implementing this formul=
-a in
-> hardware would likely require an adder, just to then set the threshold =
-of a
-> clock divider.
->=20
-> I think it is much more likely that the first formula is correct. The a=
-uthor of
-> the datasheet may think of a multiplier of (say) 3.14 as
->=20
-> 	M_PLL =3D 3
-> 	FRAC_N =3D 0.14
->=20
-> which together sum to the correct multiplier, even though the actual va=
-lue
-> stored in FRAC_N would be 36.
->=20
-> I suspect that this has slipped by unnoticed because when FRAC_N is 0, =
-there is
-> no difference in the formulae. The following patch is untested, but I s=
-uspect
-> it will fix this issue. I would appreciate if anyone with access to the=
+Work is currently being done to add the phy-ocelot-serdes driver to a
+non-syscon configuration. Doing so will require updates to the
+documentation.
 
-> hardware could measure the output of the PLL (or one of its derived clo=
-cks) and
-> determine the correct formula.
->=20
-> [1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrie=
-r.org/T/#u
->=20
-> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-> Signed-off-by: Sean Anderson <seanga2@gmail.com>
-> ---
->=20
->   drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loong=
-son1/clk-loongson1c.c
-> index 1ebf740380ef..2aa839b05d6b 100644
-> --- a/drivers/clk/loongson1/clk-loongson1c.c
-> +++ b/drivers/clk/loongson1/clk-loongson1c.c
-> @@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_=
-hw *hw,
->   	u32 pll, rate;
->  =20
->   	pll =3D __raw_readl(LS1X_CLK_PLL_FREQ);
-> -	rate =3D ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
-> +	rate =3D (pll & 0xff00) + ((pll >> 16) & 0xff);
->   	rate *=3D OSC;
-> -	rate >>=3D 2;
-> +	rate >>=3D 10;
->  =20
->   	return rate;
->   }
->=20
+I can certainly wait until that change set to submit this, but I feel
+sooner is better than later for Documentation format updates. Also,
+those updates likely won't be ready before this next merge window.
 
-+CC Stephen Boyd
+The only liberty I took was adding Alexandre and UNGLinuxDriver as the
+maintainers, otherwise the content should be the same.
+
+Colin Foster (1):
+  dt-bindings: phy: ocelot-serdes: convert to YAML
+
+ .../bindings/phy/phy-ocelot-serdes.txt        | 43 -------------
+ .../bindings/phy/phy-ocelot-serdes.yaml       | 61 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 3 files changed, 62 insertions(+), 43 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/phy-ocelot-serdes.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/phy-ocelot-serdes.yaml
+
+-- 
+2.25.1
 
