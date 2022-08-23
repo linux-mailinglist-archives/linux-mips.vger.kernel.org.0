@@ -2,65 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F1F59D409
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Aug 2022 10:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5BF59D556
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Aug 2022 11:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241724AbiHWILp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Aug 2022 04:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S240624AbiHWI1K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Aug 2022 04:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241520AbiHWIJ3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 04:09:29 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CDD6744A;
-        Tue, 23 Aug 2022 01:06:20 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11cab7d7e0fso14731655fac.6;
-        Tue, 23 Aug 2022 01:06:19 -0700 (PDT)
+        with ESMTP id S243314AbiHWIY1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 04:24:27 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED2013E0D;
+        Tue, 23 Aug 2022 01:13:26 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id p187so7903664oia.9;
+        Tue, 23 Aug 2022 01:13:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=3DUNim7WTmzHmRObYLAWDZd3QPXFrzWMAVJ6u950fVw=;
-        b=PEfKzVZ9zdDK7xpYNrTaOE8LDRrYuccID4DJC18ZZ1dOGcM/PFel+HYpWII3aKbIeF
-         DWC52FU81Nk6KSpVp4uhLoJusR/zqCu0JxHLuRXzPlJVYhVVh7+wgUCecv/5N6zsniIx
-         QvDxhVIuMs/EghKCfi/T39Sz+o9TQQaQXXA9k7Mo5jS0wfJcezhj4E8fkG3R75mS/MOr
-         n1ULmf4rkLai8G/6SCv55h0BGAWvJH87B0IvIdLCJ0EyM22FH8AIfJndotB+YyGD0hRS
-         K9As7UA+MPl9h+9Fa89Ygw7FFNqg7YRIl6gspf3za/PHuxAI/xFLO81HxY/QSBj4UIEM
-         Wz0g==
+        bh=ElG2z9ds4FvCowZwp6quOzCFLXh5nG/0Vuy4pRDUUBQ=;
+        b=W5TDAm/jykNYHzQHtJ8EtJ2w0s+1rZ4tfT02UbCcdQFe4wlHpfHrLGFglREemP61lq
+         ENdhjpsglSIpkZd4GL/UrMmJj/MtK+omqDcs5IKk6I8MOMeLdfqz0mHSsT39BXo8cpo+
+         PtO5aNfEWRuwBtqPdm/JI0D3Z2Oj9/8//1pcT2rf4a5p2Eptn9A6CKVDZZiqCAFwhGpY
+         1qpWJ6kDhtS/tW33xPbB/vyG81pxwO3rdHOs5GNCmypNZ5YKPfI8L55zGXBY0oL3ndAC
+         cNBiG86hU1f3gCSQpU0klvl0Pt7whmSKsFqZKYXa0pxVIUEmp+M5UfAPbG90LHTHgQX5
+         pB5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=3DUNim7WTmzHmRObYLAWDZd3QPXFrzWMAVJ6u950fVw=;
-        b=DslT6HfCfSaOk48qI7tcWj4PNM9/7IgIoeeO/qb6lNZJ+ebQYIWpUfPCRvez5SmBXb
-         7gr3sLdyTh8NI4ZPw1BzOqAWv3pfuvkMBu+ydXvcB1v1zcy/7afK+iudz6xeIBOeLEDW
-         m+f5C76bj4UxuDBo8pawGIzBVhrjclvLHZQWlXJ54rbV2JvTdr7LsMZcuGEHqtcF/Zz6
-         6pcHAj2ev+VcK/SvCopjWqjpLsf4GvIp7HVgE/rLOEQj1tfLJQSwpyMeB8jidKYCii3e
-         j8Lm4Uj46Hs7dCA75eCOS23RuOQAYRyj+SJP/fxY6EnyruCQyf1cL+kCev/7fkEVNo9u
-         k9tg==
-X-Gm-Message-State: ACgBeo1HSHF2dhSfK8T4F0yjlEpuWuoZH0So18F5GAHpoKr+lBjGeHsd
-        X0Sh4gKlbWJP68+v30CU6F0LuAAplLNcreI4GL+lVlv7
-X-Google-Smtp-Source: AA6agR7u0uAvaNIkWvMT1B9z9RQ3S+vI04sURkMJs02g+rhl0HQ6KWE6yptMMcC6zUNNTZ6gciyBV1GEw8LrC624xeM=
-X-Received: by 2002:a05:6870:8912:b0:11b:a59c:f533 with SMTP id
- i18-20020a056870891200b0011ba59cf533mr894982oao.220.1661241979113; Tue, 23
- Aug 2022 01:06:19 -0700 (PDT)
+        bh=ElG2z9ds4FvCowZwp6quOzCFLXh5nG/0Vuy4pRDUUBQ=;
+        b=HO7re06VsqbsLvdlgaWHiMPQ1aK2dCMcqu3vgh7W+JVM0vEZTIt1lnG+VIX99r5dR8
+         pi5qa5jWbjX4GHN8wOnvgfXZCuK+DPuc012ujSA8+bUh6m31CRQIXawMkAzEgtv6LV4s
+         3Mxrz0GICJub78Jl7qtV/EZj3gXYnLz6M6Xm2/w95pKmN0BRFQv+o8EbW5voAmwD3cp+
+         TJ9kYcj9RMZfB67BZckjGq0V6Q1qVSw6QGJ6/gGUzmja33/AsQVuQWOLAuKHEFkVQQSs
+         laZPulKBzC+a6Lm3qmTwONJ4Fsxs6XEN3UDcCxsqA3K5YUOUrqMu8HR7nGLEpT7Xi4jO
+         gQ3Q==
+X-Gm-Message-State: ACgBeo3uPO/yaRYvp9Gw3e2v7WhYuBvHo2E7Wi0tt1eiWtoX5qy134V9
+        T6//mb1kGv79kbe23CelHXjaYRmntcEOzjl1KLc=
+X-Google-Smtp-Source: AA6agR5N7gQn0g2Usy+qY39qoJWjhWNRT6YITfXN1LCui3xyQhZKhEsBFqF2BKRc35FUoipeENupSxTM9pOAq5qvyyM=
+X-Received: by 2002:a05:6808:1189:b0:33a:34b3:6788 with SMTP id
+ j9-20020a056808118900b0033a34b36788mr844226oil.194.1661242404994; Tue, 23 Aug
+ 2022 01:13:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <202208221854.8ASrzjKa-lkp@intel.com> <20220823030056.123709-1-bagasdotme@gmail.com>
-In-Reply-To: <20220823030056.123709-1-bagasdotme@gmail.com>
+References: <20220823025441.30708-1-rdunlap@infradead.org>
+In-Reply-To: <20220823025441.30708-1-rdunlap@infradead.org>
 From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Date:   Tue, 23 Aug 2022 11:06:08 +0300
-Message-ID: <CAHNKnsRUJzRGJ+muGfYAW-5EM91_j9AK-WTeV9pBZeXjH6L_6g@mail.gmail.com>
-Subject: Re: [PATCH] mips: pci: remove extraneous asterisk from top level
- comment of ar2315 PCI driver
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+Date:   Tue, 23 Aug 2022 11:13:14 +0300
+Message-ID: <CAHNKnsTdmPMwYa1f7DBJsEXxL_pzforPLar=eO6Jp=COmCXrtQ@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: ath25: clean up non-kernel-doc comment warning
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
         Aditya Srivastava <yashsri421@gmail.com>,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -72,24 +69,29 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 6:01 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On Tue, Aug 23, 2022 at 5:54 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> Don't use "/**" kernel-doc notation for comments that are not in
+> kernel-doc format.
 >
-> kernel test robot reported kernel-doc warning:
+> Eliminates one warning:
 >
-> arch/mips/pci/pci-ar2315.c:6: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> arch/mips/pci/pci-ar2315.c:6: warning: This comment starts with
+>   '/**', but isn't a kernel-doc comment. Refer
+>   Documentation/doc-guide/kernel-doc.rst
 >     * Both AR2315 and AR2316 chips have PCI interface unit, which supports DMA
 >
-> The warning above is caused by an extraneous asterisk on the top level
-> (description) comment of pci-ar2315.c, for which the comment is confused as
-> kernel-doc comment instead.
->
-> Remove the asterisk.
->
-> Link: https://lore.kernel.org/linux-doc/202208221854.8ASrzjKa-lkp@intel.com/
-> Fixes: 3ed7a2a702dc0f ("MIPS: ath25: add AR2315 PCI host controller driver")
-> Fixes: 3e58e839150db0 ("scripts: kernel-doc: add warning for comment not following kernel-doc syntax")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 > Reported-by: kernel test robot <lkp@intel.com>
-> Cc: stable@vger.kernel.org # v5.15, v5.19
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Cc: Aditya Srivastava <yashsri421@gmail.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+> ---
+> Fixes: 3ed7a2a702dc ("MIPS: ath25: add AR2315 PCI host controller driver")
+>   but backport is not needed.
 
 Acked-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+
+Randy, Bagas, which one of these patches should be applied:
+* https://patchwork.kernel.org/project/linux-mips/patch/20220823030056.123709-1-bagasdotme@gmail.com/
+* https://patchwork.kernel.org/project/linux-mips/patch/20220823025441.30708-1-rdunlap@infradead.org/
