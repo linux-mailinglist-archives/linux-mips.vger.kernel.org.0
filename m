@@ -2,97 +2,210 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A55659D57B
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Aug 2022 11:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279DF59D8B7
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Aug 2022 12:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347338AbiHWIr7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Aug 2022 04:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S1350442AbiHWJ3t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Aug 2022 05:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348715AbiHWIqy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 04:46:54 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390196FA00;
-        Tue, 23 Aug 2022 01:21:39 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso16510086pjk.0;
-        Tue, 23 Aug 2022 01:21:38 -0700 (PDT)
+        with ESMTP id S1350058AbiHWJ1y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 05:27:54 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BEA753A9
+        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 01:37:24 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id l21so12840275ljj.2
+        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 01:37:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=1cj7sCX/819JZ2jI3ANzIO5MN27uSpxPakNGo1RmZJQ=;
-        b=BO3ghMfPYRhCWjj9zSKbRzZ4wth+zDtB0V2HX4HuhRDScfcs5M14w4kaGUOsu0mB8P
-         AydjXlOEW0GbAVNyht9/Gr7aE9oMXN9wHrlDyFgf87K8KsFWszJzXzGqLQtUj84v15GH
-         KN+9xqcxtAM0YcTgeSFccJVwdv+aub1N/zEnYy9DGkjxVKKIAZlUf1RWhyCA3rqNt2hY
-         X8vF5cQX918EELOiu9ORHLG97fccfj4zj5k0BBwJF45heboo2Wn1APjlzXMqSSZfVUIG
-         88WK/hhZb4lXYddodzn888hDZwbc6oJIJgTc98Au+xW56ooBpJQtyrjNpZyEP/wCaFXD
-         UaGQ==
+        bh=+aSY9Y33CDXgz04lbF3PqxrBUx68k/v5JOdwfPTNsck=;
+        b=QkuAXN+U7cnhI883/vPgSeyqlE+WERE888alAVsSQAP6K76e4Lq6scqjW5YP5gY4Zv
+         gVD8rvePqRyUWnq08fWShX0UKGdz+64B0i1RmzOIMHquRKO34P4KjKVA1eQgbCOvET5c
+         XLxKuXdMN7i7FrPlNniRLvaqe2MWHiMxe1+cKHpfOkn+zWrbYLoyoNUBJsvd/NsQRIxV
+         0PAJTxFQYRRA1GjSzaLlvTMnfy5dlgNal0BIxfiprXMoLEB+392bMAYUtrZkZdjn3QD4
+         aRNoqblddkQYhPC/kwhTpB8oFZ8tZvUr4aA/AJhU5tY5FrlelbEHmPwxWc2JqMxLkFl+
+         3slw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=1cj7sCX/819JZ2jI3ANzIO5MN27uSpxPakNGo1RmZJQ=;
-        b=gQ5fDiTRlqR0Zx8xRkYX+lRNHXCEfvv9BNSuDl3GGoYMX2SeSzgm/VhDI0cgWIwrTC
-         vcbJNqRxCd6XCVvfGMZVNUKOTbc0ZC0ToER5lhy6ImXhK8hlF98XPvj1JTLqCxPjw4GS
-         PCWNjzof+EfRcS3mpYbC4m3azkIoDWA/lMbQnCO0b6eCnQ/jP47QJ28BQXMvbtLNB6Xk
-         B4KE13KuxKiOK2GQTCx/oCP6eO/mrWxYKnZcWfz912S/0N9I0OmJsZD+HBQrZIGOy2TS
-         cQdb9R4P7WKFBtt9vNM5I1UdGd2WGbEVBaLc7TVE+Xfy6ZboYYKbGpU1bGRgFqd6TgTx
-         wmrg==
-X-Gm-Message-State: ACgBeo0Y1H8pgwnojBaf7+qRL6jDH4TpTkq9sm1fQ3TcsaJwKqnmWHXI
-        Iez7QzNcJvopsju1MjMQbnM=
-X-Google-Smtp-Source: AA6agR7cSqq9FjNLrxj/uIIBjb+sMbLbWrl6PYCXuZ5wSdpx/KtwNwRsGD8LAzqZN5GqzxV3ybZecg==
-X-Received: by 2002:a17:903:22c6:b0:172:cad9:403 with SMTP id y6-20020a17090322c600b00172cad90403mr16811432plg.123.1661242893190;
-        Tue, 23 Aug 2022 01:21:33 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-56.three.co.id. [116.206.28.56])
-        by smtp.gmail.com with ESMTPSA id i9-20020a170902c94900b001641b2d61d4sm9880362pla.30.2022.08.23.01.21.30
+        bh=+aSY9Y33CDXgz04lbF3PqxrBUx68k/v5JOdwfPTNsck=;
+        b=mNeZemAIPR96SUfrO0RWFh54e0JM9WHkHss+ohqDX969zbNCMsRqHW7HB+S4pxTT/0
+         AUujJEzq+n2o34sJUawKozWincU6EAz4Ny22BFin7mTTRTGcTdzx0uUnvjHmUrfbYM09
+         gNQkpoRZOnGoq8ensKocz0qZ3puvx3KFAour8LWp7IVmrCREca7opL/F8PxmLSuAsrWf
+         4u3qw225VwOc6sKLrrjyP1EvH9a9TXaTi0h6uiNpK83xyHb7EM8YR8Ah/mav7DjxBCtx
+         CixqF9F0LrS9M6myGgLPoal3BPFwqX8Z+CokAFtL3QgYhoBEvoR4SonONCH3UwkXoBP4
+         Dj4g==
+X-Gm-Message-State: ACgBeo2fkh9iLrMgU/rHgEpZOU5rNnEcNdxzZFG7TVLXcBXmQEp/IRs3
+        D3uerRP6b2CLPwXqsFIlL4GYHQ==
+X-Google-Smtp-Source: AA6agR4tz09nxCgU4KECChD6CEX8ta0EVwvv34zu7NRW9WZuo44ysLqMs2v/JFtkNU1OgDp8eiWwiw==
+X-Received: by 2002:a2e:9d06:0:b0:261:d208:7475 with SMTP id t6-20020a2e9d06000000b00261d2087475mr1683044lji.113.1661243791045;
+        Tue, 23 Aug 2022 01:36:31 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id p18-20020a2eb992000000b00261ca006158sm1243319ljp.54.2022.08.23.01.36.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 01:21:32 -0700 (PDT)
-Message-ID: <e238c1b9-8c9f-c5f1-fd5e-2be94f150477@gmail.com>
-Date:   Tue, 23 Aug 2022 15:21:28 +0700
+        Tue, 23 Aug 2022 01:36:30 -0700 (PDT)
+Message-ID: <ee93aa8a-d704-9d67-ad33-c81654c90ca2@linaro.org>
+Date:   Tue, 23 Aug 2022 11:36:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH] MIPS: ath25: clean up non-kernel-doc comment warning
+Subject: Re: [PATCH v1 1/1] dt-bindings: phy: ocelot-serdes: convert to YAML
 Content-Language: en-US
-To:     Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-References: <20220823025441.30708-1-rdunlap@infradead.org>
- <CAHNKnsTdmPMwYa1f7DBJsEXxL_pzforPLar=eO6Jp=COmCXrtQ@mail.gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <CAHNKnsTdmPMwYa1f7DBJsEXxL_pzforPLar=eO6Jp=COmCXrtQ@mail.gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+References: <20220823060052.3921849-1-colin.foster@in-advantage.com>
+ <20220823060052.3921849-2-colin.foster@in-advantage.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220823060052.3921849-2-colin.foster@in-advantage.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/23/22 15:13, Sergey Ryazanov wrote:
-> Acked-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+On 23/08/2022 09:00, Colin Foster wrote:
+> Convert the phy-ocelot-serdes device tree binding to the new YAML format.
 > 
-> Randy, Bagas, which one of these patches should be applied:
-> * https://patchwork.kernel.org/project/linux-mips/patch/20220823030056.123709-1-bagasdotme@gmail.com/
-> * https://patchwork.kernel.org/project/linux-mips/patch/20220823025441.30708-1-rdunlap@infradead.org/
+> Additionally, add the file to MAINTAINERS since the original file didn't
+> exist.
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
+>  .../bindings/phy/phy-ocelot-serdes.txt        | 43 -------------
+>  .../bindings/phy/phy-ocelot-serdes.yaml       | 61 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  3 files changed, 62 insertions(+), 43 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/phy/phy-ocelot-serdes.txt
+>  create mode 100644 Documentation/devicetree/bindings/phy/phy-ocelot-serdes.yaml
 
-Hi Sergey, thanks for replying.
+Filename based on compatible, so
+mscc,vsc7514-serdes.yaml
 
-Oh, I don't see Randy's patch, since it wasn't CCed to linux-doc list.
-I prefer to choose Randy's one, because the description wording is
-clearer.
+> 
 
-Thanks.
 
--- 
-An old man doll... just what I always wanted! - Clara
+> diff --git a/Documentation/devicetree/bindings/phy/phy-ocelot-serdes.yaml b/Documentation/devicetree/bindings/phy/phy-ocelot-serdes.yaml
+> new file mode 100644
+> index 000000000000..0666974d886a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/phy-ocelot-serdes.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/phy-ocelot-serdes.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microsemi Ocelot SerDes muxing driver
+
+s/driver//
+
+Bindings are for hardware, not for Linux drivers.
+
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +  - UNGLinuxDriver@microchip.com
+> +
+> +description: |
+> +  On Microsemi Ocelot, there is a handful of registers in HSIO address
+> +  space for setting up the SerDes to switch port muxing.
+> +
+> +  A SerDes X can be "muxed" to work with switch port Y or Z for example.
+> +  One specific SerDes can also be used as a PCIe interface.
+> +
+> +  Hence, a SerDes represents an interface, be it an Ethernet or a PCIe one.
+> +
+> +  There are two kinds of SerDes: SERDES1G supports 10/100Mbps in
+> +  half/full-duplex and 1000Mbps in full-duplex mode while SERDES6G supports
+> +  10/100Mbps in half/full-duplex and 1000/2500Mbps in full-duplex mode.
+> +
+> +  Also, SERDES6G number (aka "macro") 0 is the only interface supporting
+> +  QSGMII.
+> +
+> +  This is a child of the HSIO syscon ("mscc,ocelot-hsio", see
+> +  Documentation/devicetree/bindings/mips/mscc.txt) on the Microsemi Ocelot.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mscc,vsc7514-serdes
+
+Missing blank line
+
+> +  "#phy-cells":
+> +    const: 2
+> +    description: |
+> +      from the generic phy bindings, must be 2. 
+
+Skip first sentence, it's obvious.
+
+The first number
+> +      defines the input port to use for a given SerDes macro. The
+> +      second defines the macro to use. They are defined in
+> +      dt-bindings/phy/phy-ocelot-serdes.h
+> +
+> +required:
+> +  - compatible
+> +  - "#phy-cells"
+
+Missing additionalProperties: false
+
+Base your YAML on example-schema.
+
+> +
+> +examlpes:
+
+Typo.
+
+
+> +  - |
+> +    serdes: serdes {
+> +      compatible = "mscc,vsc7514-serdes";
+> +      #phy-cells = <2>;
+> +    };
+> +
+> +    ethernet {
+> +      port1 {
+> +        phy-handle = <&phy_foo>;
+> +        /* Link SERDES1G_5 to port1 */
+> +        phys = <&serdes 1 SERDES1G_5>;
+> +      };
+> +    };
+
+Skip consumer examples in provider bindings. They're obvious.
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 714fd8b45e5a..10dd3c6ad6ad 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13481,6 +13481,7 @@ M:	UNGLinuxDriver@microchip.com
+>  L:	linux-mips@vger.kernel.org
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/mips/mscc.txt
+> +F:	Documentation/devicetree/bindings/phy/phy-ocelot-serdes.yaml
+>  F:	Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+>  F:	Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+>  F:	arch/mips/boot/dts/mscc/
+
+
+Best regards,
+Krzysztof
