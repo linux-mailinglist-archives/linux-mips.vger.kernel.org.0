@@ -2,117 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9CD59E5D8
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Aug 2022 17:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE7C59E614
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Aug 2022 17:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235972AbiHWPQ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Aug 2022 11:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
+        id S242484AbiHWPel (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Aug 2022 11:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242699AbiHWPNU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 11:13:20 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519689C1FD
-        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 03:23:36 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id x25so13054014ljm.5
-        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 03:23:35 -0700 (PDT)
+        with ESMTP id S240930AbiHWPeN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 11:34:13 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64A533431;
+        Tue, 23 Aug 2022 04:17:37 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id z187so13135882pfb.12;
+        Tue, 23 Aug 2022 04:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=yn5Cp9zoeWqGbxL3HM65C3eQTNCudh4CzSg5Uvw3JAk=;
-        b=QAJc4lxwTmf0W3KWKXRjlw6qcyC3eHPyQ5QoGuhnvAn60+muAHk9sdN/Zcrm1cUMIq
-         s/MnHrcCQNq3gmf9HYQNuccxGkfgpsLZL3+qnn86GSOLQoFZfN1u8KnQ3gDYLaOCKcgW
-         fLKxap4SHvHxX6tr3L632x2JnYqbZa2/5J3CopLcqmYJfyGRzPyGN50TuOW8DZUOhphs
-         zIJsqGjIJRIiRgqM/V447asxh+qfPATLOZ2Ic9S7QL+s5C7vfITWKfI8dfruPLKw483q
-         WpUr3abO2RFu4eWv6TQUVEkjTKgPnmC0rnSEyrkHDsyWTtzGPQEzEXrNtaE6dS5IrIWZ
-         Kyjw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=0pU5iLLC3ceGYBrxwsq4Hg09zSm+DaoRJ02xrrcMouU=;
+        b=L/J2Gt5Jqlon8zl8L69XswAVdKmyHBBm+yg7CgJKoru26DL5+vPXnh3QzqLEUhRGff
+         eB7V8HK+J+/69FBQK4AtprGRYQb63wj7Cn37DjIJGxDuVFHEdMzjqHLbihoRXECgclKd
+         kNgxhZpvERwxyXaMDYsI29h60D5nGijBM/nG7gKBipWakO9b9J5S63RO8fRxpccnszBM
+         9TszvU+cjbUy8TbV6+DFIhNNAtIABTxykXqE/Z0MotEf8GmCQ1pjqova5D+XRhG6EEOI
+         uwPzdSOpBktFUHk82Fkc2+l1jnYSP1DAh/xGhpdLoobgMN8K6+mXuLtB/zBbjyMh1qFN
+         Ep9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=yn5Cp9zoeWqGbxL3HM65C3eQTNCudh4CzSg5Uvw3JAk=;
-        b=hqSGRO0Y5Ab4wucGzLIP2LCWPrnFp2WdQTr78J+LpbHPuFOXLcNASL5XWdLpPIfA4/
-         su99muBPK3UQ596jlJJXqw8iXCTFUt0b1mWIY7X3lG3gvMY9S4SNWqlv7Emhef1kWMBI
-         SJgQNdOcp8ylLInAXOsjGQDOtbqCrF5az6hljlNpiDPYK2A7K9KSSDTodm0y/GOSFpnc
-         9dJCKlZ+Q41/hD5VIMLxemBKs/83x2M2Bm0195cZcLfaalgfIdLNfcchlCkGTkQhdW2/
-         FKyV3awF7cVdDFIpQ4ttTTWQR3KOhE9F/r/30/X2OIg5BhnjuW8Vqxyryi5DgOISxzns
-         W8aQ==
-X-Gm-Message-State: ACgBeo1eMmc+FjR8V2jPBwyzvVzQWisF0DqlApe2duoQNDMoM5KPvfL/
-        XkZiEl3fCyf1Mt1vsdjPsokKHA==
-X-Google-Smtp-Source: AA6agR4D5aExJIR72fiYWF97zzNBynY+4arB6wbMmJjNpCzNC+/Ov4i9Sl/PcwnVnQxQKarFz5l0fg==
-X-Received: by 2002:a05:651c:114b:b0:25b:e13b:6900 with SMTP id h11-20020a05651c114b00b0025be13b6900mr6417785ljo.462.1661250214179;
-        Tue, 23 Aug 2022 03:23:34 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id c4-20020a196544000000b00489e2156285sm2434193lfj.104.2022.08.23.03.23.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 03:23:33 -0700 (PDT)
-Message-ID: <c3831c5a-7e10-2112-83e0-4ec2d70001c2@linaro.org>
-Date:   Tue, 23 Aug 2022 13:23:32 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=0pU5iLLC3ceGYBrxwsq4Hg09zSm+DaoRJ02xrrcMouU=;
+        b=jz+dBq8S3RKdnV/aQUD3aCYxvrSY4szuawxlqtfh59p6bxFpeCWSfqFx37Q51oizMb
+         WuoMl+ehfUXJEnsKIuGCyrhTHpwv8xFb648clgYDABj3PwUKsSV3q+zW2C+DBc/DNq9p
+         Xn/GcDHAS3G4c04eQ9+KwobdIizUXQJvhGYJAgXxWR2pdBkSjjcxsJWWEWyDSk/1SuhX
+         5KKiHp9Aesfb1f4AcyoDAcMe+rwmqctiyPYmiUKO4UnV5V1nOPk0iVeS9bxSfNlnY1NG
+         Dl7sFNlZlXVAYPdaldMIMBO/jsGhzNrdfo24iefj7+uq0MtBrpOdj7LdXrrGD2/RzVvX
+         ZdSA==
+X-Gm-Message-State: ACgBeo3i+BTOa3XExj6rE54l6NFmizCp9FrKU75/MAOSO1mNWEjRYuYQ
+        /U1zUS+sgc1/1dEQIJklEQ78M4Mcpo0atw==
+X-Google-Smtp-Source: AA6agR5rs3KV4MIEfAj6rMx6hvhj3C3GIa4ja16PB9v5wE1J9n3s2pDW3NoG4n64a5u3F4JL8JJRTg==
+X-Received: by 2002:a05:6a00:1952:b0:537:1bb2:8451 with SMTP id s18-20020a056a00195200b005371bb28451mr369530pfk.77.1661253454738;
+        Tue, 23 Aug 2022 04:17:34 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. ([136.175.179.175])
+        by smtp.gmail.com with ESMTPSA id z11-20020a17090a8b8b00b001f51903e03fsm9572023pjn.32.2022.08.23.04.17.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 04:17:34 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yang Ling <gnaygnil@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH] MIPS: loongson32: ls1c: Fix hang during startup
+Date:   Tue, 23 Aug 2022 19:17:25 +0800
+Message-Id: <20220823111725.3134377-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH RESEND v10 6/7] clk: baikal-t1: Add DDR/PCIe directly
- controlled resets support
-Content-Language: en-US
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220822182934.23734-1-Sergey.Semin@baikalelectronics.ru>
- <20220822182934.23734-7-Sergey.Semin@baikalelectronics.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220822182934.23734-7-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22/08/2022 21:29, Serge Semin wrote:
-> Aside with a set of the trigger-like resets Baikal-T1 CCU provides two
-> additional blocks with directly controlled reset signals. In particular it
-> concerns DDR full and initial resets and various PCIe sub-domains resets.
-> Let's add the direct reset assertion/de-assertion of the corresponding
-> flags support into the Baikal-T1 CCU driver then. It will be required at
-> least for the PCIe platform driver. Obviously the DDR controller isn't
-> supposed to be fully reset in the kernel, so the corresponding controls
-> are added just for the sake of the interface implementation completeness.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> 
-> ---
-> 
-> Changelog v6:
-> - Refactor the code to support the linear reset IDs only. (@Philipp)
-> 
-> Changelog v7:
-> - Drop empty line from the sys_rst_info structure initialization block.
->   (@Philipp)
-> ---
->  drivers/clk/baikal-t1/ccu-rst.c     | 66 +++++++++++++++++++++++++++++
->  drivers/clk/baikal-t1/ccu-rst.h     | 10 +++++
->  include/dt-bindings/reset/bt1-ccu.h |  9 ++++
+From: Yang Ling <gnaygnil@gmail.com>
 
-Do not mix drivers and bindings. Bindings always go separately, so this
-has to be split.
+The RTCCTRL reg of LS1C is obselete.
+Writing this reg will cause system hang.
 
-Best regards,
-Krzysztof
+Fixes: 60219c563c9b6 ("MIPS: Add RTC support for Loongson1C board")
+Signed-off-by: Yang Ling <gnaygnil@gmail.com>
+Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
+Acked-by: Keguang Zhang <keguang.zhang@gmail.com>
+---
+ arch/mips/loongson32/ls1c/board.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/mips/loongson32/ls1c/board.c b/arch/mips/loongson32/ls1c/board.c
+index e9de6da0ce51..9dcfe9de55b0 100644
+--- a/arch/mips/loongson32/ls1c/board.c
++++ b/arch/mips/loongson32/ls1c/board.c
+@@ -15,7 +15,6 @@ static struct platform_device *ls1c_platform_devices[] __initdata = {
+ static int __init ls1c_platform_init(void)
+ {
+ 	ls1x_serial_set_uartclk(&ls1x_uart_pdev);
+-	ls1x_rtc_set_extclk(&ls1x_rtc_pdev);
+ 
+ 	return platform_add_devices(ls1c_platform_devices,
+ 				   ARRAY_SIZE(ls1c_platform_devices));
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+2.34.1
+
