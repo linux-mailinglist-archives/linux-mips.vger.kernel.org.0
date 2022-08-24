@@ -2,160 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04B259F0ED
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Aug 2022 03:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369B059F109
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Aug 2022 03:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiHXBau (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Aug 2022 21:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S233753AbiHXBdw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Aug 2022 21:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbiHXBar (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 21:30:47 -0400
-X-Greylist: delayed 136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 18:30:45 PDT
-Received: from p3plsmtpa06-01.prod.phx3.secureserver.net (p3plsmtpa06-01.prod.phx3.secureserver.net [173.201.192.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1821BE97
-        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 18:30:44 -0700 (PDT)
-Received: from black ([121.35.128.89])
-        by :SMTPAUTH: with ESMTPSA
-        id QfBxo3UvK8KflQfBzoFS6c; Tue, 23 Aug 2022 18:28:29 -0700
-X-CMAE-Analysis: v=2.4 cv=WdvJ12tX c=1 sm=1 tr=0 ts=63057ebd
- a=Ts6IU5S7MsxbcnDc+OdCiQ==:117 a=Ts6IU5S7MsxbcnDc+OdCiQ==:17
- a=IkcTkHD0fZMA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=_twTT5zqAAAA:8
- a=pGLkceISAAAA:8 a=ATfU8fHJlrvmeOZnxusA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=ILoXdGDbYT3DTB7Z0gVI:22
-X-SECURESERVER-ACCT: dhu@hodcarrier.org
-Date:   Wed, 24 Aug 2022 09:28:25 +0800
-From:   Du Huanpeng <dhu@hodcarrier.org>
-To:     Sean Anderson <seanga2@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        Yang Ling <gnaygnil@gmail.com>, linux-kernel@vger.kernel.org,
-        Kelvin Cheung <keguang.zhang@gmail.com>,
-        Stephen Boyd <sboyd@codeaurora.org>
-Subject: Re: [RESEND PATCH] clk: ls1c: Fix PLL rate calculation
-Message-ID: <20220824012825.GA2956@black>
-References: <20220823033414.198525-1-seanga2@gmail.com>
+        with ESMTP id S233635AbiHXBdu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 21:33:50 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82D37E33C
+        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 18:33:46 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-324ec5a9e97so423994097b3.7
+        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 18:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=15+zFGICN73u7PZkuVftuGFAaRqO2hNiuUPbcuB/iDw=;
+        b=ammrl+ffQIbxpXELKnFxaurs3Fbe2bx9R/IRI2+J5pQAM/wfjFh1aSFzyWG/E1RD5I
+         rshOZlmvK+Bt4a2MNbUFbSpkCeSrrxRT3zaVTQqLRUMz4elzDZb4CyvIvtQzq4jGwi+1
+         HBILJXTenmBL8ezDV/XzSltMyRVW8N5pGLVc6ZMhlIDEvl+mrwxpUc5n+db5z5Pfve4k
+         jWbqAzYB3Hyg5oa2ZHgXfW73ElDNxOwcp7mMt28pojnFNBEyD2+0HttoLOb68bdPn3gz
+         h+F5uqyOw5Q9oI+0N52Nr3XEpZ0TzyQMzlW05rWkdP3Hj3nW89n+8r+x6EjcJTcjYaCu
+         dSgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=15+zFGICN73u7PZkuVftuGFAaRqO2hNiuUPbcuB/iDw=;
+        b=OS7Dxs96Gc+INvUIFpL78ChE5DNF3W6oLlN4JVS4aR60WafzSzizAEU5B/jCw2r4Lf
+         dwAT6fxL3XRNOiX4AjwVjhhA5TiWkZxeT8fGcs1/j28oVCy7VnUcSqF6J71FtAOdgjq8
+         1bF8TTmNXUny7S5LlVS4bTiY/Cu8TtgPrUx01e0pohp3pwt6un7j3Z0xQzBNFQ2G9j5h
+         NWzCi0S11G2L39KkX4UxWROOWYKi7r4jC7Hs6fZSC2SsBaljxUtd/UQWZJgNWVK+ussn
+         B6qrXUKG/Sv86jqa7MysAcJufbgx/pD353wDFQUhuJdMx8uxn74nPIZQnOB2n1d6Pzih
+         4vCA==
+X-Gm-Message-State: ACgBeo2qdcD8mk4dloZQrBN63et+i1OMGy2uQU4T2A6iHlCo7iyl4MgB
+        hUD3kU79RNuhPZuf1HFNnjEUCpt4vP+SYNPMFA+edg==
+X-Google-Smtp-Source: AA6agR5VUVZnLczkpHKFOKrnd+Tscg/SlOlcCZoOHfOkTvdY9LhPO1gaSJJ+tW/v5A56NSwT8mnZVrMApq5J4jdaQcY=
+X-Received: by 2002:a25:1546:0:b0:68f:8758:7348 with SMTP id
+ 67-20020a251546000000b0068f87587348mr24825887ybv.563.1661304824786; Tue, 23
+ Aug 2022 18:33:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220823033414.198525-1-seanga2@gmail.com>
-X-CMAE-Envelope: MS4xfB7Qh1/JJak2gztQXiYgXTUVMZsO1KSPSanPLPhuJCyRNNIvHZpItw6k8A1HpaGJ2vq9orllLlr7Kh7lh85IQK47meW/+e3/Do+4DgYrkECkZeFgsSD1
- n5SGWQdhCBGejZWA2Uab7HIcjO6kgYAufbUq+JtB95WoogF8GYjxYiRt0TJDV8VS41n12PtIe/QTVoi9nB+vuiG81U4moMcnh/q0AvPuKaxaXg+MKqAqnFPR
- JloMvp8VsjCXD6+9WO0BFKRxOiwqVZfpKjOSYLSMaQxZVTvn6WOC5vZZ10illBB8eeBd99M25IKEqJz7k1qAnHpzy7iDdHsogxEQmCSUNKhmEbgJB/R54ar+
- ABfLLY0/J+neyz1N2ulop7IPzuFk25+EDqLwDBxh3HVcSpPfJj8=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220701012647.2007122-1-saravanak@google.com> <YwS5J3effuHQJRZ5@kroah.com>
+In-Reply-To: <YwS5J3effuHQJRZ5@kroah.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 23 Aug 2022 18:33:07 -0700
+Message-ID: <CAGETcx8C_Hw588J_DsDELp2rS-UNnezpqqqvUixqGR7m2wDKaA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 11:34:14PM -0400, Sean Anderson wrote:
-Dear Sean,
-> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
-> noticed the following calculation, which is copied from
-I didn't copy it from this driver, I read the document and ``try'' to
-understand it.
-I also write a excel [1] file to calculate values for clock nodes.
+On Tue, Aug 23, 2022 at 4:25 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > These patches are on top of driver-core-next.
+> >
+> > Even if stdout-path isn't set in DT, this patch should take console
+> > probe times back to how they were before the deferred_probe_timeout
+> > clean up series[1].
+>
+> Now dropped from my queue due to lack of a response to other reviewer's
+> questions.
 
-[1] https://github.com/hodcarrier/ls1c300_bsp
-> drivers/clk/loongson1/clk-loongson1c.c:
-> 
-> ulong ls1c300_pll_get_rate(struct clk *clk)
-> {
-> 	unsigned int mult;
-> 	long long parent_rate;
-> 	void *base;
-> 	unsigned int val;
-> 
-> 	parent_rate = clk_get_parent_rate(clk);
-> 	base = (void *)clk->data;
-> 
-> 	val = readl(base + START_FREQ);
-> 	mult = FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
-> 	return (mult * parent_rate) / 4;
-> }
-> 
-> I would like to examine the use of M_PLL and FRAC_N to calculate the multiplier
-> for the PLL. The datasheet has the following to say:
-> 
-> START_FREQ 位    缺省值      描述
-> ========== ===== =========== ====================================
-> FRAC_N     23:16 0           PLL 倍频系数的小数部分
-> 
->                  由          PLL 倍频系数的整数部分
-> M_PLL      15:8  NAND_D[3:0] (理论可以达到 255，建议不要超过 100)
->                  配置
-> 
-> which according to google translate means
-> 
-> START_FREQ Bits  Default       Description
-> ========== ===== ============= ================================================
-> FRAC_N     23:16 0             Fractional part of the PLL multiplication factor
-> 
->                  Depends on    Integer part of PLL multiplication factor
-> M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it is
->                  configuration  recommended not to exceed 100)
-> 
-> So just based on this description, I would expect that the formula to be
-> something like
-> 
-> 	rate = parent * (256 * M_PLL + FRAC_N) / 256 / 4
-> 
-> However, the datasheet also gives the following formula:
-> 
-> 	rate = parent * (M_PLL + FRAC_N) / 4
-> 
-> which is what the Linux driver has implemented. I find this very unusual.
-> First, the datasheet specifically says that these fields are the integer and
-> fractional parts of the multiplier. Second, I think such a construct does not
-> easily map to traditional PLL building blocks. Implementing this formula in
-> hardware would likely require an adder, just to then set the threshold of a
-> clock divider.
-> 
-> I think it is much more likely that the first formula is correct. The author of
-> the datasheet may think of a multiplier of (say) 3.14 as
-> 
-> 	M_PLL = 3
-> 	FRAC_N = 0.14
-> 
-> which together sum to the correct multiplier, even though the actual value
-> stored in FRAC_N would be 36.
-> 
-> I suspect that this has slipped by unnoticed because when FRAC_N is 0, there is
-> no difference in the formulae. The following patch is untested, but I suspect
-> it will fix this issue. I would appreciate if anyone with access to the
-> hardware could measure the output of the PLL (or one of its derived clocks) and
-> determine the correct formula.
-> 
-> [1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.org/T/#u
-> 
-> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-> Signed-off-by: Sean Anderson <seanga2@gmail.com>
-> ---
-> 
->  drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-> index 1ebf740380ef..2aa839b05d6b 100644
-> --- a/drivers/clk/loongson1/clk-loongson1c.c
-> +++ b/drivers/clk/loongson1/clk-loongson1c.c
-> @@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
->  	u32 pll, rate;
->  
->  	pll = __raw_readl(LS1X_CLK_PLL_FREQ);
-> -	rate = ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
-> +	rate = (pll & 0xff00) + ((pll >> 16) & 0xff);
->  	rate *= OSC;
-> -	rate >>= 2;
-> +	rate >>= 10;
->  
->  	return rate;
->  }
-> -- 
-> 2.37.1
-> 
+Sorry, I somehow missed those emails. I'll respond later today/tomorrow.
+
+-Saravana
