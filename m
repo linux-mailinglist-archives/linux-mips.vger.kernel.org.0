@@ -2,179 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369B059F109
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Aug 2022 03:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA8459F5B2
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Aug 2022 10:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbiHXBdw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Aug 2022 21:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
+        id S236099AbiHXIuX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Aug 2022 04:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233635AbiHXBdu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Aug 2022 21:33:50 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82D37E33C
-        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 18:33:46 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-324ec5a9e97so423994097b3.7
-        for <linux-mips@vger.kernel.org>; Tue, 23 Aug 2022 18:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=15+zFGICN73u7PZkuVftuGFAaRqO2hNiuUPbcuB/iDw=;
-        b=ammrl+ffQIbxpXELKnFxaurs3Fbe2bx9R/IRI2+J5pQAM/wfjFh1aSFzyWG/E1RD5I
-         rshOZlmvK+Bt4a2MNbUFbSpkCeSrrxRT3zaVTQqLRUMz4elzDZb4CyvIvtQzq4jGwi+1
-         HBILJXTenmBL8ezDV/XzSltMyRVW8N5pGLVc6ZMhlIDEvl+mrwxpUc5n+db5z5Pfve4k
-         jWbqAzYB3Hyg5oa2ZHgXfW73ElDNxOwcp7mMt28pojnFNBEyD2+0HttoLOb68bdPn3gz
-         h+F5uqyOw5Q9oI+0N52Nr3XEpZ0TzyQMzlW05rWkdP3Hj3nW89n+8r+x6EjcJTcjYaCu
-         dSgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=15+zFGICN73u7PZkuVftuGFAaRqO2hNiuUPbcuB/iDw=;
-        b=OS7Dxs96Gc+INvUIFpL78ChE5DNF3W6oLlN4JVS4aR60WafzSzizAEU5B/jCw2r4Lf
-         dwAT6fxL3XRNOiX4AjwVjhhA5TiWkZxeT8fGcs1/j28oVCy7VnUcSqF6J71FtAOdgjq8
-         1bF8TTmNXUny7S5LlVS4bTiY/Cu8TtgPrUx01e0pohp3pwt6un7j3Z0xQzBNFQ2G9j5h
-         NWzCi0S11G2L39KkX4UxWROOWYKi7r4jC7Hs6fZSC2SsBaljxUtd/UQWZJgNWVK+ussn
-         B6qrXUKG/Sv86jqa7MysAcJufbgx/pD353wDFQUhuJdMx8uxn74nPIZQnOB2n1d6Pzih
-         4vCA==
-X-Gm-Message-State: ACgBeo2qdcD8mk4dloZQrBN63et+i1OMGy2uQU4T2A6iHlCo7iyl4MgB
-        hUD3kU79RNuhPZuf1HFNnjEUCpt4vP+SYNPMFA+edg==
-X-Google-Smtp-Source: AA6agR5VUVZnLczkpHKFOKrnd+Tscg/SlOlcCZoOHfOkTvdY9LhPO1gaSJJ+tW/v5A56NSwT8mnZVrMApq5J4jdaQcY=
-X-Received: by 2002:a25:1546:0:b0:68f:8758:7348 with SMTP id
- 67-20020a251546000000b0068f87587348mr24825887ybv.563.1661304824786; Tue, 23
- Aug 2022 18:33:44 -0700 (PDT)
+        with ESMTP id S236104AbiHXIuJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Aug 2022 04:50:09 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 Aug 2022 01:50:05 PDT
+Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 322DE17ABF
+        for <linux-mips@vger.kernel.org>; Wed, 24 Aug 2022 01:50:03 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id Qly3o30vrTLjwQly3oELfj; Wed, 24 Aug 2022 10:42:31 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 24 Aug 2022 10:42:31 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH] rtc: jz4740: Use devm_clk_get_enabled() helper
+Date:   Wed, 24 Aug 2022 10:42:29 +0200
+Message-Id: <af10570000d7e103d70bbea590ce8df4f8902b67.1661330532.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220701012647.2007122-1-saravanak@google.com> <YwS5J3effuHQJRZ5@kroah.com>
-In-Reply-To: <YwS5J3effuHQJRZ5@kroah.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 23 Aug 2022 18:33:07 -0700
-Message-ID: <CAGETcx8C_Hw588J_DsDELp2rS-UNnezpqqqvUixqGR7m2wDKaA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Pali Rohar <pali@kernel.org>,
-        Andreas Farber <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Timur Tabi <timur@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh@kernel.org>,
-        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-actions@lists.infradead.org,
-        linux-unisoc@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 4:25 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
-> > These patches are on top of driver-core-next.
-> >
-> > Even if stdout-path isn't set in DT, this patch should take console
-> > probe times back to how they were before the deferred_probe_timeout
-> > clean up series[1].
->
-> Now dropped from my queue due to lack of a response to other reviewer's
-> questions.
+The devm_clk_get_enabled() helper:
+   - calls devm_clk_get()
+   - calls clk_prepare_enable() and registers what is needed in order to
+     call clk_disable_unprepare() when needed, as a managed resource.
 
-Sorry, I somehow missed those emails. I'll respond later today/tomorrow.
+This simplifies the code, the error handling paths and avoid the need of
+a dedicated function used with devm_add_action_or_reset().
 
--Saravana
+
+As a side effect, some error messages are not logged anymore, so also use
+dev_err_probe() instead of dev_err() in case of error.
+At least the error code will be logged (and -EPROBE_DEFER will be filtered)
+
+Based on my test with allyesconfig, this reduces the .o size from:
+   text	   data	    bss	    dec	    hex	filename
+   9025	   2488	    128	  11641	   2d79	drivers/rtc/rtc-jz4740.o
+down to:
+   8267	   2080	    128	  10475	   28eb	drivers/rtc/rtc-jz4740.o
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+devm_clk_get_enabled() is new and is part of 6.0-rc1
+
+Some recent changed use "rtc: ingenic". This looks odd to me, so turn back
+to "rtc: jz4740"
+---
+ drivers/rtc/rtc-jz4740.c | 25 +++----------------------
+ 1 file changed, 3 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
+index 6e51df72fd65..c383719292c7 100644
+--- a/drivers/rtc/rtc-jz4740.c
++++ b/drivers/rtc/rtc-jz4740.c
+@@ -257,11 +257,6 @@ static void jz4740_rtc_power_off(void)
+ 	kernel_halt();
+ }
+ 
+-static void jz4740_rtc_clk_disable(void *data)
+-{
+-	clk_disable_unprepare(data);
+-}
+-
+ static const struct of_device_id jz4740_rtc_of_match[] = {
+ 	{ .compatible = "ingenic,jz4740-rtc", .data = (void *)ID_JZ4740 },
+ 	{ .compatible = "ingenic,jz4760-rtc", .data = (void *)ID_JZ4760 },
+@@ -329,23 +324,9 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(rtc->base))
+ 		return PTR_ERR(rtc->base);
+ 
+-	clk = devm_clk_get(dev, "rtc");
+-	if (IS_ERR(clk)) {
+-		dev_err(dev, "Failed to get RTC clock\n");
+-		return PTR_ERR(clk);
+-	}
+-
+-	ret = clk_prepare_enable(clk);
+-	if (ret) {
+-		dev_err(dev, "Failed to enable clock\n");
+-		return ret;
+-	}
+-
+-	ret = devm_add_action_or_reset(dev, jz4740_rtc_clk_disable, clk);
+-	if (ret) {
+-		dev_err(dev, "Failed to register devm action\n");
+-		return ret;
+-	}
++	clk = devm_clk_get_enabled(dev, "rtc");
++	if (IS_ERR(clk))
++		return dev_err_probe(dev, PTR_ERR(clk), "Failed to get RTC clock\n");
+ 
+ 	spin_lock_init(&rtc->lock);
+ 
+-- 
+2.34.1
+
