@@ -2,121 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2635A2F92
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Aug 2022 21:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE125A35A1
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Aug 2022 09:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237625AbiHZTCE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Aug 2022 15:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        id S234097AbiH0HhG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Aug 2022 03:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344166AbiHZTCB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Aug 2022 15:02:01 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BB64F1BA
-        for <linux-mips@vger.kernel.org>; Fri, 26 Aug 2022 12:01:59 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3321c2a8d4cso58858277b3.5
-        for <linux-mips@vger.kernel.org>; Fri, 26 Aug 2022 12:01:59 -0700 (PDT)
+        with ESMTP id S233059AbiH0HhF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Aug 2022 03:37:05 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774E1BE4F9
+        for <linux-mips@vger.kernel.org>; Sat, 27 Aug 2022 00:37:01 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso2483644otb.6
+        for <linux-mips@vger.kernel.org>; Sat, 27 Aug 2022 00:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5IGsFt88U29g0FS5xaHF37h09E8wApZqucl8B7a7urU=;
-        b=NZ/IN3QHe1a9yv4nNj3dXDoQEezOohx3Y28Yw3TJWGSSiiN3cUtJlsU4Y0glp/12jc
-         a0FGOhIHCUpiu0+ed3TwJY8aVLdep/em/CfPOZy0LLh+R7iXzSxn7l35VkxZBRZ5fvRo
-         Zh3R2RbmKf0njkKWnyy3ElIwwssUsSL5tu7PjR1jH+eyi8D9ZpO9+PeS4QGhi0bEmRUN
-         LnKa7MUGyOfG4kF8R40+C7twpS/m0Hgy4jZFNjRGHjmmVGB0tctbbl21AB4DYrBKPHvM
-         60AtPTr04C6bV0xj+uh3LYbP69aVlToxjPJnqv1MTfG296dIdlEKZYPsXr38XtjSy62r
-         zl4Q==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=41kW5fOWjdzzcQ6HaiOHsjJFnjWCo4jg2HDR0g9ZrRI=;
+        b=NodxbnTqzR6PDRaAWMbYsuzCUJ9CJq93WTRYEH2TLUImvdy8C4v2uZjs8j/kna2/lE
+         vQeCw7pcaR73tVRj6PCsqNPpCFAJzjdTCpN02okLtudUrwWsJ0zLW06mp9mUcnRzgY5Z
+         lhvLz6snHdTqtykYtyEvtDvBgDzv+ZPjz+6AKgVB9V2czq+dqkjvCmmZ0VQ0QE08NpZT
+         Ys0ACM4KpcNZuN77YzSIQ5+5xVfS4BIwmJqvHvIIZByCEk+xBkBuwulMesVW9RhzxA4k
+         tW959XdH32XQRN1UCgEhyOMJvG2kIV5SHWTYpPVexY61fOz+Zj80yyvv9RzlC1Zed4Yr
+         UeBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5IGsFt88U29g0FS5xaHF37h09E8wApZqucl8B7a7urU=;
-        b=dZAtLv8QGZImS1TNf9k82a240kO2wapfNBZAsn8I5IxSg7b3w63NcjgZ2c8N4tNto+
-         y2dpEDSQcGfI8F4NlHB5flkm7YiDSe8BV1B5W5tlvUehAA2Na/lq22MTz06dAxHFTNor
-         XWMgDxTuBHmU2XmDIzay3rIAoOfvGcPs8ZtSospnmm4KTJduSgyMAL/fppMwnDw6t0I6
-         ERhYHA/KfcPVV2TZ3Mnn/dc2s7NcSD6UUbPa22EdY2R44u7ixrGnmBDrbTtgcczvcR2P
-         1rf78ELpvz+G9/JZ4TAGDWnTvBWvbY7qpbT0vUeWjKJWdz275YwjfJzhzmEZj0ZhNh2u
-         njQw==
-X-Gm-Message-State: ACgBeo0Vrt9613rk5W5DjgKBlI+zT2d6sw+PFtRKwf+RxoSLkMzkx30l
-        fivAoNNWOXkoTZzYqYJ0nw3eC7pLvvg6dMyyJh6AgRVnfuRBKg==
-X-Google-Smtp-Source: AA6agR4uxOHFjT5D1AMN44XQ9iAS6JWEcXawPAt7q0Qtb27j+Gm7+llYNa1lyrnJhLcDNddcjsCmIFnqV2eyMU8iV1A=
-X-Received: by 2002:a81:430f:0:b0:33f:c37f:83bd with SMTP id
- q15-20020a81430f000000b0033fc37f83bdmr1235560ywa.438.1661540518831; Fri, 26
- Aug 2022 12:01:58 -0700 (PDT)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=41kW5fOWjdzzcQ6HaiOHsjJFnjWCo4jg2HDR0g9ZrRI=;
+        b=U5HHaNjOff9B4LhiBEn/XXaSWfjG1ctI1UWpdoYaUKX+R+ip3VZ5CYDNnDNtqQlxhb
+         lWxMGrXGOgZe32Ba2Kkh3Wn1rodavpvtqykaRms235Xz1ObrhRGg+Ld+EJwiWhbDcuip
+         VnOPecpnc8P4Vx9MANTrS26k4G+5p89LTDdJbhpUz41psAy3mgiRI2X+GkLa2GBwA6/D
+         MBabBxBDZUltbtvaGqmlZxg8IYazsRMJ73idiiuqgDjpyVh+rbgcL8QIW/pS/9aqZ+Nn
+         wVcpioLAQBBWdrWf37OmI0qgD7gxPlwbNtUkx/DP96aqOQef5dx1LTRz8cHUgjzHFsk4
+         KzHw==
+X-Gm-Message-State: ACgBeo0L0H8FlvqtOh66PCojP8l6f0XL761BKsJDXEskXAlpXTUnX2RQ
+        g1hGhs6X6V8fdvKS9mjVqEoKxVJTEHIcW9rWxrrfSsn+U0tQSw==
+X-Google-Smtp-Source: AA6agR4jYlukPk+MQooY9HVbgQl4iWSJtd6U5AZFWscWH+yj+LKImzYWJlyXDVsFOeHtNm8a5C5uwJtu9/TQh0RwWR4=
+X-Received: by 2002:a05:6830:9a:b0:639:546d:a486 with SMTP id
+ a26-20020a056830009a00b00639546da486mr2804628oto.120.1661585415590; Sat, 27
+ Aug 2022 00:30:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <1661479927-6953-1-git-send-email-yangtiezhu@loongson.cn> <e785ac4b-c1d6-e9e9-df2f-869e474e18ba@iogearbox.net>
-In-Reply-To: <e785ac4b-c1d6-e9e9-df2f-869e474e18ba@iogearbox.net>
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Fri, 26 Aug 2022 21:01:46 +0200
-Message-ID: <CAM1=_QSNWm0AFA5gXE78ayafayJVQ3MNXjh8ttD-zkG7N6Y+1g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf, mips: No need to use min() to get MAX_TAIL_CALL_CNT
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        bpf@vger.kernel.org, linux-mips@vger.kernel.org
+Received: by 2002:a05:6850:604c:b0:32a:7951:35f0 with HTTP; Sat, 27 Aug 2022
+ 00:30:14 -0700 (PDT)
+Reply-To: abdwabbom447@gmail.com
+From:   Maddah Hussain <klimowiczd0@gmail.com>
+Date:   Sat, 27 Aug 2022 00:30:14 -0700
+Message-ID: <CA+ARbHQwEt6j2wjTsovTEjnEoJ=K+XPc5DmD98QyAjjxYsKqEg@mail.gmail.com>
+Subject: Get Back to me(URGENT)
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:335 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4998]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [abdwabbom447[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [klimowiczd0[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [klimowiczd0[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.5 SCC_BODY_URI_ONLY No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 6:18 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 8/26/22 4:12 AM, Tiezhu Yang wrote:
-> > MAX_TAIL_CALL_CNT is 33, so min(MAX_TAIL_CALL_CNT, 0xffff) is always
-> > MAX_TAIL_CALL_CNT, it is better to use MAX_TAIL_CALL_CNT directly.
-> >
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > ---
-> >   arch/mips/net/bpf_jit_comp32.c | 2 +-
-> >   arch/mips/net/bpf_jit_comp64.c | 2 +-
-> >   2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
-> > index 83c975d..8fee671 100644
-> > --- a/arch/mips/net/bpf_jit_comp32.c
-> > +++ b/arch/mips/net/bpf_jit_comp32.c
-> > @@ -1381,7 +1381,7 @@ void build_prologue(struct jit_context *ctx)
-> >        * 16-byte area in the parent's stack frame. On a tail call, the
-> >        * calling function jumps into the prologue after these instructions.
-> >        */
-> > -     emit(ctx, ori, MIPS_R_T9, MIPS_R_ZERO, min(MAX_TAIL_CALL_CNT, 0xffff));
->
-> I presume this is the max that can be encoded, right? Maybe just convert this
-> to a BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff) with a comment on why the assertion
-> is there?
-
-Correct. The min() is there for a reason. In the unlikely event that
-the TCC limit is raised to more than 16 bits, it is clamped to the
-maximum value allowed for the generated code (0xffff). One can argue
-that it is better fail to compile instead of degrading gracefully, but
-some kind check should be there IMO.
-
->
-> > +     emit(ctx, ori, MIPS_R_T9, MIPS_R_ZERO, MAX_TAIL_CALL_CNT);
-> >       emit(ctx, sw, MIPS_R_T9, 0, MIPS_R_SP);
-> >
-> >       /*
-> > diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
-> > index 6475828..ac175af 100644
-> > --- a/arch/mips/net/bpf_jit_comp64.c
-> > +++ b/arch/mips/net/bpf_jit_comp64.c
-> > @@ -552,7 +552,7 @@ void build_prologue(struct jit_context *ctx)
-> >        * On a tail call, the calling function jumps into the prologue
-> >        * after this instruction.
-> >        */
-> > -     emit(ctx, ori, tc, MIPS_R_ZERO, min(MAX_TAIL_CALL_CNT, 0xffff));
-> > +     emit(ctx, ori, tc, MIPS_R_ZERO, MAX_TAIL_CALL_CNT);
-> >
-> >       /* === Entry-point for tail calls === */
-> >
-> >
->
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Maddah Hussain
