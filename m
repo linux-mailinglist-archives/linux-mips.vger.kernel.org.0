@@ -2,37 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9625A3881
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Aug 2022 17:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5525A3888
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Aug 2022 17:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbiH0Puc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 27 Aug 2022 11:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S233552AbiH0Pxb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Aug 2022 11:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiH0Pub (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Aug 2022 11:50:31 -0400
+        with ESMTP id S233501AbiH0Pxa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 Aug 2022 11:53:30 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C2313DF9;
-        Sat, 27 Aug 2022 08:50:27 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1661615423tbn81paj
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA5C30F58;
+        Sat, 27 Aug 2022 08:53:28 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1661615593tev1dwfc
 Received: from localhost.localdomain ( [182.148.13.26])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 27 Aug 2022 23:50:16 +0800 (CST)
+        id ; Sat, 27 Aug 2022 23:53:07 +0800 (CST)
 X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: +bXiSo2NuBeF/Mh49jC5OgTEh7ucuuQkIRA+Ad2zRZPTVGjFwbXGbHPtU2jtX
-        MCx0FawR1nJpOWsmEFp+Iar1iSEhYFqW5rp0J6iyeaQIXRd73n/LH3SmK62c5hjezwI7ylw
-        k9nAz5eA/3pA4bnz6jgCyJXhxM8ybT8gFrGAjwkjrfTu3/cc/VJcW2noI9sHrEBT1paEY9W
-        vyIjJUuyWcc7r/43GLWkxlrbhCur9vgzssxi5RJsx9pHPHoc7mkszIPAUz2jwkklYV9MmdG
-        GsF40k906+gTpnavhtfMnDVxc38RDUH0k6wdCN4gpjSweGOT3MeCuJ069xKFNzetWOAyNPW
-        a7qaf9YMkUrzY31F5nYw49EKG3cqMmdMKNZgFDG/ZXFr6/Gn9KHsX7KZcS/uA==
+X-QQ-FEAT: HHPuPN/BfjWVIbtH5sgpHE5/n72T7kqKGrJrNjJt9MwoxM2DRYa4NFX0P8+cN
+        M5cVFIo5xn/KWB5fd7w+HsksrUS8mSwpYEYjqBLFadO+Xg+EK9TyAiyOfXJS6E9imRmtUhy
+        kMxlpPwxWQ7YELF1D90UZLl01jgp5CMujGvsU3YU/ViGCz1/QiKZcjpsl2eKapWrzDTrX+V
+        /xb4jVkFVLjD+2D9WelF4aK61nGFITz0eLnvozTnsaD7ywvrb7FdQx38W/1kjT5ryh9+58X
+        qvHA+bNuHMjWsyA0GKP8Kk8f1AQQOQcjRuGLQlFUUnt/qGg8POjz530CCzup/A2l975msOL
+        +QKK5Rwg3csFH4TYRtS8h/wcbXfnT9OmYc0nmXqXMgE9tlExc4SDVwGQkDugw==
 X-QQ-GoodBg: 0
 From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     xkernel.wang@foxmail.com, Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] mips: sgi-ip22: Fix typo in comments
-Date:   Sat, 27 Aug 2022 11:50:15 -0400
-Message-Id: <20220827155015.10832-1-dengshaomin@cdjrlc.com>
+To:     hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] MIPS: BCM77xx: Fix comments typo
+Date:   Sat, 27 Aug 2022 11:53:06 -0400
+Message-Id: <20220827155306.11757-1-dengshaomin@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,26 +47,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove the repeated word "of" in comments.
+Delete the unneeded word "that" in comments.
 
 Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
 ---
- arch/mips/sgi-ip22/ip22-gio.c | 2 +-
+ arch/mips/bcm47xx/prom.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/sgi-ip22/ip22-gio.c b/arch/mips/sgi-ip22/ip22-gio.c
-index 38d12f417e48..03d96638f957 100644
---- a/arch/mips/sgi-ip22/ip22-gio.c
-+++ b/arch/mips/sgi-ip22/ip22-gio.c
-@@ -41,7 +41,7 @@ static struct device gio_bus = {
- /**
-  * gio_match_device - Tell if an of_device structure has a matching
-  * gio_match structure
-- * @ids: array of of device match structures to search in
-+ * @ids: array of device match structures to search in
-  * @dev: the of device structure to match against
-  *
-  * Used by a driver to check whether an of_device present in the
+diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
+index 0a63721d0fbf..bcb9c90ea041 100644
+--- a/arch/mips/bcm47xx/prom.c
++++ b/arch/mips/bcm47xx/prom.c
+@@ -69,7 +69,7 @@ static __init void prom_init_mem(void)
+ 	 * call them at the beginning of the boot.
+ 	 *
+ 	 * BCM47XX uses 128MB for addressing the ram, if the system contains
+-	 * less that that amount of ram it remaps the ram more often into the
++	 * less that amount of ram it remaps the ram more often into the
+ 	 * available space.
+ 	 */
+ 
 -- 
 2.35.1
 
