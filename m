@@ -2,127 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E215A413A
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Aug 2022 05:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB43B5A4E4D
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Aug 2022 15:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiH2DFc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Aug 2022 23:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        id S230002AbiH2Nhq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Aug 2022 09:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiH2DF2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Aug 2022 23:05:28 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9957913EB2;
-        Sun, 28 Aug 2022 20:05:26 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx5OHlLAxjCJ4LAA--.51514S2;
-        Mon, 29 Aug 2022 11:05:10 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     bpf@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH bpf-next v2] bpf, mips: No need to use min() to get MAX_TAIL_CALL_CNT
-Date:   Mon, 29 Aug 2022 11:05:09 +0800
-Message-Id: <1661742309-2320-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8Bx5OHlLAxjCJ4LAA--.51514S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw4UZr1xGF47CFy7CryrCrg_yoW5Gw18pr
-        4rJwnxKr4qgr4fX3Z3Aa18Xw1rWFsY9rW7AFWjgFyIyan8WFn7WF13Kr15uFyYvrW8J3Wf
-        XrWqkwn8u34kAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r48MxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUghIDDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229958AbiH2Nhq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Aug 2022 09:37:46 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57EDF90805;
+        Mon, 29 Aug 2022 06:37:43 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oSexS-0006mi-00; Mon, 29 Aug 2022 15:37:42 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 1F5CDC0931; Mon, 29 Aug 2022 15:14:40 +0200 (CEST)
+Date:   Mon, 29 Aug 2022 15:14:40 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Ling <gnaygnil@gmail.com>
+Subject: Re: [PATCH] MIPS: loongson32: ls1c: Fix hang during startup
+Message-ID: <20220829131440.GA12409@alpha.franken.de>
+References: <20220823111725.3134377-1-keguang.zhang@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823111725.3134377-1-keguang.zhang@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MAX_TAIL_CALL_CNT is 33, so min(MAX_TAIL_CALL_CNT, 0xffff) is always
-MAX_TAIL_CALL_CNT, it is better to use MAX_TAIL_CALL_CNT directly.
+On Tue, Aug 23, 2022 at 07:17:25PM +0800, Keguang Zhang wrote:
+> From: Yang Ling <gnaygnil@gmail.com>
+> 
+> The RTCCTRL reg of LS1C is obselete.
+> Writing this reg will cause system hang.
+> 
+> Fixes: 60219c563c9b6 ("MIPS: Add RTC support for Loongson1C board")
+> Signed-off-by: Yang Ling <gnaygnil@gmail.com>
+> Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
+> Acked-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+>  arch/mips/loongson32/ls1c/board.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/mips/loongson32/ls1c/board.c b/arch/mips/loongson32/ls1c/board.c
+> index e9de6da0ce51..9dcfe9de55b0 100644
+> --- a/arch/mips/loongson32/ls1c/board.c
+> +++ b/arch/mips/loongson32/ls1c/board.c
+> @@ -15,7 +15,6 @@ static struct platform_device *ls1c_platform_devices[] __initdata = {
+>  static int __init ls1c_platform_init(void)
+>  {
+>  	ls1x_serial_set_uartclk(&ls1x_uart_pdev);
+> -	ls1x_rtc_set_extclk(&ls1x_rtc_pdev);
+>  
+>  	return platform_add_devices(ls1c_platform_devices,
+>  				   ARRAY_SIZE(ls1c_platform_devices));
+> 
+> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+> -- 
+> 2.34.1
 
-At the same time, add BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff) with a
-comment on why the assertion is there.
+applied to mips-fixes.
 
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-Suggested-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
+Thomas.
 
-v2: Add BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff) with a comment
-    suggested by Daniel and Johan, thank you.
-
- arch/mips/net/bpf_jit_comp32.c | 10 +++++++++-
- arch/mips/net/bpf_jit_comp64.c | 10 +++++++++-
- 2 files changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
-index 83c975d..ace5db3 100644
---- a/arch/mips/net/bpf_jit_comp32.c
-+++ b/arch/mips/net/bpf_jit_comp32.c
-@@ -1377,11 +1377,19 @@ void build_prologue(struct jit_context *ctx)
- 	int stack, saved, locals, reserved;
- 
- 	/*
-+	 * In the unlikely event that the TCC limit is raised to more
-+	 * than 16 bits, it is clamped to the maximum value allowed for
-+	 * the generated code (0xffff). It is better fail to compile
-+	 * instead of degrading gracefully.
-+	 */
-+	BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff);
-+
-+	/*
- 	 * The first two instructions initialize TCC in the reserved (for us)
- 	 * 16-byte area in the parent's stack frame. On a tail call, the
- 	 * calling function jumps into the prologue after these instructions.
- 	 */
--	emit(ctx, ori, MIPS_R_T9, MIPS_R_ZERO, min(MAX_TAIL_CALL_CNT, 0xffff));
-+	emit(ctx, ori, MIPS_R_T9, MIPS_R_ZERO, MAX_TAIL_CALL_CNT);
- 	emit(ctx, sw, MIPS_R_T9, 0, MIPS_R_SP);
- 
- 	/*
-diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
-index 6475828..0e7c1bd 100644
---- a/arch/mips/net/bpf_jit_comp64.c
-+++ b/arch/mips/net/bpf_jit_comp64.c
-@@ -548,11 +548,19 @@ void build_prologue(struct jit_context *ctx)
- 	int stack, saved, locals, reserved;
- 
- 	/*
-+	 * In the unlikely event that the TCC limit is raised to more
-+	 * than 16 bits, it is clamped to the maximum value allowed for
-+	 * the generated code (0xffff). It is better fail to compile
-+	 * instead of degrading gracefully.
-+	 */
-+	BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff);
-+
-+	/*
- 	 * The first instruction initializes the tail call count register.
- 	 * On a tail call, the calling function jumps into the prologue
- 	 * after this instruction.
- 	 */
--	emit(ctx, ori, tc, MIPS_R_ZERO, min(MAX_TAIL_CALL_CNT, 0xffff));
-+	emit(ctx, ori, tc, MIPS_R_ZERO, MAX_TAIL_CALL_CNT);
- 
- 	/* === Entry-point for tail calls === */
- 
 -- 
-2.1.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
