@@ -2,142 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A3D5A3DBA
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Aug 2022 15:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E215A413A
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Aug 2022 05:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiH1Nbl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Aug 2022 09:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S229673AbiH2DFc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Aug 2022 23:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiH1Nbj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Aug 2022 09:31:39 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA6B24BF6;
-        Sun, 28 Aug 2022 06:31:38 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id kk26so10943685ejc.11;
-        Sun, 28 Aug 2022 06:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=3kAQ5K5eIGeNzDKGV7oJwvNpJhXIVKVpoG1HfB4JozY=;
-        b=eb5Ic9mBKxmCXT4VEX4X3k03ETsaS0PsYLQ8P8JU+gR0JYwlPM99sPaBbeGhFXNKx3
-         baUT3670yeoQYOUVl6CijcTr80ZtczMvGKZFVYXM2n8oVB21oCWwP5vGMB8n8k21FHIp
-         rIbSyHTIcqsF+WuR5q5yhPVnEZebHVTU/FFWRu+99In0OE9USrDAw6acibAxcEiGavzl
-         AsgwaeZDuJXE7bZcFwt+fiZt8k/yqP2+quh/M/mmKh9WVEHLKk6NuXAjMz2B1UHjLBMz
-         vgTegNFhVP2lwoRnRdSeKXHKMkgqbS24b4QsrLImVtU51vcCoFH9pl5ZcHuZkzT3Pvc+
-         2EtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=3kAQ5K5eIGeNzDKGV7oJwvNpJhXIVKVpoG1HfB4JozY=;
-        b=nRUhqB2m59AFGdSXorotjABxAy6Wq3bLzUBfSp2QJh/COISo8dFPUehuvpt9msLdjI
-         dUcGLAFOya6FarXxrzDqHmZNPBV3/a43VL8Ya7Bb0AZXeL6feKHFTvEvyc6/6KapxQdm
-         wF4MGeR0YBGMchngFRbfWBvd5poRMA7+2ZhfGx0mwdMyB4vqM07Hz/sbavaJSDmfpPxA
-         FGuAbStJ7nXR2WgfYNAlJxb0XSNYbsknY5bUDpbg1DNaosDmz/F3H0XnGMhHaKeuTnph
-         QYPAV22ol9l9j686DR4oFpu53t7NESFNNrRWMO8D+KS/R5n4PCskH3KdzXOkakC74fRz
-         rDfg==
-X-Gm-Message-State: ACgBeo34YSeNToXhN/kYUkhvD71aWcXdC38CmzM6wLDHOiy76glbs3N0
-        VlG8piDKPDKJa4rHdeJCZjfUFFZf0Me2SpoFJkTvDmAqC/8=
-X-Google-Smtp-Source: AA6agR6zBCSj61ZaiC1HeGBPBcbfD8D5Jpk3eyz7rwdjBX+3i8bk51euxSQ0qpv7vpRQ8puqRxcBiIyPK8f4B6sEJGU=
-X-Received: by 2002:a17:906:730d:b0:73d:c8a1:a6ae with SMTP id
- di13-20020a170906730d00b0073dc8a1a6aemr11016005ejc.540.1661693497381; Sun, 28
- Aug 2022 06:31:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220818050019.1924408-1-keguang.zhang@gmail.com> <20220821171030.wc343w6zmrtcz5to@mobilestation>
-In-Reply-To: <20220821171030.wc343w6zmrtcz5to@mobilestation>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Sun, 28 Aug 2022 21:31:25 +0800
-Message-ID: <CAJhJPsW0HTs+=PD2JvXZVTkm9zrnRYKtEwLNv3dsVsf1AUNjDQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: loongson32: Fix the validation failure of LS1B &
- LS1C Ethernet PHY
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S . Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229675AbiH2DF2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Aug 2022 23:05:28 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9957913EB2;
+        Sun, 28 Aug 2022 20:05:26 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx5OHlLAxjCJ4LAA--.51514S2;
+        Mon, 29 Aug 2022 11:05:10 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     bpf@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH bpf-next v2] bpf, mips: No need to use min() to get MAX_TAIL_CALL_CNT
+Date:   Mon, 29 Aug 2022 11:05:09 +0800
+Message-Id: <1661742309-2320-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Bx5OHlLAxjCJ4LAA--.51514S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw4UZr1xGF47CFy7CryrCrg_yoW5Gw18pr
+        4rJwnxKr4qgr4fX3Z3Aa18Xw1rWFsY9rW7AFWjgFyIyan8WFn7WF13Kr15uFyYvrW8J3Wf
+        XrWqkwn8u34kAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r48MxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUghIDDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Serge,
-Your patch also works for me.
-But what about the plat_dat->interface? Is it obsolete?
+MAX_TAIL_CALL_CNT is 33, so min(MAX_TAIL_CALL_CNT, 0xffff) is always
+MAX_TAIL_CALL_CNT, it is better to use MAX_TAIL_CALL_CNT directly.
 
-Serge Semin <fancer.lancer@gmail.com> =E4=BA=8E2022=E5=B9=B48=E6=9C=8822=E6=
-=97=A5=E5=91=A8=E4=B8=80 01:10=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hello Keguang
->
-> On Thu, Aug 18, 2022 at 01:00:19PM +0800, Keguang Zhang wrote:
-> > From: Kelvin Cheung <keguang.zhang@gmail.com>
-> >
-> > The Ethernet of LS1B/LS1C doesn't work due to the stmmac driver
-> > using phylink_generic_validate() instead of stmmac_validate().
-> > Moreover the driver assumes the PHY interface mode
-> > passed in platform data is always supported.
-> >
-> > stmmaceth stmmaceth.0 eth0: validation of gmii with support 00000000,00=
-000000,000062cf and advertisement 00000000,00000000,000062cf failed: -EINVA=
-L
-> > stmmaceth stmmaceth.0 eth0: stmmac_open: Cannot attach to PHY (error: -=
-22)
-> >
-> > This patch sets phy_interface field of platform data.
->
-> I've got a similar fix in my repo, though didn't have a chance to test
-> it out due to lacking any loongson hardware. I've discovered the
-> issues on my still going way of the STMMAC driver refactoring. Anyway
-> IMO the problem is a bit different than you describe and should be
-> fixed in a bit different way. Please see a patch attached to this
-> email. Could you test it out on your hw? If it fixes the problem you
-> can resend it as v2 patch.
->
-> -Sergey
->
-> >
-> > Fixes: 04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate(=
-)")
-> > Fixes: d194923d51c9 ("net: stmmac: fill in supported_interfaces")
-> > Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-> > ---
-> >  arch/mips/loongson32/common/platform.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongso=
-n32/common/platform.c
-> > index 794c96c2a4cd..741aace80b80 100644
-> > --- a/arch/mips/loongson32/common/platform.c
-> > +++ b/arch/mips/loongson32/common/platform.c
-> > @@ -147,8 +147,10 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata=
- =3D {
-> >       .phy_addr               =3D -1,
-> >  #if defined(CONFIG_LOONGSON1_LS1B)
-> >       .interface              =3D PHY_INTERFACE_MODE_MII,
-> > +     .phy_interface          =3D PHY_INTERFACE_MODE_MII,
-> >  #elif defined(CONFIG_LOONGSON1_LS1C)
-> >       .interface              =3D PHY_INTERFACE_MODE_RMII,
-> > +     .phy_interface          =3D PHY_INTERFACE_MODE_RMII,
-> >  #endif
-> >       .mdio_bus_data          =3D &ls1x_mdio_bus_data,
-> >       .dma_cfg                =3D &ls1x_eth_dma_cfg,
-> >
-> > base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-> > --
-> > 2.34.1
-> >
+At the same time, add BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff) with a
+comment on why the assertion is there.
 
+Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+Suggested-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
+v2: Add BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff) with a comment
+    suggested by Daniel and Johan, thank you.
 
---=20
-Best regards,
+ arch/mips/net/bpf_jit_comp32.c | 10 +++++++++-
+ arch/mips/net/bpf_jit_comp64.c | 10 +++++++++-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-Kelvin Cheung
+diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
+index 83c975d..ace5db3 100644
+--- a/arch/mips/net/bpf_jit_comp32.c
++++ b/arch/mips/net/bpf_jit_comp32.c
+@@ -1377,11 +1377,19 @@ void build_prologue(struct jit_context *ctx)
+ 	int stack, saved, locals, reserved;
+ 
+ 	/*
++	 * In the unlikely event that the TCC limit is raised to more
++	 * than 16 bits, it is clamped to the maximum value allowed for
++	 * the generated code (0xffff). It is better fail to compile
++	 * instead of degrading gracefully.
++	 */
++	BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff);
++
++	/*
+ 	 * The first two instructions initialize TCC in the reserved (for us)
+ 	 * 16-byte area in the parent's stack frame. On a tail call, the
+ 	 * calling function jumps into the prologue after these instructions.
+ 	 */
+-	emit(ctx, ori, MIPS_R_T9, MIPS_R_ZERO, min(MAX_TAIL_CALL_CNT, 0xffff));
++	emit(ctx, ori, MIPS_R_T9, MIPS_R_ZERO, MAX_TAIL_CALL_CNT);
+ 	emit(ctx, sw, MIPS_R_T9, 0, MIPS_R_SP);
+ 
+ 	/*
+diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
+index 6475828..0e7c1bd 100644
+--- a/arch/mips/net/bpf_jit_comp64.c
++++ b/arch/mips/net/bpf_jit_comp64.c
+@@ -548,11 +548,19 @@ void build_prologue(struct jit_context *ctx)
+ 	int stack, saved, locals, reserved;
+ 
+ 	/*
++	 * In the unlikely event that the TCC limit is raised to more
++	 * than 16 bits, it is clamped to the maximum value allowed for
++	 * the generated code (0xffff). It is better fail to compile
++	 * instead of degrading gracefully.
++	 */
++	BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff);
++
++	/*
+ 	 * The first instruction initializes the tail call count register.
+ 	 * On a tail call, the calling function jumps into the prologue
+ 	 * after this instruction.
+ 	 */
+-	emit(ctx, ori, tc, MIPS_R_ZERO, min(MAX_TAIL_CALL_CNT, 0xffff));
++	emit(ctx, ori, tc, MIPS_R_ZERO, MAX_TAIL_CALL_CNT);
+ 
+ 	/* === Entry-point for tail calls === */
+ 
+-- 
+2.1.0
+
