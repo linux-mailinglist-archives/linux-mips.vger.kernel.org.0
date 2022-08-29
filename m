@@ -2,88 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722455A4EB6
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Aug 2022 16:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB3B5A5428
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Aug 2022 20:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiH2OAV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Aug 2022 10:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S229709AbiH2Spt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Aug 2022 14:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiH2OAV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Aug 2022 10:00:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5631B7A3;
-        Mon, 29 Aug 2022 07:00:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35207B81087;
-        Mon, 29 Aug 2022 14:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CBBAEC433D7;
-        Mon, 29 Aug 2022 14:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661781616;
-        bh=f24Hdlt2fPIkAUzXmijLjWqUIfWBSBOdO9S/34q2NLg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=PpQ3uM8/lo2mmePZkinbY6Bwq1/ZdhpSD0UlGs5/jP5a/coUM0CNN9lE2CnDAU/Ok
-         XPB85BfmyYB0uJZAqzWcB1g4y54k1iz9J0ZcKLmKHLJ/rRjLJ1HcAG9fGeOk/wK3DV
-         Tscbqf7jgUuuMvx9qHt5Ppm4wNDQCiKCePpBI0DSxBRinaYh1D1er4seOPY74GQosH
-         v65oL1AuUovu/tfw0u1wEJseAqdQYNdaA6jSNfdukxM17q3dkG0plLy7gjiFgeaWRw
-         +Fm62JQgn2+ugETH28VX3dHa0hXsIph/y+DEWJckwu4dLZOedI0mO5+vbcwHO7215I
-         YWDHvxs4M0O8A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0C51E924D6;
-        Mon, 29 Aug 2022 14:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229608AbiH2Sps (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Aug 2022 14:45:48 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 Aug 2022 11:45:46 PDT
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B5B7B78C
+        for <linux-mips@vger.kernel.org>; Mon, 29 Aug 2022 11:45:46 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 11137 invoked from network); 29 Aug 2022 20:39:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1661798341; bh=KYk0F5rL/05QNecCXVHTwCSPO4E26vN1t3B/MPgqtXU=;
+          h=From:To:Subject;
+          b=oCLypSCnPUWbNEt1vQo9pF0GQA8JSbAWHE6hp4muHV0TZx6fQaVATbRPkaqC8lpl3
+           2wkejebz78+YoJwbfNHewVfyuMA79hUu9XWis6T+usiLbLHtXniYrnAIEhpvjliCek
+           j5kazUWT3MK409iM+JVTt36t/wUL14KGFcoCpfxU=
+Received: from ip-137-21.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.21])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <robh+dt@kernel.org>; 29 Aug 2022 20:39:01 +0200
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tsbogend@alpha.franken.de, olek2@wp.pl, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: dts: lantiq: rename dts files with soc name being the prefix
+Date:   Mon, 29 Aug 2022 20:37:17 +0200
+Message-Id: <20220829183717.4394-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpf,
- mips: No need to use min() to get MAX_TAIL_CALL_CNT
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166178161672.22044.323887276798287961.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Aug 2022 14:00:16 +0000
-References: <1661742309-2320-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1661742309-2320-1-git-send-email-yangtiezhu@loongson.cn>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
-        tsbogend@alpha.franken.de, bpf@vger.kernel.org,
-        linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-WP-MailID: de3215a5c917005624290f2748c79044
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [4bOU]                               
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello:
+Rename lantiq dts files with soc name being the prefix, so that the
+board dts file can be located easily by soc name, and we also gain
+the consistency of naming.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+This patch is a preparation for the addition of dts for newer SoCs
+(Lantiq ARX100, VRX200 and xRX330).
 
-On Mon, 29 Aug 2022 11:05:09 +0800 you wrote:
-> MAX_TAIL_CALL_CNT is 33, so min(MAX_TAIL_CALL_CNT, 0xffff) is always
-> MAX_TAIL_CALL_CNT, it is better to use MAX_TAIL_CALL_CNT directly.
-> 
-> At the same time, add BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff) with a
-> comment on why the assertion is there.
-> 
-> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-> Suggested-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> 
-> [...]
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ arch/mips/boot/dts/lantiq/Makefile                              | 2 +-
+ .../boot/dts/lantiq/{easy50712.dts => danube_easy50712.dts}     | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename arch/mips/boot/dts/lantiq/{easy50712.dts => danube_easy50712.dts} (100%)
 
-Here is the summary with links:
-  - [bpf-next,v2] bpf, mips: No need to use min() to get MAX_TAIL_CALL_CNT
-    https://git.kernel.org/bpf/bpf-next/c/bbcf0f55e578
-
-You are awesome, thank you!
+diff --git a/arch/mips/boot/dts/lantiq/Makefile b/arch/mips/boot/dts/lantiq/Makefile
+index f5dfc06242b9..ae6e3e21ebeb 100644
+--- a/arch/mips/boot/dts/lantiq/Makefile
++++ b/arch/mips/boot/dts/lantiq/Makefile
+@@ -1,4 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+-dtb-$(CONFIG_DT_EASY50712)	+= easy50712.dtb
++dtb-$(CONFIG_DT_EASY50712)	+= danube_easy50712.dtb
+ 
+ obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+diff --git a/arch/mips/boot/dts/lantiq/easy50712.dts b/arch/mips/boot/dts/lantiq/danube_easy50712.dts
+similarity index 100%
+rename from arch/mips/boot/dts/lantiq/easy50712.dts
+rename to arch/mips/boot/dts/lantiq/danube_easy50712.dts
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
