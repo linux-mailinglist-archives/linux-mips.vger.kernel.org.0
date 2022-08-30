@@ -2,646 +2,454 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8235A66AE
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Aug 2022 16:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4FB5A6763
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Aug 2022 17:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiH3Ow0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Aug 2022 10:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
+        id S230363AbiH3P3O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Aug 2022 11:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiH3OwS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Aug 2022 10:52:18 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D6D11B609
-        for <linux-mips@vger.kernel.org>; Tue, 30 Aug 2022 07:52:14 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id c7so7905561wrp.11
-        for <linux-mips@vger.kernel.org>; Tue, 30 Aug 2022 07:52:14 -0700 (PDT)
+        with ESMTP id S229923AbiH3P3N (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Aug 2022 11:29:13 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0E598D39;
+        Tue, 30 Aug 2022 08:29:10 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gb36so2054043ejc.10;
+        Tue, 30 Aug 2022 08:29:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=MgTCOKeJOsCjluE5HoqYOuMwxbgR09payaxrYi34NKI=;
-        b=SmHL4tpF3Kfar7Ax1iAenkPKraA/jTyr4CvU/RvhQWfNqWr6+phKsVeTn+Ko73fIj4
-         pAer2FHTwjPxHGrxNiQ+8yXUYchJvFHDRKogqyDjzE3JpewIy42WeTb0SL1/0mTeGRjC
-         Aa7MIMe0Or7+Qs5huVihBLzihRiKI2p06Zg5YImnPs/4zo/7vcmpSgbyIUOznSx/l+2M
-         OxaQ7wNyYDm6HPhvft7MgwB1l6WC5y3o98vSALkyPZeeFcsrasoSfbTNvqpfHBr3Eh3F
-         YKmHpdjA4kJQkOFvrPvefaDKUOe02u6awcyHpt+EI06keSUNvjr6h2UGbvQFI5vCza9Y
-         2Ihw==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=/KQ/vUyiG4uvx6QG1V/DvG1u3VsN0RU6NmbgpiZoIwo=;
+        b=Jbe444uvwS5KTtBsCVBQjowFQX49PHwxyphvrog6nzitvtmHBHJMnk/ZXbtFjf4ivK
+         05Qx4aMUE04ULC1C5awae7j4X5P9v22dPa9y9903IO/MYxipD+HrcvQQ15y+/rG3bhKL
+         4gl4/UESbeSMeDSj0WoBLZdVsTJtzG0xipCPmcnRa8zxUsUaapTfn57JwaCoZBc3TH1d
+         l6y3eQc3QWr/aFnH4qMBWANzKiSmGU2WnZGxLGbvrFQQ8U8EGaCrVYoWlbtqLk+koQDw
+         gnw0y0HmKYojMLO+m4tqL6r7fUOmxHIS3+r5H8g+GVc6QppaQoeQ5HaMO2dCWJKkqEzA
+         2nzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=MgTCOKeJOsCjluE5HoqYOuMwxbgR09payaxrYi34NKI=;
-        b=SU2GNYk40Vkj+uXXWMSUkCEnnbFyFdbCCBrXISHmDmYYpqT+qArSmt6uK7jq5baDzD
-         QkcqMc7n2AT4bdJevHOWhACERwS/69DC9Uyl3VE1YiGTTWXi+slBqDAim4rxNZtAG5Qs
-         ZDIgCiAWn0s//EZBSqgI0MtZos9LfvieR1tfzlt0MaKY4lximu6wttYcnVxSJbL7rj0/
-         272eDx6aLKnc9jjalM88RqF4kQc8b5xTLSjDj8L6mf/X6zEuycNKMV30QznaexCxkxCh
-         dFSD+k4M3LyC9GqrQpNahs03yMSrNbKbvY4khTvHmECBa9dCaDeguh4xbVPFHeuIvdnF
-         d8tQ==
-X-Gm-Message-State: ACgBeo2K0+nbokpCN9E4izsshmAbbZFD/0hMA2AuQ2fWs1IVMt0qU50G
-        J7qD48Z+WFP1RVMdzDwl64VvYA==
-X-Google-Smtp-Source: AA6agR7CFvzUjb1VmieM57oudaeavvIC36Mlc0ACjbeRUkh587mNqxh9eWVBRnw/22W7mrZJ0Un38g==
-X-Received: by 2002:a5d:5a9a:0:b0:226:e840:c551 with SMTP id bp26-20020a5d5a9a000000b00226e840c551mr442868wrb.679.1661871133292;
-        Tue, 30 Aug 2022 07:52:13 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id b15-20020a056000054f00b00226e173b61esm2524371wrf.111.2022.08.30.07.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 07:52:12 -0700 (PDT)
-Message-ID: <04b66fe0-3e8c-fedb-264a-7e74686ba0ea@linaro.org>
-Date:   Tue, 30 Aug 2022 15:52:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 2/2] nvmem: sort config symbols alphabetically
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=/KQ/vUyiG4uvx6QG1V/DvG1u3VsN0RU6NmbgpiZoIwo=;
+        b=L55BFU06aQUk7CHscvywG9Ulk0Fp025P6fsuqTN2TnG6U5o7eouGcLcprVQJZeb+LW
+         DWB2kgc5IzkS3eBlRKdrWClh+pbvDQNVieX97l1cLsgZAlnKBJcYXuksNgjGr4SGZvsl
+         u2K8cCKmOH6zbQgO901aeEMvTXi9JZXrTlZaWCJS5IWMwcfOZhxYKB+j3Ee7WSEsiqzt
+         qCZ4yt5ed+JvGk3ax1nage/Q9FksdkfIvDEWXoYLK/xTRJmqK184DCf06ckibO+AdQzE
+         JxamnKD3TF1wFbj+Bpw0lnvA3s176C3/+HttfmrzX6bhF+AjEzt+A2DCXQPiyv2fEi5o
+         hXeQ==
+X-Gm-Message-State: ACgBeo2v0jZVcEG4bC/7y9pG/Q3Q9VZR/gDLLMgft/PnxPoopAPNSk9b
+        jSYXcZUan8q85gUDkZFGHwi+ryMBKXDGsQ==
+X-Google-Smtp-Source: AA6agR6mh+hG5Ub9n0mP0M72q8basJqWrEfuKrZt7HLzsynsaPcpmVK6SV7y8Jwa2Sli8dDEw14qDA==
+X-Received: by 2002:a17:906:cc13:b0:73d:d22d:63cd with SMTP id ml19-20020a170906cc1300b0073dd22d63cdmr17202596ejb.741.1661873348951;
+        Tue, 30 Aug 2022 08:29:08 -0700 (PDT)
+Received: from debianHome.localdomain (dynamic-095-116-163-172.95.116.pool.telefonica.de. [95.116.163.172])
+        by smtp.gmail.com with ESMTPSA id t19-20020a056402525300b00445bda73fbesm5473947edd.33.2022.08.30.08.29.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 08:29:08 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To:     selinux@vger.kernel.org
+Cc:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Joel Stanley <joel@jms.id.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Michael Walle <michael@walle.cc>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "H . Nikolaus Schaller" <hns@goldelico.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220830134059.18744-1-zajec5@gmail.com>
- <20220830134059.18744-2-zajec5@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220830134059.18744-2-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Guo Ren <guoren@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Wang Haojun <jiangliuer01@gmail.com>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-fsdevel@vger.kernel.org, linux-audit@redhat.com,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
+Subject: [RFC PATCH 2/2] fs/xattr: wire up syscalls
+Date:   Tue, 30 Aug 2022 17:28:38 +0200
+Message-Id: <20220830152858.14866-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Enable the new added extended attribute related syscalls.
 
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+TODO:
+  - deprecate traditional syscalls (setxattr, ...)?
+  - resolve possible conflicts with proposed readfile syscall
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      |  4 ++++
+ arch/arm/tools/syscall.tbl                  |  4 ++++
+ arch/arm64/include/asm/unistd.h             |  2 +-
+ arch/arm64/include/asm/unistd32.h           |  8 ++++++++
+ arch/ia64/kernel/syscalls/syscall.tbl       |  4 ++++
+ arch/m68k/kernel/syscalls/syscall.tbl       |  4 ++++
+ arch/microblaze/kernel/syscalls/syscall.tbl |  4 ++++
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |  4 ++++
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |  4 ++++
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |  4 ++++
+ arch/parisc/kernel/syscalls/syscall.tbl     |  4 ++++
+ arch/powerpc/kernel/syscalls/syscall.tbl    |  4 ++++
+ arch/s390/kernel/syscalls/syscall.tbl       |  4 ++++
+ arch/sh/kernel/syscalls/syscall.tbl         |  4 ++++
+ arch/sparc/kernel/syscalls/syscall.tbl      |  4 ++++
+ arch/x86/entry/syscalls/syscall_32.tbl      |  4 ++++
+ arch/x86/entry/syscalls/syscall_64.tbl      |  4 ++++
+ arch/xtensa/kernel/syscalls/syscall.tbl     |  4 ++++
+ include/asm-generic/audit_change_attr.h     |  6 ++++++
+ include/linux/syscalls.h                    |  8 ++++++++
+ include/uapi/asm-generic/unistd.h           | 12 +++++++++++-
+ 21 files changed, 98 insertions(+), 2 deletions(-)
 
-On 30/08/2022 14:40, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> 1. Match what most subsystems do
-> 2. Simplify maintenance a bit
-> 3. Reduce amount of conflicts for new drivers patches
-> 
-> While at it unify indent level in Makefile.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 3515bc4f16a4..826a8a36da81 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -490,3 +490,7 @@
+ 558	common	process_mrelease		sys_process_mrelease
+ 559	common  futex_waitv                     sys_futex_waitv
+ 560	common	set_mempolicy_home_node		sys_ni_syscall
++561	common	setxattrat			sys_setxattrat
++562	common	getxattrat			sys_getxattrat
++563	common	listxattrat			sys_listxattrat
++564	common	removexattrat			sys_removexattrat
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index ac964612d8b0..f0e9d9d487f0 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -464,3 +464,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 037feba03a51..63a8a9c4abc1 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -39,7 +39,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		451
++#define __NR_compat_syscalls		455
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 604a2053d006..cd6ac63376d1 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -907,6 +907,14 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
+ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ #define __NR_set_mempolicy_home_node 450
+ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
++#define __NR_setxattrat 451
++__SYSCALL(__NR_setxattrat, sys_setxattrat)
++#define __NR_getxattrat 452
++__SYSCALL(__NR_getxattrat, sys_getxattrat)
++#define __NR_listxattrat 453
++__SYSCALL(__NR_listxattrat, sys_listxattrat)
++#define __NR_removexattrat 454
++__SYSCALL(__NR_removexattrat, sys_removexattrat)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+index 78b1d03e86e1..6e942a935a27 100644
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@ -371,3 +371,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index b1f3940bc298..0847efdee734 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -450,3 +450,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 820145e47350..7f619bbc718d 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -456,3 +456,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 253ff994ed2e..5e4206c0aede 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -389,3 +389,7 @@
+ 448	n32	process_mrelease		sys_process_mrelease
+ 449	n32	futex_waitv			sys_futex_waitv
+ 450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n32	setxattrat			sys_setxattrat
++452	n32	getxattrat			sys_getxattrat
++453	n32	listxattrat			sys_listxattrat
++454	n32	removexattrat			sys_removexattrat
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 3f1886ad9d80..df0f053e76cd 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -365,3 +365,7 @@
+ 448	n64	process_mrelease		sys_process_mrelease
+ 449	n64	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n64	setxattrat			sys_setxattrat
++452	n64	getxattrat			sys_getxattrat
++453	n64	listxattrat			sys_listxattrat
++454	n64	removexattrat			sys_removexattrat
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 8f243e35a7b2..09ec31ad475f 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -438,3 +438,7 @@
+ 448	o32	process_mrelease		sys_process_mrelease
+ 449	o32	futex_waitv			sys_futex_waitv
+ 450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	o32	setxattrat			sys_setxattrat
++452	o32	getxattrat			sys_getxattrat
++453	o32	listxattrat			sys_listxattrat
++454	o32	removexattrat			sys_removexattrat
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index 8a99c998da9b..fe3f4f41aee6 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -448,3 +448,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index 2600b4237292..bee27f650397 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -530,3 +530,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index 799147658dee..d1fbad4b7864 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -453,3 +453,7 @@
+ 448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
+ 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
+ 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
++451  common	setxattrat		sys_setxattrat			sys_setxattrat
++452  common	getxattrat		sys_getxattrat			sys_getxattrat
++453  common	listxattrat		sys_listxattrat			sys_listxattrat
++454  common	removexattrat		sys_removexattrat		sys_removexattrat
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 2de85c977f54..d4daa8afe45c 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -453,3 +453,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 4398cc6fb68d..510d5175f80a 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -496,3 +496,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index 320480a8db4f..8488cc157fe0 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -455,3 +455,7 @@
+ 448	i386	process_mrelease	sys_process_mrelease
+ 449	i386	futex_waitv		sys_futex_waitv
+ 450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	i386	setxattrat		sys_setxattrat
++452	i386	getxattrat		sys_getxattrat
++453	i386	listxattrat		sys_listxattrat
++454	i386	removexattrat		sys_removexattrat
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index c84d12608cd2..f45d723d5a30 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -372,6 +372,10 @@
+ 448	common	process_mrelease	sys_process_mrelease
+ 449	common	futex_waitv		sys_futex_waitv
+ 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
++451	common	setxattrat		sys_setxattrat
++452	common	getxattrat		sys_getxattrat
++453	common	listxattrat		sys_listxattrat
++454	common	removexattrat		sys_removexattrat
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 52c94ab5c205..dbafe441a83f 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -421,3 +421,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/include/asm-generic/audit_change_attr.h b/include/asm-generic/audit_change_attr.h
+index 331670807cf0..cc840537885f 100644
+--- a/include/asm-generic/audit_change_attr.h
++++ b/include/asm-generic/audit_change_attr.h
+@@ -11,9 +11,15 @@ __NR_lchown,
+ __NR_fchown,
+ #endif
+ __NR_setxattr,
++#ifdef __NR_setxattrat
++__NR_setxattrat,
++#endif
+ __NR_lsetxattr,
+ __NR_fsetxattr,
+ __NR_removexattr,
++#ifdef __NR_removexattrat
++__NR_removexattrat,
++#endif
+ __NR_lremovexattr,
+ __NR_fremovexattr,
+ #ifdef __NR_fchownat
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index a34b0f9a9972..090b9b5229a0 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -348,23 +348,31 @@ asmlinkage long sys_io_uring_register(unsigned int fd, unsigned int op,
+ /* fs/xattr.c */
+ asmlinkage long sys_setxattr(const char __user *path, const char __user *name,
+ 			     const void __user *value, size_t size, int flags);
++asmlinkage long sys_setxattrat(int dfd, const char __user *path, const char __user *name,
++			     const void __user *value, size_t size, int flags);
+ asmlinkage long sys_lsetxattr(const char __user *path, const char __user *name,
+ 			      const void __user *value, size_t size, int flags);
+ asmlinkage long sys_fsetxattr(int fd, const char __user *name,
+ 			      const void __user *value, size_t size, int flags);
+ asmlinkage long sys_getxattr(const char __user *path, const char __user *name,
+ 			     void __user *value, size_t size);
++asmlinkage long sys_getxattrat(int dfd, const char __user *path, const char __user *name,
++			     void __user *value, size_t size, int flags);
+ asmlinkage long sys_lgetxattr(const char __user *path, const char __user *name,
+ 			      void __user *value, size_t size);
+ asmlinkage long sys_fgetxattr(int fd, const char __user *name,
+ 			      void __user *value, size_t size);
+ asmlinkage long sys_listxattr(const char __user *path, char __user *list,
+ 			      size_t size);
++asmlinkage long sys_listxattrat(int dfd, const char __user *path, char __user *list,
++			      size_t size, int flags);
+ asmlinkage long sys_llistxattr(const char __user *path, char __user *list,
+ 			       size_t size);
+ asmlinkage long sys_flistxattr(int fd, char __user *list, size_t size);
+ asmlinkage long sys_removexattr(const char __user *path,
+ 				const char __user *name);
++asmlinkage long sys_removexattrat(int dfd, const char __user *path,
++				const char __user *name, int flags);
+ asmlinkage long sys_lremovexattr(const char __user *path,
+ 				 const char __user *name);
+ asmlinkage long sys_fremovexattr(int fd, const char __user *name);
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 45fa180cc56a..4fcc71612b7a 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -886,8 +886,18 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ #define __NR_set_mempolicy_home_node 450
+ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+ 
++/* fs/xattr.c */
++#define __NR_setxattrat 451
++__SYSCALL(__NR_setxattrat, sys_setxattrat)
++#define __NR_getxattrat 452
++__SYSCALL(__NR_getxattrat, sys_getxattrat)
++#define __NR_listxattrat 453
++__SYSCALL(__NR_listxattrat, sys_listxattrat)
++#define __NR_removexattrat 454
++__SYSCALL(__NR_removexattrat, sys_removexattrat)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 451
++#define __NR_syscalls 455
+ 
+ /*
+  * 32 bit systems traditionally used different
+-- 
+2.37.2
 
-
-Applied thanks,
-
---Srini
-> ---
->   drivers/nvmem/Kconfig  | 300 +++++++++++++++++++++--------------------
->   drivers/nvmem/Makefile | 114 ++++++++--------
->   2 files changed, 208 insertions(+), 206 deletions(-)
-> 
-> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-> index 691375c13381..7f2557934834 100644
-> --- a/drivers/nvmem/Kconfig
-> +++ b/drivers/nvmem/Kconfig
-> @@ -21,6 +21,40 @@ config NVMEM_SYSFS
->   	 This interface is mostly used by userspace applications to
->   	 read/write directly into nvmem.
->   
-> +# Devices
-> +
-> +config NVMEM_APPLE_EFUSES
-> +	tristate "Apple eFuse support"
-> +	depends on ARCH_APPLE || COMPILE_TEST
-> +	default ARCH_APPLE
-> +	help
-> +	  Say y here to enable support for reading eFuses on Apple SoCs
-> +	  such as the M1. These are e.g. used to store factory programmed
-> +	  calibration data required for the PCIe or the USB-C PHY.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called nvmem-apple-efuses.
-> +
-> +config NVMEM_BCM_OCOTP
-> +	tristate "Broadcom On-Chip OTP Controller support"
-> +	depends on ARCH_BCM_IPROC || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	default ARCH_BCM_IPROC
-> +	help
-> +	  Say y here to enable read/write access to the Broadcom OTP
-> +	  controller.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem-bcm-ocotp.
-> +
-> +config NVMEM_BRCM_NVRAM
-> +	tristate "Broadcom's NVRAM support"
-> +	depends on ARCH_BCM_5301X || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	help
-> +	  This driver provides support for Broadcom's NVRAM that can be accessed
-> +	  using I/O mapping.
-> +
->   config NVMEM_IMX_IIM
->   	tristate "i.MX IC Identification Module support"
->   	depends on ARCH_MXC || COMPILE_TEST
-> @@ -64,6 +98,19 @@ config NVMEM_JZ4780_EFUSE
->   	  To compile this driver as a module, choose M here: the module
->   	  will be called nvmem_jz4780_efuse.
->   
-> +config NVMEM_LAYERSCAPE_SFP
-> +	tristate "Layerscape SFP (Security Fuse Processor) support"
-> +	depends on ARCH_LAYERSCAPE || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	select REGMAP_MMIO
-> +	help
-> +	  This driver provides support to read the eFuses on Freescale
-> +	  Layerscape SoC's. For example, the vendor provides a per part
-> +	  unique ID there.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called layerscape-sfp.
-> +
->   config NVMEM_LPC18XX_EEPROM
->   	tristate "NXP LPC18XX EEPROM Memory Support"
->   	depends on ARCH_LPC18XX || COMPILE_TEST
-> @@ -84,17 +131,32 @@ config NVMEM_LPC18XX_OTP
->   	  To compile this driver as a module, choose M here: the module
->   	  will be called nvmem_lpc18xx_otp.
->   
-> -config NVMEM_MXS_OCOTP
-> -	tristate "Freescale MXS On-Chip OTP Memory Support"
-> -	depends on ARCH_MXS || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> +config NVMEM_MESON_EFUSE
-> +	tristate "Amlogic Meson GX eFuse Support"
-> +	depends on (ARCH_MESON || COMPILE_TEST) && MESON_SM
->   	help
-> -	  If you say Y here, you will get readonly access to the
-> -	  One Time Programmable memory pages that are stored
-> -	  on the Freescale i.MX23/i.MX28 processor.
-> +	  This is a driver to retrieve specific values from the eFuse found on
-> +	  the Amlogic Meson GX SoCs.
->   
->   	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem-mxs-ocotp.
-> +	  will be called nvmem_meson_efuse.
-> +
-> +config NVMEM_MESON_MX_EFUSE
-> +	tristate "Amlogic Meson6/Meson8/Meson8b eFuse Support"
-> +	depends on ARCH_MESON || COMPILE_TEST
-> +	help
-> +	  This is a driver to retrieve specific values from the eFuse found on
-> +	  the Amlogic Meson6, Meson8 and Meson8b SoCs.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem_meson_mx_efuse.
-> +
-> +config NVMEM_MICROCHIP_OTPC
-> +	tristate "Microchip OTPC support"
-> +	depends on ARCH_AT91 || COMPILE_TEST
-> +	help
-> +	  This driver enable the OTP controller available on Microchip SAMA7G5
-> +	  SoCs. It controlls the access to the OTP memory connected to it.
->   
->   config NVMEM_MTK_EFUSE
->   	tristate "Mediatek SoCs EFUSE support"
-> @@ -107,12 +169,17 @@ config NVMEM_MTK_EFUSE
->   	  This driver can also be built as a module. If so, the module
->   	  will be called efuse-mtk.
->   
-> -config NVMEM_MICROCHIP_OTPC
-> -	tristate "Microchip OTPC support"
-> -	depends on ARCH_AT91 || COMPILE_TEST
-> +config NVMEM_MXS_OCOTP
-> +	tristate "Freescale MXS On-Chip OTP Memory Support"
-> +	depends on ARCH_MXS || COMPILE_TEST
-> +	depends on HAS_IOMEM
->   	help
-> -	  This driver enable the OTP controller available on Microchip SAMA7G5
-> -	  SoCs. It controlls the access to the OTP memory connected to it.
-> +	  If you say Y here, you will get readonly access to the
-> +	  One Time Programmable memory pages that are stored
-> +	  on the Freescale i.MX23/i.MX28 processor.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem-mxs-ocotp.
->   
->   config NVMEM_NINTENDO_OTP
->   	tristate "Nintendo Wii and Wii U OTP Support"
-> @@ -137,13 +204,21 @@ config NVMEM_QCOM_QFPROM
->   	  This driver can also be built as a module. If so, the module
->   	  will be called nvmem_qfprom.
->   
-> -config NVMEM_SPMI_SDAM
-> -	tristate "SPMI SDAM Support"
-> -	depends on SPMI
-> +config NVMEM_RAVE_SP_EEPROM
-> +	tristate "Rave SP EEPROM Support"
-> +	depends on RAVE_SP_CORE
->   	help
-> -	  This driver supports the Shared Direct Access Memory Module on
-> -	  Qualcomm Technologies, Inc. PMICs. It provides the clients
-> -	  an interface to read/write to the SDAM module's shared memory.
-> +	  Say y here to enable Rave SP EEPROM support.
-> +
-> +config NVMEM_RMEM
-> +	tristate "Reserved Memory Based Driver Support"
-> +	depends on HAS_IOMEM
-> +	help
-> +	  This driver maps reserved memory into an nvmem device. It might be
-> +	  useful to expose information left by firmware in memory.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem-rmem.
->   
->   config NVMEM_ROCKCHIP_EFUSE
->   	tristate "Rockchip eFuse Support"
-> @@ -167,79 +242,16 @@ config NVMEM_ROCKCHIP_OTP
->   	  This driver can also be built as a module. If so, the module
->   	  will be called nvmem_rockchip_otp.
->   
-> -config NVMEM_BCM_OCOTP
-> -	tristate "Broadcom On-Chip OTP Controller support"
-> -	depends on ARCH_BCM_IPROC || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	default ARCH_BCM_IPROC
-> -	help
-> -	  Say y here to enable read/write access to the Broadcom OTP
-> -	  controller.
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem-bcm-ocotp.
-> -
-> -config NVMEM_STM32_ROMEM
-> -	tristate "STMicroelectronics STM32 factory-programmed memory support"
-> -	depends on ARCH_STM32 || COMPILE_TEST
-> -	help
-> -	  Say y here to enable read-only access for STMicroelectronics STM32
-> -	  factory-programmed memory area.
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem-stm32-romem.
-> -
-> -config NVMEM_SUNXI_SID
-> -	tristate "Allwinner SoCs SID support"
-> -	depends on ARCH_SUNXI
-> -	help
-> -	  This is a driver for the 'security ID' available on various Allwinner
-> -	  devices.
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem_sunxi_sid.
-> -
-> -config NVMEM_UNIPHIER_EFUSE
-> -	tristate "UniPhier SoCs eFuse support"
-> -	depends on ARCH_UNIPHIER || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	help
-> -	  This is a simple driver to dump specified values of UniPhier SoC
-> -	  from eFuse.
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem-uniphier-efuse.
-> -
-> -config NVMEM_VF610_OCOTP
-> -	tristate "VF610 SoC OCOTP support"
-> -	depends on SOC_VF610 || COMPILE_TEST
-> +config NVMEM_SC27XX_EFUSE
-> +	tristate "Spreadtrum SC27XX eFuse Support"
-> +	depends on MFD_SC27XX_PMIC || COMPILE_TEST
->   	depends on HAS_IOMEM
->   	help
-> -	  This is a driver for the 'OCOTP' peripheral available on Vybrid
-> -	  devices like VF5xx and VF6xx.
-> -
-> -	  This driver can also be build as a module. If so, the module will
-> -	  be called nvmem-vf610-ocotp.
-> -
-> -config NVMEM_MESON_EFUSE
-> -	tristate "Amlogic Meson GX eFuse Support"
-> -	depends on (ARCH_MESON || COMPILE_TEST) && MESON_SM
-> -	help
-> -	  This is a driver to retrieve specific values from the eFuse found on
-> -	  the Amlogic Meson GX SoCs.
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem_meson_efuse.
-> -
-> -config NVMEM_MESON_MX_EFUSE
-> -	tristate "Amlogic Meson6/Meson8/Meson8b eFuse Support"
-> -	depends on ARCH_MESON || COMPILE_TEST
-> -	help
-> -	  This is a driver to retrieve specific values from the eFuse found on
-> -	  the Amlogic Meson6, Meson8 and Meson8b SoCs.
-> +	  This is a simple driver to dump specified values of Spreadtrum
-> +	  SC27XX PMICs from eFuse.
->   
->   	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem_meson_mx_efuse.
-> +	  will be called nvmem-sc27xx-efuse.
->   
->   config NVMEM_SNVS_LPGPR
->   	tristate "Support for Low Power General Purpose Register"
-> @@ -251,32 +263,13 @@ config NVMEM_SNVS_LPGPR
->   	  This driver can also be built as a module. If so, the module
->   	  will be called nvmem-snvs-lpgpr.
->   
-> -config NVMEM_RAVE_SP_EEPROM
-> -	tristate "Rave SP EEPROM Support"
-> -	depends on RAVE_SP_CORE
-> -	help
-> -	  Say y here to enable Rave SP EEPROM support.
-> -
-> -config NVMEM_SC27XX_EFUSE
-> -	tristate "Spreadtrum SC27XX eFuse Support"
-> -	depends on MFD_SC27XX_PMIC || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	help
-> -	  This is a simple driver to dump specified values of Spreadtrum
-> -	  SC27XX PMICs from eFuse.
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem-sc27xx-efuse.
-> -
-> -config NVMEM_ZYNQMP
-> -	bool "Xilinx ZYNQMP SoC nvmem firmware support"
-> -	depends on ARCH_ZYNQMP
-> +config NVMEM_SPMI_SDAM
-> +	tristate "SPMI SDAM Support"
-> +	depends on SPMI
->   	help
-> -	  This is a driver to access hardware related data like
-> -	  soc revision, IDCODE... etc by using the firmware
-> -	  interface.
-> -
-> -	  If sure, say yes. If unsure, say no.
-> +	  This driver supports the Shared Direct Access Memory Module on
-> +	  Qualcomm Technologies, Inc. PMICs. It provides the clients
-> +	  an interface to read/write to the SDAM module's shared memory.
->   
->   config NVMEM_SPRD_EFUSE
->   	tristate "Spreadtrum SoC eFuse Support"
-> @@ -289,36 +282,15 @@ config NVMEM_SPRD_EFUSE
->   	  This driver can also be built as a module. If so, the module
->   	  will be called nvmem-sprd-efuse.
->   
-> -config NVMEM_RMEM
-> -	tristate "Reserved Memory Based Driver Support"
-> -	depends on HAS_IOMEM
-> -	help
-> -	  This driver maps reserved memory into an nvmem device. It might be
-> -	  useful to expose information left by firmware in memory.
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called nvmem-rmem.
-> -
-> -config NVMEM_BRCM_NVRAM
-> -	tristate "Broadcom's NVRAM support"
-> -	depends on ARCH_BCM_5301X || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	help
-> -	  This driver provides support for Broadcom's NVRAM that can be accessed
-> -	  using I/O mapping.
-> -
-> -config NVMEM_LAYERSCAPE_SFP
-> -	tristate "Layerscape SFP (Security Fuse Processor) support"
-> -	depends on ARCH_LAYERSCAPE || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	select REGMAP_MMIO
-> +config NVMEM_STM32_ROMEM
-> +	tristate "STMicroelectronics STM32 factory-programmed memory support"
-> +	depends on ARCH_STM32 || COMPILE_TEST
->   	help
-> -	  This driver provides support to read the eFuses on Freescale
-> -	  Layerscape SoC's. For example, the vendor provides a per part
-> -	  unique ID there.
-> +	  Say y here to enable read-only access for STMicroelectronics STM32
-> +	  factory-programmed memory area.
->   
->   	  This driver can also be built as a module. If so, the module
-> -	  will be called layerscape-sfp.
-> +	  will be called nvmem-stm32-romem.
->   
->   config NVMEM_SUNPLUS_OCOTP
->   	tristate "Sunplus SoC OTP support"
-> @@ -332,17 +304,15 @@ config NVMEM_SUNPLUS_OCOTP
->   	  This driver can also be built as a module. If so, the module
->   	  will be called nvmem-sunplus-ocotp.
->   
-> -config NVMEM_APPLE_EFUSES
-> -	tristate "Apple eFuse support"
-> -	depends on ARCH_APPLE || COMPILE_TEST
-> -	default ARCH_APPLE
-> +config NVMEM_SUNXI_SID
-> +	tristate "Allwinner SoCs SID support"
-> +	depends on ARCH_SUNXI
->   	help
-> -	  Say y here to enable support for reading eFuses on Apple SoCs
-> -	  such as the M1. These are e.g. used to store factory programmed
-> -	  calibration data required for the PCIe or the USB-C PHY.
-> +	  This is a driver for the 'security ID' available on various Allwinner
-> +	  devices.
->   
-> -	  This driver can also be built as a module. If so, the module will
-> -	  be called nvmem-apple-efuses.
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem_sunxi_sid.
->   
->   config NVMEM_U_BOOT_ENV
->   	tristate "U-Boot environment variables support"
-> @@ -357,4 +327,36 @@ config NVMEM_U_BOOT_ENV
->   
->   	  If compiled as module it will be called nvmem_u-boot-env.
->   
-> +config NVMEM_UNIPHIER_EFUSE
-> +	tristate "UniPhier SoCs eFuse support"
-> +	depends on ARCH_UNIPHIER || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	help
-> +	  This is a simple driver to dump specified values of UniPhier SoC
-> +	  from eFuse.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem-uniphier-efuse.
-> +
-> +config NVMEM_VF610_OCOTP
-> +	tristate "VF610 SoC OCOTP support"
-> +	depends on SOC_VF610 || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	help
-> +	  This is a driver for the 'OCOTP' peripheral available on Vybrid
-> +	  devices like VF5xx and VF6xx.
-> +
-> +	  This driver can also be build as a module. If so, the module will
-> +	  be called nvmem-vf610-ocotp.
-> +
-> +config NVMEM_ZYNQMP
-> +	bool "Xilinx ZYNQMP SoC nvmem firmware support"
-> +	depends on ARCH_ZYNQMP
-> +	help
-> +	  This is a driver to access hardware related data like
-> +	  soc revision, IDCODE... etc by using the firmware
-> +	  interface.
-> +
-> +	  If sure, say yes. If unsure, say no.
-> +
->   endif
-> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-> index 7ac988c6966e..bac799b2fa8d 100644
-> --- a/drivers/nvmem/Makefile
-> +++ b/drivers/nvmem/Makefile
-> @@ -7,67 +7,67 @@ obj-$(CONFIG_NVMEM)		+= nvmem_core.o
->   nvmem_core-y			:= core.o
->   
->   # Devices
-> -obj-$(CONFIG_NVMEM_BCM_OCOTP)	+= nvmem-bcm-ocotp.o
-> -nvmem-bcm-ocotp-y		:= bcm-ocotp.o
-> -obj-$(CONFIG_NVMEM_IMX_IIM)	+= nvmem-imx-iim.o
-> -nvmem-imx-iim-y			:= imx-iim.o
-> -obj-$(CONFIG_NVMEM_IMX_OCOTP)	+= nvmem-imx-ocotp.o
-> -nvmem-imx-ocotp-y		:= imx-ocotp.o
-> +obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
-> +nvmem-apple-efuses-y 			:= apple-efuses.o
-> +obj-$(CONFIG_NVMEM_BCM_OCOTP)		+= nvmem-bcm-ocotp.o
-> +nvmem-bcm-ocotp-y			:= bcm-ocotp.o
-> +obj-$(CONFIG_NVMEM_BRCM_NVRAM)		+= nvmem_brcm_nvram.o
-> +nvmem_brcm_nvram-y			:= brcm_nvram.o
-> +obj-$(CONFIG_NVMEM_IMX_IIM)		+= nvmem-imx-iim.o
-> +nvmem-imx-iim-y				:= imx-iim.o
-> +obj-$(CONFIG_NVMEM_IMX_OCOTP)		+= nvmem-imx-ocotp.o
-> +nvmem-imx-ocotp-y			:= imx-ocotp.o
->   obj-$(CONFIG_NVMEM_IMX_OCOTP_SCU)	+= nvmem-imx-ocotp-scu.o
-> -nvmem-imx-ocotp-scu-y		:= imx-ocotp-scu.o
-> -obj-$(CONFIG_NVMEM_JZ4780_EFUSE)		+= nvmem_jz4780_efuse.o
-> -nvmem_jz4780_efuse-y		:= jz4780-efuse.o
-> +nvmem-imx-ocotp-scu-y			:= imx-ocotp-scu.o
-> +obj-$(CONFIG_NVMEM_JZ4780_EFUSE)	+= nvmem_jz4780_efuse.o
-> +nvmem_jz4780_efuse-y			:= jz4780-efuse.o
-> +obj-$(CONFIG_NVMEM_LAYERSCAPE_SFP)	+= nvmem-layerscape-sfp.o
-> +nvmem-layerscape-sfp-y			:= layerscape-sfp.o
->   obj-$(CONFIG_NVMEM_LPC18XX_EEPROM)	+= nvmem_lpc18xx_eeprom.o
-> -nvmem_lpc18xx_eeprom-y	:= lpc18xx_eeprom.o
-> -obj-$(CONFIG_NVMEM_LPC18XX_OTP)	+= nvmem_lpc18xx_otp.o
-> -nvmem_lpc18xx_otp-y		:= lpc18xx_otp.o
-> -obj-$(CONFIG_NVMEM_MXS_OCOTP)	+= nvmem-mxs-ocotp.o
-> -nvmem-mxs-ocotp-y		:= mxs-ocotp.o
-> -obj-$(CONFIG_NVMEM_NINTENDO_OTP)	+= nvmem-nintendo-otp.o
-> -nvmem-nintendo-otp-y		:= nintendo-otp.o
-> +nvmem_lpc18xx_eeprom-y			:= lpc18xx_eeprom.o
-> +obj-$(CONFIG_NVMEM_LPC18XX_OTP)		+= nvmem_lpc18xx_otp.o
-> +nvmem_lpc18xx_otp-y			:= lpc18xx_otp.o
-> +obj-$(CONFIG_NVMEM_MESON_EFUSE)		+= nvmem_meson_efuse.o
-> +nvmem_meson_efuse-y			:= meson-efuse.o
-> +obj-$(CONFIG_NVMEM_MESON_MX_EFUSE)	+= nvmem_meson_mx_efuse.o
-> +nvmem_meson_mx_efuse-y			:= meson-mx-efuse.o
-> +obj-$(CONFIG_NVMEM_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
-> +nvmem-microchip-otpc-y			:= microchip-otpc.o
->   obj-$(CONFIG_NVMEM_MTK_EFUSE)		+= nvmem_mtk-efuse.o
-> -nvmem_mtk-efuse-y		:= mtk-efuse.o
-> -obj-$(CONFIG_NVMEM_QCOM_QFPROM)	+= nvmem_qfprom.o
-> -nvmem_qfprom-y			:= qfprom.o
-> -obj-$(CONFIG_NVMEM_SPMI_SDAM)	+= nvmem_qcom-spmi-sdam.o
-> -nvmem_qcom-spmi-sdam-y		+= qcom-spmi-sdam.o
-> +nvmem_mtk-efuse-y			:= mtk-efuse.o
-> +obj-$(CONFIG_NVMEM_MXS_OCOTP)		+= nvmem-mxs-ocotp.o
-> +nvmem-mxs-ocotp-y			:= mxs-ocotp.o
-> +obj-$(CONFIG_NVMEM_NINTENDO_OTP)	+= nvmem-nintendo-otp.o
-> +nvmem-nintendo-otp-y			:= nintendo-otp.o
-> +obj-$(CONFIG_NVMEM_QCOM_QFPROM)		+= nvmem_qfprom.o
-> +nvmem_qfprom-y				:= qfprom.o
-> +obj-$(CONFIG_NVMEM_RAVE_SP_EEPROM)	+= nvmem-rave-sp-eeprom.o
-> +nvmem-rave-sp-eeprom-y			:= rave-sp-eeprom.o
-> +obj-$(CONFIG_NVMEM_RMEM) 		+= nvmem-rmem.o
-> +nvmem-rmem-y				:= rmem.o
->   obj-$(CONFIG_NVMEM_ROCKCHIP_EFUSE)	+= nvmem_rockchip_efuse.o
-> -nvmem_rockchip_efuse-y		:= rockchip-efuse.o
-> +nvmem_rockchip_efuse-y			:= rockchip-efuse.o
->   obj-$(CONFIG_NVMEM_ROCKCHIP_OTP)	+= nvmem-rockchip-otp.o
-> -nvmem-rockchip-otp-y		:= rockchip-otp.o
-> -obj-$(CONFIG_NVMEM_SUNXI_SID)	+= nvmem_sunxi_sid.o
-> -nvmem_stm32_romem-y 		:= stm32-romem.o
-> -obj-$(CONFIG_NVMEM_STM32_ROMEM) += nvmem_stm32_romem.o
-> -nvmem_sunxi_sid-y		:= sunxi_sid.o
-> -obj-$(CONFIG_NVMEM_UNIPHIER_EFUSE)	+= nvmem-uniphier-efuse.o
-> -nvmem-uniphier-efuse-y		:= uniphier-efuse.o
-> -obj-$(CONFIG_NVMEM_VF610_OCOTP)	+= nvmem-vf610-ocotp.o
-> -nvmem-vf610-ocotp-y		:= vf610-ocotp.o
-> -obj-$(CONFIG_NVMEM_MESON_EFUSE)	+= nvmem_meson_efuse.o
-> -nvmem_meson_efuse-y		:= meson-efuse.o
-> -obj-$(CONFIG_NVMEM_MESON_MX_EFUSE)	+= nvmem_meson_mx_efuse.o
-> -nvmem_meson_mx_efuse-y		:= meson-mx-efuse.o
-> -obj-$(CONFIG_NVMEM_SNVS_LPGPR)	+= nvmem_snvs_lpgpr.o
-> -nvmem_snvs_lpgpr-y		:= snvs_lpgpr.o
-> -obj-$(CONFIG_NVMEM_RAVE_SP_EEPROM)	+= nvmem-rave-sp-eeprom.o
-> -nvmem-rave-sp-eeprom-y		:= rave-sp-eeprom.o
-> +nvmem-rockchip-otp-y			:= rockchip-otp.o
->   obj-$(CONFIG_NVMEM_SC27XX_EFUSE)	+= nvmem-sc27xx-efuse.o
-> -nvmem-sc27xx-efuse-y		:= sc27xx-efuse.o
-> -obj-$(CONFIG_NVMEM_ZYNQMP)	+= nvmem_zynqmp_nvmem.o
-> -nvmem_zynqmp_nvmem-y		:= zynqmp_nvmem.o
-> -obj-$(CONFIG_NVMEM_SPRD_EFUSE)	+= nvmem_sprd_efuse.o
-> -nvmem_sprd_efuse-y		:= sprd-efuse.o
-> -obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
-> -nvmem-rmem-y			:= rmem.o
-> -obj-$(CONFIG_NVMEM_BRCM_NVRAM)	+= nvmem_brcm_nvram.o
-> -nvmem_brcm_nvram-y		:= brcm_nvram.o
-> -obj-$(CONFIG_NVMEM_LAYERSCAPE_SFP)	+= nvmem-layerscape-sfp.o
-> -nvmem-layerscape-sfp-y		:= layerscape-sfp.o
-> +nvmem-sc27xx-efuse-y			:= sc27xx-efuse.o
-> +obj-$(CONFIG_NVMEM_SNVS_LPGPR)		+= nvmem_snvs_lpgpr.o
-> +nvmem_snvs_lpgpr-y			:= snvs_lpgpr.o
-> +obj-$(CONFIG_NVMEM_SPMI_SDAM)		+= nvmem_qcom-spmi-sdam.o
-> +nvmem_qcom-spmi-sdam-y			+= qcom-spmi-sdam.o
-> +obj-$(CONFIG_NVMEM_SPRD_EFUSE)		+= nvmem_sprd_efuse.o
-> +nvmem_sprd_efuse-y			:= sprd-efuse.o
-> +obj-$(CONFIG_NVMEM_STM32_ROMEM)		+= nvmem_stm32_romem.o
-> +nvmem_stm32_romem-y 			:= stm32-romem.o
->   obj-$(CONFIG_NVMEM_SUNPLUS_OCOTP)	+= nvmem_sunplus_ocotp.o
-> -nvmem_sunplus_ocotp-y		:= sunplus-ocotp.o
-> -obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
-> -nvmem-apple-efuses-y 		:= apple-efuses.o
-> -obj-$(CONFIG_NVMEM_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
-> -nvmem-microchip-otpc-y		:= microchip-otpc.o
-> -obj-$(CONFIG_NVMEM_U_BOOT_ENV)	+= nvmem_u-boot-env.o
-> -nvmem_u-boot-env-y		:= u-boot-env.o
-> +nvmem_sunplus_ocotp-y			:= sunplus-ocotp.o
-> +obj-$(CONFIG_NVMEM_SUNXI_SID)		+= nvmem_sunxi_sid.o
-> +nvmem_sunxi_sid-y			:= sunxi_sid.o
-> +obj-$(CONFIG_NVMEM_U_BOOT_ENV)		+= nvmem_u-boot-env.o
-> +nvmem_u-boot-env-y			:= u-boot-env.o
-> +obj-$(CONFIG_NVMEM_UNIPHIER_EFUSE)	+= nvmem-uniphier-efuse.o
-> +nvmem-uniphier-efuse-y			:= uniphier-efuse.o
-> +obj-$(CONFIG_NVMEM_VF610_OCOTP)		+= nvmem-vf610-ocotp.o
-> +nvmem-vf610-ocotp-y			:= vf610-ocotp.o
-> +obj-$(CONFIG_NVMEM_ZYNQMP)		+= nvmem_zynqmp_nvmem.o
-> +nvmem_zynqmp_nvmem-y			:= zynqmp_nvmem.o
