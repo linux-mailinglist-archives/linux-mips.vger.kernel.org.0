@@ -2,62 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322E05A6663
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Aug 2022 16:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87125A66AA
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Aug 2022 16:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiH3OgM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Aug 2022 10:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S230033AbiH3Ovx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Aug 2022 10:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiH3OgK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Aug 2022 10:36:10 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837B48F97E;
-        Tue, 30 Aug 2022 07:36:08 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id d12-20020a05600c34cc00b003a83d20812fso4668000wmq.1;
-        Tue, 30 Aug 2022 07:36:08 -0700 (PDT)
+        with ESMTP id S229909AbiH3Ovp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Aug 2022 10:51:45 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4002A1037D2
+        for <linux-mips@vger.kernel.org>; Tue, 30 Aug 2022 07:51:42 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id r204-20020a1c44d5000000b003a84b160addso2003368wma.2
+        for <linux-mips@vger.kernel.org>; Tue, 30 Aug 2022 07:51:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=us85x22JTlrF7wD8uYoUk5r++buWfK/pYA6gIAEUhK8=;
-        b=COOUiPIa2mOTQAJAn8kcVFqO05W8SHxtgh7b277tT2ei9x7z1DlxP/I6+fCfgtXVaS
-         DfTXuR6UyDGanIwCYIhuUUS3NJtEr907BQ1Make7tQF5GU4M0ryo/bW4rvpVGQwFq+aH
-         msWjVaqTnDps1MT+EzzGVFSFAuJu2sLdk1mmfb6qdFeWEk0mikllVRaq3nrWJW/+sCMP
-         8+rLTZ+y0F+NsCyJq3WR72a93Tc3OSa67utCt9paFoAjiox+jKfJ4k8N/wOmRgiZdCVN
-         rELqFydlcMqkyHlVAebu6OU6waJT+32kwn8NKCTmQKPZ0MaEOuJrhBYxtxX+8nOgYPo8
-         oXiw==
+         :from:to:cc;
+        bh=vVOUHVR2PLgo4faefb2vLhSUsuhrw3ywut0de3rhXVw=;
+        b=sAfwqDbDynPJ5DcsZHn1V+HXNVmts9AkCL9NoArysuOqMOBSTvIo/63wPqh4Iweaar
+         zYUqH8nMPhOj/enNQZquCtsxTjqe6SzuvKrKYBJlozLpxdzWjhpeq4j/ZOjfd094Hmbs
+         TGhArJfg4Qm1Ldhn4F3Jzl140AVYf+JTyHJyj1YjkL8O2GiA/3QH5pBP3JzvE7aK7CIg
+         lH+sGyTROUcat0N+11VkoLZ69CYKZg7Tif7aEzkurhsONog7X3fa/JI3GFtvs3NUWfzs
+         98TMmbmODeOM4X7pzcoBsdKxJ7RjR/37sAdwodOn9Ibe7vLDc7cV7iG6SipOpPiaDjcR
+         K95Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=us85x22JTlrF7wD8uYoUk5r++buWfK/pYA6gIAEUhK8=;
-        b=lm8AXNzQmegjKdyqVUSS1fZKjOVKKh3eO3qkq8d+8xtRZDELQgyxusYP5RITHj5AGA
-         lPuvCg/iAMJQyIhDgIASJy1hHTDDpA+IwKGwv80rL5Gro2WD8gGz0smzBvQzIpVpJcgL
-         rAwb393PS9/qXb1QI0CkOz5Mx0TyTRbltmRhxZbIlbUhOqfOyqVfCQDxIDY1QIgBFgK1
-         FsVAxN0DdYpFtzBy8j1JNpRH6lYIl4Plg8XKNON4hxaCrjhnQnAga1HExQ0TWGERTVNI
-         9hvaN5xAV6Zx8T2nXRJfUmmpLoMCmNR2FxDzl4hhOuqyqeSBvqybF0ZHoQbgsOUJaO5Q
-         1JfA==
-X-Gm-Message-State: ACgBeo3DZZLRFhK93p59uKqDrKvRv8WBLMQpt87xf95z1/4zdsYA5AU1
-        /oaTbn6jbeOjfqIB+dD8/1k=
-X-Google-Smtp-Source: AA6agR45ExdTimhT2F8/OeCUtb+YhaF+hFoTBufVmwvO9EZdJ+yS+f8N6ztPsowvo7qAi2/nYByS0g==
-X-Received: by 2002:a05:600c:3b05:b0:3a8:4c81:54df with SMTP id m5-20020a05600c3b0500b003a84c8154dfmr3282778wms.129.1661870166813;
-        Tue, 30 Aug 2022 07:36:06 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id i17-20020a5d55d1000000b00226d945c72esm6686369wrw.96.2022.08.30.07.36.04
+         :x-gm-message-state:from:to:cc;
+        bh=vVOUHVR2PLgo4faefb2vLhSUsuhrw3ywut0de3rhXVw=;
+        b=4rKzuYR0WuRRQq/Sevlj+trJNJnvk4WtCFeMg5H/ZKKrPvCb70gB+II36pRV8lXhap
+         QoifcRg0s+JXu+BVZMw/cbcYN3lce7zDRqO0/6BN+81LV1las10qeVGJ8PMy4HQekjXF
+         YEhJy4ZZmT2egQLNOXAeFkEtohNNxiwe0VK/rv5uv/DlkdPqcybDaKf5WSr1LLcHdejG
+         CABxnIH0A8uKxtD4P4jM0VimvX0fUPORveHPbOO58znuI/YF8s7EbpFyDxsg93Db7cmG
+         4ZeVuf+Y7su9WoZz6cy3FDUwAGwO9LSmlWW4BbuE1XJE+61c7Jszwg//KN7TXuw/WvGj
+         7a2Q==
+X-Gm-Message-State: ACgBeo1aHUc30bfJy/Syc4VECWlWjatjZvaiImstNwAkP62Fj7AhA8xC
+        cTWDyU7463/BRaMWG0QZZP0GMQ==
+X-Google-Smtp-Source: AA6agR6tlJq/YAXO/1cY2WYYTLI1veoGfTMxlt+IJlkpejsgW/Wcgnlw/JhJndGznvzdPVXtsD7bxw==
+X-Received: by 2002:a05:600c:358c:b0:3a5:dac0:dc3 with SMTP id p12-20020a05600c358c00b003a5dac00dc3mr9538572wmq.60.1661871100519;
+        Tue, 30 Aug 2022 07:51:40 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id u11-20020a05600c19cb00b003a5a5069107sm12109262wmq.24.2022.08.30.07.51.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 07:36:05 -0700 (PDT)
-Message-ID: <8b4da979-fe50-4d09-f679-277053730ff1@gmail.com>
-Date:   Tue, 30 Aug 2022 16:36:03 +0200
+        Tue, 30 Aug 2022 07:51:39 -0700 (PDT)
+Message-ID: <6b3056c5-4668-ed8b-73ff-374bcff9c4be@linaro.org>
+Date:   Tue, 30 Aug 2022 15:51:37 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Subject: Re: [PATCH V2 1/2] nvmem: prefix all symbols with NVMEM_
 Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
 Cc:     Russell King <linux@armlinux.org.uk>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -67,6 +66,7 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -92,14 +92,14 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
         =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
 References: <20220830134059.18744-1-zajec5@gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 In-Reply-To: <20220830134059.18744-1-zajec5@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -108,16 +108,12 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 30/08/2022 15:40, Rafał Miłecki wrote:
+On 30/08/2022 14:40, Rafał Miłecki wrote:
 > From: Rafał Miłecki <rafal@milecki.pl>
 > 
 > This unifies all NVMEM symbols. They follow one style now.
 > 
 > Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-
-For the MediaTek part:
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
 > ---
 >   arch/arm/configs/multi_v7_defconfig |  6 +++---
 >   arch/arm/configs/qcom_defconfig     |  2 +-
@@ -130,6 +126,10 @@ Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 >   drivers/thermal/qcom/Kconfig        |  2 +-
 >   9 files changed, 37 insertions(+), 37 deletions(-)
 > 
+
+Applied thanks,
+
+--srini
 > diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
 > index b1a25b8c11e7..b61b2e3d116b 100644
 > --- a/arch/arm/configs/multi_v7_defconfig
