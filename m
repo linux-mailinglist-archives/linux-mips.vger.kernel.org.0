@@ -2,425 +2,294 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245055A870C
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Aug 2022 21:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715695A88EF
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Sep 2022 00:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbiHaTzB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 31 Aug 2022 15:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S231304AbiHaWVM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 31 Aug 2022 18:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiHaTy6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Aug 2022 15:54:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE92FC8
-        for <linux-mips@vger.kernel.org>; Wed, 31 Aug 2022 12:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661975688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=svDOqsVD4qeIC1aKtCh3SbdYv27RpwGCDoSktV2RiVw=;
-        b=inUI2vqyrg/k5fnoA2c1WDfGGAuYJT+j08VJAmho2SNRgHjn/H/tfig82GAbdVkoxbS8gw
-        /ItsWZDCH+wfJLYfLDrFLs9D3Ijw5Q5YU1eQnoj3NBYB/p/kyVQ7zDbH3SB4AL6QLKhE4L
-        w4dCFstB4RPOO3o6i0DhOtYPC0K1vjA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-336-3zdW1BcFPr6Lb_vvtYX_nQ-1; Wed, 31 Aug 2022 15:54:44 -0400
-X-MC-Unique: 3zdW1BcFPr6Lb_vvtYX_nQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A13EF101A54E;
-        Wed, 31 Aug 2022 19:54:43 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.48.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 269B61415117;
-        Wed, 31 Aug 2022 19:54:41 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 15:54:38 -0400
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-fsdevel@vger.kernel.org,
-        linux-audit@redhat.com, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] fs/xattr: wire up syscalls
-Message-ID: <Yw+8fo3k1tIuscoR@madcap2.tricolour.ca>
-References: <20220830152858.14866-1-cgzones@googlemail.com>
+        with ESMTP id S230257AbiHaWVL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Aug 2022 18:21:11 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5953C9E102;
+        Wed, 31 Aug 2022 15:21:10 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VL3BAo026541;
+        Wed, 31 Aug 2022 22:20:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=I9NXolNX9h9NY2hQxxktiuzx6spLmVozYssEapm1Vt4=;
+ b=Lu/fwiDUo7Y/x61Czz20+tbxJMsA6m+kGsrR9Lz45WcDUeS6PsNE+81BpU7KbTxo+Ynn
+ L67pas1XEW5YlvXEEQmnBbm6Xj0qggnUmAbhbetrdBSOv7CPYgU2Rr8AN95H1TjenVAa
+ YULrzFWMB1v+f5V8oUVZKYrnaOU52zDyUhDlyJ8U3gCVQDtXniVM1KYdWMPrXsivkJIt
+ Y22si7ecLsyiWbSC5wneDpaUwL+0l7qAckgmkiBNKsgPMItenVx7ylNRVvu9N5K6eSAe
+ DTWxh6dXzgYN3d+Jj1e6sXlHZGH3p9ghY6xu70B7TqO2N2BeVBfj7SMoPyMBA+jrPPOy 1w== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j7bttagmq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 Aug 2022 22:20:45 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27VJsh9m033710;
+        Wed, 31 Aug 2022 22:20:44 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ja6gqt9jn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 Aug 2022 22:20:44 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q1EnZ0fHSf45lhqSu6Ki6gPOM6AmrlBljt34et5NPRPaDzSDaJ9KcWaiF+LM/MSRAuQ1j9X5oZI4ozKfWSadnkV5eUg0XtJh6q5p6gfQY5fCCZ01ZVkY61TGTdtZr7Gx739/EOQf8GUO6t2G5FGWNuUPG/L0W2hEpfvyrVmC+IZSh2hL8bqzX5I3zPDNqO3xX2AoiQZ0xx3rH0/N+f4iohusrO7ey8+IJVAFBT40SGYdadcYo78iyEhNCZfxwLNpRSG35t3myf+bwb+HtOh/GMs3MVO1ZhzXgVNSPe/1KSVs7MbjeuqQQPXohaa6QkgY/tulFQ08nq6hF4k6mTtitg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I9NXolNX9h9NY2hQxxktiuzx6spLmVozYssEapm1Vt4=;
+ b=Dkh1OmYdsQyjmfmmXdvZoAig/qiz3qM5k9Ih3Z1J+FMQWHlDC2e1Kj81xLV4SC/9I6ToMdXbVnRJUTVciG9FXlU1YkAYnc7SNzlkfbFI84EnD0LDQ7DiqhhB95O1HGAy3Vd+KKqcDxXbc3KTc1eRuYm1VuJ8KBrszhg2qJe+Y32cefrHeoA1XVz/Z7HrYg9+HzyTNr9ydanbcLA5lvD8w7sMbWALmac/9sHD4xg5dfGbE+hxBXeYpFdsgTuLuKQCPVQGXY5EaTY/Ylse5g2G0yc+7Yc3t5fA86+teUSEkXfe3cS70yWqROUyQ27ALRu+ggD299BICtmxT/v3l7mUAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I9NXolNX9h9NY2hQxxktiuzx6spLmVozYssEapm1Vt4=;
+ b=CURxNlBd5qOpPfJEDC/WuV1LF8k7MhBYsogMATADU6dgqB0lgNUeZ8WNWQjSJjSLFHaOFL6vModT35SeBPTrXjjNmvv7zND80V8mLkvFqUWXEwh+ZZNiknLZlPRt8etou7dV8B/gFUtS+2u90lOp4SVyk+evVL6zYWnu3jQ20/o=
+Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
+ by PH0PR10MB4488.namprd10.prod.outlook.com (2603:10b6:510:35::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Wed, 31 Aug
+ 2022 22:20:42 +0000
+Received: from BYAPR10MB2663.namprd10.prod.outlook.com
+ ([fe80::95ab:eb8e:a0a7:3f0d]) by BYAPR10MB2663.namprd10.prod.outlook.com
+ ([fe80::95ab:eb8e:a0a7:3f0d%5]) with mapi id 15.20.5588.010; Wed, 31 Aug 2022
+ 22:20:41 +0000
+Subject: Re: [PATCH v2] Revert "swiotlb: panic if nslabs is too small"
+To:     Yu Zhao <yuzhao@google.com>, Christoph Hellwig <hch@infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     iommu@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220829232934.3277747-1-yuzhao@google.com>
+ <20220831063818.3902572-1-yuzhao@google.com>
+From:   Dongli Zhang <dongli.zhang@oracle.com>
+Message-ID: <747f76e1-a5ec-150c-311e-a60396f6f7ab@oracle.com>
+Date:   Wed, 31 Aug 2022 15:20:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+In-Reply-To: <20220831063818.3902572-1-yuzhao@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA9PR11CA0002.namprd11.prod.outlook.com
+ (2603:10b6:806:6e::7) To BYAPR10MB2663.namprd10.prod.outlook.com
+ (2603:10b6:a02:a9::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830152858.14866-1-cgzones@googlemail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c1607f37-9dd0-4ad2-39fd-08da8b9f0a47
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4488:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2IDrOcJMJt7u9pysJ34Z4UqlU8RWkvM6/VsSrZg7GTZ+XJlqoAPlrYHH6ti+bIrVz8aIGm8RVlhcnYMnyB8uuiyf4ZaLxLxBEZuD/Me+LQempsrX4/mt5iA7JhyPvohcKfXtfD/uZTpdWa9pDxC/X98woIYgWhQNgtmPpHU6zU2Qx9tsjSItPxPuCRPEvU+LxMD3GvPJ+bqQnHulVnkqWm8eSGlDOd51KWfUdxvY+YAol3ceqLckcFCWHmHIljmCsGJtohXKvvYQt32OG/JZB23qKngte7NLUIHrM2Zq9w/UJblFsZobhRZXBGALz+gUHJfg6MW54WWOBT9Cstwk64qN5OyVkkB0u3gTzqDy7nNIaJzCCqgsEpxiRLD0GXvHDb+1lVWP1MM8egcQPV2N2dnzXTsM1pHJ2Fv/oy9VjpEpXBPBiPCHaAYd7p0AMi2ObJ1ckArk2B/6Ef8ZFWQJMtGjpCrRmdkvmUMR1Y2uvE4qG3keeVCoGLvWVPSgLIetCE+SR1sulazw6SFxGk5QCLH31/5p1Q2YH59fsAGY+1AfYTS/JEzos9gR8gK2EXfAJ4oCRht7/Iicdj503b+8ssZAXXEYeFMUMYEAxkTgovkCUyMejHZsLSLsXnFzcUF597BQ9R+jnBfzeukmJv0i+gMJtE+lPFUKz1HyQee4yrVF9qb0bvi/fikpKgvOWrBIEIhrsPvbxVMqjOiNR5am2iEOLvE/clLKV4kYTHOWhctyIMCdxhAJT9OKDOiDOyECM6nxiJh8M+CyacDYdDvSW1zSFztcW6Kb2dG5QfGfW0b+PPUcGoQcXhLlV6ZNCG6vGWQgXJR7YEtSpReJL05e7zObfTf9HwTswVIi3yp67J6XBVlZA6FTuHHU39slxSJ+wkd9+KWP/o4McJtkOWH3TBdSEWZW5EkjFEOPJZlZZSI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(346002)(376002)(366004)(136003)(396003)(66556008)(31686004)(66476007)(8676002)(4326008)(66946007)(36756003)(38100700002)(86362001)(31696002)(107886003)(2906002)(53546011)(5660300002)(478600001)(6666004)(83380400001)(2616005)(186003)(6512007)(44832011)(41300700001)(966005)(54906003)(316002)(110136005)(6506007)(6486002)(8936002)(160913001)(15963001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bVlVd01Wd1N3NjFFOVFoL0J5TC9vaGx4MlVYNi9hMHVJWVQxeFExY3c0ZzA4?=
+ =?utf-8?B?MnB2dkxWZmxxaVF1TlRZb3BHRUduQ0NYTUVnL25HdXpBa2xxOXBBNE96b2xB?=
+ =?utf-8?B?dnhORG5uSzh1czV3SG1ndkNCeFVWaWV6QjE0S0ZZSVFtdDRqOHQ4a1dUWDE3?=
+ =?utf-8?B?b3NZYmtQNWl4SXhuMk1hSHlnY0ZmNWxXdkxXNE1oQThjNnQ0TjJzS29PRVFS?=
+ =?utf-8?B?bzhCUnZnTG91dmVNRnBlbi91M2ludUhtV1hPNzNrN0xwZmpMZmRvOXlrSjFN?=
+ =?utf-8?B?RjNCdEdYeWZOK1ZFZ1JxbzFJZE9ZdEdacmMrVkwzc3dOSWxySWlwYVUvWktJ?=
+ =?utf-8?B?NnRnbG9BRlVENmJuVWlOMTVMNFZValpabzFHTjBCT1JWNHJBdk1ubkYvaUFS?=
+ =?utf-8?B?RjFnanJWRTBvNmhUcHpoMWxZd05FWFVZeWN4OWpjT3ZjMEhuZXRJN2s2czFw?=
+ =?utf-8?B?NzhuRkc1TTV0RTUrY05vd1ZvL3hFcWZ1aUdPUHZtWmFoTUF2SDhWeUJKM2x0?=
+ =?utf-8?B?R3p1Vkh0KzY1MkdVZlVPUTh2WHQvZGNRTno1ZzFpcVoyRnQ5WStKekhqSXNv?=
+ =?utf-8?B?Qko2R0hxVTZJbmtPb290ZlplZ3NUS3dFSzVKTE1ZR0NSUGRvTkwvWXVVUC84?=
+ =?utf-8?B?VzcrVFpLOWdMekVMS3BWZWRZdVgxMERWdW1Qc1Z2K29HL1Q2dFd0WXp5Y25D?=
+ =?utf-8?B?Q1FEbXplMlI2L1lORXBZZFBPcTZBakF0WVVEclZTZjJvMEIzWnMxL2NQWGRN?=
+ =?utf-8?B?N2FKejhCMTZCOEFLWmhyQVRLa1NGWWpveVdjZTBRUGFDQis1THBMOWZ5V3Rx?=
+ =?utf-8?B?cEVUOGlmNk4rK3NLM1R0S2c5Vnp3emVMVTVyd0kwUjlDN1BoVWVQeWYwVDdG?=
+ =?utf-8?B?Y1pVUHprS1lCeHgva2hVVGdmNktxOU93cGlZYVFrNTBTL24ybDltVmJYTTJL?=
+ =?utf-8?B?Y2Z4UldsdzVoTGZnUEcyczY5VVlnUXl6VitVQnd1cWFGTmlIS28yblJaZzJi?=
+ =?utf-8?B?NEtPY0hmQU5zZTQ0Tzd0VXhvSUVYeXVUc3I3UGRDMzIyTko0S2JlMzdUN0JR?=
+ =?utf-8?B?bGdsZzE0a0pMa3l0V0NHS2dXTlBjL1JoNnVKV0UyZmFJaWZ3Y2pKNFNDcnlI?=
+ =?utf-8?B?L0NxUVRXN0JCWERXYS9US2dtUDJobXczV2J5bDc2SWdLZ2w2L0VZQkhvTjFK?=
+ =?utf-8?B?Y3h2WEhmVVQrWXB0Rks3UnM5M2JLR1M3TWFqSmhic3NUeDN6R2c2T2lNMGRy?=
+ =?utf-8?B?N2VGclZmUHMzY0hqS1FUcnRTNUNoTlZqWENzUU1QWlA5UmhSUXJDb0xteFlh?=
+ =?utf-8?B?dCtEOW8yWnFlYWNQeUlCTDM5TWlpMGdjcGh4VktleXZCYlNucGtHTGhpMmNw?=
+ =?utf-8?B?TDlZSEpTNzNtb1BJd3FMTUthODhYbkpnZnhQMEJjUndtMWxka0NhaHUrcVRm?=
+ =?utf-8?B?ZGVzTlZpZ2ZTYTNSQUtucnd3bENHazkzTTQrSTFjUjZMZzlIelhoYWdIbmF1?=
+ =?utf-8?B?dEhWTzFlclYrVnVWSWpiamlNQ05DQ2E1elo5NXlWdE1WKzdDSkdYZDlPZzY4?=
+ =?utf-8?B?MnJRcFBpc0xRRU0rTlNVWVpMNXZxMktvVkc3WElvUG95TTQ2a1pmbzBIaWtU?=
+ =?utf-8?B?TjNSS2E5TTNncEhGZ3hrRlJVNVZxSkZlRWR1ZzllSWJMRG5zSThqVndYTjhG?=
+ =?utf-8?B?cXBGa25wbUt0YUdmUEJCajc5QS9xbFZIRlowclk0TnhKamxXQTQ5L1dsZkVH?=
+ =?utf-8?B?UVZBSlU4N3EyTnp4MzdkZzR3RzlTeUFUR21xODhlL1ZHM0RheCs3TVUzZEZ0?=
+ =?utf-8?B?WlYybm9zVmEzN1ZVSy9xSHdrWFFYV0g3amMzKzV2Nm9mb3p4cGlJQWovSExR?=
+ =?utf-8?B?SjNJajF2ZWRkSHEwMFRBeXh1QzBWa3NYVzg2MmM3TzNjZFl5eXV1a2V6b0ZN?=
+ =?utf-8?B?c00va3lQK2RzaUhhYlFVakVxQWxDd2VBOWs3MUMwS2ZwbTQxSXF4c2x5L0M5?=
+ =?utf-8?B?c2lkVEdScjZqTHU5MXhWMUNSelBTci91Y0RzUUlRbHI4cnovYVV6ZFlOTDd6?=
+ =?utf-8?B?Vm1ieFdQK1ExeWdkaWJ6U1ZkSG82anAzSXFTNmNlZlM2dDhHcnNROGdBWG9C?=
+ =?utf-8?B?YVk0ZGJZK2MySHZWei9iSjU1RDRqTXhnVjlyVkFOVUdscVA1L1ZXWkIwQm9N?=
+ =?utf-8?Q?eWfDBLmOIVgqc4Qz0mEhzxs=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1607f37-9dd0-4ad2-39fd-08da8b9f0a47
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 22:20:41.7503
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LqWwvVs10v6U5qQrepERso0VCkv8gndFBrSfSwDZJv1IqEaWuldGhYUdJ6v+qCNOE5INDrtbaZYJ0honrPZ4aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4488
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-31_14,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxscore=0 spamscore=0 phishscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208310109
+X-Proofpoint-ORIG-GUID: L_KnwqI66TqP1AXyXeUWtojrTw1yMtcW
+X-Proofpoint-GUID: L_KnwqI66TqP1AXyXeUWtojrTw1yMtcW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022-08-30 17:28, Christian Göttsche wrote:
-> Enable the new added extended attribute related syscalls.
+Hi Yu,
+
+As we discussed in the past, the swiotlb panic on purpose because the
+mips/cavium-octeon/dma-octeon.c requests to allocate only PAGE_SIZE swiotlb
+buffer. This is smaller than IO_TLB_MIN_SLABS.
+
+The below comments mentioned that IO_TLB_MIN_SLABS is the "Minimum IO TLB size
+to bother booting with".
+
+56 /*
+57  * Minimum IO TLB size to bother booting with.  Systems with mainly
+58  * 64bit capable cards will only lightly use the swiotlb.  If we can't
+59  * allocate a contiguous 1MB, we're probably in trouble anyway.
+60  */
+61 #define IO_TLB_MIN_SLABS ((1<<20) >> IO_TLB_SHIFT)
+
+
+The arm may create swiotlb conditionally. That is, the swiotlb is not
+initialized if (1) CONFIG_ARM_LPAE is not set (line 273), or (2) max_pfn <=
+arm_dma_pfn_limit (line 274).
+
+arch/arm/mm/init.c
+
+271 void __init mem_init(void)
+272 {
+273 #ifdef CONFIG_ARM_LPAE
+274         swiotlb_init(max_pfn > arm_dma_pfn_limit, SWIOTLB_VERBOSE);
+275 #endif
+276
+277         set_max_mapnr(pfn_to_page(max_pfn) - mem_map);
+
+
+On x86, the swiotlb is not initialized if the memory is small (> MAX_DMA32_PFN,
+at line 47), or the secure memory is not required.
+
+44 static void __init pci_swiotlb_detect(void)
+45 {
+46         /* don't initialize swiotlb if iommu=off (no_iommu=1) */
+47         if (!no_iommu && max_possible_pfn > MAX_DMA32_PFN)
+48                 x86_swiotlb_enable = true;
+49
+50         /*
+51          * Set swiotlb to 1 so that bounce buffers are allocated and used for
+52          * devices that can't support DMA to encrypted memory.
+53          */
+54         if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT))
+55                 x86_swiotlb_enable = true;
+56
+57         /*
+58          * Guest with guest memory encryption currently perform all DMA through
+59          * bounce buffers as the hypervisor can't access arbitrary VM memory
+60          * that is not explicitly shared with it.
+61          */
+62         if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
+63                 x86_swiotlb_enable = true;
+64                 x86_swiotlb_flags |= SWIOTLB_FORCE;
+65         }
+66 }
+
+
+Regardless whether the current patch will be reverted, unless there is specific
+reason (e.g., those PAGE_SIZE will be used), I do not think it is a good idea to
+allocate <IO_TLB_MIN_SLABS swiotlb buffer. I will wait for the suggestion from
+the swiotlb maintainer.
+
+Since I do not have a mips environment, I am not able to test if the below makes
+any trouble in your situation at arch/mips/cavium-octeon/dma-octeon.c.
+
+@@ -234,6 +234,8 @@ void __init plat_swiotlb_setup(void)
+                swiotlbsize = 64 * (1<<20);
+ #endif
+
+-       swiotlb_adjust_size(swiotlbsize);
+-       swiotlb_init(true, SWIOTLB_VERBOSE);
++       if (swiotlbsize != PAGE_SIZE) {
++               swiotlb_adjust_size(swiotlbsize);
++               swiotlb_init(true, SWIOTLB_VERBOSE);
++       }
+ }
+
+
+Thank you very much!
+
+Dongli Zhang
+
+On 8/30/22 11:38 PM, Yu Zhao wrote:
+> This reverts commit 0bf28fc40d89b1a3e00d1b79473bad4e9ca20ad1.
 > 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-
-I can't speak to the completeness of the arch list, but I'm glad to see
-the audit attr change bits in there.
-
+> Reasons:
+>   1. new panic()s shouldn't be added [1].
+>   2. It does no "cleanup" but breaks MIPS [2].
+> 
+> v2: properly solved the conflict [3] with
+> commit 20347fca71a38 ("swiotlb: split up the global swiotlb lock")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> [1] https://urldefense.com/v3/__https://lore.kernel.org/r/CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld*pnerc4J2Ag990WwAA@mail.gmail.com/__;Kw!!ACWV5N9M2RV99hQ!PPVATbHVDT6TZ4sqoj5G6vfAJGPAEz-Lmp9njTsM2PPYPQqCP6aq5RF8FDmrXDlSzxJmTUUSgOW3yjKDtg$  
+> [2] https://urldefense.com/v3/__https://lore.kernel.org/r/20220820012031.1285979-1-yuzhao@google.com/__;!!ACWV5N9M2RV99hQ!PPVATbHVDT6TZ4sqoj5G6vfAJGPAEz-Lmp9njTsM2PPYPQqCP6aq5RF8FDmrXDlSzxJmTUUSgOXQRsYjKQ$  
+> [3] https://urldefense.com/v3/__https://lore.kernel.org/r/202208310701.LKr1WDCh-lkp@intel.com/__;!!ACWV5N9M2RV99hQ!PPVATbHVDT6TZ4sqoj5G6vfAJGPAEz-Lmp9njTsM2PPYPQqCP6aq5RF8FDmrXDlSzxJmTUUSgOW_tjcVMA$  
+> 
+> Fixes: 0bf28fc40d89b ("swiotlb: panic if nslabs is too small")
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
 > ---
-> TODO:
->   - deprecate traditional syscalls (setxattr, ...)?
->   - resolve possible conflicts with proposed readfile syscall
-> ---
->  arch/alpha/kernel/syscalls/syscall.tbl      |  4 ++++
->  arch/arm/tools/syscall.tbl                  |  4 ++++
->  arch/arm64/include/asm/unistd.h             |  2 +-
->  arch/arm64/include/asm/unistd32.h           |  8 ++++++++
->  arch/ia64/kernel/syscalls/syscall.tbl       |  4 ++++
->  arch/m68k/kernel/syscalls/syscall.tbl       |  4 ++++
->  arch/microblaze/kernel/syscalls/syscall.tbl |  4 ++++
->  arch/mips/kernel/syscalls/syscall_n32.tbl   |  4 ++++
->  arch/mips/kernel/syscalls/syscall_n64.tbl   |  4 ++++
->  arch/mips/kernel/syscalls/syscall_o32.tbl   |  4 ++++
->  arch/parisc/kernel/syscalls/syscall.tbl     |  4 ++++
->  arch/powerpc/kernel/syscalls/syscall.tbl    |  4 ++++
->  arch/s390/kernel/syscalls/syscall.tbl       |  4 ++++
->  arch/sh/kernel/syscalls/syscall.tbl         |  4 ++++
->  arch/sparc/kernel/syscalls/syscall.tbl      |  4 ++++
->  arch/x86/entry/syscalls/syscall_32.tbl      |  4 ++++
->  arch/x86/entry/syscalls/syscall_64.tbl      |  4 ++++
->  arch/xtensa/kernel/syscalls/syscall.tbl     |  4 ++++
->  include/asm-generic/audit_change_attr.h     |  6 ++++++
->  include/linux/syscalls.h                    |  8 ++++++++
->  include/uapi/asm-generic/unistd.h           | 12 +++++++++++-
->  21 files changed, 98 insertions(+), 2 deletions(-)
+>  kernel/dma/swiotlb.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 > 
-> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-> index 3515bc4f16a4..826a8a36da81 100644
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@ -490,3 +490,7 @@
->  558	common	process_mrelease		sys_process_mrelease
->  559	common  futex_waitv                     sys_futex_waitv
->  560	common	set_mempolicy_home_node		sys_ni_syscall
-> +561	common	setxattrat			sys_setxattrat
-> +562	common	getxattrat			sys_getxattrat
-> +563	common	listxattrat			sys_listxattrat
-> +564	common	removexattrat			sys_removexattrat
-> diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-> index ac964612d8b0..f0e9d9d487f0 100644
-> --- a/arch/arm/tools/syscall.tbl
-> +++ b/arch/arm/tools/syscall.tbl
-> @@ -464,3 +464,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common	futex_waitv			sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-> index 037feba03a51..63a8a9c4abc1 100644
-> --- a/arch/arm64/include/asm/unistd.h
-> +++ b/arch/arm64/include/asm/unistd.h
-> @@ -39,7 +39,7 @@
->  #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
->  #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> index c5a9190b218f..dd8863987e0c 100644
+> --- a/kernel/dma/swiotlb.c
+> +++ b/kernel/dma/swiotlb.c
+> @@ -326,9 +326,6 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
+>  		swiotlb_adjust_nareas(num_possible_cpus());
 >  
-> -#define __NR_compat_syscalls		451
-> +#define __NR_compat_syscalls		455
->  #endif
+>  	nslabs = default_nslabs;
+> -	if (nslabs < IO_TLB_MIN_SLABS)
+> -		panic("%s: nslabs = %lu too small\n", __func__, nslabs);
+> -
+>  	/*
+>  	 * By default allocate the bounce buffer memory from low memory, but
+>  	 * allow to pick a location everywhere for hypervisors with guest
+> @@ -341,8 +338,7 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
+>  	else
+>  		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
+>  	if (!tlb) {
+> -		pr_warn("%s: Failed to allocate %zu bytes tlb structure\n",
+> -			__func__, bytes);
+> +		pr_warn("%s: failed to allocate tlb structure\n", __func__);
+>  		return;
+>  	}
 >  
->  #define __ARCH_WANT_SYS_CLONE
-> diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-> index 604a2053d006..cd6ac63376d1 100644
-> --- a/arch/arm64/include/asm/unistd32.h
-> +++ b/arch/arm64/include/asm/unistd32.h
-> @@ -907,6 +907,14 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
->  __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->  #define __NR_set_mempolicy_home_node 450
->  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
-> +#define __NR_setxattrat 451
-> +__SYSCALL(__NR_setxattrat, sys_setxattrat)
-> +#define __NR_getxattrat 452
-> +__SYSCALL(__NR_getxattrat, sys_getxattrat)
-> +#define __NR_listxattrat 453
-> +__SYSCALL(__NR_listxattrat, sys_listxattrat)
-> +#define __NR_removexattrat 454
-> +__SYSCALL(__NR_removexattrat, sys_removexattrat)
->  
->  /*
->   * Please add new compat syscalls above this comment and update
-> diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
-> index 78b1d03e86e1..6e942a935a27 100644
-> --- a/arch/ia64/kernel/syscalls/syscall.tbl
-> +++ b/arch/ia64/kernel/syscalls/syscall.tbl
-> @@ -371,3 +371,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-> index b1f3940bc298..0847efdee734 100644
-> --- a/arch/m68k/kernel/syscalls/syscall.tbl
-> +++ b/arch/m68k/kernel/syscalls/syscall.tbl
-> @@ -450,3 +450,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-> index 820145e47350..7f619bbc718d 100644
-> --- a/arch/microblaze/kernel/syscalls/syscall.tbl
-> +++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-> @@ -456,3 +456,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> index 253ff994ed2e..5e4206c0aede 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> @@ -389,3 +389,7 @@
->  448	n32	process_mrelease		sys_process_mrelease
->  449	n32	futex_waitv			sys_futex_waitv
->  450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	n32	setxattrat			sys_setxattrat
-> +452	n32	getxattrat			sys_getxattrat
-> +453	n32	listxattrat			sys_listxattrat
-> +454	n32	removexattrat			sys_removexattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> index 3f1886ad9d80..df0f053e76cd 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> @@ -365,3 +365,7 @@
->  448	n64	process_mrelease		sys_process_mrelease
->  449	n64	futex_waitv			sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	n64	setxattrat			sys_setxattrat
-> +452	n64	getxattrat			sys_getxattrat
-> +453	n64	listxattrat			sys_listxattrat
-> +454	n64	removexattrat			sys_removexattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> index 8f243e35a7b2..09ec31ad475f 100644
-> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> @@ -438,3 +438,7 @@
->  448	o32	process_mrelease		sys_process_mrelease
->  449	o32	futex_waitv			sys_futex_waitv
->  450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	o32	setxattrat			sys_setxattrat
-> +452	o32	getxattrat			sys_getxattrat
-> +453	o32	listxattrat			sys_listxattrat
-> +454	o32	removexattrat			sys_removexattrat
-> diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-> index 8a99c998da9b..fe3f4f41aee6 100644
-> --- a/arch/parisc/kernel/syscalls/syscall.tbl
-> +++ b/arch/parisc/kernel/syscalls/syscall.tbl
-> @@ -448,3 +448,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common	futex_waitv			sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-> index 2600b4237292..bee27f650397 100644
-> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
-> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-> @@ -530,3 +530,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-> index 799147658dee..d1fbad4b7864 100644
-> --- a/arch/s390/kernel/syscalls/syscall.tbl
-> +++ b/arch/s390/kernel/syscalls/syscall.tbl
-> @@ -453,3 +453,7 @@
->  448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
->  449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
->  450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
-> +451  common	setxattrat		sys_setxattrat			sys_setxattrat
-> +452  common	getxattrat		sys_getxattrat			sys_getxattrat
-> +453  common	listxattrat		sys_listxattrat			sys_listxattrat
-> +454  common	removexattrat		sys_removexattrat		sys_removexattrat
-> diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-> index 2de85c977f54..d4daa8afe45c 100644
-> --- a/arch/sh/kernel/syscalls/syscall.tbl
-> +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> @@ -453,3 +453,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-> index 4398cc6fb68d..510d5175f80a 100644
-> --- a/arch/sparc/kernel/syscalls/syscall.tbl
-> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
-> @@ -496,3 +496,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-> index 320480a8db4f..8488cc157fe0 100644
-> --- a/arch/x86/entry/syscalls/syscall_32.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-> @@ -455,3 +455,7 @@
->  448	i386	process_mrelease	sys_process_mrelease
->  449	i386	futex_waitv		sys_futex_waitv
->  450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	i386	setxattrat		sys_setxattrat
-> +452	i386	getxattrat		sys_getxattrat
-> +453	i386	listxattrat		sys_listxattrat
-> +454	i386	removexattrat		sys_removexattrat
-> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> index c84d12608cd2..f45d723d5a30 100644
-> --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> @@ -372,6 +372,10 @@
->  448	common	process_mrelease	sys_process_mrelease
->  449	common	futex_waitv		sys_futex_waitv
->  450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
-> +451	common	setxattrat		sys_setxattrat
-> +452	common	getxattrat		sys_getxattrat
-> +453	common	listxattrat		sys_listxattrat
-> +454	common	removexattrat		sys_removexattrat
->  
->  #
->  # Due to a historical design error, certain syscalls are numbered differently
-> diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-> index 52c94ab5c205..dbafe441a83f 100644
-> --- a/arch/xtensa/kernel/syscalls/syscall.tbl
-> +++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-> @@ -421,3 +421,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/include/asm-generic/audit_change_attr.h b/include/asm-generic/audit_change_attr.h
-> index 331670807cf0..cc840537885f 100644
-> --- a/include/asm-generic/audit_change_attr.h
-> +++ b/include/asm-generic/audit_change_attr.h
-> @@ -11,9 +11,15 @@ __NR_lchown,
->  __NR_fchown,
->  #endif
->  __NR_setxattr,
-> +#ifdef __NR_setxattrat
-> +__NR_setxattrat,
-> +#endif
->  __NR_lsetxattr,
->  __NR_fsetxattr,
->  __NR_removexattr,
-> +#ifdef __NR_removexattrat
-> +__NR_removexattrat,
-> +#endif
->  __NR_lremovexattr,
->  __NR_fremovexattr,
->  #ifdef __NR_fchownat
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index a34b0f9a9972..090b9b5229a0 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -348,23 +348,31 @@ asmlinkage long sys_io_uring_register(unsigned int fd, unsigned int op,
->  /* fs/xattr.c */
->  asmlinkage long sys_setxattr(const char __user *path, const char __user *name,
->  			     const void __user *value, size_t size, int flags);
-> +asmlinkage long sys_setxattrat(int dfd, const char __user *path, const char __user *name,
-> +			     const void __user *value, size_t size, int flags);
->  asmlinkage long sys_lsetxattr(const char __user *path, const char __user *name,
->  			      const void __user *value, size_t size, int flags);
->  asmlinkage long sys_fsetxattr(int fd, const char __user *name,
->  			      const void __user *value, size_t size, int flags);
->  asmlinkage long sys_getxattr(const char __user *path, const char __user *name,
->  			     void __user *value, size_t size);
-> +asmlinkage long sys_getxattrat(int dfd, const char __user *path, const char __user *name,
-> +			     void __user *value, size_t size, int flags);
->  asmlinkage long sys_lgetxattr(const char __user *path, const char __user *name,
->  			      void __user *value, size_t size);
->  asmlinkage long sys_fgetxattr(int fd, const char __user *name,
->  			      void __user *value, size_t size);
->  asmlinkage long sys_listxattr(const char __user *path, char __user *list,
->  			      size_t size);
-> +asmlinkage long sys_listxattrat(int dfd, const char __user *path, char __user *list,
-> +			      size_t size, int flags);
->  asmlinkage long sys_llistxattr(const char __user *path, char __user *list,
->  			       size_t size);
->  asmlinkage long sys_flistxattr(int fd, char __user *list, size_t size);
->  asmlinkage long sys_removexattr(const char __user *path,
->  				const char __user *name);
-> +asmlinkage long sys_removexattrat(int dfd, const char __user *path,
-> +				const char __user *name, int flags);
->  asmlinkage long sys_lremovexattr(const char __user *path,
->  				 const char __user *name);
->  asmlinkage long sys_fremovexattr(int fd, const char __user *name);
-> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> index 45fa180cc56a..4fcc71612b7a 100644
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@ -886,8 +886,18 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->  #define __NR_set_mempolicy_home_node 450
->  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
->  
-> +/* fs/xattr.c */
-> +#define __NR_setxattrat 451
-> +__SYSCALL(__NR_setxattrat, sys_setxattrat)
-> +#define __NR_getxattrat 452
-> +__SYSCALL(__NR_getxattrat, sys_getxattrat)
-> +#define __NR_listxattrat 453
-> +__SYSCALL(__NR_listxattrat, sys_listxattrat)
-> +#define __NR_removexattrat 454
-> +__SYSCALL(__NR_removexattrat, sys_removexattrat)
-> +
->  #undef __NR_syscalls
-> -#define __NR_syscalls 451
-> +#define __NR_syscalls 455
->  
->  /*
->   * 32 bit systems traditionally used different
-> -- 
-> 2.37.2
 > 
-
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
-
+> base-commit: dcf8e5633e2e69ad60b730ab5905608b756a032f
+> 
