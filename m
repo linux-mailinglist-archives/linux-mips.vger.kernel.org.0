@@ -2,87 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9D45AD942
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Sep 2022 20:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E6A5AD93E
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Sep 2022 20:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232315AbiIESv1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Sep 2022 14:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S231981AbiIESu7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Sep 2022 14:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbiIESvZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Sep 2022 14:51:25 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A162A941
-        for <linux-mips@vger.kernel.org>; Mon,  5 Sep 2022 11:51:24 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id m66so9542959vsm.12
-        for <linux-mips@vger.kernel.org>; Mon, 05 Sep 2022 11:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=waVF2Zkls6p4dtc9CzOd8vWQdb3uv6Dg4aQ5i0JwEm8=;
-        b=hDhsA6yF/4ikzlN3N0CsnwqUatKpLfnFtlo+o9Jy9dV7LBBiJXxwUNwDxmlYCdxwDy
-         ZmkfEusO6Le69y7wgMsPThSUjNIv8cvcRj4+j5MhNGvhdqzwG8Ppl8NkPuc6G4d2yyfG
-         ro3Xfc/UUFUo3O4h/xNF/qY2a5CQoXEGejzHJH0J+1sTxEUdYgwKGq0IaBtPaMU56ZJL
-         3dyilnZy+Z1C1SfBL1PI7vBzbqMD+tQ535W+/CUT+vPlhtMmloOmczVBHkHKVpu5TDqX
-         06DyKjwTD+IQawG83CzEWeqi1SwtmSBDJ3NFLvZBuONEPb998kXqF8xmmoI4KAWn9vpb
-         zfEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=waVF2Zkls6p4dtc9CzOd8vWQdb3uv6Dg4aQ5i0JwEm8=;
-        b=ajCFqLCCFBHWN07uNXDeKqgKwx3uZUJiissMfZ+anROracptQFfe/KMOl/Ug/B92nw
-         4NIkrFjNEa7Erbjnu+jEgsY9WDSaf6iqPh9/szOnQjoj1+Qamv6LSyQ0g37vHd+lSmnu
-         vyvNdjdvXBa/17VaidkJTvVmr/NynLGkgF6YgDHZaobw6l1+FMyOod7KtDIG43rKzXzj
-         vvb3Xt+tAjq5CW9YI1jVhd6el3Ppr1MMf5J6c3jYhRKmrzEv1BIIurci+sNDh2RjJFHi
-         vu3p/J2S9s8wCCQy4gg7LrwtLALE+QcIk23iGSxfuu0Uw/xt8AHl/PzCj72246Yy4JH2
-         zHJg==
-X-Gm-Message-State: ACgBeo20z7bnNSpGX/LLcvwkEQA9WYv7hR5g90UvWZQ8RQT5e7fcB6D9
-        rriEalr3TZNRNcabsfk2feBfhctJurRF1wkR46w1gA==
-X-Google-Smtp-Source: AA6agR7dtLL5IIGG1Q/HwqLtUVy0aW5huRLuhdjh+9IVyEmSMEPezwo1YJVez4ACu0dW/RjFjIMqh2TltCZbYsFY6g8=
-X-Received: by 2002:a05:6102:5094:b0:388:6903:5f09 with SMTP id
- bl20-20020a056102509400b0038869035f09mr13679997vsb.46.1662403883854; Mon, 05
- Sep 2022 11:51:23 -0700 (PDT)
+        with ESMTP id S232479AbiIESuv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Sep 2022 14:50:51 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028135EDD6;
+        Mon,  5 Sep 2022 11:50:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662403849; x=1693939849;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZTj2nmkgcLu3QTI5ZuLWIR3EG8xTNQmi+IkgjkuRQCM=;
+  b=WX43+NkX9kRnukAEIEPjyakjPEyrJpyHFw9fHf0kDBVO5BTKkbqCdfP2
+   0Ek0MykyQ7pJjBXQxcdUkV+MaGPVpdzeEV9U7sRWiwdGFuvOfCopaOfOe
+   +u0L0NEybozqqUKkkqBRObwGkGGY+n4W31Wh6hWwoOkxtgTaFibdPEsj3
+   GlE1Xn3sumRHOnbH07zUhXndYdoCi0hE+pCPb0qCtdi/ixEwpc1cN6Hy5
+   WudQPiPr78CXc1eQPRsNN8rC66yErH/Inj1qNmYNyYpN1Dz7OlehlNKoq
+   qw3rn6RQWcfZXzUkALOYLYKXb8rm+t2uKqL2fGbLKkCySCXlbJdZeb8io
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="294026417"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="294026417"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 11:50:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="717429161"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Sep 2022 11:50:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 99765101; Mon,  5 Sep 2022 21:51:03 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] pinctrl: ingenic: Switch to use fwnode instead of of_node
+Date:   Mon,  5 Sep 2022 21:51:02 +0300
+Message-Id: <20220905185102.74056-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220725091740.28188-2-alexander.sverdlin@nokia.com> <20220830030259.3503212-1-yuzhao@google.com>
-In-Reply-To: <20220830030259.3503212-1-yuzhao@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 5 Sep 2022 12:50:47 -0600
-Message-ID: <CAOUHufY76AfTbz0wKixae=m0Zdh5P3fW2cosOvYKrJ-x0XpzJw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] MIPS: Introduce CAVIUM_RESERVE32 Kconfig option
-To:     alexander.sverdlin@nokia.com
-Cc:     cminyard@mvista.com, joe@perches.com,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org, tsbogend@alpha.franken.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Alexander,
+GPIO library now accepts fwnode as a firmware node, so
+switch the driver to use it.
 
-On Mon, Aug 29, 2022 at 9:03 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> Hi,
->
-> This commit produces a bogus error message on systems that use the
-> default value. Please take a look.
->
-> Thanks.
->
->   Linux version 6.0.0-rc1 (builder@buildhost) (mips64-openwrt-linux-musl-gcc (OpenWrt GCC 11.2.0 r19590-042d558536) 11.2.0, GNU ld (GNU Binutils) 2.37) #0 SMP Sun Jul 31 15:12:47 2022
->   Failed to allocate CAVIUM_RESERVE32 memory area  <<<===
->   Skipping L2 locking due to reduced L2 cache size
->   CVMSEG size: 0 cache lines (0 bytes)
->   printk: bootconsole [early0] enabled
->   CPU0 revision is: 000d9301 (Cavium Octeon II)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/pinctrl-ingenic.c | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
-Following up on this. Please take a look. Thanks.
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+index 3a9ee9c8af11..7e732076dedf 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -12,14 +12,14 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+-#include <linux/of_device.h>
+-#include <linux/of_irq.h>
+-#include <linux/of_platform.h>
++#include <linux/mod_devicetable.h>
++#include <linux/of.h>
+ #include <linux/pinctrl/pinctrl.h>
+ #include <linux/pinctrl/pinmux.h>
+ #include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinconf-generic.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/seq_file.h>
+ #include <linux/slab.h>
+@@ -4152,7 +4152,7 @@ static const struct of_device_id ingenic_gpio_of_matches[] __initconst = {
+ };
+ 
+ static int __init ingenic_gpio_probe(struct ingenic_pinctrl *jzpc,
+-				     struct device_node *node)
++				     struct fwnode_handle *fwnode)
+ {
+ 	struct ingenic_gpio_chip *jzgc;
+ 	struct device *dev = jzpc->dev;
+@@ -4160,7 +4160,7 @@ static int __init ingenic_gpio_probe(struct ingenic_pinctrl *jzpc,
+ 	unsigned int bank;
+ 	int err;
+ 
+-	err = of_property_read_u32(node, "reg", &bank);
++	err = fwnode_property_read_u32(fwnode, "reg", &bank);
+ 	if (err) {
+ 		dev_err(dev, "Cannot read \"reg\" property: %i\n", err);
+ 		return err;
+@@ -4185,7 +4185,7 @@ static int __init ingenic_gpio_probe(struct ingenic_pinctrl *jzpc,
+ 
+ 	jzgc->gc.ngpio = 32;
+ 	jzgc->gc.parent = dev;
+-	jzgc->gc.of_node = node;
++	jzgc->gc.fwnode = fwnode;
+ 	jzgc->gc.owner = THIS_MODULE;
+ 
+ 	jzgc->gc.set = ingenic_gpio_set;
+@@ -4196,9 +4196,12 @@ static int __init ingenic_gpio_probe(struct ingenic_pinctrl *jzpc,
+ 	jzgc->gc.request = gpiochip_generic_request;
+ 	jzgc->gc.free = gpiochip_generic_free;
+ 
+-	jzgc->irq = irq_of_parse_and_map(node, 0);
+-	if (!jzgc->irq)
++	err = fwnode_irq_get(fwnode, 0);
++	if (err < 0)
++		return err;
++	if (!err)
+ 		return -EINVAL;
++	jzgc->irq = err;
+ 
+ 	girq = &jzgc->gc.irq;
+ 	gpio_irq_chip_set_chip(girq, &ingenic_gpio_irqchip);
+@@ -4227,12 +4230,12 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
+ 	struct pinctrl_desc *pctl_desc;
+ 	void __iomem *base;
+ 	const struct ingenic_chip_info *chip_info;
+-	struct device_node *node;
+ 	struct regmap_config regmap_config;
++	struct fwnode_handle *fwnode;
+ 	unsigned int i;
+ 	int err;
+ 
+-	chip_info = of_device_get_match_data(dev);
++	chip_info = device_get_match_data(dev);
+ 	if (!chip_info) {
+ 		dev_err(dev, "Unsupported SoC\n");
+ 		return -EINVAL;
+@@ -4319,11 +4322,11 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
+ 
+ 	dev_set_drvdata(dev, jzpc->map);
+ 
+-	for_each_child_of_node(dev->of_node, node) {
+-		if (of_match_node(ingenic_gpio_of_matches, node)) {
+-			err = ingenic_gpio_probe(jzpc, node);
++	device_for_each_child_node(dev, fwnode) {
++		if (of_match_node(ingenic_gpio_of_matches, to_of_node(fwnode))) {
++			err = ingenic_gpio_probe(jzpc, fwnode);
+ 			if (err) {
+-				of_node_put(node);
++				fwnode_handle_put(fwnode);
+ 				return err;
+ 			}
+ 		}
+-- 
+2.35.1
+
