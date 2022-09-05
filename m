@@ -2,110 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5755ABF4A
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Sep 2022 16:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9D45AD942
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Sep 2022 20:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiICOUP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Sep 2022 10:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S232315AbiIESv1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Sep 2022 14:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiICOUO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Sep 2022 10:20:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EAA52FD9;
-        Sat,  3 Sep 2022 07:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2A17B80966;
-        Sat,  3 Sep 2022 14:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E69C43470;
-        Sat,  3 Sep 2022 14:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662214810;
-        bh=0aD+VSuyqXxSIVEFulDlAaMzWs8mG1JCiPYrFvQbHqk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nXtwWlB287xOlDtpAHhVfl9tPu1xM3cR2NWG5pr9+m3HgOkV32Ou69hgAeGG7anmP
-         9vgQpEnwRDQdGij523rA5e3A6+g6VWHQfONrCeiZBbg8sCWW719hUzFtWf/E7+ICPh
-         YbGrLEsasbuQNEZc2LTc1tjCKOoyVSsGh10qw0qvvZk65xVoGL6WQofHN9cV3PXKXf
-         h9R2KOJKUHBiCOfc9twQPCvhHq5RWxVCGQ/rSJrJ9Xvrv667EDXCdteNQRwhnHqmDq
-         rXPZk0LklN7vT1GjywGscy8ifC+1ThJlqEGxLoum+VF06pyrsf84aszxg5mAly9Y/J
-         q/QWXeq+oz3og==
-Received: by mail-vk1-f172.google.com with SMTP id c2so2240942vkm.9;
-        Sat, 03 Sep 2022 07:20:10 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3SXKi3/Qvvt1kXEmBWO1MaL+GKh//Fx/4BZ8q73eSGNe2OdQRw
-        GUa3Gl9eDtwnmtjD87c+ArY4v7gAyGkHkiPPs0w=
-X-Google-Smtp-Source: AA6agR4DjVYs1Z7O7YPPXaanoHXU3FRdvt+fv4WSmMa7CoMVispaaGhUAL5QcuLgVa9t520FJ2ydXbrkcTwKD8AFeaQ=
-X-Received: by 2002:ac5:cd82:0:b0:397:7f8d:95f7 with SMTP id
- i2-20020ac5cd82000000b003977f8d95f7mr2019923vka.18.1662214809526; Sat, 03 Sep
- 2022 07:20:09 -0700 (PDT)
+        with ESMTP id S232411AbiIESvZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Sep 2022 14:51:25 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A162A941
+        for <linux-mips@vger.kernel.org>; Mon,  5 Sep 2022 11:51:24 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id m66so9542959vsm.12
+        for <linux-mips@vger.kernel.org>; Mon, 05 Sep 2022 11:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=waVF2Zkls6p4dtc9CzOd8vWQdb3uv6Dg4aQ5i0JwEm8=;
+        b=hDhsA6yF/4ikzlN3N0CsnwqUatKpLfnFtlo+o9Jy9dV7LBBiJXxwUNwDxmlYCdxwDy
+         ZmkfEusO6Le69y7wgMsPThSUjNIv8cvcRj4+j5MhNGvhdqzwG8Ppl8NkPuc6G4d2yyfG
+         ro3Xfc/UUFUo3O4h/xNF/qY2a5CQoXEGejzHJH0J+1sTxEUdYgwKGq0IaBtPaMU56ZJL
+         3dyilnZy+Z1C1SfBL1PI7vBzbqMD+tQ535W+/CUT+vPlhtMmloOmczVBHkHKVpu5TDqX
+         06DyKjwTD+IQawG83CzEWeqi1SwtmSBDJ3NFLvZBuONEPb998kXqF8xmmoI4KAWn9vpb
+         zfEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=waVF2Zkls6p4dtc9CzOd8vWQdb3uv6Dg4aQ5i0JwEm8=;
+        b=ajCFqLCCFBHWN07uNXDeKqgKwx3uZUJiissMfZ+anROracptQFfe/KMOl/Ug/B92nw
+         4NIkrFjNEa7Erbjnu+jEgsY9WDSaf6iqPh9/szOnQjoj1+Qamv6LSyQ0g37vHd+lSmnu
+         vyvNdjdvXBa/17VaidkJTvVmr/NynLGkgF6YgDHZaobw6l1+FMyOod7KtDIG43rKzXzj
+         vvb3Xt+tAjq5CW9YI1jVhd6el3Ppr1MMf5J6c3jYhRKmrzEv1BIIurci+sNDh2RjJFHi
+         vu3p/J2S9s8wCCQy4gg7LrwtLALE+QcIk23iGSxfuu0Uw/xt8AHl/PzCj72246Yy4JH2
+         zHJg==
+X-Gm-Message-State: ACgBeo20z7bnNSpGX/LLcvwkEQA9WYv7hR5g90UvWZQ8RQT5e7fcB6D9
+        rriEalr3TZNRNcabsfk2feBfhctJurRF1wkR46w1gA==
+X-Google-Smtp-Source: AA6agR7dtLL5IIGG1Q/HwqLtUVy0aW5huRLuhdjh+9IVyEmSMEPezwo1YJVez4ACu0dW/RjFjIMqh2TltCZbYsFY6g8=
+X-Received: by 2002:a05:6102:5094:b0:388:6903:5f09 with SMTP id
+ bl20-20020a056102509400b0038869035f09mr13679997vsb.46.1662403883854; Mon, 05
+ Sep 2022 11:51:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1662190009.git.zhoubinbin@loongson.cn> <6d01148014a62d8d412790dc8442af40368c6f8f.1662190009.git.zhoubinbin@loongson.cn>
- <bf3e7516c351f793de08d5311aff10c379720798.camel@xry111.site>
-In-Reply-To: <bf3e7516c351f793de08d5311aff10c379720798.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 3 Sep 2022 22:19:57 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4QXyaK+H-vMsDgXY+9J1FONKzEi-fm37J9NOr0n+tqOg@mail.gmail.com>
-Message-ID: <CAAhV-H4QXyaK+H-vMsDgXY+9J1FONKzEi-fm37J9NOr0n+tqOg@mail.gmail.com>
-Subject: Re: [PATCH 2/7] LoongArch: Enable LS2X RTC in loongson3_defconfig
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        devicetree@vger.kernel.org, loongarch@lists.linux.dev,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        WANG Xuerui <git@xen0n.name>
+References: <20220725091740.28188-2-alexander.sverdlin@nokia.com> <20220830030259.3503212-1-yuzhao@google.com>
+In-Reply-To: <20220830030259.3503212-1-yuzhao@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 5 Sep 2022 12:50:47 -0600
+Message-ID: <CAOUHufY76AfTbz0wKixae=m0Zdh5P3fW2cosOvYKrJ-x0XpzJw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: Introduce CAVIUM_RESERVE32 Kconfig option
+To:     alexander.sverdlin@nokia.com
+Cc:     cminyard@mvista.com, joe@perches.com,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org, tsbogend@alpha.franken.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Ruoyao,
+Hi Alexander,
 
-On Sat, Sep 3, 2022 at 6:45 PM Xi Ruoyao <xry111@xry111.site> wrote:
+On Mon, Aug 29, 2022 at 9:03 PM Yu Zhao <yuzhao@google.com> wrote:
 >
-> On Sat, 2022-09-03 at 17:34 +0800, Binbin Zhou wrote:
-> > This is now supported, enable for Loongson-3 systems.
-> > Other systems are unaffected.
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: WANG Xuerui <git@xen0n.name>
-> > Cc: loongarch@lists.linux.dev
-> > ---
-> >  arch/loongarch/configs/loongson3_defconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/loongarch/configs/loongson3_defconfig
-> > b/arch/loongarch/configs/loongson3_defconfig
-> > index 4083d3051109..b240bc4e2021 100644
-> > --- a/arch/loongarch/configs/loongson3_defconfig
-> > +++ b/arch/loongarch/configs/loongson3_defconfig
-> > @@ -660,6 +660,7 @@ CONFIG_USB_GADGET=y
-> >  CONFIG_INFINIBAND=m
-> >  CONFIG_RTC_CLASS=y
-> >  CONFIG_RTC_DRV_EFI=y
-> > +CONFIG_RTC_DRV_LS2X=y
+> Hi,
 >
-> We already have RTC_DRV_EFI=y, IIUC this means we leave LS7A RTC for the
-> firmware to drive and operate it through EFI service.  So is this really
-> needed for LoongArch systems?  And if we enable both RTC_DRV_EFI and
-> RTC_DRV_LS2X, will some bad thing (a conflict) happen?
-Don't worry, please. EFI RTC depends on EFI runtime, so we need an
-available RTC if EFI runtime is disabled (by command line or any other
-reasons). On the other hand, multi RTCs can perfectly co-exist, they
-will be rtc0 and rtc1 under sysfs and rtc0 is the default one.
+> This commit produces a bogus error message on systems that use the
+> default value. Please take a look.
+>
+> Thanks.
+>
+>   Linux version 6.0.0-rc1 (builder@buildhost) (mips64-openwrt-linux-musl-gcc (OpenWrt GCC 11.2.0 r19590-042d558536) 11.2.0, GNU ld (GNU Binutils) 2.37) #0 SMP Sun Jul 31 15:12:47 2022
+>   Failed to allocate CAVIUM_RESERVE32 memory area  <<<===
+>   Skipping L2 locking due to reduced L2 cache size
+>   CVMSEG size: 0 cache lines (0 bytes)
+>   printk: bootconsole [early0] enabled
+>   CPU0 revision is: 000d9301 (Cavium Octeon II)
 
-Huacai
->
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
->
+Following up on this. Please take a look. Thanks.
