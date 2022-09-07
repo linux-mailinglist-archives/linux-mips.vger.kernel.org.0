@@ -2,57 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6F65AFF63
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Sep 2022 10:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476615B04F6
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Sep 2022 15:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiIGIlr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Sep 2022 04:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S229576AbiIGNPz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Sep 2022 09:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiIGIln (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Sep 2022 04:41:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEF4A5C6F;
-        Wed,  7 Sep 2022 01:41:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oQ2Oy2vE4Y+KSIGzjxEVBp2pts3FTmVlEXlZ7nc293g=; b=YGqqWOkIlp4wL4QvSg1QvGSDJs
-        7BsBuJd2vZloqmqZVYag6GUx8MgGcG6k7N6Pa6WmrLW2v0P3Feauq1+vLQ+SwrwlRqvINZJTOwBl0
-        wxhU0qzT+TzCCWV4LS0+r0cG+EYsK+DYZQ3sjYAUWpcdmCUSBkcq7yVYgDJB9tmNVHEcj/tNk/8qu
-        Zas15dUPp2A0MEg+269FxCrDmahwz7NCf5U+096527uMjhfymAT6htBZOWtUlPACwRzC2Uh3xjDRb
-        38qUztzbGAsOSLShnevqSC1PVtIy2CBEGw05PdksfYfFhjkIJA01cvmGQEPnCpudRLstViBDIDa9+
-        BE6aP28g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVqbG-004OIZ-BZ; Wed, 07 Sep 2022 08:39:58 +0000
-Date:   Wed, 7 Sep 2022 01:39:58 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>, iommu@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH v2] Revert "swiotlb: panic if nslabs is too small"
-Message-ID: <YxhY3nOLlRsDi6dj@infradead.org>
-References: <20220829232934.3277747-1-yuzhao@google.com>
- <20220831063818.3902572-1-yuzhao@google.com>
+        with ESMTP id S230133AbiIGNPe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Sep 2022 09:15:34 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B23B8048D;
+        Wed,  7 Sep 2022 06:15:15 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oVutd-0000YC-00; Wed, 07 Sep 2022 15:15:13 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 8E9DDC0DBF; Wed,  7 Sep 2022 15:02:20 +0200 (CEST)
+Date:   Wed, 7 Sep 2022 15:02:20 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
+Cc:     Yu Zhao <yuzhao@google.com>, Joe Perches <joe@perches.com>,
+        linux-mips@vger.kernel.org, Corey Minyard <cminyard@mvista.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: octeon: Get rid of preprocessor directives
+ around RESERVE32
+Message-ID: <20220907130220.GA17817@alpha.franken.de>
+References: <20220906083239.10163-1-alexander.sverdlin@nokia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831063818.3902572-1-yuzhao@google.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220906083239.10163-1-alexander.sverdlin@nokia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Thanks, applied.
+On Tue, Sep 06, 2022 at 10:32:39AM +0200, Alexander A Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> 
+> Some of them were pointless because CONFIG_CAVIUM_RESERVE32 is now always
+> defined, some were not enough (Yu Zhao reported
+> "Failed to allocate CAVIUM_RESERVE32 memory area" error).
+> 
+> Removing the directives allows for compiler coverage of RESERVE32 code and
+> replacing one of [always-true] "ifdef" with a compiler conditional fixes
+> the [cosmetic] error message.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> ---
+> 
+> Changelog:
+> v2:
+> * Reduced the scope of addr variable
+> 
+>  arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c |  4 ----
+>  arch/mips/cavium-octeon/setup.c                    | 27 +++++++++-------------
+
+applied to mips-fixes with
+
+Fixes: 3e3114ac460e ("MIPS: Introduce CAVIUM_RESERVE32 Kconfig option")
+
+added.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
