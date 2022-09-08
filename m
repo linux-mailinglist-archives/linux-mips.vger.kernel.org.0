@@ -2,110 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637965B2378
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Sep 2022 18:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898AA5B2629
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Sep 2022 20:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiIHQUm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Sep 2022 12:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S232341AbiIHSuA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Sep 2022 14:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiIHQUl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Sep 2022 12:20:41 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD6CD0774
-        for <linux-mips@vger.kernel.org>; Thu,  8 Sep 2022 09:20:40 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id i1so18835295vsc.9
-        for <linux-mips@vger.kernel.org>; Thu, 08 Sep 2022 09:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=9ZFpt/foVGQHDYdWFxLDfNkzYkIk3H2JJygdZbdIkYI=;
-        b=S2k4/+cJZwBhIMkgWdWhvS4sxcCkpPrypMcJrGhT8Q+Wk24K3zIGZVuLIu0jiWsvqz
-         uUWCQmAKAq90mSz3vuUYbyWi8xXihatYrRxe8icdG+tdaeZ1aEXoBHT44Ogrfc4Smv2D
-         Lw360FvlnIXDO/oGAk03dUPHm5OBg5q77VsD0wg4mh25ylqGw4nR6QUkwZBInmgv41xY
-         uz5mBmoqqcbdgfb2vuzK9IwysSYjTa99i6gHhXifl0LisIbn+Wr+JGNjNq8cK6TM+A3l
-         IF2nMl3aSua5EfXad5QyGRhTIDz8B+rD3tplLCwsJPBX0xmVr0cbK/9RT5XVeXTknK5N
-         3u7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9ZFpt/foVGQHDYdWFxLDfNkzYkIk3H2JJygdZbdIkYI=;
-        b=oWbgegBNM8bd9lIdL4248gRGgeysheId2ueyTezs/XjdxxrW1PKWASCMu3TutD6eoG
-         Xvemo0dMjrWpBGTyxVuEG2uv+0ZaSMZgOo0iSLKOONTYlDXhdxXky0jmnP6F3j92etzA
-         wyrtAB29/t6+OWQe1Fgi1jeoeEngXqX5xHwjkhXVVz3xLIGKx81Wn5x6aG4BlGuc/gjx
-         UXZBLQmd4ngZDUe2WaIUWkrSODi9maGZ6El7t/ADgvWujb2kexrkN6ciJI8n0JQ17g0x
-         fqU6l5CKgREthWj/kxbPfqSNZetbLfnhq4Vzfd4MOI2WGPNVZPa+WzJ1bAf++kID1w9W
-         paFQ==
-X-Gm-Message-State: ACgBeo2YkaEE6CERNysL18GEjZqiphxsYmaS5cfCAoQ1/OAaa/A2pBCN
-        PR7QG46kAz3tK1hYD/Pa/DhEMH+VLl7AitLOe4Q=
-X-Google-Smtp-Source: AA6agR5hs9fom8t2WP/aU3HnEqp3tMD3w0WnJ7V4BrXxDBbxA5/HiszGmQVPBYZt3gFbx4puysVuJUZ9eGKqOY9ae48=
-X-Received: by 2002:a67:f9c2:0:b0:398:2daf:b6e2 with SMTP id
- c2-20020a67f9c2000000b003982dafb6e2mr2363853vsq.19.1662654039057; Thu, 08 Sep
- 2022 09:20:39 -0700 (PDT)
+        with ESMTP id S232402AbiIHSt4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Sep 2022 14:49:56 -0400
+X-Greylist: delayed 904 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Sep 2022 11:49:53 PDT
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B4245F67
+        for <linux-mips@vger.kernel.org>; Thu,  8 Sep 2022 11:49:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1662662078; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=fotINh0QiCBqqcjEu9X62O41+22XkqIOaA8IoniPpLGU7L8Aa6wCpVg7S05tntRfKUh4cvXvuOw4wApIhSoQmm2fJPTIeRMnhsDDF8nIqWemJRAIQqJ3TIBelXLTYlHWjK6AbjqxHQcChYgmDhQ7Rq4rI0SoB1fxaHJlQFt6rBk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1662662078; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=+ZSQ/hCiHo3MVsDOSXfFn92+sn56Fwr/PHvAptiaK+A=; 
+        b=mUsh8UFhbDzW+V4v8ZFt21iv2nR3rC2gya5WTWK9o8PPseGXyl7ZsGg+UoOuaXdBjwyLAwWTcchufLlqnDeTbCoMcUr2JtmFS452p8Xxn6SOCzp8bCgZyjw7a8Bb6BaIumM/GfiK5vNIihM6sEsy8z6NVShsTCUT6Y5HXqBQQkY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1662662078;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=+ZSQ/hCiHo3MVsDOSXfFn92+sn56Fwr/PHvAptiaK+A=;
+        b=Kay5Jtv3gpN79e6L0NKJCWvDM4zJeh3bn72RXvGBEeDy4jY3GcNm9Smf/YrDn712
+        OkIdFgFq5a6AWSpBEMc+E/zu48mwdO5YnsU/XeczAn92FZAcwnJYfVeQeNM4Rg1ZCt5
+        8yPjGSAjMxEi4iecpkCGe9rpJNK1SBx0Y781rdSw=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1662662076622445.43536504018743; Thu, 8 Sep 2022 11:34:36 -0700 (PDT)
+Message-ID: <055843d1-ec76-2db4-8860-4bf1e81110d3@arinc9.com>
+Date:   Thu, 8 Sep 2022 21:34:33 +0300
 MIME-Version: 1.0
-Received: by 2002:a05:612c:159e:b0:2ec:bb9:ecd6 with HTTP; Thu, 8 Sep 2022
- 09:20:37 -0700 (PDT)
-Reply-To: cfc.ubagroup09@gmail.com
-From:   Kristalina Georgieva <unitedbankafricau493@gmail.com>
-Date:   Thu, 8 Sep 2022 09:20:37 -0700
-Message-ID: <CAB9_qi-gkZvg3zaGZ1YNeuDz-JJjwe0CiPNnT-ym4=zasXOqUQ@mail.gmail.com>
-Subject: XUSH HABAR
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mips: ralink: mt7621: add device tree into the kernel
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, john@phrozen.org
+References: <20220908060804.1531428-1-sergio.paracuellos@gmail.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20220908060804.1531428-1-sergio.paracuellos@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hurmatli Benefisiar,
-Men sizga bir oy oldin bu xatni yuborgan edim, lekin sizdan xabar yo'q, yo'=
-q
-Ishonchim komilki, siz uni oldingiz va shuning uchun uni yana sizga yubordi=
-m,
-Avvalo, men Kristalina Georgieva xonim, boshqaruvchi direktor va
-Xalqaro valyuta jamg'armasi prezidenti.
+On 8.09.2022 09:08, Sergio Paracuellos wrote:
+> Device tree blobs for ralink mt7621 SoCs depends on configuration
+> CONFIG_SOC_MT7621 kernel option. This blobs needs to be properly
+> builtin into the kernel in order to be able to properly boot the
+> Gnubee boards. Hence, select CONFIG_BUILTIN_DTB for mt7621 Socs.
+> This option was a miss when this related device tree files were
+> moved from staging into the real 'arch/mips/boot/dts/ralink'
+> folder in kernel.
+> 
+> Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-Aslida, biz atrofdagi barcha to'siqlar va muammolarni ko'rib chiqdik
-sizning to'liq bo'lmagan tranzaksiyangiz va to'lovlarni to'lay olmasligingi=
-z
-o'tkazish to'lovlari olinadi, sizga qarshi, imkoniyatlari uchun
-oldingi transferlar, tasdiqlash uchun bizning saytimizga tashrif buyuring 3=
-8
-=C2=B0 53'56 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 Vt
+I just tested this on a GB-PC2. If I understand correctly, this option 
+adds all compiled DT on top of the compiled linux image, vmlinux, 
+vmlinuz, etc..
 
-Biz Direktorlar kengashi, Jahon banki va Valyuta jamg'armasimiz
-Vashingtondagi Xalqaro (XVF) Departamenti bilan birgalikda
-Amerika Qo'shma Shtatlari G'aznachiligi va boshqa ba'zi tergov idoralari
-Amerika Qo'shma Shtatlarida bu erda tegishli. buyurdi
-Bizning Chet eldagi to'lov pul o'tkazmalari bo'limi, Birlashgan Bank
-Afrika Lome Togo, sizga VISA kartasini chiqarish uchun, bu erda $
-Sizning fondingizdan ko'proq pul olish uchun 1,5 million.
+DTB for GB-PC1 must come first since the bootloader on my GB-PC2 thinks 
+the device is GB-PC1.
 
-Tekshiruvimiz davomida biz aniqladik
-Sizning to'lovingiz korruptsionerlar tomonidan kechiktirilganidan xafa bo'l=
-ing
-Sizning mablag'laringizni hisoblaringizga yo'naltirishga harakat qilayotgan=
- bank
-xususiy.
+[    0.000000] Linux version 6.0.0-rc3+ (arinc9@arinc9-PC) 
+(mipsel-linux-gnu-gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0, GNU ld (GNU 
+Binutils for Ubuntu) 2.38) #8 SMP Thu Sep 8 21:16:57 +03 2022
+[    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
+[    0.000000] printk: bootconsole [early0] enabled
+[    0.000000] CPU0 revision is: 0001992f (MIPS 1004Kc)
+[    0.000000] MIPS: machine is GB-PC1
 
-Va bugun biz sizning mablag'ingiz Kartaga o'tkazilganligi haqida xabar bera=
-miz
-UBA Bank tomonidan VISA va u ham yetkazib berishga tayyor. Hozir
-UBA Bank direktori bilan bog'laning, uning ismi janob Toni
-Elumelu, elektron pochta: (cfc.ubagroup09@gmail.com)
-ATM VISA kartangizni qanday qabul qilishni aytib berish.
+I think we should not make SOC_MT7621 select this option now that we 
+compile devicetrees for all devices which use the MT7621 SoC but rather 
+leave it to the OS builder, OpenWrt SDK, etc. to decide and add the DTB 
+on top of the compiled linux image.
 
-Hurmat bilan,
+I think this is already the case for all arm devicetrees?
 
-Kristalina Georgieva xonim
+Arınç
+
+> ---
+>   arch/mips/ralink/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+> index f9fe15630abb..f3b14bfc8066 100644
+> --- a/arch/mips/ralink/Kconfig
+> +++ b/arch/mips/ralink/Kconfig
+> @@ -54,6 +54,7 @@ choice
+>   		select HAVE_PCI
+>   		select PCI_DRIVERS_GENERIC
+>   		select SOC_BUS
+> +		select BUILTIN_DTB
+>   
+>   		help
+>   		  The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc dual-core CPU,
