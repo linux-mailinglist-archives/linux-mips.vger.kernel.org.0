@@ -2,79 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31095B28DB
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Sep 2022 23:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F0D5B2D33
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Sep 2022 06:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiIHV6S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Sep 2022 17:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S229578AbiIIEBT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Sep 2022 00:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiIHV5d (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Sep 2022 17:57:33 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92F9113B552;
-        Thu,  8 Sep 2022 14:56:18 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oWPVQ-0007qL-00; Thu, 08 Sep 2022 23:56:16 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id A3CE5C0EC6; Thu,  8 Sep 2022 23:32:29 +0200 (CEST)
-Date:   Thu, 8 Sep 2022 23:32:29 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mips: Select SPARSEMEM_EXTREME for CAVIUM_OCTEON_SOC
-Message-ID: <20220908213229.GA6322@alpha.franken.de>
-References: <20220906095943.60296-1-alexander.sverdlin@nokia.com>
- <20220906095943.60296-2-alexander.sverdlin@nokia.com>
+        with ESMTP id S229491AbiIIEBS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Sep 2022 00:01:18 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241DDC6964
+        for <linux-mips@vger.kernel.org>; Thu,  8 Sep 2022 21:01:17 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-127ba06d03fso964290fac.3
+        for <linux-mips@vger.kernel.org>; Thu, 08 Sep 2022 21:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=ukB7vHK9X64DJTH5F7EfNWnUrvhQZlsGau9L/06E5/w=;
+        b=DgjYeO9WlruNpNlhAX+BveK2qQygCs5qRk4ARvLWFJ7N+rfhI8FPMnxxhbgHGjqyBA
+         BgaG1SjplAXZFMR8sRy2jjTN7/q47w0vJhl8WmOAilEdnvHab7vbvThSvvEYeTqTN7re
+         w3R7wmiuJTHklhtmQnuEYKqA90NZHxOvAH/jkyDFTkFZVW6T2lRirMt4SjZ4gPhLoKKZ
+         jclMlwqAGAySXxjXv5b6tO7IJJDFmxW+u1t5sNR4xe5Xb6mggRkbciYp1ngZFG57c/l9
+         VH2zdA9ojHn1qPK6gPd/Xo6WG5iQLmDnsqAkarqq3eGhHlq/ZKeXE5UawUFXxdXrWZAF
+         ZfBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ukB7vHK9X64DJTH5F7EfNWnUrvhQZlsGau9L/06E5/w=;
+        b=lxtsMdVKS290+rExU5+P5RTHoi72Stzd34yCAaIM73OETZaqa1HEE0W8el9d5/bj/N
+         iF1kZkUkxoiuOwb0I5qgOWBY3sG32EqeuBQ9uNLFuOlCoFeAwG3ek7h9R2PNc9JhuoU8
+         9EIK6RMELAFGqYIFT02XTS9WCi9NPOfmRupjtYoEP0kzRaC2dzR99ELOB81JfRmZ7Rg0
+         ha3nko/ympxUz65oUqU0YHcFZQ1/Zs6sFzo8BaajepFQWkfFd1PvbCY2I2+k9VTp2q4Z
+         EV5eChit9ZpA03Jav4sx3NulFXbrRftQ5+xZ0V7VRBogNLT7Ak3FgyGA9fItUbMW5+hC
+         H8SQ==
+X-Gm-Message-State: ACgBeo0MqxID3raB296wsv8mTNmoSI3/kJwHU+J825B9TKHAm8JaXRW4
+        AZDG8YBDSdk/bPEl3UDmuMT/gRbFdHOIDJaPotBM0m7zWY+mcA==
+X-Google-Smtp-Source: AA6agR5Xn0WpehxNF8YuebDn+psy8tH5cyy0uj1uWnII285PjXmZxXFm8Mchs9KcrRX1Al7WXxjrDWDdqR3GyKVwPEg=
+X-Received: by 2002:a54:4093:0:b0:342:dfd2:39bc with SMTP id
+ i19-20020a544093000000b00342dfd239bcmr2826523oii.144.1662696075823; Thu, 08
+ Sep 2022 21:01:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906095943.60296-2-alexander.sverdlin@nokia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220908060804.1531428-1-sergio.paracuellos@gmail.com> <055843d1-ec76-2db4-8860-4bf1e81110d3@arinc9.com>
+In-Reply-To: <055843d1-ec76-2db4-8860-4bf1e81110d3@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 9 Sep 2022 06:01:04 +0200
+Message-ID: <CAMhs-H9HdmaN4XyHTWiX-SZHuFQorpO4zaSjHp+DLJFc5JcyUA@mail.gmail.com>
+Subject: Re: [PATCH] mips: ralink: mt7621: add device tree into the kernel
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 11:59:42AM +0200, Alexander A Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> 
-> Commit c46173183657 ("MIPS: Add NUMA support for Loongson-3") has increased
-> .bss size of the Octeon kernel from 16k to 16M. Providing the conditions
-> for SPARSEMEM_EXTREME avoids the waste of memory.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> ---
->  arch/mips/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index ec21f89..79cfa1c 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -2669,7 +2669,7 @@ config ARCH_FLATMEM_ENABLE
->  
->  config ARCH_SPARSEMEM_ENABLE
->  	bool
-> -	select SPARSEMEM_STATIC if !SGI_IP27
-> +	select SPARSEMEM_STATIC if MACH_LOONGSON64
+Hi Arinc,
 
-removing the statement completely gives
+On Thu, Sep 8, 2022 at 8:34 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9=
+.com> wrote:
+>
+> On 8.09.2022 09:08, Sergio Paracuellos wrote:
+> > Device tree blobs for ralink mt7621 SoCs depends on configuration
+> > CONFIG_SOC_MT7621 kernel option. This blobs needs to be properly
+> > builtin into the kernel in order to be able to properly boot the
+> > Gnubee boards. Hence, select CONFIG_BUILTIN_DTB for mt7621 Socs.
+> > This option was a miss when this related device tree files were
+> > moved from staging into the real 'arch/mips/boot/dts/ralink'
+> > folder in kernel.
+> >
+> > Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>
+> I just tested this on a GB-PC2. If I understand correctly, this option
+> adds all compiled DT on top of the compiled linux image, vmlinux,
+> vmlinuz, etc..
+>
+> DTB for GB-PC1 must come first since the bootloader on my GB-PC2 thinks
+> the device is GB-PC1.
+>
+> [    0.000000] Linux version 6.0.0-rc3+ (arinc9@arinc9-PC)
+> (mipsel-linux-gnu-gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0, GNU ld (GNU
+> Binutils for Ubuntu) 2.38) #8 SMP Thu Sep 8 21:16:57 +03 2022
+> [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
+> [    0.000000] printk: bootconsole [early0] enabled
+> [    0.000000] CPU0 revision is: 0001992f (MIPS 1004Kc)
+> [    0.000000] MIPS: machine is GB-PC1
+>
+> I think we should not make SOC_MT7621 select this option now that we
+> compile devicetrees for all devices which use the MT7621 SoC but rather
+> leave it to the OS builder, OpenWrt SDK, etc. to decide and add the DTB
+> on top of the compiled linux image.
 
-      text       data        bss      total filename
-  11874896    6019382   17304160   35198438 vmlinux-sparsemem_static
-  11935172    6019702     526944   18481818 vmlinux
+I see. If this is the case I think we need to add DTB options to know
+which dtb must be included in the kernel like other ralink platforms
+do in 'arch/mips/ralink/Kconfig' and make each one dependant on
+MT7621_SOC and select BUILTIN_DTB in each of them:
 
-for a loogsoon64 kernel. And the kernel boots and works just fine.
-Can you respin your patch and remove the select SPARSEMEM_STATIC ?
+config DTB_GNUBEE1
+     bool "GnuBee1 2.5inch NAS"
+     depends on SOC_MT7621
+     select BUILTIN_DTB
 
-Thomas.
+config DTB_GNUBEE2
+     bool "GnuBee2 3.5inch NAS"
+     depends on SOC_MT7621
+     select BUILTIN_DTB
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+And then in 'arch/mips/boot/dts/ralink/Makefile' do:
+
+dtb-$(CONFIG_DTB_GNUBEE1) +=3D mt7621-gnubee-gb-pc1.dtb
+dtb-$(CONFIG_DTB_GNUBEE2) +=3D mt7621-gnubee-gb-pc2.dtb
+
+I am not a Kconfig expert so I don't know if there is a better option.
+
+>
+> I think this is already the case for all arm devicetrees?
+
+AFAIK, arm device trees are not normally embedded in the image but
+loaded in memory in the boot process and from there a pointer is
+passed to the kernel so I think just making all of them available for
+a SoC makes sense.
+
+Best regards,
+    Sergio Paracuellos
+>
+> Ar=C4=B1n=C3=A7
+>
+> > ---
+> >   arch/mips/ralink/Kconfig | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+> > index f9fe15630abb..f3b14bfc8066 100644
+> > --- a/arch/mips/ralink/Kconfig
+> > +++ b/arch/mips/ralink/Kconfig
+> > @@ -54,6 +54,7 @@ choice
+> >               select HAVE_PCI
+> >               select PCI_DRIVERS_GENERIC
+> >               select SOC_BUS
+> > +             select BUILTIN_DTB
+> >
+> >               help
+> >                 The MT7621 system-on-a-chip includes an 880 MHz MIPS100=
+4Kc dual-core CPU,
