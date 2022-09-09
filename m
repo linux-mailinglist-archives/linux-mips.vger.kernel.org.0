@@ -2,65 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F0D5B2D33
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Sep 2022 06:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38CE5B2D44
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Sep 2022 06:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiIIEBT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Sep 2022 00:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        id S229599AbiIIEQV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Sep 2022 00:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiIIEBS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Sep 2022 00:01:18 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241DDC6964
-        for <linux-mips@vger.kernel.org>; Thu,  8 Sep 2022 21:01:17 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-127ba06d03fso964290fac.3
-        for <linux-mips@vger.kernel.org>; Thu, 08 Sep 2022 21:01:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=ukB7vHK9X64DJTH5F7EfNWnUrvhQZlsGau9L/06E5/w=;
-        b=DgjYeO9WlruNpNlhAX+BveK2qQygCs5qRk4ARvLWFJ7N+rfhI8FPMnxxhbgHGjqyBA
-         BgaG1SjplAXZFMR8sRy2jjTN7/q47w0vJhl8WmOAilEdnvHab7vbvThSvvEYeTqTN7re
-         w3R7wmiuJTHklhtmQnuEYKqA90NZHxOvAH/jkyDFTkFZVW6T2lRirMt4SjZ4gPhLoKKZ
-         jclMlwqAGAySXxjXv5b6tO7IJJDFmxW+u1t5sNR4xe5Xb6mggRkbciYp1ngZFG57c/l9
-         VH2zdA9ojHn1qPK6gPd/Xo6WG5iQLmDnsqAkarqq3eGhHlq/ZKeXE5UawUFXxdXrWZAF
-         ZfBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ukB7vHK9X64DJTH5F7EfNWnUrvhQZlsGau9L/06E5/w=;
-        b=lxtsMdVKS290+rExU5+P5RTHoi72Stzd34yCAaIM73OETZaqa1HEE0W8el9d5/bj/N
-         iF1kZkUkxoiuOwb0I5qgOWBY3sG32EqeuBQ9uNLFuOlCoFeAwG3ek7h9R2PNc9JhuoU8
-         9EIK6RMELAFGqYIFT02XTS9WCi9NPOfmRupjtYoEP0kzRaC2dzR99ELOB81JfRmZ7Rg0
-         ha3nko/ympxUz65oUqU0YHcFZQ1/Zs6sFzo8BaajepFQWkfFd1PvbCY2I2+k9VTp2q4Z
-         EV5eChit9ZpA03Jav4sx3NulFXbrRftQ5+xZ0V7VRBogNLT7Ak3FgyGA9fItUbMW5+hC
-         H8SQ==
-X-Gm-Message-State: ACgBeo0MqxID3raB296wsv8mTNmoSI3/kJwHU+J825B9TKHAm8JaXRW4
-        AZDG8YBDSdk/bPEl3UDmuMT/gRbFdHOIDJaPotBM0m7zWY+mcA==
-X-Google-Smtp-Source: AA6agR5Xn0WpehxNF8YuebDn+psy8tH5cyy0uj1uWnII285PjXmZxXFm8Mchs9KcrRX1Al7WXxjrDWDdqR3GyKVwPEg=
-X-Received: by 2002:a54:4093:0:b0:342:dfd2:39bc with SMTP id
- i19-20020a544093000000b00342dfd239bcmr2826523oii.144.1662696075823; Thu, 08
- Sep 2022 21:01:15 -0700 (PDT)
+        with ESMTP id S229550AbiIIEQU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Sep 2022 00:16:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 006C3121105;
+        Thu,  8 Sep 2022 21:16:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09453153B;
+        Thu,  8 Sep 2022 21:16:23 -0700 (PDT)
+Received: from [10.162.41.8] (unknown [10.162.41.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F33023F71A;
+        Thu,  8 Sep 2022 21:16:07 -0700 (PDT)
+Message-ID: <46b8a713-64bf-9c00-9001-3196238d1482@arm.com>
+Date:   Fri, 9 Sep 2022 09:46:04 +0530
 MIME-Version: 1.0
-References: <20220908060804.1531428-1-sergio.paracuellos@gmail.com> <055843d1-ec76-2db4-8860-4bf1e81110d3@arinc9.com>
-In-Reply-To: <055843d1-ec76-2db4-8860-4bf1e81110d3@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 9 Sep 2022 06:01:04 +0200
-Message-ID: <CAMhs-H9HdmaN4XyHTWiX-SZHuFQorpO4zaSjHp+DLJFc5JcyUA@mail.gmail.com>
-Subject: Re: [PATCH] mips: ralink: mt7621: add device tree into the kernel
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH v3 2/4] mm/tlbbatch: Introduce
+ arch_tlbbatch_should_defer()
+To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        yangyicong@hisilicon.com, huzhanyuan@oppo.com, lipeifeng@oppo.com,
+        zhangshiming@oppo.com, guojian@oppo.com, realmz6@gmail.com,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, Barry Song <21cnbao@gmail.com>,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com,
+        Anshuman Khandual <khandual@linux.vnet.ibm.com>
+References: <20220822082120.8347-1-yangyicong@huawei.com>
+ <20220822082120.8347-3-yangyicong@huawei.com>
+Content-Language: en-US
+In-Reply-To: <20220822082120.8347-3-yangyicong@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,92 +57,73 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arinc,
+On 8/22/22 13:51, Yicong Yang wrote:
+> From: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+> 
+> The entire scheme of deferred TLB flush in reclaim path rests on the
+> fact that the cost to refill TLB entries is less than flushing out
+> individual entries by sending IPI to remote CPUs. But architecture
+> can have different ways to evaluate that. Hence apart from checking
+> TTU_BATCH_FLUSH in the TTU flags, rest of the decision should be
+> architecture specific.
+> 
+> Signed-off-by: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+> [https://lore.kernel.org/linuxppc-dev/20171101101735.2318-2-khandual@linux.vnet.ibm.com/]
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> [Rebase and fix incorrect return value type]
 
-On Thu, Sep 8, 2022 at 8:34 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9=
-.com> wrote:
->
-> On 8.09.2022 09:08, Sergio Paracuellos wrote:
-> > Device tree blobs for ralink mt7621 SoCs depends on configuration
-> > CONFIG_SOC_MT7621 kernel option. This blobs needs to be properly
-> > builtin into the kernel in order to be able to properly boot the
-> > Gnubee boards. Hence, select CONFIG_BUILTIN_DTB for mt7621 Socs.
-> > This option was a miss when this related device tree files were
-> > moved from staging into the real 'arch/mips/boot/dts/ralink'
-> > folder in kernel.
-> >
-> > Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->
-> I just tested this on a GB-PC2. If I understand correctly, this option
-> adds all compiled DT on top of the compiled linux image, vmlinux,
-> vmlinuz, etc..
->
-> DTB for GB-PC1 must come first since the bootloader on my GB-PC2 thinks
-> the device is GB-PC1.
->
-> [    0.000000] Linux version 6.0.0-rc3+ (arinc9@arinc9-PC)
-> (mipsel-linux-gnu-gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0, GNU ld (GNU
-> Binutils for Ubuntu) 2.38) #8 SMP Thu Sep 8 21:16:57 +03 2022
-> [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
-> [    0.000000] printk: bootconsole [early0] enabled
-> [    0.000000] CPU0 revision is: 0001992f (MIPS 1004Kc)
-> [    0.000000] MIPS: machine is GB-PC1
->
-> I think we should not make SOC_MT7621 select this option now that we
-> compile devicetrees for all devices which use the MT7621 SoC but rather
-> leave it to the OS builder, OpenWrt SDK, etc. to decide and add the DTB
-> on top of the compiled linux image.
+From semantics perspective, this patch still makes sense, even on its own.
 
-I see. If this is the case I think we need to add DTB options to know
-which dtb must be included in the kernel like other ralink platforms
-do in 'arch/mips/ralink/Kconfig' and make each one dependant on
-MT7621_SOC and select BUILTIN_DTB in each of them:
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-config DTB_GNUBEE1
-     bool "GnuBee1 2.5inch NAS"
-     depends on SOC_MT7621
-     select BUILTIN_DTB
-
-config DTB_GNUBEE2
-     bool "GnuBee2 3.5inch NAS"
-     depends on SOC_MT7621
-     select BUILTIN_DTB
-
-And then in 'arch/mips/boot/dts/ralink/Makefile' do:
-
-dtb-$(CONFIG_DTB_GNUBEE1) +=3D mt7621-gnubee-gb-pc1.dtb
-dtb-$(CONFIG_DTB_GNUBEE2) +=3D mt7621-gnubee-gb-pc2.dtb
-
-I am not a Kconfig expert so I don't know if there is a better option.
-
->
-> I think this is already the case for all arm devicetrees?
-
-AFAIK, arm device trees are not normally embedded in the image but
-loaded in memory in the boot process and from there a pointer is
-passed to the kernel so I think just making all of them available for
-a SoC makes sense.
-
-Best regards,
-    Sergio Paracuellos
->
-> Ar=C4=B1n=C3=A7
->
-> > ---
-> >   arch/mips/ralink/Kconfig | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-> > index f9fe15630abb..f3b14bfc8066 100644
-> > --- a/arch/mips/ralink/Kconfig
-> > +++ b/arch/mips/ralink/Kconfig
-> > @@ -54,6 +54,7 @@ choice
-> >               select HAVE_PCI
-> >               select PCI_DRIVERS_GENERIC
-> >               select SOC_BUS
-> > +             select BUILTIN_DTB
-> >
-> >               help
-> >                 The MT7621 system-on-a-chip includes an 880 MHz MIPS100=
-4Kc dual-core CPU,
+> ---
+>  arch/x86/include/asm/tlbflush.h | 12 ++++++++++++
+>  mm/rmap.c                       |  9 +--------
+>  2 files changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+> index cda3118f3b27..8a497d902c16 100644
+> --- a/arch/x86/include/asm/tlbflush.h
+> +++ b/arch/x86/include/asm/tlbflush.h
+> @@ -240,6 +240,18 @@ static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
+>  	flush_tlb_mm_range(vma->vm_mm, a, a + PAGE_SIZE, PAGE_SHIFT, false);
+>  }
+>  
+> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> +{
+> +	bool should_defer = false;
+> +
+> +	/* If remote CPUs need to be flushed then defer batch the flush */
+> +	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
+> +		should_defer = true;
+> +	put_cpu();
+> +
+> +	return should_defer;
+> +}
+> +
+>  static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
+>  {
+>  	/*
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index edc06c52bc82..a17a004550c6 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -687,17 +687,10 @@ static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
+>   */
+>  static bool should_defer_flush(struct mm_struct *mm, enum ttu_flags flags)
+>  {
+> -	bool should_defer = false;
+> -
+>  	if (!(flags & TTU_BATCH_FLUSH))
+>  		return false;
+>  
+> -	/* If remote CPUs need to be flushed then defer batch the flush */
+> -	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
+> -		should_defer = true;
+> -	put_cpu();
+> -
+> -	return should_defer;
+> +	return arch_tlbbatch_should_defer(mm);
+>  }
+>  
+>  /*
