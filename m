@@ -2,58 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AADF5B2DCB
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Sep 2022 06:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13675B2DFA
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Sep 2022 07:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiIIEwC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Sep 2022 00:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
+        id S229589AbiIIFLw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Sep 2022 01:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiIIEwB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Sep 2022 00:52:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C81B4123EC1;
-        Thu,  8 Sep 2022 21:51:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9102153B;
-        Thu,  8 Sep 2022 21:52:04 -0700 (PDT)
-Received: from [10.162.41.8] (unknown [10.162.41.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 918713F73D;
-        Thu,  8 Sep 2022 21:51:46 -0700 (PDT)
-Message-ID: <b621dbb6-a98f-003e-3578-fc8b0f512d4a@arm.com>
-Date:   Fri, 9 Sep 2022 10:21:44 +0530
+        with ESMTP id S229626AbiIIFLv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Sep 2022 01:11:51 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE41CEB3C
+        for <linux-mips@vger.kernel.org>; Thu,  8 Sep 2022 22:11:50 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id d12-20020a05600c34cc00b003a83d20812fso427003wmq.1
+        for <linux-mips@vger.kernel.org>; Thu, 08 Sep 2022 22:11:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=bnhl0Q1+XYxPjs75yjJdAmg4WY07uhIM66gNg9Xd2YM=;
+        b=VzX/l2iICjAzqyxFNNpZqotdtnEJ/8oi8+cLmDFmOaEfmbWP29u/1fMfK+foxM/Lot
+         L4KrJ7tbUnC4j+emqt86jg6FU4Qm8XoR9CO5peNS228pYHWuzU7bbgOB2/qAKA0uHKlI
+         qDx833yko6910zGl3oMgRfM9DeXGL3IUtKAXsXDIOIePld3VFf5Zk3ayvBJk2m8db1Ta
+         FANao6cGqbBoSTtH4d0LJ7E2xFmtPoTLo1mAx8sShuS7tWCQwD5fNbS0OO+x3m6yjYWE
+         qYEJWmWZVtwozVK/4v2SL3TbyoauG6T8j2xM/8Nr0qbdpT/dGU+aYwE5RTFw/qHg2JKC
+         Rgvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=bnhl0Q1+XYxPjs75yjJdAmg4WY07uhIM66gNg9Xd2YM=;
+        b=nZ23u5l8n9ZTHr6LJ7oWiuvhtYh9T5rgmmCaiv+Sgbo7UhGIXFTI+EvB6jDmJaRiNH
+         K0yt3LKgLkc3DUnrpchTvSGXXbZwSJ0qhs3xcgLtIIfM0Cur4Sl0RZhyj1hpgKxlD9tb
+         Y7ekehzABS4ukHgrYvSYB+Xn6kT6x6qX1NSFx4Iovhe3VbaA35cQlHfJUb2M7Rac9AiN
+         pdWz84bBkEaInF8tZ/xXfecOE3ISt+aOB+H3wqy7Pnvj7nx23VeHy3DtJoiPa7y7Eoya
+         WfUdOM13sVx/0EzWK0n7KXCePvIW7Y+LaiYTyvFh8X/3Npr0fujeJkAYmBSo/yTU5n9s
+         a/wQ==
+X-Gm-Message-State: ACgBeo1LayALJSq6RLPSgsRezg9xjsFVcY9QoEivZ0rEX6MrlET7uAhB
+        Q7O3xayJyp+ZlmIuDPr3+HDEd9VdVMA0Dg==
+X-Google-Smtp-Source: AA6agR5S+Yar9OjOb1s65oardSXrc78QwA3sS+0yDCXUgGpZ/gm/XNJdb/o6ByRZfZ1wg8Ujr7P/XA==
+X-Received: by 2002:a05:600c:4148:b0:3a5:4f94:577b with SMTP id h8-20020a05600c414800b003a54f94577bmr4256788wmm.167.1662700309099;
+        Thu, 08 Sep 2022 22:11:49 -0700 (PDT)
+Received: from localhost.localdomain (188.red-88-10-59.dynamicip.rima-tde.net. [88.10.59.188])
+        by smtp.gmail.com with ESMTPSA id m29-20020a05600c3b1d00b003a845fa1edfsm12198749wms.3.2022.09.08.22.11.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 22:11:48 -0700 (PDT)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, john@phrozen.org, arinc.unal@arinc9.com
+Subject: [PATCH] mips: ralink: mt7621: add gnubee device trees into the kernel
+Date:   Fri,  9 Sep 2022 07:11:47 +0200
+Message-Id: <20220909051147.1948425-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 3/4] mm: rmap: Extend tlbbatch APIs to fit new
- platforms
-Content-Language: en-US
-To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
-        yangyicong@hisilicon.com, huzhanyuan@oppo.com, lipeifeng@oppo.com,
-        zhangshiming@oppo.com, guojian@oppo.com, realmz6@gmail.com,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, Barry Song <21cnbao@gmail.com>,
-        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
-        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Nadav Amit <namit@vmware.com>,
-        Mel Gorman <mgorman@suse.de>
-References: <20220822082120.8347-1-yangyicong@huawei.com>
- <20220822082120.8347-4-yangyicong@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220822082120.8347-4-yangyicong@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,97 +66,66 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Device tree blobs for ralink mt7621 SoCs depends on configuration
+CONFIG_SOC_MT7621 kernel option. This blobs needs to be properly
+builtin into the kernel in order to be able to properly boot the
+Gnubee boards. Hence, we need to define specific DTB config options
+to know which device tree must be compiled and embeeded into the
+kernel for every single board to allow the generated kernel to boot
+properly.
 
+Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
+Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+---
+ arch/mips/boot/dts/ralink/Makefile |  6 ++----
+ arch/mips/ralink/Kconfig           | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-On 8/22/22 13:51, Yicong Yang wrote:
-> From: Barry Song <v-songbaohua@oppo.com>
-> 
-> Add uaddr to tlbbatch APIs so that platforms like ARM64 are
+diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
+index 11732b8c8163..b0552bfa555a 100644
+--- a/arch/mips/boot/dts/ralink/Makefile
++++ b/arch/mips/boot/dts/ralink/Makefile
+@@ -5,9 +5,7 @@ dtb-$(CONFIG_DTB_RT3883_EVAL)	+= rt3883_eval.dtb
+ dtb-$(CONFIG_DTB_MT7620A_EVAL)	+= mt7620a_eval.dtb
+ dtb-$(CONFIG_DTB_OMEGA2P)	+= omega2p.dtb
+ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
+-
+-dtb-$(CONFIG_SOC_MT7621) += \
+-	mt7621-gnubee-gb-pc1.dtb \
+-	mt7621-gnubee-gb-pc2.dtb
++dtb-$(CONFIG_DTB_GNUBEE1)	+= mt7621-gnubee-gb-pc1.dtb
++dtb-$(CONFIG_DTB_GNUBEE2)	+= mt7621-gnubee-gb-pc2.dtb
+ 
+ obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+index f9fe15630abb..cf2f5cccd2b3 100644
+--- a/arch/mips/ralink/Kconfig
++++ b/arch/mips/ralink/Kconfig
+@@ -62,7 +62,6 @@ endchoice
+ 
+ choice
+ 	prompt "Devicetree selection"
+-	depends on !SOC_MT7621
+ 	default DTB_RT_NONE
+ 	help
+ 	  Select the devicetree.
+@@ -100,6 +99,16 @@ choice
+ 		depends on SOC_MT7620
+ 		select BUILTIN_DTB
+ 
++	config DTB_GNUBEE1
++		bool "GnuBee1 2.5inch NAS"
++		depends on SOC_MT7621
++		select BUILTIN_DTB
++
++	config DTB_GNUBEE2
++		bool "GnuBee2 3.5inch NAS"
++		depends on SOC_MT7621
++		select BUILTIN_DTB
++
+ endchoice
+ 
+ endif
+-- 
+2.25.1
 
-I guess 'uaddr' refers to a virtual address from the process address
-space itself ? Please be more specific.
-
-> able to apply this on their specific hardware features. For
-> ARM64, this could be sending tlbi into hardware queues for
-> the page with this particular uaddr.
-
-This subject line and commit message here are misleading. The patch
-adds an address argument to arch callback arch_tlbbatch_add_mm() as
-arm64 platform could use that to perform the TLB flush batching ?
-
-This patch can be folded into the next one, so that the requirement
-for an additional argument 'uaddr' in the arch callback will be self
-evident. OR if this is going to be a preparatory patch, then it must
-explain how 'uaddr' argument is helpful on platforms like arm64 while
-performing TLB flush batching. But TBH, just folding it to next patch
-explains the context better.
-
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Nadav Amit <namit@vmware.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Tested-by: Xin Hao <xhao@linux.alibaba.com>
-> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->  arch/x86/include/asm/tlbflush.h |  3 ++-
->  mm/rmap.c                       | 10 ++++++----
->  2 files changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-> index 8a497d902c16..5bd78ae55cd4 100644
-> --- a/arch/x86/include/asm/tlbflush.h
-> +++ b/arch/x86/include/asm/tlbflush.h
-> @@ -264,7 +264,8 @@ static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
->  }
->  
->  static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
-> -					struct mm_struct *mm)
-> +					struct mm_struct *mm,
-> +					unsigned long uaddr)
->  {
->  	inc_mm_tlb_gen(mm);
->  	cpumask_or(&batch->cpumask, &batch->cpumask, mm_cpumask(mm));
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index a17a004550c6..7187a72b63b1 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -642,12 +642,13 @@ void try_to_unmap_flush_dirty(void)
->  #define TLB_FLUSH_BATCH_PENDING_LARGE			\
->  	(TLB_FLUSH_BATCH_PENDING_MASK / 2)
->  
-> -static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-> +static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
-> +				      unsigned long uaddr)
->  {
->  	struct tlbflush_unmap_batch *tlb_ubc = &current->tlb_ubc;
->  	int batch, nbatch;
->  
-> -	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm);
-> +	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm, uaddr);
->  	tlb_ubc->flush_required = true;
->  
->  	/*
-> @@ -725,7 +726,8 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
->  	}
->  }
->  #else
-> -static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-> +static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
-> +				      unsigned long uaddr)
->  {
->  }
->  
-> @@ -1587,7 +1589,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->  				 */
->  				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
->  
-> -				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-> +				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval), address);
->  			} else {
->  				pteval = ptep_clear_flush(vma, address, pvmw.pte);
->  			}
