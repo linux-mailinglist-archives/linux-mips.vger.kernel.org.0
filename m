@@ -2,97 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D7F5B44F7
-	for <lists+linux-mips@lfdr.de>; Sat, 10 Sep 2022 09:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA085B45F3
+	for <lists+linux-mips@lfdr.de>; Sat, 10 Sep 2022 12:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiIJHx1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Sep 2022 03:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S229459AbiIJKxW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 10 Sep 2022 06:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIJHxZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Sep 2022 03:53:25 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580B511153
-        for <linux-mips@vger.kernel.org>; Sat, 10 Sep 2022 00:53:23 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id t3so3837251ply.2
-        for <linux-mips@vger.kernel.org>; Sat, 10 Sep 2022 00:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date;
-        bh=JE+O0JjBaUaKaVbXBPjztEKOPO7pJKl9qx1EvIyCmeg=;
-        b=cvZJIBqGw+0ibOxmX+2fb/j2Y70TPEysHn1ZyDWt4NtukFlD84lWxjHmLm+5vXJ+VJ
-         KXVReY8lhuzBkeoQdI7cqq4CEGfH6ZTdjzNeF13E1LDMcxz87nP6HidR7yqXFQU1vbnh
-         AFBCIQriexf4bFS7x6XlHr4yXe5h214hVucA3T2xooH1iY/urtq9/xFfF+fNYNhSazGp
-         s44Y7FJm+0cx4aAai0rYk6VbcIjmSTh5h7jqgPsI7/RNW8pRFTd8/HnYFNpqYW6qV08Q
-         u4byXDmpYkU4fdgZVV/tCI7UrKUMeRH8yPvPvt+aTkXy8pnKHYljhWXg0m7Nm+SlAE88
-         zgbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=JE+O0JjBaUaKaVbXBPjztEKOPO7pJKl9qx1EvIyCmeg=;
-        b=mkiwFhPhUB7K0A1ZcZSzNzY8ajDPSNui9JKc0uy51E7G87kzRWyXVcgMHMLjGslFZW
-         gdd93JC2qNxY11z9LOM3hht0M/0v7G4cuCeKF8dIkH9AQh8O90uSuJUG8LlrATD//ESv
-         xs5bWSO7iHJudC61kso6GmDS6oEcp4CqZQcFCIDul8Byt5M1y9kgCVNxwkyhk4lUTers
-         20D5Uil/geuBY0Unu556t4FGW/bE0q4JtnpfOuat89Fn4Kz+8ncrgMAquh4OkDAlvHXr
-         qbTJBrYIYg/EMFjJrsSRSNXqh3zE+slw7G8lCr0kgti6yH1SF7sYL/i2HBJWGkjflU9o
-         ebyg==
-X-Gm-Message-State: ACgBeo22vUyPKJjTvqfwWHmx3BUgPMXXE+WgLW1bKPWQp0zT9DwjL4Pu
-        /Gxa+qQyKE2HQEm/KZOUBTciMH7bTsVR7A==
-X-Google-Smtp-Source: AA6agR5WNWyuopz0i+tWtj4d6z/9P1Jiwgf7f0mslhclROc9ftNMoa4vQmNLf5f/958mh31IrCT/nw==
-X-Received: by 2002:a17:90b:1d02:b0:1fe:36a:6e01 with SMTP id on2-20020a17090b1d0200b001fe036a6e01mr13521195pjb.102.1662796402707;
-        Sat, 10 Sep 2022 00:53:22 -0700 (PDT)
-Received: from google.com ([2620:15c:2ce:200:3bf1:3d60:1b12:a903])
-        by smtp.gmail.com with ESMTPSA id z12-20020a170903018c00b00176d4b093e1sm1717555plg.16.2022.09.10.00.53.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Sep 2022 00:53:21 -0700 (PDT)
-Date:   Sat, 10 Sep 2022 00:53:16 -0700
-From:   Fangrui Song <maskray@google.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic
- relocations
-Message-ID: <20220910075316.no72fdyqjvunomwm@google.com>
-References: <20220830193701.1702962-1-maskray@google.com>
+        with ESMTP id S229455AbiIJKxV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Sep 2022 06:53:21 -0400
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358B67549D
+        for <linux-mips@vger.kernel.org>; Sat, 10 Sep 2022 03:53:17 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 1134 invoked from network); 10 Sep 2022 12:53:15 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1662807195; bh=ySIT/E9Gt09cmxMpPlzE5Vy+axb5DVXkBXG6cqkUlbA=;
+          h=Subject:To:Cc:From;
+          b=pSjJ7yhl30zGLZHJaOwWzCg+aLFhNWRw7QMA74OmvSSmzKvUzNEmgRZa0vfLk8FuC
+           NenomNaZwQstKZhrLYzHm9u8bQbd9y4ckNEeDJ4opuD6XJO4xnOIpnOueIT/XaLJ7M
+           Ky4jgg/D88SkfoZHxycdGNSej9fezo46aBXd0ddE=
+Received: from ip-137-21.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.21])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <tsbogend@alpha.franken.de>; 10 Sep 2022 12:53:15 +0200
+Message-ID: <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
+Date:   Sat, 10 Sep 2022 12:53:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220830193701.1702962-1-maskray@google.com>
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
+ VPE
+Content-Language: en-US
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220702190705.5319-1-olek2@wp.pl>
+ <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+ <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
+ <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
+ <20220707100630.GC9894@alpha.franken.de>
+ <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
+ <20220707143930.GA14693@alpha.franken.de>
+From:   Aleksander Bajkowski <olek2@wp.pl>
+In-Reply-To: <20220707143930.GA14693@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-WP-MailID: d28ee153a6549419ec426d4a137f785b
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000C [geMU]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022-08-30, Fangrui Song wrote:
->The actual intention is that no dynamic relocation exists. However, some
->GNU ld ports produce unneeded R_*_NONE. (If a port is not care enough to
->determine the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
->relocations. E.g. powerpc64le ld as of 2.38 has the issue with
->defconfig.) R_*_NONE are generally no-op in the dynamic loaders. So just
->ignore them.
->
->With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
->bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
->not called "absolute relocations". (The patch is motivated by the arm64
->port missing R_AARCH64_RELATIVE.)
->
->While here, replace "egrep" with "grep" as "egrep" is deprecated in GNU
->grep 3.7.
->
->Signed-off-by: Fangrui Song <maskray@google.com>
->---
->[...]
->
+Hi THomas,
 
-Ping.
+On 7/7/22 16:39, Thomas Bogendoerfer wrote:
+[...]
+>> Or can you point me to the code in
+>> drivers/irqchip/irq-mips-cpu.c that's responsible for enabling the
+>> interrupts on VPE 1 (is it simply unmask_mips_irq)?
+> 
+> IMHO there is the problem, irq-mips-cpu.c can only do CPU irq operations
+> on the same CPU. I've checked MIPS MT specs and it's possible do
+> modify CP0 registers between VPEs. Using that needs changes in
+> irq-mips-cpu.c. But mabye that's not woth the effort as probably
+> all SMP cabable platforms have some multi processort capable
+> interrupt controller implemented.
+> 
+> I thought about another way solve the issue. By introducing a
+> new function in smp-mt.c which sets the value of the interrupt
+> mask for the secondary CPU, which is then used in vsmp_init_secondary().
+> Not sure if this is worth the effort compared to a .boot_secondary
+> override.
+
+
+Enabling interrupts on the second VPE using hotplug will be accepted
+upstream? Below is a sample patch.
+
+Unfortunately, this is not a generic solution. If in the future there
+are more platforms that require a similar patch, this can be converted
+into some generic solution.
+
+--- a/arch/mips/lantiq/irq.c
++++ b/arch/mips/lantiq/irq.c
+@@ -335,6 +336,18 @@ static const struct irq_domain_ops irq_domain_ops = {
+ 	.map = icu_map,
+ };
+ 
++static int lantiq_cpu_starting(unsigned int cpu)
++{
++	/*
++	 * MIPS CPU startup function vsmp_init_secondary() will only enable some of
++	 *  the interrupts for the second CPU/VPE. Fix this during hotplug.
++	 */
++	if (cpu > 0)
++		set_c0_status(ST0_IM);
++
++	return 0;
++}
++
+ int __init icu_of_init(struct device_node *node, struct device_node *parent)
+ {
+ 	struct device_node *eiu_node;
+@@ -410,6 +423,10 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
+ 	}
+ 	of_node_put(eiu_node);
+ 
++	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LANTIQ_STARTING,
++				  "arch/mips/lantiq:starting",
++				  lantiq_cpu_starting, NULL);
++
+ 	return 0;
+ }
+ 
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -152,6 +152,7 @@ enum cpuhp_state {
+ 	CPUHP_AP_IRQ_RISCV_STARTING,
+ 	CPUHP_AP_IRQ_LOONGARCH_STARTING,
+ 	CPUHP_AP_IRQ_SIFIVE_PLIC_STARTING,
++	CPUHP_AP_IRQ_LANTIQ_STARTING,
+ 	CPUHP_AP_ARM_MVEBU_COHERENCY,
+ 	CPUHP_AP_MICROCODE_LOADER,
+ 	CPUHP_AP_PERF_X86_AMD_UNCORE_STARTING,
+
+
+Best regards,
+Aleksander
