@@ -2,61 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA085B45F3
-	for <lists+linux-mips@lfdr.de>; Sat, 10 Sep 2022 12:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A615B4A9F
+	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 00:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiIJKxW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Sep 2022 06:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S229651AbiIJWtN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 10 Sep 2022 18:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiIJKxV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Sep 2022 06:53:21 -0400
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358B67549D
-        for <linux-mips@vger.kernel.org>; Sat, 10 Sep 2022 03:53:17 -0700 (PDT)
-Received: (wp-smtpd smtp.wp.pl 1134 invoked from network); 10 Sep 2022 12:53:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1662807195; bh=ySIT/E9Gt09cmxMpPlzE5Vy+axb5DVXkBXG6cqkUlbA=;
-          h=Subject:To:Cc:From;
-          b=pSjJ7yhl30zGLZHJaOwWzCg+aLFhNWRw7QMA74OmvSSmzKvUzNEmgRZa0vfLk8FuC
-           NenomNaZwQstKZhrLYzHm9u8bQbd9y4ckNEeDJ4opuD6XJO4xnOIpnOueIT/XaLJ7M
-           Ky4jgg/D88SkfoZHxycdGNSej9fezo46aBXd0ddE=
-Received: from ip-137-21.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.21])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <tsbogend@alpha.franken.de>; 10 Sep 2022 12:53:15 +0200
-Message-ID: <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
-Date:   Sat, 10 Sep 2022 12:53:40 +0200
+        with ESMTP id S229534AbiIJWtJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Sep 2022 18:49:09 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 629F34E60F;
+        Sat, 10 Sep 2022 15:49:08 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oX9He-0003Ex-00; Sun, 11 Sep 2022 00:49:06 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 11F12C1128; Sun, 11 Sep 2022 00:48:59 +0200 (CEST)
+Date:   Sun, 11 Sep 2022 00:48:59 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes for v6.0
+Message-ID: <20220910224858.GA13203@alpha.franken.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
- VPE
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220702190705.5319-1-olek2@wp.pl>
- <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
- <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
- <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
- <20220707100630.GC9894@alpha.franken.de>
- <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
- <20220707143930.GA14693@alpha.franken.de>
-From:   Aleksander Bajkowski <olek2@wp.pl>
-In-Reply-To: <20220707143930.GA14693@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-WP-MailID: d28ee153a6549419ec426d4a137f785b
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000C [geMU]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,78 +38,40 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi THomas,
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-On 7/7/22 16:39, Thomas Bogendoerfer wrote:
-[...]
->> Or can you point me to the code in
->> drivers/irqchip/irq-mips-cpu.c that's responsible for enabling the
->> interrupts on VPE 1 (is it simply unmask_mips_irq)?
-> 
-> IMHO there is the problem, irq-mips-cpu.c can only do CPU irq operations
-> on the same CPU. I've checked MIPS MT specs and it's possible do
-> modify CP0 registers between VPEs. Using that needs changes in
-> irq-mips-cpu.c. But mabye that's not woth the effort as probably
-> all SMP cabable platforms have some multi processort capable
-> interrupt controller implemented.
-> 
-> I thought about another way solve the issue. By introducing a
-> new function in smp-mt.c which sets the value of the interrupt
-> mask for the secondary CPU, which is then used in vsmp_init_secondary().
-> Not sure if this is worth the effort compared to a .boot_secondary
-> override.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
+are available in the Git repository at:
 
-Enabling interrupts on the second VPE using hotplug will be accepted
-upstream? Below is a sample patch.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.0_1
 
-Unfortunately, this is not a generic solution. If in the future there
-are more platforms that require a similar patch, this can be converted
-into some generic solution.
+for you to fetch changes up to 727488e305b223ca69205ca5a3b99ace21bbbf5f:
 
---- a/arch/mips/lantiq/irq.c
-+++ b/arch/mips/lantiq/irq.c
-@@ -335,6 +336,18 @@ static const struct irq_domain_ops irq_domain_ops = {
- 	.map = icu_map,
- };
- 
-+static int lantiq_cpu_starting(unsigned int cpu)
-+{
-+	/*
-+	 * MIPS CPU startup function vsmp_init_secondary() will only enable some of
-+	 *  the interrupts for the second CPU/VPE. Fix this during hotplug.
-+	 */
-+	if (cpu > 0)
-+		set_c0_status(ST0_IM);
-+
-+	return 0;
-+}
-+
- int __init icu_of_init(struct device_node *node, struct device_node *parent)
- {
- 	struct device_node *eiu_node;
-@@ -410,6 +423,10 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
- 	}
- 	of_node_put(eiu_node);
- 
-+	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LANTIQ_STARTING,
-+				  "arch/mips/lantiq:starting",
-+				  lantiq_cpu_starting, NULL);
-+
- 	return 0;
- }
- 
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -152,6 +152,7 @@ enum cpuhp_state {
- 	CPUHP_AP_IRQ_RISCV_STARTING,
- 	CPUHP_AP_IRQ_LOONGARCH_STARTING,
- 	CPUHP_AP_IRQ_SIFIVE_PLIC_STARTING,
-+	CPUHP_AP_IRQ_LANTIQ_STARTING,
- 	CPUHP_AP_ARM_MVEBU_COHERENCY,
- 	CPUHP_AP_MICROCODE_LOADER,
- 	CPUHP_AP_PERF_X86_AMD_UNCORE_STARTING,
+  mips: Select SPARSEMEM_EXTREME (2022-09-09 17:37:27 +0200)
 
+----------------------------------------------------------------
+- fix for loongson32 starup hang
+- fix for octeon irq setup problem
+- fix compiler warning for new CONFIG option
+- switch to SPARSEMEM_EXTREME for all platforms selecting SPARSEMEM
 
-Best regards,
-Aleksander
+----------------------------------------------------------------
+Alexander Sverdlin (3):
+      MIPS: octeon: Get rid of preprocessor directives around RESERVE32
+      MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
+      mips: Select SPARSEMEM_EXTREME
+
+Yang Ling (1):
+      MIPS: loongson32: ls1c: Fix hang during startup
+
+ arch/mips/Kconfig                                  |  1 -
+ arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c |  4 ----
+ arch/mips/cavium-octeon/octeon-irq.c               | 10 ++++++++
+ arch/mips/cavium-octeon/setup.c                    | 27 +++++++++-------------
+ arch/mips/loongson32/ls1c/board.c                  |  1 -
+ 5 files changed, 21 insertions(+), 22 deletions(-)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
