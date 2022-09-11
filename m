@@ -2,203 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09DB5B4FE6
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 18:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9555B500A
+	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 18:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiIKQMq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 11 Sep 2022 12:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S229619AbiIKQhc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 11 Sep 2022 12:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIKQMp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Sep 2022 12:12:45 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C2B2A97C;
-        Sun, 11 Sep 2022 09:12:44 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id r17so14932714ejy.9;
-        Sun, 11 Sep 2022 09:12:44 -0700 (PDT)
+        with ESMTP id S229441AbiIKQha (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Sep 2022 12:37:30 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2045.outbound.protection.outlook.com [104.47.51.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F65D9E;
+        Sun, 11 Sep 2022 09:37:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mAcJWicjW2LDpMJf0169zVKKoTX3FiBFU05SiwwyYpOWROo07sSVcsK28WkGAnb0FKYAxXMc/RCfNa/Zs5+58qTLWssUDS0bFdRTWpu4l+BZp8ccFFSuupralwiySiR8Y9iYsFIkI348xy2V76DebwHJueI0uvpocwpFu4qd63J7Zx5pgqRXtZxKXVs+AZDmpYpCMfJ9pudi+S1BntDQFlvHnzYZZcuhLfRGHYOwb8r+6rjkeHGhg7RkINBQxd/5+9q9Q55TagULRwfCa59v9kIBnwnJB44jUPqGghJvoqXnj7qLcnbrYqrI6Xfhc/HtWUR+/JS+mJD616z8ju1LAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0qhUPBNOhz+kD4sYIG7SR2X03YxLr3zTNkLZGiPSMW8=;
+ b=iAYHmTFwQa/6OOqLVoiLjucK6vsm5DRxuzOjlJ6bXCCoQZdbE1lNNeiSiIrqtR3sQ7gbLlHGSW8GnPHxzvEkg1Jqhf0Hep2LA4E6D36me36wLMHH/rNnS+oHEi2JeNWn2MPAvOMMTcJu7WwK7xysqSwYuwBw+42HtuzopZ0dDwbSLs0e9eSQ7ucxvoV1zLMjvpzjSjgBLRkEJgOErWoZIBm5wC/CDhPMJhSDqvA+BOZ1ko21A/1WO764+YvOQYr+f1v4vIKs0CvpGSDIQu2VbvKbD4vrWnZKN2Z7XhfYjdwuLOtt4ukaA1+JhKdb60ll+rFPnde0DGK2tnleGYs7sg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=hJ+e1XeZm7JvbKoyrv/rO2Ob1FAmtRjWjX/U6v/BW8c=;
-        b=aqL5tyqT2dBJQXOD7BO+QiMrPRsJgTKqA81lToLsQtKvWPAYziAyTyUAngDSiPiILc
-         UuPyWS6qZBHWEBmXYNM9/muD32S4IduugF6YyzLdLF/iBD5/GiLIYojslmsvFJUGEJg+
-         oLWjpWABmCp4iuOJxQhpaTtwWm8QMrUca0B76ZFbH4xoHSK9LmjHrpdQ7OJSEliPay2c
-         Qx01hMxjZ7gffAoNYhcWolaful59mZulD1Bn8qz6zTLtCxAd+wlcC8hXXKHOIIJeU+95
-         zA03ETbktj33Y8yhcqqqCkc78StVNK5SgMLpdZHVDUKLowLqVEjqUzBCC0hV43LHZrzB
-         wx6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=hJ+e1XeZm7JvbKoyrv/rO2Ob1FAmtRjWjX/U6v/BW8c=;
-        b=3A+6rF8i8asjCQtRat9oWEj5EO35+6D3vsjgpDnjgunEFnegK+h/W5OnS6trKpBfbx
-         9AyAynewY1oUmYFcqvWraLJNx6eHlhLlEI/IMwCHroa71sHTf5NNuCUbBJyAjx7LvFYk
-         uQwfKQX/L8ZHexvUErOx0moPlEFAOzK0wGNOgKsEr/lc+8PDojr46azYeMxWTumMtgQE
-         xHkm6hMnOJQmvzK1rJa5HFy67a/8xhvMGCDcez3uyDF7J7s5UIKbGpKZu+kPU4NAxpAT
-         v9oVGwjFyZBQ5IYUPt/aKTxpWJNrsHuWXgHB7bWNXZV3zOtF/i8GW15NGQmn1rTgnItO
-         o0IA==
-X-Gm-Message-State: ACgBeo2hcXnkMpq3N+1vywBtA0JwGFMt/QtzqyXAyQ5ljPvzYfHePLhP
-        M/WpvtX9kmWpL3RmAk4rotXMDxFszvhyNH7/lZ4IJQK17tT8lwSk
-X-Google-Smtp-Source: AA6agR63L9wzsGtfPmSrLrHLW7XeAUElmg2ezRCAbl6X0aiLIEFrV2cFCs2BDvowKwLH7WGNQlaMJkdNOg9B7VCWRLs=
-X-Received: by 2002:a17:907:2cce:b0:77a:6958:5aaa with SMTP id
- hg14-20020a1709072cce00b0077a69585aaamr6890242ejc.245.1662912762587; Sun, 11
- Sep 2022 09:12:42 -0700 (PDT)
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0qhUPBNOhz+kD4sYIG7SR2X03YxLr3zTNkLZGiPSMW8=;
+ b=rD1Yaz2HvsE2q2Rr0+69g1H/+7yQCdCvjzKSKvQXULCHtk98/8gs29yp2n7W7lhXfvzE8KtJF5pM3GpE1yx2LtRcAHaz7NcyKG0Rw/6ExExJq8IgdEbhOR9XQmd+5GK3UOC4s422mnoGt0+hVKwlyeeSI/NmIdDZxO7TlwdrSHQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BLAPR10MB5331.namprd10.prod.outlook.com
+ (2603:10b6:208:334::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.16; Sun, 11 Sep
+ 2022 16:37:27 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::38ee:4bfb:c7b8:72e1]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::38ee:4bfb:c7b8:72e1%7]) with mapi id 15.20.5588.020; Sun, 11 Sep 2022
+ 16:37:27 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH v2 0/1] Convert phy-ocelot-serdes documentation to YAML
+Date:   Sun, 11 Sep 2022 09:37:14 -0700
+Message-Id: <20220911163715.4036144-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0128.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::13) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-References: <20220911072251.25024-1-keguang.zhang@gmail.com> <20220911152725.xp6kvrh7542bjep6@mobilestation>
-In-Reply-To: <20220911152725.xp6kvrh7542bjep6@mobilestation>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Mon, 12 Sep 2022 00:12:29 +0800
-Message-ID: <CAJhJPsWYqVoMtLs_YpYKDKg3+YSGGiYfRLGtyUbvW48OfmRLJw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Loongson32: Fix PHY-mode being left unspecified
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2e4fb3d9-8fae-4282-9098-08da9413e984
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5331:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6xBSRfYmy1+nyHrDOug/ujAq9EP/bm4hhRFTZrLP/KJu3q26mWIghoX5PxEN2SmGRNUwZ68faifz9KIUvG2Ij7MN1dwx6Kg0EqsMiUnRdN+Lv69Bt1zigcl4z47ksyqCAuIcTdrwWYWhOwMPMarzpLQWX7+NWoIM1RyIO2h9j9mVmFAxSEvDwoQZkd+LSwraj2CeGZD71fHWYqXCoKwDetQRK3qOBa6bMfNZCIuBUfkeNpctOGko4Igfd/I0+2M7kY59zZXyT/qPS5xxdGNKDAz5sDTIRxeopEJpy9/MR2oG/J6PYam0fyllTyUsEfu0eV39ypbtlokS8bmg4xkWJnZQ6b0KerRz4gj7+xVl2xbRA3yQUHMDDM2AAgUM0+zeT4o0asovc2Hywelv4HfM7oY7E7ZsyrdmhK3cOWAQOZeAbJdS23IzHQ5c+pM0wTW1JAJqEl1H2vFFWWKBA3C4Jc1YMPnYH5eO1wd4JT/0H48ODDRimcn7wmJTbhSuh/OUMte4Q/uZ/WxeAdZcaZZXmJ9EbUXngA/ibSg3HSlY49jBXCfXmRAiUxtdsV+S5p3DHSPdOKQIMJH39iKN48XWtELpXqDFsEiL/VDGAaCnmYxQgyBc+/llgJ1nLd7ttKy4MRgzZyCZQGggXZA516kJ2NmP/wUTP9sTEQ0AGyD5Qn45yubTbve+HB17/AQtx1YT7nmbQeoUEq5aC45GFflSABE2HaGdLPPb84el8IAxN8n5HeEEwxoPBsQu5/bB1TVS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39830400003)(396003)(366004)(376002)(346002)(136003)(66946007)(66556008)(4326008)(66476007)(8676002)(6486002)(41300700001)(316002)(54906003)(86362001)(478600001)(36756003)(8936002)(2906002)(44832011)(7416002)(5660300002)(4744005)(38100700002)(38350700002)(26005)(6666004)(6512007)(52116002)(83380400001)(186003)(6506007)(1076003)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mYly3KqfXLF9AKvAXwgPuHXI5qwbrbaUx1Pld9FuKFPJEQdAieaVK8Ua0HvG?=
+ =?us-ascii?Q?GQJuRFbCz/xbYWG37ec5U1O9Xzcc5SqYnJAGn/6rouQh3ZAWQxOzVIpzrsnb?=
+ =?us-ascii?Q?ZTw6DnFUwPKrN97ozwbS/EtWXMyvvBYEmV6fFTrSjkqLEleE7WCzcUXuGamb?=
+ =?us-ascii?Q?AbSwuoRiAtnEc+6GFYNgDfCIQyducvCVQ9nEnnJdF+yDJjnzY3bVv+tCSBd5?=
+ =?us-ascii?Q?Bt9exZ+2GKnTEU0Cprhsu8Igyd99d39eDgYwEDMIo7DktsITvkG/ALCb8uQr?=
+ =?us-ascii?Q?DjVPzG4Wi0SjbFAbKnuBACJPnuljnSHCZKKij/jE4tyEK/H8vajEi1QUnbCi?=
+ =?us-ascii?Q?VNc3rDO5BTMTDqqqfw/s0clZ0qrXTx5KJOAcI6yf8XpR8vh63oV3uBB6fMFd?=
+ =?us-ascii?Q?Fey9DHKPodDZ/bACwhh4RtVS5fdrow5Wh7ZgHIrlUzwk4wMw54XYW6F6SWty?=
+ =?us-ascii?Q?wdjJwCxQrzTHlCpzta4y9DD71rApQ9+aNPYQ91qmooXoUJQQC6arOkA6D++P?=
+ =?us-ascii?Q?E1CfSyr7B0bjRT1RlLWmjbQ135pdtYWPRL5n6tRdJYwswL9noUXPEt1IV6QV?=
+ =?us-ascii?Q?2L226suaimlMxhxuVH1Nyg7YpIzimP7xhPePUJREJ7pOxJOWkJQbdVDVH5NC?=
+ =?us-ascii?Q?rquL8Y75be5So+9dwfRWnXZuDcf+iiwE58PaRn6BJ0BGosnYFXb/E+8sT07S?=
+ =?us-ascii?Q?5yb1eDUePOqbqalbRksJ83JF+FJBHm0rZpX7U+BaE87y2PldGHmFobFkE45S?=
+ =?us-ascii?Q?8dsC5h12UDlCSJmBs31PRv8DKVOBmiT/MdtC3PjCzCbMFlU87jMe+OE27pG5?=
+ =?us-ascii?Q?ymyYt4pjkWeyxnFW3wtx+uWLZ3qr62Z0nsWcgO5ngl3mYItQ0yWXfGwUM3Vp?=
+ =?us-ascii?Q?oHHybYGYmA+OdpZZlCwvLL0rX5ZchgAtSRkOpRNPajqbzRl7sXTfW7cOAMNz?=
+ =?us-ascii?Q?hN//slVI7BRjgIJORjgsmNp5HHlA+G+KlucghnJvaUzGaKjFhIRrDBh5JhBn?=
+ =?us-ascii?Q?cJA/+SN8r7V7y2nrDwaRoVECgLsnL5RtVzUSkif4RGQO+X+2G9KHnP/arlEQ?=
+ =?us-ascii?Q?VnIXLF6TlW9AB8d5Jwrz3MjWjw+qHEzL/7/kFWynQ15mjsNecAlutqeuMGfI?=
+ =?us-ascii?Q?acyjiPrnY/8FJhIWnwgkoAt8JEG/PQRR3a8hDwVU0sVqikfcZd9f0NwEhELJ?=
+ =?us-ascii?Q?kUAFqvuaadMVHjaVk7zPR7UwJS49DgtNa75MTiC+o3cmOnI5BnNR7Xc4OUnB?=
+ =?us-ascii?Q?uPWEbCJZ7jCOtdz+uY9vN2Mh3R+Kp9AL2Me7zwzJhLJKY+so+A55RF6CGVzt?=
+ =?us-ascii?Q?+e3Y+NQ0bovIvZQ+bAHSehk8eC9KRrQKGYqfraiBgnMtSG9X3qqIZEK5ds3L?=
+ =?us-ascii?Q?kv2h2BwtyT6pngFZ3M3IC+fDvDyTooWq+eDPagw1O+hwoq6+lDz2iITu0F/3?=
+ =?us-ascii?Q?bpaL/wLqrnGrCoc1U3xIPK9oDSJIzL/nJr7vEXEYMPMy+CQhPlhPX+UsIIhr?=
+ =?us-ascii?Q?bJpHPyL1jIJbO7sWw8qKx8L9FRW5VMtKiXxPzMWS5QIwSZyQBPN5JfIbx7xB?=
+ =?us-ascii?Q?mVXxngPNjMTOc7t6sbDGz+te07CF1i5SWq38Wk8i2jO0uUSV9Gk7y54Fi71S?=
+ =?us-ascii?Q?Kw=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e4fb3d9-8fae-4282-9098-08da9413e984
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2022 16:37:27.2696
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yVHE6K5tFK8hMLo/UtWv6AL9KsevT7hVFOSj44obDCg4oeCeqfpItEQCtZwDgOPusTNzqUmLmNZ0BwFhBedrNbN4lKNm5b0zeznJZR1BAvY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5331
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Serge,
+Work is currently being done to add the phy-ocelot-serdes driver to a
+non-syscon configuration. Doing so will require updates to the
+documentation.
 
-Serge Semin <fancer.lancer@gmail.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=8811=E6=
-=97=A5=E5=91=A8=E6=97=A5 23:27=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hello Kelvin
->
-> On Sun, Sep 11, 2022 at 03:22:51PM +0800, Kelvin Cheung wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> >
-> > commit 0060c8783330 ("net: stmmac: implement support for passive mode
-> > converters via dt") has changed the plat->interface field semantics fro=
-m
-> > containing the PHY-mode to specifying the MAC-PCS interface mode. Due t=
-o
-> > that the loongson32 platform code will leave the phylink interface
-> > uninitialized with the PHY-mode intended by the means of the actual
-> > platform setup. The commit-author most likely has just missed the
-> > arch-specific code to fix. Let's mend the Loongson32 platform code then=
- by
-> > assigning the PHY-mode to the phy_interface field of the STMMAC platfor=
-m
-> > data.
-> >
->
-> > Fixes: 0060c8783330 ("net: stmmac: implement support for passive mode c=
-onverters via dt")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
->
-> Your SoB tag should be here too right between mine SoB and TB
-> tags [1].
+I can certainly wait until that change set to submit this, but I feel
+sooner is better than later for Documentation format updates. Also,
+those updates likely won't be ready before this next merge window.
 
-Done.
-Just sent PATCH v2.
+The only liberty I took was adding Alexandre and UNGLinuxDriver as the
+maintainers, otherwise the content should be the same.
 
->
-> [1] Documentation/process/submitting-patches.rst, line 419 - 423.
->
-> -Sergey
->
-> > Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
->
-> > ---
-> >  arch/mips/loongson32/common/platform.c | 16 ++++++++--------
-> >  1 file changed, 8 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongso=
-n32/common/platform.c
-> > index 794c96c2a4cd..311dc1580bbd 100644
-> > --- a/arch/mips/loongson32/common/platform.c
-> > +++ b/arch/mips/loongson32/common/platform.c
-> > @@ -98,7 +98,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, v=
-oid *priv)
-> >       if (plat_dat->bus_id) {
-> >               __raw_writel(__raw_readl(LS1X_MUX_CTRL0) | GMAC1_USE_UART=
-1 |
-> >                            GMAC1_USE_UART0, LS1X_MUX_CTRL0);
-> > -             switch (plat_dat->interface) {
-> > +             switch (plat_dat->phy_interface) {
-> >               case PHY_INTERFACE_MODE_RGMII:
-> >                       val &=3D ~(GMAC1_USE_TXCLK | GMAC1_USE_PWM23);
-> >                       break;
-> > @@ -107,12 +107,12 @@ int ls1x_eth_mux_init(struct platform_device *pde=
-v, void *priv)
-> >                       break;
-> >               default:
-> >                       pr_err("unsupported mii mode %d\n",
-> > -                            plat_dat->interface);
-> > +                            plat_dat->phy_interface);
-> >                       return -ENOTSUPP;
-> >               }
-> >               val &=3D ~GMAC1_SHUT;
-> >       } else {
-> > -             switch (plat_dat->interface) {
-> > +             switch (plat_dat->phy_interface) {
-> >               case PHY_INTERFACE_MODE_RGMII:
-> >                       val &=3D ~(GMAC0_USE_TXCLK | GMAC0_USE_PWM01);
-> >                       break;
-> > @@ -121,7 +121,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev,=
- void *priv)
-> >                       break;
-> >               default:
-> >                       pr_err("unsupported mii mode %d\n",
-> > -                            plat_dat->interface);
-> > +                            plat_dat->phy_interface);
-> >                       return -ENOTSUPP;
-> >               }
-> >               val &=3D ~GMAC0_SHUT;
-> > @@ -131,7 +131,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev,=
- void *priv)
-> >       plat_dat =3D dev_get_platdata(&pdev->dev);
-> >
-> >       val &=3D ~PHY_INTF_SELI;
-> > -     if (plat_dat->interface =3D=3D PHY_INTERFACE_MODE_RMII)
-> > +     if (plat_dat->phy_interface =3D=3D PHY_INTERFACE_MODE_RMII)
-> >               val |=3D 0x4 << PHY_INTF_SELI_SHIFT;
-> >       __raw_writel(val, LS1X_MUX_CTRL1);
-> >
-> > @@ -146,9 +146,9 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata =
-=3D {
-> >       .bus_id                 =3D 0,
-> >       .phy_addr               =3D -1,
-> >  #if defined(CONFIG_LOONGSON1_LS1B)
-> > -     .interface              =3D PHY_INTERFACE_MODE_MII,
-> > +     .phy_interface          =3D PHY_INTERFACE_MODE_MII,
-> >  #elif defined(CONFIG_LOONGSON1_LS1C)
-> > -     .interface              =3D PHY_INTERFACE_MODE_RMII,
-> > +     .phy_interface          =3D PHY_INTERFACE_MODE_RMII,
-> >  #endif
-> >       .mdio_bus_data          =3D &ls1x_mdio_bus_data,
-> >       .dma_cfg                =3D &ls1x_eth_dma_cfg,
-> > @@ -186,7 +186,7 @@ struct platform_device ls1x_eth0_pdev =3D {
-> >  static struct plat_stmmacenet_data ls1x_eth1_pdata =3D {
-> >       .bus_id                 =3D 1,
-> >       .phy_addr               =3D -1,
-> > -     .interface              =3D PHY_INTERFACE_MODE_MII,
-> > +     .phy_interface          =3D PHY_INTERFACE_MODE_MII,
-> >       .mdio_bus_data          =3D &ls1x_mdio_bus_data,
-> >       .dma_cfg                =3D &ls1x_eth_dma_cfg,
-> >       .has_gmac               =3D 1,
-> >
-> > base-commit: 727488e305b223ca69205ca5a3b99ace21bbbf5f
-> > --
-> > 2.34.1
-> >
+v1 -> v2:
+    * Implemented changes from Krzysztof - see patch for details
 
+Colin Foster (1):
+  dt-bindings: phy: ocelot-serdes: convert to YAML
 
+ .../bindings/phy/mscc,vsc7514-serdes.yaml     | 56 +++++++++++++++++++
+ .../bindings/phy/phy-ocelot-serdes.txt        | 43 --------------
+ MAINTAINERS                                   |  1 +
+ 3 files changed, 57 insertions(+), 43 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/mscc,vsc7514-serdes.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/phy-ocelot-serdes.txt
 
---=20
-Best regards,
+-- 
+2.25.1
 
-Kelvin Cheung
