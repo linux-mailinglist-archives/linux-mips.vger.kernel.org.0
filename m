@@ -2,104 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3655B4EC5
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 14:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3385B4FA0
+	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 17:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiIKM2H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 11 Sep 2022 08:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S229660AbiIKP1d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 11 Sep 2022 11:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiIKM2G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Sep 2022 08:28:06 -0400
-X-Greylist: delayed 180 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 11 Sep 2022 05:28:05 PDT
-Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5220C3CBEA
-        for <linux-mips@vger.kernel.org>; Sun, 11 Sep 2022 05:28:05 -0700 (PDT)
-Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-06.nifty.com with ESMTP id 28BCMK08014745
-        for <linux-mips@vger.kernel.org>; Sun, 11 Sep 2022 21:22:20 +0900
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 28BCLrdL027206;
-        Sun, 11 Sep 2022 21:21:54 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28BCLrdL027206
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662898914;
-        bh=07On58pfAqeOPq4SkhwmI7FDSiggencyKc6cl9k18mg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dJMv7n+wlGbFk5b6w07BTCC2ykK9x39n82TqtW3YMB3HZOBYegrwB0giz2raRx/ml
-         4yx955rw6BYEfWPp1/98STbneSPZUlkZ7ZA2AgZ9BbSW9JT36LaCmIy+VfN6d+8KEU
-         /ctj/EBHWfuWBk814AnmytwBG9Ryvygg/fQ2jc3K+ULSVpLyeg1v/kSJOMiUdiOp1S
-         NOnmmpHBtN0uCJd92A4gBv+e4WfmqjefDpCHeMqWL/KJPhLMXL/MJwllrspUozJ4O5
-         S3FyPagW33DtNBUrGlkdJRs5EAnWb3BNy82rZ9fjGLjcl0AhAxVlDIn2ut7DpllNzq
-         E5SPhuNSK4gYA==
-X-Nifty-SrcIP: [209.85.160.53]
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-127dca21a7dso16382158fac.12;
-        Sun, 11 Sep 2022 05:21:54 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3/TM45+z2BUVIxV+AKOMmMr1Wf2a3PQ5KMToWxxHp15CAvsbI/
-        eLjwKDuGp0kxwXzR5Hay1PiPPvwfOw29gtGIInc=
-X-Google-Smtp-Source: AA6agR4mmN3oWojOW4OyzpDwjNMuHZ5shgZclcZMD4/8WBxQTrzs7mm0t4r8VgIgsbuMgBYDyJe3ol8lYCxc862U/y8=
-X-Received: by 2002:a54:400c:0:b0:34f:9913:262 with SMTP id
- x12-20020a54400c000000b0034f99130262mr900341oie.287.1662898912945; Sun, 11
- Sep 2022 05:21:52 -0700 (PDT)
+        with ESMTP id S229656AbiIKP1b (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Sep 2022 11:27:31 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4591F60B;
+        Sun, 11 Sep 2022 08:27:30 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id x10so7815796ljq.4;
+        Sun, 11 Sep 2022 08:27:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=cEeD6rdorkMfZPWcdroJ4Ub+zOxt2tOhNzyuThs7z/4=;
+        b=KfpIUzYZadeAR1u1Kxow0ZVLymF56Myv3hAnaLPT7dHYqNAz4nQ/ENA6porHhunsd+
+         rEZ3sKjPVRkcobKv77VUs7yNwOvgmzgQiNdScl0WKOVi2A/3zQCijOInw5TJjLtxLCdO
+         PaoKJ5Hkr0oteJ6flmDgQT29OEn2++6wkqRGMxBukHAbv8FaKybjGAgBCKVz0KdgreaS
+         9gfTCaqmNIgpdC+bg2UIcPxBl6l6ihlnIicR6MuMpYCJGsAiKGsrSaGYyL2ccklIWkiz
+         qorUIs5p4Mq7cnSeRZ2XSyLODdmIm8dLpjyal13R5eIUonF00nsHylBGVgUqpjlewqRc
+         tg2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=cEeD6rdorkMfZPWcdroJ4Ub+zOxt2tOhNzyuThs7z/4=;
+        b=yH1SD5Au0G9E1HZSh2QMD9GJxSEi1XktnzgjlBvYlkuaR1vOgaywyA+ooJ1z4ETYgf
+         tkF8Jxg36SZvpyuKCJsG6bUdPv0x41Y59yzvL9u8voiZw909uyEpMvis2GvoAvXnLPch
+         tte3A3sz7Ccua3kPu2EG5jAEA9j0PHxHRC+gVmQg0VoJLO1g/sKn2NAwbIPik1U5Fp0+
+         lfyYKTaRNKA6/3NzwNqzCAAdC7kkv9Z0PXwOAXJG+KPfPq230HUoz0AkE/s8tlJx5Rgo
+         0SirlubhTRePzkQkk69FSfRzcTAPkYAbCUNz3gmVzBW7MYGhizpN1mHltfSpVseOebCr
+         q9ig==
+X-Gm-Message-State: ACgBeo1wgqXJekpe1Uf087H8+TIERckkark7caPXpJo2Mggwyn/d6O2a
+        hPhhGIQ5o9LWsv24Fu5mQbI=
+X-Google-Smtp-Source: AA6agR6qLNl1f2idQ0gV4UETKo+F4FfRhSdYPoaZYjdxdjF7hrFhvnmYhGR/Bk4Cnp60lKWfuA6kaQ==
+X-Received: by 2002:a2e:b819:0:b0:26a:a531:da36 with SMTP id u25-20020a2eb819000000b0026aa531da36mr6289664ljo.141.1662910048745;
+        Sun, 11 Sep 2022 08:27:28 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id q12-20020ac25a0c000000b00498f3ebffb2sm645149lfn.25.2022.09.11.08.27.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Sep 2022 08:27:28 -0700 (PDT)
+Date:   Sun, 11 Sep 2022 18:27:25 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Kelvin Cheung <keguang.zhang@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH] MIPS: Loongson32: Fix PHY-mode being left unspecified
+Message-ID: <20220911152725.xp6kvrh7542bjep6@mobilestation>
+References: <20220911072251.25024-1-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-References: <202209101939.bvk64Fok-lkp@intel.com> <CAKwvOdn0i3N1DZCmx1RNoiq3086hBi_S2tkDmqNRhDx5-6rSeQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdn0i3N1DZCmx1RNoiq3086hBi_S2tkDmqNRhDx5-6rSeQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 11 Sep 2022 21:21:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASbcsLqUU+WsO7zQ-toucvkd1ePGX_HW7ehrywoS-cUMQ@mail.gmail.com>
-Message-ID: <CAK7LNASbcsLqUU+WsO7zQ-toucvkd1ePGX_HW7ehrywoS-cUMQ@mail.gmail.com>
-Subject: Re: [masahiroy:fixes 6/6] arch/mips/kernel/branch.c:712:20: error:
- instruction requires a CPU feature not currently enabled
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        linux-mips <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220911072251.25024-1-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 2:56 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Sat, Sep 10, 2022 at 12:24 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git fixes
-> > head:   97f72ed7a6b5a6bbac628f1f6e91cf06d1ea2cb5
-> > commit: 97f72ed7a6b5a6bbac628f1f6e91cf06d1ea2cb5 [6/6] Makefile.compiler: Use KBUILD_AFLAGS for as-option
-> > config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20220910/202209101939.bvk64Fok-lkp@intel.com/config)
->
-> This is likely:
-> arch/mips/loongson2ef/Platform
-> 28:cflags-$(CONFIG_CPU_LOONGSON2EF)     += $(call
-> as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
-> arch/mips/Makefile
-> 155:cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
->
-> probably both need to use cc-option similar to
-> https://lore.kernel.org/llvm/20220907045907.484043-2-ndesaulniers@google.com/
->
-> Masahiro, I'm at Linux Plumbers Conf; not sure when I can get to a
-> formal patch.  Want to drop my 2 patches and I'll send a v4 at some
-> point?
+Hello Kelvin
 
+On Sun, Sep 11, 2022 at 03:22:51PM +0800, Kelvin Cheung wrote:
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> commit 0060c8783330 ("net: stmmac: implement support for passive mode
+> converters via dt") has changed the plat->interface field semantics from
+> containing the PHY-mode to specifying the MAC-PCS interface mode. Due to
+> that the loongson32 platform code will leave the phylink interface
+> uninitialized with the PHY-mode intended by the means of the actual
+> platform setup. The commit-author most likely has just missed the
+> arch-specific code to fix. Let's mend the Loongson32 platform code then by
+> assigning the PHY-mode to the phy_interface field of the STMMAC platform
+> data.
+> 
 
+> Fixes: 0060c8783330 ("net: stmmac: implement support for passive mode converters via dt")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-OK, dropped.
+Your SoB tag should be here too right between mine SoB and TB
+tags [1].
 
-Thanks.
+[1] Documentation/process/submitting-patches.rst, line 419 - 423.
 
+-Sergey
 
+> Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
 
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+> ---
+>  arch/mips/loongson32/common/platform.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
+> index 794c96c2a4cd..311dc1580bbd 100644
+> --- a/arch/mips/loongson32/common/platform.c
+> +++ b/arch/mips/loongson32/common/platform.c
+> @@ -98,7 +98,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
+>  	if (plat_dat->bus_id) {
+>  		__raw_writel(__raw_readl(LS1X_MUX_CTRL0) | GMAC1_USE_UART1 |
+>  			     GMAC1_USE_UART0, LS1X_MUX_CTRL0);
+> -		switch (plat_dat->interface) {
+> +		switch (plat_dat->phy_interface) {
+>  		case PHY_INTERFACE_MODE_RGMII:
+>  			val &= ~(GMAC1_USE_TXCLK | GMAC1_USE_PWM23);
+>  			break;
+> @@ -107,12 +107,12 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
+>  			break;
+>  		default:
+>  			pr_err("unsupported mii mode %d\n",
+> -			       plat_dat->interface);
+> +			       plat_dat->phy_interface);
+>  			return -ENOTSUPP;
+>  		}
+>  		val &= ~GMAC1_SHUT;
+>  	} else {
+> -		switch (plat_dat->interface) {
+> +		switch (plat_dat->phy_interface) {
+>  		case PHY_INTERFACE_MODE_RGMII:
+>  			val &= ~(GMAC0_USE_TXCLK | GMAC0_USE_PWM01);
+>  			break;
+> @@ -121,7 +121,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
+>  			break;
+>  		default:
+>  			pr_err("unsupported mii mode %d\n",
+> -			       plat_dat->interface);
+> +			       plat_dat->phy_interface);
+>  			return -ENOTSUPP;
+>  		}
+>  		val &= ~GMAC0_SHUT;
+> @@ -131,7 +131,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
+>  	plat_dat = dev_get_platdata(&pdev->dev);
+>  
+>  	val &= ~PHY_INTF_SELI;
+> -	if (plat_dat->interface == PHY_INTERFACE_MODE_RMII)
+> +	if (plat_dat->phy_interface == PHY_INTERFACE_MODE_RMII)
+>  		val |= 0x4 << PHY_INTF_SELI_SHIFT;
+>  	__raw_writel(val, LS1X_MUX_CTRL1);
+>  
+> @@ -146,9 +146,9 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata = {
+>  	.bus_id			= 0,
+>  	.phy_addr		= -1,
+>  #if defined(CONFIG_LOONGSON1_LS1B)
+> -	.interface		= PHY_INTERFACE_MODE_MII,
+> +	.phy_interface		= PHY_INTERFACE_MODE_MII,
+>  #elif defined(CONFIG_LOONGSON1_LS1C)
+> -	.interface		= PHY_INTERFACE_MODE_RMII,
+> +	.phy_interface		= PHY_INTERFACE_MODE_RMII,
+>  #endif
+>  	.mdio_bus_data		= &ls1x_mdio_bus_data,
+>  	.dma_cfg		= &ls1x_eth_dma_cfg,
+> @@ -186,7 +186,7 @@ struct platform_device ls1x_eth0_pdev = {
+>  static struct plat_stmmacenet_data ls1x_eth1_pdata = {
+>  	.bus_id			= 1,
+>  	.phy_addr		= -1,
+> -	.interface		= PHY_INTERFACE_MODE_MII,
+> +	.phy_interface		= PHY_INTERFACE_MODE_MII,
+>  	.mdio_bus_data		= &ls1x_mdio_bus_data,
+>  	.dma_cfg		= &ls1x_eth_dma_cfg,
+>  	.has_gmac		= 1,
+> 
+> base-commit: 727488e305b223ca69205ca5a3b99ace21bbbf5f
+> -- 
+> 2.34.1
+> 
