@@ -2,76 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A615B4A9F
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 00:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CE65B4C41
+	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 07:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiIJWtN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Sep 2022 18:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
+        id S229903AbiIKF43 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 11 Sep 2022 01:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiIJWtJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 10 Sep 2022 18:49:09 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 629F34E60F;
-        Sat, 10 Sep 2022 15:49:08 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oX9He-0003Ex-00; Sun, 11 Sep 2022 00:49:06 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 11F12C1128; Sun, 11 Sep 2022 00:48:59 +0200 (CEST)
-Date:   Sun, 11 Sep 2022 00:48:59 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v6.0
-Message-ID: <20220910224858.GA13203@alpha.franken.de>
+        with ESMTP id S229862AbiIKF42 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Sep 2022 01:56:28 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0DD275F5
+        for <linux-mips@vger.kernel.org>; Sat, 10 Sep 2022 22:56:27 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id n23-20020a17090a091700b00202a51cc78bso3021573pjn.2
+        for <linux-mips@vger.kernel.org>; Sat, 10 Sep 2022 22:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=DCwJj87WidsHgmYTeYszpwjCSpQ0FFV5K9uO1qTls9M=;
+        b=MCDscIy6ZwSiHMmxGAWaWoCjqCB0cnaVl3wD8DzCGHM3GV/e6gN3jQAbtmV6gYq8+p
+         TBSoTN5pFHqjd5FqvWnBwbD/R+6h8ql84sTepQbkVkFxe2oVm1f1FJ8ym4tpb9KO0I4x
+         8whErwPAZjuWdee85tVZ2BegOHBRpH9o9D0gSS02xv4XFhjm+8oGwpY/HrqCvMuxvdni
+         tqnURVJOJciTLWi96FuiBqjj/59gskU+JrxQ2V7ywje6S6gD3GKuRL23tTp5s8zaV1jz
+         2gr9n6M5HpcDf17oUi6dVHVt0FgJiv+4AP2JMxE2Fyf7YuPldn1mIK0EgsLNChPf+JzJ
+         TPxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=DCwJj87WidsHgmYTeYszpwjCSpQ0FFV5K9uO1qTls9M=;
+        b=1rAXvjt+r+utc5aI/KqcSD5Eq2sd7VRe6d/XcspCoYD3IoubaRHWPf/FaOjvAcdW1M
+         J3PTYw2cqd7yudRgPycCHSMa5PrMtnxlSPa9DBMUlSyTnQvI0tqYfenMHJAtjlTTzyrc
+         jIAQxd8AZ2VHBBmtZl24AOm9u4CaAaY/zeVW9qepwtHLphPWQeGP12Qc6VfcCvIrwqVU
+         dgPsf8k/L0e+2gRFaJr4fHweIlgQAnr8BAmG9y6SrqCD9fTm5OqwD0NhfjrORMHQ1Tzw
+         e0ejeet3MqJ+xCp3rbByjnwB3KOcpt4TtFSpQeud5sDgLsDTi8GMDU5Z8miMoB1VTJ8v
+         QpbQ==
+X-Gm-Message-State: ACgBeo3vcGX9yEF4GCKsGGrUrUUvEcrrGqdosKMt4aXaTUA9anKacSFm
+        nj1y+65NnosDpEpVQTTllaMmJNZC5gd/Vk9j1RyoIJfUQczcIZp/
+X-Google-Smtp-Source: AA6agR4gJ5JrWbdmFxZZQeW6/V+wWK1xQ2WTeoeFKXtoWRtdAVrHY1A4PF292/1VH/6N765IOfAsa+dg48SqRGfNbA8=
+X-Received: by 2002:a17:902:6b42:b0:172:ed37:bc55 with SMTP id
+ g2-20020a1709026b4200b00172ed37bc55mr20767390plt.33.1662875786811; Sat, 10
+ Sep 2022 22:56:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202209101939.bvk64Fok-lkp@intel.com>
+In-Reply-To: <202209101939.bvk64Fok-lkp@intel.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Sun, 11 Sep 2022 06:56:14 +0100
+Message-ID: <CAKwvOdn0i3N1DZCmx1RNoiq3086hBi_S2tkDmqNRhDx5-6rSeQ@mail.gmail.com>
+Subject: Re: [masahiroy:fixes 6/6] arch/mips/kernel/branch.c:712:20: error:
+ instruction requires a CPU feature not currently enabled
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        linux-mips <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+On Sat, Sep 10, 2022 at 12:24 PM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git fixes
+> head:   97f72ed7a6b5a6bbac628f1f6e91cf06d1ea2cb5
+> commit: 97f72ed7a6b5a6bbac628f1f6e91cf06d1ea2cb5 [6/6] Makefile.compiler: Use KBUILD_AFLAGS for as-option
+> config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20220910/202209101939.bvk64Fok-lkp@intel.com/config)
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+This is likely:
+arch/mips/loongson2ef/Platform
+28:cflags-$(CONFIG_CPU_LOONGSON2EF)     += $(call
+as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
+arch/mips/Makefile
+155:cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
 
-are available in the Git repository at:
+probably both need to use cc-option similar to
+https://lore.kernel.org/llvm/20220907045907.484043-2-ndesaulniers@google.com/
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.0_1
+Masahiro, I'm at Linux Plumbers Conf; not sure when I can get to a
+formal patch.  Want to drop my 2 patches and I'll send a v4 at some
+point?
 
-for you to fetch changes up to 727488e305b223ca69205ca5a3b99ace21bbbf5f:
+---
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index 4d2a3e73fc45..6d27e302f6d1 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -152,7 +152,7 @@ cflags-y += -fno-stack-check
+ #
+ # Avoid this by explicitly disabling that assembler behaviour.
+ #
+-cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
++cflags-y += $(call cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
 
-  mips: Select SPARSEMEM_EXTREME (2022-09-09 17:37:27 +0200)
+ #
+ # CPU-dependent compiler/assembler options for optimization.
+diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
+index eebabf9df6ac..c6f7a4b95997 100644
+--- a/arch/mips/loongson2ef/Platform
++++ b/arch/mips/loongson2ef/Platform
+@@ -25,7 +25,7 @@ cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f
+ # binutils does not merge support for the flag then we can revisit & remove
+ # this later - for now it ensures vendor toolchains don't cause problems.
+ #
+-cflags-$(CONFIG_CPU_LOONGSON2EF)       += $(call
+as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
++cflags-$(CONFIG_CPU_LOONGSON2EF)       += $(call
+cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
 
-----------------------------------------------------------------
-- fix for loongson32 starup hang
-- fix for octeon irq setup problem
-- fix compiler warning for new CONFIG option
-- switch to SPARSEMEM_EXTREME for all platforms selecting SPARSEMEM
-
-----------------------------------------------------------------
-Alexander Sverdlin (3):
-      MIPS: octeon: Get rid of preprocessor directives around RESERVE32
-      MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
-      mips: Select SPARSEMEM_EXTREME
-
-Yang Ling (1):
-      MIPS: loongson32: ls1c: Fix hang during startup
-
- arch/mips/Kconfig                                  |  1 -
- arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c |  4 ----
- arch/mips/cavium-octeon/octeon-irq.c               | 10 ++++++++
- arch/mips/cavium-octeon/setup.c                    | 27 +++++++++-------------
- arch/mips/loongson32/ls1c/board.c                  |  1 -
- 5 files changed, 21 insertions(+), 22 deletions(-)
-
+ # Enable the workarounds for Loongson2f
+ ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Thanks,
+~Nick Desaulniers
