@@ -2,124 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CE65B4C41
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 07:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C005B4C58
+	for <lists+linux-mips@lfdr.de>; Sun, 11 Sep 2022 08:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiIKF43 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 11 Sep 2022 01:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S229651AbiIKG1V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 11 Sep 2022 02:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiIKF42 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Sep 2022 01:56:28 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0DD275F5
-        for <linux-mips@vger.kernel.org>; Sat, 10 Sep 2022 22:56:27 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id n23-20020a17090a091700b00202a51cc78bso3021573pjn.2
-        for <linux-mips@vger.kernel.org>; Sat, 10 Sep 2022 22:56:27 -0700 (PDT)
+        with ESMTP id S229558AbiIKG1U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Sep 2022 02:27:20 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F89357FF;
+        Sat, 10 Sep 2022 23:27:18 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id s11so8398000edd.13;
+        Sat, 10 Sep 2022 23:27:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=DCwJj87WidsHgmYTeYszpwjCSpQ0FFV5K9uO1qTls9M=;
-        b=MCDscIy6ZwSiHMmxGAWaWoCjqCB0cnaVl3wD8DzCGHM3GV/e6gN3jQAbtmV6gYq8+p
-         TBSoTN5pFHqjd5FqvWnBwbD/R+6h8ql84sTepQbkVkFxe2oVm1f1FJ8ym4tpb9KO0I4x
-         8whErwPAZjuWdee85tVZ2BegOHBRpH9o9D0gSS02xv4XFhjm+8oGwpY/HrqCvMuxvdni
-         tqnURVJOJciTLWi96FuiBqjj/59gskU+JrxQ2V7ywje6S6gD3GKuRL23tTp5s8zaV1jz
-         2gr9n6M5HpcDf17oUi6dVHVt0FgJiv+4AP2JMxE2Fyf7YuPldn1mIK0EgsLNChPf+JzJ
-         TPxg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=elgmNgCfXFZxV2r9JjcSrgNHyOg7gwBvXaPlEj5CKLo=;
+        b=XiP1ez6pqfgDv916QNFqAjftoSMFu8BSePHPP3tEoVv/OfQNkouuu0pmEi0m+uj0DZ
+         OcUACfute2ToigcENmw+VRPKq2w+KcamoLi2R4M+cZgFGaFl4FyM6BdPUJGux0Pqofv+
+         9NGgkbijgVcPi75PSfcG4EIJO0m+wFsmlx81umSHIghucteWOWMqSLqt80KTojt821ys
+         ycTZ49FuNVHoaOJaQtJ/ZbGlkfjXbwp7dEbJjK4w9TFEfKnXtYz5Sp32j3dWO0FslIdH
+         7tyEDsbepPO7tGyjW5EljPlG1wL/p1uI77PnxjVMB31c+JqN3DzW2s63TlUeYqKBAWKt
+         Ogfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=DCwJj87WidsHgmYTeYszpwjCSpQ0FFV5K9uO1qTls9M=;
-        b=1rAXvjt+r+utc5aI/KqcSD5Eq2sd7VRe6d/XcspCoYD3IoubaRHWPf/FaOjvAcdW1M
-         J3PTYw2cqd7yudRgPycCHSMa5PrMtnxlSPa9DBMUlSyTnQvI0tqYfenMHJAtjlTTzyrc
-         jIAQxd8AZ2VHBBmtZl24AOm9u4CaAaY/zeVW9qepwtHLphPWQeGP12Qc6VfcCvIrwqVU
-         dgPsf8k/L0e+2gRFaJr4fHweIlgQAnr8BAmG9y6SrqCD9fTm5OqwD0NhfjrORMHQ1Tzw
-         e0ejeet3MqJ+xCp3rbByjnwB3KOcpt4TtFSpQeud5sDgLsDTi8GMDU5Z8miMoB1VTJ8v
-         QpbQ==
-X-Gm-Message-State: ACgBeo3vcGX9yEF4GCKsGGrUrUUvEcrrGqdosKMt4aXaTUA9anKacSFm
-        nj1y+65NnosDpEpVQTTllaMmJNZC5gd/Vk9j1RyoIJfUQczcIZp/
-X-Google-Smtp-Source: AA6agR4gJ5JrWbdmFxZZQeW6/V+wWK1xQ2WTeoeFKXtoWRtdAVrHY1A4PF292/1VH/6N765IOfAsa+dg48SqRGfNbA8=
-X-Received: by 2002:a17:902:6b42:b0:172:ed37:bc55 with SMTP id
- g2-20020a1709026b4200b00172ed37bc55mr20767390plt.33.1662875786811; Sat, 10
- Sep 2022 22:56:26 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=elgmNgCfXFZxV2r9JjcSrgNHyOg7gwBvXaPlEj5CKLo=;
+        b=3cCJEA1ONCKjO/RTNnefydNmlWk/XJOdBjddpvAQJj4g8W15WIYfam3OcsRzckbJkl
+         Azq04vQd7vBQnA99abWR3L124/8WVXTSUcxC4hHuOYacFxXnMkHaiKojqrq007rNDh8+
+         qDvWy1oeA+ZARF9SrOjlCWkUJvI4JpUNTbLNmtsBMvirmD/Lkutk8aGVLVUxtvtS9sYU
+         tIZ83qoCArMKn1fNar61Dqe1L2TV7f8a+um3Wx7c5g3XKe75l4GjzpWNlZlCmSfM/P/B
+         8M0XLKoeqDpOLbF3L4RjJtoAxgFPtDgjTMomTE8yv6tT7hIikr/sUqd9kVqndkaFXJ0Y
+         GhJQ==
+X-Gm-Message-State: ACgBeo0M/Je88Cim4qIf8AyYJMSJBkyuWnsbGxZCV1faCAfHzra4DDQp
+        1U0FqPt1YjO7Sho/31Hb4aMwKToO36cHfQViYn7czRZAAXyJFg==
+X-Google-Smtp-Source: AA6agR4PWGoLKmarQ7MhRvaZYgkdEkj2Ne39l524qm4rbHmjmn6VBZaWzJ0NHXADRj9wsWjALrB6rDdsNdDmfbSeXdk=
+X-Received: by 2002:a05:6402:35d6:b0:44e:f45a:8f79 with SMTP id
+ z22-20020a05640235d600b0044ef45a8f79mr17888043edc.393.1662877636650; Sat, 10
+ Sep 2022 23:27:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <202209101939.bvk64Fok-lkp@intel.com>
-In-Reply-To: <202209101939.bvk64Fok-lkp@intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Sun, 11 Sep 2022 06:56:14 +0100
-Message-ID: <CAKwvOdn0i3N1DZCmx1RNoiq3086hBi_S2tkDmqNRhDx5-6rSeQ@mail.gmail.com>
-Subject: Re: [masahiroy:fixes 6/6] arch/mips/kernel/branch.c:712:20: error:
- instruction requires a CPU feature not currently enabled
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        linux-mips <linux-mips@vger.kernel.org>
+References: <20220818050019.1924408-1-keguang.zhang@gmail.com>
+ <20220821171030.wc343w6zmrtcz5to@mobilestation> <CAJhJPsW0HTs+=PD2JvXZVTkm9zrnRYKtEwLNv3dsVsf1AUNjDQ@mail.gmail.com>
+ <20220902224630.tik2zt7vpwv3pcww@mobilestation>
+In-Reply-To: <20220902224630.tik2zt7vpwv3pcww@mobilestation>
+From:   Kelvin Cheung <keguang.zhang@gmail.com>
+Date:   Sun, 11 Sep 2022 14:27:03 +0800
+Message-ID: <CAJhJPsVMB83SxmRwurzjrM6MU_D-mQcaACcx9ksdO-OCx-reqg@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: loongson32: Fix the validation failure of LS1B &
+ LS1C Ethernet PHY
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "David S . Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 12:24 PM kernel test robot <lkp@intel.com> wrote:
+Hi Serge,
+
+Serge Semin <fancer.lancer@gmail.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=883=E6=
+=97=A5=E5=91=A8=E5=85=AD 06:46=E5=86=99=E9=81=93=EF=BC=9A
 >
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git fixes
-> head:   97f72ed7a6b5a6bbac628f1f6e91cf06d1ea2cb5
-> commit: 97f72ed7a6b5a6bbac628f1f6e91cf06d1ea2cb5 [6/6] Makefile.compiler: Use KBUILD_AFLAGS for as-option
-> config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20220910/202209101939.bvk64Fok-lkp@intel.com/config)
+> On Sun, Aug 28, 2022 at 09:31:25PM +0800, Kelvin Cheung wrote:
+> > Hi Serge,
+> > Your patch also works for me.
+>
+> Great. Could you submit it for review then with your tested-by tag
+> added?
 
-This is likely:
-arch/mips/loongson2ef/Platform
-28:cflags-$(CONFIG_CPU_LOONGSON2EF)     += $(call
-as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
-arch/mips/Makefile
-155:cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
+Sure.
 
-probably both need to use cc-option similar to
-https://lore.kernel.org/llvm/20220907045907.484043-2-ndesaulniers@google.com/
+>
+> > But what about the plat_dat->interface? Is it obsolete?
+>
+> No. As I said in the patch log it's still used in the STMMAC driver
+> but for the MAC-PCS mode setting. Such PCS isn't available on the most
+> of the cases so the "phy_interface" field should be mainly utilized
+> instead while the "interface" field is supposed to be left untouched.
+> See the commit 0060c8783330 ("net: stmmac: implement support for
+> passive mode converters via dt") for details.
 
-Masahiro, I'm at Linux Plumbers Conf; not sure when I can get to a
-formal patch.  Want to drop my 2 patches and I'll send a v4 at some
-point?
+Got it. Thanks!
 
----
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index 4d2a3e73fc45..6d27e302f6d1 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -152,7 +152,7 @@ cflags-y += -fno-stack-check
- #
- # Avoid this by explicitly disabling that assembler behaviour.
- #
--cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
-+cflags-y += $(call cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
+>
+> -Sergey
+>
+> >
+> > Serge Semin <fancer.lancer@gmail.com> =E4=BA=8E2022=E5=B9=B48=E6=9C=882=
+2=E6=97=A5=E5=91=A8=E4=B8=80 01:10=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > Hello Keguang
+> > >
+> > > On Thu, Aug 18, 2022 at 01:00:19PM +0800, Keguang Zhang wrote:
+> > > > From: Kelvin Cheung <keguang.zhang@gmail.com>
+> > > >
+> > > > The Ethernet of LS1B/LS1C doesn't work due to the stmmac driver
+> > > > using phylink_generic_validate() instead of stmmac_validate().
+> > > > Moreover the driver assumes the PHY interface mode
+> > > > passed in platform data is always supported.
+> > > >
+> > > > stmmaceth stmmaceth.0 eth0: validation of gmii with support 0000000=
+0,00000000,000062cf and advertisement 00000000,00000000,000062cf failed: -E=
+INVAL
+> > > > stmmaceth stmmaceth.0 eth0: stmmac_open: Cannot attach to PHY (erro=
+r: -22)
+> > > >
+> > > > This patch sets phy_interface field of platform data.
+> > >
+> > > I've got a similar fix in my repo, though didn't have a chance to tes=
+t
+> > > it out due to lacking any loongson hardware. I've discovered the
+> > > issues on my still going way of the STMMAC driver refactoring. Anyway
+> > > IMO the problem is a bit different than you describe and should be
+> > > fixed in a bit different way. Please see a patch attached to this
+> > > email. Could you test it out on your hw? If it fixes the problem you
+> > > can resend it as v2 patch.
+> > >
+> > > -Sergey
+> > >
+> > > >
+> > > > Fixes: 04a0683f7db4 ("net: stmmac: convert to phylink_generic_valid=
+ate()")
+> > > > Fixes: d194923d51c9 ("net: stmmac: fill in supported_interfaces")
+> > > > Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+> > > > ---
+> > > >  arch/mips/loongson32/common/platform.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loo=
+ngson32/common/platform.c
+> > > > index 794c96c2a4cd..741aace80b80 100644
+> > > > --- a/arch/mips/loongson32/common/platform.c
+> > > > +++ b/arch/mips/loongson32/common/platform.c
+> > > > @@ -147,8 +147,10 @@ static struct plat_stmmacenet_data ls1x_eth0_p=
+data =3D {
+> > > >       .phy_addr               =3D -1,
+> > > >  #if defined(CONFIG_LOONGSON1_LS1B)
+> > > >       .interface              =3D PHY_INTERFACE_MODE_MII,
+> > > > +     .phy_interface          =3D PHY_INTERFACE_MODE_MII,
+> > > >  #elif defined(CONFIG_LOONGSON1_LS1C)
+> > > >       .interface              =3D PHY_INTERFACE_MODE_RMII,
+> > > > +     .phy_interface          =3D PHY_INTERFACE_MODE_RMII,
+> > > >  #endif
+> > > >       .mdio_bus_data          =3D &ls1x_mdio_bus_data,
+> > > >       .dma_cfg                =3D &ls1x_eth_dma_cfg,
+> > > >
+> > > > base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+> > > > --
+> > > > 2.34.1
+> > > >
+> >
+> >
+> >
+> > --
+> > Best regards,
+> >
+> > Kelvin Cheung
 
- #
- # CPU-dependent compiler/assembler options for optimization.
-diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
-index eebabf9df6ac..c6f7a4b95997 100644
---- a/arch/mips/loongson2ef/Platform
-+++ b/arch/mips/loongson2ef/Platform
-@@ -25,7 +25,7 @@ cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f
- # binutils does not merge support for the flag then we can revisit & remove
- # this later - for now it ensures vendor toolchains don't cause problems.
- #
--cflags-$(CONFIG_CPU_LOONGSON2EF)       += $(call
-as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
-+cflags-$(CONFIG_CPU_LOONGSON2EF)       += $(call
-cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
 
- # Enable the workarounds for Loongson2f
- ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
--- 
-Thanks,
-~Nick Desaulniers
+
+--=20
+Best regards,
+
+Kelvin Cheung
