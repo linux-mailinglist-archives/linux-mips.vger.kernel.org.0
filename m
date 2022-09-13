@@ -2,226 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C610A5B6DAB
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Sep 2022 14:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C684A5B6ED0
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Sep 2022 16:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiIMMvL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Sep 2022 08:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S232338AbiIMOFK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Sep 2022 10:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiIMMvC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Sep 2022 08:51:02 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AA0520AD
-        for <linux-mips@vger.kernel.org>; Tue, 13 Sep 2022 05:50:59 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id q62-20020a17090a17c400b00202a3497516so8902564pja.1
-        for <linux-mips@vger.kernel.org>; Tue, 13 Sep 2022 05:50:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=m+eZZoFLZFj4EhrhLyyE+g7R7dkUsiwp1ctUGIB8Xyc=;
-        b=jGIh/hBBHB9qngcxAiPKVlNnWoA+4zhrJlHf/7cC6XoKAdqrYm5GcLRzVI69z0CV39
-         /w+Q5i/tkVixk74+Fp4Lhjc8bBaLEBt9cSXeJzBNcWGk1bbmt29VXx+sb3d/UPOKmUs8
-         jtRkKfovsQvEtIMaRisgVTCoGaJAv2JiZu7sapDlXUUZejKRyep20zGPtVQAb1dAtjVO
-         WKha2N36Mc9SKwfEVzRvas+JtOgsGBDvIwik+fsnWhTupgkW+Pqr195kPR6g7BM4ZnZd
-         Bct9AUdOeRH9TAsfLZeB06sIYcOcAirND6uDCVUvlUoMTIWP43dr1J+vIaudr10e4A6O
-         G5Cg==
+        with ESMTP id S231781AbiIMOFK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Sep 2022 10:05:10 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1B217AB5;
+        Tue, 13 Sep 2022 07:05:09 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1280590722dso32422347fac.1;
+        Tue, 13 Sep 2022 07:05:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=m+eZZoFLZFj4EhrhLyyE+g7R7dkUsiwp1ctUGIB8Xyc=;
-        b=5flgrszkuWIfJndawDo6f2/ebBpW4DyrJyRgPRe8rnTFnFbP/4vJFLwyxJW857QDNe
-         HEWYGxnD8pbfHMyIC2v9MydTbZ57HYBKt6xVM1yIkYlzLuJMGlQjJPsAS607zVLWM2ZY
-         RS0FzLMQl0dG75FC3EdNtwA81V9fibpK6pICoa+r620R401AXqpS3ST4LK9Lg5nWzgEn
-         s98QBT6gpoOMy/eJfLgycar7Z5E8SrzHHcbgIyoj+i5Y4Wzpx9DSPI3sqIsx+XDKpdZV
-         eIW/HIbu91qANlr4HdLOkZsvI+/HapkLUfaeuaNYmHkbWqWZvSxQXXz0Yyg/eyZv7j0h
-         jZzA==
-X-Gm-Message-State: ACgBeo2H9ibITNvBXpnEw74lfMfUhSO26zbr4MpHx7L9RUt21GmRgzyF
-        3ixhX2NcYc7QhDm8mq4qiHA34Q==
-X-Google-Smtp-Source: AA6agR6b0dbrm/dWvV5TmvZeUsJCtL2b/PeHdCl4glygOlKhuTzGMSEz5loOjhBvm1OoAAz40VEAKw==
-X-Received: by 2002:a17:902:c245:b0:178:3912:f1f7 with SMTP id 5-20020a170902c24500b001783912f1f7mr7946684plg.75.1663073458500;
-        Tue, 13 Sep 2022 05:50:58 -0700 (PDT)
-Received: from [192.168.10.153] (ppp121-45-204-168.cbr-trn-nor-bras38.tpg.internode.on.net. [121.45.204.168])
-        by smtp.gmail.com with ESMTPSA id i12-20020a170902c94c00b00176da1aae5asm8419873pla.70.2022.09.13.05.50.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 05:50:57 -0700 (PDT)
-Message-ID: <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
-Date:   Tue, 13 Sep 2022 22:50:49 +1000
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=xaesEF6Lfa7W1zJ6vFq2YbimoamHUz/4xsPADg2pI8U=;
+        b=RwUD0q3JC+YmmFu5pL2OrGMDcPn/E2pVWwX0jNlBkd5Y29iohNZWJcgS+LM8GAW6Tu
+         wiTYmgRK7F9K8Edp8rCQ4602xjIQAY25bQHmBftPUXppAIhfYwVFtJmkhSjTw8ugBSFt
+         uEMjiWxmHWVvkd57VatGuJIqqjITGF6TIQRaCs15MMp6qkJ3+I+//zEmxm777zIUwRSu
+         HgKahI4FgJ8Q4mPolNv0IvlGcyQtu4B3Hjg4wKFHyGF6A3GEgvDZdYuIuTlyWSAoUii9
+         Ap3G+UySAmoXvZXp4kX1bTA+OImCjLBlZLGPm1r7O1rHYGAdq3gzxtiFpqaYte3L8P5v
+         yIag==
+X-Gm-Message-State: ACgBeo16qvksH6PBcM7XQBaCJuCx7SUwiY5bSLsUegkstgNtDh+KWYyL
+        3LaUUz9TPouz1cxK8JBCaw==
+X-Google-Smtp-Source: AA6agR5MZRUSO5U2/vJRsvdSOp4dyqOHS68xLdRjVDmKQUFF5s/TuXl3QUxdaeD4NpNEuWbsXwlnmw==
+X-Received: by 2002:a05:6808:21a2:b0:345:d23e:d2e2 with SMTP id be34-20020a05680821a200b00345d23ed2e2mr1526157oib.273.1663077908262;
+        Tue, 13 Sep 2022 07:05:08 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q6-20020acaf206000000b003451c927e0dsm5119169oih.38.2022.09.13.07.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:05:07 -0700 (PDT)
+Received: (nullmailer pid 3590506 invoked by uid 1000);
+        Tue, 13 Sep 2022 14:05:07 -0000
+Date:   Tue, 13 Sep 2022 09:05:07 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH RESEND v11 6/8] dt-bindings: clk: baikal-t1: Add DDR/PCIe
+ reset IDs
+Message-ID: <20220913140507.GA3590451-robh@kernel.org>
+References: <20220909192616.16542-1-Sergey.Semin@baikalelectronics.ru>
+ <20220909192616.16542-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
- Thunderbird/104.0
-Subject: Re: [PATCH kernel] KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform
- dependent
-Content-Language: en-US
-From:   Alexey Kardashevskiy <aik@ozlabs.ru>
-To:     kvm-ppc@vger.kernel.org
-Cc:     x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>
-References: <20220504074807.3616813-1-aik@ozlabs.ru>
- <0d4bb0fa-10c6-3f5a-34c8-293144b3fdbb@ozlabs.ru>
-In-Reply-To: <0d4bb0fa-10c6-3f5a-34c8-293144b3fdbb@ozlabs.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909192616.16542-7-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Ping? It's been a while and probably got lost :-/
-
-On 18/05/2022 16:27, Alexey Kardashevskiy wrote:
+On Fri, 09 Sep 2022 22:26:14 +0300, Serge Semin wrote:
+> Aside with a set of the trigger-like resets Baikal-T1 CCU provides
+> additional directly controlled reset signals for the DDR and PCIe
+> controllers. As a preparation before adding these resets support to the
+> kernel let's extent the Baikal-T1 CCU IDs list with the new IDs, which
+> will be used to access the corresponding reset controls.
 > 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 > 
-> On 5/4/22 17:48, Alexey Kardashevskiy wrote:
->> When introduced, IRQFD resampling worked on POWER8 with XICS. However
->> KVM on POWER9 has never implemented it - the compatibility mode code
->> ("XICS-on-XIVE") misses the kvm_notify_acked_irq() call and the native
->> XIVE mode does not handle INTx in KVM at all.
->>
->> This moved the capability support advertising to platforms and stops
->> advertising it on XIVE, i.e. POWER9 and later.
->>
->> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
->> ---
->>
->>
->> Or I could move this one together with KVM_CAP_IRQFD. Thoughts?
+> ---
 > 
-> 
-> Ping?
-> 
->>
->> ---
->>   arch/arm64/kvm/arm.c       | 3 +++
->>   arch/mips/kvm/mips.c       | 3 +++
->>   arch/powerpc/kvm/powerpc.c | 6 ++++++
->>   arch/riscv/kvm/vm.c        | 3 +++
->>   arch/s390/kvm/kvm-s390.c   | 3 +++
->>   arch/x86/kvm/x86.c         | 3 +++
->>   virt/kvm/kvm_main.c        | 1 -
->>   7 files changed, 21 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->> index 523bc934fe2f..092f0614bae3 100644
->> --- a/arch/arm64/kvm/arm.c
->> +++ b/arch/arm64/kvm/arm.c
->> @@ -210,6 +210,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, 
->> long ext)
->>       case KVM_CAP_SET_GUEST_DEBUG:
->>       case KVM_CAP_VCPU_ATTRIBUTES:
->>       case KVM_CAP_PTP_KVM:
->> +#ifdef CONFIG_HAVE_KVM_IRQFD
->> +    case KVM_CAP_IRQFD_RESAMPLE:
->> +#endif
->>           r = 1;
->>           break;
->>       case KVM_CAP_SET_GUEST_DEBUG2:
->> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
->> index a25e0b73ee70..0f3de470a73e 100644
->> --- a/arch/mips/kvm/mips.c
->> +++ b/arch/mips/kvm/mips.c
->> @@ -1071,6 +1071,9 @@ int kvm_vm_ioctl_check_extension(struct kvm 
->> *kvm, long ext)
->>       case KVM_CAP_READONLY_MEM:
->>       case KVM_CAP_SYNC_MMU:
->>       case KVM_CAP_IMMEDIATE_EXIT:
->> +#ifdef CONFIG_HAVE_KVM_IRQFD
->> +    case KVM_CAP_IRQFD_RESAMPLE:
->> +#endif
->>           r = 1;
->>           break;
->>       case KVM_CAP_NR_VCPUS:
->> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
->> index 875c30c12db0..87698ffef3be 100644
->> --- a/arch/powerpc/kvm/powerpc.c
->> +++ b/arch/powerpc/kvm/powerpc.c
->> @@ -591,6 +591,12 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, 
->> long ext)
->>           break;
->>   #endif
->> +#ifdef CONFIG_HAVE_KVM_IRQFD
->> +    case KVM_CAP_IRQFD_RESAMPLE:
->> +        r = !xive_enabled();
->> +        break;
->> +#endif
->> +
->>       case KVM_CAP_PPC_ALLOC_HTAB:
->>           r = hv_enabled;
->>           break;
->> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
->> index c768f75279ef..b58579b386bb 100644
->> --- a/arch/riscv/kvm/vm.c
->> +++ b/arch/riscv/kvm/vm.c
->> @@ -63,6 +63,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, 
->> long ext)
->>       case KVM_CAP_READONLY_MEM:
->>       case KVM_CAP_MP_STATE:
->>       case KVM_CAP_IMMEDIATE_EXIT:
->> +#ifdef CONFIG_HAVE_KVM_IRQFD
->> +    case KVM_CAP_IRQFD_RESAMPLE:
->> +#endif
->>           r = 1;
->>           break;
->>       case KVM_CAP_NR_VCPUS:
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index 156d1c25a3c1..85e093fc8d13 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -564,6 +564,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, 
->> long ext)
->>       case KVM_CAP_SET_GUEST_DEBUG:
->>       case KVM_CAP_S390_DIAG318:
->>       case KVM_CAP_S390_MEM_OP_EXTENSION:
->> +#ifdef CONFIG_HAVE_KVM_IRQFD
->> +    case KVM_CAP_IRQFD_RESAMPLE:
->> +#endif
->>           r = 1;
->>           break;
->>       case KVM_CAP_SET_GUEST_DEBUG2:
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index 0c0ca599a353..a0a7b769483d 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -4273,6 +4273,9 @@ int kvm_vm_ioctl_check_extension(struct kvm 
->> *kvm, long ext)
->>       case KVM_CAP_SYS_ATTRIBUTES:
->>       case KVM_CAP_VAPIC:
->>       case KVM_CAP_ENABLE_CAP:
->> +#ifdef CONFIG_HAVE_KVM_IRQFD
->> +    case KVM_CAP_IRQFD_RESAMPLE:
->> +#endif
->>           r = 1;
->>           break;
->>       case KVM_CAP_EXIT_HYPERCALL:
->> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
->> index 70e05af5ebea..885e72e668a5 100644
->> --- a/virt/kvm/kvm_main.c
->> +++ b/virt/kvm/kvm_main.c
->> @@ -4293,7 +4293,6 @@ static long 
->> kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->>   #endif
->>   #ifdef CONFIG_HAVE_KVM_IRQFD
->>       case KVM_CAP_IRQFD:
->> -    case KVM_CAP_IRQFD_RESAMPLE:
->>   #endif
->>       case KVM_CAP_IOEVENTFD_ANY_LENGTH:
->>       case KVM_CAP_CHECK_EXTENSION_VM:
+> Changelog v11:
+> - This is a new patch created by detaching the DT-part from:
+> [PATCH v10 6/7] clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+>   (@Krzysztof)
+> ---
+>  include/dt-bindings/reset/bt1-ccu.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
 
--- 
-Alexey
+Acked-by: Rob Herring <robh@kernel.org>
