@@ -2,50 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134165B5BD3
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Sep 2022 16:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1AB5B6ACD
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Sep 2022 11:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiILOC6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Sep 2022 10:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
+        id S231464AbiIMJgi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Sep 2022 05:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiILOCy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Sep 2022 10:02:54 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3746932AB9;
-        Mon, 12 Sep 2022 07:02:46 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oXk1M-0007Yg-04; Mon, 12 Sep 2022 16:02:44 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0D555C1291; Mon, 12 Sep 2022 16:02:34 +0200 (CEST)
-Date:   Mon, 12 Sep 2022 16:02:34 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Aleksander Bajkowski <olek2@wp.pl>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
- VPE
-Message-ID: <20220912140233.GA9366@alpha.franken.de>
-References: <20220702190705.5319-1-olek2@wp.pl>
- <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
- <87fsjen2kl.wl-maz@kernel.org>
- <20220706081901.GA10797@alpha.franken.de>
- <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
- <20220707100630.GC9894@alpha.franken.de>
- <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
- <20220707143930.GA14693@alpha.franken.de>
- <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
+        with ESMTP id S231264AbiIMJgg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Sep 2022 05:36:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6787664;
+        Tue, 13 Sep 2022 02:36:34 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRdZS5Vs9znVHQ;
+        Tue, 13 Sep 2022 17:33:52 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 13 Sep 2022 17:36:33 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 13 Sep
+ 2022 17:36:32 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>
+CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH 0/3] mips: use DEFINE_SHOW_ATTRIBUTE to simplify code
+Date:   Tue, 13 Sep 2022 18:10:35 +0800
+Message-ID: <20220913101038.1902389-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <794a2039-cdf7-2676-482f-9913a8949647@wp.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,79 +51,18 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 12:53:40PM +0200, Aleksander Bajkowski wrote:
-> Hi THomas,
-> 
-> On 7/7/22 16:39, Thomas Bogendoerfer wrote:
-> [...]
-> >> Or can you point me to the code in
-> >> drivers/irqchip/irq-mips-cpu.c that's responsible for enabling the
-> >> interrupts on VPE 1 (is it simply unmask_mips_irq)?
-> > 
-> > IMHO there is the problem, irq-mips-cpu.c can only do CPU irq operations
-> > on the same CPU. I've checked MIPS MT specs and it's possible do
-> > modify CP0 registers between VPEs. Using that needs changes in
-> > irq-mips-cpu.c. But mabye that's not woth the effort as probably
-> > all SMP cabable platforms have some multi processort capable
-> > interrupt controller implemented.
-> > 
-> > I thought about another way solve the issue. By introducing a
-> > new function in smp-mt.c which sets the value of the interrupt
-> > mask for the secondary CPU, which is then used in vsmp_init_secondary().
-> > Not sure if this is worth the effort compared to a .boot_secondary
-> > override.
-> 
-> 
-> Enabling interrupts on the second VPE using hotplug will be accepted
-> upstream? Below is a sample patch.
+Use DEFINE_SHOW_ATTRIBUTE to simplify code.
 
-as this is just another hack, below is what I prefer.
+Liu Shixin (3):
+  mips: cavium: convert to DEFINE_SHOW_ATTRIBUTE
+  mips: kernel: convert to DEFINE_SHOW_ATTRIBUTE
+  mips: ralink: convert to DEFINE_SHOW_ATTRIBUTE
 
-Thomas.
-
-commit 15853dc9e6d213558acbf961f98e9f77b4b61db2
-Author: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date:   Mon Sep 12 15:59:44 2022 +0200
-
-    my lantiq approach
-
-diff --git a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
-index c731082a0c42..1cc4f56b57f6 100644
---- a/arch/mips/lantiq/prom.c
-+++ b/arch/mips/lantiq/prom.c
-@@ -84,6 +84,16 @@ void __init plat_mem_setup(void)
- 	__dt_setup_arch(dtb);
- }
- 
-+#if defined(CONFIG_MIPS_MT_SMP)
-+extern const struct plat_smp_ops vsmp_smp_ops;
-+static struct plat_smp_ops lantiq_smp_ops;
-+
-+static void lantiq_init_secondary(void)
-+{
-+	set_c0_status(ST0_IM);
-+}
-+#endif
-+
- void __init prom_init(void)
- {
- 	/* call the soc specific detetcion code and get it to fill soc_info */
-@@ -95,7 +105,13 @@ void __init prom_init(void)
- 	prom_init_cmdline();
- 
- #if defined(CONFIG_MIPS_MT_SMP)
--	if (register_vsmp_smp_ops())
-+
-+	if (cpu_has_mipsmt) {
-+		lantiq_smp_ops = vsmp_smp_ops;
-+		lantiq_smp_ops.init_secondary = lantiq_init_secondary;
-+		register_smp_ops(&lantiq_smp_ops);
-+	} else {
- 		panic("failed to register_vsmp_smp_ops()");
-+	}
- #endif
- }
+ arch/mips/cavium-octeon/oct_ilm.c | 17 +++--------------
+ arch/mips/kernel/segment.c        | 15 ++-------------
+ arch/mips/ralink/bootrom.c        | 15 ++-------------
+ 3 files changed, 7 insertions(+), 40 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.25.1
+
