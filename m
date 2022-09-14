@@ -2,49 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8975B8488
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Sep 2022 11:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B3F5B84B1
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Sep 2022 11:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiINJNX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Sep 2022 05:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S231208AbiINJPP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Sep 2022 05:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiINJMr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Sep 2022 05:12:47 -0400
+        with ESMTP id S231570AbiINJNp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Sep 2022 05:13:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A287C18F;
-        Wed, 14 Sep 2022 02:05:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB8A79690;
+        Wed, 14 Sep 2022 02:06:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 679CA619DA;
-        Wed, 14 Sep 2022 09:05:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B39C433C1;
-        Wed, 14 Sep 2022 09:05:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D3B5619EF;
+        Wed, 14 Sep 2022 09:05:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98EE3C433C1;
+        Wed, 14 Sep 2022 09:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663146309;
-        bh=WvVFNThJuL1dvtDtX9kmevC8ie4RBC2Ra9PhEtPStJM=;
+        s=k20201202; t=1663146337;
+        bh=a66UEtPnwUYc8uQfQS1XmGr0kvvD1Rh32I5QpKZu9TY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VZkIJt4PtNI34u+hE5gjNj7GAh+bV5afNK9hL/0G9kLr0MXzA4sr/Kp0vYnyoM3vP
-         OeQ9tC2AhVzUHDDlwkLx9oM9xjJPCm3EdZHXT77srk+LpUjuze0NsTslwmc0emleoI
-         ZEQDwgui/trl4P3DroGX21iHQ2Jm/alCsM1Mg4LN81TR37BdDGlXIICEhP8yVn/N1v
-         2PCcEc0nm8OtXWTQHx/4SXQ0W7X+m1BLS4RLK4mPmiWkHmRy5hY6H+XHByx2tQQT8f
-         1/aNmET6X3Lo9xqAo/HAPu5aYVeh4WbCGMCU2FImjUjuxwzJfGDy6QNZeb7s+u8ouK
-         V9AMM/HnwRwLg==
+        b=n39MEz9Y3jgLKScyOwQXa3Dbc8RQVoHUJl9aJrn6VxU9x3bVMUsYWlrDZ4BeNwJ1d
+         W456jdXDHnM+rvJUXWGfoJ3mVUiWQTojCFM5KBABSFFAf0nWiU5BDY7NgaP+elfR4g
+         4xL5AsQaG8JeanSuLYrmHSyFPTKoSJJ7Ee1eB27ZbyQfh/XoofJklOBpuPIF7HidDH
+         1cbi9x2VGppGndbQEE+wb0y+2vZqAnFAvI396ObAKZCAXjepYl/v9k6jptD5e3L44W
+         fB288SXi7vrxzy+RB1qYYwKCbO77UzgtkbImXGYalP2gqsBTHff9m09fyUA52lCc95
+         4xJh683twTNgA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, maz@kernel.org,
-        samuel@sholland.org, rikard.falkeborn@gmail.com,
-        mikelley@microsoft.com, Julia.Lawall@inria.fr,
-        mark.rutland@arm.com, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 8/9] MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
-Date:   Wed, 14 Sep 2022 05:04:42 -0400
-Message-Id: <20220914090445.471489-8-sashal@kernel.org>
+        rikard.falkeborn@gmail.com, Julia.Lawall@inria.fr,
+        mark.rutland@arm.com, samuel@sholland.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 7/8] MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
+Date:   Wed, 14 Sep 2022 05:05:11 -0400
+Message-Id: <20220914090514.471614-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220914090445.471489-1-sashal@kernel.org>
-References: <20220914090445.471489-1-sashal@kernel.org>
+In-Reply-To: <20220914090514.471614-1-sashal@kernel.org>
+References: <20220914090514.471614-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -92,7 +92,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 10 insertions(+)
 
 diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
-index 43e4fc1b373ca..3e5cf5515c01f 100644
+index a27b3d70393f7..657e626cc41eb 100644
 --- a/arch/mips/cavium-octeon/octeon-irq.c
 +++ b/arch/mips/cavium-octeon/octeon-irq.c
 @@ -127,6 +127,16 @@ static void octeon_irq_free_cd(struct irq_domain *d, unsigned int irq)
