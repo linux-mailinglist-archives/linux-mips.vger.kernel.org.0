@@ -2,137 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462145B78C3
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Sep 2022 19:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816A45B7F66
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Sep 2022 05:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbiIMRtP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Sep 2022 13:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
+        id S229457AbiINDbp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Sep 2022 23:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbiIMRsn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Sep 2022 13:48:43 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2107.outbound.protection.outlook.com [40.107.223.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72673D103;
-        Tue, 13 Sep 2022 09:46:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BG6mfG5CoW6KllP4ACNFhg7DQnvmFpBr9+BJmO7cgaF5Djpe9Dh/7jpj5ujPqVMUBR5r9XWbBngP24Fsy4jULoIsxq9oVoOobkQcZxNG3FHpLTpwgTswKtIpJPcAWA+8FCX00vcXafDgsa6kplcJgG/q/KJS4eZxUsCnQ/COtIdImB/ggG5BCGfeUlYmzGDb81+0nkIUIJXKHvpbFwGUcoLsmFeQUJ/mEr82DSZjmbcdMLYyUbytsMTHlSvAD9HrGnNIKu/dHTGdpjdDg1ogbesPe91aRJKP07I//SUkHipzcCSHetDdnpsknlKJtMM6Kd320GbBsshK62antvDnMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=knQ5zDcXQNEzIZepJrLw3NnFBMAaqRuWjcfiHzfn5JA=;
- b=kO+BwpJ0hFrxt1uRyxiO5zo0oz+egOZYi9b7TDjYpdUxxhq0h5uWzqajVBB4w4oCAvUKIBQOIIHY35dV4qOpgkWwkmergbM8miR7kMB4cg/GV9pAiAnPhiZwnTMHYJoSpYu57ajE5Jp2jq2DWpNDurBsaQ8TUr/yiW6fbEwnOWn7XYemwP6NKyIzrkluGTL09dKo9T+cy/gerHy2FlOwWJilw+uUrLAoreah8VWaoKg0Y/LsFZ9jy/1D+kt1FvXW3dG7lDzV+qW2MsXOxhYKS0OKa5htEhwERMvDWvtuOxpO00jpbkTGr8IxcVu3zcdbXWE4yU83DP5Q3yUt8qketg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=knQ5zDcXQNEzIZepJrLw3NnFBMAaqRuWjcfiHzfn5JA=;
- b=ZzXzTssSYTN7ueSvikn/OMhob3nKoz8cOrOURtiXem6lN8vznLD+ar/W41atmKS73i9aHW9NQ+kqs4Rnq8biXf2m0Y/lIwR6vvzY/2wEIcDoqMylpErjtOeir8ztazdBWVxcLwouyxiQgB2MIBjIr3z4kMn42ZzQIW/PgbdFKVU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by MW4PR10MB5725.namprd10.prod.outlook.com
- (2603:10b6:303:18b::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Tue, 13 Sep
- 2022 16:46:53 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::dcf2:ddbd:b18d:bb49]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::dcf2:ddbd:b18d:bb49%3]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
- 16:46:53 +0000
-Date:   Tue, 13 Sep 2022 09:46:49 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v2 1/1] dt-bindings: phy: ocelot-serdes: convert to YAML
-Message-ID: <YyCz+XnXrz9FsbWU@colin-ia-desktop>
-References: <20220911163715.4036144-1-colin.foster@in-advantage.com>
- <20220911163715.4036144-2-colin.foster@in-advantage.com>
- <YyCyeNq7kxx6C3sE@matsya>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyCyeNq7kxx6C3sE@matsya>
-X-ClientProxiedBy: SJ0PR13CA0121.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::6) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        with ESMTP id S229559AbiINDbo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Sep 2022 23:31:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711795927E;
+        Tue, 13 Sep 2022 20:31:42 -0700 (PDT)
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MS5Rk6HP3zHnfV;
+        Wed, 14 Sep 2022 11:29:38 +0800 (CST)
+Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 14 Sep 2022 11:31:40 +0800
+Received: from huawei.com (10.67.175.33) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
+ 2022 11:31:40 +0800
+From:   Lin Yujun <linyujun809@huawei.com>
+To:     <tsbogend@alpha.franken.de>, <christophe.jaillet@wanadoo.fr>
+CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] MIPS: SGI-IP30: Fix platform-device leak in bridge_platform_create()
+Date:   Wed, 14 Sep 2022 11:28:07 +0800
+Message-ID: <20220914032807.96793-1-linyujun809@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|MW4PR10MB5725:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5de99b24-3758-48f6-e519-08da95a78f9b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dC5ZrM19+W0deyBPAKX2cG4Ya0t0VCN8irGVo86eNkN0Jkbg2K1LhORYhkofK/8vJi9zWNcR1zjGldyowo8F1F7J2tHoBWWqLQ0JcQMmchPq7cGbZUYMNOuv98SeN/62F6dIT80EEbYQBtprq/tsDkwuI0IFswao1XWsClIxL92ffh8wmaRwFROsHtuMx1jQRczo6xgZcwCTndmZlwbYHzeigU9Xe1/v/O3l+fYtU8zTYLWP/siOw9oFhAqiewXeIzO/Pg7y1GkAQhzvfMQcilw3fGD7heY3y4teLyD2eC7XowwmUvIv3lheR7y5f/eeafk6cTyd9wIm8tetF8stuQK0MYiSR8lt1sm/hOyuewaUPHLh3XEJme1JRNoUaRV3k1JqczkW7BcaCComzP+5ccu3YjQXz8gxP+AsytwyTQy1yWudH7Rcl6U/a+9ndxUl5tbpe0W7sJb70BdU01WhRifwU4CE8iKGPUlTXsJnAOYGWk7v9dGibOfB/wsOn4T4f7RKbhTJ0nz+Wsw/Rubw+ajjUizjrBTcTs3jNRAhJuG9ajdhs4WDfA7ZOtwakgw1qiJrwsXVVKFfGwN9Fea+MKgIusP5806ultMnhMpCC3wVmCRCoh9bpQVjlYQ3Em6oD5Dpy+4il2YOoVCjti8lgk7hnE2RHr/N+KZiW6sjmFjt0qBOCe/aDpDRyXUu1BK1XVdqL5PJyB+fS3YQJUI8fS/1+jZVvcVpYoRRhUbe2ooK1yO6JNTB8IV655ps4CtGWttahCin6wLpQnvZ1oxELw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39830400003)(346002)(376002)(366004)(396003)(136003)(451199015)(6916009)(186003)(53546011)(41300700001)(6512007)(26005)(44832011)(2906002)(4744005)(66476007)(66556008)(6666004)(9686003)(6486002)(5660300002)(8676002)(33716001)(54906003)(8936002)(316002)(4326008)(38100700002)(86362001)(478600001)(7416002)(6506007)(66946007)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/MOp20bfHanoS/Wh2GwbXL/Gm/djzC9JE3HgdamkhUuVdHSbLpNV7UvlrWxU?=
- =?us-ascii?Q?cplTExMJ/jjD+TWCxf7uuw28e8uY/sfsgIcLvdZxtcpciLGjxhQlWapNAu9Q?=
- =?us-ascii?Q?E6ncetE+6RcS4brObzkT5JknZUpH26R/r5audGh/zyLDHPchHtpVMjOomcLK?=
- =?us-ascii?Q?7EqbelXXE2gLDSCVyYvc7sSvrlBFfwbmDTgbGYGeaXEzGKSSXam85//xw7F0?=
- =?us-ascii?Q?Ww3LVIvAtOmlK47TXL7Q8IgBfd0hJxxtWw8OwdB/r5SUNRktVLkxohMdOkmE?=
- =?us-ascii?Q?p5x5L5mADkNHlRmvlA4jFJdgmrpu+cCpMJr6ftdyx89yQXPPHoGsqTkGdaOk?=
- =?us-ascii?Q?giHnqawn/puUwiqf3tDpb7p4HcDiF4qu8rkyJtKFuEgdD+Pl6WbZk2HL++zS?=
- =?us-ascii?Q?+xO3dpL3h8WqSOLgFsg8CAwMo0JL8ILL2msDugY9801R1VKK2rzLbttQpbsa?=
- =?us-ascii?Q?Rf0Hnp/IhfOvVVlz1+S/QnDvVoFjU6Wkv0nerdn6aUTMjeubbeqfz0VV2j2V?=
- =?us-ascii?Q?M3JY/yfdAmuAgM1CZBUwFW9wx3TVRPCFSy8hf11YKkecyg9D/HNfvdCZE8Sx?=
- =?us-ascii?Q?iFEofOdlbUrSGjRhyLp8d94ufkMdSJlhbc2+yrHZMibuhxGpg9uGlV7vL95V?=
- =?us-ascii?Q?aXUjmWgRp2Onc00DSpiaU7Qbc6MBrtwgpqR1DYwWxjl6E1/HNaXeoxxPk534?=
- =?us-ascii?Q?HpkSrqJ1qctb27JkVpc3Ni5ohyl+9uFCJRx/XeKXQ+n4/o1xDCMFlPDmhnns?=
- =?us-ascii?Q?hrt9GPTe1iZl1t36hpWVE49bINW3PqgNNP71cm0FIfidfWYNtfQ7N741R5l3?=
- =?us-ascii?Q?k8+65/zwWShkCEKYmNa6esQ8CjXxNJPRokfbLbMJmLrucOjjHvtlEhar4Qc3?=
- =?us-ascii?Q?RFeRhdxm6bmCvTH/ZhpZGsAdpx7ncrZYAdgrxGoJEc7fzKbykor1hGOyZ1KJ?=
- =?us-ascii?Q?V9eQ2CzkumQyYXjzOkvOQrmF5QD4pdZtEkMd51AOFI8d4ZqscYDOzGW56n/4?=
- =?us-ascii?Q?Z6/mh65Y/fgBjycwWyXORIbFQFwYETlllBwBsNZCAqq6VUi8sMpmvIQR2TiG?=
- =?us-ascii?Q?Zy4zkOgLipJLi0eC1ngu0gX4fq81/wHubvrsaTtrBiQ2OjCz5gFVtBDCmuPE?=
- =?us-ascii?Q?8eydYNPIaqIwb9ZXsJW8HXT5MqBZtRw3FEqGsjX8oEiV5XmhAXN2kxfgKkC3?=
- =?us-ascii?Q?R7piFlqc6/EYLUgMTr7Ul1ZdwsVQPU2eRua7XMApFoGxXs1k4emgBvZ3dBvE?=
- =?us-ascii?Q?2TdejeMFtnBbO5UGWpHFb0ND0TIfg/7kIvv/etauTN/9swU1UUn3XBXTT02s?=
- =?us-ascii?Q?YQ2fPhqh+8SyaIS2kJUCXqN5hjoNiZmAKMS+0TIPZ2vONTJB+B8mCAJVDgry?=
- =?us-ascii?Q?+uiCnJlww9O9Fnvsf5i3Nr/7j5WLTzS4yXptix9FeoX1pyNci309WM19Vben?=
- =?us-ascii?Q?8XfayfuLaA/7xqkmqQKstVmm4YakN79e/9uLBQQ9lIeneAKXXyWgRAbOacqL?=
- =?us-ascii?Q?w1+OqYh28TTHlsvElWX/7vrRoEjJ/EtoAcHUqqNgrWK4+CcTub5J19pyt+Oo?=
- =?us-ascii?Q?BWOgFQEyd7ZsWjTUTCaW7V0SqwjnylOhcGf1XXn1shtuqnHBUibjxrnontD8?=
- =?us-ascii?Q?v9a4yyj5U8TUfvFoZuj3wcM=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5de99b24-3758-48f6-e519-08da95a78f9b
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 16:46:52.9657
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5nRB0fZNbAtgZtsgipY2q9K5a9+C9xyVHmv30I7FgTICZd0qsSQsJUVPN41aaak7AyDhu34hg2HvLlzXD5qIFqGPkdldAp9Jiv8W9bECc9U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB5725
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.33]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 10:10:24PM +0530, Vinod Koul wrote:
-> On 11-09-22, 09:37, Colin Foster wrote:
-> > Convert the phy-ocelot-serdes device tree binding to the new YAML format.
-> > 
-> > Additionally, add the file to MAINTAINERS since the original file didn't
-> > exist.
-> 
+In error case in bridge_platform_create after calling
+platform_device_add()/platform_device_add_data()/
+platform_device_add_resources(), release the failed
+'pdev' or it will be leak, call platform_device_put()
+to fix this problem.
 
-Oops,
+Besides, 'pdev' is divided into 'pdev_wd' and 'pdev_bd',
+use platform_device_unregister() to release sgi_w1
+resources when xtalk-bridge registration fails.
 
-Disregard my last email. I was confused about which patch this was - no
-need to bring this into net-next.
+Fixes: fd27234f24ae ("MIPS: add support for SGI Octane (IP30)")
+Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+---
+ arch/mips/sgi-ip30/ip30-xtalk.c | 70 +++++++++++++++++++++++----------
+ 1 file changed, 50 insertions(+), 20 deletions(-)
 
-> Applied, thanks
-> 
-> -- 
-> ~Vinod
+diff --git a/arch/mips/sgi-ip30/ip30-xtalk.c b/arch/mips/sgi-ip30/ip30-xtalk.c
+index 8129524421cb..7ceb2b23ea1c 100644
+--- a/arch/mips/sgi-ip30/ip30-xtalk.c
++++ b/arch/mips/sgi-ip30/ip30-xtalk.c
+@@ -40,12 +40,15 @@ static void bridge_platform_create(int widget, int masterwid)
+ {
+ 	struct xtalk_bridge_platform_data *bd;
+ 	struct sgi_w1_platform_data *wd;
+-	struct platform_device *pdev;
++	struct platform_device *pdev_wd;
++	struct platform_device *pdev_bd;
+ 	struct resource w1_res;
+ 
+ 	wd = kzalloc(sizeof(*wd), GFP_KERNEL);
+-	if (!wd)
+-		goto no_mem;
++	if (!wd) {
++		pr_warn("xtalk:%x bridge create out of memory\n", widget);
++		return;
++	}
+ 
+ 	snprintf(wd->dev_id, sizeof(wd->dev_id), "bridge-%012lx",
+ 		 IP30_SWIN_BASE(widget));
+@@ -56,24 +59,35 @@ static void bridge_platform_create(int widget, int masterwid)
+ 	w1_res.end = w1_res.start + 3;
+ 	w1_res.flags = IORESOURCE_MEM;
+ 
+-	pdev = platform_device_alloc("sgi_w1", PLATFORM_DEVID_AUTO);
+-	if (!pdev) {
+-		kfree(wd);
+-		goto no_mem;
++	pdev_wd = platform_device_alloc("sgi_w1", PLATFORM_DEVID_AUTO);
++	if (!pdev_wd) {
++		pr_warn("xtalk:%x bridge create out of memory\n", widget);
++		goto err_kfree_wd;
++	}
++	if (platform_device_add_resources(pdev_wd, &w1_res, 1)) {
++		pr_warn("xtalk:%x bridge failed to add platform resources.\n", widget);
++		goto err_put_pdev_wd;
++	}
++	if (platform_device_add_data(pdev_wd, wd, sizeof(*wd))) {
++		pr_warn("xtalk:%x bridge failed to add platform data.\n", widget);
++		goto err_put_pdev_wd;
++	}
++	if (platform_device_add(pdev_wd)) {
++		pr_warn("xtalk:%x bridge failed to add platform device.\n", widget);
++		goto err_put_pdev_wd;
+ 	}
+-	platform_device_add_resources(pdev, &w1_res, 1);
+-	platform_device_add_data(pdev, wd, sizeof(*wd));
+ 	/* platform_device_add_data() duplicates the data */
+ 	kfree(wd);
+-	platform_device_add(pdev);
+ 
+ 	bd = kzalloc(sizeof(*bd), GFP_KERNEL);
+-	if (!bd)
+-		goto no_mem;
+-	pdev = platform_device_alloc("xtalk-bridge", PLATFORM_DEVID_AUTO);
+-	if (!pdev) {
+-		kfree(bd);
+-		goto no_mem;
++	if (!bd) {
++		pr_warn("xtalk:%x bridge create out of memory\n", widget);
++		goto err_unregister_pdev_wd;
++	}
++	pdev_bd = platform_device_alloc("xtalk-bridge", PLATFORM_DEVID_AUTO);
++	if (!pdev_bd) {
++		pr_warn("xtalk:%x bridge create out of memory\n", widget);
++		goto err_kfree_bd;
+ 	}
+ 
+ 	bd->bridge_addr	= IP30_RAW_SWIN_BASE(widget);
+@@ -93,15 +107,31 @@ static void bridge_platform_create(int widget, int masterwid)
+ 	bd->io.flags	= IORESOURCE_IO;
+ 	bd->io_offset	= IP30_SWIN_BASE(widget);
+ 
+-	platform_device_add_data(pdev, bd, sizeof(*bd));
++	if (platform_device_add_data(pdev_bd, bd, sizeof(*bd))) {
++		pr_warn("xtalk:%x bridge failed to add platform data.\n", widget);
++		goto err_put_pdev_bd;
++	}
++	if (platform_device_add(pdev_bd)) {
++		pr_warn("xtalk:%x bridge failed to add platform device.\n", widget);
++		goto err_put_pdev_bd;
++	}
+ 	/* platform_device_add_data() duplicates the data */
+ 	kfree(bd);
+-	platform_device_add(pdev);
+ 	pr_info("xtalk:%x bridge widget\n", widget);
+ 	return;
+ 
+-no_mem:
+-	pr_warn("xtalk:%x bridge create out of memory\n", widget);
++err_put_pdev_bd:
++	platform_device_put(pdev_bd);
++err_kfree_bd:
++	kfree(bd);
++err_unregister_pdev_wd:
++	platform_device_unregister(pdev_wd);
++	return;
++err_put_pdev_wd:
++	platform_device_put(pdev_wd);
++err_kfree_wd:
++	kfree(wd);
++	return;
+ }
+ 
+ static unsigned int __init xbow_widget_active(s8 wid)
+-- 
+2.17.1
+
