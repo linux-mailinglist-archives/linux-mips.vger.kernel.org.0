@@ -2,108 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65895B8427
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Sep 2022 11:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA135B8468
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Sep 2022 11:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbiINJH6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Sep 2022 05:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S231396AbiINJLz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Sep 2022 05:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiINJGo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Sep 2022 05:06:44 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC14E77540;
-        Wed, 14 Sep 2022 02:03:45 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-12b542cb1d3so29443603fac.13;
-        Wed, 14 Sep 2022 02:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=D+SZ90LOGKr6PSOG3NHenig+A+JoVupnzjOX8oY/5mM=;
-        b=nExX2H2C6WrTnNGSpxdkS/T1FL5M+Sr7vDYZT64HVjqQ5M/Pa7eAR4by6hMu0qfyxJ
-         3qbx21WcZf9gvJ23WYaYT5830WSHS9I0fxKg5PWV043q44CqnXwRpghkSNe3CAkC/uqg
-         JPNtPeZPgYSXBQ7jaLQMuYgYFWkLBrzEBMKeRSjk84LrI9NFp8PEgHV3rrvI5gEoAegf
-         f0oQrUcSA3nLHzjEbTP2bLpRjk3SI89VDDLBFyZfxUCyDyebpuKlXPAIT+G/kgKm4CcM
-         Wx3w7v7TzkDjxerXa+Q1jnVQXJueeoxUDhwHa49rCdpFkjQAs1c6QaIyJ738DjN9kXJM
-         8TQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=D+SZ90LOGKr6PSOG3NHenig+A+JoVupnzjOX8oY/5mM=;
-        b=mS2ni3e0ADsFiF1qCeBITsk7T8O8LmLeE91HIMJy19qDftYRJFvwM2dy/t6oT+B6yi
-         f7Htf5q7tcGNsxRJUGOz/K8zQmjphWgNJnQ3jOXpGz/tP69LfQX8EgUl4KSRCJtAplc0
-         HoseSD7WQOoylt+wR7eXB79RUEDz+tNXAFCPVVcHYfyLkhHqSZJ569gbIRa2/AYRRpds
-         bCij+EtBiybsKXXqm+DVZdRpCdMEHozWFnv75d+Hpj8fNTuJz1oLWg00IKRA0sDvJKrf
-         zMInELL+E2TEvGfcEypT+flN4wzIk6pkfcqrrUvSINfXQayZdy5HP3RUhiEWNacDn/fu
-         LpXg==
-X-Gm-Message-State: ACgBeo0EjWnu/dm5J0Fju19ojj3p57mh3j0FuhXGog2xSFp3D+QJMDvR
-        HA2ReI4Fn4LirnlHPvlmsaBEoESWmY+9efg7Twg=
-X-Google-Smtp-Source: AA6agR6ka3E1cNjL/pn5j8TiAFXOCTm4ghY2UhrM1mmRzKbdO8p0jFiJ1HzoekaKmYo3JI4vfIcTz0ZDPjt6wYynFCE=
-X-Received: by 2002:a05:6808:bcb:b0:345:aa85:6f33 with SMTP id
- o11-20020a0568080bcb00b00345aa856f33mr1451152oik.83.1663146214114; Wed, 14
- Sep 2022 02:03:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220914085451.11723-1-arinc.unal@arinc9.com> <20220914085451.11723-5-arinc.unal@arinc9.com>
-In-Reply-To: <20220914085451.11723-5-arinc.unal@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 14 Sep 2022 11:03:23 +0200
-Message-ID: <CAMhs-H8MohXO6xNf+vNodv9hDyCog5_Hjcb6_=_ujmYmmeEdSg@mail.gmail.com>
-Subject: Re: [PATCH 04/10] dt-bindings: memory: mt7621: add syscon as
- compatible string
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        with ESMTP id S231395AbiINJLM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Sep 2022 05:11:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7200C78583;
+        Wed, 14 Sep 2022 02:05:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04818619A0;
+        Wed, 14 Sep 2022 09:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F37BC43470;
+        Wed, 14 Sep 2022 09:04:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663146281;
+        bh=tWMZxrIUvjoZs4dSs2u4hZXkwTsimY8tEwEFEysTMQs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gQSytTHhbcNrzHAv+I9gbsAMrFF9Ozz6bS4GLBO39u1+WfENczIjRshcr7AhfhGEC
+         IDv30iYR5ff0DMQQU2gagIe6X6vuBzT6HUompgBlH6mZxcq3dFemZ0OwltjMVNinat
+         960C6j33C96j35HK+O5zgLTCUcRbXxHt+0gJK1NEn4bHsSkucUbpySCXoB/HVm/T9P
+         HS05OpAB/DTIqfkmnuu29Id5IvhdWm67ilepr+UoSsmGkY4cUO5D2eWSaX1ysyPeB8
+         UuNGdEHw0rQ7mbXxoX5lxyhC5sA4C07f6jp+7pwpCiFALwnfIijo9SF9wPtiF3HMm8
+         FXJp5XAj3r8Tg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, erkin.bozoglu@xeront.com,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sasha Levin <sashal@kernel.org>, maz@kernel.org,
+        mikelley@microsoft.com, samuel@sholland.org, Julia.Lawall@inria.fr,
+        rikard.falkeborn@gmail.com, mark.rutland@arm.com,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 11/12] MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
+Date:   Wed, 14 Sep 2022 05:04:04 -0400
+Message-Id: <20220914090407.471328-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220914090407.471328-1-sashal@kernel.org>
+References: <20220914090407.471328-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 10:55 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
-c9.com> wrote:
->
-> Add syscon as a constant string on the compatible property as it's requir=
-ed
-> for the SoC to work. Update the example accordingly.
->
-> Fixes: 5278e4a181ff ("dt-bindings: memory: add binding for Mediatek's MT7=
-621 SDRAM memory controller")
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> ---
->  .../bindings/memory-controllers/mediatek,mt7621-memc.yaml   | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+[ Upstream commit ba912afbd611d3a5f22af247721a071ad1d5b9e0 ]
 
-Thanks,
-    Sergio Paracuellos
+For irq_domain_associate() to work the virq descriptor has to be
+pre-allocated in advance. Otherwise the following happens:
+
+WARNING: CPU: 0 PID: 0 at .../kernel/irq/irqdomain.c:527 irq_domain_associate+0x298/0x2e8
+error: virq128 is not allocated
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 4.19.78-... #1
+        ...
+Call Trace:
+[<ffffffff801344c4>] show_stack+0x9c/0x130
+[<ffffffff80769550>] dump_stack+0x90/0xd0
+[<ffffffff801576d0>] __warn+0x118/0x130
+[<ffffffff80157734>] warn_slowpath_fmt+0x4c/0x70
+[<ffffffff801b83c0>] irq_domain_associate+0x298/0x2e8
+[<ffffffff80a43bb8>] octeon_irq_init_ciu+0x4c8/0x53c
+[<ffffffff80a76cbc>] of_irq_init+0x1e0/0x388
+[<ffffffff80a452cc>] init_IRQ+0x4c/0xf4
+[<ffffffff80a3cc00>] start_kernel+0x404/0x698
+
+Use irq_alloc_desc_at() to avoid the above problem.
+
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/cavium-octeon/octeon-irq.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
+index 3ad1f76c063a9..2d5e7b21d9600 100644
+--- a/arch/mips/cavium-octeon/octeon-irq.c
++++ b/arch/mips/cavium-octeon/octeon-irq.c
+@@ -127,6 +127,16 @@ static void octeon_irq_free_cd(struct irq_domain *d, unsigned int irq)
+ static int octeon_irq_force_ciu_mapping(struct irq_domain *domain,
+ 					int irq, int line, int bit)
+ {
++	struct device_node *of_node;
++	int ret;
++
++	of_node = irq_domain_get_of_node(domain);
++	if (!of_node)
++		return -EINVAL;
++	ret = irq_alloc_desc_at(irq, of_node_to_nid(of_node));
++	if (ret < 0)
++		return ret;
++
+ 	return irq_domain_associate(domain, irq, line << 6 | bit);
+ }
+ 
+-- 
+2.35.1
+
