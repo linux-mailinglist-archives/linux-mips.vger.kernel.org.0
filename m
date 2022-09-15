@@ -2,48 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85E65B8BA4
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Sep 2022 17:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD2B5B9300
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Sep 2022 05:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiINPTy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Sep 2022 11:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S229586AbiIODVg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Sep 2022 23:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiINPTx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Sep 2022 11:19:53 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EE61056E;
-        Wed, 14 Sep 2022 08:19:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1663168748; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=d18h0VCuUcQlrCNVzd8EEARixB3LaiEII5NJ/cAhdM+pS/xi7tIBSgiQy3ka5+ZSrVuT4UyAe/KNYmZjtCurviNkdscz28ErI9nIFS1dr/FB1R3XMNkdVh++Ieu/ny1Osr06f01k4/FbH+EeNTBJB8u5xHLmj13skdfm1vUxM2I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1663168748; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=wloC/J0F6yZhG8fSrhhIFOYeY4PZYcuw8/qw0WLhmts=; 
-        b=Kc35hLPDHHRFNBPdLXsB7ca2ooQ2Qh4pt8u+B4zDSzcdOFr2dO98x1/5wnc/95ocK86DfkAWYueARithEsUoJw8419JkhhCX9bQxYfLk36pGSZDkvMOAsdRZCvWV0U2f63wA7zsEE7dzvCoT2tS/EVy+MCqMnKwxabPm3g6Tuus=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663168748;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=wloC/J0F6yZhG8fSrhhIFOYeY4PZYcuw8/qw0WLhmts=;
-        b=HYRqQgZnOA5dUMeMQZnjRkWq2q5fiZVvdxsATLGvgufw/k6xNHAFIdJOJyDF3HvH
-        sMLAyZz5GVqPkarxZt/Kxxx3lH1axtLnS5Xo3Yi6tN0WmasIP1k7FsR6aW5C9AWvtzB
-        SPqc6KtvrFFWWLMhVRRmgRphHUwJ60k8lxnGDHvI=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1663168746065958.7172933428667; Wed, 14 Sep 2022 08:19:06 -0700 (PDT)
-Message-ID: <44045164-692d-c8f5-3216-b043fb821634@arinc9.com>
-Date:   Wed, 14 Sep 2022 18:18:58 +0300
+        with ESMTP id S230186AbiIODVf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Sep 2022 23:21:35 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D098F962;
+        Wed, 14 Sep 2022 20:21:34 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1274ec87ad5so45753133fac.0;
+        Wed, 14 Sep 2022 20:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=wFkBesRwfqcj3CX5Iz3LowXdYgUQd9xk42DDWFH6z/U=;
+        b=ObM2/plyRnLRqerAadJfngGyddnsH7s6dgOq2cT0ktxpFo0XfRu0J1+0F2FpFWlNxM
+         OX/RJnXBuaDizTG9vbIrPbPx/PSZ+SUoL6cJIk4JIV9N04pJT/j6wbYqXVPDMjFF39eb
+         oLecX6dZOcRicCm72+/m5DTP6/nU/r2ymbWD/FhVubnFXas5KKyeHYFOiz0v2poAaLAX
+         9V5e9Qf74MA6NTXmDkBU5gXxC5m6BNdYP8iYyFukqFAYxhHEBEGP/WS1MyNj3H1EsTcJ
+         uymbx+4999P1sIogKfeJPd9GtBCGilv2bfaUdma2YXCFPBIA2BjcJyQ6UAkHkGz317W5
+         znrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=wFkBesRwfqcj3CX5Iz3LowXdYgUQd9xk42DDWFH6z/U=;
+        b=CqK2ncUCfwBsuRjCMIM93opr02UghyiBCflXYJJICYzcKT6kMES1MjbQI5Vr0wEzz7
+         UkvP5NycX2w/hbUe65YWF0Q6iseY1b5QRWMDmmA7zi1Xo1xlw8xnzwLLTAIkB3M2F1Zz
+         wXafEqT/JflgXpUBpLFJ22tFXVBVTYBDALSba9jTUFHSU+toz7hGvZ7TU5xmosZzFJe7
+         OUdDrAsK05mSU0cmQ5s5oW6tQLVSrTljcIChWFsVzo0/jNBagn42lnzBdOY3T1Xyp64p
+         T0LGUEoyXX3cCRIrpEtOm3HkUvRSjs4OX4XapJviB+acuEsH+tr/tuo3riHxkafFINzy
+         Sk7g==
+X-Gm-Message-State: ACgBeo3pH3na6CHFv2yDEBeZ8Qn9hvP5OwCrQp/G/WnZbq3GVb1KrX5/
+        2PjdpihzzJsyzKDIVBgwuX9lweUJxF1P3gPdIkI=
+X-Google-Smtp-Source: AA6agR72umOG1lwIjilq8Z+bXLoz6rwSEVoZDQ4luKpynK6vC6GFvDWBy92K6048ExMF+/eov5V8X4fmSHo++P6n4bw=
+X-Received: by 2002:a05:6870:c0c8:b0:101:b3c3:abc3 with SMTP id
+ e8-20020a056870c0c800b00101b3c3abc3mr4119832oad.144.1663212093765; Wed, 14
+ Sep 2022 20:21:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+References: <20220914085451.11723-1-arinc.unal@arinc9.com> <20220914085451.11723-5-arinc.unal@arinc9.com>
+ <20220914151414.GA2233841-robh@kernel.org> <44045164-692d-c8f5-3216-b043fb821634@arinc9.com>
+In-Reply-To: <44045164-692d-c8f5-3216-b043fb821634@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 15 Sep 2022 05:21:21 +0200
+Message-ID: <CAMhs-H-0XV9ocrG3_MuVc3Q=o8HnYso2CqUURjVR3OMc=dAMYg@mail.gmail.com>
 Subject: Re: [PATCH 04/10] dt-bindings: memory: mt7621: add syscon as
  compatible string
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -57,40 +70,55 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sean Wang <sean.wang@mediatek.com>,
         Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220914085451.11723-1-arinc.unal@arinc9.com>
- <20220914085451.11723-5-arinc.unal@arinc9.com>
- <20220914151414.GA2233841-robh@kernel.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20220914151414.GA2233841-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DENG Qingfang <dqfext@gmail.com>, erkin.bozoglu@xeront.com,
+        netdev <netdev@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14.09.2022 18:14, Rob Herring wrote:
-> On Wed, Sep 14, 2022 at 11:54:45AM +0300, Arınç ÜNAL wrote:
->> Add syscon as a constant string on the compatible property as it's required
->> for the SoC to work. Update the example accordingly.
-> 
-> It's not required. It's required to automagically create a regmap. That
-> can be done yourself as well. The downside to adding 'syscon' is it
-> requires a DT update. Maybe that's fine for this platform? I don't know.
+On Wed, Sep 14, 2022 at 5:19 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
+9.com> wrote:
+>
+> On 14.09.2022 18:14, Rob Herring wrote:
+> > On Wed, Sep 14, 2022 at 11:54:45AM +0300, Ar=C4=B1n=C3=A7 =C3=9CNAL wro=
+te:
+> >> Add syscon as a constant string on the compatible property as it's req=
+uired
+> >> for the SoC to work. Update the example accordingly.
+> >
+> > It's not required. It's required to automagically create a regmap. That
+> > can be done yourself as well. The downside to adding 'syscon' is it
+> > requires a DT update. Maybe that's fine for this platform? I don't know=
+.
+>
+> My GB-PC2 won't boot without syscon on mt7621.dtsi. This string was
+> always there on the memory controller node on mt7621.dtsi.
 
-My GB-PC2 won't boot without syscon on mt7621.dtsi. This string was 
-always there on the memory controller node on mt7621.dtsi.
+The string was introduced because the mt7621 clock driver needs to
+read some registers creating a regmap from the syscon. The bindings
+were added before the clock driver was properly mainlined and at first
+the clock driver was using ralink architecture dependent operations
+rt_memc_* defined in
+'arch/mips/include/asm/mach-ralink/ralink_regs.h'. I forgot to update
+the mem controller binding when memc became a syscon so I think this
+patch is correct. I also think the sample should use 'syscon' in the
+node name instead of memory-controller.
 
-Arınç
+Best regards,
+    Sergio Paracuellos
+>
+> Ar=C4=B1n=C3=A7
