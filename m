@@ -2,87 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED0A5B940F
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Sep 2022 07:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C635B941A
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Sep 2022 08:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiIOF7T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Sep 2022 01:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S229487AbiIOGIC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Sep 2022 02:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIOF7S (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Sep 2022 01:59:18 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C499019F;
-        Wed, 14 Sep 2022 22:59:17 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11e9a7135easo46040428fac.6;
-        Wed, 14 Sep 2022 22:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=QuYwY1WWD4oc1w5hcjaVeyURITDJWRc1kZVgbGtIbbk=;
-        b=DSP1awPcWe1qx8PIBW3q/pE0+uNiUeGrVwlFlzVld6dQTJO30r+sBX70NGFeDfhk3g
-         nb5lz++dIYu7Vjnrdsd3ZyGNeiUu5QyOMjERF8VZ9H2SMYJMYSpoCAB91fs57kVa94RN
-         u8wr2rxMrMPYv/RsOKfUQP5D5X89yMRnZAhf125eRSMAeACbzPFRJwS9/x8zSdUyyvML
-         KbDDHR/VeYj3bqMxszYOhNico+rHvehIgE4Grrfz4OQaTNhiIRvvtL6XeT5S7fd5dE87
-         uAQjmjDejEe3YxAWHxI1I/RiFu62t97x+6R7/1OYnzwctPkXpCB8Hy6HM7QHRcswgbsY
-         HscA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=QuYwY1WWD4oc1w5hcjaVeyURITDJWRc1kZVgbGtIbbk=;
-        b=pas9WzvvPphRueuzhoOiBv4fqNs/CVxBtHJOWF6kspispsjk8fREyDEJbpmmXWgOxx
-         hLgmWDMoHjL40XBJCJR5SO+2DIKqBYfNGH7WIOjYewPYv8Gf4XU0uVjpETtkwFYgZoVo
-         5rFBNcwhvZ49V8OLM3Rj2RDm1KJQ33mzTSqDE1LcOnYTDkB15rseKLwKc+hlzVCqfZOl
-         Q7gzad4qVw3m3gIWsh9lYrvecf4W1MVnLFFdwWY3F8LE8hwrH62QZVKN7dnOmKKC2YAC
-         pV45pXFXYsKVgaxurN9xdqWLzfBukv9K3qQq++SQ/qi9nhvMYieEs4wpFCaK0BGVqYRQ
-         B/rw==
-X-Gm-Message-State: ACgBeo1WXSWM0X+kT5iOLSZoNwBGqZnx9YrPIR35d2fxyjDptlxCxQPH
-        BgOGPA7AVlmsSfn/veOF4D3Kb67++okwcudoEbM=
-X-Google-Smtp-Source: AA6agR7q6lVtWmHCXQBdt68pJfxkqrpvlVB8rMWyDEedFfJdCaTm2edGPrVJcncfUWp2Y38mPeBJ2uDrSVgmICNIUu0=
-X-Received: by 2002:a05:6870:c0c8:b0:101:b3c3:abc3 with SMTP id
- e8-20020a056870c0c800b00101b3c3abc3mr4359750oad.144.1663221556310; Wed, 14
- Sep 2022 22:59:16 -0700 (PDT)
+        with ESMTP id S229586AbiIOGIA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Sep 2022 02:08:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 359AE91D11;
+        Wed, 14 Sep 2022 23:07:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 315E31682;
+        Wed, 14 Sep 2022 23:08:04 -0700 (PDT)
+Received: from [10.162.43.6] (unknown [10.162.43.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94AAA3F73B;
+        Wed, 14 Sep 2022 23:08:16 -0700 (PDT)
+Message-ID: <1125554b-c183-23c4-5516-95b918a761cc@arm.com>
+Date:   Thu, 15 Sep 2022 11:37:44 +0530
 MIME-Version: 1.0
-References: <20220914085451.11723-1-arinc.unal@arinc9.com> <20220914085451.11723-6-arinc.unal@arinc9.com>
- <CAMhs-H9pj+qEdOCEhkyCJPvbFonLuhgSHgL4L6kkhO3YRh52vw@mail.gmail.com>
- <6593afa8-931b-81eb-d9a8-ec3adbd047c6@arinc9.com> <CAMhs-H_woEpWVEWbe+1p76g6M3ALjoVn-OgzpnJQHOjd02tHxw@mail.gmail.com>
-In-Reply-To: <CAMhs-H_woEpWVEWbe+1p76g6M3ALjoVn-OgzpnJQHOjd02tHxw@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 15 Sep 2022 07:59:04 +0200
-Message-ID: <CAMhs-H9m9LdQ3J5PjDNo_fh1b6rhSdu5Ddb3nfE=2nWxfTCP=A@mail.gmail.com>
-Subject: Re: [PATCH 05/10] mips: dts: ralink: mt7621: fix some dtc warnings
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, erkin.bozoglu@xeront.com,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        linux-doc@vger.kernel.org, corbet@lwn.net, peterz@infradead.org,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+References: <20220822082120.8347-1-yangyicong@huawei.com>
+ <20220822082120.8347-5-yangyicong@huawei.com>
+ <1e8642d5-0e2d-5747-d0d2-5aa0817ea4af@arm.com>
+ <CAGsJ_4xD4m-szM1Cm4N5ZRCODGC0fbW+BLBhy8g6+eK=aHPQNw@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAGsJ_4xD4m-szM1Cm4N5ZRCODGC0fbW+BLBhy8g6+eK=aHPQNw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,221 +59,235 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 5:30 AM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
->
-> On Wed, Sep 14, 2022 at 12:46 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@ar=
-inc9.com> wrote:
-> >
-> > Hi Sergio,
-> >
-> > On 14.09.2022 12:14, Sergio Paracuellos wrote:
-> > > Hi Arinc,
-> > >
-> > > On Wed, Sep 14, 2022 at 10:55 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.una=
-l@arinc9.com> wrote:
-> > >>
-> > >> Fix the dtc warnings below.
-> > >>
-> > >> /cpus/cpu@0: failed to match any schema with compatible: ['mips,mips=
-1004Kc']
-> > >> /cpus/cpu@1: failed to match any schema with compatible: ['mips,mips=
-1004Kc']
-> > >> uartlite@c00: $nodename:0: 'uartlite@c00' does not match '^serial(@.=
-*)?$'
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/serial/8250.yaml
-> > >> uartlite@c00: Unevaluated properties are not allowed ('clock-names' =
-was unexpected)
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/serial/8250.yaml
-> > >> sdhci@1e130000: $nodename:0: 'sdhci@1e130000' does not match '^mmc(@=
-.*)?$'
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/mmc/mtk-sd.yaml
-> > >> sdhci@1e130000: Unevaluated properties are not allowed ('bus-width',=
- 'cap-mmc-highspeed', 'cap-sd-highspeed', 'disable-wp', 'max-frequency', 'v=
-mmc-supply', 'vqmmc-supply' were unexpected)
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/mmc/mtk-sd.yaml
-> > >> xhci@1e1c0000: $nodename:0: 'xhci@1e1c0000' does not match '^usb(@.*=
-)?'
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/usb/mediatek,mtk-xhci.yaml
-> > >> xhci@1e1c0000: compatible: ['mediatek,mt8173-xhci'] is too short
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/usb/mediatek,mtk-xhci.yaml
-> > >> switch0@0: $nodename:0: 'switch0@0' does not match '^(ethernet-)?swi=
-tch(@.*)?$'
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/net/dsa/mediatek,mt7530.yaml
-> > >> port@1: status:0: 'off' is not one of ['okay', 'disabled', 'reserved=
-']
-> > >>          From schema: /home/arinc9/.local/lib/python3.10/site-packag=
-es/dtschema/schemas/dt-core.yaml
-> > >> port@2: status:0: 'off' is not one of ['okay', 'disabled', 'reserved=
-']
-> > >>          From schema: /home/arinc9/.local/lib/python3.10/site-packag=
-es/dtschema/schemas/dt-core.yaml
-> > >> port@3: status:0: 'off' is not one of ['okay', 'disabled', 'reserved=
-']
-> > >>          From schema: /home/arinc9/.local/lib/python3.10/site-packag=
-es/dtschema/schemas/dt-core.yaml
-> > >>
-> > >> - Remove "mips,mips1004Kc" compatible string from the cpu nodes. Thi=
-s
-> > >> doesn't exist anywhere.
-> > >> - Change "memc: syscon@5000" to "memc: memory-controller@5000".
-> > >> - Change "uartlite: uartlite@c00" to "serial0: serial@c00" and remov=
-e the
-> > >> aliases node.
-> > >> - Remove "clock-names" from the serial0 node. The property doesn't e=
-xist on
-> > >> the 8250.yaml schema.
-> > >> - Change "sdhci: sdhci@1e130000" to "mmc: mmc@1e130000".
-> > >> - Change "xhci: xhci@1e1c0000" to "usb: usb@1e1c0000".
-> > >> - Add "mediatek,mtk-xhci" as the second compatible string on the usb=
- node.
-> > >> - Change "switch0: switch0@0" to "switch0: switch@0"
-> > >> - Change "off" to "disabled" for disabled nodes.
-> > >>
-> > >> Remaining warnings are caused by the lack of json-schema documentati=
-on.
-> > >>
-> > >> /cpuintc: failed to match any schema with compatible: ['mti,cpu-inte=
-rrupt-controller']
-> > >> /palmbus@1e000000/wdt@100: failed to match any schema with compatibl=
-e: ['mediatek,mt7621-wdt']
-> > >> /palmbus@1e000000/i2c@900: failed to match any schema with compatibl=
-e: ['mediatek,mt7621-i2c']
-> > >> /palmbus@1e000000/spi@b00: failed to match any schema with compatibl=
-e: ['ralink,mt7621-spi']
-> > >> /ethernet@1e100000: failed to match any schema with compatible: ['me=
-diatek,mt7621-eth']
-> > >>
-> > >> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> > >> ---
-> > >>   .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  |  2 +-
-> > >>   .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  |  2 +-
-> > >>   arch/mips/boot/dts/ralink/mt7621.dtsi         | 32 +++++++--------=
-----
-> > >>   3 files changed, 14 insertions(+), 22 deletions(-)
-> > >>
-> > >> diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/ar=
-ch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-> > >> index 24eebc5a85b1..6ecb8165efe8 100644
-> > >> --- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-> > >> +++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-> > >> @@ -53,7 +53,7 @@ system {
-> > >>          };
-> > >>   };
-> > >>
-> > >> -&sdhci {
-> > >> +&mmc {
-> > >>          status =3D "okay";
-> > >>   };
-> > >>
-> > >> diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/ar=
-ch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-> > >> index 34006e667780..2e534ea5bab7 100644
-> > >> --- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-> > >> +++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-> > >> @@ -37,7 +37,7 @@ key-reset {
-> > >>          };
-> > >>   };
-> > >>
-> > >> -&sdhci {
-> > >> +&mmc {
-> > >>          status =3D "okay";
-> > >>   };
-> > >>
-> > >> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/=
-dts/ralink/mt7621.dtsi
-> > >> index ee46ace0bcc1..9302bdc04510 100644
-> > >> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > >> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > >> @@ -15,13 +15,11 @@ cpus {
-> > >>
-> > >>                  cpu@0 {
-> > >>                          device_type =3D "cpu";
-> > >> -                       compatible =3D "mips,mips1004Kc";
-> > >>                          reg =3D <0>;
-> > >>                  };
-> > >>
-> > >>                  cpu@1 {
-> > >>                          device_type =3D "cpu";
-> > >> -                       compatible =3D "mips,mips1004Kc";
-> > >>                          reg =3D <1>;
-> > >>                  };
-> > >>          };
-> > >
-> > > Instead of removing this, since compatible is correct here, I think a
-> > > cpus yaml file needs to be added to properly define mips CPU's but
-> > > compatible strings using all around the sources are a bit messy. Take
-> > > a look of how is this done for arm [0]
-> >
-> > I did investigate the arm bindings beforehand. I've seen that some of
-> > the strings are also checked by code. I don't see the mips strings used
-> > anywhere but DTs so I had decided to remove it here. I guess we can mak=
-e
-> > a basic binding to list the mips processor cores.
->
-> At the very least I do think a compatible string should exist for cpu
-> nodes :). And because of the mess with MIPS cpu nodes in dts files all
-> around I think we should only add this 'compatible' as a requirement
-> and mark 'reg' and 'device_type' as optionals.
 
-I have just sent a patch to start from containing all compatible
-strings I have found in the 'arch/mips/boot/dts' folder:
 
-https://lore.kernel.org/linux-devicetree/20220915055514.463241-1-sergio.par=
-acuellos@gmail.com/T/#u
+On 9/9/22 11:05, Barry Song wrote:
+> On Fri, Sep 9, 2022 at 5:24 PM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>>
+>>
+>>
+>> On 8/22/22 13:51, Yicong Yang wrote:
+>>> From: Barry Song <v-songbaohua@oppo.com>
+>>>
+>>> on x86, batched and deferred tlb shootdown has lead to 90%
+>>> performance increase on tlb shootdown. on arm64, HW can do
+>>> tlb shootdown without software IPI. But sync tlbi is still
+>>> quite expensive.
+>>>
+>>> Even running a simplest program which requires swapout can
+>>> prove this is true,
+>>>  #include <sys/types.h>
+>>>  #include <unistd.h>
+>>>  #include <sys/mman.h>
+>>>  #include <string.h>
+>>>
+>>>  int main()
+>>>  {
+>>>  #define SIZE (1 * 1024 * 1024)
+>>>          volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+>>>                                           MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+>>>
+>>>          memset(p, 0x88, SIZE);
+>>>
+>>>          for (int k = 0; k < 10000; k++) {
+>>>                  /* swap in */
+>>>                  for (int i = 0; i < SIZE; i += 4096) {
+>>>                          (void)p[i];
+>>>                  }
+>>>
+>>>                  /* swap out */
+>>>                  madvise(p, SIZE, MADV_PAGEOUT);
+>>>          }
+>>>  }
+>>>
+>>> Perf result on snapdragon 888 with 8 cores by using zRAM
+>>> as the swap block device.
+>>>
+>>>  ~ # perf record taskset -c 4 ./a.out
+>>>  [ perf record: Woken up 10 times to write data ]
+>>>  [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
+>>>  ~ # perf report
+>>>  # To display the perf.data header info, please use --header/--header-only options.
+>>>  # To display the perf.data header info, please use --header/--header-only options.
+>>>  #
+>>>  #
+>>>  # Total Lost Samples: 0
+>>>  #
+>>>  # Samples: 60K of event 'cycles'
+>>>  # Event count (approx.): 35706225414
+>>>  #
+>>>  # Overhead  Command  Shared Object      Symbol
+>>>  # ........  .......  .................  .............................................................................
+>>>  #
+>>>     21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
+>>>      8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
+>>>      6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
+>>>      6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
+>>>      5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+>>>      3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
+>>>      3.49%  a.out    [kernel.kallsyms]  [k] memset64
+>>>      1.63%  a.out    [kernel.kallsyms]  [k] clear_page
+>>>      1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
+>>>      1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
+>>>      1.23%  a.out    [kernel.kallsyms]  [k] xas_load
+>>>      1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
+>>>
+>>> ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
+>>> swapping in/out a page mapped by only one process. If the
+>>> page is mapped by multiple processes, typically, like more
+>>> than 100 on a phone, the overhead would be much higher as
+>>> we have to run tlb flush 100 times for one single page.
+>>> Plus, tlb flush overhead will increase with the number
+>>> of CPU cores due to the bad scalability of tlb shootdown
+>>> in HW, so those ARM64 servers should expect much higher
+>>> overhead.
+>>>
+>>> Further perf annonate shows 95% cpu time of ptep_clear_flush
+>>> is actually used by the final dsb() to wait for the completion
+>>> of tlb flush. This provides us a very good chance to leverage
+>>> the existing batched tlb in kernel. The minimum modification
+>>> is that we only send async tlbi in the first stage and we send
+>>> dsb while we have to sync in the second stage.
+>>>
+>>> With the above simplest micro benchmark, collapsed time to
+>>> finish the program decreases around 5%.
+>>>
+>>> Typical collapsed time w/o patch:
+>>>  ~ # time taskset -c 4 ./a.out
+>>>  0.21user 14.34system 0:14.69elapsed
+>>> w/ patch:
+>>>  ~ # time taskset -c 4 ./a.out
+>>>  0.22user 13.45system 0:13.80elapsed
+>>>
+>>> Also, Yicong Yang added the following observation.
+>>>       Tested with benchmark in the commit on Kunpeng920 arm64 server,
+>>>       observed an improvement around 12.5% with command
+>>>       `time ./swap_bench`.
+>>>               w/o             w/
+>>>       real    0m13.460s       0m11.771s
+>>>       user    0m0.248s        0m0.279s
+>>>       sys     0m12.039s       0m11.458s
+>>>
+>>>       Originally it's noticed a 16.99% overhead of ptep_clear_flush()
+>>>       which has been eliminated by this patch:
+>>>
+>>>       [root@localhost yang]# perf record -- ./swap_bench && perf report
+>>>       [...]
+>>>       16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
+>>>
+>>> Cc: Jonathan Corbet <corbet@lwn.net>
+>>> Cc: Nadav Amit <namit@vmware.com>
+>>> Cc: Mel Gorman <mgorman@suse.de>
+>>> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+>>> Tested-by: Xin Hao <xhao@linux.alibaba.com>
+>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>>> ---
+>>>  .../features/vm/TLB/arch-support.txt          |  2 +-
+>>>  arch/arm64/Kconfig                            |  1 +
+>>>  arch/arm64/include/asm/tlbbatch.h             | 12 ++++++++
+>>>  arch/arm64/include/asm/tlbflush.h             | 28 +++++++++++++++++--
+>>>  4 files changed, 40 insertions(+), 3 deletions(-)
+>>>  create mode 100644 arch/arm64/include/asm/tlbbatch.h
+>>>
+>>> diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
+>>> index 1c009312b9c1..2caf815d7c6c 100644
+>>> --- a/Documentation/features/vm/TLB/arch-support.txt
+>>> +++ b/Documentation/features/vm/TLB/arch-support.txt
+>>> @@ -9,7 +9,7 @@
+>>>      |       alpha: | TODO |
+>>>      |         arc: | TODO |
+>>>      |         arm: | TODO |
+>>> -    |       arm64: | TODO |
+>>> +    |       arm64: |  ok  |
+>>>      |        csky: | TODO |
+>>>      |     hexagon: | TODO |
+>>>      |        ia64: | TODO |
+>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>>> index 571cc234d0b3..09d45cd6d665 100644
+>>> --- a/arch/arm64/Kconfig
+>>> +++ b/arch/arm64/Kconfig
+>>> @@ -93,6 +93,7 @@ config ARM64
+>>>       select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>>>       select ARCH_SUPPORTS_NUMA_BALANCING
+>>>       select ARCH_SUPPORTS_PAGE_TABLE_CHECK
+>>> +     select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+>>>       select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
+>>>       select ARCH_WANT_DEFAULT_BPF_JIT
+>>>       select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+>>> diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
+>>> new file mode 100644
+>>> index 000000000000..fedb0b87b8db
+>>> --- /dev/null
+>>> +++ b/arch/arm64/include/asm/tlbbatch.h
+>>> @@ -0,0 +1,12 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +#ifndef _ARCH_ARM64_TLBBATCH_H
+>>> +#define _ARCH_ARM64_TLBBATCH_H
+>>> +
+>>> +struct arch_tlbflush_unmap_batch {
+>>> +     /*
+>>> +      * For arm64, HW can do tlb shootdown, so we don't
+>>> +      * need to record cpumask for sending IPI
+>>> +      */
+>>> +};
+>>> +
+>>> +#endif /* _ARCH_ARM64_TLBBATCH_H */
+>>> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+>>> index 412a3b9a3c25..23cbc987321a 100644
+>>> --- a/arch/arm64/include/asm/tlbflush.h
+>>> +++ b/arch/arm64/include/asm/tlbflush.h
+>>> @@ -254,17 +254,24 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
+>>>       dsb(ish);
+>>>  }
+>>>
+>>> -static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+>>> +
+>>> +static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
+>>>                                        unsigned long uaddr)
+>>>  {
+>>>       unsigned long addr;
+>>>
+>>>       dsb(ishst);
+>>> -     addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
+>>> +     addr = __TLBI_VADDR(uaddr, ASID(mm));
+>>>       __tlbi(vale1is, addr);
+>>>       __tlbi_user(vale1is, addr);
+>>>  }
+>>>
+>>> +static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+>>> +                                      unsigned long uaddr)
+>>> +{
+>>> +     return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
+>>> +}
+>>> +
+>>>  static inline void flush_tlb_page(struct vm_area_struct *vma,
+>>>                                 unsigned long uaddr)
+>>>  {
+>>> @@ -272,6 +279,23 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+>>>       dsb(ish);
+>>>  }
+>>>
+>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+>>> +{
+>>> +     return true;
+>>> +}
+>>
+>> Always defer and batch up TLB flush, unconditionally ?
+> 
+> My understanding is we actually don't need tlbbatch for a machine with one
+> or two cores as the tlb flush is not expensive. even for a system with four
+> cortex-a55 cores, i didn't see obvious cost. it was less than 1%.
+> when we have 8 cores, we see the obvious cost of tlb flush. for a server with
+> 100 crores, the cost is incredibly huge.
 
->
-> >
-> > What do you think Thomas?
-> >
-> > >
-> > >> @@ -33,11 +31,6 @@ cpuintc: cpuintc {
-> > >>                  compatible =3D "mti,cpu-interrupt-controller";
-> > >>          };
-> > >>
-> > >> -       aliases {
-> > >> -               serial0 =3D &uartlite;
-> > >> -       };
-> > >> -
-> > >> -
-> > >>          mmc_fixed_3v3: regulator-3v3 {
-> > >>                  compatible =3D "regulator-fixed";
-> > >>                  regulator-name =3D "mmc_power";
-> > >> @@ -110,17 +103,16 @@ i2c: i2c@900 {
-> > >>                          pinctrl-0 =3D <&i2c_pins>;
-> > >>                  };
-> > >>
-> > >> -               memc: syscon@5000 {
-> > >> +               memc: memory-controller@5000 {
-> > >>                          compatible =3D "mediatek,mt7621-memc", "sys=
-con";
-> > >>                          reg =3D <0x5000 0x1000>;
-> > >>                  };
-> > >>
-> > >
-> > > I think syscon nodes need to use 'syscon' in the node name, but I am
-> > > not 100% sure.
-> >
-> > I've tested this patch series on my GB-PC2, it currently works fine.
-> > Also, DT binding for MT7621 memory controller uses memory-controller on
-> > the example so I guess it's fine?
->
-> I know that works fine but when the node is a syscon it is good to
-> have that syscon in the node name (I don't know if having it is a rule
-> or something, I guess no). In any case I agree that binding and dts
-> should match.
->
-> Best regards,
->     Sergio Paracuellos
-> >
-> > Ar=C4=B1n=C3=A7
+Although dsb(ish) is deferred via arch_tlbbatch_flush(), there is still
+one dsb(isht) instruction left in __flush_tlb_page_nosync(). Is not that
+expensive as well, while queuing up individual TLB flushes ?
 
-Best regards,
-    Sergio Paracuellos
+The very idea behind TLB deferral is the opportunity it (might) provide
+to accumulate address ranges and cpu masks so that individual TLB flush
+can be replaced with a more cost effective range based TLB flush. Hence
+I guess unless address range or cpumask based cost effective TLB flush
+is available, deferral does not improve the unmap performance as much.
