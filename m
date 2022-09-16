@@ -2,130 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2E05BA93D
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Sep 2022 11:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC195BB2E3
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Sep 2022 21:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiIPJRg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Sep 2022 05:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S230095AbiIPTlb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Sep 2022 15:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiIPJRM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Sep 2022 05:17:12 -0400
-X-Greylist: delayed 927 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Sep 2022 02:16:28 PDT
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C5CA59A9;
-        Fri, 16 Sep 2022 02:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=misterjones.org; s=dkim20211231; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WpOIYPFmZvX+Hf2mD/HENyssqGqbLDXFAm0gYQobp9o=; b=vw30vGqbyjYmaM3nKnskMxB/y+
-        lw/jA0e/qsYeOLKWeB+M9pBy79w1bxVNFdGPnj1q7bDvJSGbFGE9g/6/s3WogeA7TOX1YXUyGg1x0
-        pTlP11nDz1yB2tnWgOoUfZONTyL1unFVmhgDysLveBpkJ7DtJcohL8NqRL+bFBB7z/KUIt+Jg8S7L
-        /g0VlHBwX0VvkVE6n9reRzOGt0hMoehxgxc6H3FCI/q3fovs9/b6nZbmWJpwad6zQ2KeRKuGadLzE
-        9DCBQxYnOHWwYY4Gvcv0wEak1BiL7zsNN0+ZPOQ2niZSKo3HdGerEmF7aAZ8QPwNPdyuKP+AkoKqD
-        y63NDfkw==;
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@misterjones.org>)
-        id 1oZ7DJ-00AZwo-Lg;
-        Fri, 16 Sep 2022 10:00:45 +0100
+        with ESMTP id S229593AbiIPTla (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Sep 2022 15:41:30 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11941835C;
+        Fri, 16 Sep 2022 12:41:29 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id t8-20020a9d5908000000b0063b41908168so15535397oth.8;
+        Fri, 16 Sep 2022 12:41:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rnBpLy/J1dgd76aFhw5FRIiMycfqNVIws11h81p/NbU=;
+        b=w8EJQ9HuinnqzdUivoC9wyIv4hqI+k81G9PXuOsBNfCwev8PnonvKbpq/XsLbKRzcv
+         7ta5mjGADY7rGIacGTYhqWdJ9pi6ToPoCLcOSI3PXpn+lHGQutfEk3Oo11BfRNhmeW6X
+         d6aV3Ipnn6zqDN2mvxlikPeZN0dQjCPEpjgtl4T7sOStGs8KZjf/O5ZztVMQ3zA9xdfV
+         q2rJ8kGbWKAH0W53n/iSz7El+iUxmj4lhc6PibLuHYcGW9l3XFN4koWUL2Z2Nh7KMp5q
+         2xNc7IrP2SmlVjCwORFOuwjGlSB+w7wc3HmMPO5jPW07GJyiNyZpi8Pf1EcfDjl2tXoS
+         aOzw==
+X-Gm-Message-State: ACrzQf2NZcTh2/KCPkGUzuxzk40VeHQVDaETS2d+s4qJs30ZznfsBZIr
+        ZpXN0ISEpElaxQfHgWJL3w==
+X-Google-Smtp-Source: AMsMyM5pqr2hJIPZ5Ycq9i2ddvBU0Tqj0jiQjbffC/+TCU+VgGx6xTzvHWQ4WsRCZjTtPRkCSNER1Q==
+X-Received: by 2002:a05:6830:2706:b0:659:de15:2cae with SMTP id j6-20020a056830270600b00659de152caemr1661203otu.4.1663357289198;
+        Fri, 16 Sep 2022 12:41:29 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p13-20020a056830130d00b006391adb6034sm10333282otq.72.2022.09.16.12.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 12:41:28 -0700 (PDT)
+Received: (nullmailer pid 1149627 invoked by uid 1000);
+        Fri, 16 Sep 2022 19:41:27 -0000
+Date:   Fri, 16 Sep 2022 14:41:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 04/10] dt-bindings: memory: mt7621: add
+ syscon as compatible string
+Message-ID: <20220916194127.GA1139257-robh@kernel.org>
+References: <20220915065542.13150-1-arinc.unal@arinc9.com>
+ <20220915065542.13150-5-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Date:   Fri, 16 Sep 2022 10:00:45 +0100
-From:   Marc Zyngier <maz@misterjones.org>
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
-        x86@kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        kvm-riscv@lists.infradead.org, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH kernel] KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform
- dependent
-In-Reply-To: <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
-References: <20220504074807.3616813-1-aik@ozlabs.ru>
- <0d4bb0fa-10c6-3f5a-34c8-293144b3fdbb@ozlabs.ru>
- <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <4884805567a0288ab1dbefb8aec819a2@misterjones.org>
-X-Sender: maz@misterjones.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: aik@ozlabs.ru, kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org, kvm@vger.kernel.org, farosas@linux.ibm.com, x86@kernel.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, alex.williamson@redhat.com, kvm-riscv@lists.infradead.org, pbonzini@redhat.com, linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@misterjones.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220915065542.13150-5-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022-09-13 13:50, Alexey Kardashevskiy wrote:
-> Ping? It's been a while and probably got lost :-/
+On Thu, Sep 15, 2022 at 09:55:36AM +0300, Arınç ÜNAL wrote:
+> Add syscon as a constant string on the compatible property as it's required
+> for the SoC to work. Update the example accordingly.
+
+I read this and start to give you the same reply as v1. Then I remember 
+saying this already...
+
+Update the commit message such that it answers my question and I don't 
+think you just ignored me and have to go find v1. The fact that this 
+change makes the binding match what is already in use in dts files is an 
+important detail.
+
 > 
-> On 18/05/2022 16:27, Alexey Kardashevskiy wrote:
->> 
->> 
->> On 5/4/22 17:48, Alexey Kardashevskiy wrote:
->>> When introduced, IRQFD resampling worked on POWER8 with XICS. However
->>> KVM on POWER9 has never implemented it - the compatibility mode code
->>> ("XICS-on-XIVE") misses the kvm_notify_acked_irq() call and the 
->>> native
->>> XIVE mode does not handle INTx in KVM at all.
->>> 
->>> This moved the capability support advertising to platforms and stops
->>> advertising it on XIVE, i.e. POWER9 and later.
->>> 
->>> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
->>> ---
->>> 
->>> 
->>> Or I could move this one together with KVM_CAP_IRQFD. Thoughts?
->> 
->> 
->> Ping?
->> 
->>> 
->>> ---
->>>   arch/arm64/kvm/arm.c       | 3 +++
->>>   arch/mips/kvm/mips.c       | 3 +++
->>>   arch/powerpc/kvm/powerpc.c | 6 ++++++
->>>   arch/riscv/kvm/vm.c        | 3 +++
->>>   arch/s390/kvm/kvm-s390.c   | 3 +++
->>>   arch/x86/kvm/x86.c         | 3 +++
->>>   virt/kvm/kvm_main.c        | 1 -
->>>   7 files changed, 21 insertions(+), 1 deletion(-)
->>> 
->>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->>> index 523bc934fe2f..092f0614bae3 100644
->>> --- a/arch/arm64/kvm/arm.c
->>> +++ b/arch/arm64/kvm/arm.c
->>> @@ -210,6 +210,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, 
->>> long ext)
->>>       case KVM_CAP_SET_GUEST_DEBUG:
->>>       case KVM_CAP_VCPU_ATTRIBUTES:
->>>       case KVM_CAP_PTP_KVM:
->>> +#ifdef CONFIG_HAVE_KVM_IRQFD
->>> +    case KVM_CAP_IRQFD_RESAMPLE:
->>> +#endif
-
-I don't mind moving this around, but I object to the #ifdefery.
-
-This option is always selected on arm64, so it can safely be added
-to the list without any condition.
-
-Thanks,
-
-         M.
--- 
-Who you jivin' with that Cosmik Debris?
+> Fixes: 5278e4a181ff ("dt-bindings: memory: add binding for Mediatek's MT7621 SDRAM memory controller")
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>  .../bindings/memory-controllers/mediatek,mt7621-memc.yaml | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,mt7621-memc.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,mt7621-memc.yaml
+> index 85e02854f083..ba8cd6d81d08 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,mt7621-memc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,mt7621-memc.yaml
+> @@ -11,7 +11,9 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    const: mediatek,mt7621-memc
+> +    items:
+> +      - const: mediatek,mt7621-memc
+> +      - const: syscon
+>  
+>    reg:
+>      maxItems: 1
+> @@ -24,7 +26,7 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> -    memory-controller@5000 {
+> -        compatible = "mediatek,mt7621-memc";
+> +    syscon@5000 {
+> +        compatible = "mediatek,mt7621-memc", "syscon";
+>          reg = <0x5000 0x1000>;
+>      };
+> -- 
+> 2.34.1
+> 
+> 
