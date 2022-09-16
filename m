@@ -2,63 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7572B5BA2F8
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Sep 2022 00:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8803B5BA3BA
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Sep 2022 03:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiIOWtb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Sep 2022 18:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
+        id S229716AbiIPBKj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Sep 2022 21:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiIOWta (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Sep 2022 18:49:30 -0400
-X-Greylist: delayed 615 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Sep 2022 15:49:28 PDT
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77CECB4D
-        for <linux-mips@vger.kernel.org>; Thu, 15 Sep 2022 15:49:27 -0700 (PDT)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id C8CC41788;
-        Fri, 16 Sep 2022 00:39:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1663281552;
-        bh=l1AU6Q89GEr3BmQnHBWunOTXWFXiKtc6E9sYbAlEk2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mreFRuRob2/Jb47FZ3IiSQGvLvinqLR4JBBb/UlqsUR/++FCI39pblNTNyEEbtuq1
-         sPzu5M3xV+ETZBLCmtzUkQJ2JECJ60nFAehj4SFWQkvDwGv+ea0LwoyFBddAK0zbBP
-         3Gmzik3LJ0REC9ZSNlmpbnPgKamOXAv4+EocG6u0inuIWgEzW2bvSZG1D/3qgdx5u1
-         mFURMhpOhjeqPIW6B5koi7fuqUBAfn4yyVoF2w+XBKX2KsZG21/ggLK2rU4ToOhCdA
-         D7uaA4J4ytUEMS4AZgXUPTvl0ktd1KnkrYBcYY3TwSz8rrmm2yTcDguJbSXVczpnbA
-         F8JTQRZj/7yOLYT7T6lougiWarGHU/HFBuFD1/W8/4mfsxm5wie3eEbI+ZPs0vKds6
-         rEL61bTn4bI6BWy1NpfYJG1CW6Qxeqopn+Jc6GnyUNTvUxnE5T74cjD51yQokwh78l
-         /WoWFZX9pKFS243Hrw/9+9anDVDNd1Y86r+BYautC7FcIc7HVE9cpQalkyhyyITBMf
-         wnOLuQlUW/nBZ4sn99iSOYHGSriC5vlznZeV7Q1Tk9uqMuBnJSB0HSvAGP4uQY4Ryl
-         cV7Zlf0P7of9x7Y2ioijQJDwCWsRiSlEVTnO8mHRGu0cqSjKmtJtx67Q+q4nV1vbsL
-         6yfaoKXBDlk1pT6pOpvdU0NE=
-Date:   Fri, 16 Sep 2022 00:39:11 +0200
-From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v4 04/18] MIPS: remove define-only GDA_MAGIC, previously
- magic number
-Message-ID: <c2e7510beebdd698e20d0704712e623fad00fc1c.1663280877.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <YyMlovoskUcHLEb7@kroah.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mvwxo7sfyzulcppb"
-Content-Disposition: inline
-In-Reply-To: <YyMlovoskUcHLEb7@kroah.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+        with ESMTP id S229705AbiIPBKh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Sep 2022 21:10:37 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6371150076;
+        Thu, 15 Sep 2022 18:10:35 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id j12so19711281pfi.11;
+        Thu, 15 Sep 2022 18:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
+        bh=hr/gJPcU5hvQZ/MKgVwi2KwSsJ/0TzKkNDXlKjCB2Yw=;
+        b=hq/LIZNAoz+v9v5PWfa/0aKD/JB/tXkKxHIojwHn30BdKNQ5Be3G0BaUU/zSYBJeE9
+         ZLRcqcxf0IDv61ZhN3/kOqcYUToLQAGW/EjhSW4TrFFz9Bqw+yJyw6+Y21pYn3ywkugA
+         JniDjX5JcG8m+H85hzbd3loI476IGJYE6L2/G3cL1NfdXgiVnH9OkTHI/WNBlcsCgoy5
+         g9uCl3lHdNcq9lab3lKR95Gy8j5E77OSw8jBZYVJGKBEcNBuiYVGD3iTUzbt+3PGUA5n
+         JN6BFkpeFxXKeqmd35cSdKJ5epc1LwvYjnXD/rPy7wE+YH+9cFaQxJc+tbgJ5HWLDqSc
+         5Zhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=hr/gJPcU5hvQZ/MKgVwi2KwSsJ/0TzKkNDXlKjCB2Yw=;
+        b=cCBmv2qfxgMP+orlpGYYEHbuJotF8OBPH0PqmNWszLLoIUZKYllO7wHjhb9Kd3uat8
+         BZ9wStvUXe53K23PSTG6kGRc863Q9UXhqP2rrSEMaNAMvcyZ1NFeMy9WJ1eyl/12S94o
+         yn3jAQxDrYBzoXFHjgrdZHKHMEhvDmBIpu++oxkH+XJqV8zUMxlQjpG3rLKgnhfnPNjd
+         SeRN1ZgPRVdFZZTPBDKMA/BwQT7aeAWW6iOk1lvj9u7V2/79cUHfhN9B9bYb6MjdxsUA
+         7MaludLurT4XdU6KrcXUlOyZzjeZdFF/qb4XpxsduSNx6/Na1rPRJ+uSLXQre7yJT2QD
+         54Xg==
+X-Gm-Message-State: ACrzQf13poYiRjnG39LLMcHrxtxWS+J9RATB2lRib5bv9C7HGfr2gqvD
+        82seE5OLJ1u0qimy+8jdNRWYv0/HMkA=
+X-Google-Smtp-Source: AMsMyM5HLVuDEFZ7yFGWlTXtrR5ixkZIR3wBKnru30CnmTKTvOjZydafHw2K7xojMyDBGaMDjl15+A==
+X-Received: by 2002:a05:6a00:1342:b0:545:4d30:eecb with SMTP id k2-20020a056a00134200b005454d30eecbmr2511913pfu.69.1663290634936;
+        Thu, 15 Sep 2022 18:10:34 -0700 (PDT)
+Received: from localhost ([118.210.107.131])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170902f68600b00176b3d7db49sm13769119plg.0.2022.09.15.18.10.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 18:10:33 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 16 Sep 2022 11:10:25 +1000
+Message-Id: <CMXFBGZGQCQR.2FRWNY2JHBVL9@bobo>
+Cc:     <linux-s390@vger.kernel.org>, <kvm@vger.kernel.org>,
+        "Fabiano Rosas" <farosas@linux.ibm.com>, <x86@kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Alex Williamson" <alex.williamson@redhat.com>,
+        <kvm-riscv@lists.infradead.org>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        <linux-riscv@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <kvmarm@lists.cs.columbia.edu>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH kernel] KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform
+ dependent
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Alexey Kardashevskiy" <aik@ozlabs.ru>, <kvm-ppc@vger.kernel.org>
+X-Mailer: aerc 0.11.0
+References: <20220504074807.3616813-1-aik@ozlabs.ru>
+ <0d4bb0fa-10c6-3f5a-34c8-293144b3fdbb@ozlabs.ru>
+ <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
+In-Reply-To: <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,147 +81,164 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Seems okay to me, it probably better go through the KVM tree though.
 
---mvwxo7sfyzulcppb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Nicholas Piggin <npiggin@gmail.com>
 
-The last user was removed in the 2.6.4 "MIPS mega-patch", pre-git
+Thanks,
+Nick
 
-Found with
-grep MAGIC Documentation/process/magic-number.rst | while read -r mag _;
-do git grep -wF "$mag"  | grep -ve '^Documentation.*magic-number.rst:' \
--qe ':#define '"$mag" || git grep -wF "$mag" | while IFS=3D: read -r f _;
-do sed -i '/\b'"$mag"'\b/d' "$f"; done ; done
-
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
- Documentation/process/magic-number.rst                    | 1 -
- Documentation/translations/it_IT/process/magic-number.rst | 1 -
- Documentation/translations/zh_CN/process/magic-number.rst | 1 -
- Documentation/translations/zh_TW/process/magic-number.rst | 1 -
- arch/mips/include/asm/sn/gda.h                            | 2 --
- 5 files changed, 6 deletions(-)
-
-diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
-/magic-number.rst
-index f16f4e2cc48f..fb1fbf00f49c 100644
---- a/Documentation/process/magic-number.rst
-+++ b/Documentation/process/magic-number.rst
-@@ -85,7 +85,6 @@ BAYCOM_MAGIC          0x19730510       baycom_state      =
-       ``drivers/net/ba
- SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
-miga/config.c``
- COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/=
-drivers/ubd_user.c``
- SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/a=
-miga/config.c``
--GDA_MAGIC             0x58464552       gda                      ``arch/mip=
-s/include/asm/sn/gda.h``
- EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/=
-atm/lanai.c``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
- KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
-diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
-cumentation/translations/it_IT/process/magic-number.rst
-index 5366cad4a4ea..2f626abbd2c8 100644
---- a/Documentation/translations/it_IT/process/magic-number.rst
-+++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -91,7 +91,6 @@ BAYCOM_MAGIC          0x19730510       baycom_state      =
-       ``drivers/net/ba
- SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
-miga/config.c``
- COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/=
-drivers/ubd_user.c``
- SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/a=
-miga/config.c``
--GDA_MAGIC             0x58464552       gda                      ``arch/mip=
-s/include/asm/sn/gda.h``
- EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/=
-atm/lanai.c``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
- KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
-diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
-cumentation/translations/zh_CN/process/magic-number.rst
-index 08f5a83eed92..f3192ef7158c 100644
---- a/Documentation/translations/zh_CN/process/magic-number.rst
-+++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -75,7 +75,6 @@ BAYCOM_MAGIC          0x19730510       baycom_state      =
-       ``drivers/net/ba
- SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
-miga/config.c``
- COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/=
-drivers/ubd_user.c``
- SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/a=
-miga/config.c``
--GDA_MAGIC             0x58464552       gda                      ``arch/mip=
-s/include/asm/sn/gda.h``
- EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/=
-atm/lanai.c``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
- KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
-diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
-cumentation/translations/zh_TW/process/magic-number.rst
-index 8a30da3d36b2..3e803e18d492 100644
---- a/Documentation/translations/zh_TW/process/magic-number.rst
-+++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -78,7 +78,6 @@ BAYCOM_MAGIC          0x19730510       baycom_state      =
-       ``drivers/net/ba
- SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
-miga/config.c``
- COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/=
-drivers/ubd_user.c``
- SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/a=
-miga/config.c``
--GDA_MAGIC             0x58464552       gda                      ``arch/mip=
-s/include/asm/sn/gda.h``
- EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/=
-atm/lanai.c``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
- KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
-diff --git a/arch/mips/include/asm/sn/gda.h b/arch/mips/include/asm/sn/gda.h
-index d52f81620661..5b8c96d5b587 100644
---- a/arch/mips/include/asm/sn/gda.h
-+++ b/arch/mips/include/asm/sn/gda.h
-@@ -16,8 +16,6 @@
+On Tue Sep 13, 2022 at 10:50 PM AEST, Alexey Kardashevskiy wrote:
+> Ping? It's been a while and probably got lost :-/
+>
+> On 18/05/2022 16:27, Alexey Kardashevskiy wrote:
+> >=20
+> >=20
+> > On 5/4/22 17:48, Alexey Kardashevskiy wrote:
+> >> When introduced, IRQFD resampling worked on POWER8 with XICS. However
+> >> KVM on POWER9 has never implemented it - the compatibility mode code
+> >> ("XICS-on-XIVE") misses the kvm_notify_acked_irq() call and the native
+> >> XIVE mode does not handle INTx in KVM at all.
+> >>
+> >> This moved the capability support advertising to platforms and stops
+> >> advertising it on XIVE, i.e. POWER9 and later.
+> >>
+> >> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+> >> ---
+> >>
+> >>
+> >> Or I could move this one together with KVM_CAP_IRQFD. Thoughts?
+> >=20
+> >=20
+> > Ping?
+> >=20
+> >>
+> >> ---
+> >> =C2=A0 arch/arm64/kvm/arm.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 ++=
++
+> >> =C2=A0 arch/mips/kvm/mips.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 ++=
++
+> >> =C2=A0 arch/powerpc/kvm/powerpc.c | 6 ++++++
+> >> =C2=A0 arch/riscv/kvm/vm.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+ 3 +++
+> >> =C2=A0 arch/s390/kvm/kvm-s390.c=C2=A0=C2=A0 | 3 +++
+> >> =C2=A0 arch/x86/kvm/x86.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 | 3 +++
+> >> =C2=A0 virt/kvm/kvm_main.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+ 1 -
+> >> =C2=A0 7 files changed, 21 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> >> index 523bc934fe2f..092f0614bae3 100644
+> >> --- a/arch/arm64/kvm/arm.c
+> >> +++ b/arch/arm64/kvm/arm.c
+> >> @@ -210,6 +210,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=
 =20
- #include <asm/sn/addrs.h>
+> >> long ext)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SET_GUEST_DEBUG:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_VCPU_ATTRIBUTES:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_PTP_KVM:
+> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
+> >> +#endif
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SET_GUEST_DEBUG2:
+> >> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> >> index a25e0b73ee70..0f3de470a73e 100644
+> >> --- a/arch/mips/kvm/mips.c
+> >> +++ b/arch/mips/kvm/mips.c
+> >> @@ -1071,6 +1071,9 @@ int kvm_vm_ioctl_check_extension(struct kvm=20
+> >> *kvm, long ext)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_READONLY_MEM:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SYNC_MMU:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_IMMEDIATE_EXIT:
+> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
+> >> +#endif
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_NR_VCPUS:
+> >> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> >> index 875c30c12db0..87698ffef3be 100644
+> >> --- a/arch/powerpc/kvm/powerpc.c
+> >> +++ b/arch/powerpc/kvm/powerpc.c
+> >> @@ -591,6 +591,12 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=
 =20
--#define GDA_MAGIC	0x58464552
--
- /*
-  * GDA Version History
-  *
---=20
-2.30.2
+> >> long ext)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >> =C2=A0 #endif
+> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D !xive_enabled();
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >> +#endif
+> >> +
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_PPC_ALLOC_HTAB:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D hv_enable=
+d;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> >> index c768f75279ef..b58579b386bb 100644
+> >> --- a/arch/riscv/kvm/vm.c
+> >> +++ b/arch/riscv/kvm/vm.c
+> >> @@ -63,6 +63,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=20
+> >> long ext)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_READONLY_MEM:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_MP_STATE:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_IMMEDIATE_EXIT:
+> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
+> >> +#endif
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_NR_VCPUS:
+> >> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> >> index 156d1c25a3c1..85e093fc8d13 100644
+> >> --- a/arch/s390/kvm/kvm-s390.c
+> >> +++ b/arch/s390/kvm/kvm-s390.c
+> >> @@ -564,6 +564,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=
+=20
+> >> long ext)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SET_GUEST_DEBUG:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_S390_DIAG318:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_S390_MEM_OP_EXTENSION:
+> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
+> >> +#endif
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SET_GUEST_DEBUG2:
+> >> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> >> index 0c0ca599a353..a0a7b769483d 100644
+> >> --- a/arch/x86/kvm/x86.c
+> >> +++ b/arch/x86/kvm/x86.c
+> >> @@ -4273,6 +4273,9 @@ int kvm_vm_ioctl_check_extension(struct kvm=20
+> >> *kvm, long ext)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SYS_ATTRIBUTES:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_VAPIC:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_ENABLE_CAP:
+> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
+> >> +#endif
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_EXIT_HYPERCALL:
+> >> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> >> index 70e05af5ebea..885e72e668a5 100644
+> >> --- a/virt/kvm/kvm_main.c
+> >> +++ b/virt/kvm/kvm_main.c
+> >> @@ -4293,7 +4293,6 @@ static long=20
+> >> kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+> >> =C2=A0 #endif
+> >> =C2=A0 #ifdef CONFIG_HAVE_KVM_IRQFD
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD:
+> >> -=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
+> >> =C2=A0 #endif
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_IOEVENTFD_ANY_LENGTH:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_CHECK_EXTENSION_VM:
+> >=20
+>
+> --=20
+> Alexey
 
---mvwxo7sfyzulcppb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMjqY8ACgkQvP0LAY0m
-WPHKkA//aKjjwaAs4MAgzWxJ4Ujq1CpYuzLkq9rTA0BpELR63vGDTYM7puDm1ePR
-J7prkA0BC5DClWovtgEXsGULgVB/hxR9KpwUv+iixDZSWmfMh0/zuiL7MtO+xciA
-4toIQ91w4wwG6WsLvbQHvfsBEeQfFdPZBpxFGcNTFFSAasX0iUzzVZ3PQ1D/zeCR
-ynnE/8l8M0EQWxiAILehmnJ9AvXHFypF/xklxsWkrQV7EV+nr+QDZF6ao9MVdgPK
-u7kMq4vMDHcJK7hr5tLfO49JW5JH6Kxrf+46S2oI2v1bV5InriT1HrD+zaSm+vVl
-T/MCEzTmM0s+DRAQNtxIVpEIuCnErZOzb+iCwcaSbw1l9A0+8YnvJtXWIGK34kCi
-jK20kzWpcqvHfFDeyiMHjPJCgKpmS5he5Lte1ybSjwtiZh+6e9cjttkRIJIZ3F9K
-RMhK1iZ5SfDPIrVw2kCjTxwjZ4jRoRImZj8aTCqaBXYqkarQoq5cjfXtGDbNSDgU
-WxCJkJNqw20BwMZSCERToBkxHIBC0ANUnkqTOSYd0qNzwdAtEsqtC84Epen/R4JY
-aJ58gWekSVgEr2Jy4W6XLb6LbGQ5prQ6zhpYfVIbXYS9JxxGfUWmTWjtR1Rkuapy
-MPzSNfW9lpqyRFKCMQFN5DuJcr/pMy6RRDu2cuKqTGOf55ZKnII=
-=JF+O
------END PGP SIGNATURE-----
-
---mvwxo7sfyzulcppb--
