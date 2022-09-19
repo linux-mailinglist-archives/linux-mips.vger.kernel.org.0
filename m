@@ -2,93 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4AF5BBFD0
-	for <lists+linux-mips@lfdr.de>; Sun, 18 Sep 2022 22:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666BF5BC17E
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Sep 2022 04:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiIRU3K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 18 Sep 2022 16:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S229561AbiISCqr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 18 Sep 2022 22:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiIRU3J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 18 Sep 2022 16:29:09 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBED1401E
-        for <linux-mips@vger.kernel.org>; Sun, 18 Sep 2022 13:29:08 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id f23so9928801plr.6
-        for <linux-mips@vger.kernel.org>; Sun, 18 Sep 2022 13:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=o+Gxn2cPSSzd7lUTMPs9mUaoGflxYvHVdHLbNLyYS+Y=;
-        b=XXAmHnzQSgECvZMu35YD5jk3Z0eWD8YM62so3RPjZi1ja3Tt0vpBx/uetUAVQ0iYVv
-         OFK3gXvcgj0SuaIHrPZHPf0JnL7gISJWWeKoA06LsBLgYy+J5wqOBdWK3NvLBluf48Ih
-         TSt7Qy13x2nmRQ3iWkkdeXpPBQm7Bg3n6uyopGzPR69v8AZLDp5fm7o5GgaCEc8eBZaj
-         RLwWveplEFYHuB3K6HtkdDGlGrlRrae/VescqgkLjMCZ0TwcQBQI94pHktzyRIld45yY
-         jejb280cpBSaCY/d9IW5PDUgj4nfFJzA2cutNu7Vb3C4F4jUTAA1nbMCDyqfCgNxZcQ+
-         71ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=o+Gxn2cPSSzd7lUTMPs9mUaoGflxYvHVdHLbNLyYS+Y=;
-        b=PwOPnZf1FNMuOzutNOlP36gTyL12qGJlap/LP3JCsSSux+vM/EQ+uOGKeOk+LgYqVe
-         Z7ZHJdBl+myXntPTyAMPf1bHwgVYo1wxXD+DL3NHELAllC3IuTt+z5dpQf78sBc9AJY+
-         HLK/js/Rkj2hy6cXFUCfrGTRgBqQWLvVQNxVQ4DgFb8Bxmf7fOtZFGSfr8SPQOMO3urU
-         PaduL5qVJvvD1Zo19wjT84/3vSZuPKCFCM4dBX2XOKunL3dO5utJXlUJT26SIw6w5X9M
-         2rO2pAJYjE3+rPMYVs/jitqHACarYUIcbuP61duqHCnU7vWd/YT1vGuyAQLIWzOUvbZE
-         UR0A==
-X-Gm-Message-State: ACrzQf3WlvbwEOr8C9yPumtZ5mYnpQmWSviC1vNRUR6lXLPDdG6fg2hE
-        JWVg6+fB8Nh6qwErrSJJAGU=
-X-Google-Smtp-Source: AMsMyM4eTtw8yTQykaSnXxiqUoGo5ckajeikrePQcfU+jhv9EKWOqd2TDNvif13RgpTUwWVuQgQUrQ==
-X-Received: by 2002:a17:90b:388d:b0:202:be54:1691 with SMTP id mu13-20020a17090b388d00b00202be541691mr16851090pjb.31.1663532947694;
-        Sun, 18 Sep 2022 13:29:07 -0700 (PDT)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id c13-20020a170903234d00b0016f85feae65sm19205153plh.87.2022.09.18.13.29.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 13:29:07 -0700 (PDT)
-Sender: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= 
-        <philippe.mathieu.daude@gmail.com>
-Message-ID: <3a2c8c5e-8cd0-62d5-9538-410db535dcc0@amsat.org>
-Date:   Sun, 18 Sep 2022 22:29:03 +0200
+        with ESMTP id S229541AbiISCqp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 18 Sep 2022 22:46:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C214BF70;
+        Sun, 18 Sep 2022 19:46:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72BE613D5;
+        Sun, 18 Sep 2022 19:46:50 -0700 (PDT)
+Received: from [10.162.41.7] (unknown [10.162.41.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 053413F5A1;
+        Sun, 18 Sep 2022 19:46:34 -0700 (PDT)
+Message-ID: <7403e6bb-0011-381b-a99e-cbd9d7b1a270@arm.com>
+Date:   Mon, 19 Sep 2022 08:16:32 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH] platform/mips: Adjust Kconfig to keep consistency
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
+ during page reclamation
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20220918101206.2381321-1-chenhuacai@loongson.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-In-Reply-To: <20220918101206.2381321-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Nadav Amit <namit@vmware.com>, Barry Song <21cnbao@gmail.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
+        "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
+        "huzhanyuan@oppo.com" <huzhanyuan@oppo.com>,
+        "lipeifeng@oppo.com" <lipeifeng@oppo.com>,
+        "zhangshiming@oppo.com" <zhangshiming@oppo.com>,
+        "guojian@oppo.com" <guojian@oppo.com>,
+        "realmz6@gmail.com" <realmz6@gmail.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
+        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        Mel Gorman <mgorman@suse.de>
+References: <20220822082120.8347-1-yangyicong@huawei.com>
+ <20220822082120.8347-5-yangyicong@huawei.com>
+ <1e8642d5-0e2d-5747-d0d2-5aa0817ea4af@arm.com>
+ <CAGsJ_4xD4m-szM1Cm4N5ZRCODGC0fbW+BLBhy8g6+eK=aHPQNw@mail.gmail.com>
+ <1125554b-c183-23c4-5516-95b918a761cc@arm.com>
+ <CAGsJ_4zkRv7RYCB2SC0uydMSQWfwXs3-nkjxMoR7wgn2nt43gA@mail.gmail.com>
+ <2AB9EC05-16B4-46F8-B716-53941C1C9A50@vmware.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <2AB9EC05-16B4-46F8-B716-53941C1C9A50@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 18/9/22 12:12, Huacai Chen wrote:
-> Drop the "if MIPS" and "endif" drivers/platform/Kconfig. Instead add
-> a "depends on MIPS" to "menuconfig MIPS_PLATFORM_DEVICES" in drivers/
-> platform/mips/Kconfig, like all the other subdirs are doing.
+
+
+On 9/15/22 20:01, Nadav Amit wrote:
 > 
-> Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   drivers/platform/Kconfig      | 2 --
->   drivers/platform/mips/Kconfig | 1 +
->   2 files changed, 1 insertion(+), 2 deletions(-)
+> 
+>> On Sep 14, 2022, at 11:42 PM, Barry Song <21cnbao@gmail.com> wrote:
+>>
+>>>
+>>> The very idea behind TLB deferral is the opportunity it (might) provide
+>>> to accumulate address ranges and cpu masks so that individual TLB flush
+>>> can be replaced with a more cost effective range based TLB flush. Hence
+>>> I guess unless address range or cpumask based cost effective TLB flush
+>>> is available, deferral does not improve the unmap performance as much.
+>>
+>>
+>> After sending tlbi, if we wait for the completion of tlbi, we have to get Ack
+>> from all cpus in the system, tlbi is not scalable. The point here is that we
+>> avoid waiting for each individual TLBi. Alternatively, they are batched. If
+>> you read the benchmark in the commit log, you can find the great decline
+>> in the cost to swap out a page.
+> 
+> Just a minor correction: arch_tlbbatch_flush() does not collect ranges.
+> On x86 it only accumulate CPU mask.
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-
+Thanks Nadav for the clarification.
