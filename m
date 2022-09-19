@@ -2,37 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205C55BCFA5
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Sep 2022 16:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065265BCF9E
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Sep 2022 16:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiISOvN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Sep 2022 10:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
+        id S229932AbiISOvL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Sep 2022 10:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiISOvI (ORCPT
+        with ESMTP id S229549AbiISOvI (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Sep 2022 10:51:08 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E348E32EE4;
-        Mon, 19 Sep 2022 07:51:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D59D03334D;
+        Mon, 19 Sep 2022 07:51:03 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oaI6u-0005ft-01; Mon, 19 Sep 2022 16:51:00 +0200
+        id 1oaI6u-0005ft-02; Mon, 19 Sep 2022 16:51:00 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 23F18C12F2; Mon, 19 Sep 2022 16:47:47 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 16:47:47 +0200
+        id 32702C12F2; Mon, 19 Sep 2022 16:48:14 +0200 (CEST)
+Date:   Mon, 19 Sep 2022 16:48:14 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Kelvin Cheung <keguang.zhang@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v2] MIPS: Loongson32: Fix PHY-mode being left unspecified
-Message-ID: <20220919144747.GA7674@alpha.franken.de>
-References: <20220911161009.34453-1-keguang.zhang@gmail.com>
+To:     Lin Yujun <linyujun809@huawei.com>
+Cc:     christophe.jaillet@wanadoo.fr, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] MIPS: SGI-IP30: Fix platform-device leak in
+ bridge_platform_create()
+Message-ID: <20220919144814.GB7674@alpha.franken.de>
+References: <20220914032807.96793-1-linyujun809@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220911161009.34453-1-keguang.zhang@gmail.com>
+In-Reply-To: <20220914032807.96793-1-linyujun809@huawei.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -42,30 +41,24 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 12:10:09AM +0800, Kelvin Cheung wrote:
-> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+On Wed, Sep 14, 2022 at 11:28:07AM +0800, Lin Yujun wrote:
+> In error case in bridge_platform_create after calling
+> platform_device_add()/platform_device_add_data()/
+> platform_device_add_resources(), release the failed
+> 'pdev' or it will be leak, call platform_device_put()
+> to fix this problem.
 > 
-> commit 0060c8783330 ("net: stmmac: implement support for passive mode
-> converters via dt") has changed the plat->interface field semantics from
-> containing the PHY-mode to specifying the MAC-PCS interface mode. Due to
-> that the loongson32 platform code will leave the phylink interface
-> uninitialized with the PHY-mode intended by the means of the actual
-> platform setup. The commit-author most likely has just missed the
-> arch-specific code to fix. Let's mend the Loongson32 platform code then by
-> assigning the PHY-mode to the phy_interface field of the STMMAC platform
-> data.
+> Besides, 'pdev' is divided into 'pdev_wd' and 'pdev_bd',
+> use platform_device_unregister() to release sgi_w1
+> resources when xtalk-bridge registration fails.
 > 
-> Fixes: 0060c8783330 ("net: stmmac: implement support for passive mode converters via dt")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
+> Fixes: fd27234f24ae ("MIPS: add support for SGI Octane (IP30)")
+> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
 > ---
-> V1 -> V2: Add my SoB tag
-> ---
->  arch/mips/loongson32/common/platform.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+>  arch/mips/sgi-ip30/ip30-xtalk.c | 70 +++++++++++++++++++++++----------
+>  1 file changed, 50 insertions(+), 20 deletions(-)
 
-applied to mips-fixes.
+applied to mips-next.
 
 Thomas.
 
