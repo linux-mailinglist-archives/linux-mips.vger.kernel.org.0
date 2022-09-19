@@ -2,111 +2,185 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927555BC316
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Sep 2022 08:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748D25BC48B
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Sep 2022 10:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiISGuT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Sep 2022 02:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S229895AbiISIoq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Sep 2022 04:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiISGuS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Sep 2022 02:50:18 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EA3BC37
-        for <linux-mips@vger.kernel.org>; Sun, 18 Sep 2022 23:50:16 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id z20so32730768ljq.3
-        for <linux-mips@vger.kernel.org>; Sun, 18 Sep 2022 23:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=AgUTiKhBujn05TxXhChEqalF/68tJs4eQO8QBl9KDLA=;
-        b=u/00MNl+D+cPo1LMA53PEjTlV1YyUFDISGSKO7fmcY8jJtG4osxrevg1ir2oZrMlAY
-         KGoplI+L/szE5gXN1gy6tWxgb8djvpTAMpmzrd85685XR5XmIEHg4wzs8n1hyba1cAQk
-         I/x2ASViQlamzdlRcYMvL1kVNN2fiTRnVIwyf36fPouyWZxzGeAwbiX6xvyKcUqMTiyr
-         RgCU7a8Q/7D4dzss6xuN1oQgVs1t96f98DmNZyqKy9boypscFwNBnl21DO23cIHuGuCt
-         mJKe7X0zl5pd2YP1NseYOlHYs0mFIa1OSPjuL8I7Xd00n2kdRHhVVDg6/Ec8n3zf+Oq1
-         9Fgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AgUTiKhBujn05TxXhChEqalF/68tJs4eQO8QBl9KDLA=;
-        b=n1g1JWXFxlJOjYSxVKi/gmCwUVyyfI+3OEWja2/h/Z2Liha/TP5tnktG6uCIIcovxW
-         i1RWHouJY7pXUJ79PFp8dTk03yIJxW9WtEisoPPFW8xQZProNchHz7CwiW50Ojxu4O2M
-         jnSXInv97ziv60gI597/S+F5RGzGl/DMaMKK5k/djsW4nbQ79SgpssduK3GGDocESMx/
-         zabeiF1vZRfXFuH4ypX9vl+RLAwUsTJxnqcXegt22Ml7+6TyTm+1wUIBzuD4KU98ugmJ
-         SRbOz1oZo1Zi4mRgfTZR7gtF6mm6YU9W2wRnPfQbMjka40+bRDO5WOBO/+58JI4DyLCW
-         FP1w==
-X-Gm-Message-State: ACrzQf35bVXwz1H01chgy/ZGvKyh3xBShRFG5wgW/KSZUK4mD5Nh/JqS
-        qk2c7GTlJ+Ckoz7epzYMgO/FcQ==
-X-Google-Smtp-Source: AMsMyM5BXYEND5jV85kw4nwQ041fTS/U3XG4Jie4d8jTejwhbLVGJErLR5uyBRT4JJIIgVqcoO6YPw==
-X-Received: by 2002:a2e:9d88:0:b0:26a:95c1:218f with SMTP id c8-20020a2e9d88000000b0026a95c1218fmr4722063ljj.223.1663570214700;
-        Sun, 18 Sep 2022 23:50:14 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056512114700b0048960b581e3sm5049900lfg.8.2022.09.18.23.50.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 23:50:14 -0700 (PDT)
-Message-ID: <d0630c9e-22c6-48a8-35ed-024949782cbd@linaro.org>
-Date:   Mon, 19 Sep 2022 08:50:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 net-next 00/10] dt-bindings and mt7621 devicetree
- changes
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
+        with ESMTP id S229695AbiISIop (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Sep 2022 04:44:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D1E5F5F;
+        Mon, 19 Sep 2022 01:44:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80A31B816B8;
+        Mon, 19 Sep 2022 08:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE61C433C1;
+        Mon, 19 Sep 2022 08:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663577080;
+        bh=Vd83dSwOxxVSmijrL/0T0PlkhSMj1d5PUkUDnXOIUyE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dlSngLTIaXTUHmuHDJgtMdbNwSHKqUJq9SLyDbvIvDthukzpSXHybBsTRhVVyFNJ2
+         1qqCtuHfpcMr/GliCB6rzwJjMLC2MHRH03VKiFCffo41yXNOwwmKRS/fEC1f2Cxj7R
+         DLEvYnlAXyJ2KzF8cFOljKYCXKTJeMmqp7ByoylE=
+Date:   Mon, 19 Sep 2022 10:45:06 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Olof Johansson <olof@lixom.net>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        erkin.bozoglu@xeront.com
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220918134118.554813-1-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220918134118.554813-1-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+Message-ID: <YygsEtxKz8dsEstc@kroah.com>
+References: <20220701012647.2007122-1-saravanak@google.com>
+ <YwS5J3effuHQJRZ5@kroah.com>
+ <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 18/09/2022 15:41, Arınç ÜNAL wrote:
-> Hello there!
+On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
+> On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > > These patches are on top of driver-core-next.
+> > >
+> > > Even if stdout-path isn't set in DT, this patch should take console
+> > > probe times back to how they were before the deferred_probe_timeout
+> > > clean up series[1].
+> >
+> > Now dropped from my queue due to lack of a response to other reviewer's
+> > questions.
 > 
-> This patch series removes old MediaTek bindings, improves mediatek,mt7530
-> and mt7621 memory controller bindings and improves mt7621 DTs.
+> What happened to this patch? I have a 10 second timeout on console
+> probe on my SiFive Unmatched, and I don't see this flag being set for
+> the serial driver. In fact, I don't see it anywhere in-tree. I can't
+> seem to locate another patchset from Saravana around this though, so
+> I'm not sure where to look for a missing piece for the sifive serial
+> driver.
 > 
-> v3:
-> - Explain the mt7621 memory controller binding change in more details.
-> - Remove explaining the remaining DTC warnings from the patch log as there
-> are new schemas submitted for them.
+> This is the second boot time regression (this one not fatal, unlike
+> the Layerscape PCIe one) from the fw_devlink patchset.
+> 
+> Greg, can you revert the whole set for 6.0, please? It's obviously
+> nowhere near tested enough to go in and I expect we'll see a bunch of
+> -stable fixups due to this if we let it remain in.
 
-Please always describe dependencies. Otherwise I am free to take memory
-controllers patch and I expect it will not hurt bisectability.
+What exactly is "the whole set"?  I have the default option fix queued
+up and will send that to Linus later this week (am traveling back from
+Plumbers still), but have not heard any problems about any other issues
+at all other than your report.
 
-Best regards,
-Krzysztof
+thnaks,
+
+greg k-h
