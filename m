@@ -2,105 +2,194 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666BF5BC17E
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Sep 2022 04:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E1B5BC1CE
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Sep 2022 05:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiISCqr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 18 Sep 2022 22:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S229703AbiISDop (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 18 Sep 2022 23:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiISCqp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 18 Sep 2022 22:46:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C214BF70;
-        Sun, 18 Sep 2022 19:46:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72BE613D5;
-        Sun, 18 Sep 2022 19:46:50 -0700 (PDT)
-Received: from [10.162.41.7] (unknown [10.162.41.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 053413F5A1;
-        Sun, 18 Sep 2022 19:46:34 -0700 (PDT)
-Message-ID: <7403e6bb-0011-381b-a99e-cbd9d7b1a270@arm.com>
-Date:   Mon, 19 Sep 2022 08:16:32 +0530
+        with ESMTP id S229673AbiISDoo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 18 Sep 2022 23:44:44 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C8A63E4
+        for <linux-mips@vger.kernel.org>; Sun, 18 Sep 2022 20:44:40 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z13so25457953edb.13
+        for <linux-mips@vger.kernel.org>; Sun, 18 Sep 2022 20:44:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=8wzd/IsQMAz4yliZb1FsJ3OfMRVNZc5tTLnz3lR7QHQ=;
+        b=EuFCJAkszMPKPtxQSyMQ0NoboaeVB7t96eFw9rPXwH9oSHUro5o77bxEeYAtANDzyR
+         I9BMOm4HMiosCb0pcsiSHEAZo2qSCtvZawUq0/zPNIdwAvDvQAPS+8+0uFrWbUJgoTtd
+         ExLo8MeQP7GyQ+rW2rlFvIPPT75kqxCAKPhOGjeDjYZZFhuAOfywggSn5a+jZu6mJGBr
+         cWVHHoToy9UWA6nPxBqZcAZLzmJoxjkbRc1yLhwZYNZgNQEBRnr86m6GI/e/+J8MoRAT
+         suDLw8ILYZpcoPAOh+pvz4Lu/zfiYh6RXQKy+jZAxuRvjXsVxLmt63JqorCueNp9TEEJ
+         9kQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=8wzd/IsQMAz4yliZb1FsJ3OfMRVNZc5tTLnz3lR7QHQ=;
+        b=ygJBpjTiEgtmbTlOWEFFx/Ssj2SzrLI1d9Mk1GdxqACnPYddkLcyNJuSnOZXw0i4Gw
+         mfdhwwgfN99sv7oo3t49MhEBEy6ioE2Ei1c9uuyPq444zBpCXLmTRkAVed6M4pPrMN5H
+         szQKoPLQqa7kITVDFv1UBRAvuwX+aIhGn1gxbCbysQbE+6SZv7LGzcw5WHQRaHekGEvJ
+         k+V+ouTm7ZY8UjUwtqjDYuf2BaGvJCkWhJNHWF/0Sgz7+2EzR+zMt+B6XIGv7+e6na/l
+         GWn7JuMgzlspSLgP8anzICGWSr9ef2MSmfzUftx5u+dn397ZhItrdcN+5AmB2DLcL1JG
+         iciQ==
+X-Gm-Message-State: ACrzQf0bF5Gp3HrTEjFa7Lsvcf2AYZZw05A/1vHLy5qeTel/SYK6rLDG
+        Dg4Bej5+j+YUk8GFWaxh2d0g8qsQeE8Qg7LebRtmzA==
+X-Google-Smtp-Source: AMsMyM67X4fHgNHGRzRNZ0AalOVh8oZlYNRkDoycvf7zBAcHx4qOwSpxEraLAwYUCmYCoDnGs0xLR1B5pb/N312tK3I=
+X-Received: by 2002:aa7:cc8a:0:b0:446:7668:2969 with SMTP id
+ p10-20020aa7cc8a000000b0044676682969mr13821510edt.206.1663559079248; Sun, 18
+ Sep 2022 20:44:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
- during page reclamation
-Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>, Barry Song <21cnbao@gmail.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
-        "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
-        "huzhanyuan@oppo.com" <huzhanyuan@oppo.com>,
-        "lipeifeng@oppo.com" <lipeifeng@oppo.com>,
-        "zhangshiming@oppo.com" <zhangshiming@oppo.com>,
-        "guojian@oppo.com" <guojian@oppo.com>,
-        "realmz6@gmail.com" <realmz6@gmail.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Mel Gorman <mgorman@suse.de>
-References: <20220822082120.8347-1-yangyicong@huawei.com>
- <20220822082120.8347-5-yangyicong@huawei.com>
- <1e8642d5-0e2d-5747-d0d2-5aa0817ea4af@arm.com>
- <CAGsJ_4xD4m-szM1Cm4N5ZRCODGC0fbW+BLBhy8g6+eK=aHPQNw@mail.gmail.com>
- <1125554b-c183-23c4-5516-95b918a761cc@arm.com>
- <CAGsJ_4zkRv7RYCB2SC0uydMSQWfwXs3-nkjxMoR7wgn2nt43gA@mail.gmail.com>
- <2AB9EC05-16B4-46F8-B716-53941C1C9A50@vmware.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <2AB9EC05-16B4-46F8-B716-53941C1C9A50@vmware.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701012647.2007122-1-saravanak@google.com> <YwS5J3effuHQJRZ5@kroah.com>
+In-Reply-To: <YwS5J3effuHQJRZ5@kroah.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Sun, 18 Sep 2022 20:44:27 -0700
+Message-ID: <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > These patches are on top of driver-core-next.
+> >
+> > Even if stdout-path isn't set in DT, this patch should take console
+> > probe times back to how they were before the deferred_probe_timeout
+> > clean up series[1].
+>
+> Now dropped from my queue due to lack of a response to other reviewer's
+> questions.
+
+What happened to this patch? I have a 10 second timeout on console
+probe on my SiFive Unmatched, and I don't see this flag being set for
+the serial driver. In fact, I don't see it anywhere in-tree. I can't
+seem to locate another patchset from Saravana around this though, so
+I'm not sure where to look for a missing piece for the sifive serial
+driver.
+
+This is the second boot time regression (this one not fatal, unlike
+the Layerscape PCIe one) from the fw_devlink patchset.
+
+Greg, can you revert the whole set for 6.0, please? It's obviously
+nowhere near tested enough to go in and I expect we'll see a bunch of
+-stable fixups due to this if we let it remain in.
+
+This seems to be one of the worst releases I've encountered in recent
+years on my hardware here due to this patchset. :-(
 
 
-On 9/15/22 20:01, Nadav Amit wrote:
-> 
-> 
->> On Sep 14, 2022, at 11:42 PM, Barry Song <21cnbao@gmail.com> wrote:
->>
->>>
->>> The very idea behind TLB deferral is the opportunity it (might) provide
->>> to accumulate address ranges and cpu masks so that individual TLB flush
->>> can be replaced with a more cost effective range based TLB flush. Hence
->>> I guess unless address range or cpumask based cost effective TLB flush
->>> is available, deferral does not improve the unmap performance as much.
->>
->>
->> After sending tlbi, if we wait for the completion of tlbi, we have to get Ack
->> from all cpus in the system, tlbi is not scalable. The point here is that we
->> avoid waiting for each individual TLBi. Alternatively, they are batched. If
->> you read the benchmark in the commit log, you can find the great decline
->> in the cost to swap out a page.
-> 
-> Just a minor correction: arch_tlbbatch_flush() does not collect ranges.
-> On x86 it only accumulate CPU mask.
-
-Thanks Nadav for the clarification.
+-Olof
