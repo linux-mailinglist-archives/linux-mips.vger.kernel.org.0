@@ -2,101 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD31A5BE410
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Sep 2022 13:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA925BE5EF
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Sep 2022 14:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiITLDz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Sep 2022 07:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        id S229489AbiITMes (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Sep 2022 08:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiITLDy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Sep 2022 07:03:54 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FC26EF0A;
-        Tue, 20 Sep 2022 04:03:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1663671804; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=F3nCYnYOvh89RVFuiW6azZBK9xdjihOmZMYUFmlPW83qpBJzj3w6Rcr7RO7kqtdqN2aFNY7m2b0QOLkil+t+toSIplEJCN17PjOhaVxmEsZ4T52WNiK5pC1gJadR95Jlf/gSVFa/Q8VdkYd3twjtBF6AAOOpsGAoNf2WDMZCpNM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1663671804; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=aa86F3RsZzaIkBDZNOJitzS9yBMCdSGYomvTqaakYqo=; 
-        b=FYhdODlZ98Z/RipItQxWc2sj/NSr+d+DoLDe/uHxn3e2PlGp7cpXmuWyqtQfpnxpN6d9ddCHa3k2Q/yB2TQxe0HnQPx35B2u6g9oxXNuNTMnlMaKaySbgN7XlxxIE2NaGEkVZ4siQvlK2p5XBpSekALVuBRDRrAizIDYlUBrIhM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663671804;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=aa86F3RsZzaIkBDZNOJitzS9yBMCdSGYomvTqaakYqo=;
-        b=MqM2BHFSLG1YnI5v/H1cPdR/9PPYtTYVsnhA8duT6nHnsUymbxRKGHsial+bqXcL
-        US6ZHGhoMfd2RfASRUsNF5wL+S38B2w9owQVUJKOxzIT3CO9pW158zlpouUPF7okLGn
-        buQRC16FXhe8hlrEMNW/2sQM5X6JsFOtXtjd7sY0=
-Received: from [10.172.69.65] (93-42-111-99.ip86.fastwebnet.it [93.42.111.99]) by mx.zohomail.com
-        with SMTPS id 1663671802790737.960471735429; Tue, 20 Sep 2022 04:03:22 -0700 (PDT)
-Message-ID: <efce7270-13c1-79b0-12d3-66d4952e31fb@arinc9.com>
-Date:   Tue, 20 Sep 2022 14:03:15 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 net-next 00/10] dt-bindings and mt7621 devicetree
- changes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        erkin.bozoglu@xeront.com
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220918134118.554813-1-arinc.unal@arinc9.com>
- <d0630c9e-22c6-48a8-35ed-024949782cbd@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <d0630c9e-22c6-48a8-35ed-024949782cbd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229656AbiITMeq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Sep 2022 08:34:46 -0400
+X-Greylist: delayed 175 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 05:34:43 PDT
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C6095BE;
+        Tue, 20 Sep 2022 05:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1663677099;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=ErJBayFsgwH9oyybGVYPA9jR24ryJHH2gKiq+4dbDIY=;
+    b=F+4QyGhgowTNPm60ZZdCA13e7w/I7oMUWlL6vy6gRSr3NpcIs4IiyVIum2Jy10xPAX
+    449essqWWE3UTMoyDr/h5qxG5dXk9CG5DA1JKJ8ovdflf/HZa5xBM3rRlWA4+fukKz14
+    Xol7J/Squ+xoyoyAi7cjimO9Jxuh0rMB0GjufU40xtGBGkK+JUhz1P6xk0w2hSK5baNl
+    J6AyjlNEmMEr8l2FurBrpNfh8osJufBvzPbMB+9c86T00jDVaarDCiPhuD1kSnoKLd+q
+    c1RUWlglOJ4lfhBYk3O3j8QUk99C++TiTm+E2bGwbcX5dl6xLMzucGUTFaML+lxYNRha
+    GWqg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGZjzY="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 48.1.1 DYNA|AUTH)
+    with ESMTPSA id x6434cy8KCVd0vL
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 20 Sep 2022 14:31:39 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: Usefulness of CONFIG_MACH_JZ47*
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <H34IIR.IGTU7CQ36OZK3@crapouillou.net>
+Date:   Tue, 20 Sep 2022 14:31:38 +0200
+Cc:     linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        MIPS Creator CI20 Development 
+        <mips-creator-ci20-dev@googlegroups.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F21B5D44-94D8-4BDB-BB34-9CBFC5F2B891@goldelico.com>
+References: <af10570000d7e103d70bbea590ce8df4f8902b67.1661330532.git.christophe.jaillet@wanadoo.fr>
+ <UC07HR.REF39SO0Y5PG2@crapouillou.net>
+ <CDEACE3D-5433-457B-AF77-E41F39A04CA4@goldelico.com>
+ <H34IIR.IGTU7CQ36OZK3@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19.09.2022 09:50, Krzysztof Kozlowski wrote:
-> On 18/09/2022 15:41, Arınç ÜNAL wrote:
->> Hello there!
->>
->> This patch series removes old MediaTek bindings, improves mediatek,mt7530
->> and mt7621 memory controller bindings and improves mt7621 DTs.
->>
->> v3:
->> - Explain the mt7621 memory controller binding change in more details.
->> - Remove explaining the remaining DTC warnings from the patch log as there
->> are new schemas submitted for them.
-> 
-> Please always describe dependencies. Otherwise I am free to take memory
-> controllers patch and I expect it will not hurt bisectability.
+Hi Paul,
 
-I believe it won't hurt bisectability. I only fix the warnings that I 
-describe on the patch log, the warnings do not depend on any other patches.
+> Am 20.09.2022 um 11:09 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+> Le mar., sept. 20 2022 at 08:31:30 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> Hi Paul,
+>> it seems as if there aren't many places left over where the =
+MACH_JZ47* configs are still in use:
+>> drivers/char/hw_ramdom/Kconfig
+>> drivers/clk/ingenic/Kconfig
+>> drivers/gpu/drm/ingenic/Kconfig
+>> drivers/pinctrl/pinctrl-ingenic.c
+>> Is it possible to get rid of them and just have =
+CONFIG_MACH_INGENIC_GENERIC?
+>> This might simplify my defconfig for multiple machines.
+>=20
+> CONFIG_MIPS_GENERIC_KERNEL=3Dy
 
-Arınç
+This breaks compilation for me, e.g.
+
+arch/mips/mm/cache.c:203:6: error: 'cpu_has_tx39_cache' undeclared =
+(first use in this function)
+
+> CONFIG_BOARD_INGENIC=3Dy
+
+This config option does not exist (at least in v6.0-rc). Probably you =
+refer to CONFIG_INGENIC_GENERIC_BOARD.
+
+As far as I see, this does not choose to build any device tree blob.
+
+I tried some patch to get the .dtb built, but the resulting kernel does =
+not show any activity.
+
+If I e.g. switch back from CONFIG_INGENIC_GENERIC_BOARD=3Dy to =
+CONFIG_JZ4780_CI20=3Dy the kernel works.
+
+>=20
+> Then you can support all Ingenic-based boards alongside other MIPS =
+boards.
+
+Yes, I know, but why are the MACH_JZ47* not replaced by =
+CONFIG_MACH_INGENIC_GENERIC if they are almost unused or completely =
+removed?
+
+BTW: there are also seems to be some board specific CONFIGs in processor =
+specific code (e.g. CONFIG_JZ4780_CI20 in irqchip code).
+So selecting a MACH is not sufficient to get these features.
+
+All this looks a little fragile and incomplete... Maybe if I find some =
+time (which is unfortunately quite unlikely) I can propose some fixes.
+
+BR,
+Nikolaus
+
