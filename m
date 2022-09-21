@@ -2,72 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439B75C047C
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Sep 2022 18:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B74B5E54D0
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Sep 2022 22:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiIUQo6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Sep 2022 12:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
+        id S229816AbiIUU7Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Sep 2022 16:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiIUQof (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Sep 2022 12:44:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB93B760D1;
-        Wed, 21 Sep 2022 09:34:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 964C563208;
-        Wed, 21 Sep 2022 16:34:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 02E05C433C1;
-        Wed, 21 Sep 2022 16:34:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663778066;
-        bh=TJwtM6boaPTX/2Eq5vN8/nMLleMLx+nBZGZAmMU9HuM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=F4iVwjkOe4p3obzwYIeTwixXn81XJGlJj1zU58bOdBG0Np6BQ4lkyreV0L372QFk/
-         6eHkYIFAqJOjvrdLk1QEhB00/WSK4B7X/Jkyt5qYKLW2EkYzr7ok/VjKw8lPk3HCGA
-         VQ2R6FHQ3Y8slwpWFC97bY5VtLyjFWFXZsY7KSbJ9VHXkfjztVvqct1Tc6Ggg/hma4
-         Kifffqq8A93ybE3nlN314tAQd+eTXLS8Y6dmWnzWkU6WxyY4p4+P0omIdgsMnJvu0p
-         7ewsVXE4EiQsvCVGJXcxVvZbOSya/H1KPPPx/yGO6TMOaH+emxlfywtExck8cUC3DR
-         M+HGWtqnoC0kw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBB52E4D03C;
-        Wed, 21 Sep 2022 16:34:25 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v6.0
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220921133553.GA13191@alpha.franken.de>
-References: <20220921133553.GA13191@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220921133553.GA13191@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.0_2
-X-PR-Tracked-Commit-Id: e9f3f8f488005f6da3cfb66070706770ecaef747
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 26c95642d419028db590ae0c511d9ddcdbc51746
-Message-Id: <166377806589.17149.18113641835587487083.pr-tracker-bot@kernel.org>
-Date:   Wed, 21 Sep 2022 16:34:25 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229688AbiIUU7X (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Sep 2022 16:59:23 -0400
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFCAA572C
+        for <linux-mips@vger.kernel.org>; Wed, 21 Sep 2022 13:59:19 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 5362 invoked from network); 21 Sep 2022 22:59:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1663793956; bh=a71HTrKjSyPR9ycQG2ZSn218u6d2jMS73uaEWKrlMrg=;
+          h=From:To:Cc:Subject;
+          b=JWQ+a4eAI4HqRBXZUYN+UCm8E2LqDl7VtuBj7CPbW2RQtEE1LOBnWmonrfztKWW/h
+           P78z4oezQi9eV2gSyc4EgS/6xXwCTj9evkxdua7TvOiNHZCTKOrYMRa6y3oKMWNV6x
+           skGZ17QrbpufqoAe7OyVsK9sH6Tg8v3KqnnW4t4Q=
+Received: from ip-137-21.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.21])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <john@phrozen.org>; 21 Sep 2022 22:59:16 +0200
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     john@phrozen.org, martin.blumenstingl@googlemail.com,
+        hauke@hauke-m.de, tsbogend@alpha.franken.de, maz@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Subject: [PATCH v2 0/1] MIPS: lantiq: enable all hardware interrupts on second VPE
+Date:   Wed, 21 Sep 2022 22:59:43 +0200
+Message-Id: <20220921205944.466745-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-WP-DKIM-Status: good (id: wp.pl)                                      
+X-WP-MailID: 504adcc00ef8e39b5c85d436a1f10740
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000B [MVN0]                               
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Wed, 21 Sep 2022 15:35:53 +0200:
+v2:
+ - switched to upstream recommendation.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.0_2
+Aleksander Jan Bajkowski (1):
+  MIPS: lantiq: enable all hardware interrupts on second VPE
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/26c95642d419028db590ae0c511d9ddcdbc51746
-
-Thank you!
+ arch/mips/lantiq/prom.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.30.2
+
