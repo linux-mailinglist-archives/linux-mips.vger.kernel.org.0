@@ -2,139 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D855E54D1
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Sep 2022 22:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E96E5E5589
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Sep 2022 23:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiIUU71 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Sep 2022 16:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S230481AbiIUVwQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Sep 2022 17:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiIUU70 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Sep 2022 16:59:26 -0400
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A97EA4051
-        for <linux-mips@vger.kernel.org>; Wed, 21 Sep 2022 13:59:25 -0700 (PDT)
-Received: (wp-smtpd smtp.wp.pl 10811 invoked from network); 21 Sep 2022 22:59:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1663793962; bh=eYat1uCJDkfVTxQVLAjdR9+O2hpBg5EfLC0oZyPm3Jk=;
-          h=From:To:Cc:Subject;
-          b=yLd5kz5pQn06UdirC14XJMq7fqgHNUN8RpOCQjtmRkP+a/skd7WljLTiW0tKQve5Q
-           DNz2067ulc1jVn0IKC2e4Z4Wphk/tnndw+WR5K1blQ/AQfYgmx1L9OrPrGHetQ+ANi
-           zzSqlx+42FkBlPc7aYCSCDkg/T0v+nvbqq3sUNWA=
-Received: from ip-137-21.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.21])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <john@phrozen.org>; 21 Sep 2022 22:59:22 +0200
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     john@phrozen.org, martin.blumenstingl@googlemail.com,
-        hauke@hauke-m.de, tsbogend@alpha.franken.de, maz@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>
-Subject: [PATCH v2 1/1] MIPS: lantiq: enable all hardware interrupts on second VPE
-Date:   Wed, 21 Sep 2022 22:59:44 +0200
-Message-Id: <20220921205944.466745-2-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220921205944.466745-1-olek2@wp.pl>
-References: <20220921205944.466745-1-olek2@wp.pl>
+        with ESMTP id S230484AbiIUVwA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Sep 2022 17:52:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91597A7203;
+        Wed, 21 Sep 2022 14:51:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE5D51684;
+        Wed, 21 Sep 2022 14:51:53 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [10.57.76.246])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F35F3F73B;
+        Wed, 21 Sep 2022 14:51:19 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 22:51:10 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 07/44] cpuidle,psci: Push RCU-idle into driver
+Message-ID: <YyuHTgRh7t6vYjHw@e126311.manchester.arm.com>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.802976773@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-DKIM-Status: good (id: wp.pl)                                      
-X-WP-MailID: 1fd3897e21a0bb49c1f0119ef35da854
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [sVP0]                               
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919101520.802976773@infradead.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch is needed to handle interrupts by the second VPE on the Lantiq
-ARX100, xRX200, xRX300 and xRX330 SoCs. Switching some ICU interrupts to
-the second VPE results in a hang. Currently, the vsmp_init_secondary()
-function is responsible for enabling these interrupts. It only enables
-Malta-specific interrupts (SW0, SW1, HW4 and HW5).
+On Mon, Sep 19, 2022 at 11:59:46AM +0200, Peter Zijlstra wrote:
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again, at least twice, before going idle is daft.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-The MIPS core has 8 interrupts defined. On Lantiq SoCs, hardware
-interrupts are wired to an ICU instance. Each VPE has an independent
-instance of the ICU. The mapping of the ICU interrupts is shown below:
-SW0(IP0) - IPI call,
-SW1(IP1) - IPI resched,
-HW0(IP2) - ICU 0-31,
-HW1(IP3) - ICU 32-63,
-HW2(IP4) - ICU 64-95,
-HW3(IP5) - ICU 96-127,
-HW4(IP6) - ICU 128-159,
-HW5(IP7) - timer.
+Tried it on Pixel 6 running psci_idle, looks good with no apparent issues.
 
-This patch enables all interrupt lines on the second VPE.
-
-This problem affects multithreaded SoCs with a custom interrupt controller.
-SOCs with 1004Kc core and newer use the MIPS GIC. At this point, I am aware
-that the Realtek RTL839x and RTL930x SoCs may need a similar fix. In the
-future, this may be replaced with some generic solution.
-
-Tested on Lantiq xRX200.
-
-Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- arch/mips/lantiq/prom.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
-index c731082a0c42..be4829cc7a3a 100644
---- a/arch/mips/lantiq/prom.c
-+++ b/arch/mips/lantiq/prom.c
-@@ -34,6 +34,14 @@ unsigned long physical_memsize = 0L;
-  */
- static struct ltq_soc_info soc_info;
- 
-+/*
-+ * These structs are used to override vsmp_init_secondary()
-+ */
-+#if defined(CONFIG_MIPS_MT_SMP)
-+extern const struct plat_smp_ops vsmp_smp_ops;
-+static struct plat_smp_ops lantiq_smp_ops;
-+#endif
-+
- const char *get_system_type(void)
- {
- 	return soc_info.sys_type;
-@@ -84,6 +92,17 @@ void __init plat_mem_setup(void)
- 	__dt_setup_arch(dtb);
- }
- 
-+#if defined(CONFIG_MIPS_MT_SMP)
-+static void lantiq_init_secondary(void)
-+{
-+	/*
-+	 * MIPS CPU startup function vsmp_init_secondary() will only
-+	 * enable some of the interrupts for the second CPU/VPE.
-+	 */
-+	set_c0_status(ST0_IM);
-+}
-+#endif
-+
- void __init prom_init(void)
- {
- 	/* call the soc specific detetcion code and get it to fill soc_info */
-@@ -95,7 +114,10 @@ void __init prom_init(void)
- 	prom_init_cmdline();
- 
- #if defined(CONFIG_MIPS_MT_SMP)
--	if (register_vsmp_smp_ops())
--		panic("failed to register_vsmp_smp_ops()");
-+	if (cpu_has_mipsmt) {
-+		lantiq_smp_ops = vsmp_smp_ops;
-+		lantiq_smp_ops.init_secondary = lantiq_init_secondary;
-+		register_smp_ops(&lantiq_smp_ops);
-+	}
- #endif
- }
--- 
-2.30.2
-
+Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
