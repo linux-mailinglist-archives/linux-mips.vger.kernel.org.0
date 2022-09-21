@@ -2,68 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F0B5BFF01
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Sep 2022 15:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439B75C047C
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Sep 2022 18:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiIUNgF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Sep 2022 09:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
+        id S230075AbiIUQo6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Sep 2022 12:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiIUNgE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Sep 2022 09:36:04 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCA0671BF2;
-        Wed, 21 Sep 2022 06:36:01 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oaztP-00077s-00; Wed, 21 Sep 2022 15:35:59 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 939D8C0203; Wed, 21 Sep 2022 15:35:53 +0200 (CEST)
-Date:   Wed, 21 Sep 2022 15:35:53 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v6.0
-Message-ID: <20220921133553.GA13191@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230315AbiIUQof (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Sep 2022 12:44:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB93B760D1;
+        Wed, 21 Sep 2022 09:34:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 964C563208;
+        Wed, 21 Sep 2022 16:34:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 02E05C433C1;
+        Wed, 21 Sep 2022 16:34:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663778066;
+        bh=TJwtM6boaPTX/2Eq5vN8/nMLleMLx+nBZGZAmMU9HuM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=F4iVwjkOe4p3obzwYIeTwixXn81XJGlJj1zU58bOdBG0Np6BQ4lkyreV0L372QFk/
+         6eHkYIFAqJOjvrdLk1QEhB00/WSK4B7X/Jkyt5qYKLW2EkYzr7ok/VjKw8lPk3HCGA
+         VQ2R6FHQ3Y8slwpWFC97bY5VtLyjFWFXZsY7KSbJ9VHXkfjztVvqct1Tc6Ggg/hma4
+         Kifffqq8A93ybE3nlN314tAQd+eTXLS8Y6dmWnzWkU6WxyY4p4+P0omIdgsMnJvu0p
+         7ewsVXE4EiQsvCVGJXcxVvZbOSya/H1KPPPx/yGO6TMOaH+emxlfywtExck8cUC3DR
+         M+HGWtqnoC0kw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBB52E4D03C;
+        Wed, 21 Sep 2022 16:34:25 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v6.0
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220921133553.GA13191@alpha.franken.de>
+References: <20220921133553.GA13191@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220921133553.GA13191@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.0_2
+X-PR-Tracked-Commit-Id: e9f3f8f488005f6da3cfb66070706770ecaef747
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 26c95642d419028db590ae0c511d9ddcdbc51746
+Message-Id: <166377806589.17149.18113641835587487083.pr-tracker-bot@kernel.org>
+Date:   Wed, 21 Sep 2022 16:34:25 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
+The pull request you sent on Wed, 21 Sep 2022 15:35:53 +0200:
 
-  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.0_2
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/26c95642d419028db590ae0c511d9ddcdbc51746
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.0_2
-
-for you to fetch changes up to e9f3f8f488005f6da3cfb66070706770ecaef747:
-
-  MIPS: Loongson32: Fix PHY-mode being left unspecified (2022-09-19 16:31:32 +0200)
-
-----------------------------------------------------------------
-- fix missing export for Lantiq watchdog driver
-- fix ethernet phy interface setup for Loongson32
-
-----------------------------------------------------------------
-Randy Dunlap (1):
-      MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
-
-Serge Semin (1):
-      MIPS: Loongson32: Fix PHY-mode being left unspecified
-
- arch/mips/lantiq/clk.c                 |  1 +
- arch/mips/loongson32/common/platform.c | 16 ++++++++--------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+Thank you!
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
