@@ -2,70 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384425E6378
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Sep 2022 15:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964805E662E
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Sep 2022 16:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiIVNTu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 22 Sep 2022 09:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
+        id S231604AbiIVOwV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Sep 2022 10:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiIVNTs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Sep 2022 09:19:48 -0400
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A5A2B180
-        for <linux-mips@vger.kernel.org>; Thu, 22 Sep 2022 06:19:45 -0700 (PDT)
-Received: by mail-vs1-f43.google.com with SMTP id 129so10233913vsi.10
-        for <linux-mips@vger.kernel.org>; Thu, 22 Sep 2022 06:19:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=5pmX8j7YSh9bdCilNcCRmRugMzjFGAq2N/WodhvvE34=;
-        b=d7q6Fj4couljl5wXssNBkbaUGCUyghFu2dXsHFU2OOTRt5zuue8u5N9U2FUftsVOyK
-         TTu+ThYjG+0yV8V4LYekuqj8L7HXz61lHudDG6T743gY1sAsHV7JoUC6yKzZV4mB3QCz
-         8h4cwUYltZQy23klnS2u7NYboISG1zSUjRWVtYdxchHCBOwnbmt/9RU3Hm2c2cPuZSxf
-         z8TtPKt8ZqAwVQLxmZS7W+faKLgzYkuIapyaLGrrrvqakqM5fLaxSCtq2mD+W8sIJ+D2
-         sYQbctMJQkh06wXuCXOPFlGzKBK9P14jSvJuD+IrrPp2Xn3EUQyjlloCQcAWxZYMahh8
-         kuNw==
-X-Gm-Message-State: ACrzQf3CMopcmICAnkrrgslDQpBq+uLchryVL9/1NwejmdZWnBCDecn4
-        Z5GOev1fYOTetC/vLpUpildp24bKv1vAIfTi+i0=
-X-Google-Smtp-Source: AMsMyM6eE1sjjXWAVhzt1G+bDmZHlQmZrzJKKDtx8bxQPe7oHc1yjKLuhqQ3UTO/1KBfddm72spkuanIbwZobBGuBvo=
-X-Received: by 2002:a67:b44b:0:b0:398:7e9c:21ba with SMTP id
- c11-20020a67b44b000000b003987e9c21bamr1109816vsm.83.1663852784626; Thu, 22
- Sep 2022 06:19:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220920130711.1107018-1-cuigaosheng1@huawei.com>
-In-Reply-To: <20220920130711.1107018-1-cuigaosheng1@huawei.com>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Thu, 22 Sep 2022 15:19:33 +0200
-Message-ID: <CAAdtpL5C9SHnUdX2yvzRjLec9TD2iRNSZfmjrh2sUoPPiMhzZg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Remove orphan declarations and comments
-To:     Gaosheng Cui <cuigaosheng1@huawei.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S231127AbiIVOwU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Sep 2022 10:52:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D4B5141;
+        Thu, 22 Sep 2022 07:52:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AA35B837F4;
+        Thu, 22 Sep 2022 14:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9AAFC433C1;
+        Thu, 22 Sep 2022 14:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663858336;
+        bh=tkVhQS5r5tVWh16xu4W/ZGrYTjLV+TqBvfWmPvEnTF4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e9AaOObvyNNj/cdfSr42I/rhwcDAbQOqFESDYbOhzkFgwlBi4DMpqTpdvC3Hk7eSG
+         8JtCNFIcxy+P5g8Vi5K5802VFHv1GK5QvEAwgXWrvOFIZYGB6qm/Ll3PbGaEKLr6qf
+         t0sJMeEOdwdp139kVunkNJwmx6+LlwMpQUez6rF4YJnlVQaZOEgjGSuXYa+aWI5xtU
+         C5t+2gCTWIB01NrfVUX6F/6t5aeEPcyNz2ypinshWU7uVJyxysyCjA5nZ9JVHB7G2n
+         L12MEXCShINf0EkFa2x6XCIOd6Ebs1W0F5Ro1Znx5PVWUqsQqu+FgPWHifG5255ZUD
+         zH6XNvcQk3Bww==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1obNYk-00BvuF-Gf;
+        Thu, 22 Sep 2022 15:52:14 +0100
+Date:   Thu, 22 Sep 2022 15:52:12 +0100
+Message-ID: <87fsgjjwbn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH v4 12/12] KVM: remove KVM_REQ_UNHALT
+In-Reply-To: <20220921003201.1441511-13-seanjc@google.com>
+References: <20220921003201.1441511-1-seanjc@google.com>
+        <20220921003201.1441511-13-seanjc@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: seanjc@google.com, pbonzini@redhat.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, borntraeger@linux.ibm.com, frankja@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, atishp@atishpatra.org, david@redhat.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, mlevitsk@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 3:11 PM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
->
-> This series contains a few cleanup patches, to remove unused
-> declarations which have been removed and some useless comments. Thanks!
->
-> Gaosheng Cui (2):
->   MIPS: remove orphan sb1250_time_init() declaration
->   MIPS: IRQ: remove orphan allocate_irqno() declaration
+On Wed, 21 Sep 2022 01:32:01 +0100,
+Sean Christopherson <seanjc@google.com> wrote:
+> 
+> From: Paolo Bonzini <pbonzini@redhat.com>
+> 
+> KVM_REQ_UNHALT is now unnecessary because it is replaced by the return
+> value of kvm_vcpu_block/kvm_vcpu_halt.  Remove it.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Series:
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
