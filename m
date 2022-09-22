@@ -2,156 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5555F5E5987
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Sep 2022 05:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA1A5E636F
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Sep 2022 15:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiIVDVr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Sep 2022 23:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S230514AbiIVNSY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 22 Sep 2022 09:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiIVDVV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Sep 2022 23:21:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E57A7AE23F;
-        Wed, 21 Sep 2022 20:15:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAACE143D;
-        Wed, 21 Sep 2022 20:15:40 -0700 (PDT)
-Received: from [10.162.43.8] (unknown [10.162.43.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EAB43F5A1;
-        Wed, 21 Sep 2022 20:15:24 -0700 (PDT)
-Message-ID: <0236922f-841e-c6d8-c9ee-599d72c458d3@arm.com>
-Date:   Thu, 22 Sep 2022 08:45:22 +0530
+        with ESMTP id S231255AbiIVNSL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Sep 2022 09:18:11 -0400
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3125DECCE2;
+        Thu, 22 Sep 2022 06:18:10 -0700 (PDT)
+Received: by mail-vk1-f180.google.com with SMTP id v192so4909025vkv.7;
+        Thu, 22 Sep 2022 06:18:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=FmC3Wnd/dYfP2uqwVfxKzutzBThKJES4nPc9HEeo7QQ=;
+        b=J06j6o0MXCQP79avP20hWcMOmr+9RUIwA65iEYK1TDKGJ5Pkt4ivky+PNfPf0ptbKQ
+         e9cOZbzfe2EKgMQrxeiuHP1iwqX2jQn7OCZxn9ox7kLXzFmDCitxzBY1yW7ClW5f3InW
+         D7I/8VdZJ9SaWeWA0iRbx2u2P5uE9C9bQHJMotaeZTs22t54R28NWWNt5nJ+EkX4DeYc
+         f7sMTqlMbBO70GYj88PVVZpbiwv5xTzzIDp/45cwMwW03LyEVq/2s6BIrOsxRx1eZNu+
+         WYAFtgy6cnM0Jaf72W4XSS5Nuz1DbZlN/Ngb2ua9LrAnt5/vhu8XGKUWsWUgqzN3NjXk
+         jVJQ==
+X-Gm-Message-State: ACrzQf18+i3lKb/ifowgiSu+9kuzaWXCFq1v4R64n0Azlf7zVcTsFLQg
+        ftqib/F5TPy1JE/jhOLtMVaH+zgZ2HAIER0/2Ds=
+X-Google-Smtp-Source: AMsMyM5hAS5sGeCyGhDs3JB8ybhSoe0SBFugJqR9UWsYlOLvGt3tSKkrbx2I2RYfB9/ZOUlHboLppHif1VOrjItnvws=
+X-Received: by 2002:a05:6122:10dc:b0:3a3:4904:2941 with SMTP id
+ l28-20020a05612210dc00b003a349042941mr1265866vko.24.1663852689165; Thu, 22
+ Sep 2022 06:18:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
- during page reclamation
-Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
-        "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
-        "huzhanyuan@oppo.com" <huzhanyuan@oppo.com>,
-        "lipeifeng@oppo.com" <lipeifeng@oppo.com>,
-        "zhangshiming@oppo.com" <zhangshiming@oppo.com>,
-        "guojian@oppo.com" <guojian@oppo.com>,
-        "realmz6@gmail.com" <realmz6@gmail.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Mel Gorman <mgorman@suse.de>
-References: <20220822082120.8347-1-yangyicong@huawei.com>
- <20220822082120.8347-5-yangyicong@huawei.com>
- <888da5f3-104c-3929-c21e-c710922d6f1e@arm.com>
- <36B9DE22-E3BC-4CB2-8E3F-B21B61434CD3@vmware.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <36B9DE22-E3BC-4CB2-8E3F-B21B61434CD3@vmware.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220921003201.1441511-1-seanjc@google.com> <20220921003201.1441511-12-seanjc@google.com>
+In-Reply-To: <20220921003201.1441511-12-seanjc@google.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Thu, 22 Sep 2022 15:17:56 +0200
+Message-ID: <CAAdtpL4yFdh3V0Be05OKxUFBTSgFs6oTy9U5FjSRGwOhi=tDMQ@mail.gmail.com>
+Subject: Re: [PATCH v4 11/12] KVM: mips, x86: do not rely on KVM_REQ_UNHALT
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>,
+        kvm <kvm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Sep 21, 2022 at 2:34 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> From: Paolo Bonzini <pbonzini@redhat.com>
+>
+> KVM_REQ_UNHALT is a weird request that simply reports the value of
+> kvm_arch_vcpu_runnable() on exit from kvm_vcpu_halt().  Only
+> MIPS and x86 are looking at it, the others just clear it.  Check
+> the state of the vCPU directly so that the request is handled
+> as a nop on all architectures.
+>
+> No functional change intended, except for corner cases where an
+> event arrive immediately after a signal become pending or after
+> another similar host-side event.
+>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/mips/kvm/emulate.c | 7 +++----
+>  arch/x86/kvm/x86.c      | 9 ++++++++-
+>  2 files changed, 11 insertions(+), 5 deletions(-)
 
-
-On 9/21/22 12:47, Nadav Amit wrote:
-> On Sep 20, 2022, at 11:53 PM, Anshuman Khandual <anshuman.khandual@arm.com> wrote:
-> 
->> ⚠ External Email
->>
->> On 8/22/22 13:51, Yicong Yang wrote:
->>> +static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
->>> +                                     struct mm_struct *mm,
->>> +                                     unsigned long uaddr)
->>> +{
->>> +     __flush_tlb_page_nosync(mm, uaddr);
->>> +}
->>> +
->>> +static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
->>> +{
->>> +     dsb(ish);
->>> +}
->>
->> Just wondering if arch_tlbbatch_add_mm() could also detect continuous mapping
->> TLB invalidation requests on a given mm and try to generate a range based TLB
->> invalidation such as flush_tlb_range().
->>
->> struct arch_tlbflush_unmap_batch via task->tlb_ubc->arch can track continuous
->> ranges while being queued up via arch_tlbbatch_add_mm(), any range formed can
->> later be flushed in subsequent arch_tlbbatch_flush() ?
->>
->> OR
->>
->> It might not be worth the effort and complexity, in comparison to performance
->> improvement, TLB range flush brings in ?
-> 
-> So here are my 2 cents, based on my experience with Intel-x86. It is likely
-> different on arm64, but perhaps it can provide you some insight into what
-> parameters you should measure and consider.
-> 
-> In general there is a tradeoff between full TLB flushes and entry-specific
-> ones. Flushing specific entries takes more time than flushing the entire
-> TLB, but sade TLB refills.
-
-Right.
-
-> 
-> Dave Hansen made some calculations in the past and came up with 33 as a
-> magic cutoff number, i.e., if you need to flush more than 33 entries, just
-> flush the entire TLB. I am not sure that this exact number is very
-> meaningful, since one might argue that it should’ve taken PTI into account
-> (which might require twice as many TLB invalidations).
-
-Okay.
-
-> 
-> Anyhow, back to arch_tlbbatch_add_mm(). It may be possible to track ranges,
-> but the question is whether you would actually succeed in forming continuous
-> ranges that are eventually (on x86) smaller than the full TLB flush cutoff
-> (=33). Questionable (perhaps better with MGLRU?).
-
-This proposal here for arm64 does not cause a full TLB flush ever. It creates
-individual TLB flushes all the time. Hence the choice here is not between full
-TLB flush and possible range flushes. Choice is actually between individual
-TLB flushes and range/full TLB flushes.
-
-> 
-> Then, you should remember that tracking should be very efficient, since even
-> few cache misses might have greater cost than what you save by
-> selective-flushing. Finally, on x86 you would need to invoke the smp/IPI
-> layer multiple times to send different cores the relevant range they need to
-> flush.
-
-Agreed, these reasons make it much difficult to gain any more performance.
-
-> 
-> IOW: It is somewhat complicated to implement efficeintly. On x86, and
-> probably other IPI-based TLB shootdown systems, does not have clear
-> performance benefit (IMHO).
-
-Agreed, thanks for such a detailed explanation, appreciate it.
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
