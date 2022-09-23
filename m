@@ -2,98 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF185E7553
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Sep 2022 10:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6085E77F5
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Sep 2022 12:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiIWICP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Sep 2022 04:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S230232AbiIWKKV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Sep 2022 06:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiIWICM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Sep 2022 04:02:12 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333831288B7
-        for <linux-mips@vger.kernel.org>; Fri, 23 Sep 2022 01:02:10 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id f189so354758yba.12
-        for <linux-mips@vger.kernel.org>; Fri, 23 Sep 2022 01:02:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
-        b=cfIxv64ssPCAsFkiNHHMFgdJK+aS3ek+iLqUHDY6WnbjhiOIdSnQ44wWRghl+HhmM+
-         ZgInIkmqqBXRmr0iLX3qhhwZFhR/JPfzleN6mm2nw1mLuOcoAzAHWkBFiHwZ7tqjMZgF
-         PsKRUIHjUUQqGprd2uONY74u1xE5BTvss8qSBbNp7Z+Aq70BRE20eriiNGYVyBXq+Hsq
-         b5rkcgTekY6IxWT4nPGAarRMzqwaFzSMb85FKRftobSoeGzks+ft+jlIfNWEogJG+3AZ
-         NOSobbcfUtAgxZtAvcYwJWnSzI9bh6dTNyppITL3cUvgwoUGwW3iGN9w6X1aRyfg5wnI
-         lcKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
-        b=sMmpnv70MpdJz/L3eRp4aM00rKviYN5Jr6un2foK96ciYVL77eaLIL9bAbA7jqg5rY
-         W1GnJSRQOh9flOHXbjUxyAJWAxSws2HLjFdQ+pRhtWP74ZmCQPdMpAH68lBw9bgGDqSn
-         F+QyXzp/yckJ61p248jfo4yv7rUeM/d5RUv7TAgcvlVIDEwEoiHvpAyjOeUHGZIg5qUO
-         +WzLzDtefUM5BBrVoJgUJ+GVPVDS9Wmn4bPUxKRxSAze1ITKaWpe4/MmqxIcF5GDttbm
-         XzHadWzzszL3KIjKMXJijk5kNVYeziAoigZ+YXALOw8PY3LrJ4rt7eVVcJI5Rmbd3ZS9
-         RPJg==
-X-Gm-Message-State: ACrzQf2l4rOjw5dcT+nCKWJLRIWf4rXRbjkKh6vvS0bVahYDmPjG5UKl
-        3smdq9JGifERRQYsSNU+R456lkGzECR0N6kzCHA=
-X-Google-Smtp-Source: AMsMyM4xZCf+qxLt2Ywm13M7JqasT1TK3BugpgoPjyQSFw4MK8Zlc9YURZmRkEz6rKorJr4UyEvKaVmMnfEZ87d4MnU=
-X-Received: by 2002:a25:2f12:0:b0:6b3:e5e4:aeeb with SMTP id
- v18-20020a252f12000000b006b3e5e4aeebmr7800323ybv.22.1663920129070; Fri, 23
- Sep 2022 01:02:09 -0700 (PDT)
+        with ESMTP id S229826AbiIWKKT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Sep 2022 06:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62602E5F81;
+        Fri, 23 Sep 2022 03:10:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3D28612F3;
+        Fri, 23 Sep 2022 10:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E955C433C1;
+        Fri, 23 Sep 2022 10:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663927818;
+        bh=aWyTyrzD9f+ZjxoPJJ7uCgUj/UaCAcPqHlu2o62AqU4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=frnZTK+1gkRUEzgP+1Gq7DRigaSoqF4c52MkufVHXziIFFMDVjqFVo2k6mIWMC/+5
+         GSgAXcUqzEQ4xxiNgonrHwNeQtS9sib6g6APk058bza1i+XCXo52CoKS3Av+UGiBEw
+         E0E7AdCFvr+Es9k+ytiu488VDwoYf/mOrnDPWG+fz3VDTqzt2BMqC34mQUNQx28S57
+         Koj+gH+vv0zDSaMYFSDsc9WBCG6Bq9AbdT4b1TShHNea3j8DQbVKMKqeMpcdPbj8Na
+         wSjaXp3IDj2td6KhXd+htRTmbriARp+7qsj/h9a8kjYWCOTLBzgEj3uiUGusaXdxkF
+         yV6YxiUaV5P8Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 18F8FE4D03A;
+        Fri, 23 Sep 2022 10:10:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a25:3256:0:0:0:0:0 with HTTP; Fri, 23 Sep 2022 01:02:08
- -0700 (PDT)
-Reply-To: seybasaniel@gmail.com
-From:   Seyba Daniel <bellomouse33@gmail.com>
-Date:   Fri, 23 Sep 2022 10:02:08 +0200
-Message-ID: <CAC0qSW7sc6GUJtHgf3r23GFt653_aZzwewRn531NjpkWamAU7A@mail.gmail.com>
-Subject: HELLO,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_95,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b43 listed in]
-        [list.dnswl.org]
-        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
-        *      [score: 0.9865]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [bellomouse33[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [bellomouse33[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 net-next 00/10] dt-bindings and mt7621 devicetree changes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166392781809.11802.14314301597128820257.git-patchwork-notify@kernel.org>
+Date:   Fri, 23 Sep 2022 10:10:18 +0000
+References: <20220920172556.16557-1-arinc.unal@arinc9.com>
+In-Reply-To: <20220920172556.16557-1-arinc.unal@arinc9.com>
+To:     =?utf-8?b?QXLEsW7DpyDDnE5BTCA8YXJpbmMudW5hbEBhcmluYzkuY29tPg==?=@ci.codeaurora.org
+Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        tsbogend@alpha.franken.de, gregkh@linuxfoundation.org,
+        sean.wang@mediatek.com, Landen.Chao@mediatek.com, dqfext@gmail.com,
+        sergio.paracuellos@gmail.com, erkin.bozoglu@xeront.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it, which you will
-be communicated in details upon response.
+Hello:
 
-My dearest regards
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Seyba Daniel
+On Tue, 20 Sep 2022 20:25:46 +0300 you wrote:
+> Hello there!
+> 
+> This patch series removes old MediaTek bindings, improves mediatek,mt7530
+> and mt7621 memory controller bindings and improves mt7621 DTs.
+> 
+> v4:
+> - Keep memory-controller node name.
+> - Change syscon to memory-controller on mt7621.dtsi.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v4,net-next,01/10] dt-bindings: net: drop old mediatek bindings
+    https://git.kernel.org/netdev/net-next/c/e8619b05870d
+  - [v4,net-next,02/10] dt-bindings: net: dsa: mediatek,mt7530: change mt7530 switch address
+    https://git.kernel.org/netdev/net-next/c/3737c6aaf22d
+  - [v4,net-next,03/10] dt-bindings: net: dsa: mediatek,mt7530: expand gpio-controller description
+    https://git.kernel.org/netdev/net-next/c/0fbca84eea37
+  - [v4,net-next,04/10] dt-bindings: memory: mt7621: add syscon as compatible string
+    https://git.kernel.org/netdev/net-next/c/862b19b7d4a1
+  - [v4,net-next,05/10] mips: dts: ralink: mt7621: fix some dtc warnings
+    https://git.kernel.org/netdev/net-next/c/5ae75a1ae5c9
+  - [v4,net-next,06/10] mips: dts: ralink: mt7621: remove interrupt-parent from switch node
+    https://git.kernel.org/netdev/net-next/c/08b9eaf454ee
+  - [v4,net-next,07/10] mips: dts: ralink: mt7621: change phy-mode of gmac1 to rgmii
+    https://git.kernel.org/netdev/net-next/c/97721e84f546
+  - [v4,net-next,08/10] mips: dts: ralink: mt7621: change mt7530 switch address
+    https://git.kernel.org/netdev/net-next/c/2b653a373b41
+  - [v4,net-next,09/10] mips: dts: ralink: mt7621: fix external phy on GB-PC2
+    https://git.kernel.org/netdev/net-next/c/247825f991b3
+  - [v4,net-next,10/10] mips: dts: ralink: mt7621: add GB-PC2 LEDs
+    https://git.kernel.org/netdev/net-next/c/394c3032fe0e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
