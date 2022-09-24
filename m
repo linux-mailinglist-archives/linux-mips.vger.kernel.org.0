@@ -2,91 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BFE5E8BAF
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Sep 2022 13:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E765E8C0D
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Sep 2022 14:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiIXLJE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Sep 2022 07:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        id S233768AbiIXMGV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Sep 2022 08:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiIXLJD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Sep 2022 07:09:03 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACFBDDD84
-        for <linux-mips@vger.kernel.org>; Sat, 24 Sep 2022 04:09:02 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MZR4J54V7z1P6gB;
-        Sat, 24 Sep 2022 19:04:48 +0800 (CST)
-Received: from [10.67.110.176] (10.67.110.176) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 19:08:59 +0800
-Subject: Re: [PATCH 2/2] MIPS: IRQ: remove orphan allocate_irqno() declaration
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     <ralf@linux-mips.org>, <paul.burton@mips.com>,
-        <linux-mips@vger.kernel.org>
-References: <20220920130711.1107018-1-cuigaosheng1@huawei.com>
- <20220920130711.1107018-3-cuigaosheng1@huawei.com>
- <20220924094533.GB10288@alpha.franken.de>
-From:   cuigaosheng <cuigaosheng1@huawei.com>
-Message-ID: <9bac738b-4346-d2da-2b37-30d25ac5bc09@huawei.com>
-Date:   Sat, 24 Sep 2022 19:08:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        with ESMTP id S233757AbiIXMGU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Sep 2022 08:06:20 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BA5D9083F;
+        Sat, 24 Sep 2022 05:06:20 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oc3vH-0007UC-00; Sat, 24 Sep 2022 14:06:19 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 8CDC1C053E; Sat, 24 Sep 2022 12:45:57 +0200 (CEST)
+Date:   Sat, 24 Sep 2022 12:45:57 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     john@phrozen.org, martin.blumenstingl@googlemail.com,
+        hauke@hauke-m.de, maz@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] MIPS: lantiq: enable all hardware interrupts on
+ second VPE
+Message-ID: <20220924104557.GA10628@alpha.franken.de>
+References: <20220921205944.466745-1-olek2@wp.pl>
+ <20220921205944.466745-2-olek2@wp.pl>
 MIME-Version: 1.0
-In-Reply-To: <20220924094533.GB10288@alpha.franken.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.176]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921205944.466745-2-olek2@wp.pl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> applied to mips-next. The patch didn't apply, because you alread removed
-> alloc_legacy_irqno/free_irqno in your previous patch. I've fixed that
-> while applying, but please you latest mips-next branch for creating
-> patches next time.
+On Wed, Sep 21, 2022 at 10:59:44PM +0200, Aleksander Jan Bajkowski wrote:
+> This patch is needed to handle interrupts by the second VPE on the Lantiq
+> ARX100, xRX200, xRX300 and xRX330 SoCs. Switching some ICU interrupts to
+> the second VPE results in a hang. Currently, the vsmp_init_secondary()
+> function is responsible for enabling these interrupts. It only enables
+> Malta-specific interrupts (SW0, SW1, HW4 and HW5).
+> 
+> The MIPS core has 8 interrupts defined. On Lantiq SoCs, hardware
+> interrupts are wired to an ICU instance. Each VPE has an independent
+> instance of the ICU. The mapping of the ICU interrupts is shown below:
+> SW0(IP0) - IPI call,
+> SW1(IP1) - IPI resched,
+> HW0(IP2) - ICU 0-31,
+> HW1(IP3) - ICU 32-63,
+> HW2(IP4) - ICU 64-95,
+> HW3(IP5) - ICU 96-127,
+> HW4(IP6) - ICU 128-159,
+> HW5(IP7) - timer.
+> 
+> This patch enables all interrupt lines on the second VPE.
+> 
+> This problem affects multithreaded SoCs with a custom interrupt controller.
+> SOCs with 1004Kc core and newer use the MIPS GIC. At this point, I am aware
+> that the Realtek RTL839x and RTL930x SoCs may need a similar fix. In the
+> future, this may be replaced with some generic solution.
+> 
+> Tested on Lantiq xRX200.
+> 
+> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> ---
+>  arch/mips/lantiq/prom.c | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
 
-Thanks for taking the time to review this patch, I checked my patches,you are
-right, it is my negligence,Thanks again for reminding me!
+applied to mips-next.
 
-On 2022/9/24 17:45, Thomas Bogendoerfer wrote:
-> On Tue, Sep 20, 2022 at 09:07:11PM +0800, Gaosheng Cui wrote:
->> All uses of allocate_irqno() have been removed by
->> commit 69a07a41d908 ("MIPS: SGI-IP27: rework HUB interrupts"),
->> so remove the orphan declaration.
->>
->> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
->> ---
->>   arch/mips/include/asm/irq.h | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/arch/mips/include/asm/irq.h b/arch/mips/include/asm/irq.h
->> index 57561e0e6e8d..2f47f56fca82 100644
->> --- a/arch/mips/include/asm/irq.h
->> +++ b/arch/mips/include/asm/irq.h
->> @@ -63,7 +63,6 @@ extern void do_domain_IRQ(struct irq_domain *domain, unsigned int irq);
->>   extern void arch_init_irq(void);
->>   extern void spurious_interrupt(void);
->>   
->> -extern int allocate_irqno(void);
->>   extern void alloc_legacy_irqno(void);
->>   extern void free_irqno(unsigned int irq);
->>   
->> -- 
->> 2.25.1
-> applied to mips-next. The patch didn't apply, because you alread removed
-> alloc_legacy_irqno/free_irqno in your previous patch. I've fixed that
-> while applying, but please you latest mips-next branch for creating
-> patches next time.
->
-> Thomas.
->
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
