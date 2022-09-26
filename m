@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654D75E9F56
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Sep 2022 12:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5765E9FB7
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Sep 2022 12:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbiIZKZI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Sep 2022 06:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S235439AbiIZK3d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Sep 2022 06:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbiIZKXr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Sep 2022 06:23:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22981006B;
-        Mon, 26 Sep 2022 03:17:23 -0700 (PDT)
+        with ESMTP id S235668AbiIZK2s (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Sep 2022 06:28:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3864E635;
+        Mon, 26 Sep 2022 03:19:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98A5EB80924;
-        Mon, 26 Sep 2022 10:17:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0B3C433D6;
-        Mon, 26 Sep 2022 10:17:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AFE560B9A;
+        Mon, 26 Sep 2022 10:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B912C433D6;
+        Mon, 26 Sep 2022 10:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187423;
+        s=korg; t=1664187543;
         bh=YPPEjoCPjC9HlGhDQWssN0d3LCxUhreMTxZRurIUMl8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e16TEAHg8ZXTr/j4kK8iAwcQdhA9ksLKVj5B/dvHe6lr9KHcOR9tu7albrY2fd0zY
-         fjQ5YcO6WkaSPI000nyEa+fmintArGa2bDK/jTmTLHPh9ZV9sf6E/ZO1VYwOhIoTPr
-         zVWDFrSpt6ZXSbNBG9JWNkO5s3PsM8QUvbYjeBXc=
+        b=u+zuHRepmM/TGfyPZr6WRE5mVod6qUeb6Ndk7Vx4x6cN0aaLSI/e1ao6h96heJG36
+         LesoH+9WRukqhz/Tw+DibMDh9BjMRW4u+gi5xv/38bYL0mBUfbjHKohRqhMddjHRav
+         hCve4iYBHB0zWW42HiDztfWLNmvoy6V2FoG9SHo8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 29/40] MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
-Date:   Mon, 26 Sep 2022 12:11:57 +0200
-Message-Id: <20220926100739.409284922@linuxfoundation.org>
+Subject: [PATCH 4.19 41/58] MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
+Date:   Mon, 26 Sep 2022 12:12:00 +0200
+Message-Id: <20220926100742.963610389@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
