@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129945EA12A
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Sep 2022 12:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AFC5E9EE3
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Sep 2022 12:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236492AbiIZKqL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Sep 2022 06:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S234767AbiIZKPy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Sep 2022 06:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236803AbiIZKon (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Sep 2022 06:44:43 -0400
+        with ESMTP id S234743AbiIZKPJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Sep 2022 06:15:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8094F19B;
-        Mon, 26 Sep 2022 03:25:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615E5476C8;
+        Mon, 26 Sep 2022 03:14:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C443B80926;
-        Mon, 26 Sep 2022 10:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDB4C433D6;
-        Mon, 26 Sep 2022 10:25:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43EF7B80920;
+        Mon, 26 Sep 2022 10:14:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A998AC433C1;
+        Mon, 26 Sep 2022 10:14:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187931;
-        bh=FGL8GAtxfMw4n0JvjxgP9LDX324kIAJjB3fsedpwHWk=;
+        s=korg; t=1664187260;
+        bh=13g1aFnVTOE6Fcl80WQqyFiRGJJPmPKS2B2jiHH4KwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MpgQpCA5PWFARMpmE/NbWALNj45k4wT2XVqGcLVVLxwHD1upcj4y3VyqN94B6Fhiw
-         ZuIfMvYkcAzvLxF7EFC0I19rJlLnM7TrqjziJBb5iktuHv65Do/oTpQFQ86O9Fikep
-         NSI2Jnv1J5f3yT4r0PaLEtKdpKeXSPqrj8Uqnzr4=
+        b=0hsQ1Ryjvnoj/50MAIurig+eygniVn2tbKqnDF2j4cMyxzCsHGQFUXSAGDfNvItL0
+         TSe88cHQL4ewSH3svqaRI5bNzV+Y7hvWrhLLs1zCNlLmVQqVczYy7DdUY+gcpRl+VY
+         o1EzY7b3DKNJgt5LdSpzigqzmQC0lEugwdKLAP+E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 075/120] MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
-Date:   Mon, 26 Sep 2022 12:11:48 +0200
-Message-Id: <20220926100753.759758477@linuxfoundation.org>
+Subject: [PATCH 4.9 22/30] MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
+Date:   Mon, 26 Sep 2022 12:11:53 +0200
+Message-Id: <20220926100736.941907121@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -77,10 +77,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
-index 7a623684d9b5..2d5a0bcb0cec 100644
+index d1de57b86683..e0835a743e41 100644
 --- a/arch/mips/lantiq/clk.c
 +++ b/arch/mips/lantiq/clk.c
-@@ -50,6 +50,7 @@ struct clk *clk_get_io(void)
+@@ -52,6 +52,7 @@ struct clk *clk_get_io(void)
  {
  	return &cpu_clk_generic[2];
  }
