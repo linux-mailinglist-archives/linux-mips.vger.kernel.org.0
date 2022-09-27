@@ -2,147 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F77A5EB506
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 01:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF0F5EB960
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 06:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiIZXEL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Sep 2022 19:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S229550AbiI0E4O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Sep 2022 00:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiIZXEK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Sep 2022 19:04:10 -0400
-Received: from alln-iport-3.cisco.com (alln-iport-3.cisco.com [173.37.142.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30874A8CFA;
-        Mon, 26 Sep 2022 16:04:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1694; q=dns/txt; s=iport;
-  t=1664233447; x=1665443047;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UfqbhAK++DNIhImH/1VT+jrMLWJa1wTzmPtEjmwVs+A=;
-  b=KrZ9bMa/yreybfkpXCZL3pwGiKf0MTZsvWFzgIqJzhI21GvNa6nwQwFe
-   klJBeA0q9lIxZmV9AKO8HzcsNmyA/XRUAX9L51YKFKgQl8O66TbpXGQqi
-   jIt6ja1hMiXVqD9CHVoq6G2+Bn2gvaLJZ9IZB2Al/rM2AM2uJ/H9Y/QuE
-   I=;
-X-IPAS-Result: =?us-ascii?q?A0AwAACPLzJj/5hdJa1aHAEBAQEBAQcBARIBAQQEAQFAg?=
- =?us-ascii?q?TsHAQELAYIqelU+RYxthlCCKJFoiyqBfAsBAQENAQE5CQQBAYFTgzIChGwCJ?=
- =?us-ascii?q?TQJDgECBAEBAQEDAgMBAQEBAQEDAQEFAQEBAgEHBIEJE4VoDYZDAQU6PxALG?=
- =?us-ascii?q?C5XBhOCfoMgAxCpd3iBNIEBg1ABGBiEHIFfBiSBGQGQKCccgUlEhD8+iFKCL?=
- =?us-ascii?q?gSZJTgDRB1BAwtCNRgDFAMFJAcDGQ8jDQ0EFgcMAwMFJQMCAhsHAgIDAgYTB?=
- =?us-ascii?q?QICTTYIBAgEKyQPBQIHLwUELwIeBAUGEQgCFgIGBAQEBBUCEAgCCCYXBxMzG?=
- =?us-ascii?q?QEFWRAJIRwOGg0FBhMDIG8FRA8oMWsrHRsKgQwqKBUDBAQDAgYTAwMiAhAqM?=
- =?us-ascii?q?RQEKRMSLQcrcwkCAyJnBQMDBCgsAwkhHwcoJjwHWDoBBAMCECI9BgMJAwIkW?=
- =?us-ascii?q?4EvKAUDDRkmCAUjFx4ECDwCBQZXEwIKEgMTD5hlgguBQXuBQjqSUYJkjT+BM?=
- =?us-ascii?q?J0vg2OBSYlylGJMEahzlwuNPJR0hRACBAYFAhaBYTyBWTMaCBsVgyITPhkPl?=
- =?us-ascii?q?yaFaiQxAjkCBgsBAQMJilABAQ?=
-IronPort-Data: A9a23:kwPseKymHrMObNdZ/xR6t+crxirEfRIJ4+MujC+fZmUNrF6WrkVWn
- WAbWjuAa/3ZYzejfNF0OoTg8ksAupLWydNlGgZopVhgHilAwSbn6Xt1DatR0we6dJCroJdPt
- p1GAjX4BJloCCWa/n9BC5C5xVFkz6aEW7HgP+DNPyF1VGdMRTwo4f5Zs7ZRbrVA3J7oWGthh
- fuo+5eFYA7/hWYuWo4pw/vrRC1H7ayaVAww5jTSVdgT1HfCmn8cCo4oJK3ZBxMUlaENQ4ZW7
- 86apF2I1juxEyUFU7tJoZ6nGqE+eYM+CCDV4pZgtwdOtTAZzsA6+v5T2PPx8i67gR3R9zx64
- I0lWZBd1W7FM4WU8NnxXSW0HAkuIKtWv6PiMEK+tOqz03CfaHrgkvFhWRRe0Y0woo6bAElU/
- vAebTsKdB3G3qS9wamwTa9ngcFLwMvDZdxE/Co/i2CCS697G/gvQI2SjTNc9Ds5gMFDGenXT
- 8EYcjFoKh/HZnWjP39GU8Jkxrvz3CGXnztwg2iro68swXLv61Zyi+SzP//4SN3QfJAA9qqfj
- iecl4jjOTkeNdqC2X+I/HOEmODCh2X4VZgUGbn+8eRl6HWXx2oOGFgVX0a6pfWRlEGzQZRcJ
- lYS9y5oqrI9nGSnQ8f8VBCkunOJlgATVsAWEOAg7gyJjK3O7G6xAmkCUy4Ea9E8ssIybSIl2
- 0XPnN7zAzFr9rqPRhq18raSsCP3MDIQaGwPfykJSSMB4sL/u8cyiBzVR9puGaLzicf6cRnw2
- zmivjkigK9VhskOv42//Fbakyq0rd3FQxAd4gTMQnnj6RF9bYS+IYuy5jDz6fdGMZbcS1iZp
- 1AalMWEquMDF5eAkGqKWuplNKH5ud6GPSfajFopGIMunxyk+GamVYRR5ixuYUluL8AIcCPoZ
- 0mVvhlejLdYPGGrdrNwe4K8TcAn16/xPd/+WerTc8IIb4UZXBCG+CVGZkOK2W3p1k82nskXI
- pqSd4ClC3oXE79gyhKtSuwal7Qsw0gWyWrVRJ3/5xum1KKTYHOLSLwFdkCHaKU39qqCqwTO+
- NEZPMLM1g43ePf5aCn/8oMJK10Oa38hCvjLR9d/bOWPJE9tH3ssTqaXyrI6cIsjlKNQ/gvVw
- kyAtoZj4AKXrRX6xc+iNhiPtJuHsU5DkE8G
-IronPort-HdrOrdr: A9a23:hDjVf602tBeE9/+AL1j+3QqjBLckLtp133Aq2lEZdPWaSKOlfu
- SV7ZEmPH7P+VQssR4b8+xoVJPsfZqYz+8Q3WBzB8bAYOCFggqVxehZhOOI/9SjIU3DH4Vmu5
- uIHZITNDU1ZmIK6/oTJ2KDYrEd/OU=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.93,347,1654560000"; 
-   d="scan'208";a="938224320"
-Received: from rcdn-core-1.cisco.com ([173.37.93.152])
-  by alln-iport-3.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 26 Sep 2022 23:03:45 +0000
-Received: from zorba ([10.25.129.98])
-        by rcdn-core-1.cisco.com (8.15.2/8.15.2) with ESMTPS id 28QN3fDH020704
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 26 Sep 2022 23:03:43 GMT
-Date:   Mon, 26 Sep 2022 16:03:41 -0700
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH 0/8] generic command line v4
-Message-ID: <20220926230341.GD4320@zorba>
-References: <20210416040924.2882771-1-danielwa@cisco.com>
- <b517fac5-2fdc-a8c9-75d0-174c67f5a2de@seco.com>
- <20220922205334.GV4320@zorba>
- <dcff9b0f-82c8-5aa7-0fff-b749a05fcb20@seco.com>
- <20220922211026.GW4320@zorba>
- <1663881344.25129.23.camel@chimera>
- <CAL_JsqLibRSi2n389Q7cf+1gQSidvfiZHjHCcGirgi0hgJ53-A@mail.gmail.com>
+        with ESMTP id S229587AbiI0E4M (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 00:56:12 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DEAB6553;
+        Mon, 26 Sep 2022 21:56:12 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id t3so8100661ply.2;
+        Mon, 26 Sep 2022 21:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=j36BNVGpYVmEQnZBQfKyj44H3Hy9E6/b4rFER+QdP6E=;
+        b=oi7HwN7RJNZDnVszTIWyeGQSvKg0BSQkbuvG1tVU+l6ZqgAKQiK4Tv7O0JQ6empWz8
+         ychjkSkxsVCw24RdV1EqRq0QHFkgX4fJks5E9KZcClOnItR+oZxwPjiWeX8ZD0iJBf5a
+         8ypL3p+GxvGLkT7AK5rYvTn6R/iOcpXLEfrenbofcyCQpfkIp8/+ubi77MvExbjLER//
+         pNbH/ItNIq3APoPpaHLTt7mJE3x5SlIUc036HJ+xhExRtMBFMvkHTbeVYNUite2+YQXj
+         gxxamyw6bJqTylaj5mdaLYgcvygT9tF8tJY7hzelEbyLPHxwEY5rZ5BLzySiMAtFxDNZ
+         Mxgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=j36BNVGpYVmEQnZBQfKyj44H3Hy9E6/b4rFER+QdP6E=;
+        b=xHLNCUXDcbI6w8+6yCyS1MudVzJVaZ7VfYoydq93RQWxkJflQuB0K6TFTpwCNEdAUE
+         gHzKOJPdU3Fr4MEJYUOvlFckkPjj1mlb1Hq252eI9BAURK0KP37pPP9FCkBuQzNRyxaz
+         YIrTA1zqs3d2U9HP7Xdy6s9K18alE8LOB16xhrdGPnrvjPPuWqUMdSJrh4lW4C5PQolM
+         lYDzas/j8pMzOrHHTdyjLht219Cb8TwapwvLBwe6qbMRD6ghYaVbEgddfHLLwJyvDkp6
+         kyoAgCL3ql2fcPvLDIvnN85lWprKCmQlXwxW2ktdulDWhizsYnd1iiffNdfvDHS2hPtn
+         +agA==
+X-Gm-Message-State: ACrzQf0/cFB6oWui+EZoSnND/jH3p0eRJHF+12BoC5AqOwpPNIq2HfdN
+        swA40kSdo/U+U5wzvrEF3Ek1QHtcQ0U=
+X-Google-Smtp-Source: AMsMyM4n4hRnVeUvdZ837WE3di7iyugMulTDHs6SDh9HHXKZ8JXyt4M0Ps0o58d9frDoor2bl7zgJQ==
+X-Received: by 2002:a17:902:e405:b0:176:8bc1:b09c with SMTP id m5-20020a170902e40500b001768bc1b09cmr25176028ple.1.1664254571591;
+        Mon, 26 Sep 2022 21:56:11 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:9739:ab49:3830:2cbb])
+        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b00179e1f08634sm352506plg.222.2022.09.26.21.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 21:56:11 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 21:56:08 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Lantiq: switch vmmc to use gpiod API
+Message-ID: <YzKCaMU9wlFbPZS7@google.com>
+References: <Yy08TBymyuQb27NU@google.com>
+ <20220924104612.GB10628@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAL_JsqLibRSi2n389Q7cf+1gQSidvfiZHjHCcGirgi0hgJ53-A@mail.gmail.com>
-X-Outbound-SMTP-Client: 10.25.129.98, [10.25.129.98]
-X-Outbound-Node: rcdn-core-1.cisco.com
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220924104612.GB10628@alpha.franken.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 05:52:18PM -0500, Rob Herring wrote:
-> On Thu, Sep 22, 2022 at 4:15 PM Daniel Gimpelevich
-> <daniel@gimpelevich.san-francisco.ca.us> wrote:
-> >
-> > On Thu, 2022-09-22 at 14:10 -0700, Daniel Walker wrote:
-> > > On Thu, Sep 22, 2022 at 05:03:46PM -0400, Sean Anderson wrote:
-> > [snip]
-> > > > As recently as last month, someone's patch to add such support was
-> > > > rejected for this reason [1].
-> > > >
-> > > > --Sean
-> > > >
-> > > > [1] https://lore.kernel.org/linux-arm-kernel/20220812084613.GA3107@willie-the-truck/
-> > >
-> > >
-> > > I had no idea.. Thanks for pointing that out. I guess I will re-submit in that
-> > > case.
-> > >
-> > > Daniel
-> >
-> > This has been happening repeatedly since circa 2014, on multiple
-> > architectures. It's quite frustrating, really.
-> 
-> It must not be that important. From the last time, IMO Christophe's
-> version was much closer to being merged than this series. This is not
-> how you get things upstream:
-> 
-> > * Dropped powerpc changes
-> >   Christophe Leroy has reservations about the features for powerpc. I
-> >   don't think his reservations are founded, and these changes should
-> >   fully work on powerpc. However, I dropped these changes so Christophe
-> >   can have more time to get comfortable with the changes.
-> 
-> Rob
+Hi Thomas,
 
-I don't submit often enough, that's true. However, I figured maintainers don't
-want the changes. This is a common occurrence in industry, people may submit
-once or twice, no traction and they give up. I suppose it's a combination of
-problems.
+On Sat, Sep 24, 2022 at 12:46:12PM +0200, Thomas Bogendoerfer wrote:
+> On Thu, Sep 22, 2022 at 09:55:40PM -0700, Dmitry Torokhov wrote:
+> > This switches vmmc to use gpiod API instead of OF-specific legacy gpio
+> > API that we want to stop exporting from gpiolib.
+> > 
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> >  arch/mips/lantiq/xway/vmmc.c | 22 +++++++++++++---------
+> >  1 file changed, 13 insertions(+), 9 deletions(-)
+> 
+> applied to mips-next.
 
-Christophe's don't have the same features, so they are really totally different
-but conflicting.
+My apologies, I screwed up. I thought this patch passed 0day before I
+sent it to you, but apparently it has not.
 
-Daniel
+Here is a fixup (actually cross-compiled this time), or I can send a v2
+incorporating it into the original change.
+
+Thanks.
+
+-- 
+Dmitry
+
+
+MIPS: Lantiq: vmmc: fix compile break introduced by gpiod patch
+
+"MIPS: Lantiq: switch vmmc to use gpiod API" patch introduced compile
+errors, this patch fixes them.
+
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ arch/mips/lantiq/xway/vmmc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/lantiq/xway/vmmc.c b/arch/mips/lantiq/xway/vmmc.c
+index a1947306ac18..b6b0d9884b88 100644
+--- a/arch/mips/lantiq/xway/vmmc.c
++++ b/arch/mips/lantiq/xway/vmmc.c
+@@ -41,11 +41,11 @@ static int vmmc_probe(struct platform_device *pdev)
+ 		if (IS_ERR(gpio)) {
+ 			dev_err(&pdev->dev,
+ 				"failed to request GPIO idx %d: %d\n",
+-				gpio_count, PTR_ERR(gpio);
++				gpio_count, PTR_ERR(gpio));
+ 			continue;
+ 		}
+ 
+-		gpio_consumer_set_name(gpio, "vmmc-relay");
++		gpiod_set_consumer_name(gpio, "vmmc-relay");
+ 	}
+ 
+ 	dev_info(&pdev->dev, "reserved %dMB at 0x%p", CP1_SIZE >> 20, cp1_base);
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
