@@ -2,112 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9F05EBAB1
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 08:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB305EBBF4
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 09:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiI0Gb2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Sep 2022 02:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S231148AbiI0Huk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Sep 2022 03:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiI0GbS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 02:31:18 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B430979F9;
-        Mon, 26 Sep 2022 23:31:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 5E7B081BD;
-        Tue, 27 Sep 2022 06:22:54 +0000 (UTC)
-Date:   Tue, 27 Sep 2022 09:31:11 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 00/44] cpuidle,rcu: Clean up the mess
-Message-ID: <YzKYrx8Kd9SBYcUg@atomide.com>
-References: <20220919095939.761690562@infradead.org>
+        with ESMTP id S231178AbiI0HuS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 03:50:18 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35BCC7D1DE;
+        Tue, 27 Sep 2022 00:50:02 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1od5Lt-0000Ex-00; Tue, 27 Sep 2022 09:50:01 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id BE417C0664; Tue, 27 Sep 2022 09:49:53 +0200 (CEST)
+Date:   Tue, 27 Sep 2022 09:49:53 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Lantiq: switch vmmc to use gpiod API
+Message-ID: <20220927074953.GA6127@alpha.franken.de>
+References: <Yy08TBymyuQb27NU@google.com>
+ <20220924104612.GB10628@alpha.franken.de>
+ <YzKCaMU9wlFbPZS7@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220919095939.761690562@infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YzKCaMU9wlFbPZS7@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-* Peter Zijlstra <peterz@infradead.org> [220919 10:08]:
-> Hi All!
+On Mon, Sep 26, 2022 at 09:56:08PM -0700, Dmitry Torokhov wrote:
+> Hi Thomas,
 > 
-> At long last, a respin of the cpuidle vs rcu cleanup patches.
+> On Sat, Sep 24, 2022 at 12:46:12PM +0200, Thomas Bogendoerfer wrote:
+> > On Thu, Sep 22, 2022 at 09:55:40PM -0700, Dmitry Torokhov wrote:
+> > > This switches vmmc to use gpiod API instead of OF-specific legacy gpio
+> > > API that we want to stop exporting from gpiolib.
+> > > 
+> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > ---
+> > >  arch/mips/lantiq/xway/vmmc.c | 22 +++++++++++++---------
+> > >  1 file changed, 13 insertions(+), 9 deletions(-)
+> > 
+> > applied to mips-next.
 > 
-> v1: https://lkml.kernel.org/r/20220608142723.103523089@infradead.org
+> My apologies, I screwed up. I thought this patch passed 0day before I
+> sent it to you, but apparently it has not.
 > 
-> These here patches clean up the mess that is cpuidle vs rcuidle.
+> Here is a fixup (actually cross-compiled this time), or I can send a v2
+> incorporating it into the original change.
 
-I just gave these a quick test and things still work for me. The old
-omap3 off mode during idle still works. No more need to play the
-whack the mole game with RCU-idle :) I did not test on x86, or on other
-ARMs, but considering the test pretty much covered the all the
-affected RCU-idle related paths, where suitable, feel free to add:
+I need a fixup, but this one still fails in my build:
 
-Tested-by: Tony Lindgren <tony@atomide.com>
+/local/tbogendoerfer/korg/linux/arch/mips/lantiq/xway/vmmc.c: In function ‘vmmc_probe’:
+/local/tbogendoerfer/korg/linux/arch/mips/lantiq/xway/vmmc.c:43:5: error: format ‘%d’ expects argument of type ‘int’, but argument 4 has type ‘long int’ [-Werror=format=]
+     "failed to request GPIO idx %d: %d\n",
+     ^
+/local/tbogendoerfer/korg/linux/include/linux/dev_printk.h:110:16: note: in definition of macro ‘dev_printk_index_wrap’
+   _p_func(dev, fmt, ##__VA_ARGS__);   \
+                ^~~
+/local/tbogendoerfer/korg/linux/include/linux/dev_printk.h:144:49: note: in expansion of macro ‘dev_fmt’
+  dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                 ^~~~~~~
+/local/tbogendoerfer/korg/linux/arch/mips/lantiq/xway/vmmc.c:42:4: note: in expansion of macro ‘dev_err’
+    dev_err(&pdev->dev,
+    ^~~~~~~
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
