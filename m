@@ -2,64 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF0F5EB960
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 06:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474795EB964
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 06:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiI0E4O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Sep 2022 00:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S229892AbiI0E7I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Sep 2022 00:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiI0E4M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 00:56:12 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DEAB6553;
-        Mon, 26 Sep 2022 21:56:12 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id t3so8100661ply.2;
-        Mon, 26 Sep 2022 21:56:12 -0700 (PDT)
+        with ESMTP id S229804AbiI0E7G (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 00:59:06 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6603109501;
+        Mon, 26 Sep 2022 21:59:04 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id v4so8382901pgi.10;
+        Mon, 26 Sep 2022 21:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=j36BNVGpYVmEQnZBQfKyj44H3Hy9E6/b4rFER+QdP6E=;
-        b=oi7HwN7RJNZDnVszTIWyeGQSvKg0BSQkbuvG1tVU+l6ZqgAKQiK4Tv7O0JQ6empWz8
-         ychjkSkxsVCw24RdV1EqRq0QHFkgX4fJks5E9KZcClOnItR+oZxwPjiWeX8ZD0iJBf5a
-         8ypL3p+GxvGLkT7AK5rYvTn6R/iOcpXLEfrenbofcyCQpfkIp8/+ubi77MvExbjLER//
-         pNbH/ItNIq3APoPpaHLTt7mJE3x5SlIUc036HJ+xhExRtMBFMvkHTbeVYNUite2+YQXj
-         gxxamyw6bJqTylaj5mdaLYgcvygT9tF8tJY7hzelEbyLPHxwEY5rZ5BLzySiMAtFxDNZ
-         Mxgw==
+        bh=SAJkGU+79dW4f6vbvdxoH4HOSpZWnjzUc2txpj5o7k8=;
+        b=i0JLo6YAgNP9aIA5APS8sn9FG+ZEaQMdYG4Cr9A3MxLan8b268kyX6Ie/pphVrJUFX
+         0GPKzHhxOqaXA3zOFZpP1B6CZRdAkHk55RX3atYMYwOI1f+oOXXjnjpl1C+a0aXYUDUU
+         t+37Meaqq5Uzy9T4ySMwxBhYqZSXSiya/qV7ltKNi+qJY1oH0Uw5awLORdVKq5cOFK9k
+         H2/5XBstu0d54XJ8Z7r3hVzBv4wawLDCSwoZOn1PGovsnKVSR+ESJN+ISiQ1qitoGTXa
+         IVIKucCS+bqns3qUX+O0umbK1IhRg0MuD088fxWMWEqMOM82NOqQrocZ3WW8MXesqtCU
+         lJRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=j36BNVGpYVmEQnZBQfKyj44H3Hy9E6/b4rFER+QdP6E=;
-        b=xHLNCUXDcbI6w8+6yCyS1MudVzJVaZ7VfYoydq93RQWxkJflQuB0K6TFTpwCNEdAUE
-         gHzKOJPdU3Fr4MEJYUOvlFckkPjj1mlb1Hq252eI9BAURK0KP37pPP9FCkBuQzNRyxaz
-         YIrTA1zqs3d2U9HP7Xdy6s9K18alE8LOB16xhrdGPnrvjPPuWqUMdSJrh4lW4C5PQolM
-         lYDzas/j8pMzOrHHTdyjLht219Cb8TwapwvLBwe6qbMRD6ghYaVbEgddfHLLwJyvDkp6
-         kyoAgCL3ql2fcPvLDIvnN85lWprKCmQlXwxW2ktdulDWhizsYnd1iiffNdfvDHS2hPtn
-         +agA==
-X-Gm-Message-State: ACrzQf0/cFB6oWui+EZoSnND/jH3p0eRJHF+12BoC5AqOwpPNIq2HfdN
-        swA40kSdo/U+U5wzvrEF3Ek1QHtcQ0U=
-X-Google-Smtp-Source: AMsMyM4n4hRnVeUvdZ837WE3di7iyugMulTDHs6SDh9HHXKZ8JXyt4M0Ps0o58d9frDoor2bl7zgJQ==
-X-Received: by 2002:a17:902:e405:b0:176:8bc1:b09c with SMTP id m5-20020a170902e40500b001768bc1b09cmr25176028ple.1.1664254571591;
-        Mon, 26 Sep 2022 21:56:11 -0700 (PDT)
+        bh=SAJkGU+79dW4f6vbvdxoH4HOSpZWnjzUc2txpj5o7k8=;
+        b=ZgUbvfaaNkV/YQbWAcwVwqAu7S9Xp8iatA128zxxyc51S7l7mhCuBFwKiEwaNf5ukb
+         GfCGZWXczOgRk7DamLuxvPD2iWedHFcBx6AP5sOUyuN1JNlqCxjmGi0se/dWVeG02B1X
+         kDrnkqjAmZvzEwGIgDpaK3gahcfVP+u39VVlGUo8zQH9S4NUoKbkFZdDRw6eFC6dvXLu
+         8a4HwTuoKwdirALmyLTUjBDtCuZ5Qs5GFSO8iFLIL1qW4PPjP6gIawe4ctlNNPDuohgS
+         KhqzqXc5ODl1scaM8pipkRtcXk6F6fWiM+VbhlSNUHzNaz4XQ7lS8czE8eaJ6D1OpNhq
+         X9sg==
+X-Gm-Message-State: ACrzQf2WLBLiadn60Y9o4yDfwMqCBdAmCvJSatbEmmazOwaBhLQOhdZy
+        SIAOoy36xRyy0rPLwPPNMQsG8pf01hI=
+X-Google-Smtp-Source: AMsMyM7JNRqUydIyZ2ktPnUYLLn1ZxKkSEd9FYS7ZVAy7YuI69bFCMaK0PbaXPBqPPu47RNNGpHmdQ==
+X-Received: by 2002:a63:1a12:0:b0:43d:286e:35ad with SMTP id a18-20020a631a12000000b0043d286e35admr2005806pga.512.1664254743814;
+        Mon, 26 Sep 2022 21:59:03 -0700 (PDT)
 Received: from google.com ([2620:15c:9d:2:9739:ab49:3830:2cbb])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b00179e1f08634sm352506plg.222.2022.09.26.21.56.10
+        by smtp.gmail.com with ESMTPSA id y129-20020a626487000000b0053640880313sm475867pfb.46.2022.09.26.21.59.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 21:56:11 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 21:56:08 -0700
+        Mon, 26 Sep 2022 21:59:03 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 21:59:00 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Lantiq: switch vmmc to use gpiod API
-Message-ID: <YzKCaMU9wlFbPZS7@google.com>
-References: <Yy08TBymyuQb27NU@google.com>
- <20220924104612.GB10628@alpha.franken.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC/PATCH v2] MIPS: pci: lantiq: switch to using gpiod API
+Message-ID: <YzKDFCq3M2gxlJ2e@google.com>
+References: <YzE9E+Esv/rqO0MA@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220924104612.GB10628@alpha.franken.de>
+In-Reply-To: <YzE9E+Esv/rqO0MA@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -70,60 +69,82 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
-
-On Sat, Sep 24, 2022 at 12:46:12PM +0200, Thomas Bogendoerfer wrote:
-> On Thu, Sep 22, 2022 at 09:55:40PM -0700, Dmitry Torokhov wrote:
-> > This switches vmmc to use gpiod API instead of OF-specific legacy gpio
-> > API that we want to stop exporting from gpiolib.
-> > 
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > ---
-> >  arch/mips/lantiq/xway/vmmc.c | 22 +++++++++++++---------
-> >  1 file changed, 13 insertions(+), 9 deletions(-)
-> 
-> applied to mips-next.
-
-My apologies, I screwed up. I thought this patch passed 0day before I
-sent it to you, but apparently it has not.
-
-Here is a fixup (actually cross-compiled this time), or I can send a v2
-incorporating it into the original change.
-
-Thanks.
-
--- 
-Dmitry
-
-
-MIPS: Lantiq: vmmc: fix compile break introduced by gpiod patch
-
-"MIPS: Lantiq: switch vmmc to use gpiod API" patch introduced compile
-errors, this patch fixes them.
+This patch switches the driver from legacy gpio API to the newer
+gpiod API.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- arch/mips/lantiq/xway/vmmc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v2 - actually compiles.
 
-diff --git a/arch/mips/lantiq/xway/vmmc.c b/arch/mips/lantiq/xway/vmmc.c
-index a1947306ac18..b6b0d9884b88 100644
---- a/arch/mips/lantiq/xway/vmmc.c
-+++ b/arch/mips/lantiq/xway/vmmc.c
-@@ -41,11 +41,11 @@ static int vmmc_probe(struct platform_device *pdev)
- 		if (IS_ERR(gpio)) {
- 			dev_err(&pdev->dev,
- 				"failed to request GPIO idx %d: %d\n",
--				gpio_count, PTR_ERR(gpio);
-+				gpio_count, PTR_ERR(gpio));
- 			continue;
- 		}
+ arch/mips/pci/pci-lantiq.c | 27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
+
+diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
+index 1ca42f482130..377b4a2577e1 100644
+--- a/arch/mips/pci/pci-lantiq.c
++++ b/arch/mips/pci/pci-lantiq.c
+@@ -9,11 +9,11 @@
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/mm.h>
+ #include <linux/vmalloc.h>
+ #include <linux/clk.h>
+ #include <linux/of_platform.h>
+-#include <linux/of_gpio.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_pci.h>
  
--		gpio_consumer_set_name(gpio, "vmmc-relay");
-+		gpiod_set_consumer_name(gpio, "vmmc-relay");
+@@ -62,7 +62,7 @@
+ __iomem void *ltq_pci_mapped_cfg;
+ static __iomem void *ltq_pci_membase;
+ 
+-static int reset_gpio;
++static gpio_desc *reset_gpio;
+ static struct clk *clk_pci, *clk_external;
+ static struct resource pci_io_resource;
+ static struct resource pci_mem_resource;
+@@ -123,17 +123,14 @@ static int ltq_pci_startup(struct platform_device *pdev)
+ 		clk_disable(clk_external);
+ 
+ 	/* setup reset gpio used by pci */
+-	reset_gpio = of_get_named_gpio(node, "gpio-reset", 0);
+-	if (gpio_is_valid(reset_gpio)) {
+-		int ret = devm_gpio_request(&pdev->dev,
+-						reset_gpio, "pci-reset");
+-		if (ret) {
+-			dev_err(&pdev->dev,
+-				"failed to request gpio %d\n", reset_gpio);
+-			return ret;
+-		}
+-		gpio_direction_output(reset_gpio, 1);
++	reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset",
++					     GPIOD_OUT_LOW);
++	ret = PTR_ERR_OR_ZERO(reset_gpio);
++	if (ret) {
++		dev_err(&pdev->dev, "failed to request gpio: %d\n", ret);
++		return ret;
  	}
++	gpiod_set_consumer_name(reset_gpio, "pci_reset");
  
- 	dev_info(&pdev->dev, "reserved %dMB at 0x%p", CP1_SIZE >> 20, cp1_base);
+ 	/* enable auto-switching between PCI and EBU */
+ 	ltq_pci_w32(0xa, PCI_CR_CLK_CTRL);
+@@ -195,11 +192,11 @@ static int ltq_pci_startup(struct platform_device *pdev)
+ 	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) | 0x10, LTQ_EBU_PCC_IEN);
+ 
+ 	/* toggle reset pin */
+-	if (gpio_is_valid(reset_gpio)) {
+-		__gpio_set_value(reset_gpio, 0);
++	if (reset_gpio) {
++		gpiod_set_value_cansleep(reset_gpio, 1);
+ 		wmb();
+ 		mdelay(1);
+-		__gpio_set_value(reset_gpio, 1);
++		gpiod_set_value_cansleep(reset_gpio, 0);
+ 	}
+ 	return 0;
+ }
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
