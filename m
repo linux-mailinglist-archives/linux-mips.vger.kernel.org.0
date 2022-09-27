@@ -2,89 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7415EBD3F
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 10:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C465EBE17
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 11:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiI0I35 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Sep 2022 04:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
+        id S231401AbiI0JPt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Sep 2022 05:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiI0I34 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 04:29:56 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC3D779EDA;
-        Tue, 27 Sep 2022 01:29:54 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1od5yU-0000aT-00; Tue, 27 Sep 2022 10:29:54 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 08FB7C0A44; Tue, 27 Sep 2022 10:29:46 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 10:29:46 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Lantiq: switch vmmc to use gpiod API
-Message-ID: <20220927082946.GA7667@alpha.franken.de>
-References: <Yy08TBymyuQb27NU@google.com>
- <20220924104612.GB10628@alpha.franken.de>
- <YzKCaMU9wlFbPZS7@google.com>
- <20220927074953.GA6127@alpha.franken.de>
- <791EE67B-9A27-4A3F-BE0E-A62CDB5CE9FA@gmail.com>
+        with ESMTP id S231451AbiI0JPp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 05:15:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF8F8A7F6;
+        Tue, 27 Sep 2022 02:15:42 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4McDRd2xl3zpV3J;
+        Tue, 27 Sep 2022 17:12:45 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 17:15:40 +0800
+CC:     <yangyicong@hisilicon.com>, <corbet@lwn.net>,
+        <peterz@infradead.org>, <arnd@arndb.de>,
+        <linux-kernel@vger.kernel.org>, <darren@os.amperecomputing.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
+        <linux-mm@kvack.org>, <x86@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <akpm@linux-foundation.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        Barry Song <21cnbao@gmail.com>, <wangkefeng.wang@huawei.com>,
+        <xhao@linux.alibaba.com>, <prime.zeng@hisilicon.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+References: <20220921084302.43631-1-yangyicong@huawei.com>
+ <20220921084302.43631-3-yangyicong@huawei.com>
+ <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
+Date:   Tue, 27 Sep 2022 17:15:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <791EE67B-9A27-4A3F-BE0E-A62CDB5CE9FA@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 01:08:35AM -0700, Dmitry Torokhov wrote:
-> On September 27, 2022 12:49:53 AM PDT, Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
-> >On Mon, Sep 26, 2022 at 09:56:08PM -0700, Dmitry Torokhov wrote:
-> >> Hi Thomas,
-> >> 
-> >> On Sat, Sep 24, 2022 at 12:46:12PM +0200, Thomas Bogendoerfer wrote:
-> >> > On Thu, Sep 22, 2022 at 09:55:40PM -0700, Dmitry Torokhov wrote:
-> >> > > This switches vmmc to use gpiod API instead of OF-specific legacy gpio
-> >> > > API that we want to stop exporting from gpiolib.
-> >> > > 
-> >> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> >> > > ---
-> >> > >  arch/mips/lantiq/xway/vmmc.c | 22 +++++++++++++---------
-> >> > >  1 file changed, 13 insertions(+), 9 deletions(-)
-> >> > 
-> >> > applied to mips-next.
-> >> 
-> >> My apologies, I screwed up. I thought this patch passed 0day before I
-> >> sent it to you, but apparently it has not.
-> >> 
-> >> Here is a fixup (actually cross-compiled this time), or I can send a v2
-> >> incorporating it into the original change.
-> >
-> >I need a fixup, but this one still fails in my build:
-> >
-> >/local/tbogendoerfer/korg/linux/arch/mips/lantiq/xway/vmmc.c: In function ‘vmmc_probe’:
-> >/local/tbogendoerfer/korg/linux/arch/mips/lantiq/xway/vmmc.c:43:5: error: format ‘%d’ expects argument of type ‘int’, but argument 4 has type ‘long int’ [-Werror=format=]
-> >     "failed to request GPIO idx %d: %d\n",
-> >     ^
+On 2022/9/27 14:16, Anshuman Khandual wrote:
+> [...]
 > 
-> I see, I did not realize PTR_ERR() is actually long. I guess I can introduce a temp variable and use PTR_ERR_OR_ZERO(), but there are a lot of places in the kernel that use %d and PTR_ERR(). I wonder why we can't define PTR_ERR() as (int)(long)ptr or something.
+> On 9/21/22 14:13, Yicong Yang wrote:
+>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+>> +{
+>> +	/* for small systems with small number of CPUs, TLB shootdown is cheap */
+>> +	if (num_online_cpus() <= 4)
 > 
-> What compiler/version are you using for your builds? 
+> It would be great to have some more inputs from others, whether 4 (which should
+> to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
+> is optimal for an wide range of arm64 platforms.
+> 
 
-it's rather old:
+Do you prefer this macro to be static or make it configurable through kconfig then
+different platforms can make choice based on their own situations? It maybe hard to
+test on all the arm64 platforms.
 
-gcc version 6.1.1 20160621 (Red Hat Cross 6.1.1-2) (GCC) 
+Thanks.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+>> +		return false;> +
+>> +#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
+>> +	if (unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
+>> +		return false;
+>> +#endif
+>> +
+>> +	return true;
+>> +}
+>> +
+> 
+> [...]
+> 
+> .
+> 
