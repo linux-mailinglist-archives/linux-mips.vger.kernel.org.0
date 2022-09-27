@@ -2,81 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0767B5EBA6B
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 08:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06145EBA83
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 08:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiI0GQy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Sep 2022 02:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
+        id S229982AbiI0GWB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Sep 2022 02:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiI0GQx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 02:16:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E7045E309;
-        Mon, 26 Sep 2022 23:16:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E1121042;
-        Mon, 26 Sep 2022 23:16:57 -0700 (PDT)
-Received: from [10.162.41.7] (unknown [10.162.41.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FBDD3F73B;
-        Mon, 26 Sep 2022 23:16:41 -0700 (PDT)
-Message-ID: <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com>
-Date:   Tue, 27 Sep 2022 11:46:38 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
- during page reclamation
-Content-Language: en-US
-To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
-        yangyicong@hisilicon.com, huzhanyuan@oppo.com, lipeifeng@oppo.com,
-        zhangshiming@oppo.com, guojian@oppo.com, realmz6@gmail.com,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        with ESMTP id S229735AbiI0GV7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 02:21:59 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2791C81B07;
+        Mon, 26 Sep 2022 23:21:57 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id E879B80E0;
+        Tue, 27 Sep 2022 06:13:36 +0000 (UTC)
+Date:   Tue, 27 Sep 2022 09:21:54 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, Barry Song <21cnbao@gmail.com>,
-        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
-        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-References: <20220921084302.43631-1-yangyicong@huawei.com>
- <20220921084302.43631-3-yangyicong@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220921084302.43631-3-yangyicong@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 37/44] arm,omap2: Use WFI for omap2_pm_idle()
+Message-ID: <YzKWgjNLWSmDss/h@atomide.com>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101522.842219871@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919101522.842219871@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[...]
+* Peter Zijlstra <peterz@infradead.org> [220919 10:09]:
+> arch_cpu_idle() is a very simple idle interface and exposes only a
+> single idle state and is expected to not require RCU and not do any
+> tracing/instrumentation.
+> 
+> As such, omap2_pm_idle() is not a valid implementation. Replace it
+> with a simple (shallow) omap2_do_wfi() call.
+> 
+> Omap2 doesn't have a cpuidle driver; but adding one would be the
+> recourse to (re)gain the other idle states.
 
-On 9/21/22 14:13, Yicong Yang wrote:
-> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-> +{
-> +	/* for small systems with small number of CPUs, TLB shootdown is cheap */
-> +	if (num_online_cpus() <= 4)
+Looks good to me thanks:
 
-It would be great to have some more inputs from others, whether 4 (which should
-to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
-is optimal for an wide range of arm64 platforms.
-
-> +		return false;> +
-> +#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
-> +	if (unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
-> +		return false;
-> +#endif
-> +
-> +	return true;
-> +}
-> +
-
-[...]
+Acked-by: Tony Lindgren <tony@atomide.com>
