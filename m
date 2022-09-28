@@ -2,98 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A4C5ECE21
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Sep 2022 22:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521065ED1F6
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Sep 2022 02:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbiI0UOe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Sep 2022 16:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S232891AbiI1AYx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Sep 2022 20:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbiI0UN6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 16:13:58 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4C55C8432;
-        Tue, 27 Sep 2022 13:13:56 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1odGxn-0005Vh-00; Tue, 27 Sep 2022 22:13:55 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D8157C0AE7; Tue, 27 Sep 2022 22:13:45 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 22:13:45 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Lantiq: switch vmmc to use gpiod API
-Message-ID: <20220927201345.GA19638@alpha.franken.de>
-References: <Yy08TBymyuQb27NU@google.com>
- <20220924104612.GB10628@alpha.franken.de>
- <YzKCaMU9wlFbPZS7@google.com>
- <20220927074953.GA6127@alpha.franken.de>
- <791EE67B-9A27-4A3F-BE0E-A62CDB5CE9FA@gmail.com>
- <20220927082946.GA7667@alpha.franken.de>
- <YzMW5r5+1NY1tual@google.com>
+        with ESMTP id S232817AbiI1AYf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Sep 2022 20:24:35 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461911138EB;
+        Tue, 27 Sep 2022 17:24:04 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id rk17so10740732ejb.1;
+        Tue, 27 Sep 2022 17:24:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=yrRvoMA2qzsQLaNGkBWV3qKU0u6GXYvGhupTkuY6VEY=;
+        b=N4SqAspV6MMkhBYCFIyWw1zoLE0Rd7s2OcFI1DceVn/pHLgQQpIGuPVe/Y5xz2rq7u
+         4AwEph2NeuV3pICsTTUzwRekddH0yOeND7JGqULNGiEUieyWRG6v6tDzpLe64Ks46WYl
+         +E7aPSySmJM5rrRbU/QTtIuWWnrypBa5Nee0vTcASR26Pbtt3a1rnWEXJiAhZ0LuaF3z
+         G0Kpy5TJl/IDsRofANqT6QeQSyO+rxKfvYX1lEVX/uIl1opJ/g6T4wX2v3xFu9sWUBhf
+         nxjbUpm/gkJf8RF8BM1xVL9NUSyaLL/yweBBM9Jtss7d1JdDL1D0xSUAW2CB9lb+daDC
+         gCuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=yrRvoMA2qzsQLaNGkBWV3qKU0u6GXYvGhupTkuY6VEY=;
+        b=j0VYDRs5klCIdfjk4CA9knBeIGVZqAtIdfICpLMQqP27BrwyAW5SGw/vh/uN3U/4ln
+         Dv64rBpQ/TRjU0hI38+OVJm8ILu5ALNqyw8msGbnoWAV1qeYPon3n8woM1N+EP+L3hcU
+         0nPTtLaw7+/DtWkQtQrN+BjUNOlC61YyAN5Xz42BD3OXxCeiuOQBNsZT2GdfjiDJ010A
+         Y4e+91GkAGyuQBszYDJnU1SaGtl0Zqt5+KXcHx751q6Z0HvK+D+peCGaqFjCKEXD8Lfu
+         8eWt0ZrXG/1KiY9A9Rpse28+b6Ws3SUNNOgJIlZaKCOnMVdONvlQ03uRbjSlX1onCKqz
+         m8pw==
+X-Gm-Message-State: ACrzQf0Gxq6q7ET/Zi31BKEHCz2cMfP3p4e4OqAbwkURdOAxqfjcylnX
+        TbIf0H3cwqkmZ0q4/7WDFhTDCxPHRxLEkJ/7+ffqRfDt1nc=
+X-Google-Smtp-Source: AMsMyM7eMgPelqF9CjnEbxsTqqXy6pmBZpLW9pueVjK2kG6gmJQBXY3G4jO1eBrNDVmQMCspWLB2ar5LjeuRSz4OCpA=
+X-Received: by 2002:a17:907:7eaa:b0:782:3d2b:20b0 with SMTP id
+ qb42-20020a1709077eaa00b007823d2b20b0mr25078507ejc.746.1664324641882; Tue, 27
+ Sep 2022 17:24:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YzMW5r5+1NY1tual@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921084302.43631-1-yangyicong@huawei.com> <20220921084302.43631-3-yangyicong@huawei.com>
+ <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com> <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
+In-Reply-To: <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Wed, 28 Sep 2022 13:23:50 +1300
+Message-ID: <CAGsJ_4z=dZbrAUD9jczT08S3qi_ep-h+EK35UfayVk1S+Cnp2A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        yangyicong@hisilicon.com, corbet@lwn.net, peterz@infradead.org,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, huzhanyuan@oppo.com,
+        lipeifeng@oppo.com, zhangshiming@oppo.com, guojian@oppo.com,
+        realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-mm@kvack.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, akpm@linux-foundation.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
+        catalin.marinas@arm.com, will@kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 08:29:42AM -0700, Dmitry Torokhov wrote:
-> On Tue, Sep 27, 2022 at 10:29:46AM +0200, Thomas Bogendoerfer wrote:
-> > On Tue, Sep 27, 2022 at 01:08:35AM -0700, Dmitry Torokhov wrote:
-> > > On September 27, 2022 12:49:53 AM PDT, Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
-> > > >On Mon, Sep 26, 2022 at 09:56:08PM -0700, Dmitry Torokhov wrote:
-> > > >> Hi Thomas,
-> > > >> 
-> > > >> On Sat, Sep 24, 2022 at 12:46:12PM +0200, Thomas Bogendoerfer wrote:
-> > > >> > On Thu, Sep 22, 2022 at 09:55:40PM -0700, Dmitry Torokhov wrote:
-> > > >> > > This switches vmmc to use gpiod API instead of OF-specific legacy gpio
-> > > >> > > API that we want to stop exporting from gpiolib.
-> > > >> > > 
-> > > >> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > >> > > ---
-> > > >> > >  arch/mips/lantiq/xway/vmmc.c | 22 +++++++++++++---------
-> > > >> > >  1 file changed, 13 insertions(+), 9 deletions(-)
-> > > >> > 
-> > > >> > applied to mips-next.
-> > > >> 
-> > > >> My apologies, I screwed up. I thought this patch passed 0day before I
-> > > >> sent it to you, but apparently it has not.
-> > > >> 
-> > > >> Here is a fixup (actually cross-compiled this time), or I can send a v2
-> > > >> incorporating it into the original change.
-> > > >
-> > > >I need a fixup, but this one still fails in my build:
-> > > >
-> > > >/local/tbogendoerfer/korg/linux/arch/mips/lantiq/xway/vmmc.c: In function ‘vmmc_probe’:
-> > > >/local/tbogendoerfer/korg/linux/arch/mips/lantiq/xway/vmmc.c:43:5: error: format ‘%d’ expects argument of type ‘int’, but argument 4 has type ‘long int’ [-Werror=format=]
-> > > >     "failed to request GPIO idx %d: %d\n",
-> > > >     ^
-> > > 
-> > > I see, I did not realize PTR_ERR() is actually long. I guess I can introduce a temp variable and use PTR_ERR_OR_ZERO(), but there are a lot of places in the kernel that use %d and PTR_ERR(). I wonder why we can't define PTR_ERR() as (int)(long)ptr or something.
-> > > 
-> > > What compiler/version are you using for your builds? 
-> > 
-> > it's rather old:
-> > 
-> > gcc version 6.1.1 20160621 (Red Hat Cross 6.1.1-2) (GCC) 
-> 
-> OK, I tried the below with gcc 12.1.0 cross-compiler, hopefully this
-> does not trip on 6.1.1.
+On Tue, Sep 27, 2022 at 10:15 PM Yicong Yang <yangyicong@huawei.com> wrote:
+>
+> On 2022/9/27 14:16, Anshuman Khandual wrote:
+> > [...]
+> >
+> > On 9/21/22 14:13, Yicong Yang wrote:
+> >> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> >> +{
+> >> +    /* for small systems with small number of CPUs, TLB shootdown is cheap */
+> >> +    if (num_online_cpus() <= 4)
+> >
+> > It would be great to have some more inputs from others, whether 4 (which should
+> > to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
+> > is optimal for an wide range of arm64 platforms.
+> >
 
-works with 6.1.1 as well. Applied to mips-next.
+I have tested it on a 4-cpus and 8-cpus machine. but i have no machine
+with 5,6,7
+cores.
+I saw improvement on 8-cpus machines and I found 4-cpus machines don't need
+this patch.
 
-Thomas.
+so it seems safe to have
+if (num_online_cpus()  < 8)
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+>
+> Do you prefer this macro to be static or make it configurable through kconfig then
+> different platforms can make choice based on their own situations? It maybe hard to
+> test on all the arm64 platforms.
+
+Maybe we can have this default enabled on machines with 8 and more cpus and
+provide a tlbflush_batched = on or off to allow users enable or
+disable it according
+to their hardware and products. Similar example: rodata=on or off.
+
+Hi Anshuman, Will,  Catalin, Andrew,
+what do you think about this approach?
+
+BTW, haoxin mentioned another important user scenarios for tlb bach on arm64:
+https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+
+I do believe we need it based on the expensive cost of tlb shootdown in arm64
+even by hardware broadcast.
+
+>
+> Thanks.
+>
+> >> +            return false;> +
+> >> +#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
+> >> +    if (unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
+> >> +            return false;
+> >> +#endif
+> >> +
+> >> +    return true;
+> >> +}
+> >> +
+> >
+> > [...]
+> >
+> > .
+> >
+
+Thanks
+Barry
