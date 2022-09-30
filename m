@@ -2,190 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5D25F1110
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Sep 2022 19:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7836A5F14B5
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Sep 2022 23:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbiI3Rnn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Sep 2022 13:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S231876AbiI3VZB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Sep 2022 17:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiI3Rnm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Sep 2022 13:43:42 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FE62CE2D;
-        Fri, 30 Sep 2022 10:43:42 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id o64so5411915oib.12;
-        Fri, 30 Sep 2022 10:43:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=JjEKLed2bS/39PSQcjvnHU6CF//pE8WpWB61kVnAezA=;
-        b=mWM8sI6oAZtXf+YQ9VnupgSirEQkS0w9+h0zOpZU0er2nWavQ8oHbePUoeRvap3R5m
-         XWG5xlUkd3IG9rtpi2On2YNNcbR7EXCOCO7f2j+xb33YL1o+5c/y8dgdM/wv/AE6lT0M
-         fgeGiJGcVE2F+BJGMUn0crHvIkLG+Qok6OZL89cyIHA6PAtrdnC8YGgtWOle6uDNKK64
-         Bt4qK5h31TzmJjSWFaw6BeY+u/nCoGh3gmG31sDdwbt0Djj/fg6tvKIr5HV5aUyJ335+
-         UK5oMBErJjv9/k3XYXHdyy3PbY5inA/D9IMZFcfX30LG1ISx9LS1/XqQvGA8Owo4FTEn
-         BJ4g==
-X-Gm-Message-State: ACrzQf1t91jOQ0ucLLXGTtU68viHATMf8bMLJpDu/8w6vGpGYVhsJ63y
-        ziBpSrBLzm0uwBq4oC1iD0ljWxDfdQ==
-X-Google-Smtp-Source: AMsMyM7VDN6CTtOd11B7+OywO1gEAIKw2Yt+WDP5aDkJpc4Vd2MhUobkVwmzq+e6IuWqxMrUpHxE+Q==
-X-Received: by 2002:a05:6808:201b:b0:350:87c:a8c6 with SMTP id q27-20020a056808201b00b00350087ca8c6mr4510263oiw.228.1664559821221;
-        Fri, 30 Sep 2022 10:43:41 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w92-20020a9d3665000000b0061c9ccb051bsm688932otb.37.2022.09.30.10.43.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 10:43:40 -0700 (PDT)
-Received: (nullmailer pid 565140 invoked by uid 1000);
-        Fri, 30 Sep 2022 17:43:40 -0000
-Date:   Fri, 30 Sep 2022 12:43:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        hauke@hauke-m.de, zajec5@gmail.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, arinc.unal@arinc9.com
-Subject: Re: [PATCH v3 3/3] dt-bindings: mips: brcm: convert CPU bindings for
- BMIPS architecture
-Message-ID: <20220930174340.GA536589-robh@kernel.org>
-References: <20220929072004.874795-1-sergio.paracuellos@gmail.com>
- <20220929072004.874795-4-sergio.paracuellos@gmail.com>
+        with ESMTP id S232034AbiI3VY6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Sep 2022 17:24:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D7637404;
+        Fri, 30 Sep 2022 14:24:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD5BB62509;
+        Fri, 30 Sep 2022 21:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9D2C433D6;
+        Fri, 30 Sep 2022 21:24:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664573095;
+        bh=+joHcILUm5LRJ+jhjvcI4kVtQWiLKRRqNLNft8g5IJ4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=EW3JZzrMpq9bM7gQlB/PrUVLyoXFuDqmTgxyGMhA5jvd3A6kDSSBkU1cnQWite5zD
+         zoHl/UG8JW5TxQYVwbbgvIhEugbvwfeqGbH9gKP4+nwK9YtV/YpXCyU0WfTiAehMvA
+         +abPueK0es0bLAcgjm7mlYN0TtL2EHfkRJ3Udid0UuicelNvhcJclfx0pGjJ6wueCu
+         /SF6E5ZV8AIRDLeERXbXtWEHLhTDd7dKpz74W8qD2bxGtp+hKm/FC5hZTWirLgdjD8
+         vklYD2m5tBdBYf7KJE6HkUmT5U43ScklLgOEm8gPFYhv6so9xYV0a4Xnonc4O4mgXB
+         4tONV3LYh0I2A==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220929072004.874795-4-sergio.paracuellos@gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220929225402.9696-2-Sergey.Semin@baikalelectronics.ru>
+References: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru> <20220929225402.9696-2-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH RESEND v12 1/8] clk: vc5: Fix 5P49V6901 outputs disabling when enabling FOD
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@codeaurora.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Date:   Fri, 30 Sep 2022 14:24:52 -0700
+User-Agent: alot/0.10
+Message-Id: <20220930212455.3D9D2C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 09:20:04AM +0200, Sergio Paracuellos wrote:
-> Convert the yaml binding for available CPUs in BMIPS architecture.
-> 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Quoting Serge Semin (2022-09-29 15:53:55)
+> We have discovered random glitches during the system boot up procedure.
+> The problem investigation led us to the weird outcomes: when none of the
+> Renesas 5P49V6901 ports are explicitly enabled by the kernel driver, the
+> glitches disappeared. It was a mystery since the SoC external clock
+> domains were fed with different 5P49V6901 outputs. The driver code didn't
+> seem like bogus either. We almost despaired to find out a root cause when
+> the solution has been found for a more modern revision of the chip. It
+> turned out the 5P49V6901 clock generator stopped its output for a short
+> period of time during the VC5_OUT_DIV_CONTROL register writing. The same
+> problem was found for the 5P49V6965 revision of the chip and was
+> successfully fixed in commit fc336ae622df ("clk: vc5: fix output disabling
+> when enabling a FOD") by enabling the "bypass_sync" flag hidden inside
+> "Unused Factory Reserved Register". Even though the 5P49V6901 registers
+> description and programming guide doesn't provide any intel regarding that
+> flag, setting it up anyway in the officially unused register completely
+> eliminated the denoted glitches. Thus let's activate the functionality
+> submitted in commit fc336ae622df ("clk: vc5: fix output disabling when
+> enabling a FOD") for the Renesas 5P49V6901 chip too in order to remove the
+> ports implicit inter-dependency.
+>=20
+> Fixes: dbf6b16f5683 ("clk: vc5: Add support for IDT VersaClock 5P49V6901")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+>=20
 > ---
->  .../bindings/mips/brcm/brcm,bmips-cpus.yaml   | 102 ++++++++++++++++++
->  .../bindings/mips/brcm/brcm,bmips.txt         |   8 --
 
-Ah, here it is.
-
->  2 files changed, 102 insertions(+), 8 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mips/brcm/brcm,bmips-cpus.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mips/brcm/brcm,bmips.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/mips/brcm/brcm,bmips-cpus.yaml b/Documentation/devicetree/bindings/mips/brcm/brcm,bmips-cpus.yaml
-> new file mode 100644
-> index 000000000000..60aa7df9a543
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mips/brcm/brcm,bmips-cpus.yaml
-> @@ -0,0 +1,102 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mips/brcm/brcm,bmips-cpus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MIPS CPUs bindings
-> +
-> +maintainers:
-> +  - Hauke Mehrtens <hauke@hauke-m.de>
-> +  - Rafał Miłecki <zajec5@gmail.com>
-> +
-> +description: |
-
-Don't need '|' if no formatting to preserve.
-
-> +  The device tree allows to describe the layout of BMIPS CPUs.
-> +
-> +patternProperties:
-> +  "^/":
-> +    type: object
-> +    $ref: "/schemas/mips/brcm/soc.yaml#"
-
-This is doesn't do anything.
-
-Your schema is never applied either as 'select' defaults to false if 
-there's not 'compaatible' or '$nodename' in the schema.
-
-> +
-> +properties:
-> +  cpus:
-> +    type: object
-> +    additionalProperties: true
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
-> +      mips-hpt-frequency:
-> +        description: This is common to all CPUs in the system so it lives
-> +          under the "cpus" node.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +    patternProperties:
-> +      "^cpu@[0-9]$":
-> +        type: object
-> +        $ref: "/schemas/mips/cpus.yaml#"
-> +
-> +    required:
-> +      - '#address-cells'
-> +      - '#size-cells'
-> +
-> +    allOf:
-> +      - if:
-> +          properties:
-> +            compatible:
-> +              contains:
-> +                enum:
-> +                  - "brcm,bcm3368"
-> +                  - "brcm,bcm3384"
-> +                  - "brcm,bcm33843"
-> +                  - "brcm,bcm3384-viper"
-> +                  - "brcm,bcm33843-viper"
-> +                  - "brcm,bcm6328"
-> +                  - "brcm,bcm6358"
-> +                  - "brcm,bcm6362"
-> +                  - "brcm,bcm6368"
-> +                  - "brcm,bcm63168"
-> +                  - "brcm,bcm63268"
-> +                  - "brcm,bcm7125"
-> +                  - "brcm,bcm7346"
-> +                  - "brcm,bcm7358"
-> +                  - "brcm,bcm7360"
-> +                  - "brcm,bcm7362"
-> +                  - "brcm,bcm7420"
-> +                  - "brcm,bcm7425"
-> +        then:
-> +          required:
-> +            - mips-hpt-frequency
-
-Other than this property, the cpus.yaml schema in dtschema covers all 
-this.
-
-You allow mips-hpt-frequency on any platform including non-MIPS if this 
-schema actually got applied. Is this intended for all MIPS platforms or 
-just for Broadcom platforms? The former is hard to support as how do we 
-express which platforms are MIPS in schemas. In the latter case, 
-brcm/soc.yaml could have something like this:
-
-properties:
-  cpus:
-    $ref: /schemas/cpus.yaml#
-    unevaluatedProperties: false
-
-    properties:
-      mips-hpt-frequency:
-        ...
-
-    required:
-      - mips-hpt-frequency
-
-Rob
+Applied to clk-next
