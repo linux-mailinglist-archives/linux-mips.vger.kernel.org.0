@@ -2,115 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B425F0CE5
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Sep 2022 16:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E1E5F0E9F
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Sep 2022 17:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiI3OCC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Sep 2022 10:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S231512AbiI3PQb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Sep 2022 11:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiI3OB4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Sep 2022 10:01:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F3A21824;
-        Fri, 30 Sep 2022 07:01:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2764B82779;
-        Fri, 30 Sep 2022 14:01:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13ACCC433C1;
-        Fri, 30 Sep 2022 14:01:51 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QrmDnNcd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664546510;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6UOOg5IHINhdAb/kc7hzr49OF4tFMMPyJOm2kJXSQ58=;
-        b=QrmDnNcdtDElPz1tbbdwJoacxSO7nehxXO4EwFFB6/EQ/MV/xmYnI+q06JHP6eicqWgJqf
-        XDBgdweyUjgNqvTdecRz+UAcdsdkX7WTh6xey56Ot+mYwizpUvR4FAAXp/LJCkxhPpuMmU
-        h52RizHs7XmEC33Q9oRO3z6xfUMOwuw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 79a49daa (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 30 Sep 2022 14:01:49 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] mips: allow firmware to pass RNG seed to kernel
-Date:   Fri, 30 Sep 2022 16:01:38 +0200
-Message-Id: <20220930140138.575751-1-Jason@zx2c4.com>
+        with ESMTP id S231773AbiI3PQU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Sep 2022 11:16:20 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFFE312CC9D;
+        Fri, 30 Sep 2022 08:16:17 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oeHkM-0003TJ-00; Fri, 30 Sep 2022 17:16:14 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 3E2D4C0D0C; Fri, 30 Sep 2022 16:46:40 +0200 (CEST)
+Date:   Fri, 30 Sep 2022 16:46:40 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH] mips: update config files
+Message-ID: <20220930144640.GA12989@alpha.franken.de>
+References: <20220929101451.32267-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929101451.32267-1-lukas.bulwahn@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Nearly all other firmware environments have some way of passing a RNG
-seed to initialize the RNG: DTB's rng-seed, EFI's RNG protocol, m68k's
-bootinfo block, x86's setup_data, and so forth. This adds something
-similar for MIPS, which will allow various firmware environments,
-bootloaders, and hypervisors to pass an RNG seed to initialize the
-kernel's RNG.
+On Thu, Sep 29, 2022 at 12:14:51PM +0200, Lukas Bulwahn wrote:
+> Clean up config files by:
+>   - removing configs that were deleted in the past
+>   - removing configs not in tree and without recently pending patches
+>   - adding new configs that are replacements for old configs in the file
+> 
+> For some detailed information, see Link.
+> 
+> Link: https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwahn@gmail.com/
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  arch/mips/configs/ar7_defconfig               |  4 ----
+>  arch/mips/configs/ath25_defconfig             |  4 ----
+>  arch/mips/configs/ath79_defconfig             | 10 --------
+>  arch/mips/configs/bcm63xx_defconfig           |  3 ---
+>  arch/mips/configs/bigsur_defconfig            |  9 --------
+>  arch/mips/configs/bmips_be_defconfig          |  3 ---
+>  arch/mips/configs/bmips_stb_defconfig         | 23 ++-----------------
+>  arch/mips/configs/cavium_octeon_defconfig     |  1 -
+>  arch/mips/configs/db1xxx_defconfig            |  1 -
+>  arch/mips/configs/decstation_64_defconfig     | 10 --------
+>  arch/mips/configs/decstation_defconfig        | 10 --------
+>  arch/mips/configs/decstation_r4k_defconfig    | 10 --------
+>  arch/mips/configs/fuloong2e_defconfig         |  9 --------
+>  arch/mips/configs/generic/board-ocelot.config |  1 -
+>  arch/mips/configs/gpr_defconfig               |  8 -------
+>  arch/mips/configs/ip22_defconfig              | 10 --------
+>  arch/mips/configs/ip27_defconfig              | 19 ---------------
+>  arch/mips/configs/ip28_defconfig              |  3 ---
+>  arch/mips/configs/ip32_defconfig              |  2 --
+>  arch/mips/configs/jazz_defconfig              |  1 -
+>  arch/mips/configs/lemote2f_defconfig          |  9 --------
+>  arch/mips/configs/loongson1b_defconfig        |  4 ----
+>  arch/mips/configs/loongson1c_defconfig        |  4 ----
+>  arch/mips/configs/loongson2k_defconfig        |  3 ---
+>  arch/mips/configs/loongson3_defconfig         |  2 --
+>  arch/mips/configs/malta_defconfig             |  5 ----
+>  arch/mips/configs/malta_kvm_defconfig         |  5 ----
+>  arch/mips/configs/malta_qemu_32r6_defconfig   |  3 ---
+>  arch/mips/configs/maltaaprp_defconfig         |  3 ---
+>  arch/mips/configs/maltasmvp_defconfig         |  3 ---
+>  arch/mips/configs/maltasmvp_eva_defconfig     |  3 ---
+>  arch/mips/configs/maltaup_defconfig           |  3 ---
+>  arch/mips/configs/maltaup_xpa_defconfig       |  5 ----
+>  arch/mips/configs/mtx1_defconfig              | 10 --------
+>  arch/mips/configs/omega2p_defconfig           |  3 ---
+>  arch/mips/configs/pic32mzda_defconfig         |  1 -
+>  arch/mips/configs/rb532_defconfig             |  4 ----
+>  arch/mips/configs/rbtx49xx_defconfig          |  7 ------
+>  arch/mips/configs/rm200_defconfig             |  7 ------
+>  arch/mips/configs/rt305x_defconfig            |  4 ----
+>  arch/mips/configs/sb1250_swarm_defconfig      |  2 --
+>  arch/mips/configs/vocore2_defconfig           |  3 ---
+>  arch/mips/configs/xway_defconfig              |  4 ----
+>  43 files changed, 2 insertions(+), 236 deletions(-)
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/mips/kernel/setup.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+applied to mips-next.
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 2ca156a5b231..39c79f67c7a3 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -42,6 +42,7 @@
- #include <asm/setup.h>
- #include <asm/smp-ops.h>
- #include <asm/prom.h>
-+#include <asm/fw/fw.h>
- 
- #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
- char __section(".appended_dtb") __appended_dtb[0x100000];
-@@ -756,6 +757,24 @@ static void __init prefill_possible_map(void)
- static inline void prefill_possible_map(void) {}
- #endif
- 
-+static void __init setup_rng_seed(void)
-+{
-+	char *rng_seed_hex = fw_getenv("rngseed");
-+	u8 rng_seed[512];
-+	size_t len;
-+
-+	if (!rng_seed_hex)
-+		return;
-+
-+	len = min(sizeof(rng_seed), strlen(rng_seed_hex) / 2);
-+	if (hex2bin(rng_seed, rng_seed_hex, len))
-+		return;
-+
-+	add_bootloader_randomness(rng_seed, len);
-+	memzero_explicit(rng_seed, len);
-+	memzero_explicit(rng_seed_hex, len * 2);
-+}
-+
- void __init setup_arch(char **cmdline_p)
- {
- 	cpu_probe();
-@@ -786,6 +805,8 @@ void __init setup_arch(char **cmdline_p)
- 	paging_init();
- 
- 	memblock_dump_all();
-+
-+	setup_rng_seed();
- }
- 
- unsigned long kernelsp[NR_CPUS];
+Thomas.
+
 -- 
-2.37.3
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
