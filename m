@@ -2,114 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2286E5F0E9D
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Sep 2022 17:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43145F0F47
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Sep 2022 17:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiI3PQY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Sep 2022 11:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S231156AbiI3Pwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Sep 2022 11:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiI3PQU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Sep 2022 11:16:20 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EF5011DFEF;
-        Fri, 30 Sep 2022 08:16:17 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oeHkN-0003TJ-00; Fri, 30 Sep 2022 17:16:15 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 14E97C0D1E; Fri, 30 Sep 2022 17:15:25 +0200 (CEST)
-Date:   Fri, 30 Sep 2022 17:15:25 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+        with ESMTP id S231679AbiI3Pw3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Sep 2022 11:52:29 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D2C103FF9;
+        Fri, 30 Sep 2022 08:52:28 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id r62so4493530pgr.12;
+        Fri, 30 Sep 2022 08:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=2T8Z+8mq8mSUbSxtx0J9KasGVC/gpl3JV2RqSGlE0ik=;
+        b=pszkwON9cE4UJtIuzKTMZnAKyB2/0cDq0yOGOh7PSVwctH4KEbsF66tt0A1XkrRmV6
+         b+4AcggEzv3kLFBPZEIVFv6Y3aSV2X278OBNqHJ76jTwbqZnMWltd8Dx3Yc4kCaTdae0
+         cmMFZ1LV+IaLBkztg5WFMLXCiF5hsnAO8maQVQDm8T69w/s2FCbde91YW4b4l7cBTP+m
+         RZa4WDDca2wIuj7YTSyvikMLSjh4WUxrgEvQotydT4Q9oOwy/ioh1Ank0ztawV+0kdwD
+         aVESTT/kMQaoBet+BSQCWP90vuVwF7oQ0SY47xWTVRhGiQ0B2gglTTTSGJWuGJ5cfAPm
+         uhwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=2T8Z+8mq8mSUbSxtx0J9KasGVC/gpl3JV2RqSGlE0ik=;
+        b=ff4sjBDfF7ZjNx00r/mYUeYSo3+7PqicWnOlcGIMx8sno+KozPWk3onqIIqeuSB377
+         SfpKRqTgXTaQIdyaeurTInmK1HSp/DjYPzOmDHXPhcnjYWz92+WUAUN+KNUfRHvNGDTi
+         o037BohatyGHiRhTb2hXQNMmcd9kjfDe+0itwsFlXaD+jUx4q534w7eKb+GvRfA0cdCZ
+         lyWsuLU8TOqy6u1WkeWC87geP9RigvW87kh3d+w013RVlm+WAGfJ7EykUtWSNinBVeRG
+         gWWW7O16xbdKhwyy0/Ql6/69D2QpiPXdc1QuFxFL/+Tcc5tWqlJcoYnuq1Py4D54Ifbr
+         0nUw==
+X-Gm-Message-State: ACrzQf0SN8d0pThv0B83s/Ds8Q+E0EvC5qLRDrT5TZkzho+OWLal5Dqn
+        nEP3lBc30KSI3SQ69re/NRg=
+X-Google-Smtp-Source: AMsMyM6m/zZ6R3cv74My3+B5P49eTZfRXiYe+dSoiwo4mApsFYjVR5f0XfJ1OX2nLwbZ5S+NN6tfQw==
+X-Received: by 2002:a05:6a00:16c8:b0:53b:3b9f:7283 with SMTP id l8-20020a056a0016c800b0053b3b9f7283mr9878617pfc.46.1664553147725;
+        Fri, 30 Sep 2022 08:52:27 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:d016:f5be:4ff2:43f])
+        by smtp.gmail.com with ESMTPSA id k81-20020a628454000000b0053e2b61b714sm1936554pfd.114.2022.09.30.08.52.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 08:52:27 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 08:52:24 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [RFC/PATCH v2] MIPS: pci: lantiq: switch to using gpiod API
-Message-ID: <20220930151525.GC12989@alpha.franken.de>
+Message-ID: <YzcQuBqbQ03PbCVs@google.com>
 References: <YzE9E+Esv/rqO0MA@google.com>
  <YzKDFCq3M2gxlJ2e@google.com>
+ <20220930151525.GC12989@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YzKDFCq3M2gxlJ2e@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220930151525.GC12989@alpha.franken.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 09:59:00PM -0700, Dmitry Torokhov wrote:
-> This patch switches the driver from legacy gpio API to the newer
-> gpiod API.
+On Fri, Sep 30, 2022 at 05:15:25PM +0200, Thomas Bogendoerfer wrote:
+> On Mon, Sep 26, 2022 at 09:59:00PM -0700, Dmitry Torokhov wrote:
+> > This patch switches the driver from legacy gpio API to the newer
+> > gpiod API.
+> > 
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> > v2 - actually compiles.
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
-> v2 - actually compiles.
+> I have some doubts...
 
-I have some doubts...
+You are right, I am very sorry as I am not sure how that happened. I did
+indeed have a version with the exact errors you pointed out, and I fixed
+them. I am not sure how I managed to send the wrong one to you...
 
->  arch/mips/pci/pci-lantiq.c | 27 ++++++++++++---------------
->  1 file changed, 12 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
-> index 1ca42f482130..377b4a2577e1 100644
-> --- a/arch/mips/pci/pci-lantiq.c
-> +++ b/arch/mips/pci/pci-lantiq.c
-> @@ -9,11 +9,11 @@
->  #include <linux/kernel.h>
->  #include <linux/init.h>
->  #include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/mm.h>
->  #include <linux/vmalloc.h>
->  #include <linux/clk.h>
->  #include <linux/of_platform.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/of_irq.h>
->  #include <linux/of_pci.h>
->  
-> @@ -62,7 +62,7 @@
->  __iomem void *ltq_pci_mapped_cfg;
->  static __iomem void *ltq_pci_membase;
->  
-> -static int reset_gpio;
-> +static gpio_desc *reset_gpio;
+I will send out the right one as v3, in the meantime here is what I see
+on my end with it:
 
-/local/tbogendoerfer/korg/linux/arch/mips/pci/pci-lantiq.c:65:8: error: unknown type name ‘gpio_desc’
- static gpio_desc *reset_gpio;
+dtor@dtor-ws:~/kernel/cross-tmp ((b4938080955f...))$ date
+Fri Sep 30 08:46:26 AM PDT 2022
+dtor@dtor-ws:~/kernel/cross-tmp ((b4938080955f...))$ git log -1 --abbrev --oneline HEAD
+b4938080955f (HEAD) MIPS: pci: lantiq: switch to using gpiod API
+dtor@dtor-ws:~/kernel/cross-tmp ((b4938080955f...))$ git show HEAD | git patch-id
+2f4c9e4f56e674980122ce426c9ca9281eb393a1 b4938080955f015ffd1a8f778ce57b2a8e50c7ba
+dtor@dtor-ws:~/kernel/cross-tmp ((b4938080955f...))$ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross -j1 O=./build_dir_mips ARCH=mips SHELL=/bin/bash arch/mips/pci/pci-lantiq.o
+Compiler will be installed in /usr/local/google/home/dtor/0day
+make --keep-going CONFIG_OF_ALL_DTBS=y CONFIG_DTC=y CROSS_COMPILE=/usr/local/google/home/dtor/0day/gcc-12.1.0-nolibc/mips-linux/bin/mips-linux- -j1 O=./build_dir_mips ARCH=mips SHELL=/bin/bash arch/mips/pci/pci-lantiq.o
+make[1]: Entering directory '/usr/local/google/home/dtor/kernel/cross-tmp/build_dir_mips'
+  GEN     Makefile
+  CALL    ../scripts/checksyscalls.sh
+  CC      arch/mips/pci/pci-lantiq.o
+  CC      arch/mips/pci/pci-lantiq.o
+make[1]: Leaving directory '/usr/local/google/home/dtor/kernel/cross-tmp/build_dir_mips'
 
-
->  static struct clk *clk_pci, *clk_external;
->  static struct resource pci_io_resource;
->  static struct resource pci_mem_resource;
-> @@ -123,17 +123,14 @@ static int ltq_pci_startup(struct platform_device *pdev)
->  		clk_disable(clk_external);
->  
->  	/* setup reset gpio used by pci */
-> -	reset_gpio = of_get_named_gpio(node, "gpio-reset", 0);
-> -	if (gpio_is_valid(reset_gpio)) {
-> -		int ret = devm_gpio_request(&pdev->dev,
-> -						reset_gpio, "pci-reset");
-> -		if (ret) {
-> -			dev_err(&pdev->dev,
-> -				"failed to request gpio %d\n", reset_gpio);
-> -			return ret;
-> -		}
-> -		gpio_direction_output(reset_gpio, 1);
-> +	reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset",
-> +					     GPIOD_OUT_LOW);
-> +	ret = PTR_ERR_OR_ZERO(reset_gpio);
-
-/local/tbogendoerfer/korg/linux/arch/mips/pci/pci-lantiq.c:128:2: error: ‘ret’ undeclared (first use in this function)
-  ret = PTR_ERR_OR_ZERO(reset_gpio);
-
-Thomas.
-
+Thanks.
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Dmitry
