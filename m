@@ -2,142 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7095F1855
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Oct 2022 03:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05CB5F19A6
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Oct 2022 05:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbiJABWg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Sep 2022 21:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S231454AbiJADkC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Sep 2022 23:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbiJABVu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Sep 2022 21:21:50 -0400
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F129214DE96;
-        Fri, 30 Sep 2022 18:19:12 -0700 (PDT)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 24887E0EB9;
-        Fri, 30 Sep 2022 01:54:11 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:from:from:in-reply-to:message-id
-        :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=QH7GNUWefqwCW/+YkV5wkb8ElUPYxmHqO2/8vZKiw/g=; b=j+Zzh9Uz2J1t
-        NLnYOJ0yKqX2IntkywpeHhrxWZFRdG9xQh7gZXPHWQ6iIygL+dGxvGIny7jVzzGW
-        wbNRnsQSprhDkzkI84oBMgJoSk2Q4Y3QFP9vgNcqZ1SEKAWup9J7Wi7+rDevzCMD
-        hIsyrGM5h4+HbaLNrNPSBDzTh1+oFoo=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 176BAE0E6B;
-        Fri, 30 Sep 2022 01:54:11 +0300 (MSK)
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 01:54:11 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-clk@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v12 3/8] clk: baikal-t1: Add shared xGMAC ref/ptp clocks internal parent
-Date:   Fri, 30 Sep 2022 01:53:57 +0300
-Message-ID: <20220929225402.9696-4-Sergey.Semin@baikalelectronics.ru>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru>
+        with ESMTP id S230240AbiJADj7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Sep 2022 23:39:59 -0400
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DC7FADF;
+        Fri, 30 Sep 2022 20:39:54 -0700 (PDT)
+Received: by mail-oo1-xc31.google.com with SMTP id m11-20020a4aab8b000000b00476743c0743so3469928oon.10;
+        Fri, 30 Sep 2022 20:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=JbJpSRLe2fy92XnkaEQUWwoKUwgq2j9g9DTkpHFR95I=;
+        b=Ler14OgZhf46dsdVaOlD6N4k5g3dCO0RzF0gzjDE7FDwHuvA8M79g8Zas+xDVyoq/p
+         ffZc2CTYphQuJMbmjyAGPNaAmLpftKgrQdhEAPydrTfJtSGbU7Gbh+HpIO9gGrLpI+nk
+         9iBVjM37IsvKWHsfT9lr2IYQWRWyG7+2K3mPFBQmkMwTjsh6qFSFIQAYfxlRwNqAm/XF
+         CKyW7W6kzwMAevQB9ahJqt8pKQy+BWQreDfxJOnjOIydDy8RnYBuBDetgWqIdb9XUYp7
+         qK/QFSJg2rXiHXeBvMx/JYBRZi+GWyzyQ1QADzm9zpklhRR/rNE+6XhvTxfpwMqlvaDK
+         YLzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=JbJpSRLe2fy92XnkaEQUWwoKUwgq2j9g9DTkpHFR95I=;
+        b=Thamj16W6Rxz+dnNUd2sM67t8IAHMs2nvpS9KvCuHlV13/dCiIOMinblR8oTMU+L0A
+         tAR75C4FADrVy54AHWTz5p/3dP8lKZ0S1jPrPKDIP4CVWosvwL2RiU27pchNCYd0NY+b
+         c++gFpG4nPT8+BeY09FbR201n3olscwG9cXSIvEjlC6CbOHNk9EsbKoieuaPetId4kix
+         YACVKg+oLoYedPhvH6V8JVJaMAdGDIztX1jv5DbMIzxkYS0qp5ldtWRdWMNFueS9hlAh
+         mBKdSdMFAPnjMITO6mEF0uDaOyDuJ+aQtNnG5ksS1VX/2XPmHkT/fOmzURQSieXC5BPP
+         IbJQ==
+X-Gm-Message-State: ACrzQf0cIx9vRXs038arnxuQXzlIjYEM8wWkjYYKut2HjwIpOf8WH/Mq
+        KiPGPK/XyRI3N7177ef1R0ud7YLfIIJuYq1yBRk=
+X-Google-Smtp-Source: AMsMyM6fXa9AT+YH5eAFfV9AIT42+4+yUGWhdlKQfrGYRT+Sijx1Us9qHLn9Lf1YRgINC6UVdUimUj2D0Q9kPK+/4cI=
+X-Received: by 2002:a9d:19ca:0:b0:655:bcdc:f546 with SMTP id
+ k68-20020a9d19ca000000b00655bcdcf546mr4771382otk.304.1664595594189; Fri, 30
+ Sep 2022 20:39:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [192.168.168.10]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+References: <20220929072004.874795-1-sergio.paracuellos@gmail.com>
+ <20220929072004.874795-2-sergio.paracuellos@gmail.com> <20220930171637.GA526500-robh@kernel.org>
+In-Reply-To: <20220930171637.GA526500-robh@kernel.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sat, 1 Oct 2022 05:39:42 +0200
+Message-ID: <CAMhs-H-FbJocYyuyDi_Ki+U+yEHT7GV56hk+Qh+2gbLeWkZ0Gg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: mips: add CPU bindings for MIPS architecture
+To:     Rob Herring <robh@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>, zajec5@gmail.com,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Baikal-T1 CCU reference manual says that both xGMAC reference and xGMAC
-PTP clocks are generated by two different wrappers with the same constant
-divider thus each producing a 156.25 MHz signal. But for some reason both
-of these clock sources are gated by a single switch-flag in the CCU
-registers space - CCU_SYS_XGMAC_BASE.BIT(0). In order to make the clocks
-handled independently we need to define a shared parental gate so the base
-clock signal would be switched off only if both of the child-clocks are
-disabled.
+Hi Rob,
 
-Note the ID is intentionally set to -2 since we are going to add a one
-more internal clock identifier in the next commit.
+On Fri, Sep 30, 2022 at 7:16 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Sep 29, 2022 at 09:20:02AM +0200, Sergio Paracuellos wrote:
+> > Add the yaml binding for available CPUs in MIPS architecture.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >  .../devicetree/bindings/mips/cpus.yaml        | 66 +++++++++++++++++++
+> >  1 file changed, 66 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mips/cpus.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
+> > new file mode 100644
+> > index 000000000000..4f8891f0755b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mips/cpus.yaml
+> > @@ -0,0 +1,66 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mips/cpus.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MIPS CPUs bindings
+> > +
+> > +maintainers:
+> > +  - Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > +
+> > +description: |
+> > +  The device tree allows to describe the layout of CPUs in a system through
+> > +  the "cpus" node, which in turn contains a number of subnodes (ie "cpu")
+> > +  defining properties for every CPU.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - brcm,bmips3300
+> > +      - brcm,bmips4350
+> > +      - brcm,bmips4380
+> > +      - brcm,bmips5000
+> > +      - brcm,bmips5200
+>
+> Need to remove
+> Documentation/devicetree/bindings/mips/brcm/brcm,bmips.txt.
 
-Fixes: 353afa3a8d2e ("clk: Add Baikal-T1 CCU Dividers driver")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+This is removed in the BMIPS CPUs related PATCH.
 
----
+>
+> > +      - ingenic,xburst-mxu1.0
+> > +      - ingenic,xburst-fpu1.0-mxu1.1
+> > +      - ingenic,xburst-fpu2.0-mxu2.0
+>
+> So we should remove
+> Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml?
 
-Changelog v4:
-- Change the ID macro name to the more descriptive CCU_SYS_XGMAC_CLK.
----
- drivers/clk/baikal-t1/ccu-div.c     | 1 +
- drivers/clk/baikal-t1/ccu-div.h     | 6 ++++++
- drivers/clk/baikal-t1/clk-ccu-div.c | 8 +++++---
- 3 files changed, 12 insertions(+), 3 deletions(-)
+Oh, I missed that documentation, thanks. I guess I can include that
+info in this schema and remove the file? Or maybe just drop this
+ingenic compatible from here? I wonder what is the best approach.
 
-diff --git a/drivers/clk/baikal-t1/ccu-div.c b/drivers/clk/baikal-t1/ccu-div.c
-index 4062092d67f9..bbfa3526ee10 100644
---- a/drivers/clk/baikal-t1/ccu-div.c
-+++ b/drivers/clk/baikal-t1/ccu-div.c
-@@ -579,6 +579,7 @@ struct ccu_div *ccu_div_hw_register(const struct ccu_div_init_data *div_init)
- 		goto err_free_div;
- 	}
- 	parent_data.fw_name = div_init->parent_name;
-+	parent_data.name = div_init->parent_name;
- 	hw_init.parent_data = &parent_data;
- 	hw_init.num_parents = 1;
- 
-diff --git a/drivers/clk/baikal-t1/ccu-div.h b/drivers/clk/baikal-t1/ccu-div.h
-index 795665caefbd..b6a9c8e45318 100644
---- a/drivers/clk/baikal-t1/ccu-div.h
-+++ b/drivers/clk/baikal-t1/ccu-div.h
-@@ -13,6 +13,12 @@
- #include <linux/bits.h>
- #include <linux/of.h>
- 
-+/*
-+ * CCU Divider private clock IDs
-+ * @CCU_SYS_XGMAC_CLK: CCU XGMAC internal clock
-+ */
-+#define CCU_SYS_XGMAC_CLK		-2
-+
- /*
-  * CCU Divider private flags
-  * @CCU_DIV_SKIP_ONE: Due to some reason divider can't be set to 1.
-diff --git a/drivers/clk/baikal-t1/clk-ccu-div.c b/drivers/clk/baikal-t1/clk-ccu-div.c
-index ea77eec40ddd..3953ae5664be 100644
---- a/drivers/clk/baikal-t1/clk-ccu-div.c
-+++ b/drivers/clk/baikal-t1/clk-ccu-div.c
-@@ -204,10 +204,12 @@ static const struct ccu_div_info sys_info[] = {
- 			  "eth_clk", CCU_SYS_GMAC1_BASE, 5),
- 	CCU_DIV_FIXED_INFO(CCU_SYS_GMAC1_PTP_CLK, "sys_gmac1_ptp_clk",
- 			   "eth_clk", 10),
--	CCU_DIV_GATE_INFO(CCU_SYS_XGMAC_REF_CLK, "sys_xgmac_ref_clk",
--			  "eth_clk", CCU_SYS_XGMAC_BASE, 8),
-+	CCU_DIV_GATE_INFO(CCU_SYS_XGMAC_CLK, "sys_xgmac_clk",
-+			  "eth_clk", CCU_SYS_XGMAC_BASE, 1),
-+	CCU_DIV_FIXED_INFO(CCU_SYS_XGMAC_REF_CLK, "sys_xgmac_ref_clk",
-+			   "sys_xgmac_clk", 8),
- 	CCU_DIV_FIXED_INFO(CCU_SYS_XGMAC_PTP_CLK, "sys_xgmac_ptp_clk",
--			   "eth_clk", 8),
-+			   "sys_xgmac_clk", 8),
- 	CCU_DIV_GATE_INFO(CCU_SYS_USB_CLK, "sys_usb_clk",
- 			  "eth_clk", CCU_SYS_USB_BASE, 10),
- 	CCU_DIV_VAR_INFO(CCU_SYS_PVT_CLK, "sys_pvt_clk",
--- 
-2.37.3
+>
+> > +      - loongson,gs264
+> > +      - mips,m14Kc
+> > +      - mips,mips4Kc
+> > +      - mips,mips4KEc
+> > +      - mips,mips24Kc
+> > +      - mips,mips24KEc
+> > +      - mips,mips74Kc
+> > +      - mips,mips1004Kc
+> > +      - mti,interaptiv
+> > +      - mti,mips24KEc
+> > +      - mti,mips14KEc
+> > +      - mti,mips14Kc
+> > +
+> > +  reg:
+> > +    maxItems: 1
+>
+> Does the numbering have some basis in the h/w?
 
+Looking into the current mainlined dts files I ended up with this.
+Other than that I don't really know.
 
+>
+> > +
+> > +required:
+> > +  - compatible
+> > +
+> > +additionalProperties: true
+>
+> Do you need this to be true? What's missing besides 'device_type'?
+
+As I tried to explain in the cover letter of this series, current
+'arch/mips/boot/dts' folder dts files are a bit messy
+for cpu nodes, so I set additionalProperties to true and only make
+them required for 'compatible' in this schema.
+Just to avoid surprises.  I guess I can try to set this to false and
+add clock and other properties required for some compatibles, if that
+is preferred.
+
+> We've got the same issue for Arm cpu schema, so fine for now if there's
+> not an easy fix.
+>
+> Rob
+
+Thanks,
+    Sergio Paracuellos
