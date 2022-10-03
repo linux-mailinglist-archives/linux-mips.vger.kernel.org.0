@@ -2,194 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128885F2F43
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Oct 2022 13:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2B95F33B5
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Oct 2022 18:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiJCLFo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Oct 2022 07:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S229961AbiJCQj5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Oct 2022 12:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJCLFn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Oct 2022 07:05:43 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 786A615709;
-        Mon,  3 Oct 2022 04:05:41 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1ofJGV-0008KH-00; Mon, 03 Oct 2022 13:05:39 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 913EEC0D3A; Mon,  3 Oct 2022 13:05:33 +0200 (CEST)
-Date:   Mon, 3 Oct 2022 13:05:33 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v6.1
-Message-ID: <20221003110533.GA9355@alpha.franken.de>
+        with ESMTP id S229928AbiJCQjV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Oct 2022 12:39:21 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABDC26483
+        for <linux-mips@vger.kernel.org>; Mon,  3 Oct 2022 09:39:19 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id b2so23405363eja.6
+        for <linux-mips@vger.kernel.org>; Mon, 03 Oct 2022 09:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Sz/7ENEAx45gBAphCQu33YD+axd5XhAo6fkcJvfvnk8=;
+        b=JVacrpnErD67nRcN3/GqMUQgbWz4niG4/GMA6pkm1e/D2gHV2pAVfi28SOWOMIRDWk
+         8U+wFi5gh6FWsQTLspeDrU3joJcCOxMneKytB0E5SBmXh8TqsHz7Gy87cFU2gbuGF9hR
+         99+oa5BXWFbL/iXD9YwtO/6Fl1qWStvVHJyHM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Sz/7ENEAx45gBAphCQu33YD+axd5XhAo6fkcJvfvnk8=;
+        b=u9Fm8VwJ79qzbdbXH2HhW7ixcvpa9A9tOJmShDMgzjkBr/oHHOJdl4ygch25z6EZf1
+         OAPNMlWsHI/GknDhU3VfZemK8zNVZCtlXCwtDx084ryFequ7K/T8ysXslItU1ZX9aiOo
+         0V4jQKwTO9p5tqNDLTT+7knY8HyhWVIkXJyLSdpBIiBlW6WWsn6GsqtH61M+49ZuVObm
+         8N5+Z7W8ez2MUp53iuuBgktetqotDmJNmFKKqExfiH1Vc651JeJ/2n0kM09TTwEm1o+U
+         dzmFEiyrjc/WCmI2W/r31aKQT/vIiMjL9S4URF/eOkggQ9q88emd7QGL3EQyTn29ETPy
+         gDrw==
+X-Gm-Message-State: ACrzQf0XD1T8yDOVHUfXvsQ2p1y2aBpBqJ6Fu6d5YcBnbNr/hiuW2V61
+        zf8pLzEC9OFVkcJayAl1dkdcm9RtInI7dfz0wcJg7Q==
+X-Google-Smtp-Source: AMsMyM6xIFILRmwJkVXhTIhh1kNVEjhYvcCInbiOMF9fGMFarE4DYfYfqeZfW4cB4B1Axl+ynZ4gZkZ3XnsMoj3vsBI=
+X-Received: by 2002:a17:906:9751:b0:783:87e0:4e38 with SMTP id
+ o17-20020a170906975100b0078387e04e38mr14945082ejy.257.1664815158410; Mon, 03
+ Oct 2022 09:39:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221003110533.GA9355@alpha.franken.de>
+In-Reply-To: <20221003110533.GA9355@alpha.franken.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 3 Oct 2022 09:39:06 -0700
+Message-ID: <CAADWXX8ESLDdwvUFvehj2CTPX_9reSedh1cXXirqMpFpvmQJaw@mail.gmail.com>
+Subject: Re: [GIT PULL] MIPS changes for v6.1
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
+On Mon, Oct 3, 2022 at 4:05 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.1
 
-  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
+Pulled. However, the reason I'm answering the email is because it was
+caught in my spam folder.
 
-are available in the Git repository at:
+There is nothing bad that stands out to me, and it has proper SPF records.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.1
+It's probably something you can't do much about (like your ISP having
+spammers on nearby IP addresses), but I thought I'd mention it anyway.
 
-for you to fetch changes up to 90c2d2eb7ab5848c4f853751f12b96bdc460ad1b:
+There's no DKIM - setting that up *might* help, and distinguish you
+from the bad people.
 
-  MIPS: pci: lantiq: switch to using gpiod API (2022-10-01 18:07:51 +0200)
-
-----------------------------------------------------------------
-- mainly cleanups
-- fix enabling interrupts on second VPE for Lantiq platform
-- switch to use gpiod API
-- allow firmware passing RND seed
-
-----------------------------------------------------------------
-Aleksander Jan Bajkowski (2):
-      MIPS: dts: lantiq: rename dts files with soc name being the prefix
-      MIPS: lantiq: enable all hardware interrupts on second VPE
-
-Dmitry Torokhov (3):
-      MIPS: Lantiq: switch vmmc to use gpiod API
-      MIPS: Lantiq: vmmc: fix compile break introduced by gpiod patch
-      MIPS: pci: lantiq: switch to using gpiod API
-
-Gaosheng Cui (9):
-      MIPS: Loongson2ef: remove orphan sbx00_acpi_init() declaration
-      MIPS: Octeon: remove orphan octeon_swiotlb declaration
-      MIPS: Octeon: remove orphan cvmx_fpa_setup_pool() declaration
-      MIPS: Octeon: remove orphan octeon_hal_setup_reserved32() declaration
-      MIPS: IRQ: remove orphan declarations from arch/mips/include/asm/irq.h
-      MIPS: remove orphan sni_cpu_time_init() declaration
-      MIPS: AR7: remove orphan declarations from arch/mips/include/asm/mach-ar7/ar7.h
-      MIPS: remove orphan sb1250_time_init() declaration
-      MIPS: IRQ: remove orphan allocate_irqno() declaration
-
-Jason A. Donenfeld (1):
-      mips: allow firmware to pass RNG seed to kernel
-
-Jason Wang (1):
-      MIPS: Fix comment typo
-
-Kees Cook (1):
-      MIPS: BCM47XX: Cast memcmp() of function to (void *)
-
-Lin Yujun (2):
-      MIPS: SGI-IP30: Fix platform-device leak in bridge_platform_create()
-      MIPS: SGI-IP27: Fix platform-device leak in bridge_platform_create()
-
-Liu Shixin (3):
-      mips: cavium: convert to DEFINE_SHOW_ATTRIBUTE
-      mips: kernel: convert to DEFINE_SHOW_ATTRIBUTE
-      mips: ralink: convert to DEFINE_SHOW_ATTRIBUTE
-
-Lukas Bulwahn (1):
-      mips: update config files
-
-Rafał Miłecki (1):
-      mips: bmips: bcm63268: add TWD block binding
-
-Randy Dunlap (1):
-      MIPS: ath25: clean up non-kernel-doc comment warning
-
-Shaomin Deng (1):
-      MIPS: Fix comments typo
-
-Tiezhu Yang (2):
-      MIPS: Silence missing prototype warning
-      MIPS: Simplify __bswapdi2() and __bswapsi2()
-
-Wolfram Sang (1):
-      MIPS: move from strlcpy with unused retval to strscpy
-
- arch/mips/bcm47xx/prom.c                           |  4 +-
- arch/mips/boot/dts/brcm/bcm63268.dtsi              | 18 ++++--
- arch/mips/boot/dts/lantiq/Makefile                 |  2 +-
- .../lantiq/{easy50712.dts => danube_easy50712.dts} |  0
- arch/mips/cavium-octeon/oct_ilm.c                  | 17 +-----
- arch/mips/cavium-octeon/setup.c                    |  2 +-
- arch/mips/configs/ar7_defconfig                    |  4 --
- arch/mips/configs/ath25_defconfig                  |  4 --
- arch/mips/configs/ath79_defconfig                  | 10 ----
- arch/mips/configs/bcm63xx_defconfig                |  3 -
- arch/mips/configs/bigsur_defconfig                 |  9 ---
- arch/mips/configs/bmips_be_defconfig               |  3 -
- arch/mips/configs/bmips_stb_defconfig              | 23 +------
- arch/mips/configs/cavium_octeon_defconfig          |  1 -
- arch/mips/configs/db1xxx_defconfig                 |  1 -
- arch/mips/configs/decstation_64_defconfig          | 10 ----
- arch/mips/configs/decstation_defconfig             | 10 ----
- arch/mips/configs/decstation_r4k_defconfig         | 10 ----
- arch/mips/configs/fuloong2e_defconfig              |  9 ---
- arch/mips/configs/generic/board-ocelot.config      |  1 -
- arch/mips/configs/gpr_defconfig                    |  8 ---
- arch/mips/configs/ip22_defconfig                   | 10 ----
- arch/mips/configs/ip27_defconfig                   | 19 ------
- arch/mips/configs/ip28_defconfig                   |  3 -
- arch/mips/configs/ip32_defconfig                   |  2 -
- arch/mips/configs/jazz_defconfig                   |  1 -
- arch/mips/configs/lemote2f_defconfig               |  9 ---
- arch/mips/configs/loongson1b_defconfig             |  4 --
- arch/mips/configs/loongson1c_defconfig             |  4 --
- arch/mips/configs/loongson2k_defconfig             |  3 -
- arch/mips/configs/loongson3_defconfig              |  2 -
- arch/mips/configs/malta_defconfig                  |  5 --
- arch/mips/configs/malta_kvm_defconfig              |  5 --
- arch/mips/configs/malta_qemu_32r6_defconfig        |  3 -
- arch/mips/configs/maltaaprp_defconfig              |  3 -
- arch/mips/configs/maltasmvp_defconfig              |  3 -
- arch/mips/configs/maltasmvp_eva_defconfig          |  3 -
- arch/mips/configs/maltaup_defconfig                |  3 -
- arch/mips/configs/maltaup_xpa_defconfig            |  5 --
- arch/mips/configs/mtx1_defconfig                   | 10 ----
- arch/mips/configs/omega2p_defconfig                |  3 -
- arch/mips/configs/pic32mzda_defconfig              |  1 -
- arch/mips/configs/rb532_defconfig                  |  4 --
- arch/mips/configs/rbtx49xx_defconfig               |  7 ---
- arch/mips/configs/rm200_defconfig                  |  7 ---
- arch/mips/configs/rt305x_defconfig                 |  4 --
- arch/mips/configs/sb1250_swarm_defconfig           |  2 -
- arch/mips/configs/vocore2_defconfig                |  3 -
- arch/mips/configs/xway_defconfig                   |  4 --
- arch/mips/include/asm/irq.h                        |  4 --
- arch/mips/include/asm/mach-ar7/ar7.h               |  2 -
- arch/mips/include/asm/octeon/cvmx-fpa.h            | 20 -------
- arch/mips/include/asm/octeon/octeon.h              |  1 -
- arch/mips/include/asm/octeon/pci-octeon.h          |  2 -
- arch/mips/include/asm/sibyte/sb1250.h              |  1 -
- arch/mips/include/asm/sni.h                        |  3 -
- arch/mips/kernel/prom.c                            |  6 +-
- arch/mips/kernel/relocate.c                        |  2 +-
- arch/mips/kernel/segment.c                         | 15 +----
- arch/mips/kernel/setup.c                           | 21 +++++++
- arch/mips/lantiq/prom.c                            | 26 +++++++-
- arch/mips/lantiq/xway/vmmc.c                       | 24 +++++---
- arch/mips/lib/bswapdi.c                            | 14 ++---
- arch/mips/lib/bswapsi.c                            | 10 ++--
- arch/mips/loongson2ef/common/pci.c                 |  2 -
- arch/mips/math-emu/cp1emu.c                        |  2 +-
- arch/mips/pci/pci-ar2315.c                         |  2 +-
- arch/mips/pci/pci-lantiq.c                         | 28 ++++-----
- arch/mips/pic32/pic32mzda/init.c                   |  2 +-
- arch/mips/ralink/bootrom.c                         | 15 +----
- arch/mips/sgi-ip27/ip27-xtalk.c                    | 70 +++++++++++++++-------
- arch/mips/sgi-ip30/ip30-xtalk.c                    | 70 +++++++++++++++-------
- arch/mips/sibyte/sb1250/irq.c                      |  6 --
- 73 files changed, 215 insertions(+), 414 deletions(-)
- rename arch/mips/boot/dts/lantiq/{easy50712.dts => danube_easy50712.dts} (100%)
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+                  Linus
