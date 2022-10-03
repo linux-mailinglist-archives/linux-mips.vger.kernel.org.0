@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8CF5F351A
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Oct 2022 20:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133645F351D
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Oct 2022 20:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiJCSAQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Oct 2022 14:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S230032AbiJCSAW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Oct 2022 14:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiJCR7Y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Oct 2022 13:59:24 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27294198F;
-        Mon,  3 Oct 2022 10:58:53 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id c81so12088871oif.3;
-        Mon, 03 Oct 2022 10:58:53 -0700 (PDT)
+        with ESMTP id S229886AbiJCR72 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Oct 2022 13:59:28 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79DC40E25;
+        Mon,  3 Oct 2022 10:59:00 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id n83so12066010oif.11;
+        Mon, 03 Oct 2022 10:59:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=QFAOwCvPEQ69newTdVlBlRzYqc88+vexfOUwWKRdKLA=;
-        b=bSL+caWUYucMtTfICpNrKmMuYzG2KqsMl1VGf7m+fdfwYbXEXRGmH40T90KGTeQTp1
-         a3+5fOys3Fw++Y9d0E/DNcdvwHwQ4+OiuAAksYM0fSoLiZCxS3Ebg5v7Wzty+vyUT+o0
-         y/6DkQt6yg70I3fsboXIj8CpuHDjc123RCEFr96/9GrBe/acQchhV4ySotrwA2LS48w+
-         shJSghZKBnTd6A5Gl95hAvrsLHQOi7X/3wII3KaaIIEwDuGIod2Lj8QWRNc0uYnOLTHM
-         U74rNQvTFtwwoEf13rgc0fzVzCE1u+pHKt6gTIlTHouDcP96iJ4ykXH99PD2sU9Rxlgd
-         272w==
-X-Gm-Message-State: ACrzQf1X9r+WjoRpAn01wklfn03evi/Sj0jU04gVOaeMmZ/vdwqmOKt6
-        w86DBRAeUznjQBR2YcMLrw==
-X-Google-Smtp-Source: AMsMyM7SA6zvMVxcbqiEZ7TGfRL6kPD4KABk1pxTJrUyKeakz4/ckMvfvMsa03hQxRWd/YVI7vyEeA==
-X-Received: by 2002:a05:6808:181e:b0:350:7776:9059 with SMTP id bh30-20020a056808181e00b0035077769059mr4508763oib.83.1664819932282;
-        Mon, 03 Oct 2022 10:58:52 -0700 (PDT)
+        bh=jsFBWQdyENFLVSPAWaRsFcNzTsC/248jtvvx+X5ea8g=;
+        b=hqVIMzk9aRWrpIx21W1Peb0rnSX8+0kOjC0iQ7CtnMJo4LIjN0YKSjP2hQHQZ/qJAu
+         uVlwLE7JWmifJoUDKTnbzo24bLXuc9sWS+18k1PbfFIzkBc5RlQ64r4jKBUtHQqQRvD3
+         OhMlZzHeJ8ABTV+kOqKD/8xnYpAduauoNFtVpqZbhGCRdbeumd6cmYWJHLu0FLFdlMlJ
+         QSa9ef5yxgTWRdYuauUjSYX5R0YSukoYJHjkJMr/10FG7y7EZ6UEcuYmRjUvnP/b1M69
+         WVCY19bzE4U5jjDEp1oLfo4giKwUUCIxPHBPj1KdqjGLJISaptT0I1Rj31B3dfmThedO
+         sfwA==
+X-Gm-Message-State: ACrzQf24H5sShe0EWXG1t4MazpFPjXJSgJiIPeommIu4r610GxPGhZfK
+        2Iandel9XxEExL+pycuTFw==
+X-Google-Smtp-Source: AMsMyM52zXejSllTBXcHyWmvXxfGmMUOuQa7B0+mZ10IliVgFZ0KW8GWLVHuLkmJKfcx9YOEW+vZFg==
+X-Received: by 2002:aca:6541:0:b0:350:f570:4df with SMTP id j1-20020aca6541000000b00350f57004dfmr4509157oiw.239.1664819940015;
+        Mon, 03 Oct 2022 10:59:00 -0700 (PDT)
 Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 6-20020aca0506000000b003509cc4ad4esm2607098oif.39.2022.10.03.10.58.51
+        by smtp.gmail.com with ESMTPSA id x65-20020a9d37c7000000b0065bf42c967fsm2500694otb.19.2022.10.03.10.58.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:58:51 -0700 (PDT)
-Received: (nullmailer pid 2512078 invoked by uid 1000);
-        Mon, 03 Oct 2022 17:58:50 -0000
-Date:   Mon, 3 Oct 2022 12:58:50 -0500
+        Mon, 03 Oct 2022 10:58:59 -0700 (PDT)
+Received: (nullmailer pid 2512339 invoked by uid 1000);
+        Mon, 03 Oct 2022 17:58:58 -0000
+Date:   Mon, 3 Oct 2022 12:58:58 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     zhouyanjie@wanyeetech.com, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org, zajec5@gmail.com,
+Cc:     arinc.unal@arinc9.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
         tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        arinc.unal@arinc9.com, hauke@hauke-m.de
-Subject: Re: [PATCH v5 1/2] dt-bindings: mips: add CPU bindings for MIPS
- architecture
-Message-ID: <166481993001.2512019.5640963273879940418.robh@kernel.org>
+        hauke@hauke-m.de, zajec5@gmail.com, zhouyanjie@wanyeetech.com
+Subject: Re: [PATCH v5 2/2] dt-bindings: mips: brcm: convert Broadcom SoCs to
+ schema
+Message-ID: <166481993839.2512291.4307743279168088281.robh@kernel.org>
 References: <20221002091611.946210-1-sergio.paracuellos@gmail.com>
- <20221002091611.946210-2-sergio.paracuellos@gmail.com>
+ <20221002091611.946210-3-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221002091611.946210-2-sergio.paracuellos@gmail.com>
+In-Reply-To: <20221002091611.946210-3-sergio.paracuellos@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -64,18 +64,14 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 02 Oct 2022 11:16:10 +0200, Sergio Paracuellos wrote:
-> Add the yaml binding for available CPUs in MIPS architecture.
+On Sun, 02 Oct 2022 11:16:11 +0200, Sergio Paracuellos wrote:
+> Add the yaml binding for MIPS Broadcom cable/DSL/settop platforms.
 > 
 > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > ---
->  .../bindings/mips/brcm/brcm,bmips.txt         |   8 --
->  .../devicetree/bindings/mips/cpus.yaml        | 115 ++++++++++++++++++
->  .../bindings/mips/ingenic/ingenic,cpu.yaml    |  69 -----------
->  3 files changed, 115 insertions(+), 77 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mips/brcm/brcm,bmips.txt
->  create mode 100644 Documentation/devicetree/bindings/mips/cpus.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>  .../devicetree/bindings/mips/brcm/soc.yaml    | 97 +++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/brcm/soc.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
