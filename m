@@ -2,79 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2B95F33B5
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Oct 2022 18:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244615F348D
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Oct 2022 19:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiJCQj5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Oct 2022 12:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
+        id S230029AbiJCRdC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Oct 2022 13:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiJCQjV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Oct 2022 12:39:21 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABDC26483
-        for <linux-mips@vger.kernel.org>; Mon,  3 Oct 2022 09:39:19 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id b2so23405363eja.6
-        for <linux-mips@vger.kernel.org>; Mon, 03 Oct 2022 09:39:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Sz/7ENEAx45gBAphCQu33YD+axd5XhAo6fkcJvfvnk8=;
-        b=JVacrpnErD67nRcN3/GqMUQgbWz4niG4/GMA6pkm1e/D2gHV2pAVfi28SOWOMIRDWk
-         8U+wFi5gh6FWsQTLspeDrU3joJcCOxMneKytB0E5SBmXh8TqsHz7Gy87cFU2gbuGF9hR
-         99+oa5BXWFbL/iXD9YwtO/6Fl1qWStvVHJyHM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Sz/7ENEAx45gBAphCQu33YD+axd5XhAo6fkcJvfvnk8=;
-        b=u9Fm8VwJ79qzbdbXH2HhW7ixcvpa9A9tOJmShDMgzjkBr/oHHOJdl4ygch25z6EZf1
-         OAPNMlWsHI/GknDhU3VfZemK8zNVZCtlXCwtDx084ryFequ7K/T8ysXslItU1ZX9aiOo
-         0V4jQKwTO9p5tqNDLTT+7knY8HyhWVIkXJyLSdpBIiBlW6WWsn6GsqtH61M+49ZuVObm
-         8N5+Z7W8ez2MUp53iuuBgktetqotDmJNmFKKqExfiH1Vc651JeJ/2n0kM09TTwEm1o+U
-         dzmFEiyrjc/WCmI2W/r31aKQT/vIiMjL9S4URF/eOkggQ9q88emd7QGL3EQyTn29ETPy
-         gDrw==
-X-Gm-Message-State: ACrzQf0XD1T8yDOVHUfXvsQ2p1y2aBpBqJ6Fu6d5YcBnbNr/hiuW2V61
-        zf8pLzEC9OFVkcJayAl1dkdcm9RtInI7dfz0wcJg7Q==
-X-Google-Smtp-Source: AMsMyM6xIFILRmwJkVXhTIhh1kNVEjhYvcCInbiOMF9fGMFarE4DYfYfqeZfW4cB4B1Axl+ynZ4gZkZ3XnsMoj3vsBI=
-X-Received: by 2002:a17:906:9751:b0:783:87e0:4e38 with SMTP id
- o17-20020a170906975100b0078387e04e38mr14945082ejy.257.1664815158410; Mon, 03
- Oct 2022 09:39:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221003110533.GA9355@alpha.franken.de>
-In-Reply-To: <20221003110533.GA9355@alpha.franken.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 3 Oct 2022 09:39:06 -0700
-Message-ID: <CAADWXX8ESLDdwvUFvehj2CTPX_9reSedh1cXXirqMpFpvmQJaw@mail.gmail.com>
+        with ESMTP id S229939AbiJCRcS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Oct 2022 13:32:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ABD3913C;
+        Mon,  3 Oct 2022 10:32:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 455F260FA8;
+        Mon,  3 Oct 2022 17:32:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A949DC43143;
+        Mon,  3 Oct 2022 17:32:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664818324;
+        bh=1gYDXTKcVQuv5amPQY5/ucgOB2m3PNcHB07+rOJATts=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=UhVi44Nm61lJRz4VibgtDWJKRqDh0e+gO/5Cnd+CbC67CxwNWUSv5mM7wIxsqW5zD
+         2z7FHUM+TPr9xrkNEhQeQdhJY8eiD/V2Udn3v6hOlvRv5khQUrhb/cjoQMrRCJMHxl
+         0BSJAiU1arKLjh4mVyFWwuJdrNVniMKrcZOhOtDVUSfPo8kC2k7xWHSwQZbKcdx32P
+         NGEs1VcjGYoqUeKMhd2pnQOvk/ZC9CYC3RjPkhpaDkAB8lM94TnYAgtkZ+J14Zor5D
+         /qa0bc2Qtz+vSxx4yjUMmbDtjCM6HQ/dzLSuoNZXxO9brNKsDZOOL0rOwB/a5b5cFT
+         1cqdJ5vmL55Aw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 975D0E4D03B;
+        Mon,  3 Oct 2022 17:32:04 +0000 (UTC)
 Subject: Re: [GIT PULL] MIPS changes for v6.1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221003110533.GA9355@alpha.franken.de>
+References: <20221003110533.GA9355@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221003110533.GA9355@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.1
+X-PR-Tracked-Commit-Id: 90c2d2eb7ab5848c4f853751f12b96bdc460ad1b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: fb443f36f3b9af6a4590b6e65e2d7affdfe0da18
+Message-Id: <166481832461.20277.10097702833355192196.pr-tracker-bot@kernel.org>
+Date:   Mon, 03 Oct 2022 17:32:04 +0000
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 3, 2022 at 4:05 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.1
+The pull request you sent on Mon, 3 Oct 2022 13:05:33 +0200:
 
-Pulled. However, the reason I'm answering the email is because it was
-caught in my spam folder.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.1
 
-There is nothing bad that stands out to me, and it has proper SPF records.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/fb443f36f3b9af6a4590b6e65e2d7affdfe0da18
 
-It's probably something you can't do much about (like your ISP having
-spammers on nearby IP addresses), but I thought I'd mention it anyway.
+Thank you!
 
-There's no DKIM - setting that up *might* help, and distinguish you
-from the bad people.
-
-                  Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
