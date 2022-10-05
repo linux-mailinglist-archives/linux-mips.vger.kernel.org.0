@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33BF5F527E
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Oct 2022 12:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A3B5F5280
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Oct 2022 12:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiJEKVg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Oct 2022 06:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
+        id S229494AbiJEKVh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Oct 2022 06:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJEKVf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Oct 2022 06:21:35 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B36C760FC;
-        Wed,  5 Oct 2022 03:21:34 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bu30so5359895wrb.8;
-        Wed, 05 Oct 2022 03:21:34 -0700 (PDT)
+        with ESMTP id S229603AbiJEKVg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Oct 2022 06:21:36 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8F6760ED;
+        Wed,  5 Oct 2022 03:21:35 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id j7so19885070wrr.3;
+        Wed, 05 Oct 2022 03:21:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ALKnFwRpIOaBlrQAFvWaW5lYm0S2kB5thkEACKlxgCk=;
-        b=QWtRjLVq0DLQLshDqTY607nx/oSCv6qrtiuhvZGqksHcA/Cc79xE5PMJb0HqmB8t3t
-         2SustCoOcin3MHvEuUqiSMHlaoFvXkBLFmIrnUifeGJ8/krqslaRpvG7LlMkadaKrta0
-         QIDpWrzicAU8EBhhdTQ2A791aanmyWLObaufcnBMZVE81AVlMr11yOoMLXtk8GSB9YkI
-         sgKoGuIZjar0WL4g3JKv7fKDhNuNNVp7k48/QUal2gr2woAShsIkLQK8kAqnhhsnOz2S
-         JoOH7yHROPcBqFw8/ejn0hUdAsMGFxk4ULQXuirgIK4c5wapCYOB70/gQ3kSm6nET1yA
-         SgnA==
+        bh=HAshog50Hg6lN7H+lni1kCL0WsRmHtb+odbdpswRDfg=;
+        b=eefjpfWZ6viq7VLgSGYidDJoK0enVUcRxftegGvZspm3uLeoZwzZ6mwVu5UY/1Iy5+
+         ohqR6+8g0FIWC2nVJdiRkYx+aORK2mQW09xkob3+5PwRyZwM+FHEbbHPhoR5wPTkNelx
+         sA6KI35a0jygetBBSrs/FkY9loDFb7fQ3ktXaUPJ5KzFVllG+gP+/Jzdx5W+RVT7xT5l
+         TBi/Di6XowbReNLIMPi4HkUGNeexebLZjdKBGfeX5hJ8RomixQpwGaNAGr9bx0Ery6ql
+         Pa91ycFfnkK7El25ivJEMn8kQrTd0epT9K/Niy8vWNtl2DgjtFTUwMYAjVLtFxdYuMC6
+         ER0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=ALKnFwRpIOaBlrQAFvWaW5lYm0S2kB5thkEACKlxgCk=;
-        b=FW81Qtzz00aJsfmt9iDd7+mjqJccrFkNveXLCBTi5jBT4NHtoudwjO3C+qMGaxydY3
-         ATa+mcJMPnX0qAQ7S+NBO/43JKruTuWBt6qcpCNA+wk890VhNHEyBpBpox1gTxS6uD+U
-         QZIedX6G7Ln1eSO5Mmb55/fd4lFjznNqJ9mN6poUsA75ziwmyWXWd30gcpuk708ZMwWU
-         9pnmq0TOjUU/jVkxSR6K1Ht27/+YF+NDi8vQjrfg0Tt6XEY46rYV3srjNtXNiJDw5d0j
-         xtwK+CZs8mq7fbFkmff4oxvPP+8BPIDZZwOi5CCV11CtXFROMO34cvRWGAJRdcIeedA9
-         2jKQ==
-X-Gm-Message-State: ACrzQf39LAuTjfbgfHa12S7oKM4O0iX1rZFeuf5y5mc3BYsN6FZgSQN+
-        8Hxt9CnQBfEtoi5QyQfOVJpzhFHt0ptHvA==
-X-Google-Smtp-Source: AMsMyM4l3IB8W/4m17JOXylZcluagQ2H6QqefuOxcPfTLbnU0djRgZcUY0BcdSFzI3YQfwmJtbtM1Q==
-X-Received: by 2002:a5d:620b:0:b0:22c:9eb4:d6ed with SMTP id y11-20020a5d620b000000b0022c9eb4d6edmr19980139wru.530.1664965292522;
-        Wed, 05 Oct 2022 03:21:32 -0700 (PDT)
+        bh=HAshog50Hg6lN7H+lni1kCL0WsRmHtb+odbdpswRDfg=;
+        b=PbW5fwAS4CO6e+vKrEgbjIsEr7eL4FNIyVg2mZyheWNhdqxVUywTtIFHIWS1Ck03so
+         hjlAreO2FArN2RMf4Dd8sO/QEcme191e4+1ZOqxUlJlktm+Cf4524I/MgDGmQNsO+kAN
+         X6Z5/SpYXntibJynQ6S5vG74ZY7wmp4xKTpluN9b83CPQxqOV78tmiRQPd7pZjIvSQ5v
+         wCvW8BF+7+jfab7zWgbFcdAR1K1hEhvPFxxl9hOOMioQbhHazBpq0Dsz0XIbmbgDjGPu
+         f4hlGjqEm7OJ9fs6kXCRHrF/hm6gYGd4BprQ7qc7yxlCWDFXt3ue4xJjw9ClQkBC+olE
+         mGaQ==
+X-Gm-Message-State: ACrzQf0XkNH4VI86dZecLF5x9c+DLLKAbkMameMBTl+XJt+oA/j2w9Pk
+        DDobxz/eF6otBOdZzjNSTpT08omppp7oAg==
+X-Google-Smtp-Source: AMsMyM7dswrfxF2wJ7pLfqIexxnm9UPlD+2f9eJCJhTrbmILLpwTpWIa2TbWWX5SGaELb9k34wd0gA==
+X-Received: by 2002:a05:6000:806:b0:22a:36df:2663 with SMTP id bt6-20020a056000080600b0022a36df2663mr18579272wrb.423.1664965293633;
+        Wed, 05 Oct 2022 03:21:33 -0700 (PDT)
 Received: from localhost.localdomain (188.red-88-10-59.dynamicip.rima-tde.net. [88.10.59.188])
-        by smtp.gmail.com with ESMTPSA id az30-20020adfe19e000000b002286670bafasm4481702wrb.48.2022.10.05.03.21.31
+        by smtp.gmail.com with ESMTPSA id az30-20020adfe19e000000b002286670bafasm4481702wrb.48.2022.10.05.03.21.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 03:21:32 -0700 (PDT)
+        Wed, 05 Oct 2022 03:21:33 -0700 (PDT)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -55,14 +55,13 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         zhouyanjie@wanyeetech.com, linux-mips@vger.kernel.org,
         arinc.unal@arinc9.com, f.fainelli@gmail.com,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v7 1/2] dt-bindings: mips: add CPU bindings for MIPS architecture
-Date:   Wed,  5 Oct 2022 12:21:27 +0200
-Message-Id: <20221005102128.1014468-2-sergio.paracuellos@gmail.com>
+Subject: [PATCH v7 2/2] dt-bindings: mips: brcm: add Broadcom SoCs bindings
+Date:   Wed,  5 Oct 2022 12:21:28 +0200
+Message-Id: <20221005102128.1014468-3-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221005102128.1014468-1-sergio.paracuellos@gmail.com>
 References: <20221005102128.1014468-1-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -74,229 +73,119 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add the yaml binding for available CPUs in MIPS architecture.
+Add the yaml binding for MIPS Broadcom cable/DSL/settop platforms.
 
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- .../bindings/mips/brcm/brcm,bmips.txt         |   8 --
- .../devicetree/bindings/mips/cpus.yaml        | 115 ++++++++++++++++++
- .../bindings/mips/ingenic/ingenic,cpu.yaml    |  69 -----------
- 3 files changed, 115 insertions(+), 77 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mips/brcm/brcm,bmips.txt
- create mode 100644 Documentation/devicetree/bindings/mips/cpus.yaml
- delete mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+ .../devicetree/bindings/mips/brcm/soc.yaml    | 97 +++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mips/brcm/soc.yaml
 
-diff --git a/Documentation/devicetree/bindings/mips/brcm/brcm,bmips.txt b/Documentation/devicetree/bindings/mips/brcm/brcm,bmips.txt
-deleted file mode 100644
-index 8ef71b4085ca..000000000000
---- a/Documentation/devicetree/bindings/mips/brcm/brcm,bmips.txt
-+++ /dev/null
-@@ -1,8 +0,0 @@
--* Broadcom MIPS (BMIPS) CPUs
--
--Required properties:
--- compatible: "brcm,bmips3300", "brcm,bmips4350", "brcm,bmips4380",
--  "brcm,bmips5000"
--
--- mips-hpt-frequency: This is common to all CPUs in the system so it lives
--  under the "cpus" node.
-diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
+diff --git a/Documentation/devicetree/bindings/mips/brcm/soc.yaml b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
 new file mode 100644
-index 000000000000..e991f4c6668d
+index 000000000000..506316bdf51f
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mips/cpus.yaml
-@@ -0,0 +1,115 @@
++++ b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
+@@ -0,0 +1,97 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/mips/cpus.yaml#
++$id: http://devicetree.org/schemas/mips/brcm/soc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: MIPS CPUs bindings
++title: Broadcom cable/DSL/settop platforms
 +
 +maintainers:
-+  - Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-+  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
++  - Hauke Mehrtens <hauke@hauke-m.de>
++  - Florian Fainelli <f.fainelli@gmail.com>
 +
 +description: |
-+  The device tree allows to describe the layout of CPUs in a system through
-+  the "cpus" node, which in turn contains a number of subnodes (ie "cpu")
-+  defining properties for every CPU.
++    Boards Broadcom cable/DSL/settop SoC shall have the following properties.
++    The experimental -viper variants are for running Linux on the 3384's
++    BMIPS4355 cable modem CPU instead of the BMIPS5000 application processor.
 +
 +properties:
++  $nodename:
++    const: '/'
++
 +  compatible:
 +    enum:
-+      - brcm,bmips3300
-+      - brcm,bmips4350
-+      - brcm,bmips4380
-+      - brcm,bmips5000
-+      - brcm,bmips5200
-+      - ingenic,xburst-mxu1.0
-+      - ingenic,xburst-fpu1.0-mxu1.1
-+      - ingenic,xburst-fpu2.0-mxu2.0
-+      - ingenic,xburst2-fpu2.1-mxu2.1-smt
-+      - loongson,gs264
-+      - mips,m14Kc
-+      - mips,mips4Kc
-+      - mips,mips4KEc
-+      - mips,mips24Kc
-+      - mips,mips24KEc
-+      - mips,mips74Kc
-+      - mips,mips1004Kc
-+      - mti,interaptiv
-+      - mti,mips24KEc
-+      - mti,mips14KEc
-+      - mti,mips14Kc
++      - brcm,bcm3368
++      - brcm,bcm3384
++      - brcm,bcm33843
++      - brcm,bcm3384-viper
++      - brcm,bcm33843-viper
++      - brcm,bcm6328
++      - brcm,bcm6358
++      - brcm,bcm6362
++      - brcm,bcm6368
++      - brcm,bcm63168
++      - brcm,bcm63268
++      - brcm,bcm7125
++      - brcm,bcm7346
++      - brcm,bcm7358
++      - brcm,bcm7360
++      - brcm,bcm7362
++      - brcm,bcm7420
++      - brcm,bcm7425
 +
-+  reg:
-+    maxItems: 1
++  cpus:
++    type: object
++    additionalProperties: false
++    properties:
++      '#address-cells':
++        const: 1
 +
-+  clocks:
-+    maxItems: 1
++      '#size-cells':
++        const: 0
 +
-+  device_type: true
++      mips-hpt-frequency:
++        description: MIPS counter high precision timer frequency.
++         This is common to all CPUs in the system so it lives
++         under the "cpus" node.
++        $ref: /schemas/types.yaml#/definitions/uint32
 +
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - ingenic,xburst-mxu1.0
-+              - ingenic,xburst-fpu1.0-mxu1.1
-+              - ingenic,xburst-fpu2.0-mxu2.0
-+              - ingenic,xburst2-fpu2.1-mxu2.1-smt
-+    then:
-+      required:
-+        - device_type
-+        - clocks
++    patternProperties:
++      "^cpu@[0-9]$":
++        type: object
++        $ref: /schemas/mips/cpus.yaml#
++        unevaluatedProperties: false
 +
-+required:
-+  - compatible
-+  - reg
++    required:
++      - mips-hpt-frequency
 +
-+additionalProperties: false
++additionalProperties: true
 +
 +examples:
 +  - |
-+    cpus {
-+      #size-cells = <0>;
-+      #address-cells = <1>;
++     / {
++         compatible = "brcm,bcm3368";
++         #address-cells = <1>;
++         #size-cells = <1>;
++         model = "Broadcom 3368";
 +
-+      cpu@0 {
-+        compatible = "mips,mips1004Kc";
-+        device_type = "cpu";
-+        reg = <0>;
-+      };
++         cpus {
++           #address-cells = <1>;
++           #size-cells = <0>;
 +
-+      cpu@1 {
-+        compatible = "mips,mips1004Kc";
-+        device_type = "cpu";
-+        reg = <1>;
-+      };
-+    };
++           mips-hpt-frequency = <150000000>;
 +
-+  - |
-+    // Example 2 (Ingenic CPU)
-+    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
++           cpu@0 {
++             compatible = "brcm,bmips4350";
++             device_type = "cpu";
++             reg = <0>;
++           };
 +
-+    cpus {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      cpu@0 {
-+        compatible = "ingenic,xburst-fpu1.0-mxu1.1";
-+        device_type = "cpu";
-+        reg = <0>;
-+
-+        clocks = <&cgu JZ4780_CLK_CPU>;
-+      };
-+
-+      cpu@1 {
-+        compatible = "ingenic,xburst-fpu1.0-mxu1.1";
-+        device_type = "cpu";
-+        reg = <1>;
-+
-+        clocks = <&cgu JZ4780_CLK_CORE1>;
-+      };
-+    };
++           cpu@1 {
++             compatible = "brcm,bmips4350";
++             device_type = "cpu";
++             reg = <1>;
++           };
++         };
++       };
 +...
-diff --git a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-deleted file mode 100644
-index b7e7fa715437..000000000000
---- a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
-+++ /dev/null
-@@ -1,69 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/mips/ingenic/ingenic,cpu.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Bindings for Ingenic XBurst family CPUs
--
--maintainers:
--  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
--
--description:
--  Ingenic XBurst family CPUs shall have the following properties.
--
--properties:
--  compatible:
--    oneOf:
--
--      - description: Ingenic XBurst®1 CPU Cores
--        enum:
--          - ingenic,xburst-mxu1.0
--          - ingenic,xburst-fpu1.0-mxu1.1
--          - ingenic,xburst-fpu2.0-mxu2.0
--
--      - description: Ingenic XBurst®2 CPU Cores
--        enum:
--          - ingenic,xburst2-fpu2.1-mxu2.1-smt
--
--  reg:
--    maxItems: 1
--
--  clocks:
--    maxItems: 1
--
--  device_type: true
--
--required:
--  - device_type
--  - compatible
--  - reg
--  - clocks
--
--additionalProperties: false
--
--examples:
--  - |
--    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
--
--    cpus {
--        #address-cells = <1>;
--        #size-cells = <0>;
--
--        cpu0: cpu@0 {
--                device_type = "cpu";
--                compatible = "ingenic,xburst-fpu1.0-mxu1.1";
--                reg = <0>;
--
--                clocks = <&cgu JZ4780_CLK_CPU>;
--        };
--
--        cpu1: cpu@1 {
--                device_type = "cpu";
--                compatible = "ingenic,xburst-fpu1.0-mxu1.1";
--                reg = <1>;
--
--                clocks = <&cgu JZ4780_CLK_CORE1>;
--        };
--    };
--...
 -- 
 2.25.1
 
