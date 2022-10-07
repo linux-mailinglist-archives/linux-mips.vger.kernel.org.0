@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E605F7ADD
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Oct 2022 17:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37625F7AE2
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Oct 2022 17:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiJGPqN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Oct 2022 11:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S230114AbiJGPq2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Oct 2022 11:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiJGPqJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Oct 2022 11:46:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA35D73DD
-        for <linux-mips@vger.kernel.org>; Fri,  7 Oct 2022 08:46:05 -0700 (PDT)
+        with ESMTP id S230090AbiJGPqN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Oct 2022 11:46:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAC4437C4
+        for <linux-mips@vger.kernel.org>; Fri,  7 Oct 2022 08:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665157564;
+        s=mimecast20190719; t=1665157566;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jAXnJ0u7W03NIJPSLVmnFtjZEFHwdySA+neP8cndke0=;
-        b=IgyB/xG8Pb0aM9ALx9fm/8aopEtAAYdPbRzE3T+Paki8rlF+1KdUQh9k0uyN6ic5Jhomiz
-        QBCtmAK81USQhKknveVXOW6NPB+CH0SU8dj1vHIgMIEASevfKxS7bc/4j+sSiuj+tGzK07
-        +9ftKESDpLTPaVXFcGQEqbuKWP6oI7Y=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=O4Pqcbma7I8CmezCzayfM2Dc1cTkJUS9uBKY5V7UMK0=;
+        b=YoytWHmCEkt1AFWeH/Nxw8ma3qVoJrv/Pt7+LwJySEr9Z8ZmUUq6RQ7+z7vUxGim/ba9lv
+        5cUlL8alwcjsTfHleij9HvSSKma57TWEukBXgyki/ltagvuY5syxqeDFRtfeTp47fCqnIk
+        ReIdyqQWdZyeHbr+agcilYSoyV0BiZQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-310-TToWWvOqMxerraCyYV9J6Q-1; Fri, 07 Oct 2022 11:45:57 -0400
-X-MC-Unique: TToWWvOqMxerraCyYV9J6Q-1
-Received: by mail-wm1-f72.google.com with SMTP id fc12-20020a05600c524c00b003b5054c70d3so2849500wmb.5
-        for <linux-mips@vger.kernel.org>; Fri, 07 Oct 2022 08:45:57 -0700 (PDT)
+ us-mta-5-A8WHXq0IN6SqP1VHUd_72A-1; Fri, 07 Oct 2022 11:46:04 -0400
+X-MC-Unique: A8WHXq0IN6SqP1VHUd_72A-1
+Received: by mail-wm1-f69.google.com with SMTP id k2-20020a05600c1c8200b003c3dd3aa638so367483wms.1
+        for <linux-mips@vger.kernel.org>; Fri, 07 Oct 2022 08:46:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jAXnJ0u7W03NIJPSLVmnFtjZEFHwdySA+neP8cndke0=;
-        b=kR4yPJ/lLzKWrGAmd3CrySVoku5h6vNicmjk5L9pEsNXXAiggpJjUGu/uyfIabsnTl
-         4uXqxAI6DzICCdoKuXkUmbDVNSQBNa/zrnE8eCoZ8WVPp+JAw6ySi9Bw3A97X4JPtvuT
-         J4ybG5lqpUfsECTB9pZ6oJ9IJvUC1ECMac1ELrNNMGB48TIjedQgIoC9NX34NRmdQNgI
-         +RVugYzIqWMNCLLSvMFbSJbe3r9ZurDWVcgNJ9trbeuYVQJVLkocM/1EF0DZIKO/ea5J
-         cj6Dhui6R7td4zzqzByHgSIgubPQ0dzdjBcxOWfsBKPfsqgMYxD7CtSqo18RgZZgu34Q
-         8Bhw==
-X-Gm-Message-State: ACrzQf1iNbOUhmiWS0lmzBAk+zaRrtT+aZJhFR/2aAHXSlzjOglmShAu
-        WJ0CFft9A08OABuqUYqy+qQf6HDf1e+Q8FFlcJt8Z3OX9sUQyLgxu4fjyfTgh/E6dUQJEp5I4+x
-        /ab+fHQNyiQn74qhCGCAicQ==
-X-Received: by 2002:a05:600c:1d11:b0:3b4:7644:b788 with SMTP id l17-20020a05600c1d1100b003b47644b788mr4004367wms.114.1665157556406;
-        Fri, 07 Oct 2022 08:45:56 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5EpDwoqxaA3kuqs1iO/JBIwLdmLfBJiR2SaBRc8PnLfbv3ObEmlrGj1DHjl4vmQIuUA923ig==
-X-Received: by 2002:a05:600c:1d11:b0:3b4:7644:b788 with SMTP id l17-20020a05600c1d1100b003b47644b788mr4004355wms.114.1665157556194;
-        Fri, 07 Oct 2022 08:45:56 -0700 (PDT)
+        bh=O4Pqcbma7I8CmezCzayfM2Dc1cTkJUS9uBKY5V7UMK0=;
+        b=yhlSfPS1Jl0pGaIvKrdq52Av6XyX+cWruiUvJGjarujaRpIlM5hP/viZyWrMydrzhY
+         ldKOSzKY+WE7KoUvY5VH0Or+BCDJ+73Ijh7Na8PgjnKsnKZLs76obcCK1K5YXDZVr4v2
+         qjAdWcNgt+Hb3F7nf7CAaG3y9JkYXdD4O3sMntXl/xv+5MFRK6Voop2jD7Amv9mphNyP
+         bcwStR5iQ71dvFHbytnRPneHUt+/z4AMzfOR4pst89xxm4HQdBYiLy19qKCneVPx4p4H
+         4FyA6sIzVsrGfy86EBoCd54pgj9wCtPIkZGxSP7SQB7jgRoQSH2SUuixUGLyNMgc5vH2
+         le4w==
+X-Gm-Message-State: ACrzQf0jGxn29W7WVQs8RcLyjFJfeIk20zD40pKNxD6TFNTMlDejIGAF
+        iEV6EPfdxJCk2Nu7GoZrOkq6SpmedSyr6NBKWuyhG3RBhKuOnEJ+cM1IvX62UQ8YEwcVwKro7mq
+        9RHLUpbijziJ4yBvB2UrRGA==
+X-Received: by 2002:a05:600c:474c:b0:3b4:cbca:5677 with SMTP id w12-20020a05600c474c00b003b4cbca5677mr3615511wmo.76.1665157563647;
+        Fri, 07 Oct 2022 08:46:03 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5BU2FP8ts0HH9McA8hGqt4EcEkhUio8tUw5hjcE8rRRaWGVB+HCzlKu55T50nu8VVd2MVS1w==
+X-Received: by 2002:a05:600c:474c:b0:3b4:cbca:5677 with SMTP id w12-20020a05600c474c00b003b4cbca5677mr3615475wmo.76.1665157563388;
+        Fri, 07 Oct 2022 08:46:03 -0700 (PDT)
 Received: from vschneid.remote.csb ([149.71.65.94])
-        by smtp.gmail.com with ESMTPSA id i18-20020adfb652000000b0022e38c93195sm2339428wre.34.2022.10.07.08.45.54
+        by smtp.gmail.com with ESMTPSA id i18-20020adfb652000000b0022e38c93195sm2339428wre.34.2022.10.07.08.45.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 08:45:55 -0700 (PDT)
+        Fri, 07 Oct 2022 08:46:01 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
@@ -83,9 +83,9 @@ Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Guo Ren <guoren@kernel.org>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [RFC PATCH 2/5] sched, smp: Trace send_call_function_single_ipi()
-Date:   Fri,  7 Oct 2022 16:45:30 +0100
-Message-Id: <20221007154533.1878285-2-vschneid@redhat.com>
+Subject: [RFC PATCH 3/5] smp: Add a multi-CPU variant to send_call_function_single_ipi()
+Date:   Fri,  7 Oct 2022 16:45:31 +0100
+Message-Id: <20221007154533.1878285-3-vschneid@redhat.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221007154145.1877054-1-vschneid@redhat.com>
 References: <20221007154145.1877054-1-vschneid@redhat.com>
@@ -101,89 +101,40 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-send_call_function_single_ipi() is the thing that sends IPIs at the bottom
-of smp_call_function*() via either generic_exec_single() or
-smp_call_function_many_cond(). Give it an IPI-related tracepoint.
-
-Note that this ends up tracing any IPI sent via __smp_call_single_queue(),
-which covers __ttwu_queue_wakelist() and irq_work_queue_on() "for free".
+This simply wraps around the arch function and prepends it with a
+tracepoint, bringing parity with send_call_function_single_ipi().
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/arm/kernel/smp.c   | 3 ---
- arch/arm64/kernel/smp.c | 1 -
- kernel/sched/core.c     | 7 +++++--
- kernel/smp.c            | 4 ++++
- 4 files changed, 9 insertions(+), 6 deletions(-)
+ kernel/smp.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
-index 978db2d96b44..3b280d55c1c4 100644
---- a/arch/arm/kernel/smp.c
-+++ b/arch/arm/kernel/smp.c
-@@ -48,9 +48,6 @@
- #include <asm/mach/arch.h>
- #include <asm/mpu.h>
- 
--#define CREATE_TRACE_POINTS
--#include <trace/events/ipi.h>
--
- /*
-  * as from 2.5, kernels no longer have an init_tasks structure
-  * so we need some other way of telling a new secondary core
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index ffc5d76cf695..937d2623e06b 100644
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -51,7 +51,6 @@
- #include <asm/ptrace.h>
- #include <asm/virt.h>
- 
--#define CREATE_TRACE_POINTS
- #include <trace/events/ipi.h>
- 
- DEFINE_PER_CPU_READ_MOSTLY(int, cpu_number);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 60fdc0faf1c9..14e5e137172f 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -81,6 +81,7 @@
- #include <linux/sched/rseq_api.h>
- #include <trace/events/sched.h>
- #undef CREATE_TRACE_POINTS
-+#include <trace/events/ipi.h>
- 
- #include "sched.h"
- #include "stats.h"
-@@ -3753,10 +3754,12 @@ void send_call_function_single_ipi(int cpu)
- {
- 	struct rq *rq = cpu_rq(cpu);
- 
--	if (!set_nr_if_polling(rq->idle))
-+	if (!set_nr_if_polling(rq->idle)) {
-+		trace_ipi_send_cpu(_RET_IP_, cpu);
- 		arch_send_call_function_single_ipi(cpu);
--	else
-+	} else {
- 		trace_sched_wake_idle_without_ipi(cpu);
-+	}
- }
- 
- /*
 diff --git a/kernel/smp.c b/kernel/smp.c
-index e8cdc025a046..7a7a22d69972 100644
+index 7a7a22d69972..387735180aed 100644
 --- a/kernel/smp.c
 +++ b/kernel/smp.c
-@@ -26,6 +26,10 @@
- #include <linux/sched/debug.h>
- #include <linux/jump_label.h>
+@@ -160,6 +160,12 @@ void __init call_function_init(void)
+ 	smpcfd_prepare_cpu(smp_processor_id());
+ }
  
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/ipi.h>
-+#undef CREATE_TRACE_POINTS
++static inline void send_call_function_ipi_mask(const struct cpumask *mask)
++{
++	trace_ipi_send_cpumask(_RET_IP_, mask);
++	arch_send_call_function_ipi_mask(mask);
++}
 +
- #include "smpboot.h"
- #include "sched/smp.h"
+ #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
  
+ static DEFINE_STATIC_KEY_FALSE(csdlock_debug_enabled);
+@@ -970,7 +976,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 		if (nr_cpus == 1)
+ 			send_call_function_single_ipi(last_cpu);
+ 		else if (likely(nr_cpus > 1))
+-			arch_send_call_function_ipi_mask(cfd->cpumask_ipi);
++			send_call_function_ipi_mask(cfd->cpumask_ipi);
+ 
+ 		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->pinged, this_cpu, CFD_SEQ_NOCPU, CFD_SEQ_PINGED);
+ 	}
 -- 
 2.31.1
 
