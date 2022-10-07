@@ -2,114 +2,247 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC64F5F7BB9
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Oct 2022 18:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEAD5F7C05
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Oct 2022 19:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiJGQne (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Oct 2022 12:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S229719AbiJGRNJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Oct 2022 13:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiJGQnU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Oct 2022 12:43:20 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0608F26B;
-        Fri,  7 Oct 2022 09:43:17 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 72D7C3200413;
-        Fri,  7 Oct 2022 12:43:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 07 Oct 2022 12:43:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665160995; x=
-        1665247395; bh=ztA8X0oCOrzYe4bRM5wcVboplj1CUUEIc1ilkn7aa30=; b=q
-        FKLdf9EkUFedxcq0I8GMRLbiWqr6NZQZMGydORi7Kxsl3CqTUS/EjjN9Xh0NrbNK
-        +NMDRdSZIVBmKoVd4EUhYiBPy8CFx2ArnKFSawz5/mNw/o7t0NZt8YdKzX1FPSZ9
-        XoACLMW9kHSmBH7RBRqEbrTHLTERGlwxXMBFIwmsf5cMv/gF1wbLNdqXT3QCWXAA
-        wcuhZtRxilf6WNmv2J4gDJAXPVZiGVW+Hb1EtlzVvrCVw29qO+944jLstNlWNdU4
-        zT6J3Hy1k4S+DgDQHpG8NwdnurTBV9AbbCQSF3RrFBm8+HLIedUQEab+5RWc1JyV
-        C6En08tpCZxwX0IPjvceg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665160995; x=
-        1665247395; bh=ztA8X0oCOrzYe4bRM5wcVboplj1CUUEIc1ilkn7aa30=; b=V
-        iORmYvI9BZfPe8CCIIT79BNszLMcZOEu8k5emi66xDB2mXe1SiUL4fYcl2u77Uq7
-        KJQE8U0DHZu1AvhCVOxQGlnqA1S/1r6rsb6/jCuNrBRq2dtjpQBeLxt9NscAeFVG
-        j/Wtfy2+QBYUgKmy8TEdiTHaVA3eF2+6moDmbi4HeTjRgRvCycStZPQURPYjsi2/
-        3h1dm9GXa2J01SVcCTgCzHUuwnvXHY9cRN4Mqzt0CxwPOA2c9uQ+3z3DyfLycKpB
-        z66utldH6N8O7jjbDH06go6fzVDezOiqGJeJHsG4tirJAlwr0X1nkwU2Kk8HKYRI
-        H92LOs1gO80mq2FwQsQxw==
-X-ME-Sender: <xms:IldAY9YcrY0GPBVpttivtE8OWGrjcFUA_8DE8DPS7_GMgysCU1CKnA>
-    <xme:IldAY0an20vC3DnwkP8TrolukoPfVB7kRp8jXRBt_DB5K1MYk14Vwsh0QkMEpzmsF
-    Ex-h0BvbJhsNQ>
-X-ME-Received: <xmr:IldAY_90t4QK72yxDpO73zCWOwzs0Kob1MuCWr6CJsatrp0BFX15lZbgLj6k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeijedguddtgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepifhr
-    vghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgf
-    ekffeifeeiveekleetjedvtedvtdeludfgvdfhteejjeeiudeltdefffefvdeinecuvehl
-    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrh
-    horghhrdgtohhm
-X-ME-Proxy: <xmx:IldAY7pWMZe9_52OngMsdzKSb6if6T_pl161LvQf83vWI325963RZA>
-    <xmx:IldAY4rNqC-iX4aLjjBuJbykJ27hF9qfqVKcag6QX-WsPQ4C0RNENg>
-    <xmx:IldAYxQcqJuBw90WnjVswHFP4v2Dug9FMPZD7yVk3WEtx4-lJn5nKg>
-    <xmx:I1dAY1jWZd4iSJIAVHZNkE4ex5dU43iro1I1qZLUW9I_c5O9B_Lq1g>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 7 Oct 2022 12:43:14 -0400 (EDT)
-Date:   Fri, 7 Oct 2022 18:43:56 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
+        with ESMTP id S229630AbiJGRNI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Oct 2022 13:13:08 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E726CF87F
+        for <linux-mips@vger.kernel.org>; Fri,  7 Oct 2022 10:12:45 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id l4so5098689plb.8
+        for <linux-mips@vger.kernel.org>; Fri, 07 Oct 2022 10:12:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=r+ar3rF5Nifj4ZH0w5BLPJvorwhCPz9FpYPvkQg1fFY=;
+        b=lnyLGuYmjS75CgXIYPygwDolRfcdA6yOcav2EBBasADUNmB+X4q/LGyG3GplPLKF4D
+         kbVVCg/8bBMxcfD9rLKmUEYYLhbyeB5zPm6ZDbYMckDnSVVJGqQeX6zA9l/IbMFC0x6e
+         tEj8qeloPyDPz0HyArmtPjFAzjrVIlk8ES+6Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r+ar3rF5Nifj4ZH0w5BLPJvorwhCPz9FpYPvkQg1fFY=;
+        b=tDKNNQSCUvMUhxEd43NUWTlCW1/oAH/S44jYP2Zs3QQlFVxc070VnYxpan4IEdL1nX
+         AkH50aNdFcPrPbzw2+YMhIMY0vMii43+rjoB050d1pP9PSiCCAD5ANslipT9AvQGw2lf
+         Ja2cC5DTJmrPXHH3iPOwo49SAiUabAeJWJr3MObEO8cDk8x5ZWPkQlp3inLyDaU8Wpec
+         59XwQFzXrF5DkfuMTiOmyv+MQbDQkhNe9ZWYCuaYZqKPKcYqc97aYf9Cn4al9hdo7LKO
+         slg6LsEsAmp3KFsj0hi8v5g0Eg98IHb2oQ40NXvaEPXwgRdvDxiG15GvxeL3VsfoMRPQ
+         qTAg==
+X-Gm-Message-State: ACrzQf01Kw2jmDZ+GV+79edmBTeWT1aruM5nbFkFiTAoZDTOeDGeLetn
+        5DM2Or5FaxK6FreKhFgpFONaQg==
+X-Google-Smtp-Source: AMsMyM5FdSz2fuOhnh7+TfKkWyevTFzVNHatDVk0F2miilQc1NJEc103WmEytUatslzSlAWFEVnJrw==
+X-Received: by 2002:a17:902:f707:b0:17f:8541:c04b with SMTP id h7-20020a170902f70700b0017f8541c04bmr6026417plo.98.1665162764769;
+        Fri, 07 Oct 2022 10:12:44 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q13-20020aa7842d000000b0056234327070sm1944049pfn.95.2022.10.07.10.12.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 10:12:43 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 10:12:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>, Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-api@vger.kernel.org, f.fainelli@gmail.com
-Subject: Re: [PATCH v5] MIPS: Expose prid and globalnumber to sysfs
-Message-ID: <Y0BXTP4ur6bxrpim@kroah.com>
-References: <20221007141207.30635-1-jiaxun.yang@flygoat.com>
- <Y0A9L2KajswAEKsu@kroah.com>
- <b3886864-5c54-4524-8e30-b6701553b615@app.fastmail.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v3 3/5] treewide: use get_random_u32() when possible
+Message-ID: <202210071010.52C672FA9@keescook>
+References: <20221006165346.73159-1-Jason@zx2c4.com>
+ <20221006165346.73159-4-Jason@zx2c4.com>
+ <848ed24c-13ef-6c38-fd13-639b33809194@csgroup.eu>
+ <CAHmME9raQ4E00r9r8NyWJ17iSXE_KniTG0onCNAfMmfcGar1eg@mail.gmail.com>
+ <f10fcfbf-2da6-cf2d-6027-fbf8b52803e9@csgroup.eu>
+ <6396875c-146a-acf5-dd9e-7f93ba1b4bc3@csgroup.eu>
+ <CAHmME9pE4saqnwxhsAwt-xegYGjsavPOGnHCbZhUXD7kaJ+GAA@mail.gmail.com>
+ <501b0fc3-6c67-657f-781e-25ee0283bc2e@csgroup.eu>
+ <Y0Ayvov/KQmrIwTS@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b3886864-5c54-4524-8e30-b6701553b615@app.fastmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y0Ayvov/KQmrIwTS@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 05:37:34PM +0100, Jiaxun Yang wrote:
+On Fri, Oct 07, 2022 at 08:07:58AM -0600, Jason A. Donenfeld wrote:
+> On Fri, Oct 07, 2022 at 04:57:24AM +0000, Christophe Leroy wrote:
+> > 
+> > 
+> > Le 07/10/2022 à 01:36, Jason A. Donenfeld a écrit :
+> > > On 10/6/22, Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+> > >>
+> > >>
+> > >> Le 06/10/2022 à 19:31, Christophe Leroy a écrit :
+> > >>>
+> > >>>
+> > >>> Le 06/10/2022 à 19:24, Jason A. Donenfeld a écrit :
+> > >>>> Hi Christophe,
+> > >>>>
+> > >>>> On Thu, Oct 6, 2022 at 11:21 AM Christophe Leroy
+> > >>>> <christophe.leroy@csgroup.eu> wrote:
+> > >>>>> Le 06/10/2022 à 18:53, Jason A. Donenfeld a écrit :
+> > >>>>>> The prandom_u32() function has been a deprecated inline wrapper around
+> > >>>>>> get_random_u32() for several releases now, and compiles down to the
+> > >>>>>> exact same code. Replace the deprecated wrapper with a direct call to
+> > >>>>>> the real function. The same also applies to get_random_int(), which is
+> > >>>>>> just a wrapper around get_random_u32().
+> > >>>>>>
+> > >>>>>> Reviewed-by: Kees Cook <keescook@chromium.org>
+> > >>>>>> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk> # for sch_cake
+> > >>>>>> Acked-by: Chuck Lever <chuck.lever@oracle.com> # for nfsd
+> > >>>>>> Reviewed-by: Jan Kara <jack@suse.cz> # for ext4
+> > >>>>>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > >>>>>> ---
+> > >>>>>
+> > >>>>>> diff --git a/arch/powerpc/kernel/process.c
+> > >>>>>> b/arch/powerpc/kernel/process.c
+> > >>>>>> index 0fbda89cd1bb..9c4c15afbbe8 100644
+> > >>>>>> --- a/arch/powerpc/kernel/process.c
+> > >>>>>> +++ b/arch/powerpc/kernel/process.c
+> > >>>>>> @@ -2308,6 +2308,6 @@ void notrace __ppc64_runlatch_off(void)
+> > >>>>>>     unsigned long arch_align_stack(unsigned long sp)
+> > >>>>>>     {
+> > >>>>>>         if (!(current->personality & ADDR_NO_RANDOMIZE) &&
+> > >>>>>> randomize_va_space)
+> > >>>>>> -             sp -= get_random_int() & ~PAGE_MASK;
+> > >>>>>> +             sp -= get_random_u32() & ~PAGE_MASK;
+> > >>>>>>         return sp & ~0xf;
+> > >>>>>
+> > >>>>> Isn't that a candidate for prandom_u32_max() ?
+> > >>>>>
+> > >>>>> Note that sp is deemed to be 16 bytes aligned at all time.
+> > >>>>
+> > >>>> Yes, probably. It seemed non-trivial to think about, so I didn't. But
+> > >>>> let's see here... maybe it's not too bad:
+> > >>>>
+> > >>>> If PAGE_MASK is always ~(PAGE_SIZE-1), then ~PAGE_MASK is
+> > >>>> (PAGE_SIZE-1), so prandom_u32_max(PAGE_SIZE) should yield the same
+> > >>>> thing? Is that accurate? And holds across platforms (this comes up a
+> > >>>> few places)? If so, I'll do that for a v4.
+> > >>>>
+> > >>>
+> > >>> On powerpc it is always (from arch/powerpc/include/asm/page.h) :
+> > >>>
+> > >>> /*
+> > >>>    * Subtle: (1 << PAGE_SHIFT) is an int, not an unsigned long. So if we
+> > >>>    * assign PAGE_MASK to a larger type it gets extended the way we want
+> > >>>    * (i.e. with 1s in the high bits)
+> > >>>    */
+> > >>> #define PAGE_MASK      (~((1 << PAGE_SHIFT) - 1))
+> > >>>
+> > >>> #define PAGE_SIZE        (1UL << PAGE_SHIFT)
+> > >>>
+> > >>>
+> > >>> So it would work I guess.
+> > >>
+> > >> But taking into account that sp must remain 16 bytes aligned, would it
+> > >> be better to do something like ?
+> > >>
+> > >> 	sp -= prandom_u32_max(PAGE_SIZE >> 4) << 4;
+> > >>
+> > >> 	return sp;
+> > > 
+> > > Does this assume that sp is already aligned at the beginning of the
+> > > function? I'd assume from the function's name that this isn't the
+> > > case?
+> > 
+> > Ah you are right, I overlooked it.
 > 
-> 
-> åœ¨2022å¹´10æœˆ7æ—¥åæœˆ ä¸‹åˆ3:52ï¼ŒGreg KHå†™é“ï¼š
-> [...]
-> >> +
-> >> +static int cpuregs_cpu_offline(unsigned int cpu)
-> >> +{
-> >> +	struct device *dev;
-> >> +	struct cpureg *reg = per_cpu(cpuregs, cpu);
-> >> +
-> >> +	dev = get_cpu_device(cpu);
-> >> +	if (!dev || !reg)
-> >> +		return -ENODEV;
-> >> +	if (reg->kobj.parent) {
-> >
-> > Why are you looking at the parent of a kobject?  Why not just always
-> > remove the kobject if you have a reference to it now?  How does the
-> > parent matter?
-> 
-> Another dummy copy from Arm64 code... kobject_put should be enough here?
+> So I think to stay on the safe side, I'm going to go with
+> `prandom_u32_max(PAGE_SIZE)`. Sound good?
 
-Why would it not be enough?
+Given these kinds of less mechanical changes, it may make sense to split
+these from the "trivial" conversions in a treewide patch. The chance of
+needing a revert from the simple 1:1 conversions is much lower than the
+need to revert by-hand changes.
 
+The Cocci script I suggested in my v1 review gets 80% of the first
+patch, for example.
+
+-- 
+Kees Cook
