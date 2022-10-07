@@ -2,237 +2,214 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EEA5F79F6
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Oct 2022 16:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6545F7ABA
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Oct 2022 17:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiJGOwG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Oct 2022 10:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S230076AbiJGPms (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Oct 2022 11:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiJGOwF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Oct 2022 10:52:05 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C1766865;
-        Fri,  7 Oct 2022 07:51:52 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 779EE320025E;
-        Fri,  7 Oct 2022 10:51:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 07 Oct 2022 10:51:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1665154309; x=1665240709; bh=cbXxlpgk38
-        Og2OSP3BeodMmIhEyN7me626e1pixIS0A=; b=aIPzan2K/5vwQr3WnGbKft/MgW
-        JPGZlxE2o0tOeKglTTMczDdDL7JbYv9rOKwG/XlKMVhd0Ux97xTInMITTUI12vZj
-        Vs/ZOPTYVzrGvDTig+9cFE/h0mL5blPZbQlu3wiu6G1LabZLDjmYLWgnn2FaRgFY
-        gt8h3HXClEx/HULvjWErDnGBTOrX2vbhYFfFaLvZpDkImZrirbA+nEfRAOpy3yIK
-        azG8KOWEjENV5M9d/wSEM7QVSNMJOKj44IesruQluxpdtZlcleN7mAk5/PKAgdVF
-        sK0u7si7JPPNFVQFLS9CIKvCpQkI4RWFdzp94LyC9ir8cU2vaZ8Q9ko56OOw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665154309; x=1665240709; bh=cbXxlpgk38Og2OSP3BeodMmIhEyN
-        7me626e1pixIS0A=; b=snGjR8CIxyRDi1bd8qkxVdrIhI15r1WXpAvJPKxKG4q4
-        /F6y1Jdd7P+3JQjYs397XarlQoA7MdNHxLd/EN5Ad5OrFOUBLwyS5QD4A4JjhHQR
-        kjlCk9J6+Sbr5oqrxAmOUAqFZagh7+PUIhgN9atbrmm/2hIZS7uALcx+ikIaz8TM
-        986ouMn+UJS3/5ZVGKBjtmR1KTYNXAtFZTYgEEEBasgqEjTlK7ivfzzOukJV6UMl
-        X9/9ABpgJSDm0bv25BKWU6YCwc16Cc5WHnjCFWKZfUxhZM9wlpNirqCO6B+04HoZ
-        eXJK9TuDzAEjLESKDZj40vS09DdZe+FM4czuRnReGw==
-X-ME-Sender: <xms:BD1AYy1_2ZOZUpxE6_a3TZsTRqdU65-R2RDKm611YXzdX2cOCHR5Mg>
-    <xme:BD1AY1GwT-cC0kU7SM4HPMDPZDaTn8ndOoKDas96uKFfwUTDpXXtS_anmAU2Ge9-3
-    pJWix0uSOzuzw>
-X-ME-Received: <xmr:BD1AY64wY9Xh14lJyiK1raFmpMK-vjspn9YGSjwPRFnWmIa-ElO4grkHAHlr>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeijedgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:BD1AYz16QwKwJUZQaILrOIyFb8g5oxpXd4mF-nBVxqsX0qoRupC5Mg>
-    <xmx:BD1AY1GeDWn6s677bS3Yjcx-1UoO-dlW961jtqxbM23r_PIM0mxfoQ>
-    <xmx:BD1AY8_Km6gKn85xfUo1qo6davpj5oQFwW8VM7sF3aIt6tlAMxSx2Q>
-    <xmx:BT1AY99mzHQEy5O-ygwPRc-OojV7e19P51nI6_W6Xe6_Dkre2QlrQQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 7 Oct 2022 10:51:48 -0400 (EDT)
-Date:   Fri, 7 Oct 2022 16:52:31 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsbogend@alpha.franken.de, linux-api@vger.kernel.org,
-        f.fainelli@gmail.com
-Subject: Re: [PATCH v5] MIPS: Expose prid and globalnumber to sysfs
-Message-ID: <Y0A9L2KajswAEKsu@kroah.com>
-References: <20221007141207.30635-1-jiaxun.yang@flygoat.com>
+        with ESMTP id S229934AbiJGPmr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Oct 2022 11:42:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE33D73C4
+        for <linux-mips@vger.kernel.org>; Fri,  7 Oct 2022 08:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665157364;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1lKCnBjxRPjgpNNPlEylbLIMLTQ3r/0aTk3SgXwAPQE=;
+        b=N7sQrgdSZPwOY3ZJUgISKw+SC3hBO/RHz6umRRQW4ie1INCaUWCjb3vy0v5wah0psYYkvz
+        fQtvgtdRDTaigxwjQkRn1uZP3hrluP3fb7iiWMY8rSIeMGz5G5YT/6Bd6GNXLwQ+gPIakr
+        kCmn7vL2fab3I6qWl+AKt1arkPoLJRk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-53-qAT6hu3jPC2dHM56COihdg-1; Fri, 07 Oct 2022 11:42:43 -0400
+X-MC-Unique: qAT6hu3jPC2dHM56COihdg-1
+Received: by mail-wm1-f70.google.com with SMTP id l15-20020a05600c4f0f00b003b4bec80edbso2835054wmq.9
+        for <linux-mips@vger.kernel.org>; Fri, 07 Oct 2022 08:42:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1lKCnBjxRPjgpNNPlEylbLIMLTQ3r/0aTk3SgXwAPQE=;
+        b=ihyq963zdakwmyr2UCqv5AgXfSeoPSILkOkW0/l8G87UIbnWVaJcK27EtyXWFOsTX5
+         yIutQrnX/BUDGCk1ioY6mNtirpJsUXnRzQfT2T6hN+exfQ03YbmRTW/mXviyfTjSuT2g
+         0n1meldg4IiaNT7Gj4JXZpqEIvgMJ/s8uZl8DrD23YwOYmUSLunpiIvI2KLDX/FIUhAb
+         hptEXOlCUQAUnwgReo3414yV7JzbO9BeqF1ZOSjL7q4kZvCdl0HLien0WBb9jg91jzJY
+         PPFMprevuI889QctOHeVWV00SJ2bnm9fW6VbiaxJufa4SDZC3d0BxqFhsHlan6AsuFeT
+         v/iQ==
+X-Gm-Message-State: ACrzQf2tPYYZfwzvH57jldxOBB9u2bFisCwRIvmeGls8BRkSGtD3cVy6
+        ZneLajFU5sQo2zRSiD6d6AUVzuNVxa/oRH21fpY175X2n0AUebX/TsTbZH44KZpzu6+Iq+M5uWW
+        HegZ4HFrpWO4FEOd42OZkyg==
+X-Received: by 2002:a5d:5010:0:b0:22a:cb71:9493 with SMTP id e16-20020a5d5010000000b0022acb719493mr3770673wrt.514.1665157361758;
+        Fri, 07 Oct 2022 08:42:41 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7Tr05uM1rtU5aj/QWiT6cTirx56otcH3SojWjYuAUChmPHRHcJ6HatWEhyYipO7y3unWYaxQ==
+X-Received: by 2002:a5d:5010:0:b0:22a:cb71:9493 with SMTP id e16-20020a5d5010000000b0022acb719493mr3770632wrt.514.1665157361532;
+        Fri, 07 Oct 2022 08:42:41 -0700 (PDT)
+Received: from vschneid.remote.csb ([149.71.65.94])
+        by smtp.gmail.com with ESMTPSA id e1-20020a5d5941000000b0022af865810esm2307021wri.75.2022.10.07.08.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 08:42:40 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [RFC PATCH 0/5] Generic IPI sending tracepoint
+Date:   Fri,  7 Oct 2022 16:41:40 +0100
+Message-Id: <20221007154145.1877054-1-vschneid@redhat.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221007141207.30635-1-jiaxun.yang@flygoat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 03:12:07PM +0100, Jiaxun Yang wrote:
-> Some application would like to know precise model and rev of processor
-> to do errata workaround or optimization.
-> 
-> Expose them in sysfs as:
-> /sys/devices/system/cpu/cpuX/regs/identification/prid
-> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-> 
-> Reusing AArch64 CPU registers directory.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> v2: Drop static qualifier for kobj (gregkh)
-> v3: Use kzalloc to allocate struct cpuregs.
->     note: When Greg mentioned about static I was thinking about
->     static qualifier of percpu variable. After reading documents
->     again it turns out kobjs should be allocated at runtime. Arm64's
->     cpuinfo kobj is also on a percpu variable... I guess that was a
->     intentional use?
-> v4: Properly handle err of kobj creation. (gregkh)
-> v5: Drop invalid kfree
-> ---
->  .../ABI/testing/sysfs-devices-system-cpu      | 11 +++
->  arch/mips/kernel/topology.c                   | 99 +++++++++++++++++++
->  2 files changed, 110 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> index 5bf61881f012..9fdfe2de0f76 100644
-> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> @@ -512,6 +512,17 @@ Description:	information about CPUs heterogeneity.
->  
->  		cpu_capacity: capacity of cpuX.
->  
-> +What:		/sys/devices/system/cpu/cpuX/regs/
-> +		/sys/devices/system/cpu/cpuX/regs/identification/
-> +		/sys/devices/system/cpu/cpuX/regs/identification/prid
-> +		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-> +Date:		October 2022
-> +Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
-> +Description:	MIPS CPU registers
-> +
-> +		'identification' directory exposes the Processor ID and Global Number
-> +		registers for identifying model and revision of the CPU.
-> +
->  What:		/sys/devices/system/cpu/vulnerabilities
->  		/sys/devices/system/cpu/vulnerabilities/meltdown
->  		/sys/devices/system/cpu/vulnerabilities/spectre_v1
-> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
-> index 9429d85a4703..80aaaca3cfbc 100644
-> --- a/arch/mips/kernel/topology.c
-> +++ b/arch/mips/kernel/topology.c
-> @@ -5,6 +5,8 @@
->  #include <linux/node.h>
->  #include <linux/nodemask.h>
->  #include <linux/percpu.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/smp.h>
->  
->  static DEFINE_PER_CPU(struct cpu, cpu_devices);
->  
-> @@ -26,3 +28,100 @@ static int __init topology_init(void)
->  }
->  
->  subsys_initcall(topology_init);
-> +
-> +static struct kobj_type cpuregs_kobj_type = {
-> +	.sysfs_ops = &kobj_sysfs_ops,
-> +};
-> +
-> +struct cpureg {
-> +	struct kobject kobj;
-> +	struct cpuinfo_mips *info;
-> +};
-> +static DEFINE_PER_CPU(struct cpureg *, cpuregs);
-> +
-> +#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
-> +#define CPUREGS_ATTR_RO(_name, _field)						\
-> +	static ssize_t _name##_show(struct kobject *kobj,			\
-> +			struct kobj_attribute *attr, char *buf)			\
-> +	{									\
-> +		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
-> +										\
-> +		return sprintf(buf, "0x%08x\n", info->_field);	\
+Background
+==========
 
-sysfs_emit() please.
+Detecting IPI *reception* is relatively easy, e.g. using
+trace_irq_handler_{entry,exit} or even just function-trace
+flush_smp_call_function_queue() for SMP calls.  
 
+Figuring out their *origin*, is trickier as there is no generic tracepoint tied
+to e.g. smp_call_function():
 
-> +	}									\
-> +	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
-> +
-> +CPUREGS_ATTR_RO(prid, processor_id);
-> +CPUREGS_ATTR_RO(globalnumber, globalnumber);
-> +
-> +static struct attribute *cpuregs_id_attrs[] = {
-> +	&cpuregs_attr_prid.attr,
-> +	&cpuregs_attr_globalnumber.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group cpuregs_attr_group = {
-> +	.attrs = cpuregs_id_attrs,
-> +	.name = "identification"
-> +};
-> +
-> +static int cpuregs_cpu_online(unsigned int cpu)
-> +{
-> +	int rc;
-> +	struct device *dev;
-> +	struct cpureg *reg;
-> +
-> +	dev = get_cpu_device(cpu);
-> +	if (!dev) {
-> +		rc = -ENODEV;
-> +		goto out;
-> +	}
-> +	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
-> +	if (!reg) {
-> +		rc = -ENOMEM;
-> +		goto out;
-> +	}
-> +	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
-> +					&dev->kobj, "regs");
-> +	if (rc)
-> +		goto out_kobj;
-> +	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
-> +	if (rc)
-> +		goto out_kobj;
-> +
-> +	return 0;
-> +out_kobj:
-> +	kobject_put(&reg->kobj);
-> +out:
-> +	return rc;
-> +}
-> +
-> +static int cpuregs_cpu_offline(unsigned int cpu)
-> +{
-> +	struct device *dev;
-> +	struct cpureg *reg = per_cpu(cpuregs, cpu);
-> +
-> +	dev = get_cpu_device(cpu);
-> +	if (!dev || !reg)
-> +		return -ENODEV;
-> +	if (reg->kobj.parent) {
+o AFAIA x86 has no tracepoint tied to sending IPIs, only receiving them
+  (cf. trace_call_function{_single}_entry()).
+o arm/arm64 do have trace_ipi_raise(), which gives us the target cpus but also a
+  mostly useless string (smp_calls will all be "Function call interrupts").
+o Other architectures don't seem to have any IPI-sending related tracepoint.  
 
-Why are you looking at the parent of a kobject?  Why not just always
-remove the kobject if you have a reference to it now?  How does the
-parent matter?
+I believe one reason those tracepoints used by arm/arm64 ended up as they were
+is because these archs used to handle IPIs differently from regular interrupts
+(the IRQ driver would directly invoke an IPI-handling routine), which meant they 
+never showed up in trace_irq_handler_{entry, exit}. The trace_ipi_{entry,exit}
+tracepoints gave a way to trace IPI reception but those have become redundant as
+of: 
 
-thanks,
+      56afcd3dbd19 ("ARM: Allow IPIs to be handled as normal interrupts")
+      d3afc7f12987 ("arm64: Allow IPIs to be handled as normal interrupts")
 
-greg k-h
+which gave IPIs a "proper" handler function used through
+generic_handle_domain_irq(), which makes them show up via
+trace_irq_handler_{entry, exit}.
+
+Changing stuff up
+=================
+
+Per the above, it would make sense to reshuffle trace_ipi_raise() and move it
+into generic code. This also came up during Daniel's talk on Osnoise at the CPU
+isolation MC of LPC 2022 [1]. 
+
+Now, to be useful, such a tracepoint needs to export:
+o targeted CPU(s)
+o calling context
+
+The only way to get the calling context with trace_ipi_raise() is to trigger a
+stack dump, e.g. $(trace-cmd -e ipi* -T echo 42).
+
+As for the targeted CPUs, the existing tracepoint does export them, albeit in
+cpumask form, which is quite inconvenient from a tooling perspective. For
+instance, as far as I'm aware, it's not possible to do event filtering on a
+cpumask via trace-cmd.
+
+Because of the above points, this is introducing a new tracepoint.
+
+Patches
+=======
+
+This results in having trace events for:
+
+o smp_call_function*()
+o smp_send_reschedule()
+o irq_work_queue*()
+
+This is incomplete, just looking at arm64 there's more IPI types that aren't covered:
+
+  IPI_CPU_STOP,
+  IPI_CPU_CRASH_STOP,
+  IPI_TIMER,
+  IPI_WAKEUP,
+
+... But it feels like a good starting point.
+
+Another thing worth mentioning is that depending on the callsite, the _RET_IP_
+fed to the tracepoint is not always useful - generic_exec_single() doesn't tell
+you much about the actual callback being sent via IPI, so there might be value
+in exploding the single tracepoint into at least one variant for smp_calls.
+
+Links
+=====
+
+[1]: https://youtu.be/5gT57y4OzBM?t=14234
+
+Valentin Schneider (5):
+  trace: Add trace_ipi_send_{cpu, cpumask}
+  sched, smp: Trace send_call_function_single_ipi()
+  smp: Add a multi-CPU variant to send_call_function_single_ipi()
+  irq_work: Trace calls to arch_irq_work_raise()
+  treewide: Rename and trace arch-definitions of smp_send_reschedule()
+
+ arch/alpha/kernel/smp.c          |  2 +-
+ arch/arc/kernel/smp.c            |  2 +-
+ arch/arm/kernel/smp.c            |  5 +----
+ arch/arm64/kernel/smp.c          |  3 +--
+ arch/csky/kernel/smp.c           |  2 +-
+ arch/hexagon/kernel/smp.c        |  2 +-
+ arch/ia64/kernel/smp.c           |  4 ++--
+ arch/loongarch/include/asm/smp.h |  2 +-
+ arch/mips/include/asm/smp.h      |  2 +-
+ arch/openrisc/kernel/smp.c       |  2 +-
+ arch/parisc/kernel/smp.c         |  4 ++--
+ arch/powerpc/kernel/smp.c        |  4 ++--
+ arch/riscv/kernel/smp.c          |  4 ++--
+ arch/s390/kernel/smp.c           |  2 +-
+ arch/sh/kernel/smp.c             |  2 +-
+ arch/sparc/kernel/smp_32.c       |  2 +-
+ arch/sparc/kernel/smp_64.c       |  2 +-
+ arch/x86/include/asm/smp.h       |  2 +-
+ arch/xtensa/kernel/smp.c         |  2 +-
+ include/linux/smp.h              |  1 +
+ include/trace/events/ipi.h       | 27 +++++++++++++++++++++++++++
+ kernel/irq_work.c                | 12 +++++++++++-
+ kernel/sched/core.c              |  7 +++++--
+ kernel/smp.c                     | 18 +++++++++++++++++-
+ 24 files changed, 84 insertions(+), 31 deletions(-)
+
+--
+2.31.1
+
