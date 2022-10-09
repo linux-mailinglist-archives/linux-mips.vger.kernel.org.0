@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A649A5F8E09
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Oct 2022 22:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5DF5F8E3E
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Oct 2022 22:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiJIUwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Oct 2022 16:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S230494AbiJIUzQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Oct 2022 16:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiJIUwS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Oct 2022 16:52:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06E52D763;
-        Sun,  9 Oct 2022 13:51:58 -0700 (PDT)
+        with ESMTP id S230427AbiJIUyZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Oct 2022 16:54:25 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CB631207;
+        Sun,  9 Oct 2022 13:52:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A227860C92;
-        Sun,  9 Oct 2022 20:51:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8BCC433D7;
-        Sun,  9 Oct 2022 20:51:55 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 928E5CE0FF7;
+        Sun,  9 Oct 2022 20:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF82C433D6;
+        Sun,  9 Oct 2022 20:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665348717;
-        bh=SLEl1ykAV5RDsgLc/AeCBHJhHpc6G+47h6ZWYxuzlL0=;
+        s=k20201202; t=1665348763;
+        bh=sm/LDBBuPWty4rPPEEqovbTw/jWuPeNCGNYMtE2bPkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sUMoIC/suwZ4oUoWBQpiUTV7EKEfJsUDl3IECe0v5TunLPmJV+ck/yDx9qDuuHl7Z
-         bLobjUXUo4GemK3LRtIoFy7+5gVZXs7OKdqVWxm8hvv98FPS+HbIJbhvbRn1XRuS2K
-         cLom1+XlNuQH+PGmxYqQo+4MqPBlVGdynROfziNYNynSdABBonYkqqRrp/UaVmJo9d
-         EN/j5pcGn17ZrPBKGotjGmNIufpMjRlMLQyeDDezBA5c2i5GKan8tUcleImFr79NXm
-         5qnlLweZM+a844XFRigVmOH458B29We78kdrBOzEGkFHNf/CtXc8yC4lRcUjCPiFPv
-         srWX4qLW4BUIA==
+        b=iFdIX/r/X/ZD2nGODT8vCwayOvknwsoMlraCaNDgSfXZryTM7ZkHK7fRG8DdNlBXO
+         xGZyMpdLC6UAJqsfC8qVRx9qOOqtdul6RP7pdlY8mmjoQrMTSas3T953cmX3tDfgo3
+         I9q1xDZmwq7K47VDI3jCNfRJxgA9IaSfvBe+78M+YACOrFUmZKNGSEfequn+ZwMMVK
+         AWdf/3I8B1x3kkvmTlUGNkCf4G/lTebCwkopD5MP7gYiu1VVZN8+oygkUBA8pjneey
+         j9ofLYPDQ6MFlwNfXgC6IZlIH6Df1qNzTH9DH/BXTUrNxJpMOWkKAeWx5Qi7X/PfMg
+         8B+4k3PKZJH1Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -41,12 +41,12 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 6.0 11/18] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date:   Sun,  9 Oct 2022 16:51:28 -0400
-Message-Id: <20221009205136.1201774-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.19 09/16] MIPS: BCM47XX: Cast memcmp() of function to (void *)
+Date:   Sun,  9 Oct 2022 16:52:18 -0400
+Message-Id: <20221009205226.1202133-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009205136.1201774-1-sashal@kernel.org>
-References: <20221009205136.1201774-1-sashal@kernel.org>
+In-Reply-To: <20221009205226.1202133-1-sashal@kernel.org>
+References: <20221009205226.1202133-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -91,7 +91,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-index ab203e66ba0d..a9bea411d928 100644
+index 0a63721d0fbf..5a33d6b48d77 100644
 --- a/arch/mips/bcm47xx/prom.c
 +++ b/arch/mips/bcm47xx/prom.c
 @@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
