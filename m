@@ -2,82 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F325FA1EA
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Oct 2022 18:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEE95FA3BE
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Oct 2022 20:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiJJQ1L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Oct 2022 12:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S229689AbiJJSy4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Oct 2022 14:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJJQ1K (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Oct 2022 12:27:10 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845C41C933;
-        Mon, 10 Oct 2022 09:27:07 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id q196so2563359iod.8;
-        Mon, 10 Oct 2022 09:27:07 -0700 (PDT)
+        with ESMTP id S229600AbiJJSyx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Oct 2022 14:54:53 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719D11277D;
+        Mon, 10 Oct 2022 11:54:50 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id l8so7347981wmi.2;
+        Mon, 10 Oct 2022 11:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4/l0at35d5ZpUwnD1wrDKWJwkOqrdxisFrwwbw15s3A=;
-        b=ZwrOrNjv+DPNhE5Jeg4JGXLwQ6WcmyorDalyibYOWbZNNUwMZS48FmdRTvZ6Qm+aTJ
-         lSNo4uf75769dCJtXPcejkJH36PLk3nQmjzKUy/W+6Uw92fJSJWWgKD8OdFOabv0t1yW
-         E2C5xAWcwfR+HdgrTuPt0vwUavv8DDFv1pwnDtBK7V1uF+85mPloR0zz8zct4aqjUnNx
-         +/wWv2YJ68htDxnUCgvc/AgchrlD4IEOfLRfpEa8d7WUUua00QkO86OdCb54JU2Y8Shh
-         kCsbB4mLCwe8z6dVZSCvifNz4QhrZHMu0Bz+89Kq1kYdrPAc9KpOaI8d4DKM2iJCioQt
-         wQcw==
+        bh=gVHRCzHetDvm9wFuZO6DUfd6buOnzVOKnDaUC6gkHgg=;
+        b=jfbUGf2qG4IgfJsaHgHZk8iGMLIN7QzdQ/644DGpNwElmy8Ne41kJG5u6avyUwAw/e
+         QkdXRLRFzTF3RA/3jIMsSU+zWhasOwQBYtt62fwn+qQiDcRaEPaNKn0zkkSy8jG/JnVD
+         mQWkXSJG82oCEtGSutcz43dCXX4Pn86SrHAb/dr4tOCDe4Fborpfhu7uQcfZaoMLAn5u
+         YsABV+V4e7bDt06q3JHnizc1nQtkMLiSjM3m6HlUwhUI97Gh57HrRdfkC5VoLdgzE0MA
+         OILLU5nM5VKsgLd/CfaS1gGn0oFi7gBLY0GinTUjjMwW6cwib/zxvZRAViXo5Xr7Gg8s
+         0xJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4/l0at35d5ZpUwnD1wrDKWJwkOqrdxisFrwwbw15s3A=;
-        b=o4i1I9IvwOKscJkhDJ8X9W+OOARSwyY6iPECpbtHZMxV6eWwmvu/TAF95o5s4W2RKC
-         IHQCRb8MocpPbG3vX1u68MId/FdgS43oCObotBL0XQHiuOstVDEB5vh4ZRC9EmCNyBDk
-         8hpbkHGpF+Rs/EE/GPBFy+doLDuJZ2obi7ZZ1qgSIcZGSqLvdspMj5/zYywI1SOZ82VZ
-         rUr1sBXd+tgLjxUmTFLwcZfieJw4yhbRw6NEwBHISzB0TObXGugwG+zfYfywPgi9j7yS
-         6Wmt0wAiwFkq/4ZJWb+6hnSGcx93dFTMyHcUmbGQ37HDmhUmXoQJlr5Q8LqPujuzZEdm
-         H55Q==
-X-Gm-Message-State: ACrzQf0ifjy/1rSfTmas8mAPgUtQ6+TGknSt5IjmoffdLYAhQUiZXs3/
-        yU8ci0cq9yVgdIV+oVq10GG/mkfahwb46r7cfgE=
-X-Google-Smtp-Source: AMsMyM7bAhLwNuit40EhmKHM4albATagjiH95EZ2eAu5WNbTVC8+sEKsctBxCCsczwGXpY2l1kjFIXb/7YvCpqo27zM=
-X-Received: by 2002:a05:6638:3c45:b0:363:afb2:3269 with SMTP id
- bg5-20020a0566383c4500b00363afb23269mr4242865jab.215.1665419226823; Mon, 10
- Oct 2022 09:27:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221008181655.2747857-1-lis8215@gmail.com> <Y0P/u4pJT8rup8Za@sirena.org.uk>
- <CAKNVLfZhH3s=jBWAoSppXSotY9giRRJbub9MqxCtjdZKh4fprg@mail.gmail.com> <Y0Q//+onKu16VQKH@sirena.org.uk>
-In-Reply-To: <Y0Q//+onKu16VQKH@sirena.org.uk>
+        bh=gVHRCzHetDvm9wFuZO6DUfd6buOnzVOKnDaUC6gkHgg=;
+        b=2lBmrM+pWLX9VkvKAMWYDOX0x8c01l2s2/LpDDU3HsQL+d1YQDOagLvzqHXkIgGcVj
+         vkV2L3NRz/m6On9/gHfejtD5r0yrn/ppOzKwxrAS/pvFZaT9QtsW0eHglmqLmFWfaytD
+         lTidFqisSPP3/99jDkHQJMqfxQK5dhxExKU/Exl708RqpifCjA3uacszE+5RLmdqpF9N
+         ZRT/2ejUynqB0xqYUV3ieqKzS5xos79LmuFYTdKq66QTLvWnFA2+fOy25//84NpPpQR7
+         YzCggwjvAqx4OM+VbnG7shqClLo/MJQOZs06fhiNpxMuMNN3ZPkIC//ocJ22FmydJs9U
+         eXTg==
+X-Gm-Message-State: ACrzQf1rf0p1EmPRXbAIfhvRQ2itlj+G1haxzhCrDIwpxOeYC6n3GsHC
+        oR4P1AUuRe6ZBfPZeP4Jpwo=
+X-Google-Smtp-Source: AMsMyM4tdgFZLMNaM0VNDRNGTFwZOVm1CPhn49eMPbP9JTq/VNtHdoJKIa/pN5LXqjpWz6uZYjqq8Q==
+X-Received: by 2002:a05:600c:4f01:b0:3b4:a8c8:2523 with SMTP id l1-20020a05600c4f0100b003b4a8c82523mr20678176wmq.199.1665428089025;
+        Mon, 10 Oct 2022 11:54:49 -0700 (PDT)
+Received: from hp-power-15.localdomain (mm-126-34-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.34.126])
+        by smtp.gmail.com with ESMTPSA id y2-20020a5d6142000000b00230c9d427f9sm2082272wrt.53.2022.10.10.11.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 11:54:48 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Mon, 10 Oct 2022 19:26:55 +0300
-Message-ID: <CAKNVLfZJuE-sPyHFQdo_PGHg5FZEUjbamJqAce+GyBCxc6xTbw@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: codecs: jz4725b: Various improvements and fixes
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
+Cc:     Siarhei Volkau <lis8215@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
         Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Subject: [PATCH v2 0/6] ASoC: codecs: jz4725b: Various improvements and fixes
+Date:   Mon, 10 Oct 2022 21:54:17 +0300
+Message-Id: <20221010185423.3167208-1-lis8215@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <Y0P/u4pJT8rup8Za@sirena.org.uk>
+References: <Y0P/u4pJT8rup8Za@sirena.org.uk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-=D0=BF=D0=BD, 10 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 18:53, Mark Brown =
-<broonie@kernel.org>:
-> The issue is that if someone is relying on the current behaviour and the
-> control starts doing something completely different they might be
-> surprised, it at least needs a separate change.
+The patchset fixes:
+ - Line In path stays powered off during capturing or
+   bypass to mixer.
+ - incorrectly represented dB values in alsamixer, et al.
+ - incorrect represented Capture input selector in alsamixer
+   in Playback tab.
+ - wrong control selected as Capture Master
 
-At the moment there's only one consumer for the codec in the mainline kerne=
-l
-Its RetroMini RS-90 and it doesn't seem to have capture capabilities.
+The patchset improves:
+ - Exposes output stage (post mixer) gain control and makes it new
+   Master playback gain, DAC gain was the previous master.
+   However, no Master mute now.
+ - Exposes all mixer inputs (both Mics, LineIn and DAC) with their
+   gain controls.
+
+Known issues:
+ - Bypass path enablement isn't applied immediately, for make
+   things going bit clock needs to be triggered for a bit,
+   e.g. by aplay dummy.wav
+   It might be a hardware bug, since the bit clock isn't
+   declared as required for codec operation.
+
+Tested on:
+ - Ritmix RZX-27 (jz4725b).
+ - Ritmix RZX-50 (jz4755).
+
+Diff from v1:
+ - each change in a separate patch
+
+Tested-by: Siarhei Volkau <lis8215@gmail.com>
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+
+Siarhei Volkau (6):
+  ASoC: codecs: jz4725b: add missed Line In power control bit
+  ASoC: codecs: jz4725b: fix reported volume for Master ctl
+  ASoC: codecs: jz4725b: use right control for Capture Volume
+  ASoC: codecs: jz4725b: fix capture selector naming
+  ASoC: codecs: jz4725b: use right control for Master Playback
+  ASoC: codecs: jz4725b: add missed Mixer inputs
+
+ sound/soc/codecs/jz4725b.c | 81 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 70 insertions(+), 11 deletions(-)
+
+-- 
+2.36.1
+
