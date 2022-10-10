@@ -2,180 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FDB5FA3C7
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Oct 2022 20:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BF95FA472
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Oct 2022 22:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiJJSzG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Oct 2022 14:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
+        id S229454AbiJJUAh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Oct 2022 16:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiJJSzC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Oct 2022 14:55:02 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C139A1FCEA;
-        Mon, 10 Oct 2022 11:55:01 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bu30so18305366wrb.8;
-        Mon, 10 Oct 2022 11:55:01 -0700 (PDT)
+        with ESMTP id S229560AbiJJUAf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Oct 2022 16:00:35 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D0065802;
+        Mon, 10 Oct 2022 13:00:31 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id q11so6151266ilj.10;
+        Mon, 10 Oct 2022 13:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a0HKAhNdOKF1crgdkmfV9uw0DtKONIzdjDGfK2eaD40=;
-        b=g6GYJi+i1RYgpcsc2FaPpiuxZz2OwbN4bkiNrA3qiCo061dhszzksEbCyV8xT2iRXg
-         V0JoehCp9TO8iUWzX/yS1peMDKGQ++SyIFfYyZj7rvwD8afHP/2DSSwo9b1VIg8KxQqu
-         MXzKq14gqz+zmaOouTfag3SRrcKDZiND9OfgnTRammxj6vrm6bg+pxT4UY+ZaCTV1J7a
-         Bx1bgPe1cXG3dgK+hPOj9caNLrvWT3V3JnIGv9BmTBngK+zQLAYisVE7Fr2gskPH0sOh
-         xvRwOoPkrYNl4oWcWjSQf85y+WGi1mLAaU76Tv/2oXNfX+QNP8wOtzooRkvKlkAa1hyJ
-         0DHg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EEFmiFJ7Dw1gVqlSeptMmfCFB7n+NWN+0z+4deZp3HU=;
+        b=NLddd3v+0tKtp6cmtm2QqhHh1h2elNdUINa2PSf7HuXdoxWcN5g9mdAiQ0u8E6eslT
+         /dNnyFilX3We6S7g1+yw9XlSqlKKQkSTx4TQHAKHQAaDTfG74ZqvBjY9XRnwwrMSCYUV
+         Rj84pKkSB2ph6kUlrYBGpkwFGhB3qzaXqw/+guUMUOvl9po5tAMX0Z5RTBhieOo9/Xx0
+         OnoKSV2S+hLhG912NLjqfe95ZvnCOn4OBINluIcQuWmQT31lt5rn8p7vgEkbiXeg8ZVH
+         JLwdFEquBeZgd8pvVMMOticXlsgeKc2a38qyXOeisyCKeb0SR7dVZTQotJUpYxmd7yPv
+         PM6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a0HKAhNdOKF1crgdkmfV9uw0DtKONIzdjDGfK2eaD40=;
-        b=D37muxHsAMyXFyMUg2AqLIVttn8eptPBrUP4rSo9gEME7Wwob9gy1zUK7djVDb1O4c
-         2MgKiAQviZAmnUoAWxbTmyiHkK3Hf31c5JvTzJshPe/IZZVWhgupavjIyc14lDb7E0Vv
-         mTcHW3fphKjg7SjgasZAvtgI7CfxjwyFit8n178PNcrk5Jmwc0k381uagunA0Cc2wsD/
-         xgJf2vHP/lKG4dNyWRASTEvVz5Sz6lfPSlxsFd6G6co2Suxo4qp4xocIqrcXqb3HqQBZ
-         xtPi6AFaGh8/m8pxNGzI4VufDuklX1XJS6/OkW+PIJmi3GpDET4F4UtCtPktL+B7HzFc
-         dK0A==
-X-Gm-Message-State: ACrzQf1Meoj+isPMS+rrymvjaZvpokfRZ3wIPGoD+AOsWpJKTaiGIalB
-        NhGhrSn0/AmUHiybfum/EfUd1eZjS69+Og==
-X-Google-Smtp-Source: AMsMyM7M6A5MM0GdcXezHZYlOJYNlypNddtCR4gt9oyL9mZKAIqhFKcbNCwVzt0j7ZDFVe7Wky4s3g==
-X-Received: by 2002:a5d:64af:0:b0:230:1aca:634 with SMTP id m15-20020a5d64af000000b002301aca0634mr5920199wrp.74.1665428099994;
-        Mon, 10 Oct 2022 11:54:59 -0700 (PDT)
-Received: from hp-power-15.localdomain (mm-126-34-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.34.126])
-        by smtp.gmail.com with ESMTPSA id y2-20020a5d6142000000b00230c9d427f9sm2082272wrt.53.2022.10.10.11.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 11:54:59 -0700 (PDT)
-From:   Siarhei Volkau <lis8215@gmail.com>
-Cc:     Siarhei Volkau <lis8215@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] ASoC: codecs: jz4725b: add missed Mixer inputs
-Date:   Mon, 10 Oct 2022 21:54:23 +0300
-Message-Id: <20221010185423.3167208-7-lis8215@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221010185423.3167208-1-lis8215@gmail.com>
-References: <Y0P/u4pJT8rup8Za@sirena.org.uk>
- <20221010185423.3167208-1-lis8215@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EEFmiFJ7Dw1gVqlSeptMmfCFB7n+NWN+0z+4deZp3HU=;
+        b=69XfmiIu/k7SZ8i28R+KlyVAgiWHUj/mVDf1uY52YvcWp83s6IfcKAZIeodXnaiiPp
+         yvkWHgd6rJs/elP25TU98tApUVD1n+TFhWH+Q3oI4+6R6gyyuQFVdPmKEdDmt7UBMMm0
+         9Fr6tlEwndElYtBestDXahHtc0Alfk/pCOUNRIUdx2O1GuOO7zPxZlLVDIvb+8WEmW2G
+         Fp8GOZfanRwN7+PcI3k9gHFvCCRfBp4TtsYG63TLmvyISgE8w11EuseJ6sR06k6AI3/f
+         nxtMiynLzBcHocYj7da8eUDSFkzFkXbTCOZDbCh5Q4qQuaxjBAWlMYAiEhFbJfJOP4rX
+         immQ==
+X-Gm-Message-State: ACrzQf21IwM0+a5WxidY8ZP7CD98jEuoF/9K6ghSw7SIcHehoaXqPVo2
+        2SO3iKuiHs9LvBJfwvNXHREfiKSKwlv/yT962oDTJkwm6QLivhnp
+X-Google-Smtp-Source: AMsMyM4IOC+JUIyA9Rgli9LM7FUiqfPhAbQIr549hOWE+uF2Y0x1wXn+Hc2yPwnDnz9Ies/eixMujgupBC0XjftOofs=
+X-Received: by 2002:a05:6e02:20ea:b0:2fc:318b:a952 with SMTP id
+ q10-20020a056e0220ea00b002fc318ba952mr3875846ilv.236.1665432029905; Mon, 10
+ Oct 2022 13:00:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20221009181338.2896660-1-lis8215@gmail.com> <20221009181338.2896660-9-lis8215@gmail.com>
+ <2e89fc3a-bc54-17e7-d352-25db877172ff@linaro.org>
+In-Reply-To: <2e89fc3a-bc54-17e7-d352-25db877172ff@linaro.org>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Mon, 10 Oct 2022 23:00:18 +0300
+Message-ID: <CAKNVLfZ4zPdhv=zJOcDk_hnVVoU51L8uAsoXEmzJpecsyc5KmQ@mail.gmail.com>
+Subject: Re: [PATCH 8/8] MIPS: DTS: Ingenic: Add support for the JZ4755 SoC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The Mixer couples analog input from 4 sources (DAC, Line In, Mic 1,
- Mic 2) each input has its own gain & mute controls.
+> How do you build it? How do you test it? It's basically non-compillable,
+> dead code. You need a board.
 
-At the moment only DAC is implemented fully and Line In path can be
-switched on/off. The patch implements Mic 1 and Mic 2 paths and fully
-implements Line In path.
+I tested it on a Ritmix RZX-50 handheld, although this patchset doesn't
+include it as it requires many other changes to be fully functional.
+I decided to do this in two steps: add platform first (this patchset) then
+specific drivers and quirks, in the next patchset, when this one passes.
 
-Manual states that these controls (16.6.3.3 Programmable attenuation:
-GOi) gain varies from -22.5dB to +6.0dB with 1.5dB step. Also there's
-extra values below the minimum, but they behave the same as the minimum
-value.
-
-Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
----
- sound/soc/codecs/jz4725b.c | 42 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 40 insertions(+), 2 deletions(-)
-
-diff --git a/sound/soc/codecs/jz4725b.c b/sound/soc/codecs/jz4725b.c
-index 6614c5e37..22763bb1e 100644
---- a/sound/soc/codecs/jz4725b.c
-+++ b/sound/soc/codecs/jz4725b.c
-@@ -136,6 +136,18 @@ enum {
- #define REG_CGR3_GO1L_OFFSET		0
- #define REG_CGR3_GO1L_MASK		(0x1f << REG_CGR3_GO1L_OFFSET)
- 
-+#define REG_CGR4_GO2R_OFFSET		0
-+#define REG_CGR4_GO2R_MASK		(0x1f << REG_CGR4_GO2R_OFFSET)
-+
-+#define REG_CGR5_GO2L_OFFSET		0
-+#define REG_CGR5_GO2L_MASK		(0x1f << REG_CGR5_GO2L_OFFSET)
-+
-+#define REG_CGR6_GO3R_OFFSET		0
-+#define REG_CGR6_GO3R_MASK		(0x1f << REG_CGR6_GO3R_OFFSET)
-+
-+#define REG_CGR7_GO3L_OFFSET		0
-+#define REG_CGR7_GO3L_MASK		(0x1f << REG_CGR7_GO3L_OFFSET)
-+
- #define REG_CGR8_GOR_OFFSET		0
- #define REG_CGR8_GOR_MASK		(0x1f << REG_CGR8_GOR_OFFSET)
- 
-@@ -153,6 +165,11 @@ struct jz_icdc {
- 
- static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(jz4725b_adc_tlv,     0, 150, 0);
- static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(jz4725b_dac_tlv, -2250, 150, 0);
-+static const SNDRV_CTL_TLVD_DECLARE_DB_RANGE(jz4725b_mix_tlv,
-+	 0, 11, TLV_DB_SCALE_ITEM(-2250,   0, 0),
-+	12, 31, TLV_DB_SCALE_ITEM(-2250, 150, 0),
-+);
-+
- static const SNDRV_CTL_TLVD_DECLARE_DB_RANGE(jz4725b_out_tlv,
- 	 0, 11, TLV_DB_SCALE_ITEM(-3350, 200, 0),
- 	12, 23, TLV_DB_SCALE_ITEM(-1050, 100, 0),
-@@ -170,6 +187,21 @@ static const struct snd_kcontrol_new jz4725b_codec_controls[] = {
- 		       REG_CGR10_GIL_OFFSET,
- 		       REG_CGR10_GIR_OFFSET,
- 		       0xf, 0, jz4725b_adc_tlv),
-+	SOC_DOUBLE_R_TLV("Mixer Line In Bypass Playback Volume",
-+			 JZ4725B_CODEC_REG_CGR3,
-+			 JZ4725B_CODEC_REG_CGR2,
-+			 REG_CGR2_GO1R_OFFSET,
-+			 0x1f, 1, jz4725b_mix_tlv),
-+	SOC_DOUBLE_R_TLV("Mixer Mic 1 Bypass Playback Volume",
-+			 JZ4725B_CODEC_REG_CGR5,
-+			 JZ4725B_CODEC_REG_CGR4,
-+			 REG_CGR4_GO2R_OFFSET,
-+			 0x1f, 1, jz4725b_mix_tlv),
-+	SOC_DOUBLE_R_TLV("Mixer Mic 2 Bypass Playback Volume",
-+			 JZ4725B_CODEC_REG_CGR7,
-+			 JZ4725B_CODEC_REG_CGR6,
-+			 REG_CGR6_GO3R_OFFSET,
-+			 0x1f, 1, jz4725b_mix_tlv),
- 
- 	SOC_DOUBLE_R_TLV("Master Playback Volume",
- 			 JZ4725B_CODEC_REG_CGR9,
-@@ -203,8 +235,12 @@ static const struct snd_kcontrol_new jz4725b_codec_adc_src_ctrl =
- 	SOC_DAPM_ENUM("ADC Source Capture Route", jz4725b_codec_adc_src_enum);
- 
- static const struct snd_kcontrol_new jz4725b_codec_mixer_controls[] = {
--	SOC_DAPM_SINGLE("Line In Bypass", JZ4725B_CODEC_REG_CR1,
-+	SOC_DAPM_SINGLE("Line In Bypass Playback Switch", JZ4725B_CODEC_REG_CR1,
- 			REG_CR1_BYPASS_OFFSET, 1, 0),
-+	SOC_DAPM_SINGLE("Mic 1 Bypass Playback Switch", JZ4725B_CODEC_REG_CR3,
-+			REG_CR3_SIDETONE1_OFFSET, 1, 0),
-+	SOC_DAPM_SINGLE("Mic 2 Bypass Playback Switch", JZ4725B_CODEC_REG_CR3,
-+			REG_CR3_SIDETONE2_OFFSET, 1, 0),
- };
- 
- static int jz4725b_out_stage_enable(struct snd_soc_dapm_widget *w,
-@@ -299,7 +335,9 @@ static const struct snd_soc_dapm_route jz4725b_codec_dapm_routes[] = {
- 	{"Line In", NULL, "LLINEIN"},
- 	{"Line In", NULL, "RLINEIN"},
- 
--	{"Mixer", "Line In Bypass", "Line In"},
-+	{"Mixer", "Mic 1 Bypass Playback Switch", "Mic 1"},
-+	{"Mixer", "Mic 2 Bypass Playback Switch", "Mic 2"},
-+	{"Mixer", "Line In Bypass Playback Switch", "Line In"},
- 	{"DAC to Mixer", NULL, "DAC"},
- 	{"Mixer", NULL, "DAC to Mixer"},
- 
--- 
-2.36.1
-
+Of course I can add machine's dts with working parts. What's the usual way?
