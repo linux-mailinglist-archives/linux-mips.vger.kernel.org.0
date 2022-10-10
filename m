@@ -2,96 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55B35FA16C
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Oct 2022 17:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F325FA1EA
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Oct 2022 18:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiJJPxm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Oct 2022 11:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S229456AbiJJQ1L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Oct 2022 12:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiJJPxm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Oct 2022 11:53:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1F83207C;
-        Mon, 10 Oct 2022 08:53:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A79960FA0;
-        Mon, 10 Oct 2022 15:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF46BC433D6;
-        Mon, 10 Oct 2022 15:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665417220;
-        bh=LMeKhxfmAfdwjuQ3iXb8eIas5DAK6CL7U9L+xY2kA6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eiOYrzJ5l++msOUwryKwXxVCMQwoWdUrtoRvCfAlYcxU1+thvwwJoWxRXzGz3pihQ
-         xCgtc+AHvisvr/XI46QwOCJ9vXAqjlBKFwXTl7NYfe5xops+V78FBdliz4xY188BYN
-         4j9Y/+pv6T6CYtRUy+81cy1lWuvGmlUBZ2OLYR/MUHXR/ODd4SgRzNBY7tWcVszzfB
-         Lk+Z41U/nyjQAuZkXJy03/TLUchAJKa57Sw2GvHlJQFcJIiiOTBRYHoRob0GzBRKKz
-         wfKt9ijgvJ4cf2z9ngaJ14pz6aLS5w1ZLTrCBxYiZi0BFwl581wfbegxZtVftBRJqH
-         LQ9tLhX77+mUA==
-Date:   Mon, 10 Oct 2022 16:53:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Siarhei Volkau <lis8215@gmail.com>
+        with ESMTP id S229445AbiJJQ1K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Oct 2022 12:27:10 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845C41C933;
+        Mon, 10 Oct 2022 09:27:07 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id q196so2563359iod.8;
+        Mon, 10 Oct 2022 09:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4/l0at35d5ZpUwnD1wrDKWJwkOqrdxisFrwwbw15s3A=;
+        b=ZwrOrNjv+DPNhE5Jeg4JGXLwQ6WcmyorDalyibYOWbZNNUwMZS48FmdRTvZ6Qm+aTJ
+         lSNo4uf75769dCJtXPcejkJH36PLk3nQmjzKUy/W+6Uw92fJSJWWgKD8OdFOabv0t1yW
+         E2C5xAWcwfR+HdgrTuPt0vwUavv8DDFv1pwnDtBK7V1uF+85mPloR0zz8zct4aqjUnNx
+         +/wWv2YJ68htDxnUCgvc/AgchrlD4IEOfLRfpEa8d7WUUua00QkO86OdCb54JU2Y8Shh
+         kCsbB4mLCwe8z6dVZSCvifNz4QhrZHMu0Bz+89Kq1kYdrPAc9KpOaI8d4DKM2iJCioQt
+         wQcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4/l0at35d5ZpUwnD1wrDKWJwkOqrdxisFrwwbw15s3A=;
+        b=o4i1I9IvwOKscJkhDJ8X9W+OOARSwyY6iPECpbtHZMxV6eWwmvu/TAF95o5s4W2RKC
+         IHQCRb8MocpPbG3vX1u68MId/FdgS43oCObotBL0XQHiuOstVDEB5vh4ZRC9EmCNyBDk
+         8hpbkHGpF+Rs/EE/GPBFy+doLDuJZ2obi7ZZ1qgSIcZGSqLvdspMj5/zYywI1SOZ82VZ
+         rUr1sBXd+tgLjxUmTFLwcZfieJw4yhbRw6NEwBHISzB0TObXGugwG+zfYfywPgi9j7yS
+         6Wmt0wAiwFkq/4ZJWb+6hnSGcx93dFTMyHcUmbGQ37HDmhUmXoQJlr5Q8LqPujuzZEdm
+         H55Q==
+X-Gm-Message-State: ACrzQf0ifjy/1rSfTmas8mAPgUtQ6+TGknSt5IjmoffdLYAhQUiZXs3/
+        yU8ci0cq9yVgdIV+oVq10GG/mkfahwb46r7cfgE=
+X-Google-Smtp-Source: AMsMyM7bAhLwNuit40EhmKHM4albATagjiH95EZ2eAu5WNbTVC8+sEKsctBxCCsczwGXpY2l1kjFIXb/7YvCpqo27zM=
+X-Received: by 2002:a05:6638:3c45:b0:363:afb2:3269 with SMTP id
+ bg5-20020a0566383c4500b00363afb23269mr4242865jab.215.1665419226823; Mon, 10
+ Oct 2022 09:27:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221008181655.2747857-1-lis8215@gmail.com> <Y0P/u4pJT8rup8Za@sirena.org.uk>
+ <CAKNVLfZhH3s=jBWAoSppXSotY9giRRJbub9MqxCtjdZKh4fprg@mail.gmail.com> <Y0Q//+onKu16VQKH@sirena.org.uk>
+In-Reply-To: <Y0Q//+onKu16VQKH@sirena.org.uk>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Mon, 10 Oct 2022 19:26:55 +0300
+Message-ID: <CAKNVLfZJuE-sPyHFQdo_PGHg5FZEUjbamJqAce+GyBCxc6xTbw@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: codecs: jz4725b: Various improvements and fixes
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Paul Cercueil <paul@crapouillou.net>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: codecs: jz4725b: Various improvements and fixes
-Message-ID: <Y0Q//+onKu16VQKH@sirena.org.uk>
-References: <20221008181655.2747857-1-lis8215@gmail.com>
- <Y0P/u4pJT8rup8Za@sirena.org.uk>
- <CAKNVLfZhH3s=jBWAoSppXSotY9giRRJbub9MqxCtjdZKh4fprg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zP4tF1TsbOA9/jYj"
-Content-Disposition: inline
-In-Reply-To: <CAKNVLfZhH3s=jBWAoSppXSotY9giRRJbub9MqxCtjdZKh4fprg@mail.gmail.com>
-X-Cookie: This sentence no verb.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+=D0=BF=D0=BD, 10 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 18:53, Mark Brown =
+<broonie@kernel.org>:
+> The issue is that if someone is relying on the current behaviour and the
+> control starts doing something completely different they might be
+> surprised, it at least needs a separate change.
 
---zP4tF1TsbOA9/jYj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Oct 10, 2022 at 06:20:24PM +0300, Siarhei Volkau wrote:
-> =D0=BF=D0=BD, 10 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 14:19, Mark Brow=
-n <broonie@kernel.org>:
-
-> > and will presumably cause problems for any existing configurations...
-
-> I'm curious why this didn't cause problems earlier, as the wrong
-> control was used
-> for the Master Capture Volume.
-
-The issue is that if someone is relying on the current behaviour and the
-control starts doing something completely different they might be
-surprised, it at least needs a separate change.
-
---zP4tF1TsbOA9/jYj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNEP/4ACgkQJNaLcl1U
-h9DKlQf/YSQIWB5gynvqXZHjvurY3pBrf82bZh2fiApXWPANyOMBHxVXG2wdg/GZ
-+6nAX7UhTnJeSfTK0CoifZkwYXiOPs+qwIi76mcUirMGJU+uxG0G3mXfAu3asRTa
-IG+B+uy8RInF2vcUzwamCRSQeMJA/DoiI874PAc4szy+adG1TnYQtX5AFtEjB12R
-xt2lOLObkSeEpGIJgj8yMglpHR0+Tu186ojscpvs1JfQBwePULy14fOfOHgcwal0
-Ym73bAbOh8HNigz7UXZmiQ8LKLWLnTER+Q7ZEDcjvfSl65jo96GhtnSvJoRMocwr
-x7+RmH/x/kDNZa27gVnwfrUsNjH7Dw==
-=EaAl
------END PGP SIGNATURE-----
-
---zP4tF1TsbOA9/jYj--
+At the moment there's only one consumer for the codec in the mainline kerne=
+l
+Its RetroMini RS-90 and it doesn't seem to have capture capabilities.
