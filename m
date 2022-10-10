@@ -2,108 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABCE5FA0BF
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Oct 2022 16:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1775FA105
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Oct 2022 17:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiJJO6B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Oct 2022 10:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
+        id S229458AbiJJPUj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Oct 2022 11:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJJO5a (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Oct 2022 10:57:30 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CA03F1C5
-        for <linux-mips@vger.kernel.org>; Mon, 10 Oct 2022 07:57:18 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id a17so1776091qtw.10
-        for <linux-mips@vger.kernel.org>; Mon, 10 Oct 2022 07:57:18 -0700 (PDT)
+        with ESMTP id S229600AbiJJPUi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Oct 2022 11:20:38 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6120A5EDF1;
+        Mon, 10 Oct 2022 08:20:36 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id 137so4445989iou.9;
+        Mon, 10 Oct 2022 08:20:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/TqmOJgo5WeQh0yrg49gDDHKn/XdEuTDlUHCBrMIYvg=;
-        b=DWeVbGlurVIlmFpRkDglTwWvoCPyX6C2yepr7RJq2skttu3h/Y3Vcf6aYCk8ovS+xl
-         /iC4ty4wXUBchVGftaQVR7E8StAW75HzqNHJd7jQ9sQpi4VuYOF/8LLuvwTOACa6b0CA
-         cUo4unE4ktaLiMUPDSC0v8VLHasfsQZM6HS3gfDoHXPk2y9NqJtQ/DN6j4orFCfKafC0
-         5iZqYgicR7Paun72B3mLCTliv6t6b5fEX0M48PYp2x7ljBxLb54e4wQiUHOPAWpT+Zg1
-         IS4pTX+A0f6XkrM5Ab+mu/Dwo3tVpyemagfJ7gV5XXLT14F5Wod348D1/zwydx0Myt0L
-         cEGA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AcKHzg1i2Me8EqhKFtNfioe60y1iB3hPVRhH6rIJCT4=;
+        b=TBb+j24Tql7lMGBRzux71qaHiImguWET6ioHZwhlZ4PdQUXhkEUgc9YOW2brTKqdnU
+         8zTdhhtE7FUBVfXd1p7V5o1v4uCOYImJzPziLfaBNtDjB6Lrev5IY7SQNgg3pn5bQSMo
+         wLW9nC2azr6mXZPGtkuHgN7gGw8TMPg79Qe0VkSK8fjyc7/4zb1PCeDnQBZmDTzglw8j
+         /X5XK38i7eIYFwkLSxF6OUHXkgi42yJ8QQcXEtPTdKVOm+4NKMB8BmKaGRvvfzn+j3Hz
+         zSDOr32ibJj4YfXyruWXwLovx8aJxum1btItTe2ySVpLb3/D8dHAF3u1P9O+GaFv+WqJ
+         Feuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/TqmOJgo5WeQh0yrg49gDDHKn/XdEuTDlUHCBrMIYvg=;
-        b=JlFD1KN0Ar9bDtCIxS45pYInWzCsSlV+AeQYCFOs2VME/iUU4afT2VhaK5qgceQW+V
-         WpvLHfZb4P4qZc51t38WEOKe/EvRb4EVX9wj2VobMucUmi1UFaGm8FvxOGtS6hPp2xfI
-         As2eHAhY4lGrQQPDq//pJtH6Bhq4CNMW95vSeEnwzY3DfkUV2vilQ1KMfkVa+A369gEa
-         sGzidZPTOPlwx5i0D2mhz+W4fXzeHKkO/WeRhsT71rI8Go1pJ0Yh5z5cNj76TRdCQlc9
-         YnYJ4ejeVt03f5+nG0vBo7vBkBtl8O3FkTOkssYySgOsJ6fl3gMsjzN2TkMTK8pmrpoo
-         Gf4g==
-X-Gm-Message-State: ACrzQf0ofNdxhwa9gMfgDi7V6An+i5d2G8UJf3ed3TxcLN04lVxVpIqj
-        ZWz+4kVM9LO1hZiT0nFu0Ty5rg==
-X-Google-Smtp-Source: AMsMyM7HpA4Y/zi55GTte5bpmkf2QgWTmHeH3+E6fKGv5WzzlEH5yQGtbUDRMpQqUEvklfWPcPL1Rg==
-X-Received: by 2002:a05:622a:547:b0:399:b22a:de4d with SMTP id m7-20020a05622a054700b00399b22ade4dmr5191285qtx.115.1665413815789;
-        Mon, 10 Oct 2022 07:56:55 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id s187-20020ae9dec4000000b006ce76811a07sm9952409qkf.75.2022.10.10.07.56.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 07:56:54 -0700 (PDT)
-Message-ID: <2e89fc3a-bc54-17e7-d352-25db877172ff@linaro.org>
-Date:   Mon, 10 Oct 2022 10:54:43 -0400
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AcKHzg1i2Me8EqhKFtNfioe60y1iB3hPVRhH6rIJCT4=;
+        b=Le1Y94NW+uPgQTR+714NpkpyKOibwOKtbURteqZzZcsudGtM0V3zVweUezY+Tz+GtL
+         DssTu8d+NNt7zKFVoAT4rFXfREFrh2qfi9r84bLvdALYR6A2q16IEWW0eN2JfKNvIm4M
+         xgG45He4SWTGGP1TtT1P0SVz2+BP67+WoGzTzKzRBn1CMCJHyJ3vKKR45fLCxLdYRRZs
+         fShxJL//pe3+CKqFHvrbhP9745FxBNjJ63CvUKhkXxuUuFlSCvHeNRW3NezB8zb/UILy
+         sViRLIQvzcjlkXB1lwbs+n/QonX8RAZOFZgqzRd6TeQ2jKyZ88rKLKj6UBXPEeCynYex
+         SsBg==
+X-Gm-Message-State: ACrzQf2ZBU+8ETk3Pr2EzQHta+1Y9xTFngObGltU0rAVvBDktNJx7usn
+        m6QCOzTBJJSbwK2tXt2ZtNYmG/Nyr5s2fXR0i8U=
+X-Google-Smtp-Source: AMsMyM7BgrMi5isfnHCX6JolmakAtvlRr3ULiJstScINCNYrgAduBakCoqPks5lDMlMfN79tBnKa/M8p1ql8Zm59T9A=
+X-Received: by 2002:a6b:6f02:0:b0:6bc:15d8:3446 with SMTP id
+ k2-20020a6b6f02000000b006bc15d83446mr3512864ioc.108.1665415235626; Mon, 10
+ Oct 2022 08:20:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 8/8] MIPS: DTS: Ingenic: Add support for the JZ4755 SoC
-Content-Language: en-US
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20221009181338.2896660-1-lis8215@gmail.com>
- <20221009181338.2896660-9-lis8215@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221009181338.2896660-9-lis8215@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221008181655.2747857-1-lis8215@gmail.com> <Y0P/u4pJT8rup8Za@sirena.org.uk>
+In-Reply-To: <Y0P/u4pJT8rup8Za@sirena.org.uk>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Mon, 10 Oct 2022 18:20:24 +0300
+Message-ID: <CAKNVLfZhH3s=jBWAoSppXSotY9giRRJbub9MqxCtjdZKh4fprg@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: codecs: jz4725b: Various improvements and fixes
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/10/2022 14:13, Siarhei Volkau wrote:
-> Add preliminary support for boards based on the JZ4755 SoC from
-> Ingenic.
-> 
-> It is a low-power SoC with a MIPS32r1 SoC running at ~432 MHz, and no
-> FPU.
-> 
-> The JZ4755 SoC is supposed to be newer than the JZ4725B SoC, but its
-> internals are very close to each other. So JZ4755 DT is reusing many
-> JZ4725b drivers because JZ4725b support in the kernel appears earlier.
-> 
-> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-> ---
->  arch/mips/boot/dts/ingenic/jz4755.dtsi | 439 +++++++++++++++++++++++++
+=D0=BF=D0=BD, 10 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 14:19, Mark Brown =
+<broonie@kernel.org>:
+> As covered in submitting-patches.rst this should really be split up into
+> multiple patches, with one change per patch.  This is especially the
+> case here since you have a mix of fixes and new features which should be
+> applied differently.
 
-How do you build it? How do you test it? It's basically non-compillable,
-dead code. You need a board.
+Got it, will rework.
 
-Best regards,
-Krzysztof
+> > -     SOC_DOUBLE_R_TLV("Master Capture Volume",
+> > +     SOC_DOUBLE_TLV("Master Capture Volume",
+> > +                    JZ4725B_CODEC_REG_CGR10,
+> > +                    REG_CGR10_GIL_OFFSET,
+> > +                    REG_CGR10_GIR_OFFSET,
+> > +                    0xf, 0, jz4725b_adc_tlv),
+> > +     SOC_DOUBLE_R_TLV("Mixer Line In Bypass Playback Volume",
+> >                        JZ4725B_CODEC_REG_CGR3,
+>
+> This doesn't appear to correspond to what your patch description said
 
+I forgot to mention that in the description, thanks.
+
+> and will presumably cause problems for any existing configurations...
+
+I'm curious why this didn't cause problems earlier, as the wrong
+control was used
+for the Master Capture Volume.
