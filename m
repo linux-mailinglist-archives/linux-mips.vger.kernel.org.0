@@ -2,112 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0985FB218
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 14:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284325FB3AC
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 15:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiJKMJN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Oct 2022 08:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S229890AbiJKNsm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Oct 2022 09:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiJKMJJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 08:09:09 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3B26EF34
-        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 05:09:05 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id j21so6083444qkk.9
-        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 05:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wA2PG1QV5nKHw4b8l0hoDe51fcPxcPalio0IbUmeyTM=;
-        b=FXrqF8s7XtbX/Ycq5jUsbxK5DGdGYyeznM+Y/KtKVTpxB1WEgtBvfXGtmS/mY3Z6QP
-         xTZJNxIlqUEMrPqMRIQg2lU/J2UfnvzpakaYep0KVD439+H4JvQBNEdDUfDC2Z5sJWjd
-         RY2zgbnUiGWHR8vWDuwUHpcUjv2BW7E78N5wbmLogOeltArOPTXSWzoXD5QbJSInup6Y
-         qr8x5sh/Ue5Hr+qbjR0soe72IxM2R1XjMVWfMMrOUFB/UCNqsmEvppyH6bwz0n9MwXzs
-         76IUxf+rLZBn49IgdPDPhnUq4s/TCfJtG4++2/wj2vkldnNK9BLMjX37rBHO2FjAuhbt
-         3+kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wA2PG1QV5nKHw4b8l0hoDe51fcPxcPalio0IbUmeyTM=;
-        b=Vah2YeDT+lswcwUBe5xXc/CII7uAKkeiBjrPnRLS+g5RUP5p4a272sqoX2ainm9teC
-         hSe+65affReeJws8MPa9rvyM/fC/GQlnTzJvEelu6ss83Y0dlDKfPc/i1BXJ2HK5Uspd
-         UMKv8S+cqRci1OSzGFFK0hw9huqyXYJv8KzlVctTRP+BOm8PF579fxI0yYPQH27p96yc
-         8Bmrg2WgJr1aPmweeAQmjUiHH15VFG/E4sQ1Y1rq/yhTUhNvpasq4OnBkZdc2OC+QTUp
-         kwTMNVngQHnst2ZklJqCJJk37sf7zR78LXHbP/Fc3f4hlFC8KHpujytUc40aUOmYLFtR
-         nBKg==
-X-Gm-Message-State: ACrzQf2jaf9pD7Fv3+y0k03Za0y+0PhZT+6kpNJh8EXRGLzIIWuooVtv
-        GThrHKK8ZHVJGBXf1rSx+ImTWQ==
-X-Google-Smtp-Source: AMsMyM6EDJdIKnBSo3ZfKOacjcSSHQnz7CckztC9dG1sbPnETMw/m0XvV2QlBBo1fJbyvmgZOQSIIg==
-X-Received: by 2002:a05:620a:2909:b0:6ee:6c83:9769 with SMTP id m9-20020a05620a290900b006ee6c839769mr3710909qkp.732.1665490145001;
-        Tue, 11 Oct 2022 05:09:05 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id bm4-20020a05620a198400b006cfc7f9eea0sm12917572qkb.122.2022.10.11.05.09.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 05:09:03 -0700 (PDT)
-Message-ID: <3c516469-8f89-9c4a-e558-5281d07510c7@linaro.org>
-Date:   Tue, 11 Oct 2022 08:09:01 -0400
+        with ESMTP id S230004AbiJKNs0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 09:48:26 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8AE77555;
+        Tue, 11 Oct 2022 06:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665496105; x=1697032105;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QHbuyb2S/uUcVxyF/lwXUqAZuHdBPKm0sW+WbMyb3sc=;
+  b=Pj4BNK+rzzSTyBXemPpBH2NMgeihtQKzOP08GkE32BBDFHsEGUAOjS/g
+   YtBTzP+IhzjASx0CQoxtsOGSgggsc6r1ZngggideScpztEHBpvubxJvM/
+   PrBL8xLU0ZS173Xl1LBsRCKZZsUhVi7fKD8k2d9jHx/MqBAXkHRDZRdt4
+   jP4ZP+oPiaF9m0MFT6RAOay9XKsfteS6LOUKuYpRkK5k6bSbSgcvtu+/L
+   naYmNshmjYqukJl6ZQrLY6QTS7HynU+I2J6mqh2J4UJJdOFmwMHwDGHsu
+   Dh8DYhwk1KYkPnYhlJoeIytZJScs+etnJw5/us2S84x9IdC3nJtnr0iej
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="303244167"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="303244167"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 06:48:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="695068698"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="695068698"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Oct 2022 06:48:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oiFcH-005KIR-1Z;
+        Tue, 11 Oct 2022 16:48:17 +0300
+Date:   Tue, 11 Oct 2022 16:48:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
+Message-ID: <Y0V0IXF3sASTGdMU@smile.fi.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
+ <Y0SyVwjDl7NGfTPn@sol>
+ <CAHp75Vf4oS8g0zxgismtLrzsJ7AE-bdMEq+GAzx2=Mwnhuk3UA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 8/8] MIPS: DTS: Ingenic: Add support for the JZ4755 SoC
-Content-Language: en-US
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20221009181338.2896660-1-lis8215@gmail.com>
- <20221009181338.2896660-9-lis8215@gmail.com>
- <2e89fc3a-bc54-17e7-d352-25db877172ff@linaro.org>
- <CAKNVLfZ4zPdhv=zJOcDk_hnVVoU51L8uAsoXEmzJpecsyc5KmQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAKNVLfZ4zPdhv=zJOcDk_hnVVoU51L8uAsoXEmzJpecsyc5KmQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vf4oS8g0zxgismtLrzsJ7AE-bdMEq+GAzx2=Mwnhuk3UA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/10/2022 16:00, Siarhei Volkau wrote:
->> How do you build it? How do you test it? It's basically non-compillable,
->> dead code. You need a board.
+On Tue, Oct 11, 2022 at 11:05:42AM +0300, Andy Shevchenko wrote:
+> On Tue, Oct 11, 2022 at 3:02 AM Kent Gibson <warthog618@gmail.com> wrote:
+> > On Mon, Oct 10, 2022 at 11:14:18PM +0300, Andy Shevchenko wrote:
+
+...
+
+> > > -#include <linux/gpio.h>
+> > >  #include <linux/gpio/driver.h>
+> > > +#include <linux/gpio.h>
+> > > +#include <linux/hte.h>
+> >
+> > Ok with the hte re-order.
+> >
+> > But moving the gpio subsystem header after the gpio/driver is not
+> > alphabetical ('.' precedes '/') and it read better and made more sense
+> > to me the way it was.
 > 
-> I tested it on a Ritmix RZX-50 handheld, 
+> I see, I guess this is vim sort vs shell sort. Strange, they should
+> follow the locale settings...
 
-You cannot, there is no such DTS.
+I have checked, the shell and vim sort gave the same result as in this patch.
 
-> although this patchset doesn't
-> include it as it requires many other changes to be fully functional.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Exactly.
-
-> I decided to do this in two steps: add platform first (this patchset) then
-> specific drivers and quirks, in the next patchset, when this one passes.
-> 
-> Of course I can add machine's dts with working parts. What's the usual way?
-
-Don't add dead code to the kernel, so DTSI comes with DTS.
-
-Best regards,
-Krzysztof
 
