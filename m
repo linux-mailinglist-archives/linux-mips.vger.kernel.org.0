@@ -2,242 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EA15FB113
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 13:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2178F5FB20D
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 14:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiJKLKF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Oct 2022 07:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S229669AbiJKMIY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Oct 2022 08:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJKLKF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 07:10:05 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D725C11A0A;
-        Tue, 11 Oct 2022 04:10:00 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id A8AD93200983;
-        Tue, 11 Oct 2022 07:09:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 11 Oct 2022 07:09:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1665486596; x=1665572996; bh=ua7Nyh85XFVll13jSOnPQNcQr
-        tUvqtku7ANNgc6cAo0=; b=oe/I9u21BBIuiWtVCHWUKd87rev3V/BYMhQiMSkvr
-        BG8Txs0oU9hPsl2euGRNkWCx6uHWgxIcrZaGfgsGjZoRi1Wjo1ZN3Ee2y8HRxC29
-        alh963AzBpZlhdps9Sjv1ZE5aTdcNWQFkQrPb3ltpk843FkzTh0VAN5T1eV6+pMe
-        mdX4fmjgHEquemFEmJBj9XKblrlHxOAAJPziUg1VThjHOiWIPhfi7cNSyeq5wvTS
-        zv0qUk3gTewDlkawmAvasrGvHApewbSlVdZPkepJZtpGipom2gUHDb1nnVhQdSae
-        1pSAuUBNM4Gu7BCq3sC19dd6BgL8r17uqmJj8aFyxTOXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1665486596; x=1665572996; bh=ua7Nyh85XFVll13jSOnPQNcQrtUvqtku7AN
-        Ngc6cAo0=; b=DSP6gftXA7xPjqGV4fJqddQJcoYpGW0b1LNSyiFn7bURBOeP5PQ
-        lCzRWdDG76nQza9GCVC55iyq+lYBW0CrVC3YfaroIHFPVATt+MdN2XtQyPV3lD5R
-        jRO7KpOjt0gbgfdIGWEDxz8vZ1upglQWcZpTfDl8xfrypRVQN2vylF2gqNqObk/B
-        4XkM2ag73RxpDdLo0aZbBla+DF5D2uXg/00m2rUDPBAboe3iFUeBFfldj3IS2RXn
-        dUyWyJ8yNRoSj4akKDRoafJSb2/dA9wdYH/SEvOfDc5dth6BuDClC7WXJBgr/XgE
-        aAnQZpfJThINwnbQco2Oqcsi9VEistMwLrw==
-X-ME-Sender: <xms:A09FY6IpJqQAPBNOOfdqUhGfHubdshi2X5lEu4ZOwEJimmv2jWNp8A>
-    <xme:A09FYyJi9VKDKzIkS8IIbXjQpgAgkG2S-2aGcAtGhzkO7ky7dG5sYe6oFpZDeeejk
-    IO1uvUUwajxhggjACw>
-X-ME-Received: <xmr:A09FY6usXbM8cdPT3-OltTQZhTWXMpPYeat3Ox9p1QmhtJm6P5BeNLPNwijK>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
-    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
-    grthdrtghomh
-X-ME-Proxy: <xmx:A09FY_aSi0SC7i1hmZvXNsKyarmvmeCD0w-4QcmJ48Tr7cc5cb2gbA>
-    <xmx:A09FYxZbgqDk4C2Wd88F3YbzAkA-q7I4-3IsePnR66Uaf8IzCf4_hw>
-    <xmx:A09FY7AohQLBPxDmUxsjbDylexED_oNcRE3HIzxNZHhyzy4JKisbzg>
-    <xmx:BE9FY0xyhnU-0Mn10nfQuURp4U_Xp_zB2eWcayOfvmSjbAIVOfHPlQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Oct 2022 07:09:54 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-api@vger.kernel.org, greg@kroah.com, f.fainelli@gmail.com,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v6] MIPS: Expose prid and globalnumber to sysfs
-Date:   Tue, 11 Oct 2022 12:09:51 +0100
-Message-Id: <20221011110951.93404-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+        with ESMTP id S229508AbiJKMIW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 08:08:22 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279FF4DF0E
+        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 05:08:20 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id w3so298648qtv.9
+        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 05:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d7sQGgcfeLetHsYqqAQzwhlkQO31idzHL2CtdWtj7pI=;
+        b=fFpMQBJU+KIup5rqPl5HSkr/RGGMV7irnqdmJssu6pEBstzv0l8cg2Yyh4W0MSrMjS
+         1UHEW48g9iVzieWXgwHcY2sYLOt8PGh7CZUX15ojxeZ8yjvBxSHv2WSDFYFUduWYP9nw
+         FCg96WFT2ulQ3hmp+VnOAjxmLC62pNPaUoyRZaduPPyWuVZSCJxfQDpFWFu7r13xNirS
+         IKWsSZyCLPIsSGgpTaS94qvR6G4n+kY0wFKw9Gg0jspinDQ/WolzwqymbY8U1sloEBA9
+         A+IPAE5NrQeJUa3snTIDBFMzGx3H7TLwRCa6tpNRmjgaH4XwOlPnKAepUx7845XuTUAP
+         2G7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d7sQGgcfeLetHsYqqAQzwhlkQO31idzHL2CtdWtj7pI=;
+        b=yvaKWWGLd8thLb0DUQwBKc6d0fU/sW2MbdMndyock/zjXqbbZkWI0zMcZykqAoUyRF
+         wJvy7zlqhmkRgSSsZm0JKi4wcZqKs5SIqU10VODwENmVJKjG1WutF6WZC1UYKRdLhvyU
+         EliyPDAlJU+K7/jDALA0WDbTm/dKdmA9VgFVC1hdCWa/ARh/ssd5mZWv3bus+oiDsCsV
+         XvdyDlMJR2X++1wWhLYA6fWThGsf0KnvNRkcXLWNStqSMtzqL8itl/XprF+HFgaDrFt+
+         Ub6r36ESh98zQ2NKE0NeM9TTlce8ilCOJs0NrQsyPATnLJoOSkzAw/hx6z7oOMcldfU6
+         WKlw==
+X-Gm-Message-State: ACrzQf3bezXWS6qih9RctS35czZysCLhhE7M+PP7pemHFEfKm51VjqR+
+        W4AC0I+YzDOI2FVkJPVcFU/N1Q==
+X-Google-Smtp-Source: AMsMyM4eGhDDIfVAL6kaolpL8+jGYieCca2y9hJwcftMhjyac5scT6NHJ1gngHvyVO3MwMBzC9Cc2A==
+X-Received: by 2002:ac8:7f93:0:b0:35b:bbdd:5699 with SMTP id z19-20020ac87f93000000b0035bbbdd5699mr18616407qtj.46.1665490099267;
+        Tue, 11 Oct 2022 05:08:19 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id c2-20020ac87dc2000000b0039a8b075248sm3987764qte.14.2022.10.11.05.08.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 05:08:18 -0700 (PDT)
+Message-ID: <e64594f9-e5dc-9a79-8240-fa0e749b9655@linaro.org>
+Date:   Tue, 11 Oct 2022 08:08:16 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 1/8] dt-bindings: ingenic: Add support for the JZ4755 SoC
+Content-Language: en-US
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20221009181338.2896660-1-lis8215@gmail.com>
+ <20221009181338.2896660-2-lis8215@gmail.com>
+ <84b6dae0-d503-bbd2-d483-80462917afa4@linaro.org>
+ <CAKNVLfZmjfmKb5ybY8NDhV-bQCQn7o_bSVK=aM4byftasW6dLg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAKNVLfZmjfmKb5ybY8NDhV-bQCQn7o_bSVK=aM4byftasW6dLg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Some application would like to know precise model and rev of processor
-to do errata workaround or optimization.
+On 10/10/2022 16:18, Siarhei Volkau wrote:
+> пн, 10 окт. 2022 г. в 17:55, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org>:
+> 
+>> How do you plan to merge it? Usually these go via subsystem trees...
+> 
+> It's a new case for me, could you explain the problem a bit more?
+> What things should I bother with in the next patchset version?
+> Thanks in advance.
 
-Expose them in sysfs as:
-/sys/devices/system/cpu/cpuX/regs/identification/prid
-/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+Each binding goes via subsystem maintainer, not via DT bindings tree, so
+keeping all in one patch messes with that.
 
-Reusing AArch64 CPU registers directory.
-
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
-v2: Drop static qualifier for kobj (gregkh)
-v3: Use kzalloc to allocate struct cpuregs.
-    note: When Greg mentioned about static I was thinking about
-    static qualifier of percpu variable. After reading documents
-    again it turns out kobjs should be allocated at runtime. Arm64's
-    cpuinfo kobj is also on a percpu variable... I guess that was a
-    intentional use?
-v4: Properly handle err of kobj creation. (gregkh)
-v5: Drop invalid kfree
-v6: Correct offline routine, use kobject_put
----
- .../ABI/testing/sysfs-devices-system-cpu      |  9 ++
- arch/mips/kernel/topology.c                   | 97 +++++++++++++++++++
- 2 files changed, 106 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index 5bf61881f012..9dea45ad5a22 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -512,6 +512,15 @@ Description:	information about CPUs heterogeneity.
- 
- 		cpu_capacity: capacity of cpuX.
- 
-+What:		/sys/devices/system/cpu/cpuX/regs/identification/prid
-+		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-+Date:		October 2022
-+Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
-+Description:	MIPS CPU registers
-+
-+		'identification' directory exposes the Processor ID and Global Number
-+		registers for identifying model and revision of the CPU.
-+
- What:		/sys/devices/system/cpu/vulnerabilities
- 		/sys/devices/system/cpu/vulnerabilities/meltdown
- 		/sys/devices/system/cpu/vulnerabilities/spectre_v1
-diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
-index 9429d85a4703..85588ffd6bac 100644
---- a/arch/mips/kernel/topology.c
-+++ b/arch/mips/kernel/topology.c
-@@ -5,6 +5,8 @@
- #include <linux/node.h>
- #include <linux/nodemask.h>
- #include <linux/percpu.h>
-+#include <linux/seq_file.h>
-+#include <linux/smp.h>
- 
- static DEFINE_PER_CPU(struct cpu, cpu_devices);
- 
-@@ -26,3 +28,98 @@ static int __init topology_init(void)
- }
- 
- subsys_initcall(topology_init);
-+
-+static struct kobj_type cpuregs_kobj_type = {
-+	.sysfs_ops = &kobj_sysfs_ops,
-+};
-+
-+struct cpureg {
-+	struct kobject kobj;
-+	struct cpuinfo_mips *info;
-+};
-+static DEFINE_PER_CPU(struct cpureg *, cpuregs);
-+
-+#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
-+#define CPUREGS_ATTR_RO(_name, _field)						\
-+	static ssize_t _name##_show(struct kobject *kobj,			\
-+			struct kobj_attribute *attr, char *buf)			\
-+	{									\
-+		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
-+										\
-+		return sysfs_emit(buf, "0x%08x\n", info->_field);	\
-+	}									\
-+	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
-+
-+CPUREGS_ATTR_RO(prid, processor_id);
-+CPUREGS_ATTR_RO(globalnumber, globalnumber);
-+
-+static struct attribute *cpuregs_id_attrs[] = {
-+	&cpuregs_attr_prid.attr,
-+	&cpuregs_attr_globalnumber.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group cpuregs_attr_group = {
-+	.attrs = cpuregs_id_attrs,
-+	.name = "identification"
-+};
-+
-+static int cpuregs_cpu_online(unsigned int cpu)
-+{
-+	int rc;
-+	struct device *dev;
-+	struct cpureg *reg;
-+
-+	dev = get_cpu_device(cpu);
-+	if (!dev) {
-+		rc = -ENODEV;
-+		goto out;
-+	}
-+	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
-+	if (!reg) {
-+		rc = -ENOMEM;
-+		goto out;
-+	}
-+	reg->info = &cpu_data[cpu];
-+
-+	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
-+					&dev->kobj, "regs");
-+	if (rc)
-+		goto out_kobj;
-+	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
-+	if (rc)
-+		goto out_kobj;
-+
-+	return 0;
-+out_kobj:
-+	kobject_put(&reg->kobj);
-+out:
-+	return rc;
-+}
-+
-+static int cpuregs_cpu_offline(unsigned int cpu)
-+{
-+	struct cpureg *reg = per_cpu(cpuregs, cpu);
-+
-+	if (!reg)
-+		return -ENODEV;
-+	sysfs_remove_group(&reg->kobj, &cpuregs_attr_group);
-+	kobject_put(&reg->kobj);
-+
-+	return 0;
-+}
-+
-+static int __init cpuinfo_regs_init(void)
-+{
-+	int ret;
-+
-+	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "mips/topology:online",
-+				cpuregs_cpu_online, cpuregs_cpu_offline);
-+	if (ret < 0) {
-+		pr_err("cpuinfo: failed to register hotplug callbacks.\n");
-+		return ret;
-+	}
-+	return 0;
-+}
-+
-+device_initcall(cpuinfo_regs_init);
--- 
-2.37.0 (Apple Git-136)
+Best regards,
+Krzysztof
 
