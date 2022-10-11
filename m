@@ -2,62 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBF55FB7F2
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 18:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5645FB80C
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 18:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiJKQIM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Oct 2022 12:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
+        id S229996AbiJKQOw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Oct 2022 12:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiJKQIL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 12:08:11 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5387D543EE
-        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 09:08:08 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id hh9so8519017qtb.13
-        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 09:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GWYVEJdoqXnCQWtfT0bzkIP+70WLbsk9ZN19JnMQZx0=;
-        b=knWzrFxaglSBiHlwLMrZK+zOgKEtnU3K72eEGnOpfBMOKDwTCB1o5DFjMAX/q0UhNY
-         QtDdN11oGw+99XS3Ki30jbEV3wnK3M/RZFgBzC756EJj6Qzp7bRwpx0xVlVivFLLMSoT
-         OeFfvcAMzeUvMG2gk+zcXMcyojW/wbwfJ302GKQQDum8iO4SLMQHN5VVV6Lek8K2nrim
-         ey4zQ7XwZHcjBefqfLYDvCN8aZemyW2QsFCvMONV+AY8yi+43sfWfso0dPvhCbF12v5/
-         Zm2LP1ZxvniRrJK8KUjh3/YEL2QeZJReWqzdLohiEOSis5AiXvm/BDGrcU0o48e583KX
-         k3Ow==
+        with ESMTP id S229744AbiJKQOs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 12:14:48 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B42F003;
+        Tue, 11 Oct 2022 09:14:45 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id v12so2565050edc.6;
+        Tue, 11 Oct 2022 09:14:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GWYVEJdoqXnCQWtfT0bzkIP+70WLbsk9ZN19JnMQZx0=;
-        b=YGquChVGkpGl2dRECZSFMnspnmagIIrpAzPEbu7mICKCMS6d5UhN+1Nn1e+HwgJLST
-         X4xYnydJvySFx7OOAJHOcET5ovdSmLmUxYhkrmiRRLvzrwW5PuA68HmVBUiMpyOwDyjD
-         AwW56DjBEGrdmOP3Pz8qTHFeu97tzTq03eZg/QdEgFIbuqVpY4zqHzOFZXagpXvmtHNS
-         w9vLHQp2+IzHcAbbYAv68D3APBzqz2UZ6h/lL75xmgVgj3ids04zkV/C1JnY5Chycl4r
-         OKAgPMrSh5J1qx14l9Sr7pKcVizYF0WiL1sglBI5O6UzNy2WAF6VjHmffQwsnPn/jdA4
-         Z6Xw==
-X-Gm-Message-State: ACrzQf2rnlbo86eCIB3uR96rpKqgcQ8jk5XxSnMmo7hN9Zep+xjiQiMR
-        Y6qluo06bUr0YA+AQnVs6CHzbg==
-X-Google-Smtp-Source: AMsMyM4tb/82A1JDAzYalVciziTjce/S19vvHsKcNbs5jARqscG7vKxacamXR2e1H5XtfAKSXhInbA==
-X-Received: by 2002:ac8:7d49:0:b0:399:d201:840b with SMTP id h9-20020ac87d49000000b00399d201840bmr9746570qtb.309.1665504487275;
-        Tue, 11 Oct 2022 09:08:07 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id w8-20020ac84d08000000b00399813f4d5bsm5725686qtv.72.2022.10.11.09.08.02
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gcCjfDN4mDKfmx6uTh8+bavSggaZhIbJoPNugTf0yYI=;
+        b=JMFnbtPjwrDpGhFMR1mf2dgkS3as4HvfFlzlExRVkpiEmbI7t8GMtE3sbMlBCEUMi8
+         d4HZXbGJEhNcNK/Rlt2vTgJmHJHrGV/nnM/iVvZI5oDgJwZPPnl1f0l1qJvLijXvdgQW
+         rG+Wbm7agFfsi9DJ/0WD1Zab7mpgfMcXuW4A0objUlrVTg/Fya+eKYfFfXFbE0clcUKd
+         bHaqHmnFl6JpnN8tP0q5+IxwEGGA/NUDXiE7hj/mED1GNfOgPDJGDGG5tbyOE2DbWYC2
+         B39U7weAETlxZy0DJ2IlJpVM6gXKJVSokML7jcc2Wi6ipQC8MC4jbLSBQpCrr/eZMbAI
+         7Log==
+X-Gm-Message-State: ACrzQf0dGMMPUNn295rp50aTfJQZyVHCFkWsUrlsQoJUU8BLKfcF+oZB
+        DXcZPf505Cjzdio1Tiho8s3h7y0iidQnCB3a
+X-Google-Smtp-Source: AMsMyM7ZqUp8nr4UTSkIePDm3PChCTNq8ODcC9u6v+t1VPzyVXQm6vECSYNxICUxkk5mMNcW3biFhw==
+X-Received: by 2002:a05:6402:4313:b0:45a:b150:6796 with SMTP id m19-20020a056402431300b0045ab1506796mr18367378edc.246.1665504883732;
+        Tue, 11 Oct 2022 09:14:43 -0700 (PDT)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id l1-20020a1709060cc100b007402796f065sm2884993ejh.132.2022.10.11.09.14.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 09:08:06 -0700 (PDT)
-Message-ID: <a9e5197d-78aa-4395-23bc-d7c3141f109a@linaro.org>
-Date:   Tue, 11 Oct 2022 12:05:51 -0400
+        Tue, 11 Oct 2022 09:14:42 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id u10so22398844wrq.2;
+        Tue, 11 Oct 2022 09:14:41 -0700 (PDT)
+X-Received: by 2002:adf:eb84:0:b0:22a:917e:1c20 with SMTP id
+ t4-20020adfeb84000000b0022a917e1c20mr15144886wrn.223.1665504881328; Tue, 11
+ Oct 2022 09:14:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 20/36] pinctrl: samsung: Add missed header(s)
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-8-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221010201453.77401-8-andriy.shevchenko@linux.intel.com>
+Reply-To: wens@csie.org
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Wed, 12 Oct 2022 00:14:28 +0800
+X-Gmail-Original-Message-ID: <CAGb2v65EuTdS3uvr6EgpiiK25PeYrVh+itte2wHz_wM=E1S4OA@mail.gmail.com>
+Message-ID: <CAGb2v65EuTdS3uvr6EgpiiK25PeYrVh+itte2wHz_wM=E1S4OA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/36] pinctrl: axp209: Add missed header(s)
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         Kent Gibson <warthog618@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Billy Tsai <billy_tsai@aspeedtech.com>,
@@ -76,6 +71,7 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Phil Edworthy <phil.edworthy@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Fabien Dessenne <fabien.dessenne@foss.st.com>,
         Prathamesh Shete <pshete@nvidia.com>,
         Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
@@ -89,11 +85,11 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-omap@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Patrice Chotard <patrice.chotard@foss.st.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Joel Stanley <joel@jms.id.au>,
@@ -123,7 +119,6 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Ludovic Desroches <ludovic.desroches@microchip.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
         Paul Cercueil <paul@crapouillou.net>,
         Damien Le Moal <damien.lemoal@wdc.com>,
         Tony Lindgren <tony@atomide.com>,
@@ -144,36 +139,25 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-21-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221010201453.77401-21-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/10/2022 16:14, Andy Shevchenko wrote:
+On Tue, Oct 11, 2022 at 4:16 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
 > Do not imply that some of the generic headers may be always included.
 > Instead, include explicitly what we are direct user of.
-> 
+>
 > While at it, sort headers alphabetically.
-> 
+>
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/pinctrl/samsung/pinctrl-samsung.c | 11 ++++++-----
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Acked-by: Chen-Yu Tsai <wens@csie.org>
