@@ -2,294 +2,242 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BB45FB01D
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 12:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EA15FB113
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 13:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiJKKEX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Oct 2022 06:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S229468AbiJKLKF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Oct 2022 07:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJKKEH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 06:04:07 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7BE8D0CA;
-        Tue, 11 Oct 2022 03:03:51 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id r17so30220079eja.7;
-        Tue, 11 Oct 2022 03:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6r9TR6k7ZFnpYRrQ79w4enoBrUyIdRGewHutjKTPK0c=;
-        b=dit3LHF+DkfIOR2jPB98pCnX5hBg2tdQYKlOSSnzZwUddl2fl8cHYDeZJpUO9A4Aw/
-         Af1C5cwxE5Q7nDLsh8IxLaXYaKJsMiSJGko8AJIB7p2FCiz6Y5Ye/uuADYF+EAGaljkZ
-         4sHPGDDV6V9B5carYU3TAuQTxOgUDlgYqmscEIax3d7+v0Fr9gFsdTdmCPtX0l0nrNR3
-         zamYQt+nYWT1XzLaSHw5OFuD/LqFwbunGbhVl+vUC5/UJrqSdNtXlTR6Qng6cHsnEF5Y
-         JKEM2E36Tl2Rf+I0Ev7tvP53V3Dkbm4npeiVyV5qj9gTVNmmT2X4lAosMLgoyHSzWkKN
-         gMtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6r9TR6k7ZFnpYRrQ79w4enoBrUyIdRGewHutjKTPK0c=;
-        b=TTyRqSjvcKV4rcZwtESvWWqMpdfUIc0/5pQJPblr03bDSdmYkpfVTffZAi6Q1x7tDK
-         6PDIem70JJjqrjoqB6yg7xoolp7T/yGjIkb9ChyP4LgXqW07TAIqEZDGa8/kZrSWh9fr
-         8rb18GA5QnoAQm+hxyYVN6cZBHr6bt7lb0g96hUpMkgg0IHdR47HsKAOEjCaQm/F1xH9
-         OLQcsg5Vzguu122EhyZE6X06Xvd0W45E5yoh2YBJh6eDaRHJBi7w99408haL6I62PBkh
-         dY7Q2HlWO/Neq2PZvp7P5LZmlmET14ZKeDh8VO26DVXqmFtBRVN8nYIDCoeosTLAJQ5c
-         Jbyg==
-X-Gm-Message-State: ACrzQf0pdr6ebQcbMf506XqLUsHv0SG0WjkMcBRkGVAZEPrq1NNCuihB
-        JpCqJnk+dzkRkCTUUxemrrM=
-X-Google-Smtp-Source: AMsMyM6gizhUse19Na7gK9CEfRA28qIOD56HDJigggh7Xg6DDqwtaArMlhx4ISEVp6zi9p7QQUvsgQ==
-X-Received: by 2002:a17:907:1c1a:b0:78d:426c:2828 with SMTP id nc26-20020a1709071c1a00b0078d426c2828mr18691133ejc.331.1665482629474;
-        Tue, 11 Oct 2022 03:03:49 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id o8-20020a170906768800b00780ab5a9116sm4597749ejm.211.2022.10.11.03.03.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 03:03:49 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        bcm-kernel-feedback-list@broadcom.com,
-        John Crispin <john@phrozen.org>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 2/2] mtd: parsers: add TP-Link SafeLoader partitions table parser
-Date:   Tue, 11 Oct 2022 12:03:33 +0200
-Message-Id: <20221011100333.32536-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221011100333.32536-1-zajec5@gmail.com>
-References: <20221011100333.32536-1-zajec5@gmail.com>
+        with ESMTP id S229501AbiJKLKF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 07:10:05 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D725C11A0A;
+        Tue, 11 Oct 2022 04:10:00 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id A8AD93200983;
+        Tue, 11 Oct 2022 07:09:56 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 11 Oct 2022 07:09:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1665486596; x=1665572996; bh=ua7Nyh85XFVll13jSOnPQNcQr
+        tUvqtku7ANNgc6cAo0=; b=oe/I9u21BBIuiWtVCHWUKd87rev3V/BYMhQiMSkvr
+        BG8Txs0oU9hPsl2euGRNkWCx6uHWgxIcrZaGfgsGjZoRi1Wjo1ZN3Ee2y8HRxC29
+        alh963AzBpZlhdps9Sjv1ZE5aTdcNWQFkQrPb3ltpk843FkzTh0VAN5T1eV6+pMe
+        mdX4fmjgHEquemFEmJBj9XKblrlHxOAAJPziUg1VThjHOiWIPhfi7cNSyeq5wvTS
+        zv0qUk3gTewDlkawmAvasrGvHApewbSlVdZPkepJZtpGipom2gUHDb1nnVhQdSae
+        1pSAuUBNM4Gu7BCq3sC19dd6BgL8r17uqmJj8aFyxTOXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1665486596; x=1665572996; bh=ua7Nyh85XFVll13jSOnPQNcQrtUvqtku7AN
+        Ngc6cAo0=; b=DSP6gftXA7xPjqGV4fJqddQJcoYpGW0b1LNSyiFn7bURBOeP5PQ
+        lCzRWdDG76nQza9GCVC55iyq+lYBW0CrVC3YfaroIHFPVATt+MdN2XtQyPV3lD5R
+        jRO7KpOjt0gbgfdIGWEDxz8vZ1upglQWcZpTfDl8xfrypRVQN2vylF2gqNqObk/B
+        4XkM2ag73RxpDdLo0aZbBla+DF5D2uXg/00m2rUDPBAboe3iFUeBFfldj3IS2RXn
+        dUyWyJ8yNRoSj4akKDRoafJSb2/dA9wdYH/SEvOfDc5dth6BuDClC7WXJBgr/XgE
+        aAnQZpfJThINwnbQco2Oqcsi9VEistMwLrw==
+X-ME-Sender: <xms:A09FY6IpJqQAPBNOOfdqUhGfHubdshi2X5lEu4ZOwEJimmv2jWNp8A>
+    <xme:A09FYyJi9VKDKzIkS8IIbXjQpgAgkG2S-2aGcAtGhzkO7ky7dG5sYe6oFpZDeeejk
+    IO1uvUUwajxhggjACw>
+X-ME-Received: <xmr:A09FY6usXbM8cdPT3-OltTQZhTWXMpPYeat3Ox9p1QmhtJm6P5BeNLPNwijK>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedgfeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:A09FY_aSi0SC7i1hmZvXNsKyarmvmeCD0w-4QcmJ48Tr7cc5cb2gbA>
+    <xmx:A09FYxZbgqDk4C2Wd88F3YbzAkA-q7I4-3IsePnR66Uaf8IzCf4_hw>
+    <xmx:A09FY7AohQLBPxDmUxsjbDylexED_oNcRE3HIzxNZHhyzy4JKisbzg>
+    <xmx:BE9FY0xyhnU-0Mn10nfQuURp4U_Xp_zB2eWcayOfvmSjbAIVOfHPlQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Oct 2022 07:09:54 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-api@vger.kernel.org, greg@kroah.com, f.fainelli@gmail.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v6] MIPS: Expose prid and globalnumber to sysfs
+Date:   Tue, 11 Oct 2022 12:09:51 +0100
+Message-Id: <20221011110951.93404-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Some application would like to know precise model and rev of processor
+to do errata workaround or optimization.
 
-This parser deals with most TP-Link home routers. It reads info about
-partitions and registers them in the MTD subsystem.
+Expose them in sysfs as:
+/sys/devices/system/cpu/cpuX/regs/identification/prid
+/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Reusing AArch64 CPU registers directory.
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- drivers/mtd/parsers/Kconfig             |  15 +++
- drivers/mtd/parsers/Makefile            |   1 +
- drivers/mtd/parsers/tplink_safeloader.c | 150 ++++++++++++++++++++++++
- 3 files changed, 166 insertions(+)
- create mode 100644 drivers/mtd/parsers/tplink_safeloader.c
+v2: Drop static qualifier for kobj (gregkh)
+v3: Use kzalloc to allocate struct cpuregs.
+    note: When Greg mentioned about static I was thinking about
+    static qualifier of percpu variable. After reading documents
+    again it turns out kobjs should be allocated at runtime. Arm64's
+    cpuinfo kobj is also on a percpu variable... I guess that was a
+    intentional use?
+v4: Properly handle err of kobj creation. (gregkh)
+v5: Drop invalid kfree
+v6: Correct offline routine, use kobject_put
+---
+ .../ABI/testing/sysfs-devices-system-cpu      |  9 ++
+ arch/mips/kernel/topology.c                   | 97 +++++++++++++++++++
+ 2 files changed, 106 insertions(+)
 
-diff --git a/drivers/mtd/parsers/Kconfig b/drivers/mtd/parsers/Kconfig
-index aaa06050c9bc..c258ba2a3a6f 100644
---- a/drivers/mtd/parsers/Kconfig
-+++ b/drivers/mtd/parsers/Kconfig
-@@ -123,6 +123,21 @@ config MTD_AFS_PARTS
- 	  for your particular device. It won't happen automatically. The
- 	  'physmap' map driver (CONFIG_MTD_PHYSMAP) does this, for example.
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index 5bf61881f012..9dea45ad5a22 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -512,6 +512,15 @@ Description:	information about CPUs heterogeneity.
  
-+config MTD_PARSER_TPLINK_SAFELOADER
-+	tristate "TP-Link Safeloader partitions parser"
-+	depends on MTD && (ARCH_BCM_5301X || ATH79 || SOC_MT7620 || SOC_MT7621 || COMPILE_TEST)
-+	help
-+	  TP-Link home routers use flash partitions to store various data. Info
-+	  about flash space layout is stored in a partitions table using a
-+	  custom ASCII-based format.
+ 		cpu_capacity: capacity of cpuX.
+ 
++What:		/sys/devices/system/cpu/cpuX/regs/identification/prid
++		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
++Date:		October 2022
++Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
++Description:	MIPS CPU registers
 +
-+	  That format was first found in devices with SafeLoader bootloader and
-+	  was named after it. Later it was adapted to CFE and U-Boot
-+	  bootloaders.
++		'identification' directory exposes the Processor ID and Global Number
++		registers for identifying model and revision of the CPU.
 +
-+	  This driver reads partitions table, parses it and creates MTD
-+	  partitions.
+ What:		/sys/devices/system/cpu/vulnerabilities
+ 		/sys/devices/system/cpu/vulnerabilities/meltdown
+ 		/sys/devices/system/cpu/vulnerabilities/spectre_v1
+diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
+index 9429d85a4703..85588ffd6bac 100644
+--- a/arch/mips/kernel/topology.c
++++ b/arch/mips/kernel/topology.c
+@@ -5,6 +5,8 @@
+ #include <linux/node.h>
+ #include <linux/nodemask.h>
+ #include <linux/percpu.h>
++#include <linux/seq_file.h>
++#include <linux/smp.h>
+ 
+ static DEFINE_PER_CPU(struct cpu, cpu_devices);
+ 
+@@ -26,3 +28,98 @@ static int __init topology_init(void)
+ }
+ 
+ subsys_initcall(topology_init);
 +
- config MTD_PARSER_TRX
- 	tristate "Parser for TRX format partitions"
- 	depends on MTD && (BCM47XX || ARCH_BCM_5301X || ARCH_MEDIATEK || RALINK || COMPILE_TEST)
-diff --git a/drivers/mtd/parsers/Makefile b/drivers/mtd/parsers/Makefile
-index 23fa4de4016f..0e70b621a1d8 100644
---- a/drivers/mtd/parsers/Makefile
-+++ b/drivers/mtd/parsers/Makefile
-@@ -10,6 +10,7 @@ ofpart-$(CONFIG_MTD_OF_PARTS_BCM4908)	+= ofpart_bcm4908.o
- ofpart-$(CONFIG_MTD_OF_PARTS_LINKSYS_NS)+= ofpart_linksys_ns.o
- obj-$(CONFIG_MTD_PARSER_IMAGETAG)	+= parser_imagetag.o
- obj-$(CONFIG_MTD_AFS_PARTS)		+= afs.o
-+obj-$(CONFIG_MTD_PARSER_TPLINK_SAFELOADER)	+= tplink_safeloader.o
- obj-$(CONFIG_MTD_PARSER_TRX)		+= parser_trx.o
- obj-$(CONFIG_MTD_SERCOMM_PARTS)		+= scpart.o
- obj-$(CONFIG_MTD_SHARPSL_PARTS)		+= sharpslpart.o
-diff --git a/drivers/mtd/parsers/tplink_safeloader.c b/drivers/mtd/parsers/tplink_safeloader.c
-new file mode 100644
-index 000000000000..7317d1faabbb
---- /dev/null
-+++ b/drivers/mtd/parsers/tplink_safeloader.c
-@@ -0,0 +1,150 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright © 2022 Rafał Miłecki <rafal@milecki.pl>
-+ */
++static struct kobj_type cpuregs_kobj_type = {
++	.sysfs_ops = &kobj_sysfs_ops,
++};
 +
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mtd/mtd.h>
-+#include <linux/mtd/partitions.h>
-+#include <linux/of.h>
-+#include <linux/slab.h>
++struct cpureg {
++	struct kobject kobj;
++	struct cpuinfo_mips *info;
++};
++static DEFINE_PER_CPU(struct cpureg *, cpuregs);
 +
-+#define TPLINK_SAFELOADER_DATA_OFFSET		4
-+#define TPLINK_SAFELOADER_MAX_PARTS		32
++#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
++#define CPUREGS_ATTR_RO(_name, _field)						\
++	static ssize_t _name##_show(struct kobject *kobj,			\
++			struct kobj_attribute *attr, char *buf)			\
++	{									\
++		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
++										\
++		return sysfs_emit(buf, "0x%08x\n", info->_field);	\
++	}									\
++	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
 +
-+struct safeloader_cmn_header {
-+	__be32 size;
-+	uint32_t unused;
-+} __packed;
++CPUREGS_ATTR_RO(prid, processor_id);
++CPUREGS_ATTR_RO(globalnumber, globalnumber);
 +
-+static void *mtd_parser_tplink_safeloader_read_table(struct mtd_info *mtd)
++static struct attribute *cpuregs_id_attrs[] = {
++	&cpuregs_attr_prid.attr,
++	&cpuregs_attr_globalnumber.attr,
++	NULL
++};
++
++static const struct attribute_group cpuregs_attr_group = {
++	.attrs = cpuregs_id_attrs,
++	.name = "identification"
++};
++
++static int cpuregs_cpu_online(unsigned int cpu)
 +{
-+	struct safeloader_cmn_header hdr;
-+	struct device_node *np;
-+	size_t bytes_read;
-+	size_t offset;
-+	size_t size;
-+	char *buf;
-+	int err;
++	int rc;
++	struct device *dev;
++	struct cpureg *reg;
 +
-+	np = mtd_get_of_node(mtd);
-+	if (mtd_is_partition(mtd))
-+		of_node_get(np);
-+	else
-+		np = of_get_child_by_name(np, "partitions");
-+
-+	if (of_property_read_u32(np, "partitions-table-offset", &offset)) {
-+		pr_err("Failed to get partitions table offset\n");
-+		goto err_put;
++	dev = get_cpu_device(cpu);
++	if (!dev) {
++		rc = -ENODEV;
++		goto out;
 +	}
-+
-+	err = mtd_read(mtd, offset, sizeof(hdr), &bytes_read, (uint8_t *)&hdr);
-+	if (err && !mtd_is_bitflip(err)) {
-+		pr_err("Failed to read from %s at 0x%zx\n", mtd->name, offset);
-+		goto err_put;
++	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
++	if (!reg) {
++		rc = -ENOMEM;
++		goto out;
 +	}
++	reg->info = &cpu_data[cpu];
 +
-+	size = be32_to_cpu(hdr.size);
++	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
++					&dev->kobj, "regs");
++	if (rc)
++		goto out_kobj;
++	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
++	if (rc)
++		goto out_kobj;
 +
-+	buf = kmalloc(size + 1, GFP_KERNEL);
-+	if (!buf)
-+		goto err_put;
-+
-+	err = mtd_read(mtd, offset + sizeof(hdr), size, &bytes_read, buf);
-+	if (err && !mtd_is_bitflip(err)) {
-+		pr_err("Failed to read from %s at 0x%zx\n", mtd->name, offset + sizeof(hdr));
-+		goto err_kfree;
-+	}
-+
-+	buf[size - 1] = '\0';
-+
-+	of_node_put(np);
-+
-+	return buf;
-+
-+err_kfree:
-+	kfree(buf);
-+err_put:
-+	of_node_put(np);
-+	return NULL;
++	return 0;
++out_kobj:
++	kobject_put(&reg->kobj);
++out:
++	return rc;
 +}
 +
-+static int mtd_parser_tplink_safeloader_parse(struct mtd_info *mtd,
-+					      const struct mtd_partition **pparts,
-+					      struct mtd_part_parser_data *data)
++static int cpuregs_cpu_offline(unsigned int cpu)
 +{
-+	struct mtd_partition *parts;
-+	char name[65];
-+	size_t offset;
-+	size_t bytes;
-+	char *buf;
-+	int idx;
-+	int err;
++	struct cpureg *reg = per_cpu(cpuregs, cpu);
 +
-+	parts = kcalloc(TPLINK_SAFELOADER_MAX_PARTS, sizeof(*parts), GFP_KERNEL);
-+	if (!parts) {
-+		err = -ENOMEM;
-+		goto err_out;
-+	}
++	if (!reg)
++		return -ENODEV;
++	sysfs_remove_group(&reg->kobj, &cpuregs_attr_group);
++	kobject_put(&reg->kobj);
 +
-+	buf = mtd_parser_tplink_safeloader_read_table(mtd);
-+	if (!buf) {
-+		err = -ENOENT;
-+		goto err_out;
-+	}
-+
-+	for (idx = 0, offset = TPLINK_SAFELOADER_DATA_OFFSET;
-+	     idx < TPLINK_SAFELOADER_MAX_PARTS &&
-+	     sscanf(buf + offset, "partition %64s base 0x%llx size 0x%llx%n\n",
-+		    name, &parts[idx].offset, &parts[idx].size, &bytes) == 3;
-+	     idx++, offset += bytes + 1) {
-+		parts[idx].name = kstrdup(name, GFP_KERNEL);
-+		if (!parts[idx].name) {
-+			err = -ENOMEM;
-+			goto err_free;
-+		}
-+	}
-+
-+	if (idx == TPLINK_SAFELOADER_MAX_PARTS)
-+		pr_warn("Reached maximum number of partitions!\n");
-+
-+	kfree(buf);
-+
-+	*pparts = parts;
-+
-+	return idx;
-+
-+err_free:
-+	for (idx -= 1; idx >= 0; idx--)
-+		kfree(parts[idx].name);
-+err_out:
-+	return err;
-+};
-+
-+static void mtd_parser_tplink_safeloader_cleanup(const struct mtd_partition *pparts,
-+						 int nr_parts)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_parts; i++)
-+		kfree(pparts[i].name);
-+
-+	kfree(pparts);
++	return 0;
 +}
 +
-+static const struct of_device_id mtd_parser_tplink_safeloader_of_match_table[] = {
-+	{ .compatible = "tplink,safeloader-partitions" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, mtd_parser_tplink_safeloader_of_match_table);
++static int __init cpuinfo_regs_init(void)
++{
++	int ret;
 +
-+static struct mtd_part_parser mtd_parser_tplink_safeloader = {
-+	.parse_fn = mtd_parser_tplink_safeloader_parse,
-+	.cleanup = mtd_parser_tplink_safeloader_cleanup,
-+	.name = "tplink-safeloader",
-+	.of_match_table = mtd_parser_tplink_safeloader_of_match_table,
-+};
-+module_mtd_part_parser(mtd_parser_tplink_safeloader);
++	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "mips/topology:online",
++				cpuregs_cpu_online, cpuregs_cpu_offline);
++	if (ret < 0) {
++		pr_err("cpuinfo: failed to register hotplug callbacks.\n");
++		return ret;
++	}
++	return 0;
++}
 +
-+MODULE_LICENSE("GPL");
++device_initcall(cpuinfo_regs_init);
 -- 
-2.34.1
+2.37.0 (Apple Git-136)
 
