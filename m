@@ -2,59 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C525FB821
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 18:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C395FB832
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 18:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiJKQRR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Oct 2022 12:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S229508AbiJKQWM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Oct 2022 12:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiJKQRQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 12:17:16 -0400
+        with ESMTP id S229590AbiJKQWL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 12:22:11 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4749D80BF5
-        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 09:17:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1621995AF5
+        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 09:22:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665505029;
+        s=mimecast20190719; t=1665505328;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pm4VeB8ssmcYRaiZFIcIhGhr8ty4z8Z6FbdtNOJecy0=;
-        b=X24PB1uGCMhBpXyL2eFidTjEOFO7f+QodkMC03tdMCmfyfTPIp+mdLXTscYuUxTjgpnnCY
-        DkCEkXwG77/2i2tR+nmbFP6zXBIp+LiunHReUqFme7BOWXHi42K29n9pDyx2eGx+ZoRMNN
-        qU0IjWxBX+d71GtH/KeV+55Scil5I7Q=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=6gv22bmoTax0J0zhnmYTJUdzNvY/rZYRIc0hd8rouMg=;
+        b=h5iy8YxiHkC4Kaa6hKdsVflcNHsfyFKnRCMfGVAb6j4l+J6CC+IO/MO0oYNyJuBeXQy2sL
+        4uRVxYLTlT3dfO5HE9nlYFAz6+2B1j+BcEcKdmL6EogdvQvzsR6dbn1F12zBI/qvnCKJ9W
+        4lRmLYgtG0lfeQg/+i46P0neW2oLejY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-615-rXXacenIPtK-omvvDodqCQ-1; Tue, 11 Oct 2022 12:17:08 -0400
-X-MC-Unique: rXXacenIPtK-omvvDodqCQ-1
-Received: by mail-wr1-f70.google.com with SMTP id e14-20020adf9bce000000b0022d18139c79so4019170wrc.5
-        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 09:17:08 -0700 (PDT)
+ us-mta-1-SV6je0TkOfezEzeTnk2w_A-1; Tue, 11 Oct 2022 12:22:07 -0400
+X-MC-Unique: SV6je0TkOfezEzeTnk2w_A-1
+Received: by mail-ed1-f70.google.com with SMTP id y6-20020a056402358600b0045932521633so11659770edc.17
+        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 09:22:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pm4VeB8ssmcYRaiZFIcIhGhr8ty4z8Z6FbdtNOJecy0=;
-        b=OoYr8imPYZVlxcuUMPmzO9m9ClsJFPDWHyfDn+TJk2AxDYTw9UX4c0+eLWHqLwNnJm
-         YmoT2YiWM1ZkJFLvmGL7yuuBALNaZNypxqtYEQ1XAvHqK2vogcEZkEraWCJ2kD+RxGFB
-         dL6dqhWwKHUIw6gh03rdp9P/woLJkBKq11PDV9uoBdXl/J0Tpybb4DOlLz/h5clMWdBP
-         dHT8RS0fedbCD3FeM32ChRG7fncOG6PtgKTtQBEc0GMF8gEipKSfnU6y8aoQew8y4G7k
-         9652dkX5sz1O+OBKrM0MqcLupt/0IFIk+7izkMrfxEXu9MKL3n6K2Vj9xBA6hqWPesch
-         HobQ==
-X-Gm-Message-State: ACrzQf0TeZDySnmYSO8xrVWSpDT5UhHa5kYT/YO3Zkg+B0HSWE3Iqnwu
-        cO5uefnLLOKqMte5uBw5Eig+4zSb2q/PUvPuAccT7YKTT5YknH49Qo9XgvCaK5AyBf8dWQsDj44
-        3A6bUD/xZLjS8mRMk5noDlQ==
-X-Received: by 2002:a7b:cd96:0:b0:3b4:856a:28f7 with SMTP id y22-20020a7bcd96000000b003b4856a28f7mr17405239wmj.117.1665505027267;
-        Tue, 11 Oct 2022 09:17:07 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6+yXZheRjtpI2Mraq3mO0aiY2aGzgLzN/bP6F6DHEepFtgXyphrd7vxKSt0bqtKCZRjEunTA==
-X-Received: by 2002:a7b:cd96:0:b0:3b4:856a:28f7 with SMTP id y22-20020a7bcd96000000b003b4856a28f7mr17405207wmj.117.1665505026699;
-        Tue, 11 Oct 2022 09:17:06 -0700 (PDT)
-Received: from vschneid.remote.csb ([104.132.153.106])
-        by smtp.gmail.com with ESMTPSA id b21-20020a05600c151500b003c6b9749505sm4667967wmg.30.2022.10.11.09.17.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 09:17:05 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6gv22bmoTax0J0zhnmYTJUdzNvY/rZYRIc0hd8rouMg=;
+        b=kzuwZVEfCgPOKWEaDsK9Umj0wYQhOHPT2k3RKL8396O3Zvz7YyST3jLeGQvL8/6BPQ
+         cNmwj+w0B8wAt1YnCdXm0SYcRuQqZwXLYPmOM/emlW0REYKWj4nVNDTzBRxr0J5cagdI
+         L4oHB3IFJhTBSVt7K+SAL7r8B3XSpc0Xh2fni3lm7HN3elK2mIu/xFtUex0ATSYYpC2Z
+         /kLic2d7cS1VqzyriX5R8wt0Zo5ZSE4gpk07SBSy3PSl/g93d4SODIcrJWjpARbdrw+h
+         hKVaYZWDvFMq5Oml8ZmTQxskmjpcnI2Kqr7rYrpFcJyDMANajuGL3H5zTTy6Xr2vCKcf
+         SvCg==
+X-Gm-Message-State: ACrzQf2N9mfJCJnZ+kCnckIosZY92urLK/MyCz4yHdDruRWyJqVxHE7h
+        Wl9ZxUiNfFvWMiqOjW5AJJqv6bWszRq82dVdbL66M9RpX+A3WoZKENghcxmdB/j1iphJWEWv0BN
+        H7jnjxvVEoKBCt7CYmMGH5g==
+X-Received: by 2002:a17:907:2712:b0:78d:a223:729b with SMTP id w18-20020a170907271200b0078da223729bmr11697136ejk.443.1665505325957;
+        Tue, 11 Oct 2022 09:22:05 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5z3+5ecaWwqYPDE234CAcuf3hKc1qLTNOp8VUNiMDwybT1F6EbMEGGKCCgL+v4lylioGXOig==
+X-Received: by 2002:a17:907:2712:b0:78d:a223:729b with SMTP id w18-20020a170907271200b0078da223729bmr11697097ejk.443.1665505325743;
+        Tue, 11 Oct 2022 09:22:05 -0700 (PDT)
+Received: from [192.168.0.198] (host-79-47-205-133.retail.telecomitalia.it. [79.47.205.133])
+        by smtp.gmail.com with ESMTPSA id xf13-20020a17090731cd00b00730b3bdd8d7sm7273113ejb.179.2022.10.11.09.22.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 09:22:05 -0700 (PDT)
+Message-ID: <3e680bb9-9896-3665-dd59-4f2e6f8205bb@redhat.com>
+Date:   Tue, 11 Oct 2022 18:22:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [RFC PATCH 0/5] Generic IPI sending tracepoint
+To:     Valentin Schneider <vschneid@redhat.com>
 Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
@@ -70,7 +77,6 @@ Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -78,153 +84,39 @@ Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
         Russell King <linux@armlinux.org.uk>,
         Nicholas Piggin <npiggin@gmail.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
         Guo Ren <guoren@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Douglas RAILLARD <douglas.raillard@arm.com>
-Subject: Re: [RFC PATCH 0/5] Generic IPI sending tracepoint
-In-Reply-To: <Y0CFnWDpMNGajIRD@fuller.cnet>
 References: <20221007154145.1877054-1-vschneid@redhat.com>
- <Y0CFnWDpMNGajIRD@fuller.cnet>
-Date:   Tue, 11 Oct 2022 17:17:04 +0100
-Message-ID: <xhsmhilkqfi7z.mognet@vschneid.remote.csb>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <Y0CFnWDpMNGajIRD@fuller.cnet> <xhsmhilkqfi7z.mognet@vschneid.remote.csb>
+Content-Language: en-US
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <xhsmhilkqfi7z.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+Cc Douglas
+On 10/11/22 18:17, Valentin Schneider wrote:
+> Thinking out loud, it makes way more sense to record a cpumask in the
+> tracepoint, but perhaps we could have a postprocessing step to transform
+> those into N events each targeting a single CPU?
 
-On 07/10/22 17:01, Marcelo Tosatti wrote:
-> Hi Valentin,
->
-> On Fri, Oct 07, 2022 at 04:41:40PM +0100, Valentin Schneider wrote:
->> Background
->> ==========
->> 
->> As for the targeted CPUs, the existing tracepoint does export them, albeit in
->> cpumask form, which is quite inconvenient from a tooling perspective. For
->> instance, as far as I'm aware, it's not possible to do event filtering on a
->> cpumask via trace-cmd.
->
-> https://man7.org/linux/man-pages/man1/trace-cmd-set.1.html
->
->        -f filter
->            Specify a filter for the previous event. This must come after
->            a -e. This will filter what events get recorded based on the
->            content of the event. Filtering is passed to the kernel
->            directly so what filtering is allowed may depend on what
->            version of the kernel you have. Basically, it will let you
->            use C notation to check if an event should be processed or
->            not.
->
->                ==, >=, <=, >, <, &, |, && and ||
->
->            The above are usually safe to use to compare fields.
->
-> This looks overkill to me (consider large number of bits set in mask).
->
-> +#define trace_ipi_send_cpumask(callsite, mask) do {            \
-> +	if (static_key_false(&__tracepoint_ipi_send_cpu.key)) { \
-> +               int cpu;                                        \
-> +               for_each_cpu(cpu, mask)                         \
-> +                       trace_ipi_send_cpu(callsite, cpu);	\
-> +	}                                                       \
-> +} while (0)
->
+My approach on the tracers/rtla is to make the simple things in kernel, and beautify
+things in user-space.
 
-Indeed, I expected pushback on this :-)
+You could keep the tracepoint as a mask, and then make it pretty, like cpus=3-5,8
+in user-space. For example with a trace-cmd/perf loadable plugin, libtracefs helper.
 
-I went for this due to how much simpler an int is to process/use compared
-to a cpumask. There is the trigger example I listed above, but the
-consumption of the trace event itself as well.
+For rtla I was thinking to make a new tool to parse them. and make it pretty there.
 
-Consider this event collected on an arm64 QEMU instance (output from trace-cmd)
-
-    <...>-234   [001]    37.251567: ipi_raise:            target_mask=00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000004 (Function call interrupts)
-
-That sort of formatting has been an issue downstream for things like LISA
-[1] where events are aggregated into Pandas tables, and we need to play
-silly games for performance reason because bitmasks aren't a native Python
-type.
-
-I had a look at libtraceevent to see how this data is exposed and if the
-answer would be better tooling:
-
-tep_get_field_val() just yields an unsigned long long of value 0x200018,
-which AFAICT is just the [length, offset] thing associated with dynamic
-arrays. Not really usable, and I don't see anything exported in the lib to
-extract and use those values.
-
-tep_get_field_raw() is better, it handles the dynamic array for us and
-yields a pointer to the cpumask array at the tail of the record. With that
-it's easy to get an output such as: cpumask[size=32]=[4,0,0,0,]. Still,
-this isn't a native type for many programming languages.
-
-In contrast, this is immediately readable and consumable by userspace tools
-
-<...>-234   [001]    37.250882: ipi_send_cpu:         callsite=__smp_call_single_queue+0x5c target_cpu=2
-
-Thinking out loud, it makes way more sense to record a cpumask in the
-tracepoint, but perhaps we could have a postprocessing step to transform
-those into N events each targeting a single CPU?
-
-[1]: https://github.com/ARM-software/lisa/blob/37b51243a94b27ea031ff62bb4ce818a59a7f6ef/lisa/trace.py#L4756
-
->
->> 
->> Because of the above points, this is introducing a new tracepoint.
->> 
->> Patches
->> =======
->> 
->> This results in having trace events for:
->> 
->> o smp_call_function*()
->> o smp_send_reschedule()
->> o irq_work_queue*()
->> 
->> This is incomplete, just looking at arm64 there's more IPI types that aren't covered:
->> 
->>   IPI_CPU_STOP,
->>   IPI_CPU_CRASH_STOP,
->>   IPI_TIMER,
->>   IPI_WAKEUP,
->> 
->> ... But it feels like a good starting point.
->
-> Can't you have a single tracepoint (or variant with cpumask) that would
-> cover such cases as well?
->
-> Maybe (as parameters for tracepoint):
->
-> 	* type (reschedule, smp_call_function, timer, wakeup, ...).
->
-> 	* function address: valid for smp_call_function, irq_work_queue
-> 	  types.
->
-
-That's a good point, I wasn't sure about having a parameter serving as
-discriminant for another, but the function address would be either valid or
-NULL which is fine. So perhaps:
-o callsite (i.e. _RET_IP_), serves as type
-o address of callback tied to IPI, if any
-o target CPUs
-
->> Another thing worth mentioning is that depending on the callsite, the _RET_IP_
->> fed to the tracepoint is not always useful - generic_exec_single() doesn't tell
->> you much about the actual callback being sent via IPI, so there might be value
->> in exploding the single tracepoint into at least one variant for smp_calls.
->
-> Not sure i grasp what you mean by "exploding the single tracepoint...",
-> but yes knowing the function or irq work function is very useful.
->
-
-Sorry; I meant having several "specialized" tracepoints instead of a single one.
+-- Daniel
 
