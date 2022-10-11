@@ -2,60 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1EA5FAEBD
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 10:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6735FAED5
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 11:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiJKIwh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 11 Oct 2022 04:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S229739AbiJKJDX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Oct 2022 05:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJKIwg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 04:52:36 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446275F116;
-        Tue, 11 Oct 2022 01:52:35 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id r11-20020a4aa2cb000000b004806f49e27eso3501386ool.7;
-        Tue, 11 Oct 2022 01:52:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RG7je/SPkrUeGbyJflxBun3+ZBOYqWehWXWhY9Ywba0=;
-        b=iD1ZS6OfBtk8sON3hsIjwM5uucYcNqhbUYzlsYWMSN052gwEQU+g6IX2cu1rCA4rki
-         LdnfXQvS4Yuh1Dwm8d5fJEHs7cg0LSIH2DWCskY+Al4sUQ23r+Lgx0Qjv+kOIuNkOzj+
-         0Xeie9z6ihm46L/7IbyjfD+zA+7Ggr3UaZ2HzPrz1Z6T4QJ6Ok2oLbMLF56vQUphH2Z3
-         d8fjvst2WC2aluZOCwPT2pau2VT2e74QTP7iJGRAzAkUg5Ixkzsbq9V/0tSEHI1ldlol
-         zLm6izgcvgSyQ36sBjutweV8fpbPZr7KIQeKK616rJ+/Sh7MVS32wYWuqI6rMqa8bdsd
-         zlUg==
-X-Gm-Message-State: ACrzQf2vS9fHJMJukozh8wJPvRG0sGt89aBIKH0qW5Ko1fmMeFkB6ERy
-        L8qNGH5DQQJw5sCTYjvqmiFBA8ZrksGds8eJ
-X-Google-Smtp-Source: AMsMyM7J2caHP7QYUnJnqsFi15536ODGqoMlJSTPiNnqPM9M5dbTNI6xrKViv6uj1K5PJJ/YxCzhGw==
-X-Received: by 2002:a4a:dbcd:0:b0:47f:9f26:3569 with SMTP id t13-20020a4adbcd000000b0047f9f263569mr8747611oou.19.1665478354431;
-        Tue, 11 Oct 2022 01:52:34 -0700 (PDT)
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com. [209.85.161.52])
-        by smtp.gmail.com with ESMTPSA id r21-20020a056870439500b0012796e8033dsm6199722oah.57.2022.10.11.01.52.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:52:34 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id s125-20020a4a5183000000b0047fbaf2fcbcso7454574ooa.11;
-        Tue, 11 Oct 2022 01:52:34 -0700 (PDT)
-X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
- h64-20020a0dde43000000b0034931bde8d5mr20151543ywe.283.1665478004869; Tue, 11
- Oct 2022 01:46:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-37-andriy.shevchenko@linux.intel.com> <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
-In-Reply-To: <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Oct 2022 10:46:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
-Message-ID: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 36/36] pinctrl: Clean up headers
-To:     Basavaraj Natikar <bnatikar@amd.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Kent Gibson <warthog618@gmail.com>,
+        with ESMTP id S229761AbiJKJDW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 05:03:22 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CE778BF9;
+        Tue, 11 Oct 2022 02:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665479001; x=1697015001;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0PPZbXGZc/otGlsl/WtJVqlTEnu2olMpmz0ywKjSmEM=;
+  b=a+bxSVnH0J4sB1f1LCd70hzbJsxE38TPsG/+Obv40A8e4FGOlJOk+Bn9
+   mu8vp1mq2lIvLjmB2Wh02rGaHQwxLgjQzoyzH5t31VUiRpB+xwVLWICj1
+   yVEw7qJfYa5D0XqAOPg3fg0IaG2faRn53e2pqPTBWDZB21n4Z/c77/JTg
+   OLZ7o8jLEstVp/z4tzNkx/Fulf6AH6V7P6MySK1+s/JY3rjhRi12Eog0r
+   U9BAJRPseSbpHSRZYuYhtDsARDI5HMM8ZGDpPjDP54f6vNfJu7+MXBV3d
+   ueEum1ppzCEG/M6QYU0rQFjmUr2eEMb6Eti93v73Dl1q1sg1G8ENNHBDS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284833142"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="284833142"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:03:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="621337447"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="621337447"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 11 Oct 2022 02:02:56 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oiBA3-005Eco-0E;
+        Tue, 11 Oct 2022 12:02:51 +0300
+Date:   Tue, 11 Oct 2022 12:02:50 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Marc Zyngier <maz@kernel.org>, Kent Gibson <warthog618@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Billy Tsai <billy_tsai@aspeedtech.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -67,7 +57,7 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Samuel Holland <samuel@sholland.org>,
         Horatiu Vultur <horatiu.vultur@microchip.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -91,7 +81,7 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Patrice Chotard <patrice.chotard@foss.st.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Joel Stanley <joel@jms.id.au>,
@@ -108,7 +98,6 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Andy Shevchenko <andy@kernel.org>,
         Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
         Gregory Clement <gregory.clement@bootlin.com>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
@@ -142,122 +131,56 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [rft, PATCH v2 00/36] pinctrl: Clean up and add missed headers
+Message-ID: <Y0UxOrhpsHngiuAk@smile.fi.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <CAMRc=Mc5t=R2pJYfHUntJj_UA3sL=sKGOQDL-Kf5=dfNJEKyvg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=Mc5t=R2pJYfHUntJj_UA3sL=sKGOQDL-Kf5=dfNJEKyvg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 9:31 AM Basavaraj Natikar <bnatikar@amd.com> wrote:
-> On 10/11/2022 1:44 AM, Andy Shevchenko wrote:
-> > There is a few things done:
-> > - include only the headers we are direct user of
-> > - when pointer is in use, provide a forward declaration
-> > - add missed headers
-> > - group generic headers and subsystem headers
-> > - sort each group alphabetically
+On Tue, Oct 11, 2022 at 09:10:07AM +0200, Bartosz Golaszewski wrote:
+> On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 > >
-> > While at it, fix some awkward indentations.
+> > Currently the header inclusion inside the pinctrl headers seems more arbitrary
+> > than logical. This series is basically out of two parts:
+> > - add missed headers to the pin control drivers / users
+> > - clean up the headers of pin control subsystem
 > >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  drivers/pinctrl/core.c                  | 19 ++++++++-------
-> >  drivers/pinctrl/core.h                  | 12 +++++++++-
-> >  drivers/pinctrl/devicetree.h            |  6 +++++
-> >  drivers/pinctrl/pinconf.h               | 10 ++++++++
-> >  drivers/pinctrl/pinctrl-utils.h         |  5 ++++
-> >  drivers/pinctrl/pinmux.c                | 17 ++++++++------
-> >  drivers/pinctrl/pinmux.h                | 11 +++++++++
-> >  include/linux/pinctrl/consumer.h        | 31 +++++++++++--------------
-> >  include/linux/pinctrl/devinfo.h         |  6 +++--
-> >  include/linux/pinctrl/machine.h         |  8 ++++---
-> >  include/linux/pinctrl/pinconf-generic.h | 23 ++++++++++--------
-> >  include/linux/pinctrl/pinctrl.h         | 18 +++++++-------
-> >  include/linux/pinctrl/pinmux.h          |  5 ++--
-> >  13 files changed, 110 insertions(+), 61 deletions(-)
+> > The idea is to have this series to be pulled after -rc1 by the GPIO and
+> > pin control subsystems, so all new drivers will utilize cleaned up headers
+> > of the pin control.
 > >
-> > diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
-> > index 9e57f4c62e60..655f9502e73f 100644
-> > --- a/drivers/pinctrl/core.c
-> > +++ b/drivers/pinctrl/core.c
-> > @@ -12,19 +12,21 @@
-> >   */
-> >  #define pr_fmt(fmt) "pinctrl core: " fmt
+> > Please, review and comment.
 > >
-> > -#include <linux/kernel.h>
-> > -#include <linux/kref.h>
-> > -#include <linux/export.h>
-> > -#include <linux/init.h>
-> > +#include <linux/debugfs.h>
-> >  #include <linux/device.h>
-> > -#include <linux/slab.h>
-> >  #include <linux/err.h>
-> > +#include <linux/export.h>
-> > +#include <linux/init.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/kref.h>
-> >  #include <linux/list.h>
-> > -#include <linux/debugfs.h>
-> >  #include <linux/seq_file.h>
-> > +#include <linux/slab.h>
-> > +
-> >  #include <linux/pinctrl/consumer.h>
-> > -#include <linux/pinctrl/pinctrl.h>
-> > +#include <linux/pinctrl/devinfo.h>
-> >  #include <linux/pinctrl/machine.h>
-> > +#include <linux/pinctrl/pinctrl.h>
-> >
-> >  #ifdef CONFIG_GPIOLIB
-> >  #include "../gpio/gpiolib.h"
-> > @@ -33,9 +35,8 @@
-> >
-> >  #include "core.h"
-> >  #include "devicetree.h"
-> > -#include "pinmux.h"
-> >  #include "pinconf.h"
-> > -
-> > +#include "pinmux.h"
-> >
-> >  static bool pinctrl_dummy_state;
-> >
-> > diff --git a/drivers/pinctrl/core.h b/drivers/pinctrl/core.h
-> > index 840103c40c14..4d0bdb9fb99b 100644
-> > --- a/drivers/pinctrl/core.h
-> > +++ b/drivers/pinctrl/core.h
-> > @@ -9,12 +9,22 @@
-> >   */
-> >
-> >  #include <linux/kref.h>
-> > +#include <linux/list.h>
-> >  #include <linux/mutex.h>
-> >  #include <linux/radix-tree.h>
-> > -#include <linux/pinctrl/pinconf.h>
->
-> Removing pinconf.h from the core.h may cause build failure in other files
-> because where-ever core.h is included to use “struct pinconf_ops”, there
-> is a need to include pinconf.h.
+> > Changelog v2:
+> > - added preparatory patches: all, but last (LKP)
+> > - added missed forward declaration to the last patch (LKP)
+> 
+> Thanks for doing this.
 
-I can confirm adding
+You're welcome!
 
-    #include <linux/pinctrl/pinconf.h>
+> Did you use any kind of automation for
+> detecting for which symbols the headers are missing?
 
-to drivers/pinctrl/renesas/pinctrl-rzn1.c and drivers/pinctrl/pinctrl-single.c
-fixes the issues I was seeing with shmobile_defconfig and (out-of-tree)
-renesas_defconfig.
+No, it's manual + what CI(s) reported back to me, that's why even in this
+series I have got a few compile breakages. I have very limited compile-testing
+cycle.
 
-Gr{oetje,eeting}s,
+-- 
+With Best Regards,
+Andy Shevchenko
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
