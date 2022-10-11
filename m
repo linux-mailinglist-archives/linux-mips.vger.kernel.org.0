@@ -2,54 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20CD5FAE0E
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 10:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0515FAE79
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Oct 2022 10:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiJKILC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Oct 2022 04:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S229663AbiJKIcP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Oct 2022 04:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJKILB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 04:11:01 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D971915729;
-        Tue, 11 Oct 2022 01:10:58 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id a18so5134362qko.0;
-        Tue, 11 Oct 2022 01:10:57 -0700 (PDT)
+        with ESMTP id S229732AbiJKIcO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Oct 2022 04:32:14 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB8A83211
+        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 01:32:08 -0700 (PDT)
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 091783F6FA
+        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 08:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1665477123;
+        bh=suNkJ2gh7pPN1oyqI64kbmW+brydF4+SF1qphpgiy1g=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=gg0EO9G23Ns2Emks+98mlQS2ULMWUK8cl/oqdtKgLRJ/tOfF0gHxqiL+6jWNQzIyc
+         fb1pfWVHtT+1kYEMjSdnzz36d+SKBS9msfVgzjFu7bbeFzUj8mV+T8ZoXnrz+L28b9
+         79vc7Ti5ftCD7RMDbth9kZghA7aw0S9da94Yow6kgPndXinQgvlkhvf5FLWQ7Nd1hD
+         Tv6/R+rCsdDCR/sHxYRejFZDBq+4KI8x2g/c5llFVhxSZwKR+u4EC1l27rEywI9DGE
+         D8BJkN5PY9aGcKV0YVHh7UY6YmLOR6UMVUI6eGq8ypXGhdH1MPPptqOTXgoGp7ZzYs
+         AqQB4YwtEX4VQ==
+Received: by mail-qk1-f200.google.com with SMTP id o13-20020a05620a2a0d00b006cf9085682dso10971279qkp.7
+        for <linux-mips@vger.kernel.org>; Tue, 11 Oct 2022 01:32:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/lX+/OOwDGA/EkvK0KhDO9ADs/gc/7w2DlDG3ggMBVQ=;
-        b=4WY/mqg/yLeDr7jrVzq+kkzr6MnU22nrzWQXxiHj4G142LeH3pAOtgc6FlMXEPm9oI
-         2XK/5t5iyjA1aX7bDzGEKbdv8nqOfaq4k6AJFSaMeiAYnVBtUIwVEu8l6s8xlo93i3Yn
-         DVJyZVhH9b2w5J3wOPTLQCiME+vFpSIEiXUbSBMd2/xAzRl/Ytbn2aDlSi6BAdGZVHYq
-         WnQLjDDYFbACTwvsOVF+LHDgXB5jaUzYrK0hWkAMDjJmGchABWE9T8yuoaxaBtSnb0CD
-         SGPDFriRXf9B917lU0eMzMwgNjFxqE8UZhyKg22lcSiLjlT5JxefcunnjafJvf8sHLYT
-         z3gw==
-X-Gm-Message-State: ACrzQf0G0FFQ5gkoFLx+tEwh9PVeBTUk+e//Ef1U5i+gzVrxEZal6Wwt
-        e9SXged6SVM5a7FpVPpBii4JLHojC3OdrVFE
-X-Google-Smtp-Source: AMsMyM7wHVHuWSAUsS+SedY3FjaC5QZoy0kKSyyuho+1fzvADzSLcgPUw0M8wKl3KAqgvYP54JZshA==
-X-Received: by 2002:a05:620a:4809:b0:6ce:496c:7e78 with SMTP id eb9-20020a05620a480900b006ce496c7e78mr15267234qkb.470.1665475856733;
-        Tue, 11 Oct 2022 01:10:56 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id i14-20020a05620a248e00b006bba46e5eeasm13095817qkn.37.2022.10.11.01.10.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:10:54 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id k3so15566805ybk.9;
-        Tue, 11 Oct 2022 01:10:53 -0700 (PDT)
-X-Received: by 2002:a25:4fc2:0:b0:6be:afb4:d392 with SMTP id
- d185-20020a254fc2000000b006beafb4d392mr20469390ybb.604.1665475852958; Tue, 11
- Oct 2022 01:10:52 -0700 (PDT)
+        bh=suNkJ2gh7pPN1oyqI64kbmW+brydF4+SF1qphpgiy1g=;
+        b=g5smsEol8qKB+x32c0POLM/JEbMb64+KM/S1amTDLGbEfSPTAUli6ZXY12FdI+Ngyh
+         FF6LRTweEX2pcU8u+vgSk6RZY1B++S7bYPv23IYNp9SZIePw/yuwb1xjSCmJs59A9Cgf
+         E7uaHSsJgrm3Rg4SV3TDdncg7kdFtx/slbYiQ+WmXf0Kl1FgL5HlIvRQEHA4gjdJjSab
+         GhtuZ9NxibPFyNfwHn++1ao091cYyWVxGGia1K0onvL1gfLZmqNq3NH5MW4Nvdkn7exZ
+         XLbc2FVxJF6FG3Q4LtXMox9IbXLjYjdIY6Gu+Alq4tHGp192VvbPtDoLJzhMbvRMB2kO
+         AvwQ==
+X-Gm-Message-State: ACrzQf1MMNsLrYt7n9nSKIj/HPJrMID3OGT31hijSpoQA+5wB+hn8tfh
+        wLqi3AuS1YVrb4/9spRkwKhP/UQ43PBx4NVAzCEg4BKWWBDC6tbUi+GVSniUvJbXvMt0beYQGQA
+        fegW/iWSIBmOAX+lk++AToYamI32PpyIsuShhrR0pMbwWOhGum3ilqnY=
+X-Received: by 2002:a05:620a:410f:b0:6cf:c34b:3c64 with SMTP id j15-20020a05620a410f00b006cfc34b3c64mr15570261qko.52.1665477109307;
+        Tue, 11 Oct 2022 01:31:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7DFTDHgNX/wrj8IAoSXEmta8ySJnv0knkcfflaxkZri8xCwukQw9Ji8irmUndHqkaXm0MlF8+pHua64xb11kk=
+X-Received: by 2002:a05:620a:410f:b0:6cf:c34b:3c64 with SMTP id
+ j15-20020a05620a410f00b006cfc34b3c64mr15570191qko.52.1665477109055; Tue, 11
+ Oct 2022 01:31:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-20-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221010201453.77401-20-andriy.shevchenko@linux.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Oct 2022 10:10:37 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUMLEpZrEU0EviCRqRB9tX4iNGAVx2XPR5KbCMGWZetAQ@mail.gmail.com>
-Message-ID: <CAMuHMdUMLEpZrEU0EviCRqRB9tX4iNGAVx2XPR5KbCMGWZetAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 19/36] pinctrl: renesas: Add missed header(s)
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Tue, 11 Oct 2022 10:31:33 +0200
+Message-ID: <CAJM55Z_ApPowttZrjn_0dUs81H4FfByDfv=fbhvmHquipULANg@mail.gmail.com>
+Subject: Re: [PATCH v2 25/36] pinctrl: starfive: Add missed header(s)
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         Kent Gibson <warthog618@gmail.com>,
@@ -67,6 +78,7 @@ Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Phil Edworthy <phil.edworthy@renesas.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -139,35 +151,55 @@ Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
+On Mon, 10 Oct 2022 at 22:26, Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
+>
 > Do not imply that some of the generic headers may be always included.
 > Instead, include explicitly what we are direct user of.
 >
 > While at it, sort headers alphabetically.
->
+
+The patch is fine, but I don't see any sorting other than just adding
+the headers at the appropriate place.
+In any case
+
+Acked-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
+> index 5b544fb7f3d8..6a8a9cfe8965 100644
+> --- a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
+> +++ b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
+> @@ -15,8 +15,10 @@
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/reset.h>
+> +#include <linux/seq_file.h>
+>  #include <linux/spinlock.h>
+>
+> +#include <linux/pinctrl/consumer.h>
+>  #include <linux/pinctrl/pinctrl.h>
+>  #include <linux/pinctrl/pinmux.h>
+>
+> --
+> 2.35.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
