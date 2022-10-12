@@ -2,52 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D565FC009
+	by mail.lfdr.de (Postfix) with ESMTP id C72B15FC00B
 	for <lists+linux-mips@lfdr.de>; Wed, 12 Oct 2022 07:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiJLFEz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S229595AbiJLFEz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Wed, 12 Oct 2022 01:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiJLFEy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Oct 2022 01:04:54 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B398E15FE1;
-        Tue, 11 Oct 2022 22:04:51 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ot12so35649394ejb.1;
-        Tue, 11 Oct 2022 22:04:51 -0700 (PDT)
+        with ESMTP id S229533AbiJLFEz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Oct 2022 01:04:55 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D6D19002;
+        Tue, 11 Oct 2022 22:04:53 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bj12so35527178ejb.13;
+        Tue, 11 Oct 2022 22:04:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b4gqOMlbs92RCL0Ysa0hqvx+eg7bHJri4dGP4mEDs80=;
-        b=cJUhVLawvPYnZ9EBQKO2ZunzswCUf0WgRMNrdFYyJSDxGMvjCa/g8En72Mpfq9/NLJ
-         43+7hdQs2dYfAoY6UVpPNe6B88XhsXdl3+MfRmv63MbgMv9Db3CnfYdot3NItEt7QIgr
-         jlRUbWsGVsFJqWySvdK7RsvxeCobwKrsOp79o+meRag767brfRUjYSGLPFA+Xk7JE2tv
-         4n8ZutrzXMjR4NPqoVVUSfBYaH/Iz7zHIgKQmKw+W0u7GO4HkuMDqTCwc7OlccFljX39
-         Ju2S0+fy9trH/lcATN8gznvLBX4eDkt4CmMU3taHDqxrgP9jmXJx0VmfC9p2FdJYSip6
-         9l0g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eWXigG1u8LRFaluOU8xYqRPb0mmmgU/QzpmUWeqEHJQ=;
+        b=l0LaBghwdk7PCVJXNaOY/n6ExeGkkZuRA0FQDgOwjq/wsjF+xXFFgkG4R+uQxb4bYR
+         /jcdagEmVM8UboEh9+VDBu2hGDx89ri9JA76TIjPZR/oOCIjXeNHw9w/H2dJ7ObiPNXC
+         fLRe0IVTl3PSXFM4AHguYu/589Xa9Ppj8xqdcTrIphdstMZNH7X5rCfVfcufN0LnPztB
+         u38KBKxvN+xbzgtHCbisVir6WHrh02h9ScGvlwX6ILo2/Hp1kOtQjCQ9EQIZiUsLV1o+
+         G78R1tSUNdoYFp9oroHStleKgyrV0V1InF7sHy1y5hD3GHilNUYX+5yKwa2ZvkCghSKe
+         XeiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b4gqOMlbs92RCL0Ysa0hqvx+eg7bHJri4dGP4mEDs80=;
-        b=uw0vYZqwBTV2Tj+d44ia8qlOlxuXts1px/SG1jxHwgMfVoqlzsNa8ikk4W8Epx7QLW
-         q+2jEk6050yQ3da8wsUWi/0/UVpWK+np9Qjy7blMUtanDRbuoqhBedKIACKNkzOwcL8B
-         mS2rpII3jlwW+6GeYfu6o7N5SRtSNjcPHv8YJd6vngee20yfmIAGpE9W0bSiX2cLWeGz
-         LZCT2hhIH0KPfU/id6WWhL0jzizguc/Y59f+7rOGRAcDBCrWDTblFatQsovqPQ7RuDO/
-         bPrbWpc4fWuj7hJpDnqRrl3YPZDXfn9QKvusJ+/nPURSZjWfH7mAgBECajH3sW6DecIm
-         PCnQ==
-X-Gm-Message-State: ACrzQf3ZTRKBY7jKZNZahwaJgsHt1jY64pISW1nD0J/OU8a1xyJIZK9Z
-        Dh66DDmX2uKdXQ4yjQxwgk4=
-X-Google-Smtp-Source: AMsMyM7Lv6eqNKd0zzmTCV0Vwpt7bAhdY4jQSyF4I6uECSsPSAvnrM2zb69LyIb7/S7cGh1DCosPfw==
-X-Received: by 2002:a17:907:3d9f:b0:787:8706:6885 with SMTP id he31-20020a1709073d9f00b0078787066885mr21163698ejc.280.1665551090072;
-        Tue, 11 Oct 2022 22:04:50 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eWXigG1u8LRFaluOU8xYqRPb0mmmgU/QzpmUWeqEHJQ=;
+        b=DHLTLudogmSiCqzD3KCl2yXpBGynnJtKvHykZyekEY/Jm+7Kt5bHnamf5zhwwPs0xi
+         HVecH7X1X4rME9qDQcRepChPAHwWB821IaYzWITrA3tu5GWDcWfvI2g8zRoDhnLv0J+A
+         L0EHnYOkVenXyDAH5R/jFLntnnyicRuGLwPCW6vHAH9GimL4fqY7zGc5AHiz6ADLPDdO
+         E6sm9YI3NGim2V/sguHulwCgakViGfuHsHe8qIYUkcAK6GW/fO/mSDQGF4umIwNRMYyf
+         Y2nOPqhh2mxJKz4OEwNEi+VXl6Oj/jo1yvkoeD1SNXGldBNgAchtk7MF8CSLvnoe9KBm
+         CIvQ==
+X-Gm-Message-State: ACrzQf0rztEhJMniqNqvY2SHADhNJ4x89Vsv15ri6SBvBq7PasnEcsN6
+        T/VKCBtjKjVkZ+ajy5mf3VE=
+X-Google-Smtp-Source: AMsMyM5QHWHvMa7BfZ8Ya1GTDp16MRllclavGWOgQ1pt0TPpuOngyrdAMCZYzNadj8Cb3a4wIk0IFA==
+X-Received: by 2002:a17:907:2c67:b0:78d:49d2:6297 with SMTP id ib7-20020a1709072c6700b0078d49d26297mr21876419ejc.21.1665551092152;
+        Tue, 11 Oct 2022 22:04:52 -0700 (PDT)
 Received: from localhost.lan ([194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id e11-20020a170906314b00b0073ddb2eff27sm573916eje.167.2022.10.11.22.04.49
+        by smtp.gmail.com with ESMTPSA id e11-20020a170906314b00b0073ddb2eff27sm573916eje.167.2022.10.11.22.04.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 22:04:49 -0700 (PDT)
+        Tue, 11 Oct 2022 22:04:51 -0700 (PDT)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -63,10 +64,12 @@ Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 1/2] dt-bindings: mtd: partitions: add TP-Link SafeLoader layout
-Date:   Wed, 12 Oct 2022 07:04:41 +0200
-Message-Id: <20221012050442.6815-1-zajec5@gmail.com>
+Subject: [PATCH V2 2/2] mtd: parsers: add TP-Link SafeLoader partitions table parser
+Date:   Wed, 12 Oct 2022 07:04:42 +0200
+Message-Id: <20221012050442.6815-2-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221012050442.6815-1-zajec5@gmail.com>
+References: <20221012050442.6815-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -82,78 +85,214 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-Most TP-Link home routers use the same partitioning system based on a
-custom ASCII table.
-
-It doesn't seem to have any official name. GPL sources contain tool
-named simply "make_flash" and Makefile target "FlashMaker".
-
-This partitions table format was first found in devices with a custom
-SafeLoader bootloader so it was called SafeLoader by a community. Later
-it was ported to other bootloaders but it seems the name sticked.
-
-Add binding for describing flashes with SafeLoader partitions table. It
-allows operating systems to parse it properly and register proper flash
-layout.
+This parser deals with most TP-Link home routers. It reads info about
+partitions and registers them in the MTD subsystem.
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
-V2: Fix typo in commit: s/same/name/
+V2: Fix types (thanks kernel test robot)
+    Fix off-by-one when setting '\0'
 ---
- .../tplink,safeloader-partitions.yaml         | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partitions.yaml
+ drivers/mtd/parsers/Kconfig             |  15 +++
+ drivers/mtd/parsers/Makefile            |   1 +
+ drivers/mtd/parsers/tplink_safeloader.c | 150 ++++++++++++++++++++++++
+ 3 files changed, 166 insertions(+)
+ create mode 100644 drivers/mtd/parsers/tplink_safeloader.c
 
-diff --git a/Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partitions.yaml
+diff --git a/drivers/mtd/parsers/Kconfig b/drivers/mtd/parsers/Kconfig
+index aaa06050c9bc..c258ba2a3a6f 100644
+--- a/drivers/mtd/parsers/Kconfig
++++ b/drivers/mtd/parsers/Kconfig
+@@ -123,6 +123,21 @@ config MTD_AFS_PARTS
+ 	  for your particular device. It won't happen automatically. The
+ 	  'physmap' map driver (CONFIG_MTD_PHYSMAP) does this, for example.
+ 
++config MTD_PARSER_TPLINK_SAFELOADER
++	tristate "TP-Link Safeloader partitions parser"
++	depends on MTD && (ARCH_BCM_5301X || ATH79 || SOC_MT7620 || SOC_MT7621 || COMPILE_TEST)
++	help
++	  TP-Link home routers use flash partitions to store various data. Info
++	  about flash space layout is stored in a partitions table using a
++	  custom ASCII-based format.
++
++	  That format was first found in devices with SafeLoader bootloader and
++	  was named after it. Later it was adapted to CFE and U-Boot
++	  bootloaders.
++
++	  This driver reads partitions table, parses it and creates MTD
++	  partitions.
++
+ config MTD_PARSER_TRX
+ 	tristate "Parser for TRX format partitions"
+ 	depends on MTD && (BCM47XX || ARCH_BCM_5301X || ARCH_MEDIATEK || RALINK || COMPILE_TEST)
+diff --git a/drivers/mtd/parsers/Makefile b/drivers/mtd/parsers/Makefile
+index 23fa4de4016f..0e70b621a1d8 100644
+--- a/drivers/mtd/parsers/Makefile
++++ b/drivers/mtd/parsers/Makefile
+@@ -10,6 +10,7 @@ ofpart-$(CONFIG_MTD_OF_PARTS_BCM4908)	+= ofpart_bcm4908.o
+ ofpart-$(CONFIG_MTD_OF_PARTS_LINKSYS_NS)+= ofpart_linksys_ns.o
+ obj-$(CONFIG_MTD_PARSER_IMAGETAG)	+= parser_imagetag.o
+ obj-$(CONFIG_MTD_AFS_PARTS)		+= afs.o
++obj-$(CONFIG_MTD_PARSER_TPLINK_SAFELOADER)	+= tplink_safeloader.o
+ obj-$(CONFIG_MTD_PARSER_TRX)		+= parser_trx.o
+ obj-$(CONFIG_MTD_SERCOMM_PARTS)		+= scpart.o
+ obj-$(CONFIG_MTD_SHARPSL_PARTS)		+= sharpslpart.o
+diff --git a/drivers/mtd/parsers/tplink_safeloader.c b/drivers/mtd/parsers/tplink_safeloader.c
 new file mode 100644
-index 000000000000..e38aaea5aa11
+index 000000000000..23584a477391
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partitions.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mtd/partitions/tplink,safeloader-partitions.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/mtd/parsers/tplink_safeloader.c
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright © 2022 Rafał Miłecki <rafal@milecki.pl>
++ */
 +
-+title: TP-Link SafeLoader partitions
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/mtd/mtd.h>
++#include <linux/mtd/partitions.h>
++#include <linux/of.h>
++#include <linux/slab.h>
 +
-+description: |
-+  TP-Link home routers store various data on flash (e.g. bootloader,
-+  flash layout, firmware, product info, configuration, calibration
-+  data). That requires flash partitioning.
++#define TPLINK_SAFELOADER_DATA_OFFSET		4
++#define TPLINK_SAFELOADER_MAX_PARTS		32
 +
-+  Flash space layout of TP-Link devices is stored on flash itself using
-+  a custom ASCII-based format. That format was first found in TP-Link
-+  devices with a custom SafeLoader bootloader. Later it was adapted to
-+  CFE and U-Boot bootloaders.
++struct safeloader_cmn_header {
++	__be32 size;
++	uint32_t unused;
++} __packed;
 +
-+  This binding describes partitioning method and defines offset of ASCII
-+  based partitions table. That offset is picked at manufacturing process
-+  and doesn't change.
++static void *mtd_parser_tplink_safeloader_read_table(struct mtd_info *mtd)
++{
++	struct safeloader_cmn_header hdr;
++	struct device_node *np;
++	size_t bytes_read;
++	size_t offset;
++	size_t size;
++	char *buf;
++	int err;
 +
-+maintainers:
-+  - Rafał Miłecki <rafal@milecki.pl>
++	np = mtd_get_of_node(mtd);
++	if (mtd_is_partition(mtd))
++		of_node_get(np);
++	else
++		np = of_get_child_by_name(np, "partitions");
 +
-+properties:
-+  compatible:
-+    const: tplink,safeloader-partitions
++	if (of_property_read_u32(np, "partitions-table-offset", (u32 *)&offset)) {
++		pr_err("Failed to get partitions table offset\n");
++		goto err_put;
++	}
 +
-+  partitions-table-offset:
-+    description: Flash offset of partitions table
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
++	err = mtd_read(mtd, offset, sizeof(hdr), &bytes_read, (uint8_t *)&hdr);
++	if (err && !mtd_is_bitflip(err)) {
++		pr_err("Failed to read from %s at 0x%zx\n", mtd->name, offset);
++		goto err_put;
++	}
 +
-+required:
-+  - partitions-table-offset
++	size = be32_to_cpu(hdr.size);
 +
-+additionalProperties: false
++	buf = kmalloc(size + 1, GFP_KERNEL);
++	if (!buf)
++		goto err_put;
 +
-+examples:
-+  - |
-+    partitions {
-+        compatible = "tplink,safeloader-partitions";
-+        partitions-table-offset = <0x100000>;
-+    };
++	err = mtd_read(mtd, offset + sizeof(hdr), size, &bytes_read, buf);
++	if (err && !mtd_is_bitflip(err)) {
++		pr_err("Failed to read from %s at 0x%zx\n", mtd->name, offset + sizeof(hdr));
++		goto err_kfree;
++	}
++
++	buf[size] = '\0';
++
++	of_node_put(np);
++
++	return buf;
++
++err_kfree:
++	kfree(buf);
++err_put:
++	of_node_put(np);
++	return NULL;
++}
++
++static int mtd_parser_tplink_safeloader_parse(struct mtd_info *mtd,
++					      const struct mtd_partition **pparts,
++					      struct mtd_part_parser_data *data)
++{
++	struct mtd_partition *parts;
++	char name[65];
++	size_t offset;
++	size_t bytes;
++	char *buf;
++	int idx;
++	int err;
++
++	parts = kcalloc(TPLINK_SAFELOADER_MAX_PARTS, sizeof(*parts), GFP_KERNEL);
++	if (!parts) {
++		err = -ENOMEM;
++		goto err_out;
++	}
++
++	buf = mtd_parser_tplink_safeloader_read_table(mtd);
++	if (!buf) {
++		err = -ENOENT;
++		goto err_out;
++	}
++
++	for (idx = 0, offset = TPLINK_SAFELOADER_DATA_OFFSET;
++	     idx < TPLINK_SAFELOADER_MAX_PARTS &&
++	     sscanf(buf + offset, "partition %64s base 0x%llx size 0x%llx%zn\n",
++		    name, &parts[idx].offset, &parts[idx].size, &bytes) == 3;
++	     idx++, offset += bytes + 1) {
++		parts[idx].name = kstrdup(name, GFP_KERNEL);
++		if (!parts[idx].name) {
++			err = -ENOMEM;
++			goto err_free;
++		}
++	}
++
++	if (idx == TPLINK_SAFELOADER_MAX_PARTS)
++		pr_warn("Reached maximum number of partitions!\n");
++
++	kfree(buf);
++
++	*pparts = parts;
++
++	return idx;
++
++err_free:
++	for (idx -= 1; idx >= 0; idx--)
++		kfree(parts[idx].name);
++err_out:
++	return err;
++};
++
++static void mtd_parser_tplink_safeloader_cleanup(const struct mtd_partition *pparts,
++						 int nr_parts)
++{
++	int i;
++
++	for (i = 0; i < nr_parts; i++)
++		kfree(pparts[i].name);
++
++	kfree(pparts);
++}
++
++static const struct of_device_id mtd_parser_tplink_safeloader_of_match_table[] = {
++	{ .compatible = "tplink,safeloader-partitions" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, mtd_parser_tplink_safeloader_of_match_table);
++
++static struct mtd_part_parser mtd_parser_tplink_safeloader = {
++	.parse_fn = mtd_parser_tplink_safeloader_parse,
++	.cleanup = mtd_parser_tplink_safeloader_cleanup,
++	.name = "tplink-safeloader",
++	.of_match_table = mtd_parser_tplink_safeloader_of_match_table,
++};
++module_mtd_part_parser(mtd_parser_tplink_safeloader);
++
++MODULE_LICENSE("GPL");
 -- 
 2.34.1
 
