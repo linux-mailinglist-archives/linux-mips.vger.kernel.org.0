@@ -2,81 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5DF5FC6CA
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Oct 2022 15:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6291D5FC90C
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Oct 2022 18:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJLNy5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Oct 2022 09:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S229695AbiJLQVU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Oct 2022 12:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiJLNyy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Oct 2022 09:54:54 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE65311A05;
-        Wed, 12 Oct 2022 06:54:50 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so2038073pjq.3;
-        Wed, 12 Oct 2022 06:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4W9PYnqE39FVIWPtx23Tk+GKt7RrA3d27Hf1sKJ7FqQ=;
-        b=UozGTu6YyIYkQQoEJ9mpP/ZP9EXBHkczxk9/ST0nwoYD5CXIifS1ksxnJ1z/XlD8Iv
-         DnXdQDc3QD5BBRt/elc/g3MpiMLgBMvz47ICmyWRQUwskodG72pwSD0FvOfnFwxR4gNT
-         0Nv0c1ZEd9a//beEgotrvzkxpjlIn11dOn3z2tb/KyektIxRp3AMw9k8NLnKlAlJMfAZ
-         ZW00APC6mm2Rgc0I9F6MtW+FIkz4pX/PUfBY7jV2tV/BJmcb7sxvPImZbSg5MEvkpS1A
-         VQqSmx00wjuq8wBY7o0koQO6OL1C+JRHOCj4nWqmVRt4CML82YQgP9dT0rzT4hrO952e
-         5MGA==
+        with ESMTP id S229462AbiJLQVS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Oct 2022 12:21:18 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6A622528;
+        Wed, 12 Oct 2022 09:21:17 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-132af5e5543so19995905fac.8;
+        Wed, 12 Oct 2022 09:21:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4W9PYnqE39FVIWPtx23Tk+GKt7RrA3d27Hf1sKJ7FqQ=;
-        b=SQhryKpLsYaX+V71pp5IBRS91fGROUxv/7os8zPiWHgrsgXKzeuG1h65Jj64zfWZF7
-         7IWKDWKmgKqZuUTkekP2/70ehkVv/MtkZPZTvesxMsSC7mN+na3607EqGVL9SsRBxFjU
-         FVWv6ZGoOiN5LAjzN6YaOmb9VKq9ondgpTxA1+7NNbQLWl0M6m+qyaPYjySpxdYiGfgy
-         WXgjgmyQWuPfwEgaEIPPGwtrAVnHxdQxO6ihwyPHrsYHr0MUr0P4ycIs0snez01/u9Zd
-         WYDeUz0NOYr5KhIzXviB+EcmGQ8eDE6CauVwSFOHg5dQBJ08MgvHkwChpVexFJp4YgAu
-         3OAA==
-X-Gm-Message-State: ACrzQf0IbnWsera2MGpRInyopnRNiIL6leMZLFxUL8vtXllgRpW9BRlE
-        FESDsb3b3u3wTjARLSj6nYc=
-X-Google-Smtp-Source: AMsMyM4GsOvqLbKi8bnipwZei9bul2eCxZ/xzZEAA7xagdE0qfFC/6Wvyu2i9hoIPRYsb/0vz6gCvA==
-X-Received: by 2002:a17:90a:f2c3:b0:20b:b75f:2f9e with SMTP id gt3-20020a17090af2c300b0020bb75f2f9emr5408380pjb.43.1665582890145;
-        Wed, 12 Oct 2022 06:54:50 -0700 (PDT)
-Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
-        by smtp.gmail.com with ESMTPSA id s20-20020aa78bd4000000b00562f6df42f1sm8959924pfd.152.2022.10.12.06.54.42
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mdkjtjQe9y7QrqNfE9DE704tTUxuuSLHdhelufYZEXY=;
+        b=ujkdGq1ktp3lf3tYeTdVKOtlQQRAjPaVt9dRGLLmLuX+fgAZmGi/kmUcM7+kvX0X9Y
+         0lZi6JOxXMorLtfbKREGxjAMRPdB2eWfeo2LoIg0MeTJpwB69zZHP3kIn1Qkp6Eqc/CY
+         uEEk4JLWmojl05jY7vPAqucfJBCfr1h6G/DXNg2qCIbuwBmqBuOwSdSVASPTJ+9Oiz/Q
+         3hcaOlWLz4VoZsTYIsY3zG+zp9djPVTqkIyZUF1PBV0+DJztUuLGBKyeVMgwZiY8g8AZ
+         Tztm/QzRlWZRnusK8Djt50FUAjb5MIyG8GajXxJLNeeElOmU4q3qDxod2WbVT4sHyQJ8
+         bcRg==
+X-Gm-Message-State: ACrzQf3sZCpVp7557L+7iogAChPIjbM7ERs7qMnWfHEV1r8DN81Pbu9I
+        qXQ4jUKurMLCdNqvLTvD+g==
+X-Google-Smtp-Source: AMsMyM7nAruUoSXYjluWMGl/KdX94bPKk33igtUxV/7Po/YMVByuG51WIBady0DgwT4LlWbabg9ulQ==
+X-Received: by 2002:a05:6870:eaaa:b0:132:e501:4053 with SMTP id s42-20020a056870eaaa00b00132e5014053mr3005462oap.186.1665591676702;
+        Wed, 12 Oct 2022 09:21:16 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ek19-20020a056870f61300b0012c52bd4369sm1335901oab.19.2022.10.12.09.21.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 06:54:49 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 21:54:39 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
-Message-ID: <Y0bHH06cbngWk4mH@sol>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
- <Y0SyVwjDl7NGfTPn@sol>
- <Y0bBXSHyxpdTGxoU@smile.fi.intel.com>
+        Wed, 12 Oct 2022 09:21:16 -0700 (PDT)
+Received: (nullmailer pid 2281844 invoked by uid 1000);
+        Wed, 12 Oct 2022 16:21:17 -0000
+Date:   Wed, 12 Oct 2022 11:21:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        bcm-kernel-feedback-list@broadcom.com,
+        John Crispin <john@phrozen.org>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V2 1/2] dt-bindings: mtd: partitions: add TP-Link
+ SafeLoader layout
+Message-ID: <20221012162117.GA2275712-robh@kernel.org>
+References: <20221012050442.6815-1-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y0bBXSHyxpdTGxoU@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221012050442.6815-1-zajec5@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,46 +75,86 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 04:30:05PM +0300, Andy Shevchenko wrote:
-> On Tue, Oct 11, 2022 at 08:01:27AM +0800, Kent Gibson wrote:
-> > On Mon, Oct 10, 2022 at 11:14:18PM +0300, Andy Shevchenko wrote:
+On Wed, Oct 12, 2022 at 07:04:41AM +0200, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> ...
+> Most TP-Link home routers use the same partitioning system based on a
+> custom ASCII table.
 > 
-> > > -#include <linux/gpio.h>
-> > >  #include <linux/gpio/driver.h>
-> > > +#include <linux/gpio.h>
+> It doesn't seem to have any official name. GPL sources contain tool
+> named simply "make_flash" and Makefile target "FlashMaker".
 > 
-> > But moving the gpio subsystem header after the gpio/driver is not
-> > alphabetical ('.' precedes '/') and it read better and made more sense
-> > to me the way it was.
+> This partitions table format was first found in devices with a custom
+> SafeLoader bootloader so it was called SafeLoader by a community. Later
+> it was ported to other bootloaders but it seems the name sticked.
 > 
-> Okay, I will move it back.
+> Add binding for describing flashes with SafeLoader partitions table. It
+> allows operating systems to parse it properly and register proper flash
+> layout.
 > 
-> ...
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> V2: Fix typo in commit: s/same/name/
+> ---
+>  .../tplink,safeloader-partitions.yaml         | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partitions.yaml
 > 
-> > > +#include <linux/seq_file.h>
-> > 
-> > I wasn't aware that we use anything from seq_file.
-> > What am I missing?
-> 
-> 
-> Eventually I can answer to your question: the commit 0ae3109a8391
-> ("gpiolib: cdev: add fdinfo output for line request file descriptors")
-> is what you are missing.
-> 
-> That said, we need this patch.
-> 
+> diff --git a/Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partitions.yaml
+> new file mode 100644
+> index 000000000000..e38aaea5aa11
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partitions.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/partitions/tplink,safeloader-partitions.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TP-Link SafeLoader partitions
+> +
+> +description: |
+> +  TP-Link home routers store various data on flash (e.g. bootloader,
+> +  flash layout, firmware, product info, configuration, calibration
+> +  data). That requires flash partitioning.
+> +
+> +  Flash space layout of TP-Link devices is stored on flash itself using
+> +  a custom ASCII-based format. That format was first found in TP-Link
+> +  devices with a custom SafeLoader bootloader. Later it was adapted to
+> +  CFE and U-Boot bootloaders.
+> +
+> +  This binding describes partitioning method and defines offset of ASCII
+> +  based partitions table. That offset is picked at manufacturing process
+> +  and doesn't change.
+> +
+> +maintainers:
+> +  - Rafał Miłecki <rafal@milecki.pl>
+> +
+> +properties:
+> +  compatible:
+> +    const: tplink,safeloader-partitions
+> +
+> +  partitions-table-offset:
+> +    description: Flash offset of partitions table
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
 
-Ah, yes - totally forgot that one is in flight.
-That makes sense then.
+Don't need quotes.
 
-With the gpio headers retaining their original order:
+> +
+> +required:
+> +  - partitions-table-offset
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    partitions {
+> +        compatible = "tplink,safeloader-partitions";
+> +        partitions-table-offset = <0x100000>;
 
-Rewiewed-by: Kent Gibson <warthog618@gmail.com>
+What is in the space before this? It is part of the safeloader 
+partitions? If the safeloader partitions are not the entire device, then 
+perhaps we still need fixed partitions.
 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+Rob
