@@ -2,85 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8317E5FC407
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Oct 2022 12:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B3E5FC67B
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Oct 2022 15:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJLKyq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Oct 2022 06:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S229999AbiJLNaW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Oct 2022 09:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiJLKyW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Oct 2022 06:54:22 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C612AC149E
-        for <linux-mips@vger.kernel.org>; Wed, 12 Oct 2022 03:54:03 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 81so19590645ybf.7
-        for <linux-mips@vger.kernel.org>; Wed, 12 Oct 2022 03:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
-        b=IFZQqXKZFuu4ERlIj5mnPUX4TEK9Q30/TnV67vZ7ut6qmrkfIhgvNOK1apQrKhFWRD
-         6TmuTXGRhQru75qBFlOFVZoKX9HhGaVyihmtiN/+/3IcCN+o1xkyyOIfxKkb/8kKyOuC
-         zdVe5mmhIcLQaliXWgRcUqkHMkO3QRGz0h+Tl/3OG39+d5T3kK+GjMHhqPx4E1KtmRqO
-         ruVGf5yc7eWfQmBKWRrF00PAaT1o7Gson+UnzZNh/ls5QBEyP+Lfnerf8HAhzttJ4vYF
-         CVNZ6OCnLTh9i2Vp0qbqJIG9AhmwLg3nIKRhgnnyHSbcqQ/cQPI+O8+55KdXKmDz4pXG
-         6vIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
-        b=le43tDxjBtuw8bRV6vwqUwDvq+uUdFvvekfdzoNONu8Yf9kft80Sjvp5uQcZV79DDt
-         APpC4zCw+ppDb3NvQNlRa2i6acDWCqflWjYMSZHMETfTi+UHAh97/If405unhM/h3Iah
-         qb1aVonbJAPQIQwf3tU+PMume/Osq4BHzVd+BBA67xAP3CrYCecShsmPTRLaS9EBo7u/
-         vxbdUX8LjQswE16NF+WLS/YijVOcw6hg9NPNgnq3qNh2RKFzMHIkb/MVUkRfKSmbBe2a
-         TJBx+/tpEM6H5/2r3ktKUG8fefxCOciEM4HMpDkKapLguX9V+O37tBWqLNT5v5SFnDqz
-         UkIg==
-X-Gm-Message-State: ACrzQf1x6mN6m3DeASrBDWZG4pGR6VqT8wNnuesFW81Ms2kl4rdwLaB4
-        btp28QnI+nuwFlwhAZfVgcbmCwsQYqFbrZr0jFA=
-X-Google-Smtp-Source: AMsMyM6fStb7pr3FM08EVwpu8dPCFXrrMrwOIgL/3tjf45R4wpV/gdq5Uf9FKFLT0FPB2WWyUKkgna6DZ/Y9+4z+/zI=
-X-Received: by 2002:a05:6902:13c7:b0:695:84d9:c5da with SMTP id
- y7-20020a05690213c700b0069584d9c5damr27984624ybu.650.1665572042872; Wed, 12
- Oct 2022 03:54:02 -0700 (PDT)
+        with ESMTP id S229639AbiJLNaP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Oct 2022 09:30:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9270430F52;
+        Wed, 12 Oct 2022 06:30:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665581413; x=1697117413;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tV/ZvJGYw4mf000OleNKwCzv+JZQjAKj+4wcxHqkOco=;
+  b=KBAP1bzGYBopo76rIC6lrcKVeErWW3djiYCE+y19TFQ0KVRhKEKGUUwT
+   Jh6E2QG5ET8AjdIk+8eqEoC8ELx/D8P8h7BXu12xY9y8dO/1VOOFOpa62
+   mT/JMANpA/P1/h6H2z7nCVvH5bfQVSW7V/W0yDt5ZhUi3zZ+HdOc8sE4U
+   VzOf4Oy2cuyhJFvDdpnCqwu96fn1TNI32kUIx+aH00uIXh9Ps/MMFttyZ
+   DAGQlbK9KVC4ktS9/wm0mhonD0zddiFEWckekW66H+J2efVjW+Ai8DY1u
+   XW3q4Gzgl9WY44mfxxdAmFecGYxX5feCqFQyDASBM8tQh8qYYxYoVcTaa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="331285190"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="331285190"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 06:30:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="626766256"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="626766256"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 12 Oct 2022 06:30:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oiboD-005qlS-1e;
+        Wed, 12 Oct 2022 16:30:05 +0300
+Date:   Wed, 12 Oct 2022 16:30:05 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
+Message-ID: <Y0bBXSHyxpdTGxoU@smile.fi.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
+ <Y0SyVwjDl7NGfTPn@sol>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:5a85:b0:3c0:6a39:890a with HTTP; Wed, 12 Oct 2022
- 03:54:02 -0700 (PDT)
-Reply-To: jennifermbaya036@gmail.com
-From:   "Mrs.Jennifer Mbaya" <issakak65@gmail.com>
-Date:   Wed, 12 Oct 2022 11:54:02 +0100
-Message-ID: <CAMwbs2CDdeNJnMj+hyC2+oR=QsANZDeGuXUAF+8EjEz-iW0=YA@mail.gmail.com>
-Subject: Edunsaaja
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0SyVwjDl7NGfTPn@sol>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Edunsaaja
+On Tue, Oct 11, 2022 at 08:01:27AM +0800, Kent Gibson wrote:
+> On Mon, Oct 10, 2022 at 11:14:18PM +0300, Andy Shevchenko wrote:
 
-Nimess=C3=A4si on palkinto Yhdistyneilt=C3=A4 Kansakunnilta ja Maailman
-terveysj=C3=A4rjest=C3=B6lt=C3=A4, joka on osa kansainv=C3=A4list=C3=A4 val=
-uuttarahastoa, johon
-s=C3=A4hk=C3=B6postisi, osoite ja raha on luovutettu meille siirtoa varten,
-vahvista yst=C3=A4v=C3=A4llisesti tietosi siirtoa varten.
-Meit=C3=A4 kehotettiin siirt=C3=A4m=C3=A4=C3=A4n kaikki vireill=C3=A4 oleva=
-t tapahtumat
-seuraavien kahden aikana, mutta jos olet vastaanottanut rahasi, j=C3=A4t=C3=
-=A4
-t=C3=A4m=C3=A4 viesti huomioimatta, jos et toimi heti.
-Tarvitsemme kiireellist=C3=A4 vastausta t=C3=A4h=C3=A4n viestiin, t=C3=A4m=
-=C3=A4 ei ole yksi
-niist=C3=A4 Internet-huijareista, se on pandemiaapu.
-Jennifer
+...
+
+> > -#include <linux/gpio.h>
+> >  #include <linux/gpio/driver.h>
+> > +#include <linux/gpio.h>
+
+> But moving the gpio subsystem header after the gpio/driver is not
+> alphabetical ('.' precedes '/') and it read better and made more sense
+> to me the way it was.
+
+Okay, I will move it back.
+
+...
+
+> > +#include <linux/seq_file.h>
+> 
+> I wasn't aware that we use anything from seq_file.
+> What am I missing?
+
+
+Eventually I can answer to your question: the commit 0ae3109a8391
+("gpiolib: cdev: add fdinfo output for line request file descriptors")
+is what you are missing.
+
+That said, we need this patch.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
