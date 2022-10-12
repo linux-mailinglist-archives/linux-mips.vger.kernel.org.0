@@ -2,33 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4C95FC2D5
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Oct 2022 11:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23085FC36A
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Oct 2022 12:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiJLJQN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Oct 2022 05:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
+        id S229895AbiJLKEw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Oct 2022 06:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiJLJQL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Oct 2022 05:16:11 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960597331F;
-        Wed, 12 Oct 2022 02:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1665566157; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s+g0+ssYTgL3cZkE5/H6taOX78xERs3DGn3pyH5uewU=;
-        b=q1TTDkSv+2wywK6AIXiGaOkH7iZ2YU3VEKYOBAZiyQM7JBPfmc8c6P2ZhHrYUGYo8pdYOS
-        dts7t4kZKIQ9e1u3iLHUzQuRMcbtwmO5Z8KpYm4wJCUKd79SLah8Tf9+RyDQWaVWq5AUrm
-        d0C/wxgx1Yk/JFU/GDZxLIKL5vEmKNw=
-Date:   Wed, 12 Oct 2022 10:15:29 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 11/36] pinctrl: ingenic: Add missed header(s)
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        with ESMTP id S229657AbiJLKEu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Oct 2022 06:04:50 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0E511443;
+        Wed, 12 Oct 2022 03:04:47 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id w3so2092168qtv.9;
+        Wed, 12 Oct 2022 03:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R2uNoWDHy+GOry29L6DC1dXWZKJOzJDC9JxozJVSpGE=;
+        b=ZuAn0riuXHel9rEBKRhDJaphdwknBUsVfuUv/T2PqZwW+uHUs0jQAoNTggSP2xYvxV
+         AIPBHcfBEeKUY8XaTwBfDZ4rSHoMsN+0EmQWS+Q65k7ex3GR3DSFMtYWLj5CjjdFW5lS
+         H15Im9ztaYgi/pdTI+XTH4+61vil18OUHSI0xGSAcGYNKUvzy6F36vXqiFhOKG65c2tn
+         Hm9UqrwXHcz71mbsaS1jF9iuBu0ckjr5DhBRLVoVyj42mBo6ELsboWfCQHWyRGQ4tlaj
+         QaFlpQ5WtgjVo1xKNFF2bpP4chzh3RulgtzO05YqhYqIONKukzB/OS4NwSuMzh0mSuvU
+         pMLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R2uNoWDHy+GOry29L6DC1dXWZKJOzJDC9JxozJVSpGE=;
+        b=c251R7Jd2O3hbIAN527I1kvzRHu6QHTkG2ICV7ukZ0rYa9Phe+rMgEqQKRWmR/JDug
+         5QHqprc4I94QMq9ixicxhvYlxwXu4z75cJAj2qcFyVhNeUgsZX6+V1TDR+gDOnzaqrhh
+         J80qVRYt+pKyxi4tJxSxMbCA4pL/7uW7vsWM2dAx1BRG8/IMj5CpkBBXQK/0QQWtRjLq
+         IQ0GTMaUC/7hGrPuypXyNJ9VhUPaDeO36CoZIP7ZtaPdc3QgOSFL69sCvs9eCqQmE52R
+         LZgXN40CJtCsABB8a4mCXNuliZI/yx8UYfsVeGKJCw2o+swLEiyOVBkkyGxSZtS0tT+h
+         Ttrw==
+X-Gm-Message-State: ACrzQf1nfca33kUS/tUxRzkm9qtFNMtcB0SI1M3RQFZTi1e2lXHJ1sXq
+        qIYB3oBEcU/WzR51cZSukGmYJrGptQdM0SbiN6o=
+X-Google-Smtp-Source: AMsMyM5ie8LeIoK7BaYP5eKG5FZkx73UfHVDBrIIwi+8uhHlPAnlyvjeeFl/0Iy9XueA0qyfGOPRZ2XY3nQxTptpumo=
+X-Received: by 2002:ac8:7c43:0:b0:35c:cd8f:3da5 with SMTP id
+ o3-20020ac87c43000000b0035ccd8f3da5mr23132665qtv.61.1665569086451; Wed, 12
+ Oct 2022 03:04:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <0684f480-2092-d520-2c8e-bd9a2dca47e3@gmail.com>
+In-Reply-To: <0684f480-2092-d520-2c8e-bd9a2dca47e3@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 12 Oct 2022 13:04:10 +0300
+Message-ID: <CAHp75VdDjyUAZBTaoPOe5oA3f_5xRznAooq08=Eff4F1AZyVOQ@mail.gmail.com>
+Subject: Re: [rft, PATCH v2 00/36] pinctrl: Clean up and add missed headers
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Kent Gibson <warthog618@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Billy Tsai <billy_tsai@aspeedtech.com>,
@@ -41,7 +68,7 @@ Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Samuel Holland <samuel@sholland.org>,
         Horatiu Vultur <horatiu.vultur@microchip.com>,
-        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -65,12 +92,10 @@ Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Patrice Chotard <patrice.chotard@foss.st.com>,
-        Andreas =?iso-8859-1?q?F=E4rber?= <afaerber@suse.de>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
+        Joel Stanley <joel@jms.id.au>, Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
@@ -96,6 +121,7 @@ Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Chen-Yu Tsai <wens@csie.org>,
+        Paul Cercueil <paul@crapouillou.net>,
         Damien Le Moal <damien.lemoal@wdc.com>,
         Tony Lindgren <tony@atomide.com>,
         Haojian Zhuang <haojian.zhuang@linaro.org>,
@@ -115,72 +141,42 @@ Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Message-Id: <T1VMJR.YAQIRYFT8EC22@crapouillou.net>
-In-Reply-To: <20221010201453.77401-12-andriy.shevchenko@linux.intel.com>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
-        <20221010201453.77401-12-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, Oct 11, 2022 at 11:56 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> On 10/10/2022 1:14 PM, Andy Shevchenko wrote:
+> > Currently the header inclusion inside the pinctrl headers seems more arbitrary
+> > than logical. This series is basically out of two parts:
+> > - add missed headers to the pin control drivers / users
+> > - clean up the headers of pin control subsystem
+> >
+> > The idea is to have this series to be pulled after -rc1 by the GPIO and
+> > pin control subsystems, so all new drivers will utilize cleaned up headers
+> > of the pin control.
+> >
+> > Please, review and comment.
+>
+> Did you really need to split this on a per-driver basis as opposed to
+> just a treewide drivers/pinctrl, drivers/media and drivers/gpiolib patch
+> set?
+>
+> 36 patches seems needlessly high when 4 patches could have achieve the
+> same outcome.
+
+I can combine them if maintainers ask for that, nevertheless for Intel
+pin control and GPIO drivers, which I care more about, I would like to
+leave as separate changes (easy to see in history what was done).
 
 
-Le lun., oct. 10 2022 at 23:14:27 +0300, Andy Shevchenko=20
-<andriy.shevchenko@linux.intel.com> a =E9crit :
-> Do not imply that some of the generic headers may be always included.
-> Instead, include explicitly what we are direct user of.
->=20
-> While at it, sort headers alphabetically.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> ---
->  drivers/pinctrl/pinctrl-ingenic.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 7e732076dedf..dbc25a60fbff 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -14,16 +14,18 @@
->  #include <linux/kernel.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/of.h>
-> -#include <linux/pinctrl/pinctrl.h>
-> -#include <linux/pinctrl/pinmux.h>
-> -#include <linux/pinctrl/pinconf.h>
-> -#include <linux/pinctrl/pinconf-generic.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/seq_file.h>
->  #include <linux/slab.h>
->=20
-> +#include <linux/pinctrl/consumer.h>
-> +#include <linux/pinctrl/pinconf-generic.h>
-> +#include <linux/pinctrl/pinconf.h>
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
-> +
->  #include "core.h"
->  #include "pinconf.h"
->  #include "pinmux.h"
-> --
-> 2.35.1
->=20
-
-
+-- 
+With Best Regards,
+Andy Shevchenko
