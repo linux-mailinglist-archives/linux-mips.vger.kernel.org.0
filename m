@@ -2,71 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D0C5FDE25
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Oct 2022 18:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1DB5FE24B
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Oct 2022 20:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJMQVf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Oct 2022 12:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
+        id S230182AbiJMS7b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Oct 2022 14:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiJMQVd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Oct 2022 12:21:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBCBA3F69;
-        Thu, 13 Oct 2022 09:21:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 182AB6173A;
-        Thu, 13 Oct 2022 16:21:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5671C433D6;
-        Thu, 13 Oct 2022 16:21:28 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GP4P33Go"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665678086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kPntWr7A6bA616PExnbnx5reDbccdV4V+F7u1oTVbdw=;
-        b=GP4P33GoTZTXwgHWO1z/FqyjryY8qsqfXNBCumID69G06rmzAbuflrmGXm0knLxOwy6AOV
-        r5Se8is8rcJ8teWZq2zoRDvfJGTZawQk7FulxMoGHupIBrT9us1rnRt6jRmg3GIbXoJ/w6
-        20UjSRmQn/6S5nyrDvb7rvSacSvCVHE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5f752f1b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 13 Oct 2022 16:21:25 +0000 (UTC)
-Date:   Thu, 13 Oct 2022 10:21:18 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Rolf Eike Beer <eike-kernel@sf-tec.de>
-Cc:     Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Andrew Morton <akpm@linux-foundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Graf <tgraf@suug.ch>, kasan-dev@googlegroups.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v6 5/7] treewide: use get_random_u32() when possible
-Message-ID: <Y0g6/sIJMq/JRe6y@zx2c4.com>
-References: <20221010230613.1076905-1-Jason@zx2c4.com>
- <3026360.ZldQQBzMgz@eto.sf-tec.de>
- <20221013101635.GB11818@breakpoint.cc>
- <11986571.xaOnivgMc4@eto.sf-tec.de>
+        with ESMTP id S232355AbiJMS6y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Oct 2022 14:58:54 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA30827928;
+        Thu, 13 Oct 2022 11:57:06 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id q11so1431005ilj.10;
+        Thu, 13 Oct 2022 11:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aU4v5j25jcA4b2/jV12oaXw7opkB9OVDvdOu4hkOSkY=;
+        b=QhFO5qgSaKUMRml2Jd5VUmeEmiC9AF9BZmoWzw8uxvh3OpKZoYPyVVGYi4p2MDAlFa
+         +hMoMa8jTFYXU93+Kr/LdS9ATml85nFb2/ErVZ6DUkcki6WLco1sdO0u0MUr7zdLcb50
+         U8gM9fCJcsogz5Lw6B9QRyxGaZ8d9HJ75FXki6+24oVpcN9wE3GBgQinDmZm8oG27DKl
+         xfaeeT3GBBYthIwZkrCiBgC8M40Lo3rPe4nJ2ES38QAj1B8OCrI9b5eQNKJsi5wChNTd
+         b60m4fcAQbwUuQngvLcY0Luy7sOWRSIr/XRLCS5wpz0wbDJKImI5VlSnEwoWCcuyaX5y
+         1YLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aU4v5j25jcA4b2/jV12oaXw7opkB9OVDvdOu4hkOSkY=;
+        b=K4VQ24JcmhHFUeTtBBqWcn+HkAA1v3Z0OiUu56pd0rz/g+xDSvNXZo7hV7kxoMIvCF
+         BYZebeejThbZ2ftg78MEZ6seU/N5oUCUEdJ/oOA6faZyr7hKHd+5NSATgqVASKbQsAeR
+         +2fpEUNTpWS9NGcRMF4H0RdXqtwlS96n0ZDs4gBJhSjdvP94QmottMTze+OAk6HnDPjN
+         IRR+JAIAuXKrVDCfa9rTl6nAMspyX9L7uPqGF1qripGfnadyogAr4rjOoFsSVhmZuUEw
+         dGrZRK/xsA4BidXcpOFaK7iygGbwug9gAXeplOKtMQ6I3wuMNDPoRHhFaPUOCSe2M1dK
+         sswQ==
+X-Gm-Message-State: ACrzQf0CddUJX4PziJN2cc9gi4EcyODUXt73ToCo/0WlWWscv8MSmnhO
+        Uq3AB6wLtq1kqWXFO5G7E8WGvQcsjqKHxfKjIDk=
+X-Google-Smtp-Source: AMsMyM4tAkBUHy+Lv4iPEVX7fI3kq/6F/ptm2DyftFBCewja+gWmdmjL6xlLgaH6l9cZUi7njV1AcafirE2fwO2o+eY=
+X-Received: by 2002:a05:6e02:20ea:b0:2fa:bf8:300a with SMTP id
+ q10-20020a056e0220ea00b002fa0bf8300amr696533ilv.309.1665687426081; Thu, 13
+ Oct 2022 11:57:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <11986571.xaOnivgMc4@eto.sf-tec.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221009181338.2896660-8-lis8215@gmail.com> <202210100607.YdxoR0tD-lkp@intel.com>
+ <CAKNVLfaFvge4A8-QUzeq-JManpuYMGvyHXCJi-ew==CWN8-M=A@mail.gmail.com>
+ <bb9f79d4-82a9-4790-b849-d517333ea2d4@app.fastmail.com> <GSPOJR.M4XZ4D03G60F@crapouillou.net>
+In-Reply-To: <GSPOJR.M4XZ4D03G60F@crapouillou.net>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Thu, 13 Oct 2022 21:56:54 +0300
+Message-ID: <CAKNVLfZukazKx2yDBrLZc7J9=3cCvMgZbdghtt1YO7WivdPjvw@mail.gmail.com>
+Subject: Re: [PATCH 7/8] serial: 8250/ingenic: Add support for the
+ JZ4750/JZ4755 SoCs
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        kbuild-all@lists.01.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        GPIO SUBSYSTEM <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,22 +84,17 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 01:40:40PM +0200, Rolf Eike Beer wrote:
-> Am Donnerstag, 13. Oktober 2022, 12:16:35 CEST schrieb Florian Westphal:
-> > Rolf Eike Beer <eike-kernel@sf-tec.de> wrote:
-> > > Florian, can you comment and maybe fix it?
-> > 
-> > Can't comment, do not remember -- this was 5 years ago.
-> > 
-> > > Or you wanted to move the variable before the loop and keep the random
-> > > state between the loops and only reseed when all '1' bits have been
-> > > consumed.
-> > Probably.  No clue, best to NOT change it to not block Jasons series and
-> > then just simplify this and remove all the useless shifts.
-> 
-> Sure. Jason, just in case you are going to do a v7 this could move to u8 then.
+=D1=87=D1=82, 13 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:17, Paul Cercue=
+il <paul@crapouillou.net>:
+>
+> Just disable the divider in ingenic_fixup_fdt() in
+> arch/mips/generic/board-ingenic.c.
+>
+> Cheers,
+> -Paul
+>
 
-Indeed I think this is one to send individually to netdev@ once the tree
-opens there for 6.2.
+Looks reasonable, I hope the bootloader initialized peripherals can handle
+doubled frequency, till re-initialization completes. I'll check that.
 
-Jason
+Thank you all, guys.
