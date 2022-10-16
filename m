@@ -2,105 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D256000AF
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Oct 2022 17:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D3F6000BE
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Oct 2022 17:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiJPPcr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 16 Oct 2022 11:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
+        id S229815AbiJPPgn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Oct 2022 11:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiJPPcq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Oct 2022 11:32:46 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22AF386A6
-        for <linux-mips@vger.kernel.org>; Sun, 16 Oct 2022 08:32:43 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id f14so6189866qvo.3
-        for <linux-mips@vger.kernel.org>; Sun, 16 Oct 2022 08:32:43 -0700 (PDT)
+        with ESMTP id S229786AbiJPPgm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Oct 2022 11:36:42 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5357D38A28;
+        Sun, 16 Oct 2022 08:36:39 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id u21so12878577edi.9;
+        Sun, 16 Oct 2022 08:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n+glJUn1rJ1Nz2wNZdUlNIAxnWRCwagr6ACf9glezJI=;
-        b=klwSuUnkKoO0zTw1B5PLbnJhRCSHfBdQcpM3QHpPA0GC9UJTrQM0GTlzH0kQesQNZC
-         IE1R2q7MFkYvpxl8yQEX/HzuVlt76Q7ot4aCoVcHlX0VMfHbhHba2+NjR/mZMLktBKwg
-         +i4sirbI4oLqGOcYYZddBvMmMplvr8m3qOYDN60Zo7xyqHtoFzUuURvtd24O7bIw4gSv
-         yupvoo5bHeeTm87Xy8a+tcFQAFhCQT8yB6gLaf5/KfznzQHR0nJnPl5u/yQ+PCcJaewS
-         4vvOxWL5sleolma7WrGZZqPB1Rlv5NuHo+XFmaF9GA9wYbbffAdB/zX2fxeECcvM8/lL
-         9NxA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F1OBWkds0Pt2bQp3eyvH72hH//WSRMxDqTTcvyzOiTY=;
+        b=FShg92RLlNiJ5TafP86/L9RhuD/LgC6/Ji+XUPcUpnDAG1GL4zom52xl/dwfgyFcYY
+         66tf/fV19lCdjnfc6PXE3RYENXKoEuYxEFo2K6z0aK8wAiyZqWPZU5EmAznoOACigRp2
+         lbxWGkoMPo5M5EpjgFr3jjnblUKX4lIzZoHpUz18u5sUZAXKjadlPtN7/HaGzD98jmKv
+         gtDwz+WBkGfUPm/qv1vUoJL13R46wq8X3TTHhBP3YTF1fDYOWfnznUi0nErrg5iRAVxY
+         N2nKJys5wQuZlpNvA6KH/Jxr0IwaH6zdqVOxFp7E+f39t7SFwLvSa+T/rV9J48v5v0c/
+         Zavw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n+glJUn1rJ1Nz2wNZdUlNIAxnWRCwagr6ACf9glezJI=;
-        b=P7K13jfMcudtVfiDEfOUFWKZkhHVs6nEE1GSMP0dyXUvhBoUza18Wql9XbOmSRS7Od
-         vhQ33xkEatjRhev5EZJv4PpEfBTBtU3jsy7Rov7w2m21NODO4m9MGJvdFyR+KbiZPwTG
-         f8CWY4/V+Ta5+QCOOr+yGx6mTHSmVeO0wema5hvOe5K4G5GTvPoCJ8RKmQ70HsHALUD5
-         In5HhtqvZSPUCNmZD77Za3l5e4QBjDTXJWdYvZZYasBKv+w6e1InOngNjn9mT5FucMRd
-         tZudCFhk3ikg/o44OB3kspmYl54KUtFb/OqbS/UJmlVQyGSMt8tnPW8W1+GjC9TBnuWE
-         Jysg==
-X-Gm-Message-State: ACrzQf2HQumRGQ+vseuxs4PsJQodnRHYOaA35ptSYXkImYz4LZSyLPbC
-        SfKxUIs1+FLZVmMLPnoqOLu9uw==
-X-Google-Smtp-Source: AMsMyM6+xL+9BLXbh6JLTiiPjwMnLmR5mvBjXAqAvfz2PnC4/uaWBmYX29THEJDsXVqG/xZab/whEA==
-X-Received: by 2002:ad4:5aee:0:b0:4b4:595:fb54 with SMTP id c14-20020ad45aee000000b004b40595fb54mr5383329qvh.5.1665934362813;
-        Sun, 16 Oct 2022 08:32:42 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id i20-20020ac860d4000000b00399d5d564b7sm5892803qtm.56.2022.10.16.08.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 08:32:41 -0700 (PDT)
-Message-ID: <c2accc8b-f4eb-47ca-333f-eeb98da6a363@linaro.org>
-Date:   Sun, 16 Oct 2022 11:32:40 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 3/4] dt-bindings: clock: Add Ingenic JZ4755 CGU header
-Content-Language: en-US
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F1OBWkds0Pt2bQp3eyvH72hH//WSRMxDqTTcvyzOiTY=;
+        b=sh1IoDhbUg+y+LMiyHiZYmoE2qaPbpfR3zh1XSPCInSmumBbm1nV8rnB4ZWItYM790
+         onD/iEJ6jQgVVERlVUZNmtRTVlMLcSf/4vlQ6hsbxb+UNbVnE3sq+mbKx/ZjOiSBogJB
+         pnpu83X5Z2tz+OtpBfPUEm0opXG0euoH8r51Ydp6T9EGC4+A7tdSY8TEjdSwfqwWHvUd
+         QwUxH2HMdH2yymNqsuxHpm/bSjHuuNg752c1SCU5YNl9IwDqLBqBww3WpW3dVsxGTCqp
+         c8C25Q2Y4GUztNiOnc7XUjYXubkYVTftBoFlLK2h6lUpBZ1oA1Wrv9SKqL/pD8S+wJpx
+         P5Jw==
+X-Gm-Message-State: ACrzQf0y1D9Iuk/TgnQ0VlJeU62rsRFxsEdEYcZVdwvyCPQW9D8aWTAR
+        5lPIqBYSadMTo7xZwR00AIU4rfaZ8USqxA==
+X-Google-Smtp-Source: AMsMyM61U3+jI8MWEihfJMx26dttGUB6RmOg49g+TvtQpDSAzgmH6Wv6elQvQNHBSIh9Cn88UzN2HQ==
+X-Received: by 2002:a05:6402:f96:b0:459:4180:6cf4 with SMTP id eh22-20020a0564020f9600b0045941806cf4mr6565731edb.64.1665934597066;
+        Sun, 16 Oct 2022 08:36:37 -0700 (PDT)
+Received: from hp-power-15.localdomain (mm-39-7-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.7.39])
+        by smtp.gmail.com with ESMTPSA id y16-20020a056402359000b004589da5e5cesm5758781edc.41.2022.10.16.08.36.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 08:36:36 -0700 (PDT)
+From:   Siarhei Volkau <lis8215@gmail.com>
+Cc:     stable@vger.kernel.org, Siarhei Volkau <lis8215@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20221016150110.3020451-1-lis8215@gmail.com>
- <20221016150110.3020451-4-lis8215@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221016150110.3020451-4-lis8215@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] pinctrl: Ingenic: JZ4755 bug fixes
+Date:   Sun, 16 Oct 2022 18:35:48 +0300
+Message-Id: <20221016153548.3024209-1-lis8215@gmail.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 16/10/2022 11:01, Siarhei Volkau wrote:
-> This will be used from the devicetree bindings to specify the clocks
-> that should be obtained from the jz4755-cgu driver.
-> 
-> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-> ---
->  .../dt-bindings/clock/ingenic,jz4755-cgu.h    | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> 
-> diff --git a/include/dt-bindings/clock/ingenic,jz4755-cgu.h b/include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> new file mode 100644
-> index 000000000..1ac13d61b
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> @@ -0,0 +1,49 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause) */
+Fixes UART1 function bits and MMC groups typo.
 
-Why did you choose 2.0+?
+For pins 0x97,0x99 function 0 is designated to PWM3/PWM5
+respectively, function is 1 designated to the UART1.
 
-Best regards,
-Krzysztof
+Diff from v1:
+ - sent separately
+ - added tag Fixes
+
+Fixes: b582b5a434d3 ("pinctrl: Ingenic: Add pinctrl driver for JZ4755.")
+Tested-by: Siarhei Volkau <lis8215@gmail.com>
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+---
+ drivers/pinctrl/pinctrl-ingenic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+index 3a9ee9c8a..2991fe0bb 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -667,7 +667,7 @@ static u8 jz4755_lcd_24bit_funcs[] = { 1, 1, 1, 1, 0, 0, };
+ static const struct group_desc jz4755_groups[] = {
+ 	INGENIC_PIN_GROUP("uart0-data", jz4755_uart0_data, 0),
+ 	INGENIC_PIN_GROUP("uart0-hwflow", jz4755_uart0_hwflow, 0),
+-	INGENIC_PIN_GROUP("uart1-data", jz4755_uart1_data, 0),
++	INGENIC_PIN_GROUP("uart1-data", jz4755_uart1_data, 1),
+ 	INGENIC_PIN_GROUP("uart2-data", jz4755_uart2_data, 1),
+ 	INGENIC_PIN_GROUP("ssi-dt-b", jz4755_ssi_dt_b, 0),
+ 	INGENIC_PIN_GROUP("ssi-dt-f", jz4755_ssi_dt_f, 0),
+@@ -721,7 +721,7 @@ static const char *jz4755_ssi_groups[] = {
+ 	"ssi-ce1-b", "ssi-ce1-f",
+ };
+ static const char *jz4755_mmc0_groups[] = { "mmc0-1bit", "mmc0-4bit", };
+-static const char *jz4755_mmc1_groups[] = { "mmc0-1bit", "mmc0-4bit", };
++static const char *jz4755_mmc1_groups[] = { "mmc1-1bit", "mmc1-4bit", };
+ static const char *jz4755_i2c_groups[] = { "i2c-data", };
+ static const char *jz4755_cim_groups[] = { "cim-data", };
+ static const char *jz4755_lcd_groups[] = {
+-- 
+2.36.1
 
