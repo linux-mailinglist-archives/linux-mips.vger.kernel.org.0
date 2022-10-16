@@ -2,67 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0265FFF9E
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Oct 2022 15:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4A2600044
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Oct 2022 17:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJPN20 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 16 Oct 2022 09:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S229847AbiJPPDR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Oct 2022 11:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiJPN2M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Oct 2022 09:28:12 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70083D593;
-        Sun, 16 Oct 2022 06:27:58 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id l22so12652277edj.5;
-        Sun, 16 Oct 2022 06:27:58 -0700 (PDT)
+        with ESMTP id S229900AbiJPPDO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Oct 2022 11:03:14 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB3641989;
+        Sun, 16 Oct 2022 08:03:09 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id d26so19862088ejc.8;
+        Sun, 16 Oct 2022 08:03:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R19Q50f+4lJZEQStb2xYnMd/U/8/rdyoHM9BaeMxvps=;
-        b=gbkTAWWF6YY0ZHs9zxW1q9aUl6tCSvP9p4r8o3h1d5cTHJFV3BITvz6EgkHXD12VPF
-         r45o4jjfXEVXaDE/HgXGhGzJtcVV2tdAG/hD8z35OgMVtzXvqc0uJhza7xWHJyBjphM5
-         KN/0vaIoXgSILYv9JTWA/uVS6KYRY7P5dD5U9VIfjQ0RjJWD4XYLgl2+UftSL18DV1WT
-         EHX+vVJpBDNvGUneUs+D1qh5G3Yam3mNSxnkhS8egoHtqPFC+yuNa9afL/DT2fBD/U4R
-         vZlRwQPnZoOKFbfVmWMDHxNYmyY8P9UmCCc85qLYSYUpayfKCee0JP+vG0mhZYggG3AY
-         uSiw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pa9OicZOXvfwTJ5K7w80SaAGBxmpRr9ol3hi7NLwDPw=;
+        b=GpbDbMOV0xT629x7gQAHpYE4Imi3mIMnFeRqNcn8CTfiPVfBW/4WUMV3DZofA23jB8
+         9U9Ndz2tnxiH0TgrzmhJDlVYUtPjxgaxpX1QU8H5LSgcpjxkDgYpOMTVGcdsfnbthF49
+         ULjVZkx83D0kY/uxibqjtqVzTAQIpL2NNEqhZnLImwDDF+RluVPU98yse3O72E30w/oX
+         QSbX1ZXCL9ORWZFO/B9mLVYvpTRvlclCgEJ8o5bcXuktKqJcT1xKdf5V0j8fzzmpJYJN
+         Vq32dSmM/En4nPwg7JPwgNmR9Aj/uHa81U8BaQw7vMpLQfTbN20smGk5JAnvWQvrgaZE
+         OeQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R19Q50f+4lJZEQStb2xYnMd/U/8/rdyoHM9BaeMxvps=;
-        b=qx6LRE2ruSALtGJU+MH9CW0tIdp9+lRO7k1Vmg+pijtUbpFT7+Yb79LEvNHctXJa2d
-         h5+VBZRK8zbjZY08P7XCBZCUOrCICWjUE+3fMc61aEsnLApz2qifhl8lVya8gPPRvinI
-         zrGu13oRKVjuBTRbqg/nA27NgafKsTu2vJriLEH7p0WaWM7bL7NhD/pMJtj+3npLJA07
-         GOEDKMU7iqVPVJTHAymTsJWCUrv9RyqMfP+bdRhnuvIHUIOr2jmREsAY+vQyKKx0lmaz
-         UdTGiNrCJc80oM0v30C+OjnJWTRwnuSiGl3e9Bt5m+OtP5KlyJYjrFV7G4V4ZWDaJFMA
-         33ig==
-X-Gm-Message-State: ACrzQf3903FDiEBkBYKFoQS56kJJn5Amopti1MtYuw+7ejDHpQ/o4F7Y
-        El2elJowjBBEfGu9SdEtf8g=
-X-Google-Smtp-Source: AMsMyM4CLc3sbcJ+XcUb7r1QZ6mjeycYteXNf0YLcpCxBQ7DSnn0VWt1dxwJNrSay4i3SURbUIJ5SA==
-X-Received: by 2002:a05:6402:5190:b0:45c:fca7:e07b with SMTP id q16-20020a056402519000b0045cfca7e07bmr6145825edd.327.1665926876937;
-        Sun, 16 Oct 2022 06:27:56 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pa9OicZOXvfwTJ5K7w80SaAGBxmpRr9ol3hi7NLwDPw=;
+        b=d+pRQ5G4Eaoa5FZMKnOQbkxRnX8egy1xpxtthoFBfHm91T6GfoHwalHl6x34s5CPSn
+         NxUGXQxXpAGXS7RHjVL4qVlarwdf51MXNGvrIPdtt7pDf9qJOHkJDT69zghMONvlckoW
+         c/NQPWNiTpERAb4l27GVifdYlQ8ar2PUeTnS5KgFcRW0RHsHZaJfMRwm6oZLIfSUJZOQ
+         uoqSJr2rcRsdvtN5o/uPO5QEqjN5OhkQzXIPkKLAiUQjGzMkwOmm0rLPiGaPEFrMF56/
+         6hQS92e7JJ0zzg2B7K1GqD40k+znBNS+11ceGvkvAQobKLyWxnuL1D05S0yoZe8DrIBq
+         3Hbg==
+X-Gm-Message-State: ACrzQf0G71tvwmme9fzpStiq0k4P9tYhqFEfRVYaaHKcCltMscw19U/m
+        K5mq4vBUG96R2kVVsbWqe8+6GJcosEqREw==
+X-Google-Smtp-Source: AMsMyM7Gja52fyXmLbTFjDBDXkt2Q/kQqHlb/yHbD1WtIipdSAAaCRyV2ekXZhhLq08F2hxW2s0lXA==
+X-Received: by 2002:a17:907:c25:b0:78e:1a4:132 with SMTP id ga37-20020a1709070c2500b0078e01a40132mr5378461ejc.521.1665932587166;
+        Sun, 16 Oct 2022 08:03:07 -0700 (PDT)
 Received: from hp-power-15.localdomain (mm-39-7-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.7.39])
-        by smtp.gmail.com with ESMTPSA id y5-20020aa7ce85000000b0045c72bba0bfsm5572057edv.4.2022.10.16.06.27.55
+        by smtp.gmail.com with ESMTPSA id u8-20020a17090657c800b0078c1e174e11sm4645699ejr.136.2022.10.16.08.03.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 06:27:56 -0700 (PDT)
+        Sun, 16 Oct 2022 08:03:06 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Paul Cercueil <paul@crapouillou.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 7/7] ASoC: codecs: jz4725b: add missed microphone widgets
-Date:   Sun, 16 Oct 2022 16:26:48 +0300
-Message-Id: <20221016132648.3011729-8-lis8215@gmail.com>
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH v2 0/4] Add Ingenic JZ4755 CGU driver
+Date:   Sun, 16 Oct 2022 18:01:05 +0300
+Message-Id: <20221016150110.3020451-1-lis8215@gmail.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221016132648.3011729-1-lis8215@gmail.com>
-References: <20221016132648.3011729-1-lis8215@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,50 +75,30 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Microphone input can be single ended or differential, although
-known SoCs with that codec expose MIC1P only.
+This patch serie adds a new JZ4755 machine type and the
+Clock Generation Unit (CGU) driver for the JZ4755 SoC.
 
-Also there is 20dB mic boost in the Mic1 path.
+Diffs from 1-st patchset:
+ - CGU patches splitted into its own patchset
+ - dual license for dt-bindings header
+ - acks collected
 
-Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
----
- sound/soc/codecs/jz4725b.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Siarhei Volkau (4):
+  MIPS: ingenic: add new machine type MACH_JZ4755
+  dt-bindings: ingenic: Add support for the JZ4755 CGU
+  dt-bindings: clock: Add Ingenic JZ4755 CGU header
+  clk: Add Ingenic JZ4755 CGU driver
 
-diff --git a/sound/soc/codecs/jz4725b.c b/sound/soc/codecs/jz4725b.c
-index 52b2bb95b..685ba1d3a 100644
---- a/sound/soc/codecs/jz4725b.c
-+++ b/sound/soc/codecs/jz4725b.c
-@@ -175,6 +175,15 @@ static const SNDRV_CTL_TLVD_DECLARE_DB_RANGE(jz4725b_out_tlv,
- 	12, 23, TLV_DB_SCALE_ITEM(-1050, 100, 0),
- 	24, 31, TLV_DB_SCALE_ITEM(  100,  50, 0),
- );
-+static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(jz4725b_mic_boost_tlv, 0, 2000, 0);
-+
-+static const char * const jz4725b_mic_mode_texts[] = {
-+	"Single Ended", "Differential",
-+};
-+
-+static const struct soc_enum jz4725b_mic_mode_enum =
-+	SOC_ENUM_SINGLE(JZ4725B_CODEC_REG_CR3, REG_CR3_MICDIFF_OFFSET,
-+			2, jz4725b_mic_mode_texts);
- 
- static const struct snd_kcontrol_new jz4725b_codec_controls[] = {
- 	SOC_DOUBLE_TLV("DAC Playback Volume",
-@@ -219,6 +228,13 @@ static const struct snd_kcontrol_new jz4725b_codec_controls[] = {
- 	SOC_SINGLE("High-Pass Filter Capture Switch",
- 		   JZ4725B_CODEC_REG_CR2,
- 		   REG_CR2_ADC_HPF_OFFSET, 1, 0),
-+
-+	SOC_ENUM("Mic Mode Capture Switch", jz4725b_mic_mode_enum),
-+
-+	SOC_SINGLE_TLV("Mic1 Boost Capture Volume",
-+		       JZ4725B_CODEC_REG_PMR2,
-+		       REG_PMR2_GIM_OFFSET,
-+		       1, 0, jz4725b_mic_boost_tlv),
- };
- 
- static const char * const jz4725b_codec_adc_src_texts[] = {
+ .../bindings/clock/ingenic,cgu.yaml           |   2 +
+ arch/mips/ingenic/Kconfig                     |   5 +
+ drivers/clk/ingenic/Kconfig                   |  10 +
+ drivers/clk/ingenic/Makefile                  |   1 +
+ drivers/clk/ingenic/jz4755-cgu.c              | 350 ++++++++++++++++++
+ .../dt-bindings/clock/ingenic,jz4755-cgu.h    |  49 +++
+ 6 files changed, 417 insertions(+)
+ create mode 100644 drivers/clk/ingenic/jz4755-cgu.c
+ create mode 100644 include/dt-bindings/clock/ingenic,jz4755-cgu.h
+
 -- 
 2.36.1
 
