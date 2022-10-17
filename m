@@ -2,88 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E951601664
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 20:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281EC601B06
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 23:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJQSez (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Oct 2022 14:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
+        id S230048AbiJQVJ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Oct 2022 17:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiJQSez (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 14:34:55 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26314237CA;
-        Mon, 17 Oct 2022 11:34:54 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id o64so13064030oib.12;
-        Mon, 17 Oct 2022 11:34:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x4FmwvBqnJTncoPiKUPBPPBe171UWUDniXQaooeZxpw=;
-        b=cUtLFDCVPom9VJCBq9yxFHz+45hYXRfVxxbfwS4vTRR4L5jBfanW/xQGF97wjcilmF
-         J/EETbdnb0i4tY0juFXcW6wd3vO+pKfXF4hT/DW/e3kn+pC7uiQF7TuweGlThc/dLaVG
-         d0OyeiZtdmbUoXDXgerlAtsU9uGh/LF39J7yhOtjArpzVuzwBREVp5GEXO5sir///958
-         HFCnZU7jxUST22URv/usi6+BtI1ZGvKdbTl3rNEsWPCZZUWRSgKjv/msxuhIyZTeDOhO
-         1ma3NioE1JNyPhU6aqSoTYnl5cf1BMdpSPi2IMWg/5w1jpIj9U23BE4GeBFcyXc8lOV6
-         j6Xg==
-X-Gm-Message-State: ACrzQf1CUpRoZJovLX7AKSsQ26UW+EodKrNgUQuE5kMef/08k+wDkzlm
-        EWRAexqJvFLzjDaSJePu1fzd4SRQRA==
-X-Google-Smtp-Source: AMsMyM6zWSIgmd+I4omxIOYg2rHsSiGZaz0fVmjUISZiTCI2iq+9HRTI45XL5vYpiTUKkezyqPBipw==
-X-Received: by 2002:aca:240c:0:b0:355:41a7:d4dd with SMTP id n12-20020aca240c000000b0035541a7d4ddmr1197974oic.281.1666031693439;
-        Mon, 17 Oct 2022 11:34:53 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bv13-20020a0568300d8d00b006618eb616dbsm4977077otb.8.2022.10.17.11.34.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:34:52 -0700 (PDT)
-Received: (nullmailer pid 2255311 invoked by uid 1000);
-        Mon, 17 Oct 2022 18:34:53 -0000
-Date:   Mon, 17 Oct 2022 13:34:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: clock: Add Ingenic JZ4755 CGU header
-Message-ID: <20221017183453.GA2253413-robh@kernel.org>
-References: <20221016150110.3020451-1-lis8215@gmail.com>
- <20221016150110.3020451-4-lis8215@gmail.com>
- <c2accc8b-f4eb-47ca-333f-eeb98da6a363@linaro.org>
- <CAKNVLfZ8qi4MS6ineF4M5xnSmHW+=P5mdgifmr74g4kOSK2wGA@mail.gmail.com>
+        with ESMTP id S230274AbiJQVJw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 17:09:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4C21D32A;
+        Mon, 17 Oct 2022 14:09:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBF53611EF;
+        Mon, 17 Oct 2022 21:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B54AC433D6;
+        Mon, 17 Oct 2022 21:09:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666040989;
+        bh=nhxavo8RpMYLFsWqg39tCn8fm9MCY9/SKFHfqalsN6M=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Kmf2LSpuHihQpDKiEGVHoQ17A9lCtTmwjD/7xULJ8dd+qQqnSb9VhigC7j74E9F/p
+         3SR0Fx0pZ8BFrgjiN9M6M6zyG56p3rCv4mWS9DCgFTmNQfY8GZ0nmrYbqDsiN0XOiX
+         sqTT9iQXjK70eCRygmESup9OUyvnhxXp+ywhzBhe2PnVFJ7JEEefKH9Imqy5U92R81
+         g2qwxfpcG7Kf8P8SyFyNOo8u2dm68gO8GYsYcs5MsLlctlMG/0EZhlxby8Ixn8Wsu4
+         SS0tobJiMuv5PRoE3+fbALiQJUN/14cj1b7j2LQIaJsD4AvGWntGFHX9wAZ559IHWK
+         Mt9j+vahB/Z4g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKNVLfZ8qi4MS6ineF4M5xnSmHW+=P5mdgifmr74g4kOSK2wGA@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220823033414.198525-1-seanga2@gmail.com>
+References: <20220823033414.198525-1-seanga2@gmail.com>
+Subject: Re: [RESEND PATCH] clk: ls1c: Fix PLL rate calculation
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Yang Ling <gnaygnil@gmail.com>, linux-kernel@vger.kernel.org,
+        Kelvin Cheung <keguang.zhang@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Du Huanpeng <dhu@hodcarrier.org>,
+        Sean Anderson <seanga2@gmail.com>
+To:     Sean Anderson <seanga2@gmail.com>, linux-clk@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Date:   Mon, 17 Oct 2022 14:09:47 -0700
+User-Agent: alot/0.10
+Message-Id: <20221017210949.1B54AC433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 09:21:18PM +0300, Siarhei Volkau wrote:
-> вс, 16 окт. 2022 г. в 18:32, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org>:
-> 
-> > Why did you choose 2.0+?
-> 
-> It's the first time that I need to choose a license, so it's a bit
-> confusing what
-> side effects they have, especially in that particular case.
-> 
-> What do you recommend?
+Quoting Sean Anderson (2022-08-22 20:34:14)
+> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
+> noticed the following calculation, which is copied from
+> drivers/clk/loongson1/clk-loongson1c.c:
+>=20
 
-Are you fine with GPLv4, GPLv5? Considering they haven't been written, I 
-wouldn't be.
-
-Rob
+Nobody has provided a review for this patch. If it is still important,
+please resend. Thanks.
