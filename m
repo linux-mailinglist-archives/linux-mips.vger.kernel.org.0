@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C8F6013AD
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 18:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CC660145A
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 19:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiJQQlL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Oct 2022 12:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        id S229990AbiJQRLK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Oct 2022 13:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJQQlK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 12:41:10 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4871B11A28;
-        Mon, 17 Oct 2022 09:41:09 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id e15so9558679iof.2;
-        Mon, 17 Oct 2022 09:41:09 -0700 (PDT)
+        with ESMTP id S229982AbiJQRLJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 13:11:09 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B936566A46;
+        Mon, 17 Oct 2022 10:11:08 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id q18so6132174ils.12;
+        Mon, 17 Oct 2022 10:11:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DamKCJLW3tTsBfqwD9kkmTLCFeiTbmAoAgz1S7Xzwdg=;
-        b=Qws+pPvptHePuA+pLf2zNgfIGhd+UWEUmyc8kUih72SDW79Mxp6WWHvQozTh/kzdot
-         4od3cmUCxn5kimNpXZWMJ1gGczdITAKjJlW6g/j3uPMUCnwJT4xnUbSrVRwN0aHRt/MM
-         JTosRObKCJVAno5bV2sKPQIjih4lf8BaBLl7ZskzQd62inc117lcV83IETPjKog4KAYa
-         LZWTm2uY+XnZXWTXUtbLCD4QuQbn6j7pRzU6ugwaydKGbtf/S5h1gFxjIZ1oMRlnmYXG
-         DSW5ThxGzwM5AmYdyIhb4g0f88brQqK/UnznImvNZUuwo7mbbJ7CthZVqjoF6LpkXiXN
-         0jmA==
+        bh=2R50tDa31QheH9PegEd+bVdQ3X/I4pMIoJ98xHZVENU=;
+        b=gbhcWFmvoOoHlrSw7fwphKzkgX4hOti+XwRW5+LaeaV09djLDTNgfQKCLEOakbXiUh
+         6f502qo/Bl7lANxZjkoEIkS7L5KK6Qf5i/U6ptkvGFke7HF/tAEqYL+qYQHS7OYkEdyh
+         ltYiMuLS+7IfdQmAVOErtTPxsRart4tGjR/3CZXAMPJws1qPEmu3zgtiZLljDS3tgRJQ
+         5Z2QHUPebEzye+DfcfYK0s2UQQ7Cx/NhjjpcFlsOd+MXD1ugiTuHb4teeP9eyac+Ja3n
+         MN1WcJoWDF8NdJ7J40fHi/+l1sfti3ibT4DKferFq6osjrScVwcR2ySvdivCjJixyzRO
+         qxfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DamKCJLW3tTsBfqwD9kkmTLCFeiTbmAoAgz1S7Xzwdg=;
-        b=wGi4OCULD5GaQMC7wfX9QoLyCCHj6B5IexBXx0KGX1krc/va+sQXi0FeccYxi/T439
-         RJkK8oEKSG7j8xnWj7X2Ghdk+8AYg2qy9PQFpO1gSRqtI9ldNnZEC5eTaYFRpBoqfXgH
-         QQ67UIeqMzNhCJEM69yzk94ViB2VCUDnseTPHZoObw2Usww3bHZVnvxeVTUPGKTDT5vk
-         w3K2J4nIAmBqXh94A6RdjvgXNpBHuVXZzEdpg8z0QJEKBz/uM4QeVjBeazMhCyLT48fg
-         RrVXOBgxTqpivuffgXKHjJRfrzJSlJ7xEMXYeri9ww14wFSjWRf2cpl7EYDp0sNiz3Qw
-         fKJw==
-X-Gm-Message-State: ACrzQf3tbeOOPRUHjk7b2FiD+h4R0rmVX/095xVJ0e+mQ63qRQNfvG79
-        awdlLPikg1xqkZN9l/m4xM5mk8w7JvaChMfrA5dGyycbCI3wvAyi
-X-Google-Smtp-Source: AMsMyM5s0ew/RC0GUG4fMHPyD21cXwutfLOdm5rcHDG4Bc8YDkiqY0racuaH+pRMKltAuJL0QtBdRiRuB59ixhpuuUM=
-X-Received: by 2002:a05:6638:3c45:b0:363:afb2:3269 with SMTP id
- bg5-20020a0566383c4500b00363afb23269mr5546294jab.215.1666024868675; Mon, 17
- Oct 2022 09:41:08 -0700 (PDT)
+        bh=2R50tDa31QheH9PegEd+bVdQ3X/I4pMIoJ98xHZVENU=;
+        b=kYdynQVBm5Yha0A/2HWC6K82gYtvp9XZkZRSBsmbFouUm09r3Bfo+Z7+r69+atFo5A
+         VLYtMzsTqaq88KJaA9Pq0I9ymJhlNSLl+X9cVKDP0s5RVWb/VOhalb1EpfmtF0qYCFI4
+         YkbCxBPabbIbI+g2G9uzsuZupOEhOYm2IO6D01I1I6IBtJsWtSeOSXicenJ+Vg6atBBP
+         gArNicynLmSAGbUKhVbQq9ovThUR0kW0wk1i3sjlW3YsiVWu59uV+QE4pkX4uZ0h2klT
+         ebUWPUyD+hzh7a0kcwfITUfKy2rxXeUOokYllQ6w03I6mjCcd+H4xo4RWfSiD3xCeIF/
+         fIgA==
+X-Gm-Message-State: ACrzQf2LD03iRkgN6P/4hFeg+kNaCsonoQzNl/cdztNifmDCXIAtR8Px
+        EMjMzBz5CKrYGGFZo818dv9LaqjaV5SURuocFNk=
+X-Google-Smtp-Source: AMsMyM5/Jdn558aL2rhxtSZ2OiG2HQGSp5Yfh5ExHu+Z1RngoeO5tlE0YXRAp2g3o24MQ3WEV+KDly8jDeAa2vFPnAs=
+X-Received: by 2002:a05:6e02:20ea:b0:2fc:318b:a952 with SMTP id
+ q10-20020a056e0220ea00b002fc318ba952mr5121906ilv.236.1666026668164; Mon, 17
+ Oct 2022 10:11:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221016150110.3020451-1-lis8215@gmail.com> <20221016150110.3020451-2-lis8215@gmail.com>
- <K44WJR.2LW3IFMAMTV73@crapouillou.net>
-In-Reply-To: <K44WJR.2LW3IFMAMTV73@crapouillou.net>
+References: <20221016150110.3020451-1-lis8215@gmail.com> <20221016150110.3020451-5-lis8215@gmail.com>
+ <0S4WJR.4KB18PR21S9K1@crapouillou.net>
+In-Reply-To: <0S4WJR.4KB18PR21S9K1@crapouillou.net>
 From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Mon, 17 Oct 2022 19:40:57 +0300
-Message-ID: <CAKNVLfax=BGULaq62tSGyVOkR8vC5yvd71ovPHxq4zJqykoKrA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] MIPS: ingenic: add new machine type MACH_JZ4755
+Date:   Mon, 17 Oct 2022 20:10:56 +0300
+Message-ID: <CAKNVLfYEMwRC+4VuGcaENd1eTvbhWD9=uFDAhaz+1Fd8Aaqg_w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] clk: Add Ingenic JZ4755 CGU driver
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -74,12 +74,17 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-=D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:10, Paul Cercue=
+=D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:24, Paul Cercue=
 il <paul@crapouillou.net>:
-> I see why you include it, but you do not need to have the MACH_JZ4755
-> symbol defined anywhere for the "default MACH_JZ4755" to work, it will
-> just default to false until the patchset that adds JZ4755 support is
-> merged in the MIPS tree.
 
-Thank you for the clarification, Paul.
-Will be done in the next version.
+> > +     [JZ4755_CLK_AIC] =3D {
+> > +             "aic", CGU_CLK_GATE,
+> > +             .parents =3D { JZ4755_CLK_I2S, -1, -1, -1 },
+>
+> Wrong parent here, should be JZ4755_CLK_EXT_HALF.
+
+I don't  agree, see Figure 20-13 in the JZ4755 PM.
+
+> Well it would be good to know...
+
+Indeed, I will try to figure it out.
