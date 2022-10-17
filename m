@@ -2,169 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41136009D3
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 11:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB426009F1
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 11:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbiJQJCc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Oct 2022 05:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        id S230225AbiJQJKT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Oct 2022 05:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiJQJC3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 05:02:29 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289D72CDCC
-        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 02:02:23 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id q9so23476747ejd.0
-        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 02:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+DzhSmH1cBeruDtFaVKaVattsEwc8q4hTsou+lcv6jY=;
-        b=Q+/ZCk5uKgheops7slfnvs8xurY8FEURvOhzY1eTrLbemXNWuo99WUD81VK+SpWCxY
-         kzFTgIjquxop1/2G9aP+Jc1kCFR8S4kpwj8bfbUkfgvulb3p97gFWTEKh91wZsvKLTym
-         IGt1H+AuIDwRoqtXQsNeJNwHocUiIbe3K3kYShul2xo1CQl7PNr7jxP/Mgn3ZFbkZlVO
-         J/03NK6UfMQfdp40SIbVe6sr9G0pZuHS/nb7XvkWBeDwVFOg7SA3FW+4r+22nfUcKvmM
-         0KiMdRaZT5lr/vOJbfahx9OfxFGmc5oyK0hcI+W0d917YHmMVMRNLZ2UqBGud/XBVBC3
-         GKCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+DzhSmH1cBeruDtFaVKaVattsEwc8q4hTsou+lcv6jY=;
-        b=fhXZ42cjedVcdZL11LTzGfJNot6zUTSHorJClkWnX5wwgzsE7WLK2Ohf8eIGLCoceb
-         KHGMwKOoes11fqcKaJ1m9TIkVGAPVUpDGRiKJKKK23FyPxlPtHP1QCYMdoRz9bq2eLEs
-         DhXkU9SwG8fTp75xlHhvO8rsNpdCtqnx2gM6GJco3Do62i7gDTFj9vsekQdmSzMSNm6J
-         bH7ApGHkvW5Fe+W4Q6GWrm6exfCQv+typMUNZeX4S3YGKvykBbyq/+1n3SKgfJVH1pWh
-         UCQYVAng1BpHyyA9kS2Z4ATvgRAZGJpfxVCToM13OIE6C9bV8/2MxuKZ+IZQIHMXa+lS
-         equA==
-X-Gm-Message-State: ACrzQf2ZKKNQeW8SHekhoksEqnwivSAY42zICSEbeEUtVK1T7VnB6sc5
-        P6yBpam2R8Z7kw7ERacALoED9dixvInh2VLbbepKxw==
-X-Google-Smtp-Source: AMsMyM4UDyy4gIfLqRCo+xVdWhgvw2QqSAfU62C/zZi9P70aMTTtCFnk0FMes6AqIcJjw6kKWDVGE0urcJP2xkclA/A=
-X-Received: by 2002:a17:906:8a48:b0:78d:acdc:b7d9 with SMTP id
- gx8-20020a1709068a4800b0078dacdcb7d9mr7921544ejc.500.1665997341068; Mon, 17
- Oct 2022 02:02:21 -0700 (PDT)
+        with ESMTP id S230307AbiJQJKS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 05:10:18 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AC622288;
+        Mon, 17 Oct 2022 02:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1665997807; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0bJfDcoOH2/Dfhg55MIWlaG3Eyh+d7rLyW2xeWWEQy8=;
+        b=CUek5BrHtkLHGNAQvqkzWSKqxJ7U/UHeNfTUWBi+2KPDpcLQJV2UQMEqP6wpPs5x/wdhv8
+        brK0Z8OAQUfv+oKnBeqFCY7bQL0XyVc8pRZ6M+ZClv4w/ulqmtg5geb87QYDgGcs62k2DR
+        Bet/jnmj2kowe+zsoANpATl4nu1wdwQ=
+Date:   Mon, 17 Oct 2022 10:09:56 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 1/4] MIPS: ingenic: add new machine type MACH_JZ4755
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <K44WJR.2LW3IFMAMTV73@crapouillou.net>
+In-Reply-To: <20221016150110.3020451-2-lis8215@gmail.com>
+References: <20221016150110.3020451-1-lis8215@gmail.com>
+        <20221016150110.3020451-2-lis8215@gmail.com>
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 17 Oct 2022 11:02:09 +0200
-Message-ID: <CACRpkdZ1M3ckw+jFgvMqG4jvR-t_44GPoZ6ZDXszwZCJr-cDpg@mail.gmail.com>
-Subject: Re: [rft, PATCH v2 00/36] pinctrl: Clean up and add missed headers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Kent Gibson <warthog618@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Prathamesh Shete <pshete@nvidia.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Haojian Zhuang <haojian.zhuang@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+Hi Siarhei,
 
-> Currently the header inclusion inside the pinctrl headers seems more arbitrary
-> than logical. This series is basically out of two parts:
-> - add missed headers to the pin control drivers / users
-> - clean up the headers of pin control subsystem
->
-> The idea is to have this series to be pulled after -rc1 by the GPIO and
-> pin control subsystems, so all new drivers will utilize cleaned up headers
-> of the pin control.
+Le dim., oct. 16 2022 at 18:01:06 +0300, Siarhei Volkau=20
+<lis8215@gmail.com> a =E9crit :
+> which is close to jz4725b because it is actually a low price
+> successor of the jz4755.
+> It has the same MIPS32r1 core with Xburst(R) extension
+> MXU version 1 release 2.
+>=20
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
 
-Aha I see you want to send a pull request so I backed out the applied patches
-from the series for now.
+This patch doesn't really belong in the CGU patchset. It should go=20
+through the MIPS tree.
 
-Yours,
-Linus Walleij
+I see why you include it, but you do not need to have the MACH_JZ4755=20
+symbol defined anywhere for the "default MACH_JZ4755" to work, it will=20
+just default to false until the patchset that adds JZ4755 support is=20
+merged in the MIPS tree.
+
+Cheers,
+-Paul
+
+> ---
+>  arch/mips/ingenic/Kconfig | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/arch/mips/ingenic/Kconfig b/arch/mips/ingenic/Kconfig
+> index f595b339a..edd84cf13 100644
+> --- a/arch/mips/ingenic/Kconfig
+> +++ b/arch/mips/ingenic/Kconfig
+> @@ -4,6 +4,7 @@ config MACH_INGENIC_GENERIC
+>  	bool
+>  	select MACH_INGENIC
+>  	select MACH_JZ4740
+> +	select MACH_JZ4755
+>  	select MACH_JZ4725B
+>  	select MACH_JZ4770
+>  	select MACH_JZ4780
+> @@ -53,6 +54,10 @@ config MACH_JZ4740
+>  	bool
+>  	select SYS_HAS_CPU_MIPS32_R1
+>=20
+> +config MACH_JZ4755
+> +	bool
+> +	select SYS_HAS_CPU_MIPS32_R1
+> +
+>  config MACH_JZ4770
+>  	bool
+>  	select MIPS_CPU_SCACHE
+> --
+> 2.36.1
+>=20
+
+
