@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB426009F1
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 11:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4024600A7D
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 11:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbiJQJKT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Oct 2022 05:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
+        id S231248AbiJQJYg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Oct 2022 05:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiJQJKS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 05:10:18 -0400
+        with ESMTP id S231345AbiJQJYU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 05:24:20 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AC622288;
-        Mon, 17 Oct 2022 02:10:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F76255AA;
+        Mon, 17 Oct 2022 02:24:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1665997807; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1665998651; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0bJfDcoOH2/Dfhg55MIWlaG3Eyh+d7rLyW2xeWWEQy8=;
-        b=CUek5BrHtkLHGNAQvqkzWSKqxJ7U/UHeNfTUWBi+2KPDpcLQJV2UQMEqP6wpPs5x/wdhv8
-        brK0Z8OAQUfv+oKnBeqFCY7bQL0XyVc8pRZ6M+ZClv4w/ulqmtg5geb87QYDgGcs62k2DR
-        Bet/jnmj2kowe+zsoANpATl4nu1wdwQ=
-Date:   Mon, 17 Oct 2022 10:09:56 +0100
+        bh=2+Aa1ZGaG1IdCtbUXm0XPblHyA7QJhBuGX8d7Rg6xko=;
+        b=HffYdhYeNtgN72GZeUwusVGHud8S3J1/xS+KlEWeijKhmzofMsUmijnlMKA7qm/oHDHtCx
+        U+H6mQOtQsxlw/2uqHPFZxbldSXJaA5ifm5XNArkC6gaQA6CiS/tz0wuyAiq2biv2BQxK/
+        hD+2aj9xGI36sQRrZQVR0J2N9ZNCXRQ=
+Date:   Mon, 17 Oct 2022 10:24:00 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 1/4] MIPS: ingenic: add new machine type MACH_JZ4755
+Subject: Re: [PATCH v2 4/4] clk: Add Ingenic JZ4755 CGU driver
 To:     Siarhei Volkau <lis8215@gmail.com>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -35,10 +35,10 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Message-Id: <K44WJR.2LW3IFMAMTV73@crapouillou.net>
-In-Reply-To: <20221016150110.3020451-2-lis8215@gmail.com>
+Message-Id: <0S4WJR.4KB18PR21S9K1@crapouillou.net>
+In-Reply-To: <20221016150110.3020451-5-lis8215@gmail.com>
 References: <20221016150110.3020451-1-lis8215@gmail.com>
-        <20221016150110.3020451-2-lis8215@gmail.com>
+        <20221016150110.3020451-5-lis8215@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -53,53 +53,423 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Siarhei,
 
-Le dim., oct. 16 2022 at 18:01:06 +0300, Siarhei Volkau=20
+Le dim., oct. 16 2022 at 18:01:09 +0300, Siarhei Volkau=20
 <lis8215@gmail.com> a =E9crit :
-> which is close to jz4725b because it is actually a low price
-> successor of the jz4755.
-> It has the same MIPS32r1 core with Xburst(R) extension
-> MXU version 1 release 2.
+> Add support for the clocks provided by the CGU in the Ingenic JZ4755
+> SoC.
 >=20
 > Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> ---
+>  drivers/clk/ingenic/Kconfig      |  10 +
+>  drivers/clk/ingenic/Makefile     |   1 +
+>  drivers/clk/ingenic/jz4755-cgu.c | 350=20
+> +++++++++++++++++++++++++++++++
+>  3 files changed, 361 insertions(+)
+>  create mode 100644 drivers/clk/ingenic/jz4755-cgu.c
+>=20
+> diff --git a/drivers/clk/ingenic/Kconfig b/drivers/clk/ingenic/Kconfig
+> index 898f1bc47..f80ac4f29 100644
+> --- a/drivers/clk/ingenic/Kconfig
+> +++ b/drivers/clk/ingenic/Kconfig
+> @@ -15,6 +15,16 @@ config INGENIC_CGU_JZ4740
+>=20
+>  	  If building for a JZ4740 SoC, you want to say Y here.
+>=20
+> +config INGENIC_CGU_JZ4755
+> +	bool "Ingenic JZ4755 CGU driver"
+> +	default MACH_JZ4755
+> +	select INGENIC_CGU_COMMON
+> +	help
+> +	  Support the clocks provided by the CGU hardware on Ingenic JZ4755
+> +	  and compatible SoCs.
+> +
+> +	  If building for a JZ4755 SoC, you want to say Y here.
+> +
+>  config INGENIC_CGU_JZ4725B
+>  	bool "Ingenic JZ4725B CGU driver"
+>  	default MACH_JZ4725B
+> diff --git a/drivers/clk/ingenic/Makefile=20
+> b/drivers/clk/ingenic/Makefile
+> index 9edfaf461..81d8e23c2 100644
+> --- a/drivers/clk/ingenic/Makefile
+> +++ b/drivers/clk/ingenic/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  obj-$(CONFIG_INGENIC_CGU_COMMON)	+=3D cgu.o pm.o
+>  obj-$(CONFIG_INGENIC_CGU_JZ4740)	+=3D jz4740-cgu.o
+> +obj-$(CONFIG_INGENIC_CGU_JZ4755)	+=3D jz4755-cgu.o
+>  obj-$(CONFIG_INGENIC_CGU_JZ4725B)	+=3D jz4725b-cgu.o
+>  obj-$(CONFIG_INGENIC_CGU_JZ4760)	+=3D jz4760-cgu.o
+>  obj-$(CONFIG_INGENIC_CGU_JZ4770)	+=3D jz4770-cgu.o
+> diff --git a/drivers/clk/ingenic/jz4755-cgu.c=20
+> b/drivers/clk/ingenic/jz4755-cgu.c
+> new file mode 100644
+> index 000000000..16728546a
+> --- /dev/null
+> +++ b/drivers/clk/ingenic/jz4755-cgu.c
+> @@ -0,0 +1,350 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Ingenic JZ4755 SoC CGU driver
+> + * Heavily based on JZ4725b CGU driver
+> + *
+> + * Copyright (C) 2022 Siarhei Volkau
+> + * Author: Siarhei Volkau <lis8215@gmail.com>
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/delay.h>
+> +#include <linux/of.h>
+> +
+> +#include <dt-bindings/clock/ingenic,jz4755-cgu.h>
+> +
+> +#include "cgu.h"
+> +#include "pm.h"
+> +
+> +/* CGU register offsets */
+> +#define CGU_REG_CPCCR		0x00
+> +#define CGU_REG_LCR		0x04
+> +#define CGU_REG_CPPCR		0x10
+> +#define CGU_REG_CLKGR		0x20
+> +#define CGU_REG_OPCR		0x24
+> +#define CGU_REG_I2SCDR		0x60
+> +#define CGU_REG_LPCDR		0x64
+> +#define CGU_REG_MSCCDR		0x68
+> +#define CGU_REG_SSICDR		0x74
+> +#define CGU_REG_CIMCDR		0x7C
+> +
+> +/* bits within the LCR register */
+> +#define LCR_SLEEP		BIT(0)
+> +
+> +static struct ingenic_cgu *cgu;
+> +
+> +static const s8 pll_od_encoding[4] =3D {
+> +	0x0, 0x1, -1, 0x3,
+> +};
+> +
+> +static const u8 jz4755_cgu_cpccr_div_table[] =3D {
+> +	1, 2, 3, 4, 6, 8,
+> +};
+> +
+> +static const u8 jz4755_cgu_pll_half_div_table[] =3D {
+> +	2, 1,
+> +};
+> +
+> +static const struct ingenic_cgu_clk_info jz4755_cgu_clocks[] =3D {
+> +
+> +	/* External clocks */
+> +
+> +	[JZ4755_CLK_EXT] =3D { "ext", CGU_CLK_EXT },
+> +	[JZ4755_CLK_OSC32K] =3D { "osc32k", CGU_CLK_EXT },
+> +
+> +	[JZ4755_CLK_PLL] =3D {
+> +		"pll", CGU_CLK_PLL,
+> +		.parents =3D { JZ4755_CLK_EXT, -1, -1, -1 },
+> +		.pll =3D {
+> +			.reg =3D CGU_REG_CPPCR,
+> +			.rate_multiplier =3D 1,
+> +			.m_shift =3D 23,
+> +			.m_bits =3D 9,
+> +			.m_offset =3D 2,
+> +			.n_shift =3D 18,
+> +			.n_bits =3D 5,
+> +			.n_offset =3D 2,
+> +			.od_shift =3D 16,
+> +			.od_bits =3D 2,
+> +			.od_max =3D 4,
+> +			.od_encoding =3D pll_od_encoding,
+> +			.stable_bit =3D 10,
+> +			.bypass_reg =3D CGU_REG_CPPCR,
+> +			.bypass_bit =3D 9,
+> +			.enable_bit =3D 8,
+> +		},
+> +	},
+> +
+> +	/* Muxes & dividers */
+> +
+> +	[JZ4755_CLK_PLL_HALF] =3D {
+> +		"pll half", CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
+> +		.div =3D {
+> +			CGU_REG_CPCCR, 21, 1, 1, -1, -1, -1, 0,
+> +			jz4755_cgu_pll_half_div_table,
+> +		},
+> +	},
+> +
+> +	[JZ4755_CLK_EXT_HALF] =3D {
+> +		"ext half", CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_EXT, -1, -1, -1 },
+> +		.div =3D {
+> +			CGU_REG_CPCCR, 30, 1, 1, -1, -1, -1, 0,
+> +			NULL,
+> +		},
+> +	},
+> +
+> +	[JZ4755_CLK_CCLK] =3D {
+> +		"cclk", CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
+> +		.div =3D {
+> +			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
+> +			jz4755_cgu_cpccr_div_table,
+> +		},
+> +	},
+> +
+> +	[JZ4755_CLK_H0CLK] =3D {
+> +		"hclk", CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
+> +		.div =3D {
+> +			CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1, 0,
+> +			jz4755_cgu_cpccr_div_table,
+> +		},
+> +	},
+> +
+> +	[JZ4755_CLK_PCLK] =3D {
+> +		"pclk", CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
+> +		.div =3D {
+> +			CGU_REG_CPCCR, 8, 1, 4, 22, -1, -1, 0,
+> +			jz4755_cgu_cpccr_div_table,
+> +		},
+> +	},
+> +
+> +	[JZ4755_CLK_MCLK] =3D {
+> +		"mclk", CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
+> +		.div =3D {
+> +			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
+> +			jz4755_cgu_cpccr_div_table,
+> +		},
+> +	},
+> +
+> +	[JZ4755_CLK_H1CLK] =3D {
+> +		"h1clk", CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
+> +		.div =3D {
+> +			CGU_REG_CPCCR, 16, 1, 4, 22, -1, -1, 0,
+> +			jz4755_cgu_cpccr_div_table,
+> +		},
+> +	},
+> +
+> +	[JZ4755_CLK_UDC] =3D {
+> +		"udc", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, -1, -1 },
+> +		.mux =3D { CGU_REG_CPCCR, 29, 1 },
+> +		.div =3D { CGU_REG_CPCCR, 23, 1, 6, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 10 },
+> +	},
+> +
+> +	[JZ4755_CLK_LCD] =3D {
+> +		"lcd", CGU_CLK_DIV | CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_PLL_HALF, -1, -1, -1 },
+> +		.div =3D { CGU_REG_LPCDR, 0, 1, 11, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 9 },
+> +	},
+> +
+> +	[JZ4755_CLK_MMC] =3D {
+> +		"mmc", CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_PLL_HALF, -1, -1, -1 },
+> +		.div =3D { CGU_REG_MSCCDR, 0, 1, 5, -1, -1, -1 },
+> +	},
+> +
+> +	[JZ4755_CLK_I2S] =3D {
+> +		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, -1, -1 },
+> +		.mux =3D { CGU_REG_CPCCR, 31, 1 },
+> +		.div =3D { CGU_REG_I2SCDR, 0, 1, 9, -1, -1, -1 },
+> +	},
+> +
+> +	[JZ4755_CLK_SPI] =3D {
+> +		"spi", CGU_CLK_DIV | CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_PLL_HALF, -1, -1, -1 },
+> +		.div =3D { CGU_REG_SSICDR, 0, 1, 4, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 4 },
+> +	},
+> +
+> +	[JZ4755_CLK_TVE] =3D {
+> +		"tve", CGU_CLK_MUX | CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_LCD, JZ4755_CLK_EXT, -1, -1 },
+> +		.mux =3D { CGU_REG_LPCDR, 31, 1 },
+> +		.gate =3D { CGU_REG_CLKGR, 18 },
+> +	},
+> +
+> +	[JZ4755_CLK_RTC] =3D {
+> +		"rtc", CGU_CLK_MUX | CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT512, JZ4755_CLK_OSC32K, -1, -1 },
+> +		.mux =3D { CGU_REG_OPCR, 2, 1},
+> +		.gate =3D { CGU_REG_CLKGR, 2 },
+> +	},
+> +
+> +	[JZ4755_CLK_CIM] =3D {
+> +		"cim", CGU_CLK_DIV | CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_PLL_HALF, -1, -1, -1 },
+> +		.div =3D { CGU_REG_CIMCDR, 0, 1, 8, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 8 },
+> +	},
+> +
+> +	/* Gate-only clocks */
+> +
+> +	[JZ4755_CLK_UART0] =3D {
+> +		"uart0", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 0 },
+> +	},
+> +
+> +	[JZ4755_CLK_UART1] =3D {
+> +		"uart1", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 14 },
+> +	},
+> +
+> +	[JZ4755_CLK_UART2] =3D {
+> +		"uart2", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 15 },
+> +	},
+> +
+> +	[JZ4755_CLK_ADC] =3D {
+> +		"adc", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 7 },
+> +	},
+> +
+> +	[JZ4755_CLK_AIC] =3D {
+> +		"aic", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_I2S, -1, -1, -1 },
 
-This patch doesn't really belong in the CGU patchset. It should go=20
-through the MIPS tree.
+Wrong parent here, should be JZ4755_CLK_EXT_HALF.
 
-I see why you include it, but you do not need to have the MACH_JZ4755=20
-symbol defined anywhere for the "default MACH_JZ4755" to work, it will=20
-just default to false until the patchset that adds JZ4755 support is=20
-merged in the MIPS tree.
+> +		.gate =3D { CGU_REG_CLKGR, 5 },
+> +	},
+> +
+> +	[JZ4755_CLK_I2C] =3D {
+> +		"i2c", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 3 },
+> +	},
+> +
+> +	[JZ4755_CLK_BCH] =3D {
+> +		"bch", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_MCLK/* not sure */, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 11 },
+> +	},
+> +
+> +	[JZ4755_CLK_TCU] =3D {
+> +		"tcu", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 1 },
+> +	},
+> +
+> +	[JZ4755_CLK_DMA] =3D {
+> +		"dma", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_PCLK, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 12 },
+> +	},
+> +
+> +	[JZ4755_CLK_MMC0] =3D {
+> +		"mmc0", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_MMC, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 6 },
+> +	},
+> +
+> +	[JZ4755_CLK_MMC1] =3D {
+> +		"mmc1", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_MMC, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 16 },
+> +	},
+> +
+> +	[JZ4755_CLK_AUX_CPU] =3D {
+> +		"aux_cpu", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 24 },
+> +	},
+> +
+> +	[JZ4755_CLK_AHB1] =3D {
+> +		"ahb1", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 23 },
+> +	},
+> +
+> +	[JZ4755_CLK_IDCT] =3D {
+> +		"idct", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 22 },
+> +	},
+> +
+> +	[JZ4755_CLK_DB] =3D {
+> +		"db", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 21 },
+> +	},
+> +
+> +	[JZ4755_CLK_ME] =3D {
+> +		"me", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 20 },
+> +	},
+> +
+> +	[JZ4755_CLK_MC] =3D {
+> +		"mc", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 19 },
+> +	},
+> +
+> +	[JZ4755_CLK_TSSI] =3D {
+> +		"tssi", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF/* not sure */, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 17 },
+> +	},
+> +
+> +	[JZ4755_CLK_IPU] =3D {
+> +		"ipu", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_PLL_HALF/* not sure */, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_CLKGR, 13 },
+> +	},
+> +
+> +	[JZ4755_CLK_EXT512] =3D {
+> +		"ext/512", CGU_CLK_FIXDIV,
+> +		.parents =3D { JZ4755_CLK_EXT },
+> +
+> +		/* JZ4725b doc calls it EXT512, but it seems to be /256...
+> +		 * Not sure if it applied to JZ4755 too, and which actual
+> +		 * source is used EXT or EXT_HALF
+> +		 */
+
+Well it would be good to know. It's easy to verify though. Parent the=20
+watchdog clock to EXT/512, configure it for e.g. 5 seconds, if it shuts=20
+down in 10 seconds, it's a /256 divider.
 
 Cheers,
 -Paul
 
-> ---
->  arch/mips/ingenic/Kconfig | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/arch/mips/ingenic/Kconfig b/arch/mips/ingenic/Kconfig
-> index f595b339a..edd84cf13 100644
-> --- a/arch/mips/ingenic/Kconfig
-> +++ b/arch/mips/ingenic/Kconfig
-> @@ -4,6 +4,7 @@ config MACH_INGENIC_GENERIC
->  	bool
->  	select MACH_INGENIC
->  	select MACH_JZ4740
-> +	select MACH_JZ4755
->  	select MACH_JZ4725B
->  	select MACH_JZ4770
->  	select MACH_JZ4780
-> @@ -53,6 +54,10 @@ config MACH_JZ4740
->  	bool
->  	select SYS_HAS_CPU_MIPS32_R1
->=20
-> +config MACH_JZ4755
-> +	bool
-> +	select SYS_HAS_CPU_MIPS32_R1
+> +		.fixdiv =3D { 256 },
+> +	},
 > +
->  config MACH_JZ4770
->  	bool
->  	select MIPS_CPU_SCACHE
+> +	[JZ4755_CLK_UDC_PHY] =3D {
+> +		"udc_phy", CGU_CLK_GATE,
+> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
+> +		.gate =3D { CGU_REG_OPCR, 6, true },
+> +	},
+> +};
+> +
+> +static void __init jz4755_cgu_init(struct device_node *np)
+> +{
+> +	int retval;
+> +
+> +	cgu =3D ingenic_cgu_new(jz4755_cgu_clocks,
+> +			      ARRAY_SIZE(jz4755_cgu_clocks), np);
+> +	if (!cgu) {
+> +		pr_err("%s: failed to initialise CGU\n", __func__);
+> +		return;
+> +	}
+> +
+> +	retval =3D ingenic_cgu_register_clocks(cgu);
+> +	if (retval)
+> +		pr_err("%s: failed to register CGU Clocks\n", __func__);
+> +
+> +	ingenic_cgu_register_syscore_ops(cgu);
+> +}
+> +CLK_OF_DECLARE_DRIVER(jz4755_cgu, "ingenic,jz4755-cgu",=20
+> jz4755_cgu_init);
 > --
 > 2.36.1
 >=20
