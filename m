@@ -2,174 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2A3600AF2
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 11:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DAB600B7E
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 11:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiJQJf5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Oct 2022 05:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S231534AbiJQJrf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Oct 2022 05:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiJQJfo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 05:35:44 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7402C5C362
-        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 02:35:32 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id a66so5076593vkc.3
-        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 02:35:32 -0700 (PDT)
+        with ESMTP id S231539AbiJQJrU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 05:47:20 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6555E32A
+        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 02:47:05 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j7so17606937wrr.3
+        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 02:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/piL+Cl5bNZ+cdgdtRq8tdPhqA168X72rjKGIcj1h4=;
-        b=frJwpnQ1m5aYZphVeeBe7Gk3obDQDvbUlm04wfHh9QiSL/PMF9tB/Oqsh+0kEGhfNO
-         IO0xDniqeVyzfdD+JQ/zRq4D21vh7ik7Um8ee3cn8CBCOToSaQ1ZGpd/a2Gve9yyVF34
-         ITfWo51grHozApCr0PrB6Bwe0SOYlzp6onCsTl/dTI9MCc6vgY4Nu541uAo++YYBs5A4
-         a0vKPtblJ4z5wLnNbmGOx+MINPdJQQEqi1diMlwjfz7XnWKZTtJr/JKwgIM6sTm2WKvz
-         GFI/MxIIypmMB3ZgmlItW4/UaPbdgeUgb5Ga5LgkDThgRnOzk/BQFLxn/5jf7fmdM9uK
-         /Naw==
+        bh=m28MxXGYXT4qGN7nik464yL/UhJ82SzVaHoLGkQoTpw=;
+        b=pSF9QYPlsSgNQPRR9XdOhQ9tHnI5i7mpZjMTTlvUq8/jBVi240La3CiktdZ9cpYnbg
+         3gzgPCO57wDjxjV7KwmmBFQaXqWqjRqzXTrCgvh8wcmDIVE8Auov0FvGOGYsRXNhpQuR
+         v0uxqa/yDBhbsp7XhTBM5WkFr41VnSeB1B2KgRUcNxVTYYngf4c2n+TJnNslKA3qbycQ
+         3Mg/Pn05b14TDYhsHc6vl/ddFRe80qxr2PLv4DhzicBjcB9Y4NURWiXK++bV44Pf+VSK
+         HuYAflUusNFJlXHC9YSfpGVok3c6YUgICIPANvYBQ/qXi+g9MokQq0B+0qEWWxPhKkC5
+         GQGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E/piL+Cl5bNZ+cdgdtRq8tdPhqA168X72rjKGIcj1h4=;
-        b=HZuehBhSOb4yjtzYFbB/3HGWcYTENLNtJCrL1WeSOOw3RGBvvH4TkINHc0sByCkxV4
-         eAMZsXUhnzSSTrSrtf5MGdZYbbN4zmIhXtU5QQKIOHi2lL1Bzsg8nzArN1WEwQv/25vZ
-         8+ZCKwLCJSIpPZqINqAa0WsAiZuYwJ5C4v9Q0ObKw9cJFX9sx/9l6nOyxw/IYkFqOpHD
-         IQkYVfs8L3wIVZnsRVsXEYHxJ7zZyU21pJC03FEW6dtU2z6uypF0wi0/29DbtD/QQKF3
-         Isv68TcTBrLq1jIVa6hEy2IeyyKHmKxKx3hGykdr2V56iqOpdVtIG/jdCmLPjfeZ/kbD
-         uZcg==
-X-Gm-Message-State: ACrzQf0uGM5B2RfpomtBVj51KLkLV4n7fJAurN4ZiaRReqRCsymN9oJ+
-        DIwjii6ibymFakr5FsjLQsDpXstk+pt8JtN5ta7wMQ==
-X-Google-Smtp-Source: AMsMyM6Q6nrL8lOCi83NdWMY6wKW/FytxI2676zCB6+Z2xX8cVC67C12vEdkRnmssQAcscBm4uxHwhyfQkZ6/acn8wI=
-X-Received: by 2002:a1f:4843:0:b0:3ae:c4a3:d653 with SMTP id
- v64-20020a1f4843000000b003aec4a3d653mr3536302vka.1.1665999328063; Mon, 17 Oct
- 2022 02:35:28 -0700 (PDT)
+        bh=m28MxXGYXT4qGN7nik464yL/UhJ82SzVaHoLGkQoTpw=;
+        b=C/WoY/+dcLbATzxi9//64vQQfFnhUPPLshajEZ8x88cl+dKVlnZLZE+4zze5i6dnUU
+         +YdmBUlJDwldZeJPOqQNZK3EaNgRijFajGq+UERaoOlKlagajQbjedNGiV2DQprvj9D/
+         AMiIaKEfvcFFl4A8Ee2LmohSL17l4DpFKl56+JXIheSyEC8wqkaLw5iTYQ1enojENZPE
+         S0NwLRvkzA4EJLbenC3/E3QxQ7/OMM6YQjeA2SozQFT0aXO2jMJq5ncnAPU3B2XhTf3E
+         cYc6eaSARI/KQtaC2Oj7odd3WfBsdWXWqpRFPEHrbpBxw7a4Zt1wMxZfUbA4nQstVoRx
+         1m6A==
+X-Gm-Message-State: ACrzQf2ZpkOu9wPhh/9+XeUjAVdLbwgL2lFQYcik9XSmvq+PqlnzLH+b
+        v9lsR5XPQpvl3GpANyJD/JzczmXJIlanmeki2p4jeI9TT9o=
+X-Google-Smtp-Source: AMsMyM4CGBR28SSkgO6sUfPaGHahhe5lagnYKp+a4Qpc5atANtQAtfZFWQQpanlTqBVMnG93twfz3+YjvG8BYu9pwjI=
+X-Received: by 2002:a17:906:5d04:b0:77f:ca9f:33d1 with SMTP id
+ g4-20020a1709065d0400b0077fca9f33d1mr8038485ejt.526.1666000007686; Mon, 17
+ Oct 2022 02:46:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-2-andriy.shevchenko@linux.intel.com> <CACRpkdbdzFR-a_xh8EjLMAshTeesOYhD3-_Bkc=vi7iK72ZKtA@mail.gmail.com>
-In-Reply-To: <CACRpkdbdzFR-a_xh8EjLMAshTeesOYhD3-_Bkc=vi7iK72ZKtA@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 17 Oct 2022 11:35:16 +0200
-Message-ID: <CAMRc=MexjuQw+hUDDfCVxiBEJ573jNb3Ko9SyOU-xJ03wOe8cQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/36] gpiolib: tegra186: Add missed header(s)
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Kent Gibson <warthog618@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Prathamesh Shete <pshete@nvidia.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
+References: <20221009181338.2896660-1-lis8215@gmail.com> <20221009181338.2896660-6-lis8215@gmail.com>
+In-Reply-To: <20221009181338.2896660-6-lis8215@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 17 Oct 2022 11:46:36 +0200
+Message-ID: <CACRpkdZL9qWPaoRhCt3h8m1it9DaoS3TJrxPHVOzGZWhL45PNw@mail.gmail.com>
+Subject: Re: [PATCH 5/8] pinctrl: ingenic: JZ4755 minor bug fixes
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Paul Cercueil <paul@crapouillou.net>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Haojian Zhuang <haojian.zhuang@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 10:52 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
->
-> > Do not imply that some of the generic headers may be always included.
-> > Instead, include explicitly what we are direct user of.
-> >
-> > While at it, sort headers alphabetically.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> Yours,
-> Linus Walleij
+On Sun, Oct 9, 2022 at 8:14 PM Siarhei Volkau <lis8215@gmail.com> wrote:
 
-Andy: are you going to send it together with the corresponding pinctrl
-changes in a separate PR?
+> Fixes UART1 function bits and mmc groups typo.
+>
+> For pins 0x97,0x99 function 0 is designated to PWM3/PWM5
+> respectively, function is 1 designated to the UART1.
+>
+> Tested-by: Siarhei Volkau <lis8215@gmail.com>
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
 
-Bart
+This patch applied for fixes.
+
+Yours,
+Linus Walleij
