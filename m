@@ -2,127 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794686012B1
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 17:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C8F6013AD
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 18:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJQP0I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Oct 2022 11:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
+        id S229793AbiJQQlL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Oct 2022 12:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJQP0H (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 11:26:07 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0724B37191
-        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 08:26:02 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:bdc5:2f22:6678:ef3])
-        by andre.telenet-ops.be with bizsmtp
-        id Z3Rx2800j0MC6vi013RxB9; Mon, 17 Oct 2022 17:26:00 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1okS00-0002Vj-S9; Mon, 17 Oct 2022 17:25:52 +0200
-Date:   Mon, 17 Oct 2022 17:25:52 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     D Scott Phillips <scott@os.amperecomputing.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-arm-kernel@lists.infradead.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-um@lists.infradead.org, linux-rdma@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
-        sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: Build regressions/improvements in v6.1-rc1
-In-Reply-To: <20221017145157.1866351-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2210171653540.9136@ramsan.of.borg>
-References: <20221017145157.1866351-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S229728AbiJQQlK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 12:41:10 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4871B11A28;
+        Mon, 17 Oct 2022 09:41:09 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id e15so9558679iof.2;
+        Mon, 17 Oct 2022 09:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DamKCJLW3tTsBfqwD9kkmTLCFeiTbmAoAgz1S7Xzwdg=;
+        b=Qws+pPvptHePuA+pLf2zNgfIGhd+UWEUmyc8kUih72SDW79Mxp6WWHvQozTh/kzdot
+         4od3cmUCxn5kimNpXZWMJ1gGczdITAKjJlW6g/j3uPMUCnwJT4xnUbSrVRwN0aHRt/MM
+         JTosRObKCJVAno5bV2sKPQIjih4lf8BaBLl7ZskzQd62inc117lcV83IETPjKog4KAYa
+         LZWTm2uY+XnZXWTXUtbLCD4QuQbn6j7pRzU6ugwaydKGbtf/S5h1gFxjIZ1oMRlnmYXG
+         DSW5ThxGzwM5AmYdyIhb4g0f88brQqK/UnznImvNZUuwo7mbbJ7CthZVqjoF6LpkXiXN
+         0jmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DamKCJLW3tTsBfqwD9kkmTLCFeiTbmAoAgz1S7Xzwdg=;
+        b=wGi4OCULD5GaQMC7wfX9QoLyCCHj6B5IexBXx0KGX1krc/va+sQXi0FeccYxi/T439
+         RJkK8oEKSG7j8xnWj7X2Ghdk+8AYg2qy9PQFpO1gSRqtI9ldNnZEC5eTaYFRpBoqfXgH
+         QQ67UIeqMzNhCJEM69yzk94ViB2VCUDnseTPHZoObw2Usww3bHZVnvxeVTUPGKTDT5vk
+         w3K2J4nIAmBqXh94A6RdjvgXNpBHuVXZzEdpg8z0QJEKBz/uM4QeVjBeazMhCyLT48fg
+         RrVXOBgxTqpivuffgXKHjJRfrzJSlJ7xEMXYeri9ww14wFSjWRf2cpl7EYDp0sNiz3Qw
+         fKJw==
+X-Gm-Message-State: ACrzQf3tbeOOPRUHjk7b2FiD+h4R0rmVX/095xVJ0e+mQ63qRQNfvG79
+        awdlLPikg1xqkZN9l/m4xM5mk8w7JvaChMfrA5dGyycbCI3wvAyi
+X-Google-Smtp-Source: AMsMyM5s0ew/RC0GUG4fMHPyD21cXwutfLOdm5rcHDG4Bc8YDkiqY0racuaH+pRMKltAuJL0QtBdRiRuB59ixhpuuUM=
+X-Received: by 2002:a05:6638:3c45:b0:363:afb2:3269 with SMTP id
+ bg5-20020a0566383c4500b00363afb23269mr5546294jab.215.1666024868675; Mon, 17
+ Oct 2022 09:41:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221016150110.3020451-1-lis8215@gmail.com> <20221016150110.3020451-2-lis8215@gmail.com>
+ <K44WJR.2LW3IFMAMTV73@crapouillou.net>
+In-Reply-To: <K44WJR.2LW3IFMAMTV73@crapouillou.net>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Mon, 17 Oct 2022 19:40:57 +0300
+Message-ID: <CAKNVLfax=BGULaq62tSGyVOkR8vC5yvd71ovPHxq4zJqykoKrA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] MIPS: ingenic: add new machine type MACH_JZ4755
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 17 Oct 2022, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v6.1-rc1[1] compared to v6.0[2].
->
-> Summarized:
->  - build errors: +25/-13
+=D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:10, Paul Cercue=
+il <paul@crapouillou.net>:
+> I see why you include it, but you do not need to have the MACH_JZ4755
+> symbol defined anywhere for the "default MACH_JZ4755" to work, it will
+> just default to false until the patchset that adds JZ4755 support is
+> merged in the MIPS tree.
 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9abf2313adc1ca1b6180c508c25f22f9395cc780/ (all 149 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4fe89d07dcc2804c8b562f6c7896a45643d34b2f/ (135 out of 149 configs)
->
->
-> *** ERRORS ***
->
-> 25 error regressions:
->  + /kisskb/src/arch/arm64/include/asm/cputype.h: error: initializer element is not constant:  => 44:2
-
-arm64-gcc5/arm64-allmodconfig (arch/arm64/kernel/proton-pack.c:872)
-
->  + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer:  => 94:18
->  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]:  => 1934:1
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function):  => 149:37
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor':  => 149:22
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]:  => 150:1
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size':  => 88:22
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]:  => 89:1
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]:  => 100:2
-
-um-x86_64/um-all{mod,yes}config
-
->  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: error: array subscript is above array bounds [-Werror=array-bounds]:  => 531:55
-
-arm64-gcc5/arm64-allmodconfig
-mipsel-gcc5/mips-allmodconfig
-powerpc-gcc5/powerpc-all{mod,yes}config
-powerpc-gcc5/ppc32_allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-powerpc-gcc5/ppc64le_allmodconfig
-sparc64-gcc5/sparc64-allmodconfig
-
->  + error: modpost: "ebus_dma_enable" [drivers/parport/parport_pc.ko] undefined!:  => N/A
->  + error: modpost: "ebus_dma_irq_enable" [drivers/parport/parport_pc.ko] undefined!:  => N/A
->  + error: modpost: "ebus_dma_prepare" [drivers/parport/parport_pc.ko] undefined!:  => N/A
->  + error: modpost: "ebus_dma_register" [drivers/parport/parport_pc.ko] undefined!:  => N/A
->  + error: modpost: "ebus_dma_request" [drivers/parport/parport_pc.ko] undefined!:  => N/A
->  + error: modpost: "ebus_dma_residue" [drivers/parport/parport_pc.ko] undefined!:  => N/A
->  + error: modpost: "ebus_dma_unregister" [drivers/parport/parport_pc.ko] undefined!:  => N/A
->  + error: modpost: "ns87303_lock" [drivers/parport/parport_pc.ko] undefined!:  => N/A
-
-sparc64-gcc5/sparc-allmodconfig
-
->  + error: modpost: "riscv_cbom_block_size" [arch/riscv/kvm/kvm.ko] undefined!:  => N/A
-
-riscv-gcc11/riscv-defconfig
-riscv-gcc11/rv32_defconfig
-
->  + {standard input}: Error: branch to a symbol in another ISA mode: 1339 => 2616, 2621
-
-mips-gcc11/micro32r2_defconfig
-mips-gcc11/micro32r2el_defconfig
-
->  + {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field:  => 2286
->  + {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field :  => 2302
->  + {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field :  => 2213
->  + {standard input}: Error: pcrel too far:  => 2247, 2261, 2232, 2231, 2262, 2216, 2204, 2248, 2274, 2293, 2217, 2206, 2221, 2229, 2209, 2249, 2259, 2215
->  + {standard input}: Error: unknown pseudo-op: `.l':  => 2305
-
-sh4-gcc11/sh-all{mod,yes}config (ICE in drivers/net/pcs/pcs-xpcs.o)
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+Thank you for the clarification, Paul.
+Will be done in the next version.
