@@ -2,104 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8206600673
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 07:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CF0600954
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Oct 2022 10:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiJQFxP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Oct 2022 01:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
+        id S230295AbiJQIxS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Oct 2022 04:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiJQFxO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 01:53:14 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82195558CE;
-        Sun, 16 Oct 2022 22:53:13 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id x188so11076353oig.5;
-        Sun, 16 Oct 2022 22:53:13 -0700 (PDT)
+        with ESMTP id S230407AbiJQIxC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Oct 2022 04:53:02 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74950044
+        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 01:52:37 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id r17so23274850eja.7
+        for <linux-mips@vger.kernel.org>; Mon, 17 Oct 2022 01:52:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xWNfHd4i/v2f1YfiedY7zdTGAJQwot1bMLFbJR4ZDto=;
-        b=hRDzu2lKXJClbncKEXbsYEUqxvFOZ67krtdLOITTDdxP4v16CqTvOLs2aWjchRSpyF
-         67pbMW9F3QJ787pHHFXxQSBATM1LHge8Xv9inqoMC+ZKu2dWEaqIO0ps6IYeoo18vXMh
-         6mTfSLjmHHZpQT2fP62Vxd7aUaR28o34UOoRPcIOOEgZL0Yk5owu+MMzsv49GkxCNkmD
-         +SC7JKFXt8JW1zW4fegWX+K500furv9HVuOmfFMUo8clS4s+yx70hHobXctVFRAVeGGn
-         KQqDuumM1s9GGTe/0T9QaAX/70ElwG3eTAANkP+QbIMCycDp+A3v10wqfnqOuX1jDeP8
-         ZO1Q==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RSHN6l2+g+4OGMRyyb272PZL53GFhvSEXhliSYcOFd8=;
+        b=X6igH+Jie1S0VzS+zWZR6N7qO4+ZzW3su1dA/ypmDVJf0+sLibI/eRdvYybkZNB8Fx
+         tRph14UQHSGL+gvGfpqalTHJJwJDMkweJLXyu+ihhEn44rt6Z1pH1cskikX2WSNqbaZC
+         eShz98OUWT/q7B0kNz7WoRHxGEoZ5MnMFQ5RxlSov34h3ToWZQ8qMXG0lZb28Bu3LY9e
+         vVssMEHBwniESvUS5h1nw5HmNA8myx5ybU2ZB6tz1y8UFYLXqoJHtbIT5KwF4Z3nG1wB
+         hZ6XEUAiFUtt4VlyKNAroIKcIhJkuwaxi7YNrvbPMud5aqref871a8W8oOBGPBf0anja
+         e9gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xWNfHd4i/v2f1YfiedY7zdTGAJQwot1bMLFbJR4ZDto=;
-        b=zLv8OAWeOBpRIRsbv2odWvM4xllQ3/Lc7yC82BgBy1rohevBOQrR/Mz4ek/DcZwnvX
-         lPY5dcxAKXxzOqrA/StIx4lB9JWeZ0nb+tyFLI6xSqjjLiMeu4Ncv8ClqJPZk8nJH6Sa
-         yX5XCoBIos6L/MA5s8RLLLH9+sZNvg1vjHEHlntNpBsXhUkT7oeL78ID2mlGgsk/g5Kr
-         ERVFm4FVCCtub6lazSWU5vwF/8XWn5Ikp+mjSHaKfyzhHs2ojJofQ8m09shWxenbW1ls
-         M+/s5sL02DQnM9N+7qy3ocSRTDUnT2MDDrmUP63klPUXBfGUYtP1xBviKhh+sHGv/Ps1
-         I+kg==
-X-Gm-Message-State: ACrzQf2fDibU4RqSZODoRgyvubdC5xsn+DGC69q+R3D4JBXyXCYFii6p
-        Ulgrrlp/N51LkDnLNVoUTKhKVE+HQyyUSbS09/4=
-X-Google-Smtp-Source: AMsMyM5FdpuO4qcYyeL+5khQ8rOINRTcFy6ilKl251+iJJMeEWcQ01DBtOHPeFboClvv5O/D55T2x7Izoho1Ud5n8OQ=
-X-Received: by 2002:a05:6808:1304:b0:354:b62f:a027 with SMTP id
- y4-20020a056808130400b00354b62fa027mr4089325oiv.144.1665985992894; Sun, 16
- Oct 2022 22:53:12 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RSHN6l2+g+4OGMRyyb272PZL53GFhvSEXhliSYcOFd8=;
+        b=FJxZh6LeSsXckpsPxKotM/dmHzWlcXPXWHThVIdfCbgr7XXs8UEGWaiYSjtwtWovIa
+         y9McQzY3yMJGYd57vyuSKz/uUgOqlQtXdDy+Dmy6KoEYxtRkTq6JEQWTA9jSXuYhixbJ
+         3o75Ddf2RvvRio2OU43KomswOBn/94R3DT+B/4lR8Btic3T1ywxqYPpdFT3Cm1Pov8Zt
+         tbiA5p7ErD70ar70a5kYXQ7xp+pf1BKC4obB5qkjcJJmgkhxIjLL61T48NsnSuPLAw2N
+         PtFCYa+Z/ZmiC13hpZ/YpKXAO3tAPy5KiEswf14HjPbTkinlNKUudnWvyNfPJ+NxNv+E
+         nldA==
+X-Gm-Message-State: ACrzQf1NPr7rFoOq52qepVrr1kDL7QEGo1MlL27EsbTCl8aCOD9P+qVu
+        41EKFcP1mmhXDju5zWxvIPODy9bS6RKxXYeY1M2G2A==
+X-Google-Smtp-Source: AMsMyM4xXsX24thv22hzdvInSfyg/7yTP/iUIEUiXEmAdaX/1vHBYb0+Be/bfRhSQyyTc1ooPZanlVL4emxNWtmN+mY=
+X-Received: by 2002:a17:907:a06b:b0:78d:d25f:b726 with SMTP id
+ ia11-20020a170907a06b00b0078dd25fb726mr7837040ejc.203.1665996755146; Mon, 17
+ Oct 2022 01:52:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221006042945.1038594-1-sergio.paracuellos@gmail.com>
- <20221006042945.1038594-2-sergio.paracuellos@gmail.com> <615c8c6d-3eab-0474-2c2c-6442052c0eee@fungible.com>
-In-Reply-To: <615c8c6d-3eab-0474-2c2c-6442052c0eee@fungible.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 17 Oct 2022 07:53:00 +0200
-Message-ID: <CAMhs-H8tMP-TyH9dBeO5dGe8spu3h6571-Zeo=_Xshh04x+w1g@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] dt-bindings: mips: add CPU bindings for MIPS architecture
-To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@fungible.com>
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, hauke@hauke-m.de,
-        zajec5@gmail.com, tsbogend@alpha.franken.de,
-        zhouyanjie@wanyeetech.com, linux-mips@vger.kernel.org,
-        arinc.unal@arinc9.com, f.fainelli@gmail.com,
-        Rob Herring <robh@kernel.org>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221010201453.77401-2-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 17 Oct 2022 10:52:24 +0200
+Message-ID: <CACRpkdbdzFR-a_xh8EjLMAshTeesOYhD3-_Bkc=vi7iK72ZKtA@mail.gmail.com>
+Subject: Re: [PATCH v2 01/36] gpiolib: tegra186: Add missed header(s)
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kent Gibson <warthog618@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Haojian Zhuang <haojian.zhuang@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 1:24 PM Philippe Mathieu-Daud=C3=A9
-<philmd@fungible.com> wrote:
+On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+
+> Do not imply that some of the generic headers may be always included.
+> Instead, include explicitly what we are direct user of.
 >
-> On 6/10/22 06:29, Sergio Paracuellos wrote:
-> > Add the yaml binding for available CPUs in MIPS architecture.
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >   .../bindings/mips/brcm/brcm,bmips.txt         |   8 --
-> >   .../devicetree/bindings/mips/cpus.yaml        | 115 +++++++++++++++++=
-+
-> >   .../bindings/mips/ingenic/ingenic,cpu.yaml    |  69 -----------
-> >   3 files changed, 115 insertions(+), 77 deletions(-)
-> >   delete mode 100644 Documentation/devicetree/bindings/mips/brcm/brcm,b=
-mips.txt
-> >   create mode 100644 Documentation/devicetree/bindings/mips/cpus.yaml
-> >   delete mode 100644 Documentation/devicetree/bindings/mips/ingenic/ing=
-enic,cpu.yaml
+> While at it, sort headers alphabetically.
 >
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@fungible.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Thomas, are this series going through your tree?
-
-Thanks in advance for clarification.
-
-Best regards,
-    Sergio Paracuellos
+Yours,
+Linus Walleij
