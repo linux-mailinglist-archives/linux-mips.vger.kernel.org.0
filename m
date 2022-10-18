@@ -2,154 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE563602CF4
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Oct 2022 15:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A417602CFC
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Oct 2022 15:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJRN3L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Oct 2022 09:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S229975AbiJRNbM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Oct 2022 09:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiJRN3F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Oct 2022 09:29:05 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1895F214
-        for <linux-mips@vger.kernel.org>; Tue, 18 Oct 2022 06:29:04 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j16so23468621wrh.5
-        for <linux-mips@vger.kernel.org>; Tue, 18 Oct 2022 06:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wcJzlEsI0Q0Zkw3UiSk1AeQ+ZeMU0Uy0FowbXkpqvqY=;
-        b=eEqeweMgoAha2gA3agmhPrwheBhBw4LuItboa3KIkd3futKzMLro4OSFn/+GsHoO2q
-         1g0UsVLbq6G7LYgkvrjjF0/aK9i1HtM2ftwQjwVtT+HxYmYOQu0iXWkYvn5R2pCAGqs4
-         s9cqF+SV17FECoYNEG3BbIsBfCDRYocVPcCDrmyfVwRyAV9hx0spYE9DLW1VgzgBS4tr
-         UbQ3nKR9UHhV4a0DtNBqTW1c7Zei2Dx2gjoyD+xI5pcx7YWlyHGRsdGlvYb4iC3lrx8I
-         5fNhFiugt5kE/2K8pSWMOmRr7GxD0aGVofbLzCMH3mgH/+99nu8B3Ir/+6nZinH/MMQ3
-         hyTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcJzlEsI0Q0Zkw3UiSk1AeQ+ZeMU0Uy0FowbXkpqvqY=;
-        b=IFIgB/SVo3E9PUS2CuyZRGrJHeYx0YT1XyudOfAuhBTYCDu7td23RiCzt4pG7N8rFv
-         8c02REEVv7ZxwXUSus8UEspxdbR47TebwGjWQ83AShsF9KASHz+4JwhlFquNX7u35lGs
-         FiLwNWDu6/obMuV16PHyG2hXmboZcIOgb7pBaq4Uvy4RiDFFigUGHZIq7XLqDtH8EIjv
-         Di+XbGGQZ3dBw6QS5+teq1f112WMsLhckGx9Gb8VpE4921yjt7TpfbqiA78LRqGnuHnR
-         ulp+vXfG9PMNmJOKL5aHx/I2YfgNhYkPQQ6+lITNZ964mQ6erdl23WN7b1Vt+lMsJhS9
-         fsxg==
-X-Gm-Message-State: ACrzQf0xbwe2sGWrZVkdQFa+PfOdcLSQ5TYUpG4iHFuVZGLH7nUx8Bcu
-        JLHEf6QhZdavD9EL/cDdyFCA1A==
-X-Google-Smtp-Source: AMsMyM51yRiBRyVMbbU7I9haBznkPLb7xvkfhQYeXVron/xlOZ8CJeyh1CIWGi75RgG0LYv0FAdxow==
-X-Received: by 2002:a05:6000:1190:b0:232:c73d:7524 with SMTP id g16-20020a056000119000b00232c73d7524mr1991986wrx.371.1666099742541;
-        Tue, 18 Oct 2022 06:29:02 -0700 (PDT)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05600c089300b003c409244bb0sm12880231wmp.6.2022.10.18.06.28.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 06:29:01 -0700 (PDT)
-Message-ID: <95a0537f-27b2-adc9-d44e-527281326b0d@linaro.org>
-Date:   Tue, 18 Oct 2022 15:28:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH V11 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of
- p?d_init()
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
+        with ESMTP id S229509AbiJRNbL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Oct 2022 09:31:11 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8D8C6945;
+        Tue, 18 Oct 2022 06:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666099867; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g3MzspTM9Dr8LSMMQ6MITd3EeKWr2rZaVT6P5JRlgFc=;
+        b=nAc34R932407pmkTMuqbozzx64BjLHj4VBOG8Q9x82Nm0YPEk6WYI4Uvc+AY6jgKIlUogL
+        scmhs6NBK2SX5jpT1AvnxBbIwdc6oZb0UK1wNsQDthGPSXu24u6WwISI01Lqur1NB8HcAd
+        G5hGjtV2EBVWvTh2Fu7f5al1oI1Bf94=
+Date:   Tue, 18 Oct 2022 14:30:57 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 4/4] clk: Add Ingenic JZ4755 CGU driver
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-References: <20221017024027.2389370-1-chenhuacai@loongson.cn>
- <20221017024027.2389370-2-chenhuacai@loongson.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221017024027.2389370-2-chenhuacai@loongson.cn>
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <LVAYJR.C9X3GOLBHW113@crapouillou.net>
+In-Reply-To: <CAKNVLfbbAaNdhWDo10XrUtyCM4R5E1CidC+TTQt8tUYbBU93qw@mail.gmail.com>
+References: <20221016150110.3020451-1-lis8215@gmail.com>
+        <20221016150110.3020451-5-lis8215@gmail.com>
+        <0S4WJR.4KB18PR21S9K1@crapouillou.net>
+        <CAKNVLfYEMwRC+4VuGcaENd1eTvbhWD9=uFDAhaz+1Fd8Aaqg_w@mail.gmail.com>
+        <M0RWJR.TI6Q9ATD37DF3@crapouillou.net>
+        <CAKNVLfbbAaNdhWDo10XrUtyCM4R5E1CidC+TTQt8tUYbBU93qw@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/10/22 04:40, Huacai Chen wrote:
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
-> 
-> We are preparing to add sparse vmemmap support to LoongArch. MIPS and
-> LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
-> page tables, so adjust their prototypes to make generic helpers can call
-> them.
-> 
-> NIOS2 declares pmd_init() but doesn't use, just remove it to avoid build
-> errors.
-> 
-> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   arch/loongarch/include/asm/pgalloc.h | 13 ++-----------
->   arch/loongarch/include/asm/pgtable.h |  8 ++++----
->   arch/loongarch/kernel/numa.c         |  4 ++--
->   arch/loongarch/mm/pgtable.c          | 23 +++++++++++++----------
->   arch/mips/include/asm/pgalloc.h      | 10 +++++-----
->   arch/mips/include/asm/pgtable-64.h   |  8 ++++----
->   arch/mips/kvm/mmu.c                  |  3 +--
->   arch/mips/mm/pgtable-32.c            | 10 +++++-----
->   arch/mips/mm/pgtable-64.c            | 18 ++++++++++--------
->   arch/mips/mm/pgtable.c               |  2 +-
->   arch/nios2/include/asm/pgalloc.h     |  5 -----
->   11 files changed, 47 insertions(+), 57 deletions(-)
+Hi Siarhei,
 
-> diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
-> index 61891af25019..88819a21d97e 100644
-> --- a/arch/mips/mm/pgtable-32.c
-> +++ b/arch/mips/mm/pgtable-32.c
-> @@ -13,9 +13,9 @@
->   #include <asm/pgalloc.h>
->   #include <asm/tlbflush.h>
->   
-> -void pgd_init(unsigned long page)
-> +void pgd_init(void *addr)
->   {
-> -	unsigned long *p = (unsigned long *) page;
-> +	unsigned long *p = (unsigned long *)addr;
->   	int i;
->   
->   	for (i = 0; i < USER_PTRS_PER_PGD; i+=8) {
-> @@ -61,9 +61,9 @@ void __init pagetable_init(void)
->   #endif
->   
->   	/* Initialize the entire pgd.  */
-> -	pgd_init((unsigned long)swapper_pg_dir);
-> -	pgd_init((unsigned long)swapper_pg_dir
-> -		 + sizeof(pgd_t) * USER_PTRS_PER_PGD);
-> +	pgd_init(swapper_pg_dir);
-> +	pgd_init((void *)((unsigned long)swapper_pg_dir
-> +		 + sizeof(pgd_t) * USER_PTRS_PER_PGD));
+Le lun., oct. 17 2022 at 21:07:47 +0300, Siarhei Volkau=20
+<lis8215@gmail.com> a =C3=A9crit :
+> =D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 20:24, Paul Cerc=
+ueil=20
+> <paul@crapouillou.net>:
+>>=20
+>>=20
+>>=20
+>>  Le lun., oct. 17 2022 at 20:10:56 +0300, Siarhei Volkau
+>>  <lis8215@gmail.com> a =C3=A9crit :
+>>  > =D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:24, Paul =
+Cercueil
+>>  > <paul@crapouillou.net>:
+>>  >
+>>  >>  > +     [JZ4755_CLK_AIC] =3D {
+>>  >>  > +             "aic", CGU_CLK_GATE,
+>>  >>  > +             .parents =3D { JZ4755_CLK_I2S, -1, -1, -1 },
+>>  >>
+>>  >>  Wrong parent here, should be JZ4755_CLK_EXT_HALF.
+>>  >
+>>  > I don't  agree, see Figure 20-13 in the JZ4755 PM.
+>>=20
+>>  20-13 describes the I2S clock, no?
+>=20
+> See 20.4.9 Serial Audio Clocks and Sampling Frequencies.
+> It stated that: "For internal CODEC ... CODEC needs a 12MHz
+> clock from CPM called SYS_CLK ...", but SYS_CLK is described
+> only in the I2S Controller section. I assume it is the same clock.
 
-Pre-existing, but why not use:
+Yes, and your SYS_CLK is the I2S clock, not the AIC clock.
 
-         pgd_init(&swapper_pg_dir[USER_PTRS_PER_PGD]);
+>>=20
+>>  AIC clock's parent is EXT/2 according to the diagram in 8.2.2.
+>>=20
+>=20
+> It's a bit cryptic manual, who knows how it's done in the HW.
+> I observed that codec runs on a desired sample rate only when PLL
+> equals 432 or 216 MHz, but SYS_CLK is definitely configured to be
+> 12MHz - from EXTCLK. On other PLL frequencies it is lower by
+> 2-4% than expected. That isn't observed on JZ4725B.
 
-?
+The audio codec supplies SYS_CLK to the controller, not the other way=20
+around. Parent the I2S clock to EXT/2 (which is 12 MHz) and it should=20
+work fine, independently of the PLL.
 
-Otherwise:
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+The AIC clock does not drive anything, it only "powers" the AIC module.=20
+It should be parented only to EXT/2, similar to what's done in every=20
+other CGU driver.
+
+Cheers,
+-Paul
+
+
