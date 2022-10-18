@@ -2,107 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CA6602A22
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Oct 2022 13:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA20602BC5
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Oct 2022 14:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiJRL24 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Oct 2022 07:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
+        id S230122AbiJRMa1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Oct 2022 08:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiJRL2o (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Oct 2022 07:28:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BE3B97A3;
-        Tue, 18 Oct 2022 04:28:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3469CB81EAA;
-        Tue, 18 Oct 2022 11:28:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B9FC433D6;
-        Tue, 18 Oct 2022 11:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666092514;
-        bh=EO5hPshGGBHiFaHBKiOjtX+wVrq1cMA7Ob1kzX2IeQA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=BOt7ASQDe6Ct4Bes/agdN3BKa3Qy5i86UMyBwcOi86h+GSsoz7hrLS/liFkDU9u+f
-         QenJBDEemTLX/EiWu0IFyIO41lH6cD/6xH5Ib89cLirW7ys/gZRE/B6Kd0Zu1BjVhW
-         5hUbDFl1nujWYcNCGlwjkBq40PlNi/TA1hS3EVBXxUhx+JULWYykIGPOIqEdYM5lMk
-         ckL0MhhjpdRaapbJtszjHB6zS2TnsuhAxscVV1NW9N/CvVt3o0OVC1tyrn/Q74wRi6
-         EsdW3wdy3nTvwH19rBPnuBO83h8yhww8PQMNBY0vHHsNvah7qmuglvwwnfnm0RHNT+
-         M5/347LKwoKQg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20221016132648.3011729-1-lis8215@gmail.com>
-References: <20221016132648.3011729-1-lis8215@gmail.com>
-Subject: Re: [PATCH v3 0/7] ASoC: codecs: jz4725b: Various improvements and fixes
-Message-Id: <166609251307.155136.11548088283059583394.b4-ty@kernel.org>
-Date:   Tue, 18 Oct 2022 12:28:33 +0100
+        with ESMTP id S230094AbiJRMa0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Oct 2022 08:30:26 -0400
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8214FA02FF;
+        Tue, 18 Oct 2022 05:30:24 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id a24so9469408qto.10;
+        Tue, 18 Oct 2022 05:30:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LA5Rw3StwiOqL+QwzJgo3njgEZhTbHuX12wcOa2B5Os=;
+        b=Ii73Xm4qYOpwdKdTImAOfK4v5TThDEEOii1c40foC6cBmIQSl/oJ4CNt/qBjkwV+Rf
+         IsCodeAX1yd+Aahx1Ab5Akm93REV+z6kv36LLvLPjTw1Gh09VmCkGj+iMAEQ1/DZz3eW
+         KZKJMHRIs30cTpTdfKRWfGS7R97bi7ipz9d52ZVWdDBQq4YUM37WOcsHa2fHSMSHgAYy
+         HPo4VY3NXUsWm+TUyON6gV3TDy4wAw31/HG1zFhUuopJVw4gGFJlPmOUxH92WvSUJc/p
+         zThQaaInMOrC+k0As2qDfLoHyzcMlAtj+2LdBbVjF7JVYY1B3i5fZzksVQ+y6uuAL6AH
+         84YA==
+X-Gm-Message-State: ACrzQf1uXHGsROcsNficI288QEVWleJx/Bae8A3dLvURj5I1PA7LyHJ+
+        8Ar9Sh4d1YpumoTDTAqvaFN4UwiQcqFjaQ==
+X-Google-Smtp-Source: AMsMyM787KZDxWm9qtGFBmjdpQkf8XwXaiFsOUrkiHjboDALwsYvDEqYVzAiEuaUvcSfOPX2zumXkQ==
+X-Received: by 2002:ac8:5848:0:b0:39c:e974:1c2c with SMTP id h8-20020ac85848000000b0039ce9741c2cmr1833279qth.674.1666096223404;
+        Tue, 18 Oct 2022 05:30:23 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id bq36-20020a05620a46a400b006ee77f1ecc3sm2249510qkb.31.2022.10.18.05.30.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 05:30:23 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-3573ed7cc15so135568527b3.1;
+        Tue, 18 Oct 2022 05:30:22 -0700 (PDT)
+X-Received: by 2002:a81:98d:0:b0:357:2422:13b4 with SMTP id
+ 135-20020a81098d000000b00357242213b4mr2107285ywj.316.1666096222450; Tue, 18
+ Oct 2022 05:30:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221017145157.1866351-1-geert@linux-m68k.org>
+ <alpine.DEB.2.22.394.2210171653540.9136@ramsan.of.borg> <alpine.DEB.2.21.2210181126040.50489@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2210181126040.50489@angie.orcam.me.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Oct 2022 14:30:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVbo0wMaVVhe4f4tC9-TW2+DsOVAB77TtLdnsG=us8Q2A@mail.gmail.com>
+Message-ID: <CAMuHMdVbo0wMaVVhe4f4tC9-TW2+DsOVAB77TtLdnsG=us8Q2A@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v6.1-rc1
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     linux-kernel@vger.kernel.org,
+        D Scott Phillips <scott@os.amperecomputing.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-arm-kernel@lists.infradead.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-um@lists.infradead.org, linux-rdma@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
+        sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 16 Oct 2022 16:26:41 +0300, Siarhei Volkau wrote:
-> The patchset fixes:
->  - Line In path stays powered off during capturing or
->    bypass to mixer.
->  - incorrectly represented dB values in alsamixer, et al.
->  - incorrect represented Capture input selector in alsamixer
->    in Playback tab.
->  - wrong control selected as Capture Master
-> 
-> [...]
+Hi Maciej,
 
-Applied to
+On Tue, Oct 18, 2022 at 12:39 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+> On Mon, 17 Oct 2022, Geert Uytterhoeven wrote:
+> > .> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9abf2313adc1ca1b6180c508c25f22f9395cc780/ (all 149 configs)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> > >  + {standard input}: Error: branch to a symbol in another ISA mode: 1339 =>
+> > > 2616, 2621
+> >
+> > mips-gcc11/micro32r2_defconfig
+> > mips-gcc11/micro32r2el_defconfig
+>
+>  Where can these configs be obtained from?
+
+By following the links in the URL above you removed while replying? ;-)
+
+http://kisskb.ellerman.id.au/kisskb/buildresult/14818296/
+http://kisskb.ellerman.id.au/kisskb/buildresult/14818298/
 
 Thanks!
 
-[1/7] ASoC: codecs: jz4725b: add missed Line In power control bit
-      commit: 1013999b431b4bcdc1f5ae47dd3338122751db31
-[2/7] ASoC: codecs: jz4725b: fix reported volume for Master ctl
-      commit: 088777bf65b98cfa4b5378119d0a7d49a58ece44
-[3/7] ASoC: codecs: jz4725b: use right control for Capture Volume
-      commit: 1538e2c8c9b7e7a656effcc6e4e7cfe8c1b405fd
-[4/7] ASoC: codecs: jz4725b: fix capture selector naming
-      commit: 80852f8268769715db335a22305e81a0c4a38a84
-[5/7] ASoC: codecs: jz4725b: use right control for Master Playback
-      commit: e6233ee25059de0eeac6ed3d9d49737afdbd5087
-[6/7] ASoC: codecs: jz4725b: add missed Mixer inputs
-      commit: 616c291820d155cbad258ecae5c7dbca2c01f07f
-[7/7] ASoC: codecs: jz4725b: add missed microphone widgets
-      commit: 4b192aa09b3c3615c79f8c60704a2efd15e500d0
+Gr{oetje,eeting}s,
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+                        Geert
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
