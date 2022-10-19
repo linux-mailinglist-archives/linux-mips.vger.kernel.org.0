@@ -2,89 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CB26046D1
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Oct 2022 15:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC8A604581
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Oct 2022 14:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbiJSNVe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Oct 2022 09:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
+        id S233088AbiJSMi7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Oct 2022 08:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiJSNVD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Oct 2022 09:21:03 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7CB1DB270;
-        Wed, 19 Oct 2022 06:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666169132; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2irzQRisuQph0qVQTfrw1gD3XTb5c+6xxeX7I05Lbx8=;
-        b=jjeeum7SZmGwGhPrFwc9Kx571MNPHFw077WifZSIV7ABbqICZWqAwwtr6XpAciPJ8c8G/Y
-        GMY+yWVDuu2ZD1dAMi5x/N5nNYJP3Cnz672CN98++xJOEFmmDWtKoHAPCr4z19courTJ1a
-        uY61NBBpDo+2oB8Eydhc5FPKee34LiE=
-Date:   Wed, 19 Oct 2022 09:45:23 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH][next][V2] ASoC: codecs: jz4725b: Fix spelling mistake
- "Sourc" -> "Source", "Routee" -> "Route"
+        with ESMTP id S233182AbiJSMik (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Oct 2022 08:38:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAD2EAA;
+        Wed, 19 Oct 2022 05:19:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11BF16174B;
+        Wed, 19 Oct 2022 12:10:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88008C433D7;
+        Wed, 19 Oct 2022 12:10:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666181454;
+        bh=GWr+pXdg4KAo4cm6ndECUvEjk2iIp9Udlw6HdytD74s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OjRgwK82xNTsABYyqlr8BKxalnQQsibfZTFAOamdK5hDwR/68+Cx2S/zX6i0MRQxp
+         T0crx1/UCoUvIBNb08r6YB6S4aOpA66cGj52RwxQ+sJvET2GGqMSuAUuvmXNiVG3s9
+         aTeXZ09DXkIm0Dzuy1OdMxVuMRQtL+f1fG1jaMUGy0nraMtyM1UNyQEaJPyahI4Rvz
+         F5IHTKOhmBdG8PqB7zX5baQBOCj/Kg/fJCl9rUVecEFATYO+YzWltUuLB1vZ9FWG7w
+         fN2ccE5iOoMFtTTcFjTAMxbjneGFbgD5mMaSvT/GYdNPn+MkRjLoedlJMPoYg6wLc3
+         j9FS/IlvurxGg==
+Date:   Wed, 19 Oct 2022 13:10:49 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Message-Id: <NBSZJR.DRWYIWVJJ4H42@crapouillou.net>
-In-Reply-To: <20221019071639.1003730-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH][next][V2] ASoC: codecs: jz4725b: Fix spelling mistake
+ "Sourc" -> "Source", "Routee" -> "Route"
+Message-ID: <Y0/pSVbueZYXBsmA@sirena.org.uk>
 References: <20221019071639.1003730-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RSRYBU1FRm2IiFjJ"
+Content-Disposition: inline
+In-Reply-To: <20221019071639.1003730-1-colin.i.king@gmail.com>
+X-Cookie: I like your SNOOPY POSTER!!
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Colin,
 
-Le mer., oct. 19 2022 at 08:16:39 +0100, Colin Ian King=20
-<colin.i.king@gmail.com> a =E9crit :
+--RSRYBU1FRm2IiFjJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Oct 19, 2022 at 08:16:39AM +0100, Colin Ian King wrote:
 > There are two spelling mistakes in codec routing description. Fix it.
->=20
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+Bit disappionting that people didn't notice the errors during boot
+there...
 
-Cheers,
--Paul
+--RSRYBU1FRm2IiFjJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ---
-> V2: Fix "Routee" -> "Route" too
-> ---
->  sound/soc/codecs/jz4725b.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/sound/soc/codecs/jz4725b.c b/sound/soc/codecs/jz4725b.c
-> index 685ba1d3a644..64b14b1c74b9 100644
-> --- a/sound/soc/codecs/jz4725b.c
-> +++ b/sound/soc/codecs/jz4725b.c
-> @@ -359,7 +359,7 @@ static const struct snd_soc_dapm_route=20
-> jz4725b_codec_dapm_routes[] =3D {
->=20
->  	{"Mixer to ADC", NULL, "Mixer"},
->  	{"ADC Source Capture Route", "Mixer", "Mixer to ADC"},
-> -	{"ADC Sourc Capture Routee", "Line In", "Line In"},
-> +	{"ADC Source Capture Route", "Line In", "Line In"},
->  	{"ADC Source Capture Route", "Mic 1", "Mic 1"},
->  	{"ADC Source Capture Route", "Mic 2", "Mic 2"},
->  	{"ADC", NULL, "ADC Source Capture Route"},
-> --
-> 2.37.3
->=20
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNP6UgACgkQJNaLcl1U
+h9AMAAf/QC3eZNYr9/3n2kIr05IslQ40odVk7BW7aJxsPlGbyo3UWe9aVyLNxPFg
+ButRyaxZyFUaLjORA4747at7NxfUw6dkCBeq9WxQvLkOryJVmZIWVNhIDPDnquqP
+Ze6pexDoUZsvlEaVkJXd28PXKgQSjI6tLyQTG0y+wM4Xv5L05ISaSZtku0eZM28z
+DmG8fGdquHZFUZOVKQWu+Ny1G3sSkdrBkBUJcSkGVdn7TWIklLVqNuy4w3pq+0RF
+rviZ2Wo0NMzE5ksTXv2+t/UIYzNWjv/K0jcNVB16EnEqfI1pFDQJZyrKDrF1YyQu
+6Up7a5YP6VPCJgs3A3yWVpWcFahADw==
+=c0mZ
+-----END PGP SIGNATURE-----
 
+--RSRYBU1FRm2IiFjJ--
