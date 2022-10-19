@@ -2,115 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFF760424E
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Oct 2022 12:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59CB26046D1
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Oct 2022 15:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbiJSK6E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Oct 2022 06:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S232521AbiJSNVe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Oct 2022 09:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbiJSK5M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Oct 2022 06:57:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6EDF53C9;
-        Wed, 19 Oct 2022 03:27:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BF33B824B3;
-        Wed, 19 Oct 2022 09:09:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505C9C433D6;
-        Wed, 19 Oct 2022 09:09:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666170592;
-        bh=SLEl1ykAV5RDsgLc/AeCBHJhHpc6G+47h6ZWYxuzlL0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b7rPBevF4BAmii9z0JKcKKfeLsKndZp/XOU6zDNuQGxWlBvpSxZkcOe+GDKx8I4wf
-         AI0YKn31hrIgk098m6DSkWO19WTeLFCHgUTo/xZRrUpjw2w/8Jaxqh4BozpQUZQJh1
-         Xtd9RZSDEojEGcgJPIeznTt9ieNip3v4L6UC5SvY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.0 671/862] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date:   Wed, 19 Oct 2022 10:32:38 +0200
-Message-Id: <20221019083319.597586557@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
-References: <20221019083249.951566199@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S231295AbiJSNVD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Oct 2022 09:21:03 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7CB1DB270;
+        Wed, 19 Oct 2022 06:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666169132; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2irzQRisuQph0qVQTfrw1gD3XTb5c+6xxeX7I05Lbx8=;
+        b=jjeeum7SZmGwGhPrFwc9Kx571MNPHFw077WifZSIV7ABbqICZWqAwwtr6XpAciPJ8c8G/Y
+        GMY+yWVDuu2ZD1dAMi5x/N5nNYJP3Cnz672CN98++xJOEFmmDWtKoHAPCr4z19courTJ1a
+        uY61NBBpDo+2oB8Eydhc5FPKee34LiE=
+Date:   Wed, 19 Oct 2022 09:45:23 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH][next][V2] ASoC: codecs: jz4725b: Fix spelling mistake
+ "Sourc" -> "Source", "Routee" -> "Route"
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <NBSZJR.DRWYIWVJJ4H42@crapouillou.net>
+In-Reply-To: <20221019071639.1003730-1-colin.i.king@gmail.com>
+References: <20221019071639.1003730-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+Hi Colin,
 
-[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
+Le mer., oct. 19 2022 at 08:16:39 +0100, Colin Ian King=20
+<colin.i.king@gmail.com> a =E9crit :
+> There are two spelling mistakes in codec routing description. Fix it.
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Clang is especially sensitive about argument type matching when using
-__overloaded functions (like memcmp(), etc). Help it see that function
-pointers are just "void *". Avoids this error:
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 
-arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
-                   if (!memcmp(prom_init, prom_init + mem, 32))
-                        ^~~~~~
-include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
+Cheers,
+-Paul
 
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: "Rafał Miłecki" <zajec5@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/bcm47xx/prom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-index ab203e66ba0d..a9bea411d928 100644
---- a/arch/mips/bcm47xx/prom.c
-+++ b/arch/mips/bcm47xx/prom.c
-@@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
- 			pr_debug("Assume 128MB RAM\n");
- 			break;
- 		}
--		if (!memcmp(prom_init, prom_init + mem, 32))
-+		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
- 			break;
- 	}
- 	lowmem = mem;
-@@ -159,7 +159,7 @@ void __init bcm47xx_prom_highmem_init(void)
- 
- 	off = EXTVBASE + __pa(off);
- 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
--		if (!memcmp(prom_init, (void *)(off + extmem), 16))
-+		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
- 			break;
- 	}
- 	extmem -= lowmem;
--- 
-2.35.1
-
+> ---
+> V2: Fix "Routee" -> "Route" too
+> ---
+>  sound/soc/codecs/jz4725b.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/sound/soc/codecs/jz4725b.c b/sound/soc/codecs/jz4725b.c
+> index 685ba1d3a644..64b14b1c74b9 100644
+> --- a/sound/soc/codecs/jz4725b.c
+> +++ b/sound/soc/codecs/jz4725b.c
+> @@ -359,7 +359,7 @@ static const struct snd_soc_dapm_route=20
+> jz4725b_codec_dapm_routes[] =3D {
+>=20
+>  	{"Mixer to ADC", NULL, "Mixer"},
+>  	{"ADC Source Capture Route", "Mixer", "Mixer to ADC"},
+> -	{"ADC Sourc Capture Routee", "Line In", "Line In"},
+> +	{"ADC Source Capture Route", "Line In", "Line In"},
+>  	{"ADC Source Capture Route", "Mic 1", "Mic 1"},
+>  	{"ADC Source Capture Route", "Mic 2", "Mic 2"},
+>  	{"ADC", NULL, "ADC Source Capture Route"},
+> --
+> 2.37.3
+>=20
 
 
