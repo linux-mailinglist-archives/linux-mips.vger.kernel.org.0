@@ -2,89 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADCD604C59
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Oct 2022 17:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040F5605864
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Oct 2022 09:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiJSPyY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Oct 2022 11:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        id S229543AbiJTHZU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Oct 2022 03:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiJSPxr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Oct 2022 11:53:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A3E18F25B;
-        Wed, 19 Oct 2022 08:51:13 -0700 (PDT)
+        with ESMTP id S229727AbiJTHZS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Oct 2022 03:25:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DDFD77C6;
+        Thu, 20 Oct 2022 00:25:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B399B61943;
-        Wed, 19 Oct 2022 15:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62EB3C433D7;
-        Wed, 19 Oct 2022 15:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666194615;
-        bh=wScyHxczwHL75RmoXOfql5d13NwOHcmOL0uKxW2svyU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=D/ZLocZFqh2oVDNt4qIJijuw6psZZCGYbZq/vMqTpVdAHmJab5OKwDkNJa9FZhS+R
-         6U9yEV97Zoz/IEcwhoeRgpoyVELIlzUiofWUpEDoeO/xfuI2W+6opBwCt/2eiA8TLG
-         J1a9DdqVaTC1bmqmtJ0hkDgvAe6LBA79wEeuPfrl0em6jFFkI/z+cmjhPouDLSSs/R
-         htcs8QqrN7D7r8PspZR8YmDpa+M/VWwrBoaqVICPdvAOs1sLzRPmLKOBMWkTlCZKex
-         C+kvGspb0YsLZxErffHZPmGRcPApRb7YMk7FD6zo8S59GfxMd6L9lo8sWLVpu0kL37
-         uJEHAzB105RvQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org, Paul Cercueil <paul@crapouillou.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-In-Reply-To: <20221019071639.1003730-1-colin.i.king@gmail.com>
-References: <20221019071639.1003730-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH][next][V2] ASoC: codecs: jz4725b: Fix spelling mistake "Sourc" -> "Source", "Routee" -> "Route"
-Message-Id: <166619461311.884966.9257209469691313865.b4-ty@kernel.org>
-Date:   Wed, 19 Oct 2022 16:50:13 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3136619C8;
+        Thu, 20 Oct 2022 07:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4463CC433D7;
+        Thu, 20 Oct 2022 07:25:11 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V12 0/4] mm/sparse-vmemmap: Generalise helpers and enable for LoongArch
+Date:   Thu, 20 Oct 2022 15:23:13 +0800
+Message-Id: <20221020072317.492906-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 19 Oct 2022 08:16:39 +0100, Colin Ian King wrote:
-> There are two spelling mistakes in codec routing description. Fix it.
-> 
-> 
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
-Applied to
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+V2 -> V3:
+1, Change the Signed-off-by order of author and committer;
+2, Update commit message about the build error on LoongArch.
 
-Thanks!
+V3 -> V4:
+Change pmd to pmdp for ARM64 for consistency.
 
-[1/1] ASoC: codecs: jz4725b: Fix spelling mistake "Sourc" -> "Source", "Routee" -> "Route"
-      commit: df496157a5afa1b6d1f4c46ad6549c2c346d1e59
+V4 -> V5:
+Add a detailed comment for no-fallback in the altmap case.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+V5 -> V6:
+1, Fix build error for NIOS2;
+2, Fix build error for allnoconfig;
+3, Update comment for no-fallback in the altmap case.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+V6 -> V7:
+Fix build warnings of "no previous prototype".
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+V7 -> V8:
+Fix build error for MIPS pud_init().
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+V8 -> V9:
+Remove redundant #include to avoid build error with latest upstream
+kernel.
 
-Thanks,
-Mark
+V9 -> V10:
+Fix build error due to VMEMMAP changes in 6.0-rc1.
+
+V10 -> V11:
+Adjust context due to ARM64 changes in 6.1-rc1.
+
+V11 -> V12:
+1, Fix build error for !SPARSEMEM;
+2, Simplify pagetable_init() for MIPS32.
+
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
+---
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
+
