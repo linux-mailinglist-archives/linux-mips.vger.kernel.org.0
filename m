@@ -2,71 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4825B607338
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Oct 2022 11:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA286074D9
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Oct 2022 12:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiJUJGD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Oct 2022 05:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S230423AbiJUKRY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Oct 2022 06:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiJUJGB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Oct 2022 05:06:01 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D511188ABC;
-        Fri, 21 Oct 2022 02:06:00 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1364357a691so2768875fac.7;
-        Fri, 21 Oct 2022 02:06:00 -0700 (PDT)
+        with ESMTP id S230481AbiJUKRG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Oct 2022 06:17:06 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F891208829
+        for <linux-mips@vger.kernel.org>; Fri, 21 Oct 2022 03:16:55 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id e18so1859197wmq.3
+        for <linux-mips@vger.kernel.org>; Fri, 21 Oct 2022 03:16:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=onjZXLG5H2eVDEoLf+HexzRMICClQImrKow0XsbPTTQ=;
-        b=Gc2ApEBJRflPhL9aV+noMvFYdlw6wIhvbOvlZZxZUewbW4QniqgA8kAUEthFZYmfDS
-         wjGMrkgwX1uGTa2vbCjBltlr6IU4LRMKoZbPjeIutvSNULidxLyDk2CSf4X2C/970ada
-         4BL47PUVQNr59n+uJWfcIjTNDye4vFjDfjF9pkP+XJjhoTzrQ5v4LBsOHSWT8jMSn2EJ
-         9Q78APpeXeBhLSOIWXifdGsYGsCBxcRUi6PGqAng/RL2KsQBadxDbez26KZ929kk+N5i
-         ulhMXqOzcpXnFU+hBDOSPe2lG7zFuHkf7fKWgBlOSKYfShZZwQhPWUbqsoAO+BAovmWS
-         IuJQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+5cnDmrVndRxKiTHUVemxonBJmpJGHILsZC3ogF/MOw=;
+        b=JPtq+/IRujntwIE/R0H50vcNFzBxZsG6vivxycGAXnEB2uRQt6ffZwiejqzB7e2thQ
+         NUlcGdmwHolJLIyBZw0eVbnviS2rST1avPMOUkg8ACV8YerSEMWgInAYBS94wGapJw4i
+         bfRlNjVOU9KrSi7RqliTvkKJa7cZtLfpxfwmxtE2ad1zmQef69xoS1eIddjy6V/CVYIV
+         OSX1sAbFVNxDQkT8WjHl639ubVOThBYSN7UldhIlgneUKM+K/ZRScAH6fxsbB5g0MWT/
+         301O4bxqIRd29ca4wje7C/60v3tVfhwf0S5eO9cBOGxlGkTMgxAyQO3qnOla5YK5a34j
+         LIJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=onjZXLG5H2eVDEoLf+HexzRMICClQImrKow0XsbPTTQ=;
-        b=oHl6maTiWR8zfqGUmGzB6eA1yvrk4CczaIXIjHFvsXCWhh7wKlZR2eX+XCWSsNFD2i
-         gqPrXGkBXVp1zk3TdEV53L+zrg1m1gBzH2iWdQQNEVlzaUHEOgTYXFQhQogA3DoP1eXP
-         /SNlyeLJDitZNXHusw2F873MrOU3z1nYFv3rB7OqBsihx2N62anER7Ceu8F5cTKMUChL
-         KBpoEXj+SmL/0VZkBYB1akT7soxXU5rD9X7aTeWhMNbbA7se2ZgEBNuEJ/8TGkoh08b0
-         AqoEOpwPGgQUC0D8P3A+uvvMcAf6LrqBXM5vC25PSmEUaquW38lnDRvL/7OoMf8qcGBA
-         ihOw==
-X-Gm-Message-State: ACrzQf0Fb96MRxhUg6n30jxrpu2WXMpTt1tHITPZ59MOdFbmFqqX9ZkC
-        VF2gR+d1pW+TUDAJw4eQQ7Q56PjXOvhWKkd0deY=
-X-Google-Smtp-Source: AMsMyM6pSrFzgRAYvL2maH3o/SXFldyuk69Y/lp2Iw0ym6rUQD++QPnLIzone6m0BGwlAojeid+GOz0obxoRpHrprD4=
-X-Received: by 2002:a05:6871:89:b0:131:6362:e26f with SMTP id
- u9-20020a056871008900b001316362e26fmr12120233oaa.144.1666343159659; Fri, 21
- Oct 2022 02:05:59 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+5cnDmrVndRxKiTHUVemxonBJmpJGHILsZC3ogF/MOw=;
+        b=5+uDUbrxT79b7YUapja+7stE28P2BTVKfjI/ue+TZ6bZE1s0Tarby4Szhq1IuU+G5T
+         wsQ4ckYYvxXaLLC7gQ6XM9fvYHeEQVQfzT5cLe8QwKwipknTk3PHvHsqVv8xQskVL68M
+         XgTN6yErprbILAm5fduaqBRsh8WKxg6zY0NzU7Fodp4o13ymP1kctd8r2+caWP7m+xZG
+         lHHcgJthDNNANURvIggVx3Fuac8ZW4qVb/0D8+mPJjseMwoDHq18CuzCjkKwTG276ke4
+         oTq8V3Uh7morVi0blUqJwuIW8ev7HPdPyu++OJiyfpa7XxEJOGz7bqlj0QfnfkmVawX3
+         XMxQ==
+X-Gm-Message-State: ACrzQf1ssSCf6YfCa46dKcF4FFWAZ7nGJ0juaIQXGLUUhPfy5HYkEc91
+        6oleNjQK2BdN4C9EuNmUh2iRRQ==
+X-Google-Smtp-Source: AMsMyM7lFiRw/3BBe90FzLXlb+jXp4Bsd46molv2+M4Io/03D653ZKfrdrAMjZSj/Yk+qHqfl4wzbA==
+X-Received: by 2002:a7b:c841:0:b0:3c6:ce2f:3438 with SMTP id c1-20020a7bc841000000b003c6ce2f3438mr12545988wml.51.1666347414085;
+        Fri, 21 Oct 2022 03:16:54 -0700 (PDT)
+Received: from [10.50.0.10] (ec2-54-194-108-71.eu-west-1.compute.amazonaws.com. [54.194.108.71])
+        by smtp.gmail.com with ESMTPSA id ay41-20020a05600c1e2900b003c6f0ebf988sm2166623wmb.30.2022.10.21.03.16.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 03:16:53 -0700 (PDT)
+Message-ID: <1ca11693-17c2-7260-b642-70b033c64b30@linaro.org>
+Date:   Fri, 21 Oct 2022 12:16:50 +0200
 MIME-Version: 1.0
-References: <20221006042945.1038594-1-sergio.paracuellos@gmail.com>
- <20221006042945.1038594-2-sergio.paracuellos@gmail.com> <615c8c6d-3eab-0474-2c2c-6442052c0eee@fungible.com>
- <CAMhs-H8tMP-TyH9dBeO5dGe8spu3h6571-Zeo=_Xshh04x+w1g@mail.gmail.com> <20221021084713.GA5976@alpha.franken.de>
-In-Reply-To: <20221021084713.GA5976@alpha.franken.de>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 21 Oct 2022 11:05:48 +0200
-Message-ID: <CAMhs-H_wEBELsKkpjA1aTTAjywz-LCDvA17AyE5vfzrEpSr-xQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] dt-bindings: mips: add CPU bindings for MIPS architecture
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@fungible.com>,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, hauke@hauke-m.de,
-        zajec5@gmail.com, zhouyanjie@wanyeetech.com,
-        linux-mips@vger.kernel.org, arinc.unal@arinc9.com,
-        f.fainelli@gmail.com, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [PATCH V12 4/4] LoongArch: Enable
+ ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+References: <20221020072317.492906-1-chenhuacai@loongson.cn>
+ <20221020072317.492906-5-chenhuacai@loongson.cn>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221020072317.492906-5-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,51 +91,93 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:02 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Mon, Oct 17, 2022 at 07:53:00AM +0200, Sergio Paracuellos wrote:
-> > On Thu, Oct 6, 2022 at 1:24 PM Philippe Mathieu-Daud=C3=A9
-> > <philmd@fungible.com> wrote:
-> > >
-> > > On 6/10/22 06:29, Sergio Paracuellos wrote:
-> > > > Add the yaml binding for available CPUs in MIPS architecture.
-> > > >
-> > > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > ---
-> > > >   .../bindings/mips/brcm/brcm,bmips.txt         |   8 --
-> > > >   .../devicetree/bindings/mips/cpus.yaml        | 115 +++++++++++++=
-+++++
-> > > >   .../bindings/mips/ingenic/ingenic,cpu.yaml    |  69 -----------
-> > > >   3 files changed, 115 insertions(+), 77 deletions(-)
-> > > >   delete mode 100644 Documentation/devicetree/bindings/mips/brcm/br=
-cm,bmips.txt
-> > > >   create mode 100644 Documentation/devicetree/bindings/mips/cpus.ya=
-ml
-> > > >   delete mode 100644 Documentation/devicetree/bindings/mips/ingenic=
-/ingenic,cpu.yaml
-> > >
-> > > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@fungible.com>
-> >
-> > Thanks!
-> >
-> > Thomas, are this series going through your tree?
->
-> I'll take them.
+On 20/10/22 09:23, Huacai Chen wrote:
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
+> 
+> The feature of minimizing overhead of struct page associated with each
+> HugeTLB page is implemented on x86_64. However, the infrastructure of
+> this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
+> OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+> 
+> To avoid the following build error on LoongArch we should include linux/
 
-Thanks for letting me know!!
+s/should/have to/
 
->
-> Thomas.
->
+> static_key.h in page-flags.h.
 
-Best regards,
-    Sergio Paracuellos
+This looks like 2 different changes in a single patch.. The first is a
+generic "fix missing include" and the second is LoongArch specific.
 
+Splitting in 2 would ease backport cherry-picks.
 
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+> In file included from ./include/linux/mmzone.h:22,
+> from ./include/linux/gfp.h:6,
+> from ./include/linux/mm.h:7,
+> from arch/loongarch/kernel/asm-offsets.c:9:
+> ./include/linux/page-flags.h:208:1: warning: data definition has no
+> type or storage class
+> 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
+> ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> types) in function declaration
+> 209 | hugetlb_optimize_vmemmap_key);
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
+> ./include/linux/page-flags.h:213:16: error: implicit declaration of
+> function 'static_branch_maybe' [-Werror=implicit-function-declaration]
+> 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h:213:36: error:
+> 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
+> use in this function); did you mean
+> 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
+> 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> | CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> ./include/linux/page-flags.h:213:36: note: each undeclared identifier
+> is reported only once for each function it appears in
+> ./include/linux/page-flags.h:214:37: error:
+> 'hugetlb_optimize_vmemmap_key' undeclared (first use in this
+> function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
+> 214 | &hugetlb_optimize_vmemmap_key);
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> | hugetlb_optimize_vmemmap_enabled
+> 
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>   arch/loongarch/Kconfig     | 1 +
+>   include/linux/page-flags.h | 1 +
+>   2 files changed, 2 insertions(+)
+> 
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 6f7fa0c0ca08..0a6ef613124c 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -52,6 +52,7 @@ config LOONGARCH
+>   	select ARCH_USE_QUEUED_RWLOCKS
+>   	select ARCH_USE_QUEUED_SPINLOCKS
+>   	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> +	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>   	select ARCH_WANT_LD_ORPHAN_WARN
+>   	select ARCH_WANTS_NO_INSTR
+>   	select BUILDTIME_TABLE_SORT
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index 0b0ae5084e60..1aafdc73e399 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -9,6 +9,7 @@
+>   #include <linux/types.h>
+>   #include <linux/bug.h>
+>   #include <linux/mmdebug.h>
+> +#include <linux/static_key.h>
+>   #ifndef __GENERATING_BOUNDS_H
+>   #include <linux/mm_types.h>
+>   #include <generated/bounds.h>
+
+Preferably splitting in 2 distinct patches (for each):
+
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
