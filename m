@@ -2,54 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81D5608913
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Oct 2022 10:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADE8608C35
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Oct 2022 13:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiJVIbN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 22 Oct 2022 04:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
+        id S230217AbiJVLEO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 Oct 2022 07:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiJVI3O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Oct 2022 04:29:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044602E22A9;
-        Sat, 22 Oct 2022 01:01:48 -0700 (PDT)
+        with ESMTP id S231145AbiJVLDZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Oct 2022 07:03:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A6C140A6;
+        Sat, 22 Oct 2022 03:21:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA22160ADD;
-        Sat, 22 Oct 2022 07:59:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C576EC433C1;
-        Sat, 22 Oct 2022 07:59:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE36760BBF;
+        Sat, 22 Oct 2022 10:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B97FEC433D6;
+        Sat, 22 Oct 2022 10:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666425583;
-        bh=sm/LDBBuPWty4rPPEEqovbTw/jWuPeNCGNYMtE2bPkU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dGu4EJwt1fryvkeOa/wlOSwWhFLqJeu53nKg5tG9lvCj6w1EWH9rdtojEct1oN/qC
-         atPDJ75O7wkR9mSVpM/Hicjzx5uzAv38i3QYToBmM2UOJXYDcfSokc6nWLob0BgVQm
-         mHejx1tXFd65cnItFHP9H69C97kRMEv21oevnPLA=
+        s=korg; t=1666434090;
+        bh=4VayhwOVTKVAjPqqz97sF96LRLG+KRcajksLHZHtUxk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wOx3mp5ksWJtvhNhAOmZUG8X3+HuRkTdY9Nc7h6cWFEIxsW4svt4t9REDVX0plI4T
+         0jvG2TdFgRx98jdox1K2bPVjxSRKOYymF+6X8vmbsIcB0hIMeoD9P7/9qN6LIAT+Ko
+         fQekZTeUTocY/mdL9wRqCZaeHaw+pLcmNqIWDT+k=
+Date:   Sat, 22 Oct 2022 12:21:27 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 548/717] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date:   Sat, 22 Oct 2022 09:27:07 +0200
-Message-Id: <20221022072522.604305739@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
-References: <20221022072415.034382448@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v1 0/5] convert tree to
+ get_random_u32_{below,above,between}()
+Message-ID: <Y1PEJxnlY7dh4yK8@kroah.com>
+References: <20221022014403.3881893-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221022014403.3881893-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,59 +76,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
-
-[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
-
-Clang is especially sensitive about argument type matching when using
-__overloaded functions (like memcmp(), etc). Help it see that function
-pointers are just "void *". Avoids this error:
-
-arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
-                   if (!memcmp(prom_init, prom_init + mem, 32))
-                        ^~~~~~
-include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
-
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: "Rafał Miłecki" <zajec5@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/bcm47xx/prom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-index 0a63721d0fbf..5a33d6b48d77 100644
---- a/arch/mips/bcm47xx/prom.c
-+++ b/arch/mips/bcm47xx/prom.c
-@@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
- 			pr_debug("Assume 128MB RAM\n");
- 			break;
- 		}
--		if (!memcmp(prom_init, prom_init + mem, 32))
-+		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
- 			break;
- 	}
- 	lowmem = mem;
-@@ -159,7 +159,7 @@ void __init bcm47xx_prom_highmem_init(void)
- 
- 	off = EXTVBASE + __pa(off);
- 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
--		if (!memcmp(prom_init, (void *)(off + extmem), 16))
-+		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
- 			break;
- 	}
- 	extmem -= lowmem;
--- 
-2.35.1
+On Fri, Oct 21, 2022 at 09:43:58PM -0400, Jason A. Donenfeld wrote:
+> Hey everyone,
+> 
+> Here's the second and final tranche of tree-wide conversions to get
+> random integer handling a bit tamer. It's predominantly another
+> Coccinelle-based patchset.
+> 
+> First we s/prandom_u32_max/get_random_u32_below/, since the former is
+> just a deprecated alias for the latter. Then in the next commit we can
+> remove prandom_u32_max all together. I'm quite happy about finally being
+> able to do that. It means that prandom.h is now only for deterministic and 
+> repeatable randomness, not non-deterministic/cryptographic randomness.
+> That line is no longer blurred.
+> 
+> Then, in order to clean up a bunch of inefficient patterns, we introduce
+> two trivial static inline helper functions built on top of
+> get_random_u32_below: get_random_u32_above and get_random_u32_between.
+> These are pretty straight forward to use and understand. Then the final
+> two patches convert some gnarly open-coded number juggling to use these
+> helpers.
+> 
+> I've used Coccinelle for all the treewide patches, so hopefully review
+> is rather uneventful. I didn't accept all of the changes that Coccinelle
+> proposed, though, as these tend to be somewhat context-specific. I erred
+> on the side of just going with the most obvious cases, at least this
+> time through. And then we can address more complicated cases through
+> actual maintainer trees.
+> 
+> Since get_random_u32_below() sits in my random.git tree, these patches
+> too will flow through that same tree.
+> 
+> Regards,
+> Jason
 
 
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
