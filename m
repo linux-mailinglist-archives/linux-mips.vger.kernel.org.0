@@ -2,189 +2,300 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E555660793A
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Oct 2022 16:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD61560833B
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Oct 2022 03:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiJUOIr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Oct 2022 10:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S229961AbiJVBoi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Oct 2022 21:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiJUOIq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Oct 2022 10:08:46 -0400
+        with ESMTP id S229460AbiJVBod (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Oct 2022 21:44:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0817284E;
-        Fri, 21 Oct 2022 07:08:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192895F4A;
+        Fri, 21 Oct 2022 18:44:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 717D6B82C13;
-        Fri, 21 Oct 2022 14:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 203AEC43146;
-        Fri, 21 Oct 2022 14:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666361323;
-        bh=Xo9JwJY/XMU3fy2R/321Jyhdz5lA7kxLyPv0VQaYCmg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Wwaa/+fZi02vh1Dn21QNaUJd4JP907px6Nm2UnMwpekf2npzFOwFvhPioALc1UONJ
-         8ofPTUVMkQw1G3VveiPd76Sos1nwVY2/heVdF4oWu/3qV/74un5rqmkowQV31T7UQw
-         t7ZNkB5TYOYj7abhCh2mSD7ofTrM63eidIF0dcEFUbCSKTFEfV23jErCMz0lyDrXtN
-         Pq8LYbHWAwUzAEd7hdrnsobs3zH6s5vlf62R8Rsl7pR/SBDWUOd9X2KrvYay9ZZVwI
-         N0MUMXqs3GsFnFvE/N8tXfXWWOuc1msGmZOhYsyr2bMyxB0ssBXFGLlxFhLJndP1Vo
-         b1rQ4qAJLUjbg==
-Received: by mail-ed1-f52.google.com with SMTP id w8so3982657edc.1;
-        Fri, 21 Oct 2022 07:08:43 -0700 (PDT)
-X-Gm-Message-State: ACrzQf01+uJx5KFCxnQpol9auhN3l1IJoRwwcLYwLinE3pFm/2eHEEtu
-        zDvLqADrm2h4e1FuBifXsWUi77bXoI593W3ZLmI=
-X-Google-Smtp-Source: AMsMyM56nUz8sGkCeqBVJoK6oDcAc8hZNHP1QjobCqaJwAuRDswWz3ulV0+QMeIS7x6P23jddz9EQQp/xYKEHom6WFA=
-X-Received: by 2002:aa7:d4d9:0:b0:45c:7eae:d8d8 with SMTP id
- t25-20020aa7d4d9000000b0045c7eaed8d8mr17594307edr.254.1666361321203; Fri, 21
- Oct 2022 07:08:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221020072317.492906-1-chenhuacai@loongson.cn>
- <20221020072317.492906-5-chenhuacai@loongson.cn> <1ca11693-17c2-7260-b642-70b033c64b30@linaro.org>
-In-Reply-To: <1ca11693-17c2-7260-b642-70b033c64b30@linaro.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 21 Oct 2022 22:08:28 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4ZtbPZE3edWmQJEmhBsg0QSfKjnCDrfSj2E4sZ12m5zg@mail.gmail.com>
-Message-ID: <CAAhV-H4ZtbPZE3edWmQJEmhBsg0QSfKjnCDrfSj2E4sZ12m5zg@mail.gmail.com>
-Subject: Re: [PATCH V12 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F4F7B82DBA;
+        Sat, 22 Oct 2022 01:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EE0C433D6;
+        Sat, 22 Oct 2022 01:44:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RKXib5Vl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666403058;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MoqRTfm9IB8FgPaOUAJRCt6whwpoPY6P6DzU4oQAino=;
+        b=RKXib5Vl1apeqvXSkeHuSjzGVJcpdoYt/8OAwj7E4ekShqhA/prDPzbcZ3L8EURFJsnCT+
+        VCpgWDuEXVi4KUAlPXmdTapzdA6cjXUVNdUGqKO0UKQGAT4o94LRapJolzjCdwBIIXx41V
+        8R1b7nFrQ3AUcsbIp6ZnzrkcuAw5BG0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 42623445 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 22 Oct 2022 01:44:17 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: [PATCH v1 0/5] convert tree to get_random_u32_{below,above,between}()
+Date:   Fri, 21 Oct 2022 21:43:58 -0400
+Message-Id: <20221022014403.3881893-1-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Philippe,
+Hey everyone,
 
-On Fri, Oct 21, 2022 at 6:16 PM Philippe Mathieu-Daud=C3=A9
-<philmd@linaro.org> wrote:
->
-> On 20/10/22 09:23, Huacai Chen wrote:
-> > From: Feiyang Chen <chenfeiyang@loongson.cn>
-> >
-> > The feature of minimizing overhead of struct page associated with each
-> > HugeTLB page is implemented on x86_64. However, the infrastructure of
-> > this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-> > OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
-> >
-> > To avoid the following build error on LoongArch we should include linux=
-/
->
-> s/should/have to/
-Thanks, I will change it.
+Here's the second and final tranche of tree-wide conversions to get
+random integer handling a bit tamer. It's predominantly another
+Coccinelle-based patchset.
 
->
-> > static_key.h in page-flags.h.
->
-> This looks like 2 different changes in a single patch.. The first is a
-> generic "fix missing include" and the second is LoongArch specific.
-The static_key.h inclusion is also LoongArch-specific, implicitly. X86
-and ARM64 have no build errors without this inclusion, because they
-include static_key.h from their arch-specific core headers. Once
-before I have sent a separate patch to "fix missing include", but Greg
-said that "don't fix unless you have a real problem". :)
+First we s/prandom_u32_max/get_random_u32_below/, since the former is
+just a deprecated alias for the latter. Then in the next commit we can
+remove prandom_u32_max all together. I'm quite happy about finally being
+able to do that. It means that prandom.h is now only for deterministic and 
+repeatable randomness, not non-deterministic/cryptographic randomness.
+That line is no longer blurred.
 
-Huacai
+Then, in order to clean up a bunch of inefficient patterns, we introduce
+two trivial static inline helper functions built on top of
+get_random_u32_below: get_random_u32_above and get_random_u32_between.
+These are pretty straight forward to use and understand. Then the final
+two patches convert some gnarly open-coded number juggling to use these
+helpers.
 
->
-> Splitting in 2 would ease backport cherry-picks.
->
-> > In file included from ./include/linux/mmzone.h:22,
-> > from ./include/linux/gfp.h:6,
-> > from ./include/linux/mm.h:7,
-> > from arch/loongarch/kernel/asm-offsets.c:9:
-> > ./include/linux/page-flags.h:208:1: warning: data definition has no
-> > type or storage class
-> > 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEF=
-AULT_ON,
-> > | ^~~~~~~~~~~~~~~~~~~~~~~~
-> > ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-> > declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=3Dimplicit-int]
-> > ./include/linux/page-flags.h:209:26: warning: parameter names (without
-> > types) in function declaration
-> > 209 | hugetlb_optimize_vmemmap_key);
-> > | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > ./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_ena=
-bled':
-> > ./include/linux/page-flags.h:213:16: error: implicit declaration of
-> > function 'static_branch_maybe' [-Werror=3Dimplicit-function-declaration=
-]
-> > 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_D=
-EFAULT_ON,
-> > | ^~~~~~~~~~~~~~~~~~~
-> > ./include/linux/page-flags.h:213:36: error:
-> > 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-> > use in this function); did you mean
-> > 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-> > 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_D=
-EFAULT_ON,
-> > | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > | CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-> > ./include/linux/page-flags.h:213:36: note: each undeclared identifier
-> > is reported only once for each function it appears in
-> > ./include/linux/page-flags.h:214:37: error:
-> > 'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-> > function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-> > 214 | &hugetlb_optimize_vmemmap_key);
-> > | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > | hugetlb_optimize_vmemmap_enabled
-> >
-> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >   arch/loongarch/Kconfig     | 1 +
-> >   include/linux/page-flags.h | 1 +
-> >   2 files changed, 2 insertions(+)
-> >
-> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > index 6f7fa0c0ca08..0a6ef613124c 100644
-> > --- a/arch/loongarch/Kconfig
-> > +++ b/arch/loongarch/Kconfig
-> > @@ -52,6 +52,7 @@ config LOONGARCH
-> >       select ARCH_USE_QUEUED_RWLOCKS
-> >       select ARCH_USE_QUEUED_SPINLOCKS
-> >       select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> > +     select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-> >       select ARCH_WANT_LD_ORPHAN_WARN
-> >       select ARCH_WANTS_NO_INSTR
-> >       select BUILDTIME_TABLE_SORT
-> > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> > index 0b0ae5084e60..1aafdc73e399 100644
-> > --- a/include/linux/page-flags.h
-> > +++ b/include/linux/page-flags.h
-> > @@ -9,6 +9,7 @@
-> >   #include <linux/types.h>
-> >   #include <linux/bug.h>
-> >   #include <linux/mmdebug.h>
-> > +#include <linux/static_key.h>
-> >   #ifndef __GENERATING_BOUNDS_H
-> >   #include <linux/mm_types.h>
-> >   #include <generated/bounds.h>
->
-> Preferably splitting in 2 distinct patches (for each):
->
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
->
->
+I've used Coccinelle for all the treewide patches, so hopefully review
+is rather uneventful. I didn't accept all of the changes that Coccinelle
+proposed, though, as these tend to be somewhat context-specific. I erred
+on the side of just going with the most obvious cases, at least this
+time through. And then we can address more complicated cases through
+actual maintainer trees.
+
+Since get_random_u32_below() sits in my random.git tree, these patches
+too will flow through that same tree.
+
+Regards,
+Jason
+
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Andreas Dilger <adilger.kernel@dilger.ca>
+Cc: Jaegeuk Kim <jaegeuk@kernel.org>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Darrick J. Wong <djwong@kernel.org>
+Cc: SeongJae Park <sj@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Helge Deller <deller@gmx.de>
+Cc: netdev@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-block@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-mmc@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+
+Jason A. Donenfeld (5):
+  treewide: use get_random_u32_below() instead of deprecated function
+  prandom: remove prandom_u32_max()
+  random: add helpers for random numbers with given floor or range
+  treewide: use get_random_u32_{above,below}() instead of manual loop
+  treewide: use get_random_u32_between() when possible
+
+ arch/arm/kernel/process.c                     |  2 +-
+ arch/arm64/kernel/process.c                   |  2 +-
+ arch/loongarch/kernel/process.c               |  2 +-
+ arch/loongarch/kernel/vdso.c                  |  2 +-
+ arch/mips/kernel/process.c                    |  2 +-
+ arch/mips/kernel/vdso.c                       |  2 +-
+ arch/parisc/kernel/vdso.c                     |  2 +-
+ arch/powerpc/crypto/crc-vpmsum_test.c         |  4 +-
+ arch/powerpc/kernel/process.c                 |  2 +-
+ arch/s390/kernel/process.c                    |  2 +-
+ arch/s390/kernel/vdso.c                       |  2 +-
+ arch/sparc/vdso/vma.c                         |  2 +-
+ arch/um/kernel/process.c                      |  2 +-
+ arch/x86/entry/vdso/vma.c                     |  2 +-
+ arch/x86/kernel/module.c                      |  2 +-
+ arch/x86/kernel/process.c                     |  2 +-
+ arch/x86/mm/pat/cpa-test.c                    |  4 +-
+ crypto/rsa-pkcs1pad.c                         |  2 +-
+ crypto/testmgr.c                              | 86 +++++++++----------
+ drivers/block/drbd/drbd_receiver.c            |  4 +-
+ drivers/bus/mhi/host/internal.h               |  2 +-
+ drivers/dma-buf/st-dma-fence-chain.c          |  6 +-
+ .../gpu/drm/i915/gem/i915_gem_execbuffer.c    |  2 +-
+ .../drm/i915/gt/intel_execlists_submission.c  |  2 +-
+ drivers/gpu/drm/i915/intel_memory_region.c    |  4 +-
+ drivers/infiniband/core/cma.c                 |  2 +-
+ drivers/infiniband/hw/cxgb4/id_table.c        |  4 +-
+ drivers/infiniband/hw/hns/hns_roce_ah.c       |  5 +-
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c        |  2 +-
+ drivers/md/bcache/request.c                   |  2 +-
+ drivers/media/common/v4l2-tpg/v4l2-tpg-core.c |  8 +-
+ .../media/test-drivers/vidtv/vidtv_demod.c    |  8 +-
+ .../test-drivers/vivid/vivid-kthread-cap.c    |  2 +-
+ .../test-drivers/vivid/vivid-kthread-out.c    |  2 +-
+ .../media/test-drivers/vivid/vivid-radio-rx.c |  4 +-
+ .../media/test-drivers/vivid/vivid-sdr-cap.c  |  2 +-
+ .../test-drivers/vivid/vivid-touch-cap.c      |  2 +-
+ drivers/mmc/core/core.c                       |  4 +-
+ drivers/mmc/host/dw_mmc.c                     |  2 +-
+ drivers/mtd/nand/raw/nandsim.c                |  4 +-
+ drivers/mtd/tests/mtd_nandecctest.c           | 10 +--
+ drivers/mtd/tests/stresstest.c                |  8 +-
+ drivers/mtd/ubi/debug.c                       |  2 +-
+ drivers/mtd/ubi/debug.h                       |  6 +-
+ drivers/net/ethernet/broadcom/cnic.c          |  2 +-
+ .../chelsio/inline_crypto/chtls/chtls_io.c    |  4 +-
+ drivers/net/phy/at803x.c                      |  2 +-
+ drivers/net/team/team_mode_random.c           |  2 +-
+ drivers/net/wireguard/selftest/allowedips.c   | 20 ++---
+ drivers/net/wireguard/timers.c                |  4 +-
+ .../broadcom/brcm80211/brcmfmac/p2p.c         |  2 +-
+ .../net/wireless/intel/iwlwifi/mvm/mac-ctxt.c |  2 +-
+ drivers/pci/p2pdma.c                          |  2 +-
+ drivers/s390/scsi/zfcp_fc.c                   |  2 +-
+ drivers/scsi/fcoe/fcoe_ctlr.c                 |  4 +-
+ drivers/scsi/qedi/qedi_main.c                 |  2 +-
+ drivers/scsi/scsi_debug.c                     |  6 +-
+ fs/ceph/inode.c                               |  2 +-
+ fs/ceph/mdsmap.c                              |  2 +-
+ fs/ext2/ialloc.c                              |  2 +-
+ fs/ext4/ialloc.c                              |  2 +-
+ fs/ext4/mmp.c                                 |  8 +-
+ fs/ext4/super.c                               |  5 +-
+ fs/f2fs/gc.c                                  |  2 +-
+ fs/f2fs/segment.c                             |  8 +-
+ fs/ubifs/debug.c                              |  8 +-
+ fs/ubifs/lpt_commit.c                         | 14 +--
+ fs/ubifs/tnc_commit.c                         |  2 +-
+ fs/xfs/libxfs/xfs_alloc.c                     |  2 +-
+ fs/xfs/libxfs/xfs_ialloc.c                    |  2 +-
+ fs/xfs/xfs_error.c                            |  2 +-
+ include/linux/damon.h                         |  2 +-
+ include/linux/nodemask.h                      |  2 +-
+ include/linux/prandom.h                       |  6 --
+ include/linux/random.h                        | 24 ++++++
+ kernel/bpf/core.c                             |  4 +-
+ kernel/kcsan/selftest.c                       |  4 +-
+ kernel/locking/test-ww_mutex.c                |  4 +-
+ kernel/time/clocksource.c                     |  2 +-
+ lib/fault-inject.c                            |  2 +-
+ lib/find_bit_benchmark.c                      |  4 +-
+ lib/kobject.c                                 |  2 +-
+ lib/reed_solomon/test_rslib.c                 |  6 +-
+ lib/sbitmap.c                                 |  4 +-
+ lib/test-string_helpers.c                     |  2 +-
+ lib/test_fprobe.c                             |  5 +-
+ lib/test_hexdump.c                            | 10 +--
+ lib/test_kprobes.c                            |  5 +-
+ lib/test_list_sort.c                          |  2 +-
+ lib/test_printf.c                             |  2 +-
+ lib/test_rhashtable.c                         |  4 +-
+ lib/test_vmalloc.c                            |  8 +-
+ mm/kasan/kasan_test.c                         |  6 +-
+ mm/kfence/core.c                              |  4 +-
+ mm/kfence/kfence_test.c                       |  4 +-
+ mm/slub.c                                     |  2 +-
+ mm/swapfile.c                                 |  5 +-
+ net/802/garp.c                                |  2 +-
+ net/802/mrp.c                                 |  2 +-
+ net/batman-adv/bat_iv_ogm.c                   |  4 +-
+ net/batman-adv/bat_v_elp.c                    |  2 +-
+ net/batman-adv/bat_v_ogm.c                    |  4 +-
+ net/batman-adv/network-coding.c               |  2 +-
+ net/bluetooth/mgmt.c                          |  5 +-
+ net/can/j1939/socket.c                        |  2 +-
+ net/can/j1939/transport.c                     |  2 +-
+ net/ceph/mon_client.c                         |  2 +-
+ net/ceph/osd_client.c                         |  2 +-
+ net/core/neighbour.c                          |  4 +-
+ net/core/pktgen.c                             | 37 ++++----
+ net/core/stream.c                             |  2 +-
+ net/ipv4/icmp.c                               |  2 +-
+ net/ipv4/igmp.c                               |  6 +-
+ net/ipv4/inet_connection_sock.c               |  2 +-
+ net/ipv4/inet_hashtables.c                    |  2 +-
+ net/ipv4/route.c                              |  4 +-
+ net/ipv4/tcp_bbr.c                            |  2 +-
+ net/ipv4/tcp_input.c                          |  3 +-
+ net/ipv6/addrconf.c                           |  8 +-
+ net/ipv6/mcast.c                              | 10 +--
+ net/ipv6/output_core.c                        |  8 +-
+ net/ipv6/route.c                              |  2 +-
+ net/netfilter/ipvs/ip_vs_twos.c               |  4 +-
+ net/netfilter/nf_conntrack_core.c             |  4 +-
+ net/netfilter/nf_nat_helper.c                 |  2 +-
+ net/netlink/af_netlink.c                      |  2 +-
+ net/packet/af_packet.c                        |  4 +-
+ net/sched/act_gact.c                          |  2 +-
+ net/sched/act_sample.c                        |  2 +-
+ net/sched/sch_choke.c                         |  2 +-
+ net/sched/sch_netem.c                         |  4 +-
+ net/sctp/socket.c                             |  2 +-
+ net/sctp/transport.c                          |  2 +-
+ net/sunrpc/cache.c                            |  2 +-
+ net/sunrpc/xprtsock.c                         |  2 +-
+ net/tipc/socket.c                             |  2 +-
+ net/vmw_vsock/af_vsock.c                      |  3 +-
+ net/xfrm/xfrm_state.c                         |  2 +-
+ 138 files changed, 309 insertions(+), 318 deletions(-)
+
+-- 
+2.38.1
