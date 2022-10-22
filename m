@@ -2,144 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDD8608EC3
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Oct 2022 19:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C79A608F04
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Oct 2022 20:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiJVRPM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 22 Oct 2022 13:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S229756AbiJVSot (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 Oct 2022 14:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiJVRPL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Oct 2022 13:15:11 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D6754677;
-        Sat, 22 Oct 2022 10:15:07 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j7so9490693wrr.3;
-        Sat, 22 Oct 2022 10:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
-         :subject:cc:to:from:references:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OEdRsgVqCkcKz4eZ7jkOylFepk0zkXtGkfANql0O2yY=;
-        b=eDHT+PdTkIpoA25cMakJH7LwzPhBP3+NLqYVcxGoKNV/kY/iRn4XvItq9CASOMKBhz
-         8V/Q5Wqq6WzKuKE8ScZ+DAXjp+EBhgNKy7dKLvxM1kQG9BlY8NWyjzcvy0+cLXZgtnVb
-         z7WxJ8m58IsjgXN3ijExpHHd2iUYYxS3AVmCfnLA2qPNV/Ybn9TlyKZ25+if9XxIaDKH
-         UuFFNYliJYaaporq2xKqMbW8/5hRTL+LNUAkt2YxETG7l8Y1jVepQDxsJPVx7aRQ9WPq
-         U613c1blBAGUs7IDXWZlxY9p+TMh3I3tFTTwNStYXmpiQmyY8tK8QmZg47xBDocB2COn
-         RVsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
-         :subject:cc:to:from:references:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OEdRsgVqCkcKz4eZ7jkOylFepk0zkXtGkfANql0O2yY=;
-        b=264gNRmwis7kijoprGHI3FTUEhi/GhzEzG9cspA0CUcxjgELtSeHuC6MovbwIkS9a/
-         lpeiJjlzqMJ/Lck3bAZCGX2DhSU/IguFfN8r50oF5xx7YoFGFcBIRXwFZi1BPLu62wsB
-         wZdS/bO8oTQNWQeeWv6TunsW45GlUvTj2kvwe6albCEhcRxPcTkwOchdSwoJvIfL9PNT
-         b7k9gDmCfPogZQWaPPIEFbYKJ4O7pT/Lft1mpB4UADTOBcpmz34mNgG8XTJqSuaKz8dS
-         CN9WNQ/yZTHc1a2QZLH6OK4pvVgjhZkThQFje7rlrTEQ5mtBOQBKrNrubsfYu/qklXYU
-         8tfw==
-X-Gm-Message-State: ACrzQf1a/JXunOfHLbQCTYpbfEh7x6BNf4fgCzw4thiiJnAhQxtXx+VK
-        3WMqhYbaEBzWRNRG3+G9oiE=
-X-Google-Smtp-Source: AMsMyM5GACKMhemPzQfhXeK8J8ZeCfuB8vay27pyTEULvy/cKHgyGpAjBE0I36JUTkg7zlSZEqPa1w==
-X-Received: by 2002:a5d:5142:0:b0:236:5d8d:6254 with SMTP id u2-20020a5d5142000000b002365d8d6254mr2649278wrt.514.1666458906363;
-        Sat, 22 Oct 2022 10:15:06 -0700 (PDT)
-Received: from localhost (188.29.215.65.threembb.co.uk. [188.29.215.65])
-        by smtp.gmail.com with ESMTPSA id f15-20020a05600c154f00b003b4a68645e9sm3341141wmg.34.2022.10.22.10.15.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 10:15:05 -0700 (PDT)
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
- <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
- <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
- <ROSYER.QTJF8J14H2YX1@crapouillou.net>
- <6f2c7a0b-b68b-fc42-1a82-2b69c114823f@wanyeetech.com>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Zhou Yanjie <zhouyu@wanyeetech.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/11] ASoC: jz4740-i2s: Make the PLL clock name
- SoC-specific
-In-reply-to: <6f2c7a0b-b68b-fc42-1a82-2b69c114823f@wanyeetech.com>
-Date:   Sat, 22 Oct 2022 18:15:05 +0100
-Message-ID: <UQ597w4FmzOT8p76tdRPhzECStUpFmYe@localhost>
+        with ESMTP id S229491AbiJVSor (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Oct 2022 14:44:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7474248D1;
+        Sat, 22 Oct 2022 11:44:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6986068B;
+        Sat, 22 Oct 2022 18:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3F6AC433D7;
+        Sat, 22 Oct 2022 18:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666464281;
+        bh=rOUU30Ns40RaPB0p9BJDk4013bR8TLp0a0aP/lu3CGw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QH1i6VZDzmLtoKIfZRdZlY5d0nnl5DOOq4/LqxYE5FlmXq1e/ayVWYrKNPQTQfyTm
+         lDWgFVezS94kXpPQqLVZatcxNDhidctINkWrhuWdQswTmu6mz+CfseCYZ+3W8aNf/D
+         BNkZScXW3d2V3kASY+/66HDGLtFJ5ipyIa5e8xIAsg2O2gipHt0u3nXAKd6fgttKgZ
+         NC4qpNwwmaHrG3GXHMyiFE9RiFlknggaV/ZCAfsoGqw84Y8dfHy2yZiRWd2Z5DPiV2
+         OT+zRHLzLLt4Xmw92V6rNOqAbn6uKoF3nU46vq2IUtHpqclZiRhC/zWn5A1+rqtQtz
+         yzpn0LslOhDww==
+From:   SeongJae Park <sj@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, "Kees Cook" <keescook@chromium.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        "Jani Nikula" <jani.nikula@linux.intel.com>,
+        "Jason Gunthorpe" <jgg@nvidia.com>,
+        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "Andreas Dilger" <adilger.kernel@dilger.ca>,
+        "Jaegeuk Kim" <jaegeuk@kernel.org>,
+        "Richard Weinberger" <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        "SeongJae Park" <sj@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Helge Deller" <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        damon@lists.linux.dev, linux-mm@kvack.org
+Subject: Re: [PATCH v1 1/5] treewide: use get_random_u32_below() instead of deprecated function
+Date:   Sat, 22 Oct 2022 18:44:36 +0000
+Message-Id: <20221022184436.33750-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221022014403.3881893-2-Jason@zx2c4.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Jason,
 
-Zhou Yanjie <zhouyu@wanyeetech.com> writes:
+Cc-ing damon@lists.linux.dev and linux-mm@kvack.org.
 
-> Hi Paul,
->
-> On 2022/7/13 =E4=B8=8B=E5=8D=8811:07, Paul Cercueil wrote:
->> Hi Zhou,
->>
->> Le mer., juil. 13 2022 at 22:33:44 +0800, Zhou Yanjie <zhouyu@wanyeetech=
-.com>
->> a =C3=A9crit :
->>> Hi Aidan,
->>>
->>> On 2022/7/9 =E4=B8=8A=E5=8D=8812:02, Aidan MacDonald wrote:
->>>> @@ -400,6 +402,7 @@ static const struct i2s_soc_info jz4740_i2s_soc_in=
-fo =3D
->>>> {
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .field_tx_fifo_thresh=C2=A0=C2=A0=C2=A0=
- =3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .field_i2sdiv_capture=C2=A0=C2=A0=C2=A0=
- =3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .field_i2sdiv_playback=C2=A0=C2=A0=C2=
-=A0 =3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->>>> +=C2=A0=C2=A0=C2=A0 .pll_clk_name=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 =3D "pll half",
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .shared_fifo_flush=C2=A0=C2=A0=C2=A0 =
-=3D true,
->>>> =C2=A0 };
->>>
->>>
->>> Since JZ4760, according to the description of the I2SCDR register,
->>> Ingenic SoCs no longer use PLL/2 clock, but directly use PLL clock,
->>> so it seems also inappropriate to use "pll half" for these SoCs.
->>
->> The device tree passes the clock as "pll half". So the driver should use=
- this
->> name as well...
->
->
-> I see...
->
-> It seems that the device tree of JZ4770 has used "pll half" already,
-> but there is no "pll half" used anywhere in the device tree of JZ4780,
-> maybe we can keep the pll_clk_name of JZ4770 as "pll half", and change
-> the pll_clk_name of JZ4780 to a more reasonable name.
->
->
-> Thanks and best regards!
+On Fri, 21 Oct 2022 21:43:59 -0400 "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
 
-Actually, the clock names in the DT are meaningless. The clk_get() call
-matches only the clock's name in the CGU driver. So in fact the driver
-is "broken" for jz4780. It seems jz4770 doesn't work correctly either,
-it has no "pll half", and three possible parents for its "i2s" clock.
+> This is a simple mechanical transformation done by:
+> 
+> @@
+> expression E;
+> @@
+> - prandom_u32_max(E)
+> + get_random_u32_below(E)
+> 
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+[...]
+>  include/linux/damon.h                         |  2 +-
 
-Since the driver only supports the internal codec, which requires the
-"ext" clock, there isn't a problem in practice.
+For the damon.h part,
 
-I'm just going to drop this patch and leave .set_sysclk() alone for now.
-I think a better approach is to have the DT define an array of parent
-clocks for .set_sysclk()'s use, instead of hardcoding parents in the
-driver. If the parent array is missing the driver can default to using
-"ext" so existing DTs will work.
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
-Regards,
-Aidan
+
+Thanks,
+SJ
