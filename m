@@ -2,68 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596306093CE
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Oct 2022 16:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A516093E3
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Oct 2022 16:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiJWOFF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 23 Oct 2022 10:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
+        id S229956AbiJWOde (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 23 Oct 2022 10:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJWOFD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Oct 2022 10:05:03 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DDD3CBDB;
-        Sun, 23 Oct 2022 07:05:01 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id q196so5865957iod.8;
-        Sun, 23 Oct 2022 07:05:01 -0700 (PDT)
+        with ESMTP id S229707AbiJWOdd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Oct 2022 10:33:33 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D782B1032;
+        Sun, 23 Oct 2022 07:33:32 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v11so5103188wmd.1;
+        Sun, 23 Oct 2022 07:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76WT1QUpKp6qzBWxcrAq0oJH066G81f6FsGzE6bBFSs=;
-        b=YCveSy386BWW6vtgM4Gl4qo86kzmCFKxTDd8P8Z/Xff54DECtU+F59LnPAUbUy+hj2
-         n+b7/EZTNnalwh7RFLRSlNrGTyBWrNYbEEjoYGnYJhoDRn2q6XHV3If+3GqW/oRF/Gix
-         tHpUPPjZNri0cjmT2JymTGYvSIHbHH9VjN+bah4iTc+3J0qw00lQ4vxlwDuzhvzY3i07
-         0ZOiApcdkLFcPBGJEMP+PDLJ1SGMNBG5gk65WJmA4H6nO60iFUeFeI9aaCC8hefql2MK
-         hnpb147iTx1v8lem7jcgiJcna4L3BhSJA3z1HR36kUBujRYquM7VAqJz3fBfFv9kvRIX
-         NR/w==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WUGeajMYAerRFQcOqcSIJ1LvScQ/5lPSyQp1+APgyBg=;
+        b=NMxA7YjYwmFC7EMaBdm1k/rg1Sg6SL3DNDYSF9piNDMB26oEYDSuJPr9RZz2LI+IbX
+         gzZBC/iDZIao94YxfWesLLKDqIQ2BOIoTfJFPBc8YDp3L+KYy4s+pjdpPIkBFLMGVbvP
+         S8e4wGlNA1rKkMcCda7DtQsSmiy1dw0JjJEKiYuKdXualkP4PHSxhiNtEXVANHw1glo+
+         pGIN6PhZyYAQkHwcHhDLO4RcRJMsOjjte5Z0Qsb2ehlJZkXM9mCsoPprItJkHWoplWTt
+         h/AX24iKZ07DA33piY+5fHwqSxsoNnM4ExuXUgqejEX195YRO3faoVTSWANwFhpda/Us
+         Au4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=76WT1QUpKp6qzBWxcrAq0oJH066G81f6FsGzE6bBFSs=;
-        b=wc7lsKPRq2SH3JXj3iCurm/Vo/fvik4cBtCWmU2WvEhkyQh0gL/9OPcapHsy7WLRf2
-         S5TT1Hvs6RmCB4DxUDSYPpRZukwtxxW3ld91w0PXJv+pAIvvNbfWsmidhEX0do/vYoaq
-         9zJaKFVOfhU2G5UlAqK1Ot94QMbv9xPpnJ+Luqv1Pv43OaUMMpTlkU/bq+CEtWxnaB19
-         /0avBEhG8kxu4tBlv/hWN+5rKqtrqJ+fq0kZRh6wg3RcCRUVQijdut7UcoyH/0ZEz0BE
-         +cMh8S7nGh5qFvsgadDwCwgX3gc5+GwjDMs9/sfJjqw6HsM4OSa4hV8QXutXGeFL9ELE
-         P7ZA==
-X-Gm-Message-State: ACrzQf39ayXc1D7J+GfzzKv7iKSEwKjmfI4oWmRZ0H+F5dgBPGh/GKKK
-        o3K20KtCyMaQSncBJgjjkwDKa/al9Vi2Z5eW4lU=
-X-Google-Smtp-Source: AMsMyM7W3X3wIg3V7xQwyIZDSWHweIf+MTIvPNcn+4KD4Cv8bwRhrdVqGCe6Q0OANw7dZKAyvozgR4ieGXSa+ABXqmM=
-X-Received: by 2002:a6b:6716:0:b0:6bc:113c:22a2 with SMTP id
- b22-20020a6b6716000000b006bc113c22a2mr17383571ioc.12.1666533901020; Sun, 23
- Oct 2022 07:05:01 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WUGeajMYAerRFQcOqcSIJ1LvScQ/5lPSyQp1+APgyBg=;
+        b=gGUctGQBHNH7dGBlFTno18MPSP4pWmH7Ea/lfNpJYn9sA773Nbpf9XPo9Groe4xXmK
+         sJJhVrju8MI6JzVWoOdO2fhUjhD+UQmapSnL2Nu++1BbHRavWQuev3nPC1rcOn74zAlC
+         cBF031HHa2L60vmmlkqBEiqoA+dcP2fPEBOLR7V6GU3dAqKnXF++IkRdEHkwxeaQBMFo
+         /ss/x5L0o9EecayfcwcDiq1c9lzMz1oM2YXsHQ2xcAaNo5fBZoupjdWwCL6S+N5gAEzf
+         WjSU76LbkB8OBFr/7sTfCMeNuueAfzzM9GSvZF4EOD7IUygAHPC6Pi3hZDex4ObFd8IN
+         3O1A==
+X-Gm-Message-State: ACrzQf1PXCyxFAf8I+FAHdSvnAgB6CZM7NHszQ83c7og62qwcud/na39
+        lyoE1zXmcA/WaLAmDHGZFM2ntsea/bw=
+X-Google-Smtp-Source: AMsMyM4lrHZdx1GnN4wpUqJBRPblfE99mI/Nrpbo9kMAbrO2up/+wV+u6FaSpxhHSqPJA3Pme44kxA==
+X-Received: by 2002:a1c:770f:0:b0:3c8:33ba:150f with SMTP id t15-20020a1c770f000000b003c833ba150fmr7553451wmi.194.1666535611447;
+        Sun, 23 Oct 2022 07:33:31 -0700 (PDT)
+Received: from localhost (94.197.10.75.threembb.co.uk. [94.197.10.75])
+        by smtp.gmail.com with ESMTPSA id bu18-20020a056000079200b002302dc43d77sm10406023wrb.115.2022.10.23.07.33.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Oct 2022 07:33:30 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/9] ASoC: cleanups and improvements for jz4740-i2s
+Date:   Sun, 23 Oct 2022 15:33:19 +0100
+Message-Id: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-References: <20221022165047.4020785-1-lis8215@gmail.com> <20221022165047.4020785-3-lis8215@gmail.com>
- <9W76KR.NVDSVG4IWZ3A3@crapouillou.net> <CAKNVLfZmUpFzKsdzY1e_mUTVsM-jnL65Fi6EXYcF80-oNV+DGQ@mail.gmail.com>
- <YE87KR.VC65A15U1PH41@crapouillou.net>
-In-Reply-To: <YE87KR.VC65A15U1PH41@crapouillou.net>
-From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Sun, 23 Oct 2022 17:04:49 +0300
-Message-ID: <CAKNVLfbJaGd0t==AzxyT5Q7fVD7PwK75-S5dbb+G9GZUPpagZQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] serial: 8250/ingenic: Add support for the JZ4750/JZ4755
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,29 +68,42 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-=D0=B2=D1=81, 23 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:16, Paul Cercue=
-il <paul@crapouillou.net>:
-> Do you have such hardware?
+This series is a preparatory cleanup of the jz4740-i2s driver before
+adding support for a new SoC. The two improvements are lifting
+unnecessary restrictions on sample rates and formats -- the existing
+ones appear to be derived from the limitations of the JZ4740's internal
+codec and don't reflect the actual capabilities of the I2S controller.
 
-No
+I'm unable to test the series on any JZ47xx SoCs, but I have tested
+on an X1000 (which is the SoC I'll be adding in a followup series).
 
-> Don't add support for cases you can't test.
+Changes in v6:
 
-It's just a side effect of that approach.
+* Added Cc: stable for flush bits fix.
 
-> For what we know - all JZ475x use a 24 MHz crystal and all JZ4760(B)
-> use a 12 MHz crystal, until proven otherwise.
+Changes in v5:
 
-Ouf course it just confirms the rule but I found one exception: JZ4750 & 12=
-MHz
-Link: https://github.com/carlos-wong/uboot_jz4755/blob/master/include/confi=
-gs/lib4750.h
+* Drop 'mem' resource removal patch already upstream.
+* Update FIFO flush bits fix to address Paul's review comments.
+* Drop PLL clock name patch, that needs a different approach.
 
-Regarding your proposal:
-In my opinion enabling the divisor unconditionally is a bad practice,
-as it's already enabled (or not) by the bootloader, with respect to the
-hardware capabilities.I think it's better to keep the driver as it is than
-adding such things.
+Link for v4: https://lore.kernel.org/alsa-devel/20220708160244.21933-1-aidanmacdonald.0x0@gmail.com/
 
-BR,
-Siarhei
+Aidan MacDonald (9):
+  ASoC: jz4740-i2s: Handle independent FIFO flush bits
+  ASoC: jz4740-i2s: Convert to regmap API
+  ASoC: jz4740-i2s: Simplify using regmap fields
+  ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+  ASoC: jz4740-i2s: Align macro values and sort includes
+  ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
+  ASoC: jz4740-i2s: Support continuous sample rate
+  ASoC: jz4740-i2s: Move component functions near the component driver
+  ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
+
+ sound/soc/jz4740/Kconfig      |   1 +
+ sound/soc/jz4740/jz4740-i2s.c | 455 ++++++++++++++++++----------------
+ 2 files changed, 243 insertions(+), 213 deletions(-)
+
+-- 
+2.38.1
+
