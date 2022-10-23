@@ -2,63 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DC46093F4
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Oct 2022 16:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2703F609419
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Oct 2022 16:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbiJWOeL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 23 Oct 2022 10:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S230080AbiJWO5J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 23 Oct 2022 10:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiJWOdy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Oct 2022 10:33:54 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD29B659F9;
-        Sun, 23 Oct 2022 07:33:44 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id j15so1301601wrq.3;
-        Sun, 23 Oct 2022 07:33:44 -0700 (PDT)
+        with ESMTP id S230251AbiJWO5I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Oct 2022 10:57:08 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A9A5C97B;
+        Sun, 23 Oct 2022 07:57:04 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c7-20020a05600c0ac700b003c6cad86f38so8165812wmr.2;
+        Sun, 23 Oct 2022 07:57:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yKcyGQjHmAJtNmBYOXlBo9pb7HsrytrHyz7qgBwYjhw=;
-        b=Zvuc+9WwEZdn3+oKyWUWeHWDi/YfGTZb1u1GwBxKUlcv0jfkZlXEpl4HTvEzUqokJq
-         jPVI6zHQSyBzvBjaMTO/Kk0I1hO33tDP7Jm8Wynpmd3vQhDBXMBN7s9+nutIvRL0DFIN
-         sSleOII1Y5QLenCixFn+Balet89evCr6TbpvJU4eXRNFpU2Ef/Ztiw97soIcQA0r+7fF
-         AqhHPA8YlYjg/H0TM0xvwV6f56VDypR4RXPiGHckcuqWSEt+eDwBQibmfYxRX2wIj3zT
-         A3uMpgrXG8DMWOgkNKNxSiTDV9J01GkhMSoU5orzD2L3cZNJHOxNQ8SQKhnC1mpI9OUl
-         4AhA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5N970xLEDqJdJWYY9u+esmQAZbPzXuz4v0lBTGeL7gI=;
+        b=Us+2SC+vgzvovV5/vrRo1YZQE9myy0R2LEpEag5Wv4SVx03oi+JgRIcIA37EeSdcVR
+         mr+1XjDVCdRZu1n+S6QCYLIk5L014PjmqdZOa1gbcBBs4z+AZ8Uj24kEKEaW0WsghnZw
+         g/38o4K6TtxWrVuWo1HHPZGMH3aaBlT5gdyqswXLbrFCyvNvhnx6tjIarELDlAuNKHoM
+         4UtnAMOrsX4K2F6QEqjkBK4Yz/3aHmhbeE/1PwZD+3/nDh5+om0LLDsU3iLBEBPxazTH
+         JCIzuNCjzbc3rABz7g7++X4MYYrtu0pACpYkgZR3KBq8eTkL8HCE8iypjJuaihv6voCJ
+         usTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yKcyGQjHmAJtNmBYOXlBo9pb7HsrytrHyz7qgBwYjhw=;
-        b=yEqu5SZpe4gzUegMakQNpBc5kzhJJxP+BNvimkyHAPegr3PFby/RRnDQb417oVBFJi
-         x9ZxfFKKI/QCWVDxpJaWD27Ca33AFDyGyn8j8d10fxBwyTyTmYkew+qDLyBJZxo+8Ccp
-         u9YRKkicVliiOonB7zhflfqN/t8dK6rLn5d8+rwRwT5fQJXkMeuVR3iwrAB+a7Hd5au1
-         qGfgYiPWXMJeXPo43PHxZ33RLFjKlp0F3qte0MJL4HCWm9eb9gYkn/GptmsYDURyVy6O
-         MHOa1+xWXmnHdM9J1lQb7JEmOSzvv3TopgipXsATAWfkHva0l/yaTN0rvphjpEmf3bfm
-         iF2g==
-X-Gm-Message-State: ACrzQf26zlG4z1IDJKdZbuco3jbIgSWiUar4a0ML/FFXpxCQsq1nXyY0
-        mzkAtNIkYiFigEsKjzu01Lo=
-X-Google-Smtp-Source: AMsMyM760Y2uGPzHs1dXIlqIe911hOUsZqHAkRRIwjSXF19eKoa/0dSBaVi5wAn5pEjH0TuJE/fxMQ==
-X-Received: by 2002:a5d:4f12:0:b0:22e:3920:a09c with SMTP id c18-20020a5d4f12000000b0022e3920a09cmr17811204wru.95.1666535622868;
-        Sun, 23 Oct 2022 07:33:42 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5N970xLEDqJdJWYY9u+esmQAZbPzXuz4v0lBTGeL7gI=;
+        b=mYloidtfQkua5fEgAbN8BmWY0UeI8xxa5wwkOiUmBWtduStfDTWJdKaK2Zs0deBjlo
+         VXTzAy5PX1/ZopeCS9h3bk6qSYeEpVJNJUl7wQvVq1Hc4+ffn7g2KVLAstu0Q8r62FnI
+         22CIDvUdEZkXXUMbi8dz1gGa54dOEVOgufuYDoNAhIeYDyVPuAWB86+5EBdp+OJSVgJr
+         ZDdYuUuQP95gt8WQDj2KT+6jFWKeRd+P4dh5k6rfMnEt21A/jL1sv+uS0mwgMkjnR3sb
+         F6h87dxZbqBlrulQAWXGyS/lnnZ/vT3EHsYv9M87IcEctWOo17NtFDKaJJ0a6OiMgEdj
+         QkDg==
+X-Gm-Message-State: ACrzQf0MecAMFqvMVqx+EQvLGGYZN3XXgZQv/qd/v0w0Cy7NPO0zABlP
+        RIC8tW2pmh6vkbJhbkSpmig=
+X-Google-Smtp-Source: AMsMyM6GM6lQttmKPWFkHc3/nspixgQvUJqM4+/klmp9IODFfN5LgygB/74btqrG6jctv8Y0X7ibdQ==
+X-Received: by 2002:a05:600c:4e8a:b0:3c6:da7c:8d71 with SMTP id f10-20020a05600c4e8a00b003c6da7c8d71mr37231818wmq.16.1666537022619;
+        Sun, 23 Oct 2022 07:57:02 -0700 (PDT)
 Received: from localhost (94.197.10.75.threembb.co.uk. [94.197.10.75])
-        by smtp.gmail.com with ESMTPSA id o13-20020adfcf0d000000b0022cce7689d3sm7614395wrj.36.2022.10.23.07.33.42
+        by smtp.gmail.com with ESMTPSA id l1-20020a7bc341000000b003b497138093sm8219656wmj.47.2022.10.23.07.57.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 07:33:42 -0700 (PDT)
+        Sun, 23 Oct 2022 07:57:02 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com
+To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
 Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 9/9] ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
-Date:   Sun, 23 Oct 2022 15:33:28 +0100
-Message-Id: <20221023143328.160866-10-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
-References: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/5] Add support for X1000 audio clocks
+Date:   Sun, 23 Oct 2022 15:56:48 +0100
+Message-Id: <20221023145653.177234-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,109 +69,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Move most of the DAI probe/remove logic into component ops.
-This makes things more consistent because the AIC clock is
-now managed solely from the component side. And it makes it
-easier to add codec switching support later on.
+The first three patches of this series modify the Ingenic CGU driver to
+allow the X1000's I2S divider to be modeled as a PLL clock. This is not
+really true -- it's just a fractional divider -- but doing it this way
+maximizes code reuse and avoids the need for a custom clock. (Thanks to
+Zhou Yanjie & Paul Cercueil for the idea.)
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- sound/soc/jz4740/jz4740-i2s.c | 54 +++++++++++++++++++----------------
- 1 file changed, 30 insertions(+), 24 deletions(-)
+The last two patches actually add the X1000 SoC's audio clocks.
 
-diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
-index ac04b17c2787..b620d4462d90 100644
---- a/sound/soc/jz4740/jz4740-i2s.c
-+++ b/sound/soc/jz4740/jz4740-i2s.c
-@@ -305,32 +305,10 @@ static int jz4740_i2s_set_sysclk(struct snd_soc_dai *dai, int clk_id,
- static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
- {
- 	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
--	int ret;
--
--	ret = clk_prepare_enable(i2s->clk_aic);
--	if (ret)
--		return ret;
- 
- 	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
- 		&i2s->capture_dma_data);
- 
--	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
--
--	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
--		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
--		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
--
--	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
--	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
--
--	return 0;
--}
--
--static int jz4740_i2s_dai_remove(struct snd_soc_dai *dai)
--{
--	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
--
--	clk_disable_unprepare(i2s->clk_aic);
- 	return 0;
- }
- 
-@@ -350,7 +328,6 @@ static const struct snd_soc_dai_ops jz4740_i2s_dai_ops = {
- 
- static struct snd_soc_dai_driver jz4740_i2s_dai = {
- 	.probe = jz4740_i2s_dai_probe,
--	.remove = jz4740_i2s_dai_remove,
- 	.playback = {
- 		.channels_min = 1,
- 		.channels_max = 2,
-@@ -386,7 +363,6 @@ static const struct i2s_soc_info jz4760_i2s_soc_info = {
- 
- static struct snd_soc_dai_driver jz4770_i2s_dai = {
- 	.probe = jz4740_i2s_dai_probe,
--	.remove = jz4740_i2s_dai_remove,
- 	.playback = {
- 		.channels_min = 1,
- 		.channels_max = 2,
-@@ -454,8 +430,38 @@ static int jz4740_i2s_resume(struct snd_soc_component *component)
- 	return 0;
- }
- 
-+static int jz4740_i2s_probe(struct snd_soc_component *component)
-+{
-+	struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
-+	int ret;
-+
-+	ret = clk_prepare_enable(i2s->clk_aic);
-+	if (ret)
-+		return ret;
-+
-+	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
-+
-+	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
-+		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
-+		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
-+
-+	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
-+	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
-+
-+	return 0;
-+}
-+
-+static void jz4740_i2s_remove(struct snd_soc_component *component)
-+{
-+	struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
-+
-+	clk_disable_unprepare(i2s->clk_aic);
-+}
-+
- static const struct snd_soc_component_driver jz4740_i2s_component = {
- 	.name			= "jz4740-i2s",
-+	.probe			= jz4740_i2s_probe,
-+	.remove			= jz4740_i2s_remove,
- 	.suspend		= jz4740_i2s_suspend,
- 	.resume			= jz4740_i2s_resume,
- 	.legacy_dai_naming	= 1,
+Aidan MacDonald (5):
+  clk: ingenic: Make PLL clock "od" field optional
+  clk: ingenic: Make PLL clock enable_bit and stable_bit optional
+  clk: ingenic: Add .set_rate_hook() for PLL clocks
+  dt-bindings: ingenic,x1000-cgu: Add audio clocks
+  clk: ingenic: Add X1000 audio clocks
+
+ drivers/clk/ingenic/cgu.c                     | 45 +++++++++---
+ drivers/clk/ingenic/cgu.h                     | 17 +++--
+ drivers/clk/ingenic/x1000-cgu.c               | 69 +++++++++++++++++++
+ include/dt-bindings/clock/ingenic,x1000-cgu.h |  4 ++
+ 4 files changed, 120 insertions(+), 15 deletions(-)
+
 -- 
 2.38.1
 
