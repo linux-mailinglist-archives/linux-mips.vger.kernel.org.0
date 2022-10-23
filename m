@@ -2,151 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22671609450
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Oct 2022 17:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E2B609457
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Oct 2022 17:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiJWPVG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 23 Oct 2022 11:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S230176AbiJWPWc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 23 Oct 2022 11:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJWPVF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Oct 2022 11:21:05 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7010D69F65;
-        Sun, 23 Oct 2022 08:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666538463; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R3op+VX3yYK2/2LlXgjQoOdhDpt/JM+p44pBcPSyInw=;
-        b=uKGOfoF9M7JHALdbD2VAd8XVJOKEIaGHFx+NWCcfcaIiQC9DkRUXI17tgq3h3R8ROMrmGh
-        tcHFgh/eD2xCcM8phwIel8tfFll9rrTeVuxc7Y7PorLTCUcpNOFh09O4UUwqEgbmjDW8ch
-        QdO3Rn7bXqM+ij+8lafDmrGP17oPdf8=
-Date:   Sun, 23 Oct 2022 16:20:53 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v1 1/5] clk: ingenic: Make PLL clock "od" field optional
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, zhouyu@wanyeetech.com,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <TAP7KR.18SEZOBW3THM2@crapouillou.net>
-In-Reply-To: <20221023145653.177234-2-aidanmacdonald.0x0@gmail.com>
-References: <20221023145653.177234-1-aidanmacdonald.0x0@gmail.com>
-        <20221023145653.177234-2-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S230124AbiJWPWb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Oct 2022 11:22:31 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CA86E2F8
+        for <linux-mips@vger.kernel.org>; Sun, 23 Oct 2022 08:22:30 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id z8so4457176qtv.5
+        for <linux-mips@vger.kernel.org>; Sun, 23 Oct 2022 08:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mINfRrv10YbsHL8f7bHkN2lhU+cugNCUGw70BIJKqT0=;
+        b=EnDn8SmtuqPY0xKqaq/JpfPrX/R4fSxphhQYEK/soFXMmAzvSfBxnDEr0TQhK1MYRP
+         9hB0eGS+m3v8et/fK+QpqNuSvNvZht7zNaORiTRsTxJqXOu5MQBMODnWqhMmd8EKosMV
+         yiAgEt4uHzto37QjLzy89yU1pDem07xc04L9ubWCxsfNFecswCUymuh/7X7ASVmyH3Lp
+         AtWZXcrHWOqrUlm6LHkoiEzaHR0Z3n4umTQGvJA6oUsC81AoiRx46d8eDBpVccUTHik6
+         MTAusWduOdBB0DurFycHzFJ5A4znUCwHOyEJnq2C5HbP2V9JIElqqJdoyGOS1SL/37+K
+         TY8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mINfRrv10YbsHL8f7bHkN2lhU+cugNCUGw70BIJKqT0=;
+        b=b1/1JGFNBXTEbFyp1pVIfKi5OZwoJIjnt898ZKzOvQe2Q/sV/nlB+hcB+GGfZ+Vq3f
+         heMIFa4GlhO+dlcreMXlVHeJui8zTl5u3PhYk8fqfEVnyhKrtI9iFINd9RE8scXK7HRs
+         vgptqarNIpYqPjs1FCBPdjdBGV920FteeTe+nZ87Aa7FAl+N2eL1ycL+s/33VZAUKLmd
+         J11MNOgiXms/sgSKxaT5OpKMQrJ08jA5y8olMto4D4tMc1Rgx7oedZHwhdX8JzHKUYYc
+         4vUc8q2soByJe4b+lN6lgTwo29aVeD2IRFw7WIZCmvlEtFMzBoFkgukyELy6+yPfkgYS
+         MtzA==
+X-Gm-Message-State: ACrzQf1H3F8GnRu0jhGxBNmu+W1mW+Bwf7FO20peTo0koXuhpCrcSFfw
+        eTAzyL0CMHgn9PMrqxdX2PmQnA==
+X-Google-Smtp-Source: AMsMyM5E5rQJzhPoo3LiOFHGgRAsT1+TNl2VLLZN+mbvskNNOzafo8Z7l0Kw1RdnqciMhhFUkufK6Q==
+X-Received: by 2002:ac8:5808:0:b0:39d:d5cc:5fca with SMTP id g8-20020ac85808000000b0039dd5cc5fcamr10805578qtg.12.1666538549165;
+        Sun, 23 Oct 2022 08:22:29 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05620a450600b006e8f8ca8287sm13275457qkp.120.2022.10.23.08.22.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Oct 2022 08:22:28 -0700 (PDT)
+Message-ID: <8f9d6060-a280-8300-d6ef-d9fe40d4669a@linaro.org>
+Date:   Sun, 23 Oct 2022 11:22:26 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 4/5] dt-bindings: ingenic,x1000-cgu: Add audio clocks
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221023145653.177234-1-aidanmacdonald.0x0@gmail.com>
+ <20221023145653.177234-5-aidanmacdonald.0x0@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221023145653.177234-5-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aidan,
-
-Le dim. 23 oct. 2022 =E0 15:56:49 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Add support for defining PLL clocks with od_bits =3D 0, meaning that
-> OD is fixed to 1 and there is no OD field in the register.
->=20
+On 23/10/2022 10:56, Aidan MacDonald wrote:
+> Add bindings for audio-related clocks on the Ingenic X1000 SoC.
+> 
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  drivers/clk/ingenic/cgu.c | 28 +++++++++++++++++++---------
->  drivers/clk/ingenic/cgu.h |  3 ++-
->  2 files changed, 21 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-> index 861c50d6cb24..7dc2e2567d53 100644
-> --- a/drivers/clk/ingenic/cgu.c
-> +++ b/drivers/clk/ingenic/cgu.c
-> @@ -96,8 +96,11 @@ ingenic_pll_recalc_rate(struct clk_hw *hw,=20
-> unsigned long parent_rate)
->  	m +=3D pll_info->m_offset;
->  	n =3D (ctl >> pll_info->n_shift) & GENMASK(pll_info->n_bits - 1, 0);
->  	n +=3D pll_info->n_offset;
-> -	od_enc =3D ctl >> pll_info->od_shift;
-> -	od_enc &=3D GENMASK(pll_info->od_bits - 1, 0);
-> +
-> +	if (pll_info->od_bits > 0) {
-> +		od_enc =3D ctl >> pll_info->od_shift;
-> +		od_enc &=3D GENMASK(pll_info->od_bits - 1, 0);
-> +	}
->=20
->  	if (pll_info->bypass_bit >=3D 0) {
->  		ctl =3D readl(cgu->base + pll_info->bypass_reg);
-> @@ -108,12 +111,17 @@ ingenic_pll_recalc_rate(struct clk_hw *hw,=20
-> unsigned long parent_rate)
->  			return parent_rate;
->  	}
->=20
-> -	for (od =3D 0; od < pll_info->od_max; od++) {
-> -		if (pll_info->od_encoding[od] =3D=3D od_enc)
-> -			break;
-> +	if (pll_info->od_bits > 0) {
-> +		for (od =3D 0; od < pll_info->od_max; od++) {
-> +			if (pll_info->od_encoding[od] =3D=3D od_enc)
-> +				break;
-> +		}
-> +		BUG_ON(od =3D=3D pll_info->od_max);
-> +		od++;
-> +	} else {
-> +		/* OD is fixed to 1 if no OD field is present. */
-> +		od =3D 1;
->  	}
-> -	BUG_ON(od =3D=3D pll_info->od_max);
-> -	od++;
 
-I think if pll_info->od_max is 0 you get the same result without=20
-modifying this code. You just need to modify the BUG_ON() to only=20
-trigger if pll_info->od_max > 0.
 
-Cheers,
--Paul
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->=20
->  	return div_u64((u64)parent_rate * m * pll_info->rate_multiplier,
->  		n * od);
-> @@ -215,8 +223,10 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned=20
-> long req_rate,
->  	ctl &=3D ~(GENMASK(pll_info->n_bits - 1, 0) << pll_info->n_shift);
->  	ctl |=3D (n - pll_info->n_offset) << pll_info->n_shift;
->=20
-> -	ctl &=3D ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
-> -	ctl |=3D pll_info->od_encoding[od - 1] << pll_info->od_shift;
-> +	if (pll_info->od_bits > 0) {
-> +		ctl &=3D ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
-> +		ctl |=3D pll_info->od_encoding[od - 1] << pll_info->od_shift;
-> +	}
->=20
->  	writel(ctl, cgu->base + pll_info->reg);
->=20
-> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
-> index 147b7df0d657..567142b584bb 100644
-> --- a/drivers/clk/ingenic/cgu.h
-> +++ b/drivers/clk/ingenic/cgu.h
-> @@ -33,7 +33,8 @@
->   * @od_shift: the number of bits to shift the post-VCO divider value=20
-> by (ie.
->   *            the index of the lowest bit of the post-VCO divider=20
-> value in
->   *            the PLL's control register)
-> - * @od_bits: the size of the post-VCO divider field in bits
-> + * @od_bits: the size of the post-VCO divider field in bits, or 0 if=20
-> no
-> + *	     OD field exists (then the OD is fixed to 1)
->   * @od_max: the maximum post-VCO divider value
->   * @od_encoding: a pointer to an array mapping post-VCO divider=20
-> values to
->   *               their encoded values in the PLL control register,=20
-> or -1 for
-> --
-> 2.38.1
->=20
-
+Best regards,
+Krzysztof
 
