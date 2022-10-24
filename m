@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3D960A34D
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 13:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBAD60A5E3
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 14:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbiJXLxj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Oct 2022 07:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S230323AbiJXMaf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Oct 2022 08:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiJXLwy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 07:52:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174A014089;
-        Mon, 24 Oct 2022 04:44:53 -0700 (PDT)
+        with ESMTP id S233726AbiJXM2w (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 08:28:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DF0868AB;
+        Mon, 24 Oct 2022 05:02:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48B9361257;
-        Mon, 24 Oct 2022 11:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 301D3C433D7;
-        Mon, 24 Oct 2022 11:43:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF701612BE;
+        Mon, 24 Oct 2022 12:02:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996DEC433C1;
+        Mon, 24 Oct 2022 12:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611820;
+        s=korg; t=1666612925;
         bh=7Biv/RB4g1yWRQ3Ir7P+DO9H5qF3EuPehLJSXWw6ecI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bX28EBxgBImVJu8b/SIlKVAxg2F6Jy56EWEaH03Wv8cV/mc+yFwrHQ25Z4gZtKNns
-         gJ08HLBEWxwN6YDthQjzzh6OO2MzJCy5PBf+Xb4/De199ZwNd3Ebaak12B79KTTHwg
-         hMLpDDNtGKsxDpZ87ZEis9ev15qHqU3Blc+mafMI=
+        b=ww+TW2Z/dWGTAQ3EkzTR3hc5B+ssnbCMnVRmTsxFYpcZKjUDAhN5W6AiMqOu1+ojo
+         ZMdG/iZqKQoZBS3IJVrxPTQIS3D8JcUPfcYpjr/Mgb87yEzSDvYrEZBtfv/y6XhZwT
+         fWnRaOGFP1JrOMQLje79hQBlHy0kuB2XPxbfYBBk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,12 +39,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
         Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 124/159] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date:   Mon, 24 Oct 2022 13:31:18 +0200
-Message-Id: <20221024112954.037994688@linuxfoundation.org>
+Subject: [PATCH 4.19 171/229] MIPS: BCM47XX: Cast memcmp() of function to (void *)
+Date:   Mon, 24 Oct 2022 13:31:30 +0200
+Message-Id: <20221024113004.623502859@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
