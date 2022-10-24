@@ -2,483 +2,261 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B8C609E4A
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 11:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E91E60A04F
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 13:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiJXJsM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Oct 2022 05:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S230292AbiJXLUQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Oct 2022 07:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJXJsM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 05:48:12 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A7064E8;
-        Mon, 24 Oct 2022 02:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666604887; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dcuzIeCsR0BdVkEGYLXcBGP/a2q4WpPbtpbnIwjnO6Q=;
-        b=fLgnbghv7zTVu9c71ewRgpEKbXGOO5xFprh9KahwBnbZZbB8ozbjI0Ite55sdxgYpbCiWV
-        Nn+nNQI/zqTpBWbCyH0t38kik5gG9t+aLPPBPW/XEU1jt39xe+bkQwrZGgILyq1McHNbAA
-        nd+z7dmU1HqXhzjvFy3LeoHxCkBP4Vg=
-Date:   Mon, 24 Oct 2022 10:47:57 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v5 3/3] clk: Add Ingenic JZ4755 CGU driver
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Message-Id: <XJ49KR.X4N03MEX9E2C3@crapouillou.net>
-In-Reply-To: <20221024044057.4151633-4-lis8215@gmail.com>
-References: <20221024044057.4151633-1-lis8215@gmail.com>
-        <20221024044057.4151633-4-lis8215@gmail.com>
+        with ESMTP id S230222AbiJXLUG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 07:20:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5213121E31;
+        Mon, 24 Oct 2022 04:19:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 973881FD86;
+        Mon, 24 Oct 2022 11:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666610398; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=hzNk2J1kv0hvXKhIHs7HnwozHE2hDAXgOdFZp8AywGo=;
+        b=HkTG27jc1phmO2sYSspbljuTMragV3RllZDVeL22LJUT+RamYsIuqsaoqDlSHb0l9OA6q6
+        GT0tqNWWqBg+tcq/3TR4T/xB1NJ2r0tlY31pSNOZnxJ/sjEt0/Pg+eWqW99hZIupGc0ZMW
+        XR3pQTAbIh0q7Iv51jt/wuMpfkBc3pw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666610398;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=hzNk2J1kv0hvXKhIHs7HnwozHE2hDAXgOdFZp8AywGo=;
+        b=WgrsXz4shLgIugdW3McjjV/i28ZaSykMoNzWHCg2sSAlZ3E3ktA3U8MVWkGJBmn75Oj+fQ
+        sylXkr/Z8upKERDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 03E2813357;
+        Mon, 24 Oct 2022 11:19:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zybkOt10VmOYMgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 24 Oct 2022 11:19:57 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     daniel@ffwll.ch, airlied@gmail.com, sam@ravnborg.org,
+        javierm@redhat.com, mripard@kernel.org,
+        maarten.lankhorst@linux.intel.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v2 00/21] drm/fb-helper: Untangle fbdev emulation and helpers
+Date:   Mon, 24 Oct 2022 13:19:32 +0200
+Message-Id: <20221024111953.24307-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Siarhei,
+Separate generic fbdev emulation from the helper code that is shared
+among the various fbdev implementations within DRM. Affects many drivers.
 
-Le lun. 24 oct. 2022 =E0 07:40:56 +0300, Siarhei Volkau=20
-<lis8215@gmail.com> a =E9crit :
-> Add support for the clocks provided by the CGU in the Ingenic JZ4755
-> SoC.
->=20
-> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-> ---
->  drivers/clk/ingenic/Kconfig      |  10 +
->  drivers/clk/ingenic/Makefile     |   1 +
->  drivers/clk/ingenic/jz4755-cgu.c | 346=20
-> +++++++++++++++++++++++++++++++
->  3 files changed, 357 insertions(+)
->  create mode 100644 drivers/clk/ingenic/jz4755-cgu.c
->=20
-> diff --git a/drivers/clk/ingenic/Kconfig b/drivers/clk/ingenic/Kconfig
-> index 898f1bc47..f80ac4f29 100644
-> --- a/drivers/clk/ingenic/Kconfig
-> +++ b/drivers/clk/ingenic/Kconfig
-> @@ -15,6 +15,16 @@ config INGENIC_CGU_JZ4740
->=20
->  	  If building for a JZ4740 SoC, you want to say Y here.
->=20
-> +config INGENIC_CGU_JZ4755
-> +	bool "Ingenic JZ4755 CGU driver"
-> +	default MACH_JZ4755
-> +	select INGENIC_CGU_COMMON
-> +	help
-> +	  Support the clocks provided by the CGU hardware on Ingenic JZ4755
-> +	  and compatible SoCs.
-> +
-> +	  If building for a JZ4755 SoC, you want to say Y here.
-> +
->  config INGENIC_CGU_JZ4725B
->  	bool "Ingenic JZ4725B CGU driver"
->  	default MACH_JZ4725B
-> diff --git a/drivers/clk/ingenic/Makefile=20
-> b/drivers/clk/ingenic/Makefile
-> index 9edfaf461..81d8e23c2 100644
-> --- a/drivers/clk/ingenic/Makefile
-> +++ b/drivers/clk/ingenic/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-$(CONFIG_INGENIC_CGU_COMMON)	+=3D cgu.o pm.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4740)	+=3D jz4740-cgu.o
-> +obj-$(CONFIG_INGENIC_CGU_JZ4755)	+=3D jz4755-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4725B)	+=3D jz4725b-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4760)	+=3D jz4760-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4770)	+=3D jz4770-cgu.o
-> diff --git a/drivers/clk/ingenic/jz4755-cgu.c=20
-> b/drivers/clk/ingenic/jz4755-cgu.c
-> new file mode 100644
-> index 000000000..4f869efa7
-> --- /dev/null
-> +++ b/drivers/clk/ingenic/jz4755-cgu.c
-> @@ -0,0 +1,346 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Ingenic JZ4755 SoC CGU driver
-> + * Heavily based on JZ4725b CGU driver
-> + *
-> + * Copyright (C) 2022 Siarhei Volkau
-> + * Author: Siarhei Volkau <lis8215@gmail.com>
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/delay.h>
-> +#include <linux/of.h>
-> +
-> +#include <dt-bindings/clock/ingenic,jz4755-cgu.h>
-> +
-> +#include "cgu.h"
-> +#include "pm.h"
-> +
-> +/* CGU register offsets */
-> +#define CGU_REG_CPCCR		0x00
-> +#define CGU_REG_LCR		0x04
-> +#define CGU_REG_CPPCR		0x10
-> +#define CGU_REG_CLKGR		0x20
-> +#define CGU_REG_OPCR		0x24
-> +#define CGU_REG_I2SCDR		0x60
-> +#define CGU_REG_LPCDR		0x64
-> +#define CGU_REG_MSCCDR		0x68
-> +#define CGU_REG_SSICDR		0x74
-> +#define CGU_REG_CIMCDR		0x7C
-> +
-> +/* bits within the LCR register */
-> +#define LCR_SLEEP		BIT(0)
-> +
-> +static struct ingenic_cgu *cgu;
-> +
-> +static const s8 pll_od_encoding[4] =3D {
-> +	0x0, 0x1, -1, 0x3,
-> +};
-> +
-> +static const u8 jz4755_cgu_cpccr_div_table[] =3D {
-> +	1, 2, 3, 4, 6, 8,
-> +};
-> +
-> +static const u8 jz4755_cgu_pll_half_div_table[] =3D {
-> +	2, 1,
-> +};
-> +
-> +static const struct ingenic_cgu_clk_info jz4755_cgu_clocks[] =3D {
-> +
-> +	/* External clocks */
-> +
-> +	[JZ4755_CLK_EXT] =3D { "ext", CGU_CLK_EXT },
-> +	[JZ4755_CLK_OSC32K] =3D { "osc32k", CGU_CLK_EXT },
-> +
-> +	[JZ4755_CLK_PLL] =3D {
-> +		"pll", CGU_CLK_PLL,
-> +		.parents =3D { JZ4755_CLK_EXT, -1, -1, -1 },
+It has become apparent that our fully generic fbdev emulation will
+never produce optimal results for all drivers. In its current form,
+it is also hard to maintain. The goal of this patchset is to improve
+readability and streamline the fbdev helper code within DRM. In the
+long term, we want to get to a point where drivers or memory managers
+can pick and combine the various helpers for optimal fbdev support.
 
-You don't have CGU_CLK_MUX so you only have one parent, therefore you=20
-can do:
+Patches 1 to 8 start by preparing drivers. Setting struct drm_driver's
+lastclose and output_poll_changed is not required by generic fbdev
+emulation.
 
-.parents =3D { JZ4755_CLK_EXT, },
+Two drivers depend on fb helpers implicitly including other Linux header
+files. Fixing this in patches 9 and 10 allows to remove unnecesary include
+statements from the fb-helper header in patch 11.
 
-Sorry for not noticing it before.
+Do some renaming in patches 12 to 14.
 
-Same for all the other appearances below.
+There are currently various implementation of the fbdev I/O helpers
+with varying feature sets. The fb helpers for fbdev I/O should all call
+fb_sync, which is what fbdev's internal implementation does. For DRM,
+damage handling needs to be performed after updating a framebuffer. The
+damage worker is part of the fb helpers, but the actual update logic only
+works with generic fbdev emulation. Separate the two, which also gives
+other drivers an option to set their own damage handling if neccessary.
+The full-featured I/O helpers can be moved under a shared implementation
+and called by all drivers. Patches 15 to 18 resolve these issues.
 
-> +		.pll =3D {
-> +			.reg =3D CGU_REG_CPPCR,
-> +			.rate_multiplier =3D 1,
-> +			.m_shift =3D 23,
-> +			.m_bits =3D 9,
-> +			.m_offset =3D 2,
-> +			.n_shift =3D 18,
-> +			.n_bits =3D 5,
-> +			.n_offset =3D 2,
-> +			.od_shift =3D 16,
-> +			.od_bits =3D 2,
-> +			.od_max =3D 4,
-> +			.od_encoding =3D pll_od_encoding,
-> +			.stable_bit =3D 10,
-> +			.bypass_reg =3D CGU_REG_CPPCR,
-> +			.bypass_bit =3D 9,
-> +			.enable_bit =3D 8,
-> +		},
-> +	},
-> +
-> +	/* Muxes & dividers */
-> +
-> +	[JZ4755_CLK_PLL_HALF] =3D {
-> +		"pll half", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 21, 1, 1, -1, -1, -1, 0,
-> +			jz4755_cgu_pll_half_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_EXT_HALF] =3D {
-> +		"ext half", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_EXT, -1, -1, -1 },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 30, 1, 1, -1, -1, -1, 0,
-> +			NULL,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_CCLK] =3D {
-> +		"cclk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_H0CLK] =3D {
-> +		"hclk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_PCLK] =3D {
-> +		"pclk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 8, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_MCLK] =3D {
-> +		"mclk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_H1CLK] =3D {
-> +		"h1clk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, -1, -1, -1 },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 16, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_UDC] =3D {
-> +		"udc", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, -1, -1 },
+Patch 19 changes fbdev disablement to work at the level of display
+detection. If disabled, generic fbdev emulation will be initialized,
+but no display will be detected. It can later be enabled by changing
+the parameter in sysfs and plugging in a connector.
 
-For "mux" clocks, if there's only one mux bit, then you can do:
+Patches 20 and 21 move the generic fbdev emulation into their own source
+and header files and clean up the include statements throughout DRM. Many
+drivers only call drm_fbdev_generic_setup() and can avoid including other
+Linux header files.
 
-.parents =3D { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, },
+Built on x86-64, aarch64, arm, ppc64le. Tested with various combinations
+of bochs, i915, simpledrm.
 
-Same below.
+v2:
+	* fixed commit descriptions (Christian, Sergey)
 
-> +		.mux =3D { CGU_REG_CPCCR, 29, 1 },
-> +		.div =3D { CGU_REG_CPCCR, 23, 1, 6, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 10 },
-> +	},
-> +
-> +	[JZ4755_CLK_LCD] =3D {
-> +		"lcd", CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF, -1, -1, -1 },
-> +		.div =3D { CGU_REG_LPCDR, 0, 1, 11, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 9 },
-> +	},
-> +
-> +	[JZ4755_CLK_MMC] =3D {
-> +		"mmc", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF, -1, -1, -1 },
-> +		.div =3D { CGU_REG_MSCCDR, 0, 1, 5, -1, -1, -1 },
-> +	},
-> +
-> +	[JZ4755_CLK_I2S] =3D {
-> +		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, -1, -1 },
-> +		.mux =3D { CGU_REG_CPCCR, 31, 1 },
-> +		.div =3D { CGU_REG_I2SCDR, 0, 1, 9, -1, -1, -1 },
-> +	},
-> +
-> +	[JZ4755_CLK_SPI] =3D {
-> +		"spi", CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF, -1, -1, -1 },
-> +		.div =3D { CGU_REG_SSICDR, 0, 1, 4, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 4 },
-> +	},
-> +
-> +	[JZ4755_CLK_TVE] =3D {
-> +		"tve", CGU_CLK_MUX | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_LCD, JZ4755_CLK_EXT, -1, -1 },
-> +		.mux =3D { CGU_REG_LPCDR, 31, 1 },
-> +		.gate =3D { CGU_REG_CLKGR, 18 },
-> +	},
-> +
-> +	[JZ4755_CLK_RTC] =3D {
-> +		"rtc", CGU_CLK_MUX | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT512, JZ4755_CLK_OSC32K, -1, -1 },
-> +		.mux =3D { CGU_REG_OPCR, 2, 1},
-> +		.gate =3D { CGU_REG_CLKGR, 2 },
-> +	},
-> +
-> +	[JZ4755_CLK_CIM] =3D {
-> +		"cim", CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF, -1, -1, -1 },
-> +		.div =3D { CGU_REG_CIMCDR, 0, 1, 8, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 8 },
-> +	},
-> +
-> +	/* Gate-only clocks */
-> +
-> +	[JZ4755_CLK_UART0] =3D {
-> +		"uart0", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 0 },
-> +	},
-> +
-> +	[JZ4755_CLK_UART1] =3D {
-> +		"uart1", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 14 },
-> +	},
-> +
-> +	[JZ4755_CLK_UART2] =3D {
-> +		"uart2", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 15 },
-> +	},
-> +
-> +	[JZ4755_CLK_ADC] =3D {
-> +		"adc", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 7 },
-> +	},
-> +
-> +	[JZ4755_CLK_AIC] =3D {
-> +		"aic", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 5 },
-> +	},
-> +
-> +	[JZ4755_CLK_I2C] =3D {
-> +		"i2c", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 3 },
-> +	},
-> +
-> +	[JZ4755_CLK_BCH] =3D {
-> +		"bch", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_MCLK/* not sure */, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 11 },
-> +	},
-> +
-> +	[JZ4755_CLK_TCU] =3D {
-> +		"tcu", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 1 },
-> +	},
-> +
-> +	[JZ4755_CLK_DMA] =3D {
-> +		"dma", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PCLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 12 },
-> +	},
-> +
-> +	[JZ4755_CLK_MMC0] =3D {
-> +		"mmc0", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_MMC, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 6 },
-> +	},
-> +
-> +	[JZ4755_CLK_MMC1] =3D {
-> +		"mmc1", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_MMC, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 16 },
-> +	},
-> +
-> +	[JZ4755_CLK_AUX_CPU] =3D {
-> +		"aux_cpu", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 24 },
-> +	},
-> +
-> +	[JZ4755_CLK_AHB1] =3D {
-> +		"ahb1", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 23 },
-> +	},
-> +
-> +	[JZ4755_CLK_IDCT] =3D {
-> +		"idct", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 22 },
-> +	},
-> +
-> +	[JZ4755_CLK_DB] =3D {
-> +		"db", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 21 },
-> +	},
-> +
-> +	[JZ4755_CLK_ME] =3D {
-> +		"me", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 20 },
-> +	},
-> +
-> +	[JZ4755_CLK_MC] =3D {
-> +		"mc", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 19 },
-> +	},
-> +
-> +	[JZ4755_CLK_TSSI] =3D {
-> +		"tssi", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF/* not sure */, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 17 },
-> +	},
-> +
-> +	[JZ4755_CLK_IPU] =3D {
-> +		"ipu", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF/* not sure */, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 13 },
-> +	},
-> +
-> +	[JZ4755_CLK_EXT512] =3D {
-> +		"ext/512", CGU_CLK_FIXDIV,
-> +		.parents =3D { JZ4755_CLK_EXT },
-> +
-> +		.fixdiv =3D { 512 },
-> +	},
-> +
-> +	[JZ4755_CLK_UDC_PHY] =3D {
-> +		"udc_phy", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_OPCR, 6, true },
-> +	},
-> +};
-> +
-> +static void __init jz4755_cgu_init(struct device_node *np)
-> +{
-> +	int retval;
-> +
-> +	cgu =3D ingenic_cgu_new(jz4755_cgu_clocks,
-> +			      ARRAY_SIZE(jz4755_cgu_clocks), np);
-> +	if (!cgu) {
-> +		pr_err("%s: failed to initialise CGU\n", __func__);
+Thomas Zimmermann (21):
+  drm/komeda: Don't set struct drm_driver.lastclose
+  drm/mcde: Don't set struct drm_driver.lastclose
+  drm/vboxvideo: Don't set struct drm_driver.lastclose
+  drm/amdgpu: Don't set struct drm_driver.output_poll_changed
+  drm/imx/dcss: Don't set struct drm_driver.output_poll_changed
+  drm/ingenic: Don't set struct drm_driver.output_poll_changed
+  drm/logicvc: Don't set struct drm_driver.output_poll_changed
+  drm/rockchip: Don't set struct drm_driver.output_poll_changed
+  drm/panel-ili9341: Include <linux/backlight.h>
+  drm/tve200: Include <linux/of.h>
+  drm/fb-helper: Cleanup include statements in header file
+  drm/fb_helper: Rename field fbdev to info in struct drm_fb_helper
+  drm/fb-helper: Rename drm_fb_helper_alloc_fbi() to use _info postfix
+  drm/fb-helper: Rename drm_fb_helper_unregister_fbi() to use _info
+    postfix
+  drm/fb-helper: Disconnect damage worker from update logic
+  drm/fb-helper: Call fb_sync in I/O functions
+  drm/fb-helper: Perform all fbdev I/O with the same implementation
+  drm/fb_helper: Minimize damage-helper overhead
+  drm/fb-helper: Always initialize generic fbdev emulation
+  drm/fb-helper: Move generic fbdev emulation into separate source file
+  drm/fb-helper: Remove unnecessary include statements
 
-initialise -> initialize
+ drivers/gpu/drm/Makefile                      |    2 +-
+ .../gpu/drm/amd/amdgpu/amdgpu_connectors.c    |    1 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_display.c   |    2 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h      |    1 -
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |    2 -
+ .../gpu/drm/arm/display/komeda/komeda_drv.c   |    2 +-
+ .../gpu/drm/arm/display/komeda/komeda_kms.c   |    2 -
+ drivers/gpu/drm/arm/hdlcd_crtc.c              |    1 -
+ drivers/gpu/drm/arm/hdlcd_drv.c               |    2 +-
+ drivers/gpu/drm/arm/malidp_drv.c              |    2 +-
+ drivers/gpu/drm/armada/armada_fbdev.c         |    6 +-
+ drivers/gpu/drm/aspeed/aspeed_gfx_drv.c       |    2 +-
+ drivers/gpu/drm/ast/ast_drv.c                 |    1 +
+ drivers/gpu/drm/ast/ast_drv.h                 |    1 -
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  |    2 +-
+ drivers/gpu/drm/bridge/tc358762.c             |    2 +-
+ drivers/gpu/drm/drm_crtc_helper.c             |    1 -
+ drivers/gpu/drm/drm_fb_helper.c               | 1081 ++++++-----------
+ drivers/gpu/drm/drm_fbdev.c                   |  512 ++++++++
+ drivers/gpu/drm/drm_gem_framebuffer_helper.c  |    1 -
+ drivers/gpu/drm/drm_probe_helper.c            |    1 -
+ drivers/gpu/drm/etnaviv/etnaviv_drv.h         |    3 +-
+ drivers/gpu/drm/exynos/exynos_drm_fbdev.c     |    6 +-
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c     |    2 +-
+ drivers/gpu/drm/gma500/framebuffer.c          |    6 +-
+ drivers/gpu/drm/gud/gud_drv.c                 |    2 +-
+ .../gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c   |    1 +
+ .../gpu/drm/hisilicon/hibmc/hibmc_drm_drv.h   |    1 -
+ .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |    2 +-
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c       |    2 +-
+ drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |    1 -
+ drivers/gpu/drm/i915/display/intel_fbdev.c    |    8 +-
+ drivers/gpu/drm/imx/dcss/dcss-kms.c           |    3 +-
+ drivers/gpu/drm/imx/imx-drm-core.c            |    2 +-
+ drivers/gpu/drm/imx/imx-ldb.c                 |    2 +-
+ drivers/gpu/drm/imx/imx-tve.c                 |    1 -
+ drivers/gpu/drm/imx/parallel-display.c        |    2 +-
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |    3 +-
+ drivers/gpu/drm/kmb/kmb_drv.c                 |    2 +-
+ drivers/gpu/drm/kmb/kmb_plane.c               |    1 -
+ drivers/gpu/drm/logicvc/logicvc_drm.c         |    2 +-
+ drivers/gpu/drm/logicvc/logicvc_mode.c        |    2 -
+ drivers/gpu/drm/mcde/mcde_drv.c               |    3 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |    2 +-
+ drivers/gpu/drm/meson/meson_drv.c             |    2 +-
+ drivers/gpu/drm/mgag200/mgag200_drv.c         |    1 +
+ drivers/gpu/drm/mgag200/mgag200_drv.h         |    1 -
+ drivers/gpu/drm/msm/msm_fbdev.c               |    4 +-
+ drivers/gpu/drm/mxsfb/lcdif_drv.c             |    2 +-
+ drivers/gpu/drm/mxsfb/mxsfb_drv.c             |    2 +-
+ drivers/gpu/drm/nouveau/nouveau_fbcon.c       |   27 +-
+ drivers/gpu/drm/omapdrm/omap_fbdev.c          |    6 +-
+ drivers/gpu/drm/panel/panel-ilitek-ili9341.c  |    3 +-
+ drivers/gpu/drm/pl111/pl111_drv.c             |    2 +-
+ drivers/gpu/drm/qxl/qxl_drv.c                 |    1 +
+ drivers/gpu/drm/qxl/qxl_drv.h                 |    1 -
+ drivers/gpu/drm/radeon/radeon_fb.c            |    6 +-
+ drivers/gpu/drm/rcar-du/rcar_du_drv.c         |    2 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_drv.c   |    2 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_drv.h   |    2 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_fb.c    |    2 -
+ drivers/gpu/drm/solomon/ssd130x.c             |    2 +-
+ drivers/gpu/drm/sti/sti_drv.c                 |    2 +-
+ drivers/gpu/drm/stm/drv.c                     |    2 +-
+ drivers/gpu/drm/sun4i/sun4i_drv.c             |    2 +-
+ drivers/gpu/drm/tegra/fb.c                    |    8 +-
+ drivers/gpu/drm/tidss/tidss_drv.c             |    2 +-
+ drivers/gpu/drm/tidss/tidss_kms.c             |    1 -
+ drivers/gpu/drm/tilcdc/tilcdc_drv.c           |    2 +-
+ drivers/gpu/drm/tiny/arcpgu.c                 |    2 +-
+ drivers/gpu/drm/tiny/bochs.c                  |    2 +-
+ drivers/gpu/drm/tiny/cirrus.c                 |    2 +-
+ drivers/gpu/drm/tiny/gm12u320.c               |    2 +-
+ drivers/gpu/drm/tiny/hx8357d.c                |    2 +-
+ drivers/gpu/drm/tiny/ili9163.c                |    2 +-
+ drivers/gpu/drm/tiny/ili9225.c                |    2 +-
+ drivers/gpu/drm/tiny/ili9341.c                |    2 +-
+ drivers/gpu/drm/tiny/ili9486.c                |    2 +-
+ drivers/gpu/drm/tiny/mi0283qt.c               |    2 +-
+ drivers/gpu/drm/tiny/ofdrm.c                  |    2 +-
+ drivers/gpu/drm/tiny/panel-mipi-dbi.c         |    2 +-
+ drivers/gpu/drm/tiny/repaper.c                |    2 +-
+ drivers/gpu/drm/tiny/simpledrm.c              |    2 +-
+ drivers/gpu/drm/tiny/st7586.c                 |    2 +-
+ drivers/gpu/drm/tiny/st7735r.c                |    2 +-
+ drivers/gpu/drm/tve200/tve200_drv.c           |    3 +-
+ drivers/gpu/drm/udl/udl_drv.c                 |    2 +-
+ drivers/gpu/drm/v3d/v3d_drv.c                 |    1 -
+ drivers/gpu/drm/vboxvideo/vbox_drv.c          |    4 +-
+ drivers/gpu/drm/vboxvideo/vbox_main.c         |    1 -
+ drivers/gpu/drm/vc4/vc4_drv.c                 |    2 +-
+ drivers/gpu/drm/virtio/virtgpu_drv.c          |    1 +
+ drivers/gpu/drm/virtio/virtgpu_drv.h          |    1 -
+ drivers/gpu/drm/vkms/vkms_drv.c               |    2 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_fb.c            |    3 +
+ drivers/gpu/drm/xen/xen_drm_front_gem.c       |    1 -
+ drivers/gpu/drm/xlnx/zynqmp_dpsub.c           |    2 +-
+ include/drm/drm_fb_helper.h                   |   59 +-
+ include/drm/drm_fbdev.h                       |   15 +
+ 99 files changed, 1019 insertions(+), 883 deletions(-)
+ create mode 100644 drivers/gpu/drm/drm_fbdev.c
+ create mode 100644 include/drm/drm_fbdev.h
 
-Cheers,
--Paul
 
-> +		return;
-> +	}
-> +
-> +	retval =3D ingenic_cgu_register_clocks(cgu);
-> +	if (retval)
-> +		pr_err("%s: failed to register CGU Clocks\n", __func__);
-> +
-> +	ingenic_cgu_register_syscore_ops(cgu);
-> +}
-> +CLK_OF_DECLARE_DRIVER(jz4755_cgu, "ingenic,jz4755-cgu",=20
-> jz4755_cgu_init);
-> --
-> 2.36.1
->=20
-
+base-commit: 746559738f1335241ea686566cb654847c20d7a4
+prerequisite-patch-id: c2b2f08f0eccc9f5df0c0da49fa1d36267deb11d
+prerequisite-patch-id: c67e5d886a47b7d0266d81100837557fda34cb24
+prerequisite-patch-id: 3f204510fcbf9530d6540bd8e6128cce598988b6
+-- 
+2.38.0
 
