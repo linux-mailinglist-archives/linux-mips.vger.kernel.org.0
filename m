@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A35360BBC1
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 23:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C75660BA33
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 22:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiJXVMH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Oct 2022 17:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
+        id S231424AbiJXU3s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Oct 2022 16:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiJXVLd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 17:11:33 -0400
+        with ESMTP id S234377AbiJXU3C (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 16:29:02 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2B7186D4D;
-        Mon, 24 Oct 2022 12:17:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A29D2A267;
+        Mon, 24 Oct 2022 11:41:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C23FBCE1355;
-        Mon, 24 Oct 2022 11:52:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735B4C433C1;
-        Mon, 24 Oct 2022 11:52:24 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 14B91CE1357;
+        Mon, 24 Oct 2022 12:50:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0292C433C1;
+        Mon, 24 Oct 2022 12:50:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612345;
-        bh=7Biv/RB4g1yWRQ3Ir7P+DO9H5qF3EuPehLJSXWw6ecI=;
+        s=korg; t=1666615848;
+        bh=sm/LDBBuPWty4rPPEEqovbTw/jWuPeNCGNYMtE2bPkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zphT8N3lEmzRyWQCh+kWbXIaAtR5Djp+HSSF4tsRNJiC8pZLsO+ZZXx4ZD5Pz+lxr
-         Ujx4VnnJluMgLMXENuyiy3Xz/PVPXjiAUsQpLTEEe8o+mliAXDjyZGOosHOwgrgVwX
-         jfV+1QIrGEePQTnbF0CtSCyI0B1Mt4MdbUZm1Ghs=
+        b=SICE5gKSh18IRD7waSWDtMFrM8yps1JRTZXzBtKb3wkVN9yNDL+6c7nUVsPBpkDrl
+         q9ylk1JW6Y64CFANhirzOIQW1QQooqcJLUDsFHLH2TsIAVHJG/tGIdqb+hNlyL7RVb
+         SOb780poleLpZCa/j2V9ra1rRwUng+n63eHLe82c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,12 +39,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
         Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 162/210] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date:   Mon, 24 Oct 2022 13:31:19 +0200
-Message-Id: <20221024113002.229290480@linuxfoundation.org>
+Subject: [PATCH 5.15 407/530] MIPS: BCM47XX: Cast memcmp() of function to (void *)
+Date:   Mon, 24 Oct 2022 13:32:31 +0200
+Message-Id: <20221024113103.492757352@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-index 135a5407f015..d26d9a6f6ee7 100644
+index 0a63721d0fbf..5a33d6b48d77 100644
 --- a/arch/mips/bcm47xx/prom.c
 +++ b/arch/mips/bcm47xx/prom.c
-@@ -85,7 +85,7 @@ static __init void prom_init_mem(void)
+@@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
  			pr_debug("Assume 128MB RAM\n");
  			break;
  		}
@@ -100,7 +100,7 @@ index 135a5407f015..d26d9a6f6ee7 100644
  			break;
  	}
  	lowmem = mem;
-@@ -162,7 +162,7 @@ void __init bcm47xx_prom_highmem_init(void)
+@@ -159,7 +159,7 @@ void __init bcm47xx_prom_highmem_init(void)
  
  	off = EXTVBASE + __pa(off);
  	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
