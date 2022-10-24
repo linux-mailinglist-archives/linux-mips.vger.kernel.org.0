@@ -2,115 +2,210 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C75660BA33
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 22:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE35760BECD
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Oct 2022 01:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiJXU3s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Oct 2022 16:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S230182AbiJXXmn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Oct 2022 19:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234377AbiJXU3C (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 16:29:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A29D2A267;
-        Mon, 24 Oct 2022 11:41:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 14B91CE1357;
-        Mon, 24 Oct 2022 12:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0292C433C1;
-        Mon, 24 Oct 2022 12:50:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615848;
-        bh=sm/LDBBuPWty4rPPEEqovbTw/jWuPeNCGNYMtE2bPkU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SICE5gKSh18IRD7waSWDtMFrM8yps1JRTZXzBtKb3wkVN9yNDL+6c7nUVsPBpkDrl
-         q9ylk1JW6Y64CFANhirzOIQW1QQooqcJLUDsFHLH2TsIAVHJG/tGIdqb+hNlyL7RVb
-         SOb780poleLpZCa/j2V9ra1rRwUng+n63eHLe82c=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+        with ESMTP id S229822AbiJXXmY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 19:42:24 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF4A1D73FB;
+        Mon, 24 Oct 2022 15:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666615860; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6dhnHc0bAedKhrMgs9Dk+4I6+5jfqv63sCgiUYVWOcI=;
+        b=tn1ZvOhDMsL2gp6C/3Ym9t7tzU8xZKvHqGrY4PYZXRWhTkGcKydZ7EkM1OPd+MtYhJbqEU
+        gaeSSUu5ewEavK1O9aX2hgvviFqghRqzkRmSVnUBoMURUYz5BkO4yWfO/2k3UF6FZOwmlk
+        eYlYk1D+4AEN4Q6V/cyZPE1MQ5gYaoA=
+Date:   Mon, 24 Oct 2022 13:50:50 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 2/2] serial: 8250/ingenic: Add support for the
+ JZ4750/JZ4755
+To:     Siarhei Volkau <lis8215@gmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 407/530] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date:   Mon, 24 Oct 2022 13:32:31 +0200
-Message-Id: <20221024113103.492757352@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <Q0D9KR.U3D9MHHH52AZ@crapouillou.net>
+In-Reply-To: <20221022151224.4000238-3-lis8215@gmail.com>
+References: <20221022151224.4000238-1-lis8215@gmail.com>
+        <20221022151224.4000238-3-lis8215@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+Hi Siarhei,
 
-[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
+Le sam. 22 oct. 2022 =E0 18:12:24 +0300, Siarhei Volkau=20
+<lis8215@gmail.com> a =E9crit :
+> JZ4750/55/60 (but not JZ4760b) have an extra divisor in between extclk
+> and peripheral clock, called CPCCR.ECS, the driver can't figure out=20
+> the
+> real state of the divisor without dirty hack - peek CGU CPCCR=20
+> register.
+> However, we can rely on a vendor's bootloader (u-boot 1.1.6) behavior:
+> if (extclk > 16MHz)
+>     the divisor is enabled, so the UART driving clock is extclk/2.
+>=20
+> This behavior relies on hardware differences: most boards (if not all)
+> with those SoCs have 12 or 24 MHz oscillators but many peripherals=20
+> want
+> 12Mhz to operate properly (AIC and USB-PHY at least).
+>=20
+> The patch doesn't affect JZ4760's behavior as it is subject for=20
+> another
+> patchset with re-classification of all supported ingenic UARTs.
+>=20
+> Link:=20
+> https://github.com/carlos-wong/uboot_jz4755/blob/master/cpu/mips/jz_seria=
+l.c#L158
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> ---
+>  drivers/tty/serial/8250/8250_ingenic.c | 50=20
+> ++++++++++++++++++++++----
+>  1 file changed, 43 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/tty/serial/8250/8250_ingenic.c=20
+> b/drivers/tty/serial/8250/8250_ingenic.c
+> index 2b2f5d8d2..3ffa6b722 100644
+> --- a/drivers/tty/serial/8250/8250_ingenic.c
+> +++ b/drivers/tty/serial/8250/8250_ingenic.c
+> @@ -87,24 +87,19 @@ static void __init=20
+> ingenic_early_console_setup_clock(struct earlycon_device *dev
+>  	dev->port.uartclk =3D be32_to_cpup(prop);
+>  }
+>=20
+> -static int __init ingenic_early_console_setup(struct earlycon_device=20
+> *dev,
+> -					      const char *opt)
+> +static int __init ingenic_earlycon_setup_tail(struct earlycon_device=20
+> *dev,
+> +					      const char *opt)
+>  {
+>  	struct uart_port *port =3D &dev->port;
+>  	unsigned int divisor;
+>  	int baud =3D 115200;
+>=20
+> -	if (!dev->port.membase)
+> -		return -ENODEV;
 
-Clang is especially sensitive about argument type matching when using
-__overloaded functions (like memcmp(), etc). Help it see that function
-pointers are just "void *". Avoids this error:
+You can keep this here - no need to move it (and it'd avoid duplicating=20
+code).
 
-arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
-                   if (!memcmp(prom_init, prom_init + mem, 32))
-                        ^~~~~~
-include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
+> -
+>  	if (opt) {
+>  		unsigned int parity, bits, flow; /* unused for now */
+>=20
+>  		uart_parse_options(opt, &baud, &parity, &bits, &flow);
+>  	}
+>=20
+> -	ingenic_early_console_setup_clock(dev);
+> -
+>  	if (dev->baud)
+>  		baud =3D dev->baud;
+>  	divisor =3D DIV_ROUND_CLOSEST(port->uartclk, 16 * baud);
+> @@ -129,9 +124,49 @@ static int __init=20
+> ingenic_early_console_setup(struct earlycon_device *dev,
+>  	return 0;
+>  }
+>=20
+> +static int __init ingenic_early_console_setup(struct earlycon_device=20
+> *dev,
+> +					      const char *opt)
+> +{
+> +	if (!dev->port.membase)
+> +		return -ENODEV;
+> +
+> +	ingenic_early_console_setup_clock(dev);
+> +
+> +	ingenic_earlycon_setup_tail(dev, opt);
+> +}
+> +
+> +static int __init jz4750_early_console_setup(struct earlycon_device=20
+> *dev,
+> +					     const char *opt)
+> +{
+> +	if (!dev->port.membase)
+> +		return -ENODEV;
+> +
+> +	/*
+> +	 * JZ4750/55/60 (not JZ4760b) have an extra divisor
+> +	 * between extclk and peripheral clock, the
+> +	 * driver can't figure out the real state of the
+> +	 * divisor without dirty hacks (peek CGU register).
+> +	 * However, we can rely on a vendor's behavior:
+> +	 * if (extclk > 16MHz)
+> +	 *   the divisor is enabled.
+> +	 * This behavior relies on hardware differences:
+> +	 * most boards with those SoCs have 12 or 24 MHz
+> +	 * oscillators but many peripherals want 12Mhz
+> +	 * to operate properly (AIC and USB-phy at least).
+> +	 */
+> +	ingenic_early_console_setup_clock(dev);
+> +	if (dev->port.uartclk > 16000000)
+> +		dev->port.uartclk /=3D 2;
 
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: "Rafał Miłecki" <zajec5@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/bcm47xx/prom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I would assume you could just do:
+dev->port.uartclk =3D 12000000;
 
-diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-index 0a63721d0fbf..5a33d6b48d77 100644
---- a/arch/mips/bcm47xx/prom.c
-+++ b/arch/mips/bcm47xx/prom.c
-@@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
- 			pr_debug("Assume 128MB RAM\n");
- 			break;
- 		}
--		if (!memcmp(prom_init, prom_init + mem, 32))
-+		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
- 			break;
- 	}
- 	lowmem = mem;
-@@ -159,7 +159,7 @@ void __init bcm47xx_prom_highmem_init(void)
- 
- 	off = EXTVBASE + __pa(off);
- 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
--		if (!memcmp(prom_init, (void *)(off + extmem), 16))
-+		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
- 			break;
- 	}
- 	extmem -= lowmem;
--- 
-2.35.1
+Since you'd always get a 12 MHz clock (either with a 12 MHz oscillator=20
+or a 24 MHz oscillator with a /2 divider).
 
+With that said - I am fine with that code, it would allow to fine-tune=20
+the oscillator value (although I hightly doubt anybody is going to do=20
+that).
+
+The 16 MHz value sounds very arbitrary, but I'll give it a pass.
+
+Cheers,
+-Paul
+
+> +
+> +	ingenic_earlycon_setup_tail(dev, opt);
+> +}
+> +
+>  OF_EARLYCON_DECLARE(jz4740_uart, "ingenic,jz4740-uart",
+>  		    ingenic_early_console_setup);
+>=20
+> +OF_EARLYCON_DECLARE(jz4750_uart, "ingenic,jz4750-uart",
+> +		    jz4750_early_console_setup);
+> +
+>  OF_EARLYCON_DECLARE(jz4770_uart, "ingenic,jz4770-uart",
+>  		    ingenic_early_console_setup);
+>=20
+> @@ -328,6 +363,7 @@ static const struct ingenic_uart_config=20
+> x1000_uart_config =3D {
+>=20
+>  static const struct of_device_id of_match[] =3D {
+>  	{ .compatible =3D "ingenic,jz4740-uart", .data =3D &jz4740_uart_config=20
+> },
+> +	{ .compatible =3D "ingenic,jz4750-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4760-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4770-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4775-uart", .data =3D &jz4760_uart_config=20
+> },
+> --
+> 2.36.1
+>=20
 
 
