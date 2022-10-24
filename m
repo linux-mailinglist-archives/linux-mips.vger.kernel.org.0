@@ -2,85 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171196099C9
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 07:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534BA609AE4
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Oct 2022 09:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiJXF1M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Oct 2022 01:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
+        id S229875AbiJXHDF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Oct 2022 03:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiJXF1L (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 01:27:11 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CAC7AB1D
-        for <linux-mips@vger.kernel.org>; Sun, 23 Oct 2022 22:27:09 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id z14so851239wrn.7
-        for <linux-mips@vger.kernel.org>; Sun, 23 Oct 2022 22:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w5Oed4FLXZSHIXrhxz7E5m4+ZCPArxpCCi/TgMyIPwo=;
-        b=QRYyx+qb2r46G5UaaAn13RjXzEyBlk3VtKG/cfiEgxjyPM5J5SPoEYqPIE7eO8vWTi
-         tSZoA5AYyjTD1sknUYSCDg2nP8I/3M5CGf6qFJM4imJZqQVYYZpeBqvvTYXzrwqq1fUI
-         eTbO8Fipp6N/HopSd3aZyhXXZkuaerpSdmzta0w8h+1s9iNg8e+VvGXg9LTv40GdKojC
-         qGZhfGwxqrf6hTprlMOZ2WOX7juKtnLP2XUhzwpVfL2eO7uSj4lChMgn5JlPa/7RLMxG
-         54vEvKr7twK7v8qZ/B9yhL0NPwX2H3S1G4Z8+i/stlI9jDQe01O6fck1C3i3VbAy9FPg
-         zFbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5Oed4FLXZSHIXrhxz7E5m4+ZCPArxpCCi/TgMyIPwo=;
-        b=jPeWTH5Wh/keU68pHUgE9Z2rEa5vJDWuoYqcbY9R9u4bQ+RPZ+g5+ByxZzAsOccVgt
-         4wQw2tDCDBrALayBywnxUuDVCO9X/La1w7Kn3xujaFo363gDAVAqJnJrvlXYQlfrZisx
-         VLPLAOKd3oLOnuwqsEQZOUnIzjnRC1BPBwJBXjzZ3jYcicO8Swy8JxYI8hcM4wXFdX0W
-         691briHIwy8LFmyixVM49Tdu1Q0eScefiFzNN8KV35bqmKE3dlFGqNXvHxYw0euHPvzO
-         WJS1L0MEhyV1yEUVPmSjR72GDbMNbPRw0q+EMfPNy5JhcqAYiTIYXp46LzcScrn/x1Es
-         Jcuw==
-X-Gm-Message-State: ACrzQf3M61aHlMFw50Dw9ZVXZFGZQt+P9Pfid4QElrhWwPwEHCraDjet
-        iVU3JtC0ObnsjX+CXGWZjgLsbg==
-X-Google-Smtp-Source: AMsMyM4KljTG8mMrDvY9fJihFWxdpLDCnX/Z0O4o+TtWrzj/KPbWefswclqhtu5vKtVXacd8QYv1yQ==
-X-Received: by 2002:a05:6000:1a41:b0:22e:3667:d306 with SMTP id t1-20020a0560001a4100b0022e3667d306mr19786350wry.21.1666589228553;
-        Sun, 23 Oct 2022 22:27:08 -0700 (PDT)
-Received: from [10.50.0.10] (ec2-54-194-108-71.eu-west-1.compute.amazonaws.com. [54.194.108.71])
-        by smtp.gmail.com with ESMTPSA id i9-20020a1c5409000000b003b4868eb71bsm6995337wmb.25.2022.10.23.22.27.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 22:27:08 -0700 (PDT)
-Message-ID: <a962a5c6-50f1-55e5-c865-47a417ea22b6@linaro.org>
-Date:   Mon, 24 Oct 2022 07:27:06 +0200
+        with ESMTP id S229455AbiJXHDE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Oct 2022 03:03:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F656011;
+        Mon, 24 Oct 2022 00:03:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8BC7B80ED4;
+        Mon, 24 Oct 2022 07:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73E6FC433C1;
+        Mon, 24 Oct 2022 07:02:55 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V13 0/4] mm/sparse-vmemmap: Generalise helpers and enable for LoongArch
+Date:   Mon, 24 Oct 2022 15:01:01 +0800
+Message-Id: <20221024070105.306280-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH] drivers/irqchip: fix repeated words in comments
-Content-Language: en-US
-To:     wangjianli <wangjianli@cdjrlc.com>, tsbogend@alpha.franken.de,
-        fancer.lancer@gmail.com, tglx@linutronix.de, maz@kernel.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221022054655.36496-1-wangjianli@cdjrlc.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221022054655.36496-1-wangjianli@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22/10/22 07:46, wangjianli wrote:
-> Delete the redundant word 'the'.
-> 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->   drivers/irqchip/irq-mips-gic.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
+
+V2 -> V3:
+1, Change the Signed-off-by order of author and committer;
+2, Update commit message about the build error on LoongArch.
+
+V3 -> V4:
+Change pmd to pmdp for ARM64 for consistency.
+
+V4 -> V5:
+Add a detailed comment for no-fallback in the altmap case.
+
+V5 -> V6:
+1, Fix build error for NIOS2;
+2, Fix build error for allnoconfig;
+3, Update comment for no-fallback in the altmap case.
+
+V6 -> V7:
+Fix build warnings of "no previous prototype".
+
+V7 -> V8:
+Fix build error for MIPS pud_init().
+
+V8 -> V9:
+Remove redundant #include to avoid build error with latest upstream
+kernel.
+
+V9 -> V10:
+Fix build error due to VMEMMAP changes in 6.0-rc1.
+
+V10 -> V11:
+Adjust context due to ARM64 changes in 6.1-rc1.
+
+V11 -> V12:
+1, Fix build error for !SPARSEMEM;
+2, Simplify pagetable_init() for MIPS32.
+
+V12 -> V13:
+1, Add Acked-by and Reviewed-by tags;
+2, Update commit message for the 4th patch.
+
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
+---
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
 
