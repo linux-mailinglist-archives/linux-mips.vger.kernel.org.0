@@ -2,80 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DD460C7F5
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Oct 2022 11:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2CD60C977
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Oct 2022 12:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiJYJYy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Oct 2022 05:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S230078AbiJYKJ0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Oct 2022 06:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiJYJYc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Oct 2022 05:24:32 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E342E0BE;
-        Tue, 25 Oct 2022 02:20:12 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id e20-20020a05600c449400b003cce0107a6fso626999wmo.0;
-        Tue, 25 Oct 2022 02:20:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
-         :subject:cc:to:from:references:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cEUmIwCaCeFQJYLB9XXcHphXCrocOr1on/UtIhygxzc=;
-        b=mQXWym3RJyi+Tij4sSu/GS27r0Cneg2tW5uOlDbb3WFc9GVVbrnFPZbGJPlf3y14QB
-         uU9wSVbYvot2JIGy3cG+spIxzkOR09KAw+hCk8Vcn8KpZmsclQhCqclbJvl1bqnzwDVj
-         KFTkQ2JLcNw0SgQ8oi4cOBfT+d3Mq0C8KfNRsye5V/7R8ZU+e0TkHDhIp2m+S8trEgsP
-         P8WnqFhxKmYs/a1iIca4oTUIjsRVLgqZtCpCTb77kAKjpFM0It9/7ELOQyYKO6xNoPzW
-         T6vf7HEl/9N7OvEMEKUeRyzOGbnwl7mEE8K9PRzFSHXEyqilxIbvOhVLlb0bzI7skPF8
-         3Kaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
-         :subject:cc:to:from:references:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cEUmIwCaCeFQJYLB9XXcHphXCrocOr1on/UtIhygxzc=;
-        b=3FQ2DMK363UsmCiV6mJ4QhvRNXypPci+t6rpkFTzaqZWI3DNKfiNxDZHxZLkk53qFN
-         Pet1H4kRk33pOlb+BtqHNdCwGl9CGsX419+dkqMCjmSDXYsPEwO9FYXFhmbGBl0MBK9n
-         VAgw5Czur1D9u+AZGsy+EPAOSqDrE52rpONdGflqxADoChr2owe03oTPvsBeZF8ziosr
-         DsNwEegUFZ1FV0McP/TrBZ9bofz8vaoS6Ah/MvW+R1ZIixKRMsWGUBLZOftz+ZWuPL/G
-         eeVa2H0gqeeHbrGWvEi//vMKaItJ1eIktXV4Bc3SYScJE1ZVWKJkp5T281ta1FAw6JAI
-         IYjg==
-X-Gm-Message-State: ACrzQf2akcYcsc07kf7pDNd77ZnrRaXK/EtGVLWZJJoDjd2sGn52tS05
-        HMVgLjUtcVdnfARgqFiXjRYHrmolMnf8Tw==
-X-Google-Smtp-Source: AMsMyM47fuuFRCblEyHXGL0NpNVuqqL7TkQX3Otqp+SL2+fsl4H6B2S+4I6GpUV4dEoCZ22tiNfbNA==
-X-Received: by 2002:a05:600c:35c8:b0:3c8:33dc:c262 with SMTP id r8-20020a05600c35c800b003c833dcc262mr13013520wmq.206.1666689610718;
-        Tue, 25 Oct 2022 02:20:10 -0700 (PDT)
-Received: from localhost (188.29.212.253.threembb.co.uk. [188.29.212.253])
-        by smtp.gmail.com with ESMTPSA id v26-20020a5d591a000000b0022cd96b3ba6sm2424205wrd.90.2022.10.25.02.20.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 02:20:10 -0700 (PDT)
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
- <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
- <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
- <ROSYER.QTJF8J14H2YX1@crapouillou.net>
- <6f2c7a0b-b68b-fc42-1a82-2b69c114823f@wanyeetech.com>
- <UQ597w4FmzOT8p76tdRPhzECStUpFmYe@localhost>
- <HQ76KR.B1PM87E2GIYZ1@crapouillou.net>
- <JRrsX7Q4m5FUeeBs2yKTRMe5Ihaso8gi@localhost>
- <DQD9KR.BW8U6333OSCP3@crapouillou.net>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Zhou Yanjie <zhouyu@wanyeetech.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/11] ASoC: jz4740-i2s: Make the PLL clock name
- SoC-specific
-In-reply-to: <DQD9KR.BW8U6333OSCP3@crapouillou.net>
-Date:   Tue, 25 Oct 2022 10:20:10 +0100
-Message-ID: <ebyFOPJskfdtIoKsYnqp2IcYTMYA1ESE@localhost>
+        with ESMTP id S232223AbiJYKIr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Oct 2022 06:08:47 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810332981B;
+        Tue, 25 Oct 2022 03:02:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666692130; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GZQjd+Wa2neY9qwI0lk5D0hlo8qhC97lemY8oYsOL6Q=;
+        b=KRvUJyGzMOrhIRfEabCCyBxTa37MSYJfAKXwdA45KS7sRBteAz4EJUTU+XUXe472KduOQT
+        +uAAK+LaRR31+nsBVxmJ37qwXWMUdgohMjb68N0MpCf1Vq6/9aNzUSC1nOmV1G2Uq+Nvel
+        mHd7E9211bYxMKzIhB+VNQfRfgsa/Go=
+Date:   Tue, 25 Oct 2022 11:02:00 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2 channels,
+ part 1
+To:     Uwe =?iso-8859-1?q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org
+Message-Id: <CVZAKR.06MA7BGA170W3@crapouillou.net>
+In-Reply-To: <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
+References: <20221024205213.327001-1-paul@crapouillou.net>
+        <20221024205213.327001-2-paul@crapouillou.net>
+        <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,85 +51,99 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-Paul Cercueil <paul@crapouillou.net> writes:
 
-> Hi Aidan,
->
-> Le dim. 23 oct. 2022 =C3=A0 14:29:24 +0100, Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
->> Paul Cercueil <paul@crapouillou.net> writes:
->>
->>>  Hi Aidan,
->>>  Le sam. 22 oct. 2022 =C3=A0 18:15:05 +0100, Aidan MacDonald
->>>  <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
->>>>  Actually, the clock names in the DT are meaningless. The clk_get() ca=
-ll
->>>>  matches only the clock's name in the CGU driver. So in fact the driver
->>>>  is "broken" for jz4780. It seems jz4770 doesn't work correctly either,
->>>>  it has no "pll half", and three possible parents for its "i2s" clock.
->>>  That's not true. The clock names are matched via DT.
->>>  Only in the case where a corresponding clock cannot be found via DT wi=
-ll it
->>>  search for the clock name among the clock providers. I believe this is=
- a
->>> legacy
->>>  mechanism and you absolutely shouldn't rely on it.
->>>  -Paul
->>>
->> What you say is only true for clk_get() with a device argument. When the
->> device argument is NULL -- which is the case in .set_sysclk() -- then
->> the DT name is not matched. Check drivers/clk/clkdev.c, in clk_find().
->> When the dev_id is NULL, it will not match any lookup entries with a
->> non-null dev_id, and I believe dev_id is the mechanism that implements
->> DT clock lookup. Only the wildcard entries from the CGU driver will be
->> matched if dev_id is NULL, so the DT is being ignored.
->> If you don't believe me, try changing "pll half" in the device tree and
->> the I2S driver to something else. I have done this, and it doesn't work.
->> That proves the name in the device tree is not being used.
->
-> Well, let's pass them a device pointer then.
->
+Le mar. 25 oct. 2022 =E0 08:21:29 +0200, Uwe Kleine-K=F6nig=20
+<u.kleine-koenig@pengutronix.de> a =E9crit :
+> Hello,
+>=20
+> On Mon, Oct 24, 2022 at 09:52:09PM +0100, Paul Cercueil wrote:
+>>  The "duty > cycle" trick to force the pin level of a disabled TCU2
+>>  channel would only work when the channel had been enabled=20
+>> previously.
+>>=20
+>>  Address this issue by enabling the PWM mode in jz4740_pwm_disable
+>>  (I know, right) so that the "duty > cycle" trick works before=20
+>> disabling
+>>  the PWM channel right after.
+>>=20
+>>  This issue went unnoticed, as the PWM pins on the majority of the=20
+>> boards
+>>  tested would default to the inactive level once the corresponding=20
+>> TCU
+>>  clock was enabled, so the first call to jz4740_pwm_disable() would=20
+>> not
+>>  actually change the pin levels.
+>>=20
+>>  On the GCW Zero however, the PWM pin for the backlight (PWM1, which=20
+>> is
+>>  a TCU2 channel) goes active as soon as the timer1 clock is enabled.
+>>  Since the jz4740_pwm_disable() function did not work on channels not
+>>  previously enabled, the backlight would shine at full brightness=20
+>> from
+>>  the moment the backlight driver would probe, until the backlight=20
+>> driver
+>>  tried to *enable* the PWM output.
+>>=20
+>>  With this fix, the PWM pins will be forced inactive as soon as
+>>  jz4740_pwm_apply() is called (and might be reconfigured to active if
+>>  dictated by the pwm_state). This means that there is still a tiny=20
+>> time
+>>  frame between the .request() and .apply() callbacks where the PWM=20
+>> pin
+>>  might be active. Sadly, there is no way to fix this issue: it is
+>>  impossible to write a PWM channel's registers if the corresponding=20
+>> clock
+>>  is not enabled, and enabling the clock is what causes the PWM pin=20
+>> to go
+>>  active.
+>>=20
+>>  There is a workaround, though, which complements this fix: simply
+>>  starting the backlight driver (or any PWM client driver) with a=20
+>> "init"
+>>  pinctrl state that sets the pin as an inactive GPIO. Once the=20
+>> driver is
+>>  probed and the pinctrl state switches to "default", the regular PWM=20
+>> pin
+>>  configuration can be used as it will be properly driven.
+>>=20
+>>  Fixes: c2693514a0a1 ("pwm: jz4740: Obtain regmap from parent node")
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  Cc: stable@vger.kernel.org
+>=20
+> OK, understood the issue. I think there is another similar issue: The
+> clk is get and enabled only in the .request() callback. The result is=20
+> (I
+> think---depends on a few further conditions) that if you have the
+> backlight driver as a module and the bootloader enables the backlight=20
+> to
+> show a splash screen, the backlight goes off because of the
+> clk_disable_unused initcall.
 
-Yes, I'll do that when I revise the patch.
+I will have to verify, but I'm pretty sure disabling the clock doesn't=20
+change the pin level back to inactive.
 
->> I agree we shouldn't rely on this, it's a legacy behavior, but the fact
->> is that's how the driver already works. I'm dropping this patch because
->> the driver is wrong and needs a different fix...
->
-> "How the driver already works" is a bit misleading, I never saw this
-> .set_sysclk() callback being called, so I can't really say that it works.
->
->>>>  I think a better approach is to have the DT define an array of parent
->>>>  clocks for .set_sysclk()'s use, instead of hardcoding parents in the
->>>>  driver. If the parent array is missing the driver can default to using
->>>>  "ext" so existing DTs will work.
->> As much as I like this idea there doesn't seem to be a mechanism for
->> handling a free-floating array of clocks in the DT. Everything has
->> to be put in the main "clocks" array. That makes it pretty hard to
->> figure out which ones are meant to be the parent clocks.
->> Do you know of any way to do this generically from the DT? If there's
->> no way to get away from a hardcoded array of names in the driver, I can
->> at least add a device argument to clk_get() so it'll use the DT names.
->
-> In jz4740_i2s_set_sysclk():
->
-> #define JZ4740_I2S_FIRST_PARENT_CLK 2
-> parent =3D of_clk_get(dev->of_node, JZ4740_I2S_FIRST_PARENT_CLK + clk_id);
->
-> is how I'd do it.
->
-> The DTs all have "aic", "i2s" as the first two clocks. It is even enforce=
-d in
-> the DT schemas.
->
-> Cheers,
-> -Paul
+-Paul
 
-Sounds like a plan. I was hoping to avoid adding CONFIG_OF back
-considering I removed it in an earlier patch since it was unused. :)
+> So the right thing to do is to get the clock in .probe(), and ensure=20
+> it
+> is kept on if the PWM is running already. Then you can also enable the
+> counter in .probe() and don't care for it in the enable and disable
+> functions.
+>=20
+> The init pinctrl then has to be on the PWM then, but that's IMHO ok.
+>=20
+> Best regards
+> Uwe
+>=20
+> PS: While looking into the driver I noticed that .request() uses
+> dev_err_probe(). That's wrong, this function is only supposed to be=20
+> used
+> in .probe().
+>=20
+> --
+> Pengutronix e.K.                           | Uwe Kleine-K=F6nig       =20
+>     |
+> Industrial Linux Solutions                 |=20
+> https://www.pengutronix.de/ |
 
-Guess it doesn't really matter for this driver since the Ingenic
-SoCs need CONFIG_OF anyway.
 
-Regards,
-Aidan
