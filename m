@@ -2,52 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CB060C3F0
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Oct 2022 08:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DD460C7F5
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Oct 2022 11:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiJYGoT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Oct 2022 02:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S231864AbiJYJYy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Oct 2022 05:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiJYGoS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Oct 2022 02:44:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B771148F53
-        for <linux-mips@vger.kernel.org>; Mon, 24 Oct 2022 23:44:17 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onDfY-00019b-5n; Tue, 25 Oct 2022 08:44:12 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onDfY-000G6b-2I; Tue, 25 Oct 2022 08:44:11 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onDfW-00ASK5-9r; Tue, 25 Oct 2022 08:44:10 +0200
-Date:   Tue, 25 Oct 2022 08:44:10 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+        with ESMTP id S229997AbiJYJYc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Oct 2022 05:24:32 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E342E0BE;
+        Tue, 25 Oct 2022 02:20:12 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id e20-20020a05600c449400b003cce0107a6fso626999wmo.0;
+        Tue, 25 Oct 2022 02:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:references:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cEUmIwCaCeFQJYLB9XXcHphXCrocOr1on/UtIhygxzc=;
+        b=mQXWym3RJyi+Tij4sSu/GS27r0Cneg2tW5uOlDbb3WFc9GVVbrnFPZbGJPlf3y14QB
+         uU9wSVbYvot2JIGy3cG+spIxzkOR09KAw+hCk8Vcn8KpZmsclQhCqclbJvl1bqnzwDVj
+         KFTkQ2JLcNw0SgQ8oi4cOBfT+d3Mq0C8KfNRsye5V/7R8ZU+e0TkHDhIp2m+S8trEgsP
+         P8WnqFhxKmYs/a1iIca4oTUIjsRVLgqZtCpCTb77kAKjpFM0It9/7ELOQyYKO6xNoPzW
+         T6vf7HEl/9N7OvEMEKUeRyzOGbnwl7mEE8K9PRzFSHXEyqilxIbvOhVLlb0bzI7skPF8
+         3Kaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:references:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cEUmIwCaCeFQJYLB9XXcHphXCrocOr1on/UtIhygxzc=;
+        b=3FQ2DMK363UsmCiV6mJ4QhvRNXypPci+t6rpkFTzaqZWI3DNKfiNxDZHxZLkk53qFN
+         Pet1H4kRk33pOlb+BtqHNdCwGl9CGsX419+dkqMCjmSDXYsPEwO9FYXFhmbGBl0MBK9n
+         VAgw5Czur1D9u+AZGsy+EPAOSqDrE52rpONdGflqxADoChr2owe03oTPvsBeZF8ziosr
+         DsNwEegUFZ1FV0McP/TrBZ9bofz8vaoS6Ah/MvW+R1ZIixKRMsWGUBLZOftz+ZWuPL/G
+         eeVa2H0gqeeHbrGWvEi//vMKaItJ1eIktXV4Bc3SYScJE1ZVWKJkp5T281ta1FAw6JAI
+         IYjg==
+X-Gm-Message-State: ACrzQf2akcYcsc07kf7pDNd77ZnrRaXK/EtGVLWZJJoDjd2sGn52tS05
+        HMVgLjUtcVdnfARgqFiXjRYHrmolMnf8Tw==
+X-Google-Smtp-Source: AMsMyM47fuuFRCblEyHXGL0NpNVuqqL7TkQX3Otqp+SL2+fsl4H6B2S+4I6GpUV4dEoCZ22tiNfbNA==
+X-Received: by 2002:a05:600c:35c8:b0:3c8:33dc:c262 with SMTP id r8-20020a05600c35c800b003c833dcc262mr13013520wmq.206.1666689610718;
+        Tue, 25 Oct 2022 02:20:10 -0700 (PDT)
+Received: from localhost (188.29.212.253.threembb.co.uk. [188.29.212.253])
+        by smtp.gmail.com with ESMTPSA id v26-20020a5d591a000000b0022cd96b3ba6sm2424205wrd.90.2022.10.25.02.20.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 02:20:10 -0700 (PDT)
+References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
+ <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
+ <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
+ <ROSYER.QTJF8J14H2YX1@crapouillou.net>
+ <6f2c7a0b-b68b-fc42-1a82-2b69c114823f@wanyeetech.com>
+ <UQ597w4FmzOT8p76tdRPhzECStUpFmYe@localhost>
+ <HQ76KR.B1PM87E2GIYZ1@crapouillou.net>
+ <JRrsX7Q4m5FUeeBs2yKTRMe5Ihaso8gi@localhost>
+ <DQD9KR.BW8U6333OSCP3@crapouillou.net>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/5] pwm: jz4740: Fix pin level of disabled TCU2
- channels, part 2
-Message-ID: <20221025064410.brrx5faa4jtwo67b@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
- <20221024205213.327001-3-paul@crapouillou.net>
+Cc:     Zhou Yanjie <zhouyu@wanyeetech.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 07/11] ASoC: jz4740-i2s: Make the PLL clock name
+ SoC-specific
+In-reply-to: <DQD9KR.BW8U6333OSCP3@crapouillou.net>
+Date:   Tue, 25 Oct 2022 10:20:10 +0100
+Message-ID: <ebyFOPJskfdtIoKsYnqp2IcYTMYA1ESE@localhost>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a2p5pd46iq5waynm"
-Content-Disposition: inline
-In-Reply-To: <20221024205213.327001-3-paul@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,156 +83,85 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---a2p5pd46iq5waynm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Paul Cercueil <paul@crapouillou.net> writes:
 
-On Mon, Oct 24, 2022 at 09:52:10PM +0100, Paul Cercueil wrote:
-> After commit a020f22a4ff5 ("pwm: jz4740: Make PWM start with the active p=
-art"),
-> the trick to set duty > period to properly shut down TCU2 channels did
-> not work anymore, because of the polarity inversion.
->=20
-> Address this issue by restoring the proper polarity before disabling the
-> channels.
->=20
-> Fixes: a020f22a4ff5 ("pwm: jz4740: Make PWM start with the active part")
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/pwm/pwm-jz4740.c | 62 ++++++++++++++++++++++++++--------------
->  1 file changed, 40 insertions(+), 22 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-> index 228eb104bf1e..65462a0052af 100644
-> --- a/drivers/pwm/pwm-jz4740.c
-> +++ b/drivers/pwm/pwm-jz4740.c
-> @@ -97,6 +97,19 @@ static int jz4740_pwm_enable(struct pwm_chip *chip, st=
-ruct pwm_device *pwm)
->  	return 0;
->  }
-> =20
-> +static void jz4740_pwm_set_polarity(struct jz4740_pwm_chip *jz,
-> +				    unsigned int hwpwm,
-> +				    enum pwm_polarity polarity)
-> +{
-> +	unsigned int value =3D 0;
-> +
-> +	if (polarity =3D=3D PWM_POLARITY_INVERSED)
-> +		value =3D TCU_TCSR_PWM_INITL_HIGH;
-> +
-> +	regmap_update_bits(jz->map, TCU_REG_TCSRc(hwpwm),
-> +			   TCU_TCSR_PWM_INITL_HIGH, value);
-> +}
-> +
->  static void jz4740_pwm_disable(struct pwm_chip *chip, struct pwm_device =
-*pwm)
->  {
->  	struct jz4740_pwm_chip *jz =3D to_jz4740(chip);
-> @@ -130,6 +143,7 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, st=
-ruct pwm_device *pwm,
->  	unsigned long long tmp =3D 0xffffull * NSEC_PER_SEC;
->  	struct clk *clk =3D pwm_get_chip_data(pwm);
->  	unsigned long period, duty;
-> +	enum pwm_polarity polarity;
->  	long rate;
->  	int err;
-> =20
-> @@ -169,6 +183,9 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, st=
-ruct pwm_device *pwm,
->  	if (duty >=3D period)
->  		duty =3D period - 1;
-> =20
-> +	/* Restore regular polarity before disabling the channel. */
-> +	jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, state->polarity);
-> +
+> Hi Aidan,
+>
+> Le dim. 23 oct. 2022 =C3=A0 14:29:24 +0100, Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
+>> Paul Cercueil <paul@crapouillou.net> writes:
+>>
+>>>  Hi Aidan,
+>>>  Le sam. 22 oct. 2022 =C3=A0 18:15:05 +0100, Aidan MacDonald
+>>>  <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
+>>>>  Actually, the clock names in the DT are meaningless. The clk_get() ca=
+ll
+>>>>  matches only the clock's name in the CGU driver. So in fact the driver
+>>>>  is "broken" for jz4780. It seems jz4770 doesn't work correctly either,
+>>>>  it has no "pll half", and three possible parents for its "i2s" clock.
+>>>  That's not true. The clock names are matched via DT.
+>>>  Only in the case where a corresponding clock cannot be found via DT wi=
+ll it
+>>>  search for the clock name among the clock providers. I believe this is=
+ a
+>>> legacy
+>>>  mechanism and you absolutely shouldn't rely on it.
+>>>  -Paul
+>>>
+>> What you say is only true for clk_get() with a device argument. When the
+>> device argument is NULL -- which is the case in .set_sysclk() -- then
+>> the DT name is not matched. Check drivers/clk/clkdev.c, in clk_find().
+>> When the dev_id is NULL, it will not match any lookup entries with a
+>> non-null dev_id, and I believe dev_id is the mechanism that implements
+>> DT clock lookup. Only the wildcard entries from the CGU driver will be
+>> matched if dev_id is NULL, so the DT is being ignored.
+>> If you don't believe me, try changing "pll half" in the device tree and
+>> the I2S driver to something else. I have done this, and it doesn't work.
+>> That proves the name in the device tree is not being used.
+>
+> Well, let's pass them a device pointer then.
+>
 
-Does this introduce a glitch?
+Yes, I'll do that when I revise the patch.
 
->  	jz4740_pwm_disable(chip, pwm);
-> =20
->  	err =3D clk_set_rate(clk, rate);
-> @@ -190,29 +207,30 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, =
-struct pwm_device *pwm,
->  	regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
->  			   TCU_TCSR_PWM_SD, TCU_TCSR_PWM_SD);
-> =20
-> -	/*
-> -	 * Set polarity.
-> -	 *
-> -	 * The PWM starts in inactive state until the internal timer reaches the
-> -	 * duty value, then becomes active until the timer reaches the period
-> -	 * value. In theory, we should then use (period - duty) as the real duty
-> -	 * value, as a high duty value would otherwise result in the PWM pin
-> -	 * being inactive most of the time.
-> -	 *
-> -	 * Here, we don't do that, and instead invert the polarity of the PWM
-> -	 * when it is active. This trick makes the PWM start with its active
-> -	 * state instead of its inactive state.
-> -	 */
-> -	if ((state->polarity =3D=3D PWM_POLARITY_NORMAL) ^ state->enabled)
-> -		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
-> -				   TCU_TCSR_PWM_INITL_HIGH, 0);
-> -	else
-> -		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
-> -				   TCU_TCSR_PWM_INITL_HIGH,
-> -				   TCU_TCSR_PWM_INITL_HIGH);
-> -
-> -	if (state->enabled)
-> +	if (state->enabled) {
-> +		/*
-> +		 * Set polarity.
-> +		 *
-> +		 * The PWM starts in inactive state until the internal timer
-> +		 * reaches the duty value, then becomes active until the timer
-> +		 * reaches the period value. In theory, we should then use
-> +		 * (period - duty) as the real duty value, as a high duty value
-> +		 * would otherwise result in the PWM pin being inactive most of
-> +		 * the time.
-> +		 *
-> +		 * Here, we don't do that, and instead invert the polarity of
-> +		 * the PWM when it is active. This trick makes the PWM start
-> +		 * with its active state instead of its inactive state.
-> +		 */
-> +		if (state->polarity =3D=3D PWM_POLARITY_NORMAL)
-> +			polarity =3D PWM_POLARITY_INVERSED;
-> +		else
-> +			polarity =3D PWM_POLARITY_NORMAL;
-> +
-> +		jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, polarity);
-> +
->  		jz4740_pwm_enable(chip, pwm);
-> +	}
+>> I agree we shouldn't rely on this, it's a legacy behavior, but the fact
+>> is that's how the driver already works. I'm dropping this patch because
+>> the driver is wrong and needs a different fix...
+>
+> "How the driver already works" is a bit misleading, I never saw this
+> .set_sysclk() callback being called, so I can't really say that it works.
+>
+>>>>  I think a better approach is to have the DT define an array of parent
+>>>>  clocks for .set_sysclk()'s use, instead of hardcoding parents in the
+>>>>  driver. If the parent array is missing the driver can default to using
+>>>>  "ext" so existing DTs will work.
+>> As much as I like this idea there doesn't seem to be a mechanism for
+>> handling a free-floating array of clocks in the DT. Everything has
+>> to be put in the main "clocks" array. That makes it pretty hard to
+>> figure out which ones are meant to be the parent clocks.
+>> Do you know of any way to do this generically from the DT? If there's
+>> no way to get away from a hardcoded array of names in the driver, I can
+>> at least add a device argument to clk_get() so it'll use the DT names.
+>
+> In jz4740_i2s_set_sysclk():
+>
+> #define JZ4740_I2S_FIRST_PARENT_CLK 2
+> parent =3D of_clk_get(dev->of_node, JZ4740_I2S_FIRST_PARENT_CLK + clk_id);
+>
+> is how I'd do it.
+>
+> The DTs all have "aic", "i2s" as the first two clocks. It is even enforce=
+d in
+> the DT schemas.
+>
+> Cheers,
+> -Paul
 
-Note that for disabled PWMs there is no official guaranty about the pin
-state. So it would be ok (but admittedly not great) to simplify the
-driver and accept that the pinstate is active while the PWM is off.
-IMHO this is also better than a glitch.
+Sounds like a plan. I was hoping to avoid adding CONFIG_OF back
+considering I removed it in an earlier patch since it was unused. :)
 
-If a consumer wants the PWM to be in its inactive state, they should
-not disable it.
+Guess it doesn't really matter for this driver since the Ingenic
+SoCs need CONFIG_OF anyway.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---a2p5pd46iq5waynm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNXhbcACgkQwfwUeK3K
-7AkPTAgAkbbVJH6ml6oRq6JZCZitTIWqrX4K2Hy3diqa+rEFz0d9cQTpP09RsXtn
-zy8yon2OauzmhKKm2kKAYI0OcEROOXQzDHuWqItTJbt1yxs/p97bvCg5+8Ws518x
-PgxEqVQOxm3X6+mbrP3AW4Db1AJpmvUIroN224WY/n2JS2g4/fwzIIsx6K3vWNAf
-m5MpedDo78923RrMWBJc+n7v/7fuFKIitVzFLbuBZTGTHvwFrObfRTxucQmpDC1j
-wEs7fCAYXy6ia4vcMAj+a0mJpyt7y2if+/r/dhvPdGh6Dppm3xMPdYmvRepZdQ2B
-vwtYzKON1dlzjFi5MFx0QnDUHEGcVg==
-=zXwJ
------END PGP SIGNATURE-----
-
---a2p5pd46iq5waynm--
+Regards,
+Aidan
