@@ -2,90 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4833E60DDB4
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Oct 2022 11:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5809A60DE12
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Oct 2022 11:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbiJZJGp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Oct 2022 05:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S233280AbiJZJ36 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Oct 2022 05:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiJZJGo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Oct 2022 05:06:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A4E9A9E2;
-        Wed, 26 Oct 2022 02:06:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBA3E61DA3;
-        Wed, 26 Oct 2022 09:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D56C433D6;
-        Wed, 26 Oct 2022 09:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666775202;
-        bh=OJvRuXCcGUbboEOk7Whw5rAuR91zEDRn4jEkqbi+aHA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RqCcQ7ZoY0p0kJ1iG46UxlBE3FBv69P0TzDoyjQ/57SMyKPqS1ilBFnMrACdBWnlM
-         200Ib4YEGd8J6zY2p+qVgx2NFpMNBhhdxMQ62eA4tsalRG48tV/se8pDazphsLb3bp
-         frZDMESa90mI+ETR0o3PthGeH+Y59aN9d1+j2pTgOfF3SV3+RC9v0DBtesaArdEfVW
-         aBC247/J3rMkwu9+DrV9ceUwbKATQtansLvMT2F7LF03ic64keQ6TEQWeHnrFvy3es
-         7mUzUOMIo5cmhKOLIY9pv4Q4iyKHv83LCJmST1Mb58EsJAVnqqeJX57inM1qOilafl
-         uzVCjiasTtJcA==
-Date:   Wed, 26 Oct 2022 12:06:37 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, arnd@arndb.de,
-        tsbogend@alpha.franken.de, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, lukas.bulwahn@gmail.com,
-        stephen@networkplumber.org, shayagr@amazon.com, mw@semihalf.com,
-        petrm@nvidia.com, wsa+renesas@sang-engineering.com,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH net-next] eth: fealnx: delete the driver for Myson MTD-800
-Message-ID: <Y1j4nX3zvIXXx+ab@unreal>
-References: <20221025184254.1717982-1-kuba@kernel.org>
+        with ESMTP id S233113AbiJZJ35 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Oct 2022 05:29:57 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E69140001
+        for <linux-mips@vger.kernel.org>; Wed, 26 Oct 2022 02:29:55 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so1017201wme.5
+        for <linux-mips@vger.kernel.org>; Wed, 26 Oct 2022 02:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E6H2u9oGK4VXsKGNASBOoMX/dBF+iFbozvBEkuT+Wq4=;
+        b=J/hcPlK3P0/PYAh25MBDjVEkt187l1iYYxU1NZk+huy0jgX0oshlzMSF6CjcOYSU2o
+         dG5pFlczZphLMxv24nIB9lVa2tv7isgeXZhRBgdCn5/cwuqImKY6g+8axch5PZGLL2mZ
+         dSWdNHeoZPXAV59kpgyQnOhHuxZFCj62uqI/VWBma+i0099OJFiJh/kRaGOXWyHxfxQ+
+         hurBoUYM1HQfiAN6kLDAavZL/rDvS7yf+0zMAqurtFQ79tYDcOtnQl1gBIehu2ccb1bc
+         NkJYXeFFPlCgLk/DGUae59LtyoosODTcMChgph6vQogQOq7HvdC/Lr1sO30vBUKTi5yB
+         EgLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6H2u9oGK4VXsKGNASBOoMX/dBF+iFbozvBEkuT+Wq4=;
+        b=Lg+Z+b81N2WGUBcxqt1azdN4iQU1Yupiu3RzFhk9WCwzMb66emcMy1g6VMxoppxJ2J
+         N2P0Xo+1qKtfEFlt+yNZ4+jGnnkCZ/lTLwZl1QLnSwj0sfZeZ44uvd3uSDx77HwEP2iJ
+         j6cBs3bAtefzcVnFIcfBSO6mw4L0rm1nOxpGQQLsq1evTtK9YToqptJzOpE5JtKdJJKz
+         /Ebu9w9ytViLjNkLJaNcTl0Pqv/szubnW6AFoHbvlbHh6efNPJKSsqjf2NntiQWHbqdZ
+         j0XyZWGkZl3dXvK3qlwvBbIFcbgMcVRURh2/iiDD38n70ivBi17AV5CxX7M8VlgtRvDC
+         RI8A==
+X-Gm-Message-State: ACrzQf3ozcKui6u2tXqSRtS9ptWAqsqUGVoHINniMEM8cNhReIwqyRPs
+        tIdy7Xw9iS3+xpAjYopw6q9/sby415e7isZ3
+X-Google-Smtp-Source: AMsMyM7q2Of+tpOxmL6S+98KSburHfj8xefTLmFr4ZHGUAH2MsZs2ksElXyw8bypxAEc6yn3vjKRNw==
+X-Received: by 2002:a05:600c:4f0f:b0:3ca:31ba:d77c with SMTP id l15-20020a05600c4f0f00b003ca31bad77cmr1766099wmq.36.1666776594461;
+        Wed, 26 Oct 2022 02:29:54 -0700 (PDT)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id bd14-20020a05600c1f0e00b003b492753826sm1320809wmb.43.2022.10.26.02.29.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 02:29:53 -0700 (PDT)
+Message-ID: <9604b16e-df7d-634b-5c76-3aa6f9071fc0@linaro.org>
+Date:   Wed, 26 Oct 2022 11:29:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025184254.1717982-1-kuba@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH] mips: alchemy: gpio: Include the right header
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Ralf Baechle <ralf@linux-mips.org>
+Cc:     linux-mips@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org
+References: <20221026080528.105967-1-linus.walleij@linaro.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221026080528.105967-1-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:42:54AM -0700, Jakub Kicinski wrote:
-> The git history for this driver seems to be completely
-> automated / tree wide changes. I can't find any boards
-> or systems which would use this chip. Google search
-> shows pictures of towel warmers and no networking products.
+On 26/10/22 10:05, Linus Walleij wrote:
+> The local GPIO driver in the MIPS Alchemy is including the legacy
+> <linux/gpio.h> header but what it wants is to implement a GPIO
+> driver so include <linux/gpio/driver.h> instead.
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: linux-gpio@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
-> CC: tsbogend@alpha.franken.de
-> CC: mpe@ellerman.id.au
-> CC: npiggin@gmail.com
-> CC: christophe.leroy@csgroup.eu
-> CC: lukas.bulwahn@gmail.com
-> CC: arnd@arndb.de
-> CC: stephen@networkplumber.org
-> CC: shayagr@amazon.com
-> CC: leon@kernel.org
-> CC: mw@semihalf.com
-> CC: petrm@nvidia.com
-> CC: wsa+renesas@sang-engineering.com
-> CC: linux-mips@vger.kernel.org
-> CC: linuxppc-dev@lists.ozlabs.org
-> ---
->  arch/mips/configs/mtx1_defconfig      |    1 -
->  arch/powerpc/configs/ppc6xx_defconfig |    1 -
->  drivers/net/ethernet/Kconfig          |   10 -
->  drivers/net/ethernet/Makefile         |    1 -
->  drivers/net/ethernet/fealnx.c         | 1953 -------------------------
->  5 files changed, 1966 deletions(-)
->  delete mode 100644 drivers/net/ethernet/fealnx.c
+>   arch/mips/alchemy/common/gpiolib.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
+
