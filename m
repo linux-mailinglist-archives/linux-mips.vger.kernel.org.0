@@ -2,448 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336E560E73F
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Oct 2022 20:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06E860E85A
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Oct 2022 21:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234355AbiJZS2a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Oct 2022 14:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S234805AbiJZTHg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Oct 2022 15:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbiJZS2K (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Oct 2022 14:28:10 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47608DDB6E;
-        Wed, 26 Oct 2022 11:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666808829; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=76T3QxkAI2lMFlw7PcPeJf8WUULUXs6hT4JSbflNB34=;
-        b=DubQOTxSf52DHtsIuHQvZdDm5/IFN9oCM5TyPq/uOrG+Zy+9dZqHfcXFVnLcbGV6zecvKO
-        8+8bvsTtufF9E0LhOv0OFG+F2tAjFNEcFUlDR7lBG2tuQ8S7JJkLlzEdb0bvaJ3cUzSTfG
-        4WervWKozOl36/QqDHDM2cCbMO0vz3k=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mips@vger.kernel.org, od@opendingux.net,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 7/7] usb: phy: jz4770: Remove driver
-Date:   Wed, 26 Oct 2022 19:26:57 +0100
-Message-Id: <20221026182657.146630-8-paul@crapouillou.net>
-In-Reply-To: <20221026182657.146630-1-paul@crapouillou.net>
-References: <20221026182657.146630-1-paul@crapouillou.net>
+        with ESMTP id S234808AbiJZTHU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Oct 2022 15:07:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B42CE36;
+        Wed, 26 Oct 2022 12:04:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D5B062033;
+        Wed, 26 Oct 2022 19:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2740C433D6;
+        Wed, 26 Oct 2022 19:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666811075;
+        bh=U+R8INu9G+SgFDxjAisYOYC9BdZ7qdOXy8lBhXyOEwE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=rI4nDtKHjUysmmUGj09yG6xS8huuOsMAGRr1z4i7boXV2jOUSegFC8c0jzlnnklBh
+         QZghP+s7yItJfFxeBtKdiDnojkqHThYxwjwpUt3SVs++c8/ZG+1I6PzLSZ5+xuIycQ
+         X8FPkkip5XZyWzrtQaZbTrucYseGGhEeyyOHt3pWuL92WyBxIed6Jx/2+0uY2jUiKT
+         AI/0YlNxPWu/pleo0PxcyuhgVSONw2Q9l1auUZVo3Z7fyrBzqjGhQKHfx+iminrKCL
+         5HoJKBhWNXVAV3Mf4CiFoJJcFyau3SH6zwcDzuCoijKASZpM1Jt2KAgha7K3h7FE6j
+         9rpimXL2LU/qQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     paul@crapouillou.net, lgirdwood@gmail.com, tiwai@suse.com,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, perex@perex.cz
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        zhouyu@wanyeetech.com, linux-mips@vger.kernel.org
+In-Reply-To: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
+References: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
+Subject: Re: [PATCH v6 0/9] ASoC: cleanups and improvements for jz4740-i2s
+Message-Id: <166681107350.960840.12779879137607542680.b4-ty@kernel.org>
+Date:   Wed, 26 Oct 2022 20:04:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This driver has been replaced by the Ingenic PHY driver that uses the
-generic PHY framework.
+On Sun, 23 Oct 2022 15:33:19 +0100, Aidan MacDonald wrote:
+> This series is a preparatory cleanup of the jz4740-i2s driver before
+> adding support for a new SoC. The two improvements are lifting
+> unnecessary restrictions on sample rates and formats -- the existing
+> ones appear to be derived from the limitations of the JZ4740's internal
+> codec and don't reflect the actual capabilities of the I2S controller.
+> 
+> I'm unable to test the series on any JZ47xx SoCs, but I have tested
+> on an X1000 (which is the SoC I'll be adding in a followup series).
+> 
+> [...]
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/usb/phy/Kconfig      |   8 -
- drivers/usb/phy/Makefile     |   1 -
- drivers/usb/phy/phy-jz4770.c | 353 -----------------------------------
- 3 files changed, 362 deletions(-)
- delete mode 100644 drivers/usb/phy/phy-jz4770.c
+Applied to
 
-diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
-index 2acbe41fbf7e..d905ac6f8533 100644
---- a/drivers/usb/phy/Kconfig
-+++ b/drivers/usb/phy/Kconfig
-@@ -185,12 +185,4 @@ config USB_ULPI_VIEWPORT
- 	  Provides read/write operations to the ULPI phy register set for
- 	  controllers with a viewport register (e.g. Chipidea/ARC controllers).
- 
--config JZ4770_PHY
--	tristate "Ingenic SoCs Transceiver Driver"
--	depends on MIPS || COMPILE_TEST
--	select USB_PHY
--	help
--	  This driver provides PHY support for the USB controller found
--	  on the JZ-series and X-series SoCs from Ingenic.
--
- endmenu
-diff --git a/drivers/usb/phy/Makefile b/drivers/usb/phy/Makefile
-index b352bdbe8712..df1d99010079 100644
---- a/drivers/usb/phy/Makefile
-+++ b/drivers/usb/phy/Makefile
-@@ -24,4 +24,3 @@ obj-$(CONFIG_USB_MXS_PHY)		+= phy-mxs-usb.o
- obj-$(CONFIG_USB_ULPI)			+= phy-ulpi.o
- obj-$(CONFIG_USB_ULPI_VIEWPORT)		+= phy-ulpi-viewport.o
- obj-$(CONFIG_KEYSTONE_USB_PHY)		+= phy-keystone.o
--obj-$(CONFIG_JZ4770_PHY)		+= phy-jz4770.o
-diff --git a/drivers/usb/phy/phy-jz4770.c b/drivers/usb/phy/phy-jz4770.c
-deleted file mode 100644
-index f16adcacdce3..000000000000
---- a/drivers/usb/phy/phy-jz4770.c
-+++ /dev/null
-@@ -1,353 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Ingenic SoCs USB PHY driver
-- * Copyright (c) Paul Cercueil <paul@crapouillou.net>
-- * Copyright (c) 漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>
-- * Copyright (c) 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-- */
--
--#include <linux/clk.h>
--#include <linux/io.h>
--#include <linux/module.h>
--#include <linux/platform_device.h>
--#include <linux/regulator/consumer.h>
--#include <linux/usb/otg.h>
--#include <linux/usb/phy.h>
--
--/* OTGPHY register offsets */
--#define REG_USBPCR_OFFSET			0x00
--#define REG_USBRDT_OFFSET			0x04
--#define REG_USBVBFIL_OFFSET			0x08
--#define REG_USBPCR1_OFFSET			0x0c
--
--/* bits within the USBPCR register */
--#define USBPCR_USB_MODE				BIT(31)
--#define USBPCR_AVLD_REG				BIT(30)
--#define USBPCR_COMMONONN			BIT(25)
--#define USBPCR_VBUSVLDEXT			BIT(24)
--#define USBPCR_VBUSVLDEXTSEL		BIT(23)
--#define USBPCR_POR					BIT(22)
--#define USBPCR_SIDDQ				BIT(21)
--#define USBPCR_OTG_DISABLE			BIT(20)
--#define USBPCR_TXPREEMPHTUNE		BIT(6)
--
--#define USBPCR_IDPULLUP_LSB	28
--#define USBPCR_IDPULLUP_MASK		GENMASK(29, USBPCR_IDPULLUP_LSB)
--#define USBPCR_IDPULLUP_ALWAYS		(0x2 << USBPCR_IDPULLUP_LSB)
--#define USBPCR_IDPULLUP_SUSPEND		(0x1 << USBPCR_IDPULLUP_LSB)
--#define USBPCR_IDPULLUP_OTG			(0x0 << USBPCR_IDPULLUP_LSB)
--
--#define USBPCR_COMPDISTUNE_LSB		17
--#define USBPCR_COMPDISTUNE_MASK		GENMASK(19, USBPCR_COMPDISTUNE_LSB)
--#define USBPCR_COMPDISTUNE_DFT		(0x4 << USBPCR_COMPDISTUNE_LSB)
--
--#define USBPCR_OTGTUNE_LSB			14
--#define USBPCR_OTGTUNE_MASK			GENMASK(16, USBPCR_OTGTUNE_LSB)
--#define USBPCR_OTGTUNE_DFT			(0x4 << USBPCR_OTGTUNE_LSB)
--
--#define USBPCR_SQRXTUNE_LSB	11
--#define USBPCR_SQRXTUNE_MASK		GENMASK(13, USBPCR_SQRXTUNE_LSB)
--#define USBPCR_SQRXTUNE_DCR_20PCT	(0x7 << USBPCR_SQRXTUNE_LSB)
--#define USBPCR_SQRXTUNE_DFT			(0x3 << USBPCR_SQRXTUNE_LSB)
--
--#define USBPCR_TXFSLSTUNE_LSB		7
--#define USBPCR_TXFSLSTUNE_MASK		GENMASK(10, USBPCR_TXFSLSTUNE_LSB)
--#define USBPCR_TXFSLSTUNE_DCR_50PPT	(0xf << USBPCR_TXFSLSTUNE_LSB)
--#define USBPCR_TXFSLSTUNE_DCR_25PPT	(0x7 << USBPCR_TXFSLSTUNE_LSB)
--#define USBPCR_TXFSLSTUNE_DFT		(0x3 << USBPCR_TXFSLSTUNE_LSB)
--#define USBPCR_TXFSLSTUNE_INC_25PPT	(0x1 << USBPCR_TXFSLSTUNE_LSB)
--#define USBPCR_TXFSLSTUNE_INC_50PPT	(0x0 << USBPCR_TXFSLSTUNE_LSB)
--
--#define USBPCR_TXHSXVTUNE_LSB		4
--#define USBPCR_TXHSXVTUNE_MASK		GENMASK(5, USBPCR_TXHSXVTUNE_LSB)
--#define USBPCR_TXHSXVTUNE_DFT		(0x3 << USBPCR_TXHSXVTUNE_LSB)
--#define USBPCR_TXHSXVTUNE_DCR_15MV	(0x1 << USBPCR_TXHSXVTUNE_LSB)
--
--#define USBPCR_TXRISETUNE_LSB		4
--#define USBPCR_TXRISETUNE_MASK		GENMASK(5, USBPCR_TXRISETUNE_LSB)
--#define USBPCR_TXRISETUNE_DFT		(0x3 << USBPCR_TXRISETUNE_LSB)
--
--#define USBPCR_TXVREFTUNE_LSB		0
--#define USBPCR_TXVREFTUNE_MASK		GENMASK(3, USBPCR_TXVREFTUNE_LSB)
--#define USBPCR_TXVREFTUNE_INC_25PPT	(0x7 << USBPCR_TXVREFTUNE_LSB)
--#define USBPCR_TXVREFTUNE_DFT		(0x5 << USBPCR_TXVREFTUNE_LSB)
--
--/* bits within the USBRDTR register */
--#define USBRDT_UTMI_RST				BIT(27)
--#define USBRDT_HB_MASK				BIT(26)
--#define USBRDT_VBFIL_LD_EN			BIT(25)
--#define USBRDT_IDDIG_EN				BIT(24)
--#define USBRDT_IDDIG_REG			BIT(23)
--#define USBRDT_VBFIL_EN				BIT(2)
--
--/* bits within the USBPCR1 register */
--#define USBPCR1_BVLD_REG			BIT(31)
--#define USBPCR1_DPPD				BIT(29)
--#define USBPCR1_DMPD				BIT(28)
--#define USBPCR1_USB_SEL				BIT(28)
--#define USBPCR1_WORD_IF_16BIT		BIT(19)
--
--enum ingenic_usb_phy_version {
--	ID_JZ4770,
--	ID_JZ4780,
--	ID_X1000,
--	ID_X1830,
--};
--
--struct ingenic_soc_info {
--	enum ingenic_usb_phy_version version;
--
--	void (*usb_phy_init)(struct usb_phy *phy);
--};
--
--struct jz4770_phy {
--	const struct ingenic_soc_info *soc_info;
--
--	struct usb_phy phy;
--	struct usb_otg otg;
--	struct device *dev;
--	void __iomem *base;
--	struct clk *clk;
--	struct regulator *vcc_supply;
--};
--
--static inline struct jz4770_phy *otg_to_jz4770_phy(struct usb_otg *otg)
--{
--	return container_of(otg, struct jz4770_phy, otg);
--}
--
--static inline struct jz4770_phy *phy_to_jz4770_phy(struct usb_phy *phy)
--{
--	return container_of(phy, struct jz4770_phy, phy);
--}
--
--static int ingenic_usb_phy_set_peripheral(struct usb_otg *otg,
--				     struct usb_gadget *gadget)
--{
--	struct jz4770_phy *priv = otg_to_jz4770_phy(otg);
--	u32 reg;
--
--	if (priv->soc_info->version >= ID_X1000) {
--		reg = readl(priv->base + REG_USBPCR1_OFFSET);
--		reg |= USBPCR1_BVLD_REG;
--		writel(reg, priv->base + REG_USBPCR1_OFFSET);
--	}
--
--	reg = readl(priv->base + REG_USBPCR_OFFSET);
--	reg &= ~USBPCR_USB_MODE;
--	reg |= USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL | USBPCR_OTG_DISABLE;
--	writel(reg, priv->base + REG_USBPCR_OFFSET);
--
--	return 0;
--}
--
--static int ingenic_usb_phy_set_host(struct usb_otg *otg, struct usb_bus *host)
--{
--	struct jz4770_phy *priv = otg_to_jz4770_phy(otg);
--	u32 reg;
--
--	reg = readl(priv->base + REG_USBPCR_OFFSET);
--	reg &= ~(USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL | USBPCR_OTG_DISABLE);
--	reg |= USBPCR_USB_MODE;
--	writel(reg, priv->base + REG_USBPCR_OFFSET);
--
--	return 0;
--}
--
--static int ingenic_usb_phy_init(struct usb_phy *phy)
--{
--	struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
--	int err;
--	u32 reg;
--
--	err = regulator_enable(priv->vcc_supply);
--	if (err) {
--		dev_err(priv->dev, "Unable to enable VCC: %d\n", err);
--		return err;
--	}
--
--	err = clk_prepare_enable(priv->clk);
--	if (err) {
--		dev_err(priv->dev, "Unable to start clock: %d\n", err);
--		return err;
--	}
--
--	priv->soc_info->usb_phy_init(phy);
--
--	/* Wait for PHY to reset */
--	usleep_range(30, 300);
--	reg = readl(priv->base + REG_USBPCR_OFFSET);
--	writel(reg & ~USBPCR_POR, priv->base + REG_USBPCR_OFFSET);
--	usleep_range(300, 1000);
--
--	return 0;
--}
--
--static void ingenic_usb_phy_shutdown(struct usb_phy *phy)
--{
--	struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
--
--	clk_disable_unprepare(priv->clk);
--	regulator_disable(priv->vcc_supply);
--}
--
--static void ingenic_usb_phy_remove(void *phy)
--{
--	usb_remove_phy(phy);
--}
--
--static void jz4770_usb_phy_init(struct usb_phy *phy)
--{
--	struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
--	u32 reg;
--
--	reg = USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS |
--		USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT | USBPCR_SQRXTUNE_DFT |
--		USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT | USBPCR_TXVREFTUNE_DFT |
--		USBPCR_POR;
--	writel(reg, priv->base + REG_USBPCR_OFFSET);
--}
--
--static void jz4780_usb_phy_init(struct usb_phy *phy)
--{
--	struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
--	u32 reg;
--
--	reg = readl(priv->base + REG_USBPCR1_OFFSET) | USBPCR1_USB_SEL |
--		USBPCR1_WORD_IF_16BIT;
--	writel(reg, priv->base + REG_USBPCR1_OFFSET);
--
--	reg = USBPCR_TXPREEMPHTUNE | USBPCR_COMMONONN | USBPCR_POR;
--	writel(reg, priv->base + REG_USBPCR_OFFSET);
--}
--
--static void x1000_usb_phy_init(struct usb_phy *phy)
--{
--	struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
--	u32 reg;
--
--	reg = readl(priv->base + REG_USBPCR1_OFFSET) | USBPCR1_WORD_IF_16BIT;
--	writel(reg, priv->base + REG_USBPCR1_OFFSET);
--
--	reg = USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
--		USBPCR_TXHSXVTUNE_DCR_15MV | USBPCR_TXVREFTUNE_INC_25PPT |
--		USBPCR_COMMONONN | USBPCR_POR;
--	writel(reg, priv->base + REG_USBPCR_OFFSET);
--}
--
--static void x1830_usb_phy_init(struct usb_phy *phy)
--{
--	struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
--	u32 reg;
--
--	/* rdt */
--	writel(USBRDT_VBFIL_EN | USBRDT_UTMI_RST, priv->base + REG_USBRDT_OFFSET);
--
--	reg = readl(priv->base + REG_USBPCR1_OFFSET) | USBPCR1_WORD_IF_16BIT |
--		USBPCR1_DMPD | USBPCR1_DPPD;
--	writel(reg, priv->base + REG_USBPCR1_OFFSET);
--
--	reg = USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT |	USBPCR_TXPREEMPHTUNE |
--		USBPCR_COMMONONN | USBPCR_POR;
--	writel(reg, priv->base + REG_USBPCR_OFFSET);
--}
--
--static const struct ingenic_soc_info jz4770_soc_info = {
--	.version = ID_JZ4770,
--
--	.usb_phy_init = jz4770_usb_phy_init,
--};
--
--static const struct ingenic_soc_info jz4780_soc_info = {
--	.version = ID_JZ4780,
--
--	.usb_phy_init = jz4780_usb_phy_init,
--};
--
--static const struct ingenic_soc_info x1000_soc_info = {
--	.version = ID_X1000,
--
--	.usb_phy_init = x1000_usb_phy_init,
--};
--
--static const struct ingenic_soc_info x1830_soc_info = {
--	.version = ID_X1830,
--
--	.usb_phy_init = x1830_usb_phy_init,
--};
--
--static const struct of_device_id ingenic_usb_phy_of_matches[] = {
--	{ .compatible = "ingenic,jz4770-phy", .data = &jz4770_soc_info },
--	{ .compatible = "ingenic,jz4780-phy", .data = &jz4780_soc_info },
--	{ .compatible = "ingenic,x1000-phy", .data = &x1000_soc_info },
--	{ .compatible = "ingenic,x1830-phy", .data = &x1830_soc_info },
--	{ /* sentinel */ }
--};
--MODULE_DEVICE_TABLE(of, ingenic_usb_phy_of_matches);
--
--static int jz4770_phy_probe(struct platform_device *pdev)
--{
--	struct device *dev = &pdev->dev;
--	struct jz4770_phy *priv;
--	int err;
--
--	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
--
--	priv->soc_info = device_get_match_data(&pdev->dev);
--	if (!priv->soc_info) {
--		dev_err(&pdev->dev, "Error: No device match found\n");
--		return -ENODEV;
--	}
--
--	platform_set_drvdata(pdev, priv);
--	priv->dev = dev;
--	priv->phy.dev = dev;
--	priv->phy.otg = &priv->otg;
--	priv->phy.label = "ingenic-usb-phy";
--	priv->phy.init = ingenic_usb_phy_init;
--	priv->phy.shutdown = ingenic_usb_phy_shutdown;
--
--	priv->otg.state = OTG_STATE_UNDEFINED;
--	priv->otg.usb_phy = &priv->phy;
--	priv->otg.set_host = ingenic_usb_phy_set_host;
--	priv->otg.set_peripheral = ingenic_usb_phy_set_peripheral;
--
--	priv->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(priv->base)) {
--		dev_err(dev, "Failed to map registers\n");
--		return PTR_ERR(priv->base);
--	}
--
--	priv->clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(priv->clk))
--		return dev_err_probe(dev, PTR_ERR(priv->clk),
--				     "Failed to get clock\n");
--
--	priv->vcc_supply = devm_regulator_get(dev, "vcc");
--	if (IS_ERR(priv->vcc_supply))
--		return dev_err_probe(dev, PTR_ERR(priv->vcc_supply),
--				     "Failed to get regulator\n");
--
--	err = usb_add_phy(&priv->phy, USB_PHY_TYPE_USB2);
--	if (err)
--		return dev_err_probe(dev, err, "Unable to register PHY\n");
--
--	return devm_add_action_or_reset(dev, ingenic_usb_phy_remove, &priv->phy);
--}
--
--static struct platform_driver ingenic_phy_driver = {
--	.probe		= jz4770_phy_probe,
--	.driver		= {
--		.name	= "jz4770-phy",
--		.of_match_table = ingenic_usb_phy_of_matches,
--	},
--};
--module_platform_driver(ingenic_phy_driver);
--
--MODULE_AUTHOR("周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>");
--MODULE_AUTHOR("漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>");
--MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
--MODULE_DESCRIPTION("Ingenic SoCs USB PHY driver");
--MODULE_LICENSE("GPL");
--- 
-2.35.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
+Thanks!
+
+[1/9] ASoC: jz4740-i2s: Handle independent FIFO flush bits
+      commit: 8b3a9ad86239f80ed569e23c3954a311f66481d6
+[2/9] ASoC: jz4740-i2s: Convert to regmap API
+      commit: cf375e693252f4e8ecb6256af631ff381381a3dd
+[3/9] ASoC: jz4740-i2s: Simplify using regmap fields
+      commit: 0fddb4bce669fd255f6ffade6905da5c8ed3e254
+[4/9] ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+      commit: b355ebebb17c438b90c3d339f38a79559f7259df
+[5/9] ASoC: jz4740-i2s: Align macro values and sort includes
+      commit: dacc06b812f46e0d4cfdda98134a8b5d64375341
+[6/9] ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
+      commit: 7abd01cfc5428581b21099eb629d88e76a47b67a
+[7/9] ASoC: jz4740-i2s: Support continuous sample rate
+      commit: 84a914349ba2634e8db6b0815f100697d878d033
+[8/9] ASoC: jz4740-i2s: Move component functions near the component driver
+      commit: 165afe6b66aafaafc95484ac2f0f09f78d62386b
+[9/9] ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
+      commit: 4e02fd6207474ef2d882b8620f4c3db9a02d4ddd
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
