@@ -2,279 +2,300 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05AD60E969
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Oct 2022 21:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9FC60EBB3
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 00:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbiJZTpY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Oct 2022 15:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S233880AbiJZWnj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Oct 2022 18:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbiJZTon (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Oct 2022 15:44:43 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7537B119BFC;
-        Wed, 26 Oct 2022 12:44:00 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5so3193306wmo.1;
-        Wed, 26 Oct 2022 12:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tgTbY0wb7NEE8wsfRVlRc/ObdS/WC2z2i1h/J+MWlCI=;
-        b=KY7cMPd1GFfcrGv0PtiHQ5CIfXDiI+sstPxdDLC0fKy9ZpCkfKTaukI07g1MBrNmVA
-         zL77VTcV1eiCDazbQjF8hfvixA5jyXmPdIl6gJNgatTKiCOVq1IiLMVEjDlFQcxp9f+h
-         Mw5VTwQ4zBarNl911bm/OChOqRHUH6l5cvtcqO/eErY8TeudrfdCiYhAUFADRTsRHH/r
-         8l8NxMwp6+PoKWUV2eKqZ9ZmQNj1HNXOB70qziXt9gVT1uvhJMfgfaEN+uv4hYwy8Ni1
-         PzRlDSBmUxYZhjJvVZhKB4Vy4haShFsol9Gy8MeNj7Udp9BMEaF7Usip/JLL1o3bi3CC
-         H/5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tgTbY0wb7NEE8wsfRVlRc/ObdS/WC2z2i1h/J+MWlCI=;
-        b=4tli4QnkRi8MQuFELRdII8TouQFPe5hCdRqzH5ROcD8FU/o8IUXK84V/1VCKqLKfH0
-         258XHVRdkUEXqWHv0N7nbOvgjNg1fX/mtHSDMx1RGjxYVoatdPKw0L/f7W4NVgPiPgRv
-         BW34k802pxeXPgE9OTGrLojaJFzItZ11kBlLedgZKo5SrO0/VmUHycyoGzNPWPi7myj4
-         O4UYP3maaT2VQWA6fn4pBHUaFXLMJMxYXkM9GrUMzbFrlzsEO+6hu3bMYort+uaIFIjc
-         zgn6WdYdYoFHT0dHcENUeswxuUGZrfbWqrOZazvhIjMLddzoXIoIYxgo+xtWi4V7+3w/
-         YNZg==
-X-Gm-Message-State: ACrzQf33E6HAvJN236fwVAPaAzxcjRZCA3WnMiDKbxwlJMiizk33M03p
-        Y2dlSWeejKFjz9/4C9R1zZw=
-X-Google-Smtp-Source: AMsMyM7Ilr1r8KPJxosCeQz1/nn4rtexXjzOkrLF8BsmDihsFZPMCGK61eqqOXZToHLPYQwpcNjG2A==
-X-Received: by 2002:a05:600c:4e8f:b0:3c9:9657:9c0a with SMTP id f15-20020a05600c4e8f00b003c996579c0amr3725394wmq.157.1666813438756;
-        Wed, 26 Oct 2022 12:43:58 -0700 (PDT)
-Received: from localhost (188.28.0.84.threembb.co.uk. [188.28.0.84])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c304500b003a84375d0d1sm2492662wmh.44.2022.10.26.12.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 12:43:58 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] clk: ingenic: Minor cosmetic fixups for X1000
-Date:   Wed, 26 Oct 2022 20:43:45 +0100
-Message-Id: <20221026194345.243007-7-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
-References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S233747AbiJZWnc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Oct 2022 18:43:32 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88CCC13738E;
+        Wed, 26 Oct 2022 15:43:08 -0700 (PDT)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id D461F482E;
+        Thu, 27 Oct 2022 00:43:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202205; t=1666824187;
+        bh=HaE4IXPdx+zXOUMr9BZGgBKqpp/SrgiEjg+jSxW76Go=;
+        h=Date:From:Cc:Subject:References:In-Reply-To:From;
+        b=L7s6hrXXlym5v2if6/tEycFPoqI7Ro7ohFfsKomakdmG0J7ZyvgXdkDpK/SMEinzO
+         KeXJK9Vu2EtbZtz8jxjcsargnEPo/dHpEdiY5U1kXH+3GpAG/aIS3S3krb53d/GAlO
+         5fjo5xLuteBo6whwP+ZJfaocxoQ1Nhl971iFDlz1gyvEY2yh2zdrRoWyQjqFgEzRu7
+         55ppghfsJBwtQ4UBbi/EyNWxtm/bVNFfrGLRV9Uu1A/zK17dNAZdYRxtv5BnHTdYYX
+         LOdO0u12AtRvyb4u6DEWdzJBBGn/1kyvd5PWkfJxo9na4FdSyFL5/V5RfDDivx9bWL
+         2JBbtsqpiFnHLzUrKUorhBRRoKIINkRUYjgIsnoqHEuOtseWNlcNYxnniNuJvtjSJX
+         6e9GMoAwSbkU7lHGgfnUDqGXNSqE+fNBG8jWBNTqYW1VTd+Ruei4FlAEDB8HhSYaOg
+         xr5+je/zhxRGrUiE3IMo8rFfaFlJOY1L3/t7r3X+B2b4TxIpzLN9B+WO4KXm6NqDM8
+         cXSMAcSpJ0I3SKi9AI9gYYC5sfuISR3G0D4gqXZ6n93TPxqfNQ89PbpzFn7Ngh3OLu
+         DBczps3Sbl8ssmF/2rgaKZJqVLuFTRzd6BEhZrvc6V6s7gyhAxnD4mnRC30EGAoKdl
+         iDPQuNFEhLwm84Vs4ZpjqkBg=
+Date:   Thu, 27 Oct 2022 00:43:06 +0200
+From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 07/15] MIPS: IP27: clean out sn/nmi.h
+Message-ID: <08c138e14f71c207c4428df9fd31154744be9d98.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="q6cphbowxihuyvxx"
+Content-Disposition: inline
+In-Reply-To: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        MISSING_HEADERS,PDS_OTHER_BAD_TLD,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove redundant -1 entries from the parents array and fix
-a couple indentation / whitespace issues.
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+--q6cphbowxihuyvxx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+The only user is arch/mips/sgi-ip27/ip27-nmi.c;
+this file was imported wholesale in 2.3.99pre9-1,
+and received only whitespace updates since then
+
+NMI_MAGIC isn't a magic number; it's unclear if it's actually used
+by the firmware in some capacity or if it's a holdover from copying
+the SGI code, but in the former case it's API
+and in the latter it's dead cruft
+
+Lack of QEMU support makes this unvalidatable without the hardware,
+so leave it in
+
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
- drivers/clk/ingenic/x1000-cgu.c | 49 ++++++++++++++++-----------------
- 1 file changed, 24 insertions(+), 25 deletions(-)
+ Documentation/process/magic-number.rst        |  1 -
+ .../it_IT/process/magic-number.rst            |  1 -
+ .../zh_CN/process/magic-number.rst            |  1 -
+ .../zh_TW/process/magic-number.rst            |  1 -
+ arch/mips/include/asm/sn/nmi.h                | 60 -------------------
+ 5 files changed, 64 deletions(-)
 
-diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
-index 95d5e3a44cee..feb03eed4fe8 100644
---- a/drivers/clk/ingenic/x1000-cgu.c
-+++ b/drivers/clk/ingenic/x1000-cgu.c
-@@ -216,7 +216,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_APLL] = {
- 		"apll", CGU_CLK_PLL,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.pll = {
- 			.reg = CGU_REG_APLL,
- 			.rate_multiplier = 1,
-@@ -239,7 +239,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_MPLL] = {
- 		"mpll", CGU_CLK_PLL,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.pll = {
- 			.reg = CGU_REG_MPLL,
- 			.rate_multiplier = 1,
-@@ -289,7 +289,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		 * system; mark it critical.
- 		 */
- 		.flags = CLK_IS_CRITICAL,
--		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_CPUMUX },
- 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 30 },
- 	},
-@@ -301,7 +301,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		 * disabling it or any parent clocks will hang the system.
- 		 */
- 		.flags = CLK_IS_CRITICAL,
--		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_CPUMUX },
- 		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
- 	},
- 
-@@ -320,13 +320,13 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_AHB2] = {
- 		"ahb2", CGU_CLK_DIV,
--		.parents = { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2PMUX },
- 		.div = { CGU_REG_CPCCR, 12, 1, 4, 20, -1, -1 },
- 	},
- 
- 	[X1000_CLK_PCLK] = {
- 		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2PMUX },
- 		.div = { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 28 },
- 	},
-@@ -393,13 +393,13 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_MSCMUX] = {
- 		"msc_mux", CGU_CLK_MUX,
--		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_MSC0CDR, 31, 1 },
- 	},
- 
- 	[X1000_CLK_MSC0] = {
- 		"msc0", CGU_CLK_DIV | CGU_CLK_GATE,
--		.parents = { X1000_CLK_MSCMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_MSCMUX },
- 		.div = { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
- 		.gate = { CGU_REG_CLKGR, 4 },
- 	},
-@@ -413,8 +413,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_OTG] = {
- 		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
--		.parents = { X1000_CLK_EXCLK, -1,
--					 X1000_CLK_APLL, X1000_CLK_MPLL },
-+		.parents = { X1000_CLK_EXCLK, -1, X1000_CLK_APLL, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_USBCDR, 30, 2 },
- 		.div = { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
- 		.gate = { CGU_REG_CLKGR, 3 },
-@@ -422,7 +421,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_SSIPLL] = {
- 		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
--		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_SSICDR, 31, 1 },
- 		.div = { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
- 	},
-@@ -435,7 +434,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_SSIMUX] = {
- 		"ssi_mux", CGU_CLK_MUX,
--		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2 },
- 		.mux = { CGU_REG_SSICDR, 30, 1 },
- 	},
- 
-@@ -456,37 +455,37 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_EMC] = {
- 		"emc", CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2 },
- 		.gate = { CGU_REG_CLKGR, 0 },
- 	},
- 
- 	[X1000_CLK_EFUSE] = {
- 		"efuse", CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2 },
- 		.gate = { CGU_REG_CLKGR, 1 },
- 	},
- 
- 	[X1000_CLK_SFC] = {
- 		"sfc", CGU_CLK_GATE,
--		.parents = { X1000_CLK_SSIPLL, -1, -1, -1 },
-+		.parents = { X1000_CLK_SSIPLL },
- 		.gate = { CGU_REG_CLKGR, 2 },
- 	},
- 
- 	[X1000_CLK_I2C0] = {
- 		"i2c0", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 7 },
- 	},
- 
- 	[X1000_CLK_I2C1] = {
- 		"i2c1", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 8 },
- 	},
- 
- 	[X1000_CLK_I2C2] = {
- 		"i2c2", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 9 },
- 	},
- 
-@@ -498,43 +497,43 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_UART0] = {
- 		"uart0", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 14 },
- 	},
- 
- 	[X1000_CLK_UART1] = {
- 		"uart1", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK},
- 		.gate = { CGU_REG_CLKGR, 15 },
- 	},
- 
- 	[X1000_CLK_UART2] = {
- 		"uart2", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 16 },
- 	},
- 
- 	[X1000_CLK_TCU] = {
- 		"tcu", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 18 },
- 	},
- 
- 	[X1000_CLK_SSI] = {
- 		"ssi", CGU_CLK_GATE,
--		.parents = { X1000_CLK_SSIMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_SSIMUX },
- 		.gate = { CGU_REG_CLKGR, 19 },
- 	},
- 
- 	[X1000_CLK_OST] = {
- 		"ost", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 20 },
- 	},
- 
- 	[X1000_CLK_PDMA] = {
- 		"pdma", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 21 },
- 	},
+diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
+/magic-number.rst
+index 62a3a2113e7c..7dada7abc733 100644
+--- a/Documentation/process/magic-number.rst
++++ b/Documentation/process/magic-number.rst
+@@ -76,5 +76,4 @@ KV_MAGIC              0x5f4b565f       kernel_vars_s     =
+       ``arch/mips/incl
+ CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+scsi/ncr53c8xx.c``
+ QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+ QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+-NMI_MAGIC             0x48414d4d455201 nmi_s                    ``arch/mip=
+s/include/asm/sn/nmi.h``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
+cumentation/translations/it_IT/process/magic-number.rst
+index b20a54ee6fb2..f9634a04d349 100644
+--- a/Documentation/translations/it_IT/process/magic-number.rst
++++ b/Documentation/translations/it_IT/process/magic-number.rst
+@@ -82,5 +82,4 @@ KV_MAGIC              0x5f4b565f       kernel_vars_s     =
+       ``arch/mips/incl
+ CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+scsi/ncr53c8xx.c``
+ QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+ QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+-NMI_MAGIC             0x48414d4d455201 nmi_s                    ``arch/mip=
+s/include/asm/sn/nmi.h``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
+cumentation/translations/zh_CN/process/magic-number.rst
+index e7781ab923f7..966b9e6b1a46 100644
+--- a/Documentation/translations/zh_CN/process/magic-number.rst
++++ b/Documentation/translations/zh_CN/process/magic-number.rst
+@@ -65,5 +65,4 @@ KV_MAGIC              0x5f4b565f       kernel_vars_s     =
+       ``arch/mips/incl
+ CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+scsi/ncr53c8xx.c``
+ QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+ QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+-NMI_MAGIC             0x48414d4d455201 nmi_s                    ``arch/mip=
+s/include/asm/sn/nmi.h``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
+cumentation/translations/zh_TW/process/magic-number.rst
+index 5cc0bfa97d9d..f3e87a6b3a01 100644
+--- a/Documentation/translations/zh_TW/process/magic-number.rst
++++ b/Documentation/translations/zh_TW/process/magic-number.rst
+@@ -68,5 +68,4 @@ KV_MAGIC              0x5f4b565f       kernel_vars_s     =
+       ``arch/mips/incl
+ CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+scsi/ncr53c8xx.c``
+ QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+ QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+-NMI_MAGIC             0x48414d4d455201 nmi_s                    ``arch/mip=
+s/include/asm/sn/nmi.h``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/arch/mips/include/asm/sn/nmi.h b/arch/mips/include/asm/sn/nmi.h
+index 12ac210f12a1..0bd9458fc804 100644
+--- a/arch/mips/include/asm/sn/nmi.h
++++ b/arch/mips/include/asm/sn/nmi.h
+@@ -10,8 +10,6 @@
+ #ifndef __ASM_SN_NMI_H
+ #define __ASM_SN_NMI_H
+=20
+-#include <asm/sn/addrs.h>
+-
+ /*
+  * The launch data structure resides at a fixed place in each node's memory
+  * and is used to communicate between the master processor and the slave
+@@ -29,14 +27,6 @@
+  */
+=20
+ #define NMI_MAGIC		0x48414d4d455201
+-#define NMI_SIZEOF		0x40
+-
+-#define NMI_OFF_MAGIC		0x00	/* Struct offsets for assembly	    */
+-#define NMI_OFF_FLAGS		0x08
+-#define NMI_OFF_CALL		0x10
+-#define NMI_OFF_CALLC		0x18
+-#define NMI_OFF_CALLPARM	0x20
+-#define NMI_OFF_GMASTER		0x28
+=20
+ /*
+  * The NMI routine is called only if the complement address is
+@@ -48,8 +38,6 @@
+  *
+  */
+=20
+-#ifndef __ASSEMBLY__
+-
+ typedef struct nmi_s {
+ 	volatile unsigned long	 magic;		/* Magic number */
+ 	volatile unsigned long	 flags;		/* Combination of flags above */
+@@ -59,14 +47,10 @@ typedef struct nmi_s {
+ 	volatile unsigned long	 gmaster;	/* Flag true only on global master*/
+ } nmi_t;
+=20
+-#endif /* !__ASSEMBLY__ */
+-
+ /* Following definitions are needed both in the prom & the kernel
+  * to identify the format of the nmi cpu register save area in the
+  * low memory on each node.
+  */
+-#ifndef __ASSEMBLY__
+-
+ struct reg_struct {
+ 	unsigned long	gpr[32];
+ 	unsigned long	sr;
+@@ -78,48 +62,4 @@ struct reg_struct {
+ 	unsigned long	nmi_sr;
  };
--- 
-2.38.1
+=20
+-#endif /* !__ASSEMBLY__ */
+-
+-/* These are the assembly language offsets into the reg_struct structure */
+-
+-#define R0_OFF		0x0
+-#define R1_OFF		0x8
+-#define R2_OFF		0x10
+-#define R3_OFF		0x18
+-#define R4_OFF		0x20
+-#define R5_OFF		0x28
+-#define R6_OFF		0x30
+-#define R7_OFF		0x38
+-#define R8_OFF		0x40
+-#define R9_OFF		0x48
+-#define R10_OFF		0x50
+-#define R11_OFF		0x58
+-#define R12_OFF		0x60
+-#define R13_OFF		0x68
+-#define R14_OFF		0x70
+-#define R15_OFF		0x78
+-#define R16_OFF		0x80
+-#define R17_OFF		0x88
+-#define R18_OFF		0x90
+-#define R19_OFF		0x98
+-#define R20_OFF		0xa0
+-#define R21_OFF		0xa8
+-#define R22_OFF		0xb0
+-#define R23_OFF		0xb8
+-#define R24_OFF		0xc0
+-#define R25_OFF		0xc8
+-#define R26_OFF		0xd0
+-#define R27_OFF		0xd8
+-#define R28_OFF		0xe0
+-#define R29_OFF		0xe8
+-#define R30_OFF		0xf0
+-#define R31_OFF		0xf8
+-#define SR_OFF		0x100
+-#define CAUSE_OFF	0x108
+-#define EPC_OFF		0x110
+-#define BADVA_OFF	0x118
+-#define ERROR_EPC_OFF	0x120
+-#define CACHE_ERR_OFF	0x128
+-#define NMISR_OFF	0x130
+-
+ #endif /* __ASM_SN_NMI_H */
+--=20
+2.30.2
 
+--q6cphbowxihuyvxx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNZt/oACgkQvP0LAY0m
+WPEByg//aGGsurgOuyOl2qmidd3+pAyPAl6kHAwylZ3CmbxelkCo5/eHCOenUUWn
+XAncJgYXmI2662Q6JT8dOsoHO1azc/dsHGzCUw8leWiTaEbOBpy8bISxQtc31ip6
+zNCR+wuvpCRuQrBH+oeTErhyhUCzBcD4RA2D7qHahahM9P1J9Qu0mS5aJ69LwiyC
+RfiQqG5X4x3sLkbboljFR97hXKzCC5tNgN+soK5y1uytO8QnRIeWUeWWxhPagkuM
+mjDpTxycJYbs0DjqnlgwX87iKf1QTZXCNKZ/XbrhtYOrZQKakCqm16MvNY5TOBaT
+8rb8gf2H5nNCiCF7hI5buXYLao6ViWcdiN3U4MGjd+9fh+SMN4UqvxA9dYy+0GO1
+J+3dBASCpafr6zLeeHELuxHhcY9TH9zW53Ipeh9WkRn/59Uf3AcqxlXDW0OB0n3u
+K7uq5xXlk/XwnvDtFn6lHQOghafa5HBhGLPYcphPppgKvetKCwxFNsG4F0umfOlI
+xt6DVSfljagP/b/Vb98QsPcIVoFJF25RK2ebaaZtG+6G1Fzl7OW3MJnC2vwakEpA
+kCqW5x65HIChL0LL+MVSQoyZIx+WuQuNG5G0VRG9VUCfYiEQ5h47UWcAp8J3ZoRi
+Hw/6XqHPf0EBifwT7cORKoVOVXiFP9U8rKxXHXmFmbfPUF8NAWk=
+=F6wi
+-----END PGP SIGNATURE-----
+
+--q6cphbowxihuyvxx--
