@@ -2,91 +2,197 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5809A60DE12
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Oct 2022 11:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E19960E15C
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Oct 2022 15:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbiJZJ36 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Oct 2022 05:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S233962AbiJZNAY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Oct 2022 09:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiJZJ35 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Oct 2022 05:29:57 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E69140001
-        for <linux-mips@vger.kernel.org>; Wed, 26 Oct 2022 02:29:55 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so1017201wme.5
-        for <linux-mips@vger.kernel.org>; Wed, 26 Oct 2022 02:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E6H2u9oGK4VXsKGNASBOoMX/dBF+iFbozvBEkuT+Wq4=;
-        b=J/hcPlK3P0/PYAh25MBDjVEkt187l1iYYxU1NZk+huy0jgX0oshlzMSF6CjcOYSU2o
-         dG5pFlczZphLMxv24nIB9lVa2tv7isgeXZhRBgdCn5/cwuqImKY6g+8axch5PZGLL2mZ
-         dSWdNHeoZPXAV59kpgyQnOhHuxZFCj62uqI/VWBma+i0099OJFiJh/kRaGOXWyHxfxQ+
-         hurBoUYM1HQfiAN6kLDAavZL/rDvS7yf+0zMAqurtFQ79tYDcOtnQl1gBIehu2ccb1bc
-         NkJYXeFFPlCgLk/DGUae59LtyoosODTcMChgph6vQogQOq7HvdC/Lr1sO30vBUKTi5yB
-         EgLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6H2u9oGK4VXsKGNASBOoMX/dBF+iFbozvBEkuT+Wq4=;
-        b=Lg+Z+b81N2WGUBcxqt1azdN4iQU1Yupiu3RzFhk9WCwzMb66emcMy1g6VMxoppxJ2J
-         N2P0Xo+1qKtfEFlt+yNZ4+jGnnkCZ/lTLwZl1QLnSwj0sfZeZ44uvd3uSDx77HwEP2iJ
-         j6cBs3bAtefzcVnFIcfBSO6mw4L0rm1nOxpGQQLsq1evTtK9YToqptJzOpE5JtKdJJKz
-         /Ebu9w9ytViLjNkLJaNcTl0Pqv/szubnW6AFoHbvlbHh6efNPJKSsqjf2NntiQWHbqdZ
-         j0XyZWGkZl3dXvK3qlwvBbIFcbgMcVRURh2/iiDD38n70ivBi17AV5CxX7M8VlgtRvDC
-         RI8A==
-X-Gm-Message-State: ACrzQf3ozcKui6u2tXqSRtS9ptWAqsqUGVoHINniMEM8cNhReIwqyRPs
-        tIdy7Xw9iS3+xpAjYopw6q9/sby415e7isZ3
-X-Google-Smtp-Source: AMsMyM7q2Of+tpOxmL6S+98KSburHfj8xefTLmFr4ZHGUAH2MsZs2ksElXyw8bypxAEc6yn3vjKRNw==
-X-Received: by 2002:a05:600c:4f0f:b0:3ca:31ba:d77c with SMTP id l15-20020a05600c4f0f00b003ca31bad77cmr1766099wmq.36.1666776594461;
-        Wed, 26 Oct 2022 02:29:54 -0700 (PDT)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id bd14-20020a05600c1f0e00b003b492753826sm1320809wmb.43.2022.10.26.02.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 02:29:53 -0700 (PDT)
-Message-ID: <9604b16e-df7d-634b-5c76-3aa6f9071fc0@linaro.org>
-Date:   Wed, 26 Oct 2022 11:29:52 +0200
+        with ESMTP id S233993AbiJZNAR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Oct 2022 09:00:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16B76B64D;
+        Wed, 26 Oct 2022 06:00:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D18B461EC7;
+        Wed, 26 Oct 2022 13:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E44C43147;
+        Wed, 26 Oct 2022 13:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666789211;
+        bh=RuIUY+rX8vQ87Hr5u8x9gIRK+2Qcc/QJ2fIL10pKenw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=drA0N835VJsELpOcnuwVqQJhcjL7Ile9eiojJT1XoCgMVFRyTJ0HbOfY1o4kTjkje
+         2eSfk9DnWuskgMWrPumWxTfxy1waGb5Afe2p18BxAhZY/jCYEceVIuo2KjiWP/L27L
+         cdgwUtscgCf41ggwglOp3A/enE3pcUDf+mz0AIZWDLvxTv761+HcgpoJQtwCiCUdcP
+         0Z+8KuyVQ3DRbK2OxorgbavxwknDifDIWIOf/Jy8cdOEAdVckEWOMfldiVhzPfQEnU
+         UpUbg3MMEpUY29QETfv9IoBSHx0InWn2m1pj9eTZ9+um09B7jPOmKtOjhTJ1r+HfOZ
+         uWDQL4k3Kt/RQ==
+Received: by mail-ej1-f50.google.com with SMTP id d26so20901751eje.10;
+        Wed, 26 Oct 2022 06:00:11 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1ncGIEzBSiix+XzfRfn7oQ8pvT/OzffrTqnGBiLqi8isLh6AiQ
+        I/NOEmMU3F5sfRwsBG4txixsXIKv+NDPJRmejKQ=
+X-Google-Smtp-Source: AMsMyM4BhqSlTpO8ibTrKQeHLQ4fCvgCJZu7h/bMiC5C1Sao3Cq8lb8MWz6w3OPaxPefOI2UKkBz797pHxL+UBvb+9M=
+X-Received: by 2002:a17:906:9753:b0:791:9f71:a8e6 with SMTP id
+ o19-20020a170906975300b007919f71a8e6mr36598179ejy.272.1666789209448; Wed, 26
+ Oct 2022 06:00:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH] mips: alchemy: gpio: Include the right header
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Ralf Baechle <ralf@linux-mips.org>
-Cc:     linux-mips@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org
-References: <20221026080528.105967-1-linus.walleij@linaro.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221026080528.105967-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221024070105.306280-1-chenhuacai@loongson.cn>
+ <20221024070105.306280-5-chenhuacai@loongson.cn> <CAJF2gTSN3zzvgAdiM8rYc3EGFxR4JJnHSh12mvsfUOQsqRRvkg@mail.gmail.com>
+In-Reply-To: <CAJF2gTSN3zzvgAdiM8rYc3EGFxR4JJnHSh12mvsfUOQsqRRvkg@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 26 Oct 2022 20:59:57 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H40fcUW3jwGZXpPNjbpizXb85zytCpKGHvEGwoRpG3c0Q@mail.gmail.com>
+Message-ID: <CAAhV-H40fcUW3jwGZXpPNjbpizXb85zytCpKGHvEGwoRpG3c0Q@mail.gmail.com>
+Subject: Re: [PATCH V13 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 26/10/22 10:05, Linus Walleij wrote:
-> The local GPIO driver in the MIPS Alchemy is including the legacy
-> <linux/gpio.h> header but what it wants is to implement a GPIO
-> driver so include <linux/gpio/driver.h> instead.
-> 
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: linux-gpio@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->   arch/mips/alchemy/common/gpiolib.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+Hi, Ren,
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+On Mon, Oct 24, 2022 at 4:04 PM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Mon, Oct 24, 2022 at 3:05 PM Huacai Chen <chenhuacai@loongson.cn> wrot=
+e:
+> >
+> > From: Feiyang Chen <chenfeiyang@loongson.cn>
+> >
+> > The feature of minimizing overhead of struct page associated with each
+> > HugeTLB page is implemented on x86_64. However, the infrastructure of
+> > this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
+> > OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+> >
+> > To avoid the following build error on LoongArch we should include linux=
+/
+> > static_key.h in page-flags.h. This is straightforward but the build
+> > error is implicitly a LoongArch-specific problem, because ARM64 and X86
+> > have already include static_key.h from their arch-specific core headers=
+.
+> >
+> > In file included from ./include/linux/mmzone.h:22,
+> > from ./include/linux/gfp.h:6,
+> > from ./include/linux/mm.h:7,
+> > from arch/loongarch/kernel/asm-offsets.c:9:
+> > ./include/linux/page-flags.h:208:1: warning: data definition has no
+> > type or storage class
+> > 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEF=
+AULT_ON,
+> > | ^~~~~~~~~~~~~~~~~~~~~~~~
+> > ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> > declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=3Dimplicit-int]
+> > ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> > types) in function declaration
+> > 209 | hugetlb_optimize_vmemmap_key);
+> > | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > ./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_ena=
+bled':
+> > ./include/linux/page-flags.h:213:16: error: implicit declaration of
+> > function 'static_branch_maybe' [-Werror=3Dimplicit-function-declaration=
+]
+> > 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_D=
+EFAULT_ON,
+> > | ^~~~~~~~~~~~~~~~~~~
+> > ./include/linux/page-flags.h:213:36: error:
+> > 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
+> > use in this function); did you mean
+> > 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
+> > 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_D=
+EFAULT_ON,
+> > | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > | CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> > ./include/linux/page-flags.h:213:36: note: each undeclared identifier
+> > is reported only once for each function it appears in
+> > ./include/linux/page-flags.h:214:37: error:
+> > 'hugetlb_optimize_vmemmap_key' undeclared (first use in this
+> > function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
+> > 214 | &hugetlb_optimize_vmemmap_key);
+> > | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > | hugetlb_optimize_vmemmap_enabled
+> >
+> > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  arch/loongarch/Kconfig     | 1 +
+> >  include/linux/page-flags.h | 1 +
+> >  2 files changed, 2 insertions(+)
+> >
+> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> > index 6f7fa0c0ca08..0a6ef613124c 100644
+> > --- a/arch/loongarch/Kconfig
+> > +++ b/arch/loongarch/Kconfig
+> > @@ -52,6 +52,7 @@ config LOONGARCH
+> >         select ARCH_USE_QUEUED_RWLOCKS
+> >         select ARCH_USE_QUEUED_SPINLOCKS
+> >         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> > +       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> >         select ARCH_WANT_LD_ORPHAN_WARN
+> >         select ARCH_WANTS_NO_INSTR
+> >         select BUILDTIME_TABLE_SORT
+> > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> > index 0b0ae5084e60..1aafdc73e399 100644
+> > --- a/include/linux/page-flags.h
+> > +++ b/include/linux/page-flags.h
+> > @@ -9,6 +9,7 @@
+> >  #include <linux/types.h>
+> >  #include <linux/bug.h>
+> >  #include <linux/mmdebug.h>
+> > +#include <linux/static_key.h>
+> Em... riscv needn't this.
+I found that after 36d4b36b69590fed99356a4426c940a25 (" lib/nodemask:
+inline next_node_in() and node_random()"), build errors have gone. But
+I think this is just an accident. Because that commit adds random.h
+inclusion in nodemask.h, then asm-offsets.c --> sched.h --> nodemask.h
+--> random.h --> once.h --> jump_label.h. If one day this chain is
+adjusted, then build errors come again.
+
+On the other hand, page-flags.h is obviously using some static_key
+macros, including static_key.h is straightforward for building.
+
+Huacai
 
 
+
+Huacai
+>
+> >  #ifndef __GENERATING_BOUNDS_H
+> >  #include <linux/mm_types.h>
+> >  #include <generated/bounds.h>
+> > --
+> > 2.31.1
+> >
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+>
