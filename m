@@ -2,478 +2,188 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4626102A2
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 22:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7D1610499
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 23:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236976AbiJ0UYd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Oct 2022 16:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
+        id S236700AbiJ0VkG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Oct 2022 17:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236964AbiJ0UYd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 16:24:33 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06728F4D;
-        Thu, 27 Oct 2022 13:24:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666902267; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sdedvNfyJ6QLWa3QxULLjV2IS11ddz/l6K4bga6afTU=;
-        b=RnMM2QyWubvxStgSbjUGK1bz9A7ypKnnaqmMyNc0gUevKcQLvituYDEaD/L97gYu2TwbAk
-        yN0MvDgk7V4FIMjS6/zubTOwt/Dq121RLwlwXbUV/xNZ6wPvuKqwdtZ6cx433zoDTs/0Pq
-        H/tNrSSHc84U99LhNrJhUxxbK0+LOI4=
-Date:   Thu, 27 Oct 2022 21:24:17 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v6 3/3] clk: Add Ingenic JZ4755 CGU driver
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Message-Id: <H0IFKR.MDIS5V1PYBUI@crapouillou.net>
-In-Reply-To: <20221027192024.484320-4-lis8215@gmail.com>
-References: <20221027192024.484320-1-lis8215@gmail.com>
-        <20221027192024.484320-4-lis8215@gmail.com>
+        with ESMTP id S236694AbiJ0VkF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 17:40:05 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457B13912E;
+        Thu, 27 Oct 2022 14:40:04 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id g12so4346969wrs.10;
+        Thu, 27 Oct 2022 14:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:references:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kplaoMazxKidoLai17lzJFKrm+ggKGLDvODhBftX+wU=;
+        b=oPiuoekbwhwKXHFb5AmCssEdvNL7SNFddy8tJxJCaE+txA18j5X/+j0j2mP+IAIDXF
+         CwP8rZa1pKbkJNCI7kxVzt6iok+hVMpjrn34DesLErkBF5+Rc7bpWTaMdDV7ffZg8A2o
+         YpC9kinR5OsMSG84DmhpvChpUgtX3eKY1ZQqwn3A/xMK+EcdRHsSKejCsOlRcxNAnnxc
+         pMEgXCxydQzNy/WaW1lSLRCMCIjy15DNcPLuxCgCjnea9F4RAbM17SoAKa+H8D5qDW6m
+         OhK07bjLobSzGROMuHc/weHsNU43jSV26cL3qibmkTWyK5+2ow51Q15QLCBUQw3+qQdY
+         G9og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:references:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kplaoMazxKidoLai17lzJFKrm+ggKGLDvODhBftX+wU=;
+        b=2JDf3d5Z4EEeQ+GvzdWB9yKo7VkSKYOLvEGqbjlx3DZ7SbYEFIWXvjisDy9+rtyk96
+         gB893De/bdfC9o1RVLrDiaFBAhoNAtMW85bjMn3RHO3eNDXMvSC3ZQ6d1x5zQeuKyUA8
+         fkSr6qfKNCSwKicN7A7rwTdf+J/95jRRcaFKi+a4pk+Xek3nhefolLrfRa1tzn3YT95O
+         CemvQAb/ibvwVmWOPGwjIq9UTgPxrv4AOryGUR2axxkPOzNCLRqos5RrK+WKIKBC42Ms
+         OZ2qGA/CaJhQIeiJLL2C2i1OrWMsfdS4B3dYuWq6ggr4NZ9AyinuBtDJ4bTImDkXX4hJ
+         i9Ug==
+X-Gm-Message-State: ACrzQf1dC/7Z2k8S+Zj3ZF9uBqcgxOLiOunkQ05zKTJv2FZPVsmz7v4T
+        v3a73jEbfw4DX+yNuaO0idLVc6o76EkNj223
+X-Google-Smtp-Source: AMsMyM4LEOu2JgM/1ksroFHO5oD3JxplIcMMR6sdnKnz+fbYV3Ir9xVvCvGVx+BvIKSwJdYW/MAA/Q==
+X-Received: by 2002:adf:f051:0:b0:236:70db:20d9 with SMTP id t17-20020adff051000000b0023670db20d9mr15151151wro.91.1666906802738;
+        Thu, 27 Oct 2022 14:40:02 -0700 (PDT)
+Received: from localhost (94.197.8.221.threembb.co.uk. [94.197.8.221])
+        by smtp.gmail.com with ESMTPSA id w8-20020adfde88000000b002366f9bd717sm2476810wrl.45.2022.10.27.14.40.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 14:40:02 -0700 (PDT)
+References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
+ <20221026194345.243007-2-aidanmacdonald.0x0@gmail.com>
+ <0GWEKR.T961XCYIYOL52@crapouillou.net>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, zhouyu@wanyeetech.com,
+        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] clk: ingenic: Make PLL clock "od" field optional
+In-reply-to: <0GWEKR.T961XCYIYOL52@crapouillou.net>
+Date:   Thu, 27 Oct 2022 22:40:02 +0100
+Message-ID: <sWPMeZZ7NP5UXWBsE8t41AGkBkpYIgpG@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Siarhei,
 
-Le jeu. 27 oct. 2022 =E0 22:20:23 +0300, Siarhei Volkau=20
-<lis8215@gmail.com> a =E9crit :
-> Add support for the clocks provided by the CGU in the Ingenic JZ4755
-> SoC.
->=20
-> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-> ---
->  drivers/clk/ingenic/Kconfig      |  10 +
->  drivers/clk/ingenic/Makefile     |   1 +
->  drivers/clk/ingenic/jz4755-cgu.c | 346=20
-> +++++++++++++++++++++++++++++++
->  3 files changed, 357 insertions(+)
->  create mode 100644 drivers/clk/ingenic/jz4755-cgu.c
->=20
-> diff --git a/drivers/clk/ingenic/Kconfig b/drivers/clk/ingenic/Kconfig
-> index 898f1bc47..f80ac4f29 100644
-> --- a/drivers/clk/ingenic/Kconfig
-> +++ b/drivers/clk/ingenic/Kconfig
-> @@ -15,6 +15,16 @@ config INGENIC_CGU_JZ4740
->=20
->  	  If building for a JZ4740 SoC, you want to say Y here.
->=20
-> +config INGENIC_CGU_JZ4755
-> +	bool "Ingenic JZ4755 CGU driver"
-> +	default MACH_JZ4755
-> +	select INGENIC_CGU_COMMON
-> +	help
-> +	  Support the clocks provided by the CGU hardware on Ingenic JZ4755
-> +	  and compatible SoCs.
-> +
-> +	  If building for a JZ4755 SoC, you want to say Y here.
-> +
->  config INGENIC_CGU_JZ4725B
->  	bool "Ingenic JZ4725B CGU driver"
->  	default MACH_JZ4725B
-> diff --git a/drivers/clk/ingenic/Makefile=20
-> b/drivers/clk/ingenic/Makefile
-> index 9edfaf461..81d8e23c2 100644
-> --- a/drivers/clk/ingenic/Makefile
-> +++ b/drivers/clk/ingenic/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-$(CONFIG_INGENIC_CGU_COMMON)	+=3D cgu.o pm.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4740)	+=3D jz4740-cgu.o
-> +obj-$(CONFIG_INGENIC_CGU_JZ4755)	+=3D jz4755-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4725B)	+=3D jz4725b-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4760)	+=3D jz4760-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4770)	+=3D jz4770-cgu.o
-> diff --git a/drivers/clk/ingenic/jz4755-cgu.c=20
-> b/drivers/clk/ingenic/jz4755-cgu.c
-> new file mode 100644
-> index 000000000..d2eb3ae0c
-> --- /dev/null
-> +++ b/drivers/clk/ingenic/jz4755-cgu.c
-> @@ -0,0 +1,346 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Ingenic JZ4755 SoC CGU driver
-> + * Heavily based on JZ4725b CGU driver
-> + *
-> + * Copyright (C) 2022 Siarhei Volkau
-> + * Author: Siarhei Volkau <lis8215@gmail.com>
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/delay.h>
-> +#include <linux/of.h>
-> +
-> +#include <dt-bindings/clock/ingenic,jz4755-cgu.h>
-> +
-> +#include "cgu.h"
-> +#include "pm.h"
-> +
-> +/* CGU register offsets */
-> +#define CGU_REG_CPCCR		0x00
-> +#define CGU_REG_LCR		0x04
-> +#define CGU_REG_CPPCR		0x10
-> +#define CGU_REG_CLKGR		0x20
-> +#define CGU_REG_OPCR		0x24
-> +#define CGU_REG_I2SCDR		0x60
-> +#define CGU_REG_LPCDR		0x64
-> +#define CGU_REG_MSCCDR		0x68
-> +#define CGU_REG_SSICDR		0x74
-> +#define CGU_REG_CIMCDR		0x7C
-> +
-> +/* bits within the LCR register */
-> +#define LCR_SLEEP		BIT(0)
+Paul Cercueil <paul@crapouillou.net> writes:
 
-Nitpick: this macro is not used anywhere.
+> Hi Aidan,
+>
+> Le mer. 26 oct. 2022 =C3=A0 20:43:40 +0100, Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
+>> Add support for defining PLL clocks with od_bits =3D 0, meaning that
+>> OD is fixed to 1 and there is no OD field in the register. In this
+>> case od_max must also be 0, which is enforced with BUG_ON().
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>> v1 -> v2: Simplify od lookup in ingenic_pll_recalc_rate() and
+>>           enforce od_max =3D=3D 0 when od_bits is zero.
+>>  drivers/clk/ingenic/cgu.c | 21 +++++++++++++++------
+>>  drivers/clk/ingenic/cgu.h |  3 ++-
+>>  2 files changed, 17 insertions(+), 7 deletions(-)
+>> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
+>> index 861c50d6cb24..3481129114b1 100644
+>> --- a/drivers/clk/ingenic/cgu.c
+>> +++ b/drivers/clk/ingenic/cgu.c
+>> @@ -83,7 +83,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned lo=
+ng
+>> parent_rate)
+>>  	const struct ingenic_cgu_clk_info *clk_info =3D to_clk_info(ingenic_cl=
+k);
+>>  	struct ingenic_cgu *cgu =3D ingenic_clk->cgu;
+>>  	const struct ingenic_cgu_pll_info *pll_info;
+>> -	unsigned m, n, od_enc, od;
+>> +	unsigned m, n, od, od_enc =3D 0;
+>>  	bool bypass;
+>>  	u32 ctl;
+>> @@ -96,8 +96,11 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned l=
+ong
+>> parent_rate)
+>>  	m +=3D pll_info->m_offset;
+>>  	n =3D (ctl >> pll_info->n_shift) & GENMASK(pll_info->n_bits - 1, 0);
+>>  	n +=3D pll_info->n_offset;
+>> -	od_enc =3D ctl >> pll_info->od_shift;
+>> -	od_enc &=3D GENMASK(pll_info->od_bits - 1, 0);
+>> +
+>> +	if (pll_info->od_bits > 0) {
+>> +		od_enc =3D ctl >> pll_info->od_shift;
+>> +		od_enc &=3D GENMASK(pll_info->od_bits - 1, 0);
+>> +	}
+>>  	if (pll_info->bypass_bit >=3D 0) {
+>>  		ctl =3D readl(cgu->base + pll_info->bypass_reg);
+>> @@ -112,7 +115,11 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned=
+ long
+>> parent_rate)
+>>  		if (pll_info->od_encoding[od] =3D=3D od_enc)
+>>  			break;
+>>  	}
+>
+> I'd add a space there.
+>
+> With that:
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+>
 
-With that fixed:
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Already done; the space is there in my outbox and on lore.kernel.org.
+I think you might've accidentally removed it. Stephen's already
+applied the series anyway, so...
 
-Stephen: you can merge v6 with the unused macro if you want, the same=20
-unused macro is already in jz4740-cgu.c and jz4725b-cgu.c, so we'll=20
-have to send a patch to remove these later anyway.
-
-> +
-> +static struct ingenic_cgu *cgu;
-> +
-> +static const s8 pll_od_encoding[4] =3D {
-> +	0x0, 0x1, -1, 0x3,
-> +};
-> +
-> +static const u8 jz4755_cgu_cpccr_div_table[] =3D {
-> +	1, 2, 3, 4, 6, 8,
-> +};
-> +
-> +static const u8 jz4755_cgu_pll_half_div_table[] =3D {
-> +	2, 1,
-> +};
-> +
-> +static const struct ingenic_cgu_clk_info jz4755_cgu_clocks[] =3D {
-> +
-> +	/* External clocks */
-> +
-> +	[JZ4755_CLK_EXT] =3D { "ext", CGU_CLK_EXT },
-> +	[JZ4755_CLK_OSC32K] =3D { "osc32k", CGU_CLK_EXT },
-> +
-> +	[JZ4755_CLK_PLL] =3D {
-> +		"pll", CGU_CLK_PLL,
-> +		.parents =3D { JZ4755_CLK_EXT, },
-> +		.pll =3D {
-> +			.reg =3D CGU_REG_CPPCR,
-> +			.rate_multiplier =3D 1,
-> +			.m_shift =3D 23,
-> +			.m_bits =3D 9,
-> +			.m_offset =3D 2,
-> +			.n_shift =3D 18,
-> +			.n_bits =3D 5,
-> +			.n_offset =3D 2,
-> +			.od_shift =3D 16,
-> +			.od_bits =3D 2,
-> +			.od_max =3D 4,
-> +			.od_encoding =3D pll_od_encoding,
-> +			.stable_bit =3D 10,
-> +			.bypass_reg =3D CGU_REG_CPPCR,
-> +			.bypass_bit =3D 9,
-> +			.enable_bit =3D 8,
-> +		},
-> +	},
-> +
-> +	/* Muxes & dividers */
-> +
-> +	[JZ4755_CLK_PLL_HALF] =3D {
-> +		"pll half", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 21, 1, 1, -1, -1, -1, 0,
-> +			jz4755_cgu_pll_half_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_EXT_HALF] =3D {
-> +		"ext half", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_EXT, },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 30, 1, 1, -1, -1, -1, 0,
-> +			NULL,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_CCLK] =3D {
-> +		"cclk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_H0CLK] =3D {
-> +		"hclk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_PCLK] =3D {
-> +		"pclk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 8, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_MCLK] =3D {
-> +		"mclk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_H1CLK] =3D {
-> +		"h1clk", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL, },
-> +		.div =3D {
-> +			CGU_REG_CPCCR, 16, 1, 4, 22, -1, -1, 0,
-> +			jz4755_cgu_cpccr_div_table,
-> +		},
-> +	},
-> +
-> +	[JZ4755_CLK_UDC] =3D {
-> +		"udc", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, },
-> +		.mux =3D { CGU_REG_CPCCR, 29, 1 },
-> +		.div =3D { CGU_REG_CPCCR, 23, 1, 6, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 10 },
-> +	},
-> +
-> +	[JZ4755_CLK_LCD] =3D {
-> +		"lcd", CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF, },
-> +		.div =3D { CGU_REG_LPCDR, 0, 1, 11, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 9 },
-> +	},
-> +
-> +	[JZ4755_CLK_MMC] =3D {
-> +		"mmc", CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF, },
-> +		.div =3D { CGU_REG_MSCCDR, 0, 1, 5, -1, -1, -1 },
-> +	},
-> +
-> +	[JZ4755_CLK_I2S] =3D {
-> +		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, },
-> +		.mux =3D { CGU_REG_CPCCR, 31, 1 },
-> +		.div =3D { CGU_REG_I2SCDR, 0, 1, 9, -1, -1, -1 },
-> +	},
-> +
-> +	[JZ4755_CLK_SPI] =3D {
-> +		"spi", CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF, },
-> +		.div =3D { CGU_REG_SSICDR, 0, 1, 4, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 4 },
-> +	},
-> +
-> +	[JZ4755_CLK_TVE] =3D {
-> +		"tve", CGU_CLK_MUX | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_LCD, JZ4755_CLK_EXT, },
-> +		.mux =3D { CGU_REG_LPCDR, 31, 1 },
-> +		.gate =3D { CGU_REG_CLKGR, 18 },
-> +	},
-> +
-> +	[JZ4755_CLK_RTC] =3D {
-> +		"rtc", CGU_CLK_MUX | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT512, JZ4755_CLK_OSC32K, },
-> +		.mux =3D { CGU_REG_OPCR, 2, 1},
-> +		.gate =3D { CGU_REG_CLKGR, 2 },
-> +	},
-> +
-> +	[JZ4755_CLK_CIM] =3D {
-> +		"cim", CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF, },
-> +		.div =3D { CGU_REG_CIMCDR, 0, 1, 8, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 8 },
-> +	},
-> +
-> +	/* Gate-only clocks */
-> +
-> +	[JZ4755_CLK_UART0] =3D {
-> +		"uart0", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, },
-> +		.gate =3D { CGU_REG_CLKGR, 0 },
-> +	},
-> +
-> +	[JZ4755_CLK_UART1] =3D {
-> +		"uart1", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, },
-> +		.gate =3D { CGU_REG_CLKGR, 14 },
-> +	},
-> +
-> +	[JZ4755_CLK_UART2] =3D {
-> +		"uart2", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, },
-> +		.gate =3D { CGU_REG_CLKGR, 15 },
-> +	},
-> +
-> +	[JZ4755_CLK_ADC] =3D {
-> +		"adc", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, },
-> +		.gate =3D { CGU_REG_CLKGR, 7 },
-> +	},
-> +
-> +	[JZ4755_CLK_AIC] =3D {
-> +		"aic", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, },
-> +		.gate =3D { CGU_REG_CLKGR, 5 },
-> +	},
-> +
-> +	[JZ4755_CLK_I2C] =3D {
-> +		"i2c", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, },
-> +		.gate =3D { CGU_REG_CLKGR, 3 },
-> +	},
-> +
-> +	[JZ4755_CLK_BCH] =3D {
-> +		"bch", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, },
-> +		.gate =3D { CGU_REG_CLKGR, 11 },
-> +	},
-
-Just to clear things up vs. what you wrote in your cover letter:=20
-according to table 30-3 of chapter 30.1 of the PM, BCH is on the AHB1=20
-bus, so H1CLK is correct.
-
-Cheers,
--Paul
-
-> +
-> +	[JZ4755_CLK_TCU] =3D {
-> +		"tcu", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT, },
-> +		.gate =3D { CGU_REG_CLKGR, 1 },
-> +	},
-> +
-> +	[JZ4755_CLK_DMA] =3D {
-> +		"dma", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PCLK, },
-> +		.gate =3D { CGU_REG_CLKGR, 12 },
-> +	},
-> +
-> +	[JZ4755_CLK_MMC0] =3D {
-> +		"mmc0", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_MMC, },
-> +		.gate =3D { CGU_REG_CLKGR, 6 },
-> +	},
-> +
-> +	[JZ4755_CLK_MMC1] =3D {
-> +		"mmc1", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_MMC, },
-> +		.gate =3D { CGU_REG_CLKGR, 16 },
-> +	},
-> +
-> +	[JZ4755_CLK_AUX_CPU] =3D {
-> +		"aux_cpu", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, },
-> +		.gate =3D { CGU_REG_CLKGR, 24 },
-> +	},
-> +
-> +	[JZ4755_CLK_AHB1] =3D {
-> +		"ahb1", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, },
-> +		.gate =3D { CGU_REG_CLKGR, 23 },
-> +	},
-> +
-> +	[JZ4755_CLK_IDCT] =3D {
-> +		"idct", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, },
-> +		.gate =3D { CGU_REG_CLKGR, 22 },
-> +	},
-> +
-> +	[JZ4755_CLK_DB] =3D {
-> +		"db", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, },
-> +		.gate =3D { CGU_REG_CLKGR, 21 },
-> +	},
-> +
-> +	[JZ4755_CLK_ME] =3D {
-> +		"me", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, },
-> +		.gate =3D { CGU_REG_CLKGR, 20 },
-> +	},
-> +
-> +	[JZ4755_CLK_MC] =3D {
-> +		"mc", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_H1CLK, },
-> +		.gate =3D { CGU_REG_CLKGR, 19 },
-> +	},
-> +
-> +	[JZ4755_CLK_TSSI] =3D {
-> +		"tssi", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF/* not sure */, },
-> +		.gate =3D { CGU_REG_CLKGR, 17 },
-> +	},
-> +
-> +	[JZ4755_CLK_IPU] =3D {
-> +		"ipu", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_PLL_HALF/* not sure */, },
-> +		.gate =3D { CGU_REG_CLKGR, 13 },
-> +	},
-> +
-> +	[JZ4755_CLK_EXT512] =3D {
-> +		"ext/512", CGU_CLK_FIXDIV,
-> +		.parents =3D { JZ4755_CLK_EXT, },
-> +
-> +		.fixdiv =3D { 512 },
-> +	},
-> +
-> +	[JZ4755_CLK_UDC_PHY] =3D {
-> +		"udc_phy", CGU_CLK_GATE,
-> +		.parents =3D { JZ4755_CLK_EXT_HALF, },
-> +		.gate =3D { CGU_REG_OPCR, 6, true },
-> +	},
-> +};
-> +
-> +static void __init jz4755_cgu_init(struct device_node *np)
-> +{
-> +	int retval;
-> +
-> +	cgu =3D ingenic_cgu_new(jz4755_cgu_clocks,
-> +			      ARRAY_SIZE(jz4755_cgu_clocks), np);
-> +	if (!cgu) {
-> +		pr_err("%s: failed to initialise CGU\n", __func__);
-> +		return;
-> +	}
-> +
-> +	retval =3D ingenic_cgu_register_clocks(cgu);
-> +	if (retval)
-> +		pr_err("%s: failed to register CGU Clocks\n", __func__);
-> +
-> +	ingenic_cgu_register_syscore_ops(cgu);
-> +}
-> +CLK_OF_DECLARE_DRIVER(jz4755_cgu, "ingenic,jz4755-cgu",=20
-> jz4755_cgu_init);
-> --
-> 2.36.1
->=20
-
-
+>> -	BUG_ON(od =3D=3D pll_info->od_max);
+>> +	/* if od_max =3D 0, od_bits should be 0 and od is fixed to 1. */
+>> +	if (pll_info->od_max =3D=3D 0)
+>> +		BUG_ON(pll_info->od_bits !=3D 0);
+>
+> I don't think this first BUG_ON() is needed, if we do a good job reviewing
+> patches. But I don't care enough to ask you to remove it.
+>
+> Cheers,
+> -Paul
+>
+>> +	else
+>> +		BUG_ON(od =3D=3D pll_info->od_max);
+>>  	od++;
+>>  	return div_u64((u64)parent_rate * m * pll_info->rate_multiplier,
+>> @@ -215,8 +222,10 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned lo=
+ng
+>> req_rate,
+>>  	ctl &=3D ~(GENMASK(pll_info->n_bits - 1, 0) << pll_info->n_shift);
+>>  	ctl |=3D (n - pll_info->n_offset) << pll_info->n_shift;
+>> -	ctl &=3D ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
+>> -	ctl |=3D pll_info->od_encoding[od - 1] << pll_info->od_shift;
+>> +	if (pll_info->od_bits > 0) {
+>> +		ctl &=3D ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
+>> +		ctl |=3D pll_info->od_encoding[od - 1] << pll_info->od_shift;
+>> +	}
+>>  	writel(ctl, cgu->base + pll_info->reg);
+>> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
+>> index 147b7df0d657..567142b584bb 100644
+>> --- a/drivers/clk/ingenic/cgu.h
+>> +++ b/drivers/clk/ingenic/cgu.h
+>> @@ -33,7 +33,8 @@
+>>   * @od_shift: the number of bits to shift the post-VCO divider value by=
+ (ie.
+>>   *            the index of the lowest bit of the post-VCO divider value=
+ in
+>>   *            the PLL's control register)
+>> - * @od_bits: the size of the post-VCO divider field in bits
+>> + * @od_bits: the size of the post-VCO divider field in bits, or 0 if no
+>> + *	     OD field exists (then the OD is fixed to 1)
+>>   * @od_max: the maximum post-VCO divider value
+>>   * @od_encoding: a pointer to an array mapping post-VCO divider values =
+to
+>>   *               their encoded values in the PLL control register, or -=
+1 for
+>> --
+>> 2.38.1
+>>
