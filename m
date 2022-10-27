@@ -2,73 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7911460F783
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 14:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C793760F786
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 14:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235196AbiJ0MhY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Oct 2022 08:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        id S235443AbiJ0Mii (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Oct 2022 08:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235147AbiJ0MhV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 08:37:21 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3196159950
-        for <linux-mips@vger.kernel.org>; Thu, 27 Oct 2022 05:37:16 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id y20so493416uao.8
-        for <linux-mips@vger.kernel.org>; Thu, 27 Oct 2022 05:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eQtHVIh1aNe4Qh0x0ragWBnOPchUE+ZIYXzmSXO/abc=;
-        b=qlNsrosJercoAIRBP7rls2+DO6N2QChzhgrNubVLaP/XZ7tWFhYD2doN/zhwy9Cs1e
-         L5AwTxtyURDNZaSaQ/ebp/8aEvsmYaIF6x+x+FqPBBWJiYFyt9OMCwRx9tMBIPWnp7F/
-         mUwDIG4hGvbAjjLj04uUrwrXcq+uixbDkyXOBjL8NnckOq2OmwSIksNEzw9+DXuTkjel
-         anWxa84DOGXhwpFrWIcQXqpOCeE5cO/HPba2rzhAE2cJjKVoruNhznc5g3zZO/KjaCcy
-         qLrw3OvYOuUqzMkaPfqOFOyoslmE8CQnW0J9t/SP+zdB02OLr+lewqCLEghdRsaiAnnR
-         M2Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eQtHVIh1aNe4Qh0x0ragWBnOPchUE+ZIYXzmSXO/abc=;
-        b=vZwEkt33/Q9I9lsIo+oK2YTwVU8cYaZ3bzfB7/dMUbWgG5+MhJ0EH1oUp/dqjLMSnM
-         +88Q7chgKQjGAVFC2pNhoz0Iu+kpMhn4GOoPgiek0ss4vmSyHodHo7FmZLIHckQH+YWR
-         FfJqqSvPuw0q/2D47IbwNFjgaUyWYZ5r+tzEUpOhQ/QicFkbVcl2YOteP4OfUjBw4PV3
-         uXuTPXI4SmzlajQnSJ+UbxDhgSgz8jkNp3JAIozNDxAEuADC0dtSVzLOzwYIexRhjh+P
-         QdOHHED5JUmyYl45ccrkRcUc/FgVVkVzt5CV2t10t+iLNJY4R1PvZ0LJ9xe0cGCzV6qc
-         gbVQ==
-X-Gm-Message-State: ACrzQf1zzt+2x367wHMXokzFdwWCkSpzhgb6kjtTPkRqBtPp1hwiXwk3
-        d2n2M8ZU8cCtK4W6xFh5MVsT+8MKZm7SjwliQXc=
-X-Google-Smtp-Source: AMsMyM6N08J1cioI6DLoa3mFh9ZAP88WuUeI6aE0ejM3764JQ988W4bu8pKA91x/cekbo5NTW4+llGzKYI0ICPZU6fE=
-X-Received: by 2002:ab0:32cd:0:b0:408:ffa4:85f9 with SMTP id
- f13-20020ab032cd000000b00408ffa485f9mr4028372uao.62.1666874234647; Thu, 27
- Oct 2022 05:37:14 -0700 (PDT)
+        with ESMTP id S234187AbiJ0Mih (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 08:38:37 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4C815CB26;
+        Thu, 27 Oct 2022 05:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666874314; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uWrIFI7ge6bO/Ji1tjywa7ZOL5L27qwMjMguyEcsJ1c=;
+        b=p645aQ7oOBvLNpF3dsWu9LnYa7CD2QStwmz20Eh0Q3zCycirLk1g312XMOhWpF/Oi1Zmh7
+        CtPhyO8ez1ROeZFe5wt1bP8qozkmPJPPE1JmUZOzX8vTRsG8A0B1KuaCyRnX5PyqrDSZZ2
+        GKRmabSwhIQY0mlRXmq5Lt6o9JwjYUc=
+Date:   Thu, 27 Oct 2022 13:38:24 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 1/6] clk: ingenic: Make PLL clock "od" field optional
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, zhouyu@wanyeetech.com,
+        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <0GWEKR.T961XCYIYOL52@crapouillou.net>
+In-Reply-To: <20221026194345.243007-2-aidanmacdonald.0x0@gmail.com>
+References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
+        <20221026194345.243007-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6102:3d83:0:0:0:0 with HTTP; Thu, 27 Oct 2022 05:37:13
- -0700 (PDT)
-From:   Cheickna Toure <metk1959@gmail.com>
-Date:   Thu, 27 Oct 2022 13:37:13 +0100
-Message-ID: <CAOAL42hQPJ6_wWrbOjTu=aUC1hBe-EmZ85SW_AE6rkYp283tBQ@mail.gmail.com>
-Subject: Hello, Good afternoon
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
-Good afternoon and how are you?
-I have an important and favourable information/proposal which might
-interest you to know,
-let me hear from you to detail you, it's important
-Sincerely,
-M.Cheickna
-tourecheickna@consultant.com
+Hi Aidan,
+
+Le mer. 26 oct. 2022 =E0 20:43:40 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> Add support for defining PLL clocks with od_bits =3D 0, meaning that
+> OD is fixed to 1 and there is no OD field in the register. In this
+> case od_max must also be 0, which is enforced with BUG_ON().
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+> v1 -> v2: Simplify od lookup in ingenic_pll_recalc_rate() and
+>           enforce od_max =3D=3D 0 when od_bits is zero.
+>=20
+>  drivers/clk/ingenic/cgu.c | 21 +++++++++++++++------
+>  drivers/clk/ingenic/cgu.h |  3 ++-
+>  2 files changed, 17 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
+> index 861c50d6cb24..3481129114b1 100644
+> --- a/drivers/clk/ingenic/cgu.c
+> +++ b/drivers/clk/ingenic/cgu.c
+> @@ -83,7 +83,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned=20
+> long parent_rate)
+>  	const struct ingenic_cgu_clk_info *clk_info =3D=20
+> to_clk_info(ingenic_clk);
+>  	struct ingenic_cgu *cgu =3D ingenic_clk->cgu;
+>  	const struct ingenic_cgu_pll_info *pll_info;
+> -	unsigned m, n, od_enc, od;
+> +	unsigned m, n, od, od_enc =3D 0;
+>  	bool bypass;
+>  	u32 ctl;
+>=20
+> @@ -96,8 +96,11 @@ ingenic_pll_recalc_rate(struct clk_hw *hw,=20
+> unsigned long parent_rate)
+>  	m +=3D pll_info->m_offset;
+>  	n =3D (ctl >> pll_info->n_shift) & GENMASK(pll_info->n_bits - 1, 0);
+>  	n +=3D pll_info->n_offset;
+> -	od_enc =3D ctl >> pll_info->od_shift;
+> -	od_enc &=3D GENMASK(pll_info->od_bits - 1, 0);
+> +
+> +	if (pll_info->od_bits > 0) {
+> +		od_enc =3D ctl >> pll_info->od_shift;
+> +		od_enc &=3D GENMASK(pll_info->od_bits - 1, 0);
+> +	}
+>=20
+>  	if (pll_info->bypass_bit >=3D 0) {
+>  		ctl =3D readl(cgu->base + pll_info->bypass_reg);
+> @@ -112,7 +115,11 @@ ingenic_pll_recalc_rate(struct clk_hw *hw,=20
+> unsigned long parent_rate)
+>  		if (pll_info->od_encoding[od] =3D=3D od_enc)
+>  			break;
+>  	}
+
+I'd add a space there.
+
+With that:
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+> -	BUG_ON(od =3D=3D pll_info->od_max);
+> +	/* if od_max =3D 0, od_bits should be 0 and od is fixed to 1. */
+> +	if (pll_info->od_max =3D=3D 0)
+> +		BUG_ON(pll_info->od_bits !=3D 0);
+
+I don't think this first BUG_ON() is needed, if we do a good job=20
+reviewing patches. But I don't care enough to ask you to remove it.
+
+Cheers,
+-Paul
+
+> +	else
+> +		BUG_ON(od =3D=3D pll_info->od_max);
+>  	od++;
+>=20
+>  	return div_u64((u64)parent_rate * m * pll_info->rate_multiplier,
+> @@ -215,8 +222,10 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned=20
+> long req_rate,
+>  	ctl &=3D ~(GENMASK(pll_info->n_bits - 1, 0) << pll_info->n_shift);
+>  	ctl |=3D (n - pll_info->n_offset) << pll_info->n_shift;
+>=20
+> -	ctl &=3D ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
+> -	ctl |=3D pll_info->od_encoding[od - 1] << pll_info->od_shift;
+> +	if (pll_info->od_bits > 0) {
+> +		ctl &=3D ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
+> +		ctl |=3D pll_info->od_encoding[od - 1] << pll_info->od_shift;
+> +	}
+>=20
+>  	writel(ctl, cgu->base + pll_info->reg);
+>=20
+> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
+> index 147b7df0d657..567142b584bb 100644
+> --- a/drivers/clk/ingenic/cgu.h
+> +++ b/drivers/clk/ingenic/cgu.h
+> @@ -33,7 +33,8 @@
+>   * @od_shift: the number of bits to shift the post-VCO divider value=20
+> by (ie.
+>   *            the index of the lowest bit of the post-VCO divider=20
+> value in
+>   *            the PLL's control register)
+> - * @od_bits: the size of the post-VCO divider field in bits
+> + * @od_bits: the size of the post-VCO divider field in bits, or 0 if=20
+> no
+> + *	     OD field exists (then the OD is fixed to 1)
+>   * @od_max: the maximum post-VCO divider value
+>   * @od_encoding: a pointer to an array mapping post-VCO divider=20
+> values to
+>   *               their encoded values in the PLL control register,=20
+> or -1 for
+> --
+> 2.38.1
+>=20
+
+
