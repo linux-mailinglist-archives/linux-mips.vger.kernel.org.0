@@ -2,91 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E1A6104E5
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 23:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB18F61055A
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 00:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbiJ0V5U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Oct 2022 17:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S234808AbiJ0WIS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Oct 2022 18:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236639AbiJ0V5T (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 17:57:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E63915DC;
-        Thu, 27 Oct 2022 14:57:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA767B826AC;
-        Thu, 27 Oct 2022 21:57:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77250C433D6;
-        Thu, 27 Oct 2022 21:57:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666907836;
-        bh=pMcZ3lkUN+LKNn4Gtp1ga/opwaCEMemcT9ZPw3DrnXs=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Avu+f+kbJ2KSLy0gElbOxcWnteIUIwNVcCxLq9JRw2j2mfAgaYdRKwMaB607eGxQu
-         3Oz/7rKtot3X9iC0lMjPysHWSgdZy+2Dh2OXhzO3YFd00SkuCmp7QVL5MG4F64eNiD
-         mmZerD7i65IeXCKqYrU5Pj3YSUJrMHcJmPDms6qqjs6TSMzx9z0RNwy1TXAaLw0Ojp
-         7CIOTAi3rqMDPFWg+jJWnfynRNDWBMyeuyBhT5eWXDL1Jc0Ntby1ZGVeXgPiRzDbUG
-         5DQfazsJTKaDInpnjybshajEvyzhzcvJkCh2qiFaif9yOPqTBeal8pR63FGpmWJF79
-         H7Ug50hGjllcg==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234810AbiJ0WIR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 18:08:17 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D195A2204;
+        Thu, 27 Oct 2022 15:08:14 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r14so5216523edc.7;
+        Thu, 27 Oct 2022 15:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r9RELUveKiUS67KqsZJxwv+GhPKYSZmmNpqGyp3KeL0=;
+        b=JfXFlJ4wCnFvi9jr1lx+vzRzL6wNpHsAjP9ImZnD7o4RBGnGK2q+Hkr1AfP8BCQ9Em
+         ClHUmPJP2mw+Jv3BwJXHu6/WlG1YnKxhdbpWzIIvAY5/f9Vxpo+eZyR9J2P450gcz8d1
+         ZC0/nutQ/zH7Y66UzyXySNTXBIJautFH3rHTDUUKyL6h8tPUGGZe1HOupswJUrG2WXWh
+         +9GBIBs7lmr8PJ9X8My5e7ss2akjSuXDKad86M5NIahpuIZGpF+4dt+j5j1ukAM1P/2k
+         hXW1Ih6c/LqiyAWoQITdGwfnPwsd65hnISqhXdmzfZ1XLNvFKrTDl6KQGSY4zv9DIe2f
+         JDtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r9RELUveKiUS67KqsZJxwv+GhPKYSZmmNpqGyp3KeL0=;
+        b=zrm/S1VMhZBxZrDfMZ6Y4EHEOtv5jh91kreKJnWuiOF7uypO939+YZnCE5JrD5ot5E
+         deQQyf4ymnEv9SiQ242aLSrhZSEwaReuIJVI9qPLPruAQ7xbXTKuQCyEdwOVF+1dXujU
+         NmUu+KAv2Eps7XtqcZKV5CkbwCk64Gyk+SvSk2kQIbmmx5CsxVrVl8GDMm0tYLom7eYy
+         8UBW/MXS7KwHbrpgMouvuQepB8UCOOfsBbas5QB0FsnxpSNdV6L5GIl25C2Y2x80YTHJ
+         exZb7678MMTWgxvjcXIlQ29/1/8GLLvMew7FIDeRRh2vBlFPMELJRsSLAu1A2xchZsBT
+         Y/mg==
+X-Gm-Message-State: ACrzQf170zEhJ9SiMNexqH+jdE46TQciUakJwLDxWyLjvbzvsAIOJcwA
+        G8QiywNWspmQ1ncR8zRXUgdnMI95hj+Nh3BffiM=
+X-Google-Smtp-Source: AMsMyM7WF/u9jCTtkVgKvkXWMMsUAzTmGbv2jIoDElJSEwL95CQMTNB+W2XiN6KO+oglta/8KUl11BElPtkjS3OhWbc=
+X-Received: by 2002:aa7:d80a:0:b0:462:2c1c:8716 with SMTP id
+ v10-20020aa7d80a000000b004622c1c8716mr13941343edq.185.1666908492601; Thu, 27
+ Oct 2022 15:08:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221027192024.484320-4-lis8215@gmail.com>
-References: <20221027192024.484320-1-lis8215@gmail.com> <20221027192024.484320-4-lis8215@gmail.com>
-Subject: Re: [PATCH v6 3/3] clk: Add Ingenic JZ4755 CGU driver
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Siarhei Volkau <lis8215@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-To:     Siarhei Volkau <lis8215@gmail.com>
-Date:   Thu, 27 Oct 2022 14:57:14 -0700
-User-Agent: alot/0.10
-Message-Id: <20221027215716.77250C433D6@smtp.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921084302.43631-1-yangyicong@huawei.com> <20220921084302.43631-3-yangyicong@huawei.com>
+ <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com> <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
+ <CAGsJ_4z=dZbrAUD9jczT08S3qi_ep-h+EK35UfayVk1S+Cnp2A@mail.gmail.com> <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com>
+In-Reply-To: <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Fri, 28 Oct 2022 11:07:58 +1300
+Message-ID: <CAGsJ_4x0KhEjm5a9jhtS+YK1AT49u3sHnp2rHZVSuTGZp4nKzA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>, yangyicong@hisilicon.com,
+        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-mm@kvack.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, akpm@linux-foundation.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
+        catalin.marinas@arm.com, will@kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Siarhei Volkau (2022-10-27 12:20:23)
-> diff --git a/drivers/clk/ingenic/jz4755-cgu.c b/drivers/clk/ingenic/jz475=
-5-cgu.c
-> new file mode 100644
-> index 000000000..d2eb3ae0c
-> --- /dev/null
-> +++ b/drivers/clk/ingenic/jz4755-cgu.c
-> @@ -0,0 +1,346 @@
-[...]
-> +static void __init jz4755_cgu_init(struct device_node *np)
-> +{
-> +       int retval;
-> +
-> +       cgu =3D ingenic_cgu_new(jz4755_cgu_clocks,
-> +                             ARRAY_SIZE(jz4755_cgu_clocks), np);
-> +       if (!cgu) {
-> +               pr_err("%s: failed to initialise CGU\n", __func__);
-> +               return;
-> +       }
-> +
-> +       retval =3D ingenic_cgu_register_clocks(cgu);
-> +       if (retval)
-> +               pr_err("%s: failed to register CGU Clocks\n", __func__);
-> +
-> +       ingenic_cgu_register_syscore_ops(cgu);
-> +}
-> +CLK_OF_DECLARE_DRIVER(jz4755_cgu, "ingenic,jz4755-cgu", jz4755_cgu_init);
+On Thu, Oct 27, 2022 at 11:42 PM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+>
+>
+> On 9/28/22 05:53, Barry Song wrote:
+> > On Tue, Sep 27, 2022 at 10:15 PM Yicong Yang <yangyicong@huawei.com> wrote:
+> >>
+> >> On 2022/9/27 14:16, Anshuman Khandual wrote:
+> >>> [...]
+> >>>
+> >>> On 9/21/22 14:13, Yicong Yang wrote:
+> >>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> >>>> +{
+> >>>> +    /* for small systems with small number of CPUs, TLB shootdown is cheap */
+> >>>> +    if (num_online_cpus() <= 4)
+> >>>
+> >>> It would be great to have some more inputs from others, whether 4 (which should
+> >>> to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
+> >>> is optimal for an wide range of arm64 platforms.
+> >>>
+> >
+> > I have tested it on a 4-cpus and 8-cpus machine. but i have no machine
+> > with 5,6,7
+> > cores.
+> > I saw improvement on 8-cpus machines and I found 4-cpus machines don't need
+> > this patch.
+> >
+> > so it seems safe to have
+> > if (num_online_cpus()  < 8)
+> >
+> >>
+> >> Do you prefer this macro to be static or make it configurable through kconfig then
+> >> different platforms can make choice based on their own situations? It maybe hard to
+> >> test on all the arm64 platforms.
+> >
+> > Maybe we can have this default enabled on machines with 8 and more cpus and
+> > provide a tlbflush_batched = on or off to allow users enable or
+> > disable it according
+> > to their hardware and products. Similar example: rodata=on or off.
+>
+> No, sounds bit excessive. Kernel command line options should not be added
+> for every possible run time switch options.
+>
+> >
+> > Hi Anshuman, Will,  Catalin, Andrew,
+> > what do you think about this approach?
+> >
+> > BTW, haoxin mentioned another important user scenarios for tlb bach on arm64:
+> > https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+> >
+> > I do believe we need it based on the expensive cost of tlb shootdown in arm64
+> > even by hardware broadcast.
+>
+> Alright, for now could we enable ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH selectively
+> with CONFIG_EXPERT and for num_online_cpus()  > 8 ?
 
-Is there another driver that probes this device? CLK_OF_DECLARE_DRIVER()
-is for the situation where we want to probe this device again with
-another platform driver. Please add a comment indicating what that other
-driver is.
+Sounds good to me. It is a good start to bring up tlb batched flush in
+ARM64. Later on, we
+might want to see it in both memory reclamation and migration.
+
+Thanks
+Barry
