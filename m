@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513D460F7BA
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 14:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E457A60F7C8
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 14:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235725AbiJ0Mnm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Oct 2022 08:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S235755AbiJ0MpX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Oct 2022 08:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234140AbiJ0Mnh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 08:43:37 -0400
+        with ESMTP id S235724AbiJ0MpJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 08:45:09 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E63167253;
-        Thu, 27 Oct 2022 05:43:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEE45FAA;
+        Thu, 27 Oct 2022 05:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666874613; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1666874696; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=um9/OS7dgazyiG2HSas0gGeFZisZOzGn8RMAzZOsWsE=;
-        b=RnY+S9citCYf4A1np5gWktC9TFg+p1PTiWCzc4L9VgWrDK0wCyGOeUtjz/W+XiJVmQvfUB
-        Y0fVCq9MlCnU0MI/Tj/ardWiCClOhsrAUoibplJyQdgy059cNaQNfd7+tYH/s9y5QoUJOj
-        xNPUiRUPpe6ZtQBUpW8e89k8yLnLlHc=
-Date:   Thu, 27 Oct 2022 13:43:23 +0100
+        bh=kh0g3/J/6DLJMf8jwmOmCdggEbcljmLSqAgl2NE0IWk=;
+        b=amhdwXenV1vs5UCnHQyoh4J7NX1m28frDJ4bkoLkQeYjq5RJ4MQ3y9oJLdcEn5WsESsEHE
+        cUw0W+4gmGZIufRtPWGBs1FNY5Z75Bho7MfzoQEP8O5IUQuO3lp64KDUGUsG1jl+AdgMvV
+        o/xOj13uNvjfEC0U+HphQ8cY7LkMC/g=
+Date:   Thu, 27 Oct 2022 13:44:45 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 5/6] clk: ingenic: Add X1000 audio clocks
+Subject: Re: [PATCH v2 6/6] clk: ingenic: Minor cosmetic fixups for X1000
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, zhouyu@wanyeetech.com,
         linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <BOWEKR.6I1HK0CSJNAT@crapouillou.net>
-In-Reply-To: <20221026194345.243007-6-aidanmacdonald.0x0@gmail.com>
+Message-Id: <LQWEKR.EVQMBDQ994GL1@crapouillou.net>
+In-Reply-To: <20221026194345.243007-7-aidanmacdonald.0x0@gmail.com>
 References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
-        <20221026194345.243007-6-aidanmacdonald.0x0@gmail.com>
+        <20221026194345.243007-7-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -50,16 +50,10 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Aidan,
 
-Le mer. 26 oct. 2022 =E0 20:43:44 +0100, Aidan MacDonald=20
+Le mer. 26 oct. 2022 =E0 20:43:45 +0100, Aidan MacDonald=20
 <aidanmacdonald.0x0@gmail.com> a =E9crit :
-> The X1000's CGU supplies the I2S system clock to the AIC module
-> and ultimately the audio codec, represented by the "i2s" clock.
-> It is a simple mux which can either pass through EXCLK or a PLL
-> multiplied by a fractional divider (the "i2s_pll" clock).
->=20
-> The AIC contains a separate 1/N divider controlled by the I2S
-> driver, which generates the bit clock from the system clock.
-> The frame clock is always fixed to 1/64th of the bit clock.
+> Remove redundant -1 entries from the parents array and fix
+> a couple indentation / whitespace issues.
 >=20
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
@@ -69,126 +63,217 @@ Cheers,
 -Paul
 
 > ---
-> v1 -> v2:
-> * Fix I2SCDR1 refresh to ensure the register is properly initialized
->   and we don't rely on the reset value. Since the I2SDIV_D field can
->   be automatically calculated by the hardware we don't need to provide
->   it, writing 0 triggers the auto calculation.
-> * Remove redundant -1 entries from parent clocks.
->=20
->  drivers/clk/ingenic/x1000-cgu.c | 70=20
-> +++++++++++++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
+>  drivers/clk/ingenic/x1000-cgu.c | 49=20
+> ++++++++++++++++-----------------
+>  1 file changed, 24 insertions(+), 25 deletions(-)
 >=20
 > diff --git a/drivers/clk/ingenic/x1000-cgu.c=20
 > b/drivers/clk/ingenic/x1000-cgu.c
-> index b2ce3fb83f54..95d5e3a44cee 100644
+> index 95d5e3a44cee..feb03eed4fe8 100644
 > --- a/drivers/clk/ingenic/x1000-cgu.c
 > +++ b/drivers/clk/ingenic/x1000-cgu.c
-> @@ -8,6 +8,7 @@
->  #include <linux/delay.h>
->  #include <linux/io.h>
->  #include <linux/of.h>
-> +#include <linux/rational.h>
->=20
->  #include <dt-bindings/clock/ingenic,x1000-cgu.h>
->=20
-> @@ -168,6 +169,38 @@ static const struct clk_ops x1000_otg_phy_ops =3D {
->  	.is_enabled	=3D x1000_usb_phy_is_enabled,
->  };
->=20
-> +static void
-> +x1000_i2spll_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
-> +			 unsigned long rate, unsigned long parent_rate,
-> +			 unsigned int *pm, unsigned int *pn, unsigned int *pod)
-> +{
-> +	const unsigned long m_max =3D GENMASK(pll_info->m_bits - 1, 0);
-> +	const unsigned long n_max =3D GENMASK(pll_info->n_bits - 1, 0);
-> +	unsigned long m, n;
-> +
-> +	rational_best_approximation(rate, parent_rate, m_max, n_max, &m,=20
-> &n);
-> +
-> +	/* n should not be less than 2*m */
-> +	if (n < 2 * m)
-> +		n =3D 2 * m;
-> +
-> +	*pm =3D m;
-> +	*pn =3D n;
-> +	*pod =3D 1;
-> +}
-> +
-> +static void
-> +x1000_i2spll_set_rate_hook(const struct ingenic_cgu_pll_info=20
-> *pll_info,
-> +			   unsigned long rate, unsigned long parent_rate)
-> +{
-> +	/*
-> +	 * Writing 0 causes I2SCDR1.I2SDIV_D to be automatically=20
-> recalculated
-> +	 * based on the current value of I2SCDR.I2SDIV_N, which is needed=20
-> for
-> +	 * the divider to function correctly.
-> +	 */
-> +	writel(0, cgu->base + CGU_REG_I2SCDR1);
-> +}
-> +
->  static const s8 pll_od_encoding[8] =3D {
->  	0x0, 0x1, -1, 0x2, -1, -1, -1, 0x3,
->  };
-> @@ -319,6 +352,37 @@ static const struct ingenic_cgu_clk_info=20
+> @@ -216,7 +216,7 @@ static const struct ingenic_cgu_clk_info=20
 > x1000_cgu_clocks[] =3D {
->  		.gate =3D { CGU_REG_CLKGR, 25 },
+>=20
+>  	[X1000_CLK_APLL] =3D {
+>  		"apll", CGU_CLK_PLL,
+> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK },
+>  		.pll =3D {
+>  			.reg =3D CGU_REG_APLL,
+>  			.rate_multiplier =3D 1,
+> @@ -239,7 +239,7 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>=20
+>  	[X1000_CLK_MPLL] =3D {
+>  		"mpll", CGU_CLK_PLL,
+> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK },
+>  		.pll =3D {
+>  			.reg =3D CGU_REG_MPLL,
+>  			.rate_multiplier =3D 1,
+> @@ -289,7 +289,7 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>  		 * system; mark it critical.
+>  		 */
+>  		.flags =3D CLK_IS_CRITICAL,
+> -		.parents =3D { X1000_CLK_CPUMUX, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_CPUMUX },
+>  		.div =3D { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
+>  		.gate =3D { CGU_REG_CLKGR, 30 },
+>  	},
+> @@ -301,7 +301,7 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>  		 * disabling it or any parent clocks will hang the system.
+>  		 */
+>  		.flags =3D CLK_IS_CRITICAL,
+> -		.parents =3D { X1000_CLK_CPUMUX, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_CPUMUX },
+>  		.div =3D { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
 >  	},
 >=20
-> +	[X1000_CLK_I2SPLLMUX] =3D {
-> +		"i2s_pll_mux", CGU_CLK_MUX,
-> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
-> +		.mux =3D { CGU_REG_I2SCDR, 31, 1 },
-> +	},
-> +
-> +	[X1000_CLK_I2SPLL] =3D {
-> +		"i2s_pll", CGU_CLK_PLL,
-> +		.parents =3D { X1000_CLK_I2SPLLMUX },
-> +		.pll =3D {
-> +			.reg =3D CGU_REG_I2SCDR,
-> +			.rate_multiplier =3D 1,
-> +			.m_shift =3D 13,
-> +			.m_bits =3D 9,
-> +			.n_shift =3D 0,
-> +			.n_bits =3D 13,
-> +			.calc_m_n_od =3D x1000_i2spll_calc_m_n_od,
-> +			.set_rate_hook =3D x1000_i2spll_set_rate_hook,
-> +		},
-> +	},
-> +
-> +	[X1000_CLK_I2S] =3D {
-> +		"i2s", CGU_CLK_MUX,
-> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, X1000_CLK_I2SPLL },
-> +		/*
-> +		 * NOTE: the mux is at bit 30; bit 29 enables the M/N divider.
-> +		 * Therefore, the divider is disabled when EXCLK is selected.
-> +		 */
-> +		.mux =3D { CGU_REG_I2SCDR, 29, 2 },
-> +	},
-> +
->  	[X1000_CLK_LCD] =3D {
->  		"lcd", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
->  		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
-> @@ -426,6 +490,12 @@ static const struct ingenic_cgu_clk_info=20
+> @@ -320,13 +320,13 @@ static const struct ingenic_cgu_clk_info=20
 > x1000_cgu_clocks[] =3D {
+>=20
+>  	[X1000_CLK_AHB2] =3D {
+>  		"ahb2", CGU_CLK_DIV,
+> -		.parents =3D { X1000_CLK_AHB2PMUX, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_AHB2PMUX },
+>  		.div =3D { CGU_REG_CPCCR, 12, 1, 4, 20, -1, -1 },
+>  	},
+>=20
+>  	[X1000_CLK_PCLK] =3D {
+>  		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_AHB2PMUX, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_AHB2PMUX },
+>  		.div =3D { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
+>  		.gate =3D { CGU_REG_CLKGR, 28 },
+>  	},
+> @@ -393,13 +393,13 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>=20
+>  	[X1000_CLK_MSCMUX] =3D {
+>  		"msc_mux", CGU_CLK_MUX,
+> -		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL},
+> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
+>  		.mux =3D { CGU_REG_MSC0CDR, 31, 1 },
+>  	},
+>=20
+>  	[X1000_CLK_MSC0] =3D {
+>  		"msc0", CGU_CLK_DIV | CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_MSCMUX, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_MSCMUX },
+>  		.div =3D { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
+>  		.gate =3D { CGU_REG_CLKGR, 4 },
+>  	},
+> @@ -413,8 +413,7 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>=20
+>  	[X1000_CLK_OTG] =3D {
+>  		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
+> -		.parents =3D { X1000_CLK_EXCLK, -1,
+> -					 X1000_CLK_APLL, X1000_CLK_MPLL },
+> +		.parents =3D { X1000_CLK_EXCLK, -1, X1000_CLK_APLL, X1000_CLK_MPLL },
+>  		.mux =3D { CGU_REG_USBCDR, 30, 2 },
+>  		.div =3D { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
+>  		.gate =3D { CGU_REG_CLKGR, 3 },
+> @@ -422,7 +421,7 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>=20
+>  	[X1000_CLK_SSIPLL] =3D {
+>  		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
+> -		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
+> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
+>  		.mux =3D { CGU_REG_SSICDR, 31, 1 },
+>  		.div =3D { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
+>  	},
+> @@ -435,7 +434,7 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>=20
+>  	[X1000_CLK_SSIMUX] =3D {
+>  		"ssi_mux", CGU_CLK_MUX,
+> -		.parents =3D { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2 },
+>  		.mux =3D { CGU_REG_SSICDR, 30, 1 },
+>  	},
+>=20
+> @@ -456,37 +455,37 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>=20
+>  	[X1000_CLK_EMC] =3D {
+>  		"emc", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_AHB2, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_AHB2 },
+>  		.gate =3D { CGU_REG_CLKGR, 0 },
+>  	},
+>=20
+>  	[X1000_CLK_EFUSE] =3D {
+>  		"efuse", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_AHB2, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_AHB2 },
+>  		.gate =3D { CGU_REG_CLKGR, 1 },
+>  	},
+>=20
+>  	[X1000_CLK_SFC] =3D {
+>  		"sfc", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_SSIPLL, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_SSIPLL },
+>  		.gate =3D { CGU_REG_CLKGR, 2 },
+>  	},
+>=20
+>  	[X1000_CLK_I2C0] =3D {
+>  		"i2c0", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_PCLK },
+>  		.gate =3D { CGU_REG_CLKGR, 7 },
+>  	},
+>=20
+>  	[X1000_CLK_I2C1] =3D {
+>  		"i2c1", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_PCLK },
+>  		.gate =3D { CGU_REG_CLKGR, 8 },
+>  	},
+>=20
+>  	[X1000_CLK_I2C2] =3D {
+>  		"i2c2", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_PCLK },
 >  		.gate =3D { CGU_REG_CLKGR, 9 },
 >  	},
 >=20
-> +	[X1000_CLK_AIC] =3D {
-> +		"aic", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_EXCLK },
-> +		.gate =3D { CGU_REG_CLKGR, 11 },
-> +	},
-> +
+> @@ -498,43 +497,43 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>=20
 >  	[X1000_CLK_UART0] =3D {
 >  		"uart0", CGU_CLK_GATE,
->  		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK },
+>  		.gate =3D { CGU_REG_CLKGR, 14 },
+>  	},
+>=20
+>  	[X1000_CLK_UART1] =3D {
+>  		"uart1", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK},
+>  		.gate =3D { CGU_REG_CLKGR, 15 },
+>  	},
+>=20
+>  	[X1000_CLK_UART2] =3D {
+>  		"uart2", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK },
+>  		.gate =3D { CGU_REG_CLKGR, 16 },
+>  	},
+>=20
+>  	[X1000_CLK_TCU] =3D {
+>  		"tcu", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK },
+>  		.gate =3D { CGU_REG_CLKGR, 18 },
+>  	},
+>=20
+>  	[X1000_CLK_SSI] =3D {
+>  		"ssi", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_SSIMUX, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_SSIMUX },
+>  		.gate =3D { CGU_REG_CLKGR, 19 },
+>  	},
+>=20
+>  	[X1000_CLK_OST] =3D {
+>  		"ost", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK },
+>  		.gate =3D { CGU_REG_CLKGR, 20 },
+>  	},
+>=20
+>  	[X1000_CLK_PDMA] =3D {
+>  		"pdma", CGU_CLK_GATE,
+> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> +		.parents =3D { X1000_CLK_EXCLK },
+>  		.gate =3D { CGU_REG_CLKGR, 21 },
+>  	},
+>  };
 > --
 > 2.38.1
 >=20
