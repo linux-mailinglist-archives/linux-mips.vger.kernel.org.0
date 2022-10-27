@@ -2,280 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E457A60F7C8
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 14:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4735C60F7F2
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Oct 2022 14:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235755AbiJ0MpX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Oct 2022 08:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
+        id S235912AbiJ0Mtb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Oct 2022 08:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235724AbiJ0MpJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 08:45:09 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEE45FAA;
-        Thu, 27 Oct 2022 05:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666874696; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kh0g3/J/6DLJMf8jwmOmCdggEbcljmLSqAgl2NE0IWk=;
-        b=amhdwXenV1vs5UCnHQyoh4J7NX1m28frDJ4bkoLkQeYjq5RJ4MQ3y9oJLdcEn5WsESsEHE
-        cUw0W+4gmGZIufRtPWGBs1FNY5Z75Bho7MfzoQEP8O5IUQuO3lp64KDUGUsG1jl+AdgMvV
-        o/xOj13uNvjfEC0U+HphQ8cY7LkMC/g=
-Date:   Thu, 27 Oct 2022 13:44:45 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 6/6] clk: ingenic: Minor cosmetic fixups for X1000
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, zhouyu@wanyeetech.com,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <LQWEKR.EVQMBDQ994GL1@crapouillou.net>
-In-Reply-To: <20221026194345.243007-7-aidanmacdonald.0x0@gmail.com>
-References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
-        <20221026194345.243007-7-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S235857AbiJ0MtW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Oct 2022 08:49:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C4E16EA05;
+        Thu, 27 Oct 2022 05:49:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84AA3622B7;
+        Thu, 27 Oct 2022 12:49:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7EEC4347C;
+        Thu, 27 Oct 2022 12:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666874960;
+        bh=ayJrA1JTyWdSi5OrotRFQzWnZgKlqWS2GTryuNv9C3g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TENQaZ0qX8wT35paDg5nMw/zzqDcDEv6gQ/cVQgdGrgSOg6rcYgV82zB7lSd+aKWc
+         +im2fBZ6iDwS66vc3HKhmIPvDnkBzPWzAuPyrSgWZBgy+bdveHDvSvE1AQKBXXIAxh
+         LUksZbDLfpInJJ/P1SCJwJjBmGBzqyoa1xU2sRP3wdoDXnDJs6eHXezpsQxybLNmeU
+         UkuSpNW5BkYyHlEmTO/b46g/KZ5ZjdzER4j5ojkKYDlkhFith0OED+wB31MqxveAac
+         +bZnYuUAxtnuisxPxgDeKsNxiT++anokNcEa5KmETwhByjekKjuO5E86WulWhhVDMz
+         k5alL+wp+TuZA==
+Received: by mail-ej1-f50.google.com with SMTP id d26so4192081eje.10;
+        Thu, 27 Oct 2022 05:49:20 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0pDxChIFEtAvC/WZ3EEahn+EtgW9rpk/4q0OpJTdikcALW6bH3
+        yqOInllefgdhJAOfHqxnQkn60/aygSTMf52XZ2U=
+X-Google-Smtp-Source: AMsMyM4y/u9sWFlXV8p8VaH9Xlg1ipNTnnAKSXBRsvzTB2BIHk4F2a4+XmGNyWABLqhGPAldl4sABjzRtQ5+fY6VgnY=
+X-Received: by 2002:a17:907:3ea2:b0:7ad:86f9:7b15 with SMTP id
+ hs34-20020a1709073ea200b007ad86f97b15mr4488706ejc.272.1666874959084; Thu, 27
+ Oct 2022 05:49:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+References: <20221024070105.306280-1-chenhuacai@loongson.cn>
+ <20221024070105.306280-5-chenhuacai@loongson.cn> <CAJF2gTSN3zzvgAdiM8rYc3EGFxR4JJnHSh12mvsfUOQsqRRvkg@mail.gmail.com>
+ <CAAhV-H40fcUW3jwGZXpPNjbpizXb85zytCpKGHvEGwoRpG3c0Q@mail.gmail.com> <3eb9b612-e765-7ad0-aed8-a50e28677e9c@linaro.org>
+In-Reply-To: <3eb9b612-e765-7ad0-aed8-a50e28677e9c@linaro.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 27 Oct 2022 20:49:07 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7uTTaSqrYwhvy78CAVmAJi_jJ4BipgfOW6LV5vYm8=NQ@mail.gmail.com>
+Message-ID: <CAAhV-H7uTTaSqrYwhvy78CAVmAJi_jJ4BipgfOW6LV5vYm8=NQ@mail.gmail.com>
+Subject: Re: [PATCH V13 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+Cc:     Guo Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aidan,
+On Wed, Oct 26, 2022 at 9:44 PM Philippe Mathieu-Daud=C3=A9
+<philmd@linaro.org> wrote:
+>
+> On 26/10/22 14:59, Huacai Chen wrote:
+> > On Mon, Oct 24, 2022 at 4:04 PM Guo Ren <guoren@kernel.org> wrote:
+> >> On Mon, Oct 24, 2022 at 3:05 PM Huacai Chen <chenhuacai@loongson.cn> w=
+rote:
+> >>>
+> >>> From: Feiyang Chen <chenfeiyang@loongson.cn>
+> >>>
+> >>> The feature of minimizing overhead of struct page associated with eac=
+h
+> >>> HugeTLB page is implemented on x86_64. However, the infrastructure of
+> >>> this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
+> >>> OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+> >>>
+> >>> To avoid the following build error on LoongArch we should include lin=
+ux/
+> >>> static_key.h in page-flags.h. This is straightforward but the build
+> >>> error is implicitly a LoongArch-specific problem, because ARM64 and X=
+86
+> >>> have already include static_key.h from their arch-specific core heade=
+rs.
+>
+> >>> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> >>> index 0b0ae5084e60..1aafdc73e399 100644
+> >>> --- a/include/linux/page-flags.h
+> >>> +++ b/include/linux/page-flags.h
+> >>> @@ -9,6 +9,7 @@
+> >>>   #include <linux/types.h>
+> >>>   #include <linux/bug.h>
+> >>>   #include <linux/mmdebug.h>
+> >>> +#include <linux/static_key.h>
+> >> Em... riscv needn't this.
+>
+> Would guarding the header suffice and make riscv OK with this patch?
+Emm, since LoongArch has no build errors due to an accident now, I
+will send a new version without static_key.h inclusion. If one day the
+build error comes back, we can send a separate patch to fix it.
 
-Le mer. 26 oct. 2022 =E0 20:43:45 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Remove redundant -1 entries from the parents array and fix
-> a couple indentation / whitespace issues.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> ---
->  drivers/clk/ingenic/x1000-cgu.c | 49=20
-> ++++++++++++++++-----------------
->  1 file changed, 24 insertions(+), 25 deletions(-)
->=20
-> diff --git a/drivers/clk/ingenic/x1000-cgu.c=20
-> b/drivers/clk/ingenic/x1000-cgu.c
-> index 95d5e3a44cee..feb03eed4fe8 100644
-> --- a/drivers/clk/ingenic/x1000-cgu.c
-> +++ b/drivers/clk/ingenic/x1000-cgu.c
-> @@ -216,7 +216,7 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_APLL] =3D {
->  		"apll", CGU_CLK_PLL,
-> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK },
->  		.pll =3D {
->  			.reg =3D CGU_REG_APLL,
->  			.rate_multiplier =3D 1,
-> @@ -239,7 +239,7 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_MPLL] =3D {
->  		"mpll", CGU_CLK_PLL,
-> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK },
->  		.pll =3D {
->  			.reg =3D CGU_REG_MPLL,
->  			.rate_multiplier =3D 1,
-> @@ -289,7 +289,7 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->  		 * system; mark it critical.
->  		 */
->  		.flags =3D CLK_IS_CRITICAL,
-> -		.parents =3D { X1000_CLK_CPUMUX, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_CPUMUX },
->  		.div =3D { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
->  		.gate =3D { CGU_REG_CLKGR, 30 },
->  	},
-> @@ -301,7 +301,7 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->  		 * disabling it or any parent clocks will hang the system.
->  		 */
->  		.flags =3D CLK_IS_CRITICAL,
-> -		.parents =3D { X1000_CLK_CPUMUX, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_CPUMUX },
->  		.div =3D { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
->  	},
->=20
-> @@ -320,13 +320,13 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_AHB2] =3D {
->  		"ahb2", CGU_CLK_DIV,
-> -		.parents =3D { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_AHB2PMUX },
->  		.div =3D { CGU_REG_CPCCR, 12, 1, 4, 20, -1, -1 },
->  	},
->=20
->  	[X1000_CLK_PCLK] =3D {
->  		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_AHB2PMUX },
->  		.div =3D { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
->  		.gate =3D { CGU_REG_CLKGR, 28 },
->  	},
-> @@ -393,13 +393,13 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_MSCMUX] =3D {
->  		"msc_mux", CGU_CLK_MUX,
-> -		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
->  		.mux =3D { CGU_REG_MSC0CDR, 31, 1 },
->  	},
->=20
->  	[X1000_CLK_MSC0] =3D {
->  		"msc0", CGU_CLK_DIV | CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_MSCMUX, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_MSCMUX },
->  		.div =3D { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
->  		.gate =3D { CGU_REG_CLKGR, 4 },
->  	},
-> @@ -413,8 +413,7 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_OTG] =3D {
->  		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
-> -		.parents =3D { X1000_CLK_EXCLK, -1,
-> -					 X1000_CLK_APLL, X1000_CLK_MPLL },
-> +		.parents =3D { X1000_CLK_EXCLK, -1, X1000_CLK_APLL, X1000_CLK_MPLL },
->  		.mux =3D { CGU_REG_USBCDR, 30, 2 },
->  		.div =3D { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
->  		.gate =3D { CGU_REG_CLKGR, 3 },
-> @@ -422,7 +421,7 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_SSIPLL] =3D {
->  		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
-> -		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
-> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
->  		.mux =3D { CGU_REG_SSICDR, 31, 1 },
->  		.div =3D { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
->  	},
-> @@ -435,7 +434,7 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_SSIMUX] =3D {
->  		"ssi_mux", CGU_CLK_MUX,
-> -		.parents =3D { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2 },
->  		.mux =3D { CGU_REG_SSICDR, 30, 1 },
->  	},
->=20
-> @@ -456,37 +455,37 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_EMC] =3D {
->  		"emc", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_AHB2, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_AHB2 },
->  		.gate =3D { CGU_REG_CLKGR, 0 },
->  	},
->=20
->  	[X1000_CLK_EFUSE] =3D {
->  		"efuse", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_AHB2, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_AHB2 },
->  		.gate =3D { CGU_REG_CLKGR, 1 },
->  	},
->=20
->  	[X1000_CLK_SFC] =3D {
->  		"sfc", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_SSIPLL, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_SSIPLL },
->  		.gate =3D { CGU_REG_CLKGR, 2 },
->  	},
->=20
->  	[X1000_CLK_I2C0] =3D {
->  		"i2c0", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_PCLK },
->  		.gate =3D { CGU_REG_CLKGR, 7 },
->  	},
->=20
->  	[X1000_CLK_I2C1] =3D {
->  		"i2c1", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_PCLK },
->  		.gate =3D { CGU_REG_CLKGR, 8 },
->  	},
->=20
->  	[X1000_CLK_I2C2] =3D {
->  		"i2c2", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_PCLK },
->  		.gate =3D { CGU_REG_CLKGR, 9 },
->  	},
->=20
-> @@ -498,43 +497,43 @@ static const struct ingenic_cgu_clk_info=20
-> x1000_cgu_clocks[] =3D {
->=20
->  	[X1000_CLK_UART0] =3D {
->  		"uart0", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK },
->  		.gate =3D { CGU_REG_CLKGR, 14 },
->  	},
->=20
->  	[X1000_CLK_UART1] =3D {
->  		"uart1", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK},
->  		.gate =3D { CGU_REG_CLKGR, 15 },
->  	},
->=20
->  	[X1000_CLK_UART2] =3D {
->  		"uart2", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK },
->  		.gate =3D { CGU_REG_CLKGR, 16 },
->  	},
->=20
->  	[X1000_CLK_TCU] =3D {
->  		"tcu", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK },
->  		.gate =3D { CGU_REG_CLKGR, 18 },
->  	},
->=20
->  	[X1000_CLK_SSI] =3D {
->  		"ssi", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_SSIMUX, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_SSIMUX },
->  		.gate =3D { CGU_REG_CLKGR, 19 },
->  	},
->=20
->  	[X1000_CLK_OST] =3D {
->  		"ost", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK },
->  		.gate =3D { CGU_REG_CLKGR, 20 },
->  	},
->=20
->  	[X1000_CLK_PDMA] =3D {
->  		"pdma", CGU_CLK_GATE,
-> -		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.parents =3D { X1000_CLK_EXCLK },
->  		.gate =3D { CGU_REG_CLKGR, 21 },
->  	},
->  };
-> --
-> 2.38.1
->=20
-
-
+Huacai
+>
+>   #ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>   #include <linux/static_key.h>
+>   #endif
+>
+> > I found that after 36d4b36b69590fed99356a4426c940a25 (" lib/nodemask:
+> > inline next_node_in() and node_random()"), build errors have gone. But
+> > I think this is just an accident. Because that commit adds random.h
+> > inclusion in nodemask.h, then asm-offsets.c --> sched.h --> nodemask.h
+> > --> random.h --> once.h --> jump_label.h. If one day this chain is
+> > adjusted, then build errors come again.
+> >
+> > On the other hand, page-flags.h is obviously using some static_key
+> > macros, including static_key.h is straightforward for building.
+> >
+> > Huacai
