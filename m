@@ -2,377 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA9D610C06
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 10:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4AC610C96
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 11:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiJ1IOQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Oct 2022 04:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S229634AbiJ1JAd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 28 Oct 2022 05:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiJ1IOE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 04:14:04 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8851C2F2E;
-        Fri, 28 Oct 2022 01:14:02 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MzFYy41BzzVjMm;
-        Fri, 28 Oct 2022 16:09:10 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+        with ESMTP id S229450AbiJ1JAa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 05:00:30 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11hn2228.outbound.protection.outlook.com [52.100.173.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E93CC34C8
+        for <linux-mips@vger.kernel.org>; Fri, 28 Oct 2022 02:00:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NFp4OYapaF9UGNXCqS0QezYLlP3bMtc95XsqRpyrgnkHmg0OsCV1ECBpPAuhQxoVXSXCIDU+7a0GF977OV4xqvxpwhB8gXtUuQTezy4cv3WPyRgLqwq9XhBnvt0v17WpxzDWXMvdWQHdwYZjbWTh6Q5h0zoHBXA3sxrAVAG65okCoyaUzFwDRfQI5eVcP//m6FtGoAK4CVEQm0dujh6a+FCFI3vhvDbm54zyvv/2T+86DD0nL0e9EqFeASY+XPPslvLzWZqVSzIwgBeQiF7knz+KCDfA6vCMw7AIDpZv5fEDqk011vaMbLwvN7D8cHcr1bfkKdDHR09PENj2LMbaEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=71b8Hcq0jbWLm9Mr1IJyvq/N3UExkjznuA19heg3urU=;
+ b=KCc/RaMhxe1bscyFehOLMwRrucwHv2XR20nWT2U5xCOahxL04/9QV66+2Obf5+PvygBEpX4ohttRebrQoPmFRaboxW2D1VJ//g72EgNKddUv37NoOKny/19IY+FnhtZVdkUVMY3TMrDHvcyrqW8btW2xOwiJ0qak5y4RKCy/X6K8PhSXogg5zRIIDuoovEwuCGS8Iu0Ahz8jY0QQlOmw2kvTHdV6rxWGn1cKkyFb8+9c3/uF5B8idueTBGRnUzwdrtUTRhOkJdTnBGNgfeLvIj7N/y4Izak7IpzfSEy/NilJEFfb0KDetHpkvPInMr+f6u2oWqOZIeBuZOivnsTLUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.184.167.3) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=sheldonisd.com; dmarc=none action=none
+ header.from=sheldonisd.com; dkim=none (message not signed); arc=none
+Received: from MW4PR03CA0111.namprd03.prod.outlook.com (2603:10b6:303:b7::26)
+ by CY4PR15MB1735.namprd15.prod.outlook.com (2603:10b6:910:23::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.14; Fri, 28 Oct
+ 2022 09:00:28 +0000
+Received: from MW2NAM12FT092.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:303:b7:cafe::8b) by MW4PR03CA0111.outlook.office365.com
+ (2603:10b6:303:b7::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.29 via Frontend
+ Transport; Fri, 28 Oct 2022 09:00:28 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 209.184.167.3) smtp.mailfrom=sheldonisd.com; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=sheldonisd.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ sheldonisd.com discourages use of 209.184.167.3 as permitted sender)
+Received: from mail.sheldonisd.com (209.184.167.3) by
+ MW2NAM12FT092.mail.protection.outlook.com (10.13.181.163) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5791.9 via Frontend Transport; Fri, 28 Oct 2022 09:00:27 +0000
+Received: from MAIL-365.ad.sheldonisd.com (10.1.16.82) by
+ MAIL-365.ad.sheldonisd.com (10.1.16.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 16:14:00 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>
-CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
-        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
-        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
-        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
-        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
-        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
-        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
-        <prime.zeng@hisilicon.com>, Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: [PATCH v5 2/2] arm64: support batched/deferred tlb shootdown during page reclamation
-Date:   Fri, 28 Oct 2022 16:12:55 +0800
-Message-ID: <20221028081255.19157-3-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20221028081255.19157-1-yangyicong@huawei.com>
-References: <20221028081255.19157-1-yangyicong@huawei.com>
+ 15.1.2106.2; Fri, 28 Oct 2022 03:59:43 -0500
+Received: from [193.47.61.101] (193.47.61.101) by MAIL-365.ad.sheldonisd.com
+ (10.1.16.82) with Microsoft SMTP Server id 15.1.2106.2 via Frontend
+ Transport; Fri, 28 Oct 2022 03:59:43 -0500
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: [EXTERNAL EMAIL - USE CAUTION] Greetings!   
+To:     <linux-mips@vger.kernel.org>
+From:   "Mr. Paul Morgan" <wendyarandas@sheldonisd.com>
+Date:   Fri, 28 Oct 2022 10:59:42 +0200
+Reply-To: <paulmorgan5377@gmail.com>
+Message-ID: <f1c5012d-15d5-4a54-bf96-c51211c491a7@MAIL-365.ad.sheldonisd.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW2NAM12FT092:EE_|CY4PR15MB1735:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd7b6a30-7fa5-4ae6-c9bb-08dab8c2dc1a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?3+9UNHQ0yxYEuKqQzph5QTkeallZgTmAgAL7LLsDGmhBVUNWegvFwNhMF5?=
+ =?iso-8859-1?Q?yUjwOwViAhXOqvJKmgT4clxBWvONjNc1Ci47HLgd5pj7RisQGzSjFQzVZf?=
+ =?iso-8859-1?Q?kUwJfUuTfTq/TjQwF7y2Z87c6uCyK/BwrEjw0yfU/vKtuU6zav2hOX29rH?=
+ =?iso-8859-1?Q?WwLA8vs/LbEaT2Qjqrg2aZJW+YduvcDvLm9IxmkENRQq7KwOQz7WJdFGEU?=
+ =?iso-8859-1?Q?bl2w3sC8nlXMUOlDIICclOWRg7rhFZ1aEDF1n/VjOe7FdMN9OF0I6Vb3uh?=
+ =?iso-8859-1?Q?z50UWMTPze8+ADW8j+L96YlfZ3na98jY3nuHaOvKM/f90bhfrJAEg6DqBr?=
+ =?iso-8859-1?Q?0UiNQHkEegDi0RewFJ7EkFCZSNqeJPyoHdUgYYwRnASDEhdEdkIsWKh1/c?=
+ =?iso-8859-1?Q?f7iwulL04iKztMO+1rU+k/kY3XV4pJrclf1u39Ue9voSpez4HKGQFbq3t2?=
+ =?iso-8859-1?Q?pP6xbvKz97yKLbJQxk86B5hZWpToD3IbnXba24S1S5cmpb+SvOp1u+nwnR?=
+ =?iso-8859-1?Q?LmOdrHNJG9JIbTIrTrBAaD6vXHMgP3P9rYvdK5Jp2nC28Ozj6L6UfTpWNd?=
+ =?iso-8859-1?Q?K/KM2dEy3PsinkpX2CrYwxhaiLrvoQsKtYcZVimJVNeHIWdFCJRruops90?=
+ =?iso-8859-1?Q?pJPSo2H18INXw+owvMaK3BuWpRI2P8Lw75KEhI3tEGpn2uiSJsJ5vOoDIU?=
+ =?iso-8859-1?Q?g7ovtV6GTKH8cGPGuMX4uF16ZiICLrGVqibBzJFBTudJLZvtIDDrTrbHEA?=
+ =?iso-8859-1?Q?DmtGLZl89aYrM6JIEFfOraugcMENI5DrJtTh/viGQAP5F70NHr3o+dIUja?=
+ =?iso-8859-1?Q?21//9oRxX1vodFl3Qe4oguUmKF3VSMRJj7QCqjP5Ufkrqs095i6ttZCafV?=
+ =?iso-8859-1?Q?P1az7zSqpb4+VvRGUPUvpg94p6mWLLFufGR7IsIME6VHHHgZsPwFWmM0PQ?=
+ =?iso-8859-1?Q?DxENMIik54rDwuU1aOsTQeW2mq95W1DN7hPb7AoUfT2xijdNfEe5Xd0ojo?=
+ =?iso-8859-1?Q?zUdDA1vQXRiR4AL4ye9eqYOBnj5Jg16sWDWdS+x5zAJFVHJPyNykmmPFQb?=
+ =?iso-8859-1?Q?OFObUSunqWAT41x9fPN3UxtubR6LH+4Y84KMRHzGtTLRQq7jaSU+xoRDKv?=
+ =?iso-8859-1?Q?VN5xMyrif5UfMgUkEmM7+fNnH4ilXncqG2LTTjD/8e5whX3cy0d6BAFyty?=
+ =?iso-8859-1?Q?Lx6y/0dMwSuHQf4Otuz5uoOIBjd4E5SNGLgJhCmXvkzTeUC05Amdd/dv?=
+X-Forefront-Antispam-Report: CIP:209.184.167.3;CTRY:US;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:mail.sheldonisd.com;PTR:mail.sheldonisd.com;CAT:OSPM;SFS:(13230022)(346002)(376002)(39860400002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(40480700001)(478600001)(70586007)(6916009)(16576012)(786003)(2860700004)(316002)(31696002)(40460700003)(70206006)(41320700001)(82310400005)(8676002)(6706004)(26005)(83170400001)(2906002)(186003)(956004)(336012)(42882007)(7596003)(82740400003)(356005)(41300700001)(7636003)(36860700001)(4744005)(5660300002)(31686004)(426003)(47076005)(8936002)(83380400001)(16900700008);DIR:OUT;SFP:1501;
+X-OriginatorOrg: sheldonisd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 09:00:27.9756
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd7b6a30-7fa5-4ae6-c9bb-08dab8c2dc1a
+X-MS-Exchange-CrossTenant-Id: 3237ab13-a154-4aab-bc15-73e6206d6acc
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3237ab13-a154-4aab-bc15-73e6206d6acc;Ip=[209.184.167.3];Helo=[mail.sheldonisd.com]
+X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT092.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR15MB1735
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Barry Song <v-songbaohua@oppo.com>
+CAUTION: This email originated from outside of the organization. DO NOT click links, provide credentials or open attachments unless you validate the sender and know the content is safe.
 
-on x86, batched and deferred tlb shootdown has lead to 90%
-performance increase on tlb shootdown. on arm64, HW can do
-tlb shootdown without software IPI. But sync tlbi is still
-quite expensive.
+Good day,
 
-Even running a simplest program which requires swapout can
-prove this is true,
- #include <sys/types.h>
- #include <unistd.h>
- #include <sys/mman.h>
- #include <string.h>
+I would like to get in touch with you.
+Please advise if I am contacting the right person.
 
- int main()
- {
- #define SIZE (1 * 1024 * 1024)
-         volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
-                                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+Sincerely,
 
-         memset(p, 0x88, SIZE);
-
-         for (int k = 0; k < 10000; k++) {
-                 /* swap in */
-                 for (int i = 0; i < SIZE; i += 4096) {
-                         (void)p[i];
-                 }
-
-                 /* swap out */
-                 madvise(p, SIZE, MADV_PAGEOUT);
-         }
- }
-
-Perf result on snapdragon 888 with 8 cores by using zRAM
-as the swap block device.
-
- ~ # perf record taskset -c 4 ./a.out
- [ perf record: Woken up 10 times to write data ]
- [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
- ~ # perf report
- # To display the perf.data header info, please use --header/--header-only options.
- # To display the perf.data header info, please use --header/--header-only options.
- #
- #
- # Total Lost Samples: 0
- #
- # Samples: 60K of event 'cycles'
- # Event count (approx.): 35706225414
- #
- # Overhead  Command  Shared Object      Symbol
- # ........  .......  .................  .............................................................................
- #
-    21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
-     8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
-     6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
-     6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
-     5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
-     3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
-     3.49%  a.out    [kernel.kallsyms]  [k] memset64
-     1.63%  a.out    [kernel.kallsyms]  [k] clear_page
-     1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
-     1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
-     1.23%  a.out    [kernel.kallsyms]  [k] xas_load
-     1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
-
-ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
-swapping in/out a page mapped by only one process. If the
-page is mapped by multiple processes, typically, like more
-than 100 on a phone, the overhead would be much higher as
-we have to run tlb flush 100 times for one single page.
-Plus, tlb flush overhead will increase with the number
-of CPU cores due to the bad scalability of tlb shootdown
-in HW, so those ARM64 servers should expect much higher
-overhead.
-
-Further perf annonate shows 95% cpu time of ptep_clear_flush
-is actually used by the final dsb() to wait for the completion
-of tlb flush. This provides us a very good chance to leverage
-the existing batched tlb in kernel. The minimum modification
-is that we only send async tlbi in the first stage and we send
-dsb while we have to sync in the second stage.
-
-With the above simplest micro benchmark, collapsed time to
-finish the program decreases around 5%.
-
-Typical collapsed time w/o patch:
- ~ # time taskset -c 4 ./a.out
- 0.21user 14.34system 0:14.69elapsed
-w/ patch:
- ~ # time taskset -c 4 ./a.out
- 0.22user 13.45system 0:13.80elapsed
-
-Also, Yicong Yang added the following observation.
-	Tested with benchmark in the commit on Kunpeng920 arm64 server,
-	observed an improvement around 12.5% with command
-	`time ./swap_bench`.
-		w/o		w/
-	real	0m13.460s	0m11.771s
-	user	0m0.248s	0m0.279s
-	sys	0m12.039s	0m11.458s
-
-	Originally it's noticed a 16.99% overhead of ptep_clear_flush()
-	which has been eliminated by this patch:
-
-	[root@localhost yang]# perf record -- ./swap_bench && perf report
-	[...]
-	16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
-
-It is tested on 4,8,128 CPU platforms and shows to be beneficial on
-large systems but may not have improvement on small systems like on
-a 4 CPU platform. So make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends
-on CONFIG_EXPERT for this stage and only make this enabled on systems
-with more than 8 CPUs. User can modify this threshold according to
-their own platforms by CONFIG_NR_CPUS_FOR_BATCHED_TLB.
-
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Nadav Amit <namit@vmware.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Tested-by: Xin Hao <xhao@linux.alibaba.com>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- .../features/vm/TLB/arch-support.txt          |  2 +-
- arch/arm64/Kconfig                            |  6 +++
- arch/arm64/include/asm/tlbbatch.h             | 12 +++++
- arch/arm64/include/asm/tlbflush.h             | 46 ++++++++++++++++++-
- arch/x86/include/asm/tlbflush.h               |  3 +-
- mm/rmap.c                                     | 10 ++--
- 6 files changed, 71 insertions(+), 8 deletions(-)
- create mode 100644 arch/arm64/include/asm/tlbbatch.h
-
-diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
-index 039e4e91ada3..2caf815d7c6c 100644
---- a/Documentation/features/vm/TLB/arch-support.txt
-+++ b/Documentation/features/vm/TLB/arch-support.txt
-@@ -9,7 +9,7 @@
-     |       alpha: | TODO |
-     |         arc: | TODO |
-     |         arm: | TODO |
--    |       arm64: | N/A  |
-+    |       arm64: |  ok  |
-     |        csky: | TODO |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 505c8a1ccbe0..72975e82c7d7 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -93,6 +93,7 @@ config ARM64
- 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
-+	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH if EXPERT
- 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
- 	select ARCH_WANT_DEFAULT_BPF_JIT
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-@@ -268,6 +269,11 @@ config ARM64_CONT_PMD_SHIFT
- 	default 5 if ARM64_16K_PAGES
- 	default 4
- 
-+config ARM64_NR_CPUS_FOR_BATCHED_TLB
-+	int "Threshold to enable batched TLB flush"
-+	default 8
-+	depends on ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
- config ARCH_MMAP_RND_BITS_MIN
- 	default 14 if ARM64_64K_PAGES
- 	default 16 if ARM64_16K_PAGES
-diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
-new file mode 100644
-index 000000000000..fedb0b87b8db
---- /dev/null
-+++ b/arch/arm64/include/asm/tlbbatch.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ARCH_ARM64_TLBBATCH_H
-+#define _ARCH_ARM64_TLBBATCH_H
-+
-+struct arch_tlbflush_unmap_batch {
-+	/*
-+	 * For arm64, HW can do tlb shootdown, so we don't
-+	 * need to record cpumask for sending IPI
-+	 */
-+};
-+
-+#endif /* _ARCH_ARM64_TLBBATCH_H */
-diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-index 412a3b9a3c25..b21cdeb57a18 100644
---- a/arch/arm64/include/asm/tlbflush.h
-+++ b/arch/arm64/include/asm/tlbflush.h
-@@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
- 	dsb(ish);
- }
- 
--static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
- 					 unsigned long uaddr)
- {
- 	unsigned long addr;
- 
- 	dsb(ishst);
--	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
-+	addr = __TLBI_VADDR(uaddr, ASID(mm));
- 	__tlbi(vale1is, addr);
- 	__tlbi_user(vale1is, addr);
- }
- 
-+static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+					 unsigned long uaddr)
-+{
-+	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
-+}
-+
- static inline void flush_tlb_page(struct vm_area_struct *vma,
- 				  unsigned long uaddr)
- {
-@@ -272,6 +278,42 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
- 	dsb(ish);
- }
- 
-+#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
-+static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-+{
-+	/*
-+	 * TLB batched flush is proved to be beneficial for systems with large
-+	 * number of CPUs, especially system with more than 8 CPUs. TLB shutdown
-+	 * is cheap on small systems which may not need this feature. So use
-+	 * a threshold for enabling this to avoid potential side effects on
-+	 * these platforms.
-+	 */
-+	if (num_online_cpus() <= CONFIG_ARM64_NR_CPUS_FOR_BATCHED_TLB)
-+		return false;
-+
-+#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
-+	if (unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
-+		return false;
-+#endif
-+
-+	return true;
-+}
-+
-+static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
-+					struct mm_struct *mm,
-+					unsigned long uaddr)
-+{
-+	__flush_tlb_page_nosync(mm, uaddr);
-+}
-+
-+static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
-+{
-+	dsb(ish);
-+}
-+
-+#endif /* CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH */
-+
- /*
-  * This is meant to avoid soft lock-ups on large TLB flushing ranges and not
-  * necessarily a performance improvement.
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 8a497d902c16..5bd78ae55cd4 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -264,7 +264,8 @@ static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
- }
- 
- static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
--					struct mm_struct *mm)
-+					struct mm_struct *mm,
-+					unsigned long uaddr)
- {
- 	inc_mm_tlb_gen(mm);
- 	cpumask_or(&batch->cpumask, &batch->cpumask, mm_cpumask(mm));
-diff --git a/mm/rmap.c b/mm/rmap.c
-index a9ab10bc0144..a1b408ff44e5 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -640,12 +640,13 @@ void try_to_unmap_flush_dirty(void)
- #define TLB_FLUSH_BATCH_PENDING_LARGE			\
- 	(TLB_FLUSH_BATCH_PENDING_MASK / 2)
- 
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
-+				      unsigned long uaddr)
- {
- 	struct tlbflush_unmap_batch *tlb_ubc = &current->tlb_ubc;
- 	int batch, nbatch;
- 
--	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm);
-+	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm, uaddr);
- 	tlb_ubc->flush_required = true;
- 
- 	/*
-@@ -723,7 +724,8 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
- 	}
- }
- #else
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
-+				      unsigned long uaddr)
- {
- }
- 
-@@ -1596,7 +1598,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval), address);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
--- 
-2.24.0
-
+Mr. Paul Morgan.
