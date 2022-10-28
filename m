@@ -2,167 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9FA61126E
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 15:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E124611291
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 15:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiJ1NM7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Oct 2022 09:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
+        id S229552AbiJ1NYF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Oct 2022 09:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiJ1NM5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 09:12:57 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5481CC75B
-        for <linux-mips@vger.kernel.org>; Fri, 28 Oct 2022 06:12:52 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id w14so6533365wru.8
-        for <linux-mips@vger.kernel.org>; Fri, 28 Oct 2022 06:12:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o3XkdRF1alR2hBxhKv7+KC2xEVL/mNE1pCUslh91CNk=;
-        b=czSDanOWkaznNFvfzkhI+RldJ79y0lOKTXLazE2INVObzdIpuA02fnxmTp4HXTRQTi
-         IvuTylcXIq/Sg1jCgh9FzcPYK6wCnCgisN2SPpD2hY2iM3U6UJQJMLePIaRYzRfU+2Wh
-         y9qb6oEWb7kSxsaXWIlY4Dkr2UM2TLk7qXYPH5mBMLvwd3vtyLYpmiqZDG3Zxj0+CARd
-         L8/aJqqA6LprQ5Pk4/015K7SAUBuZTJBf3EKbWQG93N7hmK53CJDPw0U9whLdkPu5vWz
-         3ELADVGMWSrtaYcGW48cTX8dbadiAO+awqSfgOoWpeoUTHQ8/pHHrLwFT/4AdLUkI1S8
-         O7bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o3XkdRF1alR2hBxhKv7+KC2xEVL/mNE1pCUslh91CNk=;
-        b=gl/fP5GPPjwt5Q7yA4eSTIIHlYHauuknj8uNZll6QJobfFsBKD0BK6AGRiOPM5FOIX
-         iGLTHBgiM92K/qIl563sdH52h5SEBgMWsf2Bid1oab4flh1ubCELBrdcl1DLwUBdxZwG
-         M3IKTqTgeCqFNZuTwqpYM4o8kJlX57UvnbgnAqh/L33LLQKlLi89uURkqh0f6ajuG4yA
-         gzWixOAoP/VzCwaqfzolbx1UbdkCO1uatqrEsytaznQC3mEyhOOwpSdN6IOJfgG5QEO/
-         YA/e/47VdbMWyhnGJsW6PWRSZBK2OscB3pmSs2FjOQU2XAL1p4EL+72yqyF/Oo3+gAYF
-         /s4Q==
-X-Gm-Message-State: ACrzQf32d/DTeSgKdiug4dADuEEfs9frGPLVMmfGIPp1mSevMo7XctYl
-        /4DEkfS5PyakaqpiI3Sn0ucdZA==
-X-Google-Smtp-Source: AMsMyM6F7+GscrQBfN0kqw1I2NMyhLF2BzgPRHQOCPO+qKjjp7P6MaY7wew3G5OT+7MX9xpYkZlRUQ==
-X-Received: by 2002:a05:6000:18c7:b0:22e:5503:9c46 with SMTP id w7-20020a05600018c700b0022e55039c46mr33561930wrq.668.1666962771104;
-        Fri, 28 Oct 2022 06:12:51 -0700 (PDT)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id n17-20020a05600c501100b003b4fdbb6319sm5926108wmr.21.2022.10.28.06.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 06:12:50 -0700 (PDT)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Barry Song <21cnbao@gmail.com>,
-        Punit Agrawal <punit.agrawal@bytedance.com>,
-        Yicong Yang <yangyicong@huawei.com>, yangyicong@hisilicon.com,
-        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
-        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
-        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-mm@kvack.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, akpm@linux-foundation.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
-        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
-        catalin.marinas@arm.com, will@kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
- during page reclamation
-References: <20220921084302.43631-1-yangyicong@huawei.com>
-        <20220921084302.43631-3-yangyicong@huawei.com>
-        <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com>
-        <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
-        <CAGsJ_4z=dZbrAUD9jczT08S3qi_ep-h+EK35UfayVk1S+Cnp2A@mail.gmail.com>
-        <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com>
-        <87o7tx5oyx.fsf@stealth>
-        <CAGsJ_4zrGfPYAXGW0g3Z-GF4vT7GD0xDjZn1dv-qruztEQTghg@mail.gmail.com>
-        <8a3ade4c-1714-5ffd-ed57-02ab0509725b@arm.com>
-Date:   Fri, 28 Oct 2022 14:12:49 +0100
-In-Reply-To: <8a3ade4c-1714-5ffd-ed57-02ab0509725b@arm.com> (Anshuman
-        Khandual's message of "Fri, 28 Oct 2022 07:44:29 +0530")
-Message-ID: <877d0k5bxq.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S230478AbiJ1NYB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 09:24:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270FD1D3749;
+        Fri, 28 Oct 2022 06:24:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFE31B829BA;
+        Fri, 28 Oct 2022 13:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B05C433D6;
+        Fri, 28 Oct 2022 13:23:56 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="D3aSOOA2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666963433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3V/khMusm/hSqNmRbev9Tdtgp+q6rmjc1eRz5Ap8HSo=;
+        b=D3aSOOA2v7cfEEDLORURmLWXY4m5LmYosFqMZBrUYO7/8BIIVyMaQpFofGfS6PbAGGghEM
+        N1mnlGqOeYY22ijnyYwhQ3n/qUuXvRCLGCptqU6tkIPskhVdyfwl5etql2JDZZmwhGpqmJ
+        wsQLLdbonz62yIm0k0VQf0ULxaVlkW0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ae7675f7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 28 Oct 2022 13:23:53 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] MIPS: pic32: treat port as signed integer
+Date:   Fri, 28 Oct 2022 15:23:44 +0200
+Message-Id: <20221028132344.1993934-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Anshuman Khandual <anshuman.khandual@arm.com> writes:
+get_port_from_cmdline() returns an int, yet is assigned to a char, which
+is wrong in its own right, but also, with char becoming unsigned, this
+poses problems, because -1 is used as an error value. Further
+complicating things, fw_init_early_console() is only ever called with a
+-1 argument. Fix this up by removing the unused argument from
+fw_init_early_console() and treating port as a proper signed integer.
 
-> On 10/28/22 03:25, Barry Song wrote:
->> On Fri, Oct 28, 2022 at 3:19 AM Punit Agrawal
->> <punit.agrawal@bytedance.com> wrote:
->>>
->>> [ Apologies for chiming in late in the conversation ]
->>>
->>> Anshuman Khandual <anshuman.khandual@arm.com> writes:
->>>
->>>> On 9/28/22 05:53, Barry Song wrote:
->>>>> On Tue, Sep 27, 2022 at 10:15 PM Yicong Yang <yangyicong@huawei.com> wrote:
->>>>>> On 2022/9/27 14:16, Anshuman Khandual wrote:
->>>>>>> [...]
->>>>>>>
->>>>>>> On 9/21/22 14:13, Yicong Yang wrote:
->>>>>>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
->>>>>>>> +{
->>>>>>>> +    /* for small systems with small number of CPUs, TLB shootdown is cheap */
->>>>>>>> +    if (num_online_cpus() <= 4)
->>>>>>> It would be great to have some more inputs from others, whether 4 (which should
->>>>>>> to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
->>>>>>> is optimal for an wide range of arm64 platforms.
->>>>>>>
->>>>> I have tested it on a 4-cpus and 8-cpus machine. but i have no machine
->>>>> with 5,6,7
->>>>> cores.
->>>>> I saw improvement on 8-cpus machines and I found 4-cpus machines don't need
->>>>> this patch.
->>>>>
->>>>> so it seems safe to have
->>>>> if (num_online_cpus()  < 8)
->>>>>
->>>>>> Do you prefer this macro to be static or make it configurable through kconfig then
->>>>>> different platforms can make choice based on their own situations? It maybe hard to
->>>>>> test on all the arm64 platforms.
->>>>> Maybe we can have this default enabled on machines with 8 and more cpus and
->>>>> provide a tlbflush_batched = on or off to allow users enable or
->>>>> disable it according
->>>>> to their hardware and products. Similar example: rodata=on or off.
->>>> No, sounds bit excessive. Kernel command line options should not be added
->>>> for every possible run time switch options.
->>>>
->>>>> Hi Anshuman, Will,  Catalin, Andrew,
->>>>> what do you think about this approach?
->>>>>
->>>>> BTW, haoxin mentioned another important user scenarios for tlb bach on arm64:
->>>>> https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
->>>>>
->>>>> I do believe we need it based on the expensive cost of tlb shootdown in arm64
->>>>> even by hardware broadcast.
->>>> Alright, for now could we enable ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH selectively
->>>> with CONFIG_EXPERT and for num_online_cpus()  > 8 ?
->>> When running the test program in the commit in a VM, I saw benefits from
->>> the patches at all sizes from 2, 4, 8, 32 vcpus. On the test machine,
->>> ptep_clear_flush() went from ~1% in the unpatched version to not showing
->>> up.
->>>
->>> Yicong mentioned that he didn't see any benefit for <= 4 CPUs but is
->>> there any overhead? I am wondering what are the downsides of enabling
->>> the config by default.
->> As we are deferring tlb flush, but sometimes while we are modifying the vma
->> which are deferred, we need to do a sync by flush_tlb_batched_pending() in
->> mprotect() , madvise() to make sure they can see the flushed result. if nobody
->> is doing mprotect(), madvise() etc in the deferred period, the overhead is zero.
->
-> Right, it is difficult to justify this overhead for smaller systems,
-> which for sure would not benefit from this batched TLB framework.
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Thomas - this is part of the -funsigned-char work I've been accumulating
+in my unsigned-char branch. If you want to take this as a fix for 6.1,
+go ahead. Otherwise, Linus asked me to keep the 6.2 unsigned-char
+patches together in my branch, so I'll take this, pending your Ack.
+-Jason
 
-Thank you for the pointers to the overhead.
+ arch/mips/include/asm/fw/fw.h             |  2 +-
+ arch/mips/pic32/pic32mzda/early_console.c | 13 ++++++-------
+ arch/mips/pic32/pic32mzda/init.c          |  2 +-
+ 3 files changed, 8 insertions(+), 9 deletions(-)
 
-Having looked at this more closely, I also see that
-flush_tlb_batched_pending() discards the entire mm vs just flushing the
-page being unmapped (as is done with ptep_clear_flush()).
+diff --git a/arch/mips/include/asm/fw/fw.h b/arch/mips/include/asm/fw/fw.h
+index d0ef8b4892bb..d0494ce4b337 100644
+--- a/arch/mips/include/asm/fw/fw.h
++++ b/arch/mips/include/asm/fw/fw.h
+@@ -26,6 +26,6 @@ extern char *fw_getcmdline(void);
+ extern void fw_meminit(void);
+ extern char *fw_getenv(char *name);
+ extern unsigned long fw_getenvl(char *name);
+-extern void fw_init_early_console(char port);
++extern void fw_init_early_console(void);
+ 
+ #endif /* __ASM_FW_H_ */
+diff --git a/arch/mips/pic32/pic32mzda/early_console.c b/arch/mips/pic32/pic32mzda/early_console.c
+index 25372e62783b..3cd1b408fa1c 100644
+--- a/arch/mips/pic32/pic32mzda/early_console.c
++++ b/arch/mips/pic32/pic32mzda/early_console.c
+@@ -27,7 +27,7 @@
+ #define U_BRG(x)	(UART_BASE(x) + 0x40)
+ 
+ static void __iomem *uart_base;
+-static char console_port = -1;
++static int console_port = -1;
+ 
+ static int __init configure_uart_pins(int port)
+ {
+@@ -47,7 +47,7 @@ static int __init configure_uart_pins(int port)
+ 	return 0;
+ }
+ 
+-static void __init configure_uart(char port, int baud)
++static void __init configure_uart(int port, int baud)
+ {
+ 	u32 pbclk;
+ 
+@@ -60,7 +60,7 @@ static void __init configure_uart(char port, int baud)
+ 		     uart_base + PIC32_SET(U_STA(port)));
+ }
+ 
+-static void __init setup_early_console(char port, int baud)
++static void __init setup_early_console(int port, int baud)
+ {
+ 	if (configure_uart_pins(port))
+ 		return;
+@@ -130,16 +130,15 @@ static int __init get_baud_from_cmdline(char *arch_cmdline)
+ 	return baud;
+ }
+ 
+-void __init fw_init_early_console(char port)
++void __init fw_init_early_console(void)
+ {
+ 	char *arch_cmdline = pic32_getcmdline();
+-	int baud = -1;
++	int baud, port;
+ 
+ 	uart_base = ioremap(PIC32_BASE_UART, 0xc00);
+ 
+ 	baud = get_baud_from_cmdline(arch_cmdline);
+-	if (port == -1)
+-		port = get_port_from_cmdline(arch_cmdline);
++	port = get_port_from_cmdline(arch_cmdline);
+ 
+ 	if (port == -1)
+ 		port = EARLY_CONSOLE_PORT;
+diff --git a/arch/mips/pic32/pic32mzda/init.c b/arch/mips/pic32/pic32mzda/init.c
+index 08c46cf122d7..53b227a9074c 100644
+--- a/arch/mips/pic32/pic32mzda/init.c
++++ b/arch/mips/pic32/pic32mzda/init.c
+@@ -47,7 +47,7 @@ void __init plat_mem_setup(void)
+ 		strscpy(arcs_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+ 
+ #ifdef CONFIG_EARLY_PRINTK
+-	fw_init_early_console(-1);
++	fw_init_early_console();
+ #endif
+ 	pic32_config_init();
+ }
+-- 
+2.38.1
+
