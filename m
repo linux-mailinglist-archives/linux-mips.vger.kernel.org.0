@@ -2,173 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10E2610E93
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 12:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A73611264
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 15:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiJ1Kel (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Oct 2022 06:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S230234AbiJ1NLs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Oct 2022 09:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiJ1Keg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 06:34:36 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A019E10551;
-        Fri, 28 Oct 2022 03:34:30 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v1so6025898wrt.11;
-        Fri, 28 Oct 2022 03:34:30 -0700 (PDT)
+        with ESMTP id S230175AbiJ1NLs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 09:11:48 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213081C6BE1
+        for <linux-mips@vger.kernel.org>; Fri, 28 Oct 2022 06:11:46 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j15so6560619wrq.3
+        for <linux-mips@vger.kernel.org>; Fri, 28 Oct 2022 06:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VTLqcHpLknCfW4rU/oVOZ72CKaRxSFT1z0XfsYLerY4=;
-        b=imzO8c9InqFWAAe6UDl0tJeylGXAQfRifIWLxkEBBPkDDUoq2OeAehXep3L+AUcFV4
-         LhTomTHllwI5F8+VOPZznHFHmr51Nxp3RPNNaANnkgxfPQD2t443F1HLxZykztKpM1De
-         HwfNABEBPfu3PtyydWY7snwBdKmHigdexxAbytchL1D+7bbKKCaTOrHDuLhbPSuR9JX6
-         F0iC2zRQ63X4kROMVyd0e1o165TC1h8n9CuneBAEtgSEoBa8TV3/v0Njypss0+tnB1VI
-         b/q/x63MDmFqBYBPv3d6FFH/iPDs5+XRVdavLRqWqPaZIL+yEo4tkYBJIuPg6rwQLfQT
-         CiXA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Aj7lCoa9R32lr+KR5EAOPwdoRP9ej39sPKRFvXXmKo=;
+        b=EFIo+tctRNuBHWwWw1xOq1kEixfm3foZR690FRJu3AM3x8PYD0ZDLFys0bq0GHDw0q
+         D+MTVPyEG1mTG0ZgdOgJq8+gjfvXKbovWD8hGjcbI7wWrksCjPBNiTntRvERjSr3G2+k
+         Lu7JNnRQmZ6+8v+2wFsOY4k1EMCtFfmzGGyaZDJW+zI6dotPwQ2SHNssHmq5yH6XrLvw
+         xSqtVUxuIWlv47NuYTEMe31KwKyXtoj47d/WfUsTDmeHSsavPPN1aNy232z2FiDj7IE2
+         kdVuMjIFXr8rqIXxZZe02eKvfiUGYKO5h8nAQjogNLBpf+5ZCJOnzUUb++YTPAQ3vG+E
+         aVQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VTLqcHpLknCfW4rU/oVOZ72CKaRxSFT1z0XfsYLerY4=;
-        b=57jJ9AiOKfa0NR9r/KuSERYCm2yPjKQH5lz32icaCw2vRy8ZN/gGsRRZM8sjGtWyua
-         wfOWR+n3m0Bs9SX/bjWfo/mDXvQt/y8p6xnk5WCVoe+fV/yCpRzQGOYYr2n6BZrdCJey
-         baknIeHj/MjivAybbZ6gSysp6bFd1PY5lz0ZEIIvCr+Z+WMAtRRetzF0oQ+zxyOB1EY6
-         6n9+1TthnUDIAaFiGyw7QpPruqqAEECGYrgBJJ7dt5f4y/bErcbJQyAo3SpbgRCXupQB
-         86OjiofRt17LKWPh5zzDFUxgWD9JCeLHCTZlUbwLduS3tu39FXC7djCR2RMzfHDQAK6B
-         WkRQ==
-X-Gm-Message-State: ACrzQf2sb/ZRWVoxNcCTDKQhA9qP0zae1xtCAYJdrk7yt+R2HNL4b0+N
-        tJPtXJSs75cyWqB51JxqfUw=
-X-Google-Smtp-Source: AMsMyM7xKnVs7p0u7RjUBpS/H+wM1foxGyZ7zOdVy4011K+n1YCXJ6oaIUI+vH0bMmnXElFL5TCO6g==
-X-Received: by 2002:adf:e510:0:b0:235:de50:72ff with SMTP id j16-20020adfe510000000b00235de5072ffmr27142953wrm.100.1666953269251;
-        Fri, 28 Oct 2022 03:34:29 -0700 (PDT)
-Received: from localhost (94.197.40.204.threembb.co.uk. [94.197.40.204])
-        by smtp.gmail.com with ESMTPSA id d13-20020adff84d000000b0023682011c1dsm3277496wrq.104.2022.10.28.03.34.28
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Aj7lCoa9R32lr+KR5EAOPwdoRP9ej39sPKRFvXXmKo=;
+        b=gmRZ1NoX8p4k2Inh2C+mQLkwmpjt/qqHV9+ByQXU1vRlQQxvfLVKxnq6aUvIm8dKWy
+         Wx+YJsftAj+t9EVYVoflVMoDzZFfYQDFKM2g252uFNm7wZhUb70+ZAhiuTcU9RMC3LIx
+         rbpx28vbRHLBzSeuTMat2+k0/N1xvUhZPMwWoMj9PyyvLEbJwIw6SYGF9Flx2neOFUHH
+         ghLezgO0IXVcXNXtXv7yEWyTl+3Uiq9sW0y27U1O39sUE4c/4zNIhMG0Zkojikht2gw3
+         GfDQqnZftEzdOqdC6F5UeX7KqjoOzvui3zL66q/4dU2I0QmJ2lcntcwBOadHuANYdHBL
+         oRFg==
+X-Gm-Message-State: ACrzQf2kuufElCgqFBwadOwS6VXRBxrXLE8cxvcV4D8pOARfCMZOjNYi
+        kX2aVxESKOqqvNjf3HuhaGY+WA==
+X-Google-Smtp-Source: AMsMyM6YDLGx8tddVpugpJgNDAZlKMyecbRnjlokKyPGo/AAsO2SU74UqqxLLYtDEOG4bOxEAgjUZA==
+X-Received: by 2002:adf:df83:0:b0:236:6d5d:ff8b with SMTP id z3-20020adfdf83000000b002366d5dff8bmr18336437wrl.315.1666962704559;
+        Fri, 28 Oct 2022 06:11:44 -0700 (PDT)
+Received: from localhost ([95.148.15.66])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003bfaba19a8fsm4641180wms.35.2022.10.28.06.11.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 03:34:28 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        tsbogend@alpha.franken.de, perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] ASoC: jz4740-i2s: Remove .set_sysclk()
-Date:   Fri, 28 Oct 2022 11:34:18 +0100
-Message-Id: <20221028103418.17578-4-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20221028103418.17578-1-aidanmacdonald.0x0@gmail.com>
-References: <20221028103418.17578-1-aidanmacdonald.0x0@gmail.com>
+        Fri, 28 Oct 2022 06:11:43 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        Barry Song <21cnbao@gmail.com>, <yangyicong@hisilicon.com>,
+        <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
+        <linux-kernel@vger.kernel.org>, <darren@os.amperecomputing.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
+        <linux-mm@kvack.org>, <x86@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <akpm@linux-foundation.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
+        <prime.zeng@hisilicon.com>, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-doc@vger.kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+References: <20220921084302.43631-1-yangyicong@huawei.com>
+        <20220921084302.43631-3-yangyicong@huawei.com>
+        <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com>
+        <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
+        <CAGsJ_4z=dZbrAUD9jczT08S3qi_ep-h+EK35UfayVk1S+Cnp2A@mail.gmail.com>
+        <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com>
+        <87o7tx5oyx.fsf@stealth>
+        <bc44cf85-aee9-03ca-9911-dbd904a43cc8@huawei.com>
+Date:   Fri, 28 Oct 2022 14:11:41 +0100
+In-Reply-To: <bc44cf85-aee9-03ca-9911-dbd904a43cc8@huawei.com> (Yicong Yang's
+        message of "Fri, 28 Oct 2022 09:20:08 +0800")
+Message-ID: <87bkpw5bzm.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-.set_sysclk() is effectively unused here. No machine drivers use
-jz4740-i2s; and JZ4740_I2S_CLKSRC_EXT is the only selectable clock
-source with simple-card, but that is also the default source and
-has a fixed frequency, so configuring it would be redundant.
+Yicong Yang <yangyicong@huawei.com> writes:
 
-simple-card ignores -ENOTSUPP error codes when setting the sysclock,
-so any device trees that do set the sysclock for some reason should
-still work.
+> On 2022/10/27 22:19, Punit Agrawal wrote:
+>> 
+>> [ Apologies for chiming in late in the conversation ]
+>> 
+>> Anshuman Khandual <anshuman.khandual@arm.com> writes:
+>> 
+>>> On 9/28/22 05:53, Barry Song wrote:
+>>>> On Tue, Sep 27, 2022 at 10:15 PM Yicong Yang <yangyicong@huawei.com> wrote:
+>>>>>
+>>>>> On 2022/9/27 14:16, Anshuman Khandual wrote:
+>>>>>> [...]
+>>>>>>
+>>>>>> On 9/21/22 14:13, Yicong Yang wrote:
+>>>>>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+>>>>>>> +{
+>>>>>>> +    /* for small systems with small number of CPUs, TLB shootdown is cheap */
+>>>>>>> +    if (num_online_cpus() <= 4)
+>>>>>>
+>>>>>> It would be great to have some more inputs from others, whether 4 (which should
+>>>>>> to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
+>>>>>> is optimal for an wide range of arm64 platforms.
+>>>>>>
+>>>>
+>>>> I have tested it on a 4-cpus and 8-cpus machine. but i have no machine
+>>>> with 5,6,7
+>>>> cores.
+>>>> I saw improvement on 8-cpus machines and I found 4-cpus machines don't need
+>>>> this patch.
+>>>>
+>>>> so it seems safe to have
+>>>> if (num_online_cpus()  < 8)
+>>>>
+>>>>>
+>>>>> Do you prefer this macro to be static or make it configurable through kconfig then
+>>>>> different platforms can make choice based on their own situations? It maybe hard to
+>>>>> test on all the arm64 platforms.
+>>>>
+>>>> Maybe we can have this default enabled on machines with 8 and more cpus and
+>>>> provide a tlbflush_batched = on or off to allow users enable or
+>>>> disable it according
+>>>> to their hardware and products. Similar example: rodata=on or off.
+>>>
+>>> No, sounds bit excessive. Kernel command line options should not be added
+>>> for every possible run time switch options.
+>>>
+>>>>
+>>>> Hi Anshuman, Will,  Catalin, Andrew,
+>>>> what do you think about this approach?
+>>>>
+>>>> BTW, haoxin mentioned another important user scenarios for tlb bach on arm64:
+>>>> https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+>>>>
+>>>> I do believe we need it based on the expensive cost of tlb shootdown in arm64
+>>>> even by hardware broadcast.
+>>>
+>>> Alright, for now could we enable ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH selectively
+>>> with CONFIG_EXPERT and for num_online_cpus()  > 8 ?
+>> 
+>> When running the test program in the commit in a VM, I saw benefits from
+>> the patches at all sizes from 2, 4, 8, 32 vcpus. On the test machine,
+>> ptep_clear_flush() went from ~1% in the unpatched version to not showing
+>> up.
+>> 
+>
+> Maybe you're booting VM on a server with more than 32 cores and Barry tested
+> on his 4 CPUs embedded platform. I guess a 4 CPU VM is not fully equivalent to
+> a 4 CPU real machine as the tbli and dsb in the VM may influence the host
+> as well.
 
-It's still possible to configure the clock parent manually in the
-device tree and control frequency using other simple-card options,
-so at the end of the day there's no real loss in functionality.
+Yeah, I also wondered about this.
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
-Meant to be applied on top of jz4740-i2s cleanups series already
-in linux-next.
-Link: https://lore.kernel.org/alsa-devel/20221023143328.160866-1-aidanmacdonald.0x0@gmail.com/
+I was able to test on a 6-core RK3399 based system - there the
+ptep_clear_flush() was only 0.10% of the overall execution time. The
+hardware seems to do a pretty good job of keeping the TLB flushing
+overhead low.
 
- sound/soc/jz4740/jz4740-i2s.c | 32 --------------------------------
- sound/soc/jz4740/jz4740-i2s.h | 10 ----------
- 2 files changed, 42 deletions(-)
- delete mode 100644 sound/soc/jz4740/jz4740-i2s.h
-
-diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
-index b620d4462d90..6d9cfe0a5041 100644
---- a/sound/soc/jz4740/jz4740-i2s.c
-+++ b/sound/soc/jz4740/jz4740-i2s.c
-@@ -23,8 +23,6 @@
- #include <sound/initval.h>
- #include <sound/dmaengine_pcm.h>
- 
--#include "jz4740-i2s.h"
--
- #define JZ_REG_AIC_CONF		0x00
- #define JZ_REG_AIC_CTRL		0x04
- #define JZ_REG_AIC_I2S_FMT	0x10
-@@ -273,35 +271,6 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
- 	return 0;
- }
- 
--static int jz4740_i2s_set_sysclk(struct snd_soc_dai *dai, int clk_id,
--	unsigned int freq, int dir)
--{
--	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
--	struct clk *parent;
--	int ret = 0;
--
--	switch (clk_id) {
--	case JZ4740_I2S_CLKSRC_EXT:
--		parent = clk_get(NULL, "ext");
--		if (IS_ERR(parent))
--			return PTR_ERR(parent);
--		clk_set_parent(i2s->clk_i2s, parent);
--		break;
--	case JZ4740_I2S_CLKSRC_PLL:
--		parent = clk_get(NULL, "pll half");
--		if (IS_ERR(parent))
--			return PTR_ERR(parent);
--		clk_set_parent(i2s->clk_i2s, parent);
--		ret = clk_set_rate(i2s->clk_i2s, freq);
--		break;
--	default:
--		return -EINVAL;
--	}
--	clk_put(parent);
--
--	return ret;
--}
--
- static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
- {
- 	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
-@@ -318,7 +287,6 @@ static const struct snd_soc_dai_ops jz4740_i2s_dai_ops = {
- 	.trigger = jz4740_i2s_trigger,
- 	.hw_params = jz4740_i2s_hw_params,
- 	.set_fmt = jz4740_i2s_set_fmt,
--	.set_sysclk = jz4740_i2s_set_sysclk,
- };
- 
- #define JZ4740_I2S_FMTS (SNDRV_PCM_FMTBIT_S8 | \
-diff --git a/sound/soc/jz4740/jz4740-i2s.h b/sound/soc/jz4740/jz4740-i2s.h
-deleted file mode 100644
-index 4da14eac1145..000000000000
---- a/sound/soc/jz4740/jz4740-i2s.h
-+++ /dev/null
-@@ -1,10 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--
--#ifndef _JZ4740_I2S_H
--#define _JZ4740_I2S_H
--
--/* I2S clock source */
--#define JZ4740_I2S_CLKSRC_EXT 0
--#define JZ4740_I2S_CLKSRC_PLL 1
--
--#endif
--- 
-2.38.1
+[...]
 
