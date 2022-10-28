@@ -2,100 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A701D610B87
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 09:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F69610BF9
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Oct 2022 10:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiJ1Hsv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Oct 2022 03:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S229893AbiJ1IOA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Oct 2022 04:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiJ1Hss (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 03:48:48 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154501BE1E0;
-        Fri, 28 Oct 2022 00:48:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666943325; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=biY8c9UIA8tRU0N6X5LV3ObrP5qOGMkHf6HMaHaU6fU=;
-        b=T8ALAdRLQ3Qrz/Wa9O149SH/+i4hnqwKFlecDqEsJgO3GQstkdGJxbceRP8483YV16P31W
-        V7eXajhrBo2nCa5+SNLBLEZ1ylh8yaaBDBfQanG+tMxKdWCKOctJTiFtPzJYNsYbQdt03N
-        0B2jVvf/kkaK7EHFOaJVPewvBaa9o6o=
-Date:   Fri, 28 Oct 2022 08:48:35 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v6 3/3] clk: Add Ingenic JZ4755 CGU driver
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Siarhei Volkau <lis8215@gmail.com>,
-        Siarhei Volkau <lis8215@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Message-Id: <ZODGKR.IJ47UDRQGD431@crapouillou.net>
-In-Reply-To: <20221027215716.77250C433D6@smtp.kernel.org>
-References: <20221027192024.484320-1-lis8215@gmail.com>
-        <20221027192024.484320-4-lis8215@gmail.com>
-        <20221027215716.77250C433D6@smtp.kernel.org>
+        with ESMTP id S229456AbiJ1IOA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 04:14:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D9A1C2F2A;
+        Fri, 28 Oct 2022 01:13:58 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzFYn2V7KzmV5j;
+        Fri, 28 Oct 2022 16:09:01 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 16:13:56 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>
+CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
+        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
+        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
+        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
+        <prime.zeng@hisilicon.com>
+Subject: [PATCH v5 0/2] arm64: support batched/deferred tlb shootdown during page reclamation
+Date:   Fri, 28 Oct 2022 16:12:53 +0800
+Message-ID: <20221028081255.19157-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Stephen,
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-Le jeu. 27 oct. 2022 =E0 14:57:14 -0700, Stephen Boyd <sboyd@kernel.org>=20
-a =E9crit :
-> Quoting Siarhei Volkau (2022-10-27 12:20:23)
->>  diff --git a/drivers/clk/ingenic/jz4755-cgu.c=20
->> b/drivers/clk/ingenic/jz4755-cgu.c
->>  new file mode 100644
->>  index 000000000..d2eb3ae0c
->>  --- /dev/null
->>  +++ b/drivers/clk/ingenic/jz4755-cgu.c
->>  @@ -0,0 +1,346 @@
-> [...]
->>  +static void __init jz4755_cgu_init(struct device_node *np)
->>  +{
->>  +       int retval;
->>  +
->>  +       cgu =3D ingenic_cgu_new(jz4755_cgu_clocks,
->>  +                             ARRAY_SIZE(jz4755_cgu_clocks), np);
->>  +       if (!cgu) {
->>  +               pr_err("%s: failed to initialise CGU\n", __func__);
->>  +               return;
->>  +       }
->>  +
->>  +       retval =3D ingenic_cgu_register_clocks(cgu);
->>  +       if (retval)
->>  +               pr_err("%s: failed to register CGU Clocks\n",=20
->> __func__);
->>  +
->>  +       ingenic_cgu_register_syscore_ops(cgu);
->>  +}
->>  +CLK_OF_DECLARE_DRIVER(jz4755_cgu, "ingenic,jz4755-cgu",=20
->> jz4755_cgu_init);
->=20
-> Is there another driver that probes this device?=20
-> CLK_OF_DECLARE_DRIVER()
-> is for the situation where we want to probe this device again with
-> another platform driver. Please add a comment indicating what that=20
-> other
-> driver is.
+Though ARM64 has the hardware to do tlb shootdown, the hardware
+broadcasting is not free.
+A simplest micro benchmark shows even on snapdragon 888 with only
+8 cores, the overhead for ptep_clear_flush is huge even for paging
+out one page mapped by only one process:
+5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
 
-See: 03d570e1a4dc ("clk: ingenic: Use CLK_OF_DECLARE_DRIVER macro")
+While pages are mapped by multiple processes or HW has more CPUs,
+the cost should become even higher due to the bad scalability of
+tlb shootdown.
 
-Cheers,
--Paul
+The same benchmark can result in 16.99% CPU consumption on ARM64
+server with around 100 cores according to Yicong's test on patch
+4/4.
 
+This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+1. only send tlbi instructions in the first stage -
+	arch_tlbbatch_add_mm()
+2. wait for the completion of tlbi by dsb while doing tlbbatch
+	sync in arch_tlbbatch_flush()
+Testing on snapdragon shows the overhead of ptep_clear_flush
+is removed by the patchset. The micro benchmark becomes 5% faster
+even for one page mapped by single process on snapdragon 888.
+
+With this support we're possible to do more optimization for memory
+reclamation and migration[*].
+
+[*] https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+
+-v5:
+1. Make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends on EXPERT for this stage on arm64.
+2. Make a threshhold of CPU numbers for enabling batched TLP flush on arm64
+Link: https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/
+
+-v4:
+1. Add tags from Kefeng and Anshuman, Thanks.
+2. Limit the TLB batch/defer on systems with >4 CPUs, per Anshuman
+3. Merge previous Patch 1,2-3 into one, per Anshuman
+Link: https://lore.kernel.org/linux-mm/20220822082120.8347-1-yangyicong@huawei.com/
+
+-v3:
+1. Declare arch's tlbbatch defer support by arch_tlbbatch_should_defer() instead
+   of ARCH_HAS_MM_CPUMASK, per Barry and Kefeng
+2. Add Tested-by from Xin Hao
+Link: https://lore.kernel.org/linux-mm/20220711034615.482895-1-21cnbao@gmail.com/
+
+-v2:
+1. Collected Yicong's test result on kunpeng920 ARM64 server;
+2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+   according to the comments of Peter Zijlstra and Dave Hansen
+3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+   is empty according to the comments of Nadav Amit
+
+Thanks, Peter, Dave and Nadav for your testing or reviewing
+, and comments.
+
+-v1:
+https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+
+Anshuman Khandual (1):
+  mm/tlbbatch: Introduce arch_tlbbatch_should_defer()
+
+Barry Song (1):
+  arm64: support batched/deferred tlb shootdown during page reclamation
+
+ .../features/vm/TLB/arch-support.txt          |  2 +-
+ arch/arm64/Kconfig                            |  6 +++
+ arch/arm64/include/asm/tlbbatch.h             | 12 +++++
+ arch/arm64/include/asm/tlbflush.h             | 46 ++++++++++++++++++-
+ arch/x86/include/asm/tlbflush.h               | 15 +++++-
+ mm/rmap.c                                     | 19 +++-----
+ 6 files changed, 84 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/include/asm/tlbbatch.h
+
+-- 
+2.24.0
 
