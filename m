@@ -2,42 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701E2611DCE
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Oct 2022 00:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84262612299
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Oct 2022 13:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiJ1W42 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Oct 2022 18:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S229767AbiJ2Lwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Oct 2022 07:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiJ1W4I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Oct 2022 18:56:08 -0400
+        with ESMTP id S229795AbiJ2Lw3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Oct 2022 07:52:29 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8C91F5246;
-        Fri, 28 Oct 2022 15:56:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035936D565;
+        Sat, 29 Oct 2022 04:52:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666997730; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1667044342; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RvJj+3xY9RbhTi17+j1hh7xVviAFKRxXo4nyj02tbpM=;
-        b=HZOqXXpfdzNX6zPLA4Js1X6WpuSNU4ALdzg43R66pCt/RenTadFhbMEsdRZcYygTQ1AL3u
-        0c6IvJqM2oPiJc5hzZih4B90wWxQWosKbEqk8yofZDHTU8xO/sG2nzBbQcgfYoWqxfSNyA
-        BvuGgGA12b2iW26xvKZqhPdbMe5qoEw=
+        bh=u2k3MpzKY6CN5hfzTzAYDzW0+oUGTIkTmQN3JyuhJx4=;
+        b=wqg9CNFaxCs0PQaegb5ISTlV5Rr/z2Nj1rkRxftnfk++Nw3Pshnefzq3SFxFuLABbEUywp
+        YQTAvBUxYyl0am9wYYV/CRvkUTbM/8wWhAyTFQtMBGoBu812XamdKlzMaiQYgq4B50+3K7
+        MOkrJch0tDem5xC8KoSy0EqzP3ohofM=
+Date:   Sat, 29 Oct 2022 12:52:11 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+Subject: Re: [PATCH v2 4/4] rtc: jz4740: Support for fine-tuning the RTC clock
+To:     kernel test robot <lkp@intel.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        od@opendingux.net, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 4/4] rtc: jz4740: Support for fine-tuning the RTC clock
-Date:   Fri, 28 Oct 2022 23:55:19 +0100
-Message-Id: <20221028225519.89210-5-paul@crapouillou.net>
-In-Reply-To: <20221028225519.89210-1-paul@crapouillou.net>
-References: <20221028225519.89210-1-paul@crapouillou.net>
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, od@opendingux.net
+Message-Id: <ZMJIKR.M45DG9N62IHH1@crapouillou.net>
+In-Reply-To: <202210291633.edaeueJF-lkp@intel.com>
+References: <20221028225519.89210-5-paul@crapouillou.net>
+        <202210291633.edaeueJF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -47,105 +51,140 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Write the NC1HZ and ADJC register fields, which allow to tweak the
-frequency of the RTC clock, so that it can run as accurately as
-possible.
+Hi Bot,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/rtc/rtc-jz4740.c | 45 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Well this report is on my RFC patch so I consider the patchset to still=20
+be valid.
 
-diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index 1602e8a4283a..70b63ce75e21 100644
---- a/drivers/rtc/rtc-jz4740.c
-+++ b/drivers/rtc/rtc-jz4740.c
-@@ -5,6 +5,7 @@
-  *	 JZ4740 SoC RTC driver
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/io.h>
-@@ -41,6 +42,9 @@
- #define JZ_RTC_CTRL_AE		BIT(2)
- #define JZ_RTC_CTRL_ENABLE	BIT(0)
- 
-+#define JZ_RTC_REGULATOR_NC1HZ_MASK	GENMASK(15, 0)
-+#define JZ_RTC_REGULATOR_ADJC_MASK	GENMASK(25, 16)
-+
- /* Magic value to enable writes on jz4780 */
- #define JZ_RTC_WENR_MAGIC	0xA55A
- 
-@@ -61,6 +65,7 @@ struct jz4740_rtc {
- 	enum jz4740_rtc_type type;
- 
- 	struct rtc_device *rtc;
-+	struct clk *clk;
- 
- 	struct clk_hw clk32k;
- 
-@@ -217,12 +222,51 @@ static int jz4740_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
- 	return jz4740_rtc_ctrl_set_bits(rtc, JZ_RTC_CTRL_AF_IRQ, enable);
- }
- 
-+static int jz4740_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
-+	long rate = clk_get_rate(rtc->clk);
-+	s32 nc1hz, adjc, offset1k;
-+	u32 reg;
-+
-+	reg = jz4740_rtc_reg_read(rtc, JZ_REG_RTC_REGULATOR);
-+	nc1hz = FIELD_GET(JZ_RTC_REGULATOR_NC1HZ_MASK, reg);
-+	adjc = FIELD_GET(JZ_RTC_REGULATOR_ADJC_MASK, reg);
-+
-+	offset1k = (nc1hz - rate + 1) * 1024L + adjc;
-+	*offset = offset1k * 1000000L / (rate * 1024L);
-+
-+	return 0;
-+}
-+
-+static int jz4740_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
-+	long rate = clk_get_rate(rtc->clk);
-+	s32 offset1k, adjc, nc1hz;
-+
-+	offset1k = div_s64_rem(offset * rate * 1024LL, 1000000LL, &adjc);
-+	nc1hz = rate - 1 + offset1k / 1024L;
-+
-+	if (adjc < 0) {
-+		nc1hz--;
-+		adjc += 1024;
-+	}
-+
-+	nc1hz = FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK, nc1hz);
-+	adjc = FIELD_PREP(JZ_RTC_REGULATOR_ADJC_MASK, adjc);
-+
-+	return jz4740_rtc_reg_write(rtc, JZ_REG_RTC_REGULATOR, nc1hz | adjc);
-+}
-+
- static const struct rtc_class_ops jz4740_rtc_ops = {
- 	.read_time	= jz4740_rtc_read_time,
- 	.set_time	= jz4740_rtc_set_time,
- 	.read_alarm	= jz4740_rtc_read_alarm,
- 	.set_alarm	= jz4740_rtc_set_alarm,
- 	.alarm_irq_enable = jz4740_rtc_alarm_irq_enable,
-+	.read_offset	= jz4740_rtc_read_offset,
-+	.set_offset	= jz4740_rtc_set_offset,
- };
- 
- static irqreturn_t jz4740_rtc_irq(int irq, void *data)
-@@ -353,6 +397,7 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
- 
- 	spin_lock_init(&rtc->lock);
- 
-+	rtc->clk = clk;
- 	platform_set_drvdata(pdev, rtc);
- 
- 	device_init_wakeup(dev, 1);
--- 
-2.35.1
+If I can actually test my RFC patch I'll send it again with this bug=20
+fixed.
+
+Cheers,
+-Paul
+
+
+Le sam. 29 oct. 2022 =E0 16:51:53 +0800, kernel test robot=20
+<lkp@intel.com> a =E9crit :
+> Hi Paul,
+>=20
+> I love your patch! Yet something to improve:
+>=20
+> [auto build test ERROR on abelloni/rtc-next]
+> [also build test ERROR on robh/for-next linus/master v6.1-rc2=20
+> next-20221028]
+> [If your patch is applied to the wrong git tree, kindly drop us a=20
+> note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:   =20
+> https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/rtc-ingenic-=
+various-updates/20221029-065805
+> base:  =20
+> https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git=20
+> rtc-next
+> patch link:   =20
+> https://lore.kernel.org/r/20221028225519.89210-5-paul%40crapouillou.net
+> patch subject: [PATCH v2 4/4] rtc: jz4740: Support for fine-tuning=20
+> the RTC clock
+> config: sparc64-randconfig-c043-20221028
+> compiler: sparc64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=3D1 build):
+>         wget=20
+> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross=20
+> -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         #=20
+> https://github.com/intel-lab-lkp/linux/commit/b73614c39710acaff7977b8d3ec=
+935105cf59757
+>         git remote add linux-review=20
+> https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review=20
+> Paul-Cercueil/rtc-ingenic-various-updates/20221029-065805
+>         git checkout b73614c39710acaff7977b8d3ec935105cf59757
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0=20
+> make.cross W=3D1 O=3Dbuild_dir ARCH=3Dsparc64 SHELL=3D/bin/bash drivers/r=
+tc/
+>=20
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    In file included from <command-line>:
+>    drivers/rtc/rtc-jz4740.c: In function 'jz4740_rtc_set_offset':
+>>>  include/linux/compiler_types.h:357:45: error: call to=20
+>>> '__compiletime_assert_248' declared with attribute error:=20
+>>> FIELD_PREP: value too large for the field
+>      357 |         _compiletime_assert(condition, msg,=20
+> __compiletime_assert_, __COUNTER__)
+>          |                                             ^
+>    include/linux/compiler_types.h:338:25: note: in definition of=20
+> macro '__compiletime_assert'
+>      338 |                         prefix ## suffix();               =20
+>              \
+>          |                         ^~~~~~
+>    include/linux/compiler_types.h:357:9: note: in expansion of macro=20
+> '_compiletime_assert'
+>      357 |         _compiletime_assert(condition, msg,=20
+> __compiletime_assert_, __COUNTER__)
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    include/linux/build_bug.h:39:37: note: in expansion of macro=20
+> 'compiletime_assert'
+>       39 | #define BUILD_BUG_ON_MSG(cond, msg)=20
+> compiletime_assert(!(cond), msg)
+>          |                                     ^~~~~~~~~~~~~~~~~~
+>    include/linux/bitfield.h:68:17: note: in expansion of macro=20
+> 'BUILD_BUG_ON_MSG'
+>       68 |                =20
+> BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+>          |                 ^~~~~~~~~~~~~~~~
+>    include/linux/bitfield.h:114:17: note: in expansion of macro=20
+> '__BF_FIELD_CHECK'
+>      114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val,=20
+> "FIELD_PREP: ");    \
+>          |                 ^~~~~~~~~~~~~~~~
+>    drivers/rtc/rtc-jz4740.c:256:17: note: in expansion of macro=20
+> 'FIELD_PREP'
+>      256 |         nc1hz =3D FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK,=20
+> nc1hz);
+>          |                 ^~~~~~~~~~
+>=20
+>=20
+> vim +/__compiletime_assert_248 +357 include/linux/compiler_types.h
+>=20
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  343
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  #define=20
+> _compiletime_assert(condition, msg, prefix, suffix) \
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  345 =20
+> 	__compiletime_assert(condition, msg, prefix, suffix)
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  346
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  347  /**
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   * compiletime_assert -=20
+> break build and emit msg if condition is false
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * @condition: a=20
+> compile-time constant condition to check
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * @msg:       a message=20
+> to emit if condition is false
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   *
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   * In tradition of POSIX=20
+> assert, this macro will break the build if the
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  353   * supplied condition is=20
+> *false*, emitting the supplied error message if the
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  354   * compiler has support=20
+> to do so.
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  355   */
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  356  #define=20
+> compiletime_assert(condition, msg) \
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21 @357 =20
+> 	_compiletime_assert(condition, msg, __compiletime_assert_,=20
+> __COUNTER__)
+> eb5c2d4b45e3d2 Will Deacon 2020-07-21  358
+>=20
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+
 
