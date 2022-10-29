@@ -2,189 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84262612299
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Oct 2022 13:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C8C612543
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Oct 2022 22:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJ2Lwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Oct 2022 07:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
+        id S229494AbiJ2Uf6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Oct 2022 16:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJ2Lw3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Oct 2022 07:52:29 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035936D565;
-        Sat, 29 Oct 2022 04:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1667044342; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u2k3MpzKY6CN5hfzTzAYDzW0+oUGTIkTmQN3JyuhJx4=;
-        b=wqg9CNFaxCs0PQaegb5ISTlV5Rr/z2Nj1rkRxftnfk++Nw3Pshnefzq3SFxFuLABbEUywp
-        YQTAvBUxYyl0am9wYYV/CRvkUTbM/8wWhAyTFQtMBGoBu812XamdKlzMaiQYgq4B50+3K7
-        MOkrJch0tDem5xC8KoSy0EqzP3ohofM=
-Date:   Sat, 29 Oct 2022 12:52:11 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 4/4] rtc: jz4740: Support for fine-tuning the RTC clock
-To:     kernel test robot <lkp@intel.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, od@opendingux.net
-Message-Id: <ZMJIKR.M45DG9N62IHH1@crapouillou.net>
-In-Reply-To: <202210291633.edaeueJF-lkp@intel.com>
-References: <20221028225519.89210-5-paul@crapouillou.net>
-        <202210291633.edaeueJF-lkp@intel.com>
+        with ESMTP id S229456AbiJ2Uf5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Oct 2022 16:35:57 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C537A326D5;
+        Sat, 29 Oct 2022 13:35:56 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id E87A03200406;
+        Sat, 29 Oct 2022 16:35:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 29 Oct 2022 16:35:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1667075753; x=1667162153; bh=bX5Gx15qqiX077Af+ndRf/Ggw
+        c6zZu6GTKM8qZRCjzQ=; b=ZtxPIVMDQvMOwWuhpYTtzgQfAUSRBD/2oE+FvGpNQ
+        Jxo7BP4Lph8nT9q119tV4GKq3XuOh8e43PjTtw+58oov5NnN4t75xmi9JNRFtsoM
+        snAG5EBdPAfg5h5wPaziYCs2a2VUhaypJ/i1HjylX1oJCONf1zvyadGMjD1iCn36
+        k03NE17mnXfaBJ5Rlmm24og33g36yYQbEO0s9lk+L4EPIKzP3edwDMQnPOwuTQOD
+        nRSwr+8CtwMrxoZVtQ6L0t3NHHfjIdAo7Nxdzvcqlc44k9AymwmvhJT/9PlFZdgf
+        trn4mgApIEOh6+Zlw1LXR/pzUS4rYBTgShB3YQDJuhGdw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1667075753; x=1667162153; bh=bX5Gx15qqiX077Af+ndRf/Ggwc6zZu6GTKM
+        8qZRCjzQ=; b=UmzD5dMBS6tuFFipZte6h+miioNDFbgsLCZl+Wstr1uLN/SCkgN
+        HNkYV/Bka0LXbxZq6e0gJNHHOqnhDVROiCh/5eLOkzLbKDjkvVSQrKQBOBwMPfE6
+        DVGvRxRdUo5nt10oKM1g62FE8xGBTVyPm8xbKNXAZ4gn9Y3qRC3+83/BCH5UaI8P
+        m8sPpUdEJL9uYmomZrCDE4+lXrqwkOXGAgsFQG5as2kT1ijDYzwak6KbOhTLaSA4
+        gSV0dlOq4re7g3XtkXKo74SDCGQtWW1WAQXDS34xj3PKqnMHSUum5LL+KHk1k4Hz
+        LYKBH19XVb6Kl1Pi5Gw4T1iib3DxoICHKpA==
+X-ME-Sender: <xms:qY5dY79VEzQSBVbl37Jwg5bQqzlu27xzSji6qOlbL8fOqEYdufMUjQ>
+    <xme:qY5dY3s4T4FshkSn6haF8ByrATWOKdLqz1kA828cpjNonRJN4oLbrpbEM3vSfnKB6
+    LO1_ZMleL1dkS5ibh8>
+X-ME-Received: <xmr:qY5dY5DmPe5n6GKDEBKYjXSCKZMjasHvnOHqo5x4YWGwljmmfA-RvZnwow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdekgdduhedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:qY5dY3f3I79vD7X-kH7Oa9QzYI6QHYrHo8XacULpZgdQc9qYNYToCA>
+    <xmx:qY5dYwMMnUJCgNWPzvKLf6IDt86eQtYQqUUP6vZjMera8WD9TAzPzQ>
+    <xmx:qY5dY5lrU6Nqx86fJDLB80lDgAo0yb9dXeuGeQPEg9CALKwpgVK6KQ>
+    <xmx:qY5dY_1-kvJZuXKA_HANyGmjwZL3T4ubeIHUouHB48KqNonph1bFuQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 29 Oct 2022 16:35:51 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        ardb@kernel.org, rostedt@goodmis.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+Subject: [PATCH] MIPS: jump_label: Fix compat branch range check
+Date:   Sat, 29 Oct 2022 21:35:35 +0100
+Message-Id: <20221029203535.940231-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Bot,
+Cast upper bound of branch range to long to do signed compare,
+avoid negtive offset trigger this warning.
 
-Well this report is on my RFC patch so I consider the patchset to still=20
-be valid.
+Fixes: 9b6584e35f40 ("MIPS: jump_label: Use compact branches for >= r6")
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: stable@vger.kernel.org
+---
+ arch/mips/kernel/jump_label.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If I can actually test my RFC patch I'll send it again with this bug=20
-fixed.
-
-Cheers,
--Paul
-
-
-Le sam. 29 oct. 2022 =E0 16:51:53 +0800, kernel test robot=20
-<lkp@intel.com> a =E9crit :
-> Hi Paul,
->=20
-> I love your patch! Yet something to improve:
->=20
-> [auto build test ERROR on abelloni/rtc-next]
-> [also build test ERROR on robh/for-next linus/master v6.1-rc2=20
-> next-20221028]
-> [If your patch is applied to the wrong git tree, kindly drop us a=20
-> note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->=20
-> url:   =20
-> https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/rtc-ingenic-=
-various-updates/20221029-065805
-> base:  =20
-> https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git=20
-> rtc-next
-> patch link:   =20
-> https://lore.kernel.org/r/20221028225519.89210-5-paul%40crapouillou.net
-> patch subject: [PATCH v2 4/4] rtc: jz4740: Support for fine-tuning=20
-> the RTC clock
-> config: sparc64-randconfig-c043-20221028
-> compiler: sparc64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=3D1 build):
->         wget=20
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross=20
-> -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         #=20
-> https://github.com/intel-lab-lkp/linux/commit/b73614c39710acaff7977b8d3ec=
-935105cf59757
->         git remote add linux-review=20
-> https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review=20
-> Paul-Cercueil/rtc-ingenic-various-updates/20221029-065805
->         git checkout b73614c39710acaff7977b8d3ec935105cf59757
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0=20
-> make.cross W=3D1 O=3Dbuild_dir ARCH=3Dsparc64 SHELL=3D/bin/bash drivers/r=
-tc/
->=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
->    In file included from <command-line>:
->    drivers/rtc/rtc-jz4740.c: In function 'jz4740_rtc_set_offset':
->>>  include/linux/compiler_types.h:357:45: error: call to=20
->>> '__compiletime_assert_248' declared with attribute error:=20
->>> FIELD_PREP: value too large for the field
->      357 |         _compiletime_assert(condition, msg,=20
-> __compiletime_assert_, __COUNTER__)
->          |                                             ^
->    include/linux/compiler_types.h:338:25: note: in definition of=20
-> macro '__compiletime_assert'
->      338 |                         prefix ## suffix();               =20
->              \
->          |                         ^~~~~~
->    include/linux/compiler_types.h:357:9: note: in expansion of macro=20
-> '_compiletime_assert'
->      357 |         _compiletime_assert(condition, msg,=20
-> __compiletime_assert_, __COUNTER__)
->          |         ^~~~~~~~~~~~~~~~~~~
->    include/linux/build_bug.h:39:37: note: in expansion of macro=20
-> 'compiletime_assert'
->       39 | #define BUILD_BUG_ON_MSG(cond, msg)=20
-> compiletime_assert(!(cond), msg)
->          |                                     ^~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:68:17: note: in expansion of macro=20
-> 'BUILD_BUG_ON_MSG'
->       68 |                =20
-> BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
->          |                 ^~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:114:17: note: in expansion of macro=20
-> '__BF_FIELD_CHECK'
->      114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val,=20
-> "FIELD_PREP: ");    \
->          |                 ^~~~~~~~~~~~~~~~
->    drivers/rtc/rtc-jz4740.c:256:17: note: in expansion of macro=20
-> 'FIELD_PREP'
->      256 |         nc1hz =3D FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK,=20
-> nc1hz);
->          |                 ^~~~~~~~~~
->=20
->=20
-> vim +/__compiletime_assert_248 +357 include/linux/compiler_types.h
->=20
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  343
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  #define=20
-> _compiletime_assert(condition, msg, prefix, suffix) \
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  345 =20
-> 	__compiletime_assert(condition, msg, prefix, suffix)
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  346
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  347  /**
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   * compiletime_assert -=20
-> break build and emit msg if condition is false
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * @condition: a=20
-> compile-time constant condition to check
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * @msg:       a message=20
-> to emit if condition is false
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   *
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   * In tradition of POSIX=20
-> assert, this macro will break the build if the
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  353   * supplied condition is=20
-> *false*, emitting the supplied error message if the
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  354   * compiler has support=20
-> to do so.
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  355   */
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  356  #define=20
-> compiletime_assert(condition, msg) \
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21 @357 =20
-> 	_compiletime_assert(condition, msg, __compiletime_assert_,=20
-> __COUNTER__)
-> eb5c2d4b45e3d2 Will Deacon 2020-07-21  358
->=20
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-
+diff --git a/arch/mips/kernel/jump_label.c b/arch/mips/kernel/jump_label.c
+index 71a882c8c6eb..f7978d50a2ba 100644
+--- a/arch/mips/kernel/jump_label.c
++++ b/arch/mips/kernel/jump_label.c
+@@ -56,7 +56,7 @@ void arch_jump_label_transform(struct jump_entry *e,
+ 			 * The branch offset must fit in the instruction's 26
+ 			 * bit field.
+ 			 */
+-			WARN_ON((offset >= BIT(25)) ||
++			WARN_ON((offset >= (long)BIT(25)) ||
+ 				(offset < -(long)BIT(25)));
+ 
+ 			insn.j_format.opcode = bc6_op;
+-- 
+2.34.1
 
