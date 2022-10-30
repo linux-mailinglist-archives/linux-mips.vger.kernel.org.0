@@ -2,101 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A111612679
-	for <lists+linux-mips@lfdr.de>; Sun, 30 Oct 2022 01:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1313612A73
+	for <lists+linux-mips@lfdr.de>; Sun, 30 Oct 2022 12:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiJ2XWM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Oct 2022 19:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S229667AbiJ3L5M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 30 Oct 2022 07:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJ2XWK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Oct 2022 19:22:10 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055F3D58
-        for <linux-mips@vger.kernel.org>; Sat, 29 Oct 2022 16:22:10 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id b20-20020a05600c4e1400b003cc28585e2fso5993092wmq.1
-        for <linux-mips@vger.kernel.org>; Sat, 29 Oct 2022 16:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rhDiK7dye7eamxJrrtP8YrQ7lGawI/KZdQpXRO8QsLU=;
-        b=gAmTOdKxDwAUpFmpFLHveCznZGdNV8MARmphHzegcYRqCHYxLWA2U1/4pcxAn5+iYa
-         6UpM/8bGIi6vSEzL6ohGWAG3A9UoXJ5LkaTD8k9L1jGZICuT8vplrsODlnHTs8O4l5Gl
-         zcXtVWic0EVUyXkc++EDE/1NpOftKm1fEzrKBrOvpcjhSvUIZE53ouwD/3Zlz0fB97Cv
-         QbRDk3sBULRkPYiHiLRPQLq3XHY48s13RjLkU8lbuVv8DcXYz32LglrjuaoGbp9j6XqD
-         NpEobpn+VsL2dATQSJ9BtAhz3gVQrNUlU1lK/rGrbz4Qg0T7YIm+UCvA0kSWJXTLPFgh
-         ZLpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rhDiK7dye7eamxJrrtP8YrQ7lGawI/KZdQpXRO8QsLU=;
-        b=EONteOXXjPg6hLoiAojKfwgABGfm6xGitJkA95HoIGt75qUK4pkbuNQIkT4K5aHiT0
-         MnRhc2GBOlukwvM4jg+rMlpDzI/Ref48Fk5i/310HyLKhs2aUJNh0bntTS6Gj4F5SVu+
-         URWO9P1ZYMI8PzaAEEIx9OdS/HfKtK5+CIfsWHIcFO1DF0obsIjZF3YIdjlNw6AwTeFV
-         opmPpa+hyDEEk/dZJ2SMKSEaw9mNET9KArU4vLCuVoikh7OvIhtsgnY0HSGTOzY+JISB
-         oP7zzjoH2jB7HRqvmezCNx23wYew3b9CVTV7Umwh42gw9o9LiVGtusxgSn67GK+fzQMl
-         bqUQ==
-X-Gm-Message-State: ACrzQf1PRSYPAU0CQ2+QRaxclRBWYV+C8/vqQhto7v6kR0wE1ibe0Irg
-        JqX6QGECWBk5BMVPOsw15khVsjxQ50/blA==
-X-Google-Smtp-Source: AMsMyM4GaZVwdX8Wr+Lr+kiwINE+wjQsl/HHdFQUrwrfT5IZOfjgFar3jV//xN2jNADpyKtDPmgWgw==
-X-Received: by 2002:a05:600c:154a:b0:3c9:f0df:1cc with SMTP id f10-20020a05600c154a00b003c9f0df01ccmr13635104wmg.200.1667085728382;
-        Sat, 29 Oct 2022 16:22:08 -0700 (PDT)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id h5-20020adff185000000b00236863c02f5sm2568830wro.96.2022.10.29.16.22.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 16:22:08 -0700 (PDT)
-Message-ID: <e0942c4b-8e81-5259-0c7c-97d09cc81669@linaro.org>
-Date:   Sun, 30 Oct 2022 01:22:05 +0200
+        with ESMTP id S229441AbiJ3L5L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 30 Oct 2022 07:57:11 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AEDC75D;
+        Sun, 30 Oct 2022 04:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1667131028; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O7jkshNTb9CiYN6d6S/xxo0roUtTTADG65mtz+EOG7s=;
+        b=Z/Ghtw9wVpX8bc8gyui25gXnYgcieXCx+emBBtV/CVXNSv+4CVH1zPs77tDzAlr6nYOfb2
+        KQAOKKcD5r4m0i/qCCafwJ2SQPkaFzUfY8OxhkHfK9TX5CpYS/ie6PC5hKwgq43FUDcOVo
+        15SN73ZxIgqV25P8yQ0jcAz+lEFdM1M=
+Date:   Sun, 30 Oct 2022 11:56:58 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v1 1/3] dt-bindings: ingenic,aic: Remove unnecessary
+ clocks from schema
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tsbogend@alpha.franken.de,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <YIEKKR.ZFP16J137HGC3@crapouillou.net>
+In-Reply-To: <20221028103418.17578-2-aidanmacdonald.0x0@gmail.com>
+References: <20221028103418.17578-1-aidanmacdonald.0x0@gmail.com>
+        <20221028103418.17578-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH] MIPS: jump_label: Fix compat branch range check
-Content-Language: en-US
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        ardb@kernel.org, rostedt@goodmis.org, stable@vger.kernel.org
-References: <20221029203535.940231-1-jiaxun.yang@flygoat.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221029203535.940231-1-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 29/10/22 22:35, Jiaxun Yang wrote:
-> Cast upper bound of branch range to long to do signed compare,
-> avoid negtive offset trigger this warning.
+Hi,
 
-Typo "negative".
+Le ven. 28 oct. 2022 =E0 11:34:16 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The AIC needs only the first two clocks: "aic" is a gate that's used
+> for gating the I2S controller when it's suspended, and "i2s" is the
+> system clock, from which the bit and frame clocks are derived. Both
+> clocks are therefore reasonably part of the AIC and should be passed
+> to the OS.
+>=20
+> But the "ext" and "pll half" clocks are a little more questionable.
+> It appears these bindings were introduced when the schema was first
+> converted to YAML, but weren't present in the original .txt binding.
+> They are intended to be the possible parent clocks of "i2s".
+>=20
+> The JZ4770 actually has three parents for its "i2s" clock, named
+> "ext", "pll0", and "pll1" in the Linux driver. The JZ4780 has two
+> parents but it doesn't have a "pll half" clock, instead it has an
+> "i2s_pll" clock which behaves much differently to the actual
+> "pll half" clock found on the JZ4740 & JZ4760. And there are other
+> Ingenic SoCs that share the JZ4780's clock layout, eg, the X1000.
+>=20
+> Therefore, the bindings aren't really adequate for the JZ4770 and
+> a bit misleading for the JZ4780. Either we should fix the bindings,
+> or remove them entirely.
+>=20
+> This patch opts to remove the bindings. There is a good case to be
+> made that "ext" and "pll half" don't belong here because they aren't
+> directly used by the AIC. They are only used to set the parent of
+> the "i2s" clock; they have no other effect on the AIC.
+>=20
+> A good way to think of it is in terms of how the AIC constrains
+> clocks. The AIC can only generate the bit & frame clocks from the
+> system clock in certain ratios. Setting the sample rate effectively
+> constrains the frame clock, which, because of the clock dividers
+> controlled by the AIC, translates to constraints on the "i2s" clock.
+> Nothing in the AIC imposes a direct constraint on the parents of
+> the "i2s" clock, and the AIC does not need to enable or disable
+> the parents directly, so in principle the AIC doesn't need to be
+> aware of the parent clocks at all.
+>=20
+> The choice of parent clock is still important, but the AIC doesn't
+> have enough information to apply such constraints itself. The sound
+> card does have that information because it knows how the AIC is
+> connected to other components. We need to use other DT mechanisms
+> to communicate those constraints at the sound card level, instead
+> of passing the clocks through to the AIC, and inventing ad-hoc ways
+> to plumb the constraints around behind the scenes.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-> Fixes: 9b6584e35f40 ("MIPS: jump_label: Use compact branches for >= r6")
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: stable@vger.kernel.org
+Yes, it makes sense also because from a DT point of view, these clocks=20
+were redundant information. It's enough to know the i2s clock to also=20
+know its parents.
+
+Acked-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
 > ---
->   arch/mips/kernel/jump_label.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/kernel/jump_label.c b/arch/mips/kernel/jump_label.c
-> index 71a882c8c6eb..f7978d50a2ba 100644
-> --- a/arch/mips/kernel/jump_label.c
-> +++ b/arch/mips/kernel/jump_label.c
-> @@ -56,7 +56,7 @@ void arch_jump_label_transform(struct jump_entry *e,
->   			 * The branch offset must fit in the instruction's 26
->   			 * bit field.
->   			 */
-> -			WARN_ON((offset >= BIT(25)) ||
-> +			WARN_ON((offset >= (long)BIT(25)) ||
->   				(offset < -(long)BIT(25)));
+>  .../devicetree/bindings/sound/ingenic,aic.yaml         | 10=20
+> ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/sound/ingenic,aic.yaml=20
+> b/Documentation/devicetree/bindings/sound/ingenic,aic.yaml
+> index d607325f2f15..c4f9b3c2bde5 100644
+> --- a/Documentation/devicetree/bindings/sound/ingenic,aic.yaml
+> +++ b/Documentation/devicetree/bindings/sound/ingenic,aic.yaml
+> @@ -37,15 +37,11 @@ properties:
+>      items:
+>        - description: AIC clock
+>        - description: I2S clock
+> -      - description: EXT clock
+> -      - description: PLL/2 clock
+>=20
+>    clock-names:
+>      items:
+>        - const: aic
+>        - const: i2s
+> -      - const: ext
+> -      - const: pll half
+>=20
+>    dmas:
+>      items:
+> @@ -82,10 +78,8 @@ examples:
+>        interrupts =3D <18>;
+>=20
+>        clocks =3D <&cgu JZ4740_CLK_AIC>,
+> -               <&cgu JZ4740_CLK_I2S>,
+> -               <&cgu JZ4740_CLK_EXT>,
+> -               <&cgu JZ4740_CLK_PLL_HALF>;
+> -      clock-names =3D "aic", "i2s", "ext", "pll half";
+> +               <&cgu JZ4740_CLK_I2S>;
+> +      clock-names =3D "aic", "i2s";
+>=20
+>        dmas =3D <&dmac 25 0xffffffff>, <&dmac 24 0xffffffff>;
+>        dma-names =3D "rx", "tx";
+> --
+> 2.38.1
+>=20
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
