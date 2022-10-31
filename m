@@ -2,120 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6CB613581
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Oct 2022 13:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0F361358F
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Oct 2022 13:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbiJaMOr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Oct 2022 08:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S231247AbiJaMPu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Oct 2022 08:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbiJaMOp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Oct 2022 08:14:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A36255AB
-        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 05:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667218423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2H8Fq04+XbNugdc6Ty/YSDXQIs5WWNt9cW9u1MIkjOA=;
-        b=LyZfO8oK7WZg4YiS9L3p0sPvSDxJCNdr2Me/YfWcIWtG3BRFZltcOhxxLIrtskFui509hE
-        xsInseEH2yFmN84gB9WUs/gQuBrkKynCG9+fUX6R3pQXdXRJ3+3lDQY7Th6RTNKRybZc4i
-        Jd+OU8QSZF05D6AMylsox0LmSDOrFXE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-301-j0xfU-rYNz-ywzLm3p3JWA-1; Mon, 31 Oct 2022 08:13:42 -0400
-X-MC-Unique: j0xfU-rYNz-ywzLm3p3JWA-1
-Received: by mail-wr1-f70.google.com with SMTP id u13-20020adfa18d000000b00236566b5b40so2988219wru.9
-        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 05:13:41 -0700 (PDT)
+        with ESMTP id S231330AbiJaMPd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Oct 2022 08:15:33 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B45F039
+        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 05:15:26 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id k8so15723239wrh.1
+        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 05:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z/xC60NFpQ8YiUuB73hd07wpqDOiKDqftBq/Nx+H0pc=;
+        b=fLMYr0IzN+j5ZLN9mtXN9uJJUIP49EtbGy0L7BzxzxfAv7ClE9S7ZiGhCYhG6RPvYS
+         htxa6rB78K9oCKyQTQNcRoEXElyZ1cZOPhd/2o13OoQ0/mnCcnz86/FhIpNG15qn/nQg
+         UFa/4+D/jb/CriyhNedgnsEdC/fOQD67VnQrAE4J5NKGxyt8CIHVeh0WzZMmnLOTmJjX
+         9nU/9K0FjtdkXyBVRfDoxHtHylhk0a0MBFLPW61c/GtbYz0TgvxNBuuuKIWdF9Sge3qd
+         sb10Re26rBwv0wbHI34qqn85oGxXjHJCTZldYN0hfAauukeSWGW5g5/bU4I7XiX5MbvD
+         ktlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2H8Fq04+XbNugdc6Ty/YSDXQIs5WWNt9cW9u1MIkjOA=;
-        b=hYIQvmIMKOEDueHewVKrRJhJ23AZhLAQajlLplFuc8bI1M8zFKxEWNKyJOdh1JY2Hn
-         /zAGuTm6+dU2qKAM9W65nLR/2mhDBbAcoRhYshBPfmTbDYXNrhA9gCHFLfMMHUm9cLNX
-         FQmNd/RlrtzKXTvQRFPhoRM2ORppjDp6hjvt2HLJzl/Muo/A7qGJ59Bp3nFhbza8OcVK
-         Egt4E9dbyrNWB//yPuAWOay5TYxhI2Kk+/3zIKcb6jE2+tkTsj1qIYzXIUgc/RcUfYNa
-         8mc0yKTcA36tf3mcR0LS4j629CnPHRbM8Kji7rRJPfLjVVlxr/vbDyGW8G7jM/CzekMs
-         YXZA==
-X-Gm-Message-State: ACrzQf2Rt6tO2x1OkTXYXkpo2w16m4afuf0sEkijfi3kSnSInznkXe94
-        Y1jsQEU7ew9M/x23poTX+SWSQVGSAvpCF9iauuPMhKWagZORxW4hmvU7y32GXuzctcHW2fdVdwx
-        j6n2XWStNxSln7016YXdx1A==
-X-Received: by 2002:a5d:64cd:0:b0:236:6d1c:c1a2 with SMTP id f13-20020a5d64cd000000b002366d1cc1a2mr8196684wri.360.1667218420926;
-        Mon, 31 Oct 2022 05:13:40 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6+QX10ZDmjvc1IfL0XXmvBimtEQHEjFBrrHb50hNQes1zzurNnpW//og1SN1o9c/o5tX548g==
-X-Received: by 2002:a5d:64cd:0:b0:236:6d1c:c1a2 with SMTP id f13-20020a5d64cd000000b002366d1cc1a2mr8196664wri.360.1667218420692;
-        Mon, 31 Oct 2022 05:13:40 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id az29-20020a05600c601d00b003cdf141f363sm7207444wmb.11.2022.10.31.05.13.38
+        bh=Z/xC60NFpQ8YiUuB73hd07wpqDOiKDqftBq/Nx+H0pc=;
+        b=6MP5budBNML8LTzO3M3AAJu0wTxofDpZpRs0S0TXo4gJuJiJE4RgqklNIkRPT7TJ0o
+         jxjgCgyCWM1SkPVvR3xg498SDIYXQ8JwLD/mbm6I59whcJFbAS8jNBCR0yYvROwsq5Si
+         ZME3mINGsc9K5pQ8CVMfKWk+3BVVKhDN/aAMHRdt3JMCZSt/PIVN5K3mfl6eM9rg1MK9
+         5ivkE1FrO4aIJDGPgJyjXpvL2jN944nflCevs9EkR0B9mNl9rRePkPEtuYxTg5xFrzXZ
+         B7K4rc2+7NbI2UJz+ycAxCbnXlZ/G76xzv0B2vM5hchE2KqIZkKMuKY/l7SlHlQrevFQ
+         7TSw==
+X-Gm-Message-State: ACrzQf0GmVSJc0VP+EDvU1YXcLKzl5FWDLERGGm5Bz4ajnLGGOH08ytP
+        emT+I2IVECCzqf2Jv1hxaCE8RopGLGLxGQ==
+X-Google-Smtp-Source: AMsMyM4Papbz7gmenhcGeWRLHNTGBU6j8IWT5TkhsU5QNi/FZqmEM15BTTwaCqYZhCnykGo8Tpdl/g==
+X-Received: by 2002:adf:9c87:0:b0:232:a0fb:ea5f with SMTP id d7-20020adf9c87000000b00232a0fbea5fmr7895835wre.473.1667218525020;
+        Mon, 31 Oct 2022 05:15:25 -0700 (PDT)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id bl19-20020adfe253000000b00236576c8eddsm7006730wrb.12.2022.10.31.05.15.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 05:13:40 -0700 (PDT)
-Message-ID: <231be619-96b7-b725-0735-0275e07477d8@redhat.com>
-Date:   Mon, 31 Oct 2022 13:13:38 +0100
+        Mon, 31 Oct 2022 05:15:24 -0700 (PDT)
+Message-ID: <6f976e6b-9e00-f6ce-fb95-7b7a21183b5d@linaro.org>
+Date:   Mon, 31 Oct 2022 13:15:22 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 04/21] drm/amdgpu: Don't set struct
- drm_driver.output_poll_changed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH] mips: boot/compressed: use __NO_FORITFY
 Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, daniel@ffwll.ch,
-        airlied@gmail.com, sam@ravnborg.org, mripard@kernel.org,
-        maarten.lankhorst@linux.intel.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-References: <20221024111953.24307-1-tzimmermann@suse.de>
- <20221024111953.24307-5-tzimmermann@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221024111953.24307-5-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8
+To:     John Thomson <git@johnthomson.fastmail.com.au>,
+        tsbogend@alpha.franken.de, keescook@chromium.org
+Cc:     linux-mips@vger.kernel.org, linux-hardening@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <20221030183647.3371915-1-git@johnthomson.fastmail.com.au>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221030183647.3371915-1-git@johnthomson.fastmail.com.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/24/22 13:19, Thomas Zimmermann wrote:
-> Don't set struct drm_driver.output_poll_changed. It's used to restore
-> the fbdev console. But as amdgpu uses generic fbdev emulation, the
-> console is being restored by the DRM client helpers already. See the
-> functions drm_kms_helper_hotplug_event() and
-> drm_kms_helper_connector_hotplug_event() in drm_probe_helper.c.
+On 30/10/22 19:36, John Thomson wrote:
+> In the mips CONFIG_SYS_SUPPORTS_ZBOOT kernel, fix the compile error
+> when using CONFIG_FORTIFY_SOURCE=y
 > 
-> v2:
-> 	* fix commit description (Christian)
+> LD      vmlinuz
+> mipsel-openwrt-linux-musl-ld: arch/mips/boot/compressed/decompress.o: in
+> function `decompress_kernel':
+> ./include/linux/decompress/mm.h:(.text.decompress_kernel+0x177c):
+> undefined reference to `warn_slowpath_fmt'
 > 
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> kernel test robot helped identify this as related to fortify. The error
+> appeared with commit 54d9469bc515 ("fortify: Add run-time WARN for
+> cross-field memcpy()")
+> Link: https://lore.kernel.org/r/202209161144.x9xSqNQZ-lkp@intel.com/
+> 
+> Resolve this in the same style as commit cfecea6ead5f ("lib/string:
+> Move helper functions out of string.c")
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 54d9469bc515 ("fortify: Add run-time WARN for cross-field memcpy()")
+> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
 > ---
+> not sure about the fixes tag:
+> compile error only occurs due to the fortify commit, but it looks like
+> this change could have been part of the other commit identified in the
+> message: lib/string move helper functions?
+> ---
+>   arch/mips/boot/compressed/decompress.c | 1 +
+>   1 file changed, 1 insertion(+)
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Typo "__NO_FORTIFY" in subject.
 
