@@ -2,125 +2,202 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9D9613BE3
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Oct 2022 18:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D31613D6D
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Oct 2022 19:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiJaRIH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Oct 2022 13:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S230107AbiJaSg6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Oct 2022 14:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiJaRIG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Oct 2022 13:08:06 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A758B12AF0;
-        Mon, 31 Oct 2022 10:08:04 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id D4D2C5C0144;
-        Mon, 31 Oct 2022 13:08:03 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 31 Oct 2022 13:08:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1667236083; x=1667322483; bh=u7ZODrZkrV
-        MqIY9SoliSOosx1CU77J/WsQSAht9zSd0=; b=HmTLeNHXy8Li1CVL6im4aiytTd
-        dRyQyL70nBSX2mh/YvUbSKuuqjmeh+OeyigdzKsqhU4FMoHPkPf933EnS3KFRX5N
-        U1JAf5635AxY+iYzKZ2znSx18IGRx93PmvAl/bBCWHcnep/6rj+7uT99Pdd0WuxL
-        4RnMOYfiAl6GRRRChVqv6hnx/LCbx6FJ+QkSnRyjZROmFOM0crzBT38HIKWXbnQW
-        DV+IxhIKAcVYvpxQLCwfUSyt/oX1IaEpX4ajx6Lb350MSbki7MMNnOnKqUvfb3gU
-        NTuXb8kQY8DLTTQOnyGj06EsQ6OpTCiBocCvYIzZAMHyLduYwaKqe2Hau3hQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1667236083; x=1667322483; bh=u7ZODrZkrVMqIY9SoliSOosx1CU77J/WsQS
-        Aht9zSd0=; b=DU4eIHdR9xpBvrxxrdWYHwrTh/sqPHbODxYuwOdwI9DjCEFPa0s
-        budxrUL5OWQb5Wnt5XauIRTqrLVAbxDIGPB/4WiwJ6cy+Px8yFPuq+F4OYp5zaFk
-        neKUCfx0jg7cVfK1865UV+gAyY+aD9mJfE7NqIVD7crEfNfTLufN00oQ85qjp66J
-        EjTSmt7NkxOBM/Y2dCPtnTWXAibP972OA47D6JhXANa9/8ROYLnc8WpJifwns1fV
-        3zqtm9PmpIfGnSSAPcy6+/dyPJf25WSSPtcEC9mj03pOJpFl/lq4gKxKc14ouDjd
-        e0k3LZ2sBMv2DlQck3UZzv5qWDYPlVmNxLg==
-X-ME-Sender: <xms:8wBgY_j0aXRx4a2C3k83vWNq9V1ca6Eykr22Drur48A10EgttWAjdg>
-    <xme:8wBgY8A5yu9GadmX0pt3xPjNemFN2SEe6z1c2gmdzmC2cHpvsf1lWsQFYJBGVeynm
-    QwM-EvWgMIoAMVDGg>
-X-ME-Received: <xmr:8wBgY_FuXX18v4EXqER3xE7qVmFA05yoBQeajy6Y75xxYunTN_11_dHasbqKQR0Q89v_d7sNf0_UPgKccyJjoib5d36brvEnJlReA4oS8kerG6Lh9Bc34d6EblJyJPbi>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudefgdeliecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekredtre
-    dttdenucfhrhhomheplfhohhhnucfvhhhomhhsohhnuceoghhithesjhhohhhnthhhohhm
-    shhonhdrfhgrshhtmhgrihhlrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhepfedvke
-    evgefgkeeghedvleetieffhefgiefhlefgvdekfedvteekueeuveelheevnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilhdr
-    tghomhdrrghu
-X-ME-Proxy: <xmx:8wBgY8QuhNsAjW-JgU618HOvZf_V5xMQWleaKYIDVlbXmVH_S1ym2g>
-    <xmx:8wBgY8zFP4p6ExVlranWm8Ou7TJD9JmPYIuEiw2iUjU57jLCNu0eXw>
-    <xmx:8wBgYy4c0-l_viYMCot2o3c2gAjpH0jEPD3y1qLqkay_jGfm8fzRTw>
-    <xmx:8wBgY2t7wL0jbFd_E6LC4Uq6ixWJedF9AGMiU8HbNlepSQ05iTqXyA>
-Feedback-ID: ic081425d:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 31 Oct 2022 13:08:00 -0400 (EDT)
-From:   John Thomson <git@johnthomson.fastmail.com.au>
-To:     tsbogend@alpha.franken.de, keescook@chromium.org
-Cc:     linux-mips@vger.kernel.org, linux-hardening@vger.kernel.org,
-        John Thomson <git@johnthomson.fastmail.com.au>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] mips: boot/compressed: use __NO_FORTIFY
-Date:   Tue,  1 Nov 2022 03:07:49 +1000
-Message-Id: <20221031170749.2159430-1-git@johnthomson.fastmail.com.au>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S229999AbiJaSg4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Oct 2022 14:36:56 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3CA13DCA
+        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 11:36:54 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id bk15so17162805wrb.13
+        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 11:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sNqF1x5hFExPPQ1p8H8ZfUJkMN/LytiJFdG0FgSo0Yc=;
+        b=Mki3cqNyLb6i/7bDr8xmcRoAI7MKB8Ubep7MvVdCAwvVAv/rvYzaNntbYk7evNSPOx
+         iZSZj+1kqC7UTT9hY3p9QxXxVMZ7rRgmk+9DY9r7FhExeFFt1VDbTR9aAf2X+JrZ0tNY
+         Tr/US88lDzmERESqdII2j74Xqtc13Nxr3puP6+gFIxszTZcUEQgT950jsRCvi08bhiKR
+         jD8ZqkKvxW/CqsLaBVsSxX0va4onlR2A9GDsiypQf+pm99b/Y+UG3WiItOZJ+Li8JVOO
+         +Y1i4xOLivYeF+DP4zPejP0GtpVAQoKKHaj+oeUXTWFGo9wGo7aYYFoFnonbrsyfX2Yj
+         K6HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sNqF1x5hFExPPQ1p8H8ZfUJkMN/LytiJFdG0FgSo0Yc=;
+        b=X4oDFPqKHLs3aF3DWr/DJCN6o3xIMiab3mTOT8M8Nz7OQr8j7I9s1vAdKAyo/I8izW
+         Y9sEGGTnbUEZm9t7fkAh1ASfUmOzaBcKERAyEkx/vBzYjPUPs2pXlkOA75b7rGult2VO
+         tCf7z+cha2FhI+d0r2q3Y7x6FJa/v2DT2fpT18s9+AyfMKsACbvfvqlLQyWUERxjeW3u
+         6C6SWuNaEcaHGGgbQTpAZIxHrmYa8h1wMVgAo1f4lRuX1PZtEdyRKBI1/m7ZlYxmQCEw
+         sLjj6xgI1ryYdwUEd54ocDnhKvLEFaP1g48Z6P+1ZT7QTjPO2UHIMcfxQ31mEon8GTT2
+         e8Sg==
+X-Gm-Message-State: ACrzQf27jH56aBp/ZRhW/kK5gP3EOU5c5EruLKN+abY++KoOspI2TpYh
+        0G1a/YRj8/JbiaHxHceoH3YYXQ==
+X-Google-Smtp-Source: AMsMyM6L4c0mU3rV7kcQN/uxBci0PgFY6LkbseXn4PqZrB/kcujXoiDFpfGo/UsDapmtxjnBCDkTjg==
+X-Received: by 2002:a5d:584e:0:b0:236:6f0f:9d8 with SMTP id i14-20020a5d584e000000b002366f0f09d8mr9048660wrf.701.1667241412938;
+        Mon, 31 Oct 2022 11:36:52 -0700 (PDT)
+Received: from localhost ([95.148.15.66])
+        by smtp.gmail.com with ESMTPSA id b20-20020a05600c151400b003b3307fb98fsm7781722wmg.24.2022.10.31.11.36.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 11:36:52 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        Yicong Yang <yangyicong@huawei.com>, yangyicong@hisilicon.com,
+        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-mm@kvack.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, akpm@linux-foundation.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-doc@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+References: <20220921084302.43631-1-yangyicong@huawei.com>
+        <20220921084302.43631-3-yangyicong@huawei.com>
+        <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com>
+        <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
+        <CAGsJ_4z=dZbrAUD9jczT08S3qi_ep-h+EK35UfayVk1S+Cnp2A@mail.gmail.com>
+        <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com>
+        <87o7tx5oyx.fsf@stealth>
+        <bc44cf85-aee9-03ca-9911-dbd904a43cc8@huawei.com>
+        <87bkpw5bzm.fsf@stealth>
+        <CAGsJ_4xj2fKLOEHYC46P8ZhUPX8rw=yTNv3Zs=CPxLON6Xxvqw@mail.gmail.com>
+Date:   Mon, 31 Oct 2022 18:36:51 +0000
+In-Reply-To: <CAGsJ_4xj2fKLOEHYC46P8ZhUPX8rw=yTNv3Zs=CPxLON6Xxvqw@mail.gmail.com>
+        (Barry Song's message of "Sat, 29 Oct 2022 10:40:11 +1300")
+Message-ID: <87zgdb4z7g.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In the mips CONFIG_SYS_SUPPORTS_ZBOOT kernel, fix the compile error
-when using CONFIG_FORTIFY_SOURCE=y
+Barry Song <21cnbao@gmail.com> writes:
 
-LD      vmlinuz
-mipsel-openwrt-linux-musl-ld: arch/mips/boot/compressed/decompress.o: in
-function `decompress_kernel':
-./include/linux/decompress/mm.h:(.text.decompress_kernel+0x177c):
-undefined reference to `warn_slowpath_fmt'
+> On Sat, Oct 29, 2022 at 2:11 AM Punit Agrawal
+> <punit.agrawal@bytedance.com> wrote:
+>>
+>> Yicong Yang <yangyicong@huawei.com> writes:
+>>
+>> > On 2022/10/27 22:19, Punit Agrawal wrote:
+>> >>
+>> >> [ Apologies for chiming in late in the conversation ]
+>> >>
+>> >> Anshuman Khandual <anshuman.khandual@arm.com> writes:
+>> >>
+>> >>> On 9/28/22 05:53, Barry Song wrote:
+>> >>>> On Tue, Sep 27, 2022 at 10:15 PM Yicong Yang <yangyicong@huawei.com> wrote:
+>> >>>>>
+>> >>>>> On 2022/9/27 14:16, Anshuman Khandual wrote:
+>> >>>>>> [...]
+>> >>>>>>
+>> >>>>>> On 9/21/22 14:13, Yicong Yang wrote:
+>> >>>>>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+>> >>>>>>> +{
+>> >>>>>>> +    /* for small systems with small number of CPUs, TLB shootdown is cheap */
+>> >>>>>>> +    if (num_online_cpus() <= 4)
+>> >>>>>>
+>> >>>>>> It would be great to have some more inputs from others, whether 4 (which should
+>> >>>>>> to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
+>> >>>>>> is optimal for an wide range of arm64 platforms.
+>> >>>>>>
+>> >>>>
+>> >>>> I have tested it on a 4-cpus and 8-cpus machine. but i have no machine
+>> >>>> with 5,6,7
+>> >>>> cores.
+>> >>>> I saw improvement on 8-cpus machines and I found 4-cpus machines don't need
+>> >>>> this patch.
+>> >>>>
+>> >>>> so it seems safe to have
+>> >>>> if (num_online_cpus()  < 8)
+>> >>>>
+>> >>>>>
+>> >>>>> Do you prefer this macro to be static or make it configurable through kconfig then
+>> >>>>> different platforms can make choice based on their own situations? It maybe hard to
+>> >>>>> test on all the arm64 platforms.
+>> >>>>
+>> >>>> Maybe we can have this default enabled on machines with 8 and more cpus and
+>> >>>> provide a tlbflush_batched = on or off to allow users enable or
+>> >>>> disable it according
+>> >>>> to their hardware and products. Similar example: rodata=on or off.
+>> >>>
+>> >>> No, sounds bit excessive. Kernel command line options should not be added
+>> >>> for every possible run time switch options.
+>> >>>
+>> >>>>
+>> >>>> Hi Anshuman, Will,  Catalin, Andrew,
+>> >>>> what do you think about this approach?
+>> >>>>
+>> >>>> BTW, haoxin mentioned another important user scenarios for tlb bach on arm64:
+>> >>>> https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+>> >>>>
+>> >>>> I do believe we need it based on the expensive cost of tlb shootdown in arm64
+>> >>>> even by hardware broadcast.
+>> >>>
+>> >>> Alright, for now could we enable ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH selectively
+>> >>> with CONFIG_EXPERT and for num_online_cpus()  > 8 ?
+>> >>
+>> >> When running the test program in the commit in a VM, I saw benefits from
+>> >> the patches at all sizes from 2, 4, 8, 32 vcpus. On the test machine,
+>> >> ptep_clear_flush() went from ~1% in the unpatched version to not showing
+>> >> up.
+>> >>
+>> >
+>> > Maybe you're booting VM on a server with more than 32 cores and Barry tested
+>> > on his 4 CPUs embedded platform. I guess a 4 CPU VM is not fully equivalent to
+>> > a 4 CPU real machine as the tbli and dsb in the VM may influence the host
+>> > as well.
+>>
+>> Yeah, I also wondered about this.
+>>
+>> I was able to test on a 6-core RK3399 based system - there the
+>> ptep_clear_flush() was only 0.10% of the overall execution time. The
+>> hardware seems to do a pretty good job of keeping the TLB flushing
+>> overhead low.
 
-kernel test robot helped identify this as related to fortify. The error
-appeared with commit 54d9469bc515 ("fortify: Add run-time WARN for
-cross-field memcpy()")
-Link: https://lore.kernel.org/r/202209161144.x9xSqNQZ-lkp@intel.com/
+I found a problem with my measurements (missing volatile). Correcting
+that increased the overhead somewhat - more below.
 
-Resolve this in the same style as commit cfecea6ead5f ("lib/string:
-Move helper functions out of string.c")
+> RK3399 has Dual-core ARM Cortex-A72 MPCore processor and
+> Quad-core ARM Cortex-A53 MPCore processor. you are probably
+> going to see different overhead of ptep_clear_flush() when you
+> bind the micro-benchmark on different cores.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 54d9469bc515 ("fortify: Add run-time WARN for cross-field memcpy()")
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
----
-v2:
-fix subject typo: FORITFY->FORTIFY
----
- arch/mips/boot/compressed/decompress.c | 1 +
- 1 file changed, 1 insertion(+)
+Indeed - binding the code on the A53 shows half the overhead from
+ptep_clear_flush() compared to the A72.
 
-diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
-index 5b38a802e101..c5dd415254d3 100644
---- a/arch/mips/boot/compressed/decompress.c
-+++ b/arch/mips/boot/compressed/decompress.c
-@@ -9,6 +9,7 @@
- 
- #define DISABLE_BRANCH_PROFILING
- 
-+#define __NO_FORTIFY
- #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/string.h>
--- 
-2.37.2
+On the A53 -
+
+    $ perf report --stdio -i perf.vanilla.a53.data | grep ptep_clear_flush
+         0.63%  pageout  [kernel.kallsyms]  [k] ptep_clear_flush
+
+On the A72
+
+    $ perf report --stdio -i perf.vanilla.a72.data | grep ptep_clear_flush
+         1.34%  pageout  [kernel.kallsyms]      [k] ptep_clear_flush
+
+
+[...]
 
