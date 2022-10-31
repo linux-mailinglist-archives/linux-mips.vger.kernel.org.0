@@ -2,107 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3700613137
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Oct 2022 08:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D6961352B
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Oct 2022 13:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiJaHcL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Oct 2022 03:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S230467AbiJaMAN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Oct 2022 08:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiJaHcL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Oct 2022 03:32:11 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7763165E5
-        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 00:32:10 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id c24so9998012pls.9
-        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 00:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bLaEG1AxuR7+lWKAQO3jvBzrZanxR9GIBe9arbHLQlY=;
-        b=bZU0WZ4XKQPhFmsbxFnGkMv1hjyf8dK6g8aLLOG1oyjhGYx3zfxLo7s8ylw0lEjHjx
-         Lu/5XoKV76xeY04gmGqY8E6KJnqV+WPHJFJHhh9yeJfAje6nm8oieAnjbTSV/z+Ava7t
-         0ZzmuiFbB7KOlVY3cC4A1WH9r6nW9j0viFSNU=
+        with ESMTP id S231147AbiJaMAB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Oct 2022 08:00:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D891106
+        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 04:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667217536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NYUZwRg+lRYohe3+hrEekpmCQsb4LiBLuZ4BzJljYVc=;
+        b=BnluX3X8GsMjE39xtb7rtw1Ndg9ZCCLi8YedJNnyuKCqyjOdUcz8WSj7wcsSNkuisPQ5/A
+        OJq87MIBNGwdfJEfTK3bCeupYJ2OqO0XCTZuyU1PSUelD3tj2wmAqGisUotFINyPZN7ThJ
+        BNIMwyFiIQU7DEdZT+GCbgvABTqjZ6Q=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-647-wZH3vBdwPWevOxMSg7440w-1; Mon, 31 Oct 2022 07:58:52 -0400
+X-MC-Unique: wZH3vBdwPWevOxMSg7440w-1
+Received: by mail-wm1-f72.google.com with SMTP id c5-20020a1c3505000000b003c56da8e894so8267017wma.0
+        for <linux-mips@vger.kernel.org>; Mon, 31 Oct 2022 04:58:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bLaEG1AxuR7+lWKAQO3jvBzrZanxR9GIBe9arbHLQlY=;
-        b=xMpA6Dh/6civyJjyadDxve19DRddvp6r0QI8y8vBQ7lkGt40e7pB+PY3PuemBQ62Dk
-         JtqQWFiHmPiK0PFVfbxgBuyjL2jm2UtgzMJv1Pzx6jTMvUsOFHi6/Co3wZIgHH6iwv+E
-         NUKAOkYUuQAvZ22s+vL4DNUdY7Iz3MPkfBeEMXCSIInaYU0eq5L7IIjIJ0MLSHm127tw
-         8EQxiI5nyzJA48vFpBWOPLJaBsTnmMGcvn/Hzpn1qv5/ivfzQlC+V0+rQFSLUmXsY7U3
-         K3+jqLxSfUgNc8r02GNHixp+CRMU8EWAuFF3MtM+98vSXjb8qUrlCr6DWw6TWp+1+3jA
-         Sifg==
-X-Gm-Message-State: ACrzQf30wZE2nxuQgvT7CG8TOo+5hs8NZjRhQYGwZ5zARdWMffa7iMkx
-        SdVz860AA38k/T+l640RKPyfPQ==
-X-Google-Smtp-Source: AMsMyM63KrzVf0s9+OO4qil3ZB6Ns6W9yyhUxqgu0fht/8bL9YlnnmByhUTyRGgtVolZAKUs+1PNTg==
-X-Received: by 2002:a17:90a:3947:b0:213:ebeb:2cf3 with SMTP id n7-20020a17090a394700b00213ebeb2cf3mr2754844pjf.9.1667201529999;
-        Mon, 31 Oct 2022 00:32:09 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id iw15-20020a170903044f00b00177324a7862sm3799216plb.45.2022.10.31.00.32.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 00:32:09 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 00:32:08 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     John Thomson <git@johnthomson.fastmail.com.au>
-Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] mips: boot/compressed: use __NO_FORITFY
-Message-ID: <202210310029.29AB38AE16@keescook>
-References: <20221030183647.3371915-1-git@johnthomson.fastmail.com.au>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NYUZwRg+lRYohe3+hrEekpmCQsb4LiBLuZ4BzJljYVc=;
+        b=KkyO96O+7X2DnyF2bRIeuN9gn9edwJXQywykr3pDhXElMRFRUZTYjUO/0/M7vaS7lP
+         FPtQO10oaHg+z8KE/pWaTDkVTNQpBjA4Qq90KF78ez62gGt/mssMe3gBTPtsgACtCOcY
+         evX4riwdFyi+TZDsTg2PZSW2UCxI4ov2f2gos29Yjrq/lCqwWYorUSWDyHxXDssZdB93
+         z7YyNZJAEEOMKeYkQLJ/p0aEuDz9ZbLlRuJciOsFyzO4qDU5g3FzjsULd3gdBm5HEdg8
+         R+LwBScbhbpr/4ixnCI34jRZJj++Xds9nu8FrngP7rNQ1u1tJHr5+mjqSMZ2tvT0aY0k
+         SzmA==
+X-Gm-Message-State: ACrzQf1YV6bk4+zJqL6fhQ6NpxS6IERLyBMoLKhKpF9ZuN8zR+o64jeF
+        tsMWi1VrfZysZS3fCdbOswaDESkr5xTRo1ycK0b5ZGjm/iz6novEQV/qvhsFFbpXQ1hafQhD8Wy
+        PN1Cz7YHoBUP+Hf6ZL/OBmw==
+X-Received: by 2002:adf:ee46:0:b0:236:57e4:60d9 with SMTP id w6-20020adfee46000000b0023657e460d9mr7712411wro.208.1667217531292;
+        Mon, 31 Oct 2022 04:58:51 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5NlG/EcNgth7sygR/Y2wmF3YkVg5o1INpxQYpcg5X49eIhA0omsq50HY00GhqtS98H3T4hUQ==
+X-Received: by 2002:adf:ee46:0:b0:236:57e4:60d9 with SMTP id w6-20020adfee46000000b0023657e460d9mr7712386wro.208.1667217531117;
+        Mon, 31 Oct 2022 04:58:51 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id cc14-20020a5d5c0e000000b00228d67db06esm7103664wrb.21.2022.10.31.04.58.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 04:58:50 -0700 (PDT)
+Message-ID: <365e1467-7dc2-42b4-b985-53323741dea8@redhat.com>
+Date:   Mon, 31 Oct 2022 12:58:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221030183647.3371915-1-git@johnthomson.fastmail.com.au>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 01/21] drm/komeda: Don't set struct
+ drm_driver.lastclose
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>, daniel@ffwll.ch,
+        airlied@gmail.com, sam@ravnborg.org, mripard@kernel.org,
+        maarten.lankhorst@linux.intel.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+References: <20221024111953.24307-1-tzimmermann@suse.de>
+ <20221024111953.24307-2-tzimmermann@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221024111953.24307-2-tzimmermann@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 04:36:47AM +1000, John Thomson wrote:
-> In the mips CONFIG_SYS_SUPPORTS_ZBOOT kernel, fix the compile error
-> when using CONFIG_FORTIFY_SOURCE=y
+On 10/24/22 13:19, Thomas Zimmermann wrote:
+> Don't set struct drm_driver.lastclose. It's used to restore the
+> fbdev console. But as komeda uses generic fbdev emulation, the
+> console is being restored by the DRM client helpers already. See
+> the call to drm_client_dev_restore() in drm_lastclose().
 > 
-> LD      vmlinuz
-> mipsel-openwrt-linux-musl-ld: arch/mips/boot/compressed/decompress.o: in
-> function `decompress_kernel':
-> ./include/linux/decompress/mm.h:(.text.decompress_kernel+0x177c):
-> undefined reference to `warn_slowpath_fmt'
-> 
-> kernel test robot helped identify this as related to fortify. The error
-> appeared with commit 54d9469bc515 ("fortify: Add run-time WARN for
-> cross-field memcpy()")
-> Link: https://lore.kernel.org/r/202209161144.x9xSqNQZ-lkp@intel.com/
-> 
-> Resolve this in the same style as commit cfecea6ead5f ("lib/string:
-> Move helper functions out of string.c")
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 54d9469bc515 ("fortify: Add run-time WARN for cross-field memcpy()")
-> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 > ---
-> not sure about the fixes tag:
-> compile error only occurs due to the fortify commit, but it looks like
-> this change could have been part of the other commit identified in the
-> message: lib/string move helper functions?
 
-I think the Fixes tag is reasonable. Strictly speaking, it should likely
-be whatever added the memcpy() in decompress.c, but that's mostly
-nonsense, since nothing else had tripped yet. :)
-
-The issue is that the memcpy() has a runtime length, so
-CONFIG_FORTIFY_SOURCE was inserting the logic for a runtime warning,
-which doesn't exist here. This is the correct fix (turning off FORTIFY
-in the early boot loader).
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
 -- 
-Kees Cook
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
