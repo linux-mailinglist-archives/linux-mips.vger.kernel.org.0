@@ -2,60 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976366155B6
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 00:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2CD6155CA
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 00:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiKAXFX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Nov 2022 19:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S231258AbiKAXFh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Nov 2022 19:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiKAXFD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Nov 2022 19:05:03 -0400
+        with ESMTP id S231302AbiKAXFd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Nov 2022 19:05:33 -0400
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22DFD60C9;
-        Tue,  1 Nov 2022 16:04:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7CC76272;
+        Tue,  1 Nov 2022 16:05:32 -0700 (PDT)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id AF4234ED4;
-        Wed,  2 Nov 2022 00:04:55 +0100 (CET)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 158FF4EEC;
+        Wed,  2 Nov 2022 00:05:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1667343895;
-        bh=PkAWXYqxDceSEZsozbKBt1CBt2T3QIdB9eUX7dEkLmg=;
-        h=Date:From:Cc:Subject:From;
-        b=TSFhvujd2SRCajv7R8zAVm+EuCS5Vh7AysxBgNGEvWADxkrv9qvgHW9m2Cdb5trJp
-         FcE+jF2i19LfTk6JQymlUrtpA5eztwtCkCW8RPcFjBKvB3hshGqRsE2JLsnEq4c+nt
-         fvOcsrVyWl6I3C7+O8ulD+J/uGCDcWkdGGyHAbMjg2XuyGAULVV6M5ev6enMVnJyMZ
-         NpHKD/PHQXItBON7xEKyVBFEn3I+Z5iNjue4c8/MPBye67rmFrh9SmPZflFbbBds30
-         ZAAK3IJMi3raN0h2I2WngCjORr/19e40LKbQPzDK+YXi2BeaaavH1sQfTi3aZt5397
-         Qawk3vmFpnCfw55RRNhmkJYixnh7hC5YaXFDUd1ehSoOfUGmJmHx285PCPzLeNK1r/
-         S2Dx46EXuZjQBL1i55lpJBrvcVXafn20zW6BaOUjdwJMmUIOkOh3DGKcJk8s4+cjPI
-         mipGk4QQ1v5t62MLsoj8cvueYNv+CJM/Ih0/DeztWwJaszMjD8DTbZGMgb7nP9BUhW
-         EHbs9bnZ2x74ARL2YaVpsuzPJvBZdAml5lxmc3bk/XXIrmQ1fhsWVDT4TA05dRBjC7
-         Nzk6xVMZQgXuUqusuxaqwO/RCzMIWPwHEqHUffPdMcQaLnP6IvXtGDSMazKaLWsq8H
-         VqbmW62LOL0tiz4CJSy5rq44=
-Date:   Wed, 2 Nov 2022 00:04:54 +0100
+        s=202205; t=1667343932;
+        bh=onPrRQdppdHaN8PzCdalvAsxdBD2D0jz8MicPGoWdmg=;
+        h=Date:From:Cc:Subject:References:In-Reply-To:From;
+        b=b3f5rcxdg4kwk2OpjLmmaULacqRKIiOV+GgAzhWHDBgeP8fZAfFvHOPLVY0o3hKm4
+         1kzDthvJizDM7i18SrvXXH2K2OKI0rGYLmr+dip1ZAN6xt5u7JPdKYtrcRDoTJBE6I
+         qrBLM56gLlrsSpPq3b6u102ILInzxjn4T7PxLoGwGq9Z5GBkYr/tueochFiBPJ5Qt9
+         +CN1IkRl2pQqS6L65dR4xGPNiIPuaolZH+lU7HZoaDJygZ0KrB8K2SkDa6gDRtlkv/
+         yS18wibSQA/ukpkgrCjm+k83uElbZ7a9J4UYCP373njzX3G2uoNIX1zBgz9bnMW4RO
+         P76rXCprUZzp7seAoqR7XzegmTK+NR1OL1apOdck/G+Ujqp/8A0es9I6iQyEGgPv5x
+         bSRfNFitwjjZTXrSeRBDOV0jqk8n75XLVGYQmJ/m85prleq+tDVGlqkTp4AeVyRPmb
+         GhtEF4fycfBxe9UkmB0tUOHIv/fEWwMREh6ziBV+GEJygAeg3QgLwI3vSlJTRQFw2f
+         FW9unM6wVUcLH1Qw3NLDlQY1mrwIFvpKVPI67zqIspebfIylBjlT+xxh/rUHqT6iiN
+         QqpW359gPHsS6zt2oVAme+KQIc77JbJfoFXgf9CO95mpr3Xx1R5uu+GdJSXDisdBJS
+         szhVq3s734GqqkkzyKxI6p1U=
+Date:   Wed, 2 Nov 2022 00:05:30 +0100
 From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
         <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>, coda@cs.cmu.edu,
-        codalist@coda.cs.cmu.edu, linux-arm-kernel@lists.infradead.org,
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v2 00/15] magic-number.rst funeral rites
-Message-ID: <cover.1667330271.git.nabijaczleweli@nabijaczleweli.xyz>
+        linux-mips@vger.kernel.org
+Subject: [PATCH v2 07/15] MIPS: IP27: clean out sn/nmi.h
+Message-ID: <534e0e7e4f2b0cc1cb35d5024192473635ed1b94.1667330271.git.nabijaczleweli@nabijaczleweli.xyz>
+References: <cover.1667330271.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="epsbez2xcv56ijjf"
+        protocol="application/pgp-signature"; boundary="fnyakdsammmxp4xy"
 Content-Disposition: inline
+In-Reply-To: <cover.1667330271.git.nabijaczleweli@nabijaczleweli.xyz>
 User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,MISSING_HEADERS,PDS_OTHER_BAD_TLD,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+        MISSING_HEADERS,PDS_OTHER_BAD_TLD,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 To:     unlisted-recipients:; (no To-header on input)
@@ -64,128 +68,233 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---epsbez2xcv56ijjf
+--fnyakdsammmxp4xy
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-This is a follow-up for the 18+1-patch series (
-https://lore.kernel.org/linux-kernel/8389a7b85b5c660c6891b1740b5dacc53491a4=
-1b.1663280877.git.nabijaczleweli@nabijaczleweli.xyz/
-https://lore.kernel.org/linux-kernel/20220927003727.slf4ofb7dgum6apt@tarta.=
-nabijaczleweli.xyz/
-) I sent in September, and the same reasoning applies:
+The only user is arch/mips/sgi-ip27/ip27-nmi.c; this file was imported
+wholesale in 2.3.99pre9-1, and received only whitespace updates since
+then.
 
-The entire file blames back to the start of git
-(minus whitespace from the RST translation and a typo fix):
-  * there are changelog comments for March 1994 through to Linux 2.5.74
-  * struct tty_ldisc is two pointers nowadays, so naturally no magic
-  * GDA_MAGIC is defined but unused, and it's been this way
-    since start-of-git
-  * M3_CARD_MAGIC isn't defined, because
-    commit d56b9b9c464a ("[PATCH] The scheduled removal of some OSS
-    drivers") removed the entire driver in 2006
-  * CS_CARD_MAGIC likewise since
-    commit b5d425c97f7d ("more scheduled OSS driver removal") in 2007
-  * KMALLOC_MAGIC and VMALLOC_MAGIC were removed in
-    commit e38e0cfa48ac ("[ALSA] Remove kmalloc wrappers"),
-    six months after start of git
-  * SLAB_C_MAGIC has never even appeared in git
-    (removed in 2.4.0-test3pre6)
-  * &c., &c., &c.
+NMI_MAGIC isn't a magic number; it's unclear if it's actually used by
+the firmware in some capacity or if it's a holdover from copying the SGI
+code, but in the former case it's API and in the latter it's dead cruft.
 
-magic-number.rst is a low-value historial relic at best and misleading
-cruft at worst.
+Lack of QEMU support makes this unvalidatable without the hardware,
+so leave it in.
 
-This latter half cleans out the remaining entries (either by recognising
-that they aren't actually magic numbers or by cutting them out entirely)
-and inters the file.
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+---
+ Documentation/process/magic-number.rst        |  1 -
+ .../it_IT/process/magic-number.rst            |  1 -
+ .../zh_CN/process/magic-number.rst            |  1 -
+ .../zh_TW/process/magic-number.rst            |  1 -
+ arch/mips/include/asm/sn/nmi.h                | 60 -------------------
+ 5 files changed, 64 deletions(-)
 
-amd64 allyesconfig builds; this largely touches code that would be
-exceedingly expensive to test (and largely untouched since the git
-import), but is very receptive to static analysis.
-
-v2:
-  Messages restyled
-  Moved printk() in synclink_cs.c became pr_warn
-  (__func__ instead of prescribed hard function name per checkpatch.pl)
-
-Ahelenia Ziemia=C5=84ska (15):
-  hamradio: baycom: remove BAYCOM_MAGIC
-  hamradio: yam: remove YAM_MAGIC
-  pcmcia: synclink_cs: remove MGSLPC_MAGIC
-  pcmcia: synclink_cs: remove dead paranoia_check, warn for missing line
-  coda: remove CODA_MAGIC
-  Documentation: remove PG_MAGIC (not a magic number)
-  MIPS: IP27: clean out sn/nmi.h
-  MIPS: IP27: remove KV_MAGIC
-  x86/APM: remove APM_BIOS_MAGIC
-  scsi: acorn: remove QUEUE_MAGIC_{FREE,USED}
-  hdlcdrv: remove HDLCDRV_MAGIC
-  drivers: net: slip: remove SLIP_MAGIC
-  fcntl: remove FASYNC_MAGIC
-  scsi: ncr53c8xx: replace CCB_MAGIC with bool busy
-  Documentation: remove magic-number.rst
-
- Documentation/process/index.rst               |  1 -
- Documentation/process/magic-number.rst        | 85 -----------------
- .../translations/it_IT/process/index.rst      |  1 -
- .../it_IT/process/magic-number.rst            | 91 -------------------
- .../translations/zh_CN/process/index.rst      |  1 -
- .../zh_CN/process/magic-number.rst            | 74 ---------------
- .../translations/zh_TW/process/index.rst      |  1 -
- .../zh_TW/process/magic-number.rst            | 77 ----------------
- arch/mips/include/asm/sn/klkernvars.h         |  8 +-
- arch/mips/include/asm/sn/nmi.h                | 60 ------------
- arch/mips/sgi-ip27/ip27-klnuma.c              |  1 -
- arch/x86/kernel/apm_32.c                      |  9 +-
- drivers/char/pcmcia/synclink_cs.c             | 79 +---------------
- drivers/net/hamradio/baycom_epp.c             | 15 +--
- drivers/net/hamradio/baycom_par.c             |  1 -
- drivers/net/hamradio/baycom_ser_fdx.c         |  3 +-
- drivers/net/hamradio/baycom_ser_hdx.c         |  3 +-
- drivers/net/hamradio/hdlcdrv.c                |  9 +-
- drivers/net/hamradio/yam.c                    |  8 +-
- drivers/net/slip/slip.c                       | 11 +--
- drivers/net/slip/slip.h                       |  4 -
- drivers/scsi/arm/queue.c                      | 21 -----
- drivers/scsi/ncr53c8xx.c                      | 25 ++---
- fs/coda/cnode.c                               |  2 +-
- fs/coda/coda_fs_i.h                           |  2 -
- fs/coda/file.c                                |  1 -
- fs/fcntl.c                                    |  6 --
- include/linux/fs.h                            |  3 -
- include/linux/hdlcdrv.h                       |  2 -
- 29 files changed, 29 insertions(+), 575 deletions(-)
- delete mode 100644 Documentation/process/magic-number.rst
- delete mode 100644 Documentation/translations/it_IT/process/magic-number.r=
-st
- delete mode 100644 Documentation/translations/zh_CN/process/magic-number.r=
-st
- delete mode 100644 Documentation/translations/zh_TW/process/magic-number.r=
-st
-
+diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
+/magic-number.rst
+index 62a3a2113e7c..7dada7abc733 100644
+--- a/Documentation/process/magic-number.rst
++++ b/Documentation/process/magic-number.rst
+@@ -76,5 +76,4 @@ KV_MAGIC              0x5f4b565f       kernel_vars_s     =
+       ``arch/mips/incl
+ CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+scsi/ncr53c8xx.c``
+ QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+ QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+-NMI_MAGIC             0x48414d4d455201 nmi_s                    ``arch/mip=
+s/include/asm/sn/nmi.h``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
+cumentation/translations/it_IT/process/magic-number.rst
+index b20a54ee6fb2..f9634a04d349 100644
+--- a/Documentation/translations/it_IT/process/magic-number.rst
++++ b/Documentation/translations/it_IT/process/magic-number.rst
+@@ -82,5 +82,4 @@ KV_MAGIC              0x5f4b565f       kernel_vars_s     =
+       ``arch/mips/incl
+ CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+scsi/ncr53c8xx.c``
+ QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+ QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+-NMI_MAGIC             0x48414d4d455201 nmi_s                    ``arch/mip=
+s/include/asm/sn/nmi.h``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
+cumentation/translations/zh_CN/process/magic-number.rst
+index e7781ab923f7..966b9e6b1a46 100644
+--- a/Documentation/translations/zh_CN/process/magic-number.rst
++++ b/Documentation/translations/zh_CN/process/magic-number.rst
+@@ -65,5 +65,4 @@ KV_MAGIC              0x5f4b565f       kernel_vars_s     =
+       ``arch/mips/incl
+ CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+scsi/ncr53c8xx.c``
+ QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+ QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+-NMI_MAGIC             0x48414d4d455201 nmi_s                    ``arch/mip=
+s/include/asm/sn/nmi.h``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
+cumentation/translations/zh_TW/process/magic-number.rst
+index 5cc0bfa97d9d..f3e87a6b3a01 100644
+--- a/Documentation/translations/zh_TW/process/magic-number.rst
++++ b/Documentation/translations/zh_TW/process/magic-number.rst
+@@ -68,5 +68,4 @@ KV_MAGIC              0x5f4b565f       kernel_vars_s     =
+       ``arch/mips/incl
+ CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+scsi/ncr53c8xx.c``
+ QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+ QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
+scsi/arm/queue.c``
+-NMI_MAGIC             0x48414d4d455201 nmi_s                    ``arch/mip=
+s/include/asm/sn/nmi.h``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/arch/mips/include/asm/sn/nmi.h b/arch/mips/include/asm/sn/nmi.h
+index 12ac210f12a1..0bd9458fc804 100644
+--- a/arch/mips/include/asm/sn/nmi.h
++++ b/arch/mips/include/asm/sn/nmi.h
+@@ -10,8 +10,6 @@
+ #ifndef __ASM_SN_NMI_H
+ #define __ASM_SN_NMI_H
+=20
+-#include <asm/sn/addrs.h>
+-
+ /*
+  * The launch data structure resides at a fixed place in each node's memory
+  * and is used to communicate between the master processor and the slave
+@@ -29,14 +27,6 @@
+  */
+=20
+ #define NMI_MAGIC		0x48414d4d455201
+-#define NMI_SIZEOF		0x40
+-
+-#define NMI_OFF_MAGIC		0x00	/* Struct offsets for assembly	    */
+-#define NMI_OFF_FLAGS		0x08
+-#define NMI_OFF_CALL		0x10
+-#define NMI_OFF_CALLC		0x18
+-#define NMI_OFF_CALLPARM	0x20
+-#define NMI_OFF_GMASTER		0x28
+=20
+ /*
+  * The NMI routine is called only if the complement address is
+@@ -48,8 +38,6 @@
+  *
+  */
+=20
+-#ifndef __ASSEMBLY__
+-
+ typedef struct nmi_s {
+ 	volatile unsigned long	 magic;		/* Magic number */
+ 	volatile unsigned long	 flags;		/* Combination of flags above */
+@@ -59,14 +47,10 @@ typedef struct nmi_s {
+ 	volatile unsigned long	 gmaster;	/* Flag true only on global master*/
+ } nmi_t;
+=20
+-#endif /* !__ASSEMBLY__ */
+-
+ /* Following definitions are needed both in the prom & the kernel
+  * to identify the format of the nmi cpu register save area in the
+  * low memory on each node.
+  */
+-#ifndef __ASSEMBLY__
+-
+ struct reg_struct {
+ 	unsigned long	gpr[32];
+ 	unsigned long	sr;
+@@ -78,48 +62,4 @@ struct reg_struct {
+ 	unsigned long	nmi_sr;
+ };
+=20
+-#endif /* !__ASSEMBLY__ */
+-
+-/* These are the assembly language offsets into the reg_struct structure */
+-
+-#define R0_OFF		0x0
+-#define R1_OFF		0x8
+-#define R2_OFF		0x10
+-#define R3_OFF		0x18
+-#define R4_OFF		0x20
+-#define R5_OFF		0x28
+-#define R6_OFF		0x30
+-#define R7_OFF		0x38
+-#define R8_OFF		0x40
+-#define R9_OFF		0x48
+-#define R10_OFF		0x50
+-#define R11_OFF		0x58
+-#define R12_OFF		0x60
+-#define R13_OFF		0x68
+-#define R14_OFF		0x70
+-#define R15_OFF		0x78
+-#define R16_OFF		0x80
+-#define R17_OFF		0x88
+-#define R18_OFF		0x90
+-#define R19_OFF		0x98
+-#define R20_OFF		0xa0
+-#define R21_OFF		0xa8
+-#define R22_OFF		0xb0
+-#define R23_OFF		0xb8
+-#define R24_OFF		0xc0
+-#define R25_OFF		0xc8
+-#define R26_OFF		0xd0
+-#define R27_OFF		0xd8
+-#define R28_OFF		0xe0
+-#define R29_OFF		0xe8
+-#define R30_OFF		0xf0
+-#define R31_OFF		0xf8
+-#define SR_OFF		0x100
+-#define CAUSE_OFF	0x108
+-#define EPC_OFF		0x110
+-#define BADVA_OFF	0x118
+-#define ERROR_EPC_OFF	0x120
+-#define CACHE_ERR_OFF	0x128
+-#define NMISR_OFF	0x130
+-
+ #endif /* __ASM_SN_NMI_H */
 --=20
 2.30.2
 
---epsbez2xcv56ijjf
+--fnyakdsammmxp4xy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNhphIACgkQvP0LAY0m
-WPHX3w//eCKxL28PXY15VC7spPr1aftrAychBKxXUo24FVkq0kZeKR7+UGLbL0/c
-luGQoQrpIL2DNgS22EJmKh2kR9ilQe3EIWWWG6R77YUl3kjTKNYG9YcsttrVgzbO
-n1M5Bu/YlJcd+ZYZEqZ3oz7Tp4apHEdqFE7qRKVDhYq9F/wwKXFUN7AAaMEG/A7G
-9u3NjWCOSD+xX03GE8JJFd3CZBSLurvtBGO6YuTQayjp/VViUpIC9dofuVN4Ugva
-0+tlKlnVnYcFfeij5vOIjKrj+PE50c7TV4FQwetNf3T87b/D7opLKeour7Tf9l+a
-kT00fjG7zKCv9uFbjG95SkSe4e58PfT3icgXYd74vqEda5AJJuXUXTqDqSGcMgPu
-361QK4YwSq2iS8h70Fg204vmpjfcqA7Jst7C44FE7bbEFTbmDTXqNvnztLOxtJXQ
-XtmUUr2Ta+bRcNN3dQ5SLGisXvAtBbLQKaB5xBtOnAfMGO544sJ3K0t5ZzlsQqVI
-Ncw9SRZmnbQvDQJcaJI8ferdn1I7nZw8PtI8toOD3dC3zyXrTexcdtOzpjD5rlyJ
-V9KlBJ8svIf8N0hXSpPBSOfAYCJBkPJz+GIw+2RTj4HRKlcTD52JbbUaoBuifd+q
-wbrU4TONKAq3yrRweH0aH8HPDRVOm1mva4vGcFM1AM6Nbx5k7xM=
-=8xd9
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNhpjoACgkQvP0LAY0m
+WPFo5hAAomlMnFk7oM6KmFFQtsNTwY3SLjenFOytQkxRZ65FRYbIN+IORjklMac/
+vi00mKIGQbgCp9Pt38+rgNSUUUss9rbNe2IB4+d97bajyCutEH1ckauPgO3QushZ
+N17tbgH0k5DdHDTCV/dIi/7mmIUcNHdPA7U/D0+5u9IS452Dpkl6kCG/dYCYIWE4
+AJbIsysKfq2WIz+yPN6ZLMIptvx/EJdBjO3dlJz8yeWT3VQ5GB+H3LhtCULTBf84
+uuv/YKqe+FmTn9+egs5D5xPzXZpGzh4Hwv+u1LFEfnZsZaK+j7jMCxmyNyJPsqFP
+01c4L0nvJAbJhcI178SHrR9kA+XO4AdfQu19/bNVTd+jFe4xFzXeOh4Q3s6G+RCp
+JRlAYsrcNPVpea9DNpcA9cgMk5Drzj8yHFSmxVgA+3hGGI0KiwiM0w5xobGOwpuH
+RehCOKPvDt/gqao2YItL+fvr/VD3sD4NB9M1tXNj77nbPuXG7/B+CbYeasqujcad
+4Psx2I0P0AmrOmf0Vdxg/sWwXOdzsP+NW96Itw6Kbgbe4GeiLtg2fqpKn9Duc3N/
+uOAdmN0xCcAqS2WVyTtW4EA8P4lZlwT8jvKomlDTfM6BufvwST1qUzbbX2QYqcCz
+NfoJORSusuiXAYxYTk+0hMBxWaq3J6L2H+tDpECyXPYfzydZk2c=
+=C0RX
 -----END PGP SIGNATURE-----
 
---epsbez2xcv56ijjf--
+--fnyakdsammmxp4xy--
