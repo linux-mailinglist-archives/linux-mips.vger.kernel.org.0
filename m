@@ -2,106 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA073614565
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Nov 2022 09:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2BF614573
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Nov 2022 09:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiKAIBs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Nov 2022 04:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S229954AbiKAIII (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Nov 2022 04:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiKAIBo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Nov 2022 04:01:44 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAC8DFD4
-        for <linux-mips@vger.kernel.org>; Tue,  1 Nov 2022 01:01:43 -0700 (PDT)
+        with ESMTP id S229964AbiKAIIH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Nov 2022 04:08:07 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B59418388
+        for <linux-mips@vger.kernel.org>; Tue,  1 Nov 2022 01:08:05 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:cd8a:284a:a448:1949])
-        by baptiste.telenet-ops.be with bizsmtp
-        id ew1g2800U2kye1T01w1gU2; Tue, 01 Nov 2022 09:01:41 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
+        by laurent.telenet-ops.be with bizsmtp
+        id ew832800N2kye1T01w84Ru; Tue, 01 Nov 2022 09:08:04 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1opmDM-002G44-GS; Tue, 01 Nov 2022 09:01:40 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1opmCu-0039Q2-Rv; Tue, 01 Nov 2022 09:01:12 +0100
+        id 1opmJX-002GBw-KJ; Tue, 01 Nov 2022 09:08:03 +0100
+Date:   Tue, 1 Nov 2022 09:08:03 +0100 (CET)
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-mips@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] staging: octeon: cvmx_ptr_to_phys() should return physaddr_t
-Date:   Tue,  1 Nov 2022 09:01:11 +0100
-Message-Id: <20221101080111.750748-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+X-X-Sender: geert@ramsan.of.borg
+To:     linux-kernel@vger.kernel.org
+cc:     linux-mips@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-um@lists.infradead.org
+Subject: Re: Build regressions/improvements in v6.1-rc3
+In-Reply-To: <20221101080246.795789-1-geert@linux-m68k.org>
+Message-ID: <alpine.DEB.2.22.394.2211010906390.538850@ramsan.of.borg>
+References: <CAHk-=wgJVNe4mUxGJE5B-_GMg0oOgxkZz3UxehVRiCT3QvoZ0w@mail.gmail.com> <20221101080246.795789-1-geert@linux-m68k.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 32-bit without physical address extensions (e.g. sh-allmodconfig):
+On Tue, 1 Nov 2022, Geert Uytterhoeven wrote:
+> JFYI, when comparing v6.1-rc3[1] to v6.1-rc2[3], the summaries are:
+>  - build errors: +4/-0
 
-    drivers/staging/octeon/ethernet-mem.c: In function ‘cvm_oct_free_hw_memory’:
-    ./arch/sh/include/asm/io.h:239:32: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-      239 | #define phys_to_virt(address) ((void *)(address))
-	  |                                ^
-    drivers/staging/octeon/ethernet-mem.c:123:18: note: in expansion of macro ‘phys_to_virt’
-      123 |    fpa = (char *)phys_to_virt(cvmx_ptr_to_phys(fpa));
-	  |                  ^~~~~~~~~~~~
+   + /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]:  => 239:34
 
-Fix this by making cvmx_ptr_to_phys() return physaddr_t instead of
-uint64_t.
+sh4-gcc11/sh-allmodconfig
+cvmx_ptr_to_phys() should return physaddr_t instead (patch sent)
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-Compile-tested only (sh, mips allmodconfig, mips
-allmodconfig+CONFIG_CAVIUM_OCTEON_=y)
----
- arch/mips/include/asm/octeon/cvmx.h   | 4 ++--
- drivers/staging/octeon/octeon-stubs.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size':  => 88:22
+   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]:  => 89:1
+   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]:  => 100:2
 
-diff --git a/arch/mips/include/asm/octeon/cvmx.h b/arch/mips/include/asm/octeon/cvmx.h
-index 25854abc95f8a2cd..72e775bf31e6008b 100644
---- a/arch/mips/include/asm/octeon/cvmx.h
-+++ b/arch/mips/include/asm/octeon/cvmx.h
-@@ -154,13 +154,13 @@ static inline uint64_t cvmx_build_bits(uint64_t high_bit,
- 
- /**
-  * Convert a memory pointer (void*) into a hardware compatible
-- * memory address (uint64_t). Octeon hardware widgets don't
-+ * memory address (phys_addr_t). Octeon hardware widgets don't
-  * understand logical addresses.
-  *
-  * @ptr:    C style memory pointer
-  * Returns Hardware physical address
-  */
--static inline uint64_t cvmx_ptr_to_phys(void *ptr)
-+static inline phys_addr_t cvmx_ptr_to_phys(void *ptr)
- {
- 	if (sizeof(void *) == 8) {
- 		/*
-diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-index 3f8e5713b8a850f0..7a02e59e283fbae8 100644
---- a/drivers/staging/octeon/octeon-stubs.h
-+++ b/drivers/staging/octeon/octeon-stubs.h
-@@ -1212,7 +1212,7 @@ static inline void *cvmx_phys_to_ptr(uint64_t physical_address)
- 	return (void *)(uintptr_t)(physical_address);
- }
- 
--static inline uint64_t cvmx_ptr_to_phys(void *ptr)
-+static inline phys_addr_t cvmx_ptr_to_phys(void *ptr)
- {
- 	return (unsigned long)ptr;
- }
--- 
-2.25.1
+um-x86_64/um-all{mod,yes}config
 
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							     - Linus Torvalds
