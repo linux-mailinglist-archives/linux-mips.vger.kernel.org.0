@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407DC6171DA
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 00:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2ED16171DE
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 00:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiKBXUM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Nov 2022 19:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S230394AbiKBXUN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Nov 2022 19:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiKBXT1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 19:19:27 -0400
+        with ESMTP id S230197AbiKBXTf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 19:19:35 -0400
 Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F4725E1
-        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 16:19:21 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id q63-20020a632a42000000b0045724b1dfb9so96765pgq.3
-        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 16:19:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45221AD
+        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 16:19:23 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id f19-20020a63f113000000b0046fde69a09dso90873pgi.10
+        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 16:19:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=c745/GhVAupZOShsaNtc5Y0Jm7uB9ydr3S2itBPefjM=;
-        b=pj8ZAUMzpQAWjfpeZGv/CFSzOSSwAiDNlmMCeDtMJXA3Ia6uRvLVcV16Cymca0aHXC
-         PM6wRe31jjgcVPugCvX2WsyNtqvMLIJF0v+Ys/n5Nq2k4svZOYnhn3INYaYp+USpd+G1
-         514pS4WDUrP9flgT5BLdl+/qUHO2eNFQZVTslZCWnmYA53yd76i4Ah4L5OS7bjh89Kxd
-         agD1FqGzCkHp/1xQ5FePUye1+JugXCV19Z37h3h0SVTeBVE4gWePoOlMN/4jX90JcqtQ
-         h9Xz7vnqCR6lnYHkhGhaSKxff5kFMXnt6v8GUJMP6nlzvcT1qM4okUu+0Q4ETJu9vS+7
-         8iTA==
+        bh=61+uc/Y9XgqKqIqJKklgZKwyXFi4EpAveqLf+gzND20=;
+        b=Utw2bIoFpd0OsW8gcFI5XrC8r/opoeV6PzEujs3E4Mr9+St+h1iGz7I0t2dfS8UClh
+         tAtUjqK55zt6/KkvBXOzqfYjfHXVvlGdNUDx6aXeRWpNBB/SzUU3M7O4hGxRvmfcP7Dv
+         H7xUVWjzIm9fOWFawnQ+tUiBa9aTdqs3xjhRiHy7QmZH5iQmDFc0LC68bjVk8Tk76MUY
+         okNb1d05tSvdlxWMqm8WJt1KJ94gRKBpU/aaJyEkAN3CmyDtunrNwjuXsVAB9MDK12T5
+         qP1tSiadBS2lzWdtmS7wbdVgSkTUTO1m/e38yDr5/ydciJMTwj/jwYNum8ez3aI14Ekv
+         m1vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=c745/GhVAupZOShsaNtc5Y0Jm7uB9ydr3S2itBPefjM=;
-        b=A6geFfO9lz5xwu6Q9hV6EmxQ0kSCFJxqbhqQgYmQleKJlYfJeJn5/XEC4FzXYKbvcH
-         U+JqTu8z+RzeMjIfY0VgCJ+RRb6+whTtFVZ7NqqBMl219JmQHv3ARy/93QqQOx9ic4Fr
-         sZaCXZyg4I9SLzyNiNLoJEv2B3VVUm2gDdWwe3OhS6s5Y1w1muzsNUj8Vrq4IN2g71aA
-         AGDDokXSq70aq4nz2ZLiORFUdChDoJfSzZ5QKbHKNAmTVQ1MF8FYrL1b7SlL4ndxNiyR
-         8mBQlmWixP9WlDMzufqRHDxcxSHfqb1f9Px6IEQclln02a8A/Yw5AKzVV/dyxdMrMlJK
-         1snA==
-X-Gm-Message-State: ACrzQf2rfSj7YLy+sNnHSWQnQPM025X5zOWBGX1Bmjftqpi2cHKteqiJ
-        FFpqzHxOvh6mEwLrK3svpbIkmPPawm8=
-X-Google-Smtp-Source: AMsMyM50bKDX4r1Ac7K4343Hy6JzbUn/G7PmXwa6NG1xDlxuMg48/hoXRC8GNkJYnpu6i2NofBL/D0pMfb0=
+        bh=61+uc/Y9XgqKqIqJKklgZKwyXFi4EpAveqLf+gzND20=;
+        b=moQEL0R+BEBY3fiqCl0myJtIuBA9RlAinHVWbpdGRNK970OQiDG/PQJEVN4nLEZefo
+         x+d2SiNDi0Gf/9jma7ULnAqO9WnLclY9lz86lPj4wHmG99zTPG2LMxJCD0ofrjGCVj/w
+         PQSPS6QttoKXa7RQ+ZqXuv3vt7FVRp7YB3ANHFI1KwdVBJxg1FVNbAIctYXPSVeMRTYt
+         1/hlAKrDo8B0aNRZ7tHq9L02zNHeKK3bxyfAsv32V24hWqGRyWJpkbaMhCfAaVd9J0+V
+         DYQaKErCi2j1h+81m7R09R2nTZLjiT5yy2zufyQ08Jz5G/xQgOsI4M8bPRsw08IwxFtr
+         NPcQ==
+X-Gm-Message-State: ACrzQf0WG9tCiiKp5sJulAtpL3QrYiBu/yYdURKkaoaPriPnvNNrlBKl
+        C27HnA/4VWvaQkuizk9y/50UWP02JMY=
+X-Google-Smtp-Source: AMsMyM69CxKgcSWgM1vAnwvZeDyLX7/AeVTRbrDaM9LXBznOzPR+Ikthjk94S3wZJoe6s5YkzQYZMQYdPec=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:8a97:b0:178:1939:c721 with SMTP id
- p23-20020a1709028a9700b001781939c721mr27564226plo.108.1667431161027; Wed, 02
- Nov 2022 16:19:21 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:38cd:b0:214:184f:4007 with SMTP id
+ nn13-20020a17090b38cd00b00214184f4007mr9764899pjb.82.1667431162802; Wed, 02
+ Nov 2022 16:19:22 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  2 Nov 2022 23:18:31 +0000
+Date:   Wed,  2 Nov 2022 23:18:32 +0000
 In-Reply-To: <20221102231911.3107438-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221102231911.3107438-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221102231911.3107438-5-seanjc@google.com>
-Subject: [PATCH 04/44] KVM: Teardown VFIO ops earlier in kvm_exit()
+Message-ID: <20221102231911.3107438-6-seanjc@google.com>
+Subject: [PATCH 05/44] KVM: s390: Unwind kvm_arch_init() piece-by-piece() if a
+ step fails
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -97,43 +98,76 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Move the call to kvm_vfio_ops_exit() further up kvm_exit() to try and
-bring some amount of symmetry to the setup order in kvm_init(), and more
-importantly so that the arch hooks are invoked dead last by kvm_exit().
-This will allow arch code to move away from the arch hooks without any
-change in ordering between arch code and common code in kvm_exit().
-
-That kvm_vfio_ops_exit() is called last appears to be 100% arbitrary.  It
-was bolted on after the fact by commit 571ee1b68598 ("kvm: vfio: fix
-unregister kvm_device_ops of vfio").  The nullified kvm_device_ops_table
-is also local to kvm_main.c and is used only when there are active VMs,
-so unless arch code is doing something truly bizarre, nullifying the
-table earlier in kvm_exit() is little more than a nop.
+In preparation for folding kvm_arch_hardware_setup() into kvm_arch_init(),
+unwind initialization one step at a time instead of simply calling
+kvm_arch_exit().  Using kvm_arch_exit() regardless of which initialization
+step failed relies on all affected state playing nice with being undone
+even if said state wasn't first setup.  That holds true for state that is
+currently configured by kvm_arch_init(), but not for state that's handled
+by kvm_arch_hardware_setup(), e.g. calling gmap_unregister_pte_notifier()
+without first registering a notifier would result in list corruption due
+to attempting to delete an entry that was never added to the list.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/kvm_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/s390/kvm/kvm-s390.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 8b7534cc953b..f592dd4ce8f2 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -5961,6 +5961,7 @@ void kvm_exit(void)
- 	for_each_possible_cpu(cpu)
- 		free_cpumask_var(per_cpu(cpu_kick_mask, cpu));
- 	kmem_cache_destroy(kvm_vcpu_cache);
-+	kvm_vfio_ops_exit();
- 	kvm_async_pf_deinit();
- 	unregister_syscore_ops(&kvm_syscore_ops);
- 	unregister_reboot_notifier(&kvm_reboot_notifier);
-@@ -5970,7 +5971,6 @@ void kvm_exit(void)
- 	free_cpumask_var(cpus_hardware_enabled);
- 	kvm_arch_hardware_unsetup();
- 	kvm_arch_exit();
--	kvm_vfio_ops_exit();
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 45d4b8182b07..8395433a79b2 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -490,11 +490,11 @@ int kvm_arch_init(void *opaque)
+ 
+ 	kvm_s390_dbf_uv = debug_register("kvm-uv", 32, 1, 7 * sizeof(long));
+ 	if (!kvm_s390_dbf_uv)
+-		goto out;
++		goto err_kvm_uv;
+ 
+ 	if (debug_register_view(kvm_s390_dbf, &debug_sprintf_view) ||
+ 	    debug_register_view(kvm_s390_dbf_uv, &debug_sprintf_view))
+-		goto out;
++		goto err_debug_view;
+ 
+ 	kvm_s390_cpu_feat_init();
+ 
+@@ -502,25 +502,32 @@ int kvm_arch_init(void *opaque)
+ 	rc = kvm_register_device_ops(&kvm_flic_ops, KVM_DEV_TYPE_FLIC);
+ 	if (rc) {
+ 		pr_err("A FLIC registration call failed with rc=%d\n", rc);
+-		goto out;
++		goto err_flic;
+ 	}
+ 
+ 	if (IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)) {
+ 		rc = kvm_s390_pci_init();
+ 		if (rc) {
+ 			pr_err("Unable to allocate AIFT for PCI\n");
+-			goto out;
++			goto err_pci;
+ 		}
+ 	}
+ 
+ 	rc = kvm_s390_gib_init(GAL_ISC);
+ 	if (rc)
+-		goto out;
++		goto err_gib;
+ 
+ 	return 0;
+ 
+-out:
+-	kvm_arch_exit();
++err_gib:
++	if (IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM))
++		kvm_s390_pci_exit();
++err_pci:
++err_flic:
++err_debug_view:
++	debug_unregister(kvm_s390_dbf_uv);
++err_kvm_uv:
++	debug_unregister(kvm_s390_dbf);
+ 	return rc;
  }
- EXPORT_SYMBOL_GPL(kvm_exit);
  
 -- 
 2.38.1.431.g37b22c650d-goog
