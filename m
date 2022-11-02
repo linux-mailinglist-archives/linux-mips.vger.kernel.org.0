@@ -2,59 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2ED16171DE
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 00:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1EB6171E0
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 00:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiKBXUN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Nov 2022 19:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S230460AbiKBXUO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Nov 2022 19:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiKBXTf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 19:19:35 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45221AD
-        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 16:19:23 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id f19-20020a63f113000000b0046fde69a09dso90873pgi.10
-        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 16:19:23 -0700 (PDT)
+        with ESMTP id S230372AbiKBXT4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 19:19:56 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77FA2611
+        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 16:19:25 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id v18-20020a637a12000000b0046ed84b94efso94344pgc.6
+        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 16:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=61+uc/Y9XgqKqIqJKklgZKwyXFi4EpAveqLf+gzND20=;
-        b=Utw2bIoFpd0OsW8gcFI5XrC8r/opoeV6PzEujs3E4Mr9+St+h1iGz7I0t2dfS8UClh
-         tAtUjqK55zt6/KkvBXOzqfYjfHXVvlGdNUDx6aXeRWpNBB/SzUU3M7O4hGxRvmfcP7Dv
-         H7xUVWjzIm9fOWFawnQ+tUiBa9aTdqs3xjhRiHy7QmZH5iQmDFc0LC68bjVk8Tk76MUY
-         okNb1d05tSvdlxWMqm8WJt1KJ94gRKBpU/aaJyEkAN3CmyDtunrNwjuXsVAB9MDK12T5
-         qP1tSiadBS2lzWdtmS7wbdVgSkTUTO1m/e38yDr5/ydciJMTwj/jwYNum8ez3aI14Ekv
-         m1vw==
+        bh=Pp3PbLfGlbPMUpUfY94YYIKSvd3QEyEjimXY5GHh7Do=;
+        b=UkZGnXGmq2elzgV9DLUz74QXF30iTWbFGDiWfdaXhQTrFX8aiqCFVBpq5xcu6/5CJ0
+         6CAeS4zBndyLbi6uL4aOTOJPom/GUXPjp+wnaiLNi/IOKHaUUiAdDM0lQqJcKi8lJ3vx
+         vnARJXxit3idHJ3CVkd3Epv6mh/Uh5po1QC+vmSMzcdxDA+trq8VPV/HTVpleuhXsuBJ
+         gB5evBsfkJOotXoUamKJrE8Yp7t9k0CZooSYyZMUGEw+wssTud1LYZ35nFOFQX6SsKf7
+         8kThfTBVhIqoMM2+KcJViQg4ABdkLDTwvbAbS0YvwKJ8JO2nHVa2hjZQKtmcKqW09CRW
+         6M/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=61+uc/Y9XgqKqIqJKklgZKwyXFi4EpAveqLf+gzND20=;
-        b=moQEL0R+BEBY3fiqCl0myJtIuBA9RlAinHVWbpdGRNK970OQiDG/PQJEVN4nLEZefo
-         x+d2SiNDi0Gf/9jma7ULnAqO9WnLclY9lz86lPj4wHmG99zTPG2LMxJCD0ofrjGCVj/w
-         PQSPS6QttoKXa7RQ+ZqXuv3vt7FVRp7YB3ANHFI1KwdVBJxg1FVNbAIctYXPSVeMRTYt
-         1/hlAKrDo8B0aNRZ7tHq9L02zNHeKK3bxyfAsv32V24hWqGRyWJpkbaMhCfAaVd9J0+V
-         DYQaKErCi2j1h+81m7R09R2nTZLjiT5yy2zufyQ08Jz5G/xQgOsI4M8bPRsw08IwxFtr
-         NPcQ==
-X-Gm-Message-State: ACrzQf0WG9tCiiKp5sJulAtpL3QrYiBu/yYdURKkaoaPriPnvNNrlBKl
-        C27HnA/4VWvaQkuizk9y/50UWP02JMY=
-X-Google-Smtp-Source: AMsMyM69CxKgcSWgM1vAnwvZeDyLX7/AeVTRbrDaM9LXBznOzPR+Ikthjk94S3wZJoe6s5YkzQYZMQYdPec=
+        bh=Pp3PbLfGlbPMUpUfY94YYIKSvd3QEyEjimXY5GHh7Do=;
+        b=2q+bt/MR9ElqKuVeYjJneRgr+bUO+Dt1AcR3mJgJjQNL4pRodl0q1fFY7P0OL6hE+O
+         iFOnAZiuzbYgkW7stTXeuz0lOe1XpJC2ov5iEUgXv6eLpMrXpgMRPEVptOwqNYTNC/lI
+         BL0oUHDBfEfe5lM4xXLDnNdDAIsj+oKM60qTkpByQIaSVmG9p1cmMoB3gWog2z4JOmBY
+         0IPRqsJIFVeI3t5jMXGqMqRZTUk3YqtB2L+fsYMyyXFaqpS8RSx4boQnBInOyWnCp9gS
+         fDczXe6dbujX8o735c05ABDKrDcN5LMB/IxEqj0fb3/uc1lUC0X97+tH8cpEGCE2+/DM
+         wcVA==
+X-Gm-Message-State: ACrzQf1D2U2tXOSvv9x58pRS2vN1WnFELO4F+w6Vf5l9mols7j/C5NL6
+        hgjFlC0VOX6o39Rs34Ce5Pr4nS72UTM=
+X-Google-Smtp-Source: AMsMyM5BN48AgcZOI4nVxc2uFg8TXUQwjAkA5TEHVSI5KiQDtZoUe78o5/c87/pf9J/oxQANcuw7e+pFPCs=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:38cd:b0:214:184f:4007 with SMTP id
- nn13-20020a17090b38cd00b00214184f4007mr9764899pjb.82.1667431162802; Wed, 02
- Nov 2022 16:19:22 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a63:1206:0:b0:470:18c:1489 with SMTP id
+ h6-20020a631206000000b00470018c1489mr6904894pgl.357.1667431164538; Wed, 02
+ Nov 2022 16:19:24 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  2 Nov 2022 23:18:32 +0000
+Date:   Wed,  2 Nov 2022 23:18:33 +0000
 In-Reply-To: <20221102231911.3107438-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221102231911.3107438-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221102231911.3107438-6-seanjc@google.com>
-Subject: [PATCH 05/44] KVM: s390: Unwind kvm_arch_init() piece-by-piece() if a
- step fails
+Message-ID: <20221102231911.3107438-7-seanjc@google.com>
+Subject: [PATCH 06/44] KVM: s390: Move hardware setup/unsetup to init/exit
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -98,77 +97,70 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In preparation for folding kvm_arch_hardware_setup() into kvm_arch_init(),
-unwind initialization one step at a time instead of simply calling
-kvm_arch_exit().  Using kvm_arch_exit() regardless of which initialization
-step failed relies on all affected state playing nice with being undone
-even if said state wasn't first setup.  That holds true for state that is
-currently configured by kvm_arch_init(), but not for state that's handled
-by kvm_arch_hardware_setup(), e.g. calling gmap_unregister_pte_notifier()
-without first registering a notifier would result in list corruption due
-to attempting to delete an entry that was never added to the list.
+Now that kvm_arch_hardware_setup() is called immediately after
+kvm_arch_init(), fold the guts of kvm_arch_hardware_(un)setup() into
+kvm_arch_{init,exit}() as a step towards dropping one of the hooks.
+
+No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/s390/kvm/kvm-s390.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ arch/s390/kvm/kvm-s390.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
 diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 45d4b8182b07..8395433a79b2 100644
+index 8395433a79b2..1aaee15211f2 100644
 --- a/arch/s390/kvm/kvm-s390.c
 +++ b/arch/s390/kvm/kvm-s390.c
-@@ -490,11 +490,11 @@ int kvm_arch_init(void *opaque)
+@@ -323,21 +323,12 @@ static struct notifier_block kvm_clock_notifier = {
  
- 	kvm_s390_dbf_uv = debug_register("kvm-uv", 32, 1, 7 * sizeof(long));
- 	if (!kvm_s390_dbf_uv)
--		goto out;
-+		goto err_kvm_uv;
- 
- 	if (debug_register_view(kvm_s390_dbf, &debug_sprintf_view) ||
- 	    debug_register_view(kvm_s390_dbf_uv, &debug_sprintf_view))
--		goto out;
-+		goto err_debug_view;
- 
- 	kvm_s390_cpu_feat_init();
- 
-@@ -502,25 +502,32 @@ int kvm_arch_init(void *opaque)
- 	rc = kvm_register_device_ops(&kvm_flic_ops, KVM_DEV_TYPE_FLIC);
- 	if (rc) {
- 		pr_err("A FLIC registration call failed with rc=%d\n", rc);
--		goto out;
-+		goto err_flic;
- 	}
- 
- 	if (IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)) {
- 		rc = kvm_s390_pci_init();
- 		if (rc) {
- 			pr_err("Unable to allocate AIFT for PCI\n");
--			goto out;
-+			goto err_pci;
- 		}
- 	}
- 
- 	rc = kvm_s390_gib_init(GAL_ISC);
- 	if (rc)
--		goto out;
-+		goto err_gib;
- 
+ int kvm_arch_hardware_setup(void *opaque)
+ {
+-	gmap_notifier.notifier_call = kvm_gmap_notifier;
+-	gmap_register_pte_notifier(&gmap_notifier);
+-	vsie_gmap_notifier.notifier_call = kvm_s390_vsie_gmap_notifier;
+-	gmap_register_pte_notifier(&vsie_gmap_notifier);
+-	atomic_notifier_chain_register(&s390_epoch_delta_notifier,
+-				       &kvm_clock_notifier);
  	return 0;
- 
--out:
--	kvm_arch_exit();
-+err_gib:
-+	if (IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM))
-+		kvm_s390_pci_exit();
-+err_pci:
-+err_flic:
-+err_debug_view:
-+	debug_unregister(kvm_s390_dbf_uv);
-+err_kvm_uv:
-+	debug_unregister(kvm_s390_dbf);
- 	return rc;
  }
  
+ void kvm_arch_hardware_unsetup(void)
+ {
+-	gmap_unregister_pte_notifier(&gmap_notifier);
+-	gmap_unregister_pte_notifier(&vsie_gmap_notifier);
+-	atomic_notifier_chain_unregister(&s390_epoch_delta_notifier,
+-					 &kvm_clock_notifier);
++
+ }
+ 
+ static void allow_cpu_feat(unsigned long nr)
+@@ -517,6 +508,13 @@ int kvm_arch_init(void *opaque)
+ 	if (rc)
+ 		goto err_gib;
+ 
++	gmap_notifier.notifier_call = kvm_gmap_notifier;
++	gmap_register_pte_notifier(&gmap_notifier);
++	vsie_gmap_notifier.notifier_call = kvm_s390_vsie_gmap_notifier;
++	gmap_register_pte_notifier(&vsie_gmap_notifier);
++	atomic_notifier_chain_register(&s390_epoch_delta_notifier,
++				       &kvm_clock_notifier);
++
+ 	return 0;
+ 
+ err_gib:
+@@ -533,6 +531,11 @@ int kvm_arch_init(void *opaque)
+ 
+ void kvm_arch_exit(void)
+ {
++	gmap_unregister_pte_notifier(&gmap_notifier);
++	gmap_unregister_pte_notifier(&vsie_gmap_notifier);
++	atomic_notifier_chain_unregister(&s390_epoch_delta_notifier,
++					 &kvm_clock_notifier);
++
+ 	kvm_s390_gib_destroy();
+ 	if (IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM))
+ 		kvm_s390_pci_exit();
 -- 
 2.38.1.431.g37b22c650d-goog
 
