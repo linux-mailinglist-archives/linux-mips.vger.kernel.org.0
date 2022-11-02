@@ -2,148 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DE561612D
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 11:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE886162B1
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 13:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiKBKrm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Nov 2022 06:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
+        id S230085AbiKBM1p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Nov 2022 08:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKBKrl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 06:47:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E47920BF2
-        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 03:46:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667386007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iUJvEUx8gtjx3iaw6xY22YZZMkx+Fxj3A7QQSAUB80Y=;
-        b=IdsGxcpc/b9eri3/F2vdOUh/cr0GJaUlcfrvfXm5M1ivFv5rIhWx6/D/pKE538YSPP5rTI
-        dnD7I+fjmyuhuvWBoCiKKCvwlRz6YgWk+A/vS3qXmahAei/2tst2AFgeuCYRtXXo0TJL7L
-        IuJ/qqE+hcToYJ3azmb4wt9N7PXsAw8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-632-7az3CsV2N7qvpV7mKMNYNg-1; Wed, 02 Nov 2022 06:46:46 -0400
-X-MC-Unique: 7az3CsV2N7qvpV7mKMNYNg-1
-Received: by mail-wm1-f71.google.com with SMTP id p14-20020a05600c204e00b003cf4cce4da5so340213wmg.0
-        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 03:46:45 -0700 (PDT)
+        with ESMTP id S229459AbiKBM1n (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 08:27:43 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8053329C96;
+        Wed,  2 Nov 2022 05:27:42 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y13so16261871pfp.7;
+        Wed, 02 Nov 2022 05:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KZvGB1ExMcp29WtIMrBo+pEgQiFER5J1+0To0GGikI0=;
+        b=TZ5N8vp7LxMUgK1giVGCRI03mSK3u5QitWCDZNcODGHQX6bb5mVZ7Um6nnOCPaIWLp
+         k5ava7cWu/CS/AGNfANz0Kn4mAjYhlGXwITIKwQvkjffaDl/06JTtZc8wfr0o6TvwOtA
+         rCLEcyVNWxsu7cS4cg0bBLNkJ4xZELwvVWhWC+2+Evnbq0hYgNhAXB3MqI0CFO7hpPl9
+         rBuua9ChdWE8Uo/+E/Y4mKeLeq2PJ7yP8OVLh3Xyk4F9nHIZdKm/zH+ikbkhSNo4mK1l
+         amlyrqTbNGD8jSPsHZyV0RXmfhRznLW00tt0fYE2Ff7Xwbf5e/7ptppCCWzGnGMuAEsV
+         Ieew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iUJvEUx8gtjx3iaw6xY22YZZMkx+Fxj3A7QQSAUB80Y=;
-        b=dVYwfsoe1RbRHSSws+oL3cDWAtRh72kwUnQP6GnRgPIrgfPF79CoM/HjcTrVRM77X5
-         fRDLeaprpQP+xOCOOmk9sCY/a5+M/DrY5eTk9AoCR7SBl+Lp1uNb3lFWkLF0DxWF3ZtJ
-         lewqOQ5fJe3yoeUwW3KZYm26vIi3n5aGVbZ34eIIaeR5BlFHH5V7STgHBBhUc83StgyI
-         lKz6uhjYOQaQIa/ZA/AmOIfqFHEHxZnNn+9VeMJk7KS6iZKSxbwvkPUYCS8Gy7ho/xi2
-         FLOaElL11RAPdk9d6wZws/qjLm5Y3N8Qa221MshBq2CBq0+jBJ0r7A3wt2pTe1VdK4HT
-         WjYQ==
-X-Gm-Message-State: ACrzQf2Aw3QknhncsTCyz29UWUFm9MUTQA7HQO0U7/GnaiUnEATOlp0y
-        pdGoanurUwljqsscq2qL3uTXpn5C4Ibsv18a23UipDwIGLxkMam2Ap5+gg1afsIE22KFj7QMTt+
-        7PREu47mi72X/hVL7r11XFA==
-X-Received: by 2002:a05:600c:3556:b0:3ca:771d:701a with SMTP id i22-20020a05600c355600b003ca771d701amr14652017wmq.61.1667386004908;
-        Wed, 02 Nov 2022 03:46:44 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5jzv0egtLEIAVaxEN/tayyZgqvKvq+1qzahuWoTfzpPIfJE04AyAO6MvJnCllXJsp0I0J18w==
-X-Received: by 2002:a05:600c:3556:b0:3ca:771d:701a with SMTP id i22-20020a05600c355600b003ca771d701amr14651998wmq.61.1667386004691;
-        Wed, 02 Nov 2022 03:46:44 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id c18-20020a05600c0a5200b003b3365b38f9sm1701531wmq.10.2022.11.02.03.46.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 03:46:44 -0700 (PDT)
-Message-ID: <5abf94d6-9a48-525e-c562-605529c5793a@redhat.com>
-Date:   Wed, 2 Nov 2022 11:46:42 +0100
+        bh=KZvGB1ExMcp29WtIMrBo+pEgQiFER5J1+0To0GGikI0=;
+        b=M6HyN44gXnv0JdQ7oPsd7QNNq8+CgWhiOXyGpi+shXX+2K6ZSG4d0SAi5xBf8CzrAX
+         qWtmErS9ZeoI6up32URlsEwZCI0wqbus8iIKMqoCxt99vh9ealOSNG2JKuSkJAMoZukl
+         Auno0lT7lfPd0LQHS2K+RDF4LuZ01GO3Ox3vDh8cGlpYf32iDB1L8PIdgif9+opitLdV
+         cagWNTQnmvsX8d0fRIEL3zJ4/y+eX35xFS6t1uWMRquvrzsn9ai8nkN9k+Yc7BwxYCrd
+         BncElVRiRPGX0am3e+XMViiM8dd0ZUjhx4nvS7oIWeGwxWvjakDnwCqPem4M+XGp9pIr
+         9Icw==
+X-Gm-Message-State: ACrzQf2Vm0gsyo/5Xm2NwqHQDc5E27uP64ONvPwTxPayJMROFlYt3VZs
+        9wIL2dDRPWKM8BzZ7xjDYNQ=
+X-Google-Smtp-Source: AMsMyM4oSSfM/dS5vcLfsfK3Hxn8c6M15elG4Jf6+x9YzIdJJ7IS1EjYwIVz3eHO9HVTA2UokzE9SA==
+X-Received: by 2002:a63:188:0:b0:43c:22e9:2d10 with SMTP id 130-20020a630188000000b0043c22e92d10mr21549310pgb.12.1667392061827;
+        Wed, 02 Nov 2022 05:27:41 -0700 (PDT)
+Received: from localhost ([111.196.209.15])
+        by smtp.gmail.com with ESMTPSA id m10-20020a170902f64a00b001769cfa5cd4sm8236429plg.49.2022.11.02.05.27.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 05:27:41 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 20:27:39 +0800
+From:   Rongwei Zhang <pudh4418@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Maxim Uvarov <muvarov@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Rongwei Zhang <pudh4418@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] MIPS: fix duplicate definitions for exported symbols
+Message-ID: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 17/21] drm/fb-helper: Perform all fbdev I/O with the
- same implementation
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, daniel@ffwll.ch,
-        airlied@gmail.com, sam@ravnborg.org, mripard@kernel.org,
-        maarten.lankhorst@linux.intel.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-References: <20221024111953.24307-1-tzimmermann@suse.de>
- <20221024111953.24307-18-tzimmermann@suse.de>
- <3ab32fc3-f2aa-1b42-fd87-557482ab56d5@redhat.com>
- <0ca70b76-c24a-4fdb-cf0d-2647d37379df@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <0ca70b76-c24a-4fdb-cf0d-2647d37379df@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/2/22 11:33, Thomas Zimmermann wrote:
+Building with clang-14 fails with:
 
-[...]
+AS      arch/mips/kernel/relocate_kernel.o
+<unknown>:0: error: symbol 'kexec_args' is already defined
+<unknown>:0: error: symbol 'secondary_kexec_args' is already defined
+<unknown>:0: error: symbol 'kexec_start_address' is already defined
+<unknown>:0: error: symbol 'kexec_indirection_page' is already defined
+<unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
 
->>
->>> +static ssize_t __drm_fb_helper_write(struct fb_info *info, const char __user *buf, size_t count,
->>> +				     loff_t *ppos, drm_fb_helper_write_screen write_screen)
->>> +{
->>
->> [...]
->>
->>> +	/*
->>> +	 * Copy to framebuffer even if we already logged an error. Emulates
->>> +	 * the behavior of the original fbdev implementation.
->>> +	 */
->>> +	ret = write_screen(info, buf, count, pos);
->>> +	if (ret < 0)
->>> +		return ret; /* return last error, if any */
->>> +	else if (!ret)
->>> +		return err; /* return previous error, if any */
->>> +
->>> +	*ppos += ret;
->>> +
->>
->> Should *ppos be incremented even if the previous error is returned?
-> 
-> Yes. It emulates the original fbdev code at [1]. Further down in that 
-> function, the position is being updated even if an error occured. We 
-> only return the initial error if no bytes got written.
-> 
-> It could happen that some userspace program hits to error, but still 
-> relies on the output and position being updated. IIRC I even added 
-> validation of this behavior to the IGT fbdev tests.  I agree that this 
-> is somewhat bogus behavior, but changing it would change long-standing 
-> userspace semantics.
->
+It turns out EXPORT defined in asm/asm.h expands to a symbol definition,
+so there is no need to define these symbols again. Remove duplicated
+symbol definitions.
 
-Thanks for the explanation, feel free then to also add to this patch:
+Fixes: 7aa1c8f47e7e ("MIPS: kdump: Add support")
+Signed-off-by: Rongwei Zhang <pudh4418@gmail.com>
+---
+ arch/mips/kernel/relocate_kernel.S | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
+diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
+index cfde14b48fd8..f5b2ef979b43 100644
+--- a/arch/mips/kernel/relocate_kernel.S
++++ b/arch/mips/kernel/relocate_kernel.S
+@@ -145,8 +145,7 @@ LEAF(kexec_smp_wait)
+  * kexec_args[0..3] are used to prepare register values.
+  */
+ 
+-kexec_args:
+-	EXPORT(kexec_args)
++EXPORT(kexec_args)
+ arg0:	PTR_WD		0x0
+ arg1:	PTR_WD		0x0
+ arg2:	PTR_WD		0x0
+@@ -159,8 +158,7 @@ arg3:	PTR_WD		0x0
+  * their registers a0-a3. secondary_kexec_args[0..3] are used
+  * to prepare register values.
+  */
+-secondary_kexec_args:
+-	EXPORT(secondary_kexec_args)
++EXPORT(secondary_kexec_args)
+ s_arg0: PTR_WD		0x0
+ s_arg1: PTR_WD		0x0
+ s_arg2: PTR_WD		0x0
+@@ -171,19 +169,16 @@ kexec_flag:
+ 
+ #endif
+ 
+-kexec_start_address:
+-	EXPORT(kexec_start_address)
++EXPORT(kexec_start_address)
+ 	PTR_WD		0x0
+ 	.size		kexec_start_address, PTRSIZE
+ 
+-kexec_indirection_page:
+-	EXPORT(kexec_indirection_page)
++EXPORT(kexec_indirection_page)
+ 	PTR_WD		0
+ 	.size		kexec_indirection_page, PTRSIZE
+ 
+ relocate_new_kernel_end:
+ 
+-relocate_new_kernel_size:
+-	EXPORT(relocate_new_kernel_size)
++EXPORT(relocate_new_kernel_size)
+ 	PTR_WD		relocate_new_kernel_end - relocate_new_kernel
+ 	.size		relocate_new_kernel_size, PTRSIZE
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.38.1
 
