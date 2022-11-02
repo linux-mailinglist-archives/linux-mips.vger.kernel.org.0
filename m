@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705ED616C5F
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 19:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D801B616C80
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 19:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiKBSgU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Nov 2022 14:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
+        id S231379AbiKBShY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Nov 2022 14:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiKBSgI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 14:36:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1342FC0A
-        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 11:34:23 -0700 (PDT)
+        with ESMTP id S231508AbiKBShJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 14:37:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9852FC1D
+        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 11:34:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667414063;
+        s=mimecast20190719; t=1667414066;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QqLWPThYSO+7/uH6VGCIiG2p0FrpcxY/esl5LuglSyI=;
-        b=cOdX8LuLRDRpX2n0lVSAqduhtaUfKaFl8WOs1hKw7uZ5osOkpo9f3GNcDPv1fCkv4dYT4z
-        xwj4++Ns/vEr9lAS4huhwbiIfbAg6Q0U2pzZtT+KYiIzuM4eTqulKfW9dc9eFg3O7AUxB1
-        keL5gVEgaZi+dJY+YRRGIC4v7dyOlyg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vPxNJZ59dAj9Aw/rnn/vqSwo8b8sDM1O6Xi76OwhNZs=;
+        b=L/8+QVXWBbfiZ92AeTl7/2LbksdpihZV1psDO5gjVTnM+4vDSA87xZ5/fQJ8YOL+ULZv1B
+        Z3o3AjwtimKYjiRnBM4Mgxu7kjtLRolsZoSv3iysrHhBzkOr3dArOdK/aPh8wu89zvSS+3
+        oCZ6FRgBDL160DtPy8KgcqyH5Q8HFUY=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-347-3hQ-kJqWP5avxaM1sPdGsg-1; Wed, 02 Nov 2022 14:34:20 -0400
-X-MC-Unique: 3hQ-kJqWP5avxaM1sPdGsg-1
-Received: by mail-qk1-f199.google.com with SMTP id br12-20020a05620a460c00b006fa52448320so4145441qkb.0
-        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 11:34:20 -0700 (PDT)
+ us-mta-292-k-rjlPu5P7eA-bnN22XYOw-1; Wed, 02 Nov 2022 14:34:25 -0400
+X-MC-Unique: k-rjlPu5P7eA-bnN22XYOw-1
+Received: by mail-qv1-f70.google.com with SMTP id b2-20020a0cfe62000000b004bbfb15297dso5392379qvv.19
+        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 11:34:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QqLWPThYSO+7/uH6VGCIiG2p0FrpcxY/esl5LuglSyI=;
-        b=RHmGa2zOL8m0DWNDn/kPLL0BrYIn+MUMrhAxHaITlVkO8wV8D94xHQsNVx+/CSKzkn
-         96x7Qros9w3zAy3izwz2DWoTHkorwUhupLZOX5SnkyTXCeCnAjdqwcKRdeTaZ/l28lwi
-         du9Bw947W0t64+v5RzvRuIyBWsf+EfYOdja0PkCgKEiZy/WZeWTBbMQ3Yct9cjOUcAFi
-         gt+eLSzVE7Hv+JSgRdatqyh+YTUTBww7eLlf2bayzcqXMDwM+HuavO8YwgqpNJkfZUpe
-         VON3PNZe2RI0ABPGlIm/b5NvS+12EMB3xrzpnaCdrIfB8UcOFdXxjA8HrL/r92XE13Xa
-         zXOA==
-X-Gm-Message-State: ACrzQf218Gn6IGnkw4FInf6UfY2KrurUqMH2f/BPcBRRCDhZjDeAJwPo
-        c6B23X3SHFfAK5phJnFuS8V0tlbHG0lFqjntVAdkK9izU/ydc/f/4NwFfAuMmX95BMbpY+tQfoI
-        Sh6AXJhOxGQdkRt+cHS96Cw==
-X-Received: by 2002:a05:620a:2185:b0:6fa:9b5:7bcd with SMTP id g5-20020a05620a218500b006fa09b57bcdmr17834819qka.689.1667414059897;
-        Wed, 02 Nov 2022 11:34:19 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5zQBXSq1wHjxRSmwTcnsY0fuwHzVoafdqUQfLwgY4gLc/C2queTj08Inp5WgKA+UYkDnhs/w==
-X-Received: by 2002:a05:620a:2185:b0:6fa:9b5:7bcd with SMTP id g5-20020a05620a218500b006fa09b57bcdmr17834779qka.689.1667414059700;
-        Wed, 02 Nov 2022 11:34:19 -0700 (PDT)
+        bh=vPxNJZ59dAj9Aw/rnn/vqSwo8b8sDM1O6Xi76OwhNZs=;
+        b=Zj+UsYy3s4pzO2HV5QgK5xRduxHYpcyXYZj3NBMNsa0HEcfL8dZvHz+DFYVl6196HO
+         ZhgRZGvZ03zT+PtwAooq+8Yup/FLFIqPNYgnhaViY6siWDwHkZ+fqV4+wC9YIGQRall0
+         bgsOCeVcDFALr0eaYHiylsjj6t/uNGdcqHQProl479jD2hTD6FsI0znZK+q7irqft4jE
+         yLEJ34jIqOfArSFaIzwBwASBcMQQsMcHDGNWODEeGJssKocmXbYctDnS5ZredEbEI9ND
+         3xAdXIJ9Z/3srcNVih73dnn7KIKeFXDLDoIPTCmgVJw2cb1YYYcPmzStIYqelp4mP16M
+         2Qwg==
+X-Gm-Message-State: ACrzQf08EEXw0wCZEIs1CdrxdY94vg10aJ8LONC+iXzBay8XvqrFSP8x
+        XIampIO4fxcazFSGzm1dWpdmG+oGFo2rvfgRCkMdVG3miewOXxB+YRf6rPBhpho3R+aB7eHTZiS
+        1b3ekm/WgoUI4IMNEpy9Esw==
+X-Received: by 2002:a37:92c6:0:b0:6fa:28b2:1e2a with SMTP id u189-20020a3792c6000000b006fa28b21e2amr13574186qkd.9.1667414064983;
+        Wed, 02 Nov 2022 11:34:24 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4EXOUjNlIxUYR8PDvF9w7H8/QWuUsvimzUEYEqnOFqRnuqhuZtDCzI4Vu/740apEttSzlakQ==
+X-Received: by 2002:a37:92c6:0:b0:6fa:28b2:1e2a with SMTP id u189-20020a3792c6000000b006fa28b21e2amr13574163qkd.9.1667414064758;
+        Wed, 02 Nov 2022 11:34:24 -0700 (PDT)
 Received: from vschneid.remote.csb ([149.71.65.94])
-        by smtp.gmail.com with ESMTPSA id w187-20020a3794c4000000b006eed47a1a1esm8757820qkd.134.2022.11.02.11.34.14
+        by smtp.gmail.com with ESMTPSA id w187-20020a3794c4000000b006eed47a1a1esm8757820qkd.134.2022.11.02.11.34.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 11:34:18 -0700 (PDT)
+        Wed, 02 Nov 2022 11:34:23 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
@@ -83,9 +83,9 @@ Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Guo Ren <guoren@kernel.org>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [RFC PATCH v2 4/8] smp: Trace IPIs sent via arch_send_call_function_ipi_mask()
-Date:   Wed,  2 Nov 2022 18:33:32 +0000
-Message-Id: <20221102183336.3120536-3-vschneid@redhat.com>
+Subject: [RFC PATCH v2 5/8] irq_work: Trace self-IPIs sent via arch_irq_work_raise()
+Date:   Wed,  2 Nov 2022 18:33:33 +0000
+Message-Id: <20221102183336.3120536-4-vschneid@redhat.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221102182949.3119584-1-vschneid@redhat.com>
 References: <20221102182949.3119584-1-vschneid@redhat.com>
@@ -101,41 +101,54 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This simply wraps around the arch function and prepends it with a
-tracepoint, similar to send_call_function_single_ipi().
+IPIs sent to remove CPUs via irq_work_queue_on() are now covered by
+trace_ipi_send_cpumask(), add another instance of the tracepoint to cover
+self-IPIs.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- kernel/smp.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ kernel/irq_work.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index e2ca1e2f31274..c4d561cf50d45 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -160,6 +160,13 @@ void __init call_function_init(void)
- 	smpcfd_prepare_cpu(smp_processor_id());
+diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+index 7afa40fe5cc43..aec38c294ce68 100644
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -22,6 +22,8 @@
+ #include <asm/processor.h>
+ #include <linux/kasan.h>
+ 
++#include <trace/events/ipi.h>
++
+ static DEFINE_PER_CPU(struct llist_head, raised_list);
+ static DEFINE_PER_CPU(struct llist_head, lazy_list);
+ static DEFINE_PER_CPU(struct task_struct *, irq_workd);
+@@ -74,6 +76,16 @@ void __weak arch_irq_work_raise(void)
+ 	 */
  }
  
-+static inline void
-+send_call_function_ipi_mask(const struct cpumask *mask)
++static inline void irq_work_raise(struct irq_work *work)
 +{
-+	trace_ipi_send_cpumask(mask, _RET_IP_, func);
-+	arch_send_call_function_ipi_mask(mask);
++	if (trace_ipi_send_cpumask_enabled() && arch_irq_work_has_interrupt())
++		trace_ipi_send_cpumask(cpumask_of(smp_processor_id()),
++				       _RET_IP_,
++				       work->func);
++
++	arch_irq_work_raise();
 +}
 +
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
+ /* Enqueue on current CPU, work must already be claimed and preempt disabled */
+ static void __irq_work_queue_local(struct irq_work *work)
+ {
+@@ -99,7 +111,7 @@ static void __irq_work_queue_local(struct irq_work *work)
  
- static DEFINE_STATIC_KEY_FALSE(csdlock_debug_enabled);
-@@ -970,7 +977,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 		if (nr_cpus == 1)
- 			send_call_function_single_ipi(last_cpu);
- 		else if (likely(nr_cpus > 1))
--			arch_send_call_function_ipi_mask(cfd->cpumask_ipi);
-+			send_call_function_ipi_mask(cfd->cpumask_ipi);
+ 	/* If the work is "lazy", handle it from next tick if any */
+ 	if (!lazy_work || tick_nohz_tick_stopped())
+-		arch_irq_work_raise();
++		irq_work_raise(work);
+ }
  
- 		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->pinged, this_cpu, CFD_SEQ_NOCPU, CFD_SEQ_PINGED);
- 	}
+ /* Enqueue the irq work @work on the current CPU */
 -- 
 2.31.1
 
