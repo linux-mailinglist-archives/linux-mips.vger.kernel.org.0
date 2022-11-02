@@ -2,142 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE886162B1
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 13:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A6761631A
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 13:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiKBM1p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Nov 2022 08:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S231205AbiKBMyR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Nov 2022 08:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBM1n (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 08:27:43 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8053329C96;
-        Wed,  2 Nov 2022 05:27:42 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y13so16261871pfp.7;
-        Wed, 02 Nov 2022 05:27:42 -0700 (PDT)
+        with ESMTP id S229598AbiKBMyP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 08:54:15 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DD01BE8F
+        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 05:54:15 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id k5so8590173pjo.5
+        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 05:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KZvGB1ExMcp29WtIMrBo+pEgQiFER5J1+0To0GGikI0=;
-        b=TZ5N8vp7LxMUgK1giVGCRI03mSK3u5QitWCDZNcODGHQX6bb5mVZ7Um6nnOCPaIWLp
-         k5ava7cWu/CS/AGNfANz0Kn4mAjYhlGXwITIKwQvkjffaDl/06JTtZc8wfr0o6TvwOtA
-         rCLEcyVNWxsu7cS4cg0bBLNkJ4xZELwvVWhWC+2+Evnbq0hYgNhAXB3MqI0CFO7hpPl9
-         rBuua9ChdWE8Uo/+E/Y4mKeLeq2PJ7yP8OVLh3Xyk4F9nHIZdKm/zH+ikbkhSNo4mK1l
-         amlyrqTbNGD8jSPsHZyV0RXmfhRznLW00tt0fYE2Ff7Xwbf5e/7ptppCCWzGnGMuAEsV
-         Ieew==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sz/uTvOc0gNmc74MGKA7yKeLqyFqD/joiI1SxwVZLms=;
+        b=gMco29rIHyjluL75KoUf2pw2XrSEdZCMQHDxALSkmifq+/s7GAD1xAYqY35LCOejLj
+         uuDAKkLdDsF7ZHyBZYyKfaJqYvFBOFhoAafty8TuEPIC64Lzaxt7PG3uk+VPn7pbQPt8
+         VduIYP3I2f9Ge7H5zmsibvH447LXtSH7OWZJRErQyiblliWhq9RATJYwZIRxn3LlUI/T
+         d35i3X5nNMLF9rk2uA6sWkKEppODkyP8II01Oy7LBkqUrkz6K5lD8nUl6a9cGPzUDU8T
+         qM33I6IW+PGklzw3hSVmr1A/9hanlqgtBiFL7BgoRBJWNMoOr3TbCBn4kf0S4FZ+5yQ3
+         A3QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZvGB1ExMcp29WtIMrBo+pEgQiFER5J1+0To0GGikI0=;
-        b=M6HyN44gXnv0JdQ7oPsd7QNNq8+CgWhiOXyGpi+shXX+2K6ZSG4d0SAi5xBf8CzrAX
-         qWtmErS9ZeoI6up32URlsEwZCI0wqbus8iIKMqoCxt99vh9ealOSNG2JKuSkJAMoZukl
-         Auno0lT7lfPd0LQHS2K+RDF4LuZ01GO3Ox3vDh8cGlpYf32iDB1L8PIdgif9+opitLdV
-         cagWNTQnmvsX8d0fRIEL3zJ4/y+eX35xFS6t1uWMRquvrzsn9ai8nkN9k+Yc7BwxYCrd
-         BncElVRiRPGX0am3e+XMViiM8dd0ZUjhx4nvS7oIWeGwxWvjakDnwCqPem4M+XGp9pIr
-         9Icw==
-X-Gm-Message-State: ACrzQf2Vm0gsyo/5Xm2NwqHQDc5E27uP64ONvPwTxPayJMROFlYt3VZs
-        9wIL2dDRPWKM8BzZ7xjDYNQ=
-X-Google-Smtp-Source: AMsMyM4oSSfM/dS5vcLfsfK3Hxn8c6M15elG4Jf6+x9YzIdJJ7IS1EjYwIVz3eHO9HVTA2UokzE9SA==
-X-Received: by 2002:a63:188:0:b0:43c:22e9:2d10 with SMTP id 130-20020a630188000000b0043c22e92d10mr21549310pgb.12.1667392061827;
-        Wed, 02 Nov 2022 05:27:41 -0700 (PDT)
-Received: from localhost ([111.196.209.15])
-        by smtp.gmail.com with ESMTPSA id m10-20020a170902f64a00b001769cfa5cd4sm8236429plg.49.2022.11.02.05.27.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 05:27:41 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 20:27:39 +0800
-From:   Rongwei Zhang <pudh4418@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Maxim Uvarov <muvarov@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Rongwei Zhang <pudh4418@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] MIPS: fix duplicate definitions for exported symbols
-Message-ID: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
+        bh=Sz/uTvOc0gNmc74MGKA7yKeLqyFqD/joiI1SxwVZLms=;
+        b=3aPsZXX8i7ewKei3sHVtadgwRQgaiaAFXUkuRHI4CXrDq9ev5ckQtRiqCgnZ99fYrJ
+         8ewYKY/j63LTzNGR236Cp/9VtJ8A8CkkSVX4dJGmkfG7TkIwZ2VaU9TyVJbETNN3Itvh
+         vYIYu9siRVJG6ggxpT89O/o3LIpF8OLoDr0P+GMxf99PfmpyawmICGGG9qC640/woUrf
+         3x5JIz6cp21hHP6qk1OS5Dv7g5JDEkqyIsV6d06J9lpGwYq5LuiVdW/twQd/o5UumrCt
+         mr1yFS2hMUKIz1rrZYTLqR8xDsp6FxTYyV7hnYIeQE1K5voKvRy5YKS7tuNhAATyDXyb
+         SVpQ==
+X-Gm-Message-State: ACrzQf0fgGUXHU76GLb2yFDp1Af8cgft5qvfXRnak7VZXaVBh+NvQ+5t
+        odbHxtxiGCrGTKHjBu/jjVGsB4NsD4rw7R7YqtY=
+X-Google-Smtp-Source: AMsMyM7zYTm0ZmdMgJfwEPWQ6iiPPfLaP2CNfbAaYJnLIqwwlD3fqJIoA9NFRLPSxXRzbf7xPG6t5iTECeAUTsi+Urw=
+X-Received: by 2002:a17:90b:2393:b0:213:ecb2:2e04 with SMTP id
+ mr19-20020a17090b239300b00213ecb22e04mr14468959pjb.100.1667393654447; Wed, 02
+ Nov 2022 05:54:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Received: by 2002:a05:7022:662c:b0:46:197b:656c with HTTP; Wed, 2 Nov 2022
+ 05:54:13 -0700 (PDT)
+Reply-To: rihabmanyang1993@gmail.com
+From:   Rihab Manyang <omardiakhate751@gmail.com>
+Date:   Wed, 2 Nov 2022 12:54:13 +0000
+Message-ID: <CAAs2n94DKjX6ZC8g4kdP45u1f2UDWbY4NWRPx4w49bO+RiwOfg@mail.gmail.com>
+Subject: HI DEAR..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1034 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [omardiakhate751[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rihabmanyang1993[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [omardiakhate751[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Building with clang-14 fails with:
-
-AS      arch/mips/kernel/relocate_kernel.o
-<unknown>:0: error: symbol 'kexec_args' is already defined
-<unknown>:0: error: symbol 'secondary_kexec_args' is already defined
-<unknown>:0: error: symbol 'kexec_start_address' is already defined
-<unknown>:0: error: symbol 'kexec_indirection_page' is already defined
-<unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
-
-It turns out EXPORT defined in asm/asm.h expands to a symbol definition,
-so there is no need to define these symbols again. Remove duplicated
-symbol definitions.
-
-Fixes: 7aa1c8f47e7e ("MIPS: kdump: Add support")
-Signed-off-by: Rongwei Zhang <pudh4418@gmail.com>
----
- arch/mips/kernel/relocate_kernel.S | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
-index cfde14b48fd8..f5b2ef979b43 100644
---- a/arch/mips/kernel/relocate_kernel.S
-+++ b/arch/mips/kernel/relocate_kernel.S
-@@ -145,8 +145,7 @@ LEAF(kexec_smp_wait)
-  * kexec_args[0..3] are used to prepare register values.
-  */
- 
--kexec_args:
--	EXPORT(kexec_args)
-+EXPORT(kexec_args)
- arg0:	PTR_WD		0x0
- arg1:	PTR_WD		0x0
- arg2:	PTR_WD		0x0
-@@ -159,8 +158,7 @@ arg3:	PTR_WD		0x0
-  * their registers a0-a3. secondary_kexec_args[0..3] are used
-  * to prepare register values.
-  */
--secondary_kexec_args:
--	EXPORT(secondary_kexec_args)
-+EXPORT(secondary_kexec_args)
- s_arg0: PTR_WD		0x0
- s_arg1: PTR_WD		0x0
- s_arg2: PTR_WD		0x0
-@@ -171,19 +169,16 @@ kexec_flag:
- 
- #endif
- 
--kexec_start_address:
--	EXPORT(kexec_start_address)
-+EXPORT(kexec_start_address)
- 	PTR_WD		0x0
- 	.size		kexec_start_address, PTRSIZE
- 
--kexec_indirection_page:
--	EXPORT(kexec_indirection_page)
-+EXPORT(kexec_indirection_page)
- 	PTR_WD		0
- 	.size		kexec_indirection_page, PTRSIZE
- 
- relocate_new_kernel_end:
- 
--relocate_new_kernel_size:
--	EXPORT(relocate_new_kernel_size)
-+EXPORT(relocate_new_kernel_size)
- 	PTR_WD		relocate_new_kernel_end - relocate_new_kernel
- 	.size		relocate_new_kernel_size, PTRSIZE
 -- 
-2.38.1
-
+My name is Rihab Manyang,i am here to search for a business partner and
+friend who will help me to invest my fund in his country.
