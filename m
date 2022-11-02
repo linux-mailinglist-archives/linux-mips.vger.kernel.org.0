@@ -2,66 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C36615EEB
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 10:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABC2615EEE
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Nov 2022 10:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiKBJHj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Nov 2022 05:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
+        id S231186AbiKBJIS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Nov 2022 05:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiKBJHA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 05:07:00 -0400
+        with ESMTP id S231214AbiKBJHn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Nov 2022 05:07:43 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB81B27FF5
-        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 02:04:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D433928702
+        for <linux-mips@vger.kernel.org>; Wed,  2 Nov 2022 02:05:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667379843;
+        s=mimecast20190719; t=1667379907;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XBlp2DOijU5hXQ9AriUwp9vEVLgfxcCQxHX+sSZSvOs=;
-        b=cU6CaU/T3cRlN3WmIu3UEc7d6/fczr3AsteLEeSis2kQhSs1jBTSH6BOdcbi98+L1CS4Ff
-        dKMMJcQ9Qorjv5Px2oNHPiQBogLkzL3IpXhZQ2qdQ7DSS4cLXg+T1b+/c8PHb2DjBMo67F
-        JpmKjCMX4nYr+UYWvXcW7BFgqEGjVdg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=LpYqcUNkPgIA1fAPwB+EiO+Z9dq0ENSiM+RajxMrldI=;
+        b=gyuwcEyuDatDeHRSaakcsSF54xu9ubwrWfYGF4PMwX8uS0/8G4xXYXkDd6DIZLnYpVibi/
+        /QCWp2ofdI76vRLSQ5DrdnYwPEaxceEc23DN7Y7z1R9q9epQfKkLrQTBLiwdMpUUM4Iqun
+        cTW430qncx/KzWHGU/Tjz8jljhG57S8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-126-ZlTBEauyPTirt9aZAgPpPg-1; Wed, 02 Nov 2022 05:04:01 -0400
-X-MC-Unique: ZlTBEauyPTirt9aZAgPpPg-1
-Received: by mail-wr1-f71.google.com with SMTP id s11-20020adfbc0b000000b0023659af24a8so4619706wrg.14
-        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 02:04:01 -0700 (PDT)
+ us-mta-588-06KKnD3JNGKa8wCIWXrlDg-1; Wed, 02 Nov 2022 05:05:05 -0400
+X-MC-Unique: 06KKnD3JNGKa8wCIWXrlDg-1
+Received: by mail-wm1-f69.google.com with SMTP id c5-20020a1c3505000000b003c56da8e894so821627wma.0
+        for <linux-mips@vger.kernel.org>; Wed, 02 Nov 2022 02:05:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XBlp2DOijU5hXQ9AriUwp9vEVLgfxcCQxHX+sSZSvOs=;
-        b=N7hium023t+WpAokL0oUDaaNzF2Ujh9oBX/+R5ZYL5y+DsFg0xTiVonVS/jftU6IMU
-         cwiKTa70YVNYQBEG7hIqTuZO8j1d0QDR8FtIGaWQrbHlrG7ZAsieYXzJ4IZiPriEYCzd
-         8sSn7GEbjVBTNM/UjytaXlbLU+SEVxfBRAuSVMqTRLcIuAFZt8cODeoBD7kUXE9VZQcm
-         G/nup9UX7Qs1i3ui6iwy7N+QNFLbKCD0aQxUxFiZFRNqe85Zmn9NIRDFSlwhIBoFqgy0
-         mhe+hR5NLkZ/SmrvqV3MwWVdFte0/XFYRPQZ8TmiyQaty7FY2xbjoq8ulADcLvTRafSV
-         AlgA==
-X-Gm-Message-State: ACrzQf3e4+sFy2F2sZZBR4pvZJbEs8N4MGcWm8IbJzBPDNQzJEFm8LnY
-        9jIgpyr/585C3BHM5j4DBZHw75qbE3D2w8kMYYIjp388soLdg/aDZSw01dC5dkQocQ9+36PqfIo
-        9xVdMqS6cL4p2F+Tko9IVyw==
-X-Received: by 2002:a7b:c409:0:b0:3cf:4c81:8936 with SMTP id k9-20020a7bc409000000b003cf4c818936mr24380818wmi.38.1667379840253;
-        Wed, 02 Nov 2022 02:04:00 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM72ckpdUoZR+NwXtu1sv2+7NmgS+YMIWWHB7QdeKnWTKduGDRl7tg4bkpenTZv0mX1kFf34kw==
-X-Received: by 2002:a7b:c409:0:b0:3cf:4c81:8936 with SMTP id k9-20020a7bc409000000b003cf4c818936mr24380784wmi.38.1667379840046;
-        Wed, 02 Nov 2022 02:04:00 -0700 (PDT)
+        bh=LpYqcUNkPgIA1fAPwB+EiO+Z9dq0ENSiM+RajxMrldI=;
+        b=R7W9Yivi/8FG1U8yWimj+gGCcodMgqw2Tt/muFFL5b7hgHeqnLrJq/9RAXkOdGY6hB
+         8Rb1SfGKF+Xg19nm+QoUubR/y8/501pOAx1xdJI0aN8Zx6tvdE3/fRp4TmBwdgglBryS
+         QHRBcWGR3VMZ4M2SOXoCkV62n+Jreja5YaMBRbchoti5Sf/iRVuzV6E5cJ4TPC8cSi0n
+         F5rKOl4KV1TxdzabnB2aacxGbSILa80ck0RO7/6gGUk3N+0Q0arWhlClHB+j4OI1fZP1
+         EZl3Dxlh81Z5rDHXP4/rPPLOSs27SwNfjSP6veFoLA8bmprqwAUKsn7Bp8CYP092K/j6
+         Vajw==
+X-Gm-Message-State: ACrzQf2xJCtIJOneIq0znh6G2Ub3sp2RB4Cbamyi2pen/rQUyS5hwFyi
+        3Fy7olUQsr3Vx/0bmDbXCS+WgDe9T8S5Nr4aoyyovrlFVkIXcgezWDvtj6aGzCqfU0TLWzhD7Jc
+        MfEQmIEIirmrnKSYiC+h6BA==
+X-Received: by 2002:a5d:6488:0:b0:22b:3b0b:5e72 with SMTP id o8-20020a5d6488000000b0022b3b0b5e72mr14464154wri.138.1667379904740;
+        Wed, 02 Nov 2022 02:05:04 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6Ug/7BR+PMLuqwC0wiYVRKEgerXkzKho5yFNKIDT0bC26SnYKpkqpAn1quqQ9FNF9E1JGkLg==
+X-Received: by 2002:a5d:6488:0:b0:22b:3b0b:5e72 with SMTP id o8-20020a5d6488000000b0022b3b0b5e72mr14464139wri.138.1667379904487;
+        Wed, 02 Nov 2022 02:05:04 -0700 (PDT)
 Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id b13-20020a5d550d000000b002366b17ca8bsm14083933wrv.108.2022.11.02.02.03.58
+        by smtp.gmail.com with ESMTPSA id p2-20020a5d4582000000b00228d52b935asm12402687wrq.71.2022.11.02.02.05.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:03:59 -0700 (PDT)
-Message-ID: <87284e5e-859e-3b1c-7142-28d4fa7a7939@redhat.com>
-Date:   Wed, 2 Nov 2022 10:03:57 +0100
+        Wed, 02 Nov 2022 02:05:04 -0700 (PDT)
+Message-ID: <a96d57d8-486d-5a48-a00a-39df6275cbb5@redhat.com>
+Date:   Wed, 2 Nov 2022 10:05:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH v2 15/21] drm/fb-helper: Disconnect damage worker from
- update logic
+Subject: Re: [PATCH v2 16/21] drm/fb-helper: Call fb_sync in I/O functions
 Content-Language: en-US
 To:     Thomas Zimmermann <tzimmermann@suse.de>, daniel@ffwll.ch,
         airlied@gmail.com, sam@ravnborg.org, mripard@kernel.org,
@@ -82,9 +81,9 @@ Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
         linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
         xen-devel@lists.xenproject.org
 References: <20221024111953.24307-1-tzimmermann@suse.de>
- <20221024111953.24307-16-tzimmermann@suse.de>
+ <20221024111953.24307-17-tzimmermann@suse.de>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221024111953.24307-16-tzimmermann@suse.de>
+In-Reply-To: <20221024111953.24307-17-tzimmermann@suse.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -98,33 +97,14 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 10/24/22 13:19, Thomas Zimmermann wrote:
-> The fbdev helpers implement a damage worker that forwards fbdev
-> updates to the DRM driver. The worker's update logic depends on
-> the generic fbdev emulation. Separate the two via function pointer.
-> 
-> The generic fbdev emulation sets struct drm_fb_helper_funcs.fb_dirty,
-> a new callback that hides the update logic from the damage worker.
-> It's not possible to use the generic logic with other fbdev emulation,
-> because it contains additional code for the shadow buffering that
-> the generic emulation employs.
-> 
-> DRM drivers with internal fbdev emulation can set fb_dirty to their
-> own implementation if they require damage handling; although no such
-> drivers currently exist.
+> Call struct fb_ops.fb_sync in drm_fbdev_{read,write}() to mimic the
+> behavior of fbdev. Fbdev implementations of fb_read and fb_write in
+> struct fb_ops invoke fb_sync to synchronize with outstanding operations
+> before I/O. Doing the same in DRM implementations will allow us to use
+> them throughout DRM drivers.
 > 
 > Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 > ---
-
-[...]
-
->  static void drm_fb_helper_damage_work(struct work_struct *work)
->  {
-> -	struct drm_fb_helper *helper = container_of(work, struct drm_fb_helper,
-> -						    damage_work);
-> -	struct drm_device *dev = helper->dev;
-> +	struct drm_fb_helper *helper = container_of(work, struct drm_fb_helper, damage_work);
-
-This line is an unrelated code style change. But I guess it's OK.
 
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
