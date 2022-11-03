@@ -2,68 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCD8618298
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 16:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439EE6182CF
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 16:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiKCPYR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 11:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S231169AbiKCP32 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 11:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbiKCPYQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 11:24:16 -0400
+        with ESMTP id S231902AbiKCP2v (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 11:28:51 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3C4BAA
-        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 08:23:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A231B1C4
+        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 08:27:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667488999;
+        s=mimecast20190719; t=1667489273;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ex9w6AF29xEwpNLs+Jj1aaojn2ZZjhH0ZX9iUoTOfgc=;
-        b=JYIcN4Qvut2ueP8N4RFbgV0SYq5S8nvRybbNe2ttD9jexTpnOj2XngkrGJD88PEFd9PSiO
-        khIJaLvEJXZECQvfBP2WCcEPF4mGZDl/ojdIeFDtnqLr+D9EM85KqMhDa91FrMO3n72YH3
-        QJLdpwtvDAncQDbMJaVB0ruJZizXNQ0=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=xCSLioTknXwq+ek9x4fiuIn1LdVr/LliQOq4IIs2CLE=;
+        b=UlUeIPFghiiYsdAzdI7QI8/Es18nEexMjJc8+7ol0CpkKuFPaj2Js5ERkKmDlrN/j1uD9+
+        rVW7cDqusq3FABPutxi70/v6hNPNT4fxABLh0BKyzhhyhlP0Ct1Su+AFqMQA8HcmaIrZzC
+        IPwN0Oq5I3Q6xS6svsiMUtUvV90ZQN4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-158-ac28ZndHMVSnydIY72Bleg-1; Thu, 03 Nov 2022 11:23:18 -0400
-X-MC-Unique: ac28ZndHMVSnydIY72Bleg-1
-Received: by mail-ej1-f72.google.com with SMTP id qk31-20020a1709077f9f00b00791a3e02c80so1482559ejc.21
-        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 08:23:17 -0700 (PDT)
+ us-mta-596--0qvbcNHPwCBFq_kforMfg-1; Thu, 03 Nov 2022 11:27:52 -0400
+X-MC-Unique: -0qvbcNHPwCBFq_kforMfg-1
+Received: by mail-ed1-f72.google.com with SMTP id f20-20020a0564021e9400b00461ea0ce17cso1621164edf.16
+        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 08:27:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ex9w6AF29xEwpNLs+Jj1aaojn2ZZjhH0ZX9iUoTOfgc=;
-        b=poUvVPs1QiErNf6n8eyCGgNiytAtZc9VkAawd4GR9uM5AWKUcnxzEHEvf/f38M1BH8
-         ptHJpXJmcHCXEMV9He8v4aUqRA7nAmfmesWJvBAuwUxBCIHr1wrlRlA0X0NWNjx+9Zkk
-         TZHI0C12cq5fn2d7Wjjcjv4YNap09/NrYbRLCLTqrzP1w+mgcRqpeUOatBU+7KpPLzKR
-         2irlXVxW8fVTRBwwsfrmvnf/2QLcWt1fQiAR7YEddvR6/rKBAAJ04FB4ojAewJOlI3vK
-         FEP/3FZrTThxukMM8IitwdQ38QRbwo97CaWItdh34I9UYcBlCZufMQsZ+VZqoBc60O2u
-         qAtQ==
-X-Gm-Message-State: ACrzQf0VepRpCoRbUmtCFMTcba2SJiOPAF7Cgw6b7h8WMlyYYrKyUA+R
-        R9gOHUM+qcVN4li8rfE7bYQfSFX0CdTgnKud5298WMVBga7HFoxrRZfmsAIGiBNeQY8tiDhQ0Wu
-        PXQa8yaTFy7a2bLOxEFqJmA==
-X-Received: by 2002:a17:907:8a07:b0:7ad:e111:9f1f with SMTP id sc7-20020a1709078a0700b007ade1119f1fmr18706651ejc.748.1667488996723;
-        Thu, 03 Nov 2022 08:23:16 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7w/ZtXgKJ7V+2Z8oeupCi1g9Jll17Pmqv+y4uPqlw3EJEEB8/pAd5jt1iBgMRagb/0UlEDkg==
-X-Received: by 2002:a17:907:8a07:b0:7ad:e111:9f1f with SMTP id sc7-20020a1709078a0700b007ade1119f1fmr18706603ejc.748.1667488996425;
-        Thu, 03 Nov 2022 08:23:16 -0700 (PDT)
+        bh=xCSLioTknXwq+ek9x4fiuIn1LdVr/LliQOq4IIs2CLE=;
+        b=vNVOzjhtKo+j6AewMCD5Sza/eYoMcwOvddAsxpci/jH3v2UPtFca44GP7MNyzmlQpo
+         znBnMNN2tLm3X/kbDAIIMZtEU7gcGnf6W7xzI1P4maykoQTgtUjS9NBqC8x6rxk2PZPR
+         hQXH/05zfrHgmlRtzUGOV8yP0VliQOELPkqwrzNUWhliYE2V0ywMPH6S91gepYFt8GUE
+         haLtiQ10NkEFbF1kh7zE0hBRloSTagqSupNrNQPVe8DKUhmipRyrd3XTyM1rM6snjw8+
+         8zb25NrPpxsdZyql+PZjT+8rD2HTxnmoVa5hUS93mdJRXDvI/fdMWmaapzh/fdDDYQUQ
+         gjJw==
+X-Gm-Message-State: ACrzQf091FyRcwRcX5frDN6o9QK7iEpgTA4a8urAWCEDldxExe6dhv8S
+        1ZHN2YCdCedeY7JwIsqii3LpKQ8JdZdSM7F7kZorXdOQGczV6iB0LCVFadSfNY80YYhidY2tuK6
+        hiQyCMcdif/T92v/vXW9KpA==
+X-Received: by 2002:a17:907:2dab:b0:78d:fc4b:7e31 with SMTP id gt43-20020a1709072dab00b0078dfc4b7e31mr28147775ejc.531.1667489270832;
+        Thu, 03 Nov 2022 08:27:50 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7u9a9PiI+1WXKEKW1T9dxImTSTFhIKArq6MPRri6hHxMVLdP9Ji+9iwit/AYCn6duMyFkDdg==
+X-Received: by 2002:a17:907:2dab:b0:78d:fc4b:7e31 with SMTP id gt43-20020a1709072dab00b0078dfc4b7e31mr28147732ejc.531.1667489270591;
+        Thu, 03 Nov 2022 08:27:50 -0700 (PDT)
 Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id 9-20020a170906218900b007a9c3831409sm596520eju.137.2022.11.03.08.23.13
+        by smtp.googlemail.com with ESMTPSA id 15-20020a508e4f000000b00463bc1ddc76sm657729edx.28.2022.11.03.08.27.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:23:15 -0700 (PDT)
-Message-ID: <7b6ce80e-7f1f-11cd-8bde-8d8fa9fd7e1d@redhat.com>
-Date:   Thu, 3 Nov 2022 16:23:12 +0100
+        Thu, 03 Nov 2022 08:27:49 -0700 (PDT)
+Message-ID: <82df23f2-b049-8bee-8bb8-608645b918d8@redhat.com>
+Date:   Thu, 3 Nov 2022 16:27:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH 39/44] KVM: Drop kvm_count_lock and instead protect
- kvm_usage_count with kvm_lock
+Subject: Re: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
         Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -71,7 +71,6 @@ To:     Sean Christopherson <seanjc@google.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
         Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Matthew Rosato <mjrosato@linux.ibm.com>,
@@ -95,11 +94,11 @@ Cc:     James Morse <james.morse@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Yuan Yao <yuan.yao@intel.com>
 References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-40-seanjc@google.com>
+ <b37267a9-c0b4-9841-71af-d8eab9baeb60@linux.ibm.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221102231911.3107438-40-seanjc@google.com>
+In-Reply-To: <b37267a9-c0b4-9841-71af-d8eab9baeb60@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
@@ -110,163 +109,24 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/3/22 00:19, Sean Christopherson wrote:
-> +- kvm_lock is taken outside kvm->mmu_lock
+On 11/3/22 13:08, Christian Borntraeger wrote:
+>> There are bug fixes throughout this series.  They are more scattered than
+>> I would usually prefer, but getting the sequencing correct was a gigantic
+>> pain for many of the x86 fixes due to needing to fix common code in order
+>> for the x86 fix to have any meaning.  And while the bugs are often fatal,
+>> they aren't all that interesting for most users as they either require a
+>> malicious admin or broken hardware, i.e. aren't likely to be encountered
+>> by the vast majority of KVM users.  So unless someone _really_ wants a
+>> particular fix isolated for backporting, I'm not planning on shuffling
+>> patches.
+>>
+>> Tested on x86.  Lightly tested on arm64.  Compile tested only on all 
+>> other architectures.
+> 
+> Some sniff tests seem to work ok on s390.
 
-Not surprising since one is a mutex and one is an rwlock. :)  You can 
-drop this hunk as well as the "Opportunistically update KVM's locking 
-documentation" sentence in the commit message.
-
->   - vcpu->mutex is taken outside kvm->arch.hyperv.hv_lock
->   
->   - kvm->arch.mmu_lock is an rwlock.  kvm->arch.tdp_mmu_pages_lock and
-> @@ -216,15 +220,11 @@ time it will be set using the Dirty tracking mechanism described above.
->   :Type:		mutex
->   :Arch:		any
->   :Protects:	- vm_list
-> -
-> -``kvm_count_lock``
-> -^^^^^^^^^^^^^^^^^^
-> -
-> -:Type:		raw_spinlock_t
-> -:Arch:		any
-> -:Protects:	- hardware virtualization enable/disable
-> -:Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
-> -		migration.
-> +		- kvm_usage_count
-> +		- hardware virtualization enable/disable
-> +		- module probing (x86 only)
-
-What do you mean exactly by "module probing"?  Is it anything else than 
-what is serialized by vendor_module_lock?
+Thanks.  There are just a couple nits, and MIPS/PPC/RISC-V have very 
+small changes.  Feel free to send me a pull request once Marc acks.
 
 Paolo
-
-> +:Comment:	KVM also disables CPU hotplug via cpus_read_lock() during
-> +		enable/disable.
->   
->   ``kvm->mn_invalidate_lock``
->   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 4e765ef9f4bd..c8d92e6c3922 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -100,7 +100,6 @@ EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
->    */
->   
->   DEFINE_MUTEX(kvm_lock);
-> -static DEFINE_RAW_SPINLOCK(kvm_count_lock);
->   LIST_HEAD(vm_list);
->   
->   static cpumask_var_t cpus_hardware_enabled;
-> @@ -5028,9 +5027,10 @@ static void hardware_enable_nolock(void *junk)
->   
->   static int kvm_online_cpu(unsigned int cpu)
->   {
-> +	unsigned long flags;
->   	int ret = 0;
->   
-> -	raw_spin_lock(&kvm_count_lock);
-> +	mutex_lock(&kvm_lock);
->   	/*
->   	 * Abort the CPU online process if hardware virtualization cannot
->   	 * be enabled. Otherwise running VMs would encounter unrecoverable
-> @@ -5039,13 +5039,16 @@ static int kvm_online_cpu(unsigned int cpu)
->   	if (kvm_usage_count) {
->   		WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
->   
-> +		local_irq_save(flags);
->   		hardware_enable_nolock(NULL);
-> +		local_irq_restore(flags);
-> +
->   		if (atomic_read(&hardware_enable_failed)) {
->   			atomic_set(&hardware_enable_failed, 0);
->   			ret = -EIO;
->   		}
->   	}
-> -	raw_spin_unlock(&kvm_count_lock);
-> +	mutex_unlock(&kvm_lock);
->   	return ret;
->   }
->   
-> @@ -5061,10 +5064,13 @@ static void hardware_disable_nolock(void *junk)
->   
->   static int kvm_offline_cpu(unsigned int cpu)
->   {
-> -	raw_spin_lock(&kvm_count_lock);
-> -	if (kvm_usage_count)
-> +	mutex_lock(&kvm_lock);
-> +	if (kvm_usage_count) {
-> +		preempt_disable();
->   		hardware_disable_nolock(NULL);
-> -	raw_spin_unlock(&kvm_count_lock);
-> +		preempt_enable();
-> +	}
-> +	mutex_unlock(&kvm_lock);
->   	return 0;
->   }
->   
-> @@ -5079,9 +5085,11 @@ static void hardware_disable_all_nolock(void)
->   
->   static void hardware_disable_all(void)
->   {
-> -	raw_spin_lock(&kvm_count_lock);
-> +	cpus_read_lock();
-> +	mutex_lock(&kvm_lock);
->   	hardware_disable_all_nolock();
-> -	raw_spin_unlock(&kvm_count_lock);
-> +	mutex_unlock(&kvm_lock);
-> +	cpus_read_unlock();
->   }
->   
->   static int hardware_enable_all(void)
-> @@ -5097,7 +5105,7 @@ static int hardware_enable_all(void)
->   	 * Disable CPU hotplug to prevent scenarios where KVM sees
->   	 */
->   	cpus_read_lock();
-> -	raw_spin_lock(&kvm_count_lock);
-> +	mutex_lock(&kvm_lock);
->   
->   	kvm_usage_count++;
->   	if (kvm_usage_count == 1) {
-> @@ -5110,7 +5118,7 @@ static int hardware_enable_all(void)
->   		}
->   	}
->   
-> -	raw_spin_unlock(&kvm_count_lock);
-> +	mutex_unlock(&kvm_lock);
->   	cpus_read_unlock();
->   
->   	return r;
-> @@ -5716,6 +5724,15 @@ static void kvm_init_debug(void)
->   
->   static int kvm_suspend(void)
->   {
-> +	/*
-> +	 * Secondary CPUs and CPU hotplug are disabled across the suspend/resume
-> +	 * callbacks, i.e. no need to acquire kvm_lock to ensure the usage count
-> +	 * is stable.  Assert that kvm_lock is not held as a paranoid sanity
-> +	 * check that the system isn't suspended when KVM is enabling hardware.
-> +	 */
-> +	lockdep_assert_not_held(&kvm_lock);
-> +	lockdep_assert_irqs_disabled();
-> +
->   	if (kvm_usage_count)
->   		hardware_disable_nolock(NULL);
->   	return 0;
-> @@ -5723,10 +5740,11 @@ static int kvm_suspend(void)
->   
->   static void kvm_resume(void)
->   {
-> -	if (kvm_usage_count) {
-> -		lockdep_assert_not_held(&kvm_count_lock);
-> +	lockdep_assert_not_held(&kvm_lock);
-> +	lockdep_assert_irqs_disabled();
-> +
-> +	if (kvm_usage_count)
->   		hardware_enable_nolock(NULL);
-> -	}
->   }
->   
->   static struct syscore_ops kvm_syscore_ops = {
 
