@@ -2,134 +2,187 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4FC61779F
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 08:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2106177E8
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 08:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiKCHZp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 03:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        id S229975AbiKCHqf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 03:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiKCHZo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 03:25:44 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F872DDD
-        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 00:25:43 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id k8so1356723wrh.1
-        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 00:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EDXCjZngZdqFd0T8UNtaJgIVNUXtxy5kh+IvZcYgc3o=;
-        b=KBb4CRffvbqT8vCYmIjrzMCnn1vGDH3hTE8kztkuirWCWDx5vmnnhlY12+76G8HB+D
-         zNMscqf1aWjU1jn9Q/+2qznV1nyjnfJgJejU0eBLDst+wEJ5JP32F9KCikAYwccYRz/4
-         CEoS+rbiQf+EK76mQ+O07yD4/kZHVOkQQ4sHVGI67dP7iLfCkYZsRk0ZykZuinHxGqnw
-         VBepbg5NHi4yk+ONf1CC+WSt8MwwyKu83Az0OvU8HlQtsrRUhgNXczuxh+p9v62b1ye5
-         0/LNF3gKJJGGBQ4GVZwf3fHBWg9tW8pDxWcOYgxGkG6PYQEim2NR9gsO5CmPy3fAtv6n
-         sc3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EDXCjZngZdqFd0T8UNtaJgIVNUXtxy5kh+IvZcYgc3o=;
-        b=t4GCdmyrG/sOfFqg2GfD2WNgtfq7YvgcWuXK5aaKS2CgYIPV+OJth9nIQYWz3OHMBJ
-         MLAnyaj+pIvqd7fcQjevUGkI9HSn0uhKlZne5NhVs7QqR2WM3+GVeC+JiKkusJPFfB/I
-         S9UJRpGnlTAidN/q+6lWpjKvRu2697+042DhA9p1VQbZ/9k5ILfIgG4AyiThKI/XPKS2
-         F+uHqskuUnpVt2MLf599oMoRzaFScxdFV764FYZj5vKNwjC1aQpiAZSukwc5etWxt5E1
-         KL0vuz1xOlk222zmJNpG6zasRtK0IrnnncxrtHM4v6V/j/+HHGKGJxXvtBloiA3hOd4g
-         8jKg==
-X-Gm-Message-State: ACrzQf25/NvSgWvbVz/RpzQm/DLZe9wE6eg7ABLNLYGG+I+Udk1kNY3S
-        HXPvjBTiIiaBXOFSjwSywtJx/A==
-X-Google-Smtp-Source: AMsMyM74HX/NoI0zgj7ni+fuzXHxAnM/kiJpMAz2sP8bktGhOQR4suw74I3bBM5aFs9fFpQjlVL3zA==
-X-Received: by 2002:a5d:50ca:0:b0:236:776c:3075 with SMTP id f10-20020a5d50ca000000b00236776c3075mr17956880wrt.656.1667460341889;
-        Thu, 03 Nov 2022 00:25:41 -0700 (PDT)
-Received: from [192.168.11.175] (216.red-88-29-181.dynamicip.rima-tde.net. [88.29.181.216])
-        by smtp.gmail.com with ESMTPSA id i10-20020a1c540a000000b003a3442f1229sm4408723wmb.29.2022.11.03.00.25.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 00:25:40 -0700 (PDT)
-Message-ID: <dd59d579-4a4e-6db2-eac4-6c5c3ab71fd3@linaro.org>
-Date:   Thu, 3 Nov 2022 08:25:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH 17/44] KVM: arm64: Do arm/arch initialiation without
- bouncing through kvm_init()
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-18-seanjc@google.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221102231911.3107438-18-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229481AbiKCHqe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 03:46:34 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6902ACB;
+        Thu,  3 Nov 2022 00:46:31 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D690D5C00DF;
+        Thu,  3 Nov 2022 03:46:28 -0400 (EDT)
+Received: from imap46 ([10.202.2.96])
+  by compute5.internal (MEProxy); Thu, 03 Nov 2022 03:46:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1667461588; x=1667547988; bh=UJ
+        Z0UysFtjqjPIhOXvrXl9HpVojGVqoZMb7srL4hqgM=; b=FC+Hvo6gBuNfJFvN7t
+        PepS2kfLAqKwLgZ1E8jMfgBPVrUgq2h7ZoZfLx1Fr3xjTWMwltpi5DCIBgcQtMb0
+        hCfPWTE5Dxcaehj6B7AnmqSP1D6ac5WnSZOP1hg+01aTNKFoj1FVy51WaDEoNd1M
+        yWgrvoUk9hWWg95tlY86MFO9cOGnC1AwgUkPpsAFl3HjMrUEla+J8IwNYlLKhbTQ
+        gSCESpSg7cf2wUhMnsEzgsPwsw+NcUCBklJKrQXJjpGDlRtYwdG/sCVy7NecTG06
+        oPgkHpF+CMmiWB2LtrGs+whg7LOYy3XjYIMFZRcdlz1Zk0BS8vjrVx7EjLOiIY2l
+        7bzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667461588; x=1667547988; bh=UJZ0UysFtjqjPIhOXvrXl9HpVojG
+        VqoZMb7srL4hqgM=; b=cvCkb37chz2XVByqN5aIh7DmQTkZ63n8jLJVAkpFhJKf
+        nKS0iw65gibFD75Xu/u4ZupnHxPfRZ0oCNQwTO8r5oHXLxRrPvJt10xZ4+QnO9ra
+        4zZ7//UQN7jhu0gnoaiEowAEXebyqthKOiWghcGwU94ARMEr+n5gGvrQcloKcMvf
+        J16A476mIBVkSfICJSBEujTf4hFncE7OLFV0TG6yUkpmwQYYuW7eJgkMC9w42Pbj
+        W6EK1/fqruup/LL+rIIZz4PsOGpncVFuTjgkV1kO4KySRnvlRKcMVzgz7cTS9Quy
+        HDEk6EY9d3Ur3A27UlTPjpi2pE8TYYHNFPblleYoBQ==
+X-ME-Sender: <xms:03FjY7b1CAJwEuzluTxLif4B88JXlNghnCfO2eG1MaKSB7A_FCm-mg>
+    <xme:03FjY6Y-UIo2Aau6fJrpHEbbm2WcFjVhtUvcGRn14177hNBSvwZXLMc3UQu2XLaSf
+    bc1GyQwGL4woAhdAA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudekgdduuddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedflfho
+    hhhnucfvhhhomhhsohhnfdcuoehlihhsthhssehjohhhnhhthhhomhhsohhnrdhfrghsth
+    hmrghilhdrtghomhdrrghuqeenucggtffrrghtthgvrhhnpeejjeefieelgfeftdekkeef
+    keffgeelteelhfehkeelgefgtddtveevudehteetgfenucffohhmrghinhepkhgvrhhnvg
+    hlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mheplhhishhtshesjhhohhhnthhhohhmshhonhdrfhgrshhtmhgrihhlrdgtohhmrdgruh
+X-ME-Proxy: <xmx:03FjY98o3Kiu4I6CSH9uilu0NoH7Ih6mkFGolflG5k3i8TCRM2Z6-w>
+    <xmx:03FjYxot7QbczOxt5fdS2BWXeauqOf_ZLQ8VXESEdWvC7vBA8paBhw>
+    <xmx:03FjY2pUvWU4z2LA7p-0jmUCKmvuQjFQwiMjDY0pFM_MJ0yvrvmhHQ>
+    <xmx:1HFjY6oCruZq-H7sCgY9ssAM3LduTSZ-Pv_fsrM3Ec4HIMvHFnJQ8w>
+Feedback-ID: ia7894244:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3C91C2A20085; Thu,  3 Nov 2022 03:46:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <f479b9cc-1301-410c-a36e-80c365964566@app.fastmail.com>
+In-Reply-To: <Y2NrRt5FF+zi4Vf1@feng-clx>
+References: <9b71ae3e-7f53-4c9e-90c4-79d3d649f94c@app.fastmail.com>
+ <Y2DReuPHZungAGsU@feng-clx>
+ <53b53476-bb1e-402e-9f65-fd7f0ecf94c2@app.fastmail.com>
+ <Y2DngwUc7cLB0dG7@hyeyoo>
+ <29271a2b-cf19-4af9-bfe5-5bcff8a23fda@app.fastmail.com>
+ <Y2D4D52h5VVa8QpE@hyeyoo> <Y2ElURkvmGD5csMc@feng-clx>
+ <70002fbe-34ec-468e-af67-97e4bf97819b@app.fastmail.com>
+ <Y2IJSR6NLVyVTsDY@feng-clx> <Y2IZNqpABkdxxPjv@hyeyoo>
+ <Y2NrRt5FF+zi4Vf1@feng-clx>
+Date:   Thu, 03 Nov 2022 07:45:49 +0000
+From:   "John Thomson" <lists@johnthomson.fastmail.com.au>
+To:     "Feng Tang" <feng.tang@intel.com>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>
+Cc:     "Vlastimil Babka" <vbabka@suse.cz>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Christoph Lameter" <cl@linux.com>,
+        "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Dmitry Vyukov" <dvyukov@google.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Andrey Konovalov" <andreyknvl@gmail.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "John Garry" <john.garry@huawei.com>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "John Crispin" <john@phrozen.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v6 1/4] mm/slub: enable debugging memory wasting of kmalloc
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sean,
+On Thu, 3 Nov 2022, at 07:18, Feng Tang wrote:
+> On Wed, Nov 02, 2022 at 04:16:06PM +0900, Hyeonggon Yoo wrote:
+>> On Wed, Nov 02, 2022 at 02:08:09PM +0800, Feng Tang wrote:
+> [...]
+>> > > transfer started ......................................... transfer ok, time=2.11s
+>> > > setting up elf image... OK
+>> > > jumping to kernel code
+>> > > zimage at:     80B842A0 810B4BC0
+>> > > 
+>> > > Uncompressing Linux at load address 80001000
+>> > > 
+>> > > Copy device tree to address  80B80EE0
+>> > > 
+>> > > Now, booting the kernel...
+>> > > 
+>> > > [    0.000000] Linux version 6.1.0-rc3+ (john@john) (mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #73 SMP Wed Nov  2 05:10:01 AEST 2022
+>> > > [    0.000000] ------------[ cut here ]------------
+>> > > [    0.000000] WARNING: CPU: 0 PID: 0 at mm/slub.c:3416 kmem_cache_alloc+0x5a4/0x5e8
+>> > > [    0.000000] Modules linked in:
+>> > > [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3+ #73
+>> > > [    0.000000] Stack : 810fff78 80084d98 00000000 00000004 00000000 00000000 80889d04 80c90000
+>> > > [    0.000000]         80920000 807bd328 8089d368 80923bd3 00000000 00000001 80889cb0 00000000
+>> > > [    0.000000]         00000000 00000000 807bd328 8084bcb1 00000002 00000002 00000001 6d6f4320
+>> > > [    0.000000]         00000000 80c97d3d 80c97d68 fffffffc 807bd328 00000000 00000000 00000000
+>> > > [    0.000000]         00000000 a0000000 80910000 8110a0b4 00000000 00000020 80010000 80010000
+>> > > [    0.000000]         ...
+>> > > [    0.000000] Call Trace:
+>> > > [    0.000000] [<80008260>] show_stack+0x28/0xf0
+>> > > [    0.000000] [<8070c958>] dump_stack_lvl+0x60/0x80
+>> > > [    0.000000] [<8002e184>] __warn+0xc4/0xf8
+>> > > [    0.000000] [<8002e210>] warn_slowpath_fmt+0x58/0xa4
+>> > > [    0.000000] [<801c0fac>] kmem_cache_alloc+0x5a4/0x5e8
+>> > > [    0.000000] [<8092856c>] prom_soc_init+0x1fc/0x2b4
+>> > > [    0.000000] [<80928060>] prom_init+0x44/0xf0
+>> > > [    0.000000] [<80929214>] setup_arch+0x4c/0x6a8
+>> > > [    0.000000] [<809257e0>] start_kernel+0x88/0x7c0
+>> > > [    0.000000] 
+>> > > [    0.000000] ---[ end trace 0000000000000000 ]---
+>> > > [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
+>> > > [    0.000000] printk: bootconsole [early0] enabled
+>> > > 
+>> > > Thank you for working through this with me.
+>> > > I will try to address the root cause in mt7621.c.
+>> > > It looks like other arch/** soc_device_register users use postcore_initcall, device_initcall,
+>> > > or the ARM DT_MACHINE_START .init_machine. A quick hack to use postcore_initcall in mt7621
+>> > > avoided this zero ptr kmem_cache passed to kmem_cache_alloc_lru.
+>> > 
+>> > If IIUC, the prom_soc_init() is only called once in kernel, can the
+>> > 'soc_dev_attr' just be defined as a global data structure instead
+>> > of calling kzalloc(), as its size is small only containing 7 pointers.
+>> 
+>> But soc_device_registers() too uses kmalloc. I think calling it
+>> after slab initialization will be best solution - if that is correct.
+>
+> Yes, you are right, there is other kmalloc() down the call chain.
+>
+> Hi John,
+>
+> Will you verify and submit a patch for your proposal of deferring
+> calling prom_soc_init()? thanks
+>
+> - Feng
 
-On 3/11/22 00:18, Sean Christopherson wrote:
-> Move arm/arch specific initialization directly in arm's module_init(),
-> now called kvm_arm_init(), instead of bouncing through kvm_init() to
-> reach kvm_arch_init().  Invoking kvm_arch_init() is the very first action
-> performed by kvm_init(), i.e. this is a glorified nop.
-> 
-> Making kvm_arch_init() a nop will allow dropping it entirely once all
-> other architectures follow suit.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/arm64/kvm/arm.c | 25 ++++++++++++++++---------
->   1 file changed, 16 insertions(+), 9 deletions(-)
+Hi Feng,
 
->   /* NOP: Compiling as a module not supported */
->   void kvm_arch_exit(void)
->   {
-> -	kvm_unregister_perf_callbacks();
+My proposed mt7621.c changes are RFC here:
+https://lore.kernel.org/lkml/20221103050538.1930758-1-git@johnthomson.fastmail.com.au/
+That series lets me boot the v6.1-rc3 kernel. I have only tried it with my config (as sent earlier). If there are other suspect config settings that I should test, please let me know?
+I used device_initcall, but postcore_initcall also works fine.
+I rephrased Vlastimil's explanation and used it in patch 3 description.
+I have not referenced a Fixes tag yet (unsure which/if any I should use)
 
-Doesn't this belong to the previous patch?
-
-> +
->   }
-
+Cheers,
+-- 
+  John Thomson
