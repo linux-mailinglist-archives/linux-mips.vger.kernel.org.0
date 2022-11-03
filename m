@@ -2,242 +2,165 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17829617B66
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 12:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C0A617C26
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 13:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiKCLP7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 07:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
+        id S231319AbiKCMI7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 08:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiKCLP6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 07:15:58 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BC0CE1A;
-        Thu,  3 Nov 2022 04:15:54 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 0CD713200A5F;
-        Thu,  3 Nov 2022 07:15:51 -0400 (EDT)
-Received: from imap46 ([10.202.2.96])
-  by compute5.internal (MEProxy); Thu, 03 Nov 2022 07:15:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1667474151; x=1667560551; bh=zy
-        B+zszBgBm3K/aStLXUgTea1eyb+dWbZii+A4olXKY=; b=F/Y15xVLvcPCmli2pd
-        HVBLbgUgtuKvTP+LIxpLQr1zKLf336lyMDijyPn//mHybphiZwmt7vBvrUjJPAb/
-        RF90k7pFRf8xD21xh4Oc7A6v9e9gVQ5bUIdO7A07YP3A225myR7kaApUUy/wIWZJ
-        x5A+Z0zItQHVrzfxgDjfE/pUX+RiDwNMrsocWet/wbFvU4aU96pHObRQELTULTXV
-        m2FKrWtRsBh6gpo24Jk9F1mO7veDMig60uOy2lsi2SvI0TdxtSlHnOwIpWGQzTKq
-        iHtAP2UJlwirQW6eDgR2bxPt02AArOXwkGuCeQwC1SsVDewv+qG+rQxs1q/kv7+S
-        +FtA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667474151; x=1667560551; bh=zyB+zszBgBm3K/aStLXUgTea1eyb
-        +dWbZii+A4olXKY=; b=KZG4NZKAnFhMpCQLvC4z5E4pqNzuYvLLYKMo8t9JZtb2
-        JIUoALZCT/NxTpYvUOx8nCsYXnuJsBYeYIOOV59nPFrIjBwm1W9VsyfmF0pRT/5k
-        YopuoUIoLSKrJfIEy2153aGBBwJ9+1qJhjPD12GzR30R1fSD7fxPP3GrrKD3Yv1r
-        4bBfuBS/zac7X5YU/t0JN0UPMfzpHpJBa4mWuuQqEVWCkLi2n47nw/PpxU/XDbFr
-        8/LC9YJgP98DnhWzcdv1e9ILDwyi77f693bob9//SHbNT9hP0oU6NpMPWJXd67CC
-        PZg1JHgNoqj5zEhMTj5hqTzjf52CIxLk7ccjM7xs7w==
-X-ME-Sender: <xms:56JjY6nVgRSiVTzlTBFLnDSq_sQTOH9R22JHyeP5rfe-dSqpdv4dyg>
-    <xme:56JjYx3r_y7wTk7enS-4u0_EF1w3jmMWzoojUxVyv8sx25Ewh7yPl-hW_FdYb5LpA
-    UKubtiqVJw3Swy2dw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudelgddvtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdflohhh
-    nhcuvfhhohhmshhonhdfuceolhhishhtshesjhhohhhnthhhohhmshhonhdrfhgrshhtmh
-    grihhlrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhepjeejfeeilefgfedtkeekfeek
-    ffegleetlefhheekleeggfdttdevveduheettefgnecuffhomhgrihhnpehkvghrnhgvlh
-    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehlihhsthhssehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilhdrtghomhdrrghu
-X-ME-Proxy: <xmx:56JjY4qBT8yA0_LfG1RK9eHSreqrsHod4bzwzARSyVuQFNQqs3siFg>
-    <xmx:56JjY-mPV8gG3eO8CQsvZaL-5I3qQs7ctSsts-lmuXLdaTbVy9objA>
-    <xmx:56JjY41go-1wE6Oqwd2dNU_3zVUTYZrsrK201KLJ2wYeo0swzXfrEw>
-    <xmx:56JjY1wcwKrOad65IJFCtp1_hsAX03fQmaTK_FEvXLrxRRr0_fyEJg>
-Feedback-ID: if0294502:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2BC5C2A20080; Thu,  3 Nov 2022 07:15:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <26ebbed1-0fe9-4af9-8466-65f841d0b382@app.fastmail.com>
-In-Reply-To: <20221103050538.1930758-4-git@johnthomson.fastmail.com.au>
-References: <20221103050538.1930758-1-git@johnthomson.fastmail.com.au>
- <20221103050538.1930758-4-git@johnthomson.fastmail.com.au>
-Date:   Thu, 03 Nov 2022 11:15:01 +0000
-From:   "John Thomson" <lists@johnthomson.fastmail.com.au>
-To:     "Sergio Paracuellos" <sergio.paracuellos@gmail.com>,
-        =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        "John Crispin" <john@phrozen.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 3/3] mips: ralink: mt7621: do not use kzalloc too early
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230388AbiKCMI6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 08:08:58 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC84DD6;
+        Thu,  3 Nov 2022 05:08:57 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3B0Gq9021170;
+        Thu, 3 Nov 2022 12:08:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=tRd+Sf4ESzYxXeduPYDhAWunMH0Pov2R0lxSdKxbbNc=;
+ b=VRfTy5Inlafk+/Jp+RulvFawqvi/rSVV5WzgD4Q1ylYH5YYV6rkSt9im3XzzAdVhyA1S
+ pvZsUgzws4pR0NmM9t9h3jocHcktl8DGqfhgFSLrxlknEcccU5fUwG0weOUeZmhOa+v5
+ /TFIiNm4imhOJWsZbUA3gE1G3WJq3v1g1w94vinZPPz+bPMUjHFVAQVWDh4M5o1yB8nr
+ CkL0Og3cF1BgO+0JO95fWHkydv9kJ87DI6b+gpdqCKQU6YCXb72iPx1NOlLixNYoO4Le
+ By84c4Q99oNNnMAvCX2FNua/g8RbEyUfgdWXfOnEc+5/w1mAKOkACyhntrGE3j92Ekby jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3km6pgvku9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 12:08:11 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3Aw71f011008;
+        Thu, 3 Nov 2022 12:08:10 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3km6pgvksp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 12:08:10 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3C5slO006357;
+        Thu, 3 Nov 2022 12:08:08 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3kgut90qww-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 12:08:07 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3C2WEU47645072
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Nov 2022 12:02:32 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7331F11C050;
+        Thu,  3 Nov 2022 12:08:04 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 019D711C04A;
+        Thu,  3 Nov 2022 12:08:03 +0000 (GMT)
+Received: from [9.179.10.27] (unknown [9.179.10.27])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Nov 2022 12:08:02 +0000 (GMT)
+Message-ID: <b37267a9-c0b4-9841-71af-d8eab9baeb60@linux.ibm.com>
+Date:   Thu, 3 Nov 2022 13:08:02 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20221102231911.3107438-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: kDz4IlUkdMl5dt80_ZCu6z1wzI39hakX
+X-Proofpoint-GUID: KA9oP9_xjNfF3-IlHpu6OGKikLeeqdHZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-03_02,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 spamscore=0
+ impostorscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0 adultscore=0
+ suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211030083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 3 Nov 2022, at 05:05, John Thomson wrote:
-> Following commit 6edf2576a6cc ("mm/slub: enable debugging memory wasting
-> of kmalloc") mt7621 failed to boot very early, without showing any
-> console messages.
-> This exposed the pre-existing bug of mt7621.c using kzalloc before normal
-> memory management was available.
-> Prior to this slub change, there existed the unintended protection against
-> "kmem_cache *s" being NULL as slab_pre_alloc_hook() happened to
-> return NULL and bailed out of slab_alloc_node().
-> This allowed mt7621 prom_soc_init to fail in the soc_dev_init kzalloc,
-> but continue booting without this soc device.
->
-> Console output from a DEBUG_ZBOOT vmlinuz kernel loading,
-> with mm/slub modified to warn on kmem_cache zero or null:
->
-> zimage at:     80B842A0 810B4BC0
-> Uncompressing Linux at load address 80001000
-> Copy device tree to address  80B80EE0
-> Now, booting the kernel...
->
-> [    0.000000] Linux version 6.1.0-rc3+ (john@john)
-> (mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot
-> 2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #73 SMP Wed
->      Nov  2 05:10:01 AEST 2022
-> [    0.000000] ------------[ cut here ]------------
-> [    0.000000] WARNING: CPU: 0 PID: 0 at mm/slub.c:3416
-> kmem_cache_alloc+0x5a4/0x5e8
-> [    0.000000] Modules linked in:
-> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3+ #73
-> [    0.000000] Stack : 810fff78 80084d98 00000000 00000004 00000000
-> 00000000 80889d04 80c90000
-> [    0.000000]         80920000 807bd328 8089d368 80923bd3 00000000
-> 00000001 80889cb0 00000000
-> [    0.000000]         00000000 00000000 807bd328 8084bcb1 00000002
-> 00000002 00000001 6d6f4320
-> [    0.000000]         00000000 80c97d3d 80c97d68 fffffffc 807bd328
-> 00000000 00000000 00000000
-> [    0.000000]         00000000 a0000000 80910000 8110a0b4 00000000
-> 00000020 80010000 80010000
-> [    0.000000]         ...
-> [    0.000000] Call Trace:
-> [    0.000000] [<80008260>] show_stack+0x28/0xf0
-> [    0.000000] [<8070c958>] dump_stack_lvl+0x60/0x80
-> [    0.000000] [<8002e184>] __warn+0xc4/0xf8
-> [    0.000000] [<8002e210>] warn_slowpath_fmt+0x58/0xa4
-> [    0.000000] [<801c0fac>] kmem_cache_alloc+0x5a4/0x5e8
-> [    0.000000] [<8092856c>] prom_soc_init+0x1fc/0x2b4
-> [    0.000000] [<80928060>] prom_init+0x44/0xf0
-> [    0.000000] [<80929214>] setup_arch+0x4c/0x6a8
-> [    0.000000] [<809257e0>] start_kernel+0x88/0x7c0
-> [    0.000000]
-> [    0.000000] ---[ end trace 0000000000000000 ]---
-> [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
-> [    0.000000] printk: bootconsole [early0] enabled
->
-> This early kzalloc was introduced in commit 71b9b5e0130d ("MIPS: ralink:
-> mt7621: introduce 'soc_device' initialization")
->
-> Link: 
-> https://lore.kernel.org/linux-mm/becf2ac3-2a90-4f3a-96d9-a70f67c66e4a@app.fastmail.com/
-> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
-> ---
->  arch/mips/ralink/mt7621.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-> index f2443b833bc3..836965021d5c 100644
-> --- a/arch/mips/ralink/mt7621.c
-> +++ b/arch/mips/ralink/mt7621.c
-> @@ -25,6 +25,7 @@
->  #define MT7621_MEM_TEST_PATTERN         0xaa5555aa
+Am 03.11.22 um 00:18 schrieb Sean Christopherson:
+> Non-x86 folks, please test on hardware when possible.  I made a _lot_ of
+> mistakes when moving code around.  Thankfully, x86 was the trickiest code
+> to deal with, and I'm fairly confident that I found all the bugs I
+> introduced via testing.  But the number of mistakes I made and found on
+> x86 makes me more than a bit worried that I screwed something up in other
+> arch code.
 > 
->  static u32 detect_magic __initdata;
-> +struct ralink_soc_info *soc_info_ptr;
+> This is a continuation of Chao's series to do x86 CPU compatibility checks
+> during virtualization hardware enabling[1], and of Isaku's series to try
+> and clean up the hardware enabling paths so that x86 (Intel specifically)
+> can temporarily enable hardware during module initialization without
+> causing undue pain for other architectures[2].  It also includes one patch
+> from another mini-series from Isaku that provides the less controversial
+> patches[3].
 > 
->  int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
->  {
-> @@ -147,27 +148,30 @@ static const char __init *mt7621_get_soc_revision(void)
->  		return "E1";
->  }
+> The main theme of this series is to kill off kvm_arch_init(),
+> kvm_arch_hardware_(un)setup(), and kvm_arch_check_processor_compat(), which
+> all originated in x86 code from way back when, and needlessly complicate
+> both common KVM code and architecture code.  E.g. many architectures don't
+> mark functions/data as __init/__ro_after_init purely because kvm_init()
+> isn't marked __init to support x86's separate vendor modules.
 > 
-> -static void soc_dev_init(struct ralink_soc_info *soc_info)
-> +static int __init mt7621_soc_dev_init(void)
->  {
->  	struct soc_device *soc_dev;
->  	struct soc_device_attribute *soc_dev_attr;
+> The idea/hope is that with those hooks gone (moved to arch code), it will
+> be easier for x86 (and other architectures) to modify their module init
+> sequences as needed without having to fight common KVM code.  E.g. I'm
+> hoping that ARM can build on this to simplify its hardware enabling logic,
+> especially the pKVM side of things.
 > 
->  	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
->  	if (!soc_dev_attr)
-> -		return;
-> +		return -ENOMEM;
+> There are bug fixes throughout this series.  They are more scattered than
+> I would usually prefer, but getting the sequencing correct was a gigantic
+> pain for many of the x86 fixes due to needing to fix common code in order
+> for the x86 fix to have any meaning.  And while the bugs are often fatal,
+> they aren't all that interesting for most users as they either require a
+> malicious admin or broken hardware, i.e. aren't likely to be encountered
+> by the vast majority of KVM users.  So unless someone _really_ wants a
+> particular fix isolated for backporting, I'm not planning on shuffling
+> patches.
 > 
->  	soc_dev_attr->soc_id = "mt7621";
->  	soc_dev_attr->family = "Ralink";
->  	soc_dev_attr->revision = mt7621_get_soc_revision();
-> 
-> -	soc_dev_attr->data = soc_info;
-> +	soc_dev_attr->data = soc_info_ptr;
-> 
->  	soc_dev = soc_device_register(soc_dev_attr);
->  	if (IS_ERR(soc_dev)) {
->  		kfree(soc_dev_attr);
-> -		return;
-> +		return PTR_ERR(soc_dev);
->  	}
-> +
-> +	return 0;
->  }
-> +device_initcall(mt7621_soc_dev_init);
-> 
->  void __init prom_soc_init(struct ralink_soc_info *soc_info)
->  {
-> @@ -209,7 +213,7 @@ void __init prom_soc_init(struct ralink_soc_info *soc_info)
-> 
->  	soc_info->mem_detect = mt7621_memory_detect;
-> 
-> -	soc_dev_init(soc_info);
-> +	soc_info_ptr = soc_info;
-> 
->  	if (!register_cps_smp_ops())
->  		return;
-> -- 
-> 2.37.2
+> Tested on x86.  Lightly tested on arm64.  Compile tested only on all other
+> architectures.
 
-I backported this to kernel 5.10 as a test
-without it, there was no /sys/bus/soc
-with it, the drivers/staging/mt7621-pci-phy/pci-mt7621-phy.c driver
-panicked in soc_device_match_attr
-This was fixed with an added sentinel element in the quirk table:
---- a/drivers/staging/mt7621-pci-phy/pci-mt7621-phy.c
-+++ b/drivers/staging/mt7621-pci-phy/pci-mt7621-phy.c
-@@ -293,7 +293,8 @@ static struct phy *mt7621_pcie_phy_of_xlate(struct device *d
-ev,
- }
- 
- static const struct soc_device_attribute mt7621_pci_quirks_match[] = {
--       { .soc_id = "mt7621", .revision = "E2" }
-+       { .soc_id = "mt7621", .revision = "E2" },
-+       { /* sentinel */ }
- };
- 
- static const struct regmap_config mt7621_pci_phy_regmap_config = {
+Some sniff tests seem to work ok on s390.
 
-There is the same quirk table to kernel 5.15 in drivers/staging/mt7621-pci/pci-mt7621.c
-Should I add commits for these for the stable kernels?
-
-In master, these files are now
-drivers/pci/controller/pcie-mt7621.c
-drivers/phy/ralink/phy-mt7621-pci.c
-
-Should I add sentinels to the soc_device_attribute quirk tables in all of these files?
-
-Cheers,
--- 
-  John Thomson
