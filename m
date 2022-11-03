@@ -2,182 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BB46182DE
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 16:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EEA618519
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 17:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbiKCPau (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 11:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S232077AbiKCQrj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 12:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiKCPad (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 11:30:33 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F4E1C438
-        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 08:30:02 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 78so1938920pgb.13
-        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 08:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UyUe+HbRzSrTdJquQCMiaXWC2coZG28I37xguDaJaYg=;
-        b=JxP3em5mMEo8M/seyYjwqQClKWueZhrkefM7iopEbtJ9U0ARhXsBBlBaHvB0YZ+mCq
-         7I2lDIbzgsTnUJXXFFd+Mf2MRkvMQ3d/mi120+0k+co+feliF2fGnlDGLipP3oo4jHIs
-         yhCQnzB0LNdLsoCiyP2ThdGCDug/wevVBzx4ZCIoRVJzM62ULFanZrMyKnrfoLhgGw7L
-         LE3NJVvLI80qGdb5QUdNBUYtcEfD6sTxNonp/rLGuh5no7R8ACiBwreWQkoFJnyoE1Nq
-         joZ/uzznkWHqO7mwwbSR52gm1kYa+vf+hliw2Y9f1o05+cN6N5swUWJ7vJszMr5BEKoW
-         HTcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UyUe+HbRzSrTdJquQCMiaXWC2coZG28I37xguDaJaYg=;
-        b=I8LojCvNana1gWRWPNjyrIN0oFHYBZdLOWqUeoVOQkZF776NX7Y/G/tVInb6gBVTp3
-         xX6X6UZQHkpeWjL73WVEjTcbDns+VnT6WxMocEQblYDCH8wf0Q694tprqoCUI2vszh9+
-         tMCaCpFvAQlsetLDzwq5+a4ttnhirwQkOPnqNi++0ZIjbx7WLyWSzLs7TFc234+oYkVX
-         S70eLcfQAx4M2WVVW3JL0J+HnybSu4cm9AtNosd9HUYKoefIrYxgnF0sVq+zh5NhdUIu
-         iP6/Xxqi2TpQMpz+Zs+g4pa2ToCE0Wd9lAUpaJIx3JvIcTACgjdCX9p/EA+zV777h+Sm
-         LJFQ==
-X-Gm-Message-State: ACrzQf0VPBxTqHBFkx0GVUKPzG0rhDSnPz5WHdXHZEP/mY/cU4UIabTa
-        KvdQ7R5EbIFRaoELULytnydvkA==
-X-Google-Smtp-Source: AMsMyM6by5WQXi0G4lBZGaavWsGrxKC8DeWyAUbAtvZsM8BboB9ucyemIyMYLKoI4FadI1MlyxYOPw==
-X-Received: by 2002:a05:6a00:1996:b0:56d:a845:5789 with SMTP id d22-20020a056a00199600b0056da8455789mr17697890pfl.59.1667489402026;
-        Thu, 03 Nov 2022 08:30:02 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f3-20020a170902f38300b0017a018221e2sm835452ple.70.2022.11.03.08.30.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 08:30:01 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 15:29:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
+        with ESMTP id S232529AbiKCQrK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 12:47:10 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB0819C2C;
+        Thu,  3 Nov 2022 09:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667493997; x=1699029997;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6sEwb2LvPX9v9prH3mu2nEGi0LVqQc1+Me9tIfh9Gsk=;
+  b=FSAajs9mYEpAxwK1E+Kao7vQC/qmjWPLx+u/6kzAraWx6TeMe8tnDsLB
+   g9o+1xrusrovOrcx7ToF5XANKPmAHc/1ZQ+Ms9pYKXlY+/x8i1zyEmYaw
+   G6WRv0n8FJ8b/fnKRrCandQ+ULlB/HwEaHm2mUmnrpPE/TC6oj35Fgf/v
+   YqCcJc/1s2ZszfDUGLDVGl4ufvcn06A7YJlj7sljN5Bv9w5nDhTXE1XCv
+   JG13K+P6z4q27Bci4Ks+ohpmCH2umHYgK1Jsgf0E2lATSPvhpxc3l+EX/
+   43+4a2eyGaxbbNxnksIZ8k/cbnCJJAXSoAKXimAsXFLNOov1GqpkbJHHk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="373970810"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="373970810"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 09:46:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="629408020"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="629408020"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 03 Nov 2022 09:46:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 858A5F7; Thu,  3 Nov 2022 18:46:52 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 17/44] KVM: arm64: Do arm/arch initialiation without
- bouncing through kvm_init()
-Message-ID: <Y2Pedr1MYt/P1uL0@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-18-seanjc@google.com>
- <dd59d579-4a4e-6db2-eac4-6c5c3ab71fd3@linaro.org>
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-pci@vger.kernel.org, xen-devel@lists.xenproject.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: [PATCH v2 0/4] PCI: Add pci_dev_for_each_resource() helper and refactor bus one
+Date:   Thu,  3 Nov 2022 18:46:40 +0200
+Message-Id: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dd59d579-4a4e-6db2-eac4-6c5c3ab71fd3@linaro.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 03, 2022, Philippe Mathieu-Daudé wrote:
-> Hi Sean,
-> 
-> On 3/11/22 00:18, Sean Christopherson wrote:
-> > Move arm/arch specific initialization directly in arm's module_init(),
-> > now called kvm_arm_init(), instead of bouncing through kvm_init() to
-> > reach kvm_arch_init().  Invoking kvm_arch_init() is the very first action
-> > performed by kvm_init(), i.e. this is a glorified nop.
-> > 
-> > Making kvm_arch_init() a nop will allow dropping it entirely once all
-> > other architectures follow suit.
-> > 
-> > No functional change intended.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >   arch/arm64/kvm/arm.c | 25 ++++++++++++++++---------
-> >   1 file changed, 16 insertions(+), 9 deletions(-)
-> 
-> >   /* NOP: Compiling as a module not supported */
-> >   void kvm_arch_exit(void)
-> >   {
-> > -	kvm_unregister_perf_callbacks();
-> 
-> Doesn't this belong to the previous patch?
+Provide two new helper macros to iterate over PCI device resources and
+convert users.
 
-No, but the above changelog is a lie, there is very much a functional change here.
+Looking at it, refactor existing pci_bus_for_each_resource() and convert
+users accordingly.
 
-The goal of the previous patch is to fix the error paths in kvm_arch_init(), a.k.a.
-kvm_arm_init().  After fixing kvm_arch_init(), there are still bugs in the sequence
-as a whole because kvm_arch_exit() doesn't unwind other state, e.g. kvm_arch_exit()
-should really look something like:
+This applies on top of this patch Mika sent out earlier:
+https://lore.kernel.org/linux-pci/20221103103254.30497-1-mika.westerberg@linux.intel.com/
 
-  void kvm_arch_exit(void)
-  {
-	teardown_subsystems();
+Changelog v2:
+- refactor to have two macros
+- refactor existing pci_bus_for_each_resource() in the same way and
+  convert users
 
-	if (!is_kernel_in_hyp_mode())
-		teardown_hyp_mode();
+Andy Shevchenko (3):
+  PCI: Split pci_bus_for_each_resource_p() out of
+    pci_bus_for_each_resource()
+  EISA: Convert to use pci_bus_for_each_resource_p()
+  pcmcia: Convert to use pci_bus_for_each_resource_p()
 
-	kvm_arm_vmid_alloc_free();
+Mika Westerberg (1):
+  PCI: Introduce pci_dev_for_each_resource()
 
-	if (is_protected_kvm_enabled())
-		???	
-  }
+ .clang-format                      |  3 +++
+ arch/alpha/kernel/pci.c            |  5 ++---
+ arch/arm/kernel/bios32.c           | 16 ++++++-------
+ arch/mips/pci/pci-legacy.c         |  3 +--
+ arch/powerpc/kernel/pci-common.c   |  5 ++---
+ arch/sparc/kernel/leon_pci.c       |  5 ++---
+ arch/sparc/kernel/pci.c            | 10 ++++-----
+ arch/sparc/kernel/pcic.c           |  5 ++---
+ drivers/eisa/pci_eisa.c            |  4 ++--
+ drivers/pci/bus.c                  |  7 +++---
+ drivers/pci/hotplug/shpchp_sysfs.c |  8 +++----
+ drivers/pci/pci.c                  |  5 ++---
+ drivers/pci/probe.c                |  2 +-
+ drivers/pci/remove.c               |  5 ++---
+ drivers/pci/setup-bus.c            | 36 ++++++++++++------------------
+ drivers/pci/setup-res.c            |  4 +---
+ drivers/pci/xen-pcifront.c         |  4 +---
+ drivers/pcmcia/rsrc_nonstatic.c    |  9 +++-----
+ drivers/pcmcia/yenta_socket.c      |  3 +--
+ include/linux/pci.h                | 25 +++++++++++++++++----
+ 20 files changed, 78 insertions(+), 86 deletions(-)
 
-Becuase although the comment "NOP: Compiling as a module not supported" is correct
-about KVM ARM always having to be built into the kernel, kvm_arch_exit() can still
-be called if a later stage of kvm_init() fails.
+-- 
+2.35.1
 
-But rather than add a patch to fix kvm_arch_exit(), I chose to fix the bug by
-moving code out of kvm_arch_init() so that the unwind sequence established in the
-previous patch could be reused.
-
-Except I managed to forget those details when writing the changelog.  The changelog
-should instead be:
-
-  KVM: arm64: Do arm/arch initialization without bouncing through kvm_init()
-  
-  Do arm/arch specific initialization directly in arm's module_init(), now
-  called kvm_arm_init(), instead of bouncing through kvm_init() to reach
-  kvm_arch_init().  Invoking kvm_arch_init() is the very first action
-  performed by kvm_init(), so from a initialization perspective this is a
-  glorified nop.
-  
-  Avoiding kvm_arch_init() also fixes a mostly benign bug as kvm_arch_exit()
-  doesn't properly unwind if a later stage of kvm_init() fails.  While the
-  soon-to-be-deleted comment about compiling as a module being unsupported
-  is correct, kvm_arch_exit() can still be called by kvm_init() if any step
-  after the call to kvm_arch_init() succeeds.
-
-  Add a FIXME to call out that pKVM initialization isn't unwound if
-  kvm_init() fails, which is a pre-existing problem inherited from
-  kvm_arch_exit().
-
-  Making kvm_arch_init() a nop will also allow dropping kvm_arch_init() and
-  kvm_arch_exit() entirely once all other architectures follow suit.
