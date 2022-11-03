@@ -2,68 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978CE6187E4
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 19:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19310618809
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 19:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiKCSrb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 14:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S230273AbiKCS6Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 14:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbiKCSra (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 14:47:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7C211172
-        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 11:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667501188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KUvqpmismHtbPDi1RWOVBVQOlTCkIOX4rr6fY8m3qi8=;
-        b=EabJpTwfu8tjjAfHEkBVi7bBq+lrfUWFHawhyEB1UMCeQZXnLUaK5P9HsuBOfU3j6e6noZ
-        SJRT20RiiiB+HpCjpj0Hhrm05HM7kb7Wpu9MwqIEstj4N4izzUjgBuNbbsO4PblKrwrYHN
-        iuCVN8/aEt7ngeIDwuH4QtswA1pOwKY=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-246-A9vMUIFGOJC1EZ1Vfd2LGw-1; Thu, 03 Nov 2022 14:46:27 -0400
-X-MC-Unique: A9vMUIFGOJC1EZ1Vfd2LGw-1
-Received: by mail-ej1-f72.google.com with SMTP id oz34-20020a1709077da200b007adc8d68e90so1826397ejc.11
-        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 11:46:27 -0700 (PDT)
+        with ESMTP id S231246AbiKCS6X (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 14:58:23 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6842FE74
+        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 11:58:21 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 64so2474319pgc.5
+        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 11:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgBlWniGTXEnPcASGuNFCxIZuwOSNaqHJ+Eb2HtkZ3A=;
+        b=crtTNSDLBpNcvDSxofCENmrvtDvGgpUzGCkxI3/S4zR915QtnPiMfGmQ1bfa1+IphI
+         JYKHG76keqoKUqskuvBrM1m0JyELxmvNXlZ4KiPUOKMYgaWfFysvap9RGXI963+2hoeq
+         HHT/GX+S1XBR2PYehjOUxetwVpL78GGV9aYozWyKXyCWQQP6iGe8zgNPOME2bv1qjA9e
+         apMslXORbm1rWkX1K/6OQ1RCG98VSwtHOf2J04nfLy9jITyFIIcn6ieZ9TY4AUm1gsGc
+         eyQU7zbjJP0kGKm2zN/8wgEWv2C3dUA3cPXDwDYFGn1wLuJmRxozNVKQFEnfavfSL6Lx
+         ZqXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KUvqpmismHtbPDi1RWOVBVQOlTCkIOX4rr6fY8m3qi8=;
-        b=lJjOUVoKKXVLUi3Y4fn+8l2TTdQbplbfsm3OmUSMp+V1qIji6Xfe/s5kSj76ybznpn
-         lpCbyhRxi6ng09GcEZhsyFXtNeStvrxZWvhgQ8pPyZW6La3rcrom+++J1iNBfHdsnm6f
-         fYGmVrlHgDfNWSIlbgB7fK9zlecNcGyCSbaNNjbck2g4RTXvJnNYvmtV1SMxNbC/ltBf
-         Vbi+2qStD/PaB3SPSgOemEIIFNXBR6lwrNCiTTfWDTW+jhd+c3tguUdxw9XHaybaDzqE
-         IfN29ly81E6H1JavVJPH8bP8iX8l11WVRr8vL4hJQujyd9vsV07icZSmMyEqbQRGzzQ2
-         QALw==
-X-Gm-Message-State: ACrzQf0dquOhHUus1hPU97lt28q9+pHUxEpWckz1FWlhxof51/RAGjd5
-        djBvXcqOdcYMTXWpy1tc3BNPgMyT79mbuRBPXg7NEgZW08Pz6j9NH7Zza1kZTNC0T1r8Ik9Y2Y/
-        lNx/l4C0ABKS7tOOtjowROA==
-X-Received: by 2002:a17:907:31c9:b0:740:ef93:2ffd with SMTP id xf9-20020a17090731c900b00740ef932ffdmr30301700ejb.584.1667501186286;
-        Thu, 03 Nov 2022 11:46:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6jngiF1WMeYDLzQRcIfcwEai0RoBStUb1QJ9IQKOY38atIN4TLSIas8P4CJc6XubwxUck1WA==
-X-Received: by 2002:a17:907:31c9:b0:740:ef93:2ffd with SMTP id xf9-20020a17090731c900b00740ef932ffdmr30301665ejb.584.1667501186012;
-        Thu, 03 Nov 2022 11:46:26 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id 2-20020a170906218200b0078246b1360fsm799044eju.131.2022.11.03.11.46.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 11:46:25 -0700 (PDT)
-Message-ID: <c29e7d40-ddb9-def0-f944-a921a05a4bb2@redhat.com>
-Date:   Thu, 3 Nov 2022 19:46:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
- vendor code
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OgBlWniGTXEnPcASGuNFCxIZuwOSNaqHJ+Eb2HtkZ3A=;
+        b=IHAHWffLN6c3mVt6SPEhF8quzxguZ2xYvZT9QPmkUhFPtnn0nJjoKJ40WpOL0u1GHv
+         K9o1LLd821FpMLUAkfdcAUiDaya0ckL7DUrZGTbuq+AfGeUDaMqaRMcxrRc/Y1pUr+sL
+         G5dMiKCd6QL1xVCJoatp0q5+vmdsn0P229zhnNZpaznQ5pz738XeaLUPDlntQoT4aSNt
+         1CvafXNjXX8VxxEDM9/bgtLH0iQW98hFYNLWa81znYa3W2VaZKRPm9pshfW40GmzALuh
+         fDlZCJuTRwpS3RxXBtxxDTQ+KHDzWGdYF39lTFsgjnN+BHm91XQavrUSrT7iiXbZ3A5z
+         q72Q==
+X-Gm-Message-State: ACrzQf1orwC2k12Xp9Ma5/ADyAY7LUgi2k5zAWlsWaLRiBooPLOA+Guw
+        swHii2X4Xw32FjbCU9YaTxcVag==
+X-Google-Smtp-Source: AMsMyM7lUXjnrFRO+e+xTY8enXMXmh/YC+M/IqwbxJRPxqwsuhxb3fUJPK1b1MpOBO3HsUEvz+aKuA==
+X-Received: by 2002:aa7:81cf:0:b0:561:7d72:73ef with SMTP id c15-20020aa781cf000000b005617d7273efmr31655060pfn.16.1667501900762;
+        Thu, 03 Nov 2022 11:58:20 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c20-20020a17090ad91400b00209a12b3879sm309308pjv.37.2022.11.03.11.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 11:58:20 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 18:58:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Anup Patel <anup@brainfault.org>,
@@ -93,44 +80,77 @@ Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Chao Gao <chao.gao@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
+ vendor code
+Message-ID: <Y2QPSK1/6esl61wQ@google.com>
 References: <20221102231911.3107438-1-seanjc@google.com>
  <20221102231911.3107438-34-seanjc@google.com>
  <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
  <Y2QJ2TuyZImbFFvi@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y2QJ2TuyZImbFFvi@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <c29e7d40-ddb9-def0-f944-a921a05a4bb2@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c29e7d40-ddb9-def0-f944-a921a05a4bb2@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/3/22 19:35, Sean Christopherson wrote:
-> It's technically required.  IA32_FEAT_CTL and thus KVM_INTEL depends on any of
-> CPU_SUP_{INTEL,CENATUR,ZHAOXIN}, but init_ia32_feat_ctl() is invoked if and only
-> if the actual CPU type matches one of the aforementioned CPU_SUP_*.
+On Thu, Nov 03, 2022, Paolo Bonzini wrote:
+> On 11/3/22 19:35, Sean Christopherson wrote:
+> > It's technically required.  IA32_FEAT_CTL and thus KVM_INTEL depends on any of
+> > CPU_SUP_{INTEL,CENATUR,ZHAOXIN}, but init_ia32_feat_ctl() is invoked if and only
+> > if the actual CPU type matches one of the aforementioned CPU_SUP_*.
+> > 
+> > E.g. running a kernel built with
+> > 
+> >    CONFIG_CPU_SUP_INTEL=y
+> >    CONFIG_CPU_SUP_AMD=y
+> >    # CONFIG_CPU_SUP_HYGON is not set
+> >    # CONFIG_CPU_SUP_CENTAUR is not set
+> >    # CONFIG_CPU_SUP_ZHAOXIN is not set
+> > 
+> > on a Cenatur or Zhaoxin CPU will leave X86_FEATURE_VMX set but not set
+> > X86_FEATURE_MSR_IA32_FEAT_CTL.  If VMX isn't enabled in MSR_IA32_FEAT_CTL, KVM
+> > will get unexpected #UDs when trying to enable VMX.
 > 
-> E.g. running a kernel built with
-> 
->    CONFIG_CPU_SUP_INTEL=y
->    CONFIG_CPU_SUP_AMD=y
->    # CONFIG_CPU_SUP_HYGON is not set
->    # CONFIG_CPU_SUP_CENTAUR is not set
->    # CONFIG_CPU_SUP_ZHAOXIN is not set
-> 
-> on a Cenatur or Zhaoxin CPU will leave X86_FEATURE_VMX set but not set
-> X86_FEATURE_MSR_IA32_FEAT_CTL.  If VMX isn't enabled in MSR_IA32_FEAT_CTL, KVM
-> will get unexpected #UDs when trying to enable VMX.
+> Oh, I see.  Perhaps X86_FEATURE_VMX and X86_FEATURE_SGX should be moved to
+> one of the software words instead of using cpuid.  Nothing that you should
+> care about for this series though.
 
-Oh, I see.  Perhaps X86_FEATURE_VMX and X86_FEATURE_SGX should be moved 
-to one of the software words instead of using cpuid.  Nothing that you 
-should care about for this series though.
+Or maybe something like this?
 
-Paolo
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 3e508f239098..ebe617ab0b37 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -191,6 +191,8 @@ static void default_init(struct cpuinfo_x86 *c)
+                        strcpy(c->x86_model_id, "386");
+        }
+ #endif
++
++       clear_cpu_cap(c, X86_FEATURE_MSR_IA32_FEAT_CTL);
+ }
+ 
+ static const struct cpu_dev default_cpu = {
+diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+index c881bcafba7d..3a7ae67f5a5e 100644
+--- a/arch/x86/kernel/cpu/cpuid-deps.c
++++ b/arch/x86/kernel/cpu/cpuid-deps.c
+@@ -72,6 +72,8 @@ static const struct cpuid_dep cpuid_deps[] = {
+        { X86_FEATURE_AVX512_FP16,              X86_FEATURE_AVX512BW  },
+        { X86_FEATURE_ENQCMD,                   X86_FEATURE_XSAVES    },
+        { X86_FEATURE_PER_THREAD_MBA,           X86_FEATURE_MBA       },
++       { X86_FEATURE_VMX,                      X86_FEATURE_MSR_IA32_FEAT_CTL         },
++       { X86_FEATURE_SGX,                      X86_FEATURE_MSR_IA32_FEAT_CTL         },
+        { X86_FEATURE_SGX_LC,                   X86_FEATURE_SGX       },
+        { X86_FEATURE_SGX1,                     X86_FEATURE_SGX       },
+        { X86_FEATURE_SGX2,                     X86_FEATURE_SGX1      },
 
