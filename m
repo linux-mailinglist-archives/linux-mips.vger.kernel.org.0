@@ -2,126 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B032618778
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 19:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1356461879B
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 19:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiKCSas (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 14:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S231140AbiKCSfL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 14:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbiKCSaq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 14:30:46 -0400
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A492AE42;
-        Thu,  3 Nov 2022 11:29:53 -0700 (PDT)
-Received: by mail-pf1-f171.google.com with SMTP id b185so2400986pfb.9;
-        Thu, 03 Nov 2022 11:29:53 -0700 (PDT)
+        with ESMTP id S229672AbiKCSfL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 14:35:11 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B518EF40
+        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 11:35:09 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id l2so2716591pld.13
+        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 11:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dgoOqWPJe20h3F3t+kWJTAR37+M7sNOsPG89iz5Bulk=;
+        b=Pm4Lr3kAm7G9yhV3E+texinWexF8/BykknHnX+41QMhdAJg8Q6KGdsZlwDR9KsaQ03
+         q0oiA6QGnfMNaCLi6FwippomEY2Gxx8DIbtsls7Wm3K9Y5ntAz6T/fo5rOOGqR0XZexV
+         IMpIarVZKtd2r4wbd6pBH2HWWgUKLdmEcjKjz7hr2eZWqilU2ZOjSL0LQYBIbuLk+an3
+         F080UdTs/Pl//2c4Y7M3MC5aXIj0L8ze9uKQnOS3RTfUxOdNjPBYkRT7wM2xznbkkPNf
+         k6rWzEiCMkA6YZikO6kTaZUjEx2R8QJERpkjNDf1cNtL0uRiWX1pfQEgD4PMO8IN1GPi
+         cqnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pZjEyPGh7N/ck24vh/VKMs5s50UIlOa2pgI4ml3dqpA=;
-        b=wBIG6peM6DO5VkovFmK5TgeyvBa7jO8i95AVxC7AtHb7w6gbuyIVitJya39P0iaTJu
-         0sT6wJ6o5hrKmNgXieS+gzsrfy5btgpKT6RZ2nSrQgaYhFueAGWUyUmm4pYpUFvbsiPn
-         7oY6sqqszRlqiSokONWdNzFxaCSIc2FNrRUGQ7cCDsbMzfsGB791jzVb+LyoHWF36yoK
-         2TrOYBVCI2uJxj7oZe3gEUTXw/Rl59c8yO59nawy3Xsh/YPXHqATxcpUZtOmF5C2qQIm
-         d3+Ra3gi/m/RggvdOLbYJ/bpD4AHpoa2ao5th4mbUqIqD3J+HACVkCz5DRhVVTeNcERI
-         z7qQ==
-X-Gm-Message-State: ACrzQf3EhY2IWYhRFKNYyvinf1CSPHo9OLMWzdjT9rya749d8zsmYHdq
-        YaY05A38KU+b5JFp2N8rNLs=
-X-Google-Smtp-Source: AMsMyM4MMb94EAGz1kO2Q0DRDyjidkdmznJiyzQZ8JfQK1Y1FbZfy+aOFpE2yYDeDmYpBxRHuxCHKQ==
-X-Received: by 2002:aa7:8c15:0:b0:56b:ead2:3950 with SMTP id c21-20020aa78c15000000b0056bead23950mr32086578pfd.77.1667500192405;
-        Thu, 03 Nov 2022 11:29:52 -0700 (PDT)
-Received: from rocinante (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b0018157b415dbsm1034089plg.63.2022.11.03.11.29.46
+        bh=dgoOqWPJe20h3F3t+kWJTAR37+M7sNOsPG89iz5Bulk=;
+        b=T0UYEKalyGd9xd/tRM3/5KAUfir7NVONilH6NkBKrRZkUfWf2Val709RA8GcyBHafy
+         FBEyWkezqpHDO+lGa3FBqCXvWZlNSn35T0zC0VGovm4c60Bsw5NpC7B8Ggl0opFMfBto
+         DvSPfxowy38NBS8LIG7WXZEY6fArwYbYpunbVYwKVleL5RTr8gBciWvbdC99gYrPOVWX
+         AR4Ht82z/67zjrODC8Lz1IyB063gRAHFY1UpftN5ilsjeEvydHDTsuGuEVvvdhqhyzDe
+         aVeZwmcmZ1de8/M1Stech6fAyZHG3ljn2XxUhwKk453/WCMLzlTbmGZV5vBe3XQvpH4H
+         WElQ==
+X-Gm-Message-State: ACrzQf1/apRiv59bMOJW/J1jXO6uZV3Nvq+0ytnoJVd2ybNPwylWJqE1
+        GeO+Q3h9WkmniYHsezKgeLO4gg==
+X-Google-Smtp-Source: AMsMyM7An2PKDpytAFzn8oRI/SQJomdGS1nTfx9CsrnDxhHyyoY4AD/5FsaR2YoYMTMl2oHfbxu0kQ==
+X-Received: by 2002:a17:903:1250:b0:185:40c6:3c2c with SMTP id u16-20020a170903125000b0018540c63c2cmr31387342plh.64.1667500509087;
+        Thu, 03 Nov 2022 11:35:09 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z4-20020a1709027e8400b0017da2798025sm914686pla.295.2022.11.03.11.35.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 11:29:51 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 03:29:44 +0900
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Thu, 03 Nov 2022 11:35:08 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 18:35:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v2 4/4] pcmcia: Convert to use
- pci_bus_for_each_resource_p()
-Message-ID: <Y2QImB0OLakzz1+F@rocinante>
-References: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
- <20221103164644.70554-5-andriy.shevchenko@linux.intel.com>
- <Y2P0XCNJvTVuziO7@owl.dominikbrodowski.net>
- <Y2P2ja26ikNecTsv@smile.fi.intel.com>
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
+ vendor code
+Message-ID: <Y2QJ2TuyZImbFFvi@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-34-seanjc@google.com>
+ <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2P2ja26ikNecTsv@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
-
-[...]
-> > > -
-> > > -	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
-> > > -		res = s->cb_dev->bus->resource[i];
-> > > -#else
-> > > -	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
-> > >  #endif
-> > > +
-> > > +	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
-> > >  		if (!res)
-> > >  			continue;
-> > 
-> > Doesn't this remove the proper iterator for X86? Even if that is the right
-> > thing to do, it needs an explict explanation.
+On Thu, Nov 03, 2022, Paolo Bonzini wrote:
+> On 11/3/22 00:19, Sean Christopherson wrote:
+> > +	if (!boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
+> > +	    !boot_cpu_has(X86_FEATURE_VMX)) {
+> > +		pr_err("VMX not enabled in MSR_IA32_FEAT_CTL\n");
+> > +		return false;
 > 
-> I dunno what was in 2010, but reading code now I have found no differences in
-> the logic on how resources are being iterated in these two pieces of code.
+> I think the reference to the BIOS should remain in these messages and in
+> svm.c (even though these days it's much less common for vendors to default
+> to disabled virtualization in the system setup).
 
-This code is over a decade old (13 years old to be precise) and there was
-something odd between Bjorn's and Jesse's patches, as per:
+Ya, I'll figure out a way to mention BIOS/firmware.
 
-  89a74ecccd1f ("PCI: add pci_bus_for_each_resource(), remove direct bus->resource[] refs")
-  cf26e8dc4194 ("pcmcia: do not autoadd root PCI bus resources")
+> The check for X86_FEATURE_MSR_IA32_FEAT_CTL is not needed because
+> init_ia32_feat_ctl() will clear X86_FEATURE_VMX if the rdmsr fail (and not
+> set X86_FEATURE_MSR_IA32_FEAT_CTL).
 
-> But fine, I will add a line to a commit message about this change.
+It's technically required.  IA32_FEAT_CTL and thus KVM_INTEL depends on any of
+CPU_SUP_{INTEL,CENATUR,ZHAOXIN}, but init_ia32_feat_ctl() is invoked if and only
+if the actual CPU type matches one of the aforementioned CPU_SUP_*.
 
-I wouldn't, personally.  The change you are proposing is self-explanatory
-and somewhat in-line with what is there already - unless I am also reading
-the current implementation wrong.
+E.g. running a kernel built with
 
-That said, Dominik is the maintainer of PCMCIA driver, so his is the last
-word, so to speak. :)
+  CONFIG_CPU_SUP_INTEL=y
+  CONFIG_CPU_SUP_AMD=y
+  # CONFIG_CPU_SUP_HYGON is not set
+  # CONFIG_CPU_SUP_CENTAUR is not set
+  # CONFIG_CPU_SUP_ZHAOXIN is not set
 
-> Considering this is done, can you issue your conditional tag so I will
-> incorporate it in v3?
-
-No need, really.  Again, unless Dominik thinks otherwise.
-
-	Krzysztof
+on a Cenatur or Zhaoxin CPU will leave X86_FEATURE_VMX set but not set
+X86_FEATURE_MSR_IA32_FEAT_CTL.  If VMX isn't enabled in MSR_IA32_FEAT_CTL, KVM
+will get unexpected #UDs when trying to enable VMX.
