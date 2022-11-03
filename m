@@ -2,60 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86527617774
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 08:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A66D61777A
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 08:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiKCHRJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 03:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S230497AbiKCHST (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 03:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiKCHQz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 03:16:55 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14235F40
-        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 00:16:54 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so537415wmq.4
-        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 00:16:54 -0700 (PDT)
+        with ESMTP id S230402AbiKCHSS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 03:18:18 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BE1D62
+        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 00:18:17 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id w14so1286652wru.8
+        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 00:18:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hhVVFU4gv+0KPdkJhZ6Bsgp0nMXVzSegBp2GVEhxHuI=;
-        b=h9I23FTp6GIOXmio03YkEg/XABkIyK7okfyOacacDCySEptlxLcYcKstMetIpqEjVI
-         AJxxtkE/wdXbgKxacBRTI0vKPMD7Lrwttr/WvlHH6ej0kR33MU05lAqiRuHOXS6eYgUi
-         5D/WB/7tpxiogfi3huBIVAcoj+aw5jR0iw+raivB9st+zpUrHhjUaefLK8xl1XeXGROT
-         jIYtNJVpBXb1lhi22kZeWS2z2s2scGKIObYA8G99yKRsKrD7Waw2HL3AJk86rNi+kcwk
-         ldYfFW2HEUS0Ngd3K7BW6C8SpUqOYnm44amyRmlRCLpiKmxp0dOvOZKAUgifFtw1/6bS
-         zu8w==
+        bh=D/SNnecemsjQs+W90QUlkgsOD/Rjb4+lDkgjOjEDTCQ=;
+        b=jw3d99cvMg52Lg1tLW9BuRNFr97hU8VbjiyM8gochZWG1eGvxYgj4JDJfCZnnjS66j
+         2lDmaY49Y9gNXV+0NqqYMPompzAvLelDDyxTDyv63Mzv1FpaKJ2B9UYwTxwc6+9E1fj5
+         FJhI1fX/X/YYeQJFY71s0y5YmCRlxUG6ujCNUlpLlY/mY+G8+yumC0FbiEGwNFo+LVFU
+         bsVfMxNPq9XriX8IesQE+M4MIPqclT9ZI+C/ooGdqt08Ib6SHWOMYVtcjCYmkNt5Y22V
+         kEpFY0C9GTT/VRjoVENUsza65QqqGrehKGm4P0CKYdVEVtyKJm9XwB/y8pqmKkigPrlA
+         3XhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hhVVFU4gv+0KPdkJhZ6Bsgp0nMXVzSegBp2GVEhxHuI=;
-        b=Z0HZ4lYbIIVsxRTAhwIr7Bevz4pIWGD7iXYZSzri03EKrtwVzV6w7Mne7pX9M5f5B8
-         RdlUgtJerVINLLtQpOoD/YVQvHwQ/FlbXIEJaQTIUxWpEo8CV5yp/k814tFp2uEP64Oh
-         LEfaqFTAlu0IdZJF4LAI1E13Lc2qj1qD1fkc7qZpatHBOP2oUtveOxyZ3cFIle1EeJeg
-         rJ/vJqYwNvFT7o2KjGiXpERPSxBPSpL0pTAIPpPMG9Y+F4/HdK6DQAcFKPHDLg0fwgM4
-         k5RjDBS/l0adbeKSXdWa7ZQ0/IQHglGpNtWephUkN1WOF4vUWqgj5ZnF8Hki3zlXODyy
-         Gnfg==
-X-Gm-Message-State: ACrzQf0yVTlFIa/8I+5rHoowZpVcvZdy0YJMDaKE2KDtkt6rI1jB4OBs
-        UfAMr4xaAKm187fdI8wcHGUkRg==
-X-Google-Smtp-Source: AMsMyM5U5tWVDdkP8vx2CGlIc4Tyh8xELM0VfMzpr/hFq4D4kTE8+riEzXzUJzEDmk/itTcMkiPp1A==
-X-Received: by 2002:a05:600c:22c6:b0:3cf:88bb:3a95 with SMTP id 6-20020a05600c22c600b003cf88bb3a95mr4075812wmg.71.1667459812670;
-        Thu, 03 Nov 2022 00:16:52 -0700 (PDT)
+        bh=D/SNnecemsjQs+W90QUlkgsOD/Rjb4+lDkgjOjEDTCQ=;
+        b=3OWMtD3fcy2Lxgn1ey9wege+PliUHMxsWfnDcN2+lAm6seLPE5YqtjBQD7hB07H92j
+         sJz4joFpSjcOAP7dicxR882uu5yF+edQzeYv2DkzPHUJRr2QGYt0mCGHax+oL7Oiiv2i
+         QWp0FrRhtF7ooXwUNDgp2lFZJdEtyUhWckiYlOqGHnT0fVvppeo2+IfFdh7JvxJ+zUjM
+         rouano+tssouy7mB2g4wQ+cjAHzmuYILjx24BaV+ePxf6k9ZUNEX1a0GP1tXg2AEOlNo
+         oW61YnIo0GqvCjla0BhgzKGs+FY+KOvomwFav/xOHUtB/x6HJYLbNPcC2Yv3wKGwtjWl
+         fdRg==
+X-Gm-Message-State: ACrzQf1L4wYxUZ+C+fD+z1X6J7KnX2NMO8B6pb5+cOb0wrntepaFVaX6
+        ZLZXVUcMrU2ExTpoWwWXSQ+SBg==
+X-Google-Smtp-Source: AMsMyM6jhYnE/aEjYcHXapzofavAu7pX7ddMD038s2P34j/GAHoNYKyfFysuRe52YUvpGlRBEmTO3A==
+X-Received: by 2002:a5d:42c7:0:b0:236:4ddd:3576 with SMTP id t7-20020a5d42c7000000b002364ddd3576mr17938354wrr.289.1667459896483;
+        Thu, 03 Nov 2022 00:18:16 -0700 (PDT)
 Received: from [192.168.11.175] (216.red-88-29-181.dynamicip.rima-tde.net. [88.29.181.216])
-        by smtp.gmail.com with ESMTPSA id p22-20020a05600c359600b003c6b9749505sm4601041wmq.30.2022.11.03.00.16.48
+        by smtp.gmail.com with ESMTPSA id j7-20020a05600c190700b003b477532e66sm6341187wmq.2.2022.11.03.00.18.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 00:16:51 -0700 (PDT)
-Message-ID: <5aaa19b8-da75-9a3c-634b-d4c26f77943b@linaro.org>
-Date:   Thu, 3 Nov 2022 08:16:48 +0100
+        Thu, 03 Nov 2022 00:18:15 -0700 (PDT)
+Message-ID: <1da0b1fa-ca20-4370-26b4-9f18ab8ac95d@linaro.org>
+Date:   Thu, 3 Nov 2022 08:18:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH 25/44] KVM: s390: Do s390 specific init without bouncing
- through kvm_init()
+Subject: Re: [PATCH 27/44] KVM: Drop kvm_arch_{init,exit}() hooks
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -90,9 +89,9 @@ Cc:     James Morse <james.morse@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Yuan Yao <yuan.yao@intel.com>
 References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-26-seanjc@google.com>
+ <20221102231911.3107438-28-seanjc@google.com>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221102231911.3107438-26-seanjc@google.com>
+In-Reply-To: <20221102231911.3107438-28-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -105,21 +104,23 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 3/11/22 00:18, Sean Christopherson wrote:
-> Move the guts of kvm_arch_init() into a new helper, __kvm_s390_init(),
-> and invoke the new helper directly from kvm_s390_init() instead of
-> bouncing through kvm_init().  Invoking kvm_arch_init() is the very
-> first action performed by kvm_init(), i.e. this is a glorified nop.
-> 
-> Moving setup to __kvm_s390_init() will allow tagging more functions as
-> __init, and emptying kvm_arch_init() will allow dropping the hook
-> entirely once all architecture implementations are nops.
+> Drop kvm_arch_init() and kvm_arch_exit() now that all implementations
+> are nops.
 > 
 > No functional change intended.
 > 
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->   arch/s390/kvm/kvm-s390.c | 29 +++++++++++++++++++++++++----
->   1 file changed, 25 insertions(+), 4 deletions(-)
+>   arch/arm64/kvm/arm.c                | 11 -----------
+>   arch/mips/kvm/mips.c                | 10 ----------
+>   arch/powerpc/include/asm/kvm_host.h |  1 -
+>   arch/powerpc/kvm/powerpc.c          |  5 -----
+>   arch/riscv/kvm/main.c               |  9 ---------
+>   arch/s390/kvm/kvm-s390.c            | 10 ----------
+>   arch/x86/kvm/x86.c                  | 10 ----------
+>   include/linux/kvm_host.h            |  3 ---
+>   virt/kvm/kvm_main.c                 | 19 ++-----------------
+>   9 files changed, 2 insertions(+), 76 deletions(-)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
