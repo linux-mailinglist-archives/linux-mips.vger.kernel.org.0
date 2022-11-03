@@ -2,107 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0B16180AF
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 16:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056DB6180BF
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 16:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiKCPKr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 11:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S232073AbiKCPME (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 11:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbiKCPKW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 11:10:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14171C90B
-        for <linux-mips@vger.kernel.org>; Thu,  3 Nov 2022 08:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667488096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MLzJVyRQvNMkBYTyqF+CAZ1OHQes3dhnjH8NkXHBEKk=;
-        b=ChUPIQ1KKuEKfl7tFOU9XAUCesIAOB1U0ewwQIarSAKJ67oDLOks6NkPK/0XEEFZUyNoPz
-        MWSZg/4Zl3uPlmNGqFOeXFmb1XTzyXpQb8j7taINKNsVq72ExX3niCeeK4UpX7gmYvcvK9
-        OVfZBVEWdn0Nw5jSqN2GSKnj7ehSc58=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-115-mhWY9rT7OJ6QqySWPErE-w-1; Thu, 03 Nov 2022 11:08:14 -0400
-X-MC-Unique: mhWY9rT7OJ6QqySWPErE-w-1
-Received: by mail-ej1-f70.google.com with SMTP id sg37-20020a170907a42500b007adaedb5ba2so1428738ejc.18
-        for <linux-mips@vger.kernel.org>; Thu, 03 Nov 2022 08:08:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MLzJVyRQvNMkBYTyqF+CAZ1OHQes3dhnjH8NkXHBEKk=;
-        b=cldO4GaAUKIaycuLqoVcMRQ3TzXuuqs+K5BKInCykibHwDmtFhjyHyX75AclHFwYGH
-         lO4AhMBeWGf0v9acn8HWLrwYvDXka9+oDwMXDfeZXlUrn7E1glgC+7AXv0//2g/YTGXZ
-         kNE1ab9CaF4OtqpOK3tz4eEEmNj3Lor5+OeW1GIroBxRXHqIKBJRmuEtz38RWCuLCc3M
-         UvYASskxr65tAUWzm2RoWtyvrM+PubxeWFwBOoC0Bs72pY/QnTLZQJ6VC7gOjHRLPYP2
-         4dJq7R/aQcZuLauFHITb0KdkuZX5Ye+y3L+yZLkOC8jLtt0+vUjQbBQDv3B2+ACM23ml
-         LHFQ==
-X-Gm-Message-State: ACrzQf2ckC+QHNHxKpuockMclmmKQCbB5Urwm8i940AK5tEXNlEtoDW6
-        oIlvdxmWaF5RIelhUhV9+Cf3pP6parm9bdjhJ07kvxemXpVzH4d5WF06doe1S5T7CpL2spAkUGs
-        MdMgH3oJPsZRh9cGDxgW9Zw==
-X-Received: by 2002:a05:6402:550e:b0:456:f79f:2bed with SMTP id fi14-20020a056402550e00b00456f79f2bedmr31117690edb.106.1667488092993;
-        Thu, 03 Nov 2022 08:08:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6ksX1XHskAylW8hRvHj1WJtzsGVm4o7GE4R3Qlz1mullFc3dI571812AyMzkQixxOznTrmOg==
-X-Received: by 2002:a05:6402:550e:b0:456:f79f:2bed with SMTP id fi14-20020a056402550e00b00456f79f2bedmr31117664edb.106.1667488092781;
-        Thu, 03 Nov 2022 08:08:12 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id s28-20020a056402037c00b0045bccd8ab83sm646641edw.1.2022.11.03.08.08.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:08:11 -0700 (PDT)
-Message-ID: <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
-Date:   Thu, 3 Nov 2022 16:08:09 +0100
+        with ESMTP id S232156AbiKCPLt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 11:11:49 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC20DAD;
+        Thu,  3 Nov 2022 08:11:12 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id A20465C0054;
+        Thu,  3 Nov 2022 11:11:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 03 Nov 2022 11:11:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1667488269; x=1667574669; bh=gPsPIUpuWi
+        0AzhW+1UQvBnM1pKalxNt18gpNydGWEuE=; b=ivzSOPo0VRRByEJs7gehHrnsoU
+        O/1Qpib6eRC6wPu+27XOD2lT1+Zhm+B8ta6XI8FTsKtqyUb34m53Tfr0dPrnen88
+        odeMSfTzAhFhYqITHJDfQAW+slcfL0rqsuhgqZM+oBRZHnCUVrYNzBOU/5r3YtZG
+        rqgosgjr+pbqZ0bwJOpGwyvSyXlW81k62Ii84OtbkHaHT3VE7CvxvOWl62nsO6I2
+        nKvcnV86NYi/+/TN4GeyYMtnaaM1ZeSwotANnQmN81vo7pzy2rKsYtr1U29zKG/O
+        LeEQrR7pNK2r8SIBxAW3bhzY+A5sxf/AlU/uqHgvhsjfNhVnXDsbbvWqVUnw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1667488269; x=1667574669; bh=gPsPIUpuWi0Az
+        hW+1UQvBnM1pKalxNt18gpNydGWEuE=; b=NzKAZ3bmOvJNQs5Z+lG5fPp5xIXVn
+        a9GQYaHnmclp14YKW5ttwKfdqBJpfc6CcwhNwh2MYpCuAEx2Le/51xua9AiYET14
+        5ssO4mvecnw4EWCzq7ZWlPHrK/pZ5dBxatmeA2MoU/SoRE5WbLChPdItHhZQzzYw
+        3/nr+XkAc4KLIRL5iuk/XjzMFDzw2I5vyp99iOw05mD6Z9u8SPX9Q/H8W+0Om3lq
+        mupvqIQtoG7PQDeUGLSvIfRno2mTuaUW2JheiKdRMLZETp2h+x/1Z8FPPJJ54eKQ
+        AzxtZz2+tBWPytfrSmb2sTVU7Cr8vX6grEZYso6xmWXn2rkXQkNONthqg==
+X-ME-Sender: <xms:DNpjYy4KvSk6wM7cBHtfHuc9p4qIwtt6tKyJbJ3phUoD_PCkfOTAfQ>
+    <xme:DNpjY77FACsayqxCU6jhCg_p6SYHlF_58lQVWtgcBgL4PyS6O6L2xxQvJ26VSNlEx
+    1JLWJZcrwbv5SCMJYM>
+X-ME-Received: <xmr:DNpjYxc-hQdxWoJl0ar78Bjn4Sk5yqzI-72RDKrMxGEpc5GfUe9KdzVmUA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudelgdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomheplfhirgiguhhn
+    ucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenucggtf
+    frrghtthgvrhhnpedtgfduvedvtdfgkeektdffveeiueeludegheehtdegheduueeuueeg
+    tdehjeehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:DNpjY_KFm12Svr-OBipfMRWk69IlitOc-KUH_w5SOVTbPKBjP0JlBA>
+    <xmx:DNpjY2I46yjkQo7q3DYql9m4wo-bTjeJjiUXAbz4E2Id2hIh3sUrfg>
+    <xmx:DNpjYwyqDTiO8lD_yvmwwJSk4b4vhev5ks3RKP9liG3dKecLz37Xtg>
+    <xmx:DdpjY-9WWZs8L25HFHTlG5Y767sLspjSYdyQ7kXBfhPs13UXhjMvoQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 3 Nov 2022 11:11:07 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        ardb@kernel.org, rostedt@goodmis.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: [PATCH v2] MIPS: jump_label: Fix compat branch range check
+Date:   Thu,  3 Nov 2022 15:10:53 +0000
+Message-Id: <20221103151053.213583-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
- vendor code
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-34-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221102231911.3107438-34-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,19 +83,32 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/3/22 00:19, Sean Christopherson wrote:
-> +	if (!boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
-> +	    !boot_cpu_has(X86_FEATURE_VMX)) {
-> +		pr_err("VMX not enabled in MSR_IA32_FEAT_CTL\n");
-> +		return false;
+Cast upper bound of branch range to long to do signed compare,
+avoid negative offset trigger this warning.
 
-I think the reference to the BIOS should remain in these messages and in 
-svm.c (even though these days it's much less common for vendors to 
-default to disabled virtualization in the system setup).
+Fixes: 9b6584e35f40 ("MIPS: jump_label: Use compact branches for >= r6")
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+---
+v2: Fix typo, collect review tags.
+---
+ arch/mips/kernel/jump_label.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The check for X86_FEATURE_MSR_IA32_FEAT_CTL is not needed because 
-init_ia32_feat_ctl() will clear X86_FEATURE_VMX if the rdmsr fail (and 
-not set X86_FEATURE_MSR_IA32_FEAT_CTL).
-
-Paolo
+diff --git a/arch/mips/kernel/jump_label.c b/arch/mips/kernel/jump_label.c
+index 71a882c8c6eb..f7978d50a2ba 100644
+--- a/arch/mips/kernel/jump_label.c
++++ b/arch/mips/kernel/jump_label.c
+@@ -56,7 +56,7 @@ void arch_jump_label_transform(struct jump_entry *e,
+ 			 * The branch offset must fit in the instruction's 26
+ 			 * bit field.
+ 			 */
+-			WARN_ON((offset >= BIT(25)) ||
++			WARN_ON((offset >= (long)BIT(25)) ||
+ 				(offset < -(long)BIT(25)));
+ 
+ 			insn.j_format.opcode = bc6_op;
+-- 
+2.34.1
 
