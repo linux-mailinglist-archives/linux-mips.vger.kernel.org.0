@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE2D618117
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 16:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9A0618130
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Nov 2022 16:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiKCPO6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Nov 2022 11:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        id S232145AbiKCPPB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Nov 2022 11:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbiKCPOz (ORCPT
+        with ESMTP id S232055AbiKCPOz (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Nov 2022 11:14:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7874BF60;
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047F4DEAD;
         Thu,  3 Nov 2022 08:14:54 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 382061F8C7;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A05411F8D0;
         Thu,  3 Nov 2022 15:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1667488493; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xjxS/GfnitqpIX/oT1VDr+4iEgFe/+oN1n1IofhuZsY=;
-        b=utvMig1eoj479eEriWrJ0nVTCL5Lk9KTSWVVHrqrowWjVIG9DcwMkAyKHQsokhUAZ/vfMH
-        CbiE82hRJwGqH4DJZO+M+ZfnFfFE15gZZZvFO9Kjd3zgY9PKFOebOIJ3YCpvT2mUTjYImS
-        GVI9v08EO77cHzHLlYtnySmWx3JwW84=
+        bh=EFk8gpKJydjM+fwMWE9ut0kHu5wwTQClJK0OS12MSKc=;
+        b=f492smjEQCmdi3Dsdo/Ey7rUqRWTZBazpiRCvsxccZ5pk+IqU+l2jP98mg2AqAYsY5OZTH
+        8ttUnMBMm/YowH8elwLoezAB7lpvKQ54XusD4G4OcwJ2iELNOvf/SxuYt7k6QYTnrzPaED
+        WV2jr0n8+23t8XnbHwfNYnL1NGwTmHg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1667488493;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xjxS/GfnitqpIX/oT1VDr+4iEgFe/+oN1n1IofhuZsY=;
-        b=+fI4CarHR9yIQjwk6lIjBSv0KJzOZE4PnC+U4vE+56gARj3H/onb+TrQGL6o0rt+MuGYBt
-        9zhCVmzjlb45cQDg==
+        bh=EFk8gpKJydjM+fwMWE9ut0kHu5wwTQClJK0OS12MSKc=;
+        b=0OWWqS/ATSchqMJpxB8R5mVbqv+v1fCQwAfHIS01vRBK3a4fqcoXlsoRnFSrw0ImmQXMSP
+        PwwNXJaQDMGj2WAg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B24C413ADB;
-        Thu,  3 Nov 2022 15:14:52 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3137313AAF;
+        Thu,  3 Nov 2022 15:14:53 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id gJTAKuzaY2PBGgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 03 Nov 2022 15:14:52 +0000
+        id 0CU2C+3aY2PBGgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 03 Nov 2022 15:14:53 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     daniel@ffwll.ch, airlied@gmail.com, sam@ravnborg.org,
         javierm@redhat.com, mripard@kernel.org,
@@ -67,9 +67,9 @@ Cc:     "linux-hyperv@vger.kernel.orglinux-hyperv"@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org, freedreno@lists.freedesktop.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v3 07/23] drm/logicvc: Don't set struct drm_driver.output_poll_changed
-Date:   Thu,  3 Nov 2022 16:14:30 +0100
-Message-Id: <20221103151446.2638-8-tzimmermann@suse.de>
+Subject: [PATCH v3 08/23] drm/rockchip: Don't set struct drm_driver.output_poll_changed
+Date:   Thu,  3 Nov 2022 16:14:31 +0100
+Message-Id: <20221103151446.2638-9-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221103151446.2638-1-tzimmermann@suse.de>
 References: <20221103151446.2638-1-tzimmermann@suse.de>
@@ -85,7 +85,7 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 Don't set struct drm_driver.output_poll_changed. It's used to restore
-the fbdev console. But as logicvc uses generic fbdev emulation, the
+the fbdev console. But as rockchip uses generic fbdev emulation, the
 console is being restored by the DRM client helpers already. See the
 functions drm_kms_helper_hotplug_event() and
 drm_kms_helper_connector_hotplug_event() in drm_probe_helper.c.
@@ -96,28 +96,28 @@ v2:
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
- drivers/gpu/drm/logicvc/logicvc_mode.c | 2 --
+ drivers/gpu/drm/rockchip/rockchip_drm_fb.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/logicvc/logicvc_mode.c b/drivers/gpu/drm/logicvc/logicvc_mode.c
-index d8207ffda1af9..9971950ebd4ee 100644
---- a/drivers/gpu/drm/logicvc/logicvc_mode.c
-+++ b/drivers/gpu/drm/logicvc/logicvc_mode.c
-@@ -10,7 +10,6 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc_helper.h>
- #include <drm/drm_drv.h>
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
+index 092bf863110b7..7de64b0ad047f 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
+@@ -9,7 +9,6 @@
+ #include <drm/drm.h>
+ #include <drm/drm_atomic.h>
+ #include <drm/drm_damage_helper.h>
 -#include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_dma_helper.h>
+ #include <drm/drm_fourcc.h>
+ #include <drm/drm_framebuffer.h>
  #include <drm/drm_gem_framebuffer_helper.h>
- #include <drm/drm_mode_config.h>
-@@ -26,7 +25,6 @@
+@@ -101,7 +100,6 @@ rockchip_fb_create(struct drm_device *dev, struct drm_file *file,
  
- static const struct drm_mode_config_funcs logicvc_mode_config_funcs = {
- 	.fb_create		= drm_gem_fb_create,
--	.output_poll_changed	= drm_fb_helper_output_poll_changed,
- 	.atomic_check		= drm_atomic_helper_check,
- 	.atomic_commit		= drm_atomic_helper_commit,
+ static const struct drm_mode_config_funcs rockchip_drm_mode_config_funcs = {
+ 	.fb_create = rockchip_fb_create,
+-	.output_poll_changed = drm_fb_helper_output_poll_changed,
+ 	.atomic_check = drm_atomic_helper_check,
+ 	.atomic_commit = drm_atomic_helper_commit,
  };
 -- 
 2.38.0
