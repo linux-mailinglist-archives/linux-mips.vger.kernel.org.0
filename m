@@ -2,177 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16728619BE2
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Nov 2022 16:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 874D8619BF7
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Nov 2022 16:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbiKDPkn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Nov 2022 11:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S229572AbiKDPpR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Nov 2022 11:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbiKDPkl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Nov 2022 11:40:41 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BB831EC5
-        for <linux-mips@vger.kernel.org>; Fri,  4 Nov 2022 08:40:40 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y13so4835070pfp.7
-        for <linux-mips@vger.kernel.org>; Fri, 04 Nov 2022 08:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aFlTeUJ4nQplolWHip6FrS/j8TYR0+QbDmRZAFvu7G8=;
-        b=slnKaxTVWka5uyvV8ksftk1iXtqkYG7wonGPtAtNy/P6RP4ZnWhdbZSV/6seXnMCof
-         dnF6JUiRfV2oVCETco2jEIOQzRouLfUDiH7vxFD2orQpNLxCcfMVtLr6ntSOZeUo+8A4
-         1WMtzeSAIQ00ZBggEzItHUadG+pi52a6RW5LTbSCWNWQHjLySk/BPh9TembQq8ly6ISW
-         XBS14fXfAOCGbRuWccsHUKA4no5JdNrqlAYc2mDDTkISHx1kXdJjDDClXTXp09r2HKHF
-         4YYshPvOotdfKVbVnw4u/+IsxQ4NAMvmIrkrc7+c9m8NGZEp/7DC/KTLI5ge39pksAS0
-         M2/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aFlTeUJ4nQplolWHip6FrS/j8TYR0+QbDmRZAFvu7G8=;
-        b=Ynk1bVAcdop6z5ip4EQoxdyWCDA/ULdcQ39/xPLBM7AOTEGIR27hUyln42DzB+R2jb
-         4VIkm7VQfNMgbH5ZrZ319UwUi7VdEmGoEi5wzhwd+uWyFIuqlyQ8QiyeooTnAr6/G+br
-         qZq/6pTAsVPrtGqce9bCBqz9BryK+RSoN0PTdO1y51Gtu49Jwv9OTcoxs5BlZLXNeD3G
-         k5h3MBa6mOmtZ9yQ+aa+ljaqofrr3mO+p2PuB27/b0ymFah/b+OF5mtMgKvO+4mH7Cuj
-         /FfmM0tFruamgYdoPV5sVSoEagO2/1l/Ugns4bXqK0FxZ/Roc9F/jTuv4QBZk4e5V33G
-         QJrg==
-X-Gm-Message-State: ACrzQf2TQr+xsjhFkzHExjfMT/a2bt0T9/5oBmHW5c19BEoE2TirXIVd
-        URul/aOSw4Ud269R3F1RjriJJg==
-X-Google-Smtp-Source: AMsMyM5MdI5VKNUr37j2LDfWFXfSalVZ70lqDfROHdw5vEhrWbzDEJP2xBkjkN31VBShKB5D+mx4vA==
-X-Received: by 2002:a62:1a8d:0:b0:544:1309:19f3 with SMTP id a135-20020a621a8d000000b00544130919f3mr36549720pfa.37.1667576439875;
-        Fri, 04 Nov 2022 08:40:39 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y133-20020a62ce8b000000b00565cbad9616sm2905778pfg.6.2022.11.04.08.40.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 08:40:39 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 15:40:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
- vendor code
-Message-ID: <Y2UydNBFR3e2DAe7@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-34-seanjc@google.com>
- <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
- <Y2QJ2TuyZImbFFvi@google.com>
- <c29e7d40-ddb9-def0-f944-a921a05a4bb2@redhat.com>
- <Y2QPSK1/6esl61wQ@google.com>
- <6c71fcca-c17f-5979-e15e-afcf08899064@redhat.com>
+        with ESMTP id S230205AbiKDPpQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Nov 2022 11:45:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835702F392;
+        Fri,  4 Nov 2022 08:45:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1DA6B82ECC;
+        Fri,  4 Nov 2022 15:45:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8DEC433D6;
+        Fri,  4 Nov 2022 15:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667576710;
+        bh=E7bcdLSHvaAKIPE4ct56X1unFntQqaD0pUdA4q8WBPw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iW2uzuyJnRpdzdYsOnj4Dp2jfgwg/wmolQBPj30EcOuf2VsVt3t2KGn1L2da6vygL
+         dgk5H4xlPxNq7WJE0fBxhwwvtqV21rDvvnmzLfxGQBPtJoKomuEvU1KudXZgKZ8wWW
+         ZyxZO03YbaXh9LiyJ5Q4bfCvW1rwPZBk+tFh4ZHJfT60Uz3U5Lx1kVzYWIMttyDcmD
+         1TCxAOUJvc5dGmcoXZCI6AMCi4ilnI9/qlyIWWcoQ7fbhky8dXIQBZ3lKFJwFgma47
+         E5YyYFEuly9dIIRudPC0lqTN3GuIIXhBvPqf35m07Cag87dJ8kurm8ACuWPQ12Y02s
+         DtcPhURUzZJKg==
+Date:   Fri, 4 Nov 2022 15:44:53 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <Y2UzdYyjgahJsbHg@sirena.org.uk>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fVhQhryKijuhlxQZ"
 Content-Disposition: inline
-In-Reply-To: <6c71fcca-c17f-5979-e15e-afcf08899064@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
+X-Cookie: Quack!
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Nov 04, 2022, Paolo Bonzini wrote:
-> On 11/3/22 19:58, Sean Christopherson wrote:
-> > 
-> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> > index 3e508f239098..ebe617ab0b37 100644
-> > --- a/arch/x86/kernel/cpu/common.c
-> > +++ b/arch/x86/kernel/cpu/common.c
-> > @@ -191,6 +191,8 @@ static void default_init(struct cpuinfo_x86 *c)
-> >                          strcpy(c->x86_model_id, "386");
-> >          }
-> >   #endif
-> > +
-> > +       clear_cpu_cap(c, X86_FEATURE_MSR_IA32_FEAT_CTL);
-> >   }
-> >   static const struct cpu_dev default_cpu = {
-> 
-> Not needed I think?  default_init does not call init_ia32_feat_ctl.
 
-cpuid_deps is only processed by do_clear_cpu_cap(), so unless there's an explicit
-"clear" action, the dependencies will not be updated.  It kinda makes sense since
-hardware-based features shouldn't end up with scenarios where a dependent feature
-exists but the base feature does not (barring bad KVM setups :-) ).
+--fVhQhryKijuhlxQZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-That said, this seems like a bug waiting to happen, and unless I'm missing something
-it's quite straightforward to process all dependencies during setup.  Time to find
-out if Boris and co. agree :-)
+On Fri, Nov 04, 2022 at 02:18:00PM +0100, Maxime Ripard wrote:
 
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index 1a85e1fb0922..c4408d03b180 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -147,6 +147,7 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
- 
- extern void setup_clear_cpu_cap(unsigned int bit);
- extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
-+extern void apply_cpuid_deps(struct cpuinfo_x86 *c);
- 
- #define setup_force_cpu_cap(bit) do { \
-        set_cpu_cap(&boot_cpu_data, bit);       \
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 3e508f239098..28ce31dadd7f 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1884,6 +1884,8 @@ static void identify_cpu(struct cpuinfo_x86 *c)
-                        c->x86_capability[i] |= boot_cpu_data.x86_capability[i];
-        }
- 
-+       apply_cpuid_deps(c);
-+
-        ppin_init(c);
- 
-        /* Init Machine Check Exception if available. */
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index c881bcafba7d..7e91e97973ca 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -138,3 +138,13 @@ void setup_clear_cpu_cap(unsigned int feature)
- {
-        do_clear_cpu_cap(NULL, feature);
- }
-+
-+void apply_cpuid_deps(struct cpuinfo_x86 *c)
-+{
-+       const struct cpuid_dep *d;
-+
-+       for (d = cpuid_deps; d->feature; d++) {
-+               if (!cpu_has(c, d->feature))
-+                       clear_cpu_cap(c, d->feature);
-+       }
-+}
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
 
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+
+Given that the current approach involves patching every single user to
+set a default implementation it feels like it might be more
+straightforward to just have the clock API use that implementation if
+none is defined - as you say there's already a flag to indicate the
+unusual case where there's a solid reason to prevent reparenting.  It
+feels like the resulting API is more straightforward.
+
+--fVhQhryKijuhlxQZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNlM3UACgkQJNaLcl1U
+h9C5/gf/ZAWh5zvkI1qjXrZhZu2SWgV5WGeNOTbNz15+lAF9tH5C8ilg87uyeZMu
+FqNtaI2yJVBQ3uV+LbG0gypsDTeJ+LtfC+/saRJdP8mYUIu8fO9g6xzs31D73Vd0
+9DOeN92+hX3GUcy6kFSTwgF5zVmvHnwOewIOly65XCHvibSgBRyAgV1AyNmH9uiy
+zgVO88CdCE4NwAuMynXAR8mi+U4b0vDuk6EQ5UZjLJWWNRjxvFFJrcMCHISRJGsT
+yqZJd8iCFTk91ovn3IKGno5MZ5tA8qWSJ52cBxs9VRKqQhQuWQl4UD4qwWdgwN6Y
+liuJLyjGo/OfBHnsuDkzhj30nFiIUA==
+=scaI
+-----END PGP SIGNATURE-----
+
+--fVhQhryKijuhlxQZ--
