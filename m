@@ -2,145 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE09619C5F
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Nov 2022 17:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA21619D50
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Nov 2022 17:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbiKDQAN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Nov 2022 12:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S231649AbiKDQbm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Nov 2022 12:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbiKDQAM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Nov 2022 12:00:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7B131230;
-        Fri,  4 Nov 2022 09:00:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B0F262271;
-        Fri,  4 Nov 2022 16:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407C5C433C1;
-        Fri,  4 Nov 2022 15:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667577610;
-        bh=RnKpU/hTdTSmTNhPFE1pRi4HN2+uJR5IYJ3mHMOQJ94=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cT/Z80DQRnPv/70/29SwYeenhOJLyjbBPUFlgfpd/AZinAJl0ffseRleU9nuJBUko
-         sIKZREqhjpM5ixmbGPtno+npoo5AfZQueFrKX4MHj5HbO6032QcomMPEs11RxlCRCF
-         +npEC1nMjw2yzXE3+8fu/b6DX5Zyh1ekZsGoJSUiBNkV8rAVlWCjALi+TPQALz5yLf
-         8JmAJZSyXbUsqNPG3SJPuUdwaXQ/YK17sNKIv6mAuSRsBddzrpVxhgHxOUN/vVDF21
-         VhZaoe2BNXMOANIoVRwbo95TtqPu/Q5GIO4aUt0cX2VGbao265lJ1lyL1fG/C3KEu+
-         lOiIL5YO6XPRw==
-Date:   Fri, 4 Nov 2022 15:59:53 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
-Message-ID: <Y2U2+ePwRieYkNjv@sirena.org.uk>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
- <Y2UzdYyjgahJsbHg@sirena.org.uk>
- <20221104155123.qomguvthehnogkdd@houat>
+        with ESMTP id S231663AbiKDQbc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Nov 2022 12:31:32 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39C1326F3
+        for <linux-mips@vger.kernel.org>; Fri,  4 Nov 2022 09:31:30 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id m6so5002361pfb.0
+        for <linux-mips@vger.kernel.org>; Fri, 04 Nov 2022 09:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tykh0C7NQoqMsiv0FEJ8nDBTc1ar6j/4SljcpXaw+gg=;
+        b=ZvfqWRbmiygXbQlvUXzlFPIy6pWgi3NnbKZ9axUfvTwSG1jmeczFdzfmEBk6JPul9u
+         KtfoNDPD7+7L7ckLKxE85H3i30VZE1cLcwZqr+9Pmyt/Uvr0gsenysKMrttjRd1DNmYa
+         taHLNc4BlGL4LuS+a5zOzje7JmI5lr7pLr83tPoJKPDxZ+8mRqo1TUsZIcKB3+pLirGc
+         61VotfoTC994tXlc+pHq0IWsR3SGM7VfiO/hK89Ek0CoqTLSvnWOMLSW6BMMx8STYHyn
+         tAWojTUjFC5IOfCMzJ25ZkS53CsxfaYW+If16SDvap+gn/hFvgnPNsAIXJ/ZXr/CVgup
+         nXnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tykh0C7NQoqMsiv0FEJ8nDBTc1ar6j/4SljcpXaw+gg=;
+        b=HF63O8Q6FTcxldaOp3ZoNppbWK/LdO+1WIzzeBxXopR80OVN+6YmRbzDcmp5wSGa40
+         QVsDMwRRqKG5JrjKA0EHsm7wll81wjdO5N3OeAcKZ0GBcP3PDtExT3OGZKh/isFLD3vc
+         4inHvmQKcocS+dJXBPFr00p6zGLGEcNd9Z+0iMOPArpVpYPCpkG75Kzq6i5SlkXCJyTy
+         fjqDGMCvIn5OEAw4TDCEzMWd7kfnzh9Oe1T8z+ahXIghn9SgmcWK2dLOKU0BhVd7E+0b
+         dWN5UtltSSwN1vvURyFVHCBhKSGDnb9otLmDO8JO01aezV6pqfDfsvSleeBLAYlwUgBR
+         OGEw==
+X-Gm-Message-State: ACrzQf1PyWWVMk6ZYForKnw4NybM1YbpLAuJ/GmS+T9xCtSiAfSzCSQo
+        1bCoFS278z4WQmjLVwf++FwiwA==
+X-Google-Smtp-Source: AMsMyM4q4CNgN2lQ4PyaYyADoR+QimlVBokrxw9X6LS0+cBweFifUR+XVuuTHXr8UlnLM2zvHk12kA==
+X-Received: by 2002:a05:6a00:248e:b0:56e:ad31:b976 with SMTP id c14-20020a056a00248e00b0056ead31b976mr1059125pfv.51.1667579490004;
+        Fri, 04 Nov 2022 09:31:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y133-20020a62ce8b000000b00565cbad9616sm2954667pfg.6.2022.11.04.09.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 09:31:29 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 16:31:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 08/44] KVM: x86: Move hardware setup/unsetup to init/exit
+Message-ID: <Y2U+XT0Sm+a69CaH@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-9-seanjc@google.com>
+ <20221104062223.7kcrbt66mlmqxk7f@yy-desk-7060>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UFrR3s30/s3KKRzK"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104155123.qomguvthehnogkdd@houat>
-X-Cookie: Quack!
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221104062223.7kcrbt66mlmqxk7f@yy-desk-7060>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Fri, Nov 04, 2022, Yuan Yao wrote:
+> On Wed, Nov 02, 2022 at 11:18:35PM +0000, Sean Christopherson wrote:
+> > To avoid having to unwind various setup, e.g registration of several
+> > notifiers, slot in the vendor hardware setup before the registration of
+> > said notifiers and callbacks.  Introducing a functional change while
+> > moving code is less than ideal, but the alternative is adding a pile of
+> > unwinding code, which is much more error prone, e.g. several attempts to
+> > move the setup code verbatim all introduced bugs.
 
---UFrR3s30/s3KKRzK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
 
-On Fri, Nov 04, 2022 at 04:51:23PM +0100, Maxime Ripard wrote:
+> > @@ -9325,6 +9343,24 @@ int kvm_arch_init(void *opaque)
+> >  		kvm_caps.supported_xcr0 = host_xcr0 & KVM_SUPPORTED_XCR0;
+> >  	}
+> >
+> > +	rdmsrl_safe(MSR_EFER, &host_efer);
+> > +
+> > +	if (boot_cpu_has(X86_FEATURE_XSAVES))
+> > +		rdmsrl(MSR_IA32_XSS, host_xss);
+> > +
+> > +	kvm_init_pmu_capability();
+> > +
+> > +	r = ops->hardware_setup();
+> > +	if (r != 0)
+> > +		goto out_mmu_exit;
+> 
+> The failure case of ops->hardware_setup() is unwound
+> by kvm_arch_exit() before this patch, do we need to
+> keep that old behavior ?
 
-> Just filling determine_rate if it's missing with
-> __clk_mux_determine_rate will possibly pick different parents, and I'm
-> fairly certain that this have never been tested on most platforms, and
-> will be completely broken. And I don't really want to play a game of
-> whack-a-mole adding that flag everywhere it turns out it's broken.
+As called out in the changelog, the call to ops->hardware_setup() was deliberately
+slotted in before the call to kvm_timer_init() so that kvm_arch_init() wouldn't
+need to unwind more stuff if harware_setup() fails.
 
-Well, hopefully everyone for whom it's an issue currently will be
-objecting to this version of the change anyway so we'll either know
-where to set the flag or we'll get the whack-a-mole with the series
-being merged?
-
---UFrR3s30/s3KKRzK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNlNvgACgkQJNaLcl1U
-h9CDMAf+IBF/7wHY1CiObYqxme229wA2t2WnnYY98dUUNS5r9zuNUi7juhvrvn+E
-VFS2XsBkk6YvHvT2mQdVWxnTb3suMHPfHzr2euHUVwNVevnBNKDVYp8nlYmyRSUC
-orLXibEBBMbA69rPzQyaFqZHj17zEyWQvHSrWk44MnQJH2f7JFEmcLPXgug1dpsP
-mmWyfYnKKlRXMqDPkJ3ozY2AaABQkWdk64ke2unO7z9M7ySybhybPHBibISAn/WA
-8mQ7NgbHPzpVnTCfrRwSEd05eCvJaEacBYFByW87lEEEtfxwwJsXSZCJpmc9ZVPm
-WTCliiQC4/Pd0EJKpPQCXYinp/27fw==
-=2DXe
------END PGP SIGNATURE-----
-
---UFrR3s30/s3KKRzK--
+> > +	/*
+> > +	 * Point of no return!  DO NOT add error paths below this point unless
+> > +	 * absolutely necessary, as most operations from this point forward
+> > +	 * require unwinding.
+> > +	 */
+> > +	kvm_ops_update(ops);
+> > +
+> >  	kvm_timer_init();
+> >
+> >  	if (pi_inject_timer == -1)
+> > @@ -9336,8 +9372,32 @@ int kvm_arch_init(void *opaque)
+> >  		set_hv_tscchange_cb(kvm_hyperv_tsc_notifier);
+> >  #endif
+> >
+> > +	kvm_register_perf_callbacks(ops->handle_intel_pt_intr);
+> > +
+> > +	if (!kvm_cpu_cap_has(X86_FEATURE_XSAVES))
+> > +		kvm_caps.supported_xss = 0;
+> > +
+> > +#define __kvm_cpu_cap_has(UNUSED_, f) kvm_cpu_cap_has(f)
+> > +	cr4_reserved_bits = __cr4_reserved_bits(__kvm_cpu_cap_has, UNUSED_);
+> > +#undef __kvm_cpu_cap_has
+> > +
+> > +	if (kvm_caps.has_tsc_control) {
+> > +		/*
+> > +		 * Make sure the user can only configure tsc_khz values that
+> > +		 * fit into a signed integer.
+> > +		 * A min value is not calculated because it will always
+> > +		 * be 1 on all machines.
+> > +		 */
+> > +		u64 max = min(0x7fffffffULL,
+> > +			      __scale_tsc(kvm_caps.max_tsc_scaling_ratio, tsc_khz));
+> > +		kvm_caps.max_guest_tsc_khz = max;
+> > +	}
+> > +	kvm_caps.default_tsc_scaling_ratio = 1ULL << kvm_caps.tsc_scaling_ratio_frac_bits;
+> > +	kvm_init_msr_list();
+> >  	return 0;
+> >
+> > +out_mmu_exit:
+> > +	kvm_mmu_vendor_module_exit();
+> >  out_free_percpu:
+> >  	free_percpu(user_return_msrs);
+> >  out_free_x86_emulator_cache:
