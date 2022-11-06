@@ -2,73 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA0861DA45
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Nov 2022 13:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE13361E3B5
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Nov 2022 18:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiKEMkB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Nov 2022 08:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S230300AbiKFREa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 6 Nov 2022 12:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiKEMjt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Nov 2022 08:39:49 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329711AF31
-        for <linux-mips@vger.kernel.org>; Sat,  5 Nov 2022 05:39:48 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso6660957pjc.5
-        for <linux-mips@vger.kernel.org>; Sat, 05 Nov 2022 05:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=mu8m7znM9duu/MEuox3wxE9uI+enJzfHDrHCiCJ0dxXEnbtqlugP30RV4pUA4LaD8D
-         DTqzL6R3iJdygnN0tebcl2jKMC1xnk2qmH9yHj5ZpYJsig0zgAkFbQEJMtQOsyMS9E9+
-         9mZsd+BXbCYizoNZILloIeJgVKBYQDDlfcxWmhtehgP0gShVz6QbysTuA73O0zNW89oN
-         M95vp9qd39mlLDduLYXTQkqHXtcuCB6sr4c0ysKpoCTw5s/vT8zmw06SHC/DLusZ9o66
-         sNkDbmLIhAcJBtA+VmbRSjB+l+4rXBDt3pKOG75zF9L+vjSBjo5n2zZjo+rRsufLH5jZ
-         6xmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=O7uYrZXo4NVsHwDJrzjqyTLqSxsr4iyRGMBIjTA3TFJzIDYIDPIRm6r13QmRdDtmEG
-         /8QFR7JFDsiT3rIZNfNnud8baYA/D6kIfWZHGumNUlfAQr5VEGbY0wXyLBA5NbULgRXo
-         pbHSJgm31N3RJuNWKI7bwWOe/eXT91InBTh+FvZVEQ5gEN1N9BvRvvMpaJFgPLkT2Ha+
-         nPD6fQjQyWccPBTpRI77l2/dvx9M8FCqEuI6bJ/Z95vstLlVCsaqQNwzIvkiSQ3YkmBt
-         z6Slf1SKUCi+tgi/VcNDlPHmMV/z7ikhzTnq9JIYEXBGpdgl3bAQsqnNke6ENNYW0jE7
-         7xpw==
-X-Gm-Message-State: ACrzQf1gNg5ltB7lE3tiKU3ffthzYL3qcpnYmGvofsBOMFG5wk/5o9aw
-        OuoLunDXzCGfwd2RXQT6TyVBWv/qaVdlUCd5svc=
-X-Google-Smtp-Source: AMsMyM5GFe2gsiMaHXHXvp99K7JeNN2UuK6dELDyLpsoJjIUkQcn4q3aD74FbKEapmwctM2YF8x1D4LMLHeg4fM3LVk=
-X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
- mh3-20020a17090b4ac300b002133918f276mr57022678pjb.19.1667651987563; Sat, 05
- Nov 2022 05:39:47 -0700 (PDT)
+        with ESMTP id S230182AbiKFRER (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 6 Nov 2022 12:04:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BDADFDD;
+        Sun,  6 Nov 2022 09:04:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B599E60CF1;
+        Sun,  6 Nov 2022 17:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2163BC433C1;
+        Sun,  6 Nov 2022 17:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667754251;
+        bh=/m+ws4LtJVeV9zdgtIhbPo9cdoq0Rje2NJJD+yX3fok=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Xw8RdSzrdpsGQziwYNtcrLtVG6JS+RksKg7yM6Jb0F7SctpanpsYkHnL6XW8RNdEf
+         6AQMfDBO+x1Ija17OASnTSkKyg6fgN9yd8rT2kR4gTdkxBjBSPT82rn5G57hMSu6MY
+         xuylFSXkJslwimqn8wJvPxC79kOmaSXfq0FdF7VoGVeRllOUqGqLlh7g+OmrrKXiVy
+         VF5PuH8CIfTMh8fkaQOKjMoqlwK/dE3GSRRcRTPbRGa0Pg+ZMJgPyQmY8/ubJlLAOU
+         UvWqh9Rg77HcvJgm3Hf2YM5fKIhKQAcGBBiC2llKQfEb7+YQZIuCmkdFlF7ec4hUQr
+         57Npbln49TLUw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Siarhei Volkau <lis8215@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, paul@crapouillou.net,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.0 11/30] ASoC: codecs: jz4725b: add missed Line In power control bit
+Date:   Sun,  6 Nov 2022 12:03:23 -0500
+Message-Id: <20221106170345.1579893-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221106170345.1579893-1-sashal@kernel.org>
+References: <20221106170345.1579893-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
- 05:39:47 -0700 (PDT)
-Reply-To: stefanopessia755@hotmail.com
-From:   Stefano Pessina <wamathaibenard@gmail.com>
-Date:   Sat, 5 Nov 2022 15:39:47 +0300
-Message-ID: <CAN7bvZKO8GxFn7CG_EtS_Of+AZ+KsuqTkq40Mq-yJDNrEHyakg@mail.gmail.com>
-Subject: Geldspende
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---=20
-Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
-t.
-Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
-stefanopessia755@hotmail.com
+From: Siarhei Volkau <lis8215@gmail.com>
+
+[ Upstream commit 1013999b431b4bcdc1f5ae47dd3338122751db31 ]
+
+Line In path stayed powered off during capturing or
+bypass to mixer.
+
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+Link: https://lore.kernel.org/r/20221016132648.3011729-2-lis8215@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/soc/codecs/jz4725b.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/sound/soc/codecs/jz4725b.c b/sound/soc/codecs/jz4725b.c
+index 5201a8f6d7b6..cc7a48c96aa4 100644
+--- a/sound/soc/codecs/jz4725b.c
++++ b/sound/soc/codecs/jz4725b.c
+@@ -236,7 +236,8 @@ static const struct snd_soc_dapm_widget jz4725b_codec_dapm_widgets[] = {
+ 	SND_SOC_DAPM_MIXER("DAC to Mixer", JZ4725B_CODEC_REG_CR1,
+ 			   REG_CR1_DACSEL_OFFSET, 0, NULL, 0),
+ 
+-	SND_SOC_DAPM_MIXER("Line In", SND_SOC_NOPM, 0, 0, NULL, 0),
++	SND_SOC_DAPM_MIXER("Line In", JZ4725B_CODEC_REG_PMR1,
++			   REG_PMR1_SB_LIN_OFFSET, 1, NULL, 0),
+ 	SND_SOC_DAPM_MIXER("HP Out", JZ4725B_CODEC_REG_CR1,
+ 			   REG_CR1_HP_DIS_OFFSET, 1, NULL, 0),
+ 
+-- 
+2.35.1
+
