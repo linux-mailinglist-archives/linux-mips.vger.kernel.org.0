@@ -2,181 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A02161EC73
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 08:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3046261ECDB
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 09:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiKGHwX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Nov 2022 02:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        id S230263AbiKGI2M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Nov 2022 03:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiKGHwW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 02:52:22 -0500
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15DDB7E1;
-        Sun,  6 Nov 2022 23:52:21 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-13b103a3e5dso11817387fac.2;
-        Sun, 06 Nov 2022 23:52:21 -0800 (PST)
+        with ESMTP id S229986AbiKGI2L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 03:28:11 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119DC13F7A
+        for <linux-mips@vger.kernel.org>; Mon,  7 Nov 2022 00:28:10 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id d20so15023095ljc.12
+        for <linux-mips@vger.kernel.org>; Mon, 07 Nov 2022 00:28:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SJ/Mwnct3TZ7HIih3opk7ydhGcqvBaH59swvlRhyi5o=;
+        b=xa7T5BQxzXkz/boFwpbQFJiXwgrhpUrx5A0mnmE58r+XBnsnebuPQ3CYeOndGP7bUw
+         2wzd+Jb7YiaY5Er2T77/2Ydj/QZfzOD7/qP6mXoyuD5JQO+eZqKau6HSkpK1wohfxj3l
+         UnGU4DGm9F3uufcxBQdyL14prPXU337j/SglQRAOOCNurYqwg1ILSPT6MH8eMVxtHPeS
+         miLsRIYaNY1dm4U7JagrKWVX4RseouKjAomkH1eQ/n4nfeQrGXX2LSD9sYhecX1ZCdRH
+         cGZIZkM6j66nZCelPNSba3Qfbdzmm6aewa9QCszHGPG1brZsM8HiLUlhUnwa/n6G3WGa
+         bE7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hLKOOl0yo7YI7pAdrLyTR/NQWG7rhWdAq87I8wp+XOk=;
-        b=Hz4IE7Yn/5Nk8NP9z/+kHSK2iouID2NqPAJE07Gf7dUmrO4KnUTFzlxtL17jMaBXyp
-         Dv8cHm8yE0X+WAdKn4ta0lHnmPPGfGfpqw07hjoUFsj269CFe3fkBiBGKkM1Km0ZpBVq
-         5FV9MdfdXsA+SCYMUJsU5Mn77akA5ZCA2PaN4H2APil9FSkds3jXsuxr+BDJfrBWiaM5
-         rq0ytCDRu1afvaduGSERw3Lhw3WnYPZbZBgTOezBolnSeyuJmyNqBeAAxCpTtuGE5uyJ
-         2wJB6T+x72yrVPWlXHlocyEcwEuOanDtNzXq3z1T+oSGECc93ju7wyeWDz9t553gHl+0
-         0Rpg==
-X-Gm-Message-State: ACrzQf2aC3vOwXLhcvRjLxjIQHOKLXRXZrcFyuHa2adtz3AlLoSTj0Go
-        nUVwS6lx2ZvAY/XgTjRsvr1BHWPzu0YxKQ==
-X-Google-Smtp-Source: AMsMyM79ktbSDFQXhG8HxgxzC9XjiIyabewaT9y3o1EOqeqG95rHakAsNcx7ruKGx21FsDn3b6kSrA==
-X-Received: by 2002:a05:6870:c1d1:b0:13a:f691:c9ae with SMTP id i17-20020a056870c1d100b0013af691c9aemr27647508oad.34.1667807540968;
-        Sun, 06 Nov 2022 23:52:20 -0800 (PST)
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com. [209.85.210.49])
-        by smtp.gmail.com with ESMTPSA id x12-20020a05683000cc00b0065c2c46077dsm2627246oto.67.2022.11.06.23.52.20
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SJ/Mwnct3TZ7HIih3opk7ydhGcqvBaH59swvlRhyi5o=;
+        b=z6+HnlwJAPdFac1nRs0sLA+ZO+NhgOTMzjel1XZrAimlk/wJCICQYEq/wiwHdyMF0w
+         7TxV2Jwp+ZDCAjSWrzBlofONiEkSHhMmRlPLzqDnNZwqcexIuDxdy/O72ANFX385NElJ
+         38iKV+i5WIEeRYdCV2mG+wsy4UxcgSNIqDaLaEc4ZG2Fx/Ia/aiYONj0wrD6sjvf97Ht
+         DevbpQzvOQ6NT9ifqruqJq6BBHDGirIz7be3/7dlYX4gi5pfRKa5RdYKvTbDX70ywr01
+         5fOXPW8ogz3CwFFWPwJZFBIebBP8J57lcjfQPZksCH/4fPNFc983LigMrFL2aH2kXDQg
+         ZKBA==
+X-Gm-Message-State: ACrzQf0+LNoNfuY/ioNSlPRrUPqNxydVxNNKW4UUHLaTTvQZrLNgPAK2
+        RcsnHJvtCSVI9lAsWeQvYTIOhQ==
+X-Google-Smtp-Source: AMsMyM773skFoC6OdBSf7t8Ae0cisF6SiTWYbW/Zdmmo7u8JVCVXqxcgwqDj6Hx38fvKc8n74dfqPQ==
+X-Received: by 2002:a05:651c:516:b0:26f:2a03:b969 with SMTP id o22-20020a05651c051600b0026f2a03b969mr4921918ljp.343.1667809688422;
+        Mon, 07 Nov 2022 00:28:08 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id q21-20020a2e9155000000b0026acc9edecdsm1098071ljg.47.2022.11.07.00.28.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 23:52:20 -0800 (PST)
-Received: by mail-ot1-f49.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so6071166otb.8;
-        Sun, 06 Nov 2022 23:52:20 -0800 (PST)
-X-Received: by 2002:a81:9c49:0:b0:34a:de:97b8 with SMTP id n9-20020a819c49000000b0034a00de97b8mr45959924ywa.384.1667807529144;
- Sun, 06 Nov 2022 23:52:09 -0800 (PST)
+        Mon, 07 Nov 2022 00:28:07 -0800 (PST)
+Message-ID: <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
+Date:   Mon, 7 Nov 2022 09:28:07 +0100
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech> <20221018-clk-range-checks-fixes-v2-28-f6736dec138e@cerno.tech>
-In-Reply-To: <20221018-clk-range-checks-fixes-v2-28-f6736dec138e@cerno.tech>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 7 Nov 2022 08:51:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXee3Xf8G53anCq-4qfenHhgnMiyC1KhKo8Uv6-UV_jrw@mail.gmail.com>
-Message-ID: <CAMuHMdXee3Xf8G53anCq-4qfenHhgnMiyC1KhKo8Uv6-UV_jrw@mail.gmail.com>
-Subject: Re: [PATCH v2 28/65] clk: renesas: r9a06g032: Add a determine_rate hook
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for
+ LoongArch CPU interrupt controller
+Content-Language: en-US
+To:     Liu Peibao <liupeibao@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221107023404.26730-1-liupeibao@loongson.cn>
+ <20221107023404.26730-2-liupeibao@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107023404.26730-2-liupeibao@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CC Gareth
+On 07/11/2022 03:34, Liu Peibao wrote:
 
-On Fri, Nov 4, 2022 at 2:18 PM Maxime Ripard <maxime@cerno.tech> wrote:
->
-> The Renesas r9a06g032 bitselect clock implements a mux with a set_parent
-> hook, but doesn't provide a determine_rate implementation.
->
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidate to
-> trigger that parent change is a call to clk_set_rate(), with
-> determine_rate() figuring out which parent is the best suited for a
-> given rate.
->
-> The other trigger would be a call to clk_set_parent(), but it's far less
-> used, and it doesn't look like there's any obvious user for that clock.
->
-> So, the set_parent hook is effectively unused, possibly because of an
-> oversight. However, it could also be an explicit decision by the
-> original author to avoid any reparenting but through an explicit call to
-> clk_set_parent().
->
-> The latter case would be equivalent to setting the flag
-> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> implementation is provided, clk_round_rate() (through
-> clk_core_round_rate_nolock()) will call itself on the parent if
-> CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> CLK_SET_RATE_NO_REPARENT is set.
->
-> And if it was an oversight, then we are at least explicit about our
-> behavior now and it can be further refined down the line.
->
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Add commit msg explaining what you are doing here (e.g. the hardware).
+
+> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
 > ---
->  drivers/clk/renesas/r9a06g032-clocks.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/clk/renesas/r9a06g032-clocks.c b/drivers/clk/renesas/r9a06g032-clocks.c
-> index 983faa5707b9..70c37097ca6e 100644
-> --- a/drivers/clk/renesas/r9a06g032-clocks.c
-> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
-> @@ -773,6 +773,7 @@ static int r9a06g032_clk_mux_set_parent(struct clk_hw *hw, u8 index)
->  }
->
->  static const struct clk_ops clk_bitselect_ops = {
-> +       .determine_rate = __clk_mux_determine_rate,
->         .get_parent = r9a06g032_clk_mux_get_parent,
->         .set_parent = r9a06g032_clk_mux_set_parent,
->  };
-> @@ -797,7 +798,7 @@ r9a06g032_register_bitsel(struct r9a06g032_priv *clocks,
->
->         init.name = desc->name;
->         init.ops = &clk_bitselect_ops;
-> -       init.flags = CLK_SET_RATE_PARENT;
-> +       init.flags = CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT;
->         init.parent_names = names;
->         init.num_parents = 2;
->
->
-> --
-> b4 0.11.0-dev-99e3a
+>  .../loongarch,cpu-interrupt-controller.yaml   | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+> new file mode 100644
+> index 000000000000..30b742661a3f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LoongArch CPU Interrupt Controller
+> +
+> +description: >
+> +   On LoongArch the loongarch_cpu_irq_of_init() helper can be used to initialize
+> +   the 14 CPU IRQs from a devicetree file and create a irq_domain for this IRQ
+> +   controller.
+> +
+> +   With the irq_domain in place we can describe how the 14 IRQs are wired to the
+> +   platforms internal interrupt controller cascade.
+
+This should be the description of hardware, not Linux drivers.
+
+> +
+> +maintainers:
+> +  - Liu Peibao <liupeibao@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    const: loongarch,cpu-interrupt-controller
+
+You have exactly one and only one type of CPU interrupt controller for
+all your Loongarch designs? All current and all future? All?
+
+> +
+> +  '#interrupt-cells':
+
+Best regards,
+Krzysztof
+
