@@ -2,27 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F10761F1AE
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 12:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6015661F1E8
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 12:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiKGLUP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Nov 2022 06:20:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
+        id S231860AbiKGLdj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Nov 2022 06:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiKGLUP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 06:20:15 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AB3B15722;
-        Mon,  7 Nov 2022 03:20:13 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8BxWtjs6WhjUQUFAA--.14786S3;
-        Mon, 07 Nov 2022 19:20:12 +0800 (CST)
-Received: from [10.20.42.77] (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxiFfr6WhjcGwOAA--.22100S3;
-        Mon, 07 Nov 2022 19:20:11 +0800 (CST)
+        with ESMTP id S231837AbiKGLdi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 06:33:38 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BAED40
+        for <linux-mips@vger.kernel.org>; Mon,  7 Nov 2022 03:33:36 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id o12so16330126lfq.9
+        for <linux-mips@vger.kernel.org>; Mon, 07 Nov 2022 03:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VxI8WoIaewd53an8ZdvD6m/HYBA42Wa5t8ObrpsudSE=;
+        b=g9hVurBa6N5czBfveJTkVxw8tnfhfMr8lPLRApBXMcEE8bRRP6ar0fJiYumMrnrjfQ
+         CYzdYkc38AXlNdcU+yJBwkqHi45hOwK+g/aSM2X2FYeyge27ElevSxfbSqRTiw6CyRZr
+         tVbaluZRfbB8arK8mKF5StpTnORSxvEUX+4oU2I/jA0TrSRC4kJRzAfneSuEKpIe78Pe
+         OhTOJFVBAfFkThbvjha5U1h3MvCdMMkKshX+ZgaghRFO7QF8/B4v5nBtiQZu4f8h7wgV
+         cexqXX8wn46Ic5jL4mi5uXBDbaqH/uzO/FcgHeCP61LugDe5HzM5cXQLwHvgjkLaYY4x
+         o2jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VxI8WoIaewd53an8ZdvD6m/HYBA42Wa5t8ObrpsudSE=;
+        b=3wmlG28IigMUpV3spf9uZeYqwyMQKn83f8w0sG1Emyf5tZkDax4ABU6dsEskJppkNg
+         Y+U3FfMbaBDW5a1Rh6Z6paYZjj2fDk7pvSiD6wv3lir//RKSTuiRrsDLu0DJeaT10Rlw
+         WcQMWI+jE9YemGhlNxa+QK2p6XvjC4YcB9AEnWCdEVC/8I8lm77b4+8deOhWG1TNgrwq
+         5OyUalBqaogCu27H/VBz8j6XQ5DDINx3pqGkGShqxNTHaKClw5xjaj6P00WXbotPPlyb
+         45o5/r8+Ni1jXTM73KcxtAzRtGn83tVcHtXyMW1+AU1KU3tUiwYpBJPJImCiyzwHlbbA
+         z35Q==
+X-Gm-Message-State: ACrzQf3PX6herWZnync/YLdcem2apesd3jsyRKIyGmyQypzGArItVTCs
+        Br1s718MORJjcCb83epC55EWHw==
+X-Google-Smtp-Source: AMsMyM7kUFCpOI3evQFFO9fVKPNN9d1xB0Y37za5WBTTwpUm3cCMQBjcuFBvk0h3AQNNC+TUbG3tQw==
+X-Received: by 2002:a19:650c:0:b0:4b0:38df:e825 with SMTP id z12-20020a19650c000000b004b038dfe825mr410572lfb.471.1667820814878;
+        Mon, 07 Nov 2022 03:33:34 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id o4-20020ac25e24000000b0049c86ca95bfsm1198271lfg.52.2022.11.07.03.33.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 03:33:34 -0800 (PST)
+Message-ID: <9bcefe53-5ac8-5265-a0ac-83cdd69798eb@linaro.org>
+Date:   Mon, 7 Nov 2022 12:33:32 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
 Subject: Re: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for
  LoongArch CPU interrupt controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Content-Language: en-US
+To:     Liu Peibao <liupeibao@loongson.cn>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -37,123 +72,70 @@ References: <20221107023404.26730-1-liupeibao@loongson.cn>
  <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
  <196e80d8-f4fb-7393-81a5-bca757c805f5@loongson.cn>
  <e92beaac-aa88-0336-cb30-7de438de67c9@linaro.org>
-From:   Liu Peibao <liupeibao@loongson.cn>
-Message-ID: <e5910bf9-b662-a733-57f2-5faccb038cb1@loongson.cn>
-Date:   Mon, 7 Nov 2022 19:20:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <e92beaac-aa88-0336-cb30-7de438de67c9@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+ <e5910bf9-b662-a733-57f2-5faccb038cb1@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e5910bf9-b662-a733-57f2-5faccb038cb1@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxiFfr6WhjcGwOAA--.22100S3
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQADCmNno+QOXQADsb
-X-Coremail-Antispam: 1Uk129KBjvJXoWxCr4fZryDuF4Utw13KrW5Awb_yoW5ZFykpF
-        yUCFZxGF4Utr43Cws2g3WFkrnIvrn3Jr109wsxtw17CrnIg343XF42yF95uayrGryxXr4j
-        vr10v3WIgFnxJFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcVc_UUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/7/22 5:55 PM, Krzysztof Kozlowski wrote:
-> On 07/11/2022 10:21, Liu Peibao wrote:
->> On 11/7/22 4:28 PM, Krzysztof Kozlowski wrote:
->>> On 07/11/2022 03:34, Liu Peibao wrote:
->>>
->>> Add commit msg explaining what you are doing here (e.g. the hardware).
->>>
->>
->> I just add this yaml for what I did in patch 1/2 and the header seems enough
->> to describe what I want to, so I did not add the commit log.
-> 
-> This should instead describe briefly the hardware here.
-> 
-
-How about I add the following comments:
-
-"Current LoongArch compatible CPUs support 14 CPU IRQs. We can describe how
-the 14 IRQs are wired to the platforms internal interrupt controller cascade
-by devicetree."
-
-
->>
->>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->>>> ---
->>>>  .../loongarch,cpu-interrupt-controller.yaml   | 42 +++++++++++++++++++
->>>>  1 file changed, 42 insertions(+)
->>>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+On 07/11/2022 12:20, Liu Peibao wrote:
+> On 11/7/22 5:55 PM, Krzysztof Kozlowski wrote:
+>> On 07/11/2022 10:21, Liu Peibao wrote:
+>>> On 11/7/22 4:28 PM, Krzysztof Kozlowski wrote:
+>>>> On 07/11/2022 03:34, Liu Peibao wrote:
 >>>>
->>>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
->>>> new file mode 100644
->>>> index 000000000000..30b742661a3f
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
->>>> @@ -0,0 +1,42 @@
->>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: LoongArch CPU Interrupt Controller
->>>> +
->>>> +description: >
->>>> +   On LoongArch the loongarch_cpu_irq_of_init() helper can be used to initialize
->>>> +   the 14 CPU IRQs from a devicetree file and create a irq_domain for this IRQ
->>>> +   controller.
->>>> +
->>>> +   With the irq_domain in place we can describe how the 14 IRQs are wired to the
->>>> +   platforms internal interrupt controller cascade.
+>>>> Add commit msg explaining what you are doing here (e.g. the hardware).
+>>>>
 >>>
->>> This should be the description of hardware, not Linux drivers.
->>>
+>>> I just add this yaml for what I did in patch 1/2 and the header seems enough
+>>> to describe what I want to, so I did not add the commit log.
 >>
->> OK, I will remove this in the next version of this patch.
+>> This should instead describe briefly the hardware here.
 >>
->>>> +
->>>> +maintainers:
->>>> +  - Liu Peibao <liupeibao@loongson.cn>
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: loongarch,cpu-interrupt-controller
->>>
->>> You have exactly one and only one type of CPU interrupt controller for
->>> all your Loongarch designs? All current and all future? All?
->>>
->>
->> It is sure of that "all current and recent designs". It is really hard to limit the
->> design in the distant future.
->>
->> And if there is updating, maybe I will add additional things like this:
->> "loongarch,cpu-interrupt-controller-2.0".
 > 
-> Unless you have a clear versioning of your hardware, adding 2.0 won't be
-> correct. Don't you have this for specific SoC?
+> How about I add the following comments:
 > 
+> "Current LoongArch compatible CPUs support 14 CPU IRQs. We can describe how
+> the 14 IRQs are wired to the platforms internal interrupt controller cascade
+> by devicetree."
 
-The "loongarch,cpu-interrupt-controller" now is compatible for all the LoongArch
-compatible CPUs, not specific for one chip. And we may keep this CPU interrupt
-controller for a long time.
+Sure.
 
-BR,
-Peibao
+>>>>> +    const: loongarch,cpu-interrupt-controller
+>>>>
+>>>> You have exactly one and only one type of CPU interrupt controller for
+>>>> all your Loongarch designs? All current and all future? All?
+>>>>
+>>>
+>>> It is sure of that "all current and recent designs". It is really hard to limit the
+>>> design in the distant future.
+>>>
+>>> And if there is updating, maybe I will add additional things like this:
+>>> "loongarch,cpu-interrupt-controller-2.0".
+>>
+>> Unless you have a clear versioning of your hardware, adding 2.0 won't be
+>> correct. Don't you have this for specific SoC?
+>>
+> 
+> The "loongarch,cpu-interrupt-controller" now is compatible for all the LoongArch
+> compatible CPUs, not specific for one chip. And we may keep this CPU interrupt
+> controller for a long time.
+
+Still specific compatibles (as fallbacks) are used for such cases, so
+why is this different? Hardware compatible with several other devices
+still gets specific compatible, right?
+
+You cannot have "-2.0" suffix in the future just because "you want", so
+be sure that your choice is reasonable.
+
+Best regards,
+Krzysztof
 
