@@ -2,80 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD8661E4FA
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Nov 2022 18:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A04F61E897
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 03:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiKFRom (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 6 Nov 2022 12:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S230115AbiKGCeQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 6 Nov 2022 21:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiKFRol (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 6 Nov 2022 12:44:41 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694326422;
-        Sun,  6 Nov 2022 09:44:40 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id 11so7296000iou.0;
-        Sun, 06 Nov 2022 09:44:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LmwpYCTGFDgeBb3yaFM0SZa/jnM1t19xpWxBuBKJal8=;
-        b=FdnOLJCaxhF57Ct4n+8ZKrn1+v5QwMN+hsh06h/iWEb1N8H9iGKcFf6xiTsvHnaAIi
-         KehmF31IWBfev4X0kwpNLvQfbOSYqsP9jjGJgagF58XtGeO22Qw/zyQd65J02lQTRH1n
-         qFXeMRJsW9/bRiJ9vHdV9S6oZuIxtgVB8N5sIp6jf1MGi8m4bymCETSvaRU2pCQuxJ9J
-         OXpPHaDeadltcQUwxRLiCM+80tBDiz6QB3KPs0yBfY4Rl3HLbcbjPhOWcbokvl/AeUqk
-         45DTKn9D3LLfcoOBU/84Nb6s8T2QHof2mBeY1eoQ7s14pkGmBNC08NtXNz8DGt9aIaA6
-         zXuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LmwpYCTGFDgeBb3yaFM0SZa/jnM1t19xpWxBuBKJal8=;
-        b=lXlkQiepEGE6yQ/AaKs5T2CVI6LF5CPKjj1m8jgfoCrgssZuNu5gRXEXpjMvovZjsT
-         wUAo45Sb/bIEWUEtRqh5fOmF9waOPXiFf4QmstE+/GQKaMJmtSI8jN+Yy1D3rvA3ipGo
-         IfZPdmON4AqmIm2Csx/GxRKgrKawRD42zU0b++S/Fi2uZg3bG7YLRElbQ/Yl5ldv8fsk
-         7bCZj/ur7/lgW8ssoXAGJ4/UZmjM3zyADLpKpcDCeTRtB8UACCQauHw7lenrWePV5B6Z
-         LaY0iZ0ssfwejylGk5gQ/nBYhYRXGG/RQjFAuvwP9oxE5gVTXmxsG2LDgvp2AhWZt86c
-         BPGw==
-X-Gm-Message-State: ACrzQf2yrm6YNf2bgtNzXGaPigQCdLZRPERUx8cmaysqOfefGgvX6oj/
-        izXUPt1bg6k58OXga8CBokUMVeOfZ1ysutoBjvC/llaFNtc=
-X-Google-Smtp-Source: AMsMyM418EFQAdgZSCnwSka9QG7J5t/0cMR9HkkhAMxXuxbHyH/U0bq+Cin5uEekUmsh5uyq/C/AGzh6E6wYz9I6AcA=
-X-Received: by 2002:a5d:9552:0:b0:6ce:64b7:5198 with SMTP id
- a18-20020a5d9552000000b006ce64b75198mr19618284ios.108.1667756679822; Sun, 06
- Nov 2022 09:44:39 -0800 (PST)
+        with ESMTP id S230079AbiKGCeQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 6 Nov 2022 21:34:16 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 076CA2BDC;
+        Sun,  6 Nov 2022 18:34:13 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8Dxu9ihbmhjfO0EAA--.16207S3;
+        Mon, 07 Nov 2022 10:34:09 +0800 (CST)
+Received: from loongson-PC.loongson.cn (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+Ccbmhj2D0OAA--.40061S2;
+        Mon, 07 Nov 2022 10:34:09 +0800 (CST)
+From:   Liu Peibao <liupeibao@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] irqchip: loongarch-cpu: add DT support
+Date:   Mon,  7 Nov 2022 10:34:03 +0800
+Message-Id: <20221107023404.26730-1-liupeibao@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20221106170637.1580802-1-sashal@kernel.org> <20221106170637.1580802-9-sashal@kernel.org>
-In-Reply-To: <20221106170637.1580802-9-sashal@kernel.org>
-From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Sun, 6 Nov 2022 20:44:28 +0300
-Message-ID: <CAKNVLfZ63utLSOujoTZqN8jHKwYwqb-Z0E=VwueFmwMJf961iA@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.4 09/12] ASoC: codecs: jz4725b: fix capture
- selector naming
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, paul@crapouillou.net,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dxr+Ccbmhj2D0OAA--.40061S2
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQABCmNmUmQAPwAGsA
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Cw4fCw1fZFyUXryxAF48Crg_yoW8Jw13pa
+        y7u3yavr1xJFnrWwn3C345Wr9Ivr1rK3y2qayfKa4Skrs8G34DZF10yF9xuFs5C3y3JF12
+        9F18tF18uF15JFDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
+        4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-=D0=B2=D1=81, 6 =D0=BD=D0=BE=D1=8F=D0=B1. 2022 =D0=B3. =D0=B2 20:06, Sasha =
-Levin <sashal@kernel.org>:
-> +       {"ADC Sourc Capture Routee", "Line In", "Line In"},
+LoongArch is coming to support booting with FDT, so DT
+support of this driver is desired.
 
-Please make sure you're grabbing df496157a5af companion commit.
+Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+---
+ drivers/irqchip/irq-loongarch-cpu.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-BR,
-Siarhei
+diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
+index 741612ba6a52..a28b7c549654 100644
+--- a/drivers/irqchip/irq-loongarch-cpu.c
++++ b/drivers/irqchip/irq-loongarch-cpu.c
+@@ -92,6 +92,25 @@ static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops = {
+ 	.xlate = irq_domain_xlate_onecell,
+ };
+ 
++#ifdef CONFIG_OF
++int __init loongarch_cpu_irq_of_init(struct device_node *of_node,
++				struct device_node *parent)
++{
++	cpuintc_handle = of_node_to_fwnode(of_node);
++
++	irq_domain = irq_domain_create_linear(cpuintc_handle, EXCCODE_INT_NUM,
++				&loongarch_cpu_intc_irq_domain_ops, NULL);
++	if (!irq_domain)
++		panic("Failed to add irqdomain for loongarch CPU");
++
++	set_handle_irq(&handle_cpu_irq);
++
++	return 0;
++}
++IRQCHIP_DECLARE(cpu_intc, "loongson,cpu-interrupt-controller",
++					loongarch_cpu_irq_of_init);
++#endif
++
+ static int __init
+ liointc_parse_madt(union acpi_subtable_headers *header,
+ 		       const unsigned long end)
+-- 
+2.20.1
+
