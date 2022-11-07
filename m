@@ -2,124 +2,325 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BAF61E898
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 03:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D54561E8C4
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 04:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbiKGCeR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 6 Nov 2022 21:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
+        id S230309AbiKGDBT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 6 Nov 2022 22:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiKGCeP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 6 Nov 2022 21:34:15 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16C352AE3;
-        Sun,  6 Nov 2022 18:34:12 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8Axz7ejbmhjgu0EAA--.11534S3;
-        Mon, 07 Nov 2022 10:34:11 +0800 (CST)
-Received: from loongson-PC.loongson.cn (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+Ccbmhj2D0OAA--.40061S3;
-        Mon, 07 Nov 2022 10:34:09 +0800 (CST)
-From:   Liu Peibao <liupeibao@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for LoongArch CPU interrupt controller
-Date:   Mon,  7 Nov 2022 10:34:04 +0800
-Message-Id: <20221107023404.26730-2-liupeibao@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221107023404.26730-1-liupeibao@loongson.cn>
-References: <20221107023404.26730-1-liupeibao@loongson.cn>
+        with ESMTP id S230050AbiKGDBS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 6 Nov 2022 22:01:18 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1178BD2C3
+        for <linux-mips@vger.kernel.org>; Sun,  6 Nov 2022 19:01:15 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id f5so26731306ejc.5
+        for <linux-mips@vger.kernel.org>; Sun, 06 Nov 2022 19:01:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JlY2OstXwROXIDpT6VsXnJfzUqv1irH1Acsts2GGjpg=;
+        b=wH7KmpU7jVwmAquM9Wvk3ttImj9+lvZI8Rxq1i6YYsElC8cWksh48ZwROArAULlZ7C
+         tWe8M8ahyJHdHwo2Ck68YVw1aHJ/MLoYcQlrnfABVok8QpmzXxG1ffcBMZXcH6h5LAvm
+         0tBbIsqoRxCX/KnzpT+CYyHXfKhw4foQW6+Ax6UY2aF+XO4GKByYk/PtdVxGB2RT0Fbu
+         ysRYJ78VJd30TMAFhUzwFf/xZ7AJ2g1baQLCe9iqAVhA1Yqqkk67FLLNxduytkqwDB7v
+         JP5zJ/Gyoc7JfJxpc+R8WHDqVMk2NzGLLCgzvKh3qN6XuvMHVMMnDXEN4atLvrkjLInL
+         jZnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JlY2OstXwROXIDpT6VsXnJfzUqv1irH1Acsts2GGjpg=;
+        b=7GDNtRRBydsQ9ih8IL0J81Zj0w8CiKPK6oir2VfgnoAYS1l63ZpVHkQ+u6n70+kj2g
+         hn15R6Rl3wlII/QpH/yxiWMfgPz0YIpNK7G0Dt3JkjXyUsJNByjWfBCdmhfWBnsSZJoC
+         pF7TcoR7RjGPEbVW1TKI3gJWc8yZehTwmzYp1XC8Shz3S66OA+6+jV2TLDooS+Fknnm6
+         0ryONRtXHCCK8vc2jRi10hx/oOh8fyZ70EPVdm8ADhXt4bzS5HnkiRVdEanyP86xTtXc
+         2EFSryRmcFgulEupKpVfcqYxhOPdJmyYllL1Rw7sbr1l8OaSKAI8/HsUdZ4DdymyQiD7
+         wOYw==
+X-Gm-Message-State: ACrzQf1wkMT5RAeVOgYZuhrUBAOd1WDfyIq/7HMdbWVGjmKPU9fnXcA4
+        mG6MYNtAD4GFqXRNqhAbRlx84Cd2TnwqFaHTdvDQtw==
+X-Google-Smtp-Source: AMsMyM6JBSnXu9W+mu2GHeFQ3pcqBebFarC8BvVQZEanz3Zu4tMlcAMijwZHL0jNoTpD/MpfGKS3dVLLizMbV1pDGog=
+X-Received: by 2002:a17:906:dac8:b0:741:545b:796a with SMTP id
+ xi8-20020a170906dac800b00741545b796amr45605430ejb.240.1667790073283; Sun, 06
+ Nov 2022 19:01:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dxr+Ccbmhj2D0OAA--.40061S3
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQADCmNno+QHGAAAsU
-X-Coremail-Antispam: 1Uk129KBjvJXoW7CFy5Gw4xKF17Gw1kWrWfZrb_yoW8CF1kpF
-        W7CanxWF40qF43Cws2ga40krnxZFnxJrna9ws3tw47Gr1ag343XFW29F95JFW8GrZ2qw17
-        Z3WFv3W0q3ZrJF7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
-        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        CVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jrcTPUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221102231911.3107438-1-seanjc@google.com> <20221102231911.3107438-10-seanjc@google.com>
+In-Reply-To: <20221102231911.3107438-10-seanjc@google.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 7 Nov 2022 08:31:01 +0530
+Message-ID: <CAAhSdy10dC+_S5PZ=QziYqVJKHh6Gi6D0H0C7GSsxWdFVrTQjA@mail.gmail.com>
+Subject: Re: [PATCH 09/44] KVM: Drop arch hardware (un)setup hooks
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
----
- .../loongarch,cpu-interrupt-controller.yaml   | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+On Thu, Nov 3, 2022 at 4:49 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Drop kvm_arch_hardware_setup() and kvm_arch_hardware_unsetup() now that
+> all implementations are nops.
+>
+> No functional change intended.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
-new file mode 100644
-index 000000000000..30b742661a3f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LoongArch CPU Interrupt Controller
-+
-+description: >
-+   On LoongArch the loongarch_cpu_irq_of_init() helper can be used to initialize
-+   the 14 CPU IRQs from a devicetree file and create a irq_domain for this IRQ
-+   controller.
-+
-+   With the irq_domain in place we can describe how the 14 IRQs are wired to the
-+   platforms internal interrupt controller cascade.
-+
-+maintainers:
-+  - Liu Peibao <liupeibao@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongarch,cpu-interrupt-controller
-+
-+  '#interrupt-cells':
-+    const: 1
-+
-+  interrupt-controller: true
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - '#interrupt-cells'
-+  - interrupt-controller
-+
-+examples:
-+  - |
-+    interrupt-controller {
-+      compatible = "loongarch,cpu-interrupt-controller";
-+      #interrupt-cells = <1>;
-+      interrupt-controller;
-+    };
--- 
-2.20.1
+For KVM RISC-V:
+Acked-by: Anup Patel <anup@brainfault.org>
 
+Thanks,
+Anup
+
+> ---
+>  arch/arm64/include/asm/kvm_host.h   |  1 -
+>  arch/arm64/kvm/arm.c                |  5 -----
+>  arch/mips/include/asm/kvm_host.h    |  1 -
+>  arch/mips/kvm/mips.c                |  5 -----
+>  arch/powerpc/include/asm/kvm_host.h |  1 -
+>  arch/powerpc/kvm/powerpc.c          |  5 -----
+>  arch/riscv/include/asm/kvm_host.h   |  1 -
+>  arch/riscv/kvm/main.c               |  5 -----
+>  arch/s390/kvm/kvm-s390.c            | 10 ----------
+>  arch/x86/kvm/x86.c                  | 10 ----------
+>  include/linux/kvm_host.h            |  2 --
+>  virt/kvm/kvm_main.c                 |  7 -------
+>  12 files changed, 53 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 45e2136322ba..5d5a887e63a5 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -859,7 +859,6 @@ static inline bool kvm_system_needs_idmapped_vectors(void)
+>
+>  void kvm_arm_vcpu_ptrauth_trap(struct kvm_vcpu *vcpu);
+>
+> -static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 94d33e296e10..2ee729f54ce0 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -63,11 +63,6 @@ int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu)
+>         return kvm_vcpu_exiting_guest_mode(vcpu) == IN_GUEST_MODE;
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>         return 0;
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 5cedb28e8a40..28f0ba97db71 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -888,7 +888,6 @@ extern unsigned long kvm_mips_get_ramsize(struct kvm *kvm);
+>  extern int kvm_vcpu_ioctl_interrupt(struct kvm_vcpu *vcpu,
+>                              struct kvm_mips_interrupt *irq);
+>
+> -static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_free_memslot(struct kvm *kvm,
+>                                          struct kvm_memory_slot *slot) {}
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index a25e0b73ee70..af29490d9740 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -135,11 +135,6 @@ void kvm_arch_hardware_disable(void)
+>         kvm_mips_callbacks->hardware_disable();
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>         return 0;
+> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
+> index caea15dcb91d..5d2c3a487e73 100644
+> --- a/arch/powerpc/include/asm/kvm_host.h
+> +++ b/arch/powerpc/include/asm/kvm_host.h
+> @@ -877,7 +877,6 @@ struct kvm_vcpu_arch {
+>  #define __KVM_HAVE_CREATE_DEVICE
+>
+>  static inline void kvm_arch_hardware_disable(void) {}
+> -static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
+>  static inline void kvm_arch_flush_shadow_all(struct kvm *kvm) {}
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index b850b0efa201..74ea5687ecbc 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -441,11 +441,6 @@ int kvm_arch_hardware_enable(void)
+>         return 0;
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>         return kvmppc_core_check_processor_compat();
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> index dbbf43d52623..8c771fc4f5d2 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -229,7 +229,6 @@ struct kvm_vcpu_arch {
+>         bool pause;
+>  };
+>
+> -static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>
+> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+> index df2d8716851f..a146fa0ce4d2 100644
+> --- a/arch/riscv/kvm/main.c
+> +++ b/arch/riscv/kvm/main.c
+> @@ -25,11 +25,6 @@ int kvm_arch_check_processor_compat(void *opaque)
+>         return 0;
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+>  int kvm_arch_hardware_enable(void)
+>  {
+>         unsigned long hideleg, hedeleg;
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 1aaee15211f2..7fcd2d3b3558 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -321,16 +321,6 @@ static struct notifier_block kvm_clock_notifier = {
+>         .notifier_call = kvm_clock_sync,
+>  };
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+> -void kvm_arch_hardware_unsetup(void)
+> -{
+> -
+> -}
+> -
+>  static void allow_cpu_feat(unsigned long nr)
+>  {
+>         set_bit_inv(nr, kvm_s390_available_cpu_feat);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 80ee580a9cd4..40d4bfaa17a4 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11985,16 +11985,6 @@ void kvm_arch_hardware_disable(void)
+>         drop_user_return_notifiers();
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+> -void kvm_arch_hardware_unsetup(void)
+> -{
+> -
+> -}
+> -
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>         struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 18592bdf4c1b..9b52bd40be56 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1447,8 +1447,6 @@ static inline void kvm_create_vcpu_debugfs(struct kvm_vcpu *vcpu) {}
+>
+>  int kvm_arch_hardware_enable(void);
+>  void kvm_arch_hardware_disable(void);
+> -int kvm_arch_hardware_setup(void *opaque);
+> -void kvm_arch_hardware_unsetup(void);
+>  int kvm_arch_check_processor_compat(void *opaque);
+>  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
+>  bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index f592dd4ce8f2..27ce263a80e4 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5843,10 +5843,6 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+>         if (r)
+>                 return r;
+>
+> -       r = kvm_arch_hardware_setup(opaque);
+> -       if (r < 0)
+> -               goto err_hw_setup;
+> -
+>         if (!zalloc_cpumask_var(&cpus_hardware_enabled, GFP_KERNEL)) {
+>                 r = -ENOMEM;
+>                 goto err_hw_enabled;
+> @@ -5939,8 +5935,6 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+>  out_free_2:
+>         free_cpumask_var(cpus_hardware_enabled);
+>  err_hw_enabled:
+> -       kvm_arch_hardware_unsetup();
+> -err_hw_setup:
+>         kvm_arch_exit();
+>         return r;
+>  }
+> @@ -5969,7 +5963,6 @@ void kvm_exit(void)
+>         on_each_cpu(hardware_disable_nolock, NULL, 1);
+>         kvm_irqfd_exit();
+>         free_cpumask_var(cpus_hardware_enabled);
+> -       kvm_arch_hardware_unsetup();
+>         kvm_arch_exit();
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_exit);
+> --
+> 2.38.1.431.g37b22c650d-goog
+>
