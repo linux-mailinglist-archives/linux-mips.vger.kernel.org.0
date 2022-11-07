@@ -2,247 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B6C61EDB0
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 09:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3670861EEAC
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 10:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbiKGIyZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Nov 2022 03:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S230507AbiKGJVV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Nov 2022 04:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbiKGIyX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 03:54:23 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAFABE3A;
-        Mon,  7 Nov 2022 00:54:22 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id CBDFB580981;
-        Mon,  7 Nov 2022 03:54:21 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 07 Nov 2022 03:54:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667811261; x=
-        1667818461; bh=DpobGsjjO6+ObD0CgLx0PfBT5w/ojqtKffWwUQfBXkA=; b=a
-        L7x6VeduJt+1Hu5h1m6xZv3p7hN365kpXqH5SuShvo3zwCzJIKsm96bEmylPDRnr
-        vKihkUHqJ+opr8d5eypGD34fQlnFGyxPjZz8U+6RxuJq36EaUEjtGGOHxWFWJmsR
-        xF8mQxK/zVQWtqPsaAi62pWa+AWIoU2BQQvgaXR8zkOkphgUl8UR2UNnuFhq1pY6
-        BBMhiWDZbMK+qFDNXAtIYmad+XRLYmN1xRyV+Cdif96MtdkOqfkm8tHhatycY5y4
-        6hqoUGqXVWC6P521j5IjRmmgaDJ6w3DWXYznabMX8M7Hgb9gEW6XKEk3hW0kJ2QI
-        +2VDPHajg+fFKI1/fw4zg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667811261; x=
-        1667818461; bh=DpobGsjjO6+ObD0CgLx0PfBT5w/ojqtKffWwUQfBXkA=; b=a
-        wf3lMuGSE0c+KKuKS9VUt+n1OzUMiXhyTIxQLBDjWgJq5Rasjs/0LinZ+VNNis3Q
-        alYUFBZQZ1o6/Q54VwJt3hqIwUHR2Sqily3v9eJVSTlP+Hu2fMStre5KXTVYz4tY
-        up+dWJV8xLSoFiZUgzmweb/bZBcB/fFtJnk3gDOGBjofi4mAWNWAPpiPA0jEfPrm
-        qZYWyDNc5qSMORFII98iU3MY0TQmveTRjRLYGwUC3eXJUsRYRr3v7if3WJeSkO6I
-        j3g07rByjglyFc5HGmp7F1QOFNm/ObUDgojleoszz+DZFx1tbTqcAVeOKkORWZom
-        ZIRqMfyKz+fN8PnA+frdQ==
-X-ME-Sender: <xms:vMdoY_7qKFUnXrMLgK6UK63X-Fh4SaqG616lZWh2McRJiMf86oKkBg>
-    <xme:vMdoY05eqjOQdOTGTKTySzE1Wn9z9h-j5CLWyw-kRMMS7CUhWbIcIkplkIUxbV3Zx
-    tjU76RkWB9nO9l2Z6w>
-X-ME-Received: <xmr:vMdoY2eTjJtLQJNNaygWBJHdzqd2eezOC-jGJ5qGPoZggXSc-nHUmqhTbr9BJgETFjOt3Omg7gRBI2Br8ytbDietmUNlkAqFM8RJrlQ2C87Yog>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdejgdduvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddunecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepleelfeeileelteetfedvieekfeefffevhfdtvefgheevudevheejvddv
-    ieeltdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:vMdoYwK5IAG7BHmBDjFkYVhB3wRP1TzolwSnR7LPSyHllzJNSVgrKg>
-    <xmx:vMdoYzJWQmddsqBUPbOODTn8VI2mqM3H1ese92evIxTkRlBaGuPeYA>
-    <xmx:vMdoY5w7ruPvXZ8uflNCksVlsNEDzQ_jl3m9tAGFgnB3-SXCh18Y3A>
-    <xmx:vcdoY6WhoDikh1uwLRRPXPUC7EI94vIUcFL5a0jAMBx8zIodtk5heg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Nov 2022 03:54:18 -0500 (EST)
-Date:   Mon, 7 Nov 2022 09:54:17 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 56/65] clk: ingenic: cgu: Switch to determine_rate
-Message-ID: <20221107085417.xrsh6xy3ouwdkp4z@houat>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-56-f6736dec138e@cerno.tech>
- <80VTKR.CE8RVN8M3ZYK3@crapouillou.net>
- <20221104145946.orsyrhiqvypisl5j@houat>
- <cp7Yh29ndlOOi1yW8KwCcpzoLPLxm1vR@localhost>
+        with ESMTP id S229638AbiKGJVU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 04:21:20 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D1E3F5AF;
+        Mon,  7 Nov 2022 01:21:17 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8Bx37cMzmhj2_8EAA--.11645S3;
+        Mon, 07 Nov 2022 17:21:16 +0800 (CST)
+Received: from [10.20.42.77] (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeALzmhjs2IOAA--.39954S3;
+        Mon, 07 Nov 2022 17:21:15 +0800 (CST)
+Subject: Re: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for
+ LoongArch CPU interrupt controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221107023404.26730-1-liupeibao@loongson.cn>
+ <20221107023404.26730-2-liupeibao@loongson.cn>
+ <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
+From:   Liu Peibao <liupeibao@loongson.cn>
+Message-ID: <196e80d8-f4fb-7393-81a5-bca757c805f5@loongson.cn>
+Date:   Mon, 7 Nov 2022 17:21:15 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <cp7Yh29ndlOOi1yW8KwCcpzoLPLxm1vR@localhost>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxLeALzmhjs2IOAA--.39954S3
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQADCmNno+QOXQABsZ
+X-Coremail-Antispam: 1Uk129KBjvJXoW7try5GF1fKFyktFyDCF18AFb_yoW8Kw1fpF
+        y7CanxuF40qF43Cws2g3WF9rnxZrn3Jr1S9anxt3yxC34ag343XFW2vF95uFWrGryxXr4U
+        Zr1093W0qFnrJFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        baAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        kF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
+        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
+        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
+        cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
+        80aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
+        43ZEXa7IU8JfQtUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On 11/7/22 4:28 PM, Krzysztof Kozlowski wrote:
+> On 07/11/2022 03:34, Liu Peibao wrote:
+> 
+> Add commit msg explaining what you are doing here (e.g. the hardware).
+> 
 
-On Fri, Nov 04, 2022 at 05:35:29PM +0000, Aidan MacDonald wrote:
->=20
-> Maxime Ripard <maxime@cerno.tech> writes:
->=20
-> > Hi Paul,
-> >
-> > On Fri, Nov 04, 2022 at 02:31:20PM +0000, Paul Cercueil wrote:
-> >> Le ven. 4 nov. 2022 =E0 14:18:13 +0100, Maxime Ripard <maxime@cerno.te=
-ch> a
-> >> =E9crit :
-> >> > The Ingenic CGU clocks implements a mux with a set_parent hook, but
-> >> > doesn't provide a determine_rate implementation.
-> >> >
-> >> > This is a bit odd, since set_parent() is there to, as its name impli=
-es,
-> >> > change the parent of a clock. However, the most likely candidate to
-> >> > trigger that parent change is a call to clk_set_rate(), with
-> >> > determine_rate() figuring out which parent is the best suited for a
-> >> > given rate.
-> >> >
-> >> > The other trigger would be a call to clk_set_parent(), but it's far =
-less
-> >> > used, and it doesn't look like there's any obvious user for that clo=
-ck.
-> >> >
-> >> > So, the set_parent hook is effectively unused, possibly because of an
-> >> > oversight. However, it could also be an explicit decision by the
-> >> > original author to avoid any reparenting but through an explicit cal=
-l to
-> >> > clk_set_parent().
-> >> >
-> >> > The driver does implement round_rate() though, which means that we c=
-an
-> >> > change the rate of the clock, but we will never get to change the
-> >> > parent.
-> >> >
-> >> > However, It's hard to tell whether it's been done on purpose or not.
-> >> >
-> >> > Since we'll start mandating a determine_rate() implementation, let's
-> >> > convert the round_rate() implementation to a determine_rate(), which
-> >> > will also make the current behavior explicit. And if it was an
-> >> > oversight, the clock behaviour can be adjusted later on.
-> >>
-> >> So it's partly on purpose, partly because I didn't know about
-> >> .determine_rate.
-> >>
-> >> There's nothing odd about having a lonely .set_parent callback; in my =
-case
-> >> the clocks are parented from the device tree.
-> >>
-> >> Having the clocks driver trigger a parent change when requesting a rate
-> >> change sounds very dangerous, IMHO. My MMC controller can be parented =
-to the
-> >> external 48 MHz oscillator, and if the card requests 50 MHz, it could =
-switch
-> >> to one of the PLLs. That works as long as the PLLs don't change rate, =
-but if
-> >> one is configured as driving the CPU clock, it becomes messy.
-> >> The thing is, the clocks driver has no way to know whether or not it is
-> >> "safe" to use a designated parent.
-> >>
-> >> For that reason, in practice, I never actually want to have a clock
-> >> re-parented - it's almost always a bad idea vs. sticking to the parent=
- clock
-> >> configured in the DTS.
-> >
-> > Yeah, and this is totally fine. But we need to be explicit about it. The
-> > determine_rate implementation I did in all the patches is an exact
-> > equivalent to the round_rate one if there was one. We will never ask to
-> > change the parent.
-> >
-> > Given what you just said, I would suggest to set the
-> > CLK_SET_RATE_NO_REPARENT flag as well.
->
-> Ideally there should be a way for drivers and the device tree to
-> say, "clock X must be driven by clock Y", but the clock framework
-> would be allowed to re-parent clocks freely as long as it doesn't
-> violate any DT or driver constraints.
+I just add this yaml for what I did in patch 1/2 and the header seems enough
+to describe what I want to, so I did not add the commit log.
 
-I'm not really sure what you mean there, sorry. Isn't it what
-assigned-clock-parents/clk_set_parent() at probe, plus a determine_rate
-implementation that would affect best_parent_hw would already provide?
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>> ---
+>>  .../loongarch,cpu-interrupt-controller.yaml   | 42 +++++++++++++++++++
+>>  1 file changed, 42 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>> new file mode 100644
+>> index 000000000000..30b742661a3f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: LoongArch CPU Interrupt Controller
+>> +
+>> +description: >
+>> +   On LoongArch the loongarch_cpu_irq_of_init() helper can be used to initialize
+>> +   the 14 CPU IRQs from a devicetree file and create a irq_domain for this IRQ
+>> +   controller.
+>> +
+>> +   With the irq_domain in place we can describe how the 14 IRQs are wired to the
+>> +   platforms internal interrupt controller cascade.
+> 
+> This should be the description of hardware, not Linux drivers.
+> 
 
-> That way allowing reparenting doesn't need to be an all-or-nothing
-> thing, and it doesn't need to be decided at the clock driver level
-> with special flags.
+OK, I will remove this in the next version of this patch.
 
-Like I said, the default implementation is already working to what you
-suggested if I understood properly. However, this has never been tested
-for any of the drivers in that series so I don't want to introduce (and
-debug ;)) regressions in all those drivers that were not setting any
-constraint but never actually tested their reparenting code.
+>> +
+>> +maintainers:
+>> +  - Liu Peibao <liupeibao@loongson.cn>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: loongarch,cpu-interrupt-controller
+> 
+> You have exactly one and only one type of CPU interrupt controller for
+> all your Loongarch designs? All current and all future? All?
+> 
 
-So that series is strictly equivalent to what you had before, it's just
-explicit now.
+It is sure of that "all current and recent designs". It is really hard to limit the
+design in the distant future.
 
-If you find that some other decision make sense for your driver in
-particular cases, feel free to change it. I barely know most of these
-platforms, so I won't be able to make that decision (and test it)
-unfortunately.
+And if there is updating, maybe I will add additional things like this:
+"loongarch,cpu-interrupt-controller-2.0".
 
-Maxime
+BR,
+Peibao
+
