@@ -2,83 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6015661F1E8
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 12:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C65B461F273
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 13:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbiKGLdj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Nov 2022 06:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        id S231956AbiKGMGs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Nov 2022 07:06:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbiKGLdi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 06:33:38 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BAED40
-        for <linux-mips@vger.kernel.org>; Mon,  7 Nov 2022 03:33:36 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id o12so16330126lfq.9
-        for <linux-mips@vger.kernel.org>; Mon, 07 Nov 2022 03:33:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VxI8WoIaewd53an8ZdvD6m/HYBA42Wa5t8ObrpsudSE=;
-        b=g9hVurBa6N5czBfveJTkVxw8tnfhfMr8lPLRApBXMcEE8bRRP6ar0fJiYumMrnrjfQ
-         CYzdYkc38AXlNdcU+yJBwkqHi45hOwK+g/aSM2X2FYeyge27ElevSxfbSqRTiw6CyRZr
-         tVbaluZRfbB8arK8mKF5StpTnORSxvEUX+4oU2I/jA0TrSRC4kJRzAfneSuEKpIe78Pe
-         OhTOJFVBAfFkThbvjha5U1h3MvCdMMkKshX+ZgaghRFO7QF8/B4v5nBtiQZu4f8h7wgV
-         cexqXX8wn46Ic5jL4mi5uXBDbaqH/uzO/FcgHeCP61LugDe5HzM5cXQLwHvgjkLaYY4x
-         o2jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VxI8WoIaewd53an8ZdvD6m/HYBA42Wa5t8ObrpsudSE=;
-        b=3wmlG28IigMUpV3spf9uZeYqwyMQKn83f8w0sG1Emyf5tZkDax4ABU6dsEskJppkNg
-         Y+U3FfMbaBDW5a1Rh6Z6paYZjj2fDk7pvSiD6wv3lir//RKSTuiRrsDLu0DJeaT10Rlw
-         WcQMWI+jE9YemGhlNxa+QK2p6XvjC4YcB9AEnWCdEVC/8I8lm77b4+8deOhWG1TNgrwq
-         5OyUalBqaogCu27H/VBz8j6XQ5DDINx3pqGkGShqxNTHaKClw5xjaj6P00WXbotPPlyb
-         45o5/r8+Ni1jXTM73KcxtAzRtGn83tVcHtXyMW1+AU1KU3tUiwYpBJPJImCiyzwHlbbA
-         z35Q==
-X-Gm-Message-State: ACrzQf3PX6herWZnync/YLdcem2apesd3jsyRKIyGmyQypzGArItVTCs
-        Br1s718MORJjcCb83epC55EWHw==
-X-Google-Smtp-Source: AMsMyM7kUFCpOI3evQFFO9fVKPNN9d1xB0Y37za5WBTTwpUm3cCMQBjcuFBvk0h3AQNNC+TUbG3tQw==
-X-Received: by 2002:a19:650c:0:b0:4b0:38df:e825 with SMTP id z12-20020a19650c000000b004b038dfe825mr410572lfb.471.1667820814878;
-        Mon, 07 Nov 2022 03:33:34 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id o4-20020ac25e24000000b0049c86ca95bfsm1198271lfg.52.2022.11.07.03.33.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 03:33:34 -0800 (PST)
-Message-ID: <9bcefe53-5ac8-5265-a0ac-83cdd69798eb@linaro.org>
-Date:   Mon, 7 Nov 2022 12:33:32 +0100
+        with ESMTP id S232009AbiKGMGk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 07:06:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203EF1B1D4;
+        Mon,  7 Nov 2022 04:06:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE626B8101D;
+        Mon,  7 Nov 2022 12:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46DD2C433D6;
+        Mon,  7 Nov 2022 12:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667822783;
+        bh=TjwC/oCNbbUzKPDP67kFN1hAvayD11aeO+3EJVwBAHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uVU4PMxo1R8a3xp/WKHs1dq/6doMgdlOpIsmcirQbv3czoZbcxWJpPwnRrBpNnLaM
+         RIaI2ploJwL3I8PSy07X4klDoFGje/zAjmQm0GMafEh6v9eSVzb3H6UHbMJeGYIK/0
+         3HkQjVeGkkfj4w3q16A9Jpu8h/eTG5MQNUyBXtMwVQBVCZBvcrvN6PBx8wq4Un2SsG
+         waxoneKGslH7u6FU8MFJJQeOVg92oqhsWrP6aKBcVt7eUdvfzyvh8bep0OHaNEym9f
+         kwo9TcnG/5EsDXRnkiFTaef9nelMlw97dI2zZnD+Bud8Et09b4EPGmFQOKomMmC6mm
+         cuDEys2QhiEog==
+Date:   Mon, 7 Nov 2022 12:06:07 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <Y2j0r0wX1XtQBvqO@sirena.org.uk>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
+ <Y2UzdYyjgahJsbHg@sirena.org.uk>
+ <20221104155123.qomguvthehnogkdd@houat>
+ <Y2U2+ePwRieYkNjv@sirena.org.uk>
+ <20221107084322.gk4j75r52zo5k7xk@houat>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for
- LoongArch CPU interrupt controller
-Content-Language: en-US
-To:     Liu Peibao <liupeibao@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221107023404.26730-1-liupeibao@loongson.cn>
- <20221107023404.26730-2-liupeibao@loongson.cn>
- <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
- <196e80d8-f4fb-7393-81a5-bca757c805f5@loongson.cn>
- <e92beaac-aa88-0336-cb30-7de438de67c9@linaro.org>
- <e5910bf9-b662-a733-57f2-5faccb038cb1@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e5910bf9-b662-a733-57f2-5faccb038cb1@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fjklijebr6IM77Hd"
+Content-Disposition: inline
+In-Reply-To: <20221107084322.gk4j75r52zo5k7xk@houat>
+X-Cookie: Minimum charge for booths.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,56 +112,54 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07/11/2022 12:20, Liu Peibao wrote:
-> On 11/7/22 5:55 PM, Krzysztof Kozlowski wrote:
->> On 07/11/2022 10:21, Liu Peibao wrote:
->>> On 11/7/22 4:28 PM, Krzysztof Kozlowski wrote:
->>>> On 07/11/2022 03:34, Liu Peibao wrote:
->>>>
->>>> Add commit msg explaining what you are doing here (e.g. the hardware).
->>>>
->>>
->>> I just add this yaml for what I did in patch 1/2 and the header seems enough
->>> to describe what I want to, so I did not add the commit log.
->>
->> This should instead describe briefly the hardware here.
->>
-> 
-> How about I add the following comments:
-> 
-> "Current LoongArch compatible CPUs support 14 CPU IRQs. We can describe how
-> the 14 IRQs are wired to the platforms internal interrupt controller cascade
-> by devicetree."
 
-Sure.
+--fjklijebr6IM77Hd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->>>>> +    const: loongarch,cpu-interrupt-controller
->>>>
->>>> You have exactly one and only one type of CPU interrupt controller for
->>>> all your Loongarch designs? All current and all future? All?
->>>>
->>>
->>> It is sure of that "all current and recent designs". It is really hard to limit the
->>> design in the distant future.
->>>
->>> And if there is updating, maybe I will add additional things like this:
->>> "loongarch,cpu-interrupt-controller-2.0".
->>
->> Unless you have a clear versioning of your hardware, adding 2.0 won't be
->> correct. Don't you have this for specific SoC?
->>
-> 
-> The "loongarch,cpu-interrupt-controller" now is compatible for all the LoongArch
-> compatible CPUs, not specific for one chip. And we may keep this CPU interrupt
-> controller for a long time.
+On Mon, Nov 07, 2022 at 09:43:22AM +0100, Maxime Ripard wrote:
+> On Fri, Nov 04, 2022 at 03:59:53PM +0000, Mark Brown wrote:
 
-Still specific compatibles (as fallbacks) are used for such cases, so
-why is this different? Hardware compatible with several other devices
-still gets specific compatible, right?
+> > Well, hopefully everyone for whom it's an issue currently will be
+> > objecting to this version of the change anyway so we'll either know
+> > where to set the flag or we'll get the whack-a-mole with the series
+> > being merged?
 
-You cannot have "-2.0" suffix in the future just because "you want", so
-be sure that your choice is reasonable.
+> I'm sorry, I'm not sure what you mean here. The only issue to fix at the
+> moment is that determine_rate and set_parent aren't coupled, and it led
+> to issues due to oversight.
 
-Best regards,
-Krzysztof
+> I initially added a warning but Stephen wanted to fix all users in that
+> case and make that an error instead.
 
+My suggestion is that instead of doing either of these things it'd be
+quicker and less error prone to just fix the core to provide the default
+implementation if nothing more specific is provided.  Any issues that
+causes would already be present with your current series.
+
+> If I filled __clk_mux_determine_rate into clocks that weren't using it
+> before, I would change their behavior. With that flag set, on all users
+> I add __clk_mux_determine_rate to, the behavior is the same than what we
+> previously had, so the risk of regressions is minimal, and everything
+> should keep going like it was?
+
+The series does fill in __clk_mux_determine_rate for everything though -
+if it was just assumed by default the only thing that'd be needed would
+be adding the flag.
+
+--fjklijebr6IM77Hd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNo9K4ACgkQJNaLcl1U
+h9CrmQf/bbIS1m2oXUj6n0mwM7QBssq/2mPiYM5zHCkJ5nf48MDZPWSwMuq37myq
+q8lR7tDeZBdU/MtjTTpvWo8j/TLyZRrhWhX5rItRjfhZdXtePpp0tci4nHKyvWuD
+Lc6+WJkeyUQsy93Y0qyvKl9DZ8o4Dyqs/lM7kkCEy+9eJNaT7QFAFZYhdUN2FJAR
+2YiQG2mvchxdE7SyVxMsOfXX/J6haXQKAcKej6M1HpuJukPGEKH2N9WqfKKNUuWY
+rMJ0QnheSBUxkPHRzdDOMo2k+xDK6cOSg8RxRtKQ2djWWWXII5JWs6VyVHLeK6Cx
+9KTsnJ+fIbHK0GK9Pq3vm90Uk4W3Ng==
+=y36Q
+-----END PGP SIGNATURE-----
+
+--fjklijebr6IM77Hd--
