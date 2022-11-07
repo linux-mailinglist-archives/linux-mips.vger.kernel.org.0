@@ -2,67 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1DD61F78F
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 16:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1582561F82F
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Nov 2022 17:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiKGP0V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Nov 2022 10:26:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S231435AbiKGQCr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Nov 2022 11:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbiKGP0U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 10:26:20 -0500
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E03A1B3;
-        Mon,  7 Nov 2022 07:26:18 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id DEA372B05E77;
-        Mon,  7 Nov 2022 10:26:08 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 07 Nov 2022 10:26:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1667834768; x=1667841968; bh=IIy8QXUDWn
-        lcncLyNQJNbxMRRWumgUmyAMyd+aDiO3o=; b=Yz8C45furNQhVL2oz7HXZgGnHH
-        TvCIbx3oIXxLgbEPnABUHdZn1FjTlBXO/L1HUin7nlSwmgzBZEAHQXtqUueLWNNB
-        OwfmyOlg36y4QZvHUbl/IFeKRrua5v3nbs+lI8yzO8mXx4IT19hD5T6x7SIXqH7E
-        cc2GzTsHAmmLjTDm7nLKE9rJj7tzh9QXh/pmM/gmbKHm8u4yCEDXIt2H8iqZARt9
-        QsECam1RG4/cnzrlWYrmdX95jbKBthE1SCw52xWcjKgvNrC/w9eFBvNcqPdoP0VC
-        kgyueznhPVmNlxZMotlGuMS8QDMwTbcA/aTq9dkJ4NLHTQ8GcN7cr6b1QC9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667834768; x=1667841968; bh=IIy8QXUDWnlcncLyNQJNbxMRRWum
-        gUmyAMyd+aDiO3o=; b=we3Y+H0VECymbGK0VaXTFHbsW346wsLVjErpCLgJ45+g
-        scHpf9eiainU1JBqntlua0SrTwXrGABBVlunf276/GfhfNOd/1vGEf1lUcHwrvm5
-        zbWxzN3W7Zenf9Aa8Y0lcDOZ0gM54P8lT8lwFBUPN/ByfauorTjW7d7RXbvSlkJT
-        k7v9evp6jVencFixQzMQhtO2nt3yGpBePuWO6Pu5QWJ2wKtmD8tFnyhZw/c9eN/k
-        XmLHoh4bXi0sW22vHo0bm88oijG5yx4MWoMqBaBgxLapeXxyjGYt3QLy+aQKy4Ug
-        w/V1K5ZGWlq/bSa4sSDWF1/AjvqtR9hsVVTIILV+1w==
-X-ME-Sender: <xms:jiNpY8OMxnFFt5PbqqvqZSEoKfqq7taLlfkj3szUIQCjdWFIeQL24w>
-    <xme:jiNpYy89u_mQTLvZGrbcNIjZbLYu9wV4EYfNRlktfKZUm38GG6xC_Qlt2hrpbO_df
-    BSGxlyk5s8vknO0ZFg>
-X-ME-Received: <xmr:jiNpYzSfZa6atc_eqwJFct1WjeHK-hLh2fplSb5wr1nE_LAD9arud3e8hqAHxwKU5wiR6hkEVdXqGN4RgoEjwLXSB8uMLCObkZqNF9IY6V2NlA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdejhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:jiNpY0vtIK-PZdgej79mMr_MApM6wLdfXscqntkFAEOkhGYrOU0MCQ>
-    <xmx:jiNpY0cvni03g0uv0yl-yo399Y_hbctd4rNagD2H1NT2_Xs_g9EWBQ>
-    <xmx:jiNpY42HLjMSaphod3lQyPY5KzbEAeoKRXRXEDPctlkn3XY9SKEjVg>
-    <xmx:kCNpY4m1DCnGwZRgh_rsYFaEzCSCv9LG7n_fC4ovY1-GZspzYu6x7s6Mw5U>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Nov 2022 10:26:05 -0500 (EST)
-Date:   Mon, 7 Nov 2022 16:26:03 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S232273AbiKGQCq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 11:02:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854FE1FFBC;
+        Mon,  7 Nov 2022 08:02:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D81610E7;
+        Mon,  7 Nov 2022 16:02:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F88C433D6;
+        Mon,  7 Nov 2022 16:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667836963;
+        bh=Q/9M3qSa1bFKeX3VjOKXXNeZQ8B6sH7ewCOsQSJl+z0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XOmgvny4UUp7BZnQahaV6KsWUNhmwIhMxpmcOq3tw9+9teYm6GP3wrPKa3hZGoLnw
+         E8JjujtcqktG/KkrpbyyurTKPktTQdPK912YFUTtXWMPkM5Mc8ahGVOnmMw4Uhs9uI
+         cTBlpsSY6QMvq4ve9Z36ouACRIQs64gqbTRuCpXHF7tFc/7x4f8H/Qv0fo1LJXDNr9
+         JzeHD9nkKpifY1CmMZpd4sb8KMqk3fuEl3XqfTd7Ru1lKOsEk7X40/JP1ugM9/6yCX
+         WursSOfQ18hBTkSv25XwIi5vVUTkBzpxlLxQrxg8iYZ3853WT5wCALjP37Nihp0/J3
+         NEZKY1McJ+eyw==
+Date:   Mon, 7 Nov 2022 16:02:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     Stephen Boyd <sboyd@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
@@ -78,7 +49,7 @@ Cc:     Stephen Boyd <sboyd@kernel.org>,
         Paul Cercueil <paul@crapouillou.net>,
         Chunyan Zhang <zhang.lyra@gmail.com>,
         Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Abel Vesa <abelvesa@kernel.org>,
         Charles Keepax <ckeepax@opensource.cirrus.com>,
@@ -119,7 +90,7 @@ Cc:     Stephen Boyd <sboyd@kernel.org>,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org
 Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
-Message-ID: <20221107152603.57qimyzkinhifx5p@houat>
+Message-ID: <Y2ksFHGNIEVm1ldF@sirena.org.uk>
 References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
  <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
  <Y2UzdYyjgahJsbHg@sirena.org.uk>
@@ -127,14 +98,16 @@ References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
  <Y2U2+ePwRieYkNjv@sirena.org.uk>
  <20221107084322.gk4j75r52zo5k7xk@houat>
  <Y2j0r0wX1XtQBvqO@sirena.org.uk>
+ <20221107152603.57qimyzkinhifx5p@houat>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6jvzxow5645ldbud"
+        protocol="application/pgp-signature"; boundary="hTyRvcr/YAY3aApU"
 Content-Disposition: inline
-In-Reply-To: <Y2j0r0wX1XtQBvqO@sirena.org.uk>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107152603.57qimyzkinhifx5p@houat>
+X-Cookie: Minimum charge for booths.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -142,62 +115,46 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---6jvzxow5645ldbud
+--hTyRvcr/YAY3aApU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 07, 2022 at 12:06:07PM +0000, Mark Brown wrote:
-> On Mon, Nov 07, 2022 at 09:43:22AM +0100, Maxime Ripard wrote:
-> > On Fri, Nov 04, 2022 at 03:59:53PM +0000, Mark Brown wrote:
->=20
-> > > Well, hopefully everyone for whom it's an issue currently will be
-> > > objecting to this version of the change anyway so we'll either know
-> > > where to set the flag or we'll get the whack-a-mole with the series
-> > > being merged?
->=20
-> > I'm sorry, I'm not sure what you mean here. The only issue to fix at the
-> > moment is that determine_rate and set_parent aren't coupled, and it led
-> > to issues due to oversight.
->=20
-> > I initially added a warning but Stephen wanted to fix all users in that
-> > case and make that an error instead.
->=20
-> My suggestion is that instead of doing either of these things it'd be
-> quicker and less error prone to just fix the core to provide the default
-> implementation if nothing more specific is provided.  Any issues that
-> causes would already be present with your current series.
->=20
-> > If I filled __clk_mux_determine_rate into clocks that weren't using it
-> > before, I would change their behavior. With that flag set, on all users
-> > I add __clk_mux_determine_rate to, the behavior is the same than what we
-> > previously had, so the risk of regressions is minimal, and everything
-> > should keep going like it was?
->=20
-> The series does fill in __clk_mux_determine_rate for everything though -
-> if it was just assumed by default the only thing that'd be needed would
-> be adding the flag.
+On Mon, Nov 07, 2022 at 04:26:03PM +0100, Maxime Ripard wrote:
+> On Mon, Nov 07, 2022 at 12:06:07PM +0000, Mark Brown wrote:
+> > On Mon, Nov 07, 2022 at 09:43:22AM +0100, Maxime Ripard wrote:
 
-The behavior assumed by default was equivalent to
-__clk_mux_determine_rate + CLK_SET_RATE_NO_REPARENT. We could indeed set
-both if determine_rate is missing in the core, but that's unprecedented
-in the clock framework so I think we'll want Stephen to comment here :)
+> > The series does fill in __clk_mux_determine_rate for everything though -
+> > if it was just assumed by default the only thing that'd be needed would
+> > be adding the flag.
 
-It's also replacing one implicit behavior by another. The point of this
-series was to raise awareness on that particular point, so I'm not sure
-it actually fixes things. We'll see what Stephen thinks about it.
+> The behavior assumed by default was equivalent to
+> __clk_mux_determine_rate + CLK_SET_RATE_NO_REPARENT. We could indeed set
+> both if determine_rate is missing in the core, but that's unprecedented
+> in the clock framework so I think we'll want Stephen to comment here :)
 
-Maxime
+> It's also replacing one implicit behavior by another. The point of this
+> series was to raise awareness on that particular point, so I'm not sure
+> it actually fixes things. We'll see what Stephen thinks about it.
 
---6jvzxow5645ldbud
+We could also just set the operation and still require the flag to be
+specified.  I'm a little surprised to learn that it's something you
+might want to override, never mind that the API didn't have a default -
+it feels like a bit of a landmine that this is the case and is probably
+why there's so many cases to fix up.
+
+--hTyRvcr/YAY3aApU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2kjiwAKCRDj7w1vZxhR
-xbC4AQCzinBg5fORSxUmh/ryaaQ1U50ULCO44lpcoTcfgR8NCQEArCtBTBrB8cDz
-ZaXsPn80Mh//XhAP83gNXiHtZW4aJwQ=
-=1n6i
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNpLBMACgkQJNaLcl1U
+h9BS0gf/chIMp6chtu1p8LwUn+lniQOfOjVm2GoGAQ06qSr9+3KsWgvPO3J4pFNa
+l036gwiNNFPM5gXlEj19YU0NgiAQIt2hoh9q92PY1kN8vmSQutr8U6QVxq27pphZ
+5T2AVdZG2/L1Za5fy+qtwzx6ji1EENFmdLOF/NRrtc1zJPm/bT9E14uqwH7vmK0f
+Jh1uBONY+x2wM44EMNgt3p4HTS/37ARwT9njBao9UUdt1uFWnUx05o0lerkyk4Xg
+QlkvyC2hU+mXML3s6FVEbx0TQImsJItRx7Fk4E0Pij30qxWDtd0uybSJOzuWo16R
+emQv+2HsLgl0L3qkctPVJREpPwCQuQ==
+=mfv5
 -----END PGP SIGNATURE-----
 
---6jvzxow5645ldbud--
+--hTyRvcr/YAY3aApU--
