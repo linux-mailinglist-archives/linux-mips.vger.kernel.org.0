@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6F0621246
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 14:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B34162125F
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 14:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbiKHNZV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Nov 2022 08:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S233808AbiKHN1W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Nov 2022 08:27:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbiKHNZS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 08:25:18 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D42F18B02
-        for <linux-mips@vger.kernel.org>; Tue,  8 Nov 2022 05:25:17 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id n12so38491717eja.11
-        for <linux-mips@vger.kernel.org>; Tue, 08 Nov 2022 05:25:17 -0800 (PST)
+        with ESMTP id S234344AbiKHN1U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 08:27:20 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CA44E433
+        for <linux-mips@vger.kernel.org>; Tue,  8 Nov 2022 05:27:19 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id n12so38506674eja.11
+        for <linux-mips@vger.kernel.org>; Tue, 08 Nov 2022 05:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xIunjndO5rqOpIPjGIQJB4TuLtmFYebQ0fOsvPNeO54=;
-        b=dY2KECnuVH7NYv0yOK7RrL62QdqUlhl2JmgS7xh7Aop7k+RcPrpLQgabXuGbHHpGQR
-         eHydRYWR08BPIi0DGkFfFL5aziMJHQLfVfnBD+eU2h7KlhHzcO6P+1GLNOD4+iPtpIq9
-         f+xJ7woffKNTUf34ylHgwFwugM0mjDy+MNR+/tosLv90DX21VaSDgG9tpTl2KCuCdJUO
-         uOa6Dv9G/jILV/FYPlkjsMzVEJLK96Ug7G7tfkWymeifahO0bdSmcFGNxzhRtu8RVMPO
-         uhbfFCJ4Ya/DrkwEqdNt0sBFZZ7Pau3qynHAmgL94y0H0QvBHa6kKlb7zVfFQiDHP0ks
-         6ZQQ==
+        bh=N/2yj1vtV3WtEYwU3cNvgg/PVgtVCmwn3eJn8jo49wk=;
+        b=VMnat+U1KSonabFKRPuR13L5JqFFcM/AvvqPUwa+9VtqcDpyz6Op4uI9k8fhWWUfgj
+         OQMGyd7nBSVagfiyDveayuziCLNEcnxn2ErDoMUoLlpt3yo8/JHVhiTmfW1xUoXEQ8ch
+         5jJZRKNOXfrIQxouT0FZtywu8oBKzwLv6/7PIprEyWb5tHAmIqyiFvsPphy4dzO+D1O/
+         ByJEsT3p8EBbAPP+gKvFSCFRhufjqGSeVaHTdjl/xTUCo6crbpyBuirSVOUQflk15qBf
+         1q39gU7+oVdTRiJwpV9lCujVgxFVrOBGfRo6fbxcreewXR1hDWvKWjF1rSAwPNJVX2jh
+         IlsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xIunjndO5rqOpIPjGIQJB4TuLtmFYebQ0fOsvPNeO54=;
-        b=KwbLogIFBV/QppFdqIMkcyU1Zgiwtr+fF3In4stFczc6257wPeX6wUDkbLKfismjte
-         cIyBF3YkX5KnpBhruhvuTTWUqxoKzZYverpcMOSgHJCz3Pbo+wWq3siEtqIKpjIcjE2F
-         6ZObg4Rt9+XF1W2uaC8n9/PNcSATD8G5dxwNeM4GCT3KGWkljqAuPEYrqTE18a1038Qc
-         sahh68hXg+jnp1/QOuduJ0pqWYgZJjwwxzyn65lVPvaKzK3wfKCtPc0P99+uXlCEbobU
-         ffh299KSJXvXVxuXTSShjZ9wT0gzRv4qbS2DRl1cEvK7i5WaQYbdOkssHEv+XjjuZqoG
-         Yo0Q==
-X-Gm-Message-State: ANoB5pmX2nijF1UkC9DSJAgUov2s5cKgaEbBlaqvp39cuPWisPFVTo3i
-        WiCOhiv0d4QkXmT3Q8swBzpFpUo4l8VolTgBXhzzLg==
-X-Google-Smtp-Source: AA0mqf68wWCeuB7GkTzw5Vcyy6luDq6tRlJuZOq+6MaYhZcTvhkBj9mitsGYltXA5OQs4b2+osg1ro8i402jh/hf0IY=
-X-Received: by 2002:a17:906:6acc:b0:7ae:658c:ee45 with SMTP id
- q12-20020a1709066acc00b007ae658cee45mr11184945ejs.190.1667913915716; Tue, 08
- Nov 2022 05:25:15 -0800 (PST)
+        bh=N/2yj1vtV3WtEYwU3cNvgg/PVgtVCmwn3eJn8jo49wk=;
+        b=0hXR/UmL7PCaoo8sPZPKxuLBE/czW91FnHFbchxTiYJakU7VqltEnIxgZY2pL6Ha7Q
+         eTv6ZyENdWlD3i4s84GTrcDER3kmW4cv724n6Ct8xH0hdwHnHQDnF+zDLtfvPT5Fm+Ya
+         BjiFCF9CCW45GoHZDpX3lzR/BTyISxwbqKubQinExxkgtdviehQAs4aQwaI2j8HZxm7h
+         w8d2BYBK1pz9Myqij3AvJBDPvGPBKBAfk7dPmOOgQ65YIQ1c8za/h+L5km8d1wSBi2Qg
+         132qFiTXVNdjpnr0vayv2OMNGuTcg4E4w7m7u8qaB+G0kVID7UUWcE72qk8N6QgWDYqZ
+         EOyQ==
+X-Gm-Message-State: ACrzQf1VQDNqMkNs1do3sX5rpGd9CbojzhwHjRtOnv1pZXaO/BngsKdO
+        prvy9yj8joJEWKph6q+UZAS0n0h8evNpPMs6G/Qg0A==
+X-Google-Smtp-Source: AMsMyM4SQlliAGfUpQoe5HVHzBogl+LIrkzKv8wyDOakcTA7xnKfY84HO6wUWBApVXLz+WmeEpt0AVEmstNop5fvJLQ=
+X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
+ d11-20020a1709064c4b00b007ada197b58emr54058070ejw.203.1667914037645; Tue, 08
+ Nov 2022 05:27:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech> <20221018-clk-range-checks-fixes-v2-34-f6736dec138e@cerno.tech>
-In-Reply-To: <20221018-clk-range-checks-fixes-v2-34-f6736dec138e@cerno.tech>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech> <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
+In-Reply-To: <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 14:25:04 +0100
-Message-ID: <CACRpkdYwM6X8bBABCisUGX=P4F=hcFb7QLT3Cu7XUWUvV4TE1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 34/65] clk: ux500: prcmu: Add a determine_rate hook
+Date:   Tue, 8 Nov 2022 14:27:06 +0100
+Message-ID: <CACRpkdaOM=T1pRJNK6hdc76m5tQfrjvF9nVBp7ZDf3wOMNSwyg@mail.gmail.com>
+Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
 To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     Stephen Boyd <sboyd@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
@@ -121,8 +121,8 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Fri, Nov 4, 2022 at 2:32 PM Maxime Ripard <maxime@cerno.tech> wrote:
 
-> The UX500 PRCMU "clkout" clock implements a mux with a set_parent hook,
-> but doesn't provide a determine_rate implementation.
+> The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
+> hook, but doesn't provide a determine_rate implementation.
 >
 > This is a bit odd, since set_parent() is there to, as its name implies,
 > change the parent of a clock. However, the most likely candidate to
@@ -137,21 +137,21 @@ On Fri, Nov 4, 2022 at 2:32 PM Maxime Ripard <maxime@cerno.tech> wrote:
 > oversight. However, it could also be an explicit decision by the
 > original author to avoid any reparenting but through an explicit call to
 > clk_set_parent().
+>
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+>
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-It is actually set up from the device tree, typically like this:
-
-/* clkout1 from ACLK divided by 8 */
-clocks = <&clkout_clk DB8500_CLKOUT_1 DB8500_CLKOUT_SRC_ACLK 8>;
-
-So the parent (source) and divisor comes in there.
-
-clk->source and clk->divider is already set up when clk_hw_register() is
-called.
-
-So set/get_parent() is never used on clkout.
-
-I think I just added the callbacks for completeness, should we delete them
-altogether? The patch is probably fine as-is as well so
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
