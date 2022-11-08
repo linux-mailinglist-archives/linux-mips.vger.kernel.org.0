@@ -2,105 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAFA620897
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 05:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6669D6208FA
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 06:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbiKHE5u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Nov 2022 23:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S233298AbiKHFn6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Nov 2022 00:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiKHE5d (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Nov 2022 23:57:33 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD6745ED2;
-        Mon,  7 Nov 2022 20:53:58 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id q9so35689564ejd.0;
-        Mon, 07 Nov 2022 20:53:58 -0800 (PST)
+        with ESMTP id S233293AbiKHFn5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 00:43:57 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5118920BC8;
+        Mon,  7 Nov 2022 21:43:56 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id c2so13212771plz.11;
+        Mon, 07 Nov 2022 21:43:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=snUtTBHDSnPgKxJzYe5m09ZTxD4YzrDQEzl3/KiB5BQ=;
-        b=O5V4m3NpU0iTB/56L9P1aQCm7tnJP89b3QY5x7lJKRq2S/ZqzcDduG3A2OR2mOTFL5
-         AdOtXmCvUoviTVH2pIH12JgRPBRM9aWWRjITkiVztkk5vjBMjQrwdClvLsRvdH5MhMQ4
-         vejWdS+fxbKMJeMgnDkrm1GtAzRCHfiw5cHJpkvpTt1T0iqeb9XnUmz4PfiPYG8ht9l5
-         aSoCnfncwFdqLloHsisagvVANa5Rv2eD6YrVKsArYCILDUQ9dwQ5Uj+l+cp4lAiaQzJw
-         KamDdnJinb2bTn9H08F2gOVuWMCk/t0seHgiKO4h/RHdpkdBUHoR7q7XJhlQhkphJGOd
-         kZIQ==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3UicMHRBXNKZ6klzBYtNlGfdpT3ipHtBcp9O7LuoFbE=;
+        b=XNdeC13pb4LjOBaRWcKMBNqFRJ+RgsbfVoNw18z5L+vfkg1SZceZjUxbLhiIy1qySy
+         Y4hI02da8j9ev8qt2sUsGeUiOSLlDAUgz5JUplPGm8kAk4jLtNdmDFZCCStM1EGIelNU
+         pjjtL4FSGAVwgisQucoSj4vLVpkgLqzZdzX9wYytiy3sfYNB3aYKj8S/Nug5gaKAa8gA
+         /5oDb+KCNmSa3bC/jNyCQmeij+quPN3cyVSSr1ovXCPVJxrqYAAydTsm3Q4bRt6yNhxm
+         6FVSyKTuVZN23UWZkdV6Uc7djgZpboRwjQPImKvKrchYImM3eB6pVBMtJk1jJ8Nfk6ob
+         kIoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=snUtTBHDSnPgKxJzYe5m09ZTxD4YzrDQEzl3/KiB5BQ=;
-        b=eiS0cH4kFtYpFq5SLK5z/bYWnJIy94Om6g822HPw7Gax/fA8DHjejUmclLyz1HXn0p
-         qLKlN4MOzvz3Hse10jGLlr0HQhdBfBSIBWUe962I1fGeL4gTyy6qCWtDkiNFhcoE/MT1
-         RNATPi1kOItHODB8CKbFRtjxBK5TUhO3fBtLZ6Et6K98UmHi1Pw4/gcbq2CY/BTvCMX4
-         cveMMpk2fUZ6bbtnDDUHNX1PV1tmzOPu+cybBQOSacyNzNEF73PgcWuz/K1dh7utJW7w
-         wT7rYAeKGTko1fZ7FGWVMJZwl1RD9gpf6j/EzAEllpwIMmslG98JVkfWXC+9rLQ8tC1q
-         2ueA==
-X-Gm-Message-State: ACrzQf1KXKL3GhmlsVGQcMMNc8a5MldQxCW4fAYjFOCd6QOYbNBDLZ3I
-        seCeEMH+jG+RNxDAYHdmrYI=
-X-Google-Smtp-Source: AMsMyM4b2UK2nV5j9TolXpFZNf1GGYQE1UnIfvBA6PuqwuNgn8pl/aqkmsrxekAsAjLadTaeYsvX4Q==
-X-Received: by 2002:a17:907:320c:b0:77b:6f08:9870 with SMTP id xg12-20020a170907320c00b0077b6f089870mr50227681ejb.249.1667883236826;
-        Mon, 07 Nov 2022 20:53:56 -0800 (PST)
-Received: from hp-power-15.localdomain (mm-58-12-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.12.58])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05640210cb00b004637489cf08sm4994444edu.88.2022.11.07.20.53.55
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3UicMHRBXNKZ6klzBYtNlGfdpT3ipHtBcp9O7LuoFbE=;
+        b=MnFD0FKh03Z5ArKMuS2i+elCdil8z2E960T9XaCmwwi+AD58BPSjqA1R3INAnFN5tQ
+         n1lZAbEtaCSnS/NW9aZLRVTQOong6G94heldExo567ok/9UTmEdg+++JWuM3OAF+2qFI
+         0ToK3qRg2thG/YDb6kfCvelAkw+wNqyTVdSSburpjApHc/LCEP/6VVL7EqMzOmVm6hpk
+         fcg7vBj2000hEdQ+vy0PS8hI69WRBYFm13AdSb2Ug/sdXqGfUgHzZu7pJwjEjfjMA2+c
+         eQBMeqjmedOC59hwKdxTamjK799GS/2LbUdqWDpiZ5gVm3gZwF3G3A0DSz0oJNMP4XnF
+         cNBQ==
+X-Gm-Message-State: ACrzQf2Y1wqR/yzDOJt/DBeyHepQiJRdcgErEuUKGB/ObeCaqzxFHvt1
+        wOG7qEDttMoAxyb9Cx9zwotEVGwbGUImHg==
+X-Google-Smtp-Source: AMsMyM6Ssf7qu6Zt1cmqzeY+6ksfJF4jyx1t2euaZBhwzvq5JPVY+8zsaODdG48vWXQYQDWTdtSyvw==
+X-Received: by 2002:a17:90b:4a04:b0:213:587b:204e with SMTP id kk4-20020a17090b4a0400b00213587b204emr55088612pjb.98.1667886235549;
+        Mon, 07 Nov 2022 21:43:55 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id k21-20020a628415000000b0056bb06ce1cfsm5614872pfd.97.2022.11.07.21.43.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 20:53:56 -0800 (PST)
-From:   Siarhei Volkau <lis8215@gmail.com>
-Cc:     Siarhei Volkau <lis8215@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: [PATCH 2/2] MIPS: ingenic: rs90: set MMC_MUX clock
-Date:   Tue,  8 Nov 2022 07:53:00 +0300
-Message-Id: <20221108045300.2084671-3-lis8215@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221108045300.2084671-1-lis8215@gmail.com>
-References: <20221108045300.2084671-1-lis8215@gmail.com>
+        Mon, 07 Nov 2022 21:43:55 -0800 (PST)
+Date:   Mon, 7 Nov 2022 21:43:54 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "Christopherson,, Sean" <seanjc@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yao, Yuan" <yuan.yao@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
+Message-ID: <20221108054354.GA1708572@ls.amr.corp.intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221104071749.GC1063309@ls.amr.corp.intel.com>
+ <Y2V1oslbw24/2Opd@google.com>
+ <20221107214634.GE1063309@ls.amr.corp.intel.com>
+ <bf29fe1ac84cae8ddb06e566b56c653600a1901c.camel@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <bf29fe1ac84cae8ddb06e566b56c653600a1901c.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Since the MMC driver can't change the common MMC_MUX clock
-anymore, the CGU shall configure that clock properly.
+On Tue, Nov 08, 2022 at 01:09:27AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
----
- arch/mips/boot/dts/ingenic/rs90.dts | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> On Mon, 2022-11-07 at 13:46 -0800, Isaku Yamahata wrote:
+> > > On Fri, Nov 04, 2022, Isaku Yamahata wrote:
+> > > > Thanks for the patch series. I the rebased TDX KVM patch series and it
+> > > > worked.
+> > > > Since cpu offline needs to be rejected in some cases(To keep at least one
+> > > > cpu
+> > > > on a package), arch hook for cpu offline is needed.
+> > > 
+> > > I hate to bring this up because I doubt there's a real use case for SUSPEND
+> > > with
+> > > TDX, but the CPU offline path isn't just for true offlining of CPUs.  When
+> > > the
+> > > system enters SUSPEND, only the initiating CPU goes through
+> > > kvm_suspend()+kvm_resume(),
+> > > all responding CPUs go through CPU offline+online.  I.e. disallowing all
+> > > CPUs from
+> > > going "offline" will prevent suspending the system.
+> > 
+> > The current TDX KVM implementation disallows CPU package from offline only
+> > when
+> > TDs are running.  If no TD is running, CPU offline is allowed.  So before
+> > SUSPEND, TDs need to be killed via systemd or something.  After killing TDs,
+> > the
+> > system can enter into SUSPEND state.
+> 
+> This seems not correct.  You need one cpu for each to be online in order to
+> create TD as well, as TDH.MNG.KEY.CONFIG needs to be called on all packages,
+> correct?
 
-diff --git a/arch/mips/boot/dts/ingenic/rs90.dts b/arch/mips/boot/dts/ingenic/rs90.dts
-index e8df70dd4..d874abaa6 100644
---- a/arch/mips/boot/dts/ingenic/rs90.dts
-+++ b/arch/mips/boot/dts/ingenic/rs90.dts
-@@ -295,8 +295,9 @@ partition@20000 {
- 
- &cgu {
- 	/* Use 32kHz oscillator as the parent of the RTC clock */
--	assigned-clocks = <&cgu JZ4725B_CLK_RTC>;
--	assigned-clock-parents = <&cgu JZ4725B_CLK_OSC32K>;
-+	assigned-clocks = <&cgu JZ4725B_CLK_MMC_MUX>, <&cgu JZ4725B_CLK_RTC>;
-+	assigned-clock-parents = <0>, <&cgu JZ4725B_CLK_OSC32K>;
-+	assigned-clock-rates = <48000000>;
- };
- 
- &tcu {
+That's correct. In such case, the creation of TD fails.  TD creation checks if
+at least one cpu is online on all CPU packages.  If no, error.
 -- 
-2.36.1
-
+Isaku Yamahata <isaku.yamahata@gmail.com>
