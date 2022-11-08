@@ -2,99 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F6B621AF9
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 18:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B76621BC3
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 19:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbiKHRqj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Nov 2022 12:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
+        id S234799AbiKHSVI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Nov 2022 13:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbiKHRqh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 12:46:37 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21550554E2
-        for <linux-mips@vger.kernel.org>; Tue,  8 Nov 2022 09:46:37 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id g24so14838525plq.3
-        for <linux-mips@vger.kernel.org>; Tue, 08 Nov 2022 09:46:37 -0800 (PST)
+        with ESMTP id S234816AbiKHSUp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 13:20:45 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE30C7054B;
+        Tue,  8 Nov 2022 10:20:16 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id x15so9117100qtv.9;
+        Tue, 08 Nov 2022 10:20:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cjSjC5m99kmUUHYC704oOlI8KJi6LTudhKVnFW3q+Mo=;
-        b=ftWxPl3+8IfelsK/irLrvblaLrX6dvTk43ZU1RGb7E7QhEuhpuFGQnZUs1B/6eqA8Y
-         9uQybJjBJrLcnswih9ZuqdP/IGzw5N1LHsBYZwMjKm4pxbrW1ieLuxCyIbeQvnPHGIX9
-         KlKI+02Y2PtkvzGrkUCj7EVO4k0DJZDFtOtuUtFMvCioPX+FiFS160StdFwaRhG4AwZY
-         /X/0r60JYMQEe4UtsauftLe+islfrGWTT7n2RWyEhP6x94J5Vb4QTPr7DjEYHP04yepW
-         KF97tjKStfZxjB8uLonmnyGRloE774fNFuZ/STi6vuLRLYYB1EDXjhtfDOqD4TBoTzbU
-         ZVkg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dds6n3pa0ZNU44FMOnijGAbu1rZyoy+W/S80mJkNJys=;
+        b=j4FM8XSe33BB5Mj2lc0ZsfXBSWCah9A86ROxsNO6pZMRFgviTVw1vnUHOg9rrrNxQx
+         dJx2GFIH1iTl2wC/ZAQBtbhX19XGV2lW/UUGVbxqXyohsfzBnPRRwNB4gAONwFwTX7Wu
+         CHqrq6wKhYtSRlKAX/O85C6hBffzLKGJCto0V7K3E5LGfvOISXdxlxi6Ryj4YfY7xtbd
+         p5Nf1UUo/zB81XSlupF36RTIdVDpYFysdcaPEBvCO1cH/kZ3f43WGh9oQlfaJbQYsmW+
+         aQ8uULhtgSYaiGCJP1yWglv3WVttI3h9/QG8dfwwECE/3kutxniFj3AJ/f24lgbeidjs
+         Qw5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cjSjC5m99kmUUHYC704oOlI8KJi6LTudhKVnFW3q+Mo=;
-        b=uzrSvbaG/sLkNrvQSmVsxpOwAsFHyZeFbIkJMkJw0x5XUiVZDWnidOL/hpPs1QRLeQ
-         y5+r3Wyndd0tNig/d+xaVPTYgLKzkL8qEk73wkJTaSln5AaPiDKK1Vf4S6tARivxqA0C
-         sPcc0w1KKLzbrYRieFeGvscT9HsFmPJ+ZBe3nnzwioyaRrcZJJukXvI3pQzaM9nzAUcX
-         HmGHmy3+e97UCH3rOv9oyr/Olcvw2cJWv+bZlN+oE479t/gWDzgUJdgnKKXWydcNOE+p
-         4SmjXSLqg6MF3GJboxogO+jyZPIwQDynnVduKmeKnsJXMChSm36o9u9/oWlMbskslCDt
-         OI2A==
-X-Gm-Message-State: ACrzQf3wnYc39828dcJpiPsj9mpgQRYrEgA5Iow48QvlPmVc5+Q+GKID
-        BxSpajLawnC6CnqxnW/WZ4PR0w==
-X-Google-Smtp-Source: AMsMyM6IejjlUU0y+myBNmX6xdBJY00CqsdAF2QTJKOsZh5WixYj1ODA6TQRcmab3f8JPfGm8K7ciQ==
-X-Received: by 2002:a17:902:ea04:b0:187:4923:56f4 with SMTP id s4-20020a170902ea0400b00187492356f4mr35142106plg.97.1667929596484;
-        Tue, 08 Nov 2022 09:46:36 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170902d50900b00185402cfedesm7283578plg.246.2022.11.08.09.46.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 09:46:35 -0800 (PST)
-Date:   Tue, 8 Nov 2022 17:46:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
-Message-ID: <Y2qV+IGKyKQItMj2@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221104071749.GC1063309@ls.amr.corp.intel.com>
- <Y2V1oslbw24/2Opd@google.com>
- <20221107214634.GE1063309@ls.amr.corp.intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dds6n3pa0ZNU44FMOnijGAbu1rZyoy+W/S80mJkNJys=;
+        b=0cGE93PlMRY04x0KggA0lxw2WHVdg0zfLJ6NKgG9BVTPvjb8nPNIh/ewhPdxiIyE1t
+         NvUBQLXiu2DOhubUb/Og/r9aG1hcBCOhNn0InJVHhvRhUo+zPPRg2j6amfmPiCpD542I
+         5xcP/cMm0V04t/dyBgEcnBBoWSfY1SDnCgrl/twTTM0IasUI840UooBDtPH1RKL8e45a
+         VPxr0eCy7Q3Jw48xgR0E27wQD5vNRUdMMQ4BcdeISOC89IwIcXy6oo66o8Pp68+BZ6WB
+         mTp5eCNI3n8Y3YTR1FGKU+oA4TUf2RdRJCWM614f+0Zri/84jw6NIkUbELFCWd71TgZD
+         rG9g==
+X-Gm-Message-State: ANoB5pnaRz5R9ZI+P/59XVmb9GMIRWKUhpX+v5dznUGHqxF817pwtth1
+        v4l6eDaAk634YaDhJ4JPLJ4=
+X-Google-Smtp-Source: AA0mqf6DFZvkLfK2BCaUB2lJ9ZiAHME+bHk1Hqh+RrEBPKQSJqszpPUmrV+phO23eZcp1dLOgv2ASg==
+X-Received: by 2002:ac8:1193:0:b0:3a5:81e9:d17e with SMTP id d19-20020ac81193000000b003a581e9d17emr12543320qtj.173.1667931615782;
+        Tue, 08 Nov 2022 10:20:15 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id fc17-20020a05622a489100b003a5612c3f28sm8569225qtb.56.2022.11.08.10.20.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 10:20:14 -0800 (PST)
+Message-ID: <90b0bd9d-b4d9-c5f3-7276-dfe145a2947c@gmail.com>
+Date:   Tue, 8 Nov 2022 10:20:12 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107214634.GE1063309@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] mips: dts: brcm: bcm7435: add "interrupt-names" for NAND
+ controller
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20221108085032.4609-1-zajec5@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221108085032.4609-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,82 +79,16 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 07, 2022, Isaku Yamahata wrote:
-> On Fri, Nov 04, 2022 at 08:27:14PM +0000,
-> Sean Christopherson <seanjc@google.com> wrote:
-> 
-> > On Fri, Nov 04, 2022, Isaku Yamahata wrote:
-> > > Thanks for the patch series. I the rebased TDX KVM patch series and it worked.
-> > > Since cpu offline needs to be rejected in some cases(To keep at least one cpu
-> > > on a package), arch hook for cpu offline is needed.
-> > 
-> > I hate to bring this up because I doubt there's a real use case for SUSPEND with
-> > TDX, but the CPU offline path isn't just for true offlining of CPUs.  When the
-> > system enters SUSPEND, only the initiating CPU goes through kvm_suspend()+kvm_resume(),
-> > all responding CPUs go through CPU offline+online.  I.e. disallowing all CPUs from
-> > going "offline" will prevent suspending the system.
-> 
-> The current TDX KVM implementation disallows CPU package from offline only when
-> TDs are running.  If no TD is running, CPU offline is allowed.  So before
-> SUSPEND, TDs need to be killed via systemd or something.  After killing TDs, the
-> system can enter into SUSPEND state.
 
-Ah, I assumed offlining was disallowed if TDX was enabled.
 
-> > I don't see anything in the TDX series or the specs that suggests suspend+resume
-> > is disallowed when TDX is enabled, so blocking that seems just as wrong as
-> > preventing software from soft-offlining CPUs.
+On 11/8/2022 12:50 AM, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> When it comes to SUSPEND, it means suspend-to-idle, ACPI S1, S3, or S4.
-> suspend-to-idle doesn't require CPU offline.
+> Second interrupt can be DMA or EDU one. Specify it explicitly using
+> interrupt-names property. This matches documented binding.
 > 
-> Although CPU related spec doesn't mention about S3, the ACPI spec says
-> 
->   7.4.2.2 System _S1 State (Sleeping with Processor Context Maintained)
->   The processor-complex context is maintained.
-> 
->   7.4.2.4 System _S3 State or 7.4.2.5 System _S4 State
->   The processor-complex context is not maintained.
-> 
-> It's safe to say the processor context related to TDX is complex, I think.
-> Let me summarize the situation. What do you think?
-> 
-> - While no TD running:
->   No additional limitation on CPU offline.
-> 
-> - On TD creation:
->   If any of whole cpu package is software offlined, TD creation fails.
->   Alternative: forcibly online necessary CPUs, create TD, and offline CPUs
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
-The alternative isn't really viable because there's no way the kernel can guarantee
-a CPU can be onlined, i.e. the kernel would need to fallback of disallowing TD
-creation anyways.
-
-> - TD running:
->   Although it's not required to keep all CPU packages online, keep CPU package
->   from offlining for TD destruction.
-> 
-> - TD destruction:
->   If any of whole cpu package is software offlined, TD destruction fails.
->   The current implementation prevents any cpu package from offlinining during
->   TD running.
->   Alternative:
->   - forcibly online necessary CPUs, destruct TD, and offline CPUs again and
->     allow CPU package to offline
->   - Stash TDX resources somewhere. When cpu packages are onlined, free those
->     release.
-> 
-> - On SUSPEND:
->   TODO: Allow CPU offline if S1 is requested.
-
-Is this actually a TODO?  I assume the kernel doesn't actually try to offline
-CPUs in this case, i.e. it Just Works.
-
->   - suspend-to-idle: nothing to do because cpu offline isn't required
->   - ACPI S1: Need to allow offline CPUs.  This can be implemented by referencing
->     suspend_state_t pm_suspend_target_state is PM_SUSPEND_TO_STANBY.
->   - ACPI S3/S4: refuse cpu offline.  The system needs to kill all TDs before
->     starting SUSPEND process. This is what is implemented.
-
-Looks good, disallowing SUSPEND with active TDs is a reasonable tradeoff.  As
-above, I highly doubt anyone actually cares.
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
