@@ -2,319 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F5D621839
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 16:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502C2621876
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 16:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiKHP21 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Nov 2022 10:28:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S233737AbiKHPi3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Nov 2022 10:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbiKHP2Z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 10:28:25 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA4E2F9
-        for <linux-mips@vger.kernel.org>; Tue,  8 Nov 2022 07:28:22 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id k19so21648187lji.2
-        for <linux-mips@vger.kernel.org>; Tue, 08 Nov 2022 07:28:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rYyQ/3KwA5SEi7xobmtMHnwgbg0DrEr9YUI+FxITXks=;
-        b=oudhA7iWo073iyyJQt8Okd+b8G1K6VItNkGt4/f1tP4fNyw46cvITxgr/evZp9ORvq
-         rkKqlTFcDHk+3t7el5VIFhrrAQngAPgr6QOO+cfQayIr194tPIilrMUubBSC9iSNv2N4
-         gaptbtSKej2YQ0XMaua2sSnq2tBBTPd+6XX9IJoVzAU8xWAzvjeKyZccNt9GKW6RNjmF
-         BfKHbhmOe5/2s67vZQyjBLFMoJ/A8AWZnLZ53XhvDY+3kWHsxDxQ8aoRlTd1TincoTZP
-         c36QC8Cuzfa3bxTExcAgxbvK3Wu6BxjKMvIwuVPxDs5fcl8yslN13jt8lb0JUOP7udjN
-         8Fgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rYyQ/3KwA5SEi7xobmtMHnwgbg0DrEr9YUI+FxITXks=;
-        b=kZIK1KYBVpYScYfJ7qmnvIs3XREkj/IMURQ4wEhBZXEodRzOOcWaM5jaM4oGPwchSp
-         r7+heopg6DecOSXhaeBz/IgJ/e2NXEmcXzUXu2tQWQFHSWjkUUze9YEuyHIx2UIo0Fzh
-         MxTJMyK3Ph09Za4Slo61T1CyhOL30tcN3rbYA4Y6MzZnDpDGdiCrF5OpLp1JpiySu6AQ
-         xSwtaMjU5irkNSvi+p5r9jt5UyfVtAqMaFLG7wTVq7aAijqYMsUmuDfDymtwqe/eMc+y
-         xPm7JFvtSfNvbbXyG4U5ioH7DhP+q/4hS/pBQgOsKdLYylIE0PiWbdnwp96YnCZdYAn9
-         W+QA==
-X-Gm-Message-State: ACrzQf3bcYHsuI24U0dVJDjv0LPrHqcL6qWG8IwwTl8QGA51FMtE+3HR
-        sbTayhd+CG/4lqpTbHMe4Unoiw==
-X-Google-Smtp-Source: AMsMyM7azffc3j7n0RlXzVVXhr4h6KU9GBtHDPvSR1EQLGZAnoaDtp1H2k8dV1j18dnuFx2eTd4lcw==
-X-Received: by 2002:a05:651c:88a:b0:26c:81e1:57dc with SMTP id d10-20020a05651c088a00b0026c81e157dcmr21276405ljq.236.1667921300408;
-        Tue, 08 Nov 2022 07:28:20 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id s2-20020a05651c048200b0026fc79fd67dsm1777329ljc.74.2022.11.08.07.28.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 07:28:19 -0800 (PST)
-Message-ID: <d9edb6e1-c3da-0f5b-546d-37d8151aaa35@linaro.org>
-Date:   Tue, 8 Nov 2022 16:28:18 +0100
+        with ESMTP id S234237AbiKHPi2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 10:38:28 -0500
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38E472736;
+        Tue,  8 Nov 2022 07:38:24 -0800 (PST)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 96C4FB86;
+        Tue,  8 Nov 2022 16:38:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202205; t=1667921901;
+        bh=QmFrYew7uldCRdEfnY237r/8E+rgbEnHjVQjjnRiroM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rAckSJb0Nvd8f9bLqB/jNx/HbGoh4z5cUQgYfixAmFnBkKcZmhLyagtO9wUERm1wW
+         sXfmAL2985EWoB6SDCHvTV5+gTT5951NfRemZlHJEn+eY1hw0UjSEs5aFzhfnzfjVD
+         43TBQdL6BsdCfZJd+ApJD2X/Pa97gWIOI+DAQcCWXKsG0dh04KlUFzqj92BtITJQiN
+         9BvCsmOHKCg6bhGPls+bvJFTGsAiMSoiaB9Isu97wtgdMhPglIjv+v5CDmSAOn0mye
+         wRCIYaiqhzZFJM0Eaur/Alx0FJwKRirko3rwoyP3DEAV1x6bMdFKaTppuamEDL9Y+5
+         afuW7YfxXTb311b1E3HbbgnbAa25ca1PwfS5dw+0eIPWLzKrVc47+ER1bVeNGeTZf8
+         Zv5Gr4vDraGTqSNNokTG/zcWotNAAE07fp1BIHsAKp9b9X7mjhN7UQi9cU08FC74R4
+         H1rZYtiSRtmE8dCVU2frn2llbCoYe/x3/xnkSg0foazxLsxqkHxHOrluONEdgjAs70
+         jpibf1xyVKrIcNwXW+SMDbR2Iu2OuV8c+ixwICHBkHxPL1ngiDeyQ0VXJreeOPyuQY
+         ZKqqdziapgXRPdK+r05sH+KBfj0hj2CJmvDlrAhU0s1U9oUK42Vq2VvS86seW2PSaA
+         fWi1uQpl9AgI0mbcN24ar4r0=
+Date:   Tue, 8 Nov 2022 16:38:20 +0100
+From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 07/15] MIPS: IP27: clean out sn/nmi.h
+Message-ID: <20221108153820.fp5du7p7zr7pc7cs@tarta.nabijaczleweli.xyz>
+References: <cover.1667330271.git.nabijaczleweli@nabijaczleweli.xyz>
+ <534e0e7e4f2b0cc1cb35d5024192473635ed1b94.1667330271.git.nabijaczleweli@nabijaczleweli.xyz>
+ <20221104145002.GA16099@alpha.franken.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/2] dt-bindings: gpio: add loongson series gpio
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        richard.liu@st.com, Arnaud Patard <apatard@mandriva.com>,
-        Hongbing Hu <huhb@lemote.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <20221108092107.28996-1-zhuyinbo@loongson.cn>
- <20221108092107.28996-2-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221108092107.28996-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h7xzdhf5opgoap56"
+Content-Disposition: inline
+In-Reply-To: <20221104145002.GA16099@alpha.franken.de>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 08/11/2022 10:21, Yinbo Zhu wrote:
-> Add the Loongson series gpio binding with DT schema format using
-> json-schema.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  .../bindings/gpio/loongson,ls-gpio.yaml       | 154 ++++++++++++++++++
->  MAINTAINERS                                   |  11 ++
->  2 files changed, 165 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-> new file mode 100644
-> index 000000000000..9d335262ddcc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-> @@ -0,0 +1,154 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/loongson,ls-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson series GPIO controller.
-> +
-> +maintainers:
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,ls2k-gpio
-> +      - loongson,ls7a-gpio
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  ngpios: true
 
-minimum? maximum?
+--h7xzdhf5opgoap56
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +  gpio-controller: true
-> +
-> +  gpio-ranges: true
-> +
-> +  loongson,conf_offset:
+On Fri, Nov 04, 2022 at 03:50:02PM +0100, Thomas Bogendoerfer wrote:
+> On Wed, Nov 02, 2022 at 12:05:30AM +0100, Ahelenia Ziemia=C5=84ska wrote:
+> > The only user is arch/mips/sgi-ip27/ip27-nmi.c; this file was imported
+> > wholesale in 2.3.99pre9-1, and received only whitespace updates since
+> > then.
+> >=20
+> > NMI_MAGIC isn't a magic number; it's unclear if it's actually used by
+> > the firmware in some capacity or if it's a holdover from copying the SGI
+> > code, but in the former case it's API and in the latter it's dead cruft.
+>=20
+> it's used by firmware and Linux code to register the NMI exception
+> handler.
+Great, I'll put that in the message.
 
-No underscores in node names. Plus comments from Linus seem to apply
-here as well. Drop it entirely or explain why this is not part of
-compatible, why this is needed and why encoding programming model
-address in DT matches the DT...
+> Please leave arch/mips/include/asm/sn/nmi.h untouched as
+> it's documents firmware NMI handler usage (even when we don't use it, yet=
+).
+"Yet".
+This file appeared in 2.3.99pre9-1, and hasn't changed since.
+I removed hard-coded assembly struct offsets, which we'll never use,
+because we /haven't/ used them, and this part is implemented in C.
+This file's my age, and these parts have been dead for just as long.
 
+Yet.
 
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This option indicate this GPIO configuration offset address.
-> +
-> +  loongson,out_offset:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This option indicate this GPIO output value offset address.
+--h7xzdhf5opgoap56
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Drop
+-----BEGIN PGP SIGNATURE-----
 
-> +
-> +  loongson,in_offset:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This option indicate this GPIO input value offset address.
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNqd+kACgkQvP0LAY0m
+WPGGpg//dLU8hnK9tZdfcpo5GV0ERzxD2jSaCqx+7GtOPqi06pMv+x1W9p+DtT+R
+yjWlIz7bfhLM+cK9Foh9xE4fw6q1OMLMxj+OTAgHvymPnMKqw+eTKvNA5Pli46wp
+knBbflMGUCyUT8y8U8vT7wL49xYTRsdH5h27yz+wjRvgaBYz9x8iExttM8M3pVaR
+j7sbzS9U3I3/y4TyJ+jySOix3zGmB3J9gOcYIv2226tUUSLWHn9x7RHO593pbWEv
+mGH+5sVG3jrCUZA9mriR4RI2ztrqse1RsvxSJYROJtoQh4so5zR0I796HHP+FLeh
+i0aDcILPce0YFKO/3wz/XgntV5k1CK5s0niqP2aTcscM5DGJHjkjZvXnacQFYp/I
+isf/2zz/XTmMuDehzC48hoGEkBtFFVIUm5JKiE361PxGtlh8EmpCLu1CN/jb/9Yy
+ZcOWYsRWezri/Y897k/IpQo54iwvVCrOuQmCkhfrXyqoSugVUC3Y/G2yMEU9vMij
+lz1c4e+FSzH8zZNqG06mKfo23JkFhJn5GcHKEdcqVrH/R18u+qEOue1Zzlamrqnf
+D4W9jdUUKCkvGGSpxyztm1Vvx5kTvTWF1yJevCoL/uYRVFpiLbUzkptSI3Ww5Q9e
+bU1YDGV3U1bCxT9a0pvGl3EzdN1fSf7cwDWsEae9agiRRS6+1UM=
+=FWO/
+-----END PGP SIGNATURE-----
 
-Drop
-
-
-> +
-> +  loongson,gpio_base:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This option indicate the first GPIO number in this node.
-
-Drop
-
-
-> +
-> +  loongson,support_irq:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      This option indicate this GPIO whether support interrupt.
-
-Drop
-
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    maxItems: 64
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - ngpios
-> +  - "#gpio-cells"
-> +  - gpio-controller
-> +  - gpio-ranges
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    gpio0: gpio@1fe00500 {
-> +      compatible = "loongson,ls2k-gpio";
-> +      reg = <0x1fe00500 0x38>;
-> +      ngpios = <64>;
-> +      #gpio-cells = <2>;
-> +      gpio-controller;
-> +      gpio-ranges = <&pctrl 0 0 15>,
-> +                    <&pctrl 16 16 15>,
-> +                    <&pctrl 32 32 10>,
-> +                    <&pctrl 44 44 20>;
-> +      loongson,conf_offset = <0>;
-> +      loongson,out_offset = <0x10>;
-> +      loongson,in_offset = <0x20>;
-> +      loongson,gpio_base = <0>;
-> +      loongson,support_irq;
-> +      interrupt-parent = <&liointc1>;
-> +      interrupts = <28 IRQ_TYPE_LEVEL_LOW>,
-> +                   <29 IRQ_TYPE_LEVEL_LOW>,
-> +                   <30 IRQ_TYPE_LEVEL_LOW>,
-> +                   <30 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <26 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <>,
-
-What's this?
-
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <>,
-> +                   <>,
-
-What's this?
-
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>,
-> +                   <27 IRQ_TYPE_LEVEL_LOW>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 916b2d9cffc0..878b8320ac3b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12048,6 +12048,17 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
->  F:	drivers/soc/loongson/loongson2_guts.c
->  
-> +LOONGSON SERIES GPIO DRIVER
-> +M:	Richard Liu, STMicroelectronics <richard.liu@st.com>
-> +M:	Arnaud Patard <apatard@mandriva.com>
-> +M:	Hongbing Hu <huhb@lemote.com>
-> +M:	Huacai Chen <chenhuacai@kernel.org>
-> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-
-Are they all maintainers of this driver?
-
-> +L:	linux-gpio@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-> +F:	drivers/gpio/gpio-loongson.c
-> +
->  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->  M:	Sathya Prakash <sathya.prakash@broadcom.com>
->  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-
-Best regards,
-Krzysztof
-
+--h7xzdhf5opgoap56--
