@@ -2,97 +2,319 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777AD6216B6
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 15:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F5D621839
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Nov 2022 16:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbiKHObw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Nov 2022 09:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S234314AbiKHP21 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Nov 2022 10:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234263AbiKHObF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 09:31:05 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F73F5B0
-        for <linux-mips@vger.kernel.org>; Tue,  8 Nov 2022 06:31:04 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id k22so13965575pfd.3
-        for <linux-mips@vger.kernel.org>; Tue, 08 Nov 2022 06:31:04 -0800 (PST)
+        with ESMTP id S233784AbiKHP2Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Nov 2022 10:28:25 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA4E2F9
+        for <linux-mips@vger.kernel.org>; Tue,  8 Nov 2022 07:28:22 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id k19so21648187lji.2
+        for <linux-mips@vger.kernel.org>; Tue, 08 Nov 2022 07:28:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rYyQ/3KwA5SEi7xobmtMHnwgbg0DrEr9YUI+FxITXks=;
+        b=oudhA7iWo073iyyJQt8Okd+b8G1K6VItNkGt4/f1tP4fNyw46cvITxgr/evZp9ORvq
+         rkKqlTFcDHk+3t7el5VIFhrrAQngAPgr6QOO+cfQayIr194tPIilrMUubBSC9iSNv2N4
+         gaptbtSKej2YQ0XMaua2sSnq2tBBTPd+6XX9IJoVzAU8xWAzvjeKyZccNt9GKW6RNjmF
+         BfKHbhmOe5/2s67vZQyjBLFMoJ/A8AWZnLZ53XhvDY+3kWHsxDxQ8aoRlTd1TincoTZP
+         c36QC8Cuzfa3bxTExcAgxbvK3Wu6BxjKMvIwuVPxDs5fcl8yslN13jt8lb0JUOP7udjN
+         8Fgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=0hxbSRNAYG6yM4r5a6SRqP/gurbfLWUS6GC82IFNS47XATd6TUi9uUyUzcwG5FmtVU
-         ASu5Zq0KAGh5Km/qG0xR4wpOwg1PWYOdCSizkZtw2Hn85JPW+vdoZVl15o5+n7c3wJFV
-         JrarB0MdMk+NVkCPq8M+GmFWikd8NxVb/NQDZANpss7ilj6Hdr1j7+UEdCev/kWEDkvL
-         I73/Pgq5fz5ZAplcaN93xLgpB+BbWwIkiirKUr+pBl9oXhoA3NmRiE7OsQF8+UBts28b
-         FPEWL69pzz7f1xr5n0JsNkRtZGjquNzz3Wd13z42JHCUQM9PHrLk827Ru84X2dCHX4pB
-         pkjw==
-X-Gm-Message-State: ACrzQf1/BiXR2h9i7nzvoF84t+hxBtJq5jn7SoWi/r6eC5xJaEyqsVdA
-        cg4aM7AXva1udTQlLaPjUxoUK6xLUgDQx4FmwZ0=
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
+        bh=rYyQ/3KwA5SEi7xobmtMHnwgbg0DrEr9YUI+FxITXks=;
+        b=kZIK1KYBVpYScYfJ7qmnvIs3XREkj/IMURQ4wEhBZXEodRzOOcWaM5jaM4oGPwchSp
+         r7+heopg6DecOSXhaeBz/IgJ/e2NXEmcXzUXu2tQWQFHSWjkUUze9YEuyHIx2UIo0Fzh
+         MxTJMyK3Ph09Za4Slo61T1CyhOL30tcN3rbYA4Y6MzZnDpDGdiCrF5OpLp1JpiySu6AQ
+         xSwtaMjU5irkNSvi+p5r9jt5UyfVtAqMaFLG7wTVq7aAijqYMsUmuDfDymtwqe/eMc+y
+         xPm7JFvtSfNvbbXyG4U5ioH7DhP+q/4hS/pBQgOsKdLYylIE0PiWbdnwp96YnCZdYAn9
+         W+QA==
+X-Gm-Message-State: ACrzQf3bcYHsuI24U0dVJDjv0LPrHqcL6qWG8IwwTl8QGA51FMtE+3HR
+        sbTayhd+CG/4lqpTbHMe4Unoiw==
+X-Google-Smtp-Source: AMsMyM7azffc3j7n0RlXzVVXhr4h6KU9GBtHDPvSR1EQLGZAnoaDtp1H2k8dV1j18dnuFx2eTd4lcw==
+X-Received: by 2002:a05:651c:88a:b0:26c:81e1:57dc with SMTP id d10-20020a05651c088a00b0026c81e157dcmr21276405ljq.236.1667921300408;
+        Tue, 08 Nov 2022 07:28:20 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id s2-20020a05651c048200b0026fc79fd67dsm1777329ljc.74.2022.11.08.07.28.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 07:28:19 -0800 (PST)
+Message-ID: <d9edb6e1-c3da-0f5b-546d-37d8151aaa35@linaro.org>
+Date:   Tue, 8 Nov 2022 16:28:18 +0100
 MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:42e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4689]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 2/2] dt-bindings: gpio: add loongson series gpio
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        richard.liu@st.com, Arnaud Patard <apatard@mandriva.com>,
+        Hongbing Hu <huhb@lemote.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <20221108092107.28996-1-zhuyinbo@loongson.cn>
+ <20221108092107.28996-2-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221108092107.28996-2-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On 08/11/2022 10:21, Yinbo Zhu wrote:
+> Add the Loongson series gpio binding with DT schema format using
+> json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  .../bindings/gpio/loongson,ls-gpio.yaml       | 154 ++++++++++++++++++
+>  MAINTAINERS                                   |  11 ++
+>  2 files changed, 165 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+> new file mode 100644
+> index 000000000000..9d335262ddcc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+> @@ -0,0 +1,154 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/loongson,ls-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson series GPIO controller.
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - loongson,ls2k-gpio
+> +      - loongson,ls7a-gpio
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ngpios: true
+
+minimum? maximum?
+
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  gpio-ranges: true
+> +
+> +  loongson,conf_offset:
+
+No underscores in node names. Plus comments from Linus seem to apply
+here as well. Drop it entirely or explain why this is not part of
+compatible, why this is needed and why encoding programming model
+address in DT matches the DT...
+
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This option indicate this GPIO configuration offset address.
+> +
+> +  loongson,out_offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This option indicate this GPIO output value offset address.
+
+Drop
+
+> +
+> +  loongson,in_offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This option indicate this GPIO input value offset address.
+
+Drop
+
+
+> +
+> +  loongson,gpio_base:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This option indicate the first GPIO number in this node.
+
+Drop
+
+
+> +
+> +  loongson,support_irq:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      This option indicate this GPIO whether support interrupt.
+
+Drop
+
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 64
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - ngpios
+> +  - "#gpio-cells"
+> +  - gpio-controller
+> +  - gpio-ranges
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    gpio0: gpio@1fe00500 {
+> +      compatible = "loongson,ls2k-gpio";
+> +      reg = <0x1fe00500 0x38>;
+> +      ngpios = <64>;
+> +      #gpio-cells = <2>;
+> +      gpio-controller;
+> +      gpio-ranges = <&pctrl 0 0 15>,
+> +                    <&pctrl 16 16 15>,
+> +                    <&pctrl 32 32 10>,
+> +                    <&pctrl 44 44 20>;
+> +      loongson,conf_offset = <0>;
+> +      loongson,out_offset = <0x10>;
+> +      loongson,in_offset = <0x20>;
+> +      loongson,gpio_base = <0>;
+> +      loongson,support_irq;
+> +      interrupt-parent = <&liointc1>;
+> +      interrupts = <28 IRQ_TYPE_LEVEL_LOW>,
+> +                   <29 IRQ_TYPE_LEVEL_LOW>,
+> +                   <30 IRQ_TYPE_LEVEL_LOW>,
+> +                   <30 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <>,
+
+What's this?
+
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <>,
+> +                   <>,
+
+What's this?
+
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+> +                   <27 IRQ_TYPE_LEVEL_LOW>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 916b2d9cffc0..878b8320ac3b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12048,6 +12048,17 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
+>  F:	drivers/soc/loongson/loongson2_guts.c
+>  
+> +LOONGSON SERIES GPIO DRIVER
+> +M:	Richard Liu, STMicroelectronics <richard.liu@st.com>
+> +M:	Arnaud Patard <apatard@mandriva.com>
+> +M:	Hongbing Hu <huhb@lemote.com>
+> +M:	Huacai Chen <chenhuacai@kernel.org>
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+
+Are they all maintainers of this driver?
+
+> +L:	linux-gpio@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+> +F:	drivers/gpio/gpio-loongson.c
+> +
+>  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>  M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+
+Best regards,
+Krzysztof
+
