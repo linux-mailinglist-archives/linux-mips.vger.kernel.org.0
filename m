@@ -2,124 +2,262 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D866C62299F
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Nov 2022 12:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D2D622AAC
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Nov 2022 12:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiKILHg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Nov 2022 06:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S229968AbiKILhS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Nov 2022 06:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiKILHf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Nov 2022 06:07:35 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E3A1A047;
-        Wed,  9 Nov 2022 03:07:34 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 85DE13200A3C;
-        Wed,  9 Nov 2022 06:07:33 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 09 Nov 2022 06:07:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667992053; x=
-        1668078453; bh=PtXlGxu5pHm04GVMp9fkQqlVpuB3Y1JtbfwxVosbUzs=; b=j
-        1d3Ye6iodxIBcobDJ4jPLQmX77Ts7LeEuNx2Ld9Sx+Qcr2wnEWicj231rjZ/n89p
-        XG7so0qsFFJcnfrDuAhE/+wGO2hUV3QAIHaVU4wbaJgyGneszDcgVPfuzufW3ihq
-        2zrxNK5IeaWNFpPhKs0ZP8Zl4T6wzUOJobJ4utUCArtwBuEEjwBTrD3svDQDqYFP
-        OHkPF6QCGfU9sh4Rs2cnQQHEB1Dt9ZJXpvXztP4nk74zOiTy1QFt8+Ndo8f1BHvy
-        0CMGN8zlmQx5kouOFpinp2+H9zPQRTOsEwLk7SOumiljDNhvQqPdL52Rmu8LzASb
-        PlaMC9eN0P55xVV5f6shw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667992053; x=
-        1668078453; bh=PtXlGxu5pHm04GVMp9fkQqlVpuB3Y1JtbfwxVosbUzs=; b=I
-        Yc3t4YdziTHLywjI+YFY6zpSxIVbNH9hzmeisqHIJgHabF55nkH9kheIkbi6j1QI
-        N9alZGLD0AFTWJ/Iwc/tcJZsxwqXfSy20YLzmzhGFDdVuNT1EH5wN36OAHsKRlGT
-        H829vg431NZO2U4l+MG7jXySBAOtmvbIUj900U0rV/4mGGoKoM2MWDZV4DE5M/rz
-        UAsMgwJGXW3ImwWXs9bopRqrlsUlUJSaTAlO26Bzl6q9NFtGicMRChP4O/R1Z6Wr
-        /IUhvCgKoRM+ZVAPwfK0MUeruKiO6oJJmk48ednJHuou2hrI9VRbLeKjp5T3QoPi
-        buHDk9v32rRG+fE0OEuEg==
-X-ME-Sender: <xms:84lrY8dfLs5n4KJHIHsoocSthNsOOjxmYeRvwnyeNwX2wI55MbZ2Yg>
-    <xme:84lrY-OtNZmA5t6tDLeNxuUOaGMbJ2n35SFVnqnktxmC__vdvwnt29-qO_s4rxpEv
-    THORMzK5Y5m3XNom1I>
-X-ME-Received: <xmr:84lrY9hTuZQlrnXLlD3Ec4uXJSZd4e3Lrobn25mqWcBrecs44_OIl1anOxK100US>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgddvfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeegieeh
-    vefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:84lrYx8vQLR9iBrsZ1bvuhWotdsmB--UhFGHhFvdmNTgYnkPU6ESlg>
-    <xmx:84lrY4uugfgyJb3i5TNXlbM1KBth0AjzkNlEpodFdM63kEjQFFp74Q>
-    <xmx:84lrY4HPEkVVu2pSm8Gj9stvYwYaQAjip66M93gIYH2O3V7iIPDa6Q>
-    <xmx:9YlrYyWm8bYblbQn03_co7Fr3d6MUc6ykBQobXT1Ottkq1S9x-Yvug>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Nov 2022 06:07:30 -0500 (EST)
-Message-ID: <7cf55c95-540e-b182-b4b3-e641535752e1@flygoat.com>
-Date:   Wed, 9 Nov 2022 11:07:18 +0000
+        with ESMTP id S229885AbiKILhJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Nov 2022 06:37:09 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758A22A716;
+        Wed,  9 Nov 2022 03:37:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1667993821; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3HeCzuAd5DrGQl3yX0PoEWG+18EHx/4Mkssb32++3BI=;
+        b=WwCPTNJPOIDWtdzd5piGmEgZU4J4b1t9NVy+qRbY3+ISBvVQ6apE6t+8jx2p/zEgIxnja5
+        9nWJEIf1duGHYh5JmCtFyh2CbFVaBUveP5Si2RGhwuWsnzKNfsXmdpkN0q+yUABhtgFuRh
+        Y+C1HQZU871ihv7USL4Dk3I6J/l65gU=
+Date:   Wed, 09 Nov 2022 11:36:35 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 56/65] clk: ingenic: cgu: Switch to determine_rate
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andreas =?iso-8859-1?q?F=E4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Message-Id: <Z8W2LR.DTD355V5EAE02@crapouillou.net>
+In-Reply-To: <20221109105301.ueus7o3b75j5yeff@houat>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+        <20221018-clk-range-checks-fixes-v2-56-f6736dec138e@cerno.tech>
+        <80VTKR.CE8RVN8M3ZYK3@crapouillou.net>
+        <20221104145946.orsyrhiqvypisl5j@houat>
+        <IOEVKR.TWFKJND2FJ473@crapouillou.net>
+        <20221109105301.ueus7o3b75j5yeff@houat>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] MIPS: jump_label: Fix compat branch range check
-Content-Language: en-US
-To:     tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ardb@kernel.org, rostedt@goodmis.org, stable@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-References: <20221103151053.213583-1-jiaxun.yang@flygoat.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20221103151053.213583-1-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Maxime,
 
+Le mer. 9 nov. 2022 =E0 11:53:01 +0100, Maxime Ripard=20
+<maxime@cerno.tech> a =E9crit :
+> Hi Paul,
+>=20
+> On Sat, Nov 05, 2022 at 10:33:54AM +0000, Paul Cercueil wrote:
+>>  Hi Maxime,
+>>=20
+>>  Le ven. 4 nov. 2022 =E0 15:59:46 +0100, Maxime Ripard=20
+>> <maxime@cerno.tech> a
+>>  =E9crit :
+>>  > Hi Paul,
+>>  >
+>>  > On Fri, Nov 04, 2022 at 02:31:20PM +0000, Paul Cercueil wrote:
+>>  > >  Le ven. 4 nov. 2022 =E0 14:18:13 +0100, Maxime Ripard
+>>  > > <maxime@cerno.tech> a
+>>  > >  =E9crit :
+>>  > >  > The Ingenic CGU clocks implements a mux with a set_parent=20
+>> hook,
+>>  > > but
+>>  > >  > doesn't provide a determine_rate implementation.
+>>  > >  >
+>>  > >  > This is a bit odd, since set_parent() is there to, as its=20
+>> name
+>>  > > implies,
+>>  > >  > change the parent of a clock. However, the most likely=20
+>> candidate
+>>  > > to
+>>  > >  > trigger that parent change is a call to clk_set_rate(), with
+>>  > >  > determine_rate() figuring out which parent is the best=20
+>> suited for
+>>  > > a
+>>  > >  > given rate.
+>>  > >  >
+>>  > >  > The other trigger would be a call to clk_set_parent(), but=20
+>> it's
+>>  > > far less
+>>  > >  > used, and it doesn't look like there's any obvious user for=20
+>> that
+>>  > > clock.
+>>  > >  >
+>>  > >  > So, the set_parent hook is effectively unused, possibly=20
+>> because
+>>  > > of an
+>>  > >  > oversight. However, it could also be an explicit decision by=20
+>> the
+>>  > >  > original author to avoid any reparenting but through an=20
+>> explicit
+>>  > > call to
+>>  > >  > clk_set_parent().
+>>  > >  >
+>>  > >  > The driver does implement round_rate() though, which means=20
+>> that
+>>  > > we can
+>>  > >  > change the rate of the clock, but we will never get to=20
+>> change the
+>>  > >  > parent.
+>>  > >  >
+>>  > >  > However, It's hard to tell whether it's been done on purpose=20
+>> or
+>>  > > not.
+>>  > >  >
+>>  > >  > Since we'll start mandating a determine_rate()=20
+>> implementation,
+>>  > > let's
+>>  > >  > convert the round_rate() implementation to a=20
+>> determine_rate(),
+>>  > > which
+>>  > >  > will also make the current behavior explicit. And if it was=20
+>> an
+>>  > >  > oversight, the clock behaviour can be adjusted later on.
+>>  > >
+>>  > >  So it's partly on purpose, partly because I didn't know about
+>>  > >  .determine_rate.
+>>  > >
+>>  > >  There's nothing odd about having a lonely .set_parent=20
+>> callback; in
+>>  > > my case
+>>  > >  the clocks are parented from the device tree.
+>>  > >
+>>  > >  Having the clocks driver trigger a parent change when=20
+>> requesting a
+>>  > > rate
+>>  > >  change sounds very dangerous, IMHO. My MMC controller can be
+>>  > > parented to the
+>>  > >  external 48 MHz oscillator, and if the card requests 50 MHz, it
+>>  > > could switch
+>>  > >  to one of the PLLs. That works as long as the PLLs don't change
+>>  > > rate, but if
+>>  > >  one is configured as driving the CPU clock, it becomes messy.
+>>  > >  The thing is, the clocks driver has no way to know whether or=20
+>> not
+>>  > > it is
+>>  > >  "safe" to use a designated parent.
+>>  > >
+>>  > >  For that reason, in practice, I never actually want to have a=20
+>> clock
+>>  > >  re-parented - it's almost always a bad idea vs. sticking to the
+>>  > > parent clock
+>>  > >  configured in the DTS.
+>>  >
+>>  > Yeah, and this is totally fine. But we need to be explicit about=20
+>> it. The
+>>  > determine_rate implementation I did in all the patches is an exact
+>>  > equivalent to the round_rate one if there was one. We will never=20
+>> ask to
+>>  > change the parent.
+>>  >
+>>  > Given what you just said, I would suggest to set the
+>>  > CLK_SET_RATE_NO_REPARENT flag as well.
+>>=20
+>>  But that would introduce policy into the driver...
+>=20
+> I'm not sure why you're bringing policies into that discussion.=20
+> There's
+> plenty of policy in the driver already, and the current code doesn't=20
+> do
+> something that the old wasn't doing (implicitly).
 
-在 2022/11/3 15:10, Jiaxun Yang 写道:
-> Cast upper bound of branch range to long to do signed compare,
-> avoid negative offset trigger this warning.
->
-> Fixes: 9b6584e35f40 ("MIPS: jump_label: Use compact branches for >= r6")
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Yes, I was just talking about the CLK_SET_RATE_NO_REPARENT flag adding=20
+policy. The fact that there's plenty of policy in the driver already is=20
+not an argument for adding some more.
 
-Ping :-)
+> And there's plenty of policies in drivers in general. Whether you=20
+> limit
+> the rate or not, whether you allow reparenting or not, even the
+> CLK_SET_RATE_NO_REPARENT flag mentioned above is a policy decision set
+> by drivers.
 
-Thanks
-- Jiaxun
+Allowing reparenting and not limiting the rates is not a policy, it's=20
+just following what the hardware allows you to do. The absence of=20
+policy means that the driver allows you to configure the hardware in=20
+any way you might want to.
 
-> ---
-> v2: Fix typo, collect review tags.
-> ---
->   arch/mips/kernel/jump_label.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/mips/kernel/jump_label.c b/arch/mips/kernel/jump_label.c
-> index 71a882c8c6eb..f7978d50a2ba 100644
-> --- a/arch/mips/kernel/jump_label.c
-> +++ b/arch/mips/kernel/jump_label.c
-> @@ -56,7 +56,7 @@ void arch_jump_label_transform(struct jump_entry *e,
->   			 * The branch offset must fit in the instruction's 26
->   			 * bit field.
->   			 */
-> -			WARN_ON((offset >= BIT(25)) ||
-> +			WARN_ON((offset >= (long)BIT(25)) ||
->   				(offset < -(long)BIT(25)));
->   
->   			insn.j_format.opcode = bc6_op;
+Limiting rates, forbidding reparenting, that's policy, and it doesn't=20
+belong in a driver.
+
+You can argue that choosing not to reparent on rate change is a policy,=20
+and it is. That's why we need a way to enforce these policies outside=20
+the driver.
+
+>>  The fact that I don't want the MMC parented to the PLLs, doesn't=20
+>> mean
+>>  that it's an invalid configuration per se.
+>=20
+> Sure, and that's another policy :)
+
+A policy that is not enforced by the driver.
+
+Going back to the patch itself... I am fine with the change, although=20
+the patch description should probably be updated. We have .set_parent=20
+callbacks to configure clocks from DT, there's nothing more to it.
+
+Cheers,
+-Paul
+
 
