@@ -2,166 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C656242D4
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Nov 2022 14:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6245F62478A
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Nov 2022 17:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiKJNF5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Nov 2022 08:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S232744AbiKJQu2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Nov 2022 11:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiKJNFz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 08:05:55 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5561A388
-        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 05:05:54 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso1450961pjc.5
-        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 05:05:54 -0800 (PST)
+        with ESMTP id S232434AbiKJQuI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 11:50:08 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3703BF76
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 08:49:34 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id h14so1988646pjv.4
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 08:49:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lrV3scjxXBUgyRehk9/on/q8TxNDq8MdTdotV2WeMBQ=;
-        b=GVZ09h+ngHWOecbTC/uzghXW93HVi79Hc3aHUMBuHut0K+MRP4qjrmbxOsy9wAvyhh
-         CzAf4wAUsz2LX8ScnTSnBYBlU0zD4SfZXHjTGLx4odMNe2HTZmWoc8/O0MjERSTJDuKQ
-         9UeL9YNFV2iAuj4M769TxWHJzx0wEKM1UD/fL8Quarzgi8/jAHx03TmKPyEcNniVs1JP
-         E1bQ9YyT5yBnS4K6hTH0QDyjNMb9vjtJqKa6/m2IeBhMmf0jPp66hTlfQCyxBUHnorSo
-         4QxzB8BVVnzEGtFh63S81NhnvCx7MGrBaQEPEUdQo8KV1MCY/puvxsLONjSQ8GgFephe
-         xQuA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rPjVc+C4keVB9JNeySRKdiTbUPe13351AhOJe9TtZf8=;
+        b=OOR4bwRUplBbyMMh2BEwu+86VP3qxijSJnezQ7clymoLz9HUcLonm3WyVFc88kB5fY
+         O/E+L3vna3lCH6PwuGGALEpEbdqf//FCQPJXnQH0fruVZmuKpiXxpksMlHLNli5FBIVk
+         yHcqF3ftlcFWSWpaRO18yKIRlZ4MLKYwLTrjNA/qL4cv528Rj8wkmrotYw4AfXaxmJus
+         pcCX78Uh4a0+xqNPkY5yiRwsOaQfBATcwvX2XL8kq2aQkn5xXT0ESqE2s4sWnkM2XUP1
+         lN0YUhWFEsDiU77d2rUZObTRDQeLPD96HT9QdyztVtB+kfc9jl7KnKnrsPBskzRSRVH/
+         XRTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lrV3scjxXBUgyRehk9/on/q8TxNDq8MdTdotV2WeMBQ=;
-        b=CqrAi2GCbs0XMyNfxenggdUsQhnX/BdRVbO71mN7irhjYSJOf2kg8YchUhRPtwP16i
-         BZ+KDNLTgGwV4xRUi1hbTqY6FSLr2antNukPTnksUDQlbMcKMvLlC1Q0NI0likqaIEkg
-         ccv/Nm9L0xub6EXURyepD9qBZL9JlUxSdgjyhAusbrl1TxkBUU+DlwtlE0fjxcJ+H6IB
-         E4cNBwWt3qaKIPgDWpDPtHbaxvLsXNRWh+CU5ol4XQhvx1EEHJraqkx4N3Oxbic8JK/c
-         o7QIPWmVuy3pR1sQTf/EA6C5IKteeUOJqxBJyAKIYUdhZQET2a7+ynsaS7TnBjG/1+vb
-         p0yQ==
-X-Gm-Message-State: ACrzQf1vjxnHitj3dv/eQQsplJfW9dYFg8hp5e1MtbGOy/50dZrlCjyr
-        Tovf+VJcEibLySvOpI/cXfgd/XMXSeIJg1jop/Bddg==
-X-Google-Smtp-Source: AMsMyM4ntafpxKu1kZoVYdCyuwK4y2qgGm0PDcBHChl8r8c0pj7m0JmQ6SHmodBY/Un25AY0R73awNrQX1GtCyrtwGQ=
-X-Received: by 2002:a17:903:100c:b0:186:63a1:3b5d with SMTP id
- a12-20020a170903100c00b0018663a13b5dmr65965693plb.148.1668085553525; Thu, 10
- Nov 2022 05:05:53 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rPjVc+C4keVB9JNeySRKdiTbUPe13351AhOJe9TtZf8=;
+        b=o1Ast07FGKOEcBVRfhwlU8NpHwGbTv/3oXrSdUoBHTO5F4Lxr4v+PBuMLu6FK7DZZ+
+         4AxseoGzyjRj0j702XxGYADYEiZeQNYpniKYf2LWkuZzFiokAhFHjHBZxO2cOHT4gg3J
+         pTIBqRNVZOJacfFkQMYNuozC5ATafInBWcUOcRboDyHPKk+EFkxKnSQheO5XpS+nMKRp
+         iIr4WTMZS1KiTtZhbM+dFbn9OV2kJ+pXP/Us83soXQ2ErMjpwELUxE7ypinR1Z8nvOoS
+         sGv8/PUuLPti5yBS7YN8yEyg0iEIZlNdKwSKpYZHQG0/DkIvvNUGiz5B81weBJYqJJgN
+         GDEg==
+X-Gm-Message-State: ACrzQf20lABSJTM/4H2Zwq7QF1NIAP6haxmICp/vOOl+M5vwhQO+3pfT
+        yKq4UfBKCDlMNjE/Rt3AJTGsHw==
+X-Google-Smtp-Source: AMsMyM7nQN/gdgW0z481CkQ/WjHrrL4d++/kzaSXhuKO9UuGt09a3AowKSZBoBJ0HDICWxNrCbdrGA==
+X-Received: by 2002:a17:902:d50c:b0:187:460:bf9c with SMTP id b12-20020a170902d50c00b001870460bf9cmr65545589plg.4.1668098974180;
+        Thu, 10 Nov 2022 08:49:34 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c3-20020a17090a020300b00205d85cfb30sm3288107pjc.20.2022.11.10.08.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 08:49:33 -0800 (PST)
+Date:   Thu, 10 Nov 2022 16:49:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Robert Hoo <robert.hu@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 37/44] KVM: Rename and move CPUHP_AP_KVM_STARTING to
+ ONLINE section
+Message-ID: <Y20rmaU14rZFFCZI@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-38-seanjc@google.com>
+ <301a8a33a5cbe5b4fd3efe03b05bb8410a46e9f5.camel@linux.intel.com>
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
- <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com> <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
-In-Reply-To: <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 10 Nov 2022 14:05:16 +0100
-Message-ID: <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
-Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <301a8a33a5cbe5b4fd3efe03b05bb8410a46e9f5.camel@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 12:39, Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
-> > >
-> > > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
-> > > hook, but doesn't provide a determine_rate implementation.
-> > >
-> > > This is a bit odd, since set_parent() is there to, as its name implies,
-> > > change the parent of a clock. However, the most likely candidate to
-> > > trigger that parent change is a call to clk_set_rate(), with
-> > > determine_rate() figuring out which parent is the best suited for a
-> > > given rate.
-> > >
-> > > The other trigger would be a call to clk_set_parent(), but it's far less
-> > > used, and it doesn't look like there's any obvious user for that clock.
-> >
-> > If I recall correctly, that is the use case we did target for these
-> > types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
->
-> Hm I am trying to get that driver to work ... from time to time.
-> It's just that ALSA SoC DT has changed to much that it turns out
-> into a complete rewrite :/
->
-> So in sound/soc/ux500/mop500_ab8500.c
-> I see this:
->
->         status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
->         if (status)
-> (...)
->
-> and there is elaborate code to switch between "SYSCLK" and
-> "ULPCLK" (ulta-low power clock). Just like you say... however
-> a clock named SYSCLK or ULPCLK does not appear in the
-> code in drivers/clk/ux500 or any DT bindings so... it seems to
-> be non-working for the time being.
+On Thu, Nov 10, 2022, Robert Hoo wrote:
+> > -static int kvm_starting_cpu(unsigned int cpu)
+> > +static int kvm_online_cpu(unsigned int cpu)
+> >  {
+> > +	int ret = 0;
+> > +
+> >  	raw_spin_lock(&kvm_count_lock);
+> > -	if (kvm_usage_count)
+> > +	/*
+> > +	 * Abort the CPU online process if hardware virtualization
+> > cannot
+> > +	 * be enabled. Otherwise running VMs would encounter
+> > unrecoverable
+> > +	 * errors when scheduled to this CPU.
+> > +	 */
+> > +	if (kvm_usage_count) {
+> > +		WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
+> > +
+> >  		hardware_enable_nolock(NULL);
+> > +		if (atomic_read(&hardware_enable_failed)) {
+> > +			atomic_set(&hardware_enable_failed, 0);
+> 
+> I see other places using this hardware_enable_failed with atomic_inc(),
+> should here use atomic_dec() instead of straightly set to 0?
 
-It's definitely not working, but the corresponding clocks ("ulpclk",
-"intclk", "audioclk", etc) are being registered in ab8500_reg_clks().
+Meh, both options are flawed.  E.g. if hardware_enable_failed was left dangling
+(the WARN above), then atomic_dec() won't remedy the problem and KVM will reject
+onlining CPUs indefinitely.  Forcing the atomic back to '0' will remedy that
+particular issue, but could lead to problems if there are other bugs.
 
-What seems to be missing is a DT conversion for these clocks, so they
-can be consumed properly. Right?
+> Though here is embraced by spin_lock, hardware_enable_nolock() can be
+> invoked in other places in parallel?
 
-Kind regards
-Uffe
+Only because of a KVM bug, which gets fixed in the next patch:
+
+  KVM: Disable CPU hotplug during hardware enabling
