@@ -2,195 +2,206 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E263623CAD
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Nov 2022 08:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 336C0624169
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Nov 2022 12:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiKJHcC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Nov 2022 02:32:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S230043AbiKJL3V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Nov 2022 06:29:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiKJHbz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 02:31:55 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783EF32B82;
-        Wed,  9 Nov 2022 23:31:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668065513; x=1699601513;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=K4DExVACpt2lARFBBsyLRbh7EHo+YwPLCynabZeKIUc=;
-  b=SR6T61f5Ot3dK2IU86mrDqzqV6tF4R6lOlNUT7aGnKENyhzAvENoDFKP
-   zkPqsK/DBY01EaiBq41Y2BSxrMYv4lu+l8KZ7Nh37UfJP9wVRPpsVagkV
-   N1gCmsGZUhq1W/lFX7AOiJXfP/+kC6+zA+1BpOQQkHzSgC+QYLfHbLsdp
-   f8EhkmDrKIXpZ/ljJdCMcHr5gkZ3KOj22SLkMtyUgrMl9OI59+JS6rJou
-   SpSG0MlMDGtUT04jdMgjQCBj8m/JvcOepdQnf0mIKY7zw+IPehiXGjRx7
-   8WjZNvRJzpccv8GgWa/HgLNcI0yr2Je5HnQBvigr4Cp7hh5kWTROk9OJA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="309952072"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="309952072"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 23:31:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="631556568"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="631556568"
-Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
-  by orsmga007.jf.intel.com with ESMTP; 09 Nov 2022 23:31:43 -0800
-Message-ID: <ff0e8701d02ee161d064f92c8b742c2cc061bce0.camel@linux.intel.com>
-Subject: Re: [PATCH 32/44] KVM: x86: Unify pr_fmt to use module name for all
- KVM modules
-From:   Robert Hoo <robert.hu@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Date:   Thu, 10 Nov 2022 15:31:42 +0800
-In-Reply-To: <20221102231911.3107438-33-seanjc@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
-         <20221102231911.3107438-33-seanjc@google.com>
+        with ESMTP id S229588AbiKJL3U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 06:29:20 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F08E2B197
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 03:29:19 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id f63so1541943pgc.2
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 03:29:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dZWp2kHBH7BxTK24vYMYaWuh8ES61v4HZQKkOxWH97c=;
+        b=nm5AzPUP/c5SxnOWRF0E8OOs8vIUdOgDjB6wYkEQYpfYDRuGKSxS+CBIeuds7UEokj
+         CAc3O4M3Lzp0CmH9uvJ+chSuCz2e7UtgkMxDMXFmH0EFBdC81NQcL56cIa/e5fTzyvWS
+         kSegvkcOyKB6FEauX3mSzkzzDIAUq5r5SATzN3WmVSBqg1jyg/gg0kYs06KdBSG3zxV/
+         fvTxGa1dt18Ruz+5BEtQasGBTHQrEp0wpReAHWWGdK+pWMVHzmdtTwn3mkonTWk309ZV
+         x5RN6EKVnoWzvPKijsEeJPqRTGi+5rLHTCBxYP1D5lgzLbOuhL8arV0ezTVKJRNayIhr
+         L9Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dZWp2kHBH7BxTK24vYMYaWuh8ES61v4HZQKkOxWH97c=;
+        b=8FbicjJ9uO0+Xh3jkNw9eWC9Tr+5LYSx9bJFg70ytMlmlb7XI8UD3tfWNHxXa0ePdJ
+         yy8lvPj4RE8zaHWfWiG1+vb+r/OOq2eaArNs9nL+UQ+nqehu244S2c4ZpKZ/sC1G7e+u
+         U1AOXTDda4e55BXFedhayi+M34S/eml+Ts+3ij+DwPCeueLGgfMvd2cQdYXtrISvcvuD
+         WilIlqm7uVyl9AH1q1n99N7UH/ugMUf7rABJQRLiQdzwr1TA1LhEVKaW6cN7PvTYCCkH
+         X++yLuvorbgfDDWHrdd1jJNME+KmXlwnnvoc5OG9D85AkNc6A7BRkuv7qaj9SywlWCE/
+         6RnA==
+X-Gm-Message-State: ACrzQf3NeTQNzUzHRysesKrV6iBvIMDfoBaVZrlYx+gg3EwI06IJXl5c
+        bptsnL8hNWWzt9Mroamz2F5ZL77gpHlS6RQf+jFWpg==
+X-Google-Smtp-Source: AMsMyM4cuzpOD/TX9hqFyYyupcC8P3vPeFAFlSRm0wZ2MgnRUbZnV+cRg9A/mVHt7wBrkUdmfz48YahbcXukazUMnzc=
+X-Received: by 2002:a63:4204:0:b0:442:ee11:4894 with SMTP id
+ p4-20020a634204000000b00442ee114894mr2372631pga.595.1668079758533; Thu, 10
+ Nov 2022 03:29:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech> <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
+In-Reply-To: <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 10 Nov 2022 12:28:41 +0100
+Message-ID: <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
+Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 2022-11-02 at 23:18 +0000, Sean Christopherson wrote:
-> Define pr_fmt using KBUILD_MODNAME for all KVM x86 code so that
-> printks
-> use consistent formatting across common x86, Intel, and AMD code.  In
-> addition to providing consistent print formatting, using
-> KBUILD_MODNAME,
-> e.g. kvm_amd and kvm_intel, allows referencing SVM and VMX (and SEV
-> and
-> SGX and ...) as technologies without generating weird messages, and
-> without causing naming conflicts with other kernel code, e.g. "SEV:
-> ",
-> "tdx: ", "sgx: " etc.. are all used by the kernel for non-KVM
-> subsystems.
-> 
-> Opportunistically move away from printk() for prints that need to be
-> modified anyways, e.g. to drop a manual "kvm: " prefix.
-> 
-> Opportunistically convert a few SGX WARNs that are similarly modified
-> to
-> WARN_ONCE; in the very unlikely event that the WARNs fire, odds are
-> good
-> that they would fire repeatedly and spam the kernel log without
-> providing
-> unique information in each print.
-> 
-> Note, defining pr_fmt yields undesirable results for code that uses
-> KVM's
-> printk wrappers, e.g. vcpu_unimpl().  But, that's a pre-existing
-> problem
-> as SVM/kvm_amd already defines a pr_fmt, and thankfully use of KVM's
-> wrappers is relatively limited in KVM x86 code.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
+> hook, but doesn't provide a determine_rate implementation.
+>
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
+>
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+
+If I recall correctly, that is the use case we did target for these
+types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
+
+Maybe there are some additional pieces missing from the old down
+stream kernel, I don't have full picture, sorry.
+
+Anyway, if I am not wrong, this was about supporting a low-power audio
+use case, which requires us to switch the parent clock (to avoid
+wasting energy).
+
+>
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
+
+Yes, this was the reason.
+
+As a matter of fact, I don't even recall that re-parenting was
+possible through clk_set_rate() when this clock driver was introduced.
+But, I might be wrong, it's quite a while ago.
+
+>
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+>
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
+Seems reasonable to me!
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
 > ---
->  arch/x86/kvm/cpuid.c            |  1 +
->  arch/x86/kvm/debugfs.c          |  2 ++
->  arch/x86/kvm/emulate.c          |  1 +
->  arch/x86/kvm/hyperv.c           |  1 +
->  arch/x86/kvm/i8254.c            |  4 ++--
->  arch/x86/kvm/i8259.c            |  4 +++-
->  arch/x86/kvm/ioapic.c           |  1 +
->  arch/x86/kvm/irq.c              |  1 +
->  arch/x86/kvm/irq_comm.c         |  7 +++---
->  arch/x86/kvm/kvm_onhyperv.c     |  1 +
->  arch/x86/kvm/lapic.c            |  8 +++----
->  arch/x86/kvm/mmu/mmu.c          |  6 ++---
->  arch/x86/kvm/mmu/page_track.c   |  1 +
->  arch/x86/kvm/mmu/spte.c         |  4 ++--
->  arch/x86/kvm/mmu/spte.h         |  4 ++--
->  arch/x86/kvm/mmu/tdp_iter.c     |  1 +
->  arch/x86/kvm/mmu/tdp_mmu.c      |  1 +
->  arch/x86/kvm/mtrr.c             |  1 +
->  arch/x86/kvm/pmu.c              |  1 +
->  arch/x86/kvm/smm.c              |  1 +
->  arch/x86/kvm/svm/avic.c         |  2 +-
->  arch/x86/kvm/svm/nested.c       |  2 +-
->  arch/x86/kvm/svm/pmu.c          |  2 ++
->  arch/x86/kvm/svm/sev.c          |  1 +
->  arch/x86/kvm/svm/svm.c          | 10 ++++-----
->  arch/x86/kvm/svm/svm_onhyperv.c |  1 +
->  arch/x86/kvm/svm/svm_onhyperv.h |  4 ++--
->  arch/x86/kvm/vmx/evmcs.c        |  1 +
->  arch/x86/kvm/vmx/evmcs.h        |  4 +---
->  arch/x86/kvm/vmx/nested.c       |  3 ++-
->  arch/x86/kvm/vmx/pmu_intel.c    |  5 +++--
->  arch/x86/kvm/vmx/posted_intr.c  |  2 ++
->  arch/x86/kvm/vmx/sgx.c          |  5 +++--
->  arch/x86/kvm/vmx/vmcs12.c       |  1 +
->  arch/x86/kvm/vmx/vmx.c          | 40 ++++++++++++++++---------------
+>  drivers/clk/ux500/clk-sysctrl.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/ux500/clk-sysctrl.c b/drivers/clk/ux500/clk-sysctrl.c
+> index 702f2f8b43fa..d36336665b6d 100644
+> --- a/drivers/clk/ux500/clk-sysctrl.c
+> +++ b/drivers/clk/ux500/clk-sysctrl.c
+> @@ -110,6 +110,7 @@ static const struct clk_ops clk_sysctrl_gate_fixed_rate_ops = {
+>  };
+>
+>  static const struct clk_ops clk_sysctrl_set_parent_ops = {
+> +       .determine_rate = __clk_mux_determine_rate,
+>         .set_parent = clk_sysctrl_set_parent,
+>         .get_parent = clk_sysctrl_get_parent,
+>  };
+> @@ -220,6 +221,7 @@ struct clk *clk_reg_sysctrl_set_parent(struct device *dev,
+>                                 unsigned long flags)
+>  {
+>         return clk_reg_sysctrl(dev, name, parent_names, num_parents,
+> -                       reg_sel, reg_mask, reg_bits, 0, 0, flags,
+> +                       reg_sel, reg_mask, reg_bits, 0, 0,
+> +                       flags | CLK_SET_RATE_NO_REPARENT,
+>                         &clk_sysctrl_set_parent_ops);
+>  }
+>
 > --
->  arch/x86/kvm/vmx/vmx_ops.h      |  4 ++--
->  arch/x86/kvm/x86.c              | 28 ++++++++++++-----------
->  arch/x86/kvm/xen.c              |  1 +
->  38 files changed, 97 insertions(+), 70 deletions(-)
-> 
-After this patch set, still find some printk()s left in arch/x86/kvm/*,
-consider clean all of them up?
-
-arch/x86/kvm/lapic.c:1215:		printk(KERN_ERR "TODO:
-unsupported delivery mode %x\n",
-arch/x86/kvm/lapic.c:1506:		printk(KERN_ERR "Local APIC
-read with len = %x, "
-arch/x86/kvm/lapic.c:2586:		printk(KERN_ERR "malloc apic
-regs error for vcpu %x\n",
-arch/x86/kvm/ioapic.h:95:		printk(KERN_EMERG "assertion
-failed %s: %d: %s\n",	\
-arch/x86/kvm/ioapic.c:614:		printk(KERN_WARNING "ioapic:
-wrong length %d\n", len);
-arch/x86/kvm/ioapic.c:641:		printk(KERN_WARNING "ioapic:
-Unsupported size %d\n", len);
-arch/x86/kvm/mmu/mmu.c:1652:			printk(KERN_ERR "%s: %p
-%llx\n", __func__,
-arch/x86/kvm/svm/svm.c:3450:		printk(KERN_ERR "%s: unexpected
-exit_int_info 0x%x "
-arch/x86/kvm/vmx/posted_intr.c:322:				printk(
-KERN_INFO
-arch/x86/kvm/vmx/posted_intr.c:343:			printk(KERN_INF
-O "%s: failed to update PI IRTE\n",
-arch/x86/kvm/vmx/vmx.c:6507:			printk(KERN_WARNING
-"%s: Breaking out of NMI-blocked "
-arch/x86/kvm/x86.c:13027:		printk(KERN_INFO "irq bypass
-consumer (token %p) unregistration"
-
+> b4 0.11.0-dev-99e3a
