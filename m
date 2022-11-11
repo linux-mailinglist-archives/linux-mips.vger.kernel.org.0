@@ -2,108 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6D46247B7
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Nov 2022 17:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F08624EB1
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 01:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbiKJQ7E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Nov 2022 11:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        id S229907AbiKKAGO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Nov 2022 19:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiKJQ7D (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 11:59:03 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92968C74B
-        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 08:59:01 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id b11so2036381pjp.2
-        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 08:59:01 -0800 (PST)
+        with ESMTP id S229579AbiKKAGN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 19:06:13 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCDD5C77C
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 16:06:13 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id y203so3494557pfb.4
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 16:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=++qaNnNL5OJX09F4SmymJbSNGTe4YNGKf8knlNeZLIM=;
-        b=LnpIznW50UbJYIR0PEtWeJYNJ+5rH6MIlZozMzFMTwSQvTcP33ucW9c9lQSevvLDXI
-         QyB5+yXhMZUDNlkwdSbDFjM7JR9S8ttOodJeLQApsp/g1X2g7iaiRMpztbbtLirGmHXP
-         Ok5MPlCZ4tZXNzdoN/5EaAFNU5i/kMEU+Pj6UbsvHwVNko95a9bIdjWXiNhQrkyCMZcF
-         1gbXxHeTac5BLcvPalQHTWFwjbFrO0re69/ZDM4/c7ATiGknmYZEnSteDE0eFOsuiUGv
-         o02wNWrUZNQBtGle02WgOsPhE6Inb5/XeEtyenAcor9m9bnEppDYL8UdqJt6p1agDB2o
-         ED2w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sXQg6m0KDTXTm2nqz+lTg6WMBvdzJA0Ss4aaQqsqfi0=;
+        b=hNVPv+ey8HIvOZmC+WAnWIG8OYAeSlZS0xPLzYhDCZmnArotz5Y/nhfn9r9c8PCEFe
+         E8mVjVIva+def9PHp762BmRXmUoK5jg3heR3NAusrpN5STPSFfkervClje0NQa5CwXrE
+         HdlsTtSUM+MPo4+vdGUA38aqr644tAa7P5bI3VxUrx5hCBiuVMLzUakeu0v8EjWAOK7v
+         BgVrNZDyAWChq0qRi87Yhdn0EcEzkTu6Ae/6zTz8SPVNgwEGA83vKScQ/P1+h2fj3QJH
+         Ic9NMyWV4IhkYFZTb5wG6PyKY3kSFDqOOs7F1TgAuJpwI7fBOge9ep4GrU+eZD7ML8Bk
+         8lbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=++qaNnNL5OJX09F4SmymJbSNGTe4YNGKf8knlNeZLIM=;
-        b=PHv2NSKujXSBixuPSWjoa8e4DI5qNGqDr8h84qT9sjoC8HirIOIWUtQMdfIA3+FOac
-         QyiEO25g+vCPQWmeQYVhP8Pq5zk+SeLYd+vTXLXJKK634HeTJYHQkLNlpkaHGHGVnXiS
-         j4mO89T1CRzt3tKmwEa04l5wFgCvmaB7VeqpTVTx1ZoxaStlzuFFE9Rb4XYcVPZ7T0zR
-         A9+IbWwSqecQcOt5en7wBg7NbCAlwmR8RbN85hnnt8z3FVSb6pW64Xi1Uydg9Vy+czzf
-         neNJ/5r+TzZ5bUWueTWw/O1mTBndXrCD+6S3Cg2GJHZe/Obav3uO3Ocu2vfJFVCrjFNq
-         HmEw==
-X-Gm-Message-State: ANoB5pkDz4UY2I+CAbAn6V2JVDZW6iABHD8ytYP4QZ+8c380g1HAFtXM
-        q+YGKFBXOeM6Nue9YW3zTdRjxg==
-X-Google-Smtp-Source: AA0mqf4HLI0425WgRwXjVOczy7lGJ1ZoFRhJMikRvyU6kmBBe6o5W1MVmVmeziJeqm75+QzM+47Lew==
-X-Received: by 2002:a17:902:6aca:b0:188:736c:befa with SMTP id i10-20020a1709026aca00b00188736cbefamr1100928plt.8.1668099540938;
-        Thu, 10 Nov 2022 08:59:00 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sXQg6m0KDTXTm2nqz+lTg6WMBvdzJA0Ss4aaQqsqfi0=;
+        b=olNcktD8l00Dim6dAXkunMwrx1kTENunBaDg1kY1smMd8zB4IDYAnx9ff+9Zbr8HxY
+         gmR34+WvViCMWkl5o2XJcYXxZ3FDb4lUXp0BdjquowqEyX80Zv7FuISyfPPJtzw3Ju37
+         2ng2P4uiSSwcD90ujgkOFQHtJIatWHaSD6TYEBd7/pH5S0weeBu7QnppO32K5IO1o9ga
+         flWzBoYBkmnm3bl2P82KnC8pCfpt4zS3BIomER7ysYoxXcnR1l2vZEGUgFP1Rg+e29Cf
+         7YmVN4b9evIp2x/an80/Kt7BrExq8l8rgS6SFcOme7+6mpaZVoHxXE4ZMliy0vFaxJW7
+         YaLw==
+X-Gm-Message-State: ACrzQf3KzO0VSk963SAj97Xkef+oL6a72Ew0nt1W2/PI7L2A4QMkWIMf
+        z2J0eL34Zn5teuF+u3I+FkI9cg==
+X-Google-Smtp-Source: AMsMyM4gD1W2r9wxYtObzCBR9GM6UAk6Hoer15K7R44TK7byNmqvji7Uiit5OvUTQRObzAPBYqhIPw==
+X-Received: by 2002:a05:6a00:bef:b0:56e:3a98:1089 with SMTP id x47-20020a056a000bef00b0056e3a981089mr3906306pfu.38.1668125172489;
+        Thu, 10 Nov 2022 16:06:12 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n63-20020a17090a5ac500b00200461cfa99sm3302123pji.11.2022.11.10.08.59.00
+        by smtp.gmail.com with ESMTPSA id s18-20020a170903215200b00186a6b6350esm234146ple.268.2022.11.10.16.06.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:59:00 -0800 (PST)
-Date:   Thu, 10 Nov 2022 16:58:56 +0000
+        Thu, 10 Nov 2022 16:06:12 -0800 (PST)
+Date:   Fri, 11 Nov 2022 00:06:08 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Yao, Yuan" <yuan.yao@intel.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 38/44] KVM: Disable CPU hotplug during hardware enabling
-Message-ID: <Y20t0AMNqvtyOwp2@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 36/44] KVM: x86: Do compatibility checks when onlining CPU
+Message-ID: <Y22R8GAvcuoWBELA@google.com>
 References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-39-seanjc@google.com>
- <88e920944de70e7d69a98f74005b49c59b5aaa3b.camel@intel.com>
- <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
+ <20221102231911.3107438-37-seanjc@google.com>
+ <20221103210402.GB1063309@ls.amr.corp.intel.com>
+ <Y2RB4qT02EkhMjPL@google.com>
+ <20221104071819.GD1063309@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
+In-Reply-To: <20221104071819.GD1063309@ls.amr.corp.intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,60 +103,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 10, 2022, Huang, Kai wrote:
-> On Thu, 2022-11-10 at 01:33 +0000, Huang, Kai wrote:
-> > > @@ -9283,7 +9283,13 @@ static int
-> > > kvm_x86_check_processor_compatibility(struct kvm_x86_init_ops *ops)
-> > >  	int cpu = smp_processor_id();
-> > >  	struct cpuinfo_x86 *c = &cpu_data(cpu);
-> > >  
-> > > -	WARN_ON(!irqs_disabled());
-> > > +	/*
-> > > +	 * Compatibility checks are done when loading KVM and when enabling
-> > > +	 * hardware, e.g. during CPU hotplug, to ensure all online CPUs are
-> > > +	 * compatible, i.e. KVM should never perform a compatibility check
-> > > on
-> > > +	 * an offline CPU.
-> > > +	 */
-> > > +	WARN_ON(!irqs_disabled() && cpu_active(cpu));
-> > >  
-> > 
-> > Also, the logic of:
-> > 
-> > 	!irqs_disabled() && cpu_active(cpu)
-> > 
-> > is quite weird.
-> > 
-> > The original "WARN(!irqs_disabled())" is reasonable because in STARTING
-> > section
-> > the IRQ is indeed disabled.
-> > 
-> > But this doesn't make sense anymore after we move to ONLINE section, in which
-> > IRQ has already been enabled (see start_secondary()).  IIUC the WARN_ON()
-> > doesn't get exploded is purely because there's an additional cpu_active(cpu)
-> > check.
-> > 
-> > So, a more reasonable check should be something like:
-> > 
-> > 	WARN_ON(irqs_disabled() || cpu_active(cpu) || !cpu_online(cpu));
-> > 
-> > Or we can simply do:
-> > 
-> > 	WARN_ON(!cpu_online(cpu) || cpu_active(cpu));
-> > 
-> > (because I don't know whether it's possible IRQ can somehow get disabled in
-> > ONLINE section).
-> > 
-> > Btw above is purely based on code analysis, but I haven't done any test.
+On Fri, Nov 04, 2022, Isaku Yamahata wrote:
+> On Thu, Nov 03, 2022 at 10:34:10PM +0000,
+> Sean Christopherson <seanjc@google.com> wrote:
 > 
-> Hmm.. I wasn't thinking thoroughly.  I forgot CPU compatibility check also
-> happens on all online cpus when loading KVM.  For this case, IRQ is disabled and
-> cpu_active() is true.  For the hotplug case, IRQ is enabled but  cpu_active() is
-> false.
+> > On Thu, Nov 03, 2022, Isaku Yamahata wrote:
+> > > On Wed, Nov 02, 2022 at 11:19:03PM +0000,
+> > > Sean Christopherson <seanjc@google.com> wrote:
+> > > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > > > index f223c845ed6e..c99222b71fcc 100644
+> > > > --- a/arch/x86/include/asm/kvm_host.h
+> > > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > > @@ -1666,7 +1666,7 @@ struct kvm_x86_nested_ops {
+> > > >  };
+> > > >  
+> > > >  struct kvm_x86_init_ops {
+> > > > -	int (*check_processor_compatibility)(void);
+> > > > +	int (*check_processor_compatibility)(int cpu);
+> > > 
+> > > Is this cpu argument used only for error message to include cpu number
+> > > with avoiding repeating raw_smp_processor_id() in pr_err()?
+> > 
+> > Yep.
+> > 
+> > > The actual check is done on the current executing cpu.
+> > > 
+> > > If cpu != raw_smp_processor_id(), cpu is wrong. Although the function is called
+> > > in non-preemptive context, it's a bit confusing. So voting to remove it and
+> > > to use.
+> > 
+> > What if I rename the param is this_cpu?  I 100% agree the argument is confusing
+> > as-is, but forcing all the helpers to manually grab the cpu is quite annoying.
 > 
-> So WARN_ON(!irqs_disabled() && cpu_active(cpu)) looks reasonable.  Sorry for the
-> noise.  Just needed some time to connect the comment with the code.
+> Makes sense. Let's settle it with this_cpu.
 
-No worries, more than once while working through this code, I've considered setting
-up one of those evidence boards from the movies with string and push pins to help
-connect all the dots.
+Finally got to actually change the code, and am not a fan of passing "this_cpu"
+everywhere.  It's not terrible, but it's not clearly better than just grabbing
+the CPU on-demand.  And while manually grabbing the CPU in the helpers is annoying,
+in at least two cases the pain is just shifted to the caller.
+
+I'm going with your original suggestion of just grabbing raw_smp_processor_id()
+in the helpers that print the error message.
