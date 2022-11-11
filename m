@@ -2,236 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018FB625327
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 06:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE04625682
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 10:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiKKFkj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Nov 2022 00:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S233336AbiKKJUu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Nov 2022 04:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKKFki (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Nov 2022 00:40:38 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2FA42996;
-        Thu, 10 Nov 2022 21:40:37 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id b185so4016842pfb.9;
-        Thu, 10 Nov 2022 21:40:37 -0800 (PST)
+        with ESMTP id S233291AbiKKJUt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Nov 2022 04:20:49 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413CA663C3
+        for <linux-mips@vger.kernel.org>; Fri, 11 Nov 2022 01:20:48 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id f7so6806686edc.6
+        for <linux-mips@vger.kernel.org>; Fri, 11 Nov 2022 01:20:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D8HH1xBFiha6+sm/Y4eoKI3Sva17f983aTsKIsT9yJg=;
-        b=XOCtEjy6X6yotSYRZaRr4X9l+mtikYBW/JdosZi1C9LWHw3eNb8uToajxLxhJnWXdz
-         mg1ZNtzBsbT/ZjaMOsHV0pYETDxI+tMVubLuOLI1Qt++d2dYYWDVnO0AOAMJDr6MieXZ
-         KzHFmG/C+gR9ZuKEGWeBIvwjf+4gn2C7gY3zH5aJpLS4rGAggIP7dVuDZ1V4uXhHgTjj
-         XujCXOk10zqTj+EMhBxkzAzGI/uFLE1ITWDGbnjk5aqFByRlenlRnBDPb9B4y/eR5lRu
-         d5F33g3vzOE31hgf3JJdkPb1+XMI00GY6FaP1ZM1vUcUoR0u/vVgOlzxgeo5rmIQwsHo
-         oFDQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KQqlnqh61yDEivsgLuzXFgBFvWeIkle9538NvChEgG4=;
+        b=eRHEStFUgdZI+TOEkzLgPNAUqr8je9PakORGJBpBvetm722q6+52mzO4PuK6UP2C9B
+         y5QKHELjwoL/I5ZveEAoHNQYPUFH2gG9BiO6rNE0Zoi1U/NPdjDb6jXihqpiYnUK7uS7
+         SaEgVVAc1rCLsO+PywRf34jY4cKkxjJ5rpb0iLv7Lx6icnPxIKkBSReqSNOAi5AyQqJr
+         wfParI72b+nyrA1C6NNwYpO2mYi/F3sK4RXxqU2kGu5IcDipfl9TyQkhA6GnH0/P0zga
+         4Pzu7HawlgloyguZmgsGbfP6pqVHW5N9NgfDTgsFvjn4zWaBEAPihtz4CQ3ui15zn27r
+         jJSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D8HH1xBFiha6+sm/Y4eoKI3Sva17f983aTsKIsT9yJg=;
-        b=QPpHJJgsWvECxKKkWub1rdb5HD6nDmvS2n2Kk0c4yMN9qZk+hZ9ezzbjF6AIstBcUy
-         XFe1kEmlv0sT5THVLifUY4Mp7FmgEOghj7UJip5lVFxsK6FpnMarTAh1vUv96BO7Te0n
-         Jmavacs6B1NACcsMyo2DGUv+9TNdfCz5ppIjrsL25U7MB8VaQKfqBrAqdljajEgCa9Ew
-         csmyzEVgZHVwrLJDBTvTOnapez7dNGDdnsR+xhXI7+1FmnCvtBy0oK5SaSxansdn+6WS
-         lIa3DCFkXF205hxQBhRut3IiuPYuixcb4anH+Ma3kKvuPQLr3JMoJhQ608fzil+UYZJe
-         ri1g==
-X-Gm-Message-State: ANoB5pm4IWS+CdcuO3x+0w/SQnoQ4fVUmwrmrfnUMhhqS2kUNdd3Tf4i
-        vF/UaojlPmBW9BPa32gb2qXvP9vRPJcyWl3U33QgbUPpcdhEbA==
-X-Google-Smtp-Source: AA0mqf7LtyWb4mv/BiYN+GCemkrpM0E23HkAcxyLA53+ZairQeI1XE3OCKbdza4ZBfABDJlMa+kqN31acJjCn/ox24c=
-X-Received: by 2002:a63:a47:0:b0:46f:b3e:4d46 with SMTP id z7-20020a630a47000000b0046f0b3e4d46mr309632pgk.265.1668145236629;
- Thu, 10 Nov 2022 21:40:36 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KQqlnqh61yDEivsgLuzXFgBFvWeIkle9538NvChEgG4=;
+        b=xBlPvLtlWILWF8LE8cQ0YVhY2V5pX8qtYiW8+dcEcdkkfw0vdIpxdedV5Dwickr5SO
+         2zDPPnQauZoaV3jbSSrkVpQ33+rilCifB7vHP2MT6AieB+O8b6LCpgHk7H2/9SjXdaGi
+         kRk7I0TzsG4o6uObCFkzpXDTPXy0bjwOykw+iKSjrhAt3vjiuwgTJbBRf7K3Sx3kWzbK
+         5kKFhUIAFeG1bIx72J2uzVcxNqzq849Cxmqz1p0hzrj3ffDSTvOqKB49FVRwngl9OLgf
+         /CSIKHRUvMwYNB3cSmq3c6WqB33n2qEJJsPMm4LmCyTmHRXga6CPSQlfeGdccwA8aJ88
+         fduw==
+X-Gm-Message-State: ANoB5pnQkku167/OLhhP41U1YerqsQEDbvRxpuBltc99eGqPHneX/Xbe
+        E0cPfwxTs4yU2itqm0hVw0QFQ2eBrqA2/4LSmKw1pA==
+X-Google-Smtp-Source: AA0mqf53QBR47pUgYWT2xVhbs/Lj4/kZl7NAGXQCY837HnfVAtbLsG6fA3g+X2q4OOQ/b93b11NyQoioTLD4pHwNxXU=
+X-Received: by 2002:a50:ee13:0:b0:463:a83c:e0af with SMTP id
+ g19-20020a50ee13000000b00463a83ce0afmr679526eds.158.1668158446767; Fri, 11
+ Nov 2022 01:20:46 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1668128257.git.nabijaczleweli@nabijaczleweli.xyz> <60f6526fffa99416d2429dfb0b454148170cce8a.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
-In-Reply-To: <60f6526fffa99416d2429dfb0b454148170cce8a.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
-From:   Cye Borg <cyborgyn@gmail.com>
-Date:   Fri, 11 Nov 2022 06:40:24 +0100
-Message-ID: <CAD4NMubS_DV0+1hgz3MEwNd4m9MUpUHXQ_EPJdd2MsgvMBSqpw@mail.gmail.com>
-Subject: Re: [PATCH v3 08/15] MIPS: IP27: remove KV_MAGIC
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-mips@vger.kernel.org
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
+ <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
+ <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com> <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
+In-Reply-To: <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Nov 2022 10:20:34 +0100
+Message-ID: <CACRpkdb8uYfs6w99FVjD_t6nZgDhPUx=yB1j=CmpHTHAM2QGQw@mail.gmail.com>
+Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Lee Jones <lee@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Just asking:
-This code in SGI seems to help bring online other CPUs.
-- Does it use the firmware to do it?
-- Is there a possibility that the magic number in this case is used by
-the firmware?
-- If yes: do we break multiprocessing on SGI if we delete this
-"useless relic", which is not referenced in the linux code elsewhere?
+On Thu, Nov 10, 2022 at 2:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> On Thu, 10 Nov 2022 at 12:39, Linus Walleij <linus.walleij@linaro.org> wrote:
+> >
+> > On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
+> > > >
+> > > > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
+> > > > hook, but doesn't provide a determine_rate implementation.
+> > > >
+> > > > This is a bit odd, since set_parent() is there to, as its name implies,
+> > > > change the parent of a clock. However, the most likely candidate to
+> > > > trigger that parent change is a call to clk_set_rate(), with
+> > > > determine_rate() figuring out which parent is the best suited for a
+> > > > given rate.
+> > > >
+> > > > The other trigger would be a call to clk_set_parent(), but it's far less
+> > > > used, and it doesn't look like there's any obvious user for that clock.
+> > >
+> > > If I recall correctly, that is the use case we did target for these
+> > > types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
+> >
+> > Hm I am trying to get that driver to work ... from time to time.
+> > It's just that ALSA SoC DT has changed to much that it turns out
+> > into a complete rewrite :/
+> >
+> > So in sound/soc/ux500/mop500_ab8500.c
+> > I see this:
+> >
+> >         status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
+> >         if (status)
+> > (...)
+> >
+> > and there is elaborate code to switch between "SYSCLK" and
+> > "ULPCLK" (ulta-low power clock). Just like you say... however
+> > a clock named SYSCLK or ULPCLK does not appear in the
+> > code in drivers/clk/ux500 or any DT bindings so... it seems to
+> > be non-working for the time being.
+>
+> It's definitely not working, but the corresponding clocks ("ulpclk",
+> "intclk", "audioclk", etc) are being registered in ab8500_reg_clks().
+>
+> What seems to be missing is a DT conversion for these clocks, so they
+> can be consumed properly. Right?
 
-Best regards:
-Barnab=C3=A1s Vir=C3=A1gh
+Yeps that and a few more things, I have a scratch rewrite here:
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-stericsson.git/log/?h=ux500-audio-rewrite
 
+I remember Lee said he had audio working with the mainline kernel
+on Snowball at one point, unfortunately I think that was before we
+started with the DT conversions and then we probably broke it.
 
-On Fri, Nov 11, 2022 at 2:15 AM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> It appeared in the original import of SGI code in 2.4.0-test3pre8 and
-> has never been used anywhere.
->
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xy=
-z>
-> ---
->  Documentation/process/magic-number.rst                    | 1 -
->  Documentation/translations/it_IT/process/magic-number.rst | 1 -
->  Documentation/translations/zh_CN/process/magic-number.rst | 1 -
->  Documentation/translations/zh_TW/process/magic-number.rst | 1 -
->  arch/mips/include/asm/sn/klkernvars.h                     | 8 ++------
->  arch/mips/sgi-ip27/ip27-klnuma.c                          | 1 -
->  6 files changed, 2 insertions(+), 11 deletions(-)
->
-> diff --git a/Documentation/process/magic-number.rst b/Documentation/proce=
-ss/magic-number.rst
-> index 7dada7abc733..d8ffbc21872e 100644
-> --- a/Documentation/process/magic-number.rst
-> +++ b/Documentation/process/magic-number.rst
-> @@ -72,7 +72,6 @@ APM_BIOS_MAGIC        0x4101           apm_user        =
-         ``arch/x86/kerne
->  FASYNC_MAGIC          0x4601           fasync_struct            ``includ=
-e/linux/fs.h``
->  SLIP_MAGIC            0x5302           slip                     ``driver=
-s/net/slip.h``
->  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``includ=
-e/linux/hdlcdrv.h``
-> -KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/m=
-ips/include/asm/sn/klkernvars.h``
->  CCB_MAGIC             0xf2691ad2       ccb                      ``driver=
-s/scsi/ncr53c8xx.c``
->  QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``driver=
-s/scsi/arm/queue.c``
->  QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``driver=
-s/scsi/arm/queue.c``
-> diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/=
-Documentation/translations/it_IT/process/magic-number.rst
-> index f9634a04d349..0e59704aa617 100644
-> --- a/Documentation/translations/it_IT/process/magic-number.rst
-> +++ b/Documentation/translations/it_IT/process/magic-number.rst
-> @@ -78,7 +78,6 @@ APM_BIOS_MAGIC        0x4101           apm_user        =
-         ``arch/x86/kerne
->  FASYNC_MAGIC          0x4601           fasync_struct            ``includ=
-e/linux/fs.h``
->  SLIP_MAGIC            0x5302           slip                     ``driver=
-s/net/slip.h``
->  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``includ=
-e/linux/hdlcdrv.h``
-> -KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/m=
-ips/include/asm/sn/klkernvars.h``
->  CCB_MAGIC             0xf2691ad2       ccb                      ``driver=
-s/scsi/ncr53c8xx.c``
->  QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``driver=
-s/scsi/arm/queue.c``
->  QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``driver=
-s/scsi/arm/queue.c``
-> diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/=
-Documentation/translations/zh_CN/process/magic-number.rst
-> index 966b9e6b1a46..17a73661ef17 100644
-> --- a/Documentation/translations/zh_CN/process/magic-number.rst
-> +++ b/Documentation/translations/zh_CN/process/magic-number.rst
-> @@ -61,7 +61,6 @@ APM_BIOS_MAGIC        0x4101           apm_user        =
-         ``arch/x86/kerne
->  FASYNC_MAGIC          0x4601           fasync_struct            ``includ=
-e/linux/fs.h``
->  SLIP_MAGIC            0x5302           slip                     ``driver=
-s/net/slip.h``
->  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``includ=
-e/linux/hdlcdrv.h``
-> -KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/m=
-ips/include/asm/sn/klkernvars.h``
->  CCB_MAGIC             0xf2691ad2       ccb                      ``driver=
-s/scsi/ncr53c8xx.c``
->  QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``driver=
-s/scsi/arm/queue.c``
->  QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``driver=
-s/scsi/arm/queue.c``
-> diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/=
-Documentation/translations/zh_TW/process/magic-number.rst
-> index f3e87a6b3a01..9d44d49b93bf 100644
-> --- a/Documentation/translations/zh_TW/process/magic-number.rst
-> +++ b/Documentation/translations/zh_TW/process/magic-number.rst
-> @@ -64,7 +64,6 @@ APM_BIOS_MAGIC        0x4101           apm_user        =
-         ``arch/x86/kerne
->  FASYNC_MAGIC          0x4601           fasync_struct            ``includ=
-e/linux/fs.h``
->  SLIP_MAGIC            0x5302           slip                     ``driver=
-s/net/slip.h``
->  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``includ=
-e/linux/hdlcdrv.h``
-> -KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/m=
-ips/include/asm/sn/klkernvars.h``
->  CCB_MAGIC             0xf2691ad2       ccb                      ``driver=
-s/scsi/ncr53c8xx.c``
->  QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``driver=
-s/scsi/arm/queue.c``
->  QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``driver=
-s/scsi/arm/queue.c``
-> diff --git a/arch/mips/include/asm/sn/klkernvars.h b/arch/mips/include/as=
-m/sn/klkernvars.h
-> index ea6b21795163..93d5eb873255 100644
-> --- a/arch/mips/include/asm/sn/klkernvars.h
-> +++ b/arch/mips/include/asm/sn/klkernvars.h
-> @@ -6,18 +6,14 @@
->  #ifndef __ASM_SN_KLKERNVARS_H
->  #define __ASM_SN_KLKERNVARS_H
->
-> -#define KV_MAGIC_OFFSET                0x0
-> -#define KV_RO_NASID_OFFSET     0x4
-> -#define KV_RW_NASID_OFFSET     0x6
-> -
-> -#define KV_MAGIC               0x5f4b565f
-> +#define KV_RO_NASID_OFFSET     0x0
-> +#define KV_RW_NASID_OFFSET     0x2
->
->  #ifndef __ASSEMBLY__
->
->  #include <asm/sn/types.h>
->
->  typedef struct kern_vars_s {
-> -       int             kv_magic;
->         nasid_t         kv_ro_nasid;
->         nasid_t         kv_rw_nasid;
->         unsigned long   kv_ro_baseaddr;
-> diff --git a/arch/mips/sgi-ip27/ip27-klnuma.c b/arch/mips/sgi-ip27/ip27-k=
-lnuma.c
-> index abd7a84df7dd..82bb7ac20ef8 100644
-> --- a/arch/mips/sgi-ip27/ip27-klnuma.c
-> +++ b/arch/mips/sgi-ip27/ip27-klnuma.c
-> @@ -61,7 +61,6 @@ static __init void set_ktext_source(nasid_t client_nasi=
-d, nasid_t server_nasid)
->
->         KERN_VARS_ADDR(client_nasid) =3D (unsigned long)kvp;
->
-> -       kvp->kv_magic =3D KV_MAGIC;
->         kvp->kv_ro_nasid =3D server_nasid;
->         kvp->kv_rw_nasid =3D master_nasid;
->         kvp->kv_ro_baseaddr =3D NODE_CAC_BASE(server_nasid);
-> --
-> 2.30.2
+Yours,
+Linus Walleij
