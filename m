@@ -2,37 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B628625DE7
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 16:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6DD625DE4
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 16:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234997AbiKKPJB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Nov 2022 10:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        id S234987AbiKKPI5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Nov 2022 10:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234902AbiKKPID (ORCPT
+        with ESMTP id S234903AbiKKPID (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Nov 2022 10:08:03 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A906663CF;
-        Fri, 11 Nov 2022 07:06:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC83A6A771;
+        Fri, 11 Nov 2022 07:06:46 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1otVcD-00037d-03; Fri, 11 Nov 2022 16:06:45 +0100
+        id 1otVcD-00037d-04; Fri, 11 Nov 2022 16:06:45 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id F242CC11F2; Fri, 11 Nov 2022 16:04:24 +0100 (CET)
-Date:   Fri, 11 Nov 2022 16:04:24 +0100
+        id 86DD8C11F2; Fri, 11 Nov 2022 16:05:19 +0100 (CET)
+Date:   Fri, 11 Nov 2022 16:05:19 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ardb@kernel.org, rostedt@goodmis.org, stable@vger.kernel.org,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Subject: Re: [PATCH v2] MIPS: jump_label: Fix compat branch range check
-Message-ID: <20221111150424.GD13465@alpha.franken.de>
-References: <20221103151053.213583-1-jiaxun.yang@flygoat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: pic32: treat port as signed integer
+Message-ID: <20221111150519.GE13465@alpha.franken.de>
+References: <20221028132344.1993934-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221103151053.213583-1-jiaxun.yang@flygoat.com>
+In-Reply-To: <20221028132344.1993934-1-Jason@zx2c4.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -42,35 +39,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:10:53PM +0000, Jiaxun Yang wrote:
-> Cast upper bound of branch range to long to do signed compare,
-> avoid negative offset trigger this warning.
+On Fri, Oct 28, 2022 at 03:23:44PM +0200, Jason A. Donenfeld wrote:
+> get_port_from_cmdline() returns an int, yet is assigned to a char, which
+> is wrong in its own right, but also, with char becoming unsigned, this
+> poses problems, because -1 is used as an error value. Further
+> complicating things, fw_init_early_console() is only ever called with a
+> -1 argument. Fix this up by removing the unused argument from
+> fw_init_early_console() and treating port as a proper signed integer.
 > 
-> Fixes: 9b6584e35f40 ("MIPS: jump_label: Use compact branches for >= r6")
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
-> v2: Fix typo, collect review tags.
-> ---
->  arch/mips/kernel/jump_label.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Thomas - this is part of the -funsigned-char work I've been accumulating
+> in my unsigned-char branch. If you want to take this as a fix for 6.1,
+> go ahead. Otherwise, Linus asked me to keep the 6.2 unsigned-char
+> patches together in my branch, so I'll take this, pending your Ack.
+> -Jason
 > 
-> diff --git a/arch/mips/kernel/jump_label.c b/arch/mips/kernel/jump_label.c
-> index 71a882c8c6eb..f7978d50a2ba 100644
-> --- a/arch/mips/kernel/jump_label.c
-> +++ b/arch/mips/kernel/jump_label.c
-> @@ -56,7 +56,7 @@ void arch_jump_label_transform(struct jump_entry *e,
->  			 * The branch offset must fit in the instruction's 26
->  			 * bit field.
->  			 */
-> -			WARN_ON((offset >= BIT(25)) ||
-> +			WARN_ON((offset >= (long)BIT(25)) ||
->  				(offset < -(long)BIT(25)));
->  
->  			insn.j_format.opcode = bc6_op;
-> -- 
-> 2.34.1
+>  arch/mips/include/asm/fw/fw.h             |  2 +-
+>  arch/mips/pic32/pic32mzda/early_console.c | 13 ++++++-------
+>  arch/mips/pic32/pic32mzda/init.c          |  2 +-
+>  3 files changed, 8 insertions(+), 9 deletions(-)
 
 applied to mips-fixes.
 
