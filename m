@@ -2,99 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045E9624FB1
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 02:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F2B62511F
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 03:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiKKBjC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Nov 2022 20:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S233169AbiKKCvV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Nov 2022 21:51:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKKBjC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 20:39:02 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB32F6175A
-        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 17:38:59 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id v3so3232206pgh.4
-        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 17:38:59 -0800 (PST)
+        with ESMTP id S232771AbiKKCu5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 21:50:57 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD87532C5
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 18:50:17 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id i3so3735650pfc.11
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 18:50:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RS3a6hLMxUUoEPjaozjVNm3jkJhC+H0XClz14w/jfaA=;
-        b=SoG++eGsogNhOXHNYNGSQwqVVuREga4mMXnUJPEp2Aaf3wDTjmN4pUpcDu6NyDyk/7
-         ZCrJ5tCMaVWUaaxyvaQrhL0T5FiyghxHxIWcZucG8+WiPsxAaytMKmY0pIZmkCvM/P3A
-         FzRDVfuDDdZ0ZvXjDTxrK9PvmsGmkf3tvXZwJCbLUSF0TG776tNA1944kmAMkLT9zZec
-         fBYk+3bEeWzmhZC19FCrSr44X5QV+XC8WpwQgvzfkBuRNUn1T3FMjmURa/IIpEBzEphS
-         S5BEZ0ZwTijqaaaZMQZlcNfQrroFpxn8GJ4NeHygg9gK3xqWbjbKbAj8qSY8fGLozXvu
-         Gsig==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DlM9jt3oq9rUO54MRZZJtyFo9f4eKY5Dlupb73aeGvs=;
+        b=Jdd14s24R2RXDKxZRxUneSZI6Oig+Wlkatf40pmja95zzOXlbqrNb9BRPxLcxMHJzU
+         O1LYHh5c1Pdbl7TEdqY+/z4WKvlviF/Ar67CyCw5ckNh6/L0J1MisNiDm3ji1ETNxLBt
+         dCBqls08UQrtRgAo4M7k4/koC0FWazYWD7Qcgy56fdSHmxd/UU3/eCbwlggzGuyeR6cS
+         iPVNqkYHPZQNU0/IicN0qQnbzRK/iAMDMkgQsk9oI0vtVDwuNU54W+D54LTb24j1H3QJ
+         Dtxup5tiWQCO5LdsrDjpCz1MxWPEcH9tCCfCZx9R3W4fLRVWitEJuCIio8alk01kJQBq
+         zSKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RS3a6hLMxUUoEPjaozjVNm3jkJhC+H0XClz14w/jfaA=;
-        b=4HdMwIfAnGro1ihSvEZQQH9UDn7ivVpkSx8MsNkjKPDSba7F9ZzBlnphdm4AxyE47n
-         uyLexyg3ogx9PlJ4MLdsIUQUB1enzte6I8LiRc5jkNBEC4eY8kdv63nw7qEAXh89DX5h
-         1HTHQTtPUs6xS5+R1t8w11+vyPHBy+bE1dNZQrvII/dS2PnLTK3C01UT602VEKYCJm0h
-         kkclVP0U04Chc/Tx0nmjnfNx4YUsz9EQaZoCX24slsx2M93mvXv+jyi6REFdDQep51eE
-         LuVCNHIRF6MTDnxMRJc/dciYfOndFqXADBvvfrsZbUhkg1vd+jNkDfMiUqIL+Okp+WSz
-         TXVA==
-X-Gm-Message-State: ACrzQf2ZrAG/xIy9RGX+MdlCTS1cYcACvHkc/wLOB2jNVHsJ0dLdzbjJ
-        PYf5I54KyrHmh15xdEPGKMgAIg==
-X-Google-Smtp-Source: AMsMyM5NZekdvfkLtC3kWWLVHXrB1AuT7u9X73tzeCo4RhIdse0v2yQHD++RSAOfBDE10qOQXDbeUA==
-X-Received: by 2002:a63:e62:0:b0:46f:e658:a8ff with SMTP id 34-20020a630e62000000b0046fe658a8ffmr4116215pgo.493.1668130739232;
-        Thu, 10 Nov 2022 17:38:59 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z6-20020aa79486000000b005636326fdbfsm310014pfk.78.2022.11.10.17.38.58
+        bh=DlM9jt3oq9rUO54MRZZJtyFo9f4eKY5Dlupb73aeGvs=;
+        b=VFehsIMWn4W3zJ5513j7X0GEUSZzkJ09b1tMyhHqKg0UazJEvY6I3bCx7fbkHxj7hB
+         LMkwchB8/EFeVfi4cbjRRHNBIIbZ7DbMWZrV41ZB/qPpFjWjBjeWdlRlKOzLuJu+EasP
+         kj8Isiz/V1EvFxuICe0CyR+ne3qfUf91/j0k1ukq474wMPtfkFxWjKV1tbr4vorSXwuZ
+         RkZrXlVJPu1NjIP2dLMdTbNa/A+TvlH89LaGlWEyAWBwWfSchpBrGpct8is2ETHjyVzx
+         oflK8vV8Sy2eM4iyt1Bo31X1dXnJNiJBDX40swEqBEcw4aH+JwTHa59f2+3tQGmQQO2/
+         i2Wg==
+X-Gm-Message-State: ANoB5pmKniTA9GUFWbDei/QeBTEswmBmz+J7kawXZLiif4R6w7P8qZVO
+        wkDQPlkmqBV6pWNcqPnU8I8nig==
+X-Google-Smtp-Source: AA0mqf646foeZYLjRBETnW3xknDdl0IpdbTH31c6T87NIpbXQ8RRqKx1FDvg2rvCz465iAesmvZfDg==
+X-Received: by 2002:a05:6a00:4199:b0:56b:bb06:7dd5 with SMTP id ca25-20020a056a00419900b0056bbb067dd5mr656354pfb.3.1668135016385;
+        Thu, 10 Nov 2022 18:50:16 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id k25-20020a634b59000000b0046f7b0f504esm324268pgl.58.2022.11.10.18.50.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 17:38:58 -0800 (PST)
-Date:   Fri, 11 Nov 2022 01:38:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        Thu, 10 Nov 2022 18:50:15 -0800 (PST)
+Date:   Thu, 10 Nov 2022 18:50:15 -0800 (PST)
+X-Google-Original-Date: Thu, 10 Nov 2022 18:50:12 PST (-0800)
+Subject:     Re: [PATCH] mm: remove kern_addr_valid() completely
+In-Reply-To: <20221018074014.185687-1-wangkefeng.wang@huawei.com>
+CC:     akpm@linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-fsdevel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, catalin.marinas@arm.com,
+        Will Deacon <will@kernel.org>, guoren@kernel.org,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        gerg@linux-m68k.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>
-Subject: Re: [PATCH 10/44] KVM: VMX: Clean up eVMCS enabling if KVM
- initialization fails
-Message-ID: <Y22nrQ7aziK0NMOE@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-11-seanjc@google.com>
- <87mt98qfi2.fsf@ovpn-194-252.brq.redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mt98qfi2.fsf@ovpn-194-252.brq.redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        luto@kernel.org, peterz@infradead.org, chris@zankel.net,
+        jcmvbkbc@gmail.com, wangkefeng.wang@huawei.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     wangkefeng.wang@huawei.com
+Message-ID: <mhng-d9c721d8-f193-4bfa-a1ec-1fa616bf9375@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,193 +99,613 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 03, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > +	/*
-> > +	 * Reset everything to support using non-enlightened VMCS access later
-> > +	 * (e.g. when we reload the module with enlightened_vmcs=0)
-> > +	 */
-> > +	for_each_online_cpu(cpu) {
-> > +		vp_ap =	hv_get_vp_assist_page(cpu);
-> > +
-> > +		if (!vp_ap)
-> > +			continue;
-> > +
-> > +		vp_ap->nested_control.features.directhypercall = 0;
-> > +		vp_ap->current_nested_vmcs = 0;
-> > +		vp_ap->enlighten_vmentry = 0;
-> > +	}
-> 
-> Unrelated to your patch but while looking at this code I got curious
-> about why don't we need a protection against CPU offlining here. Turns
-> out that even when we offline a CPU, its VP assist page remains
-> allocated (see hv_cpu_die()), we just write '0' to the MSR and thus
+On Tue, 18 Oct 2022 00:40:14 PDT (-0700), wangkefeng.wang@huawei.com wrote:
+> Most architectures(except arm64/x86/sparc) simply return 1 for
+> kern_addr_valid(), which is only used in read_kcore(), and it
+> calls copy_from_kernel_nofault() which could check whether the
+> address is a valid kernel address, so no need kern_addr_valid(),
+> let's remove unneeded kern_addr_valid() completely.
+>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  arch/alpha/include/asm/pgtable.h          |  2 -
+>  arch/arc/include/asm/pgtable-bits-arcv2.h |  2 -
+>  arch/arm/include/asm/pgtable-nommu.h      |  2 -
+>  arch/arm/include/asm/pgtable.h            |  4 --
+>  arch/arm64/include/asm/pgtable.h          |  2 -
+>  arch/arm64/mm/mmu.c                       | 47 -----------------------
+>  arch/arm64/mm/pageattr.c                  |  3 +-
+>  arch/csky/include/asm/pgtable.h           |  3 --
+>  arch/hexagon/include/asm/page.h           |  7 ----
+>  arch/ia64/include/asm/pgtable.h           | 16 --------
+>  arch/loongarch/include/asm/pgtable.h      |  2 -
+>  arch/m68k/include/asm/pgtable_mm.h        |  2 -
+>  arch/m68k/include/asm/pgtable_no.h        |  1 -
+>  arch/microblaze/include/asm/pgtable.h     |  3 --
+>  arch/mips/include/asm/pgtable.h           |  2 -
+>  arch/nios2/include/asm/pgtable.h          |  2 -
+>  arch/openrisc/include/asm/pgtable.h       |  2 -
+>  arch/parisc/include/asm/pgtable.h         | 15 --------
+>  arch/powerpc/include/asm/pgtable.h        |  7 ----
+>  arch/riscv/include/asm/pgtable.h          |  2 -
+>  arch/s390/include/asm/pgtable.h           |  2 -
+>  arch/sh/include/asm/pgtable.h             |  2 -
+>  arch/sparc/include/asm/pgtable_32.h       |  6 ---
+>  arch/sparc/mm/init_32.c                   |  3 +-
+>  arch/sparc/mm/init_64.c                   |  1 -
+>  arch/um/include/asm/pgtable.h             |  2 -
+>  arch/x86/include/asm/pgtable_32.h         |  9 -----
+>  arch/x86/include/asm/pgtable_64.h         |  1 -
+>  arch/x86/mm/init_64.c                     | 41 --------------------
+>  arch/xtensa/include/asm/pgtable.h         |  2 -
+>  fs/proc/kcore.c                           | 26 +++++--------
+>  31 files changed, 11 insertions(+), 210 deletions(-)
+>
+> diff --git a/arch/alpha/include/asm/pgtable.h b/arch/alpha/include/asm/pgtable.h
+> index 3ea9661c09ff..9e45f6735d5d 100644
+> --- a/arch/alpha/include/asm/pgtable.h
+> +++ b/arch/alpha/include/asm/pgtable.h
+> @@ -313,8 +313,6 @@ extern inline pte_t mk_swap_pte(unsigned long type, unsigned long offset)
+>  #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
+>  #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
+>
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  #define pte_ERROR(e) \
+>  	printk("%s:%d: bad pte %016lx.\n", __FILE__, __LINE__, pte_val(e))
+>  #define pmd_ERROR(e) \
+> diff --git a/arch/arc/include/asm/pgtable-bits-arcv2.h b/arch/arc/include/asm/pgtable-bits-arcv2.h
+> index b23be557403e..515e82db519f 100644
+> --- a/arch/arc/include/asm/pgtable-bits-arcv2.h
+> +++ b/arch/arc/include/asm/pgtable-bits-arcv2.h
+> @@ -120,8 +120,6 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+>  #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
+>  #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
+>
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  #include <asm/hugepage.h>
+>  #endif
+> diff --git a/arch/arm/include/asm/pgtable-nommu.h b/arch/arm/include/asm/pgtable-nommu.h
+> index d16aba48fa0a..25d8c7bb07e0 100644
+> --- a/arch/arm/include/asm/pgtable-nommu.h
+> +++ b/arch/arm/include/asm/pgtable-nommu.h
+> @@ -21,8 +21,6 @@
+>  #define pgd_none(pgd)		(0)
+>  #define pgd_bad(pgd)		(0)
+>  #define pgd_clear(pgdp)
+> -#define kern_addr_valid(addr)	(1)
+> -/* FIXME */
+>  /*
+>   * PMD_SHIFT determines the size of the area a second-level page table can map
+>   * PGDIR_SHIFT determines what a third-level page table entry can map
+> diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
+> index 78a532068fec..00954ab1a039 100644
+> --- a/arch/arm/include/asm/pgtable.h
+> +++ b/arch/arm/include/asm/pgtable.h
+> @@ -298,10 +298,6 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+>   */
+>  #define MAX_SWAPFILES_CHECK() BUILD_BUG_ON(MAX_SWAPFILES_SHIFT > __SWP_TYPE_BITS)
+>
+> -/* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
+> -/* FIXME: this is not correct */
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  /*
+>   * We provide our own arch_get_unmapped_area to cope with VIPT caches.
+>   */
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 71a1af42f0e8..4873c1d6e7d0 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -1021,8 +1021,6 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>   */
+>  #define MAX_SWAPFILES_CHECK() BUILD_BUG_ON(MAX_SWAPFILES_SHIFT > __SWP_TYPE_BITS)
+>
+> -extern int kern_addr_valid(unsigned long addr);
+> -
+>  #ifdef CONFIG_ARM64_MTE
+>
+>  #define __HAVE_ARCH_PREPARE_TO_SWAP
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 9a7c38965154..556154d821bf 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -814,53 +814,6 @@ void __init paging_init(void)
+>  	create_idmap();
+>  }
+>
+> -/*
+> - * Check whether a kernel address is valid (derived from arch/x86/).
+> - */
+> -int kern_addr_valid(unsigned long addr)
+> -{
+> -	pgd_t *pgdp;
+> -	p4d_t *p4dp;
+> -	pud_t *pudp, pud;
+> -	pmd_t *pmdp, pmd;
+> -	pte_t *ptep, pte;
+> -
+> -	addr = arch_kasan_reset_tag(addr);
+> -	if ((((long)addr) >> VA_BITS) != -1UL)
+> -		return 0;
+> -
+> -	pgdp = pgd_offset_k(addr);
+> -	if (pgd_none(READ_ONCE(*pgdp)))
+> -		return 0;
+> -
+> -	p4dp = p4d_offset(pgdp, addr);
+> -	if (p4d_none(READ_ONCE(*p4dp)))
+> -		return 0;
+> -
+> -	pudp = pud_offset(p4dp, addr);
+> -	pud = READ_ONCE(*pudp);
+> -	if (pud_none(pud))
+> -		return 0;
+> -
+> -	if (pud_sect(pud))
+> -		return pfn_valid(pud_pfn(pud));
+> -
+> -	pmdp = pmd_offset(pudp, addr);
+> -	pmd = READ_ONCE(*pmdp);
+> -	if (pmd_none(pmd))
+> -		return 0;
+> -
+> -	if (pmd_sect(pmd))
+> -		return pfn_valid(pmd_pfn(pmd));
+> -
+> -	ptep = pte_offset_kernel(pmdp, addr);
+> -	pte = READ_ONCE(*ptep);
+> -	if (pte_none(pte))
+> -		return 0;
+> -
+> -	return pfn_valid(pte_pfn(pte));
+> -}
+> -
+>  #ifdef CONFIG_MEMORY_HOTPLUG
+>  static void free_hotplug_page_range(struct page *page, size_t size,
+>  				    struct vmem_altmap *altmap)
+> diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+> index d107c3d434e2..0a741a910a6a 100644
+> --- a/arch/arm64/mm/pageattr.c
+> +++ b/arch/arm64/mm/pageattr.c
+> @@ -201,8 +201,7 @@ void __kernel_map_pages(struct page *page, int numpages, int enable)
+>
+>  /*
+>   * This function is used to determine if a linear map page has been marked as
+> - * not-valid. Walk the page table and check the PTE_VALID bit. This is based
+> - * on kern_addr_valid(), which almost does what we need.
+> + * not-valid. Walk the page table and check the PTE_VALID bit.
+>   *
+>   * Because this is only called on the kernel linear map,  p?d_sect() implies
+>   * p?d_present(). When debug_pagealloc is enabled, sections mappings are
+> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+> index c3d9b92cbe61..77bc6caff2d2 100644
+> --- a/arch/csky/include/asm/pgtable.h
+> +++ b/arch/csky/include/asm/pgtable.h
+> @@ -249,9 +249,6 @@ extern void paging_init(void);
+>  void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+>  		      pte_t *pte);
+>
+> -/* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  #define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
+>  	remap_pfn_range(vma, vaddr, pfn, size, prot)
+>
+> diff --git a/arch/hexagon/include/asm/page.h b/arch/hexagon/include/asm/page.h
+> index 7cbf719c578e..d7d4f9fca327 100644
+> --- a/arch/hexagon/include/asm/page.h
+> +++ b/arch/hexagon/include/asm/page.h
+> @@ -131,13 +131,6 @@ static inline void clear_page(void *page)
+>
+>  #define page_to_virt(page)	__va(page_to_phys(page))
+>
+> -/*
+> - * For port to Hexagon Virtual Machine, MAYBE we check for attempts
+> - * to reference reserved HVM space, but in any case, the VM will be
+> - * protected.
+> - */
+> -#define kern_addr_valid(addr)   (1)
+> -
+>  #include <asm/mem-layout.h>
+>  #include <asm-generic/memory_model.h>
+>  /* XXX Todo: implement assembly-optimized version of getorder. */
+> diff --git a/arch/ia64/include/asm/pgtable.h b/arch/ia64/include/asm/pgtable.h
+> index 6925e28ae61d..01517a5e6778 100644
+> --- a/arch/ia64/include/asm/pgtable.h
+> +++ b/arch/ia64/include/asm/pgtable.h
+> @@ -181,22 +181,6 @@ ia64_phys_addr_valid (unsigned long addr)
+>  	return (addr & (local_cpu_data->unimpl_pa_mask)) == 0;
+>  }
+>
+> -/*
+> - * kern_addr_valid(ADDR) tests if ADDR is pointing to valid kernel
+> - * memory.  For the return value to be meaningful, ADDR must be >=
+> - * PAGE_OFFSET.  This operation can be relatively expensive (e.g.,
+> - * require a hash-, or multi-level tree-lookup or something of that
+> - * sort) but it guarantees to return TRUE only if accessing the page
+> - * at that address does not cause an error.  Note that there may be
+> - * addresses for which kern_addr_valid() returns FALSE even though an
+> - * access would not cause an error (e.g., this is typically true for
+> - * memory mapped I/O regions.
+> - *
+> - * XXX Need to implement this for IA-64.
+> - */
+> -#define kern_addr_valid(addr)	(1)
+> -
+> -
+>  /*
+>   * Now come the defines and routines to manage and access the three-level
+>   * page table.
+> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+> index 946704bee599..fc70b7041b76 100644
+> --- a/arch/loongarch/include/asm/pgtable.h
+> +++ b/arch/loongarch/include/asm/pgtable.h
+> @@ -421,8 +421,6 @@ static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+>  	__update_tlb(vma, address, (pte_t *)pmdp);
+>  }
+>
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  static inline unsigned long pmd_pfn(pmd_t pmd)
+>  {
+>  	return (pmd_val(pmd) & _PFN_MASK) >> _PFN_SHIFT;
+> diff --git a/arch/m68k/include/asm/pgtable_mm.h b/arch/m68k/include/asm/pgtable_mm.h
+> index 9b4e2fe2ac82..b93c41fe2067 100644
+> --- a/arch/m68k/include/asm/pgtable_mm.h
+> +++ b/arch/m68k/include/asm/pgtable_mm.h
+> @@ -145,8 +145,6 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+>
+>  #endif /* !__ASSEMBLY__ */
+>
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  /* MMU-specific headers */
+>
+>  #ifdef CONFIG_SUN3
+> diff --git a/arch/m68k/include/asm/pgtable_no.h b/arch/m68k/include/asm/pgtable_no.h
+> index bce5ca56c388..fed58da3a6b6 100644
+> --- a/arch/m68k/include/asm/pgtable_no.h
+> +++ b/arch/m68k/include/asm/pgtable_no.h
+> @@ -20,7 +20,6 @@
+>  #define pgd_none(pgd)		(0)
+>  #define pgd_bad(pgd)		(0)
+>  #define pgd_clear(pgdp)
+> -#define kern_addr_valid(addr)	(1)
+>  #define	pmd_offset(a, b)	((void *)0)
+>
+>  #define PAGE_NONE	__pgprot(0)
+> diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
+> index ba348e997dbb..42f5988e998b 100644
+> --- a/arch/microblaze/include/asm/pgtable.h
+> +++ b/arch/microblaze/include/asm/pgtable.h
+> @@ -416,9 +416,6 @@ extern unsigned long iopa(unsigned long addr);
+>  #define	IOMAP_NOCACHE_NONSER	2
+>  #define	IOMAP_NO_COPYBACK	3
+>
+> -/* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  void do_page_fault(struct pt_regs *regs, unsigned long address,
+>  		   unsigned long error_code);
+>
+> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> index 6caec386ad2f..364a06033105 100644
+> --- a/arch/mips/include/asm/pgtable.h
+> +++ b/arch/mips/include/asm/pgtable.h
+> @@ -550,8 +550,6 @@ static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+>  	__update_tlb(vma, address, pte);
+>  }
+>
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  /*
+>   * Allow physical addresses to be fixed up to help 36-bit peripherals.
+>   */
+> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
+> index b3d45e815295..ab793bc517f5 100644
+> --- a/arch/nios2/include/asm/pgtable.h
+> +++ b/arch/nios2/include/asm/pgtable.h
+> @@ -249,8 +249,6 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+>  #define __swp_entry_to_pte(swp)	((pte_t) { (swp).val })
+>  #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
+>
+> -#define kern_addr_valid(addr)		(1)
+> -
+>  extern void __init paging_init(void);
+>  extern void __init mmu_init(void);
+>
+> diff --git a/arch/openrisc/include/asm/pgtable.h b/arch/openrisc/include/asm/pgtable.h
+> index dcae8aea132f..6477c17b3062 100644
+> --- a/arch/openrisc/include/asm/pgtable.h
+> +++ b/arch/openrisc/include/asm/pgtable.h
+> @@ -395,8 +395,6 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+>  #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
+>  #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
+>
+> -#define kern_addr_valid(addr)           (1)
+> -
+>  typedef pte_t *pte_addr_t;
+>
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
+> index ecd028854469..bd09a44cfb2d 100644
+> --- a/arch/parisc/include/asm/pgtable.h
+> +++ b/arch/parisc/include/asm/pgtable.h
+> @@ -23,21 +23,6 @@
+>  #include <asm/processor.h>
+>  #include <asm/cache.h>
+>
+> -/*
+> - * kern_addr_valid(ADDR) tests if ADDR is pointing to valid kernel
+> - * memory.  For the return value to be meaningful, ADDR must be >=
+> - * PAGE_OFFSET.  This operation can be relatively expensive (e.g.,
+> - * require a hash-, or multi-level tree-lookup or something of that
+> - * sort) but it guarantees to return TRUE only if accessing the page
+> - * at that address does not cause an error.  Note that there may be
+> - * addresses for which kern_addr_valid() returns FALSE even though an
+> - * access would not cause an error (e.g., this is typically true for
+> - * memory mapped I/O regions.
+> - *
+> - * XXX Need to implement this for parisc.
+> - */
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  /* This is for the serialization of PxTLB broadcasts. At least on the N class
+>   * systems, only one PxTLB inter processor broadcast can be active at any one
+>   * time on the Merced bus. */
+> diff --git a/arch/powerpc/include/asm/pgtable.h b/arch/powerpc/include/asm/pgtable.h
+> index 283f40d05a4d..9972626ddaf6 100644
+> --- a/arch/powerpc/include/asm/pgtable.h
+> +++ b/arch/powerpc/include/asm/pgtable.h
+> @@ -81,13 +81,6 @@ void poking_init(void);
+>  extern unsigned long ioremap_bot;
+>  extern const pgprot_t protection_map[16];
+>
+> -/*
+> - * kern_addr_valid is intended to indicate whether an address is a valid
+> - * kernel address.  Most 32-bit archs define it as always true (like this)
+> - * but most 64-bit archs actually perform a test.  What should we do here?
+> - */
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  #ifndef CONFIG_TRANSPARENT_HUGEPAGE
+>  #define pmd_large(pmd)		0
+>  #endif
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 7ec936910a96..c7993bdf749f 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -801,8 +801,6 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>
+>  #endif /* !CONFIG_MMU */
+>
+> -#define kern_addr_valid(addr)   (1) /* FIXME */
+> -
+>  extern char _start[];
+>  extern void *_dtb_early_va;
+>  extern uintptr_t _dtb_early_pa;
+> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+> index f1cb9391190d..e1db07211818 100644
+> --- a/arch/s390/include/asm/pgtable.h
+> +++ b/arch/s390/include/asm/pgtable.h
+> @@ -1773,8 +1773,6 @@ static inline swp_entry_t __swp_entry(unsigned long type, unsigned long offset)
+>  #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
+>  #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
+>
+> -#define kern_addr_valid(addr)   (1)
+> -
+>  extern int vmem_add_mapping(unsigned long start, unsigned long size);
+>  extern void vmem_remove_mapping(unsigned long start, unsigned long size);
+>  extern int __vmem_map_4k_page(unsigned long addr, unsigned long phys, pgprot_t prot, bool alloc);
+> diff --git a/arch/sh/include/asm/pgtable.h b/arch/sh/include/asm/pgtable.h
+> index 6fb9ec54cf9b..3ce30becf6df 100644
+> --- a/arch/sh/include/asm/pgtable.h
+> +++ b/arch/sh/include/asm/pgtable.h
+> @@ -92,8 +92,6 @@ static inline unsigned long phys_addr_mask(void)
+>
+>  typedef pte_t *pte_addr_t;
+>
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  #define pte_pfn(x)		((unsigned long)(((x).pte_low >> PAGE_SHIFT)))
+>
+>  struct vm_area_struct;
+> diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
+> index 8ff549004fac..5acc05b572e6 100644
+> --- a/arch/sparc/include/asm/pgtable_32.h
+> +++ b/arch/sparc/include/asm/pgtable_32.h
+> @@ -368,12 +368,6 @@ __get_iospace (unsigned long addr)
+>  	}
+>  }
+>
+> -extern unsigned long *sparc_valid_addr_bitmap;
+> -
+> -/* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
+> -#define kern_addr_valid(addr) \
+> -	(test_bit(__pa((unsigned long)(addr))>>20, sparc_valid_addr_bitmap))
+> -
+>  /*
+>   * For sparc32&64, the pfn in io_remap_pfn_range() carries <iospace> in
+>   * its high 4 bits.  These macros/functions put it there or get it from there.
+> diff --git a/arch/sparc/mm/init_32.c b/arch/sparc/mm/init_32.c
+> index d88e774c8eb4..9c0ea457bdf0 100644
+> --- a/arch/sparc/mm/init_32.c
+> +++ b/arch/sparc/mm/init_32.c
+> @@ -37,8 +37,7 @@
+>
+>  #include "mm_32.h"
+>
+> -unsigned long *sparc_valid_addr_bitmap;
+> -EXPORT_SYMBOL(sparc_valid_addr_bitmap);
+> +static unsigned long *sparc_valid_addr_bitmap;
+>
+>  unsigned long phys_base;
+>  EXPORT_SYMBOL(phys_base);
+> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+> index d6faee23c77d..04f9db0c3111 100644
+> --- a/arch/sparc/mm/init_64.c
+> +++ b/arch/sparc/mm/init_64.c
+> @@ -1667,7 +1667,6 @@ bool kern_addr_valid(unsigned long addr)
+>
+>  	return pfn_valid(pte_pfn(*pte));
+>  }
+> -EXPORT_SYMBOL(kern_addr_valid);
+>
+>  static unsigned long __ref kernel_map_hugepud(unsigned long vstart,
+>  					      unsigned long vend,
+> diff --git a/arch/um/include/asm/pgtable.h b/arch/um/include/asm/pgtable.h
+> index 66bc3f99d9be..4e3052f2671a 100644
+> --- a/arch/um/include/asm/pgtable.h
+> +++ b/arch/um/include/asm/pgtable.h
+> @@ -298,8 +298,6 @@ extern pte_t *virt_to_pte(struct mm_struct *mm, unsigned long addr);
+>  	((swp_entry_t) { pte_val(pte_mkuptodate(pte)) })
+>  #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
+>
+> -#define kern_addr_valid(addr) (1)
+> -
+>  /* Clear a kernel PTE and flush it from the TLB */
+>  #define kpte_clear_flush(ptep, vaddr)		\
+>  do {						\
+> diff --git a/arch/x86/include/asm/pgtable_32.h b/arch/x86/include/asm/pgtable_32.h
+> index 7c9c968a42ef..7d4ad8907297 100644
+> --- a/arch/x86/include/asm/pgtable_32.h
+> +++ b/arch/x86/include/asm/pgtable_32.h
+> @@ -47,15 +47,6 @@ do {						\
+>
+>  #endif /* !__ASSEMBLY__ */
+>
+> -/*
+> - * kern_addr_valid() is (1) for FLATMEM and (0) for SPARSEMEM
+> - */
+> -#ifdef CONFIG_FLATMEM
+> -#define kern_addr_valid(addr)	(1)
+> -#else
+> -#define kern_addr_valid(kaddr)	(0)
+> -#endif
+> -
+>  /*
+>   * This is used to calculate the .brk reservation for initial pagetables.
+>   * Enough space is reserved to allocate pagetables sufficient to cover all
+> diff --git a/arch/x86/include/asm/pgtable_64.h b/arch/x86/include/asm/pgtable_64.h
+> index e479491da8d5..7929327abe00 100644
+> --- a/arch/x86/include/asm/pgtable_64.h
+> +++ b/arch/x86/include/asm/pgtable_64.h
+> @@ -240,7 +240,6 @@ static inline void native_pgd_clear(pgd_t *pgd)
+>  #define __swp_entry_to_pte(x)		((pte_t) { .pte = (x).val })
+>  #define __swp_entry_to_pmd(x)		((pmd_t) { .pmd = (x).val })
+>
+> -extern int kern_addr_valid(unsigned long addr);
+>  extern void cleanup_highmap(void);
+>
+>  #define HAVE_ARCH_UNMAPPED_AREA
+> diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+> index 3f040c6e5d13..e8db4edd7cc9 100644
+> --- a/arch/x86/mm/init_64.c
+> +++ b/arch/x86/mm/init_64.c
+> @@ -1416,47 +1416,6 @@ void mark_rodata_ro(void)
+>  	debug_checkwx();
+>  }
+>
+> -int kern_addr_valid(unsigned long addr)
+> -{
+> -	unsigned long above = ((long)addr) >> __VIRTUAL_MASK_SHIFT;
+> -	pgd_t *pgd;
+> -	p4d_t *p4d;
+> -	pud_t *pud;
+> -	pmd_t *pmd;
+> -	pte_t *pte;
+> -
+> -	if (above != 0 && above != -1UL)
+> -		return 0;
+> -
+> -	pgd = pgd_offset_k(addr);
+> -	if (pgd_none(*pgd))
+> -		return 0;
+> -
+> -	p4d = p4d_offset(pgd, addr);
+> -	if (!p4d_present(*p4d))
+> -		return 0;
+> -
+> -	pud = pud_offset(p4d, addr);
+> -	if (!pud_present(*pud))
+> -		return 0;
+> -
+> -	if (pud_large(*pud))
+> -		return pfn_valid(pud_pfn(*pud));
+> -
+> -	pmd = pmd_offset(pud, addr);
+> -	if (!pmd_present(*pmd))
+> -		return 0;
+> -
+> -	if (pmd_large(*pmd))
+> -		return pfn_valid(pmd_pfn(*pmd));
+> -
+> -	pte = pte_offset_kernel(pmd, addr);
+> -	if (pte_none(*pte))
+> -		return 0;
+> -
+> -	return pfn_valid(pte_pfn(*pte));
+> -}
+> -
+>  /*
+>   * Block size is the minimum amount of memory which can be hotplugged or
+>   * hotremoved. It must be power of two and must be equal or larger than
+> diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
+> index 54f577c13afa..5b5484d707b2 100644
+> --- a/arch/xtensa/include/asm/pgtable.h
+> +++ b/arch/xtensa/include/asm/pgtable.h
+> @@ -386,8 +386,6 @@ ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
+>
+>  #else
+>
+> -#define kern_addr_valid(addr)	(1)
+> -
+>  extern  void update_mmu_cache(struct vm_area_struct * vma,
+>  			      unsigned long address, pte_t *ptep);
+>
+> diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
+> index dff921f7ca33..590ecb79ad8b 100644
+> --- a/fs/proc/kcore.c
+> +++ b/fs/proc/kcore.c
+> @@ -541,25 +541,17 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+>  			fallthrough;
+>  		case KCORE_VMEMMAP:
+>  		case KCORE_TEXT:
+> -			if (kern_addr_valid(start)) {
+> -				/*
+> -				 * Using bounce buffer to bypass the
+> -				 * hardened user copy kernel text checks.
+> -				 */
+> -				if (copy_from_kernel_nofault(buf, (void *)start,
+> -						tsz)) {
+> -					if (clear_user(buffer, tsz)) {
+> -						ret = -EFAULT;
+> -						goto out;
+> -					}
+> -				} else {
+> -					if (copy_to_user(buffer, buf, tsz)) {
+> -						ret = -EFAULT;
+> -						goto out;
+> -					}
+> +			/*
+> +			 * Using bounce buffer to bypass the
+> +			 * hardened user copy kernel text checks.
+> +			 */
+> +			if (copy_from_kernel_nofault(buf, (void *)start, tsz)) {
+> +				if (clear_user(buffer, tsz)) {
+> +					ret = -EFAULT;
+> +					goto out;
+>  				}
+>  			} else {
+> -				if (clear_user(buffer, tsz)) {
+> +				if (copy_to_user(buffer, buf, tsz)) {
+>  					ret = -EFAULT;
+>  					goto out;
+>  				}
 
-Heh, "die".  Hyper-V is quite dramatic.
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-> accessing the page is safe. The consequent hv_cpu_init(), however, does
-> not restore VP assist page when it's already allocated:
-> 
-> # rdmsr -p 24 0x40000073
-> 10212f001
-> # echo 0 > /sys/devices/system/cpu/cpu24/online 
-> # echo 1 > /sys/devices/system/cpu/cpu24/online 
-> # rdmsr -p 24 0x40000073
-> 0
-> 
-> The culprit is commit e5d9b714fe402 ("x86/hyperv: fix root partition
-> faults when writing to VP assist page MSR"). A patch is inbound.
-> 
-> 'hv_root_partition' case is different though. We do memunmap() and reset
-> VP assist page to zero so it is theoretically possible we're going to
-> clash. Unless I'm missing some obvious reason why module unload can't
-> coincide with CPU offlining, we may be better off surrounding this with
-> cpus_read_lock()/cpus_read_unlock(). 
-
-I finally see what you're concerned about.  If a CPU goes offline and its assist
-page is unmapped, zeroing out the nested/eVMCS stuff will fault.
-
-I think the real problem is that the purging of the eVMCS is in the wrong place.
-Move the clearing to vmx_hardware_disable() and then the CPU hotplug bug goes
-away once KVM disables hotplug during hardware enabling/disable later in the series.
-There's no need to wait until module exit, e.g. it's not like it costs much to
-clear a few variables, and IIUC the state is used only when KVM is actively using
-VMX/eVMCS.
-
-However, I believe there's a second bug.  KVM's CPU online hook is called before
-Hyper-V's online hook (CPUHP_AP_ONLINE_DYN).  Before this series, which moves KVM's
-hook from STARTING to ONLINE, KVM's hook is waaaay before Hyper-V's.  That means
-that hv_cpu_init()'s allocation of the VP assist page will come _after_ KVM's
-check in vmx_hardware_enable()
-
-	/*
-	 * This can happen if we hot-added a CPU but failed to allocate
-	 * VP assist page for it.
-	 */
-	if (static_branch_unlikely(&enable_evmcs) &&
-	    !hv_get_vp_assist_page(cpu))
-		return -EFAULT;
-
-I.e. CPU hotplug will never work if KVM is running VMs as a Hyper-V guest.  I bet
-you can repro by doing a SUSPEND+RESUME.
-
-Can you try to see if that's actually a bug?  If so, the only sane fix seems to
-be to add a dedicated ONLINE action for Hyper-V.  Per patch
-
-  KVM: Rename and move CPUHP_AP_KVM_STARTING to ONLINE section
-
-from this series, CPUHP_AP_KVM_ONLINE needs to be before CPUHP_AP_SCHED_WAIT_EMPTY
-to ensure there are no tasks, i.e. no vCPUs, running on the to-be-unplugged CPU.
-
-Back to the original bug, proposed fix is below.  The other advantage of moving
-the reset to hardware disabling is that the "cleanup" is just disabling the static
-key, and at that point can simply be deleted as there's no need to disable the
-static key when kvm-intel is unloaded since kvm-intel owns the key.  I.e. this
-patch (that we're replying to) would get replaced with a patch to delete the
-disabling of the static key.
-
---
-From: Sean Christopherson <seanjc@google.com>
-Date: Thu, 10 Nov 2022 17:28:08 -0800
-Subject: [PATCH] KVM: VMX: Reset eVMCS controls in VP assist page during
- hardware disabling
-
-Reset the eVMCS controls in the per-CPU VP assist page during hardware
-disabling instead of waiting until kvm-intel's module exit.  The controls
-are activated if and only if KVM creates a VM, i.e. don't need to be
-reset if hardware is never enabled.
-
-Doing the reset during hardware disabling will naturally fix a potential
-NULL pointer deref bug once KVM disables CPU hotplug while enabling and
-disabling hardware (which is necessary to fix a variety of bugs).  If the
-kernel is running as the root partition, the VP assist page is unmapped
-during CPU hot unplug, and so KVM's clearing of the eVMCS controls needs
-to occur with CPU hot(un)plug disabled, otherwise KVM could attempt to
-write to a CPU's VP assist page after it's unmapped.
-
-Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++-----------------
- 1 file changed, 30 insertions(+), 20 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index aca88524fd1e..ae13aa3e8a1d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -552,6 +552,33 @@ static int hv_enable_direct_tlbflush(struct kvm_vcpu *vcpu)
- 	return 0;
- }
- 
-+static void hv_reset_evmcs(void)
-+{
-+	struct hv_vp_assist_page *vp_ap;
-+
-+	if (!static_branch_unlikely(&enable_evmcs))
-+		return;
-+
-+	/*
-+	 * KVM should enable eVMCS if and only if all CPUs have a VP assist
-+	 * page, and should reject CPU onlining if eVMCS is enabled the CPU
-+	 * doesn't have a VP assist page allocated.
-+	 */
-+	vp_ap = hv_get_vp_assist_page(smp_processor_id());
-+	if (WARN_ON_ONCE(!vp_ap))
-+		return;
-+
-+	/*
-+	 * Reset everything to support using non-enlightened VMCS access later
-+	 * (e.g. when we reload the module with enlightened_vmcs=0)
-+	 */
-+	vp_ap->nested_control.features.directhypercall = 0;
-+	vp_ap->current_nested_vmcs = 0;
-+	vp_ap->enlighten_vmentry = 0;
-+}
-+
-+#else /* IS_ENABLED(CONFIG_HYPERV) */
-+static void hv_reset_evmcs(void) {}
- #endif /* IS_ENABLED(CONFIG_HYPERV) */
- 
- /*
-@@ -2497,6 +2524,8 @@ static void vmx_hardware_disable(void)
- 	if (cpu_vmxoff())
- 		kvm_spurious_fault();
- 
-+	hv_reset_evmcs();
-+
- 	intel_pt_handle_vmx(0);
- }
- 
-@@ -8463,27 +8492,8 @@ static void vmx_exit(void)
- 	kvm_exit();
- 
- #if IS_ENABLED(CONFIG_HYPERV)
--	if (static_branch_unlikely(&enable_evmcs)) {
--		int cpu;
--		struct hv_vp_assist_page *vp_ap;
--		/*
--		 * Reset everything to support using non-enlightened VMCS
--		 * access later (e.g. when we reload the module with
--		 * enlightened_vmcs=0)
--		 */
--		for_each_online_cpu(cpu) {
--			vp_ap =	hv_get_vp_assist_page(cpu);
--
--			if (!vp_ap)
--				continue;
--
--			vp_ap->nested_control.features.directhypercall = 0;
--			vp_ap->current_nested_vmcs = 0;
--			vp_ap->enlighten_vmentry = 0;
--		}
--
-+	if (static_branch_unlikely(&enable_evmcs))
- 		static_branch_disable(&enable_evmcs);
--	}
- #endif
- 	vmx_cleanup_l1d_flush();
- 
-
-base-commit: 5f47ba6894477dfbdc5416467a25fb7acb47d404
--- 
-
+Thanks!
