@@ -2,233 +2,293 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D62624F5C
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 02:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045E9624FB1
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Nov 2022 02:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiKKBPG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Nov 2022 20:15:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
+        id S229667AbiKKBjC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Nov 2022 20:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbiKKBOk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 20:14:40 -0500
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 701586314C;
-        Thu, 10 Nov 2022 17:14:19 -0800 (PST)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id C2455512;
-        Fri, 11 Nov 2022 02:14:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202211; t=1668129258;
-        bh=Ll41Eia4YFIaHQ+bYX+2DwMFLW+igGoHhF2oNt/mOVY=;
-        h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=phrgfsvvPcXtLKdt5te5tZODin71YsWa5CHRHjH4lgcbrF1ytnYqeUAq14hgACMl4
-         mcarQVDoTJhAUdgWD0hAkuzidCyd9vC4f83UeeQkjqHHzC9l4Sr2ap5IQiZhqpbQLj
-         8E+5kuvDHcgkRW8oR2usVfcKYjMvIJIjfpiJ5GdKy2dEbKBJ7NyiN3llTqhkuOlh9x
-         sBYKfoP4gbd1VPozKajgB3lbNiypQKRYIr2ZLWcA8rHiUW6SKzZMPXmkRD7EKM2IAM
-         hyNVVPDQOn+6d/fYUG1tau17YiAi9j6/gVF7hkHICJAdYr1HyXBSj2HE8raS+AT9TK
-         EtRIuTNutltaA==
-Date:   Fri, 11 Nov 2022 02:14:17 +0100
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v3 08/15] MIPS: IP27: remove KV_MAGIC
-Message-ID: <60f6526fffa99416d2429dfb0b454148170cce8a.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <cover.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
+        with ESMTP id S229463AbiKKBjC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Nov 2022 20:39:02 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB32F6175A
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 17:38:59 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id v3so3232206pgh.4
+        for <linux-mips@vger.kernel.org>; Thu, 10 Nov 2022 17:38:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RS3a6hLMxUUoEPjaozjVNm3jkJhC+H0XClz14w/jfaA=;
+        b=SoG++eGsogNhOXHNYNGSQwqVVuREga4mMXnUJPEp2Aaf3wDTjmN4pUpcDu6NyDyk/7
+         ZCrJ5tCMaVWUaaxyvaQrhL0T5FiyghxHxIWcZucG8+WiPsxAaytMKmY0pIZmkCvM/P3A
+         FzRDVfuDDdZ0ZvXjDTxrK9PvmsGmkf3tvXZwJCbLUSF0TG776tNA1944kmAMkLT9zZec
+         fBYk+3bEeWzmhZC19FCrSr44X5QV+XC8WpwQgvzfkBuRNUn1T3FMjmURa/IIpEBzEphS
+         S5BEZ0ZwTijqaaaZMQZlcNfQrroFpxn8GJ4NeHygg9gK3xqWbjbKbAj8qSY8fGLozXvu
+         Gsig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RS3a6hLMxUUoEPjaozjVNm3jkJhC+H0XClz14w/jfaA=;
+        b=4HdMwIfAnGro1ihSvEZQQH9UDn7ivVpkSx8MsNkjKPDSba7F9ZzBlnphdm4AxyE47n
+         uyLexyg3ogx9PlJ4MLdsIUQUB1enzte6I8LiRc5jkNBEC4eY8kdv63nw7qEAXh89DX5h
+         1HTHQTtPUs6xS5+R1t8w11+vyPHBy+bE1dNZQrvII/dS2PnLTK3C01UT602VEKYCJm0h
+         kkclVP0U04Chc/Tx0nmjnfNx4YUsz9EQaZoCX24slsx2M93mvXv+jyi6REFdDQep51eE
+         LuVCNHIRF6MTDnxMRJc/dciYfOndFqXADBvvfrsZbUhkg1vd+jNkDfMiUqIL+Okp+WSz
+         TXVA==
+X-Gm-Message-State: ACrzQf2ZrAG/xIy9RGX+MdlCTS1cYcACvHkc/wLOB2jNVHsJ0dLdzbjJ
+        PYf5I54KyrHmh15xdEPGKMgAIg==
+X-Google-Smtp-Source: AMsMyM5NZekdvfkLtC3kWWLVHXrB1AuT7u9X73tzeCo4RhIdse0v2yQHD++RSAOfBDE10qOQXDbeUA==
+X-Received: by 2002:a63:e62:0:b0:46f:e658:a8ff with SMTP id 34-20020a630e62000000b0046fe658a8ffmr4116215pgo.493.1668130739232;
+        Thu, 10 Nov 2022 17:38:59 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z6-20020aa79486000000b005636326fdbfsm310014pfk.78.2022.11.10.17.38.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 17:38:58 -0800 (PST)
+Date:   Fri, 11 Nov 2022 01:38:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>
+Subject: Re: [PATCH 10/44] KVM: VMX: Clean up eVMCS enabling if KVM
+ initialization fails
+Message-ID: <Y22nrQ7aziK0NMOE@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-11-seanjc@google.com>
+ <87mt98qfi2.fsf@ovpn-194-252.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pwqz45zq5jlhaxj5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        MISSING_HEADERS,PDS_OTHER_BAD_TLD,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <87mt98qfi2.fsf@ovpn-194-252.brq.redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, Nov 03, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> > +	/*
+> > +	 * Reset everything to support using non-enlightened VMCS access later
+> > +	 * (e.g. when we reload the module with enlightened_vmcs=0)
+> > +	 */
+> > +	for_each_online_cpu(cpu) {
+> > +		vp_ap =	hv_get_vp_assist_page(cpu);
+> > +
+> > +		if (!vp_ap)
+> > +			continue;
+> > +
+> > +		vp_ap->nested_control.features.directhypercall = 0;
+> > +		vp_ap->current_nested_vmcs = 0;
+> > +		vp_ap->enlighten_vmentry = 0;
+> > +	}
+> 
+> Unrelated to your patch but while looking at this code I got curious
+> about why don't we need a protection against CPU offlining here. Turns
+> out that even when we offline a CPU, its VP assist page remains
+> allocated (see hv_cpu_die()), we just write '0' to the MSR and thus
 
---pwqz45zq5jlhaxj5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Heh, "die".  Hyper-V is quite dramatic.
 
-It appeared in the original import of SGI code in 2.4.0-test3pre8 and
-has never been used anywhere.
+> accessing the page is safe. The consequent hv_cpu_init(), however, does
+> not restore VP assist page when it's already allocated:
+> 
+> # rdmsr -p 24 0x40000073
+> 10212f001
+> # echo 0 > /sys/devices/system/cpu/cpu24/online 
+> # echo 1 > /sys/devices/system/cpu/cpu24/online 
+> # rdmsr -p 24 0x40000073
+> 0
+> 
+> The culprit is commit e5d9b714fe402 ("x86/hyperv: fix root partition
+> faults when writing to VP assist page MSR"). A patch is inbound.
+> 
+> 'hv_root_partition' case is different though. We do memunmap() and reset
+> VP assist page to zero so it is theoretically possible we're going to
+> clash. Unless I'm missing some obvious reason why module unload can't
+> coincide with CPU offlining, we may be better off surrounding this with
+> cpus_read_lock()/cpus_read_unlock(). 
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+I finally see what you're concerned about.  If a CPU goes offline and its assist
+page is unmapped, zeroing out the nested/eVMCS stuff will fault.
+
+I think the real problem is that the purging of the eVMCS is in the wrong place.
+Move the clearing to vmx_hardware_disable() and then the CPU hotplug bug goes
+away once KVM disables hotplug during hardware enabling/disable later in the series.
+There's no need to wait until module exit, e.g. it's not like it costs much to
+clear a few variables, and IIUC the state is used only when KVM is actively using
+VMX/eVMCS.
+
+However, I believe there's a second bug.  KVM's CPU online hook is called before
+Hyper-V's online hook (CPUHP_AP_ONLINE_DYN).  Before this series, which moves KVM's
+hook from STARTING to ONLINE, KVM's hook is waaaay before Hyper-V's.  That means
+that hv_cpu_init()'s allocation of the VP assist page will come _after_ KVM's
+check in vmx_hardware_enable()
+
+	/*
+	 * This can happen if we hot-added a CPU but failed to allocate
+	 * VP assist page for it.
+	 */
+	if (static_branch_unlikely(&enable_evmcs) &&
+	    !hv_get_vp_assist_page(cpu))
+		return -EFAULT;
+
+I.e. CPU hotplug will never work if KVM is running VMs as a Hyper-V guest.  I bet
+you can repro by doing a SUSPEND+RESUME.
+
+Can you try to see if that's actually a bug?  If so, the only sane fix seems to
+be to add a dedicated ONLINE action for Hyper-V.  Per patch
+
+  KVM: Rename and move CPUHP_AP_KVM_STARTING to ONLINE section
+
+from this series, CPUHP_AP_KVM_ONLINE needs to be before CPUHP_AP_SCHED_WAIT_EMPTY
+to ensure there are no tasks, i.e. no vCPUs, running on the to-be-unplugged CPU.
+
+Back to the original bug, proposed fix is below.  The other advantage of moving
+the reset to hardware disabling is that the "cleanup" is just disabling the static
+key, and at that point can simply be deleted as there's no need to disable the
+static key when kvm-intel is unloaded since kvm-intel owns the key.  I.e. this
+patch (that we're replying to) would get replaced with a patch to delete the
+disabling of the static key.
+
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Thu, 10 Nov 2022 17:28:08 -0800
+Subject: [PATCH] KVM: VMX: Reset eVMCS controls in VP assist page during
+ hardware disabling
+
+Reset the eVMCS controls in the per-CPU VP assist page during hardware
+disabling instead of waiting until kvm-intel's module exit.  The controls
+are activated if and only if KVM creates a VM, i.e. don't need to be
+reset if hardware is never enabled.
+
+Doing the reset during hardware disabling will naturally fix a potential
+NULL pointer deref bug once KVM disables CPU hotplug while enabling and
+disabling hardware (which is necessary to fix a variety of bugs).  If the
+kernel is running as the root partition, the VP assist page is unmapped
+during CPU hot unplug, and so KVM's clearing of the eVMCS controls needs
+to occur with CPU hot(un)plug disabled, otherwise KVM could attempt to
+write to a CPU's VP assist page after it's unmapped.
+
+Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- Documentation/process/magic-number.rst                    | 1 -
- Documentation/translations/it_IT/process/magic-number.rst | 1 -
- Documentation/translations/zh_CN/process/magic-number.rst | 1 -
- Documentation/translations/zh_TW/process/magic-number.rst | 1 -
- arch/mips/include/asm/sn/klkernvars.h                     | 8 ++------
- arch/mips/sgi-ip27/ip27-klnuma.c                          | 1 -
- 6 files changed, 2 insertions(+), 11 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++-----------------
+ 1 file changed, 30 insertions(+), 20 deletions(-)
 
-diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
-/magic-number.rst
-index 7dada7abc733..d8ffbc21872e 100644
---- a/Documentation/process/magic-number.rst
-+++ b/Documentation/process/magic-number.rst
-@@ -72,7 +72,6 @@ APM_BIOS_MAGIC        0x4101           apm_user          =
-       ``arch/x86/kerne
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- SLIP_MAGIC            0x5302           slip                     ``drivers/=
-net/slip.h``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
--KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
-diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
-cumentation/translations/it_IT/process/magic-number.rst
-index f9634a04d349..0e59704aa617 100644
---- a/Documentation/translations/it_IT/process/magic-number.rst
-+++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -78,7 +78,6 @@ APM_BIOS_MAGIC        0x4101           apm_user          =
-       ``arch/x86/kerne
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- SLIP_MAGIC            0x5302           slip                     ``drivers/=
-net/slip.h``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
--KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
-diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
-cumentation/translations/zh_CN/process/magic-number.rst
-index 966b9e6b1a46..17a73661ef17 100644
---- a/Documentation/translations/zh_CN/process/magic-number.rst
-+++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -61,7 +61,6 @@ APM_BIOS_MAGIC        0x4101           apm_user          =
-       ``arch/x86/kerne
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- SLIP_MAGIC            0x5302           slip                     ``drivers/=
-net/slip.h``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
--KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
-diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
-cumentation/translations/zh_TW/process/magic-number.rst
-index f3e87a6b3a01..9d44d49b93bf 100644
---- a/Documentation/translations/zh_TW/process/magic-number.rst
-+++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -64,7 +64,6 @@ APM_BIOS_MAGIC        0x4101           apm_user          =
-       ``arch/x86/kerne
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- SLIP_MAGIC            0x5302           slip                     ``drivers/=
-net/slip.h``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
--KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
-diff --git a/arch/mips/include/asm/sn/klkernvars.h b/arch/mips/include/asm/=
-sn/klkernvars.h
-index ea6b21795163..93d5eb873255 100644
---- a/arch/mips/include/asm/sn/klkernvars.h
-+++ b/arch/mips/include/asm/sn/klkernvars.h
-@@ -6,18 +6,14 @@
- #ifndef __ASM_SN_KLKERNVARS_H
- #define __ASM_SN_KLKERNVARS_H
-=20
--#define KV_MAGIC_OFFSET		0x0
--#define KV_RO_NASID_OFFSET	0x4
--#define KV_RW_NASID_OFFSET	0x6
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index aca88524fd1e..ae13aa3e8a1d 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -552,6 +552,33 @@ static int hv_enable_direct_tlbflush(struct kvm_vcpu *vcpu)
+ 	return 0;
+ }
+ 
++static void hv_reset_evmcs(void)
++{
++	struct hv_vp_assist_page *vp_ap;
++
++	if (!static_branch_unlikely(&enable_evmcs))
++		return;
++
++	/*
++	 * KVM should enable eVMCS if and only if all CPUs have a VP assist
++	 * page, and should reject CPU onlining if eVMCS is enabled the CPU
++	 * doesn't have a VP assist page allocated.
++	 */
++	vp_ap = hv_get_vp_assist_page(smp_processor_id());
++	if (WARN_ON_ONCE(!vp_ap))
++		return;
++
++	/*
++	 * Reset everything to support using non-enlightened VMCS access later
++	 * (e.g. when we reload the module with enlightened_vmcs=0)
++	 */
++	vp_ap->nested_control.features.directhypercall = 0;
++	vp_ap->current_nested_vmcs = 0;
++	vp_ap->enlighten_vmentry = 0;
++}
++
++#else /* IS_ENABLED(CONFIG_HYPERV) */
++static void hv_reset_evmcs(void) {}
+ #endif /* IS_ENABLED(CONFIG_HYPERV) */
+ 
+ /*
+@@ -2497,6 +2524,8 @@ static void vmx_hardware_disable(void)
+ 	if (cpu_vmxoff())
+ 		kvm_spurious_fault();
+ 
++	hv_reset_evmcs();
++
+ 	intel_pt_handle_vmx(0);
+ }
+ 
+@@ -8463,27 +8492,8 @@ static void vmx_exit(void)
+ 	kvm_exit();
+ 
+ #if IS_ENABLED(CONFIG_HYPERV)
+-	if (static_branch_unlikely(&enable_evmcs)) {
+-		int cpu;
+-		struct hv_vp_assist_page *vp_ap;
+-		/*
+-		 * Reset everything to support using non-enlightened VMCS
+-		 * access later (e.g. when we reload the module with
+-		 * enlightened_vmcs=0)
+-		 */
+-		for_each_online_cpu(cpu) {
+-			vp_ap =	hv_get_vp_assist_page(cpu);
 -
--#define KV_MAGIC		0x5f4b565f
-+#define KV_RO_NASID_OFFSET	0x0
-+#define KV_RW_NASID_OFFSET	0x2
-=20
- #ifndef __ASSEMBLY__
-=20
- #include <asm/sn/types.h>
-=20
- typedef struct kern_vars_s {
--	int		kv_magic;
- 	nasid_t		kv_ro_nasid;
- 	nasid_t		kv_rw_nasid;
- 	unsigned long	kv_ro_baseaddr;
-diff --git a/arch/mips/sgi-ip27/ip27-klnuma.c b/arch/mips/sgi-ip27/ip27-kln=
-uma.c
-index abd7a84df7dd..82bb7ac20ef8 100644
---- a/arch/mips/sgi-ip27/ip27-klnuma.c
-+++ b/arch/mips/sgi-ip27/ip27-klnuma.c
-@@ -61,7 +61,6 @@ static __init void set_ktext_source(nasid_t client_nasid,=
- nasid_t server_nasid)
-=20
- 	KERN_VARS_ADDR(client_nasid) =3D (unsigned long)kvp;
-=20
--	kvp->kv_magic =3D KV_MAGIC;
- 	kvp->kv_ro_nasid =3D server_nasid;
- 	kvp->kv_rw_nasid =3D master_nasid;
- 	kvp->kv_ro_baseaddr =3D NODE_CAC_BASE(server_nasid);
---=20
-2.30.2
+-			if (!vp_ap)
+-				continue;
+-
+-			vp_ap->nested_control.features.directhypercall = 0;
+-			vp_ap->current_nested_vmcs = 0;
+-			vp_ap->enlighten_vmentry = 0;
+-		}
+-
++	if (static_branch_unlikely(&enable_evmcs))
+ 		static_branch_disable(&enable_evmcs);
+-	}
+ #endif
+ 	vmx_cleanup_l1d_flush();
+ 
 
---pwqz45zq5jlhaxj5
-Content-Type: application/pgp-signature; name="signature.asc"
+base-commit: 5f47ba6894477dfbdc5416467a25fb7acb47d404
+-- 
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNtoekACgkQvP0LAY0m
-WPF16A/9F5lQWkaXt3oVQYoFM4UiSHZP/tJdzsRZC32lJhaP/jeT+/H9x7cxhKjr
-rNQOA+HXKmLmU8wUIcz5zjIDydwSJFsy6WXfIsw+e5+1DkAMIIwonYSGxfGpYPJ5
-psCxz5xaxEOnV8T9gP8gHEiQv7ZXm0u0R/UNcxd+ps/DlBC5ZiItgZ3ZTsTh6C++
-yWSURfbt3M9mtQyL9urr7NIwZHG+faFaoeRwlTJG1oFrw7kN7T6L+3nh1Z423zf2
-LRVpfC7J7s4GcauqQQ6jnAQyG0mJZE7O5kT8ZX2P+9+zurWxswxHCTUqktceDnNZ
-h7UiUlYKuh9SGqsey12lKAno/G+/EySa1PCxJHsJ8/NFTaltWyxOeXhBlLa+vVAf
-kRJzRicgucDR5zzWM42nB8G9NTSLzrETOLTPNhsiw1pxmzg+Wf9d/r/yHE2VGJAd
-CZv4B6ECClH09X71mOef4hA8bml0wIuZJyKkHWhnVxyzqEG+TTqAYZEer7YRF9uy
-cvH6G9KcilJs3EAmFQWxRJtjJUxeOEXNb32XrHVuI7ylPgyEfYpZ+sY/NCbPKGOm
-INuq+woXEqnKjU7Z0yPRn9SGek+sD2PcSjbfRD1kscgMyEROwBQp3yBU8iRgV1wM
-JyG3eB5MTxo8zCe75RhA20cyh4Ss4XUBmbc/Ji1gvRtchnBbGb0=
-=BdmV
------END PGP SIGNATURE-----
-
---pwqz45zq5jlhaxj5--
