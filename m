@@ -2,82 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2546288AC
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Nov 2022 19:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B57628A1F
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Nov 2022 21:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236540AbiKNS6Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Nov 2022 13:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S237251AbiKNUJs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Nov 2022 15:09:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236318AbiKNS6L (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Nov 2022 13:58:11 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025F11D33C;
-        Mon, 14 Nov 2022 10:58:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668452289; x=1699988289;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BZMLhTwKqFLidxOVtwWq081cCaNo7ow4HF5ovB57GGE=;
-  b=GppoaM+AeBp3THbC30cQaYtJRZEhR9Bow3agyfVCEymlXZT04nkSUfCD
-   mw4b2xegRjaRphDpIwI1QrwTgYEjHrL0FLVujEYahf/V1BiQxDIZjb/I8
-   wm5QIx3yBjhv83yx38PoslQ2/yvHxKPfQPD2PSDPhuNfpRQSboPBvWB6u
-   PzX2E0QEq0NP4PpejxFDllRUt1OuQFHPn7+3DN1SWFIGVBbXlg91YU8NI
-   JsgdAjcvLjnEPttsOSwiq63F/2B1jgN8LV0+Zhc+9E8YxekRC1b3+P70I
-   PoIhQxiyLsEoZwhaMVbHz6yF0R9s9U31s/4fFYkDQ2RGQdlrBYOjuIVvK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="338843407"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="338843407"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 10:58:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="638607286"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="638607286"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 14 Nov 2022 10:58:00 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EECC2348; Mon, 14 Nov 2022 20:58:24 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-pci@vger.kernel.org, xen-devel@lists.xenproject.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: [PATCH v3 4/4] pcmcia: Convert to use pci_bus_for_each_resource_p()
-Date:   Mon, 14 Nov 2022 20:58:22 +0200
-Message-Id: <20221114185822.65038-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221114185822.65038-1-andriy.shevchenko@linux.intel.com>
-References: <20221114185822.65038-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        with ESMTP id S237527AbiKNUJj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Nov 2022 15:09:39 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A701A380;
+        Mon, 14 Nov 2022 12:09:39 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9B0CA5C01C0;
+        Mon, 14 Nov 2022 15:09:38 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 14 Nov 2022 15:09:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1668456578; x=1668542978; bh=LR9Oot9dV3
+        p/sGrwT31gG+j2rSTcoLkSED15p73795Q=; b=RUB0ESW0+BaX89e0krEsUsA8CK
+        AtInxoM2OwKTrBQgSoo5CfTbwvoUSqrj7Ymk5AYhFFZsKP6LQ8i+meOKeqnHLnzD
+        0QPRCcHTe6yetyDdVOApBAV5sHyI2D5Yfgc9sBtmts6qkui+tHWYEOGq8ZgxmyC0
+        NK3hve5GjiHRruNtrBkPAPsQinOf/VlwqoGOnbyEtPtuDsQMCZ0kqHw/GxRn8AVN
+        gYcl2BgrV7/hQtPns4X7RCQIYPbLKEYXSjcJypnaJ/1ZR1uxsBbZITuXQmcbPJlj
+        BRRkTft6f9xDzmoMgfEAYl9KJ1DMxrsBqBYAQKMLIE/ecz/lnjuJhWNleekg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668456578; x=1668542978; bh=LR9Oot9dV3p/sGrwT31gG+j2rSTc
+        oLkSED15p73795Q=; b=kYinAXvfb+bPRrjG7hkwa9rTdjFzIj9MOLKIheleg5zx
+        doSjGVh9eCju4S4p/HNIxH4RYpCshd6tJvUpT+1cr3nfmDVZhbrtWSOMCVnl6adM
+        ZYkAarikNUPtlET21y7dZkUHRIIQK1denE39eBNhX9zBMwyAMZDs0yEaCGBtuQDK
+        Cl25Dm/wdRgiaVApo7ySyrU/BeDgT4ng5AE51/iOBKbQMC18JGeXKw2CiHi9zVjn
+        2CC2JwuUqH8KYwPb7+OEneUFzqCcpkWG9X8ZSOwzkG+2U6AfCI1ao0fx5nUtD/vj
+        4JaBnMB34YjIq17SLXH0kG695nryUoO3e6qVqDVisA==
+X-ME-Sender: <xms:gKByYym7c_GDr5IHfpqCH2cI1U9lt0Hr98AdbpVG2oy1uyNr1kzl7w>
+    <xme:gKByY52iLygN_eOjANO3Oyzv2nl99rEkyBVHDzTqzMonAvBpxWZzdWkvKQcJxG2wK
+    9XbjhLe7R2FUi2gBS8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgddutdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:gaByYwqjfe79TcWGfeLK01KCJg-5_ksdvP5rBoMGSNgASwWJz9GSAg>
+    <xmx:gaByY2nTFKoumcd73d_Clr3Z7bbaSaax-UFKgenDelwPQGvAjlT-yw>
+    <xmx:gaByYw0e3k_0RYin8FvbOrTcgUnSzaxFivvpxISivdV6cuwayNp2Hw>
+    <xmx:gqByY3s31fBP0SRr3lSBoFnh1H8PTix3wNenZJ8w3h6CMb-9lnPpfw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EB13DB60086; Mon, 14 Nov 2022 15:09:36 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <b9c0711c-6efc-4d84-af4e-62e585ac2fa6@app.fastmail.com>
+In-Reply-To: <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
+References: <20221027125253.3458989-1-chenhuacai@loongson.cn>
+ <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
+Date:   Mon, 14 Nov 2022 21:09:16 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Huacai Chen" <chenhuacai@kernel.org>,
+        "Huacai Chen" <chenhuacai@loongson.cn>
+Cc:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Dinh Nguyen" <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Feiyang Chen" <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V14 0/4] mm/sparse-vmemmap: Generalise helpers and enable for
+ LoongArch
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,60 +98,19 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pci_bus_for_each_resource_p() hides the iterator loop since
-it may be not used otherwise. With this, we may drop that iterator
-variable definition.
+On Sat, Nov 12, 2022, at 11:26, Huacai Chen wrote:
+> Hi, Arnd,
+>
+> Just a gentle ping, is this series good enough now? I think the last
+> problem (static-key.h inclusion) has also been solved.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
----
- drivers/pcmcia/rsrc_nonstatic.c | 9 +++------
- drivers/pcmcia/yenta_socket.c   | 3 +--
- 2 files changed, 4 insertions(+), 8 deletions(-)
+Yes, this looks fine to me. Sorry I didn't have this on my
+radar any more.
 
-diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
-index ad1141fddb4c..9d92d4bb6239 100644
---- a/drivers/pcmcia/rsrc_nonstatic.c
-+++ b/drivers/pcmcia/rsrc_nonstatic.c
-@@ -934,7 +934,7 @@ static int adjust_io(struct pcmcia_socket *s, unsigned int action, unsigned long
- static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
- {
- 	struct resource *res;
--	int i, done = 0;
-+	int done = 0;
- 
- 	if (!s->cb_dev || !s->cb_dev->bus)
- 		return -ENODEV;
-@@ -960,12 +960,9 @@ static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
- 	 */
- 	if (s->cb_dev->bus->number == 0)
- 		return -EINVAL;
--
--	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
--		res = s->cb_dev->bus->resource[i];
--#else
--	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
- #endif
-+
-+	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
- 		if (!res)
- 			continue;
- 
-diff --git a/drivers/pcmcia/yenta_socket.c b/drivers/pcmcia/yenta_socket.c
-index 3966a6ceb1ac..b200f2b99a7a 100644
---- a/drivers/pcmcia/yenta_socket.c
-+++ b/drivers/pcmcia/yenta_socket.c
-@@ -673,9 +673,8 @@ static int yenta_search_res(struct yenta_socket *socket, struct resource *res,
- 			    u32 min)
- {
- 	struct resource *root;
--	int i;
- 
--	pci_bus_for_each_resource(socket->dev->bus, root, i) {
-+	pci_bus_for_each_resource_p(socket->dev->bus, root) {
- 		if (!root)
- 			continue;
- 
--- 
-2.35.1
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
+I guess the series should be merged through Andrew's linux-mm
+tree. Let me know if for some reason I should pick it up into
+the asm-generic tree instead.
+
+     Arnd
