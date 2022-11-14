@@ -2,172 +2,318 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AB26278A8
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Nov 2022 10:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3259362797E
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Nov 2022 10:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236818AbiKNJH1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Nov 2022 04:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
+        id S235789AbiKNJvF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Nov 2022 04:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237070AbiKNJHQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Nov 2022 04:07:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EA7273C;
-        Mon, 14 Nov 2022 01:05:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AC6260F51;
-        Mon, 14 Nov 2022 09:05:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA65C433C1;
-        Mon, 14 Nov 2022 09:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668416750;
-        bh=D7WS1/Iq9HsSGiJfZeeNpWeUbfN2wCTKHRwR1waF5b8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gu23KWX+hkd2VrW8L8cgRL+RvzQoNmHr4ZHYqyx7b9ggw62j+4gl+srj7mMWbYEWO
-         eMq9AeoWeTXuHN/JCWdPJOC4s9/SfymP7ivydCT3Rc5lzvj0XxUfCGvOXg+FUovve3
-         mBjFDbEU8fbv5pZjeBcZG4yoTG+UTWC2w0hMhrdGaf5jiuivlIjmg6M0icdu4BayDd
-         QORZ6I5Y6XZL3p7KDrZaQgns3WiyBQD5S5uJ7AJ3isJBuf/JmKGDVf410NdJ4z5Krb
-         lm/rhmS+2/v3szQ2Sg6geE8bZDNcFgYVQt+IzZj3PeuYYzaH8viYNnTeheDKRc95zq
-         VsYSZrpR3L72Q==
-Date:   Mon, 14 Nov 2022 09:05:34 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
-Message-ID: <Y3IE3ta8hLLUcu7H@google.com>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
- <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
- <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
- <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
- <CACRpkdb8uYfs6w99FVjD_t6nZgDhPUx=yB1j=CmpHTHAM2QGQw@mail.gmail.com>
+        with ESMTP id S229933AbiKNJua (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Nov 2022 04:50:30 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4D585F98;
+        Mon, 14 Nov 2022 01:50:27 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8AxbdpiD3JjMd0GAA--.20741S3;
+        Mon, 14 Nov 2022 17:50:26 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxj+BfD3JjTX8SAA--.49498S2;
+        Mon, 14 Nov 2022 17:50:23 +0800 (CST)
+Subject: Re: [PATCH v1 2/2] dt-bindings: gpio: add loongson series gpio
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, zhuyinbo@loongson.cn,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        richard.liu@st.com, Arnaud Patard <apatard@mandriva.com>,
+        Hongbing Hu <huhb@lemote.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <20221108092107.28996-1-zhuyinbo@loongson.cn>
+ <20221108092107.28996-2-zhuyinbo@loongson.cn>
+ <d9edb6e1-c3da-0f5b-546d-37d8151aaa35@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <d5457109-3bcb-e7d3-067d-9e4acd66ac17@loongson.cn>
+Date:   Mon, 14 Nov 2022 17:50:22 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <d9edb6e1-c3da-0f5b-546d-37d8151aaa35@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdb8uYfs6w99FVjD_t6nZgDhPUx=yB1j=CmpHTHAM2QGQw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Bxj+BfD3JjTX8SAA--.49498S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Jw45JryxJw4fXF4rXFWrZrb_yoWxArWUp3
+        WUAFsrZwsFgF13Cr4YgFnrArn3Ar1kCw1rur9xC347tryqkwn3JF4SgFykW3Z3WryUX3W7
+        Xrsxu3yrGw15A3DanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
+        0_Jw0_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
+        c4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0TrW5UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 11 Nov 2022, Linus Walleij wrote:
 
-> On Thu, Nov 10, 2022 at 2:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > On Thu, 10 Nov 2022 at 12:39, Linus Walleij <linus.walleij@linaro.org> wrote:
-> > >
-> > > On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
-> > > > >
-> > > > > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
-> > > > > hook, but doesn't provide a determine_rate implementation.
-> > > > >
-> > > > > This is a bit odd, since set_parent() is there to, as its name implies,
-> > > > > change the parent of a clock. However, the most likely candidate to
-> > > > > trigger that parent change is a call to clk_set_rate(), with
-> > > > > determine_rate() figuring out which parent is the best suited for a
-> > > > > given rate.
-> > > > >
-> > > > > The other trigger would be a call to clk_set_parent(), but it's far less
-> > > > > used, and it doesn't look like there's any obvious user for that clock.
-> > > >
-> > > > If I recall correctly, that is the use case we did target for these
-> > > > types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
-> > >
-> > > Hm I am trying to get that driver to work ... from time to time.
-> > > It's just that ALSA SoC DT has changed to much that it turns out
-> > > into a complete rewrite :/
-> > >
-> > > So in sound/soc/ux500/mop500_ab8500.c
-> > > I see this:
-> > >
-> > >         status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
-> > >         if (status)
-> > > (...)
-> > >
-> > > and there is elaborate code to switch between "SYSCLK" and
-> > > "ULPCLK" (ulta-low power clock). Just like you say... however
-> > > a clock named SYSCLK or ULPCLK does not appear in the
-> > > code in drivers/clk/ux500 or any DT bindings so... it seems to
-> > > be non-working for the time being.
-> >
-> > It's definitely not working, but the corresponding clocks ("ulpclk",
-> > "intclk", "audioclk", etc) are being registered in ab8500_reg_clks().
-> >
-> > What seems to be missing is a DT conversion for these clocks, so they
-> > can be consumed properly. Right?
+
+在 2022/11/8 下午11:28, Krzysztof Kozlowski 写道:
+> On 08/11/2022 10:21, Yinbo Zhu wrote:
+>> Add the Loongson series gpio binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   .../bindings/gpio/loongson,ls-gpio.yaml       | 154 ++++++++++++++++++
+>>   MAINTAINERS                                   |  11 ++
+>>   2 files changed, 165 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+>> new file mode 100644
+>> index 000000000000..9d335262ddcc
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+>> @@ -0,0 +1,154 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/gpio/loongson,ls-gpio.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson series GPIO controller.
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls2k-gpio
+>> +      - loongson,ls7a-gpio
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  ngpios: true
 > 
-> Yeps that and a few more things, I have a scratch rewrite here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-stericsson.git/log/?h=ux500-audio-rewrite
+> minimum? maximum?
+okay, I got it.
 > 
-> I remember Lee said he had audio working with the mainline kernel
-> on Snowball at one point, unfortunately I think that was before we
-> started with the DT conversions and then we probably broke it.
+>> +
+>> +  "#gpio-cells":
+>> +    const: 2
+>> +
+>> +  gpio-controller: true
+>> +
+>> +  gpio-ranges: true
+>> +
+>> +  loongson,conf_offset:
+> 
+> No underscores in node names. Plus comments from Linus seem to apply
+> here as well. Drop it entirely or explain why this is not part of
+> compatible, why this is needed and why encoding programming model
+> address in DT matches the DT...
+Add it is to distinguish differnt address in different platform.
+and I had drop them and initial them in kernel driver that depend
+on diffent compatible.
+> 
+> 
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      This option indicate this GPIO configuration offset address.
+>> +
+>> +  loongson,out_offset:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      This option indicate this GPIO output value offset address.
+> 
+> Drop
+> 
+>> +
+>> +  loongson,in_offset:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      This option indicate this GPIO input value offset address.
+> 
+> Drop
+> 
+> 
+>> +
+>> +  loongson,gpio_base:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      This option indicate the first GPIO number in this node.
+> 
+> Drop
+> 
+> 
+>> +
+>> +  loongson,support_irq:
+>> +    $ref: /schemas/types.yaml#/definitions/flag
+>> +    description:
+>> +      This option indicate this GPIO whether support interrupt.
+> 
+> Drop
+> 
+>> +
+>> +  interrupts:
+>> +    minItems: 1
+>> +    maxItems: 64
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - ngpios
+>> +  - "#gpio-cells"
+>> +  - gpio-controller
+>> +  - gpio-ranges
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +
+>> +    gpio0: gpio@1fe00500 {
+>> +      compatible = "loongson,ls2k-gpio";
+>> +      reg = <0x1fe00500 0x38>;
+>> +      ngpios = <64>;
+>> +      #gpio-cells = <2>;
+>> +      gpio-controller;
+>> +      gpio-ranges = <&pctrl 0 0 15>,
+>> +                    <&pctrl 16 16 15>,
+>> +                    <&pctrl 32 32 10>,
+>> +                    <&pctrl 44 44 20>;
+>> +      loongson,conf_offset = <0>;
+>> +      loongson,out_offset = <0x10>;
+>> +      loongson,in_offset = <0x20>;
+>> +      loongson,gpio_base = <0>;
+>> +      loongson,support_irq;
+>> +      interrupt-parent = <&liointc1>;
+>> +      interrupts = <28 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <29 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <30 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <30 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <26 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <>,
+> 
+> What's this?
+There was no interrupt function in this gpio.
+> 
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <>,
+>> +                   <>,
+> 
+> What's this?
+> 
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>,
+>> +                   <27 IRQ_TYPE_LEVEL_LOW>;
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 916b2d9cffc0..878b8320ac3b 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -12048,6 +12048,17 @@ S:	Maintained
+>>   F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
+>>   F:	drivers/soc/loongson/loongson2_guts.c
+>>   
+>> +LOONGSON SERIES GPIO DRIVER
+>> +M:	Richard Liu, STMicroelectronics <richard.liu@st.com>
+>> +M:	Arnaud Patard <apatard@mandriva.com>
+>> +M:	Hongbing Hu <huhb@lemote.com>
+>> +M:	Huacai Chen <chenhuacai@kernel.org>
+>> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> 
+> Are they all maintainers of this driver?
+add huacai and myself as maintainer.
+> 
+>> +L:	linux-gpio@vger.kernel.org
+>> +S:	Maintained
+>> +F:	Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+>> +F:	drivers/gpio/gpio-loongson.c
+>> +
+>>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>>   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> 
+> Best regards,
+> Krzysztof
+> 
 
-That was also 100 years ago. :)
-
-But yes, it used to work at one point.
-
--- 
-Lee Jones [李琼斯]
