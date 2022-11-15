@@ -2,28 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56016299A2
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Nov 2022 14:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37708629A9C
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Nov 2022 14:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238247AbiKONHP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Nov 2022 08:07:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S229937AbiKONgN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Nov 2022 08:36:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238251AbiKONHM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Nov 2022 08:07:12 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A22972494F;
-        Tue, 15 Nov 2022 05:07:09 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxTLb8jnNjL0UHAA--.9807S3;
-        Tue, 15 Nov 2022 21:07:08 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9Vb6jnNjO6UTAA--.34062S2;
-        Tue, 15 Nov 2022 21:07:07 +0800 (CST)
+        with ESMTP id S229833AbiKONgN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Nov 2022 08:36:13 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D107B1089
+        for <linux-mips@vger.kernel.org>; Tue, 15 Nov 2022 05:36:11 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id 97so4943859uam.0
+        for <linux-mips@vger.kernel.org>; Tue, 15 Nov 2022 05:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U7mTdtGmnKT1l4rqdyKapBUF4iLXmO0p5rKdEhhg63U=;
+        b=Tg69myXMlgXVtWUU1D5S5CfsA2sHtrEFASYjM3Hh2ugynyxm4UDnoXacIiTDLXGu8K
+         N3qNP+RJN4u1X5cZbKCrh6w3gBErjlcfXs0sF0y+tfIvq1hpy0vGAQO7bMrz4LRhzq2m
+         triyXAiiJB5E+LCOn4cigI2zeNHff/2UFdV9wcU7SUdJStthca1sjQPONzuIXKwwtNqB
+         +9EJ+gbMWnHSQZU2kSkdW5j+69av11QBjBzRsw7lYw/PkPqvbg8tMKNJ0FPTNwD9Ax2X
+         lV6EhWlFc6MYlMW3l+fpkMAYxUj4JjCza10rMwdlfzI7bJKbHjT5NSmUZ826E6oC3XCc
+         0tZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U7mTdtGmnKT1l4rqdyKapBUF4iLXmO0p5rKdEhhg63U=;
+        b=TLUE946A351li2wXc2sIcUQEQKoACHW/KSAM5vsq7bdHakthDkrRba7UkiMktILn0j
+         iuGqk/JlIYV59fowq3s6rEBbfBpJ1RmfVjSu2eDMvIlEu/ljvwBfJyHVSnVahQqojLAc
+         lcTPX0e2apbjG0FjwL4N29Ec0UBr7mizkJCZgywmJC0uSuDeiPy13HwZuRVKrR9+WrBW
+         Y8a39W1wA00+ZzdvstBOgaB7bPkJOHFJQN5SQuddrZZnjBzdPjNBzbZmHArhbOzI4HIv
+         4wIgYQN90XxZIRKvr1EX7I/0n7f+/yL4H7zX5oV+7r4HdWEiDTJdFndbiJn/PP9DDtAp
+         A+ow==
+X-Gm-Message-State: ANoB5pnygt6rUI8yd9p+/CoJrhe4a7U3ccll1g/ZA45NTIfRVG1Dl27C
+        1ZPMdCeh6/foxJ1TfOZPSj9Y1grU9o0cQ9GiybIFAA==
+X-Google-Smtp-Source: AA0mqf5DpPJ1UK4Q211u76/jWWRWitTx4shgsyTa5wMd5qmYtp/mR9opW5GexXaqFResUisdhUK+OUTg1mqUDaFVPTI=
+X-Received: by 2002:ab0:15b2:0:b0:418:7beb:6f42 with SMTP id
+ i47-20020ab015b2000000b004187beb6f42mr4857776uae.92.1668519367898; Tue, 15
+ Nov 2022 05:36:07 -0800 (PST)
+MIME-Version: 1.0
+References: <20221114095332.21079-1-zhuyinbo@loongson.cn> <CAMRc=McnEiSj1Q51pG3Lc8e+HcXE_uU7dm=1VoOa__xOgyoZPg@mail.gmail.com>
+ <8b24e3df-8c22-bd09-cfc1-b27e39a05c25@loongson.cn> <fd5cc541-dfc6-d1cf-0865-669b11ce2e7a@xen0n.name>
+ <9a448680-0bb6-c4f0-93d2-29a86fede2d4@loongson.cn>
+In-Reply-To: <9a448680-0bb6-c4f0-93d2-29a86fede2d4@loongson.cn>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 15 Nov 2022 14:35:56 +0100
+Message-ID: <CAMRc=McQ-_3rmHFMW_f+oscuEi+18OJHYz7jBFLm_fh2qA1EHw@mail.gmail.com>
 Subject: Re: [PATCH v2 1/2] gpio: loongson: add dts/acpi gpio support
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, zhuyinbo@loongson.cn,
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -38,190 +72,169 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>, zhuyinbo@loongson.cn,
         lvjianmin <lvjianmin@loongson.cn>,
         zhanghongchen <zhanghongchen@loongson.cn>,
         Liu Peibao <liupeibao@loongson.cn>
-References: <20221114095332.21079-1-zhuyinbo@loongson.cn>
- <CAMRc=McnEiSj1Q51pG3Lc8e+HcXE_uU7dm=1VoOa__xOgyoZPg@mail.gmail.com>
- <8b24e3df-8c22-bd09-cfc1-b27e39a05c25@loongson.cn>
- <fd5cc541-dfc6-d1cf-0865-669b11ce2e7a@xen0n.name>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <9a448680-0bb6-c4f0-93d2-29a86fede2d4@loongson.cn>
-Date:   Tue, 15 Nov 2022 21:07:05 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <fd5cc541-dfc6-d1cf-0865-669b11ce2e7a@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx9Vb6jnNjO6UTAA--.34062S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3WF1rurWfGw4kCw1xXFW7twb_yoWxWryDpF
-        n3AayxGFWUGr1xAr1qq34UZryayry5JwnFqF1rJa4UCryqq3Wjqr1UXF1q9F18Gr4rAF1j
-        qry8Gr47uF45ZrUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8k-BtUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, Nov 15, 2022 at 2:07 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>
+>
+>
+> =E5=9C=A8 2022/11/15 =E4=B8=8B=E5=8D=886:17, WANG Xuerui =E5=86=99=E9=81=
+=93:
+> > Sorry for jumping in, but...
+> >
+> > On 2022/11/15 17:53, Yinbo Zhu wrote:
+> >>
+> >>
+> >> =E5=9C=A8 2022/11/15 =E4=B8=8B=E5=8D=885:05, Bartosz Golaszewski =E5=
+=86=99=E9=81=93:
+> >>> On Mon, Nov 14, 2022 at 10:53 AM Yinbo Zhu <zhuyinbo@loongson.cn> wro=
+te:
+> >>>>
+> >>>> The latest Loongson series platform use dts or acpi framework to
+> >>>> register gpio device resources, such as the Loongson-2 series
+> >>>> SoC of LOONGARCH architecture. In order to support dts, acpi and
+> >>>> compatibility with previous platform device resources in driver,
+> >>>> this patch was added.
+> >>>>
+> >>>> Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
+> >>>> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+> >>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+> >>>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+> >>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> >>>> ---
+> >>>> Change in v2:
+> >>>>                  1. Fixup of_loongson_gpio_get_props and remove the
+> >>>> parse logic about
+> >>>>                     "loongson,conf_offset", "loongson,out_offset",
+> >>>> "loongson,in_offset",
+> >>>>                     "loongson,gpio_base", "loongson,support_irq"
+> >>>> then kernel driver will
+> >>>>                     initial them that depend compatible except
+> >>>> "loongson,gpio_base".
+> >>>>
+> >>>>   arch/loongarch/include/asm/loongson.h         |  13 +
+> >>>>   .../include/asm/mach-loongson2ef/loongson.h   |  12 +
+> >>>>   .../include/asm/mach-loongson64/loongson.h    |  13 +
+> >>>>   drivers/gpio/Kconfig                          |   6 +-
+> >>>>   drivers/gpio/gpio-loongson.c                  | 422
+> >>>> +++++++++++++++---
+> >>>>   5 files changed, 391 insertions(+), 75 deletions(-)
+> >>>>
+> >>>> diff --git a/arch/loongarch/include/asm/loongson.h
+> >>>> b/arch/loongarch/include/asm/loongson.h
+> >>>> index 00db93edae1b..383fdda155f0 100644
+> >>>> --- a/arch/loongarch/include/asm/loongson.h
+> >>>> +++ b/arch/loongarch/include/asm/loongson.h
+> >>>> @@ -60,6 +60,19 @@ static inline void xconf_writeq(u64 val64,
+> >>>> volatile void __iomem *addr)
+> >>>>          );
+> >>>>   }
+> >>>>
+> >>>> +/* =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D Data structrues =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D */
+> >>>> +
+> >>>> +/* gpio data */
+> >>>> +struct platform_gpio_data {
+> >>>> +       u32 gpio_conf;
+> >>>> +       u32 gpio_out;
+> >>>> +       u32 gpio_in;
+> >>>> +       u32 support_irq;
+> >>>> +       char *label;
+> >>>> +       int gpio_base;
+> >>>> +       int ngpio;
+> >>>> +};
+> >>>
+> >>> This is a terrible name for an exported structure. You would at least
+> >>> need some kind of a namespace prefix. But even then the need to add a
+> >>> platform data structure is very questionable. We've moved past the
+> >>> need for platform data in the kernel. I don't see anyone setting it u=
+p
+> >>> in this series either. Could you provide more explanation on why you
+> >>> would need it and who would use it?
+> >> okay, I will add a namespace prefix, about this platform data was adde=
+d
+> >> that was to compatible with legacy platforms that do not support dts o=
+r
+> >> acpi, then, the mips loongson platform or loongarch loongson platform
+> >
+> > Why are you trying to support "legacy" LoongArch platforms when the
+> > architecture was just upstreamed *this year*?
+> the leagacy gpio driver had support LoongArch, and you can find some
+> gpio register defined in arch/loongarch/include
+> /asm/loongson.h in legacy gpio driver, such as LOONGSON_GPIODATA,
+> The legacy gpio driver is the driver that doesn't include my gpio patch.
+> >
+> >> can implement the gpio device driver to initialize the
+> >> platform_gpio_data structure as needed after exporting the structure.
+> >>>
+> >>>> +
+> >>>>   /* =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D LS7A registers =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D */
+> >>>>   #define LS7A_PCH_REG_BASE              0x10000000UL
+> >>>>   /* LPC regs */
+> >>>> diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> >>>> b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> >>>> index ca039b8dcde3..b261cea4fee1 100644
+> >>>> --- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> >>>> +++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> >>>> @@ -315,4 +315,16 @@ extern unsigned long _loongson_addrwincfg_base;
+> >>>>
+> >>>>   #endif /* ! CONFIG_CPU_SUPPORTS_ADDRWINCFG */
+> >>>>
+> >>>> +/* =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D Data structrues =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D */
+> >>>> +
+> >>>> +/* gpio data */
+> >>>> +struct platform_gpio_data {
+> >>>> +       u32 gpio_conf;
+> >>>> +       u32 gpio_out;
+> >>>> +       u32 gpio_in;
+> >>>> +       u32 support_irq;
+> >>>> +       char *label;
+> >>>> +       int gpio_base;
+> >>>> +       int ngpio;
+> >>>> +};
+> >>>
+> >>> No idea why you would need to duplicate it like this either. And why
+> >>> put it in arch/.
+> >> because loongson platform include mips and loongarch, and the gpio
+> >> device data was defined in arch/ in leagcy loongson gpio driver.  so t=
+he
+> >> latest loongson gpio drvier add platform_gpio_data in same dir.
+> >
+> > I think at this point it's hopefully clear, that the way forward to
+> > supporting Loongson IP blocks shared between MIPS/LoongArch SoCs is to
+> > start over and do things properly, making the code as platform-agnostic
+> > as possible. Just make sure the drivers can get initialized via DT and
+> > ACPI then you're all set -- the upstream kernel is guaranteed to use on=
+e
+> > of the two well-established boot flows for every Loongson chip it
+> > supports. Be it hard-coded DT in arch/mips/boot/dts/loongson, or the
+> > LoongArch ACPI/upcoming DT, no need for hard-coding things in arch/ in
+> > either case.
+> Our old platforms are used by customers, but we will not maintain those
+> platforms. Adding dts/acpi support to those old platforms not only makes
+> no sense, but also affects their use. Because the configuration of
+> dts/acpi requires the support of the firmware team, but in fact, we have
+> no one to maintain those old platforms.
+>
+> in a words, My patch to upstream was supposed to consider dts/acpi in
+> LoongArch platform  But I have to consider the original legacy gpio
+> driver and to compatible with it.
 
+Which legacy driver are you referring to? Neither gpio-loongson nor
+gpio-loongson1 define any platform data. If it wasn't needed before
+then it's sure we won't be adding it in 2022. If you have board-files
+upstream that need to use this driver then you can do fine with
+regular device properties.
 
-在 2022/11/15 下午6:17, WANG Xuerui 写道:
-> Sorry for jumping in, but...
-> 
-> On 2022/11/15 17:53, Yinbo Zhu wrote:
->>
->>
->> 在 2022/11/15 下午5:05, Bartosz Golaszewski 写道:
->>> On Mon, Nov 14, 2022 at 10:53 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->>>>
->>>> The latest Loongson series platform use dts or acpi framework to
->>>> register gpio device resources, such as the Loongson-2 series
->>>> SoC of LOONGARCH architecture. In order to support dts, acpi and
->>>> compatibility with previous platform device resources in driver,
->>>> this patch was added.
->>>>
->>>> Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
->>>> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
->>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->>>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> ---
->>>> Change in v2:
->>>>                  1. Fixup of_loongson_gpio_get_props and remove the 
->>>> parse logic about
->>>>                     "loongson,conf_offset", "loongson,out_offset", 
->>>> "loongson,in_offset",
->>>>                     "loongson,gpio_base", "loongson,support_irq" 
->>>> then kernel driver will
->>>>                     initial them that depend compatible except 
->>>> "loongson,gpio_base".
->>>>
->>>>   arch/loongarch/include/asm/loongson.h         |  13 +
->>>>   .../include/asm/mach-loongson2ef/loongson.h   |  12 +
->>>>   .../include/asm/mach-loongson64/loongson.h    |  13 +
->>>>   drivers/gpio/Kconfig                          |   6 +-
->>>>   drivers/gpio/gpio-loongson.c                  | 422 
->>>> +++++++++++++++---
->>>>   5 files changed, 391 insertions(+), 75 deletions(-)
->>>>
->>>> diff --git a/arch/loongarch/include/asm/loongson.h 
->>>> b/arch/loongarch/include/asm/loongson.h
->>>> index 00db93edae1b..383fdda155f0 100644
->>>> --- a/arch/loongarch/include/asm/loongson.h
->>>> +++ b/arch/loongarch/include/asm/loongson.h
->>>> @@ -60,6 +60,19 @@ static inline void xconf_writeq(u64 val64, 
->>>> volatile void __iomem *addr)
->>>>          );
->>>>   }
->>>>
->>>> +/* ============== Data structrues =============== */
->>>> +
->>>> +/* gpio data */
->>>> +struct platform_gpio_data {
->>>> +       u32 gpio_conf;
->>>> +       u32 gpio_out;
->>>> +       u32 gpio_in;
->>>> +       u32 support_irq;
->>>> +       char *label;
->>>> +       int gpio_base;
->>>> +       int ngpio;
->>>> +};
->>>
->>> This is a terrible name for an exported structure. You would at least
->>> need some kind of a namespace prefix. But even then the need to add a
->>> platform data structure is very questionable. We've moved past the
->>> need for platform data in the kernel. I don't see anyone setting it up
->>> in this series either. Could you provide more explanation on why you
->>> would need it and who would use it?
->> okay, I will add a namespace prefix, about this platform data was added
->> that was to compatible with legacy platforms that do not support dts or
->> acpi, then, the mips loongson platform or loongarch loongson platform
-> 
-> Why are you trying to support "legacy" LoongArch platforms when the 
-> architecture was just upstreamed *this year*?
-the leagacy gpio driver had support LoongArch, and you can find some
-gpio register defined in arch/loongarch/include
-/asm/loongson.h in legacy gpio driver, such as LOONGSON_GPIODATA,
-The legacy gpio driver is the driver that doesn't include my gpio patch.
-> 
->> can implement the gpio device driver to initialize the
->> platform_gpio_data structure as needed after exporting the structure.
->>>
->>>> +
->>>>   /* ============== LS7A registers =============== */
->>>>   #define LS7A_PCH_REG_BASE              0x10000000UL
->>>>   /* LPC regs */
->>>> diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h 
->>>> b/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>>> index ca039b8dcde3..b261cea4fee1 100644
->>>> --- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>>> +++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>>> @@ -315,4 +315,16 @@ extern unsigned long _loongson_addrwincfg_base;
->>>>
->>>>   #endif /* ! CONFIG_CPU_SUPPORTS_ADDRWINCFG */
->>>>
->>>> +/* ============== Data structrues =============== */
->>>> +
->>>> +/* gpio data */
->>>> +struct platform_gpio_data {
->>>> +       u32 gpio_conf;
->>>> +       u32 gpio_out;
->>>> +       u32 gpio_in;
->>>> +       u32 support_irq;
->>>> +       char *label;
->>>> +       int gpio_base;
->>>> +       int ngpio;
->>>> +};
->>>
->>> No idea why you would need to duplicate it like this either. And why
->>> put it in arch/.
->> because loongson platform include mips and loongarch, and the gpio 
->> device data was defined in arch/ in leagcy loongson gpio driver.  so the
->> latest loongson gpio drvier add platform_gpio_data in same dir.
-> 
-> I think at this point it's hopefully clear, that the way forward to 
-> supporting Loongson IP blocks shared between MIPS/LoongArch SoCs is to 
-> start over and do things properly, making the code as platform-agnostic 
-> as possible. Just make sure the drivers can get initialized via DT and 
-> ACPI then you're all set -- the upstream kernel is guaranteed to use one 
-> of the two well-established boot flows for every Loongson chip it 
-> supports. Be it hard-coded DT in arch/mips/boot/dts/loongson, or the 
-> LoongArch ACPI/upcoming DT, no need for hard-coding things in arch/ in 
-> either case.
-Our old platforms are used by customers, but we will not maintain those
-platforms. Adding dts/acpi support to those old platforms not only makes
-no sense, but also affects their use. Because the configuration of
-dts/acpi requires the support of the firmware team, but in fact, we have
-no one to maintain those old platforms.
-
-in a words, My patch to upstream was supposed to consider dts/acpi in
-LoongArch platform  But I have to consider the original legacy gpio
-driver and to compatible with it.
-> 
->>>
->>> [snip]
->>>
->>> I will hold off reviewing the rest of the patch until we get that 
->>> clarified.
->>>
->>> Bartosz
->>>
->>
-> 
-
+Bartosz
