@@ -2,320 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20757629453
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Nov 2022 10:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9B26294E0
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Nov 2022 10:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiKOJbV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Nov 2022 04:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S238225AbiKOJx4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Nov 2022 04:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiKOJbU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Nov 2022 04:31:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4BFB7D9
-        for <linux-mips@vger.kernel.org>; Tue, 15 Nov 2022 01:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668504619;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PI4QkJgg5xRejZYnaDkrohoS+PcA0MTFv2A75peo2zg=;
-        b=aa7iI5Lq4Rmc3VrPX4X35FoV8oMPTYrA9nhnHxaPCy0DA9ijQqa0y8mpM4y7h2IBWBYtsU
-        5tEDotMjAhoi/mMl4mqDqjKwpbzghxt9KKzsTVRX7wZlGOY5P1MvY+hVjcVs9Bv8YzA7Qk
-        R4ZQr1fF44q2/NO45xVwJxBWOZGMPew=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-306-Qo9vVGKJPxeSWYSK9pne9w-1; Tue, 15 Nov 2022 04:30:18 -0500
-X-MC-Unique: Qo9vVGKJPxeSWYSK9pne9w-1
-Received: by mail-ej1-f71.google.com with SMTP id hs34-20020a1709073ea200b007ad86f91d39so6991328ejc.10
-        for <linux-mips@vger.kernel.org>; Tue, 15 Nov 2022 01:30:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PI4QkJgg5xRejZYnaDkrohoS+PcA0MTFv2A75peo2zg=;
-        b=n33UFUNS8RIoTGT9nW8poZtyPZyHIylVp0K5FlvwAYJw6OYOnb8o4jKdj7hkUN+d5Y
-         UizkLE1rFpUgx8KAWI10S5w8oiPxfWd7l5XT+PGvk5aYNH4ei4RxyTlzgsTUggx6f9K9
-         L5/Tbow+Pzk0XUbe7tl35MTFOErV1Vfs98KKIDG05jquwCgXH6IxhIoeLBw8x4/lzv5P
-         CBvVUy6h19u6VygPwFem/Drnyj0MJaZbr5R7LHtVMX/YXCDaHNWcoCUp0OspdQKT13ev
-         On0vc3itebBz2DX6neXOVNqtD4J+GTljwTWEt5khcqMZ6WLR+K/ZGtoZIf4ZLjnnQOZu
-         OZEw==
-X-Gm-Message-State: ANoB5pmi/KozhBqq2Twe0wHzh2DUXHV5zoqJy6SAr6IVOqLpEarmOi8D
-        TSSh70U7DBCrJPNVQzmNWOtET4ZpBviCllOVasyMpKu3CgaVa/OWFBrxqxdC6OMVqso8BdGQIJ3
-        8E6/Alb+c+Qh9OYeRhU4GFg==
-X-Received: by 2002:a50:fe13:0:b0:461:565e:8779 with SMTP id f19-20020a50fe13000000b00461565e8779mr14489165edt.387.1668504617476;
-        Tue, 15 Nov 2022 01:30:17 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5Zsa4CnM7XTxV75wUJGjjLzRgPV7NQ4412B1eIJSCcezAuycjNE+mpvlda5nQMKDxwK/vVkA==
-X-Received: by 2002:a50:fe13:0:b0:461:565e:8779 with SMTP id f19-20020a50fe13000000b00461565e8779mr14489153edt.387.1668504617196;
-        Tue, 15 Nov 2022 01:30:17 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id ew13-20020a056402538d00b004642b35f89esm5950875edb.9.2022.11.15.01.30.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 01:30:16 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
+        with ESMTP id S237819AbiKOJxv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Nov 2022 04:53:51 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54538110F;
+        Tue, 15 Nov 2022 01:53:29 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxndqYYXNjgjcHAA--.21645S3;
+        Tue, 15 Nov 2022 17:53:28 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+CWYXNjUoUTAA--.52636S2;
+        Tue, 15 Nov 2022 17:53:28 +0800 (CST)
+Subject: Re: [PATCH v2 1/2] gpio: loongson: add dts/acpi gpio support
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, zhuyinbo@loongson.cn,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>
-Subject: Re: [PATCH 10/44] KVM: VMX: Clean up eVMCS enabling if KVM
- initialization fails
-In-Reply-To: <Y22nrQ7aziK0NMOE@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-11-seanjc@google.com>
- <87mt98qfi2.fsf@ovpn-194-252.brq.redhat.com> <Y22nrQ7aziK0NMOE@google.com>
-Date:   Tue, 15 Nov 2022 10:30:14 +0100
-Message-ID: <87sfikmuop.fsf@redhat.com>
+        lvjianmin <lvjianmin@loongson.cn>,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221114095332.21079-1-zhuyinbo@loongson.cn>
+ <CAMRc=McnEiSj1Q51pG3Lc8e+HcXE_uU7dm=1VoOa__xOgyoZPg@mail.gmail.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <8b24e3df-8c22-bd09-cfc1-b27e39a05c25@loongson.cn>
+Date:   Tue, 15 Nov 2022 17:53:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMRc=McnEiSj1Q51pG3Lc8e+HcXE_uU7dm=1VoOa__xOgyoZPg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dxr+CWYXNjUoUTAA--.52636S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWr1UWFW5AF1fZw1DWw43trb_yoWrXFykpF
+        nxAa93KF48Kry7Crn8J348ur13A395KrnFqF4fJ34jkryDW34kZr1DGF15ZF4xGr4FvFyj
+        qFy8Kr48WFs8ur7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
+        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
+        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8k-BtUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
 
-> On Thu, Nov 03, 2022, Vitaly Kuznetsov wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> > +	/*
->> > +	 * Reset everything to support using non-enlightened VMCS access later
->> > +	 * (e.g. when we reload the module with enlightened_vmcs=0)
->> > +	 */
->> > +	for_each_online_cpu(cpu) {
->> > +		vp_ap =	hv_get_vp_assist_page(cpu);
->> > +
->> > +		if (!vp_ap)
->> > +			continue;
->> > +
->> > +		vp_ap->nested_control.features.directhypercall = 0;
->> > +		vp_ap->current_nested_vmcs = 0;
->> > +		vp_ap->enlighten_vmentry = 0;
->> > +	}
->> 
->> Unrelated to your patch but while looking at this code I got curious
->> about why don't we need a protection against CPU offlining here. Turns
->> out that even when we offline a CPU, its VP assist page remains
->> allocated (see hv_cpu_die()), we just write '0' to the MSR and thus
->
-> Heh, "die".  Hyper-V is quite dramatic.
->
->> accessing the page is safe. The consequent hv_cpu_init(), however, does
->> not restore VP assist page when it's already allocated:
->> 
->> # rdmsr -p 24 0x40000073
->> 10212f001
->> # echo 0 > /sys/devices/system/cpu/cpu24/online 
->> # echo 1 > /sys/devices/system/cpu/cpu24/online 
->> # rdmsr -p 24 0x40000073
->> 0
->> 
->> The culprit is commit e5d9b714fe402 ("x86/hyperv: fix root partition
->> faults when writing to VP assist page MSR"). A patch is inbound.
->> 
->> 'hv_root_partition' case is different though. We do memunmap() and reset
->> VP assist page to zero so it is theoretically possible we're going to
->> clash. Unless I'm missing some obvious reason why module unload can't
->> coincide with CPU offlining, we may be better off surrounding this with
->> cpus_read_lock()/cpus_read_unlock(). 
->
-> I finally see what you're concerned about.  If a CPU goes offline and its assist
-> page is unmapped, zeroing out the nested/eVMCS stuff will fault.
->
-> I think the real problem is that the purging of the eVMCS is in the wrong place.
-> Move the clearing to vmx_hardware_disable() and then the CPU hotplug bug goes
-> away once KVM disables hotplug during hardware enabling/disable later in the series.
-> There's no need to wait until module exit, e.g. it's not like it costs much to
-> clear a few variables, and IIUC the state is used only when KVM is actively using
-> VMX/eVMCS.
->
-> However, I believe there's a second bug.  KVM's CPU online hook is called before
-> Hyper-V's online hook (CPUHP_AP_ONLINE_DYN).  Before this series, which moves KVM's
-> hook from STARTING to ONLINE, KVM's hook is waaaay before Hyper-V's.  That means
-> that hv_cpu_init()'s allocation of the VP assist page will come _after_ KVM's
-> check in vmx_hardware_enable()
->
-> 	/*
-> 	 * This can happen if we hot-added a CPU but failed to allocate
-> 	 * VP assist page for it.
-> 	 */
-> 	if (static_branch_unlikely(&enable_evmcs) &&
-> 	    !hv_get_vp_assist_page(cpu))
-> 		return -EFAULT;
->
-> I.e. CPU hotplug will never work if KVM is running VMs as a Hyper-V guest.  I bet
-> you can repro by doing a SUSPEND+RESUME.
->
-> Can you try to see if that's actually a bug?  If so, the only sane fix seems to
-> be to add a dedicated ONLINE action for Hyper-V.  
 
-It seems we can't get away without a dedicated stage for Hyper-V anyway,
-e.g. see our discussion with Michael:
-
-https://lore.kernel.org/linux-hyperv/878rkqr7ku.fsf@ovpn-192-136.brq.redhat.com/
-
-All these issues are more or less "theoretical" as there's no real CPU
-hotplug on Hyper-V/Azure. Yes, it is possible to trigger problems by
-doing CPU offline/online but I don't see how this may come handy outside
-of testing envs.
-
-> Per patch
->
->   KVM: Rename and move CPUHP_AP_KVM_STARTING to ONLINE section
->
-> from this series, CPUHP_AP_KVM_ONLINE needs to be before CPUHP_AP_SCHED_WAIT_EMPTY
-> to ensure there are no tasks, i.e. no vCPUs, running on the to-be-unplugged CPU.
->
-> Back to the original bug, proposed fix is below.  The other advantage of moving
-> the reset to hardware disabling is that the "cleanup" is just disabling the static
-> key, and at that point can simply be deleted as there's no need to disable the
-> static key when kvm-intel is unloaded since kvm-intel owns the key.  I.e. this
-> patch (that we're replying to) would get replaced with a patch to delete the
-> disabling of the static key.
->
-
-From a quick glance looks good to me, I'll try to find some time to work
-on this issue. I will likely end up proposing a dedicated CPU hotplug
-stage for Hyper-V (which needs to happen before KVM's
-CPUHP_AP_KVM_ONLINE on CPU hotplug and after on unplug) anyway.
-
-Thanks for looking into this!
-
-> --
-> From: Sean Christopherson <seanjc@google.com>
-> Date: Thu, 10 Nov 2022 17:28:08 -0800
-> Subject: [PATCH] KVM: VMX: Reset eVMCS controls in VP assist page during
->  hardware disabling
->
-> Reset the eVMCS controls in the per-CPU VP assist page during hardware
-> disabling instead of waiting until kvm-intel's module exit.  The controls
-> are activated if and only if KVM creates a VM, i.e. don't need to be
-> reset if hardware is never enabled.
->
-> Doing the reset during hardware disabling will naturally fix a potential
-> NULL pointer deref bug once KVM disables CPU hotplug while enabling and
-> disabling hardware (which is necessary to fix a variety of bugs).  If the
-> kernel is running as the root partition, the VP assist page is unmapped
-> during CPU hot unplug, and so KVM's clearing of the eVMCS controls needs
-> to occur with CPU hot(un)plug disabled, otherwise KVM could attempt to
-> write to a CPU's VP assist page after it's unmapped.
->
-> Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++-----------------
->  1 file changed, 30 insertions(+), 20 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index aca88524fd1e..ae13aa3e8a1d 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -552,6 +552,33 @@ static int hv_enable_direct_tlbflush(struct kvm_vcpu *vcpu)
->  	return 0;
->  }
->  
-> +static void hv_reset_evmcs(void)
-> +{
-> +	struct hv_vp_assist_page *vp_ap;
-> +
-> +	if (!static_branch_unlikely(&enable_evmcs))
-> +		return;
-> +
-> +	/*
-> +	 * KVM should enable eVMCS if and only if all CPUs have a VP assist
-> +	 * page, and should reject CPU onlining if eVMCS is enabled the CPU
-> +	 * doesn't have a VP assist page allocated.
-> +	 */
-> +	vp_ap = hv_get_vp_assist_page(smp_processor_id());
-> +	if (WARN_ON_ONCE(!vp_ap))
-> +		return;
-> +
-> +	/*
-> +	 * Reset everything to support using non-enlightened VMCS access later
-> +	 * (e.g. when we reload the module with enlightened_vmcs=0)
-> +	 */
-> +	vp_ap->nested_control.features.directhypercall = 0;
-> +	vp_ap->current_nested_vmcs = 0;
-> +	vp_ap->enlighten_vmentry = 0;
-> +}
-> +
-> +#else /* IS_ENABLED(CONFIG_HYPERV) */
-> +static void hv_reset_evmcs(void) {}
->  #endif /* IS_ENABLED(CONFIG_HYPERV) */
->  
->  /*
-> @@ -2497,6 +2524,8 @@ static void vmx_hardware_disable(void)
->  	if (cpu_vmxoff())
->  		kvm_spurious_fault();
->  
-> +	hv_reset_evmcs();
-> +
->  	intel_pt_handle_vmx(0);
->  }
->  
-> @@ -8463,27 +8492,8 @@ static void vmx_exit(void)
->  	kvm_exit();
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
-> -	if (static_branch_unlikely(&enable_evmcs)) {
-> -		int cpu;
-> -		struct hv_vp_assist_page *vp_ap;
-> -		/*
-> -		 * Reset everything to support using non-enlightened VMCS
-> -		 * access later (e.g. when we reload the module with
-> -		 * enlightened_vmcs=0)
-> -		 */
-> -		for_each_online_cpu(cpu) {
-> -			vp_ap =	hv_get_vp_assist_page(cpu);
-> -
-> -			if (!vp_ap)
-> -				continue;
-> -
-> -			vp_ap->nested_control.features.directhypercall = 0;
-> -			vp_ap->current_nested_vmcs = 0;
-> -			vp_ap->enlighten_vmentry = 0;
-> -		}
-> -
-> +	if (static_branch_unlikely(&enable_evmcs))
->  		static_branch_disable(&enable_evmcs);
-> -	}
->  #endif
->  	vmx_cleanup_l1d_flush();
->  
->
-> base-commit: 5f47ba6894477dfbdc5416467a25fb7acb47d404
-
--- 
-Vitaly
+在 2022/11/15 下午5:05, Bartosz Golaszewski 写道:
+> On Mon, Nov 14, 2022 at 10:53 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>>
+>> The latest Loongson series platform use dts or acpi framework to
+>> register gpio device resources, such as the Loongson-2 series
+>> SoC of LOONGARCH architecture. In order to support dts, acpi and
+>> compatibility with previous platform device resources in driver,
+>> this patch was added.
+>>
+>> Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
+>> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>> Change in v2:
+>>                  1. Fixup of_loongson_gpio_get_props and remove the parse logic about
+>>                     "loongson,conf_offset", "loongson,out_offset", "loongson,in_offset",
+>>                     "loongson,gpio_base", "loongson,support_irq" then kernel driver will
+>>                     initial them that depend compatible except "loongson,gpio_base".
+>>
+>>   arch/loongarch/include/asm/loongson.h         |  13 +
+>>   .../include/asm/mach-loongson2ef/loongson.h   |  12 +
+>>   .../include/asm/mach-loongson64/loongson.h    |  13 +
+>>   drivers/gpio/Kconfig                          |   6 +-
+>>   drivers/gpio/gpio-loongson.c                  | 422 +++++++++++++++---
+>>   5 files changed, 391 insertions(+), 75 deletions(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/loongson.h b/arch/loongarch/include/asm/loongson.h
+>> index 00db93edae1b..383fdda155f0 100644
+>> --- a/arch/loongarch/include/asm/loongson.h
+>> +++ b/arch/loongarch/include/asm/loongson.h
+>> @@ -60,6 +60,19 @@ static inline void xconf_writeq(u64 val64, volatile void __iomem *addr)
+>>          );
+>>   }
+>>
+>> +/* ============== Data structrues =============== */
+>> +
+>> +/* gpio data */
+>> +struct platform_gpio_data {
+>> +       u32 gpio_conf;
+>> +       u32 gpio_out;
+>> +       u32 gpio_in;
+>> +       u32 support_irq;
+>> +       char *label;
+>> +       int gpio_base;
+>> +       int ngpio;
+>> +};
+> 
+> This is a terrible name for an exported structure. You would at least
+> need some kind of a namespace prefix. But even then the need to add a
+> platform data structure is very questionable. We've moved past the
+> need for platform data in the kernel. I don't see anyone setting it up
+> in this series either. Could you provide more explanation on why you
+> would need it and who would use it?
+okay, I will add a namespace prefix, about this platform data was added
+that was to compatible with legacy platforms that do not support dts or
+acpi, then, the mips loongson platform or loongarch loongson platform
+can implement the gpio device driver to initialize the
+platform_gpio_data structure as needed after exporting the structure.
+> 
+>> +
+>>   /* ============== LS7A registers =============== */
+>>   #define LS7A_PCH_REG_BASE              0x10000000UL
+>>   /* LPC regs */
+>> diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+>> index ca039b8dcde3..b261cea4fee1 100644
+>> --- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
+>> +++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+>> @@ -315,4 +315,16 @@ extern unsigned long _loongson_addrwincfg_base;
+>>
+>>   #endif /* ! CONFIG_CPU_SUPPORTS_ADDRWINCFG */
+>>
+>> +/* ============== Data structrues =============== */
+>> +
+>> +/* gpio data */
+>> +struct platform_gpio_data {
+>> +       u32 gpio_conf;
+>> +       u32 gpio_out;
+>> +       u32 gpio_in;
+>> +       u32 support_irq;
+>> +       char *label;
+>> +       int gpio_base;
+>> +       int ngpio;
+>> +};
+> 
+> No idea why you would need to duplicate it like this either. And why
+> put it in arch/.
+because loongson platform include mips and loongarch, and the gpio 
+device data was defined in arch/ in leagcy loongson gpio driver.  so the
+latest loongson gpio drvier add platform_gpio_data in same dir.
+> 
+> [snip]
+> 
+> I will hold off reviewing the rest of the patch until we get that clarified.
+> 
+> Bartosz
+> 
 
