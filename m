@@ -2,130 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695856291F7
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Nov 2022 07:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B5B6293D0
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Nov 2022 10:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiKOGo4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Nov 2022 01:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S237475AbiKOJFy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Nov 2022 04:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiKOGoz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Nov 2022 01:44:55 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D958C1836F;
-        Mon, 14 Nov 2022 22:44:53 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VUsFbJs_1668494685;
-Received: from 30.240.98.93(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VUsFbJs_1668494685)
-          by smtp.aliyun-inc.com;
-          Tue, 15 Nov 2022 14:44:48 +0800
-Message-ID: <ffdf1eb1-c188-b161-0e70-cad6f64c6c46@linux.alibaba.com>
-Date:   Tue, 15 Nov 2022 14:44:44 +0800
+        with ESMTP id S229806AbiKOJFx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Nov 2022 04:05:53 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3062718393
+        for <linux-mips@vger.kernel.org>; Tue, 15 Nov 2022 01:05:51 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id m4so7223282vsc.6
+        for <linux-mips@vger.kernel.org>; Tue, 15 Nov 2022 01:05:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DPUEJYNpBZuDWaWvpWz9lTBlWL+Xs7ztgn+pfOxI9Vw=;
+        b=za5gKQHyD5pfb+Psq9X451yj/JM/sWgade6c5blX+uuQ2wxffv7AkvmTo1P0h/EN09
+         Fy3sp3m+6emgJD4ycOw+g6J0KpPXl5XJ4OaQJnxsOLH2lEe6hoCyMXfT53vfQSTIyZWl
+         qUe0miJhOkndQKc0+RwVEGXuasFvwQrgZI2RXrJH/AzgtJ4tQq8kyB41Fi2JV57QBx/U
+         e9mBNZw42y15hjRkxNZTAJAWw93sqE2R7+AsU0he/J3QreUibqfXO+mATPYzyaxUgkhB
+         1bC/swUVlF2528bieS438IHPBlS1TDJHrlb3j/tkH3EUeo+EazNACSO3uUFi/bhFLYZJ
+         8Dyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DPUEJYNpBZuDWaWvpWz9lTBlWL+Xs7ztgn+pfOxI9Vw=;
+        b=DGijoMrXZGBi3j7LnKuqZyYgoLPXYIHQp0Mmg9faqUY6mDXP7lmY0Hy9kBtcgwUFMn
+         /8hwhuq3p0MKyLsLedFsxGbT1UCG0ZEQ6MAa5YPsNF+/Pw8tgdV6/olpYJmZYogDR3LT
+         G7MkyMrKkMsDSQ7OHsTnRnjWvg/uVzQfzdZ0sIH9YSyofheYJSKlSzRPOfPUx4wjJWhp
+         CcWBc56sZvSpmxo1cM3gR47uwLEaHFabKxp+FJqRaJhJk9iXPFk5XKSTOzjRx+FC2U67
+         BBHP2rr160PNRGou/P97T1Z2BEIzV4TkxjDLleodpZRNDCOWLWAzYb4XVWs+xjmeskO4
+         TYWQ==
+X-Gm-Message-State: ANoB5plMJCIhE8fD8wnXDaZFhEqtnsgPeSIByrbQzufiBcziifbLncVH
+        N776mzpVGFxmhPPrIxVCLgIc1F3uS5FIVfr51aioOA==
+X-Google-Smtp-Source: AA0mqf7+HqkJSU4s6JQwT2ZWSckr32WEqchatmDr7NixiuSYebqcmgWdYUG8Gs6SmmejKZeaxlr8IJgVjjoKp9Fl4yw=
+X-Received: by 2002:a05:6102:488:b0:3ac:38c7:1bdd with SMTP id
+ n8-20020a056102048800b003ac38c71bddmr8089142vsa.9.1668503150211; Tue, 15 Nov
+ 2022 01:05:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v6 1/2] mm/tlbbatch: Introduce
- arch_tlbbatch_should_defer()
-To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        anshuman.khandual@arm.com, linux-doc@vger.kernel.org
-Cc:     corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
-        punit.agrawal@bytedance.com, linux-kernel@vger.kernel.org,
-        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
-        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
-        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        Barry Song <21cnbao@gmail.com>, wangkefeng.wang@huawei.com,
-        prime.zeng@hisilicon.com,
-        Anshuman Khandual <khandual@linux.vnet.ibm.com>,
-        Barry Song <baohua@kernel.org>
-References: <20221115031425.44640-1-yangyicong@huawei.com>
- <20221115031425.44640-2-yangyicong@huawei.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20221115031425.44640-2-yangyicong@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114095332.21079-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20221114095332.21079-1-zhuyinbo@loongson.cn>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 15 Nov 2022 10:05:39 +0100
+Message-ID: <CAMRc=McnEiSj1Q51pG3Lc8e+HcXE_uU7dm=1VoOa__xOgyoZPg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] gpio: loongson: add dts/acpi gpio support
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        lvjianmin <lvjianmin@loongson.cn>,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-在 2022/11/15 上午11:14, Yicong Yang 写道:
-> From: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+On Mon, Nov 14, 2022 at 10:53 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
 >
-> The entire scheme of deferred TLB flush in reclaim path rests on the
-> fact that the cost to refill TLB entries is less than flushing out
-> individual entries by sending IPI to remote CPUs. But architecture
-> can have different ways to evaluate that. Hence apart from checking
-> TTU_BATCH_FLUSH in the TTU flags, rest of the decision should be
-> architecture specific.
+> The latest Loongson series platform use dts or acpi framework to
+> register gpio device resources, such as the Loongson-2 series
+> SoC of LOONGARCH architecture. In order to support dts, acpi and
+> compatibility with previous platform device resources in driver,
+> this patch was added.
 >
-> Signed-off-by: Anshuman Khandual <khandual@linux.vnet.ibm.com>
-> [https://lore.kernel.org/linuxppc-dev/20171101101735.2318-2-khandual@linux.vnet.ibm.com/]
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> [Rebase and fix incorrect return value type]
-> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> Reviewed-by: Barry Song <baohua@kernel.org>
-> Tested-by: Punit Agrawal <punit.agrawal@bytedance.com>
+> Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
+> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
->   arch/x86/include/asm/tlbflush.h | 12 ++++++++++++
->   mm/rmap.c                       |  9 +--------
->   2 files changed, 13 insertions(+), 8 deletions(-)
+> Change in v2:
+>                 1. Fixup of_loongson_gpio_get_props and remove the parse logic about
+>                    "loongson,conf_offset", "loongson,out_offset", "loongson,in_offset",
+>                    "loongson,gpio_base", "loongson,support_irq" then kernel driver will
+>                    initial them that depend compatible except "loongson,gpio_base".
 >
-> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-> index cda3118f3b27..8a497d902c16 100644
-> --- a/arch/x86/include/asm/tlbflush.h
-> +++ b/arch/x86/include/asm/tlbflush.h
-> @@ -240,6 +240,18 @@ static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
->   	flush_tlb_mm_range(vma->vm_mm, a, a + PAGE_SIZE, PAGE_SHIFT, false);
->   }
->   
-> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-> +{
-> +	bool should_defer = false;
+>  arch/loongarch/include/asm/loongson.h         |  13 +
+>  .../include/asm/mach-loongson2ef/loongson.h   |  12 +
+>  .../include/asm/mach-loongson64/loongson.h    |  13 +
+>  drivers/gpio/Kconfig                          |   6 +-
+>  drivers/gpio/gpio-loongson.c                  | 422 +++++++++++++++---
+>  5 files changed, 391 insertions(+), 75 deletions(-)
+>
+> diff --git a/arch/loongarch/include/asm/loongson.h b/arch/loongarch/include/asm/loongson.h
+> index 00db93edae1b..383fdda155f0 100644
+> --- a/arch/loongarch/include/asm/loongson.h
+> +++ b/arch/loongarch/include/asm/loongson.h
+> @@ -60,6 +60,19 @@ static inline void xconf_writeq(u64 val64, volatile void __iomem *addr)
+>         );
+>  }
+>
+> +/* ============== Data structrues =============== */
 > +
-> +	/* If remote CPUs need to be flushed then defer batch the flush */
-> +	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
-> +		should_defer = true;
-> +	put_cpu();
-> +
-> +	return should_defer;
-> +}
-> +
->   static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
->   {
->   	/*
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 2ec925e5fa6a..a9ab10bc0144 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -685,17 +685,10 @@ static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
->    */
->   static bool should_defer_flush(struct mm_struct *mm, enum ttu_flags flags)
->   {
-> -	bool should_defer = false;
-> -
->   	if (!(flags & TTU_BATCH_FLUSH))
->   		return false;
->   
-> -	/* If remote CPUs need to be flushed then defer batch the flush */
-> -	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
-> -		should_defer = true;
-> -	put_cpu();
-> -
-> -	return should_defer;
-> +	return arch_tlbbatch_should_defer(mm);
->   }
->   
-LGTM, thanks
+> +/* gpio data */
+> +struct platform_gpio_data {
+> +       u32 gpio_conf;
+> +       u32 gpio_out;
+> +       u32 gpio_in;
+> +       u32 support_irq;
+> +       char *label;
+> +       int gpio_base;
+> +       int ngpio;
+> +};
 
-Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
->   /*
+This is a terrible name for an exported structure. You would at least
+need some kind of a namespace prefix. But even then the need to add a
+platform data structure is very questionable. We've moved past the
+need for platform data in the kernel. I don't see anyone setting it up
+in this series either. Could you provide more explanation on why you
+would need it and who would use it?
+
+> +
+>  /* ============== LS7A registers =============== */
+>  #define LS7A_PCH_REG_BASE              0x10000000UL
+>  /* LPC regs */
+> diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> index ca039b8dcde3..b261cea4fee1 100644
+> --- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> +++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> @@ -315,4 +315,16 @@ extern unsigned long _loongson_addrwincfg_base;
+>
+>  #endif /* ! CONFIG_CPU_SUPPORTS_ADDRWINCFG */
+>
+> +/* ============== Data structrues =============== */
+> +
+> +/* gpio data */
+> +struct platform_gpio_data {
+> +       u32 gpio_conf;
+> +       u32 gpio_out;
+> +       u32 gpio_in;
+> +       u32 support_irq;
+> +       char *label;
+> +       int gpio_base;
+> +       int ngpio;
+> +};
+
+No idea why you would need to duplicate it like this either. And why
+put it in arch/.
+
+[snip]
+
+I will hold off reviewing the rest of the patch until we get that clarified.
+
+Bartosz
