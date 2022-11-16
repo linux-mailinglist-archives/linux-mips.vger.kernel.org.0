@@ -2,42 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756D962B555
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Nov 2022 09:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F151D62B71F
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Nov 2022 11:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiKPIfw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Nov 2022 03:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
+        id S231336AbiKPKDU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Nov 2022 05:03:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232833AbiKPIfu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Nov 2022 03:35:50 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185B3EB4;
-        Wed, 16 Nov 2022 00:35:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1668587744; bh=yawoOj1vTGik4sRlX100aUafBB/AIVMWRJWCHw5WNHA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=F9rRkk2KFb7+53HCjEhZrn1MBtlTnYY7eQ00L9g5Cw9gk9UH9/bAv6E42FPAZYbaU
-         TbcmtwtqbXtFWXh0eEKI87JtMzBjQ/x33X0Be0KFAgQgwnGaNNkwxIt2KAcKZbvHVb
-         O2qaEKguhq0MGoPUeO3okeTpY21TzqODwGjJcBOI=
-Received: from [100.100.57.122] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E3FDD60087;
-        Wed, 16 Nov 2022 16:35:43 +0800 (CST)
-Message-ID: <3ae71f5c-2737-b313-31f5-5de9eedcf6cd@xen0n.name>
-Date:   Wed, 16 Nov 2022 16:35:43 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:108.0)
- Gecko/20100101 Thunderbird/108.0a1
+        with ESMTP id S231177AbiKPKDS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Nov 2022 05:03:18 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9C44C25;
+        Wed, 16 Nov 2022 02:03:15 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Dx_NhitXRjJ74HAA--.22409S3;
+        Wed, 16 Nov 2022 18:03:14 +0800 (CST)
+Received: from [10.130.0.63] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VZetXRjusEUAA--.36668S3;
+        Wed, 16 Nov 2022 18:03:12 +0800 (CST)
 Subject: Re: [PATCH v3 1/2] gpio: loongson: add dts/acpi gpio support
-Content-Language: en-US
 To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Juxin Gao <gaojuxin@loongson.cn>,
@@ -51,51 +40,54 @@ Cc:     lvjianmin <lvjianmin@loongson.cn>,
         zhanghongchen <zhanghongchen@loongson.cn>,
         Liu Peibao <liupeibao@loongson.cn>
 References: <20221116065335.8823-1-zhuyinbo@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
+From:   Qing Zhang <zhangqing@loongson.cn>
+Message-ID: <086f8ff4-563d-8f4d-585e-59205854f66c@loongson.cn>
+Date:   Wed, 16 Nov 2022 18:03:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
 In-Reply-To: <20221116065335.8823-1-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx9VZetXRjusEUAA--.36668S3
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvAXoW3tw1UCFy7WrWkXr18GF18uFg_yoW8Cr4DKo
+        W7JFZ3urW8Z347J3WYqrySqF47Z3Wqqa1vy3s2kFs8Gan8t3s8tr9rJ3y3XFy0vF1FqFyx
+        ZFyfWa1xtFWxtFWDn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUPvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
+        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
+        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
+        IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E
+        4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU289NDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022/11/16 14:53, Yinbo Zhu wrote:
+Hi, yinbo
+
+On 2022/11/16 下午2:53, Yinbo Zhu wrote:
 > The latest Loongson series platform use dts or acpi framework to
 > register gpio device resources, such as the Loongson-2 series
 > SoC of LOONGARCH architecture. In order to support dts, acpi and
 > compatibility with previous platform device resources in driver,
 > this patch was added.
-
-"LoongArch", not "LOONGARCH". The latter sounds too similar to a mass 
-replace from the all-caps MIPS.
-
-But again the commit message is overly verbose IMO, and contains minor 
-grammatical mistakes that don't hamper understanding but are a nuisance 
-nevertheless. I think the following could be enough:
-
-"Subject: gpio: loongson: Add DTS and ACPI support"
-
-"Latest Loongson platforms such as the Loongson-2 SoC series describe 
-GPIO device resources with DTS or ACPI. Add such support to the existing 
-platform device driver."
-
 > 
 > Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
-
-He's canonically "Jianmin Lv <...>" in the Git history.
-
 > Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-
-Please use proper spelling, either "Zhang Hongchen" or "Hongchen Zhang". 
-I think every people with a loongson.cn address is using the latter form 
-i.e. the Western order of "Firstname Lastname" except the "Liu Peibao" 
-below, but ask the person themselves for honoring their own preference.
-
 > Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
 > Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
 > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
@@ -128,9 +120,6 @@ below, but ask the person themselves for honoring their own preference.
 >   F:	drivers/soc/loongson/loongson2_guts.c
 >   
 > +LOONGSON SERIES GPIO DRIVER
-
-Drop "series" here and everywhere else.
-
 > +M:	Huacai Chen <chenhuacai@kernel.org>
 > +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
 > +L:	linux-gpio@vger.kernel.org
@@ -153,6 +142,12 @@ Drop "series" here and everywhere else.
 > -	depends on CPU_LOONGSON2EF || CPU_LOONGSON64
 > +	bool "Loongson series GPIO support"
 > +	depends on CPU_LOONGSON2EF || CPU_LOONGSON64 || LOONGARCH
+I did not see the dts file related to mips (eg: 2K1000),
+If there is no plan to support or validate them, I recommend delete 
+"cpu_loongson64".
+
+Thanks,
+- Qing
 >   	help
 > -	  Driver for GPIO functionality on Loongson-2F/3A/3B processors.
 > +	  Driver for GPIO functionality on Loongson seires processors.
@@ -175,13 +170,6 @@ Drop "series" here and everywhere else.
 >    *  Copyright (c) 2013 Hongbing Hu <huhb@lemote.com>
 >    *  Copyright (c) 2014 Huacai Chen <chenhc@lemote.com>
 > + *  Copyright (c) 2022-2023 Yinbo Zhu <zhuyinbo@loongson.cn>
-
-Is it 2023 already?
-
-And do the people listed in the S-o-b tags need a mention here? Or is it 
-more appropriate to remove some of them or demote to tags like 
-Co-developed-by?
-
 >    */
 >   
 > +#include <linux/acpi.h>
@@ -245,9 +233,6 @@ Co-developed-by?
 > +	if (pin >= chip->ngpio)
 > +		return -EINVAL;
 > +	else
-
-Drop the "else" because the true branch is an early return i.e. diverging.
-
 > +		return 0;
 > +}
 > +
@@ -274,9 +259,6 @@ Drop the "else" because the true branch is an early return i.e. diverging.
 > +			bval = 1;
 > +		else
 > +			bval = 0;
-
-bval = input ? 1 : 0;
-
 > +		writeb(bval, LOONGSON_GPIO_OEN_BYTE(lgpio, pin));
 > +		return;
 > +	}
@@ -317,9 +299,6 @@ bval = input ? 1 : 0;
 > +			bval = 1;
 > +		else
 > +			bval = 0;
-
-bval = high ? 1 : 0;
-
 > +		writeb(bval, LOONGSON_GPIO_OUT_BYTE(lgpio, pin));
 > +		return;
 > +	}
@@ -465,10 +444,6 @@ bval = high ? 1 : 0;
 > +	if (!strcmp(lgpio->chip.label, "loongson,ls7a-gpio") ||
 > +			!strncmp(lgpio->chip.label, "LOON0002", 8) ||
 > +			!strcmp(lgpio->chip.label, "loongson,ls2k-gpio"))
-
-Aren't these 3 device IDs the only models we support/have right now? If 
-so I think the check could safely be dropped.
-
 > +		lgpio->chip.to_irq = loongson_gpio_to_irq;
 > +
 > +	gpiochip_add(&lgpio->chip);
@@ -499,11 +474,6 @@ so I think the check could safely be dropped.
 > +		lgpio->conf_offset = 0x800;
 > +		lgpio->out_offset = 0x900;
 > +		lgpio->in_offset = 0xa00;
-
-Aren't configurations like these usually described in the DT? Are you 
-trying to maintain compatibility with the pre-existing DT structure that 
-is missing such data?
-
 > +		return;
 > +	}
 > +}
@@ -609,10 +579,6 @@ is missing such data?
 > +	return 0;
 > +out:
 > +	pr_err("%s: %s: missing mandatory property\n", __func__, np->name);
-
-I suggest checking out <linux/dev_printk.h> and use dev_* printk's 
-everywhere you have a `dev` at hand (which is the case here).
-
 > +	return ret;
 > +}
 > +
@@ -665,7 +631,8 @@ everywhere you have a `dev` at hand (which is the case here).
 > -
 > -	ret = platform_driver_register(&loongson_gpio_driver);
 > -	if (ret) {
-> -		pr_err("error registering loongson GPIO driver\n"); > -		return ret;
+> -		pr_err("error registering loongson GPIO driver\n");
+> -		return ret;
 > -	}
 > -
 > -	pdev = platform_device_register_simple("loongson-gpio", -1, NULL, 0);
@@ -694,15 +661,6 @@ everywhere you have a `dev` at hand (which is the case here).
 > +#define __LOONGSON_GPIO_PLATFORM_H
 > +
 > +/* ============== Data structrues =============== */
-
-This comment could be removed as the code here is very trivial hence 
-self-commentary.
-
-But again, please check out Arnd's review comment; still I think this 
-might not be necessary at all because the legacy users already have to 
-modify many other things elsewhere before they can rebase on the more 
-recent upstream versions.
-
 > +
 > +struct loongson_gpio_platform_data {
 > +	u32 gpio_conf;
@@ -715,9 +673,5 @@ recent upstream versions.
 > +};
 > +
 > +#endif
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+> 
 
