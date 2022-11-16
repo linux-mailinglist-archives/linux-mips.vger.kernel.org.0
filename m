@@ -2,203 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F1E62C87D
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Nov 2022 19:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0D462CDF4
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Nov 2022 23:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbiKPS4m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Nov 2022 13:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S237845AbiKPWni (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Nov 2022 17:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239314AbiKPS4U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Nov 2022 13:56:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163576711E
-        for <linux-mips@vger.kernel.org>; Wed, 16 Nov 2022 10:54:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668624843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XrMOrTfFoolcBWY273BC4KVOqyrI8gbytsgZlItRSSY=;
-        b=ggnk2mNlajTLNaTYtTEVAXXL1mzLcneUkdkTzCipHOe8bpGYR81K2i0Q1IZkJzxzD6loT0
-        VKwyQr+j6YAkRE5woCv3D8UX+LCBDyk//mZqtobHn5uAEz5dmYpkCGrHnFc1bjg5+yePtM
-        ZHKhMPO4da92jOYTzViClXv0S4S0ri8=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-648-v3oMk9s3MX2ysUNS8tN4Kw-1; Wed, 16 Nov 2022 13:54:02 -0500
-X-MC-Unique: v3oMk9s3MX2ysUNS8tN4Kw-1
-Received: by mail-wr1-f69.google.com with SMTP id u13-20020adfa18d000000b00236566b5b40so3978265wru.9
-        for <linux-mips@vger.kernel.org>; Wed, 16 Nov 2022 10:54:02 -0800 (PST)
+        with ESMTP id S234495AbiKPWn2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Nov 2022 17:43:28 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F786BDCE
+        for <linux-mips@vger.kernel.org>; Wed, 16 Nov 2022 14:43:15 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id o7so18103pjj.1
+        for <linux-mips@vger.kernel.org>; Wed, 16 Nov 2022 14:43:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wf2gFJO0eZI55pjXm8OYjMYkGLte7QuRao7+IuvSaqE=;
+        b=D2amVl9V9KQfzLW2zaIS23IBouuPji7hB+OAx+ZhW9BBCDB5OKBikMdNxb0VPTDxJj
+         csClJ0YRCWBC/mBx5CM8cmRfxBeg4UGIi36VQSyP9C8PzSygpHTtXYMcx806fNdiiKsi
+         DAssScFkYAwJ1pFNUcIn3ZWqN1hBHz6LpWnys=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XrMOrTfFoolcBWY273BC4KVOqyrI8gbytsgZlItRSSY=;
-        b=Wn63VWaDJxunNmTCvcAnczGEkAiDBRhEBsL4KK0fcAfVM1+DMKmiWvzyGBdM4/Av/c
-         sXqomCXAbPsOocI3LHy0/8JT6ZVJIuB7K/aA136OjyUucG7wh0j2jZ/7z0KtB1BZMoAv
-         vkdq5BOQb1RRzJ3HttkGFDaAAyfnNwpI1E3MlxvoIU72QY2TYdbCvu1v2vRFHfDeFLCk
-         f2qYyqOy3gNyaEizAGFP2/zKkZzuz9pIdGruf8t2hm3XAiFOijHfIsS7bbt8oBeAckgh
-         G6tcdEc/YkNlX/qtgy9Bq5kNKRXeEvk+M28hlyvRqQEhMoKoaUU6cC/9ZcD3DBqfJdTq
-         LIxw==
-X-Gm-Message-State: ANoB5pmkZ2y6os2hEgWKOBhw9xVYo0afVo4BS71bdRKht0ukG8s3Wlur
-        0JU0dsNxX4ESoUfr6qZvRxObUX9+S+nFnbHxQxpeOJp4bREWTmZzOO0o3GUs5G1Ehep28N0Udp8
-        BtmnkO0JccEpnETarTLIcWA==
-X-Received: by 2002:a05:600c:188a:b0:3cf:8e62:f769 with SMTP id x10-20020a05600c188a00b003cf8e62f769mr3135351wmp.52.1668624841279;
-        Wed, 16 Nov 2022 10:54:01 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5DCp6F6fiXltcSvKkMYb+ZcNvwNu+I48re+Q7o+sjDMiBTT1rVi2cU7FL82kIKKDnPvsKEPw==
-X-Received: by 2002:a05:600c:188a:b0:3cf:8e62:f769 with SMTP id x10-20020a05600c188a00b003cf8e62f769mr3135302wmp.52.1668624841029;
-        Wed, 16 Nov 2022 10:54:01 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:9f00:a98d:4026:7c44:40fd? (p200300cbc7049f00a98d40267c4440fd.dip0.t-ipconnect.de. [2003:cb:c704:9f00:a98d:4026:7c44:40fd])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05600c315000b003cff309807esm3012333wmo.23.2022.11.16.10.53.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 10:54:00 -0800 (PST)
-Message-ID: <caf52607-49cd-3073-ca4a-ddce9509e7c9@redhat.com>
-Date:   Wed, 16 Nov 2022 19:53:57 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wf2gFJO0eZI55pjXm8OYjMYkGLte7QuRao7+IuvSaqE=;
+        b=YcBUq3fLW/u8q4ci3Ek8lkfmQyw4cMM/8hUcvu5Y9MeSkwx8C2dmJyI0Gb64a82Psw
+         Hmf5GPslDpt19VXvxXacurZ5bAtoHPKWWgukjpZMZEzwPWk9HN9gLalXhoCg3hcmSnYf
+         dt44Jrvoo98FVVGgBysKhH38cwhwtwgqp2+gHI45I3WdrGtlfLhvF80c0qV/m6OUcqpQ
+         or09ytxoE0u7RQfY3v84r1JSgxz59cdTMDel6PBF/YbMJmrsNA0yVxLmBPddHWCZQFM1
+         bH3wDEyrG0KXN9ZIbB6nz2GY2CR35jBBvDeMUnXSZof2Wv0D7t0M8X79rzxc1Evg6t2M
+         8gJg==
+X-Gm-Message-State: ANoB5pnqdsrcaQhuvQalz6VUP/4EJa0gep4/5xqE8MemoOIBa8W+JI+g
+        J32UCmp4pU4m6br2cdqkIEJKSg==
+X-Google-Smtp-Source: AA0mqf5VxV4Cbn3MvfOzCKh9TKzLZskissYVmNmiO/kVOhEqnlwi5i8J4bomSjPXRjnnkIIEn4wz5w==
+X-Received: by 2002:a17:90b:3c42:b0:213:1ce7:d962 with SMTP id pm2-20020a17090b3c4200b002131ce7d962mr6007688pjb.63.1668638594628;
+        Wed, 16 Nov 2022 14:43:14 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902710900b00183c6784704sm12680746pll.291.2022.11.16.14.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 14:43:14 -0800 (PST)
+Date:   Wed, 16 Nov 2022 14:43:13 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
         Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-21-david@redhat.com>
- <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
-In-Reply-To: <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] treewide: use get_random_u32_between() when
+ possible
+Message-ID: <202211161436.A45AD719A@keescook>
+References: <20221114164558.1180362-1-Jason@zx2c4.com>
+ <20221114164558.1180362-4-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114164558.1180362-4-Jason@zx2c4.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 16.11.22 19:16, Linus Torvalds wrote:
-> On Wed, Nov 16, 2022 at 2:30 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> Let's make it clearer that functionality provided by FOLL_FORCE is
->> really only for ptrace access.
-> 
-> I'm not super-happy about this one.
-> 
-> I do understand the "let's rename the bit so that no new user shows up".
-> 
-> And it's true that the main traditional use is ptrace.
-> 
-> But from the patch itself it becomes obvious that no, it's not *just*
-> ptrace. At least not yet.
-> 
-> It's used for get_arg_page(), which uses it to basically look up (and
-> install) pages in the newly created VM.
-> 
-> Now, I'm not entirely sure why it even uses FOLL_FORCE, - I think it
-> might be historical, because the target should always be the new stack
-> vma.
-> 
-> Following the history of it is a big of a mess, because there's a
-> number of renamings and re-organizations, but it seems to go back to
-> 2007 and commit b6a2fea39318 ("mm: variable length argument support").
-> 
+On Mon, Nov 14, 2022 at 05:45:58PM +0100, Jason A. Donenfeld wrote:
+> -				(get_random_u32_below(1024) + 1) * PAGE_SIZE;
+> +				get_random_u32_between(1, 1024 + 1) * PAGE_SIZE;
 
-Right.
+I really don't like "between". Can't this be named "inclusive" (and
+avoid adding 1 everywhere, which seems ugly), or at least named
+something less ambiguous?
 
-> Before that commit, we kept our own array of "this is the set of pages
-> that I will install in the new VM". That commit basically just inserts
-> the pages directly into the VM instead, getting rid of the array size
-> limitation.
-> 
-> So at a minimum, I think that FOLL_FORCE would need to be removed
-> before any renaming to FOLL_PTRACE, because that's not some kind of
-> small random case.
-> 
-> It *might* be as simple as just removing it, but maybe there's some
-> reason for having it that I don't immediately see.
+> -		n = get_random_u32_below(100) + 1;
+> +		n = get_random_u32_between(1, 101);
 
-Right, I have the same feeling. It might just be a copy-and-paste legacy 
-leftover.
+Because I find this much less readable. "Below 100" is clear: 0-99
+inclusive, plus 1, so 1-100 inclusive. "Between 1 and 101" is not obvious
+to me to mean: 1-100 inclusive.
 
-> 
-> There _are_ also small random cases too, like get_cmdline(). Maybe
-> that counts as ptrace, but the execve() case most definitely does not.
-
-I agree. I'd suggest moving forward without this (last) patch for now 
-and figuring out how to further cleanup FOLL_FORCE usage on top.
-
-@Andrew, if you intend to put this into mm-unstable, please drop the 
-last patch for now.
+These seem so much nicer:
+	get_random_u32_inclusive(1, 1024)
+	get_random_u32_inclusive(1, 100)
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Kees Cook
