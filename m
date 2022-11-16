@@ -2,106 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205C262C30A
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Nov 2022 16:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A9262C602
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Nov 2022 18:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233050AbiKPPwg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Nov 2022 10:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
+        id S233587AbiKPRL1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Nov 2022 12:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbiKPPwd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Nov 2022 10:52:33 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A144253ECF
-        for <linux-mips@vger.kernel.org>; Wed, 16 Nov 2022 07:52:31 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso2780513pjc.2
-        for <linux-mips@vger.kernel.org>; Wed, 16 Nov 2022 07:52:31 -0800 (PST)
+        with ESMTP id S233956AbiKPRLZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Nov 2022 12:11:25 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99F59FF8
+        for <linux-mips@vger.kernel.org>; Wed, 16 Nov 2022 09:11:22 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id l2so16981084pld.13
+        for <linux-mips@vger.kernel.org>; Wed, 16 Nov 2022 09:11:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=coErVjWyqhzO9EuKB5XSmlh7IJj5NvKWNvG7xdrbhC4=;
-        b=Axl8RQ6KDdRrT9Z9C/Q7WDP07ILGsJIsXvmq6hEH7xYRxr1KYM7WfFS4wN+lhhZ4fX
-         c4Jtlogr7Ros9vXyyEFv/zFAE8+4peFtT7kH9mbNBRnzYJ/2b8sYrYCafzb/t5b9hh4H
-         MzZxnel8UMmtPU7lGv2FYN+iMfYeZiXKTt6kJLjx0bmpPltUoJ0RtRfd1Ec/nG1HLpUR
-         NvlX1cr6oDpawENjKiQcMRdisM4zgyG2koLhhizlhvLd74nRufWrbXHhbtX0zrVof0Oh
-         3EiecDo5X1cIJiERj7KVmypmulB3/lI1LWoLIDeuu1zT2CC/G2udJFJRosnSOWJ19zuG
-         AhsA==
+        bh=qU5KpuuvMvabmlf4l/Mi3tQhh2fL8Dh2/iugoH77F0k=;
+        b=TdgWtef6UhHbqKe4QS/3Ayu3VNZZ3i9eoJmtCy7dLqrysJ7wB0UBIiB1NHl2XD8yEJ
+         9A9e40vVPz0LeaGnBm+xWkbLjcxsdpGQjMtsawyPcUDXFiJtlqbZJWuF4NPJNhW8gWhc
+         yklS7sdK1V06+Vo7Vtm2MrCNKTPLN0kZs4hpWbYlAx+pUoMaBEUe2EJ/R8vPCcvbrDoh
+         3WsWgepDpESG+KKK928nilFdVglC19Gmb2mv5/mmmkx20fEfIehPjExF++q08zwUw6nJ
+         A1VBgI5fVGcYhdLGJAFBS9e+51HNi1lhj80m/YmoiHsls5U6I/EdT06kMnKY5Lu6o+oq
+         Zk/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=coErVjWyqhzO9EuKB5XSmlh7IJj5NvKWNvG7xdrbhC4=;
-        b=DvUfUQASSfORl+QZ1GuqTzJHOYyENmF/tCGnJqTkhv8Mg447e+LVljKsI6uPyCaaGp
-         uyna1MdMM2VL7IFlecVaBCsY8WE6x/zvKQYVkkyQcb6nD3MT5+sRF8DRatv3kVT75dLI
-         +gXXj6MajGVWLEymvTvWrLiLWkCdfTegU6Ba9WdAVFlXipUwaoc5FUVINYf93pLvekZz
-         uSM2yc8kzoVDVbEaRqAyun9B46YpFVUGn3ZK47dS5sv4OLUeGbCZxQ7eieLC4HfQIwdM
-         fDqjEymIeunUTQ2FV2gVBvVxqTH55LzmuDTJhpU1p16qv8CT50xx6goBRuzzRNx29xE5
-         ZW2A==
-X-Gm-Message-State: ANoB5plhZrwh+vzKcKvkH+MjCcjJOeR0cSkvlgR4DAwBWuTdCKOH2h+N
-        LMI7U9jrgp1riOj8QEebZiCChw==
-X-Google-Smtp-Source: AA0mqf7dFwkFbcATwoaCt8aciY1qylOnTaB4gr/nPlKa0OFTmbzR8xQHyljgxnYchchnXSvQiHP/Xg==
-X-Received: by 2002:a17:902:6944:b0:188:640f:f401 with SMTP id k4-20020a170902694400b00188640ff401mr9754670plt.44.1668613950911;
-        Wed, 16 Nov 2022 07:52:30 -0800 (PST)
+        bh=qU5KpuuvMvabmlf4l/Mi3tQhh2fL8Dh2/iugoH77F0k=;
+        b=ONLTtee15l9FX+ImOtVPvPVrWYltdGmvfPTlP8p3+PZcAkQo0oY3x+y36PtYqmVfxO
+         dnu9O0ehCgZZLH1PXqdKCbCo8Aq4JnM0xQbt+cdGAiZog3HRV7FNWVCfrrLsX/QD4wVR
+         naxfz5vJej6W5FhJXrjnnRTxGEbOQJn2O8lm77tDf+Z+gSK1t0idB9WsiRWJKSlQV/dm
+         plbj9sqqq3Lx85bQWeG0pv/BOakvDoy8Bm2wZX9OvRHys1KLA7uY10ir+t5CkQwKB6Ez
+         OWFjUJv1hrcaDMlCCUWzyMTYBhG2EHU1v9ygmqXsH2Il/hmS4w8IDl8/aTT83GFbOdN3
+         u5Mw==
+X-Gm-Message-State: ANoB5pn0o0A5oMa/jr0hT8dQ36oAZY1PJ/aBJKaIdwvPSewGAwH9sVB5
+        5bf3XplLzlCsBafx0Hq1poD8eg==
+X-Google-Smtp-Source: AA0mqf6YIHZPZijJW3drWLmCC0J1i77v6BfIk1GaXTBydT1hr0zvtFJFuTOMD/RjlZsQvYbm7cfMpQ==
+X-Received: by 2002:a17:902:ed41:b0:175:105a:3087 with SMTP id y1-20020a170902ed4100b00175105a3087mr10067985plb.65.1668618681834;
+        Wed, 16 Nov 2022 09:11:21 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b00177e5d83d3esm12341507plk.88.2022.11.16.07.52.30
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090276c600b001788ccecbf5sm12424413plt.31.2022.11.16.09.11.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 07:52:30 -0800 (PST)
-Date:   Wed, 16 Nov 2022 15:52:26 +0000
+        Wed, 16 Nov 2022 09:11:21 -0800 (PST)
+Date:   Wed, 16 Nov 2022 17:11:18 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+Cc:     "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "Yao, Yuan" <yuan.yao@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
         "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
         "maz@kernel.org" <maz@kernel.org>,
         "anup@brainfault.org" <anup@brainfault.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
         "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Yao, Yuan" <yuan.yao@intel.com>,
-        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
         "james.morse@arm.com" <james.morse@arm.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "Gao, Chao" <chao.gao@intel.com>,
         "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 13/44] KVM: x86: Serialize vendor module initialization
- (hardware setup)
-Message-ID: <Y3UHOg7E0iRFpjml@google.com>
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH 38/44] KVM: Disable CPU hotplug during hardware enabling
+Message-ID: <Y3UZtoIidMyE8qVz@google.com>
 References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-14-seanjc@google.com>
- <e8e3b4c7bf3bd733c626618b57f9bf2f1835770e.camel@intel.com>
+ <20221102231911.3107438-39-seanjc@google.com>
+ <88e920944de70e7d69a98f74005b49c59b5aaa3b.camel@intel.com>
+ <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
+ <Y3PzhANShVlTXVg1@google.com>
+ <95ca433349eca601bdd2b16d70f59ba8e56d8e3f.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e8e3b4c7bf3bd733c626618b57f9bf2f1835770e.camel@intel.com>
+In-Reply-To: <95ca433349eca601bdd2b16d70f59ba8e56d8e3f.camel@intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,64 +112,104 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Wed, Nov 16, 2022, Huang, Kai wrote:
-> On Wed, 2022-11-02 at 23:18 +0000, Sean Christopherson wrote:
-> > Acquire a new mutex, vendor_module_lock, in kvm_x86_vendor_init() while
-> > doing hardware setup to ensure that concurrent calls are fully serialized.
-> > KVM rejects attempts to load vendor modules if a different module has
-> > already been loaded, but doesn't handle the case where multiple vendor
-> > modules are loaded at the same time, and module_init() doesn't run under
-> > the global module_mutex.
+> On Tue, 2022-11-15 at 20:16 +0000, Sean Christopherson wrote:
+> > On Thu, Nov 10, 2022, Huang, Kai wrote:
+> > > On Thu, 2022-11-10 at 01:33 +0000, Huang, Kai wrote:
+> > > Hmm.. I wasn't thinking thoroughly.  I forgot CPU compatibility check also
+> > > happens on all online cpus when loading KVM.  For this case, IRQ is disabled and
+> > > cpu_active() is true.  For the hotplug case, IRQ is enabled but  cpu_active() is
+> > > false.
 > > 
-> > Note, in practice, this is likely a benign bug as no platform exists that
-> > supports both SVM and VMX, i.e. barring a weird VM setup, one of the
-> > vendor modules is guaranteed to fail a support check before modifying
-> > common KVM state.
-> > 
-> > Alternatively, KVM could perform an atomic CMPXCHG on .hardware_enable,
-> > but that comes with its own ugliness as it would require setting
-> > .hardware_enable before success is guaranteed, e.g. attempting to load
-> > the "wrong" could result in spurious failure to load the "right" module.
-> > 
-> > Introduce a new mutex as using kvm_lock is extremely deadlock prone due
-> > to kvm_lock being taken under cpus_write_lock(), and in the future, under
-> > under cpus_read_lock().  Any operation that takes cpus_read_lock() while
-> > holding kvm_lock would potentially deadlock, e.g. kvm_timer_init() takes
-> > cpus_read_lock() to register a callback.  In theory, KVM could avoid
-> > such problematic paths, i.e. do less setup under kvm_lock, but avoiding
-> > all calls to cpus_read_lock() is subtly difficult and thus fragile.  E.g.
-> > updating static calls also acquires cpus_read_lock().
-> > 
-> > Inverting the lock ordering, i.e. always taking kvm_lock outside
-> > cpus_read_lock(), is not a viable option, e.g. kvm_online_cpu() takes
-> > kvm_lock and is called under cpus_write_lock().
+> > Actually, you're right (and wrong).  You're right in that the WARN is flawed.  And
+> > the reason for that is because you're wrong about the hotplug case.  In this version
+> > of things, the compatibility checks are routed through hardware enabling, i.e. this
+> > flow is used only when loading KVM.  This helper should only be called via SMP function
+> > call, which means that IRQs should always be disabled.
 > 
-> "kvm_online_cpu() takes kvm_lock and is called under cpus_write_lock()" hasn't
-> happened yet.
-
-Doh, right.  Thanks!
-
-> > The lockdep splat below is dependent on future patches to take
-> > cpus_read_lock() in hardware_enable_all(), but as above, deadlock is
-> > already is already possible.
+> Did you mean below code change in later patch "[PATCH 39/44] KVM: Drop
+> kvm_count_lock and instead protect kvm_usage_count with kvm_lock"?
 > 
-> IIUC kvm_lock by design is supposed to protect vm_list, thus IMHO naturally it
-> doesn't fit to protect multiple vendor module loading.
+>  	/*
+>  	 * Abort the CPU online process if hardware virtualization cannot
+>  	 * be enabled. Otherwise running VMs would encounter unrecoverable
+> @@ -5039,13 +5039,16 @@ static int kvm_online_cpu(unsigned int cpu)
+>  	if (kvm_usage_count) {
+>  		WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
+>  
+> +		local_irq_save(flags);
+>  		hardware_enable_nolock(NULL);
+> +		local_irq_restore(flags);
 
-A different way to look at it is that kvm_lock protects anything that is global to
-all of KVM, and it just so happens that lists and counters of VMs are the only
-such resources (lumping in the usage in vm_uevent_notify_change() and the future
-usage to protect kvm_usage_count).
+Sort of.  What I was saying is that in this v1, the compatibility checks that are
+done during harware enabling are initiated from vendor code, i.e. VMX and SVM call
+{svm,vmx}_check_processor_compat() directly.  As a result, the compat checks that
+are handled in common code:
 
-> Looks above argument is good enough.  I am not sure  whether we need additional
-> justification which comes from future patches. :)
+	if (__cr4_reserved_bits(cpu_has, c) !=
+	    __cr4_reserved_bits(cpu_has, &boot_cpu_data))
+		return -EIO;
 
-To try to prevent someone from trying to eliminate the "extra" lock, like this
-series does for kvm_count_lock.  Hopefully future someones that want to clean up
-the code do a git blame to understand why the lock was introduced and don't waste
-their time running into the same issues (or worse, don't run into the issues and
-break KVM).
+are skipped.  And if that's fixed, then the above hardware_enable_nolock() call
+will bounce through kvm_x86_check_processor_compatibility() with IRQs enabled
+once the KVM hotplug hook is moved to the ONLINE section.
 
-> Also, do you also want to update Documentation/virt/kvm/locking.rst" in this
-> patch?
+As above, the simple "fix" would be to disable IRQs, but that's not actually
+necessary.  The only requirement is that preemption is disabled so that the checks
+are done on the current CPU.  The "IRQs disabled" check was a deliberately
+agressive WARN that was added to guard against doing compatibility checks from
+the "wrong" location.
 
-Hmm, yeah.  That'd also be a good place to document why kvm_lock isn't used.
+E.g. this is what I ended up with for a changelog to drop the irqs_disabled()
+check and for the end code (though it's not tested yet...)
+
+    Drop kvm_x86_check_processor_compatibility()'s WARN that IRQs are
+    disabled, as the ONLINE section runs with IRQs disabled.  The WARN wasn't
+    intended to be a requirement, e.g. disabling preemption is sufficient,
+    the IRQ thing was purely an aggressive sanity check since the helper was
+    only ever invoked via SMP function call.
+
+
+static int kvm_x86_check_processor_compatibility(void)
+{
+        int cpu = smp_processor_id();
+        struct cpuinfo_x86 *c = &cpu_data(cpu);
+
+        /*
+         * Compatibility checks are done when loading KVM and when enabling
+         * hardware, e.g. during CPU hotplug, to ensure all online CPUs are
+         * compatible, i.e. KVM should never perform a compatibility check on
+         * an offline CPU.
+         */
+        WARN_ON(!cpu_online(cpu));
+
+        if (__cr4_reserved_bits(cpu_has, c) !=
+            __cr4_reserved_bits(cpu_has, &boot_cpu_data))
+                return -EIO;
+
+        return static_call(kvm_x86_check_processor_compatibility)();
+}
+
+
+int kvm_arch_hardware_enable(void)
+{
+        struct kvm *kvm;
+        struct kvm_vcpu *vcpu;
+        unsigned long i;
+        int ret;
+        u64 local_tsc;
+        u64 max_tsc = 0;
+        bool stable, backwards_tsc = false;
+
+        kvm_user_return_msr_cpu_online();
+
+        ret = kvm_x86_check_processor_compatibility();
+        if (ret)
+                return ret;
+
+        ret = static_call(kvm_x86_hardware_enable)();
+        if (ret != 0)
+                return ret;
+
+
+	....
+}
