@@ -2,163 +2,348 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1598A62DCBF
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 14:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 804EC62DDAE
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 15:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234146AbiKQN3i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Nov 2022 08:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S240149AbiKQONV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Nov 2022 09:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiKQN3h (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 08:29:37 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE27729A8
-        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 05:29:36 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovexO-0005Hp-6O; Thu, 17 Nov 2022 14:29:30 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovexM-004rWq-1M; Thu, 17 Nov 2022 14:29:28 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovexM-00HHrg-1B; Thu, 17 Nov 2022 14:29:28 +0100
-Date:   Thu, 17 Nov 2022 14:29:27 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2
- channels, part 1
-Message-ID: <20221117132927.mom5klfd4eww5amk@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
- <20221024205213.327001-2-paul@crapouillou.net>
- <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
- <CVZAKR.06MA7BGA170W3@crapouillou.net>
+        with ESMTP id S234421AbiKQONT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 09:13:19 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBF06204F;
+        Thu, 17 Nov 2022 06:13:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MW5+NnO2Tu8NlwdFq3hDFtaofKcS5eP2XdeVQ9JCU3g=; b=AbnKE5Jc6O+H3xaGhMYqGrC3y9
+        YVacd7j962DPg4af6H/+3simUiSgbuK/6G4zOl6bRYUYuLlrfnrdtOe9kgHbyzTTSHzpcEqu7qPv4
+        i/tQVeVWKIRgJXbg5hWxJebKtN2EOimPdIUqJ5UPTvtVLIe3VOu+NAxDi+ao2G6T7X7leU6AgOQe+
+        EVJz3gbkA7CnSkui7IjODrAPkhoYTvJzucvlcmObLasetIt9Y4UcnCmj1L8efJmwNseYneU9uObMI
+        C3+2NforbJUN9mRB2v294ooOYsk2XW5dJTDvRy1Ypp9Befi7H88f/EarR5pfO0ONSMvNsDK5hGMyP
+        m8CTMzhg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovfd5-001hCk-C8; Thu, 17 Nov 2022 14:12:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81A68300220;
+        Thu, 17 Nov 2022 15:12:32 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6829C207D6247; Thu, 17 Nov 2022 15:12:32 +0100 (CET)
+Date:   Thu, 17 Nov 2022 15:12:32 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 8/8] sched, smp: Trace smp callback causing an IPI
+Message-ID: <Y3ZBUMteJysc1/lA@hirez.programming.kicks-ass.net>
+References: <20221102182949.3119584-1-vschneid@redhat.com>
+ <20221102183336.3120536-7-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xsmjk3h2yzdssoiw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CVZAKR.06MA7BGA170W3@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221102183336.3120536-7-vschneid@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Nov 02, 2022 at 06:33:36PM +0000, Valentin Schneider wrote:
+> The newly-introduced ipi_send_cpumask tracepoint has a "callback" parameter
+> which so far has only been fed with NULL.
+> 
+> While CSD_TYPE_SYNC/ASYNC and CSD_TYPE_IRQ_WORK share a similar backing
+> struct layout (meaning their callback func can be accessed without caring
+> about the actual CSD type), CSD_TYPE_TTWU doesn't even have a function
+> attached to its struct. This means we need to check the type of a CSD
+> before eventually dereferencing its associated callback.
+> 
+> This isn't as trivial as it sounds: the CSD type is stored in
+> __call_single_node.u_flags, which get cleared right before the callback is
+> executed via csd_unlock(). This implies checking the CSD type before it is
+> enqueued on the call_single_queue, as the target CPU's queue can be flushed
+> before we get to sending an IPI.
+> 
+> Furthermore, send_call_function_single_ipi() only has a CPU parameter, and
+> would need to have an additional argument to trickle down the invoked
+> function. This is somewhat silly, as the extra argument will always be
+> pushed down to the function even when nothing is being traced, which is
+> unnecessary overhead.
+> 
+> Two options present themselves:
+> a) Create copies of send_call_function_{single_ipi, ipi_mask}() that take
+>    an extra argument used for tracing, so that codepaths remain unchanged
+>    when tracing isn't in effect (a sort of manual -fipa-sra).
+> 
+> b) Stash the CSD func in somewhere as a side effect that
+>    the portion of send_call_function_{single_ipi, ipi_mask}() under the
+>    tracepoint's static key can fetch.
+> 
+> a) creates redundant code, and b) is quite fragile due to requiring extra
+> care for "reentrant" functions (async SMP calls).
+> 
+> This implements a).
+> 
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  kernel/irq_work.c   |  2 ++
+>  kernel/sched/core.c | 35 ++++++++++++++++++++++++-----------
+>  kernel/sched/smp.h  |  1 +
+>  kernel/smp.c        | 42 ++++++++++++++++++++++++++++++++++++++----
+>  4 files changed, 65 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+> index aec38c294ce68..fcfa75c4a5daf 100644
+> --- a/kernel/irq_work.c
+> +++ b/kernel/irq_work.c
+> @@ -24,6 +24,8 @@
+>  
+>  #include <trace/events/ipi.h>
+>  
+> +#include "sched/smp.h"
+> +
+>  static DEFINE_PER_CPU(struct llist_head, raised_list);
+>  static DEFINE_PER_CPU(struct llist_head, lazy_list);
+>  static DEFINE_PER_CPU(struct task_struct *, irq_workd);
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 02181f8072b5f..41196ca67e913 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -3743,17 +3743,30 @@ void sched_ttwu_pending(void *arg)
+>  	rq_unlock_irqrestore(rq, &rf);
+>  }
+>  
+> -void send_call_function_single_ipi(int cpu)
+> -{
+> -	struct rq *rq = cpu_rq(cpu);
+> -
+> -	if (!set_nr_if_polling(rq->idle)) {
+> -		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);
+> -		arch_send_call_function_single_ipi(cpu);
+> -	} else {
+> -		trace_sched_wake_idle_without_ipi(cpu);
+> -	}
+> -}
+> +/*
+> + * We want a variant that traces the function causing the IPI to be sent, but
+> + * we don't want the extra argument to cause unnecessary overhead when tracing
+> + * isn't happening.
+> + */
+> +#define GEN_CFSI(suffix, IPI_EXP, ...)						\
+> +void send_call_function_single_ipi##suffix(__VA_ARGS__)				\
+> +{										\
+> +	struct rq *rq = cpu_rq(cpu);						\
+> +										\
+> +	if (!set_nr_if_polling(rq->idle)) {					\
+> +		IPI_EXP;							\
+> +		arch_send_call_function_single_ipi(cpu);			\
+> +	} else {								\
+> +		trace_sched_wake_idle_without_ipi(cpu);				\
+> +	}									\
+> +}
+> +
+> +GEN_CFSI(/* nop */,
+> +	 /* nop */,
+> +	 int cpu)
+> +GEN_CFSI(_trace,
+> +	 trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func),
+> +	 int cpu, smp_call_func_t func)
+>  
 
---xsmjk3h2yzdssoiw
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+*yuck*
 
-Hello Paul,
+How about something like so?
 
-On Tue, Oct 25, 2022 at 11:02:00AM +0100, Paul Cercueil wrote:
-> Le mar. 25 oct. 2022 =E0 08:21:29 +0200, Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> a =E9crit :
-> > Hello,
-> >=20
-> > On Mon, Oct 24, 2022 at 09:52:09PM +0100, Paul Cercueil wrote:
-> > >  The "duty > cycle" trick to force the pin level of a disabled TCU2
-> > >  channel would only work when the channel had been enabled
-> > > previously.
-> > >=20
-> > >  Address this issue by enabling the PWM mode in jz4740_pwm_disable
-> > >  (I know, right) so that the "duty > cycle" trick works before
-> > > disabling
-> > >  the PWM channel right after.
-> > >=20
-> > >  This issue went unnoticed, as the PWM pins on the majority of the
-> > > boards
-> > >  tested would default to the inactive level once the corresponding
-> > > TCU
-> > >  clock was enabled, so the first call to jz4740_pwm_disable() would
-> > > not
-> > >  actually change the pin levels.
-> > >=20
-> > >  On the GCW Zero however, the PWM pin for the backlight (PWM1, which
-> > > is
-> > >  a TCU2 channel) goes active as soon as the timer1 clock is enabled.
-> > >  Since the jz4740_pwm_disable() function did not work on channels not
-> > >  previously enabled, the backlight would shine at full brightness
-> > > from
-> > >  the moment the backlight driver would probe, until the backlight
-> > > driver
-> > >  tried to *enable* the PWM output.
-> > >=20
-> > >  With this fix, the PWM pins will be forced inactive as soon as
-> > >  jz4740_pwm_apply() is called (and might be reconfigured to active if
-> > >  dictated by the pwm_state). This means that there is still a tiny
-> > > time
-> > >  frame between the .request() and .apply() callbacks where the PWM
-> > > pin
-> > >  might be active. Sadly, there is no way to fix this issue: it is
-> > >  impossible to write a PWM channel's registers if the corresponding
-> > > clock
-> > >  is not enabled, and enabling the clock is what causes the PWM pin
-> > > to go
-> > >  active.
-> > >=20
-> > >  There is a workaround, though, which complements this fix: simply
-> > >  starting the backlight driver (or any PWM client driver) with a
-> > > "init"
-> > >  pinctrl state that sets the pin as an inactive GPIO. Once the
-> > > driver is
-> > >  probed and the pinctrl state switches to "default", the regular PWM
-> > > pin
-> > >  configuration can be used as it will be properly driven.
-> > >=20
-> > >  Fixes: c2693514a0a1 ("pwm: jz4740: Obtain regmap from parent node")
-> > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > >  Cc: stable@vger.kernel.org
-> >=20
-> > OK, understood the issue. I think there is another similar issue: The
-> > clk is get and enabled only in the .request() callback. The result is (I
-> > think---depends on a few further conditions) that if you have the
-> > backlight driver as a module and the bootloader enables the backlight to
-> > show a splash screen, the backlight goes off because of the
-> > clk_disable_unused initcall.
->=20
-> I will have to verify, but I'm pretty sure disabling the clock doesn't
-> change the pin level back to inactive.
-
-Given that you set the clk's rate depending on the period to apply, I'd
-claim that you need to keep the clk on. Maybe it doesn't hurt, because
-another component of the system keeps the clk running, but it's wrong
-anyhow. Assumptions like these tend to break on new chip revisions.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---xsmjk3h2yzdssoiw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN2NzQACgkQwfwUeK3K
-7AksvQf9EZfAv7iQBz9ZFUNDv/rCJVBR7ECu9o6TMX63AUmUcgxYFG5meUqypxK0
-jRfD2P6pHB4+cL7W0D4L3t4vA5sS9tfl4egGC4y6wI05ircgRVaUIZfH+t+jjHlb
-c2aOxTQ/eg65jyCkD+tNIE5BPPieMOojXat7rteGQok1JUEZfTMp21hygPYRBKiG
-v5ILRExvbJaC1CYKyfw67P6mVazYfaQMU2UKGbpSHtO+yekIQas26hekUh1i81qC
-Rk7OIMEGLQdMUISVvLtuNXVWRnCXW6GaC90eYrTcdPVpeyhQi7NJaUc6JMWT6Vdv
-W+L1jN0wGwtWNsyy4zjgGnrGQis2zw==
-=VCuW
------END PGP SIGNATURE-----
-
---xsmjk3h2yzdssoiw--
+---
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -24,6 +24,8 @@
+ 
+ #include <trace/events/ipi.h>
+ 
++#include "sched/smp.h"
++
+ static DEFINE_PER_CPU(struct llist_head, raised_list);
+ static DEFINE_PER_CPU(struct llist_head, lazy_list);
+ static DEFINE_PER_CPU(struct task_struct *, irq_workd);
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3763,16 +3763,17 @@ void sched_ttwu_pending(void *arg)
+ 	rq_unlock_irqrestore(rq, &rf);
+ }
+ 
+-void send_call_function_single_ipi(int cpu)
++bool send_call_function_single_ipi(int cpu)
+ {
+ 	struct rq *rq = cpu_rq(cpu);
+ 
+ 	if (!set_nr_if_polling(rq->idle)) {
+-		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);
+ 		arch_send_call_function_single_ipi(cpu);
+-	} else {
+-		trace_sched_wake_idle_without_ipi(cpu);
++		return true;
+ 	}
++
++	trace_sched_wake_idle_without_ipi(cpu);
++	return false;
+ }
+ 
+ /*
+--- a/kernel/sched/smp.h
++++ b/kernel/sched/smp.h
+@@ -6,7 +6,7 @@
+ 
+ extern void sched_ttwu_pending(void *arg);
+ 
+-extern void send_call_function_single_ipi(int cpu);
++extern bool send_call_function_single_ipi(int cpu);
+ 
+ #ifdef CONFIG_SMP
+ extern void flush_smp_call_function_queue(void);
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -163,7 +163,6 @@ void __init call_function_init(void)
+ static inline void
+ send_call_function_ipi_mask(const struct cpumask *mask)
+ {
+-	trace_ipi_send_cpumask(mask, _RET_IP_, func);
+ 	arch_send_call_function_ipi_mask(mask);
+ }
+ 
+@@ -438,11 +437,16 @@ static void __smp_call_single_queue_debu
+ 	struct cfd_seq_local *seq = this_cpu_ptr(&cfd_seq_local);
+ 	struct call_function_data *cfd = this_cpu_ptr(&cfd_data);
+ 	struct cfd_percpu *pcpu = per_cpu_ptr(cfd->pcpu, cpu);
++	struct __call_single_data *csd;
++
++	csd = container_of(node, call_single_data_t, node.llist);
++	WARN_ON_ONCE(!(CSD_TYPE(csd) & (CSD_TYPE_SYNC | CSD_TYPE_ASYNC)));
+ 
+ 	cfd_seq_store(pcpu->seq_queue, this_cpu, cpu, CFD_SEQ_QUEUE);
+ 	if (llist_add(node, &per_cpu(call_single_queue, cpu))) {
+ 		cfd_seq_store(pcpu->seq_ipi, this_cpu, cpu, CFD_SEQ_IPI);
+ 		cfd_seq_store(seq->ping, this_cpu, cpu, CFD_SEQ_PING);
++		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, csd->func);
+ 		send_call_function_single_ipi(cpu);
+ 		cfd_seq_store(seq->pinged, this_cpu, cpu, CFD_SEQ_PINGED);
+ 	} else {
+@@ -487,6 +491,27 @@ static __always_inline void csd_unlock(s
+ 
+ static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
+ 
++static __always_inline
++bool raw_smp_call_single_queue(int cpu, struct llist_node *node)
++{
++	/*
++	 * The list addition should be visible to the target CPU when it pops
++	 * the head of the list to pull the entry off it in the IPI handler
++	 * because of normal cache coherency rules implied by the underlying
++	 * llist ops.
++	 *
++	 * If IPIs can go out of order to the cache coherency protocol
++	 * in an architecture, sufficient synchronisation should be added
++	 * to arch code to make it appear to obey cache coherency WRT
++	 * locking and barrier primitives. Generic code isn't really
++	 * equipped to do the right thing...
++	 */
++	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
++		return send_call_function_single_ipi(cpu);
++
++	return false;
++}
++
+ void __smp_call_single_queue(int cpu, struct llist_node *node)
+ {
+ #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
+@@ -503,19 +528,28 @@ void __smp_call_single_queue(int cpu, st
+ #endif
+ 
+ 	/*
+-	 * The list addition should be visible to the target CPU when it pops
+-	 * the head of the list to pull the entry off it in the IPI handler
+-	 * because of normal cache coherency rules implied by the underlying
+-	 * llist ops.
+-	 *
+-	 * If IPIs can go out of order to the cache coherency protocol
+-	 * in an architecture, sufficient synchronisation should be added
+-	 * to arch code to make it appear to obey cache coherency WRT
+-	 * locking and barrier primitives. Generic code isn't really
+-	 * equipped to do the right thing...
+-	 */
+-	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
+-		send_call_function_single_ipi(cpu);
++	 * We have to check the type of the CSD before queueing it, because
++	 * once queued it can have its flags cleared by
++	 *   flush_smp_call_function_queue()
++	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
++	 * executes migration_cpu_stop() on the remote CPU).
++	 */
++	if (trace_ipi_send_cpumask_enabled()) {
++		call_single_data_t *csd;
++		smp_call_func_t func;
++
++		csd = container_of(node, call_single_data_t, node.llist);
++
++		func = sched_ttwu_pending;
++		if (CSD_TYPE(csd) != CSD_TYPE_TTWU)
++			func = csd->func;
++
++		if (raw_smp_call_single_queue(cpu, node))
++			trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
++		return;
++	}
++
++	raw_smp_call_single_queue(cpu, node);
+ }
+ 
+ /*
+@@ -983,10 +1017,13 @@ static void smp_call_function_many_cond(
+ 		 * number of CPUs might be zero due to concurrent changes to the
+ 		 * provided mask.
+ 		 */
+-		if (nr_cpus == 1)
++		if (nr_cpus == 1) {
++			trace_ipi_send_cpumask(cpumask_of(last_cpu), _RET_IP_, func);
+ 			send_call_function_single_ipi(last_cpu);
+-		else if (likely(nr_cpus > 1))
+-			send_call_function_ipi_mask(cfd->cpumask_ipi);
++		} else if (likely(nr_cpus > 1)) {
++			trace_ipi_send_cpumask(mask, _RET_IP_, func);
++			send_call_function_ipi_mask(mask);
++		}
+ 
+ 		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->pinged, this_cpu, CFD_SEQ_NOCPU, CFD_SEQ_PINGED);
+ 	}
