@@ -2,52 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EB762E8EA
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 23:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E2562E976
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 00:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239263AbiKQW60 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Nov 2022 17:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
+        id S239304AbiKQXUZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Nov 2022 18:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239691AbiKQW6X (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 17:58:23 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69A0186FC
-        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 14:58:21 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso3389436pjc.5
-        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 14:58:21 -0800 (PST)
+        with ESMTP id S234905AbiKQXUY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 18:20:24 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8670472136
+        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 15:20:19 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id e15so2178148qts.1
+        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 15:20:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gB4fu8WxG++brcac1xEx09Jo8IsSv6jaRuNq5hahL+I=;
-        b=Fy4BdUGW9a1WNEtqYFLG188KBaVxCW7dlYHJCJYByhqbYzWtrREex26XefPtc0cld6
-         YCRtECSkUML5k6sMmax4MrQy/8YHDQGVY6nBvl6IgyA0kq1FCwf8z9yqhcxsos46Zhwv
-         H1rDgpoCNHoreRPMRNhXYMHZ9u7/T1h/SC+nQ=
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y0Zl62KafxDJ8AwrDahi1bqb4Xk/32bDlmDdXpQC/2I=;
+        b=McHst7l/f7KmgETncU4ax8Cz1+X0pDSSDz+NpOo85KKRbSTGF3eq2IAlrIRy/FELSJ
+         Y7C0SIlyu5mGQyhzPLIjsCXMOXUrzD5TZH+dJcbaF2LHrVuVcof8hyWOL3D9pZZx4wAD
+         8LINQRolzJh6QXumNwKV51jsDIdF9sMEo4+5s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gB4fu8WxG++brcac1xEx09Jo8IsSv6jaRuNq5hahL+I=;
-        b=F4dn+FSFl9DJoZf/w+rghvyjzLSeiEZXKC9hYJNCj1R3k9onQBGqCOmT5BWDm/h/kB
-         DV5oLKcmup7cD+6KHcl8rSyldhPW9l29UuJPm2wdVkEwNVA4bT9aFUO6tzAGPToUUwGx
-         UstBQWcxUZRkD64zxfzILnW/yxbuaiWD9nACGNJQ65X/te5HAwJrLhLOWqx0A5eCxxOz
-         yCx1Rz2v4oLFe6mXOGi36cpPw5UNDMXHfUIS6cRxRXSHYcX5fkEvBUQp/2wSw3n9FXYy
-         9qE8ZpX0kZjshaUSt7C+UM3sOHFaNIbcbfDstRHzUE9t49C62i49OXUQZ5p6ejkOYfXA
-         jpJw==
-X-Gm-Message-State: ANoB5pkY5Ku4Xd/bKXpt0qfzr2tsI68G89yiAa+ht3HTTtAMWsV684oH
-        6vA16g9ymr+DVr4OC3mbocZyxartmUnQ/Q==
-X-Google-Smtp-Source: AA0mqf5a5ur58uPnDpwIjYXEwn4PnQ44wkjJwk4UbGX/PChCoGId0YIreHCZd3TM/oH8mIHpTiFUgA==
-X-Received: by 2002:a17:90a:2b46:b0:213:aa5f:a026 with SMTP id y6-20020a17090a2b4600b00213aa5fa026mr4652677pjc.243.1668725901245;
-        Thu, 17 Nov 2022 14:58:21 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a11-20020a170902710b00b00186bc66d2cbsm1970473pll.73.2022.11.17.14.58.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:58:20 -0800 (PST)
-Date:   Thu, 17 Nov 2022 14:58:19 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y0Zl62KafxDJ8AwrDahi1bqb4Xk/32bDlmDdXpQC/2I=;
+        b=JEZ5FUb6EpvYxuf5zNtjNizWjyngMzg7s1BaxiFzwVsWAQan0rl+EAUJqj4bc91K4K
+         RB1UUor6n/9dxiElY1z5jUGuNKuCSvKy0ImJJEnbh+RtHzsObC7tJKCpAqGnOtF2zjOe
+         IG46ozw08MI6LH5CbQYXEoQGlcyAsClg2JggD+2Jcvvc1uJwPith9nBnU7bN6CljjmHN
+         fD30FFAM33+lB/UFHrApX8WMPvsFUJWb6gnSw3A73lV9USvXI46xW2ZrvtUiYWQjhMOp
+         KagugvZ96IUbcxIOl7Km2gap9o/G455g+5rx7JP5j5cdGOObnDxldTfy4btF/w49CV/1
+         2rXA==
+X-Gm-Message-State: ANoB5pkL4gfvxx8NzuN2U7yMl4pouMZx/FdAuyDOOBd3J8R0SnfTr9S1
+        /v8+x+6l8RcRokSTfcemtfTfoQ7Rdd+kHA==
+X-Google-Smtp-Source: AA0mqf5vj1X4es2fmzELzbdx7wvAOcex0b/8kK4otBfmFJ/yY4OqxQf+omX3a0sG18RRHwuqZRDjzw==
+X-Received: by 2002:ac8:7595:0:b0:3a5:226e:2677 with SMTP id s21-20020ac87595000000b003a5226e2677mr4514029qtq.141.1668727218283;
+        Thu, 17 Nov 2022 15:20:18 -0800 (PST)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com. [209.85.219.43])
+        by smtp.gmail.com with ESMTPSA id gb14-20020a05622a598e00b003a5d7b54894sm1103875qtb.31.2022.11.17.15.20.17
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 15:20:17 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id h7so1687435qvs.3
+        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 15:20:17 -0800 (PST)
+X-Received: by 2002:ad4:4101:0:b0:4b1:856b:4277 with SMTP id
+ i1-20020ad44101000000b004b1856b4277mr4665856qvp.129.1668727216978; Thu, 17
+ Nov 2022 15:20:16 -0800 (PST)
+MIME-Version: 1.0
+References: <20221116102659.70287-1-david@redhat.com> <20221116102659.70287-21-david@redhat.com>
+ <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com> <202211171439.CDE720EAD@keescook>
+In-Reply-To: <202211171439.CDE720EAD@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 17 Nov 2022 15:20:01 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjykbz-4xVTWF7vkvGJnFoTSXNVeMzfsXaLnGm3CRd8rQ@mail.gmail.com>
+Message-ID: <CAHk-=wjykbz-4xVTWF7vkvGJnFoTSXNVeMzfsXaLnGm3CRd8rQ@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
+To:     Kees Cook <keescook@chromium.org>
 Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
         x86@kernel.org, linux-alpha@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
@@ -108,33 +121,35 @@ Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
         Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
-Message-ID: <202211171439.CDE720EAD@keescook>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-21-david@redhat.com>
- <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 10:16:34AM -0800, Linus Torvalds wrote:
-> There _are_ also small random cases too, like get_cmdline(). Maybe
-> that counts as ptrace, but the execve() case most definitely does not.
+On Thu, Nov 17, 2022 at 2:58 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Oh, er, why does get_arg_page() even need FOLL_FORCE? This is writing the
+> new stack contents to the nascent brpm->vma, which was newly allocated
+> with VM_STACK_FLAGS, which an arch can override, but they all appear to include
+> VM_WRITE | VM_MAYWRITE.
 
-Oh, er, why does get_arg_page() even need FOLL_FORCE? This is writing the
-new stack contents to the nascent brpm->vma, which was newly allocated
-with VM_STACK_FLAGS, which an arch can override, but they all appear to include
-VM_WRITE | VM_MAYWRITE.
+Yeah, it does seem entirely superfluous.
 
--- 
-Kees Cook
+It's been there since the very beginning (although in that original
+commit b6a2fea39318 it was there as a '1' to the 'force' argument to
+get_user_pages()).
+
+I *think* it can be just removed. But as long as it exists, it should
+most definitely not be renamed to FOLL_PTRACE.
+
+There's a slight worry that it currently hides some other setup issue
+that makes it matter, since it's been that way so long, but I can't
+see what it is.
+
+             Linus
