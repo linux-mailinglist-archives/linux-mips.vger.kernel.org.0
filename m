@@ -2,150 +2,210 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E1362E668
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 22:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD8762E773
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 22:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240553AbiKQVJo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Nov 2022 16:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S241087AbiKQV6V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Nov 2022 16:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240624AbiKQVJZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 16:09:25 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCA87722F;
-        Thu, 17 Nov 2022 13:08:04 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4969620007;
-        Thu, 17 Nov 2022 21:07:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668719281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=72JrUM6NacHh18cxNPJTokOPFIy2MlvUmUZu6AVg77s=;
-        b=kQ3WnKEHtW817TTGo/51w1BLV9fElm+d4PRny19l0Xo5WVvRKUWbYa4RLUCeb4hzAu+blU
-        gN78c5WiYd88yo78Tac1K8UgLdjF8sGEUg2eG4K4KIGZ2aSd/NCisT3pEqKgpi8MG9t8wo
-        Mhed7VoKwoPF1Ad6rnk8zscQKUda7EVdabBo89uHsVUfKLNbVRCzBabKqvqOG3TKdkeI5N
-        elXTmNOrt8pOHvUy7n2mYZBmGVFue71mi4Gp0X7blRdSkQQj+FNRIx2l1Hm3E/1dFZjljQ
-        ITXz8XlIez/SUSB6b7UDZFkg18YUByW5VovCJRgF+828mYPwuo2FHFq7f7zwSg==
-Date:   Thu, 17 Nov 2022 22:07:56 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
-Message-ID: <20221117220756.7a1bf734@xps-13>
-In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
-        <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S241077AbiKQV5t (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 16:57:49 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA2E7C021
+        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 13:57:15 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso3263925pjc.5
+        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 13:57:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IIh+nGIerLfk4ZB9SpoRZWMODmjSUqXiyhjydKb0Cds=;
+        b=PJZ6jbnQhQq9tru88c3QcgjfZaJDnoJRCzzf1bX0/gWQf6BO1kYnGuZiAkcQbfZxF1
+         wVZdaktXE7y7G0iGR9w0mDib97tK+9Z1KEN4DGKZzUJEwZpO/1SRERjEZW4dZS1lSmQm
+         6pLSDQke2I1tY0Rbt7braOr4eQDXUxJpKb4Zg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IIh+nGIerLfk4ZB9SpoRZWMODmjSUqXiyhjydKb0Cds=;
+        b=NvUdP/8HJQNuw4JOicoV7frAahErbbz1TKk3eiyr55e5HsGjnL0yEn0QD69KwKaOjW
+         GKzesux6qkg5EHHNlkFkP3/9iCo+UB9T9/+BjTaPTRAOVg6+o14BUbLddTmvC8BSqCgP
+         eDqfQA7YDhStYWhGhcdHqaryYYNyDFcKLxq+qOI5OmukuiDbzAYpx9poTmtw4zIEMdAj
+         1Y4ryWiUsV4UiRhj6PcuJ+IE/JjtTP7oiN6FBl0vRrgMIQ8uQIgVG646Vn160H/qSOKf
+         x4aC1H3v3lE4Duo4QTZia08VOl6sjXpstnGDSL8ahr/VUY0OAuDGP7/m8N0Y4wQ4Cwur
+         yXHA==
+X-Gm-Message-State: ANoB5pniX7oEYizprMOoMBunH+dz0Qaki8Swvcxk9vFCxQnGnUC5eIsB
+        /csFPJLuI+HwJwtci5LKZcKtJw==
+X-Google-Smtp-Source: AA0mqf5F2mDePv/SsUAusLJAu22vdbKLGH3peZOY+MZBhXcyEG7NIlWlaGpyKLA4kx4t011dWowR5A==
+X-Received: by 2002:a17:90a:dd82:b0:212:fdb1:720b with SMTP id l2-20020a17090add8200b00212fdb1720bmr10785160pjv.66.1668722234748;
+        Thu, 17 Nov 2022 13:57:14 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a28-20020aa795bc000000b0056beae3dee2sm1674860pfk.145.2022.11.17.13.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 13:57:14 -0800 (PST)
+Date:   Thu, 17 Nov 2022 13:57:13 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] treewide: use get_random_u32_inclusive() when
+ possible
+Message-ID: <202211171349.F42BA5B0@keescook>
+References: <20221114164558.1180362-1-Jason@zx2c4.com>
+ <20221117202906.2312482-1-Jason@zx2c4.com>
+ <20221117202906.2312482-4-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117202906.2312482-4-Jason@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Krzysztof,
-
-krzysztof.kozlowski@linaro.org wrote on Thu, 17 Nov 2022 13:38:42 +0100:
-
-> The Devicetree bindings document does not have to say in the title that
-> it is a "binding", but instead just describe the hardware.  For shared
-> (re-usable) schemas, name them all as "common properties".
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Thu, Nov 17, 2022 at 09:29:06PM +0100, Jason A. Donenfeld wrote:
+> These cases were done with this Coccinelle:
+> 
+> @@
+> expression H;
+> expression L;
+> @@
+> - (get_random_u32_below(H) + L)
+> + get_random_u32_inclusive(L, H + L - 1)
+> 
+> @@
+> expression H;
+> expression L;
+> expression E;
+> @@
+>   get_random_u32_inclusive(L,
+>   H
+> - + E
+> - - E
+>   )
+> 
+> @@
+> expression H;
+> expression L;
+> expression E;
+> @@
+>   get_random_u32_inclusive(L,
+>   H
+> - - E
+> - + E
+>   )
+> 
+> @@
+> expression H;
+> expression L;
+> expression E;
+> expression F;
+> @@
+>   get_random_u32_inclusive(L,
+>   H
+> - - E
+>   + F
+> - + E
+>   )
+> 
+> @@
+> expression H;
+> expression L;
+> expression E;
+> expression F;
+> @@
+>   get_random_u32_inclusive(L,
+>   H
+> - + E
+>   + F
+> - - E
+>   )
+> 
+> And then subsequently cleaned up by hand, with several automatic cases
+> rejected if it didn't make sense contextually.
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com> # for infiniband
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
->  Documentation/devicetree/bindings/clock/qcom,gcc.yaml         | 2 +-
->  Documentation/devicetree/bindings/dma/dma-common.yaml         | 2 +-
->  Documentation/devicetree/bindings/dma/dma-controller.yaml     | 4 ++--
->  Documentation/devicetree/bindings/dma/dma-router.yaml         | 4 ++--
->  Documentation/devicetree/bindings/iio/adc/adc.yaml            | 2 +-
->  .../devicetree/bindings/media/video-interface-devices.yaml    | 2 +-
->  Documentation/devicetree/bindings/media/video-interfaces.yaml | 2 +-
->  Documentation/devicetree/bindings/mmc/mmc-controller.yaml     | 2 +-
->  Documentation/devicetree/bindings/mtd/nand-chip.yaml          | 2 +-
->  Documentation/devicetree/bindings/mtd/nand-controller.yaml    | 2 +-
->  .../bindings/net/bluetooth/bluetooth-controller.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/can/can-controller.yaml | 2 +-
->  .../devicetree/bindings/net/ethernet-controller.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/ethernet-phy.yaml       | 2 +-
->  Documentation/devicetree/bindings/net/mdio.yaml               | 2 +-
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml        | 2 +-
->  .../devicetree/bindings/power/reset/restart-handler.yaml      | 2 +-
->  Documentation/devicetree/bindings/rtc/rtc.yaml                | 2 +-
->  .../devicetree/bindings/soundwire/soundwire-controller.yaml   | 2 +-
->  Documentation/devicetree/bindings/spi/spi-controller.yaml     | 2 +-
->  Documentation/devicetree/bindings/watchdog/watchdog.yaml      | 2 +-
->  21 files changed, 23 insertions(+), 23 deletions(-)
->=20
+>  arch/x86/kernel/module.c                      |  2 +-
+>  crypto/rsa-pkcs1pad.c                         |  2 +-
+>  crypto/testmgr.c                              | 10 ++++----
+>  drivers/bus/mhi/host/internal.h               |  2 +-
+>  drivers/dma-buf/st-dma-fence-chain.c          |  2 +-
+>  drivers/infiniband/core/cma.c                 |  2 +-
+>  drivers/infiniband/hw/hns/hns_roce_ah.c       |  5 ++--
+>  drivers/mtd/nand/raw/nandsim.c                |  2 +-
+>  drivers/net/wireguard/selftest/allowedips.c   |  8 +++---
+>  .../broadcom/brcm80211/brcmfmac/p2p.c         |  2 +-
+>  .../net/wireless/intel/iwlwifi/mvm/mac-ctxt.c |  2 +-
+>  fs/f2fs/segment.c                             |  6 ++---
+>  kernel/kcsan/selftest.c                       |  2 +-
+>  lib/test_hexdump.c                            | 10 ++++----
+>  lib/test_printf.c                             |  2 +-
+>  lib/test_vmalloc.c                            |  6 ++---
+>  mm/kasan/kasan_test.c                         |  6 ++---
+>  mm/kfence/kfence_test.c                       |  2 +-
+>  mm/swapfile.c                                 |  5 ++--
+>  net/bluetooth/mgmt.c                          |  5 ++--
+>  net/core/pktgen.c                             | 25 ++++++++-----------
+>  net/ipv4/tcp_input.c                          |  2 +-
+>  net/ipv6/addrconf.c                           |  6 ++---
+>  net/netfilter/nf_nat_helper.c                 |  2 +-
+>  net/xfrm/xfrm_state.c                         |  2 +-
+>  25 files changed, 56 insertions(+), 64 deletions(-)
 
-[...]
+Even the diffstat agrees this is a nice clean-up. :)
 
-> diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Docum=
-entation/devicetree/bindings/mtd/nand-chip.yaml
-> index 97ac3a3fbb52..20b195ef9b70 100644
-> --- a/Documentation/devicetree/bindings/mtd/nand-chip.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/mtd/nand-chip.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> =20
-> -title: NAND Chip and NAND Controller Generic Binding
-> +title: NAND Chip and NAND Controller common properties
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-I only see this now but the title should be
+The only comment I have is that maybe these cases can just be left as-is
+with _below()?
 
-	"NAND chip common properties"
+> -             size_t len = get_random_u32_below(rs) + gs;
+> +             size_t len = get_random_u32_inclusive(gs, rs + gs - 1);
 
-> =20
->  maintainers:
->    - Miquel Raynal <miquel.raynal@bootlin.com>
-> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b=
-/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-> index 359a015d4e5a..a004efc42842 100644
-> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> =20
-> -title: NAND Chip and NAND Controller Generic Binding
-> +title: NAND Chip and NAND Controller common properties
+It seems like writing it in the form of base plus [0, limit) is clearer?
 
-And here just "NAND controller..."
+		size_t len = gs + get_random_u32_below(rs);
 
-Of course the original purpose of your series is more to clean those
-titles rather than fixing them and if you disagree I am fine doing it
-myself aside, but if you could at the same time make the title more
-accurate that would be perfect.
+But there is only a handful, so *shrug*
 
-Either ways:
+All the others are much cleaner rewritten as _inclusive().
 
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Cheers,
-Miqu=C3=A8l
+-- 
+Kees Cook
