@@ -2,86 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328A662E035
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 16:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6131E62E08E
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 16:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239465AbiKQPo0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Nov 2022 10:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S240163AbiKQP7M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Nov 2022 10:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbiKQPoY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 10:44:24 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7630B5FC6;
-        Thu, 17 Nov 2022 07:44:21 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2AHFgbpU025691
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 10:42:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1668699767; bh=Z8eRjDyW5LkCGXRIWQ/ehJoBTxfA+rKV6G90HV/lnfI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=a5RGA55J01HygsEqMJNP2VrZPtI8ZaGUHt2dY2LY5wF8DMtynBL3gxe4ssBSltxUc
-         tGBtVlIBAOfcvHXP8OxNBxX/rSKyMd0+qgQqEihqLCmIIT5R91T0BV2UToxLFXN9NK
-         qLPI7qFXLd4XspU67nh5HMMeBw4NAJ1ReJokdr95mAlk7ege100zyHPP5eUMyPQkdJ
-         2J/DoKBr5ulEfGsbUWpt2b/Jh4Fgk8Q/WSHSBEMDxX6G3lCTA/GKgvoNGo91ao1O85
-         B0gVxshfsoXUb4HsVOvv2uuEHdk9gVaKkI7GIFJ0/jwX2DtNAGU82pYQXeJCXpebQn
-         9YTcylqtbCwyg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 2CB0415C34C3; Thu, 17 Nov 2022 10:42:37 -0500 (EST)
-Date:   Thu, 17 Nov 2022 10:42:37 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Kees Cook <kees@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        ydroneaud@opteya.com
-Subject: Re: [PATCH v2 3/3] treewide: use get_random_u32_between() when
- possible
-Message-ID: <Y3ZWbcoGOdFjlPhS@mit.edu>
-References: <20221114164558.1180362-1-Jason@zx2c4.com>
- <20221114164558.1180362-4-Jason@zx2c4.com>
- <202211161436.A45AD719A@keescook>
- <Y3V4g8eorwiU++Y3@zx2c4.com>
- <Y3V6QtYMayODVDOk@zx2c4.com>
- <202211161628.164F47F@keescook>
- <Y3WDyl8ArQgeEoUU@zx2c4.com>
- <0EE39896-C7B6-4CB6-87D5-22AA787740A9@kernel.org>
+        with ESMTP id S239986AbiKQP7B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 10:59:01 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482E970A02;
+        Thu, 17 Nov 2022 07:58:59 -0800 (PST)
+Received: from frapeml500006.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NCkxL2vgnz67FVn;
+        Thu, 17 Nov 2022 23:54:14 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml500006.china.huawei.com (7.182.85.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 16:58:57 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 15:58:56 +0000
+Date:   Thu, 17 Nov 2022 15:58:55 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-watchdog@vger.kernel.org>
+Subject: Re: [RFC PATCH 5/9] dt-bindings: drop redundant part of title (end,
+ part two)
+Message-ID: <20221117155855.000066f7@Huawei.com>
+In-Reply-To: <20221117123850.368213-6-krzysztof.kozlowski@linaro.org>
+References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
+        <20221117123850.368213-6-krzysztof.kozlowski@linaro.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0EE39896-C7B6-4CB6-87D5-22AA787740A9@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,36 +69,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 04:47:27PM -0800, Kees Cook wrote:
-> >> > - between
-> >> > - ranged
-> >> > - spanning
-> >> > 
-> >> > https://www.thefreedictionary.com/List-of-prepositions.htm
-> >> > - amid
-> >> > 
-> >> > Sigh, names.
-> >> 
-> >> I think "inclusive" is best.
-> >
-> >I find it not very descriptive of what the function does. Is there one
-> >you like second best? Or are you convinced they're all much much much
-> >worse than "inclusive" that they shouldn't be considered?
+On Thu, 17 Nov 2022 13:38:46 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.
 > 
-> Right, I don't think any are sufficiently descriptive. "Incluisve"
-> with two arguments seems unambiguous and complete to me. :)
+> Drop trailing "Node|Tree|Generic bindings" in various forms (also with
+> trailling full stop):
+> 
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -not -name 'trivial-devices.yaml' \
+>     -exec sed -i -e 's/^title: \(.*\) [nN]ode [bB]indings\?\.\?$/title: \1/' {} \;
+> 
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -not -name 'trivial-devices.yaml' \
+>     -exec sed -i -e 's/^title: \(.*\) [tT]ree [bB]indings\?\.\?$/title: \1/' {} \;
+> 
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -not -name 'trivial-devices.yaml' \
+>     -exec sed -i -e 's/^title: \(.*\) [gG]eneric [bB]indings\?\.\?$/title: \1/' {} \;
+> 
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -not -name 'trivial-devices.yaml' \
+>     -exec sed -i -e 's/^title: \(.*\) [bB]indings\? description\.\?$/title: \1/' {} \;
+> 
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -not -name 'trivial-devices.yaml' \
+>     -exec sed -i -e 's/^title: \(.*\) [bB]indings\? document\.\?$/title: \1/' {} \;
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The problem with "between", "ranged", "spanning" is that they don't
-tell the reader whether we're dealing with an "open interval" or a
-"closed interval".  They are just different ways of saying that it's a
-range between, say, 0 and 20.  But it doesn't tell you whether it
-includes 0 or 20 or not.
+FWIW eyeballed these as well and all look good to me.
 
-The only way I can see for making it ambiguous is either to use the
-terminology "closed interval" or "inclusive".  And "open" and "closed"
-can have other meanings, so get_random_u32_inclusive() is going to be
-less confusing than get_random_u32_closed().
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Cheers,
 
-					- Ted
