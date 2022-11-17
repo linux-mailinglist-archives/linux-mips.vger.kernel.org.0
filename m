@@ -2,110 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2323162DED3
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 15:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5291462DF86
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Nov 2022 16:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239872AbiKQO7N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Nov 2022 09:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S240104AbiKQPVF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Nov 2022 10:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240028AbiKQO65 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 09:58:57 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334F9748C9
-        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 06:58:53 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id l12so3209378lfp.6
-        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 06:58:53 -0800 (PST)
+        with ESMTP id S240515AbiKQPUM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 10:20:12 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F082BAE4B
+        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 07:16:19 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso5660051pjg.5
+        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 07:16:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VSnIdJlrSu1RqwxbrwymcRNJoSgT34DNNQH025cvo20=;
-        b=Ur9szg1DKJvl3ubQjvlChH09oAO12tYaDGESWoJRFs5nbTcgL70iq6Rk6jcbyh2eSV
-         5sIr6XHiZbOMcG5vg6LYzpKXTZagjOTTXivxVfplX5GAD0O1/9QIYKFbd0XkOcolglVT
-         VrJu0CgFgUecUmcpa3we0bBiZQmSB6sCWxEucrm8wK9mxNNpZRyq2THIgu40f2wTK8zo
-         2iE5ibWayllqwdjGN++kkVQdW9OgLgRj0+rBH5OvzcLsoNEByi9LNspb+2B+W5wqkM41
-         Rwzp9Tu2wWCQ3oQ9fSXsHYYSxRuw8yfwAEchPTid10LtcwGqSDyeXQdG7IyHwjOChaWM
-         86bg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Geqy1MGLbG4CNNhTg6ig5gMw4IRIu2ApDkqg8kUu6fE=;
+        b=im3ECY8irru0d2J3PmRkK1oS6XMYGDmkKrSKiLpQr6kggh65U519LacoANhp99/wDs
+         yHeOZt/b6IK2ihlol7f0Ba2me3bs0cr3TxYhTcQThAifpYqs8dB3p/8NK2dEXBDay90O
+         bW6pXrP7B14I1MNWa+NfggtZKbyTz1rnHhMsVYBCQiIPWqcakktYyuja6CoTLxQtkpfs
+         JsqTKBMeEN72FgBWe/ihbCXP9h1x9TEb9ulziUgPn3ZIyNK23YQtGzg65j8/As9Xyk7K
+         3+HVs34s1miAiKC8ZfgoVMv73WwF3DJWJcQDYskZpYkejUuTFt6cPMAw/xSDBCQyvpM1
+         B6Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VSnIdJlrSu1RqwxbrwymcRNJoSgT34DNNQH025cvo20=;
-        b=i0dGE+g1nIC2aeTNceOVMN/PjnimItIXHBBLm3eYo7LeVkDwyIulvIuZiIu2QpFmSP
-         r9Q1vGMsRkmhKN8Ki3beZ9Lo9DYbIUKMejILbIOmY3Gj8f45gqhCZx4GSOk0YcpknXvZ
-         ffFnnU7s/3FhvrAj378iQs2L7oaKaxjOf7dab9ykq+/A21J8Gu82SPTfScm9frVD6ucW
-         EsGgteks/9VxFcKvWjuV67gq3ksap57AmmhwcOLgnBHJ25N7bnKHAqhlIAH3pAZ0J1N2
-         u8uxC+d3adqvAwV6P8i7KgU3gNh5to/PnsAyJVwQDKPHL8hFiYEOUBek69Ed4c3ER8LF
-         Ynag==
-X-Gm-Message-State: ANoB5pl4oYyVedfNt8wbXnrpJWFeuGL+H7WRgqXlzvUxwg4ObB7cAxbp
-        IoSpuXYWwXJDrk0z/rdSmw5jbg==
-X-Google-Smtp-Source: AA0mqf4/hs47bXqsUk4ZLu/jQ1Wna1nuVovn6G3NWi6j/M3148XUWs2V/ZZa76pyYbEsKXo3MQAsvg==
-X-Received: by 2002:ac2:4a69:0:b0:4ac:d080:e1bd with SMTP id q9-20020ac24a69000000b004acd080e1bdmr1120397lfp.318.1668697131665;
-        Thu, 17 Nov 2022 06:58:51 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id r8-20020ac24d08000000b00492dfcc0e58sm186892lfi.53.2022.11.17.06.58.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 06:58:51 -0800 (PST)
-Message-ID: <2f35b9aa-1385-9c2b-ed60-721a835645dc@linaro.org>
-Date:   Thu, 17 Nov 2022 15:58:49 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Geqy1MGLbG4CNNhTg6ig5gMw4IRIu2ApDkqg8kUu6fE=;
+        b=TsscjWXMo58d/prgV+pVlWfp9LetxReRGwG311Uzn0HZOjZEfp+MZbl0G++tdK+Q1S
+         jgCBejH9IlgiywZJeXjan3jYSdwmCCXsvQF0bo/y7kRofW5DFaZGUcDm6yDuRFecCm9U
+         ENk6xFiRUM6QxmEhyv4TgN5c5fFDaH+enFcjxiYYS7plIF/iaOkCxkWx2IX+ATTcqaI1
+         SiWPzqwZJMWhrqrpr9HsvrV/SArTNjeNaEr0KP7+BVtrbxpcLYAuaUiiG0kIlPQ6mKt3
+         L5qqEX6TItROmA1avUSeTJBEO/IWSdqM1w7ypEzspR4M/Z6YVBh4rI7DBfkOjSvQG2x1
+         +0BA==
+X-Gm-Message-State: ANoB5pmj2jaY9ZcB9vHb+JQMDb0ZZz0tnGOiCdA1ZZKfgDrvr9OAra16
+        eEbTwg8LvqWWqvg0lXPf5PXvIA==
+X-Google-Smtp-Source: AA0mqf5Drbj5GGUy8zNXmPljMG8UuEFTPTHf+YuwVXyWlSocFeljs1OjIQ+Ab7mWXZMNXetmsxdGbQ==
+X-Received: by 2002:a17:90a:6b84:b0:20a:cbb0:3c9b with SMTP id w4-20020a17090a6b8400b0020acbb03c9bmr3280802pjj.81.1668698179289;
+        Thu, 17 Nov 2022 07:16:19 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id r12-20020a63e50c000000b00476dc914262sm1135777pgh.1.2022.11.17.07.16.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 07:16:18 -0800 (PST)
+Date:   Thu, 17 Nov 2022 15:16:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "Yao, Yuan" <yuan.yao@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH 38/44] KVM: Disable CPU hotplug during hardware enabling
+Message-ID: <Y3ZQP3C1f8pk199t@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-39-seanjc@google.com>
+ <88e920944de70e7d69a98f74005b49c59b5aaa3b.camel@intel.com>
+ <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
+ <Y3PzhANShVlTXVg1@google.com>
+ <95ca433349eca601bdd2b16d70f59ba8e56d8e3f.camel@intel.com>
+ <Y3UZtoIidMyE8qVz@google.com>
+ <7fb66c497b6c41049167b05c63267cbc301b1c20.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
- <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
- <Y3Y1xjOjijBsQLZA@lunn.ch>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y3Y1xjOjijBsQLZA@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7fb66c497b6c41049167b05c63267cbc301b1c20.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/11/2022 14:23, Andrew Lunn wrote:
->>  allOf:
->> -  - $ref: "dma-common.yaml#"
->> +  - $ref: dma-common.yaml#
->>  
->>  
->>  allOf:
->> -  - $ref: "dma-common.yaml#"
->> +  - $ref: dma-common.yaml#
+On Thu, Nov 17, 2022, Huang, Kai wrote:
+> On Wed, 2022-11-16 at 17:11 +0000, Sean Christopherson wrote:
+> > static int kvm_x86_check_processor_compatibility(void)
+> > {
+> >         int cpu = smp_processor_id();
+> >         struct cpuinfo_x86 *c = &cpu_data(cpu);
+> > 
+> >         /*
+> >          * Compatibility checks are done when loading KVM and when enabling
+> >          * hardware, e.g. during CPU hotplug, to ensure all online CPUs are
+> >          * compatible, i.e. KVM should never perform a compatibility check on
+> >          * an offline CPU.
+> >          */
+> >         WARN_ON(!cpu_online(cpu));
 > 
-> Looks like some other automated change made its way into this patch.
+> Looks good to me.  Perhaps this also can be removed, though.
 
-I forgot to mention in commit msg, but maybe better to drop it to reduce
-noise.
+Hmm, it's a bit superfluous, but I think it could fire if KVM messed up CPU
+hotplug again, e.g. if the for_each_online_cpu() => IPI raced with CPU unplug.
 
-Best regards,
-Krzysztof
+> And IMHO the removing of WARN_ON(!irq_disabled()) should be folded to the patch
+> "[PATCH 37/44] KVM: Rename and move CPUHP_AP_KVM_STARTING to ONLINE section". 
+> Because moving from STARTING section to ONLINE section changes the IRQ status
+> when the compatibility check is called.
 
+Yep, that's what I have coded up, just smushed it all together here.
