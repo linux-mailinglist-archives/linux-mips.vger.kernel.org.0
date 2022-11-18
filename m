@@ -2,88 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460AB62EF64
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 09:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C838E62EFFF
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 09:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241017AbiKRI3L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Nov 2022 03:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
+        id S241279AbiKRIrw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Nov 2022 03:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbiKRI2i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 03:28:38 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85267391E4
-        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 00:28:33 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id d3so5928873ljl.1
-        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 00:28:33 -0800 (PST)
+        with ESMTP id S241289AbiKRIra (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 03:47:30 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AE38C4AA
+        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 00:46:25 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id b62so4494550pgc.0
+        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 00:46:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DZabo7ibEwOOw8J7VwUfivpQWJQQOqpTQOP6qmrwcFs=;
-        b=c0DwlSGGZnpMt70g7cvHCqqLtClo+HqnYC/KDMQT/2C4Kgme2ED6Ajko4OIXpmbeXS
-         m5SIke4QdtVszOu65Cv1AnF200xxc1a/iy1cj+W/4WPUi1idnzCq3jL3rOCyXQ/Sy7Xo
-         FhxYYZmL7CP0ofdSTlNio6J4qvL4Gb4QE7SbMbyvGwdcz0q2lnaiEphLSDGuz3cWY979
-         gQT9VdBtzdRs59dL/dUgCq5BV84WRT+Q7ok8jIBAq5G8XWvjz6kIifP/efd7/+/UMkZu
-         +qzJPaRvsSeqy/GGhmsAycmFzituYnYzJUATh2BkazIz98eeuD3Eq9fkv2cSDtBNQpLB
-         eqpQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4o2lpMlk9nMfsW2UbDxsnQVEI8k+iF2dcDvZUBBRXk=;
+        b=rWqF8mvWeDHZf+4YtTcHg25bwDhGlBZWJzEqQtZgAqZe2EfN8k08xEH9FU0YL8Zofs
+         FJGCOTy16LAUeBUyziYPlFZmQ5LQBgCt4pLTikMnTkIeg17EGhOE9yD1tQcBdPIooO5L
+         7vlbvTaYV3DNS3BkAxiRd/66hL/WshSCKxSibfDdFhMwsWBy4xWE1RqIEzCcsxVlKN4Z
+         BNRcbJy60LQRqwYNTzqnPh2jC5iz4PSxWP1eayPHrfB+G95c4MIG6cgoq1OElUSI0it/
+         k5u6BbSzeHAi2+D5tQFB9EhqTh+NIf9sSabyBX4b/cbH/r8GZk5q18jmi4SuhIEr1gpl
+         v/gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DZabo7ibEwOOw8J7VwUfivpQWJQQOqpTQOP6qmrwcFs=;
-        b=KDB4uW6yKv63A7mPyVpPbtPqndZaZTDnnoRVZTZC+oomoFfu1FcMtLgwGE4hV1TFeL
-         sXCEMzuukZmM9SUqJriArzADM3u+TM/mBT11T9tjwij3HtPhp3OPMYaLR52duBBURDzo
-         pakoqjZAqNDQO74GnP6VAfddx3QMR/3RQht1arT+35x+8HO9RYrzcTSwzTX1iwEnZeTv
-         kcAwp0gmChKVT/AZxnzaL8emvGgCwFagr+Yyc8jtUrTHe58MwUhLJwc/TLOP1VvWNTiF
-         mF+Y85ZfJmNcvJaMEWfogWhHVnLpqhVMAf1kz+zpLpbpDjSW7QDoimy64nPisKQBORsH
-         5C+A==
-X-Gm-Message-State: ANoB5plGdQqBk77YHNoY8qgf2Omt/oyWL5fpYSPqKtnX6IPrjQMXQ6ZF
-        Cpion8U3cXCdLaGR3Jh8rHAOMQ==
-X-Google-Smtp-Source: AA0mqf5FUU/an0yPckwGnu0iJ8FLtTfHewcyaiyp5w+c6ymGf8LMkNj5Lkw1yXdUuHVX3l3x9IvIFA==
-X-Received: by 2002:a2e:a5c7:0:b0:277:8d48:27dd with SMTP id n7-20020a2ea5c7000000b002778d4827ddmr2207144ljp.192.1668760111721;
-        Fri, 18 Nov 2022 00:28:31 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id d24-20020a056512369800b0049b8c0571e5sm564273lfs.113.2022.11.18.00.28.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 00:28:31 -0800 (PST)
-Message-ID: <578b686e-8461-a959-86c5-83a8be1dc981@linaro.org>
-Date:   Fri, 18 Nov 2022 09:28:29 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4o2lpMlk9nMfsW2UbDxsnQVEI8k+iF2dcDvZUBBRXk=;
+        b=XyfnfoQu9lJCM9QGhK5Mfk3SZYrM/f/xoP+uh6j/pkduIoDqtMHqRW+bk+hFEywnRI
+         ohoeJMDr8iT1DtqONCaIN5C8ZcqYsNuSbzUevMgUOuCyErmrPQ+B+PT49ga8zKQLMRiW
+         mt+kDAmrDFkVzMejBKsJtDmuQFiUi0PyGRD5GJfuT3iSkEhwwFtuwC5GjeSUzXGDzJ0P
+         DTUMtSGranJrc83NQxV3GP4gKr1HyRhkJ6cYDMbIC11OEvXAAcBsHI6e4dgPSk6f25Bg
+         AmEQP3a4Opa4dmEV1WrUs2inji/PZtqsf4djWhXH8fmbUvhJ925ocRdSwpeC6M8pWJw3
+         1GuQ==
+X-Gm-Message-State: ANoB5pmHgcKnKMa95CtZxsaq/eWfij4bnNTalAcw3MxY2+BPVksmlRVg
+        ddCBudof+FtwnFA5I1JyN6kMlBwDucEP8j1S7E8lMw==
+X-Google-Smtp-Source: AA0mqf4axdzUGsd3ztrxougeoe8WIqqIteJIKbLXPG7ewSDBk4rpwXnQ0D4JyF7rDvn81OBS60MR/MU/f0Va1WqbCX4=
+X-Received: by 2002:a63:4285:0:b0:477:15c8:cd8a with SMTP id
+ p127-20020a634285000000b0047715c8cd8amr4354532pga.595.1668761184769; Fri, 18
+ Nov 2022 00:46:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+References: <20221108045300.2084671-1-lis8215@gmail.com> <20221108045300.2084671-2-lis8215@gmail.com>
+In-Reply-To: <20221108045300.2084671-2-lis8215@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 18 Nov 2022 09:45:48 +0100
+Message-ID: <CAPDyKFrMqCL1-faBadVP3xB-5qiCYsyRUuOHbFZuOWfLdCXwig@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mmc: jz4740: Don't change parent clock rate for some SoCs
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
- <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
- <20221117220756.7a1bf734@xps-13>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117220756.7a1bf734@xps-13>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,86 +70,81 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/11/2022 22:07, Miquel Raynal wrote:
-> Hi Krzysztof,
-> 
-> krzysztof.kozlowski@linaro.org wrote on Thu, 17 Nov 2022 13:38:42 +0100:
-> 
->> The Devicetree bindings document does not have to say in the title that
->> it is a "binding", but instead just describe the hardware.  For shared
->> (re-usable) schemas, name them all as "common properties".
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/clock/qcom,gcc.yaml         | 2 +-
->>  Documentation/devicetree/bindings/dma/dma-common.yaml         | 2 +-
->>  Documentation/devicetree/bindings/dma/dma-controller.yaml     | 4 ++--
->>  Documentation/devicetree/bindings/dma/dma-router.yaml         | 4 ++--
->>  Documentation/devicetree/bindings/iio/adc/adc.yaml            | 2 +-
->>  .../devicetree/bindings/media/video-interface-devices.yaml    | 2 +-
->>  Documentation/devicetree/bindings/media/video-interfaces.yaml | 2 +-
->>  Documentation/devicetree/bindings/mmc/mmc-controller.yaml     | 2 +-
->>  Documentation/devicetree/bindings/mtd/nand-chip.yaml          | 2 +-
->>  Documentation/devicetree/bindings/mtd/nand-controller.yaml    | 2 +-
->>  .../bindings/net/bluetooth/bluetooth-controller.yaml          | 2 +-
->>  Documentation/devicetree/bindings/net/can/can-controller.yaml | 2 +-
->>  .../devicetree/bindings/net/ethernet-controller.yaml          | 2 +-
->>  Documentation/devicetree/bindings/net/ethernet-phy.yaml       | 2 +-
->>  Documentation/devicetree/bindings/net/mdio.yaml               | 2 +-
->>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml        | 2 +-
->>  .../devicetree/bindings/power/reset/restart-handler.yaml      | 2 +-
->>  Documentation/devicetree/bindings/rtc/rtc.yaml                | 2 +-
->>  .../devicetree/bindings/soundwire/soundwire-controller.yaml   | 2 +-
->>  Documentation/devicetree/bindings/spi/spi-controller.yaml     | 2 +-
->>  Documentation/devicetree/bindings/watchdog/watchdog.yaml      | 2 +-
->>  21 files changed, 23 insertions(+), 23 deletions(-)
->>
-> 
-> [...]
-> 
->> diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> index 97ac3a3fbb52..20b195ef9b70 100644
->> --- a/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> +++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
->> @@ -4,7 +4,7 @@
->>  $id: http://devicetree.org/schemas/mtd/nand-chip.yaml#
->>  $schema: http://devicetree.org/meta-schemas/core.yaml#
->>  
->> -title: NAND Chip and NAND Controller Generic Binding
->> +title: NAND Chip and NAND Controller common properties
-> 
-> I only see this now but the title should be
-> 
-> 	"NAND chip common properties"
-> 
->>  
->>  maintainers:
->>    - Miquel Raynal <miquel.raynal@bootlin.com>
->> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> index 359a015d4e5a..a004efc42842 100644
->> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
->> @@ -4,7 +4,7 @@
->>  $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
->>  $schema: http://devicetree.org/meta-schemas/core.yaml#
->>  
->> -title: NAND Chip and NAND Controller Generic Binding
->> +title: NAND Chip and NAND Controller common properties
-> 
-> And here just "NAND controller..."
-> 
-> Of course the original purpose of your series is more to clean those
-> titles rather than fixing them and if you disagree I am fine doing it
-> myself aside, but if you could at the same time make the title more
-> accurate that would be perfect.
-> 
-> Either ways:
-> 
-> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+On Tue, 8 Nov 2022 at 05:53, Siarhei Volkau <lis8215@gmail.com> wrote:
+>
+> Some SoCs have one clock divider for all MMC units, thus changing one
+> affects others as well. This leads to random hangs and memory
+> corruptions, observed on the JZ4755 based device with two MMC slots
+> used at the same time.
 
-Thanks, I update these manually, so I can correct the names to ones you
-mentioned. Thanks.
+Urgh, that sounds like broken HW to me.
 
-Best regards,
-Krzysztof
+The MMC blocks could share a parent clock (that would need a fixed
+rate for it to be applied), assuming there is a separate gate/divider
+available per block. But there isn't'?
 
+>
+> List of SoCs affected includes: JZ4725b, JZ4755, JZ4760 and JZ4760b.
+> However, the MMC driver doesn't distinguish JZ4760 and JZ4770
+> which shall remain its behavior. For the JZ4755 is sufficient to
+> use JZ4725b's binding. JZ4750 is outside of the patch.
+>
+> The MMC core has its own clock divisor, rather coarse but suitable well,
+> and it shall keep the role of tuning clock for the MMC host in that
+> case.
+
+The mmc core doesn't have a clock divisor, but it does control the bus
+clock frequency through the ->set_ios() host ops. It needs to do that,
+to be able to conform to the (e)MMC, SD and SDIO specifications.
+
+Can you please try to elaborate on the above, so I can better
+understand your point?
+
+>
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+
+Kind regards
+Uffe
+
+> ---
+>  drivers/mmc/host/jz4740_mmc.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+> index dc2db9c18..d390ff31d 100644
+> --- a/drivers/mmc/host/jz4740_mmc.c
+> +++ b/drivers/mmc/host/jz4740_mmc.c
+> @@ -114,6 +114,7 @@ enum jz4740_mmc_version {
+>         JZ_MMC_JZ4740,
+>         JZ_MMC_JZ4725B,
+>         JZ_MMC_JZ4760,
+> +       JZ_MMC_JZ4770,
+>         JZ_MMC_JZ4780,
+>         JZ_MMC_X1000,
+>  };
+> @@ -887,7 +888,13 @@ static int jz4740_mmc_set_clock_rate(struct jz4740_mmc_host *host, int rate)
+>         int real_rate;
+>
+>         jz4740_mmc_clock_disable(host);
+> -       clk_set_rate(host->clk, host->mmc->f_max);
+> +
+> +       /*
+> +        * Changing rate on these SoCs affects other MMC units too.
+> +        * Make sure the rate is configured properly by the CGU driver.
+> +        */
+> +       if (host->version != JZ_MMC_JZ4725B && host->version != JZ_MMC_JZ4760)
+> +               clk_set_rate(host->clk, host->mmc->f_max);
+>
+>         real_rate = clk_get_rate(host->clk);
+>
+> @@ -992,6 +999,7 @@ static const struct of_device_id jz4740_mmc_of_match[] = {
+>         { .compatible = "ingenic,jz4740-mmc", .data = (void *) JZ_MMC_JZ4740 },
+>         { .compatible = "ingenic,jz4725b-mmc", .data = (void *)JZ_MMC_JZ4725B },
+>         { .compatible = "ingenic,jz4760-mmc", .data = (void *) JZ_MMC_JZ4760 },
+> +       { .compatible = "ingenic,jz4770-mmc", .data = (void *) JZ_MMC_JZ4770 },
+>         { .compatible = "ingenic,jz4775-mmc", .data = (void *) JZ_MMC_JZ4780 },
+>         { .compatible = "ingenic,jz4780-mmc", .data = (void *) JZ_MMC_JZ4780 },
+>         { .compatible = "ingenic,x1000-mmc", .data = (void *) JZ_MMC_X1000 },
+> --
+> 2.36.1
+>
