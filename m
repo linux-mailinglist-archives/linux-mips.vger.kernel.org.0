@@ -2,101 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C3862F51F
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 13:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F34162F54F
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 13:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241879AbiKRMkZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Nov 2022 07:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S241920AbiKRMsp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Nov 2022 07:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241870AbiKRMkX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 07:40:23 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB7F72118
-        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 04:40:22 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id b9so6630625ljr.5
-        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 04:40:22 -0800 (PST)
+        with ESMTP id S241983AbiKRMs3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 07:48:29 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71697655;
+        Fri, 18 Nov 2022 04:48:28 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id f7so6995041edc.6;
+        Fri, 18 Nov 2022 04:48:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/zLTYsXHR/2HWPYQijXGBO91u/5WmcoUCXMlBqcrLxE=;
-        b=NqmKwrLbeZtYmWVypNV9cw9sVY8Uh0yA6ockCssS1ZW75SofXF8qdOtqUfQMry96sv
-         leC+y7V2WvnDfbLwbzkDg7ztJnrcxoL4uCBqz+kxduqpJev0UsmRsmKTtJ9uTfZI9HXe
-         6zoekzQEulbmlkQb6I2l43uKgmjdGK4lDzGm75xdRNxTrnernduIDMEE2W3BQy7JUDF4
-         4KY2uWtn4Q7DhPosMCKq3qvVUYy5nzDYvyP/NkGaDRz9OcXUyjkWGey6hlmY4/nsv/3m
-         EaV2eXIkvpidckVPkoycILrmEh/Xdsx10yTDgRgIYEAeYBmWToOrGwFcCFJZ2NvHTNrS
-         v3bA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qkf+vf5H99m28DXni9JA8v6TuHcwaOr7fkrAsoxdAJo=;
+        b=azckUTFwl5+mcmV9ZvXGrNxfypC5unle8kmUw73iVO21n7hARbaVF9tOy012c8JhI6
+         PQfilSi3CANlmk4DU1fXnx2fX41wPEkmFbYLTYWzAr88FjjLEvTWlByuucH1EzXBX+XU
+         gBLcr85qUg0I4vDW9c1v8aRmA9Sk7N4iNjqdGtBfU9PeWbPOCBb1ONsx+k+WNUQzp3tI
+         iTcZhogHs6M3NeCMELorsaCL6RDFeLmPK4ZdDyItgsVP3Dy1OLBIVkCpRZDJjJnLOX3J
+         EbzBnM1iiAZ2NXHdCEVLWJUGBNV98wsL0vidgO4qbmrNU2joZeFKyItaW5yP/qGdpZyi
+         UATw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/zLTYsXHR/2HWPYQijXGBO91u/5WmcoUCXMlBqcrLxE=;
-        b=pKH7ZzpicSWSXQ5XmLhdsFOUBhjMh+HpNff9twv18HkB2zEIFAuU8F2UMQ7EVk7K/6
-         EvoVuILVJLPD5RAfs+TkF79APJhaPCAnzJu/XZcLmMcvpa7ffG89RiIj8QwqOleJ3eYm
-         5fEXRigTweuceG6HbCcr8AaeqkVhei30NdeHly3dcp6CJsJ4bcSPustXB9YiROSpAcd3
-         eyGx7eufr5ezPtU+3Yrljc+wUqnYNYcZyTkhE5wQnY3jDuNeixXNn7BWq1OmF18EaqsI
-         CcoTqIoc5k3wgUQeUWkQrwXlmWycJSBEoVzkyzGI8g8fB6C5OpMXD8uuKOazezK+gdzI
-         1VYA==
-X-Gm-Message-State: ANoB5pkpZJNZ16koL1rb6N3LKPuRRb7V1PTZxy3DqSh+8r7AN6tZLQYW
-        n0pEFarNBr3eIKtZfJJm8n7EQQ==
-X-Google-Smtp-Source: AA0mqf6JHaqd3SdG/FMh7z7NgcZ5t7HsgeEP1/ln5CmlzAKzsWOfgilv2P8o79vy350QVlD7csdD3g==
-X-Received: by 2002:a2e:b10c:0:b0:26f:bd6e:7f7f with SMTP id p12-20020a2eb10c000000b0026fbd6e7f7fmr2456769ljl.87.1668775219007;
-        Fri, 18 Nov 2022 04:40:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05651c10ab00b002793cf0e9e8sm48983ljn.122.2022.11.18.04.40.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 04:40:18 -0800 (PST)
-Message-ID: <13c5292b-4f04-0f85-98a2-bf4b5265b567@linaro.org>
-Date:   Fri, 18 Nov 2022 13:40:16 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qkf+vf5H99m28DXni9JA8v6TuHcwaOr7fkrAsoxdAJo=;
+        b=kmdxr/7zavXNN1bsun8WNB1nE3NeuH33mPVhh3w/J/oFJ+VKQx3I9csRjGHxakkByj
+         6hsWkQPSRTixRXiC4fT+kTptqoDoYbVypzixQoKmC3bYxbtm2n5zDFdcp9AKVR5LqQEb
+         C128PFMlmXjPF3dZOs0P6ube9ped+BIU9yG2bnqClE/3T7+y2Tvmn1i/wO3rAnurYTiS
+         xewrNmOha/63EifbBVsqy7QZwa+0pMoehcIv8P9pgxCWLuhwk27oN05w7F3pCSxkaaW4
+         dK+Svbb60zr0+THYPTbYGqcBGTqTBEtWsUmgE9tCV2yoiJdaqJILmkzAyjRoOEg5KoMH
+         e0mA==
+X-Gm-Message-State: ANoB5pmhQ/hsuM1sAZNwuw9I+ootHdOgepP8aDLsAUWtUWStywqcf0G3
+        Zy3uAiVBt/VEkfQENMjKFcYtSlsz9kq3n3+i9mw=
+X-Google-Smtp-Source: AA0mqf71tBnaz8hkADRoxmAofrunH7v9OzKJ8sYvsMQGeNNKjlJGnl5xdl4X47mYMcPcWRJACPqG1rhZdKdMZ5+0huA=
+X-Received: by 2002:a05:6402:702:b0:461:ed76:cb42 with SMTP id
+ w2-20020a056402070200b00461ed76cb42mr6187221edx.229.1668775706846; Fri, 18
+ Nov 2022 04:48:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/2] dt-bindings: gpio: add loongson series gpio
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+References: <20221108045300.2084671-1-lis8215@gmail.com> <20221108045300.2084671-2-lis8215@gmail.com>
+ <CAPDyKFrMqCL1-faBadVP3xB-5qiCYsyRUuOHbFZuOWfLdCXwig@mail.gmail.com>
+ <59EJLR.DQ7KHQEAEUSG2@crapouillou.net> <CAKNVLfYpmJjQYFOy__PkmqcftQcQUYEKJ2V2K90MfG-1MBC_uA@mail.gmail.com>
+ <CAPDyKFpNMfru+U8r-pnFpyfZ_3_7RdrApdBvcpykV1ccaMMaHQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFpNMfru+U8r-pnFpyfZ_3_7RdrApdBvcpykV1ccaMMaHQ@mail.gmail.com>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Fri, 18 Nov 2022 15:48:15 +0300
+Message-ID: <CAKNVLfbKPveW+k9FWZob=7VYu4UD6sPNct3TiMpdn0QvJp41Ug@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mmc: jz4740: Don't change parent clock rate for some SoCs
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <20221114095332.21079-1-zhuyinbo@loongson.cn>
- <20221114095332.21079-2-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221114095332.21079-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14/11/2022 10:53, Yinbo Zhu wrote:
-> Add the Loongson series gpio binding with DT schema format using
-> json-schema.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
+=D0=BF=D1=82, 18 =D0=BD=D0=BE=D1=8F=D0=B1. 2022 =D0=B3. =D0=B2 13:06, Ulf H=
+ansson <ulf.hansson@linaro.org>:
+>
+> On Fri, 18 Nov 2022 at 10:52, Siarhei Volkau <lis8215@gmail.com> wrote:
+> >
+> > =D0=BF=D1=82, 18 =D0=BD=D0=BE=D1=8F=D0=B1. 2022 =D0=B3. =D0=B2 12:27, P=
+aul Cercueil <paul@crapouillou.net>:
+> > >
+> > > Hi,
+> > >
+> > > (Ingenic SoCs maintainer here)
+> > >
+> > > Le ven. 18 nov. 2022 =C3=A0 09:45:48 +0100, Ulf Hansson
+> > > <ulf.hansson@linaro.org> a =C3=A9crit :
+> > > > On Tue, 8 Nov 2022 at 05:53, Siarhei Volkau <lis8215@gmail.com> wro=
+te:
+> > > >>
+> > > >>  Some SoCs have one clock divider for all MMC units, thus changing
+> > > >> one
+> > > >>  affects others as well. This leads to random hangs and memory
+> > > >>  corruptions, observed on the JZ4755 based device with two MMC slo=
+ts
+> > > >>  used at the same time.
+> > > >
+> > > > Urgh, that sounds like broken HW to me.
+> > > >
+> > > > The MMC blocks could share a parent clock (that would need a fixed
+> > > > rate for it to be applied), assuming there is a separate gate/divid=
+er
+> > > > available per block. But there isn't'?
+> > >
+> > > They do share a parent clock and have separate gates, and each MMC IP
+> > > block has an internal divider for the bus frequency derived from that
+> > > shared clock.
+> > >
+> > > >>
+> > > >>  List of SoCs affected includes: JZ4725b, JZ4755, JZ4760 and JZ476=
+0b.
+> > > >>  However, the MMC driver doesn't distinguish JZ4760 and JZ4770
+> > > >>  which shall remain its behavior. For the JZ4755 is sufficient to
+> > > >>  use JZ4725b's binding. JZ4750 is outside of the patch.
+> > > >>
+> > > >>  The MMC core has its own clock divisor, rather coarse but suitabl=
+e
+> > > >> well,
+> > > >>  and it shall keep the role of tuning clock for the MMC host in th=
+at
+> > > >>  case.
+> > > >
+> > > > The mmc core doesn't have a clock divisor, but it does control the =
+bus
+> > > > clock frequency through the ->set_ios() host ops. It needs to do th=
+at,
+> > > > to be able to conform to the (e)MMC, SD and SDIO specifications.
+> > > >
+> > > > Can you please try to elaborate on the above, so I can better
+> > > > understand your point?
+> > >
+> > > Yes, I don't really understand the patch, TBH.
+> > >
+> > > The "clk_set_rate" call will only set the shared clock to the *maximu=
+m*
+> > > clock frequency (host->mmc->f_max) which should be the exact same
+> > > across all MMC IPs.
+> >
+> > That's the case I need different "f_max" for my HW, for some reason
+> > internal slot can't do a full rate (48MHz) but the external can, the sa=
+me
+> > card used for checking. So I want to set 24M for mmc0, and 48M for mmc1
+> > with respect to hardware limitation.
+>
+> This sounds like a board specific problem, right?
 
+Exactly.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> The simple solution would be to use 24M for both hosts, but that would
+> unnecessarily degrade the speed for the host for the internal slot.
+>
+Indeed.
 
-Best regards,
-Krzysztof
+> It sounds like we need a new DT binding to describe a capped
+> max-frequency for the "broken slot". And in case that is available in
+> the DTS, the mmc->f_max value should be overridden with it, while also
+> respecting the original f_max value while calling clk_set_rate().
+>
+> Br
+> Uffe
 
+I think it is unnecessary, "max-frequency" is enough and clear to use here,
+it just needs to be tuned independently for each controller. However, the
+controllers have hidden dependency on each other. Break this dependency
+that's the subject of the patchset.
+
+Siarhei
