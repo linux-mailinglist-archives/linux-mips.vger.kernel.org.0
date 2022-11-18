@@ -2,171 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE2A62F1EF
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 10:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C898D62F217
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 11:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241311AbiKRJzx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Nov 2022 04:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
+        id S241584AbiKRKHB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Nov 2022 05:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235099AbiKRJzw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 04:55:52 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BE78E0AA;
-        Fri, 18 Nov 2022 01:55:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1668765350; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6XNQnzVk9riDdeXq+9UMc2lKBE5CylsUGgRXuU/IvoA=;
-        b=lP8PARIJ1MGPuSFRXoZdjDQldeDX9gaAL8k6+ck7PFoPEr/pfVYxjDVHYtpLT9/6oltISw
-        axe4KwYExIC3fbuX3Vdw5FQcDGfcZA+AoBUTXzpwPyVmEacl1F7QisvJtCY7T79sG17bb5
-        b4/03lyP69aMqj4L9x1xBzMC6qdib+c=
-Date:   Fri, 18 Nov 2022 09:55:40 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2 channels,
- part 1
-To:     Uwe =?iso-8859-1?q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Message-Id: <SKFJLR.07UMT1VWJOD52@crapouillou.net>
-In-Reply-To: <20221117132927.mom5klfd4eww5amk@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
-        <20221024205213.327001-2-paul@crapouillou.net>
-        <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
-        <CVZAKR.06MA7BGA170W3@crapouillou.net>
-        <20221117132927.mom5klfd4eww5amk@pengutronix.de>
+        with ESMTP id S241678AbiKRKG6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 05:06:58 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166908FB19
+        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 02:06:57 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id 4so4179244pli.0
+        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 02:06:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3uh3YxDgspkB68SJoIPbAc50d6XGVfp5931wp78ekCo=;
+        b=hs2eonUzH3U51NbUg0vNsd5tQ0Z1HqnyDlCfH1qE2oZqGApg8MIgzun6Ze88oUOO/J
+         ewfn0OyHrsF1os3fvp7YGC8JJ1uA2Tm4oVxe7VmZPu4u2Z/2jzgbXpwHhKnfKNi6PTtH
+         xDsl5Hy5omYexkgisVxzwjIjvNdCwPRbcjI9IZA18WnC6VgBVo6XM9a4jWJzFePT4z4J
+         cAuMJ2KMk2I+tlNpkmr7eLUIZaEgi//zFzKchwN+H3insIS+AWPiXIxQ0IB1MRYkPah+
+         LJahjP8cnuCmkW9s1TX+6iZd1TC49N0+EMAl5NwX7WXgsvg4ypBGLikFouVUct2V0y5x
+         LAiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3uh3YxDgspkB68SJoIPbAc50d6XGVfp5931wp78ekCo=;
+        b=NByxQZ1qqla0jYW/f/OtecEKYfGNith7MvNysYoeg1zErhJ4ynzImevI8K48m+in1P
+         ZSue/CRqoj1pns+mC02h5uKFIZD7fBvWgoRkpLaLaHaSFFdq9KHz5WGT3lVHo6JqDf2Z
+         HKtp2qWOFlME+HPXOwM74VcdRgZuVXpseTCsZBDwfm4lwZrkBRmk4x/hB/iPQ2oQS6cm
+         jJ7bhFOIEX6+6youHBi5GB+6pRgE0V2EwneHXT9vba7h9Usz3A24M8jQXOVi2Lrr+moa
+         1YnS/MCOY6Dtinm0K3fpOYW93YtrsVYXJa02Ev6y5+4lRW+ZFXr1wdDHFhNDEB1DyiIb
+         565A==
+X-Gm-Message-State: ANoB5pn3/fwUtUNzD/P56b/3ieDEeldoVXTEGcLXnI0uUGv91WTvYMK8
+        xLqMa0fJm53hKvDSFetK7rEdwsIeIPYuDQNCqh7QgQ==
+X-Google-Smtp-Source: AA0mqf5DQ+7W6xK4uZyzaxH1CPEq0BqnknF+w4PGK0v1UlGT6oDvQqas4LBFkLxvPhpjLRDpZu78WhKSiUk6wGZeezQ=
+X-Received: by 2002:a17:902:bcc9:b0:186:be05:798e with SMTP id
+ o9-20020a170902bcc900b00186be05798emr6832336pls.37.1668766016568; Fri, 18 Nov
+ 2022 02:06:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+References: <20221108045300.2084671-1-lis8215@gmail.com> <20221108045300.2084671-2-lis8215@gmail.com>
+ <CAPDyKFrMqCL1-faBadVP3xB-5qiCYsyRUuOHbFZuOWfLdCXwig@mail.gmail.com>
+ <59EJLR.DQ7KHQEAEUSG2@crapouillou.net> <CAKNVLfYpmJjQYFOy__PkmqcftQcQUYEKJ2V2K90MfG-1MBC_uA@mail.gmail.com>
+In-Reply-To: <CAKNVLfYpmJjQYFOy__PkmqcftQcQUYEKJ2V2K90MfG-1MBC_uA@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 18 Nov 2022 11:06:19 +0100
+Message-ID: <CAPDyKFpNMfru+U8r-pnFpyfZ_3_7RdrApdBvcpykV1ccaMMaHQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mmc: jz4740: Don't change parent clock rate for some SoCs
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Uwe,
+On Fri, 18 Nov 2022 at 10:52, Siarhei Volkau <lis8215@gmail.com> wrote:
+>
+> =D0=BF=D1=82, 18 =D0=BD=D0=BE=D1=8F=D0=B1. 2022 =D0=B3. =D0=B2 12:27, Pau=
+l Cercueil <paul@crapouillou.net>:
+> >
+> > Hi,
+> >
+> > (Ingenic SoCs maintainer here)
+> >
+> > Le ven. 18 nov. 2022 =C3=A0 09:45:48 +0100, Ulf Hansson
+> > <ulf.hansson@linaro.org> a =C3=A9crit :
+> > > On Tue, 8 Nov 2022 at 05:53, Siarhei Volkau <lis8215@gmail.com> wrote=
+:
+> > >>
+> > >>  Some SoCs have one clock divider for all MMC units, thus changing
+> > >> one
+> > >>  affects others as well. This leads to random hangs and memory
+> > >>  corruptions, observed on the JZ4755 based device with two MMC slots
+> > >>  used at the same time.
+> > >
+> > > Urgh, that sounds like broken HW to me.
+> > >
+> > > The MMC blocks could share a parent clock (that would need a fixed
+> > > rate for it to be applied), assuming there is a separate gate/divider
+> > > available per block. But there isn't'?
+> >
+> > They do share a parent clock and have separate gates, and each MMC IP
+> > block has an internal divider for the bus frequency derived from that
+> > shared clock.
+> >
+> > >>
+> > >>  List of SoCs affected includes: JZ4725b, JZ4755, JZ4760 and JZ4760b=
+.
+> > >>  However, the MMC driver doesn't distinguish JZ4760 and JZ4770
+> > >>  which shall remain its behavior. For the JZ4755 is sufficient to
+> > >>  use JZ4725b's binding. JZ4750 is outside of the patch.
+> > >>
+> > >>  The MMC core has its own clock divisor, rather coarse but suitable
+> > >> well,
+> > >>  and it shall keep the role of tuning clock for the MMC host in that
+> > >>  case.
+> > >
+> > > The mmc core doesn't have a clock divisor, but it does control the bu=
+s
+> > > clock frequency through the ->set_ios() host ops. It needs to do that=
+,
+> > > to be able to conform to the (e)MMC, SD and SDIO specifications.
+> > >
+> > > Can you please try to elaborate on the above, so I can better
+> > > understand your point?
+> >
+> > Yes, I don't really understand the patch, TBH.
+> >
+> > The "clk_set_rate" call will only set the shared clock to the *maximum*
+> > clock frequency (host->mmc->f_max) which should be the exact same
+> > across all MMC IPs.
+>
+> That's the case I need different "f_max" for my HW, for some reason
+> internal slot can't do a full rate (48MHz) but the external can, the same
+> card used for checking. So I want to set 24M for mmc0, and 48M for mmc1
+> with respect to hardware limitation.
 
-Le jeu. 17 nov. 2022 =E0 14:29:27 +0100, Uwe Kleine-K=F6nig=20
-<u.kleine-koenig@pengutronix.de> a =E9crit :
-> Hello Paul,
->=20
-> On Tue, Oct 25, 2022 at 11:02:00AM +0100, Paul Cercueil wrote:
->>  Le mar. 25 oct. 2022 =E0 08:21:29 +0200, Uwe Kleine-K=F6nig
->>  <u.kleine-koenig@pengutronix.de> a =E9crit :
->>  > Hello,
->>  >
->>  > On Mon, Oct 24, 2022 at 09:52:09PM +0100, Paul Cercueil wrote:
->>  > >  The "duty > cycle" trick to force the pin level of a disabled=20
->> TCU2
->>  > >  channel would only work when the channel had been enabled
->>  > > previously.
->>  > >
->>  > >  Address this issue by enabling the PWM mode in=20
->> jz4740_pwm_disable
->>  > >  (I know, right) so that the "duty > cycle" trick works before
->>  > > disabling
->>  > >  the PWM channel right after.
->>  > >
->>  > >  This issue went unnoticed, as the PWM pins on the majority of=20
->> the
->>  > > boards
->>  > >  tested would default to the inactive level once the=20
->> corresponding
->>  > > TCU
->>  > >  clock was enabled, so the first call to jz4740_pwm_disable()=20
->> would
->>  > > not
->>  > >  actually change the pin levels.
->>  > >
->>  > >  On the GCW Zero however, the PWM pin for the backlight (PWM1,=20
->> which
->>  > > is
->>  > >  a TCU2 channel) goes active as soon as the timer1 clock is=20
->> enabled.
->>  > >  Since the jz4740_pwm_disable() function did not work on=20
->> channels not
->>  > >  previously enabled, the backlight would shine at full=20
->> brightness
->>  > > from
->>  > >  the moment the backlight driver would probe, until the=20
->> backlight
->>  > > driver
->>  > >  tried to *enable* the PWM output.
->>  > >
->>  > >  With this fix, the PWM pins will be forced inactive as soon as
->>  > >  jz4740_pwm_apply() is called (and might be reconfigured to=20
->> active if
->>  > >  dictated by the pwm_state). This means that there is still a=20
->> tiny
->>  > > time
->>  > >  frame between the .request() and .apply() callbacks where the=20
->> PWM
->>  > > pin
->>  > >  might be active. Sadly, there is no way to fix this issue: it=20
->> is
->>  > >  impossible to write a PWM channel's registers if the=20
->> corresponding
->>  > > clock
->>  > >  is not enabled, and enabling the clock is what causes the PWM=20
->> pin
->>  > > to go
->>  > >  active.
->>  > >
->>  > >  There is a workaround, though, which complements this fix:=20
->> simply
->>  > >  starting the backlight driver (or any PWM client driver) with a
->>  > > "init"
->>  > >  pinctrl state that sets the pin as an inactive GPIO. Once the
->>  > > driver is
->>  > >  probed and the pinctrl state switches to "default", the=20
->> regular PWM
->>  > > pin
->>  > >  configuration can be used as it will be properly driven.
->>  > >
->>  > >  Fixes: c2693514a0a1 ("pwm: jz4740: Obtain regmap from parent=20
->> node")
->>  > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  > >  Cc: stable@vger.kernel.org
->>  >
->>  > OK, understood the issue. I think there is another similar issue:=20
->> The
->>  > clk is get and enabled only in the .request() callback. The=20
->> result is (I
->>  > think---depends on a few further conditions) that if you have the
->>  > backlight driver as a module and the bootloader enables the=20
->> backlight to
->>  > show a splash screen, the backlight goes off because of the
->>  > clk_disable_unused initcall.
->>=20
->>  I will have to verify, but I'm pretty sure disabling the clock=20
->> doesn't
->>  change the pin level back to inactive.
->=20
-> Given that you set the clk's rate depending on the period to apply,=20
-> I'd
-> claim that you need to keep the clk on. Maybe it doesn't hurt, because
-> another component of the system keeps the clk running, but it's wrong
-> anyhow. Assumptions like these tend to break on new chip revisions.
+This sounds like a board specific problem, right?
 
-If the backlight driver is a module then it will probe before the=20
-clk_disable_unused initcall, unless something is really wrong. So the=20
-backlight would stay ON if it was enabled by the bootloader, unless the=20
-DTB decides it doesn't have to be.
+The simple solution would be to use 24M for both hosts, but that would
+unnecessarily degrade the speed for the host for the internal slot.
 
-Anyway, I can try your suggestion, and move the trick to force-disable=20
-PWM pins in the probe(). After that, the clocks can be safely disabled,=20
-so I can disable them (for the disabled PWMs) at the end of the probe=20
-and re-enable them again in their respective .request() callback.
+It sounds like we need a new DT binding to describe a capped
+max-frequency for the "broken slot". And in case that is available in
+the DTS, the mmc->f_max value should be overridden with it, while also
+respecting the original f_max value while calling clk_set_rate().
 
-Cheers,
--Paul
-
-
+Br
+Uffe
