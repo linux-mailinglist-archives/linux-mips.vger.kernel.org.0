@@ -2,121 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF28A62FAAC
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 17:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F84462FAD0
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 17:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242288AbiKRQp7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Nov 2022 11:45:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
+        id S242341AbiKRQvN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Nov 2022 11:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242234AbiKRQpk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 11:45:40 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7FD13EAF;
-        Fri, 18 Nov 2022 08:45:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B457722809;
-        Fri, 18 Nov 2022 16:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668789932; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        with ESMTP id S242337AbiKRQvM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 11:51:12 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7E2942F3;
+        Fri, 18 Nov 2022 08:51:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1668790269; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gGWCBwR6W7N/T/oKVxq15JaXduGL74ybELQMLEOROjQ=;
-        b=oTTvOF9em1RBHrcDz3sPtZD55HB28JQKz0rq8O6fqbEdz69a/AXJF4jT92zC2TnMfoTP5o
-        N+/92zbPBa11XH4uj3j1PVuX4IFT5iMf+cuDaOPUiGYk17AhOFewCKsW2Vloee6rUH2cev
-        ywRRIq+dF6sPyizq6eVC4qLT8N+v1Fc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668789932;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gGWCBwR6W7N/T/oKVxq15JaXduGL74ybELQMLEOROjQ=;
-        b=w1a8SK5GtUV98VIRjCKPQTv/uTPpGl8AZCdCXalMKOScuLDWEelI6GTSk7XWYEsOviak8d
-        9ZPPVSaQ1GZLctAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2CE531345B;
-        Fri, 18 Nov 2022 16:45:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /+1SCqy2d2MoEAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 18 Nov 2022 16:45:32 +0000
-Message-ID: <f427422c-9af3-dc0a-dcc3-2a1114eb77ea@suse.cz>
-Date:   Fri, 18 Nov 2022 17:45:31 +0100
+        bh=5nuvc8xs/tHY7tFt1K4QIyCzdBKfQ5FijC8GcRmpSk8=;
+        b=sp3ZFBBa9zl7myNNfiumVeMAKCSAyZt5xTG2Hz1aGT3V3p6UOmfodKg7HShLsGtlih7YIT
+        XnSUAcgkDbm9NJaaZKHcPMWwtx0mz06qBeiKXcvfabvtWoB0gtysLbd1jG2AGy9T2VCrfA
+        Y+NmDgs2qXQfcNPHU8UN7pFwqhM8LLQ=
+Date:   Fri, 18 Nov 2022 16:51:00 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] MIPS: DTS: CI20: fix reset line polarity of the ethernet
+ controller
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <0TYJLR.I2HAAXVSWQ2D@crapouillou.net>
+In-Reply-To: <Y3e2Q9jeGotRlwqV@google.com>
+References: <Y3e2Q9jeGotRlwqV@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH mm-unstable v1 04/20] mm: add early FAULT_FLAG_UNSHARE
- consistency checks
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-5-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221116102659.70287-5-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/16/22 11:26, David Hildenbrand wrote:
-> For now, FAULT_FLAG_UNSHARE only applies to anonymous pages, which
-> implies a COW mapping. Let's hide FAULT_FLAG_UNSHARE early if we're not
-> dealing with a COW mapping, such that we treat it like a read fault as
-> documented and don't have to worry about the flag throughout all fault
-> handlers.
-> 
-> While at it, centralize the check for mutual exclusion of
-> FAULT_FLAG_UNSHARE and FAULT_FLAG_WRITE and just drop the check that
-> either flag is set in the WP handler.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  mm/huge_memory.c |  3 ---
->  mm/hugetlb.c     |  5 -----
->  mm/memory.c      | 23 ++++++++++++++++++++---
->  3 files changed, 20 insertions(+), 11 deletions(-)
+Hi Dmitry,
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Le ven. 18 nov. 2022 =E0 08:43:47 -0800, Dmitry Torokhov=20
+<dmitry.torokhov@gmail.com> a =E9crit :
+> The reset line is called PWRST#, annotated as "active low" in the
+> binding documentation, and is driven low and then high by the driver=20
+> to
+> reset the chip. However in device tree for CI20 board it was=20
+> incorrectly
+> marked as "active high". Fix it.
+>=20
+> Because (as far as I know) the ci20.dts is always built in the kernel=20
+> I
+> elected not to also add a quirk to gpiolib to force the polarity=20
+> there.
+>=20
+> Fixes: db49ca38579d ("net: davicom: dm9000: switch to using gpiod=20
+> API")
+> Reported-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+Acked-by: Paul Cercueil <paul@crapouillou.net>
+
+Thanks.
+
+Cheers,
+-Paul
+
+> ---
+>  arch/mips/boot/dts/ingenic/ci20.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts=20
+> b/arch/mips/boot/dts/ingenic/ci20.dts
+> index 37c46720c719..f38c39572a9e 100644
+> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+> @@ -438,7 +438,7 @@ dm9000@6 {
+>  		ingenic,nemc-tAW =3D <50>;
+>  		ingenic,nemc-tSTRV =3D <100>;
+>=20
+> -		reset-gpios =3D <&gpf 12 GPIO_ACTIVE_HIGH>;
+> +		reset-gpios =3D <&gpf 12 GPIO_ACTIVE_LOW>;
+>  		vcc-supply =3D <&eth0_power>;
+>=20
+>  		interrupt-parent =3D <&gpe>;
+> --
+> 2.38.1.584.g0f3c55d4c2-goog
+>=20
+>=20
+> --
+> Dmitry
+
 
