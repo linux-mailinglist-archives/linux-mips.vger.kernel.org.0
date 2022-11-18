@@ -2,155 +2,275 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6019162EA49
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 01:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170A562EBED
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 03:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240611AbiKRAb3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Nov 2022 19:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S235055AbiKRC3r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Nov 2022 21:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234802AbiKRAb1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 19:31:27 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6F562056
-        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 16:31:26 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id q71so3598082pgq.8
-        for <linux-mips@vger.kernel.org>; Thu, 17 Nov 2022 16:31:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SdXW0qNT9EJ55g7ZecMibSPRKy2hZHqw3Yh8nMlwERE=;
-        b=aU25zccRjTs3wP43k0MIJn4DgVbsnZCNuzNnI2CpXWYIZxXulCGxIQevzOUHHZBnNX
-         P9dqjL6CLaVk8Gd/8VV9yHkQnYw6wZLIF25d9n4/Hz+qw11dfo4C3uVe8ugX4akyWpVq
-         2j/LOKCC5xRDK3aE2eqqxuB+wZP/Rdy2IY2yY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SdXW0qNT9EJ55g7ZecMibSPRKy2hZHqw3Yh8nMlwERE=;
-        b=dC0jNn4bNPmmBXDFANUOKePaocz8f8mQMyH+NOxXN4q2XLm+8KgS/+H089ohVqaTZL
-         VlRD6dYlNUBoNaIdm4HrqfHFHN2SOQFmsuWEafBuw79LrruQSdLoIR4VDMktZ1T4zKs4
-         jxFu5I12P3/LPU+Qa+ROmVUDfwIIx+fob89NqkccYVQGZ16n8qpjfLD6eGamX/hw5nuz
-         U5SLK0zysOlBAe4+Zf0Lpj/9/eZqXIPGbJHEnOXqhuERNl4904DtbEIVhYmGS4y6CSWE
-         W0INwSECnrY0t62aD86SpDwSZjMKiwtlDG5jx7ohM+4FP1pf1f5H0czaBKCXEJjpGc4q
-         TTSw==
-X-Gm-Message-State: ANoB5pkeSfEfun9ldusGlW1hNdY98GU4hRV7Bnu4svzwnDSMD1DweJmo
-        xVZd9G35VfMv1KcB4iSP1AeJWZtujwiNBQ==
-X-Google-Smtp-Source: AA0mqf4Eg6efWFkC4PcZKO6M1HjEMRT/hWrF7/OJe6t0KCBzvaZRup/szSwa3Jgy88qqEUfyA5B6Hg==
-X-Received: by 2002:a65:53ca:0:b0:476:dd80:fb29 with SMTP id z10-20020a6553ca000000b00476dd80fb29mr4360083pgr.619.1668731485545;
-        Thu, 17 Nov 2022 16:31:25 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b00186b6bb2f48sm2022328plk.129.2022.11.17.16.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 16:31:25 -0800 (PST)
-Date:   Thu, 17 Nov 2022 16:31:24 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
-Message-ID: <202211171630.8EABF5EDD@keescook>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-21-david@redhat.com>
- <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
- <202211171439.CDE720EAD@keescook>
- <CAHk-=wjykbz-4xVTWF7vkvGJnFoTSXNVeMzfsXaLnGm3CRd8rQ@mail.gmail.com>
+        with ESMTP id S232004AbiKRC3q (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Nov 2022 21:29:46 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213974AF03;
+        Thu, 17 Nov 2022 18:29:44 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4ND126472Wz15Mbg;
+        Fri, 18 Nov 2022 10:29:18 +0800 (CST)
+Received: from [10.174.187.128] (10.174.187.128) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 18 Nov 2022 10:29:41 +0800
+Subject: Re: disabling halt polling broken? (was Re: [PATCH 00/14] KVM:
+ Halt-polling fixes, cleanups and a new stat)
+To:     David Matlack <dmatlack@google.com>
+CC:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>, kvm <kvm@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Jon Cargille <jcargill@google.com>,
+        kvm-ppc <kvm-ppc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Jim Mattson <jmattson@google.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+        <wangyuan38@huawei.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+ <03f2f5ab-e809-2ba5-bd98-3393c3b843d2@de.ibm.com>
+ <YVHcY6y1GmvGJnMg@google.com>
+ <f37ab68c-61ce-b6fb-7a49-831bacfc7424@redhat.com>
+ <43e42f5c-9d9f-9e8b-3a61-9a053a818250@de.ibm.com>
+ <CABgObfYtS6wiQe=BhF3t5usr7J6q4PWE4=rwZMMukfC9wT_6fA@mail.gmail.com>
+ <YVIAdVxc+q2UWB+J@google.com>
+ <32810c89-44c6-6780-9d05-e49f6b897b6e@huawei.com>
+ <Y3UboELxugwDJkIG@google.com>
+From:   "wangyanan (Y)" <wangyanan55@huawei.com>
+Message-ID: <e124456c-0691-460b-c471-00ac1d7b0254@huawei.com>
+Date:   Fri, 18 Nov 2022 10:29:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjykbz-4xVTWF7vkvGJnFoTSXNVeMzfsXaLnGm3CRd8rQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3UboELxugwDJkIG@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.187.128]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500023.china.huawei.com (7.185.36.83)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:20:01PM -0800, Linus Torvalds wrote:
-> On Thu, Nov 17, 2022 at 2:58 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Oh, er, why does get_arg_page() even need FOLL_FORCE? This is writing the
-> > new stack contents to the nascent brpm->vma, which was newly allocated
-> > with VM_STACK_FLAGS, which an arch can override, but they all appear to include
-> > VM_WRITE | VM_MAYWRITE.
-> 
-> Yeah, it does seem entirely superfluous.
-> 
-> It's been there since the very beginning (although in that original
-> commit b6a2fea39318 it was there as a '1' to the 'force' argument to
-> get_user_pages()).
-> 
-> I *think* it can be just removed. But as long as it exists, it should
-> most definitely not be renamed to FOLL_PTRACE.
-> 
-> There's a slight worry that it currently hides some other setup issue
-> that makes it matter, since it's been that way so long, but I can't
-> see what it is.
 
-My test system boots happily with it removed. I'll throw it into -next
-and see if anything melts...
 
--- 
-Kees Cook
+On 2022/11/17 1:19, David Matlack wrote:
+> On Tue, Nov 15, 2022 at 11:28:56AM +0800, wangyanan (Y) wrote:
+>> Hi Sean, Paolo,
+>>
+>> I recently also notice the behavior change of param halt_poll_ns.
+>> Now it loses the ability to:
+>> 1) dynamically disable halt polling for all the running VMs
+>> by `echo 0 > /sys`
+>> 2) dynamically adjust the halt polling interval for all the
+>> running VMs by `echo * > /sys`
+>>
+>> While in our cases, we usually use above two abilities, and
+>> KVM_CAP_HALT_POLL is not used yet.
+> I think the right path forward is to make KVM_CAP_HALT_POLL a pure
+> override of halt_poll_ns, and restore the pre-existing behavior of
+> halt_poll_ns whenever KVM_CAP_HALT_POLL is not used. e.g. see the patch
+> below.
+Agree with this.
+kvm.halt_poll_ns serves like a legacy method to control halt polling
+globally. Once KVM_CAP_HALT_POLL is used for a VM, it should
+hold 100% responsibility to control on the VM, including disabling
+the polling. This strategy helps to keep the two mechanisms
+decoupled.
+> That will fix issues (1) and (2) above for any VM not using
+> KVM_CAP_HALT_POLL. If a VM is using KVM_CAP_HALT_POLL, it will ignore
+> all changes to halt_poll_ns. If we truly need a mechanism for admins to
+> disable halt-polling on VMs using KVM_CAP_HALT_POLL, we can introduce a
+> separate module parameter for that. But IMO, any setup that is
+> sophisticated enough to use KVM_CAP_HALT_POLL should also be able to use
+> KVM_CAP_HALT_POLL to disable halt polling.
+>
+> If everyone is happy with this approach I can test and send a real patch
+> to the mailing list.
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index e6e66c5e56f2..253ad055b6ad 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -788,6 +788,7 @@ struct kvm {
+>   	struct srcu_struct srcu;
+>   	struct srcu_struct irq_srcu;
+>   	pid_t userspace_pid;
+> +	bool override_halt_poll_ns;
+>   	unsigned int max_halt_poll_ns;
+>   	u32 dirty_ring_size;
+>   	bool vm_bugged;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 43bbe4fde078..479d0d0da0b5 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1198,8 +1198,6 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+>   			goto out_err_no_arch_destroy_vm;
+>   	}
+>   
+> -	kvm->max_halt_poll_ns = halt_poll_ns;
+> -
+>   	r = kvm_arch_init_vm(kvm, type);
+>   	if (r)
+>   		goto out_err_no_arch_destroy_vm;
+> @@ -3371,7 +3369,7 @@ void kvm_sigset_deactivate(struct kvm_vcpu *vcpu)
+>   	sigemptyset(&current->real_blocked);
+>   }
+>   
+> -static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
+> +static void grow_halt_poll_ns(struct kvm_vcpu *vcpu, unsigned int max)
+>   {
+>   	unsigned int old, val, grow, grow_start;
+>   
+> @@ -3385,8 +3383,8 @@ static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
+>   	if (val < grow_start)
+>   		val = grow_start;
+>   
+> -	if (val > vcpu->kvm->max_halt_poll_ns)
+> -		val = vcpu->kvm->max_halt_poll_ns;
+> +	if (val > max)
+> +		val = max;
+>   
+>   	vcpu->halt_poll_ns = val;
+>   out:
+> @@ -3501,10 +3499,17 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+>   {
+>   	bool halt_poll_allowed = !kvm_arch_no_poll(vcpu);
+>   	bool do_halt_poll = halt_poll_allowed && vcpu->halt_poll_ns;
+> +	unsigned int max_halt_poll_ns;
+>   	ktime_t start, cur, poll_end;
+> +	struct kvm *kvm = vcpu->kvm;
+>   	bool waited = false;
+>   	u64 halt_ns;
+>   
+> +	if (kvm->override_halt_poll_ns)
+> +		max_halt_poll_ns = kvm->max_halt_poll_ns;
+> +	else
+> +		max_halt_poll_ns = READ_ONCE(halt_poll_ns);
+> +
+>   	start = cur = poll_end = ktime_get();
+>   	if (do_halt_poll) {
+>   		ktime_t stop = ktime_add_ns(start, vcpu->halt_poll_ns);
+> @@ -3545,17 +3550,16 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+>   	if (halt_poll_allowed) {
+>   		if (!vcpu_valid_wakeup(vcpu)) {
+>   			shrink_halt_poll_ns(vcpu);
+> -		} else if (vcpu->kvm->max_halt_poll_ns) {
+> +		} else if (max_halt_poll_ns) {
+>   			if (halt_ns <= vcpu->halt_poll_ns)
+>   				;
+>   			/* we had a long block, shrink polling */
+> -			else if (vcpu->halt_poll_ns &&
+> -				 halt_ns > vcpu->kvm->max_halt_poll_ns)
+> +			else if (vcpu->halt_poll_ns && halt_ns > max_halt_poll_ns)
+>   				shrink_halt_poll_ns(vcpu);
+>   			/* we had a short halt and our poll time is too small */
+> -			else if (vcpu->halt_poll_ns < vcpu->kvm->max_halt_poll_ns &&
+> -				 halt_ns < vcpu->kvm->max_halt_poll_ns)
+> -				grow_halt_poll_ns(vcpu);
+> +			else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
+> +				 halt_ns < max_halt_poll_ns)
+> +				grow_halt_poll_ns(vcpu, max_halt_poll_ns);
+>   		} else {
+>   			vcpu->halt_poll_ns = 0;
+>   		}
+> @@ -4588,6 +4592,7 @@ static int kvm_vm_ioctl_enable_cap_generic(struct kvm *kvm,
+>   		if (cap->flags || cap->args[0] != (unsigned int)cap->args[0])
+>   			return -EINVAL;
+>   
+> +		kvm->override_halt_poll_ns = true;
+>   		kvm->max_halt_poll_ns = cap->args[0];
+>   		return 0;
+>   	}
+Looks sensible to me overall.
+I will look at the RFC series, thanks for your quick response.
+
+Yanan
+.
+>> On 2021/9/28 1:33, Sean Christopherson wrote:
+>>> On Mon, Sep 27, 2021, Paolo Bonzini wrote:
+>>>> On Mon, Sep 27, 2021 at 5:17 PM Christian Borntraeger
+>>>> <borntraeger@de.ibm.com> wrote:
+>>>>>> So I think there are two possibilities that makes sense:
+>>>>>>
+>>>>>> * track what is using KVM_CAP_HALT_POLL, and make writes to halt_poll_ns follow that
+>>>>> what about using halt_poll_ns for those VMs that did not uses KVM_CAP_HALT_POLL and the private number for those that did.
+>>>> Yes, that's what I meant.  David pointed out that doesn't allow you to
+>>>> disable halt polling altogether, but for that you can always ask each
+>>>> VM's userspace one by one, or just not use KVM_CAP_HALT_POLL. (Also, I
+>>>> don't know about Google's usecase, but mine was actually more about
+>>>> using KVM_CAP_HALT_POLL to *disable* halt polling on some VMs!).
+>>> I kinda like the idea if special-casing halt_poll_ns=0, e.g. for testing or
+>>> in-the-field mitigation if halt-polling is broken.  It'd be trivial to support, e.g.
+>> Do we have any plan to repost the diff as a fix?
+>> I would be very nice that this issue can be solved.
+>>
+>> Besides, I think we may need some Doc for users to describe
+>> how halt_poll_ns works with KVM_CAP_HALT_POLL, like
+>> "Documentation/virt/guest-halt-polling.rst".
+>>> @@ -3304,19 +3304,23 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+>>>                   update_halt_poll_stats(vcpu, start, poll_end, !waited);
+>>>
+>>>           if (halt_poll_allowed) {
+>>> +               max_halt_poll_ns = vcpu->kvm->max_halt_poll_ns;
+>>> +               if (!max_halt_poll_ns || !halt_poll_ns)  <------ squish the max if halt_poll_ns==0
+>>> +                       max_halt_poll_ns = halt_poll_ns;
+>>> +
+>> Does this mean that KVM_CAP_HALT_POLL will not be able to
+>> disable halt polling for a VM individually when halt_poll_ns !=0?
+>>>                   if (!vcpu_valid_wakeup(vcpu)) {
+>>>                           shrink_halt_poll_ns(vcpu);
+>>> -               } else if (vcpu->kvm->max_halt_poll_ns) {
+>>> +               } else if (max_halt_poll_ns) {
+>>>                           if (halt_ns <= vcpu->halt_poll_ns)
+>>>                                   ;
+>>>                           /* we had a long block, shrink polling */
+>>>                           else if (vcpu->halt_poll_ns &&
+>>> -                                halt_ns > vcpu->kvm->max_halt_poll_ns)
+>>> +                                halt_ns > max_halt_poll_ns)
+>>>                                   shrink_halt_poll_ns(vcpu);
+>>>                           /* we had a short halt and our poll time is too small */
+>>> -                       else if (vcpu->halt_poll_ns < vcpu->kvm->max_halt_poll_ns &&
+>>> -                                halt_ns < vcpu->kvm->max_halt_poll_ns)
+>>> -                               grow_halt_poll_ns(vcpu);
+>>> +                       else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
+>>> +                                halt_ns < max_halt_poll_ns)
+>>> +                               grow_halt_poll_ns(vcpu, max_halt_poll_ns);
+>>>                   } else {
+>>>                           vcpu->halt_poll_ns = 0;
+>>>                   }
+>>> _______________________________________________
+>>> kvmarm mailing list
+>>> kvmarm@lists.cs.columbia.edu
+>>> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
+>>> .
+>> Thanks,
+>> Yanan
+> .
+
