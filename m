@@ -2,137 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B707762FA94
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 17:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B6F62FA95
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Nov 2022 17:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235186AbiKRQns (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Nov 2022 11:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S242161AbiKRQoB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Nov 2022 11:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241647AbiKRQnp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 11:43:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C3593CE0
-        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 08:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668789760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iCeupirs0oRwfAYdrtKDNR33oxtw0kRHF9WhmcxURbs=;
-        b=is4sSZobXPguOsrAJb7JAyhMO5SpS8UcYWAE+R5d34fjCAKvqtZg6QBIcFoLw5h6mr3RCt
-        5EPAB+vTGhKztvDccZH+7yoUS2r4oeOVsIgMWRoR4f+xF1kMvXGjusdUOr+rokCcXgyAxz
-        YUK1G/bzc2+QiGQxJI9KYRjL7cpX4AI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-486-COQ2a1lXPdS-Va1eb4_zwQ-1; Fri, 18 Nov 2022 11:42:38 -0500
-X-MC-Unique: COQ2a1lXPdS-Va1eb4_zwQ-1
-Received: by mail-ed1-f70.google.com with SMTP id c9-20020a05640227c900b00463de74bc15so3309627ede.13
-        for <linux-mips@vger.kernel.org>; Fri, 18 Nov 2022 08:42:38 -0800 (PST)
+        with ESMTP id S242259AbiKRQnx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 11:43:53 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477526EB5E;
+        Fri, 18 Nov 2022 08:43:52 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id u6-20020a17090a5e4600b0021881a8d264so3215991pji.4;
+        Fri, 18 Nov 2022 08:43:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xCoTXso4ukr/aOj+PyBLVl50EP6vJzd3ZaoBL6gF4Ig=;
+        b=dPoqJ3Y/oaNVTvWZsCHlXQBdtaybM++8iviOsWxK3/l9G1fysrlgKpeEGTFD1lN9Ic
+         X+IvBJLgo7dld7CFvUQapUsATf14MwxAYiKYEsHQ3MT4+HfBuTG1ZUhcuU+7ZbbNIwjL
+         tbsLwmFIp6r+ORJQRAbsEnK/+Z1jb81kSYLLfA0UaqX7C3APyp3czT7hAgrSxD2PAjBh
+         /1dq5boT1In3A89LYTaHCCgPqmcEDOEDF2XUEWqLXaHlQkuKIk+TC4gfXwhMtGYwv4aH
+         OkXJpOD7jCcmYIokR7IdRpUWuXVRX0evxNlkn+AWeWl9TaVNkKWbGtryz7HAuFNAlH2R
+         qmZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iCeupirs0oRwfAYdrtKDNR33oxtw0kRHF9WhmcxURbs=;
-        b=3LalUotuoWCtH8PmbaMt/IqqbLG7Iz+hf4CU78Fm86EjnQIhnm0K2iWgEED3qkHU/M
-         3ImIEZcA1xlZlMUBgPsNWiWb07yhb8QKauRrkf/9Qt/f81bQ51+QbJJk5DNeL7vAgUn4
-         oTz1BwC3rV0PeeiHHCeEhU/IOMFARYzDykDe6kYTd8cQNmjRF9qF1Q/wF7zFrw1QR8dw
-         f2eyfZB0UmVBGUVjAOe6YfD0TluFhQaBO879R29NFVSSPhhwJFjF9IPAHJzn/VlNPST2
-         fLxwijoJmf3rIiK2R+F6jQkx2FB0JaqAeWZzpM11EBrQ+32S19eqm3osxwhfGUbhXykV
-         ceLw==
-X-Gm-Message-State: ANoB5pllW+T86d//+IQaoDVDp/z8cVnEWGocPmlSjC3c1rEAaioYveMa
-        QurPtRISKbIjPvXPAoi96Bt+4Tg+YhW5xaWt7MDTbNtYLV53g6LdST6x8zEVDmHkIGNPhoa2HEA
-        eV6uaE5lggqKDVG+T6QsNDw==
-X-Received: by 2002:aa7:d4cf:0:b0:461:a9ce:5408 with SMTP id t15-20020aa7d4cf000000b00461a9ce5408mr6997407edr.201.1668789757505;
-        Fri, 18 Nov 2022 08:42:37 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5TaV9WywAgyEkJUjIKk83rbFXBQR8khfDHnlKNNSiUU8k8aohx0CjQn5lly7hEq5+W3BWrVw==
-X-Received: by 2002:aa7:d4cf:0:b0:461:a9ce:5408 with SMTP id t15-20020aa7d4cf000000b00461a9ce5408mr6997376edr.201.1668789757207;
-        Fri, 18 Nov 2022 08:42:37 -0800 (PST)
-Received: from [192.168.0.46] (host-95-248-159-81.retail.telecomitalia.it. [95.248.159.81])
-        by smtp.gmail.com with ESMTPSA id b10-20020a1709063caa00b0073d83f80b05sm1912134ejh.94.2022.11.18.08.42.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 08:42:36 -0800 (PST)
-Message-ID: <1ab5082c-bec5-53f2-501b-f15f7e8edbd9@redhat.com>
-Date:   Fri, 18 Nov 2022 17:42:34 +0100
+        bh=xCoTXso4ukr/aOj+PyBLVl50EP6vJzd3ZaoBL6gF4Ig=;
+        b=rTce/sT6I88oDa9dyUNQ63te3ihYgh2OdFXxWCKtTCfk2uXeI6HWsNhvKsJKxqG6n4
+         T7kPG8qbYIWKTRZwyQIfngbldA6zENzX/biHxyOTKN/DLe6v5fFILf9o8GFIr/JUQgqd
+         R+OTBonM1wQAjBp6RjVlAmssUkSSOK+ecIwvcDa1WrwTZ2XNphKAbFZzBvuEIlveTzZN
+         zyOe0JXUGKa5+Ks/rEpXxjftUq/hrm0Yk2f93G6q2cntRtVhpq6LfFJ3sAIfQyiJR7IN
+         BAhgGdjlDpQdHA1Fs/Z0xHZwuZHYgMP93Yhgz/oHW91cR8jVAJnD6hj2D5L77a3ZFSTw
+         Fw0Q==
+X-Gm-Message-State: ANoB5pnQ3ea1HhBKDxpyF487GS+i1P5pu0NaW8XW+QS2gu1WnagrvZJy
+        GAdml0FIuCORpoEzPqCjb4A=
+X-Google-Smtp-Source: AA0mqf6SgYNjINnOXfgTSDlQ9zLwcbpiKDFjMVTF2wBATfO0CoNe9plV1D3vCgGvOU1foQNFkKy/qQ==
+X-Received: by 2002:a17:902:e94e:b0:186:5613:becf with SMTP id b14-20020a170902e94e00b001865613becfmr369558pll.46.1668789831601;
+        Fri, 18 Nov 2022 08:43:51 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:e4c5:c31d:4c68:97a0])
+        by smtp.gmail.com with ESMTPSA id c7-20020a170902d48700b0017f72a430adsm4011031plg.71.2022.11.18.08.43.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 08:43:50 -0800 (PST)
+Date:   Fri, 18 Nov 2022 08:43:47 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: DTS: CI20: fix reset line polarity of the ethernet
+ controller
+Message-ID: <Y3e2Q9jeGotRlwqV@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [RFC PATCH v2 8/8] sched, smp: Trace smp callback causing an IPI
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20221102182949.3119584-1-vschneid@redhat.com>
- <20221102183336.3120536-7-vschneid@redhat.com>
- <Y3ZBUMteJysc1/lA@hirez.programming.kicks-ass.net>
- <xhsmhfsehy706.mognet@vschneid.remote.csb>
- <Y3dMiyFn6TG1s5g3@hirez.programming.kicks-ass.net>
-Content-Language: en-US
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-In-Reply-To: <Y3dMiyFn6TG1s5g3@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/18/22 10:12, Peter Zijlstra wrote:
-> On Thu, Nov 17, 2022 at 02:45:29PM +0000, Valentin Schneider wrote:
-> 
->>> +	if (trace_ipi_send_cpumask_enabled()) {
->>> +		call_single_data_t *csd;
->>> +		smp_call_func_t func;
->>> +
->>> +		csd = container_of(node, call_single_data_t, node.llist);
->>> +
->>> +		func = sched_ttwu_pending;
->>> +		if (CSD_TYPE(csd) != CSD_TYPE_TTWU)
->>> +			func = csd->func;
->>> +
->>> +		if (raw_smp_call_single_queue(cpu, node))
->>> +			trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
->> So I went with the tracepoint being placed *before* the actual IPI gets
->> sent to have a somewhat sane ordering between trace_ipi_send_cpumask() and
->> e.g. trace_call_function_single_entry().
->>
->> Packaging the call_single_queue logic makes the code less horrible, but it
->> does mix up the event ordering...
-> Keeps em sharp ;-)
-> 
+The reset line is called PWRST#, annotated as "active low" in the
+binding documentation, and is driven low and then high by the driver to
+reset the chip. However in device tree for CI20 board it was incorrectly
+marked as "active high". Fix it.
 
-Having the trace before the IPI avoids the (non ideal) case where the trace stops because of
-an IPI execution before we have trace about who sent it... :-(.
+Because (as far as I know) the ci20.dts is always built in the kernel I
+elected not to also add a quirk to gpiolib to force the polarity there.
 
--- Daniel
+Fixes: db49ca38579d ("net: davicom: dm9000: switch to using gpiod API")
+Reported-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ arch/mips/boot/dts/ingenic/ci20.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+index 37c46720c719..f38c39572a9e 100644
+--- a/arch/mips/boot/dts/ingenic/ci20.dts
++++ b/arch/mips/boot/dts/ingenic/ci20.dts
+@@ -438,7 +438,7 @@ dm9000@6 {
+ 		ingenic,nemc-tAW = <50>;
+ 		ingenic,nemc-tSTRV = <100>;
+ 
+-		reset-gpios = <&gpf 12 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpf 12 GPIO_ACTIVE_LOW>;
+ 		vcc-supply = <&eth0_power>;
+ 
+ 		interrupt-parent = <&gpe>;
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
+
+-- 
+Dmitry
