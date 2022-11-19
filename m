@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6008C630AB2
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Nov 2022 03:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D3A630ABB
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Nov 2022 03:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236110AbiKSCag (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Nov 2022 21:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S233425AbiKSCao (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Nov 2022 21:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235482AbiKSC3d (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 21:29:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359B4C80FB;
-        Fri, 18 Nov 2022 18:16:47 -0800 (PST)
+        with ESMTP id S232177AbiKSC36 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 21:29:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0870C42F5C;
+        Fri, 18 Nov 2022 18:16:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0228B82672;
-        Sat, 19 Nov 2022 02:16:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2639C433C1;
-        Sat, 19 Nov 2022 02:16:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA584B82670;
+        Sat, 19 Nov 2022 02:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8427FC433C1;
+        Sat, 19 Nov 2022 02:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668824204;
+        s=k20201202; t=1668824216;
         bh=I84bOwHkVnsTvDgkw2gb+kyVJZQH1oBuSUisAlazIdY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mBDTnL+tjTp2QVV2mjZawH2iUo0BWNVIqA0H1FV0r6AB+fNA8IHetU8bGsRcKosY4
-         wzhmLH/Etkr1W0zJswNi3lOCM6NZy/OpwqKbD5ASEOgYTLqmQn/r2NDYdoS0x1f7xB
-         x/0QxySkN/ybJ5Y0cd7f/CNN4Xm6sobXxx08AotyTQ1CbiVarkxqYSvyse+sIm5M+j
-         +i7uBV5iEQBrC9aDxcxEPzbUSP1JreP8UezwwkDuBQ3pIko8G/WDhLJ28ttF/tkm38
-         BvjR55QYdQOoiWiQ1TnupDXzeTtOefuTz30Iz83jLLE3ntVs2dY9F0wlTJBXr6OCL9
-         9NUjp0hvbylkg==
+        b=s64VOFLlS8Nt6kBbZmH7P5lHCvpuLj7YsQijdBzkZPrJ3+YJgWlFHmTRXEJByLU8g
+         B1pH0cgRSQLt4sRd0sczR4bmA4mSniWMpuusUlVmEjvIA8Fgyogqltk2GKBuX9i/+N
+         wZWPwUvobAwwgDZtzY9UopxLze+84bALNnLq9+xAkdsx3Dnh3uCxwlneZGWbZHfisw
+         JhnR1/T2LU8midoizWxsi4HJsZaYO6H2ggZwpjjnedWuEOPZrY1Mz/tYPeUUzRh2PC
+         mP+MSGLWThOtWy/D6nJDQdLzSrkisQRe8ufExefDJPG4kuN7KYNfYUIOEp1JQdLU27
+         GAdBKpCSuGmzA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
@@ -38,12 +38,12 @@ Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Sasha Levin <sashal@kernel.org>, yangtiezhu@loongson.cn,
         windhl@126.com, wsa+renesas@sang-engineering.com,
         linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 6/6] MIPS: pic32: treat port as signed integer
-Date:   Fri, 18 Nov 2022 21:16:30 -0500
-Message-Id: <20221119021630.1775586-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 4/4] MIPS: pic32: treat port as signed integer
+Date:   Fri, 18 Nov 2022 21:16:45 -0500
+Message-Id: <20221119021645.1775682-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221119021630.1775586-1-sashal@kernel.org>
-References: <20221119021630.1775586-1-sashal@kernel.org>
+In-Reply-To: <20221119021645.1775682-1-sashal@kernel.org>
+References: <20221119021645.1775682-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
