@@ -2,48 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5AE6309C6
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Nov 2022 03:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 274A4630A1D
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Nov 2022 03:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbiKSCSf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Nov 2022 21:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S235596AbiKSCXF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Nov 2022 21:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiKSCRw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 21:17:52 -0500
+        with ESMTP id S235906AbiKSCWY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Nov 2022 21:22:24 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7864C9E965;
-        Fri, 18 Nov 2022 18:13:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00D6C6D17;
+        Fri, 18 Nov 2022 18:15:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C978462834;
-        Sat, 19 Nov 2022 02:13:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD41C433C1;
-        Sat, 19 Nov 2022 02:13:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D43B62832;
+        Sat, 19 Nov 2022 02:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E554C433D7;
+        Sat, 19 Nov 2022 02:14:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668824031;
-        bh=Dk71J1TivFdywWgI0fJZHHgJT+AmdlthmXStXT4KjPc=;
+        s=k20201202; t=1668824098;
+        bh=akzyXA6taxIIlj4f4t66EKRkG+JncKRTxevLEUPUAs0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sCUprYYyuPMeJlEegE4RE2EW4J7wMRab1zmxosK+2xxWTe44vDUfp6a6s+alTR/wQ
-         nBWHui2D0kL8YxotGJYioa8XdagilOdROe1vK2VvK74JrtW3iVj4FdVqYZFBLOZJTQ
-         GZzyMnW/Qh8BzkcvBPdBXCN2KVv7oulFRMFxbvmXggTvvc6SSt38uiRPbFPdChJnqU
-         y7O8WaYnQgvMCGFIJH9WbvOCZ8bg8T7/8kQU0AfKrfzmo0kE329J0h/7chVsWkIBpS
-         CWjI4J5h+kZXc2hqZaIDrmjSp6B7i5IMkbQnMUM8uFAX0mS+WPL7+8ORt+jCL03KyA
-         ga53aeTUJR/dA==
+        b=nKXhTwgy60LnPekilNJqXmwj8fqnC52jK/2yfSZ8ywX8Zeg/t1qDO+dlSykpjNiX2
+         cSzXLwym68ItTzymrK2aIMTap8VGdDZz+zIPXdSFXXsbxMzrRV8cnlVlu9qr7AhtxQ
+         IKw3wzHV8O3aP5PbIfDoQMfBSl8PD+LYxN9GKchKpxlkdzukTy7lxGu6XNAS2Y/DWa
+         PIQo7ngnrABMuBSHI8cC9f5cQRZGjbNa4+sgbYXNzzQCo8wtDZRxDKeOhb+20iXs57
+         bzcQdiMiBSq696gRqM/CychkyMBBIvNOzGaJEqI2AbWCu9MFMdGKZPOKJeAnQ3JOiV
+         ErDJG9IvvgOYg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, yangtiezhu@loongson.cn,
-        windhl@126.com, wsa+renesas@sang-engineering.com,
+        wsa+renesas@sang-engineering.com, windhl@126.com,
         linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 43/44] MIPS: pic32: treat port as signed integer
-Date:   Fri, 18 Nov 2022 21:11:23 -0500
-Message-Id: <20221119021124.1773699-43-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 27/27] MIPS: pic32: treat port as signed integer
+Date:   Fri, 18 Nov 2022 21:13:52 -0500
+Message-Id: <20221119021352.1774592-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221119021124.1773699-1-sashal@kernel.org>
-References: <20221119021124.1773699-1-sashal@kernel.org>
+In-Reply-To: <20221119021352.1774592-1-sashal@kernel.org>
+References: <20221119021352.1774592-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -142,7 +142,7 @@ index 25372e62783b..3cd1b408fa1c 100644
  	if (port == -1)
  		port = EARLY_CONSOLE_PORT;
 diff --git a/arch/mips/pic32/pic32mzda/init.c b/arch/mips/pic32/pic32mzda/init.c
-index d9c8c4e46aff..58d8ca730df7 100644
+index 764f2d022fae..429830afff54 100644
 --- a/arch/mips/pic32/pic32mzda/init.c
 +++ b/arch/mips/pic32/pic32mzda/init.c
 @@ -47,7 +47,7 @@ void __init plat_mem_setup(void)
