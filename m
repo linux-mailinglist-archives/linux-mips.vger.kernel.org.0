@@ -2,97 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E93632393
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Nov 2022 14:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC9A6323B3
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Nov 2022 14:33:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiKUNa4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Nov 2022 08:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S230382AbiKUNde (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Nov 2022 08:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiKUNaq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Nov 2022 08:30:46 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAC9BFF6F
-        for <linux-mips@vger.kernel.org>; Mon, 21 Nov 2022 05:30:42 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id 7so13543297ybp.13
-        for <linux-mips@vger.kernel.org>; Mon, 21 Nov 2022 05:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GrD43smjCY3nWkLYSNjoj38of5EV+w5nYaqRZQqu6Z8=;
-        b=TUNYh4I3FrTN2Qk4H0EaCgVdh6VtCUkHQrl7IF/WS7A8JSbSrytMpvO9LkK9Chb/uQ
-         h9GLIhg4dMaSzvngUjH18KAVt1yZoCFimILjVFl+dkm1tcVzFl4XBl55R+EfA4twK5Ke
-         gYoxXpoho+NKdd3nXtxHF6h0GjlyIWZ0OAKcvzgF0MIpF6dOinFEk36siwVhJValvUyc
-         pueO/pGQ7t8JbKNXg4JSPMLpASYMygIVKHIG8S7hscoi39Di4OM/PV1uTKa10eaeqj5R
-         UQRz5lOvq6w2vbh0ZmtgIp+lsq0Y3AkQwctNRFuHzu8YKxkvctDEQvbADmqbEAxKtIVt
-         Kocw==
+        with ESMTP id S229864AbiKUNd1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Nov 2022 08:33:27 -0500
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0168784822;
+        Mon, 21 Nov 2022 05:33:26 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id p18so7956362qkg.2;
+        Mon, 21 Nov 2022 05:33:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GrD43smjCY3nWkLYSNjoj38of5EV+w5nYaqRZQqu6Z8=;
-        b=JDHAigSjaGa1Y0l98Zs9PZp88PUlV3jbXRF3dpu/XVQGi1caEKZznsAw3vkJLaQzLB
-         WMulA34O7YpadDzSSKsEnJs270duBoiILbmMSzlhWVqWE80EWuTsL9W/B8nbUe7dR9G/
-         XkDpmvDB64hWx9vAOgCQ+rWTACYXSnLIaRqF0GhoDgFrnG9gLOGw5b9PqoqAGMRffc1y
-         vUGvSydhZCY7rUHL2iPKKJfUn6FoijTKaW+yuSjsczRYB/adI8jmaHHp0brD4TQ/tMpf
-         Kb/ZFyBgeAxgAa7US1G6FVr/s/oKnFBVCJ91MI7tsizfr+Fu/oc5QoFXDdRYs+daCzCi
-         moww==
-X-Gm-Message-State: ANoB5pnUemfUbzY1J2f2o1OiYLYf1oLrcjjT+FddFclpQDU7b6ri3zjD
-        6fQ08Q02GuTqUodeGZZiq3tg+Sv640Bf+WTRlsCefg==
-X-Google-Smtp-Source: AA0mqf534R8JnjgMAXUcVtn2pda2CXoOXsQXeOnwXivkvGmMe/kxz+dylSUO0uREdlZBWzAUitBn5prW6/5teaSJXAg=
-X-Received: by 2002:a25:1843:0:b0:6dc:b9ec:7c87 with SMTP id
- 64-20020a251843000000b006dcb9ec7c87mr563702yby.322.1669037441964; Mon, 21 Nov
- 2022 05:30:41 -0800 (PST)
+        bh=W52hjy2XgXbLvoau/TZhYUdh0mFs9ky77EejBWrKJL0=;
+        b=MKBAflyqCUHtzPOOQZ6ifQuwGDxrXiqLha4B6jgtDirrkjwDpkFryHuD6F/dt8H0QI
+         /OIxYrlqSHJDdf035z2Khhf6Kryhq1gElZdNzSmWIBxdcJErG0ksH8kPf2cpKnjiGIly
+         jDZA5W2gtjqmoIEHcAdhqOYFTh1/kn8BF7eeKJcFk2VjJkIWVC5Ad5PmSNuuBGrnERyp
+         c80M43ypsnc9Em3IJzqGakMQC8lGEP87p4FVat1CCYUeyIGWTts6Q2ROcXfUuxpSE3AA
+         5Xqf4HHD5kcwg6YwWXUrJ1/eZxMVpT2w3M5TLvlivG1HOyJ8IFsM6fXzmDinFTgUttcU
+         Uqhg==
+X-Gm-Message-State: ANoB5plLQ5A+/+zT5/m1BgTpcb1kqSljtoUhzcMqioQs+/IM6aYOCLxV
+        8maqDHR5KaxgAEMGSgB6hUqsAxwHQez/9g==
+X-Google-Smtp-Source: AA0mqf5ztepVbKEErbeHzkEO/g8ATeu0M6TG2+WT51QBKFlvCWQFw94PLJ5lwReFzcLN831JtiNw6w==
+X-Received: by 2002:a05:620a:993:b0:6fa:172:c37d with SMTP id x19-20020a05620a099300b006fa0172c37dmr16277536qkx.92.1669037604910;
+        Mon, 21 Nov 2022 05:33:24 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id l21-20020a37f915000000b006fa7b5ea2d1sm8239937qkj.125.2022.11.21.05.33.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 05:33:23 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-36cbcda2157so113000447b3.11;
+        Mon, 21 Nov 2022 05:33:23 -0800 (PST)
+X-Received: by 2002:a81:4f4c:0:b0:357:66a5:bb25 with SMTP id
+ d73-20020a814f4c000000b0035766a5bb25mr17212924ywb.383.1669037603130; Mon, 21
+ Nov 2022 05:33:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20221121123803.3786-1-zhuyinbo@loongson.cn>
-In-Reply-To: <20221121123803.3786-1-zhuyinbo@loongson.cn>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 21 Nov 2022 14:30:30 +0100
-Message-ID: <CACRpkdbZS1HCvnTPnEHS6WSBvHUHmHOHs1YejuMcN9STn0+uPA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] gpio: loongson2ef: move driver to original location
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org> <20221121110615.97962-8-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221121110615.97962-8-krzysztof.kozlowski@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 21 Nov 2022 14:33:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUtT3=F-3XLb604VUvKxNQBWK1y0rMnMn0kASKjQGw=3g@mail.gmail.com>
+Message-ID: <CAMuHMdUtT3=F-3XLb604VUvKxNQBWK1y0rMnMn0kASKjQGw=3g@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] dt-bindings: drop redundant part of title (beginning)
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 1:38 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
-
-> This gpio driver doesn't cover CPU_LOONGSON64 platforms, because
-> of gpio address was wrong and I don't plan to support it thus
-> move this driver to arch/mips/loongson2ef/ so that I can drop the
-> shackles of the legacy driver and add a new driver that supports
-> dts/acpi to support LoongArch platforms.
+On Mon, Nov 21, 2022 at 12:09 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "Devicetree binding", but instead just describe the hardware.
 >
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Drop beginning "Devicetree bindings" in various forms:
+>
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [dD]evice[ -]\?[tT]ree [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+>
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+>
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [dD][tT] [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Don't do this, we spent a lot of time to collect drivers in
-in drivers/gpio this is counter to our ambitions to have the
-drivers under drivers/* and only arch code under arch/*.
+>  .../devicetree/bindings/interrupt-controller/renesas,irqc.yaml  | 2 +-
 
-Create a new file named loongson2-64bit.c or so and just
-ignore that this one exist is an option, as is actually
-integrating this driver properly.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Yours,
-Linus Walleij
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
