@@ -2,109 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABDE6364D1
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Nov 2022 16:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A9A6367B2
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Nov 2022 18:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238896AbiKWPxs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Nov 2022 10:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S238260AbiKWRyP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Nov 2022 12:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238785AbiKWPxB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Nov 2022 10:53:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121AC5A6EA;
-        Wed, 23 Nov 2022 07:52:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73E2E61DD9;
-        Wed, 23 Nov 2022 15:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F5EEC43144;
-        Wed, 23 Nov 2022 15:52:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669218776;
-        bh=ZtsEDAGH6M1Hm2mKwIp+nkyl3EOfULlsa+PR5Jh+/yY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aCYae1otHmgUnvQhYydPYexYhzz0miYjM4zpf8c2mnxAms5CtVYUfAM7tWuXKgBlL
-         NCzjlOivqXZ6UqIGFo6Q3BntqxLP3hoWG6T432NPpsWDwgRF2tNVlSSreyLi6w5epT
-         5yRu6zDAJOHqLx2PKvtXWr2dbpMJrrYdASELSXDQ7oXGnQVROdJjqD20wCxJmK/TbF
-         LxosEZjoFf2ROozxpxjVeaVFcuzQLwzX93rS2p4/AwotUvzWq5hYJvRgCJVOQBQ8wc
-         Y+r3iBPxcrfDRitsbVrK4soZK4ULKoO7A7tHxHwHfbIwT8fluQgTwO6NOBHUOHbov+
-         PWGuJ73a1veDQ==
-Date:   Wed, 23 Nov 2022 15:52:45 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 9/9] dt-bindings: drop redundant part of title (manual)
-Message-ID: <Y35BzU80hf36eRyo@sirena.org.uk>
-References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
- <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S237243AbiKWRyO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Nov 2022 12:54:14 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11E64A2C;
+        Wed, 23 Nov 2022 09:54:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1669226051; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1O/qeaT6DVSGwZFjj+0GGqQHqMGAQ6aVICj9N+I6Cg=;
+        b=Qnm9cqwIvObrA3v4tAAwNgmzQbzkZzabJqwXqmDpJFvOAzwd2O/CdZThHBItyqSpSZjve/
+        J1QiEi1pM1bowLIAfqvBUibaGk1tdapCYUMc38UtlQwCF9hlQgHYV60KaNpV1m/ralLTR3
+        KErJ9EQaa9STUoYl5kypSx8yM4Dsu6o=
+Date:   Wed, 23 Nov 2022 17:54:00 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: Please bump brcm/bcm4330-sdio.bin firmware
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>
+Cc:     linux-firmware@kernel.org, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, linux-mips@vger.kernel.org,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Artur Rojek <contact@artur-rojek.eu>
+Message-Id: <02BTLR.2900VTVOISJZ@crapouillou.net>
+In-Reply-To: <fa5b46e2-f13e-547e-8df9-70c65f191957@broadcom.com>
+References: <L70QLR.XAGB8X2431341@crapouillou.net>
+        <fa5b46e2-f13e-547e-8df9-70c65f191957@broadcom.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QAOhPtWQs4kr9fZE"
-Content-Disposition: inline
-In-Reply-To: <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
-X-Cookie: I'm rated PG-34!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Arend,
 
---QAOhPtWQs4kr9fZE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Le mar. 22 nov. 2022 =E0 20:35:41 +0100, Arend van Spriel=20
+<arend.vanspriel@broadcom.com> a =E9crit :
+> On 11/22/2022 12:06 AM, Paul Cercueil wrote:
+>> Hello,
+>>=20
+>> As a week-end project I got the BCM4330 chip to work with the=20
+>> mainline =7FLinux kernel on the MIPS CI20 board. One of the problems I=20
+>> was facing =7Fwas the firmware crashing, resulting in timeout errors=20
+>> in the brcmfmac =7Fdriver.
+>>=20
+>> It turns out the bcm4330-sdio.bin firmware that's currently in=20
+>> =7Flinux-firmware is not the latest one. Running "strings" on the blob=20
+>> =7Fpoints out to a version 5.90.125.104 dated 2011-10-25. The firmware=20
+>> that =7Foriginally came on the CI20 is version 5.90.195.26 dated=20
+>> 2012-05-09, and =7Fthe version found in Android [1] is 5.90.195.114=20
+>> dated 2013-01-23. Only =7Fthe last two will work on the CI20 board.
+>>=20
+>> My question then, could we bump the firmware available in=20
+>> linux-firmware =7Fto the latest version? Or is there a valid reason=20
+>> why an older firmware =7Fis kept in the tree?
+>=20
+> We "Broadcom" could. The linux-firmware repo provides all firmware=20
+> that linux distro can freely redistribute. The license info is listed=20
+> in the README in the repo as are the applicable firmware license=20
+> documents. So releasing the firmware to linux-firmware under the=20
+> given license can only be done by anyone owning it, not by people=20
+> licensed to use it.
 
-On Mon, Nov 21, 2022 at 12:06:15PM +0100, Krzysztof Kozlowski wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding" or a "schema", but instead just describe
-> the hardware.
+I actually did not know this.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> The bcm4330 chip was one of the first chips that brcmfmac supported=20
+> and Broadcom has EOL-ed that chip a long time ago hence no newer=20
+> firmware was considered for release to linux-firmware. In the past we=20
+> often re-released what was available in Android so we probably can do=20
+> that again for this and other chips.
 
---QAOhPtWQs4kr9fZE
-Content-Type: application/pgp-signature; name="signature.asc"
+This would be great.
 
------BEGIN PGP SIGNATURE-----
+Cheers,
+-Paul
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+QcwACgkQJNaLcl1U
-h9AXjAf8DK+4g+6i+PYcdDNKGnFY/1uo0vNGE7MKgsNgIAMn42Y9Tw++ts0ZwHYw
-EDuQqMblUcsp9NKWMs1LVsvQ2YGAbZUXjgUzWpiImszGWwmUf6DZkjwNojGA5ngh
-GAGhKyUYUGXRb0MKJ1X4O3pobituSQSnz8UWlDrpBOO2OiWnWvdbURWlhNYNqMSm
-70ahwExSo8nv/Dxkvf+GV0FHLToE5K4JZxqRh/Gn0l0206IYzY4jvEbCq0DEuZPH
-Jt7Az6phpVvce86sAHnvukNdIa0EQ/8pR+v9idvZiGVY5NJvdJA54BR+1AoXlMna
-RQueknzjRrsbdQSr0xa/wr8lQW5rpw==
-=Wum3
------END PGP SIGNATURE-----
 
---QAOhPtWQs4kr9fZE--
