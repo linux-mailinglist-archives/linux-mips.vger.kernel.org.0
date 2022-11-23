@@ -2,96 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A9A6367B2
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Nov 2022 18:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AC9636CBC
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Nov 2022 23:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238260AbiKWRyP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Nov 2022 12:54:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
+        id S232140AbiKWWFr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Nov 2022 17:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237243AbiKWRyO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Nov 2022 12:54:14 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11E64A2C;
-        Wed, 23 Nov 2022 09:54:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1669226051; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/1O/qeaT6DVSGwZFjj+0GGqQHqMGAQ6aVICj9N+I6Cg=;
-        b=Qnm9cqwIvObrA3v4tAAwNgmzQbzkZzabJqwXqmDpJFvOAzwd2O/CdZThHBItyqSpSZjve/
-        J1QiEi1pM1bowLIAfqvBUibaGk1tdapCYUMc38UtlQwCF9hlQgHYV60KaNpV1m/ralLTR3
-        KErJ9EQaa9STUoYl5kypSx8yM4Dsu6o=
-Date:   Wed, 23 Nov 2022 17:54:00 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: Please bump brcm/bcm4330-sdio.bin firmware
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>
-Cc:     linux-firmware@kernel.org, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, linux-mips@vger.kernel.org,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Artur Rojek <contact@artur-rojek.eu>
-Message-Id: <02BTLR.2900VTVOISJZ@crapouillou.net>
-In-Reply-To: <fa5b46e2-f13e-547e-8df9-70c65f191957@broadcom.com>
-References: <L70QLR.XAGB8X2431341@crapouillou.net>
-        <fa5b46e2-f13e-547e-8df9-70c65f191957@broadcom.com>
+        with ESMTP id S231441AbiKWWFp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Nov 2022 17:05:45 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6AA85164
+        for <linux-mips@vger.kernel.org>; Wed, 23 Nov 2022 14:05:43 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-39451671bdfso162252997b3.10
+        for <linux-mips@vger.kernel.org>; Wed, 23 Nov 2022 14:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sS/IgqjTF1tmvQxzdv5yarn8h8llKtnDhKBpoO1W7gw=;
+        b=H3OfneAQdVLL8lSwU/0mnFsoxLSLxCgfHi/87G5l/gHv+mdyOgH/D9L75dZF4Rx5s2
+         ug5cpP6uukXLswroGQ5JbdlnljpOKXpxM7YKbnh+1wZb1Va/GjWGkzHkoKN7f2/5zmsu
+         XELF7pGg9Tw3NnC/8sieKyPD1ef8c0McVYnZTTjbbWFgoTz2YmGLmOQ1qPC2/2bdoFBv
+         Twy4OxkoUcuNb5nQ7aby8YyaKpTB+7BVb+2qcTmnX8B+aa8a40PdxyYRjEiXgSk1+clD
+         5QC2AfBcwZx+kRvk7Ew7IB5nerw2zAq+K2HkSkja0wen5iJUsbh9qXrF39oJUaMFlkFy
+         pMZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sS/IgqjTF1tmvQxzdv5yarn8h8llKtnDhKBpoO1W7gw=;
+        b=Ed71sx/4gUAQIYg5OSHy9ZvJqtUngbkaKaNxbh7+vFOzI8ICRoCDsWIlK0A2+lFrpb
+         wMZqlaWoJ4a2VNkZoZOpwmi7pkqsq8450pb5NNKL3eM0Ck//19gsR50FuErK+jC6K8KA
+         DlBE0v7asqXjj6knZQ7UxegQBabXG02NPHd7Xi0DLthlLhFUlLbMlsGFkWGipJ91g1gZ
+         cYlGMLUpKajYRgSVoEQBG7gY5YohQB0fby647pHuy+tbxqIekHCWRdRqXLJg6Ou3vHFw
+         9P66h9sog/E5knVXGobhb238UWh3DqHFdRpdQDbd/nFupk5FD6gjmM3OeBWHkztcuooX
+         7iGA==
+X-Gm-Message-State: ANoB5pnFcmfZe21K7lv71Gyb7/SFxwm9X7vMrUgbqA785MtbYu38JbU2
+        3wdC5ZiUixSNaIxQOcHW6aau3c46nyqDjvvufanC9A==
+X-Google-Smtp-Source: AA0mqf4RP+UuaAyu4KmEHW5zVct6l2qm89R2f7yd/Dqrj/Tw40uxMrmXQ6A3yUE04g5OYl92I5TjytR1SlKBvbAWhTo=
+X-Received: by 2002:a81:7909:0:b0:36f:d2d9:cdc4 with SMTP id
+ u9-20020a817909000000b0036fd2d9cdc4mr13216107ywc.380.1669241142870; Wed, 23
+ Nov 2022 14:05:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn> <20221121123803.3786-2-zhuyinbo@loongson.cn>
+ <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com> <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn>
+In-Reply-To: <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 23 Nov 2022 23:05:31 +0100
+Message-ID: <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arend,
+On Wed, Nov 23, 2022 at 9:02 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> =E5=9C=A8 2022/11/21 =E4=B8=8B=E5=8D=889:24, Linus Walleij =E5=86=99=E9=
+=81=93:
 
-Le mar. 22 nov. 2022 =E0 20:35:41 +0100, Arend van Spriel=20
-<arend.vanspriel@broadcom.com> a =E9crit :
-> On 11/22/2022 12:06 AM, Paul Cercueil wrote:
->> Hello,
->>=20
->> As a week-end project I got the BCM4330 chip to work with the=20
->> mainline =7FLinux kernel on the MIPS CI20 board. One of the problems I=20
->> was facing =7Fwas the firmware crashing, resulting in timeout errors=20
->> in the brcmfmac =7Fdriver.
->>=20
->> It turns out the bcm4330-sdio.bin firmware that's currently in=20
->> =7Flinux-firmware is not the latest one. Running "strings" on the blob=20
->> =7Fpoints out to a version 5.90.125.104 dated 2011-10-25. The firmware=20
->> that =7Foriginally came on the CI20 is version 5.90.195.26 dated=20
->> 2012-05-09, and =7Fthe version found in Android [1] is 5.90.195.114=20
->> dated 2013-01-23. Only =7Fthe last two will work on the CI20 board.
->>=20
->> My question then, could we bump the firmware available in=20
->> linux-firmware =7Fto the latest version? Or is there a valid reason=20
->> why an older firmware =7Fis kept in the tree?
->=20
-> We "Broadcom" could. The linux-firmware repo provides all firmware=20
-> that linux distro can freely redistribute. The license info is listed=20
-> in the README in the repo as are the applicable firmware license=20
-> documents. So releasing the firmware to linux-firmware under the=20
-> given license can only be done by anyone owning it, not by people=20
-> licensed to use it.
+> >> +static int loongson_gpio_request(
+> >> +                       struct gpio_chip *chip, unsigned int pin)
+> >> +{
+> >> +       if (pin >=3D chip->ngpio)
+> >> +               return -EINVAL;
+> >
+> > This is not needed, the gpiolib core already checks this. Drop it.
+> I check gpio_request in gpilib, I notice gpio_is_valid is not equal to
+> this condition, so I still kept it for byte mode.
 
-I actually did not know this.
+This is because descriptors can only be obtained from gpiod_get() and
+similar and gpiod_get() falls to gpiod_get_index() which will not
+return a valid descriptor from either HW backend. gpiod_get()
+will call gpiod_request() for if and only if the descriptor is valid.
 
-> The bcm4330 chip was one of the first chips that brcmfmac supported=20
-> and Broadcom has EOL-ed that chip a long time ago hence no newer=20
-> firmware was considered for release to linux-firmware. In the past we=20
-> often re-released what was available in Android so we probably can do=20
-> that again for this and other chips.
+The only reason to implement something like this is because of
+using the legacy GPIO numberspace which we are getting rid
+of so it is irrelevant, the consumers of your driver will only be
+using gpio descriptors, will only come in through gpiod_get_index()
+and will have desc validity check done before calling gpiod_request().
 
-This would be great.
+So drop this.
 
-Cheers,
--Paul
+> > I am bit suspicious that your IRQchip implementation expects consumers
+> > to call gpiod_to_irq() first and this is not legal.
+>
+> okay, I got it, and other driver use gpio interrupt doesn't rely on
+> gpiod_to_irq, but can use gpiod_to_irq.
 
+Yes it can be used to look up the irq corresponding to a GPIO
+but it is not mandatory to do that.
 
+> The reason is that gpio interrupt wasn't an independent module,  The
+> loongson interrupt controller liointc include lots of interrupt was
+> route to perpherial, such as i2c/spi .. gpio, so gpio interrupt as
+> normal perpherial interrupt, It is unnecessary and redundant to
+> implement a gpio irq chip. The liointc controller driver had cover all
+> interrupt.
+
+This is fine, and it is common for GPIO drivers to implement
+their own IRQchips.
+
+But these drivers can not rely on the .gpio_to_irq() callback
+to be called before an IRQ is requested and used.
+
+> in addition,  I don't like to use the dynamically allocated gpio base,
+> so I set the gpio base after call bgpio_init.
+
+Don't do that because the GPIO maintainers love the
+dynamic base and hate hardcoded bases. Set the base to -1
+If you wonder why, read drivers/gpio/TODO.
+
+Yours,
+Linus Walleij
