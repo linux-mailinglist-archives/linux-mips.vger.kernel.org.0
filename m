@@ -2,108 +2,169 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890416372B6
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Nov 2022 08:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338E4637489
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Nov 2022 09:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiKXHMR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Nov 2022 02:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S230054AbiKXIzO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Nov 2022 03:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiKXHMO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Nov 2022 02:12:14 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B66CFA4F
-        for <linux-mips@vger.kernel.org>; Wed, 23 Nov 2022 23:16:36 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id b29so873056pfp.13
-        for <linux-mips@vger.kernel.org>; Wed, 23 Nov 2022 23:16:36 -0800 (PST)
+        with ESMTP id S229946AbiKXIy5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Nov 2022 03:54:57 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAFE8756F
+        for <linux-mips@vger.kernel.org>; Thu, 24 Nov 2022 00:54:56 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id b73so1122474yba.4
+        for <linux-mips@vger.kernel.org>; Thu, 24 Nov 2022 00:54:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9beI1qbDaBEZGBMzOodYXezAJNnkCn943LXJypsps08=;
-        b=jN9Iu2JG6Jbf9f/Vtx6/x8W99mbfvmkmA5JpUTuuOhHuX9hE65G+zwT360z98Yxh2l
-         i6PqDF91yJmzwCKNYEVFuLVfqGCqoHx9I7wNV8pa819eMDoiMR27SZF1GHdGnGDHcMWz
-         pqI4i03rsZDpQ60ONyvQHuYR+N3femATVqrSC4hLc3ih0MmJpf23tjAqEmigk+Q4lN5p
-         TjriD73VK+kqD8Wil5LA1NXQ4waHtGM3IZBFIczk95hCWTGki63dLVXFv0wvyqKSahPp
-         nd3iHhwTtHF7fG/CtXcp1E5PNjqsgHvp71L23Lt4pdmYQDMtQS6xnA3gM9hUIGynee9E
-         kaMQ==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l8R3F5kALGt7fZIFbbdQLZusILmf2AipY3tz1OkoyZg=;
+        b=BoTT++1ZJhXWkMbqvMW/FRK8+Jp2xAbHiq27Xk1WEsyCZ7YGMXSoiYjXndFPTgLW3E
+         Ak39gt1gk7HkJXwvl1ze3jPLtMdIGBkXI3TD6mJazIm5soc2L/KIXoktqhUnYB7k3AQO
+         KG1FZND6mzdGbeZJcgp5NydoulbO1aJlSobDLYBYcFhiuvo+RXDBHhq4BJZm3yE8BZgN
+         I5G/E5r2fLHt1x+F6ZSSRS9XeYFfiCEbobbo8jrrucKv3IHG/S65AHc3Onjwy2SWLsNy
+         VHQs63G8Pxalw2RYjcDYGG1XwzMT0fcZaklDmBMHeJGkteMnQ8zmkk6t27JTibOCODaC
+         H84A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9beI1qbDaBEZGBMzOodYXezAJNnkCn943LXJypsps08=;
-        b=uMMYUm5t5uI4owXeO1UH91TEqomDvgMwyZu5o27P4oywdxOUa324v5AtdCJy5c/b9r
-         5wTTxVN7EtmYuuxbnTWYa3409agpkUF77X6L2pkg2BOj2M/ScKN8wqAHeOH9fxt5tTBs
-         ISIrIoHp9cmD05sgTaa+SiFz0pqTz+YrdtgJldRazTKPA9PU/moI+OWRM4VItkP7PwQT
-         WHWucBVW/fKSRGWYqpJIiXcs4YAztdJfFYQhEsn8lrNV+2y2rXDU1XYWX31KTjIMQs3e
-         O+BvXvoEeS0t6/HKSeFGM49ZjMFf/q+jfftsZbvzZ4uTVrUi81D6Imn54S9Di6gQSwPG
-         JrrA==
-X-Gm-Message-State: ANoB5pmN1adF3cOZOxBmoOhoobWCtbKOTchBymewVdafYZqiMJuq73+c
-        67CWXOh8MnzIPQwERc1a/jxZuA==
-X-Google-Smtp-Source: AA0mqf539xW7yp+XmSaeh7QyKEx/uI4+Px0TRaTKiiPa7cXAYmK2DoSN46/6FwkQRO+vECyNwcPwTg==
-X-Received: by 2002:aa7:8c19:0:b0:573:620a:3b1c with SMTP id c25-20020aa78c19000000b00573620a3b1cmr13160104pfd.50.1669274195379;
-        Wed, 23 Nov 2022 23:16:35 -0800 (PST)
-Received: from localhost ([122.172.85.60])
-        by smtp.gmail.com with ESMTPSA id k4-20020a170902c40400b001867fdec154sm414181plk.224.2022.11.23.23.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 23:16:34 -0800 (PST)
-Date:   Thu, 24 Nov 2022 12:46:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 0/9] dt-bindings: cleanup titles
-Message-ID: <20221124071632.5cadtc6pbdvdv3xb@vireshk-i7>
-References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l8R3F5kALGt7fZIFbbdQLZusILmf2AipY3tz1OkoyZg=;
+        b=pL7ybcKm7Sljux4J9rDaYtp6k4ksi0H9VORXVRkZo8qo7J7nWyejfiMdtMyPHtEASJ
+         9buw3TqLzDECP7na50oLvgzSMXN6B/c6qoH4zgHa/d7Qp/kEw1NRx4ijh/SPBoXUNh8n
+         QkP0V4nLeVJBeDLyI9AE33GMvbqmRQVNuUOYA2ZeXvuchV9owhSFT2sz2fHJS74P3w0v
+         4PvQS1hRpUSR95u6Ah1g5KcGwT6pfx7XMw+QnPkiMr+t4abobzqMSEy0KtQXaYaBIOXX
+         iaJPqAPNjf+Q6u/vtU+MJFvdkuQnAkWEfzmW/5ExkqZRVeTdsHOee0qbp+2O2Ztufe07
+         XBzw==
+X-Gm-Message-State: ANoB5pmPVA29aRggZaSlrhsm2he4tFp3MYFDBEMFiJ4HAcGcr+DBLwip
+        v+XKEQsHMTUUA+L30mUkF9z2SOZ50Pz+fgAHVvkeiw==
+X-Google-Smtp-Source: AA0mqf7HBKYpljZej6bXe7Ojnqxlh65R7Qj4zpxpnR7ZPi1/Wnuyt44OyTeMDenQUWF4/SbRV3buTCxQI4MkWFzQ1DI=
+X-Received: by 2002:a25:d8d4:0:b0:6f0:36e2:5fc2 with SMTP id
+ p203-20020a25d8d4000000b006f036e25fc2mr5552927ybg.52.1669280095520; Thu, 24
+ Nov 2022 00:54:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn> <20221121123803.3786-2-zhuyinbo@loongson.cn>
+ <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com>
+ <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn> <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
+ <4c02570e-03d5-85f1-73fb-b66d6170c875@loongson.cn>
+In-Reply-To: <4c02570e-03d5-85f1-73fb-b66d6170c875@loongson.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 24 Nov 2022 09:54:43 +0100
+Message-ID: <CACRpkdbgP9m40t_Ky4H+SQi9TELikomT2M-JpF7+auKmzOxQdg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 21-11-22, 12:06, Krzysztof Kozlowski wrote:
->  .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml        | 2 +-
->  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml         | 2 +-
->  Documentation/devicetree/bindings/opp/opp-v1.yaml               | 2 +-
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml          | 2 +-
->  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml      | 2 +-
->  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml    | 2 +-
->  Documentation/devicetree/bindings/opp/opp-v2.yaml               | 2 +-
+On Thu, Nov 24, 2022 at 3:22 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> =E5=9C=A8 2022/11/24 =E4=B8=8A=E5=8D=886:05, Linus Walleij =E5=86=99=E9=
+=81=93:
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > But these drivers can not rely on the .gpio_to_irq() callback
+> > to be called before an IRQ is requested and used.
+>
+> I may not have made it clear before that the gpio irq chip for other
+> platforms may need to be implemented, but the loongson platform may be
+> special.
+>
+> I mean that the loongson platform use gpio irq does not need to rely on
+> gpio_to_irq, because loongson interrupt controller driver has covered
+> gpio irq.  The specific reason is my above explanation.
+>
+> so, Can I not realize gpio irq chip?
 
--- 
-viresh
+Isn't this a hierarchical irqchip then?
+
+Please consult the following from
+Documentation/driver-api/gpio/driver.rst:
+
+---------------------------------
+
+GPIO drivers providing IRQs
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+
+It is custom that GPIO drivers (GPIO chips) are also providing interrupts,
+most often cascaded off a parent interrupt controller, and in some special
+cases the GPIO logic is melded with a SoC's primary interrupt controller.
+
+The IRQ portions of the GPIO block are implemented using an irq_chip, using
+the header <linux/irq.h>. So this combined driver is utilizing two sub-
+systems simultaneously: gpio and irq.
+
+It is legal for any IRQ consumer to request an IRQ from any irqchip even if=
+ it
+is a combined GPIO+IRQ driver. The basic premise is that gpio_chip and
+irq_chip are orthogonal, and offering their services independent of each
+other.
+
+gpiod_to_irq() is just a convenience function to figure out the IRQ for a
+certain GPIO line and should not be relied upon to have been called before
+the IRQ is used.
+
+Always prepare the hardware and make it ready for action in respective
+callbacks from the GPIO and irq_chip APIs. Do not rely on gpiod_to_irq() ha=
+ving
+been called first.
+
+We can divide GPIO irqchips in two broad categories:
+
+- CASCADED INTERRUPT CHIPS: this means that the GPIO chip has one common
+  interrupt output line, which is triggered by any enabled GPIO line on tha=
+t
+  chip. The interrupt output line will then be routed to an parent interrup=
+t
+  controller one level up, in the most simple case the systems primary
+  interrupt controller. This is modeled by an irqchip that will inspect bit=
+s
+  inside the GPIO controller to figure out which line fired it. The irqchip
+  part of the driver needs to inspect registers to figure this out and it
+  will likely also need to acknowledge that it is handling the interrupt
+  by clearing some bit (sometime implicitly, by just reading a status
+  register) and it will often need to set up the configuration such as
+  edge sensitivity (rising or falling edge, or high/low level interrupt for
+  example).
+
+- HIERARCHICAL INTERRUPT CHIPS: this means that each GPIO line has a dedica=
+ted
+  irq line to a parent interrupt controller one level up. There is no need
+  to inquire the GPIO hardware to figure out which line has fired, but it
+  may still be necessary to acknowledge the interrupt and set up configurat=
+ion
+  such as edge sensitivity.
+
+---------------------------------
+
+You find an example of a hierarchical GPIO irqchip using the
+GPIOLIB_IRQCHIP in drivers/gpio/gpio-ixp4xx.c.
+
+Yours,
+Linus Walleij
