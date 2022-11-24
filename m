@@ -2,102 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B237637220
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Nov 2022 07:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 890416372B6
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Nov 2022 08:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiKXGA0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Nov 2022 01:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
+        id S229502AbiKXHMR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Nov 2022 02:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKXGAZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Nov 2022 01:00:25 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FE1C6963;
-        Wed, 23 Nov 2022 22:00:25 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id v28so736365pfi.12;
-        Wed, 23 Nov 2022 22:00:25 -0800 (PST)
+        with ESMTP id S229539AbiKXHMO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Nov 2022 02:12:14 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B66CFA4F
+        for <linux-mips@vger.kernel.org>; Wed, 23 Nov 2022 23:16:36 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id b29so873056pfp.13
+        for <linux-mips@vger.kernel.org>; Wed, 23 Nov 2022 23:16:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WAHp5qCPTZ8K1yZRoCUQaJtAs4jsVFjCKksyNhA51CU=;
-        b=g+AmRf/lnRgQbwl2mXxjZelx0mevNmKoLXYDXm4DLHEHwTdK2VjQYmh90w77WStM6D
-         6xcEKEuI6rliXnztGajuG4b4756LNtAtJpsCJYxf5gtmbaEBlU6ThWiIuvkth6ncVadC
-         8GAMlW5s2XXAb8SE7YqI2Lpvh9jNHkYIvBfU/DjHWw1zu8qEEYYqidUiGaP1btF8tRBn
-         XVkUqyobn8A8/aAXVm7rXmktTm7l22vFagTjppLSUD11jPVD7RXQBGZzV4L13CUJxEQL
-         5/DttRVtS9KfruyPufbeT8ouWGG5pC6HgnHfSkMBFYrZOkq0Zop9JTWmZ8FcrECstfRt
-         X/1A==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9beI1qbDaBEZGBMzOodYXezAJNnkCn943LXJypsps08=;
+        b=jN9Iu2JG6Jbf9f/Vtx6/x8W99mbfvmkmA5JpUTuuOhHuX9hE65G+zwT360z98Yxh2l
+         i6PqDF91yJmzwCKNYEVFuLVfqGCqoHx9I7wNV8pa819eMDoiMR27SZF1GHdGnGDHcMWz
+         pqI4i03rsZDpQ60ONyvQHuYR+N3femATVqrSC4hLc3ih0MmJpf23tjAqEmigk+Q4lN5p
+         TjriD73VK+kqD8Wil5LA1NXQ4waHtGM3IZBFIczk95hCWTGki63dLVXFv0wvyqKSahPp
+         nd3iHhwTtHF7fG/CtXcp1E5PNjqsgHvp71L23Lt4pdmYQDMtQS6xnA3gM9hUIGynee9E
+         kaMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WAHp5qCPTZ8K1yZRoCUQaJtAs4jsVFjCKksyNhA51CU=;
-        b=Pece9TJxJtyBmLSZ3yJ/HZ2nFFLzKDkVt3ILsn65l2Lg4OdwcHLsdTH0Fr6DNOixsc
-         zLtcQYoBN/gAIB6owYpdsqVjqTNQedCz/nA9loe+VQpYmVAQRMFSiKjwL8LWBIPagSbV
-         E3nYetOv6twF428kwLEEzXu7JUVogYuUDciFARvfvFDNN9tkrKRGBisIZqQ+oEKoCsC7
-         m11LfVxlhr95uRb8mDYLwG+Lavf6rpzkKXmD1ZMXxR9dMCklVJe+yOeRJOSJOMGXriT3
-         L/cbCdi4exIYwjznch0tYtwb+D3DYU/fxv20O3k5v48YAylbGXuphHjEC0jNRZO1Uw1g
-         xPIw==
-X-Gm-Message-State: ANoB5pkLbq5LrwPj4GBAUYPaPuY7ndzwLMf6d5OZ+q4oOvRIhb3qGN+d
-        0a2Kzrhqw2RH8XCDFwE7v7GVuff6v/XJkw==
-X-Google-Smtp-Source: AA0mqf4IJFTQoMphoJhmGYaDWWkEvp/q+FhM6VEh56udXD/CrkmE8PrZoDcgrkX9eOhL43hRuhRLvg==
-X-Received: by 2002:a05:6a00:1515:b0:56b:abf4:f77c with SMTP id q21-20020a056a00151500b0056babf4f77cmr15234736pfu.37.1669269624383;
-        Wed, 23 Nov 2022 22:00:24 -0800 (PST)
-Received: from localhost.localdomain ([50.7.59.154])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b001886ff82680sm248554plh.127.2022.11.23.22.00.21
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9beI1qbDaBEZGBMzOodYXezAJNnkCn943LXJypsps08=;
+        b=uMMYUm5t5uI4owXeO1UH91TEqomDvgMwyZu5o27P4oywdxOUa324v5AtdCJy5c/b9r
+         5wTTxVN7EtmYuuxbnTWYa3409agpkUF77X6L2pkg2BOj2M/ScKN8wqAHeOH9fxt5tTBs
+         ISIrIoHp9cmD05sgTaa+SiFz0pqTz+YrdtgJldRazTKPA9PU/moI+OWRM4VItkP7PwQT
+         WHWucBVW/fKSRGWYqpJIiXcs4YAztdJfFYQhEsn8lrNV+2y2rXDU1XYWX31KTjIMQs3e
+         O+BvXvoEeS0t6/HKSeFGM49ZjMFf/q+jfftsZbvzZ4uTVrUi81D6Imn54S9Di6gQSwPG
+         JrrA==
+X-Gm-Message-State: ANoB5pmN1adF3cOZOxBmoOhoobWCtbKOTchBymewVdafYZqiMJuq73+c
+        67CWXOh8MnzIPQwERc1a/jxZuA==
+X-Google-Smtp-Source: AA0mqf539xW7yp+XmSaeh7QyKEx/uI4+Px0TRaTKiiPa7cXAYmK2DoSN46/6FwkQRO+vECyNwcPwTg==
+X-Received: by 2002:aa7:8c19:0:b0:573:620a:3b1c with SMTP id c25-20020aa78c19000000b00573620a3b1cmr13160104pfd.50.1669274195379;
+        Wed, 23 Nov 2022 23:16:35 -0800 (PST)
+Received: from localhost ([122.172.85.60])
+        by smtp.gmail.com with ESMTPSA id k4-20020a170902c40400b001867fdec154sm414181plk.224.2022.11.23.23.16.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 22:00:23 -0800 (PST)
-From:   Genjian <zhanggenjian123@gmail.com>
-X-Google-Original-From: Genjian <zhanggenjian@kylinos.cn>
-To:     tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanggenjian123@gmail.com, Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] MIPS: Restore symbol versions for copy_page_cpu and clear_page_cpu
-Date:   Thu, 24 Nov 2022 13:58:16 +0800
-Message-Id: <20221124055816.1803770-1-zhanggenjian@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 23 Nov 2022 23:16:34 -0800 (PST)
+Date:   Thu, 24 Nov 2022 12:46:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 0/9] dt-bindings: cleanup titles
+Message-ID: <20221124071632.5cadtc6pbdvdv3xb@vireshk-i7>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Genjian Zhang <zhanggenjian@kylinos.cn>
+On 21-11-22, 12:06, Krzysztof Kozlowski wrote:
+>  .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml        | 2 +-
+>  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml         | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v1.yaml               | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml          | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml      | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml    | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2.yaml               | 2 +-
 
-The mips build generates two warnings:
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-WARNING: modpost: EXPORT symbol "clear_page_cpu" [vmlinux] version generation failed, symbol will not be versioned.
-WARNING: modpost: EXPORT symbol "copy_page_cpu" [vmlinux] version generation failed, symbol will not be versioned.
-
-Add their prototypes to be defined in asm-prototypes.h, so that
-genksyms knows the types of these symbols and can generate CRCs for
-them.
-
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
----
- arch/mips/include/asm/asm-prototypes.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/mips/include/asm/asm-prototypes.h b/arch/mips/include/asm/asm-prototypes.h
-index f901ed043c71..8e8fc38b0941 100644
---- a/arch/mips/include/asm/asm-prototypes.h
-+++ b/arch/mips/include/asm/asm-prototypes.h
-@@ -6,3 +6,6 @@
- #include <linux/uaccess.h>
- #include <asm/ftrace.h>
- #include <asm/mmu_context.h>
-+
-+extern void clear_page_cpu(void *page);
-+extern void copy_page_cpu(void *to, void *from);
 -- 
-2.25.1
-
+viresh
