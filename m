@@ -2,184 +2,245 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C05063A3C7
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Nov 2022 09:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D8463AB3B
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Nov 2022 15:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiK1I6I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Nov 2022 03:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
+        id S232400AbiK1Oj3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Nov 2022 09:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiK1I6H (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Nov 2022 03:58:07 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5042644
-        for <linux-mips@vger.kernel.org>; Mon, 28 Nov 2022 00:58:06 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id b8so14444148edf.11
-        for <linux-mips@vger.kernel.org>; Mon, 28 Nov 2022 00:58:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iRo5DYRndKCx9sGSXzsZxPr88K/zqtuLTLl1O32mcFE=;
-        b=XOKEpyQaMH8DtU4ghoeum5LLPSyZKKSeL9ukREYJEhE5Pet4ng53VcgxrNVIVOiN3z
-         qM9BvX69vBwubqV7gI66eEPgV5zFoyHzRXj6Y/c3o1k6BVytkDV23dS8hW9lN3urO8Q7
-         YycsWj1XAMOHph6L7v2J+A4VSfKO7i7WBHunk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iRo5DYRndKCx9sGSXzsZxPr88K/zqtuLTLl1O32mcFE=;
-        b=nEVkA95FMnJ31hRzCmNysEmj3yDTk4OKPBL0dVW2vWQA0QiMcE/VvoEFjfih+u4Vmn
-         YBRJzZXo1FM8forRnEDcdcZTIMh+uW6/PNr9PGgAw2EbRk4yH6I8eVQJhPFsuOCGDlKM
-         Qc1iIF/eR+igY/I0CU2ZsK645FYLLZzIXnnPD+YnNGoQMBa8dJAyOEJ/1gqlxMvAwIRn
-         DPu+9pC4sMN0QLHtWZpA83mpczf61mUh8N2CaJ0QFee1jYADyq9DHI9QEUBwq7sPSkcI
-         qUEs/dSgC/JA1ids4Mzn+jJpIMSOfo9PB6PBsBhzHUcCcAVBoDLwuZ7XF5LLqMBtzcZp
-         g4vQ==
-X-Gm-Message-State: ANoB5pkaPJakZB/a1vKR3CCFW6NlfgIkW5xYnafLcPZcuZGYcU8FjV0L
-        3Y4EXzaYBVD1Ly96wkxZQLkm8j5MrNsVeA==
-X-Google-Smtp-Source: AA0mqf7ZI0N32FzkPEkSlYxtYcxlxkiu25+2e3Ax9ZRYkrJCav59KfbevXI43Tyb69kSi11iolwE3g==
-X-Received: by 2002:a05:6402:1f08:b0:461:d21a:c0f3 with SMTP id b8-20020a0564021f0800b00461d21ac0f3mr15960720edb.71.1669625885080;
-        Mon, 28 Nov 2022 00:58:05 -0800 (PST)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id t25-20020a1709064f1900b007be886f0db5sm2109533eju.209.2022.11.28.00.58.04
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 00:58:04 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id l11so14483448edb.4
-        for <linux-mips@vger.kernel.org>; Mon, 28 Nov 2022 00:58:04 -0800 (PST)
-X-Received: by 2002:aa7:db98:0:b0:46a:d57:d9d0 with SMTP id
- u24-20020aa7db98000000b0046a0d57d9d0mr25216647edt.113.1669625884043; Mon, 28
- Nov 2022 00:58:04 -0800 (PST)
+        with ESMTP id S232556AbiK1OjY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Nov 2022 09:39:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16DE1DDF8
+        for <linux-mips@vger.kernel.org>; Mon, 28 Nov 2022 06:39:23 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfHt-0005y6-Mf; Mon, 28 Nov 2022 15:39:13 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfHr-000qRh-J8; Mon, 28 Nov 2022 15:39:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfHr-000xiB-Ez; Mon, 28 Nov 2022 15:39:11 +0100
+Date:   Mon, 28 Nov 2022 15:39:11 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/5] pwm: jz4740: Fix pin level of disabled TCU2
+ channels, part 2
+Message-ID: <20221128143911.n3woy6mjom5n4sad@pengutronix.de>
+References: <20221024205213.327001-1-paul@crapouillou.net>
+ <20221024205213.327001-3-paul@crapouillou.net>
+ <20221025064410.brrx5faa4jtwo67b@pengutronix.de>
+ <Y90BKR.1BA4VWKIBIKU@crapouillou.net>
 MIME-Version: 1.0
-References: <20221116102659.70287-1-david@redhat.com> <20221116102659.70287-17-david@redhat.com>
- <81fb0fa3-2e06-b765-56ac-a7d981194e59@redhat.com> <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
- <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
-In-Reply-To: <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 28 Nov 2022 17:57:51 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5BQBsBiY48o3FxmQT7H4063=dvDDwSB4S=AyLxXbXuJeA@mail.gmail.com>
-Message-ID: <CAAFQd5BQBsBiY48o3FxmQT7H4063=dvDDwSB4S=AyLxXbXuJeA@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE usage
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mlivur37dd6gymdx"
+Content-Disposition: inline
+In-Reply-To: <Y90BKR.1BA4VWKIBIKU@crapouillou.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 5:19 PM David Hildenbrand <david@redhat.com> wrote:
->
-> On 28.11.22 09:17, Hans Verkuil wrote:
-> > Hi David,
-> >
-> > On 27/11/2022 11:35, David Hildenbrand wrote:
-> >> On 16.11.22 11:26, David Hildenbrand wrote:
-> >>> FOLL_FORCE is really only for ptrace access. According to commit
-> >>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
-> >>> writable"), get_vaddr_frames() currently pins all pages writable as a
-> >>> workaround for issues with read-only buffers.
-> >>>
-> >>> FOLL_FORCE, however, seems to be a legacy leftover as it predates
-> >>> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
-> >>> always writable"). Let's just remove it.
-> >>>
-> >>> Once the read-only buffer issue has been resolved, FOLL_WRITE could
-> >>> again be set depending on the DMA direction.
-> >>>
-> >>> Cc: Hans Verkuil <hverkuil@xs4all.nl>
-> >>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> >>> Cc: Tomasz Figa <tfiga@chromium.org>
-> >>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> >>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>> Signed-off-by: David Hildenbrand <david@redhat.com>
-> >>> ---
-> >>>    drivers/media/common/videobuf2/frame_vector.c | 2 +-
-> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
-> >>> index 542dde9d2609..062e98148c53 100644
-> >>> --- a/drivers/media/common/videobuf2/frame_vector.c
-> >>> +++ b/drivers/media/common/videobuf2/frame_vector.c
-> >>> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
-> >>>        start = untagged_addr(start);
-> >>>          ret = pin_user_pages_fast(start, nr_frames,
-> >>> -                  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-> >>> +                  FOLL_WRITE | FOLL_LONGTERM,
-> >>>                      (struct page **)(vec->ptrs));
-> >>>        if (ret > 0) {
-> >>>            vec->got_ref = true;
-> >>
-> >>
-> >> Hi Andrew,
-> >>
-> >> see the discussion at [1] regarding a conflict and how to proceed with
-> >> upstreaming. The conflict would be easy to resolve, however, also
-> >> the patch description doesn't make sense anymore with [1].
-> >
-> > Might it be easier and less confusing if you post a v2 of this series
-> > with my patch first? That way it is clear that 1) my patch has to come
-> > first, and 2) that it is part of a single series and should be merged
-> > by the mm subsystem.
-> >
-> > Less chances of things going wrong that way.
-> >
-> > Just mention in the v2 cover letter that the first patch was added to
-> > make it easy to backport that fix without being hampered by merge
-> > conflicts if it was added after your frame_vector.c patch.
->
-> Yes, that's the way I would naturally do, it, however, Andrew prefers
-> delta updates for minor changes.
->
-> @Andrew, whatever you prefer!
->
-> Thanks!
->
 
-However you folks proceed with taking this patch, feel free to add my
-Acked-by. Thanks!
+--mlivur37dd6gymdx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Tomasz
+Hello,
 
-> --
-> Thanks,
->
-> David / dhildenb
->
+On Tue, Oct 25, 2022 at 11:10:46AM +0100, Paul Cercueil wrote:
+> Le mar. 25 oct. 2022 =E0 08:44:10 +0200, Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> a =E9crit :
+> > On Mon, Oct 24, 2022 at 09:52:10PM +0100, Paul Cercueil wrote:
+> > >  After commit a020f22a4ff5 ("pwm: jz4740: Make PWM start with the
+> > > active part"),
+> > >  the trick to set duty > period to properly shut down TCU2 channels
+> > > did
+> > >  not work anymore, because of the polarity inversion.
+> > >=20
+> > >  Address this issue by restoring the proper polarity before
+> > > disabling the
+> > >  channels.
+> > >=20
+> > >  Fixes: a020f22a4ff5 ("pwm: jz4740: Make PWM start with the active
+> > > part")
+> > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > >  Cc: stable@vger.kernel.org
+> > >  ---
+> > >   drivers/pwm/pwm-jz4740.c | 62
+> > > ++++++++++++++++++++++++++--------------
+> > >   1 file changed, 40 insertions(+), 22 deletions(-)
+> > >=20
+> > >  diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
+> > >  index 228eb104bf1e..65462a0052af 100644
+> > >  --- a/drivers/pwm/pwm-jz4740.c
+> > >  +++ b/drivers/pwm/pwm-jz4740.c
+> > >  @@ -97,6 +97,19 @@ static int jz4740_pwm_enable(struct pwm_chip
+> > > *chip, struct pwm_device *pwm)
+> > >   	return 0;
+> > >   }
+> > >=20
+> > >  +static void jz4740_pwm_set_polarity(struct jz4740_pwm_chip *jz,
+> > >  +				    unsigned int hwpwm,
+> > >  +				    enum pwm_polarity polarity)
+> > >  +{
+> > >  +	unsigned int value =3D 0;
+> > >  +
+> > >  +	if (polarity =3D=3D PWM_POLARITY_INVERSED)
+> > >  +		value =3D TCU_TCSR_PWM_INITL_HIGH;
+> > >  +
+> > >  +	regmap_update_bits(jz->map, TCU_REG_TCSRc(hwpwm),
+> > >  +			   TCU_TCSR_PWM_INITL_HIGH, value);
+> > >  +}
+> > >  +
+> > >   static void jz4740_pwm_disable(struct pwm_chip *chip, struct
+> > > pwm_device *pwm)
+> > >   {
+> > >   	struct jz4740_pwm_chip *jz =3D to_jz4740(chip);
+> > >  @@ -130,6 +143,7 @@ static int jz4740_pwm_apply(struct pwm_chip
+> > > *chip, struct pwm_device *pwm,
+> > >   	unsigned long long tmp =3D 0xffffull * NSEC_PER_SEC;
+> > >   	struct clk *clk =3D pwm_get_chip_data(pwm);
+> > >   	unsigned long period, duty;
+> > >  +	enum pwm_polarity polarity;
+> > >   	long rate;
+> > >   	int err;
+> > >=20
+> > >  @@ -169,6 +183,9 @@ static int jz4740_pwm_apply(struct pwm_chip
+> > > *chip, struct pwm_device *pwm,
+> > >   	if (duty >=3D period)
+> > >   		duty =3D period - 1;
+> > >=20
+> > >  +	/* Restore regular polarity before disabling the channel. */
+> > >  +	jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, state->polarity);
+> > >  +
+> >=20
+> > Does this introduce a glitch?
+>=20
+> Maybe. But the PWM is shut down before finishing its period anyway, so th=
+ere
+> was already a glitch.
+>=20
+> > >   	jz4740_pwm_disable(chip, pwm);
+> > >=20
+> > >   	err =3D clk_set_rate(clk, rate);
+> > >  @@ -190,29 +207,30 @@ static int jz4740_pwm_apply(struct pwm_chip
+> > > *chip, struct pwm_device *pwm,
+> > >   	regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+> > >   			   TCU_TCSR_PWM_SD, TCU_TCSR_PWM_SD);
+> > >=20
+> > >  -	/*
+> > >  -	 * Set polarity.
+> > >  -	 *
+> > >  -	 * The PWM starts in inactive state until the internal timer
+> > > reaches the
+> > >  -	 * duty value, then becomes active until the timer reaches the
+> > > period
+> > >  -	 * value. In theory, we should then use (period - duty) as the
+> > > real duty
+> > >  -	 * value, as a high duty value would otherwise result in the PWM
+> > > pin
+> > >  -	 * being inactive most of the time.
+> > >  -	 *
+> > >  -	 * Here, we don't do that, and instead invert the polarity of the
+> > > PWM
+> > >  -	 * when it is active. This trick makes the PWM start with its
+> > > active
+> > >  -	 * state instead of its inactive state.
+> > >  -	 */
+> > >  -	if ((state->polarity =3D=3D PWM_POLARITY_NORMAL) ^ state->enabled)
+> > >  -		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+> > >  -				   TCU_TCSR_PWM_INITL_HIGH, 0);
+> > >  -	else
+> > >  -		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+> > >  -				   TCU_TCSR_PWM_INITL_HIGH,
+> > >  -				   TCU_TCSR_PWM_INITL_HIGH);
+> > >  -
+> > >  -	if (state->enabled)
+> > >  +	if (state->enabled) {
+> > >  +		/*
+> > >  +		 * Set polarity.
+> > >  +		 *
+> > >  +		 * The PWM starts in inactive state until the internal timer
+> > >  +		 * reaches the duty value, then becomes active until the timer
+> > >  +		 * reaches the period value. In theory, we should then use
+> > >  +		 * (period - duty) as the real duty value, as a high duty value
+> > >  +		 * would otherwise result in the PWM pin being inactive most of
+> > >  +		 * the time.
+> > >  +		 *
+> > >  +		 * Here, we don't do that, and instead invert the polarity of
+> > >  +		 * the PWM when it is active. This trick makes the PWM start
+> > >  +		 * with its active state instead of its inactive state.
+> > >  +		 */
+> > >  +		if (state->polarity =3D=3D PWM_POLARITY_NORMAL)
+> > >  +			polarity =3D PWM_POLARITY_INVERSED;
+> > >  +		else
+> > >  +			polarity =3D PWM_POLARITY_NORMAL;
+> > >  +
+> > >  +		jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, polarity);
+> > >  +
+> > >   		jz4740_pwm_enable(chip, pwm);
+> > >  +	}
+> >=20
+> > Note that for disabled PWMs there is no official guaranty about the pin
+> > state. So it would be ok (but admittedly not great) to simplify the
+> > driver and accept that the pinstate is active while the PWM is off.
+> > IMHO this is also better than a glitch.
+> >=20
+> > If a consumer wants the PWM to be in its inactive state, they should
+> > not disable it.
+>=20
+> Completely disagree. I absolutely do not want the backlight to go full
+> bright mode when the PWM pin is disabled. And disabling the backlight is a
+> thing (for screen blanking and during mode changes).
+
+For some hardwares there is no pretty choice. So the gist is: If the
+backlight driver wants to ensure that the PWM pin is driven to its
+inactive level, it should use:
+
+	pwm_apply(pwm, { .period =3D ..., .duty_cycle =3D 0, .enabled =3D true });
+
+and better not
+
+	pwm_apply(pwm, { ..., .enabled =3D false });
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--mlivur37dd6gymdx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOEyAwACgkQwfwUeK3K
+7Aml5Qf/YDou9goYlX65v+kTZcSXdWj3R0MxXfmaqmhzKz8n5vRMNST5LTOquhIH
+D2kfpER3lHFpuVHuljV7tYlWTW1Eo0PcHqLnJzfdbR4+kSxuFDXonu7MHlIzQWlu
+DFWJLkQdvK1KkfRya9VtKM5hs4zgNAakkbwYsqoHOi1TTg0826gNFqtWS6quBmZ1
+e94Lo3W/+LDIlHAeZSb3ag/v4rGkiWe4T1HOMsLRnjvxxjSPJxp7z9tjdbAgwnxR
+3Hn65v+BycGy8rgPeafnX/S4a3Ud7YYaGgJc8NvlPMXpgQ/GaGYIZRSsFAn+nLpq
+1BW9yT0YdrE8khzB1RlGnSqiXbv8kQ==
+=VUR+
+-----END PGP SIGNATURE-----
+
+--mlivur37dd6gymdx--
