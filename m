@@ -2,97 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BFB63B5A9
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Nov 2022 00:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A11D963B5F0
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Nov 2022 00:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiK1XKL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Nov 2022 18:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S234729AbiK1XcG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Nov 2022 18:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234577AbiK1XKK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Nov 2022 18:10:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BA32E9D6;
-        Mon, 28 Nov 2022 15:10:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26616B8102B;
-        Mon, 28 Nov 2022 23:10:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AEA6C433D6;
-        Mon, 28 Nov 2022 23:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1669677006;
-        bh=Z/itbdefigEkmW9ubXmwx/IWcP+dYHfAaiqq0syhieQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=zoujZvTTGZ/7PzKtBN3jnsRdwHk6AGdfYydfuv0cnu8pxGG4Z5OsihxFXGZO+7uwU
-         XXRT0z9WWgHbdxdSvSXeg2l7EcYoNalJSgNCRhgKmWmheim0iIuhoxLWu6S/w8xw/X
-         ZkEIsPzG00T/4bEyTIjImIKg7FFj1F77JrfrNXJ4=
-Date:   Mon, 28 Nov 2022 15:10:05 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        with ESMTP id S234702AbiK1Xb7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Nov 2022 18:31:59 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EDD930558;
+        Mon, 28 Nov 2022 15:31:56 -0800 (PST)
+Received: from loongson.cn (unknown [117.133.84.114])
+        by gateway (Coremail) with SMTP id _____8BxXevrRIVjw9gBAA--.4439S3;
+        Tue, 29 Nov 2022 07:31:55 +0800 (CST)
+Received: from [192.168.1.7] (unknown [117.133.84.114])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxj+DqRIVjIskdAA--.9504S3;
+        Tue, 29 Nov 2022 07:31:54 +0800 (CST)
+Message-ID: <c1f46cb8-dfbb-8b2a-5617-173bb62084ec@loongson.cn>
+Date:   Tue, 29 Nov 2022 07:31:53 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v8 1/2] gpio: loongson: add gpio driver support
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Subject: Re: [PATCH V14 0/4] mm/sparse-vmemmap: Generalise helpers and
- enable for LoongArch
-Message-Id: <20221128151005.916e4373cd4e5808111dea0c@linux-foundation.org>
-In-Reply-To: <CAAhV-H7PifGc7jEmVURVYHXLdrKBGdRecjjLwOekeqS_cEXkxw@mail.gmail.com>
-References: <20221027125253.3458989-1-chenhuacai@loongson.cn>
-        <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
-        <b9c0711c-6efc-4d84-af4e-62e585ac2fa6@app.fastmail.com>
-        <CAAhV-H7PifGc7jEmVURVYHXLdrKBGdRecjjLwOekeqS_cEXkxw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221128064300.12021-1-zhuyinbo@loongson.cn>
+ <CACRpkdZoD8v6pPStaKLf14houZk5e89ZBz5wZJVQJxJ1Xq37Ug@mail.gmail.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+In-Reply-To: <CACRpkdZoD8v6pPStaKLf14houZk5e89ZBz5wZJVQJxJ1Xq37Ug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxj+DqRIVjIskdAA--.9504S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7CFW5XF1Dtw1kKr17tFyxXwb_yoW8Jw4xpF
+        W7Cay7KFWUKr45CrWDKryrZFyfGFZ8Krsxtr4v9rWDK34DJ3Z2q3y3uF1j9F1xAFyrCr15
+        ZrZ3CrW09an8JFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jbWrXUUUUU=
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 27 Nov 2022 13:01:19 +0800 Huacai Chen <chenhuacai@kernel.org> wrote:
 
-> Hi, Andrew,
-> 
-> On Tue, Nov 15, 2022 at 4:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Sat, Nov 12, 2022, at 11:26, Huacai Chen wrote:
-> > > Hi, Arnd,
-> > >
-> > > Just a gentle ping, is this series good enough now? I think the last
-> > > problem (static-key.h inclusion) has also been solved.
-> >
-> > Yes, this looks fine to me. Sorry I didn't have this on my
-> > radar any more.
-> >
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> >
-> > I guess the series should be merged through Andrew's linux-mm
-> > tree. Let me know if for some reason I should pick it up into
-> > the asm-generic tree instead.
-> Another gentle ping, can this series be merged to linux-mm in the 6.2 cycle?
+在 2022/11/29 4:35, Linus Walleij 写道:
+> On Mon, Nov 28, 2022 at 7:43 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>
+>> The Loongson platforms GPIO controller contains 60 GPIO pins in total,
+>> 4 of which are dedicated GPIO pins, and the remaining 56 are reused
+>> with other functions. Each GPIO can set input/output and has the
+>> interrupt capability.
+>>
+>> This driver added support for Loongson GPIO controller and support to
+>> use DTS or ACPI to descibe GPIO device resources.
+>>
+>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+>> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> v8 looks really nice.
+>
+>> +static int loongson_gpio_to_irq(
+>> +                       struct gpio_chip *chip, unsigned int offset)
+>> +{
+>> +       struct platform_device *pdev =
+>> +               container_of(chip->parent, struct platform_device, dev);
+>> +
+>> +       if (offset >= chip->ngpio)
+>> +               return -EINVAL;
+> You forgot to drop this.
 
-It's a pretty large patchset and I'm a bit concerned about the amount
-of review and test which it has received from the MIPS side?
+You mean to remove this if judgment?
 
-Prudence suggest that we merge this in 6.3-rc1.  But I'll queue it up
-for now, get a bit of testing while we consider this.
+"if(offset >= chip->ngpio)"
+
+         return -EINVAL;
+
+>
+> With this fixed (and Bartosz requested fix):
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> Yours,
+> Linus Walleij
 
