@@ -2,140 +2,187 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EE963A2A7
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Nov 2022 09:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B7263A2B1
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Nov 2022 09:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiK1ITy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Nov 2022 03:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
+        id S230123AbiK1IUA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Nov 2022 03:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiK1ITx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Nov 2022 03:19:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71C31180E;
-        Mon, 28 Nov 2022 00:18:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8142460FE7;
-        Mon, 28 Nov 2022 08:18:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEA40C43470;
-        Mon, 28 Nov 2022 08:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669623533;
-        bh=8fvSqyC5O7kIfnW0Kyq33j5dit6Z5CFYOeb+1myKFss=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jylfX3gRUDIRl78mcgXqXQ3hPGGqN6r0iGnar94bW6COLNIN6I5XdxgDk8oM0qrAx
-         Lnj4SrwhzfbRP8ECsTg4ZihP4FG0a+32QTIQkutFWb28sv9POIo3dh0oBr1P/SLeP4
-         bHtXKOfipeUdemaf8YGKIS4BGWaavB79/qMzHuZFH7TUUeEauWUAzs630Ti/k7BIUN
-         xia+PHCdapvTeDHldeCe2YRouwErxoTAB8/KUSPJ1VL+HzoIlzgKF/xMocoNCDCcKR
-         4wET1oBSGtjids0dhr7OEVaj/vzerKnjmZJGYwmXezKDBd2ezLEm60iNjRlSW4DTLj
-         Fki0XgEHYWcQA==
-Received: by mail-ej1-f54.google.com with SMTP id b2so7509576eja.7;
-        Mon, 28 Nov 2022 00:18:53 -0800 (PST)
-X-Gm-Message-State: ANoB5plSl4h59le3ccIgzzM8Hw0/JiEQoZzGrNrg968nUC/QFNS6PjQ5
-        y9ae2CAtbo2yaRASQO+2WuKU2AWVEge2je4ygkc=
-X-Google-Smtp-Source: AA0mqf4+1cmRwSticidoMDLfF2SOB4WXxmURJljOM3sqd+ULavDUaLn5tkZ9YGNeduJcF2Uo7T2lIG95LDpRA7MUUBA=
-X-Received: by 2002:a17:907:9856:b0:780:8144:a41f with SMTP id
- jj22-20020a170907985600b007808144a41fmr43519094ejc.189.1669623532033; Mon, 28
- Nov 2022 00:18:52 -0800 (PST)
+        with ESMTP id S229861AbiK1IT4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Nov 2022 03:19:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71296101F4
+        for <linux-mips@vger.kernel.org>; Mon, 28 Nov 2022 00:18:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669623533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ueiNL/RrPlD3vRod9MDAxJpgFwmJj0Jyg8USWk7yPz8=;
+        b=S+oFkjKVP3mckzd7VBbvH1QuZTZol0q9wTWffdsPiXu+2nmhjaLmPhu8ziCyV0KCioRPJI
+        5JQ7Ka6QTT7w/TcDd4C3+oasgr3fATIDGVWRdSU8qp6A71RrRGJewLWoV59J4JHfMOQ3z1
+        2VHUt/gcI6faTsrG8illEYtRpXcU/30=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-417--XH8O_lcMwWmv2ZkIsS4tg-1; Mon, 28 Nov 2022 03:18:51 -0500
+X-MC-Unique: -XH8O_lcMwWmv2ZkIsS4tg-1
+Received: by mail-wm1-f69.google.com with SMTP id z18-20020a05600c221200b003cf7fcc286aso3478169wml.1
+        for <linux-mips@vger.kernel.org>; Mon, 28 Nov 2022 00:18:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ueiNL/RrPlD3vRod9MDAxJpgFwmJj0Jyg8USWk7yPz8=;
+        b=OCHMdNV3LrTaTZIU4Cx3kljctee0mKSXBr+LsCH47ZvuMpMIFgbOciLmDka2Ap3t3l
+         4aqkHMs8Jv51z/FGXaBF/90vaN4Q0jQuo3dYhwgLB8DZYXBv7NFqKnBbZ26ecmh2KPYU
+         opxu8Dywb7W6dhkeZgmryCjMbyRTRqVzx+lqWxPP/pg0PqpcqeJ2mz0HKzamD50GRats
+         t2e9EQi5ucobbMjTKXDgK9mwtlauXZNWr3I49EfqjiolbhCdMULsWw4eDz93PFYRjRoh
+         ttbLNB+qsAFHmAKnR9502a519sO6tkrsPi4NmIm+8jkDU0catGV0s/j4KsSQFvEiWnQ4
+         vW3g==
+X-Gm-Message-State: ANoB5pkJui02iMd+nRWtLxOi1R8QW9wVqoqARC2ngalkwLYNlGPZzcUY
+        IST5OEioD6V4Nmbh1eDSpQiV9vXQi7vxYO3CaA83KHyAzXzyX05YTjTjwE3QWPZwydL13SZY3nu
+        1lrUqPgs4Kqb10JE/W9pQ9A==
+X-Received: by 2002:a05:600c:3587:b0:3cf:a9c2:2b04 with SMTP id p7-20020a05600c358700b003cfa9c22b04mr36262301wmq.152.1669623530703;
+        Mon, 28 Nov 2022 00:18:50 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5KFgnMS9OgeX6iNUgB1p0xskb3yOxviUW4FnLaUffslFm3du7Shktyf0rRUHCATZ7f+3nFJA==
+X-Received: by 2002:a05:600c:3587:b0:3cf:a9c2:2b04 with SMTP id p7-20020a05600c358700b003cfa9c22b04mr36262220wmq.152.1669623530122;
+        Mon, 28 Nov 2022 00:18:50 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:9000:3d6:e434:f8b4:80cf? (p200300cbc702900003d6e434f8b480cf.dip0.t-ipconnect.de. [2003:cb:c702:9000:3d6:e434:f8b4:80cf])
+        by smtp.gmail.com with ESMTPSA id g14-20020a05600c310e00b003a2f2bb72d5sm22518102wmo.45.2022.11.28.00.18.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 00:18:49 -0800 (PST)
+Message-ID: <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
+Date:   Mon, 28 Nov 2022 09:18:47 +0100
 MIME-Version: 1.0
-References: <20220714084136.570176-1-chenhuacai@loongson.cn>
- <20220714084136.570176-3-chenhuacai@loongson.cn> <CAAhV-H7uF85UHfbS+-sMcXbB=q3UO0Z8rO=poNQbEtaipi4PHQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H7uF85UHfbS+-sMcXbB=q3UO0Z8rO=poNQbEtaipi4PHQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 28 Nov 2022 16:18:40 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT82uNmjfDcMrSodssZWsMSrN_476s03QCv__kmQH-6GQ@mail.gmail.com>
-Message-ID: <CAJF2gTT82uNmjfDcMrSodssZWsMSrN_476s03QCv__kmQH-6GQ@mail.gmail.com>
-Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
+ usage
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-17-david@redhat.com>
+ <81fb0fa3-2e06-b765-56ac-a7d981194e59@redhat.com>
+ <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 2:25 PM Huacai Chen <chenhuacai@gmail.com> wrote:
->
-> ping?
-Who can test?
+On 28.11.22 09:17, Hans Verkuil wrote:
+> Hi David,
+> 
+> On 27/11/2022 11:35, David Hildenbrand wrote:
+>> On 16.11.22 11:26, David Hildenbrand wrote:
+>>> FOLL_FORCE is really only for ptrace access. According to commit
+>>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+>>> writable"), get_vaddr_frames() currently pins all pages writable as a
+>>> workaround for issues with read-only buffers.
+>>>
+>>> FOLL_FORCE, however, seems to be a legacy leftover as it predates
+>>> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
+>>> always writable"). Let's just remove it.
+>>>
+>>> Once the read-only buffer issue has been resolved, FOLL_WRITE could
+>>> again be set depending on the DMA direction.
+>>>
+>>> Cc: Hans Verkuil <hverkuil@xs4all.nl>
+>>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>>> Cc: Tomasz Figa <tfiga@chromium.org>
+>>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>>> ---
+>>>    drivers/media/common/videobuf2/frame_vector.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+>>> index 542dde9d2609..062e98148c53 100644
+>>> --- a/drivers/media/common/videobuf2/frame_vector.c
+>>> +++ b/drivers/media/common/videobuf2/frame_vector.c
+>>> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+>>>        start = untagged_addr(start);
+>>>          ret = pin_user_pages_fast(start, nr_frames,
+>>> -                  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+>>> +                  FOLL_WRITE | FOLL_LONGTERM,
+>>>                      (struct page **)(vec->ptrs));
+>>>        if (ret > 0) {
+>>>            vec->got_ref = true;
+>>
+>>
+>> Hi Andrew,
+>>
+>> see the discussion at [1] regarding a conflict and how to proceed with
+>> upstreaming. The conflict would be easy to resolve, however, also
+>> the patch description doesn't make sense anymore with [1].
+> 
+> Might it be easier and less confusing if you post a v2 of this series
+> with my patch first? That way it is clear that 1) my patch has to come
+> first, and 2) that it is part of a single series and should be merged
+> by the mm subsystem.
+> 
+> Less chances of things going wrong that way.
+> 
+> Just mention in the v2 cover letter that the first patch was added to
+> make it easy to backport that fix without being hampered by merge
+> conflicts if it was added after your frame_vector.c patch.
 
->
-> On Thu, Jul 14, 2022 at 4:42 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> > cpu_max_bits_warn() generates a runtime warning similar as below while
-> > we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-> > instead of NR_CPUS to iterate CPUs.
-> >
-> > [    3.052463] ------------[ cut here ]------------
-> > [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
-> > [    3.070072] Modules linked in: efivarfs autofs4
-> > [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-> > [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
-> > [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
-> > [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
-> > [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
-> > [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
-> > [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
-> > [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
-> > [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
-> > [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
-> > [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
-> > [    3.195868]         ...
-> > [    3.199917] Call Trace:
-> > [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
-> > [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
-> > [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
-> > [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-> > [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
-> > [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
-> > [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
-> > [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
-> > [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
-> > [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
-> > [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
-> > [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  arch/sh/kernel/cpu/proc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
-> > index a306bcd6b341..5f6d0e827bae 100644
-> > --- a/arch/sh/kernel/cpu/proc.c
-> > +++ b/arch/sh/kernel/cpu/proc.c
-> > @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> >
-> >  static void *c_start(struct seq_file *m, loff_t *pos)
-> >  {
-> > -       return *pos < NR_CPUS ? cpu_data + *pos : NULL;
-> > +       return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
-> >  }
-> >  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
-> >  {
-> > --
-> > 2.31.1
-> >
+Yes, that's the way I would naturally do, it, however, Andrew prefers 
+delta updates for minor changes.
 
+@Andrew, whatever you prefer!
 
+Thanks!
 
 -- 
-Best Regards
- Guo Ren
+Thanks,
+
+David / dhildenb
+
