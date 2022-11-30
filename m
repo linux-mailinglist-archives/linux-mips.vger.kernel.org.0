@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04F863E4C6
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 00:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FE863E4CD
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 00:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiK3XMd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Nov 2022 18:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S229615AbiK3XMx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Nov 2022 18:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiK3XLV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Nov 2022 18:11:21 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDDB9AE2E
-        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 15:10:19 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id g193-20020a636bca000000b00476a2298bd1so78610pgc.12
-        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 15:10:19 -0800 (PST)
+        with ESMTP id S229996AbiK3XMA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Nov 2022 18:12:00 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E6D975F1
+        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 15:10:26 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id pi2-20020a17090b1e4200b0021834843687so3836789pjb.0
+        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 15:10:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=dcQvNId+1/lZrSHF7uunpbezCT+tuo/sIJb5/wlRPe4=;
-        b=pHmagdtfQ4rK+aGEXZjdjDGthSGMalpKOUI7GqmTThtcoGM3uif6SuxCKGFccSMhzF
-         yXa6bXXeOyIZVV80kJ2S8h6K+mMCejoDaZ/ii2EUL468p93Ajf6t43DB1Wt8JLJVCK3k
-         fqXtMCFFaLo2Yrtm5TWBEaDppU5iHM6i37aozepB5rFwVkB6w9kckW+YlLEmnktq1HXV
-         AeupN9sJKY0Z8mPllbegidvlJtPJLBWqNGjw+FxYfr+Jh6eBu00SDQq/7ROHpk2uqD/h
-         azdvQ2Z1YBskieoxau57lCCiX5XS1wltjhHLwIJ4a4YKTmeK1EHTBVc1iP46NnMXtyrr
-         8gWg==
+        bh=eiSwfPmu4ewAiGcYbvYY+86df6I0KPgxP3gGecAMxPE=;
+        b=iL8L003XqB+GKgCwHArr5kcxs4MyewOQ/xo1XysK8lk71q/4iO5w3SKvia9KqD7amd
+         nXu1/r0fblzdTNOJpq/EYl9gFk0lysyFVV/7oFccNNQgU1JhwDr1/0HsYHMNLSclslmA
+         UAtezhSD+JCAni39XkYX4QGkvZksvWY0lR4tjm/jCfiuQLeieGvg5A3LN33ihkcJ66/D
+         QbO+O4mX6xEZLgdpufHO4gE+50I1GNIH2gNitP+ZjnsiKLl2r5s0LRLVS15/Koi+mQZn
+         TJODgWK9oIR1COz+tFiDAPrhXmMt5j7wHvbTN67IWmBvfAG9+GHxtj6LR7jSg7tvIMuj
+         4E5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dcQvNId+1/lZrSHF7uunpbezCT+tuo/sIJb5/wlRPe4=;
-        b=eFHB6oV0dk3k7SR+V2OwBCSj/saAuwCh2WkUZwhmLAOzCh180Ja720j0JPxWOtaAwj
-         0i5l75dVX+eouxveoEWW/nkI0IfUaBWGaF/Yj9OEZ1hzucugcJ6jekmco92Cs1dH4oRj
-         e+oSRFrkYs81bhVb2IO0oz9hB0/DqOsjvrM01Sfh6LbUdGGwHQoQXqRTzOT9y94YQhGW
-         agTWOw8+NsJMof7uIdwAr5gN5A7NEdP5hCJ+PPP9SsGkC5TFZhcOIlKuYzXXhSwaI98X
-         vwg/5AbGVYMOt54L7DUHJXASWsestD/sQXoRvLA/RJ+cndsVVHy4y4YPac+jhqrstev3
-         8Jtg==
-X-Gm-Message-State: ANoB5pkd065E4i2ev7A6hczauMQbU8sn0aKizkS1YyRY54/GYrvbBA20
-        aKkCyNwBgrpSA2OiX2hw6Xac0Z9ZGz4=
-X-Google-Smtp-Source: AA0mqf7ZWgyt1epRJUyUxB4XV55CE8DXheZJV/3IY8TnkDCqHbUc8SwU1nVFbmRSfIFlm9uXCObVa4N3hDQ=
+        bh=eiSwfPmu4ewAiGcYbvYY+86df6I0KPgxP3gGecAMxPE=;
+        b=Dh27dL2Qc8rHbxKHboshru2WfOXk1GkvJ6z7k09vKxGvMhfs9GuGH7kh6t4lUDBYfl
+         u7m+bHDp3+bk5PcTj7WVvs8c16FdQpByzHfy2yq4U6xJqLhytbiYHXdYdaoOxa2UEMSn
+         hN/JjAbp0yYgr4H1OcQ4CR1lYscuDn12tUKCRhuQwxnp7hU1kdhiZXRaATG8m5FgbRfY
+         KRusKQv1mdCA/a0x/6Whs6oduleRV8/KI58sBf3TgMM9f9eNa2lqISvzkoC+BN8qdHFD
+         zSNA9rfiZFcZXy80uDkw+MXYAgMUUUiGKLZ1AMYHrSGxSdsCURkDhr3/ISuE4k9lmINf
+         A2fw==
+X-Gm-Message-State: ANoB5plpjIEFsjKkJHiwjraUuheyQ56z4uZD3s3UEZ/kziEfEvbzuxkF
+        cSjT0i0M7ZKun6YFVVPMjas1tdDlquY=
+X-Google-Smtp-Source: AA0mqf6KEmE4iPJ9U98BX162/oz5Lzb4cw+ziaGyrlJEvv/WGc/WSrrcrRcdtUijxIw8BMhf6X3VggubLl4=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:d24e:b0:218:b478:f44f with SMTP id
- o14-20020a17090ad24e00b00218b478f44fmr46131273pjw.232.1669849804458; Wed, 30
- Nov 2022 15:10:04 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:ce05:b0:219:23ea:b314 with SMTP id
+ f5-20020a17090ace0500b0021923eab314mr23130247pju.230.1669849806254; Wed, 30
+ Nov 2022 15:10:06 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 30 Nov 2022 23:09:00 +0000
+Date:   Wed, 30 Nov 2022 23:09:01 +0000
 In-Reply-To: <20221130230934.1014142-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221130230934.1014142-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130230934.1014142-17-seanjc@google.com>
-Subject: [PATCH v2 16/50] KVM: arm64: Simplify the CPUHP logic
+Message-ID: <20221130230934.1014142-18-seanjc@google.com>
+Subject: [PATCH v2 17/50] KVM: arm64: Free hypervisor allocations if vector
+ slot init fails
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -100,200 +101,55 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+Teardown hypervisor mode if vector slot setup fails in order to avoid
+leaking any allocations done by init_hyp_mode().
 
-For a number of historical reasons, the KVM/arm64 hotplug setup is pretty
-complicated, and we have two extra CPUHP notifiers for vGIC and timers.
-
-It looks pretty pointless, and gets in the way of further changes.
-So let's just expose some helpers that can be called from the core
-CPUHP callback, and get rid of everything else.
-
-This gives us the opportunity to drop a useless notifier entry,
-as well as tidy-up the timer enable/disable, which was a bit odd.
-
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Fixes: b881cdce77b4 ("KVM: arm64: Allocate hyp vectors statically")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/arm64/kvm/arch_timer.c     | 27 ++++++++++-----------------
- arch/arm64/kvm/arm.c            | 13 +++++++++++++
- arch/arm64/kvm/vgic/vgic-init.c | 19 ++-----------------
- include/kvm/arm_arch_timer.h    |  4 ++++
- include/kvm/arm_vgic.h          |  4 ++++
- include/linux/cpuhotplug.h      |  3 ---
- 6 files changed, 33 insertions(+), 37 deletions(-)
+ arch/arm64/kvm/arm.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/kvm/arch_timer.c b/arch/arm64/kvm/arch_timer.c
-index bb24a76b4224..33fca1a691a5 100644
---- a/arch/arm64/kvm/arch_timer.c
-+++ b/arch/arm64/kvm/arch_timer.c
-@@ -811,10 +811,18 @@ void kvm_timer_vcpu_init(struct kvm_vcpu *vcpu)
- 	ptimer->host_timer_irq_flags = host_ptimer_irq_flags;
- }
- 
--static void kvm_timer_init_interrupt(void *info)
-+void kvm_timer_cpu_up(void)
- {
- 	enable_percpu_irq(host_vtimer_irq, host_vtimer_irq_flags);
--	enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
-+	if (host_ptimer_irq)
-+		enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
-+}
-+
-+void kvm_timer_cpu_down(void)
-+{
-+	disable_percpu_irq(host_vtimer_irq);
-+	if (host_ptimer_irq)
-+		disable_percpu_irq(host_ptimer_irq);
- }
- 
- int kvm_arm_timer_set_reg(struct kvm_vcpu *vcpu, u64 regid, u64 value)
-@@ -976,18 +984,6 @@ void kvm_arm_timer_write_sysreg(struct kvm_vcpu *vcpu,
- 	preempt_enable();
- }
- 
--static int kvm_timer_starting_cpu(unsigned int cpu)
--{
--	kvm_timer_init_interrupt(NULL);
--	return 0;
--}
--
--static int kvm_timer_dying_cpu(unsigned int cpu)
--{
--	disable_percpu_irq(host_vtimer_irq);
--	return 0;
--}
--
- static int timer_irq_set_vcpu_affinity(struct irq_data *d, void *vcpu)
- {
- 	if (vcpu)
-@@ -1185,9 +1181,6 @@ int kvm_timer_hyp_init(bool has_gic)
- 		goto out_free_irq;
- 	}
- 
--	cpuhp_setup_state(CPUHP_AP_KVM_ARM_TIMER_STARTING,
--			  "kvm/arm/timer:starting", kvm_timer_starting_cpu,
--			  kvm_timer_dying_cpu);
- 	return 0;
- out_free_irq:
- 	free_percpu_irq(host_vtimer_irq, kvm_get_running_vcpus());
 diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index c6732ac329ca..07f5cef5c33b 100644
+index 07f5cef5c33b..fa986ebb4793 100644
 --- a/arch/arm64/kvm/arm.c
 +++ b/arch/arm64/kvm/arm.c
-@@ -1670,7 +1670,15 @@ static void _kvm_arch_hardware_enable(void *discard)
- 
- int kvm_arch_hardware_enable(void)
- {
-+	int was_enabled = __this_cpu_read(kvm_arm_hardware_enabled);
-+
- 	_kvm_arch_hardware_enable(NULL);
-+
-+	if (!was_enabled) {
-+		kvm_vgic_cpu_up();
-+		kvm_timer_cpu_up();
-+	}
-+
- 	return 0;
- }
- 
-@@ -1684,6 +1692,11 @@ static void _kvm_arch_hardware_disable(void *discard)
- 
- void kvm_arch_hardware_disable(void)
- {
-+	if (__this_cpu_read(kvm_arm_hardware_enabled)) {
-+		kvm_timer_cpu_down();
-+		kvm_vgic_cpu_down();
-+	}
-+
- 	if (!is_protected_kvm_enabled())
- 		_kvm_arch_hardware_disable(NULL);
- }
-diff --git a/arch/arm64/kvm/vgic/vgic-init.c b/arch/arm64/kvm/vgic/vgic-init.c
-index f6d4f4052555..6c7f6ae21ec0 100644
---- a/arch/arm64/kvm/vgic/vgic-init.c
-+++ b/arch/arm64/kvm/vgic/vgic-init.c
-@@ -465,17 +465,15 @@ int kvm_vgic_map_resources(struct kvm *kvm)
- 
- /* GENERIC PROBE */
- 
--static int vgic_init_cpu_starting(unsigned int cpu)
-+void kvm_vgic_cpu_up(void)
- {
- 	enable_percpu_irq(kvm_vgic_global_state.maint_irq, 0);
--	return 0;
- }
- 
- 
--static int vgic_init_cpu_dying(unsigned int cpu)
-+void kvm_vgic_cpu_down(void)
- {
- 	disable_percpu_irq(kvm_vgic_global_state.maint_irq);
--	return 0;
- }
- 
- static irqreturn_t vgic_maintenance_handler(int irq, void *data)
-@@ -584,19 +582,6 @@ int kvm_vgic_hyp_init(void)
- 		return ret;
- 	}
- 
--	ret = cpuhp_setup_state(CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
--				"kvm/arm/vgic:starting",
--				vgic_init_cpu_starting, vgic_init_cpu_dying);
--	if (ret) {
--		kvm_err("Cannot register vgic CPU notifier\n");
--		goto out_free_irq;
+@@ -2237,18 +2237,18 @@ int kvm_arch_init(void *opaque)
+ 	err = kvm_init_vector_slots();
+ 	if (err) {
+ 		kvm_err("Cannot initialise vector slots\n");
+-		goto out_err;
 -	}
 -
- 	kvm_info("vgic interrupt IRQ%d\n", kvm_vgic_global_state.maint_irq);
+-	err = init_subsystems();
+-	if (err)
+ 		goto out_hyp;
++	}
++
++	err = init_subsystems();
++	if (err)
++		goto out_subs;
+ 
+ 	if (!in_hyp_mode) {
+ 		err = finalize_hyp_mode();
+ 		if (err) {
+ 			kvm_err("Failed to finalize Hyp protection\n");
+-			goto out_hyp;
++			goto out_subs;
+ 		}
+ 	}
+ 
+@@ -2262,8 +2262,9 @@ int kvm_arch_init(void *opaque)
+ 
  	return 0;
--
--out_free_irq:
--	free_percpu_irq(kvm_vgic_global_state.maint_irq,
--			kvm_get_running_vcpus());
--	return ret;
- }
-diff --git a/include/kvm/arm_arch_timer.h b/include/kvm/arm_arch_timer.h
-index cd6d8f260eab..1638418f72dd 100644
---- a/include/kvm/arm_arch_timer.h
-+++ b/include/kvm/arm_arch_timer.h
-@@ -104,4 +104,8 @@ void kvm_arm_timer_write_sysreg(struct kvm_vcpu *vcpu,
- u32 timer_get_ctl(struct arch_timer_context *ctxt);
- u64 timer_get_cval(struct arch_timer_context *ctxt);
  
-+/* CPU HP callbacks */
-+void kvm_timer_cpu_up(void);
-+void kvm_timer_cpu_down(void);
-+
- #endif
-diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
-index 4df9e73a8bb5..fc4acc91ba06 100644
---- a/include/kvm/arm_vgic.h
-+++ b/include/kvm/arm_vgic.h
-@@ -431,4 +431,8 @@ int vgic_v4_load(struct kvm_vcpu *vcpu);
- void vgic_v4_commit(struct kvm_vcpu *vcpu);
- int vgic_v4_put(struct kvm_vcpu *vcpu, bool need_db);
- 
-+/* CPU HP callbacks */
-+void kvm_vgic_cpu_up(void);
-+void kvm_vgic_cpu_down(void);
-+
- #endif /* __KVM_ARM_VGIC_H */
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index f61447913db9..7337414e4947 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -186,9 +186,6 @@ enum cpuhp_state {
- 	CPUHP_AP_TI_GP_TIMER_STARTING,
- 	CPUHP_AP_HYPERV_TIMER_STARTING,
- 	CPUHP_AP_KVM_STARTING,
--	CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
--	CPUHP_AP_KVM_ARM_VGIC_STARTING,
--	CPUHP_AP_KVM_ARM_TIMER_STARTING,
- 	/* Must be the last timer callback */
- 	CPUHP_AP_DUMMY_TIMER_STARTING,
- 	CPUHP_AP_ARM_XEN_STARTING,
+-out_hyp:
++out_subs:
+ 	hyp_cpu_pm_exit();
++out_hyp:
+ 	if (!in_hyp_mode)
+ 		teardown_hyp_mode();
+ out_err:
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
