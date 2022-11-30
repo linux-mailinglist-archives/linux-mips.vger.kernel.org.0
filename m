@@ -2,40 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF3D63D81F
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Nov 2022 15:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3387D63D882
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Nov 2022 15:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiK3Oap (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Nov 2022 09:30:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S229694AbiK3Ova convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 30 Nov 2022 09:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiK3Oa0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Nov 2022 09:30:26 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2BC54745;
-        Wed, 30 Nov 2022 06:30:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1669817583; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=dXasd2esNNmpiHUfVcmRkxgzG65o721c/Rvd3FSmMvedmhALBVsV8qp0aRGUE2LZxkv2HoMmc+ekS3YM7y1rZd7ygvUwHPN/hIGHycdpwbRMl8AKrHO6BjS80kHs3dfXb+tTq6HObvTyo9BtHSLXZJfNhtI2NDQXKCD5ErIoBsg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1669817583; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=tcD2tFxEru39PLp3xQkd+dJ8fltdBcdkPCdXOUfgLMQ=; 
-        b=lO865isAuQRik7INPA7FZOiYw2VcoYkZzICanbPbLMs5UcOpVmYH2ojvAtyUkogX1bx6lflv9TwhKvXKySfLjzNEfJQth/+YrNbGbOryVSSzseZpaJvZ7R4fmc1NBsDCLo2lxD/q7DmFswtddApJGvyLOVRN0aOK3V+2uvxxs04=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669817583;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=tcD2tFxEru39PLp3xQkd+dJ8fltdBcdkPCdXOUfgLMQ=;
-        b=h91l4+uumvdMWNksQsm+lLIQWjvfnAiRH0AY1lQ1rUMZHTcD9BpIXNqyyiRIIZNv
-        zTAeFsofzE/hNeBYRoRnP2XXfHJy36b852k4KrBCBZRISGmZRX3Kl8uojjKq4iNQH83
-        JVCdBqOiVaWHwI39rjwtkpbVw4RCX2IGXFzaUjAo=
-Received: from arinc9-PC.lan (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1669817581238174.27626882243624; Wed, 30 Nov 2022 06:13:01 -0800 (PST)
-From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        with ESMTP id S229674AbiK3Ov2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Nov 2022 09:51:28 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B286573B83;
+        Wed, 30 Nov 2022 06:51:24 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id a27so11229401qtw.10;
+        Wed, 30 Nov 2022 06:51:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rbewHNiIDPrh2vDJAS18QQyUgoqR1U2XFbW+RCOiyVY=;
+        b=fCXuCOgUwLOoxJH49GdlHGzuXdGP3I5vqtKMQfw5p/zM1r4oBmwI25DVL2rJwh3AEm
+         2MT2kuea8mUOjXqUTBz4OHAlI6cj3GPIYUor399iWhBHSMyTZbHscIOjg0vQjyw9/TKP
+         hZS6NWMNxSV74chr9cNAJ3IYqBs3z1yKSWzsv8dd6Usp8rHqgbOw5BME2sOFlciLJHVF
+         2gsgvGdnvdp8G4gwF1ibs9mvH5gMeBYfaFiGGWOL0rdIzdtFxbkQ2zT7WDbqiw26zikL
+         uR9+g09vhUsfyhh/onuP5TIxIsSWkyoNxLmMMaDoHa8uQYJGSmUxE0rk2FmCGJLb97GO
+         TwtA==
+X-Gm-Message-State: ANoB5pnuGTT7RELZ7BhWRdGXJ8VlkfCavUzwlUiDK58G7HuexBWb2TZ/
+        OQLy0BhEvyuLsDsdJV6nxkMzQOEQzK35CQ==
+X-Google-Smtp-Source: AA0mqf5t9XxSny7wiMYJL+fC3x3d1hmg9pcxoc3fo7HwOxvscAyInELNzC7ZXHCOZNBIyrHqL5faMA==
+X-Received: by 2002:a05:622a:488f:b0:3a6:328e:e7d1 with SMTP id fc15-20020a05622a488f00b003a6328ee7d1mr21723005qtb.272.1669819883617;
+        Wed, 30 Nov 2022 06:51:23 -0800 (PST)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id y26-20020a37f61a000000b006bc192d277csm1262642qkj.10.2022.11.30.06.51.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 06:51:22 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3c090251d59so117848417b3.4;
+        Wed, 30 Nov 2022 06:51:22 -0800 (PST)
+X-Received: by 2002:a81:f80f:0:b0:38e:e541:d8ca with SMTP id
+ z15-20020a81f80f000000b0038ee541d8camr55824371ywm.283.1669819872327; Wed, 30
+ Nov 2022 06:51:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20221130141040.32447-1-arinc.unal@arinc9.com> <20221130141040.32447-3-arinc.unal@arinc9.com>
+In-Reply-To: <20221130141040.32447-3-arinc.unal@arinc9.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 30 Nov 2022 15:51:00 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVBZiWxORfb2hd0hn_En6yFEwm8uJXr553YfB8gv1sOFw@mail.gmail.com>
+Message-ID: <CAMuHMdVBZiWxORfb2hd0hn_En6yFEwm8uJXr553YfB8gv1sOFw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] arm: dts: remove label = "cpu" from DSA dt-binding
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         soc@kernel.org, "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -56,7 +72,7 @@ To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         <bcm-kernel-feedback-list@broadcom.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
         Hans Ulli Kroll <ulli.kroll@googlemail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -78,7 +94,6 @@ To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Stefan Agner <stefan@agner.ch>,
         Heiko Stuebner <heiko@sntech.de>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
@@ -88,60 +103,56 @@ To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
         Frank Wunderlich <frank-w@public-files.de>,
         Michael Riesch <michael.riesch@wolfvision.net>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 5/5] powerpc: dts: remove label = "cpu" from DSA dt-binding
-Date:   Wed, 30 Nov 2022 17:10:40 +0300
-Message-Id: <20221130141040.32447-6-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221130141040.32447-1-arinc.unal@arinc9.com>
-References: <20221130141040.32447-1-arinc.unal@arinc9.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is not used by the DSA dt-binding, so remove it from all devicetrees.
+CC cleger
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- arch/powerpc/boot/dts/turris1x.dts | 2 --
- 1 file changed, 2 deletions(-)
+On Wed, Nov 30, 2022 at 3:33 PM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+> This is not used by the DSA dt-binding, so remove it from all devicetrees.
+>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-index 045af668e928..3841c8d96d00 100644
---- a/arch/powerpc/boot/dts/turris1x.dts
-+++ b/arch/powerpc/boot/dts/turris1x.dts
-@@ -147,7 +147,6 @@ ports {
- 
- 					port@0 {
- 						reg = <0>;
--						label = "cpu";
- 						ethernet = <&enet1>;
- 						phy-mode = "rgmii-id";
- 
-@@ -184,7 +183,6 @@ port@5 {
- 
- 					port@6 {
- 						reg = <6>;
--						label = "cpu";
- 						ethernet = <&enet0>;
- 						phy-mode = "rgmii-id";
- 
--- 
-2.34.1
+>  arch/arm/boot/dts/r9a06g032.dtsi                          | 1 -
 
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+> --- a/arch/arm/boot/dts/r9a06g032.dtsi
+> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
+> @@ -401,7 +401,6 @@ switch_port3: port@3 {
+>                                 switch_port4: port@4 {
+>                                         reg = <4>;
+>                                         ethernet = <&gmac2>;
+> -                                       label = "cpu";
+>                                         phy-mode = "internal";
+>                                         status = "disabled";
+>                                         fixed-link {
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
