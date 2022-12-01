@@ -2,120 +2,235 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECB963F1B3
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 14:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255E163F3BF
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 16:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbiLANeM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Dec 2022 08:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S231697AbiLAPX6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Dec 2022 10:23:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiLANeJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 08:34:09 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 901F5AC1B0;
-        Thu,  1 Dec 2022 05:34:08 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1p0jhW-000077-02; Thu, 01 Dec 2022 14:34:06 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D4996C1FB9; Thu,  1 Dec 2022 14:33:44 +0100 (CET)
-Date:   Thu, 1 Dec 2022 14:33:44 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     John Thomson <git@johnthomson.fastmail.com.au>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] mips: ralink: mt7621: do not use kzalloc too early
-Message-ID: <20221201133344.GC10560@alpha.franken.de>
-References: <20221114015658.2873120-1-git@johnthomson.fastmail.com.au>
- <20221114015658.2873120-4-git@johnthomson.fastmail.com.au>
+        with ESMTP id S231703AbiLAPXx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 10:23:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477382EF22
+        for <linux-mips@vger.kernel.org>; Thu,  1 Dec 2022 07:22:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669908172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0uolOOp7yoOC/673O4rWJ2SQim3eJ9tGJUopqkFhibc=;
+        b=B+Uzk/aU+G0kyeVnZME32d4YN4l7sLEVdy7VP6JuIJVqdFtpi6L4u9AR4foUS4yhJn04ji
+        IbCpdEjCFiv/Ox5p9ri3H0diiVKuINuS06MGQTlm7eAeA92w2eMUUp1TObuZXodswa8hnv
+        xYmqwHPcu0DVGFsFXIzPOza1/s2AbEU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-488-sXqKdtlJNFClgHjS7qDftw-1; Thu, 01 Dec 2022 10:22:51 -0500
+X-MC-Unique: sXqKdtlJNFClgHjS7qDftw-1
+Received: by mail-wm1-f69.google.com with SMTP id h9-20020a1c2109000000b003cfd37aec58so995012wmh.1
+        for <linux-mips@vger.kernel.org>; Thu, 01 Dec 2022 07:22:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0uolOOp7yoOC/673O4rWJ2SQim3eJ9tGJUopqkFhibc=;
+        b=76tQ/ktsaXNk7QClxxM3NkBymyvc5nZG1pxyzfMwwynq9UACbUuYYecj2y2+yPJ1fT
+         UW6q3QjHEnRolj9xg8Pyo/sYWf/vGPOrWRSrugMFVWfpDFu06y8cMRunDY1bbB+t1uWn
+         WuLqQoabvim4MD2RYt9JSaEsnBPCxuGin78qLEVIpjDVtq5h1OZDdaGEPlBatYjtU6po
+         1yt0o3aZsQPtjq0mbQuzHWMgY5gJLJh64WHMSnE+lVD+HOHKNKyMCJsnYd4EBUJ0Hnt3
+         QajNkkCelyGes5kp+59WudS6SFKBdSWCnnOaVT54K0zsRp6uU6UoC0Z/dcfgeTz3Hq9N
+         +l2A==
+X-Gm-Message-State: ANoB5pncBwIcTuGT+15gPDuF+9c2c8McimzRH4fynBuKz/k8RUX9xbD/
+        zx+yM3jvVCTbiphmVyoKWHpBfw15g1Iu/t5+J8H8zPeZ5UPMPyxrHmfoUylgADr+ygbhs94i6uX
+        aDDdXVdtQa9d0h4wexXLh/A==
+X-Received: by 2002:adf:f54e:0:b0:242:1534:7b57 with SMTP id j14-20020adff54e000000b0024215347b57mr14035648wrp.404.1669908170128;
+        Thu, 01 Dec 2022 07:22:50 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4+3YusiSWHR13O3MACnIQbSphop/g7AmmIFME21D1fv2+5ZYUMJJrVIeLUQmj0nQTJeAmHuA==
+X-Received: by 2002:adf:f54e:0:b0:242:1534:7b57 with SMTP id j14-20020adff54e000000b0024215347b57mr14035606wrp.404.1669908169821;
+        Thu, 01 Dec 2022 07:22:49 -0800 (PST)
+Received: from ovpn-194-141.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b003b47e75b401sm10593279wmq.37.2022.12.01.07.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 07:22:49 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>
+Subject: Re: [PATCH v2 12/50] KVM: VMX: Move Hyper-V eVMCS initialization to
+ helper
+In-Reply-To: <20221130230934.1014142-13-seanjc@google.com>
+References: <20221130230934.1014142-1-seanjc@google.com>
+ <20221130230934.1014142-13-seanjc@google.com>
+Date:   Thu, 01 Dec 2022 16:22:45 +0100
+Message-ID: <87k03bf8sa.fsf@ovpn-194-141.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114015658.2873120-4-git@johnthomson.fastmail.com.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:56:58AM +1000, John Thomson wrote:
-> With CONFIG_SLUB=y, following commit 6edf2576a6cc ("mm/slub: enable
-> debugging memory wasting of kmalloc") mt7621 failed to boot very early,
-> without showing any console messages.
-> This exposed the pre-existing bug of mt7621.c using kzalloc before normal
-> memory management was available.
-> Prior to this slub change, there existed the unintended protection against
-> "kmem_cache *s" being NULL as slab_pre_alloc_hook() happened to
-> return NULL and bailed out of slab_alloc_node().
-> This allowed mt7621 prom_soc_init to fail in the soc_dev_init kzalloc,
-> but continue booting without the SOC_BUS driver device registered.
-> 
-> Console output from a DEBUG_ZBOOT vmlinuz kernel loading,
-> with mm/slub modified to warn on kmem_cache zero or null:
-> 
-> zimage at:     80B842A0 810B4BC0
-> Uncompressing Linux at load address 80001000
-> Copy device tree to address  80B80EE0
-> Now, booting the kernel...
-> 
-> [    0.000000] Linux version 6.1.0-rc3+ (john@john)
-> (mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot
-> 2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #73 SMP Wed
->      Nov  2 05:10:01 AEST 2022
-> [    0.000000] ------------[ cut here ]------------
-> [    0.000000] WARNING: CPU: 0 PID: 0 at mm/slub.c:3416
-> kmem_cache_alloc+0x5a4/0x5e8
-> [    0.000000] Modules linked in:
-> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3+ #73
-> [    0.000000] Stack : 810fff78 80084d98 00000000 00000004 00000000
-> 00000000 80889d04 80c90000
-> [    0.000000]         80920000 807bd328 8089d368 80923bd3 00000000
-> 00000001 80889cb0 00000000
-> [    0.000000]         00000000 00000000 807bd328 8084bcb1 00000002
-> 00000002 00000001 6d6f4320
-> [    0.000000]         00000000 80c97d3d 80c97d68 fffffffc 807bd328
-> 00000000 00000000 00000000
-> [    0.000000]         00000000 a0000000 80910000 8110a0b4 00000000
-> 00000020 80010000 80010000
-> [    0.000000]         ...
-> [    0.000000] Call Trace:
-> [    0.000000] [<80008260>] show_stack+0x28/0xf0
-> [    0.000000] [<8070c958>] dump_stack_lvl+0x60/0x80
-> [    0.000000] [<8002e184>] __warn+0xc4/0xf8
-> [    0.000000] [<8002e210>] warn_slowpath_fmt+0x58/0xa4
-> [    0.000000] [<801c0fac>] kmem_cache_alloc+0x5a4/0x5e8
-> [    0.000000] [<8092856c>] prom_soc_init+0x1fc/0x2b4
-> [    0.000000] [<80928060>] prom_init+0x44/0xf0
-> [    0.000000] [<80929214>] setup_arch+0x4c/0x6a8
-> [    0.000000] [<809257e0>] start_kernel+0x88/0x7c0
-> [    0.000000]
-> [    0.000000] ---[ end trace 0000000000000000 ]---
-> [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
-> [    0.000000] printk: bootconsole [early0] enabled
-> 
-> Allowing soc_device_register to work exposed oops in the mt7621 phy pci,
-> and pci controller drivers from soc_device_match_attr, due to missing
-> sentinels in the quirks tables. These were fixed with:
-> commit 819b885cd886 ("phy: ralink: mt7621-pci: add sentinel to quirks
-> table")
-> not yet applied ("PCI: mt7621: add sentinel to quirks table")
-> 
-> Link: https://lore.kernel.org/linux-mm/becf2ac3-2a90-4f3a-96d9-a70f67c66e4a@app.fastmail.com/
-> Fixes: 71b9b5e0130d ("MIPS: ralink: mt7621: introduce 'soc_device' initialization")
-> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+Sean Christopherson <seanjc@google.com> writes:
+
+> Move Hyper-V's eVMCS initialization to a dedicated helper to clean up
+> vmx_init(), and add a comment to call out that the Hyper-V init code
+> doesn't need to be unwound if vmx_init() ultimately fails.
+>
+> No functional change intended.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  arch/mips/ralink/mt7621.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
+>  arch/x86/kvm/vmx/vmx.c | 73 +++++++++++++++++++++++++-----------------
+>  1 file changed, 43 insertions(+), 30 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index c0de7160700b..b8bf95b9710d 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -523,6 +523,8 @@ static inline void vmx_segment_cache_clear(struct vcpu_vmx *vmx)
+>  static unsigned long host_idt_base;
+>  
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> +static struct kvm_x86_ops vmx_x86_ops __initdata;
+> +
+>  static bool __read_mostly enlightened_vmcs = true;
+>  module_param(enlightened_vmcs, bool, 0444);
+>  
+> @@ -551,6 +553,43 @@ static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
+>  	return 0;
+>  }
+>  
+> +static __init void hv_init_evmcs(void)
+> +{
+> +	int cpu;
+> +
+> +	if (!enlightened_vmcs)
+> +		return;
+> +
+> +	/*
+> +	 * Enlightened VMCS usage should be recommended and the host needs
+> +	 * to support eVMCS v1 or above.
+> +	 */
+> +	if (ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
+> +	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
+> +	     KVM_EVMCS_VERSION) {
+> +
+> +		/* Check that we have assist pages on all online CPUs */
+> +		for_each_online_cpu(cpu) {
+> +			if (!hv_get_vp_assist_page(cpu)) {
+> +				enlightened_vmcs = false;
+> +				break;
+> +			}
+> +		}
+> +
+> +		if (enlightened_vmcs) {
+> +			pr_info("KVM: vmx: using Hyper-V Enlightened VMCS\n");
+> +			static_branch_enable(&enable_evmcs);
+> +		}
+> +
+> +		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
+> +			vmx_x86_ops.enable_l2_tlb_flush
+> +				= hv_enable_l2_tlb_flush;
+> +
+> +	} else {
+> +		enlightened_vmcs = false;
+> +	}
+> +}
+> +
+>  static void hv_reset_evmcs(void)
+>  {
+>  	struct hv_vp_assist_page *vp_ap;
+> @@ -577,6 +616,7 @@ static void hv_reset_evmcs(void)
+>  }
+>  
+>  #else /* IS_ENABLED(CONFIG_HYPERV) */
+> +static void hv_init_evmcs(void) {}
+>  static void hv_reset_evmcs(void) {}
+>  #endif /* IS_ENABLED(CONFIG_HYPERV) */
+>  
+> @@ -8500,38 +8540,11 @@ static int __init vmx_init(void)
+>  {
+>  	int r, cpu;
+>  
+> -#if IS_ENABLED(CONFIG_HYPERV)
+>  	/*
+> -	 * Enlightened VMCS usage should be recommended and the host needs
+> -	 * to support eVMCS v1 or above. We can also disable eVMCS support
+> -	 * with module parameter.
+> +	 * Note, hv_init_evmcs() touches only VMX knobs, i.e. there's nothing
+> +	 * to unwind if a later step fails.
+>  	 */
+> -	if (enlightened_vmcs &&
+> -	    ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
+> -	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
+> -	    KVM_EVMCS_VERSION) {
+> -
+> -		/* Check that we have assist pages on all online CPUs */
+> -		for_each_online_cpu(cpu) {
+> -			if (!hv_get_vp_assist_page(cpu)) {
+> -				enlightened_vmcs = false;
+> -				break;
+> -			}
+> -		}
+> -
+> -		if (enlightened_vmcs) {
+> -			pr_info("KVM: vmx: using Hyper-V Enlightened VMCS\n");
+> -			static_branch_enable(&enable_evmcs);
+> -		}
+> -
+> -		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
+> -			vmx_x86_ops.enable_l2_tlb_flush
+> -				= hv_enable_l2_tlb_flush;
+> -
+> -	} else {
+> -		enlightened_vmcs = false;
+> -	}
+> -#endif
+> +	hv_init_evmcs();
+>  
+>  	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
+>  		     __alignof__(struct vcpu_vmx), THIS_MODULE);
 
-applied to mips-next.
-
-Thomas.
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Vitaly
+
