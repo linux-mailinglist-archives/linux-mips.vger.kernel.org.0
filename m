@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255E163F3BF
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 16:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586A763F466
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 16:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiLAPX6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Dec 2022 10:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S231414AbiLAPoE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Dec 2022 10:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbiLAPXx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 10:23:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477382EF22
-        for <linux-mips@vger.kernel.org>; Thu,  1 Dec 2022 07:22:53 -0800 (PST)
+        with ESMTP id S231322AbiLAPoD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 10:44:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC96CCA
+        for <linux-mips@vger.kernel.org>; Thu,  1 Dec 2022 07:43:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669908172;
+        s=mimecast20190719; t=1669909384;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=0uolOOp7yoOC/673O4rWJ2SQim3eJ9tGJUopqkFhibc=;
-        b=B+Uzk/aU+G0kyeVnZME32d4YN4l7sLEVdy7VP6JuIJVqdFtpi6L4u9AR4foUS4yhJn04ji
-        IbCpdEjCFiv/Ox5p9ri3H0diiVKuINuS06MGQTlm7eAeA92w2eMUUp1TObuZXodswa8hnv
-        xYmqwHPcu0DVGFsFXIzPOza1/s2AbEU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=uICPaEENN8EB00poBiDynBWP9unBSRZ6Eo0ZeloiILw=;
+        b=ShDSpJFN0QDtH03IzK5wfnlyUH76O3c7dsbxoFK+KF0E2RVlEAR3LFhECLAXd86gw9UQ/X
+        3FrWrq7UepVYdRDfFbakv+ciRtEt2VkXedgY1ubBB3Thq6PYJfP/roq+NZqQvA1N2Tkfx1
+        mPSxDMX7PJPfke0HISThbxAYOMGvlMc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-488-sXqKdtlJNFClgHjS7qDftw-1; Thu, 01 Dec 2022 10:22:51 -0500
-X-MC-Unique: sXqKdtlJNFClgHjS7qDftw-1
-Received: by mail-wm1-f69.google.com with SMTP id h9-20020a1c2109000000b003cfd37aec58so995012wmh.1
-        for <linux-mips@vger.kernel.org>; Thu, 01 Dec 2022 07:22:51 -0800 (PST)
+ us-mta-515-7vArYQFqM3qNP8HpbZkXyw-1; Thu, 01 Dec 2022 10:43:03 -0500
+X-MC-Unique: 7vArYQFqM3qNP8HpbZkXyw-1
+Received: by mail-wr1-f71.google.com with SMTP id v14-20020adf8b4e000000b0024174021277so533453wra.13
+        for <linux-mips@vger.kernel.org>; Thu, 01 Dec 2022 07:43:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0uolOOp7yoOC/673O4rWJ2SQim3eJ9tGJUopqkFhibc=;
-        b=76tQ/ktsaXNk7QClxxM3NkBymyvc5nZG1pxyzfMwwynq9UACbUuYYecj2y2+yPJ1fT
-         UW6q3QjHEnRolj9xg8Pyo/sYWf/vGPOrWRSrugMFVWfpDFu06y8cMRunDY1bbB+t1uWn
-         WuLqQoabvim4MD2RYt9JSaEsnBPCxuGin78qLEVIpjDVtq5h1OZDdaGEPlBatYjtU6po
-         1yt0o3aZsQPtjq0mbQuzHWMgY5gJLJh64WHMSnE+lVD+HOHKNKyMCJsnYd4EBUJ0Hnt3
-         QajNkkCelyGes5kp+59WudS6SFKBdSWCnnOaVT54K0zsRp6uU6UoC0Z/dcfgeTz3Hq9N
-         +l2A==
-X-Gm-Message-State: ANoB5pncBwIcTuGT+15gPDuF+9c2c8McimzRH4fynBuKz/k8RUX9xbD/
-        zx+yM3jvVCTbiphmVyoKWHpBfw15g1Iu/t5+J8H8zPeZ5UPMPyxrHmfoUylgADr+ygbhs94i6uX
-        aDDdXVdtQa9d0h4wexXLh/A==
-X-Received: by 2002:adf:f54e:0:b0:242:1534:7b57 with SMTP id j14-20020adff54e000000b0024215347b57mr14035648wrp.404.1669908170128;
-        Thu, 01 Dec 2022 07:22:50 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4+3YusiSWHR13O3MACnIQbSphop/g7AmmIFME21D1fv2+5ZYUMJJrVIeLUQmj0nQTJeAmHuA==
-X-Received: by 2002:adf:f54e:0:b0:242:1534:7b57 with SMTP id j14-20020adff54e000000b0024215347b57mr14035606wrp.404.1669908169821;
-        Thu, 01 Dec 2022 07:22:49 -0800 (PST)
+        bh=uICPaEENN8EB00poBiDynBWP9unBSRZ6Eo0ZeloiILw=;
+        b=fR6rQ98O76r4U2vsRl+XRjbJhftO9sGrga+njw33WjStuiaWiAwyI6eDH5A6SFsB0c
+         jtTuVGd+xaCsUCMnehO4nmy2w+daHm594HWOBZOnfSyUHYkKg/7OU7bOJLx5l/FIwTbh
+         tym1WGBCkXbZ7O4JEK8Ey7XLbi0Ye7R47/PlD5vzc9ONVqngewJiN6so/1++2tPbgH+w
+         IM/4gl+w+UELjc+/duHFnD0wXD2JJ60+A1d40DG+K4RAvOBPFaFtA7WEYvOQFcYJ50Id
+         mJTJOWbcWZuiNXnWjqyVCgBTDWePgg8raLuStR71be1vfETMUpGaMNeTG7cv4YbewuPV
+         PQcA==
+X-Gm-Message-State: ANoB5pnRpONg5+PmZcSEN9646PmDDdCuzQxGh2lpJQS9ZaJwbasS6Vbw
+        8z8mz19p4o2vh8kLvyECuICpE2nFTQ7W4Kjj+yg1n7PwN4h2gKHCKgcrC5+3//5l7kUGXPSjXZA
+        yM3cVO/0cIW58RjZ/vx7QDw==
+X-Received: by 2002:adf:ecd2:0:b0:236:6fd9:9efa with SMTP id s18-20020adfecd2000000b002366fd99efamr39370659wro.101.1669909382063;
+        Thu, 01 Dec 2022 07:43:02 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4imAxqHpsHzf4lwMnv25YvuYKadYTHsioCJaPqnZlFtnFG20xMn8tkXOhL/ZrHUpQYnEbeIQ==
+X-Received: by 2002:adf:ecd2:0:b0:236:6fd9:9efa with SMTP id s18-20020adfecd2000000b002366fd99efamr39370625wro.101.1669909381800;
+        Thu, 01 Dec 2022 07:43:01 -0800 (PST)
 Received: from ovpn-194-141.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b003b47e75b401sm10593279wmq.37.2022.12.01.07.22.46
+        by smtp.gmail.com with ESMTPSA id bg28-20020a05600c3c9c00b003cfa3a12660sm9307122wmb.1.2022.12.01.07.42.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 07:22:49 -0800 (PST)
+        Thu, 01 Dec 2022 07:43:00 -0800 (PST)
 From:   Vitaly Kuznetsov <vkuznets@redhat.com>
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     James Morse <james.morse@arm.com>,
@@ -89,13 +89,13 @@ Cc:     James Morse <james.morse@arm.com>,
         Sean Christopherson <seanjc@google.com>,
         David Woodhouse <dwmw2@infradead.org>,
         Paul Durrant <paul@xen.org>
-Subject: Re: [PATCH v2 12/50] KVM: VMX: Move Hyper-V eVMCS initialization to
- helper
-In-Reply-To: <20221130230934.1014142-13-seanjc@google.com>
+Subject: Re: [PATCH v2 10/50] KVM: VMX: Reset eVMCS controls in VP assist
+ page during hardware disabling
+In-Reply-To: <20221130230934.1014142-11-seanjc@google.com>
 References: <20221130230934.1014142-1-seanjc@google.com>
- <20221130230934.1014142-13-seanjc@google.com>
-Date:   Thu, 01 Dec 2022 16:22:45 +0100
-Message-ID: <87k03bf8sa.fsf@ovpn-194-141.brq.redhat.com>
+ <20221130230934.1014142-11-seanjc@google.com>
+Date:   Thu, 01 Dec 2022 16:42:58 +0100
+Message-ID: <87h6yff7ul.fsf@ovpn-194-141.brq.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -110,124 +110,114 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Sean Christopherson <seanjc@google.com> writes:
 
-> Move Hyper-V's eVMCS initialization to a dedicated helper to clean up
-> vmx_init(), and add a comment to call out that the Hyper-V init code
-> doesn't need to be unwound if vmx_init() ultimately fails.
+> Reset the eVMCS controls in the per-CPU VP assist page during hardware
+> disabling instead of waiting until kvm-intel's module exit.  The controls
+> are activated if and only if KVM creates a VM, i.e. don't need to be
+> reset if hardware is never enabled.
 >
-> No functional change intended.
+> Doing the reset during hardware disabling will naturally fix a potential
+> NULL pointer deref bug once KVM disables CPU hotplug while enabling and
+> disabling hardware (which is necessary to fix a variety of bugs).  If the
+> kernel is running as the root partition, the VP assist page is unmapped
+> during CPU hot unplug, and so KVM's clearing of the eVMCS controls needs
+> to occur with CPU hot(un)plug disabled, otherwise KVM could attempt to
+> write to a CPU's VP assist page after it's unmapped.
 >
+> Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  arch/x86/kvm/vmx/vmx.c | 73 +++++++++++++++++++++++++-----------------
->  1 file changed, 43 insertions(+), 30 deletions(-)
+>  arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++-----------------
+>  1 file changed, 30 insertions(+), 20 deletions(-)
 >
 > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c0de7160700b..b8bf95b9710d 100644
+> index cea8c07f5229..d85d175dca70 100644
 > --- a/arch/x86/kvm/vmx/vmx.c
 > +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -523,6 +523,8 @@ static inline void vmx_segment_cache_clear(struct vcpu_vmx *vmx)
->  static unsigned long host_idt_base;
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
-> +static struct kvm_x86_ops vmx_x86_ops __initdata;
-> +
->  static bool __read_mostly enlightened_vmcs = true;
->  module_param(enlightened_vmcs, bool, 0444);
->  
-> @@ -551,6 +553,43 @@ static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
+> @@ -551,6 +551,33 @@ static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
 >  	return 0;
 >  }
 >  
-> +static __init void hv_init_evmcs(void)
+> +static void hv_reset_evmcs(void)
 > +{
-> +	int cpu;
+> +	struct hv_vp_assist_page *vp_ap;
 > +
-> +	if (!enlightened_vmcs)
+> +	if (!static_branch_unlikely(&enable_evmcs))
 > +		return;
 > +
 > +	/*
-> +	 * Enlightened VMCS usage should be recommended and the host needs
-> +	 * to support eVMCS v1 or above.
+> +	 * KVM should enable eVMCS if and only if all CPUs have a VP assist
+> +	 * page, and should reject CPU onlining if eVMCS is enabled the CPU
+> +	 * doesn't have a VP assist page allocated.
 > +	 */
-> +	if (ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
-> +	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
-> +	     KVM_EVMCS_VERSION) {
+> +	vp_ap = hv_get_vp_assist_page(smp_processor_id());
+> +	if (WARN_ON_ONCE(!vp_ap))
+> +		return;
 > +
-> +		/* Check that we have assist pages on all online CPUs */
-> +		for_each_online_cpu(cpu) {
-> +			if (!hv_get_vp_assist_page(cpu)) {
-> +				enlightened_vmcs = false;
-> +				break;
-> +			}
-> +		}
-> +
-> +		if (enlightened_vmcs) {
-> +			pr_info("KVM: vmx: using Hyper-V Enlightened VMCS\n");
-> +			static_branch_enable(&enable_evmcs);
-> +		}
-> +
-> +		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
-> +			vmx_x86_ops.enable_l2_tlb_flush
-> +				= hv_enable_l2_tlb_flush;
-> +
-> +	} else {
-> +		enlightened_vmcs = false;
-> +	}
+
+In case my understanding is correct, this may actually get triggered
+for Hyper-V root partition: vmx_hardware_disable() gets called from
+kvm_dying_cpu() which has its own CPUHP_AP_KVM_STARTING stage. VP page
+unmapping happens in hv_cpu_die() which uses generic CPUHP_AP_ONLINE_DYN
+(happens first on CPU oflining AFAIR). I believe we need to introduce a
+new CPUHP_AP_HYPERV_STARTING stage and put it before
+CPUHP_AP_KVM_STARTING so it happens after it upon offlining.
+
+The issue is likely theoretical as Hyper-V root partition is a very
+special case, I'm not sure whether KVM is used there and whether CPU
+offlining is possible. In any case, WARN_ON_ONCE() is much better than
+NULL pointer dereference we have now :-)
+
+> +	/*
+> +	 * Reset everything to support using non-enlightened VMCS access later
+> +	 * (e.g. when we reload the module with enlightened_vmcs=0)
+> +	 */
+> +	vp_ap->nested_control.features.directhypercall = 0;
+> +	vp_ap->current_nested_vmcs = 0;
+> +	vp_ap->enlighten_vmentry = 0;
 > +}
 > +
->  static void hv_reset_evmcs(void)
->  {
->  	struct hv_vp_assist_page *vp_ap;
-> @@ -577,6 +616,7 @@ static void hv_reset_evmcs(void)
->  }
->  
->  #else /* IS_ENABLED(CONFIG_HYPERV) */
-> +static void hv_init_evmcs(void) {}
->  static void hv_reset_evmcs(void) {}
+> +#else /* IS_ENABLED(CONFIG_HYPERV) */
+> +static void hv_reset_evmcs(void) {}
 >  #endif /* IS_ENABLED(CONFIG_HYPERV) */
 >  
-> @@ -8500,38 +8540,11 @@ static int __init vmx_init(void)
->  {
->  	int r, cpu;
+>  /*
+> @@ -2496,6 +2523,8 @@ static void vmx_hardware_disable(void)
+>  	if (cpu_vmxoff())
+>  		kvm_spurious_fault();
 >  
-> -#if IS_ENABLED(CONFIG_HYPERV)
->  	/*
-> -	 * Enlightened VMCS usage should be recommended and the host needs
-> -	 * to support eVMCS v1 or above. We can also disable eVMCS support
-> -	 * with module parameter.
-> +	 * Note, hv_init_evmcs() touches only VMX knobs, i.e. there's nothing
-> +	 * to unwind if a later step fails.
->  	 */
-> -	if (enlightened_vmcs &&
-> -	    ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
-> -	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
-> -	    KVM_EVMCS_VERSION) {
-> -
-> -		/* Check that we have assist pages on all online CPUs */
+> +	hv_reset_evmcs();
+> +
+>  	intel_pt_handle_vmx(0);
+>  }
+>  
+> @@ -8462,27 +8491,8 @@ static void vmx_exit(void)
+>  	kvm_exit();
+>  
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> -	if (static_branch_unlikely(&enable_evmcs)) {
+> -		int cpu;
+> -		struct hv_vp_assist_page *vp_ap;
+> -		/*
+> -		 * Reset everything to support using non-enlightened VMCS
+> -		 * access later (e.g. when we reload the module with
+> -		 * enlightened_vmcs=0)
+> -		 */
 > -		for_each_online_cpu(cpu) {
-> -			if (!hv_get_vp_assist_page(cpu)) {
-> -				enlightened_vmcs = false;
-> -				break;
-> -			}
+> -			vp_ap =	hv_get_vp_assist_page(cpu);
+> -
+> -			if (!vp_ap)
+> -				continue;
+> -
+> -			vp_ap->nested_control.features.directhypercall = 0;
+> -			vp_ap->current_nested_vmcs = 0;
+> -			vp_ap->enlighten_vmentry = 0;
 > -		}
 > -
-> -		if (enlightened_vmcs) {
-> -			pr_info("KVM: vmx: using Hyper-V Enlightened VMCS\n");
-> -			static_branch_enable(&enable_evmcs);
-> -		}
-> -
-> -		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
-> -			vmx_x86_ops.enable_l2_tlb_flush
-> -				= hv_enable_l2_tlb_flush;
-> -
-> -	} else {
-> -		enlightened_vmcs = false;
+> +	if (static_branch_unlikely(&enable_evmcs))
+>  		static_branch_disable(&enable_evmcs);
 > -	}
-> -#endif
-> +	hv_init_evmcs();
->  
->  	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
->  		     __alignof__(struct vcpu_vmx), THIS_MODULE);
+>  #endif
+>  	vmx_cleanup_l1d_flush();
 
 Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
