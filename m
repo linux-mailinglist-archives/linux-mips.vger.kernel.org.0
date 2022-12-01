@@ -2,57 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E2863F55D
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 17:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC13D63FA30
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 23:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbiLAQi1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Dec 2022 11:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        id S230126AbiLAWAc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Dec 2022 17:00:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiLAQiZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 11:38:25 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88EE5AE0A
-        for <linux-mips@vger.kernel.org>; Thu,  1 Dec 2022 08:38:23 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id w2so833569pfq.12
-        for <linux-mips@vger.kernel.org>; Thu, 01 Dec 2022 08:38:23 -0800 (PST)
+        with ESMTP id S230494AbiLAWAU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 17:00:20 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A87C5E07
+        for <linux-mips@vger.kernel.org>; Thu,  1 Dec 2022 14:00:18 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso2822268wmo.1
+        for <linux-mips@vger.kernel.org>; Thu, 01 Dec 2022 14:00:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wz5UjU3Ma0W7cBTZ/63jSNwcUzSf/RN7ETO0YflOK9Q=;
-        b=L5oONEpJeyYInhCN8kEGfJ8WS2VPlfmSQI0EIRyACnSb62Ho4uiLAZ+22FZ0LpKSBY
-         OanLGdeorUn/O6YHVn5BHqcWoMtKOfzbPKcz+4fsn48JXXYOuwBU81HsoXu4yIA+KxBs
-         oNf69ULLkYXBFawHATlUKtmTRlCCGuue7O3x4Uj20kNa312jwW6CLd6dDy2pzPGk3DaL
-         y4jm5SpqWS/wMH/C2TjT2ihvVuFcoRw2TnuuxPCYPfzDwkDLPEA8hE11/Idhqhxr7xt0
-         rj/FXhrQIb1ypgd2I2CBp8L/oyRKWO3NUq8Jq7LgrgnoUKAu1/kU3hKmcHIeaOcvmDNO
-         M6Aw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QIafPhFD9IJ7Ly0CwNSGH3i2Rs4yyu6nN9+ipEhZh0A=;
+        b=jjyByQFW3CViXa2XSpO0S5OezirA8iriSGyNq1Emb3eAjXPvAcs8h/qhWZvQRHrkM7
+         E4yO5aU5oCECenX1ChS/eFoKmPv0xbsgDyU0kSVTl00jl03ZBLNhtOgaVKcwhuzhfB8T
+         N7R+KHdaQ76bY3Z76ec67H1IKhJ28BX8clWmhefVQ98++dEoXnF5l49Qy+3a5Cak9CFt
+         EIL7cmRV6y+1rtO82GUIbFuUYJjyYdwwYbZEtJNme41VeTXnC4oIE2dnPOWtcMsSXZFG
+         q6jTLuz1FCKKC86LuPzjUTBAJLTqeyAPRmVpOXM4szcQvlKMGYRA5VkbQrYDVl2oy6Mj
+         mCEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wz5UjU3Ma0W7cBTZ/63jSNwcUzSf/RN7ETO0YflOK9Q=;
-        b=dC8MkUgsAS0ofCDvObrMLzGSlqGeGx4ehif1aC3Yne9QRd7TT6xHY4s75VnhcaOr5P
-         5Lv+9T9l1ICs9vzcweCCZCo38YMnEbp0gVJ1rQSNGxAKgBM/44dAaWL1TRlrCap3C+DO
-         fEe7TomHT7Kkn5Vk1MHyTUdly1dEYYeQCXs8ku+fz+UH3datDXrgx1pouzqsToWuRFvw
-         +QoLBSumKGmpKluHGEokkb/t6GXZHbhs7OfbWeamB3kIspWk9Bz4RxPBy8xeOw26q9Tz
-         wrqiQoRsdNZ4sjiB49DbBLbZ6JPOUWCMz0BJhvxzvhLdvr6MLUmZJr4Lla+Gj83iKHcm
-         OZ+g==
-X-Gm-Message-State: ANoB5pmXQJafNADp3Djudhd0tIcixtB02CWb1OlFgqzQDYjn+KWYWUOE
-        ix2LLRxSyKP47qZb4MGP/n8pSw==
-X-Google-Smtp-Source: AA0mqf7E8VTs9g+yA9GqMgTdFbO4YLYoa36a9KLdCj074cztIQB7gniXVzh1et27ldGMC17rtCxmqQ==
-X-Received: by 2002:aa7:8512:0:b0:575:65ff:8831 with SMTP id v18-20020aa78512000000b0057565ff8831mr16235817pfn.80.1669912703144;
-        Thu, 01 Dec 2022 08:38:23 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm5118172pjf.17.2022.12.01.08.38.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 08:38:22 -0800 (PST)
-Date:   Thu, 1 Dec 2022 16:38:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        bh=QIafPhFD9IJ7Ly0CwNSGH3i2Rs4yyu6nN9+ipEhZh0A=;
+        b=tmK/Fc7AVR4oG5ZYxPU6+sW7RzshE0qYruv1RARzhJ/lNrbyQLUBxYnGEdTCI0Qu5P
+         GREwZpGme7xEmH7dscXqmmkatNj8xlNsbppuTlAflgAVrTFfu6lNacBdTEnnjVVTLUUD
+         5wsDSDzlHagC7tfVWtUU+Z8HK+yWLORWH8d783WF3D23c/czyu0NFZ6lFp/oHu+7wfbK
+         yDnVEPexhTvMtSdndnH42AD2UaZym5GKSBOw9Rg8j3U8xf58YHKkxo2ViTr+hk8u0+FH
+         5c9b7kEuGzgMQ3nwqKyE2pNDfHJ/gImPpkofTLbEJNAKfYHWkYFabNc0HGfUJj8MzVrB
+         dERg==
+X-Gm-Message-State: ANoB5pk6xgT8an4eDgpMFBPv+t4cP2hyzbWbxG/5HBBXm+KN17LAm3ME
+        wjgBl3ipF//fDlRkCOpA0mCatw==
+X-Google-Smtp-Source: AA0mqf6xx+vYTMkMQZD2sUVXTGHs5cp2mVsSPKIbRGdbGqnCPXkM+pX1knRmP86IOvF6J1/cipiL/g==
+X-Received: by 2002:a05:600c:3495:b0:3cf:ae53:918f with SMTP id a21-20020a05600c349500b003cfae53918fmr38954917wmq.131.1669932017038;
+        Thu, 01 Dec 2022 14:00:17 -0800 (PST)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id k12-20020adfe8cc000000b00241b5af8697sm5556585wrn.85.2022.12.01.14.00.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 14:00:16 -0800 (PST)
+Message-ID: <beb697c2-dfad-780e-4638-76b229f28731@linaro.org>
+Date:   Thu, 1 Dec 2022 23:00:13 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH v2 21/50] KVM: MIPS: Hardcode callbacks to hardware
+ virtualization extensions
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Anup Patel <anup@brainfault.org>,
@@ -66,7 +73,8 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Eric Farman <farman@linux.ibm.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         David Woodhouse <dwmw2@infradead.org>,
-        Paul Durrant <paul@xen.org>, James Morse <james.morse@arm.com>,
+        Paul Durrant <paul@xen.org>
+Cc:     James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -79,196 +87,100 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
         Cornelia Huck <cohuck@redhat.com>,
         Isaku Yamahata <isaku.yamahata@intel.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
         Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2 26/50] KVM: PPC: Move processor compatibility check to
- module init
-Message-ID: <Y4jXuh4P9Oibki6W@google.com>
 References: <20221130230934.1014142-1-seanjc@google.com>
- <20221130230934.1014142-27-seanjc@google.com>
- <87cz93snqc.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+ <20221130230934.1014142-22-seanjc@google.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221130230934.1014142-22-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87cz93snqc.fsf@mpe.ellerman.id.au>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 01, 2022, Michael Ellerman wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > Move KVM PPC's compatibility checks to their respective module_init()
-> > hooks, there's no need to wait until KVM's common compat check, nor is
-> > there a need to perform the check on every CPU (provided by common KVM's
-> > hook), as the compatibility checks operate on global data.
-> >
-> >   arch/powerpc/include/asm/cputable.h: extern struct cpu_spec *cur_cpu_spec;
-> >   arch/powerpc/kvm/book3s.c: return 0
-> >   arch/powerpc/kvm/e500.c: strcmp(cur_cpu_spec->cpu_name, "e500v2")
-> >   arch/powerpc/kvm/e500mc.c: strcmp(cur_cpu_spec->cpu_name, "e500mc")
-> >                              strcmp(cur_cpu_spec->cpu_name, "e5500")
-> >                              strcmp(cur_cpu_spec->cpu_name, "e6500")
+On 1/12/22 00:09, Sean Christopherson wrote:
+> Now that KVM no longer supports trap-and-emulate (see commit 45c7e8af4a5e
+> "MIPS: Remove KVM_TE support"), hardcode the MIPS callbacks to the
+> virtualization callbacks.
 > 
-> I'm not sure that output is really useful in the change log unless you
-> explain more about what it is.
-
-Agreed, I got lazy.  I'll write a proper description.
- 
-> > diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
-> > index 57e0ad6a2ca3..795667f7ebf0 100644
-> > --- a/arch/powerpc/kvm/e500mc.c
-> > +++ b/arch/powerpc/kvm/e500mc.c
-> > @@ -388,6 +388,10 @@ static int __init kvmppc_e500mc_init(void)
-> >  {
-> >  	int r;
-> >  
-> > +	r = kvmppc_e500mc_check_processor_compat();
-> > +	if (r)
-> > +		return kvmppc_e500mc;
->  
-> This doesn't build:
+> Harcoding the callbacks eliminates the technically-unnecessary check on
+> non-NULL kvm_mips_callbacks in kvm_arch_init().  MIPS has never supported
+> multiple in-tree modules, i.e. barring an out-of-tree module, where
+> copying and renaming kvm.ko counts as "out-of-tree", KVM could never
+> encounter a non-NULL set of callbacks during module init.
 > 
-> linux/arch/powerpc/kvm/e500mc.c: In function ‘kvmppc_e500mc_init’:
-> linux/arch/powerpc/kvm/e500mc.c:391:13: error: implicit declaration of function ‘kvmppc_e500mc_check_processor_compat’; did you mean ‘kvmppc_core_check_processor_compat’? [-Werror=implicit-function-declaration]
->   391 |         r = kvmppc_e500mc_check_processor_compat();
->       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |             kvmppc_core_check_processor_compat
-> linux/arch/powerpc/kvm/e500mc.c:393:24: error: ‘kvmppc_e500mc’ undeclared (first use in this function); did you mean ‘kvm_ops_e500mc’?
->   393 |                 return kvmppc_e500mc;
->       |                        ^~~~~~~~~~~~~
->       |                        kvm_ops_e500mc
-> linux/arch/powerpc/kvm/e500mc.c:393:24: note: each undeclared identifier is reported only once for each function it appears in
+> The callback check is also subtly broken, as it is not thread safe,
+> i.e. if there were multiple modules, loading both concurrently would
+> create a race between checking and setting kvm_mips_callbacks.
+> 
+> Given that out-of-tree shenanigans are not the kernel's responsibility,
+> hardcode the callbacks to simplify the code.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/mips/include/asm/kvm_host.h |  2 +-
+>   arch/mips/kvm/Makefile           |  2 +-
+>   arch/mips/kvm/callback.c         | 14 --------------
+>   arch/mips/kvm/mips.c             |  9 ++-------
+>   arch/mips/kvm/vz.c               |  7 ++++---
+>   5 files changed, 8 insertions(+), 26 deletions(-)
+>   delete mode 100644 arch/mips/kvm/callback.c
+> 
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 28f0ba97db71..2803c9c21ef9 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -758,7 +758,7 @@ struct kvm_mips_callbacks {
+>   	void (*vcpu_reenter)(struct kvm_vcpu *vcpu);
+>   };
+>   extern struct kvm_mips_callbacks *kvm_mips_callbacks;
 
-Huh, CONFIG_PPC_E500MC got unselected in the config I use to compile test this
-flavor.  I suspect I botched an oldconfig at some point.
- 
-Anyways, fixed that and the bugs.
+IIUC we could even constify this pointer.
 
-Thanks much!
+Anyway,
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
---
-Subject: [PATCH] KVM: PPC: Move processor compatibility check to module init
-
-Move KVM PPC's compatibility checks to their respective module_init()
-hooks, there's no need to wait until KVM's common compat check, nor is
-there a need to perform the check on every CPU (provided by common KVM's
-hook).  The compatibility checks are either a nop (Book3S), or simply
-check the CPU name stored in the global CPU spec (e500 and e500mc).
-
-Cc: Fabiano Rosas <farosas@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/powerpc/include/asm/kvm_ppc.h |  1 -
- arch/powerpc/kvm/book3s.c          | 10 ----------
- arch/powerpc/kvm/e500.c            |  4 ++--
- arch/powerpc/kvm/e500mc.c          |  6 +++++-
- arch/powerpc/kvm/powerpc.c         |  2 +-
- 5 files changed, 8 insertions(+), 15 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/include/asm/kvm_ppc.h
-index bfacf12784dd..51a1824b0a16 100644
---- a/arch/powerpc/include/asm/kvm_ppc.h
-+++ b/arch/powerpc/include/asm/kvm_ppc.h
-@@ -118,7 +118,6 @@ extern int kvmppc_xlate(struct kvm_vcpu *vcpu, ulong eaddr,
- extern int kvmppc_core_vcpu_create(struct kvm_vcpu *vcpu);
- extern void kvmppc_core_vcpu_free(struct kvm_vcpu *vcpu);
- extern int kvmppc_core_vcpu_setup(struct kvm_vcpu *vcpu);
--extern int kvmppc_core_check_processor_compat(void);
- extern int kvmppc_core_vcpu_translate(struct kvm_vcpu *vcpu,
-                                       struct kvm_translation *tr);
- 
-diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
-index 6d525285dbe8..87283a0e33d8 100644
---- a/arch/powerpc/kvm/book3s.c
-+++ b/arch/powerpc/kvm/book3s.c
-@@ -999,16 +999,6 @@ int kvmppc_h_logical_ci_store(struct kvm_vcpu *vcpu)
- }
- EXPORT_SYMBOL_GPL(kvmppc_h_logical_ci_store);
- 
--int kvmppc_core_check_processor_compat(void)
--{
--	/*
--	 * We always return 0 for book3s. We check
--	 * for compatibility while loading the HV
--	 * or PR module
--	 */
--	return 0;
--}
--
- int kvmppc_book3s_hcall_implemented(struct kvm *kvm, unsigned long hcall)
- {
- 	return kvm->arch.kvm_ops->hcall_implemented(hcall);
-diff --git a/arch/powerpc/kvm/e500.c b/arch/powerpc/kvm/e500.c
-index c8b2b4478545..0ea61190ec04 100644
---- a/arch/powerpc/kvm/e500.c
-+++ b/arch/powerpc/kvm/e500.c
-@@ -314,7 +314,7 @@ static void kvmppc_core_vcpu_put_e500(struct kvm_vcpu *vcpu)
- 	kvmppc_booke_vcpu_put(vcpu);
- }
- 
--int kvmppc_core_check_processor_compat(void)
-+static int kvmppc_e500_check_processor_compat(void)
- {
- 	int r;
- 
-@@ -507,7 +507,7 @@ static int __init kvmppc_e500_init(void)
- 	unsigned long handler_len;
- 	unsigned long max_ivor = 0;
- 
--	r = kvmppc_core_check_processor_compat();
-+	r = kvmppc_e500_check_processor_compat();
- 	if (r)
- 		goto err_out;
- 
-diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
-index 57e0ad6a2ca3..4564aa27edcf 100644
---- a/arch/powerpc/kvm/e500mc.c
-+++ b/arch/powerpc/kvm/e500mc.c
-@@ -168,7 +168,7 @@ static void kvmppc_core_vcpu_put_e500mc(struct kvm_vcpu *vcpu)
- 	kvmppc_booke_vcpu_put(vcpu);
- }
- 
--int kvmppc_core_check_processor_compat(void)
-+int kvmppc_e500mc_check_processor_compat(void)
- {
- 	int r;
- 
-@@ -388,6 +388,10 @@ static int __init kvmppc_e500mc_init(void)
- {
- 	int r;
- 
-+	r = kvmppc_e500mc_check_processor_compat();
-+	if (r)
-+		goto err_out;
-+
- 	r = kvmppc_booke_init();
- 	if (r)
- 		goto err_out;
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index 5faf69421f13..d44b85ba8cef 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -442,7 +442,7 @@ int kvm_arch_hardware_enable(void)
- 
- int kvm_arch_check_processor_compat(void *opaque)
- {
--	return kvmppc_core_check_processor_compat();
-+	return 0;
- }
- 
- int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
-
-base-commit: 00e4493db7c6163d48d5b45034d1a77e16a1c8dc
--- 
-
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index af29490d9740..f0a6c245d1ff 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -1012,17 +1012,12 @@ long kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
+>   
+>   int kvm_arch_init(void *opaque)
+>   {
+> -	if (kvm_mips_callbacks) {
+> -		kvm_err("kvm: module already exists\n");
+> -		return -EEXIST;
+> -	}
+> -
+> -	return kvm_mips_emulation_init(&kvm_mips_callbacks);
+> +	return kvm_mips_emulation_init();
+>   }
+>   
+>   void kvm_arch_exit(void)
+>   {
+> -	kvm_mips_callbacks = NULL;
+> +
+>   }
+>   
+>   int kvm_arch_vcpu_ioctl_get_sregs(struct kvm_vcpu *vcpu,
+> diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
+> index c706f5890a05..dafab003ea0d 100644
+> --- a/arch/mips/kvm/vz.c
+> +++ b/arch/mips/kvm/vz.c
+> @@ -3304,7 +3304,10 @@ static struct kvm_mips_callbacks kvm_vz_callbacks = {
+>   	.vcpu_reenter = kvm_vz_vcpu_reenter,
+>   };
+>   
+> -int kvm_mips_emulation_init(struct kvm_mips_callbacks **install_callbacks)
+> +/* FIXME: Get rid of the callbacks now that trap-and-emulate is gone. */
+> +struct kvm_mips_callbacks *kvm_mips_callbacks = &kvm_vz_callbacks;
