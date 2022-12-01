@@ -2,60 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBBC63E54F
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 00:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5767263E71B
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 02:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiK3XSU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Nov 2022 18:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S229787AbiLABew (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Nov 2022 20:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbiK3XRX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Nov 2022 18:17:23 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E6A975C5
-        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 15:12:03 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id d186-20020a25e6c3000000b006f384608ed4so14687236ybh.14
-        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 15:12:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=8x0ZXn3EDc/IXE10wWIHQ6grwXVgVE97mHwl4hbdeQk=;
-        b=svX1/fceR089wUbhSQhk/jDIM6Hb1O6OQ2qpyY/bxODwo2l21O/+lF2M/oWYVFopBL
-         9iVSjpUD4ByvxHNMTLm2+Aqi3jkHju8zeyRE0QQ4MXEVtGJlbaZInZtfd0vZlRTxGrzq
-         JsifAxPm+HxofD/VWF9T5VpkTs3QrcfDSrRCCx24sbFpCjTOTpcatd79jNfZI53OekTV
-         PFymG/ZoNTP1yqeAIkXfkfQrmLz6NqML76C7vkqujoT5hbToc0RUrI+jh/dGR+3upHWw
-         Pv5WHPynR7w4dPeVQ7wg5KdVd27yXGQS19WxO6GBAvU3VTI/56EGnkKmcDKvptaKWmKb
-         82JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8x0ZXn3EDc/IXE10wWIHQ6grwXVgVE97mHwl4hbdeQk=;
-        b=4FzciwhcF93k3sYhTuwFI186s7ppv1Q+MaNkdziOV0vF8I3pyMKRghSJhR423MqojL
-         8y875NkLX0PlgGKajFh+8vy4zLAzKMv7jXFaSlvQQwfkjXUk05lLNS++t4C4NVtfCoYe
-         ZLx6UMQb7HMKEdR574Tja0NE3ClHm3PiZNL/rUbU/at0p3q/9pmmHpUJqXAg+KIWwB2e
-         nCpuWoXtzm+ctaye6Tl7JhYuTAJO5D/APRkQ8oDnNZ25JY1ko9Ab744vS2KC0jwGmtPQ
-         yuAkj3VqwUxbcfMmiE+DTE50MiCXnkl2OZvoqnneh2e9O+HErU1feoEDOrM9f+fRQAli
-         Zm5A==
-X-Gm-Message-State: ANoB5pmdtQlWbZeVsXwlR+ftVjtMjuFrWtU7a5DaO9uQ8ep8yUFH+lyo
-        y5VfCmBQ9Yqnr9YtLefJcbgvTrvavw0=
-X-Google-Smtp-Source: AA0mqf52TAnX1cWAQ96XDuvwPCxCy8n4wLWV5o+6wUepr4pO9rnWPI1F+BmGpVuyqa0Tukjf36JFuFHSLuw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:d40f:0:b0:6fb:a7f8:8b62 with SMTP id
- m15-20020a25d40f000000b006fba7f88b62mr1103250ybf.313.1669849864582; Wed, 30
- Nov 2022 15:11:04 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 30 Nov 2022 23:09:34 +0000
-In-Reply-To: <20221130230934.1014142-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20221130230934.1014142-1-seanjc@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130230934.1014142-51-seanjc@google.com>
-Subject: [PATCH v2 50/50] KVM: Clean up error labels in kvm_init()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        with ESMTP id S229515AbiLABev (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Nov 2022 20:34:51 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1721158034;
+        Wed, 30 Nov 2022 17:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669858491; x=1701394491;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YopNAk0o4R/Gm+eGMQdhkQKi75mYgT2RAg4YlRHu29c=;
+  b=bpOijAC9/nN+0QvL8R9oSxAj3J0jCxQfrlRlqh2OPCAkRn/Bw/TpgyHp
+   YyAxBuyMA6nvbKgsiNfuhfSReS2wFSAktO7kled0IayUPFiejOx4x//BO
+   XXtfopSO5z581B0dQzbKaV91xtOp9qiBRcZyrPvGqmDAXiwiaG+zM0EjX
+   12+A2jmHFc1lmoBqXClZ0fL2DQ2S/Lvb/rpvGmXmhoedHnqjXKkbtCtMM
+   xLtOASCxIALXp0N5Q3nAyXRxC97SrEfL5dTw7BGKKHgJ2KArX1ygd5NNs
+   y493+4wh7b1IP9V1nDtS4EcTamQhuGi0nM8L8tkvCRu1bSFIZi3gHTYtc
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="313186484"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="313186484"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 17:34:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="707875700"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="707875700"
+Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Nov 2022 17:34:38 -0800
+Message-ID: <ceb3bb1e98a3933c3bf34641d731c69b67d761b4.camel@linux.intel.com>
+Subject: Re: [PATCH 32/44] KVM: x86: Unify pr_fmt to use module name for all
+ KVM modules
+From:   Robert Hoo <robert.hu@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Anup Patel <anup@brainfault.org>,
@@ -67,11 +55,8 @@ To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Matthew Rosato <mjrosato@linux.ibm.com>,
         Eric Farman <farman@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paul Durrant <paul@xen.org>
-Cc:     James Morse <james.morse@arm.com>,
+        James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -81,75 +66,46 @@ Cc:     James Morse <james.morse@arm.com>,
         kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org,
         Isaku Yamahata <isaku.yamahata@intel.com>,
-        "=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?=" <philmd@linaro.org>,
         Fabiano Rosas <farosas@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Date:   Thu, 01 Dec 2022 09:34:37 +0800
+In-Reply-To: <Y4fg+MO2DusqMSZO@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+         <20221102231911.3107438-33-seanjc@google.com>
+         <ff0e8701d02ee161d064f92c8b742c2cc061bce0.camel@linux.intel.com>
+         <Y20r2NR9MaBbOGLn@google.com> <Y4fg+MO2DusqMSZO@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Convert the last two "out" lables to "err" labels now that the dust has
-settled, i.e. now that there are no more planned changes to the order
-of things in kvm_init().
+On Wed, 2022-11-30 at 23:02 +0000, Sean Christopherson wrote:
+> On Thu, Nov 10, 2022, Sean Christopherson wrote:
+> > On Thu, Nov 10, 2022, Robert Hoo wrote:
+> > > After this patch set, still find some printk()s left in
+> > > arch/x86/kvm/*,
+> > > consider clean all of them up?
+> > 
+> > Hmm, yeah, I suppose at this point it makes sense to tack on a
+> > patch to clean
+> > them up.
+> 
+> Actually, I'm going to pass on this for now.  The series is already
+> too big.  I'll
+> add this to my todo list for the future.
 
-Use "err" instead of "out" as it's easier to describe what failed than it
-is to describe what needs to be unwound, e.g. if allocating a per-CPU kick
-mask fails, KVM needs to free any masks that were allocated, and of course
-needs to unwind previous operations.
-
-Reported-by: Chao Gao <chao.gao@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- virt/kvm/kvm_main.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 6a2be96557c2..b8c6bfb46066 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -5907,14 +5907,14 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- 					   NULL);
- 	if (!kvm_vcpu_cache) {
- 		r = -ENOMEM;
--		goto out_free_3;
-+		goto err_vcpu_cache;
- 	}
- 
- 	for_each_possible_cpu(cpu) {
- 		if (!alloc_cpumask_var_node(&per_cpu(cpu_kick_mask, cpu),
- 					    GFP_KERNEL, cpu_to_node(cpu))) {
- 			r = -ENOMEM;
--			goto out_free_4;
-+			goto err_cpu_kick_mask;
- 		}
- 	}
- 
-@@ -5956,11 +5956,11 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
- err_async_pf:
- 	kvm_irqfd_exit();
- err_irqfd:
--out_free_4:
-+err_cpu_kick_mask:
- 	for_each_possible_cpu(cpu)
- 		free_cpumask_var(per_cpu(cpu_kick_mask, cpu));
- 	kmem_cache_destroy(kvm_vcpu_cache);
--out_free_3:
-+err_vcpu_cache:
- #ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
- 	unregister_syscore_ops(&kvm_syscore_ops);
- 	unregister_reboot_notifier(&kvm_reboot_notifier);
--- 
-2.38.1.584.g0f3c55d4c2-goog
+That's all right, thanks for update.
 
