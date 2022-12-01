@@ -2,58 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A8563E993
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 07:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EAC63E9B3
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 07:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiLAGFB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Dec 2022 01:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S229771AbiLAGOm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Dec 2022 01:14:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLAGE7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 01:04:59 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2050F9AE18;
-        Wed, 30 Nov 2022 22:04:59 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id s186so912045oia.5;
-        Wed, 30 Nov 2022 22:04:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SQ6eCCvP2RIqVFnGOfA4yG/2BtjQTMpdxc/JWs/IikY=;
-        b=PvHY6dBEyebJE6QNI6Wjq2MneXIl4rTpGS7fBC7Qv6R/Yiga7OIh4/Pj4BgHnrpndG
-         GrmgooNZOVFverQjG/PwQwa+jNTTeu5eaofi0fQ6sUgKspL/GgqiAAoT7DsAPA/bcNeL
-         CuuBxemNVt9HiH103qegQcLdL8byYtx9q2Sy8nfwvxBZulJQ2g5EAZZ4I/KTXdccwea1
-         xayFiXCzBGxNpmCBPyhigLfeSVQaNBWPI/KTZtc4+CqnxGM8xxSJGEpvpTJVaXAoUIMI
-         LhDFRKO2nzxUjEipEZonE2WghJNoafzVk4PIFC+1xTm7vj4OLlTNuK0dUH2dye1MdJio
-         EOHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SQ6eCCvP2RIqVFnGOfA4yG/2BtjQTMpdxc/JWs/IikY=;
-        b=dnzYRuVBOJfA56lOlWjR/3WF0Z0Fjm3n0v8f7/OJcHPT7/LmRqv7H5l2qNRkKNh9yx
-         WyX9eyOIbJKRP5VP9NxC7znaYfNYTl/+tAgfeFcNC7mQ97DUoQwO2O6abDSKnFENADJj
-         y+WydRCnnry+pLKeus0xUDQUcdLivdTuw5T3xZEyrxHYC5wMyiFyTrRpXjJyaxvYAp+g
-         yd/eZMg67b9xBysiIYlucgay23e3rYrdblir0pm/AbO2u6+/BdLe9ruqTwyAKVZUTe/H
-         iYkW49jaOv7lKR9K/oRTXzdSOk2tsWxi3z+t/4Al3E+VB4xScW7tLNdSzECFPxzAm9Iu
-         nOGg==
-X-Gm-Message-State: ANoB5pnrR1okCRFCmjTjKjFv/WDmgXr6nqdMtC5k0tUZzCbFBopzJgVU
-        Aneve+pJMd8CYcRAGEW2+pOXMpAFmKEUjJT1uWk=
-X-Google-Smtp-Source: AA0mqf5l2e4XTILLZHTH7QTRBPvz28RAyHNavvCrAHgTBlylFcIYKmUFvkgoGR7uLixlsP/mcB3a5GSDsiHvA3KSd08=
-X-Received: by 2002:aca:60c6:0:b0:35a:51fc:2134 with SMTP id
- u189-20020aca60c6000000b0035a51fc2134mr22358640oib.144.1669874698405; Wed, 30
- Nov 2022 22:04:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20221130141040.32447-1-arinc.unal@arinc9.com> <20221130141040.32447-5-arinc.unal@arinc9.com>
-In-Reply-To: <20221130141040.32447-5-arinc.unal@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 1 Dec 2022 07:04:47 +0100
-Message-ID: <CAMhs-H_yk4_ieChz9ZaMgZiQNSO7RxhAXPN0nHWWxbox=qY_mw@mail.gmail.com>
-Subject: Re: [PATCH 4/5] mips: dts: remove label = "cpu" from DSA dt-binding
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+        with ESMTP id S229751AbiLAGOk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 01:14:40 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09D0A85FC
+        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 22:14:33 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p0cot-0005vD-4h; Thu, 01 Dec 2022 07:13:15 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p0coe-0002BZ-Us; Thu, 01 Dec 2022 07:13:00 +0100
+Date:   Thu, 1 Dec 2022 07:13:00 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         soc@kernel.org, "David S. Miller" <davem@davemloft.net>,
@@ -75,7 +46,7 @@ Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         <bcm-kernel-feedback-list@broadcom.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
         Hans Ulli Kroll <ulli.kroll@googlemail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -97,6 +68,7 @@ Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Stefan Agner <stefan@agner.ch>,
         Heiko Stuebner <heiko@sntech.de>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
@@ -113,29 +85,66 @@ Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
         linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/5] dt-bindings: net: qca,ar71xx: remove label = "cpu"
+ from examples
+Message-ID: <20221201061300.GD19642@pengutronix.de>
+References: <20221130141040.32447-1-arinc.unal@arinc9.com>
+ <20221130141040.32447-2-arinc.unal@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221130141040.32447-2-arinc.unal@arinc9.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 3:14 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
-9.com> wrote:
->
-> This is not used by the DSA dt-binding, so remove it from all devicetrees=
-.
->
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+On Wed, Nov 30, 2022 at 05:10:36PM +0300, Arınç ÜNAL wrote:
+> This is not used by the DSA dt-binding, so remove it from the examples.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+
+Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+
+Thx!
+
 > ---
->  arch/mips/boot/dts/ralink/mt7621.dtsi | 1 -
+>  Documentation/devicetree/bindings/net/qca,ar71xx.yaml | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/qca,ar71xx.yaml b/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
+> index 1ebf9e8c8a1d..89f94b31b546 100644
+> --- a/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
+> +++ b/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
+> @@ -123,7 +123,6 @@ examples:
+>  
+>                      switch_port0: port@0 {
+>                          reg = <0x0>;
+> -                        label = "cpu";
+>                          ethernet = <&eth1>;
+>  
+>                          phy-mode = "gmii";
+> -- 
+> 2.34.1
+> 
+> 
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-
-Thanks,
-    Sergio Paracuellos
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
