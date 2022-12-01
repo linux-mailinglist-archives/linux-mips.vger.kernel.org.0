@@ -2,60 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586A763F466
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 16:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E2863F55D
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 17:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbiLAPoE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Dec 2022 10:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
+        id S232221AbiLAQi1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Dec 2022 11:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbiLAPoD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 10:44:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC96CCA
-        for <linux-mips@vger.kernel.org>; Thu,  1 Dec 2022 07:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669909384;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uICPaEENN8EB00poBiDynBWP9unBSRZ6Eo0ZeloiILw=;
-        b=ShDSpJFN0QDtH03IzK5wfnlyUH76O3c7dsbxoFK+KF0E2RVlEAR3LFhECLAXd86gw9UQ/X
-        3FrWrq7UepVYdRDfFbakv+ciRtEt2VkXedgY1ubBB3Thq6PYJfP/roq+NZqQvA1N2Tkfx1
-        mPSxDMX7PJPfke0HISThbxAYOMGvlMc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-515-7vArYQFqM3qNP8HpbZkXyw-1; Thu, 01 Dec 2022 10:43:03 -0500
-X-MC-Unique: 7vArYQFqM3qNP8HpbZkXyw-1
-Received: by mail-wr1-f71.google.com with SMTP id v14-20020adf8b4e000000b0024174021277so533453wra.13
-        for <linux-mips@vger.kernel.org>; Thu, 01 Dec 2022 07:43:03 -0800 (PST)
+        with ESMTP id S230394AbiLAQiZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 11:38:25 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88EE5AE0A
+        for <linux-mips@vger.kernel.org>; Thu,  1 Dec 2022 08:38:23 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id w2so833569pfq.12
+        for <linux-mips@vger.kernel.org>; Thu, 01 Dec 2022 08:38:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wz5UjU3Ma0W7cBTZ/63jSNwcUzSf/RN7ETO0YflOK9Q=;
+        b=L5oONEpJeyYInhCN8kEGfJ8WS2VPlfmSQI0EIRyACnSb62Ho4uiLAZ+22FZ0LpKSBY
+         OanLGdeorUn/O6YHVn5BHqcWoMtKOfzbPKcz+4fsn48JXXYOuwBU81HsoXu4yIA+KxBs
+         oNf69ULLkYXBFawHATlUKtmTRlCCGuue7O3x4Uj20kNa312jwW6CLd6dDy2pzPGk3DaL
+         y4jm5SpqWS/wMH/C2TjT2ihvVuFcoRw2TnuuxPCYPfzDwkDLPEA8hE11/Idhqhxr7xt0
+         rj/FXhrQIb1ypgd2I2CBp8L/oyRKWO3NUq8Jq7LgrgnoUKAu1/kU3hKmcHIeaOcvmDNO
+         M6Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uICPaEENN8EB00poBiDynBWP9unBSRZ6Eo0ZeloiILw=;
-        b=fR6rQ98O76r4U2vsRl+XRjbJhftO9sGrga+njw33WjStuiaWiAwyI6eDH5A6SFsB0c
-         jtTuVGd+xaCsUCMnehO4nmy2w+daHm594HWOBZOnfSyUHYkKg/7OU7bOJLx5l/FIwTbh
-         tym1WGBCkXbZ7O4JEK8Ey7XLbi0Ye7R47/PlD5vzc9ONVqngewJiN6so/1++2tPbgH+w
-         IM/4gl+w+UELjc+/duHFnD0wXD2JJ60+A1d40DG+K4RAvOBPFaFtA7WEYvOQFcYJ50Id
-         mJTJOWbcWZuiNXnWjqyVCgBTDWePgg8raLuStR71be1vfETMUpGaMNeTG7cv4YbewuPV
-         PQcA==
-X-Gm-Message-State: ANoB5pnRpONg5+PmZcSEN9646PmDDdCuzQxGh2lpJQS9ZaJwbasS6Vbw
-        8z8mz19p4o2vh8kLvyECuICpE2nFTQ7W4Kjj+yg1n7PwN4h2gKHCKgcrC5+3//5l7kUGXPSjXZA
-        yM3cVO/0cIW58RjZ/vx7QDw==
-X-Received: by 2002:adf:ecd2:0:b0:236:6fd9:9efa with SMTP id s18-20020adfecd2000000b002366fd99efamr39370659wro.101.1669909382063;
-        Thu, 01 Dec 2022 07:43:02 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4imAxqHpsHzf4lwMnv25YvuYKadYTHsioCJaPqnZlFtnFG20xMn8tkXOhL/ZrHUpQYnEbeIQ==
-X-Received: by 2002:adf:ecd2:0:b0:236:6fd9:9efa with SMTP id s18-20020adfecd2000000b002366fd99efamr39370625wro.101.1669909381800;
-        Thu, 01 Dec 2022 07:43:01 -0800 (PST)
-Received: from ovpn-194-141.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id bg28-20020a05600c3c9c00b003cfa3a12660sm9307122wmb.1.2022.12.01.07.42.59
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wz5UjU3Ma0W7cBTZ/63jSNwcUzSf/RN7ETO0YflOK9Q=;
+        b=dC8MkUgsAS0ofCDvObrMLzGSlqGeGx4ehif1aC3Yne9QRd7TT6xHY4s75VnhcaOr5P
+         5Lv+9T9l1ICs9vzcweCCZCo38YMnEbp0gVJ1rQSNGxAKgBM/44dAaWL1TRlrCap3C+DO
+         fEe7TomHT7Kkn5Vk1MHyTUdly1dEYYeQCXs8ku+fz+UH3datDXrgx1pouzqsToWuRFvw
+         +QoLBSumKGmpKluHGEokkb/t6GXZHbhs7OfbWeamB3kIspWk9Bz4RxPBy8xeOw26q9Tz
+         wrqiQoRsdNZ4sjiB49DbBLbZ6JPOUWCMz0BJhvxzvhLdvr6MLUmZJr4Lla+Gj83iKHcm
+         OZ+g==
+X-Gm-Message-State: ANoB5pmXQJafNADp3Djudhd0tIcixtB02CWb1OlFgqzQDYjn+KWYWUOE
+        ix2LLRxSyKP47qZb4MGP/n8pSw==
+X-Google-Smtp-Source: AA0mqf7E8VTs9g+yA9GqMgTdFbO4YLYoa36a9KLdCj074cztIQB7gniXVzh1et27ldGMC17rtCxmqQ==
+X-Received: by 2002:aa7:8512:0:b0:575:65ff:8831 with SMTP id v18-20020aa78512000000b0057565ff8831mr16235817pfn.80.1669912703144;
+        Thu, 01 Dec 2022 08:38:23 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm5118172pjf.17.2022.12.01.08.38.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 07:43:00 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     James Morse <james.morse@arm.com>,
+        Thu, 01 Dec 2022 08:38:22 -0800 (PST)
+Date:   Thu, 1 Dec 2022 16:38:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -68,39 +79,25 @@ Cc:     James Morse <james.morse@arm.com>,
         linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
         Cornelia Huck <cohuck@redhat.com>,
         Isaku Yamahata <isaku.yamahata@intel.com>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
         Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
         Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paul Durrant <paul@xen.org>
-Subject: Re: [PATCH v2 10/50] KVM: VMX: Reset eVMCS controls in VP assist
- page during hardware disabling
-In-Reply-To: <20221130230934.1014142-11-seanjc@google.com>
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2 26/50] KVM: PPC: Move processor compatibility check to
+ module init
+Message-ID: <Y4jXuh4P9Oibki6W@google.com>
 References: <20221130230934.1014142-1-seanjc@google.com>
- <20221130230934.1014142-11-seanjc@google.com>
-Date:   Thu, 01 Dec 2022 16:42:58 +0100
-Message-ID: <87h6yff7ul.fsf@ovpn-194-141.brq.redhat.com>
+ <20221130230934.1014142-27-seanjc@google.com>
+ <87cz93snqc.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87cz93snqc.fsf@mpe.ellerman.id.au>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,119 +105,170 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Thu, Dec 01, 2022, Michael Ellerman wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> > Move KVM PPC's compatibility checks to their respective module_init()
+> > hooks, there's no need to wait until KVM's common compat check, nor is
+> > there a need to perform the check on every CPU (provided by common KVM's
+> > hook), as the compatibility checks operate on global data.
+> >
+> >   arch/powerpc/include/asm/cputable.h: extern struct cpu_spec *cur_cpu_spec;
+> >   arch/powerpc/kvm/book3s.c: return 0
+> >   arch/powerpc/kvm/e500.c: strcmp(cur_cpu_spec->cpu_name, "e500v2")
+> >   arch/powerpc/kvm/e500mc.c: strcmp(cur_cpu_spec->cpu_name, "e500mc")
+> >                              strcmp(cur_cpu_spec->cpu_name, "e5500")
+> >                              strcmp(cur_cpu_spec->cpu_name, "e6500")
+> 
+> I'm not sure that output is really useful in the change log unless you
+> explain more about what it is.
 
-> Reset the eVMCS controls in the per-CPU VP assist page during hardware
-> disabling instead of waiting until kvm-intel's module exit.  The controls
-> are activated if and only if KVM creates a VM, i.e. don't need to be
-> reset if hardware is never enabled.
->
-> Doing the reset during hardware disabling will naturally fix a potential
-> NULL pointer deref bug once KVM disables CPU hotplug while enabling and
-> disabling hardware (which is necessary to fix a variety of bugs).  If the
-> kernel is running as the root partition, the VP assist page is unmapped
-> during CPU hot unplug, and so KVM's clearing of the eVMCS controls needs
-> to occur with CPU hot(un)plug disabled, otherwise KVM could attempt to
-> write to a CPU's VP assist page after it's unmapped.
->
-> Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++-----------------
->  1 file changed, 30 insertions(+), 20 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index cea8c07f5229..d85d175dca70 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -551,6 +551,33 @@ static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
->  	return 0;
->  }
+Agreed, I got lazy.  I'll write a proper description.
+ 
+> > diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
+> > index 57e0ad6a2ca3..795667f7ebf0 100644
+> > --- a/arch/powerpc/kvm/e500mc.c
+> > +++ b/arch/powerpc/kvm/e500mc.c
+> > @@ -388,6 +388,10 @@ static int __init kvmppc_e500mc_init(void)
+> >  {
+> >  	int r;
+> >  
+> > +	r = kvmppc_e500mc_check_processor_compat();
+> > +	if (r)
+> > +		return kvmppc_e500mc;
 >  
-> +static void hv_reset_evmcs(void)
-> +{
-> +	struct hv_vp_assist_page *vp_ap;
-> +
-> +	if (!static_branch_unlikely(&enable_evmcs))
-> +		return;
-> +
-> +	/*
-> +	 * KVM should enable eVMCS if and only if all CPUs have a VP assist
-> +	 * page, and should reject CPU onlining if eVMCS is enabled the CPU
-> +	 * doesn't have a VP assist page allocated.
-> +	 */
-> +	vp_ap = hv_get_vp_assist_page(smp_processor_id());
-> +	if (WARN_ON_ONCE(!vp_ap))
-> +		return;
-> +
+> This doesn't build:
+> 
+> linux/arch/powerpc/kvm/e500mc.c: In function ‘kvmppc_e500mc_init’:
+> linux/arch/powerpc/kvm/e500mc.c:391:13: error: implicit declaration of function ‘kvmppc_e500mc_check_processor_compat’; did you mean ‘kvmppc_core_check_processor_compat’? [-Werror=implicit-function-declaration]
+>   391 |         r = kvmppc_e500mc_check_processor_compat();
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |             kvmppc_core_check_processor_compat
+> linux/arch/powerpc/kvm/e500mc.c:393:24: error: ‘kvmppc_e500mc’ undeclared (first use in this function); did you mean ‘kvm_ops_e500mc’?
+>   393 |                 return kvmppc_e500mc;
+>       |                        ^~~~~~~~~~~~~
+>       |                        kvm_ops_e500mc
+> linux/arch/powerpc/kvm/e500mc.c:393:24: note: each undeclared identifier is reported only once for each function it appears in
 
-In case my understanding is correct, this may actually get triggered
-for Hyper-V root partition: vmx_hardware_disable() gets called from
-kvm_dying_cpu() which has its own CPUHP_AP_KVM_STARTING stage. VP page
-unmapping happens in hv_cpu_die() which uses generic CPUHP_AP_ONLINE_DYN
-(happens first on CPU oflining AFAIR). I believe we need to introduce a
-new CPUHP_AP_HYPERV_STARTING stage and put it before
-CPUHP_AP_KVM_STARTING so it happens after it upon offlining.
+Huh, CONFIG_PPC_E500MC got unselected in the config I use to compile test this
+flavor.  I suspect I botched an oldconfig at some point.
+ 
+Anyways, fixed that and the bugs.
 
-The issue is likely theoretical as Hyper-V root partition is a very
-special case, I'm not sure whether KVM is used there and whether CPU
-offlining is possible. In any case, WARN_ON_ONCE() is much better than
-NULL pointer dereference we have now :-)
+Thanks much!
 
-> +	/*
-> +	 * Reset everything to support using non-enlightened VMCS access later
-> +	 * (e.g. when we reload the module with enlightened_vmcs=0)
-> +	 */
-> +	vp_ap->nested_control.features.directhypercall = 0;
-> +	vp_ap->current_nested_vmcs = 0;
-> +	vp_ap->enlighten_vmentry = 0;
-> +}
-> +
-> +#else /* IS_ENABLED(CONFIG_HYPERV) */
-> +static void hv_reset_evmcs(void) {}
->  #endif /* IS_ENABLED(CONFIG_HYPERV) */
->  
->  /*
-> @@ -2496,6 +2523,8 @@ static void vmx_hardware_disable(void)
->  	if (cpu_vmxoff())
->  		kvm_spurious_fault();
->  
-> +	hv_reset_evmcs();
-> +
->  	intel_pt_handle_vmx(0);
->  }
->  
-> @@ -8462,27 +8491,8 @@ static void vmx_exit(void)
->  	kvm_exit();
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
-> -	if (static_branch_unlikely(&enable_evmcs)) {
-> -		int cpu;
-> -		struct hv_vp_assist_page *vp_ap;
-> -		/*
-> -		 * Reset everything to support using non-enlightened VMCS
-> -		 * access later (e.g. when we reload the module with
-> -		 * enlightened_vmcs=0)
-> -		 */
-> -		for_each_online_cpu(cpu) {
-> -			vp_ap =	hv_get_vp_assist_page(cpu);
-> -
-> -			if (!vp_ap)
-> -				continue;
-> -
-> -			vp_ap->nested_control.features.directhypercall = 0;
-> -			vp_ap->current_nested_vmcs = 0;
-> -			vp_ap->enlighten_vmentry = 0;
-> -		}
-> -
-> +	if (static_branch_unlikely(&enable_evmcs))
->  		static_branch_disable(&enable_evmcs);
-> -	}
->  #endif
->  	vmx_cleanup_l1d_flush();
+--
+Subject: [PATCH] KVM: PPC: Move processor compatibility check to module init
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Move KVM PPC's compatibility checks to their respective module_init()
+hooks, there's no need to wait until KVM's common compat check, nor is
+there a need to perform the check on every CPU (provided by common KVM's
+hook).  The compatibility checks are either a nop (Book3S), or simply
+check the CPU name stored in the global CPU spec (e500 and e500mc).
 
+Cc: Fabiano Rosas <farosas@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/powerpc/include/asm/kvm_ppc.h |  1 -
+ arch/powerpc/kvm/book3s.c          | 10 ----------
+ arch/powerpc/kvm/e500.c            |  4 ++--
+ arch/powerpc/kvm/e500mc.c          |  6 +++++-
+ arch/powerpc/kvm/powerpc.c         |  2 +-
+ 5 files changed, 8 insertions(+), 15 deletions(-)
+
+diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/include/asm/kvm_ppc.h
+index bfacf12784dd..51a1824b0a16 100644
+--- a/arch/powerpc/include/asm/kvm_ppc.h
++++ b/arch/powerpc/include/asm/kvm_ppc.h
+@@ -118,7 +118,6 @@ extern int kvmppc_xlate(struct kvm_vcpu *vcpu, ulong eaddr,
+ extern int kvmppc_core_vcpu_create(struct kvm_vcpu *vcpu);
+ extern void kvmppc_core_vcpu_free(struct kvm_vcpu *vcpu);
+ extern int kvmppc_core_vcpu_setup(struct kvm_vcpu *vcpu);
+-extern int kvmppc_core_check_processor_compat(void);
+ extern int kvmppc_core_vcpu_translate(struct kvm_vcpu *vcpu,
+                                       struct kvm_translation *tr);
+ 
+diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+index 6d525285dbe8..87283a0e33d8 100644
+--- a/arch/powerpc/kvm/book3s.c
++++ b/arch/powerpc/kvm/book3s.c
+@@ -999,16 +999,6 @@ int kvmppc_h_logical_ci_store(struct kvm_vcpu *vcpu)
+ }
+ EXPORT_SYMBOL_GPL(kvmppc_h_logical_ci_store);
+ 
+-int kvmppc_core_check_processor_compat(void)
+-{
+-	/*
+-	 * We always return 0 for book3s. We check
+-	 * for compatibility while loading the HV
+-	 * or PR module
+-	 */
+-	return 0;
+-}
+-
+ int kvmppc_book3s_hcall_implemented(struct kvm *kvm, unsigned long hcall)
+ {
+ 	return kvm->arch.kvm_ops->hcall_implemented(hcall);
+diff --git a/arch/powerpc/kvm/e500.c b/arch/powerpc/kvm/e500.c
+index c8b2b4478545..0ea61190ec04 100644
+--- a/arch/powerpc/kvm/e500.c
++++ b/arch/powerpc/kvm/e500.c
+@@ -314,7 +314,7 @@ static void kvmppc_core_vcpu_put_e500(struct kvm_vcpu *vcpu)
+ 	kvmppc_booke_vcpu_put(vcpu);
+ }
+ 
+-int kvmppc_core_check_processor_compat(void)
++static int kvmppc_e500_check_processor_compat(void)
+ {
+ 	int r;
+ 
+@@ -507,7 +507,7 @@ static int __init kvmppc_e500_init(void)
+ 	unsigned long handler_len;
+ 	unsigned long max_ivor = 0;
+ 
+-	r = kvmppc_core_check_processor_compat();
++	r = kvmppc_e500_check_processor_compat();
+ 	if (r)
+ 		goto err_out;
+ 
+diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
+index 57e0ad6a2ca3..4564aa27edcf 100644
+--- a/arch/powerpc/kvm/e500mc.c
++++ b/arch/powerpc/kvm/e500mc.c
+@@ -168,7 +168,7 @@ static void kvmppc_core_vcpu_put_e500mc(struct kvm_vcpu *vcpu)
+ 	kvmppc_booke_vcpu_put(vcpu);
+ }
+ 
+-int kvmppc_core_check_processor_compat(void)
++int kvmppc_e500mc_check_processor_compat(void)
+ {
+ 	int r;
+ 
+@@ -388,6 +388,10 @@ static int __init kvmppc_e500mc_init(void)
+ {
+ 	int r;
+ 
++	r = kvmppc_e500mc_check_processor_compat();
++	if (r)
++		goto err_out;
++
+ 	r = kvmppc_booke_init();
+ 	if (r)
+ 		goto err_out;
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index 5faf69421f13..d44b85ba8cef 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -442,7 +442,7 @@ int kvm_arch_hardware_enable(void)
+ 
+ int kvm_arch_check_processor_compat(void *opaque)
+ {
+-	return kvmppc_core_check_processor_compat();
++	return 0;
+ }
+ 
+ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+
+base-commit: 00e4493db7c6163d48d5b45034d1a77e16a1c8dc
 -- 
-Vitaly
 
