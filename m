@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B1363E9B9
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 07:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B4963E9DB
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Dec 2022 07:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiLAGOr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Dec 2022 01:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        id S229802AbiLAGWE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Dec 2022 01:22:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiLAGOm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 01:14:42 -0500
+        with ESMTP id S229795AbiLAGV4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 01:21:56 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C19A85C4
-        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 22:14:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F421AB035
+        for <linux-mips@vger.kernel.org>; Wed, 30 Nov 2022 22:21:55 -0800 (PST)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1p0cpU-0005yr-J8; Thu, 01 Dec 2022 07:13:52 +0100
+        id 1p0cwR-00075x-2t; Thu, 01 Dec 2022 07:21:03 +0100
 Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1p0cpS-0002De-7V; Thu, 01 Dec 2022 07:13:50 +0100
-Date:   Thu, 1 Dec 2022 07:13:50 +0100
+        id 1p0cwN-0002Vk-93; Thu, 01 Dec 2022 07:20:59 +0100
+Date:   Thu, 1 Dec 2022 07:20:59 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
@@ -78,23 +78,22 @@ Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Frank Wunderlich <frank-w@public-files.de>,
         Michael Riesch <michael.riesch@wolfvision.net>,
         Oleksij Rempel <linux@rempel-privat.de>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-renesas-soc@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 4/5] mips: dts: remove label = "cpu" from DSA dt-binding
-Message-ID: <20221201061350.GE19642@pengutronix.de>
+        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 2/5] arm: dts: remove label = "cpu" from DSA dt-binding
+Message-ID: <20221201062059.GF19642@pengutronix.de>
 References: <20221130141040.32447-1-arinc.unal@arinc9.com>
- <20221130141040.32447-5-arinc.unal@arinc9.com>
+ <20221130141040.32447-3-arinc.unal@arinc9.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221130141040.32447-5-arinc.unal@arinc9.com>
+In-Reply-To: <20221130141040.32447-3-arinc.unal@arinc9.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL:  http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -113,27 +112,13 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 05:10:39PM +0300, Arınç ÜNAL wrote:
+On Wed, Nov 30, 2022 at 05:10:37PM +0300, Arınç ÜNAL wrote:
 > This is not used by the DSA dt-binding, so remove it from all devicetrees.
 > 
 > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
->  arch/mips/boot/dts/qca/ar9331.dtsi    | 1 -
->  arch/mips/boot/dts/ralink/mt7621.dtsi | 1 -
->  2 files changed, 2 deletions(-)
-> 
-> diff --git a/arch/mips/boot/dts/qca/ar9331.dtsi b/arch/mips/boot/dts/qca/ar9331.dtsi
-> index c4102b280b47..768ac0f869b1 100644
-> --- a/arch/mips/boot/dts/qca/ar9331.dtsi
-> +++ b/arch/mips/boot/dts/qca/ar9331.dtsi
-> @@ -176,7 +176,6 @@ ports {
->  
->  						switch_port0: port@0 {
->  							reg = <0x0>;
-> -							label = "cpu";
->  							ethernet = <&eth1>;
->  
->  							phy-mode = "gmii";
+>  arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi                   | 1 -
+>  arch/arm/boot/dts/imx6qp-prtwd3.dts                       | 1 -
 
 Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
