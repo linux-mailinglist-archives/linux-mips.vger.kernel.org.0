@@ -2,104 +2,224 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10414640A53
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Dec 2022 17:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FE0640AD3
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Dec 2022 17:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233782AbiLBQMG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Dec 2022 11:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S234100AbiLBQbz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Dec 2022 11:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbiLBQL7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Dec 2022 11:11:59 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B63ACA5C
-        for <linux-mips@vger.kernel.org>; Fri,  2 Dec 2022 08:11:58 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id q6so1817860uao.9
-        for <linux-mips@vger.kernel.org>; Fri, 02 Dec 2022 08:11:58 -0800 (PST)
+        with ESMTP id S234174AbiLBQba (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Dec 2022 11:31:30 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8A19A4E7
+        for <linux-mips@vger.kernel.org>; Fri,  2 Dec 2022 08:31:23 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 82so4833818pgc.0
+        for <linux-mips@vger.kernel.org>; Fri, 02 Dec 2022 08:31:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TAefJrRL7K4A+RMGngmdLs8YqkmKSbBIjbXCxnKmhbs=;
-        b=OTdGscoyyXY4sJr8w9cmCX0xSvhEErZUBMdHPPKX/5+iYfWQdgtRA4jjcNYzRwCGFQ
-         rU6lS4qgX5LkqwunFDKXyrFmNIkukP6ir/ILfkqTFuvG0gbbtlUSljSwUxGUOl2HDdET
-         SwhUO7sNYmbE+qzpnT3fuzzUzQU/YUivMVuklk0khfLjB7pEbm1EvNDxRMGtRV1KIzC0
-         zeEhRu5/xAlTU2/SPZ8ZHZNt+Z3ZT0Wg+Odu6EdGqbdqbwDF2yJz/eh/QzqqDYuXMEDk
-         3VHckgxrYQUX1IKG4EAs/X+d4p66OEl+1gbN16LQZjnW4pULS6EOCE0G+0jvhUMmmWVG
-         oCEg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RsaZyzKJOuyFVoAfYZw39HCTNem7JcJUeEd5tgG0e8Y=;
+        b=JuBGytq8t5tr5SVnzdgiUWfOnnv3YoaxJ/EPOkhREUxf0Lu7Q36UoNdircCDscdJe1
+         Ne3pPvJP46804SbaTNQC7CD0nyOf+6DUf7RttT6MnjeqYf2tKeLulPmMzXN6C0vzpI5a
+         kmqZ1b2nEnQBpLkucgI+K9CNuj0M6idXU9Z/tpGiUmJvFfSAKZUEJ0tYDDD5QTm1XgZh
+         KUg4c1fCmmWL1AfPqQe/Q+7M8gt59bLLwzR5wrgb2mkyqnFKW9rqK8zn1jiKosWg6tGN
+         xvGvpF7x1Z6otoY0Ddi4ibaMdJj9vaSCpFDZW9nFUZDm9ecAOG+G1OAJWfl9eXVsVqrU
+         2Qew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TAefJrRL7K4A+RMGngmdLs8YqkmKSbBIjbXCxnKmhbs=;
-        b=5w+1T3CzJdapdpiQXCmZOMiCrE3mW3AYKpbdRMXSY+1Ft4/G0qlH2RODQhgiSWqdUV
-         JJYIKMmWEZGNgBcc7TnZFMnXh0Ek2LCOQWols5NIjYtzBOINQ4mNbYBKrPdQbiyetJ1+
-         esOayGz4NVg22a8+loRXgef0qO8sF9K4UKBQqoZ7vPVk1kV6hvrSqbsj8pylzP+vN2DH
-         YS517+/iGFF4NdCipam+JqTm09cv1+qDIu02gDTVOaEq91gIIgDT5FvlthPKPdm16T70
-         fbF2fTkr8joSPHkqb5zr2QD1rpyC+LtcR5rwFwQFL8/7SJIx/+/jZ+U8F18gXsjG+1Ws
-         wHfg==
-X-Gm-Message-State: ANoB5pnEMMeYlTunBJvIy8C5ggsIneozASxNjQeFLEXGFSOWMCp/TOsn
-        V7Did98i168CSCbmeSKKZ72NpFrsuGwaiZ34rILzoQ==
-X-Google-Smtp-Source: AA0mqf6y8bCMPq1LTVZ8bKCUOnTJ4Vq1GPxxgwR2WlG4b/Lw466vVq5YLikadhKWjms/IOLGdHK46U6YPHGpuihZdkw=
-X-Received: by 2002:ab0:734e:0:b0:419:18c7:58d with SMTP id
- k14-20020ab0734e000000b0041918c7058dmr17210680uap.119.1669997517287; Fri, 02
- Dec 2022 08:11:57 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RsaZyzKJOuyFVoAfYZw39HCTNem7JcJUeEd5tgG0e8Y=;
+        b=nPnmvQvM9Q/Z82ymLKeYXWCswr1IBRPMhYgIs7FtmDEvwT3G5mjGmfVhWPotGbjWVp
+         YxAbrr/BwoXI5TJ7gPeeTuKWaYC7HaV2es8AFeD5MovINFVtsUeDgKb6Ju7LLfVYBDHH
+         lOeVxO0n3csAwPglqzF9vnQOSI2o1FSIAL8idhIYqbfv7bCzJrlNSmvg93VMS3X/FhGy
+         G9e1bfLxJYYAwsuazJ9GGVNNndLcTDNBaFC2CIlU1XuKonEtVp05xMD6C8aNcF6GRzud
+         /+f7J2/2tpOH0jqYmbkwuK6OjktSa+lV76Bk1PdhzTBp0+HqP7DjreTdAh2og06zAxy7
+         x4pg==
+X-Gm-Message-State: ANoB5pmkJbb/E1+otGKqtwC9WRGoo1hqtLROFYM4nrVjWkWmXklYmHa1
+        nGp/YF5FRcpITzhYE1lS/Ldt9w==
+X-Google-Smtp-Source: AA0mqf5YDkgE2z83Sno75+zaFki0bhnK0sTw98u0yDu/SzUnzr69GggIhlhUBJVYlhlyDIQeZ9Y6nA==
+X-Received: by 2002:a65:5601:0:b0:43c:4eef:bac7 with SMTP id l1-20020a655601000000b0043c4eefbac7mr46619641pgs.356.1669998682344;
+        Fri, 02 Dec 2022 08:31:22 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id g204-20020a6252d5000000b005756a67e227sm5438977pfb.90.2022.12.02.08.31.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 08:31:21 -0800 (PST)
+Date:   Fri, 2 Dec 2022 16:31:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "paul@xen.org" <paul@xen.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "Yao, Yuan" <yuan.yao@intel.com>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "philmd@linaro.org" <philmd@linaro.org>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v2 42/50] KVM: Disable CPU hotplug during hardware
+ enabling/disabling
+Message-ID: <Y4ooVrDTkscy68vg@google.com>
+References: <20221130230934.1014142-1-seanjc@google.com>
+ <20221130230934.1014142-43-seanjc@google.com>
+ <8b1053781e859aa95a08c10b0e8a06912a2b42a2.camel@intel.com>
 MIME-Version: 1.0
-References: <20221201123220.7893-1-zhuyinbo@loongson.cn>
-In-Reply-To: <20221201123220.7893-1-zhuyinbo@loongson.cn>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 2 Dec 2022 17:11:46 +0100
-Message-ID: <CAMRc=MdSfw2-qbcOReEKnhNj4QaTy4mkJL+fH3m7nTBuLhxZaw@mail.gmail.com>
-Subject: Re: [PATCH v10 1/2] gpio: loongson: add gpio driver support
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b1053781e859aa95a08c10b0e8a06912a2b42a2.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 1:33 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+On Fri, Dec 02, 2022, Huang, Kai wrote:
+> On Wed, 2022-11-30 at 23:09 +0000, Sean Christopherson wrote:
+> > From: Chao Gao <chao.gao@intel.com>
+> > 
+> > Disable CPU hotplug when enabling/disabling hardware to prevent the
+> > corner case where if the following sequence occurs:
+> > 
+> >   1. A hotplugged CPU marks itself online in cpu_online_mask
+> >   2. The hotplugged CPU enables interrupt before invoking KVM's ONLINE
+> >      callback
+> >   3  hardware_{en,dis}able_all() is invoked on another CPU
+> > 
+> > the hotplugged CPU will be included in on_each_cpu() and thus get sent
+> > through hardware_{en,dis}able_nolock() before kvm_online_cpu() is called.
+> 
+> Should we explicitly call out what is the consequence of such case, otherwise
+> it's hard to tell whether this truly is an issue?
 >
-> The Loongson platforms GPIO controller contains 60 GPIO pins in total,
-> 4 of which are dedicated GPIO pins, and the remaining 56 are reused
-> with other functions. Each GPIO can set input/output and has the
-> interrupt capability.
->
-> This driver added support for Loongson GPIO controller and support to
-> use DTS or ACPI to descibe GPIO device resources.
->
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
+> IIUC, since now the compatibility check has already been moved to
+> kvm_arch_hardware_enable(), the consequence is hardware_enable_all() will fail
+> if the now online cpu isn't compatible, which will results in failing to create
+> the first VM.  This isn't ideal since the incompatible cpu should be rejected to
+> go online instead.
 
-Both patches applied.
+Actually, in that specific scenario, KVM should not reject the CPU.  E.g. if KVM
+is autoloaded (common with systemd and/or qemu-kvm installed), but not used by
+userspace, then KVM is overstepping by rejecting the incompatible CPU since the
+user likely cares more about onlining a CPU than they do about KVM.
 
-For the future: please reverse the order of patches and send dt
-bindings before the driver code.
+> > KVM currently fudges around this race by keeping track of which CPUs have
+> > done hardware enabling (see commit 1b6c016818a5 "KVM: Keep track of which
+> > cpus have virtualization enabled"), but that's an inefficient, convoluted,
+> > and hacky solution.
 
-Bartosz
+...
+
+> > +	/*
+> > +	 * Compatibility checks are done when loading KVM and when enabling
+> > +	 * hardware, e.g. during CPU hotplug, to ensure all online CPUs are
+> > +	 * compatible, i.e. KVM should never perform a compatibility check on
+> > +	 * an offline CPU.
+> > +	 */
+> > +	WARN_ON(!cpu_online(cpu));
+> 
+> IMHO this chunk logically should belong to previous patch.  IIUC disabling CPU
+> hotplug during hardware_enable_all() doesn't have relationship to this WARN().
+
+Hmm, yeah, I agree.  I'll move it.
+
+> >  static int hardware_enable_all(void)
+> >  {
+> >  	int r = 0;
+> >  
+> > +	/*
+> > +	 * When onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
+> > +	 * is called, and so on_each_cpu() between them includes the CPU that
+> > +	 * is being onlined.  As a result, hardware_enable_nolock() may get
+> > +	 * invoked before kvm_online_cpu(), which also enables hardware if the
+> > +	 * usage count is non-zero.  Disable CPU hotplug to avoid attempting to
+> > +	 * enable hardware multiple times.
+> 
+> It won't enable hardware multiple times, right?  Since hardware_enable_nolock()
+> has below check:
+> 
+>         if (cpumask_test_cpu(cpu, cpus_hardware_enabled))                      
+>                 return;                                                        
+>                                                                                                                                                    
+>         cpumask_set_cpu(cpu, cpus_hardware_enabled);     
+> 
+> IIUC the only issue is the one that I replied in the changelog.
+> 
+> Or perhaps I am missing something?
+
+You're not missing anything in terms of code.  What the comment means by "attempting"
+in this case is calling hardware_enable_nolock().  As called out in the changelog,
+guarding against this race with cpus_hardware_enabled is a hack, i.e. KVM should
+not have to rely on a per-CPU flag.
+
+ : KVM currently fudges around this race by keeping track of which CPUs have
+ : done hardware enabling (see commit 1b6c016818a5 "KVM: Keep track of which
+ : cpus have virtualization enabled"), but that's an inefficient, convoluted,
+ : and hacky solution.
+
+I actually considered removing the per-CPU flag, but decided not to because it's
+simpler to blast
+
+	on_each_cpu(hardware_disable_nolock, ...)
+
+in kvm_reboot() and if enabling hardware fails on one or more CPUs, and taking a
+#UD on VMXOFF in the latter case is really unnecessary, i.e. the flag is nice to
+have for other reasons.
+
+That said, after this patch, KVM should be able to WARN in the enable path.  I'll
+test that and do a more thorough audit; unless I'm missing something, I'll add a
+patch to do:
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index b8c6bfb46066..ee896fa2f196 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -5027,7 +5027,7 @@ static int kvm_usage_count;
+ 
+ static int __hardware_enable_nolock(void)
+ {
+-       if (__this_cpu_read(hardware_enabled))
++       if (WARN_ON_ONCE(__this_cpu_read(hardware_enabled)))
+                return 0;
+ 
+        if (kvm_arch_hardware_enable()) {
+
