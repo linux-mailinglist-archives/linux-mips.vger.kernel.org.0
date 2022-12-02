@@ -2,80 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B64640A11
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Dec 2022 17:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896F3640A22
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Dec 2022 17:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbiLBQCG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Dec 2022 11:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S233773AbiLBQFI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Dec 2022 11:05:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbiLBQBL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Dec 2022 11:01:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F60E51DD
-        for <linux-mips@vger.kernel.org>; Fri,  2 Dec 2022 07:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669996778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=imKWtJjnLxywPeyj1k0cz/LH0f5N0UttG38/bDrYO7s=;
-        b=iozW/lesOLhKS8DbTVG9u1rW5dvJRRehTPEhUtSKTSNsZodhw6+OsxDythxLJvv8T5Azac
-        RfFPXNQoTME1QVgcC7WHrNpI4rGNuS/pDSUWQ1xIPeD1xQOpzdvlivsYphrvkVoMoMWEjB
-        J3+18APyZiWW0MCh9tudGL3FkglsDso=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-232-AJnbpNZiOu2OJHlZZZSQxA-1; Fri, 02 Dec 2022 10:59:32 -0500
-X-MC-Unique: AJnbpNZiOu2OJHlZZZSQxA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1D316833A09;
-        Fri,  2 Dec 2022 15:59:31 +0000 (UTC)
-Received: from vschneid.remote.csb (unknown [10.33.36.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AD20020290A5;
-        Fri,  2 Dec 2022 15:59:26 +0000 (UTC)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH v3 8/8] sched, smp: Trace smp callback causing an IPI
-Date:   Fri,  2 Dec 2022 15:58:17 +0000
-Message-Id: <20221202155817.2102944-9-vschneid@redhat.com>
-In-Reply-To: <20221202155817.2102944-1-vschneid@redhat.com>
-References: <20221202155817.2102944-1-vschneid@redhat.com>
+        with ESMTP id S233902AbiLBQEf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Dec 2022 11:04:35 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F7710BC
+        for <linux-mips@vger.kernel.org>; Fri,  2 Dec 2022 08:04:14 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id k7so5012949pll.6
+        for <linux-mips@vger.kernel.org>; Fri, 02 Dec 2022 08:04:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=b2GsRYGpugbtZSHFD2RurCZ4JW4xZuzTsOfxXrCkfT8=;
+        b=NpcRjd8PL93RDmu18EFPPR+cTZLP3kvCDAEAva9wUQzgEtv6dhPvDs1R9Q9+h2mN7N
+         H42dGaT+sl8xeMuYK2rfUD+midQutKuG+T3MUl21HeEIW4MolVpdsUIo9SmBbkggNx39
+         8eN3yXePSJelVozj19wEaq9z6VDhzvEr0ForIWyEXE5qa5rozQa3WxAYewh7SubIBKmO
+         02PPePyseXuLiMMtCMvFiCLdBEv6hZUEsP/WY2KPh2svytXFAqt8tvoUSmd0DdfZmIR5
+         sLez1JP4ikgagdRRPh2k9RbfsucGTq+KVdolkDHLvc/Uk58Zr0iw+nxpff3e47GDmBB4
+         X4Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b2GsRYGpugbtZSHFD2RurCZ4JW4xZuzTsOfxXrCkfT8=;
+        b=YDbO4V0GXQRMdf0OfNh/eHRZLet/imIPT0kbP8Ev48pWJe8teqgY5N7Q4oYYNgpOAJ
+         riZ4zfIuVb1AUFmoI5Lgh1RTGRe02AByZBcHb4hSteADBdS8NUEGgSdF9cmAbS7BoAfw
+         jPSOMsa68IjSiFpuN05cbYU1ngF2gV0+INH6sqadK4DafyRy2qsV+Jm8IE5c646mcJNh
+         IFI11T9+xs2cr9yCiOO3g+rTH7GhGIWS5EXyo9WNAQyu1RMwowEv4pHLpB5acQNi94qU
+         3KG6pSkhI2k2nyV3PqB288q3h3AFXWPAMny/ZMd9vp/aoxkKtF+w1lbgSmjRQpKznfz2
+         KFFQ==
+X-Gm-Message-State: ANoB5plujpT6lTlhSBmNrmToTOicLEhwg+fjxqE1sQJhR4zO1Ynd1aMm
+        cq6/Jdbf97eB+0aSWIWgFt9C8Q==
+X-Google-Smtp-Source: AA0mqf7w0TN/IsoZof5JEkNGBQ8Yd2Zjjhh4wCVFAlaPO07IGqPcQWl6OiCMwNp3DG6Q8B9rQJAiYA==
+X-Received: by 2002:a17:90a:9a98:b0:219:2f90:4fb3 with SMTP id e24-20020a17090a9a9800b002192f904fb3mr28837193pjp.109.1669997053879;
+        Fri, 02 Dec 2022 08:04:13 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q42-20020a17090a1b2d00b00219752c8ea5sm3349337pjq.37.2022.12.02.08.04.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 08:04:13 -0800 (PST)
+Date:   Fri, 2 Dec 2022 16:04:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "paul@xen.org" <paul@xen.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "Yao, Yuan" <yuan.yao@intel.com>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "philmd@linaro.org" <philmd@linaro.org>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v2 40/50] KVM: x86: Do compatibility checks when onlining
+ CPU
+Message-ID: <Y4oh+XsbifA2BSj9@google.com>
+References: <20221130230934.1014142-1-seanjc@google.com>
+ <20221130230934.1014142-41-seanjc@google.com>
+ <cf755389c21c73e8367d8162cabc83629d3f9a74.camel@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <cf755389c21c73e8367d8162cabc83629d3f9a74.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,217 +115,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Context
-=======
+On Fri, Dec 02, 2022, Huang, Kai wrote:
+> On Wed, 2022-11-30 at 23:09 +0000, Sean Christopherson wrote:
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -11967,6 +11967,11 @@ int kvm_arch_hardware_enable(void)
+> >  	bool stable, backwards_tsc = false;
+> >  
+> >  	kvm_user_return_msr_cpu_online();
+> > +
+> > +	ret = kvm_x86_check_processor_compatibility();
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  	ret = static_call(kvm_x86_hardware_enable)();
+> >  	if (ret != 0)
+> >  		return ret;
+> 
+> Thinking more, AFAICT, kvm_x86_vendor_init() so far still does the compatibility
+> check on all online cpus.  Since now kvm_arch_hardware_enable() also does the
+> compatibility check, IIUC the compatibility check will be done twice -- one in
+> kvm_x86_vendor_init() and one in hardware_enable_all() when creating the first
+> VM.
+> 
+> Do you think it's still worth to do compatibility check in vm_x86_vendor_init()?
+> 
+> The behaviour difference should be "KVM module fail to load" vs "failing to
+> create the first VM" IIUC.  I don't know whether the former is better than the
+> better, but it seems duplicated compatibility checking isn't needed?
 
-The newly-introduced ipi_send_cpumask tracepoint has a "callback" parameter
-which so far has only been fed with NULL.
-
-While CSD_TYPE_SYNC/ASYNC and CSD_TYPE_IRQ_WORK share a similar backing
-struct layout (meaning their callback func can be accessed without caring
-about the actual CSD type), CSD_TYPE_TTWU doesn't even have a function
-attached to its struct. This means we need to check the type of a CSD
-before eventually dereferencing its associated callback.
-
-This isn't as trivial as it sounds: the CSD type is stored in
-__call_single_node.u_flags, which get cleared right before the callback is
-executed via csd_unlock(). This implies checking the CSD type before it is
-enqueued on the call_single_queue, as the target CPU's queue can be flushed
-before we get to sending an IPI.
-
-Furthermore, send_call_function_single_ipi() only has a CPU parameter, and
-would need to have an additional argument to trickle down the invoked
-function. This is somewhat silly, as the extra argument will always be
-pushed down to the function even when nothing is being traced, which is
-unnecessary overhead.
-
-Changes
-=======
-
-send_call_function_single_ipi() is only used by smp.c, and is defined in
-sched/core.c as it contains scheduler-specific ops (set_nr_if_polling() of
-a CPU's idle task).
-
-Split it into two parts: the scheduler bits remain in sched/core.c, and the
-actual IPI emission is moved into smp.c. This lets us define an
-__always_inline helper function that can take the related callback as
-parameter without creating useless register pressure in the non-traced path
-which only gains a (disabled) static branch.
-
-Do the same thing for the multi IPI case.
-
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- kernel/sched/core.c | 18 +++++++-----
- kernel/sched/smp.h  |  2 +-
- kernel/smp.c        | 72 +++++++++++++++++++++++++++++++++------------
- 3 files changed, 66 insertions(+), 26 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 40587b0d99329..e59aac936dcb9 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3743,16 +3743,20 @@ void sched_ttwu_pending(void *arg)
- 	rq_unlock_irqrestore(rq, &rf);
- }
- 
--void send_call_function_single_ipi(int cpu)
-+/*
-+ * Prepare the scene for sending an IPI for a remote smp_call
-+ *
-+ * Returns true if the caller can proceed with sending the IPI.
-+ * Returns false otherwise.
-+ */
-+bool call_function_single_prep_ipi(int cpu)
- {
--	struct rq *rq = cpu_rq(cpu);
--
--	if (!set_nr_if_polling(rq->idle)) {
--		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);
--		arch_send_call_function_single_ipi(cpu);
--	} else {
-+	if (set_nr_if_polling(cpu_rq(cpu)->idle)) {
- 		trace_sched_wake_idle_without_ipi(cpu);
-+		return false;
- 	}
-+
-+	return true;
- }
- 
- /*
-diff --git a/kernel/sched/smp.h b/kernel/sched/smp.h
-index 2eb23dd0f2856..21ac44428bb02 100644
---- a/kernel/sched/smp.h
-+++ b/kernel/sched/smp.h
-@@ -6,7 +6,7 @@
- 
- extern void sched_ttwu_pending(void *arg);
- 
--extern void send_call_function_single_ipi(int cpu);
-+extern bool call_function_single_prep_ipi(int cpu);
- 
- #ifdef CONFIG_SMP
- extern void flush_smp_call_function_queue(void);
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 821b5986721ac..5cd680a7e78ef 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -161,9 +161,18 @@ void __init call_function_init(void)
- }
- 
- static __always_inline void
--send_call_function_ipi_mask(const struct cpumask *mask)
-+send_call_function_single_ipi(int cpu, smp_call_func_t func)
- {
--	trace_ipi_send_cpumask(mask, _RET_IP_, NULL);
-+	if (call_function_single_prep_ipi(cpu)) {
-+		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
-+		arch_send_call_function_single_ipi(cpu);
-+	}
-+}
-+
-+static __always_inline void
-+send_call_function_ipi_mask(const struct cpumask *mask, smp_call_func_t func)
-+{
-+	trace_ipi_send_cpumask(mask, _RET_IP_, func);
- 	arch_send_call_function_ipi_mask(mask);
- }
- 
-@@ -430,12 +439,16 @@ static void __smp_call_single_queue_debug(int cpu, struct llist_node *node)
- 	struct cfd_seq_local *seq = this_cpu_ptr(&cfd_seq_local);
- 	struct call_function_data *cfd = this_cpu_ptr(&cfd_data);
- 	struct cfd_percpu *pcpu = per_cpu_ptr(cfd->pcpu, cpu);
-+	struct __call_single_data *csd;
-+
-+	csd = container_of(node, call_single_data_t, node.llist);
-+	WARN_ON_ONCE(!(CSD_TYPE(csd) & (CSD_TYPE_SYNC | CSD_TYPE_ASYNC)));
- 
- 	cfd_seq_store(pcpu->seq_queue, this_cpu, cpu, CFD_SEQ_QUEUE);
- 	if (llist_add(node, &per_cpu(call_single_queue, cpu))) {
- 		cfd_seq_store(pcpu->seq_ipi, this_cpu, cpu, CFD_SEQ_IPI);
- 		cfd_seq_store(seq->ping, this_cpu, cpu, CFD_SEQ_PING);
--		send_call_function_single_ipi(cpu);
-+		send_call_function_single_ipi(cpu, csd->func);
- 		cfd_seq_store(seq->pinged, this_cpu, cpu, CFD_SEQ_PINGED);
- 	} else {
- 		cfd_seq_store(pcpu->seq_noipi, this_cpu, cpu, CFD_SEQ_NOIPI);
-@@ -477,6 +490,25 @@ static __always_inline void csd_unlock(struct __call_single_data *csd)
- 	smp_store_release(&csd->node.u_flags, 0);
- }
- 
-+static __always_inline void
-+raw_smp_call_single_queue(int cpu, struct llist_node *node, smp_call_func_t func)
-+{
-+	/*
-+	 * The list addition should be visible to the target CPU when it pops
-+	 * the head of the list to pull the entry off it in the IPI handler
-+	 * because of normal cache coherency rules implied by the underlying
-+	 * llist ops.
-+	 *
-+	 * If IPIs can go out of order to the cache coherency protocol
-+	 * in an architecture, sufficient synchronisation should be added
-+	 * to arch code to make it appear to obey cache coherency WRT
-+	 * locking and barrier primitives. Generic code isn't really
-+	 * equipped to do the right thing...
-+	 */
-+	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
-+		send_call_function_single_ipi(cpu, func);
-+}
-+
- static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
- 
- void __smp_call_single_queue(int cpu, struct llist_node *node)
-@@ -493,21 +525,25 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
- 		}
- 	}
- #endif
--
- 	/*
--	 * The list addition should be visible to the target CPU when it pops
--	 * the head of the list to pull the entry off it in the IPI handler
--	 * because of normal cache coherency rules implied by the underlying
--	 * llist ops.
--	 *
--	 * If IPIs can go out of order to the cache coherency protocol
--	 * in an architecture, sufficient synchronisation should be added
--	 * to arch code to make it appear to obey cache coherency WRT
--	 * locking and barrier primitives. Generic code isn't really
--	 * equipped to do the right thing...
-+	 * We have to check the type of the CSD before queueing it, because
-+	 * once queued it can have its flags cleared by
-+	 *   flush_smp_call_function_queue()
-+	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
-+	 * executes migration_cpu_stop() on the remote CPU).
- 	 */
--	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
--		send_call_function_single_ipi(cpu);
-+	if (trace_ipi_send_cpumask_enabled()) {
-+		call_single_data_t *csd;
-+		smp_call_func_t func;
-+
-+		csd = container_of(node, call_single_data_t, node.llist);
-+		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
-+			sched_ttwu_pending : csd->func;
-+
-+		raw_smp_call_single_queue(cpu, node, func);
-+	} else {
-+		raw_smp_call_single_queue(cpu, node, NULL);
-+	}
- }
- 
- /*
-@@ -976,9 +1012,9 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 		 * provided mask.
- 		 */
- 		if (nr_cpus == 1)
--			send_call_function_single_ipi(last_cpu);
-+			send_call_function_single_ipi(last_cpu, func);
- 		else if (likely(nr_cpus > 1))
--			send_call_function_ipi_mask(cfd->cpumask_ipi);
-+			send_call_function_ipi_mask(cfd->cpumask_ipi, func);
- 
- 		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->pinged, this_cpu, CFD_SEQ_NOCPU, CFD_SEQ_PINGED);
- 	}
--- 
-2.31.1
-
+It's not strictly needed, but I think it's worth keeping.  The duplicate checking
+annoys me too, and I considered removing it multiple times when creating this
+series.  But, if there is a hardware incompatibility for whatever reason, failing
+to load and thus not instantiating /dev/kvm is friendlier to userspace, e.g.
+userspace can immediately flag the platform as potentially flaky, whereas
+detecting the likely hardware issue when VM creation fails would essentialy require
+scraping the kernel logs.
