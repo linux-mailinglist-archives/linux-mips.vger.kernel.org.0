@@ -2,120 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2782663FDF9
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Dec 2022 03:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CF463FE1A
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Dec 2022 03:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiLBCH6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Dec 2022 21:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S231382AbiLBC23 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Dec 2022 21:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiLBCH6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 21:07:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D836283255;
-        Thu,  1 Dec 2022 18:07:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S230070AbiLBC22 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Dec 2022 21:28:28 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31D7C86A7;
+        Thu,  1 Dec 2022 18:28:27 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 919F8B82032;
-        Fri,  2 Dec 2022 02:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F76C4347C;
-        Fri,  2 Dec 2022 02:07:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669946873;
-        bh=L7x3GzZtWoBfnRdvPmJ5iRAK+U+EE2V4CXeaUkVAWAs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=foQwtkgJKDbknPhyOTRO1aRIENt5mE5FWmbSMWUAdJB9JE5q7h7xWxhlmvUWZOK9P
-         X+wPUjPDCXC/6/fVNYIqhVUvmOiEMgO5IbwZKdH+pEhoojcR3RgPU7Hu3yFdSQcD3d
-         bIz/Cq0w3cOvrNBAPGwLaTeUoMmJynXevBLRLi6pNrgravjoR+MekOefTuOlUjhS84
-         GgfKI5u9v0LU3onVZkkRyvsHQ1eKVlFX/6HLv4VCVhO/YT23HtGu3KkPd7VKwJX9I0
-         j+glZoJybsNOiB2Pkzak6i61Ss/aaAC/fImLKDTiSIj9gMZRDenBm2yudAF4Cnonfe
-         cuKz1dtr5hZqA==
-Received: by mail-ej1-f48.google.com with SMTP id gu23so8427368ejb.10;
-        Thu, 01 Dec 2022 18:07:53 -0800 (PST)
-X-Gm-Message-State: ANoB5plqkFybjBb5FyqsVJRtVi1vaotqJX59rcaUJg86wLJhknO/esxB
-        co8MzHnFpiMvoMi4DA+ZXOHO6+xsGAEKCmVthMs=
-X-Google-Smtp-Source: AA0mqf7xXNgupaF/RrnM37TfCuq0Z/Kk9yhnddAF6zI2fYvNphwIca7gMPOCjkYRQFOTSaREu6az2U/2Vx8uQQR5gb8=
-X-Received: by 2002:a17:906:840a:b0:7c0:c0c9:9c4 with SMTP id
- n10-20020a170906840a00b007c0c0c909c4mr1278895ejx.272.1669946871539; Thu, 01
- Dec 2022 18:07:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20221114113824.1880-1-liupeibao@loongson.cn> <20221114113824.1880-2-liupeibao@loongson.cn>
-In-Reply-To: <20221114113824.1880-2-liupeibao@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 2 Dec 2022 10:07:40 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4euj53v=5k7iw5Ts7i41fpnRfWCUaAKuOTPpjRDushFg@mail.gmail.com>
-Message-ID: <CAAhV-H4euj53v=5k7iw5Ts7i41fpnRfWCUaAKuOTPpjRDushFg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] irqchip: loongarch-cpu: add DT support
-To:     Liu Peibao <liupeibao@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        wanghongliang <wanghongliang@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NNcLf3VLQz501SV;
+        Fri,  2 Dec 2022 10:28:26 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl1.zte.com.cn with SMTP id 2B22SEG4067270;
+        Fri, 2 Dec 2022 10:28:14 +0800 (+08)
+        (envelope-from zhang.songyi@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Fri, 2 Dec 2022 10:28:15 +0800 (CST)
+Date:   Fri, 2 Dec 2022 10:28:15 +0800 (CST)
+X-Zmail-TransId: 2af9638962bf1f3cbd76
+X-Mailer: Zmail v1.0
+Message-ID: <202212021028158035876@zte.com.cn>
+Mime-Version: 1.0
+From:   <zhang.songyi@zte.com.cn>
+To:     <tsbogend@alpha.franken.de>
+Cc:     <zhang.songyi@zte.com.cn>, <cgel.zte@gmail.com>,
+        <chi.minghao@zte.com.cn>, <linux-mips@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIG1pcHMvcGNpOiB1c2UgZGV2bV9wbGF0Zm9ybV9pb3JlbWFwX3Jlc291cmNlKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B22SEG4067270
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638962CA.000 by FangMail milter!
+X-FangMail-Envelope: 1669948106/4NNcLf3VLQz501SV/638962CA.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<zhang.songyi@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638962CA.000/4NNcLf3VLQz501SV
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Peibao and Marc,
+From: zhang songyi <zhang.songyi@zte.com.cn>
 
-I found this patch has merged but lkp report a problem, this can
-simply fixed by add "static" before loongarch_cpu_irq_of_init
-definition. Since Marc's next branch hasn't been tagged yet, can
-Peibao send a new version and Marc rebase it?
+Use the devm_platform_ioremap_resource() helper instead of
+calling platform_get_resource() and devm_ioremap_resource()
+separately
 
-Huacai
+Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+---
+ arch/mips/pci/pci-rt3883.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-On Mon, Nov 14, 2022 at 7:38 PM Liu Peibao <liupeibao@loongson.cn> wrote:
->
-> LoongArch is coming to support booting with FDT, so DT
-> support of this driver is desired.
->
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> ---
->  drivers/irqchip/irq-loongarch-cpu.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->
-> diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
-> index 741612ba6a52..a28b7c549654 100644
-> --- a/drivers/irqchip/irq-loongarch-cpu.c
-> +++ b/drivers/irqchip/irq-loongarch-cpu.c
-> @@ -92,6 +92,25 @@ static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops = {
->         .xlate = irq_domain_xlate_onecell,
->  };
->
-> +#ifdef CONFIG_OF
-> +int __init loongarch_cpu_irq_of_init(struct device_node *of_node,
-> +                               struct device_node *parent)
-> +{
-> +       cpuintc_handle = of_node_to_fwnode(of_node);
-> +
-> +       irq_domain = irq_domain_create_linear(cpuintc_handle, EXCCODE_INT_NUM,
-> +                               &loongarch_cpu_intc_irq_domain_ops, NULL);
-> +       if (!irq_domain)
-> +               panic("Failed to add irqdomain for loongarch CPU");
-> +
-> +       set_handle_irq(&handle_cpu_irq);
-> +
-> +       return 0;
-> +}
-> +IRQCHIP_DECLARE(cpu_intc, "loongson,cpu-interrupt-controller",
-> +                                       loongarch_cpu_irq_of_init);
-> +#endif
-> +
->  static int __init
->  liointc_parse_madt(union acpi_subtable_headers *header,
->                        const unsigned long end)
-> --
-> 2.20.1
->
+diff --git a/arch/mips/pci/pci-rt3883.c b/arch/mips/pci/pci-rt3883.c
+index e07ae098bdd8..d59888aaed81 100644
+--- a/arch/mips/pci/pci-rt3883.c
++++ b/arch/mips/pci/pci-rt3883.c
+@@ -404,7 +404,6 @@ static int rt3883_pci_probe(struct platform_device *pdev)
+ 	struct rt3883_pci_controller *rpc;
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *np = dev->of_node;
+-	struct resource *res;
+ 	struct device_node *child;
+ 	u32 val;
+ 	int err;
+@@ -414,8 +413,7 @@ static int rt3883_pci_probe(struct platform_device *pdev)
+ 	if (!rpc)
+ 		return -ENOMEM;
+
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	rpc->base = devm_ioremap_resource(dev, res);
++	rpc->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rpc->base))
+ 		return PTR_ERR(rpc->base);
+
+-- 
+2.15.2
