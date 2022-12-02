@@ -2,29 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9EA640B23
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Dec 2022 17:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BE7640B1B
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Dec 2022 17:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbiLBQuM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Dec 2022 11:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S234182AbiLBQuK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Dec 2022 11:50:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiLBQuF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Dec 2022 11:50:05 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31F1B0B45
-        for <linux-mips@vger.kernel.org>; Fri,  2 Dec 2022 08:50:01 -0800 (PST)
+        with ESMTP id S234017AbiLBQuE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Dec 2022 11:50:04 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C23D03A4
+        for <linux-mips@vger.kernel.org>; Fri,  2 Dec 2022 08:50:02 -0800 (PST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:2d07:19c5:4d8b:89d9])
-        by albert.telenet-ops.be with bizsmtp
-        id rUpW2800C0ys3B706UpWC6; Fri, 02 Dec 2022 17:49:59 +0100
+        by laurent.telenet-ops.be with bizsmtp
+        id rUpW2800G0ys3B701UpWDW; Fri, 02 Dec 2022 17:49:59 +0100
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1p19E9-002K66-7w; Fri, 02 Dec 2022 17:49:29 +0100
+        id 1p19E9-002K67-IM; Fri, 02 Dec 2022 17:49:29 +0100
 Received: from geert by rox.of.borg with local (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1p19E8-006Wb3-GZ; Fri, 02 Dec 2022 17:49:28 +0100
+        id 1p19E8-006WbA-HQ; Fri, 02 Dec 2022 17:49:28 +0100
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         Tony Lindgren <tony@atomide.com>,
@@ -59,9 +59,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
         linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org
-Subject: [PATCH 10/11] MIPS: mscc: jaguar2: Fix pca9545 i2c-mux node names
-Date:   Fri,  2 Dec 2022 17:49:25 +0100
-Message-Id: <5eb01c348c5dd90887b33e866555df8f1067e9df.1669999298.git.geert+renesas@glider.be>
+Subject: [PATCH 11/11] powerpc: dts: fsl: Fix pca954x i2c-mux node names
+Date:   Fri,  2 Dec 2022 17:49:26 +0100
+Message-Id: <6c5d86c49ac170e9d56ab121ea0602f3873849ca.1669999298.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1669999298.git.geert+renesas@glider.be>
 References: <cover.1669999298.git.geert+renesas@glider.be>
@@ -69,7 +69,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,43 +78,104 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 "make dtbs_check":
 
-    arch/mips/boot/dts/mscc/jaguar2_pcb110.dtb: pca9545@70: $nodename:0: 'pca9545@70' does not match '^(i2c-?)?mux'
-	    From schema: Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-    arch/mips/boot/dts/mscc/jaguar2_pcb110.dtb: pca9545@70: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'i2c@0', 'i2c@1', 'i2c@2', 'i2c@3' were unexpected)
-	    From schema: Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+    arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dtb: pca9546@77: $nodename:0: 'pca9546@77' does not match '^(i2c-?)?mux'
+           From schema: Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+    arch/powerpc/boot/dts/fsl/t1024qds.dtb: pca9547@77: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'i2c@0', 'i2c@2', 'i2c@3' were unexpected)
+           From schema: Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
     ...
 
-Fix this by renaming PCA9545 nodes to "i2c-mux", to match the I2C bus
+Fix this by renaming pca954x nodes to "i2c-mux", to match the I2C bus
 multiplexer/switch DT bindings and the Generic Names Recommendation in
 the Devicetree Specification.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- arch/mips/boot/dts/mscc/jaguar2_pcb110.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/powerpc/boot/dts/fsl/t1024qds.dts  | 2 +-
+ arch/powerpc/boot/dts/fsl/t1024rdb.dts  | 2 +-
+ arch/powerpc/boot/dts/fsl/t104xqds.dtsi | 2 +-
+ arch/powerpc/boot/dts/fsl/t104xrdb.dtsi | 2 +-
+ arch/powerpc/boot/dts/fsl/t208xqds.dtsi | 2 +-
+ arch/powerpc/boot/dts/fsl/t208xrdb.dtsi | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts b/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
-index 0ea7bc5b5746842f..1813f4e32e55fadb 100644
---- a/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
-+++ b/arch/mips/boot/dts/mscc/jaguar2_pcb110.dts
-@@ -208,7 +208,7 @@ i2cmux_3: i2cmux-3-pins {
- };
- 
- &i2c0 {
--	pca9545@70 {
-+	i2c-mux@70 {
- 		compatible = "nxp,pca9545";
- 		reg = <0x70>;
- 		#address-cells = <1>;
-@@ -236,7 +236,7 @@ i2c127: i2c@3 {
- 			reg = <3>;
+diff --git a/arch/powerpc/boot/dts/fsl/t1024qds.dts b/arch/powerpc/boot/dts/fsl/t1024qds.dts
+index d6858b7cd93fb5d5..9ea7942f914e14ee 100644
+--- a/arch/powerpc/boot/dts/fsl/t1024qds.dts
++++ b/arch/powerpc/boot/dts/fsl/t1024qds.dts
+@@ -151,7 +151,7 @@ slic@3 {
  		};
- 	};
--	pca9545@71 {
-+	i2c-mux@71 {
- 		compatible = "nxp,pca9545";
- 		reg = <0x71>;
- 		#address-cells = <1>;
+ 
+ 		i2c@118000 {
+-			pca9547@77 {
++			i2c-mux@77 {
+ 				compatible = "nxp,pca9547";
+ 				reg = <0x77>;
+ 				#address-cells = <1>;
+diff --git a/arch/powerpc/boot/dts/fsl/t1024rdb.dts b/arch/powerpc/boot/dts/fsl/t1024rdb.dts
+index dbcd31cc35dcd2bb..270aaf631f2ab0fa 100644
+--- a/arch/powerpc/boot/dts/fsl/t1024rdb.dts
++++ b/arch/powerpc/boot/dts/fsl/t1024rdb.dts
+@@ -165,7 +165,7 @@ rtc@68 {
+ 		};
+ 
+ 		i2c@118100 {
+-			pca9546@77 {
++			i2c-mux@77 {
+ 				compatible = "nxp,pca9546";
+ 				reg = <0x77>;
+ 				#address-cells = <1>;
+diff --git a/arch/powerpc/boot/dts/fsl/t104xqds.dtsi b/arch/powerpc/boot/dts/fsl/t104xqds.dtsi
+index 615479732252404f..1c329f076f64f2dc 100644
+--- a/arch/powerpc/boot/dts/fsl/t104xqds.dtsi
++++ b/arch/powerpc/boot/dts/fsl/t104xqds.dtsi
+@@ -268,7 +268,7 @@ flash@0 {
+ 		};
+ 
+ 		i2c@118000 {
+-			pca9547@77 {
++			i2c-mux@77 {
+ 				compatible = "nxp,pca9547";
+ 				reg = <0x77>;
+ 			};
+diff --git a/arch/powerpc/boot/dts/fsl/t104xrdb.dtsi b/arch/powerpc/boot/dts/fsl/t104xrdb.dtsi
+index bfe1ed5be337492e..fc7bec5dcb90fc2d 100644
+--- a/arch/powerpc/boot/dts/fsl/t104xrdb.dtsi
++++ b/arch/powerpc/boot/dts/fsl/t104xrdb.dtsi
+@@ -128,7 +128,7 @@ adt7461@4c {
+ 		};
+ 
+ 		i2c@118100 {
+-			pca9546@77 {
++			i2c-mux@77 {
+ 				compatible = "nxp,pca9546";
+ 				reg = <0x77>;
+ 				#address-cells = <1>;
+diff --git a/arch/powerpc/boot/dts/fsl/t208xqds.dtsi b/arch/powerpc/boot/dts/fsl/t208xqds.dtsi
+index db4139999b28ebf4..962c99941645b965 100644
+--- a/arch/powerpc/boot/dts/fsl/t208xqds.dtsi
++++ b/arch/powerpc/boot/dts/fsl/t208xqds.dtsi
+@@ -135,7 +135,7 @@ flash@2 {
+ 		};
+ 
+ 		i2c@118000 {
+-			pca9547@77 {
++			i2c-mux@77 {
+ 				compatible = "nxp,pca9547";
+ 				reg = <0x77>;
+ 				#address-cells = <1>;
+diff --git a/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi b/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
+index ff87e67c70da4a29..ecc3e8c7394cad20 100644
+--- a/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
++++ b/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
+@@ -138,7 +138,7 @@ eeprom@50 {
+ 		};
+ 
+ 		i2c@118100 {
+-			pca9546@77 {
++			i2c-mux@77 {
+ 				compatible = "nxp,pca9546";
+ 				reg = <0x77>;
+ 			};
 -- 
 2.25.1
 
