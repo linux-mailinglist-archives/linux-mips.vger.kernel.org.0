@@ -2,51 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1CA641476
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 07:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229F4641586
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 11:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbiLCGRW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Dec 2022 01:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S229497AbiLCKEB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Dec 2022 05:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLCGRV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 01:17:21 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EF1C0556;
-        Fri,  2 Dec 2022 22:17:19 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NPKNF1BcVz4xq1v;
-        Sat,  3 Dec 2022 14:17:17 +0800 (CST)
-Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
-        by mse-fl1.zte.com.cn with SMTP id 2B36HEQM087245;
-        Sat, 3 Dec 2022 14:17:14 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Sat, 3 Dec 2022 14:17:16 +0800 (CST)
-Date:   Sat, 3 Dec 2022 14:17:16 +0800 (CST)
-X-Zmail-TransId: 2b04638ae9ec672f7cfb
-X-Mailer: Zmail v1.0
-Message-ID: <202212031417162803709@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <tsbogend@alpha.franken.de>
-Cc:     <julia.lawall@inria.fr>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIE1JUFM6IE9DVEVPTjogY3ZteC1ib290bWVtOiB1c2Ugc3Ryc2NweSgpIHRvIGluc3RlYWQgb2YKIHN0cm5jcHkoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B36HEQM087245
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638AE9ED.000 by FangMail milter!
-X-FangMail-Envelope: 1670048237/4NPKNF1BcVz4xq1v/638AE9ED.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638AE9ED.000/4NPKNF1BcVz4xq1v
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        with ESMTP id S229512AbiLCKD7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 05:03:59 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1FE84DE7
+        for <linux-mips@vger.kernel.org>; Sat,  3 Dec 2022 02:03:58 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id 7so8816233ybp.13
+        for <linux-mips@vger.kernel.org>; Sat, 03 Dec 2022 02:03:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N6E8CnP3iI5t13RtsJQQcTXnbZ3ZGPTmoPz8kIfTx4U=;
+        b=k0vaNbXpIr1SS/R+YqWWkyExuOQIYt3c8XfhEfqDa9Z2UuX4cdm9VdUn/4gHGMUxtH
+         5FyGA8rU9sdTo1UFjoFc5JgDdVGmXSAMsZY35MJUnaSncVbVYJXR5j+p4TrjstZjq8xz
+         JCOEDr9BdvQQTTPf+fFgcjUCv9YGPv4mVcHvxJXJ93CWUynMjTGe4Blq/e83y+RDFEbV
+         XMjN1RKwqXqIe+4mElvNvFbFzfFjRxyuttUTmR4wfjxopzy3yay/5qCYu1jvusRq7z6t
+         DH2pwodZDL90KwVCuHcpmsO0+iSnBUNAUL3svPVBSnVusbSa4QZJnaqVQwCqoNaXBs8x
+         3gXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N6E8CnP3iI5t13RtsJQQcTXnbZ3ZGPTmoPz8kIfTx4U=;
+        b=m0WO2+Oyl6EWkW1npHyCNXtWRxzrIjX2Qz7IvT1QAdFDWGNcIfW5VvwNKIPqzqWNnx
+         2z0s6sC/Gvw3NNhCHdHlPIieaXjXEmJtUvGSR9hSIGJS0snNsNqvw+8XXMpVxCtg4HAp
+         AyPSCsIYXe8iwezVd4U4q1Be24C9/Tl/XJBgkWtW4e3km4S2h+eJjLDFPuNUQa1ftBR2
+         l0+MD5Nk7f7AliIu+b5WlAWgO/5rEyPySg17XcyH50qe84bfRQlp4wRk4/HFQstpsz+y
+         OZXciKMIbly2rx+Vepa4S+ENRC8dcGZCokEtuALyh/+zo+s/Fvb1pUsnjkVAk6w7Tol/
+         JPzA==
+X-Gm-Message-State: ANoB5pmizBd1y5ZmQVOVKMN/bgZvwJAQYUv4YW72M0SNsh6NKu76AqbP
+        qsiiuisr4h66s3qFIOCBKE/qYKiY/VFzeYo/pK1aBw==
+X-Google-Smtp-Source: AA0mqf6D4lrppamEcD0PVhGEQxhIID44UmELO3zkV8dlr+HoqpZTBr+TgBXi4XgTOEHh0lS6bXQVtURTpgndyWewC8k=
+X-Received: by 2002:a25:d8d4:0:b0:6f0:36e2:5fc2 with SMTP id
+ p203-20020a25d8d4000000b006f036e25fc2mr46503178ybg.52.1670061837556; Sat, 03
+ Dec 2022 02:03:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20221201123220.7893-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20221201123220.7893-1-zhuyinbo@loongson.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 3 Dec 2022 11:03:46 +0100
+Message-ID: <CACRpkdZm-4-5625szX_VqJoQH1OQZnw+jH3SqWsb9nr3S0Nbmw@mail.gmail.com>
+Subject: Re: [PATCH v10 1/2] gpio: loongson: add gpio driver support
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,30 +80,19 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+On Thu, Dec 1, 2022 at 1:33 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+(...)
+> +config GPIO_LOONGSON_64BIT
+> +       tristate "Loongson 64 bit GPIO support"
+> +       depends on LOONGARCH || COMPILE_TEST
+> +       select GPIO_GENERIC
+> +       select GPIOLIB_IRQCHIP
 
-The implementation of strscpy() is more robust and safer.
+If the kernelbots start complaining you might need to add a:
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- arch/mips/cavium-octeon/executive/cvmx-bootmem.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+select IRQ_DOMAIN_HIERARCHY
 
-diff --git a/arch/mips/cavium-octeon/executive/cvmx-bootmem.c b/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
-index 306cee07ce3f..334bf8e577e5 100644
---- a/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
-+++ b/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
-@@ -780,9 +780,8 @@ int64_t cvmx_bootmem_phy_named_block_alloc(uint64_t size, uint64_t min_addr,
- 	if (addr_allocated >= 0) {
- 		named_block_desc_ptr->base_addr = addr_allocated;
- 		named_block_desc_ptr->size = size;
--		strncpy(named_block_desc_ptr->name, name,
-+		strscpy(named_block_desc_ptr->name, name,
- 			cvmx_bootmem_desc->named_block_name_len);
--		named_block_desc_ptr->name[cvmx_bootmem_desc->named_block_name_len - 1] = 0;
- 	}
+here.
 
- 	if (!(flags & CVMX_BOOTMEM_FLAG_NO_LOCKING))
--- 
-2.15.2
+Yours,
+Linus Walleij
