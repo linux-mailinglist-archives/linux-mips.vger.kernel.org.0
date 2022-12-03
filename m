@@ -2,59 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443B764176C
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 16:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3002E641782
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 16:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiLCPBf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Dec 2022 10:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S229650AbiLCP1m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Dec 2022 10:27:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiLCPBb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 10:01:31 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDF121256
-        for <linux-mips@vger.kernel.org>; Sat,  3 Dec 2022 07:01:29 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id t10so7076194vsa.5
-        for <linux-mips@vger.kernel.org>; Sat, 03 Dec 2022 07:01:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=09mwFGz4NcvFbSVkdum1P3oLswumOl7iXfX4mGer/Fg=;
-        b=vn+zFXCqAI+urZrIK5ppevghvUY5FHb+9sphp7ac70gMg3YE73mE+3g6peM3093a25
-         hkTfTljMkA5Eqx6zV+xR1Pyt/yAza1JBC1goCDnAlzFq/AsZ7OtkPRHW41rflaABgnWO
-         TGNlRpgOfV6BdiXnzVvsCY+NLf2YVgOGiUylST1lMoI07iuJq/2xX8wYjKkxeeKqnJ7i
-         +3KXGfXgPGEcFiBrShZLl+2f/OKRgHsdqmsfSrxrgaKFKRy2wI/JrD2fvUYwWuWX/Ik5
-         EGtYyO+NZ4WPWm9KBrxhTujEFlUYCldEOB7A49T8wo8S51qhMeisMKqn6ygUqgQJcZ/R
-         8JcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=09mwFGz4NcvFbSVkdum1P3oLswumOl7iXfX4mGer/Fg=;
-        b=QFEeaIPpzd01RtCAbm2mbrWL81zYkbdUcpPvpdAKMPbTThErAGhqja0lgutQupD0Gy
-         +fpoKBGsMjLOgkdmpUYVB4Mci9gLK6rX5+Y5GR8PRiw6QMLp2EImJheAAHGqJLlaArje
-         sByBc+wybTfwNWRUUP+b+XFjniKNtST+s+t7oOexBjwl9+tFvTCRQHMMokOf48TXyaIY
-         t0ORFnTDZCFBbA+0dauYHeoYrboI6FCKEp7w1l5llKUoJ38JONqD27Sr5o1hPI/zmbE8
-         AspJCmyzr4xZ9GTpieZaO/eM7S89AWq7XexZ6cpjeKFrWKF8VZrD2WXdjWmELjO4fTfj
-         Gpog==
-X-Gm-Message-State: ANoB5pkN32nK0ExJyUARqqUDJWVa9MdtV9QMVxzVlLQt2IVvDcEjCH5N
-        AzYcaMMOLtNjHpjOOAWErvFfsppmqHuRKmmDGH3RXQ==
-X-Google-Smtp-Source: AA0mqf4prrZgY5AZGLl8TsqsXt+T07g61OMhnTaRfqtm8oQHZV4+gNzjg0YMjGFSea+wglI7ScShDYsKrWU3UL7H+B4=
-X-Received: by 2002:a67:e8d7:0:b0:3b0:767f:e291 with SMTP id
- y23-20020a67e8d7000000b003b0767fe291mr29399514vsn.47.1670079688361; Sat, 03
- Dec 2022 07:01:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20221203105825.15886-1-zhuyinbo@loongson.cn> <b6b34bc4-4089-9c02-81b2-9eaf2c9a4663@loongson.cn>
-In-Reply-To: <b6b34bc4-4089-9c02-81b2-9eaf2c9a4663@loongson.cn>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Sat, 3 Dec 2022 16:01:17 +0100
-Message-ID: <CAMRc=MdqOA_xU6TdcMspF=GMYx0MbKv0MzrTNOuZ7W=kg2skDw@mail.gmail.com>
-Subject: Re: [PATCH v1] gpio: loongson: enable irqdomain hierarchy config
+        with ESMTP id S229575AbiLCP1l (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 10:27:41 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB1A2BC0;
+        Sat,  3 Dec 2022 07:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670081258; x=1701617258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=uSf2YHH5QrA+iUzZpxeHz51OuUatV/0N2ramzCq2LzY=;
+  b=WH2VZl4V96I5i/spmTiYeOBAbFimUT1yxXYxbnTqjvJ3cCCTjtEUXGCY
+   ye2XvjX8lBtQw16Ulu7lKJ41zlfq2ksfuy6yUCZPvw+/tlXfRkuqWhloo
+   32GOlBCUeOvLDIDUpiHDecwV9RI3bqBXT8GYTsWd8FMhbLdULeCYjhTUI
+   PRHLq1grj7buNjwl7paBPQjCN92PVK0zlhHig0MhoRjPXujUOSKeY85K/
+   qHu2DrJCVVzXmz62NHx+grZgCbNfkmK+wqnmYG5w6vvqOK5sLlkc7exwC
+   2Bk3zZFnhMvAVaCTl0QRLtnaq/hJfS1RbcZU4ESIEsVVKBWVjWnY8cEnW
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="314834590"
+X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
+   d="scan'208";a="314834590"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2022 07:27:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787604048"
+X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
+   d="scan'208";a="787604048"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Dec 2022 07:27:33 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1p1UQN-0042l6-0l;
+        Sat, 03 Dec 2022 17:27:31 +0200
+Date:   Sat, 3 Dec 2022 17:27:30 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
 To:     Yinbo Zhu <zhuyinbo@loongson.cn>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         WANG Xuerui <kernel@xen0n.name>,
@@ -66,50 +58,52 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
         Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Subject: Re: [PATCH v10 1/2] gpio: loongson: add gpio driver support
+Message-ID: <Y4tq4i2CJdnQWFZC@smile.fi.intel.com>
+References: <20221201123220.7893-1-zhuyinbo@loongson.cn>
+ <CACRpkdZm-4-5625szX_VqJoQH1OQZnw+jH3SqWsb9nr3S0Nbmw@mail.gmail.com>
+ <35ff475a-e925-81eb-ffeb-448be43f59ff@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <35ff475a-e925-81eb-ffeb-448be43f59ff@loongson.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Dec 3, 2022 at 12:05 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->
->
-> =E5=9C=A8 2022/12/3 18:58, Yinbo Zhu =E5=86=99=E9=81=93:
-> > The loongson gpio driver need select IRQ_DOMAIN_HIERARCHY and add
-> > such support.
-> >
-> > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> > ---
-> >   drivers/gpio/Kconfig | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> > index 55b7c5bae4aa..0f014411703e 100644
-> > --- a/drivers/gpio/Kconfig
-> > +++ b/drivers/gpio/Kconfig
-> > @@ -395,6 +395,7 @@ config GPIO_LOONGSON_64BIT
-> >       depends on LOONGARCH || COMPILE_TEST
-> >       select GPIO_GENERIC
-> >       select GPIOLIB_IRQCHIP
-> > +     select IRQ_DOMAIN_HIERARCHY
-> >       help
-> >         Say yes here to support the GPIO functionality of a number of
-> >         Loongson series of chips. The Loongson GPIO controller supports
->
-> Hi Bartosz,
->
->
-> please help merge this patch on top of the existing series.
->
+On Sat, Dec 03, 2022 at 06:53:20PM +0800, Yinbo Zhu wrote:
+> 在 2022/12/3 18:03, Linus Walleij 写道:
+> > On Thu, Dec 1, 2022 at 1:33 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> > > +config GPIO_LOONGSON_64BIT
+> > > +       tristate "Loongson 64 bit GPIO support"
+> > > +       depends on LOONGARCH || COMPILE_TEST
+> > > +       select GPIO_GENERIC
+> > > +       select GPIOLIB_IRQCHIP
+> > If the kernelbots start complaining you might need to add a:
+> > 
+> > select IRQ_DOMAIN_HIERARCHY
+> > 
+> > here.
+> 
+> Bartosz had merged my patch and I will add a change on top of the existing
+> series.
 
-I applied this, but please don't ping me an hour after you submit a
-patch on a Saturday.
+I don;'t know why he had done that, the driver requires a lot of cleanups,
+e.g. why it uses acpi.h, what that "nice" container of the platform device for.
 
-Bart
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
