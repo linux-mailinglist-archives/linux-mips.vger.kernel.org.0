@@ -2,106 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021AD641644
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 12:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32706416CD
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 14:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbiLCLFG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Dec 2022 06:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
+        id S229540AbiLCNJJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Dec 2022 08:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiLCLFF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 06:05:05 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC9521F9E5;
-        Sat,  3 Dec 2022 03:05:02 -0800 (PST)
-Received: from loongson.cn (unknown [117.133.84.183])
-        by gateway (Coremail) with SMTP id _____8Axz+tdLYtjDPgCAA--.6899S3;
-        Sat, 03 Dec 2022 19:05:01 +0800 (CST)
-Received: from [192.168.1.2] (unknown [117.133.84.183])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxBldcLYtjzwclAA--.7740S3;
-        Sat, 03 Dec 2022 19:05:00 +0800 (CST)
-Message-ID: <b6b34bc4-4089-9c02-81b2-9eaf2c9a4663@loongson.cn>
-Date:   Sat, 3 Dec 2022 19:04:59 +0800
+        with ESMTP id S229728AbiLCNJH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 08:09:07 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28962CCAA
+        for <linux-mips@vger.kernel.org>; Sat,  3 Dec 2022 05:09:05 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id y16so11928433wrm.2
+        for <linux-mips@vger.kernel.org>; Sat, 03 Dec 2022 05:09:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=he4pvbcj9k7gldXO1AUh5F+PmpcqjQDOE40QJU9PQgY=;
+        b=IpTDWkg/+W6qtb6/BO+Rextf9MvVMSlQQo2APxxM4BQDnn7qkZcjkB9FFMGn9O0vXJ
+         xmbYFo0ZqKzC+reWi5Ui9m8ZE1DJ75WQ/bFAPBwaB3yh9eWT2bus6awgqTyx7PNgfhCI
+         BIvAAuR9hVxe/O2K+n3uaJUi0elOaR19s/Wse5pkabhXyOshgLmtSwZzqtvZqzXN08Qn
+         kDzAwrurvkG00GxtgVAhvrZdg82nMPvqvv+CKvcporDHyn64rgrQ7nLeu1tWshBlJ8TS
+         GDHMfMYnKweZp0ELa2PUHmSv5lLnkW7A+qy+Wew81JoaPQynn0ljjylNO17zoxC18jz1
+         TURQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=he4pvbcj9k7gldXO1AUh5F+PmpcqjQDOE40QJU9PQgY=;
+        b=ck0ZPKMeLua+u9l7M/sNsmPrt2zImw1LvQbNZV/D/Hno8xQgMCWIhPaYLEAyjmMMSB
+         kt53Yj0lEaBt1apzfjIg0gDu9u5RIK106u06Ndwd/1Bfybr2YK9/SzK+k9twxFdqqsuT
+         cj73aNavAEAk/POlmgyd9pe8CjwTwkEjA4mXMNWKxmkHuq69CE+rC87LZ7kyaZO6yRVV
+         qa+o47ax9m7ZEA/qMFkMLoFGxlmqsm5QKJP1u3ZXPpIkf26TVO8sh9TILTm0/5wluKQI
+         nhXOWduVF4g1KocENaKpYBWkGJTfSF2ozOZGKXN4H7N2Ulk3yF1FGpWkAwAm/K/L9vCJ
+         74Mw==
+X-Gm-Message-State: ANoB5plG1gJo+ZTT7eR7szuFvCHS1gONQTclINa3YxzSaEponwxkV7D+
+        9mQ6m83FYMHWzGjGYbYvTaysBw==
+X-Google-Smtp-Source: AA0mqf7FEFUrgBHbSYwX9vCImy4IPfSr1vGLJ8MA6ZSfnzZGkyWh6DJhnsHrk4VGpak6bs/xb0bb7g==
+X-Received: by 2002:adf:eb92:0:b0:236:80a8:485e with SMTP id t18-20020adfeb92000000b0023680a8485emr38696645wrn.362.1670072944015;
+        Sat, 03 Dec 2022 05:09:04 -0800 (PST)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id n3-20020a05600c3b8300b003cfbbd54178sm19062878wms.2.2022.12.03.05.09.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Dec 2022 05:09:03 -0800 (PST)
+Message-ID: <9bd630af-6f88-baa7-7bd4-e99d818fb977@linaro.org>
+Date:   Sat, 3 Dec 2022 14:09:00 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1] gpio: loongson: enable irqdomain hierarchy config
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH 00/11] Fix pca954x i2c-mux node names
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <20221203105825.15886-1-zhuyinbo@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-In-Reply-To: <20221203105825.15886-1-zhuyinbo@loongson.cn>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org
+References: <cover.1669999298.git.geert+renesas@glider.be>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <cover.1669999298.git.geert+renesas@glider.be>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxBldcLYtjzwclAA--.7740S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrKFyDWry8Ww1rCr1ftrW5Wrg_yoW3uFX_Cw
-        nF9Fs3Xr1UCryq9F4a9r4fZry2kayUWr1fZw1vq343X34xX3WUuw1a93Z5W3W7Wr17WFZ5
-        ZrWfAryIyryxWjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        17CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8mQ6JUUUUU==
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 2/12/22 17:49, Geert Uytterhoeven wrote:
+> 	Hi all,
+> 
+> According to the I2C bus multiplexer/switch DT bindings, i2c-mux nodes
+> should be named "i2c-mux" (or something similar).
+> This patch series renames nodes for pca954x i2c-muxes that are flagged
+> by
+> 
+>      make dtbs_checK DT_SCHEMA_FILES=Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> 
+> Please apply where appropriate.
+> Thanks!
+> 
+> Geert Uytterhoeven (11):
+>    ARM: dts: ti: Fix pca954x i2c-mux node names
+>    ARM: dts: aspeed: Fix pca954x i2c-mux node names
+>    ARM: dts: imx: Fix pca9547 i2c-mux node name
+>    ARM: dts: nuvoton: Fix pca954x i2c-mux node names
+>    ARM: dts: socfpga: Fix pca9548 i2c-mux node name
+>    ARM: dts: vf610: Fix pca9548 i2c-mux node names
+>    arm64: dts: freescale: Fix pca954x i2c-mux node names
+>    arm64: dts: marvell: Fix pca954x i2c-mux node names
+>    arm64: dts: renesas: ulcb-kf: Fix pca9548 i2c-mux node names
+>    MIPS: mscc: jaguar2: Fix pca9545 i2c-mux node names
+>    powerpc: dts: fsl: Fix pca954x i2c-mux node names
 
-在 2022/12/3 18:58, Yinbo Zhu 写道:
-> The loongson gpio driver need select IRQ_DOMAIN_HIERARCHY and add
-> such support.
->
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->   drivers/gpio/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 55b7c5bae4aa..0f014411703e 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -395,6 +395,7 @@ config GPIO_LOONGSON_64BIT
->   	depends on LOONGARCH || COMPILE_TEST
->   	select GPIO_GENERIC
->   	select GPIOLIB_IRQCHIP
-> +	select IRQ_DOMAIN_HIERARCHY
->   	help
->   	  Say yes here to support the GPIO functionality of a number of
->   	  Loongson series of chips. The Loongson GPIO controller supports
-
-Hi Bartosz,
-
-
-please help merge this patch on top of the existing series.
-
-
-Thanks,
-
-Yinbo
+Series:
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
