@@ -2,32 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0900C64161F
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 11:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393E7641632
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 11:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiLCKx2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Dec 2022 05:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
+        id S229678AbiLCK6j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Dec 2022 05:58:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLCKx0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 05:53:26 -0500
+        with ESMTP id S229608AbiLCK6i (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 05:58:38 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D230C2BB3F;
-        Sat,  3 Dec 2022 02:53:24 -0800 (PST)
-Received: from loongson.cn (unknown [117.133.84.183])
-        by gateway (Coremail) with SMTP id _____8CxKemjKotjiPcCAA--.3748S3;
-        Sat, 03 Dec 2022 18:53:23 +0800 (CST)
-Received: from [192.168.1.2] (unknown [117.133.84.183])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+ChKotjewYlAA--.26150S3;
-        Sat, 03 Dec 2022 18:53:22 +0800 (CST)
-Message-ID: <35ff475a-e925-81eb-ffeb-448be43f59ff@loongson.cn>
-Date:   Sat, 3 Dec 2022 18:53:20 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v10 1/2] gpio: loongson: add gpio driver support
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F5574FFB7;
+        Sat,  3 Dec 2022 02:58:33 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8Cx7+vYK4tjv_cCAA--.7097S3;
+        Sat, 03 Dec 2022 18:58:32 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+DSK4tj5QYlAA--.26430S2;
+        Sat, 03 Dec 2022 18:58:32 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         WANG Xuerui <kernel@xen0n.name>,
@@ -40,61 +35,60 @@ Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
         loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
         Arnaud Patard <apatard@mandriva.com>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20221201123220.7893-1-zhuyinbo@loongson.cn>
- <CACRpkdZm-4-5625szX_VqJoQH1OQZnw+jH3SqWsb9nr3S0Nbmw@mail.gmail.com>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-In-Reply-To: <CACRpkdZm-4-5625szX_VqJoQH1OQZnw+jH3SqWsb9nr3S0Nbmw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v1] gpio: loongson: enable irqdomain hierarchy config
+Date:   Sat,  3 Dec 2022 18:58:25 +0800
+Message-Id: <20221203105825.15886-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axf+ChKotjewYlAA--.26150S3
+X-CM-TRANSID: AQAAf8Dxr+DSK4tj5QYlAA--.26430S2
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUPE1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4
-        v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY
-        67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2js
-        IE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
-        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCF54CYxVAaw2AFwI0_JF0_Jw1l4c8EcI0Ec7Cj
-        xVAaw2AFwI0_JF0_Jw1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjxUzCztUUUUU
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Wry5CF1fZFW5GrykGw1UGFg_yoWxZrc_C3
+        sFqFn3Wr1UCF9F9rWavr4fZry2ka1UWr1ru3Z2qw13Zw17Za15uw15ua1DWw17Wr47WFWr
+        ZrWfJFyjvr4xWjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        X7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07j1SoXUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+The loongson gpio driver need select IRQ_DOMAIN_HIERARCHY and add
+such support.
 
-在 2022/12/3 18:03, Linus Walleij 写道:
-> On Thu, Dec 1, 2022 at 1:33 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
-> (...)
->> +config GPIO_LOONGSON_64BIT
->> +       tristate "Loongson 64 bit GPIO support"
->> +       depends on LOONGARCH || COMPILE_TEST
->> +       select GPIO_GENERIC
->> +       select GPIOLIB_IRQCHIP
-> If the kernelbots start complaining you might need to add a:
->
-> select IRQ_DOMAIN_HIERARCHY
->
-> here.
->
-> Yours,
-> Linus Walleij
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ drivers/gpio/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Bartosz had merged my patch and I will add a change on top of the 
-existing series.
-
-Thanks.
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 55b7c5bae4aa..0f014411703e 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -395,6 +395,7 @@ config GPIO_LOONGSON_64BIT
+ 	depends on LOONGARCH || COMPILE_TEST
+ 	select GPIO_GENERIC
+ 	select GPIOLIB_IRQCHIP
++	select IRQ_DOMAIN_HIERARCHY
+ 	help
+ 	  Say yes here to support the GPIO functionality of a number of
+ 	  Loongson series of chips. The Loongson GPIO controller supports
+-- 
+2.20.1
 
