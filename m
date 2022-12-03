@@ -2,89 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C919F6416CF
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 14:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443B764176C
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Dec 2022 16:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiLCNLe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Dec 2022 08:11:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S229755AbiLCPBf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Dec 2022 10:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiLCNLd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 08:11:33 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3702CCAA
-        for <linux-mips@vger.kernel.org>; Sat,  3 Dec 2022 05:11:32 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id m19so5429603wms.5
-        for <linux-mips@vger.kernel.org>; Sat, 03 Dec 2022 05:11:32 -0800 (PST)
+        with ESMTP id S229615AbiLCPBb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 10:01:31 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDF121256
+        for <linux-mips@vger.kernel.org>; Sat,  3 Dec 2022 07:01:29 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id t10so7076194vsa.5
+        for <linux-mips@vger.kernel.org>; Sat, 03 Dec 2022 07:01:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=npJnN6h9Q1vkDWhzJn+eWtMO9lMJ3i+il671VPKzft8=;
-        b=kkyhtYOkb8JJ9PTlhEl3vswFzXtG8qi7dbwyb9d0fyeJNUC+hCgjqUZZF6tGqB2+cA
-         1oXJ+IUpnp4v9t+3Lp7g4bNU5x+XdXUP371EygIbxWoLBRY/Dz91RrYADymCxQPsB6M/
-         mYILVcHCQUYdg4IFxve1XvvOrl0KwpEqxgQ3NaAjMz1yz1MHh7+q62x717XUpW2/p0Bj
-         BlyAF0l7bUMsrBV/tl/riY4hdNc2ED/jvDjO22EMuvndKr101algb2o9zMKo+63TPCsH
-         SlzldirVLVoLIgmOHthXc5HAYxN6ycMUE6llK8IYWg8Dclg8nRXOBdCs4o6ULprrKNme
-         +buQ==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=09mwFGz4NcvFbSVkdum1P3oLswumOl7iXfX4mGer/Fg=;
+        b=vn+zFXCqAI+urZrIK5ppevghvUY5FHb+9sphp7ac70gMg3YE73mE+3g6peM3093a25
+         hkTfTljMkA5Eqx6zV+xR1Pyt/yAza1JBC1goCDnAlzFq/AsZ7OtkPRHW41rflaABgnWO
+         TGNlRpgOfV6BdiXnzVvsCY+NLf2YVgOGiUylST1lMoI07iuJq/2xX8wYjKkxeeKqnJ7i
+         +3KXGfXgPGEcFiBrShZLl+2f/OKRgHsdqmsfSrxrgaKFKRy2wI/JrD2fvUYwWuWX/Ik5
+         EGtYyO+NZ4WPWm9KBrxhTujEFlUYCldEOB7A49T8wo8S51qhMeisMKqn6ygUqgQJcZ/R
+         8JcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=npJnN6h9Q1vkDWhzJn+eWtMO9lMJ3i+il671VPKzft8=;
-        b=FcgyJyceeQZIRLp6y4XrvXWYbcTavQbCR/GEpAkdrcP+/Xhon80taNM6LVGu8arCdd
-         EGKCV4JQkH/yrUoeDwDNyex9RWvHQSrk3h1YhXVWHeZUnh6z9lfDC9g1dte3+ZDjZRRd
-         8QyE01klLZQg7hY74x+lFYevQj0SkIC5ZyOxviDtt4TfRo8PbabiiYMWlhkppewPZDoi
-         ZUsruQoeRT5MdZVfk5i9IA7oM6vFOYzYH5nd6t9emPlnXbiDzZSU/CzMGaWjtgU/rmML
-         mcRHREUhxofoETPk/9B5ao/KRImx4GHPSwhXhcjbwptgHSXJye9vzD397B13qytBDKv0
-         pTig==
-X-Gm-Message-State: ANoB5pnXdeQvRpnPtZtBzzmwjx2JKFePqWe9Jj6hCoBhMP8b8X3yW+dI
-        lZ9mOQIDB5Pwgse2s32sV/2IOg==
-X-Google-Smtp-Source: AA0mqf4SwLUdwBkT7R6VcWBwZXnTuUyLGfcW9SuFCRA3hcEBz2wgzyQAl0WtUX5XWCZx148vV2MJgg==
-X-Received: by 2002:a05:600c:3c95:b0:3cf:92cc:9e5f with SMTP id bg21-20020a05600c3c9500b003cf92cc9e5fmr54559878wmb.181.1670073091300;
-        Sat, 03 Dec 2022 05:11:31 -0800 (PST)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id az23-20020adfe197000000b002425504ae7dsm1269413wrb.80.2022.12.03.05.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Dec 2022 05:11:30 -0800 (PST)
-Message-ID: <0ec82628-4eb8-239c-9bee-d55525a65535@linaro.org>
-Date:   Sat, 3 Dec 2022 14:11:29 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=09mwFGz4NcvFbSVkdum1P3oLswumOl7iXfX4mGer/Fg=;
+        b=QFEeaIPpzd01RtCAbm2mbrWL81zYkbdUcpPvpdAKMPbTThErAGhqja0lgutQupD0Gy
+         +fpoKBGsMjLOgkdmpUYVB4Mci9gLK6rX5+Y5GR8PRiw6QMLp2EImJheAAHGqJLlaArje
+         sByBc+wybTfwNWRUUP+b+XFjniKNtST+s+t7oOexBjwl9+tFvTCRQHMMokOf48TXyaIY
+         t0ORFnTDZCFBbA+0dauYHeoYrboI6FCKEp7w1l5llKUoJ38JONqD27Sr5o1hPI/zmbE8
+         AspJCmyzr4xZ9GTpieZaO/eM7S89AWq7XexZ6cpjeKFrWKF8VZrD2WXdjWmELjO4fTfj
+         Gpog==
+X-Gm-Message-State: ANoB5pkN32nK0ExJyUARqqUDJWVa9MdtV9QMVxzVlLQt2IVvDcEjCH5N
+        AzYcaMMOLtNjHpjOOAWErvFfsppmqHuRKmmDGH3RXQ==
+X-Google-Smtp-Source: AA0mqf4prrZgY5AZGLl8TsqsXt+T07g61OMhnTaRfqtm8oQHZV4+gNzjg0YMjGFSea+wglI7ScShDYsKrWU3UL7H+B4=
+X-Received: by 2002:a67:e8d7:0:b0:3b0:767f:e291 with SMTP id
+ y23-20020a67e8d7000000b003b0767fe291mr29399514vsn.47.1670079688361; Sat, 03
+ Dec 2022 07:01:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH linux-next] MIPS: OCTEON: cvmx-bootmem: use strscpy() to
- instead of strncpy()
-Content-Language: en-US
-To:     yang.yang29@zte.com.cn, tsbogend@alpha.franken.de
-Cc:     julia.lawall@inria.fr, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
-References: <202212031417162803709@zte.com.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <202212031417162803709@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221203105825.15886-1-zhuyinbo@loongson.cn> <b6b34bc4-4089-9c02-81b2-9eaf2c9a4663@loongson.cn>
+In-Reply-To: <b6b34bc4-4089-9c02-81b2-9eaf2c9a4663@loongson.cn>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Sat, 3 Dec 2022 16:01:17 +0100
+Message-ID: <CAMRc=MdqOA_xU6TdcMspF=GMYx0MbKv0MzrTNOuZ7W=kg2skDw@mail.gmail.com>
+Subject: Re: [PATCH v1] gpio: loongson: enable irqdomain hierarchy config
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 3/12/22 07:17, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
-> 
-> The implementation of strscpy() is more robust and safer.
-> 
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
-> ---
->   arch/mips/cavium-octeon/executive/cvmx-bootmem.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+On Sat, Dec 3, 2022 at 12:05 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>
+>
+> =E5=9C=A8 2022/12/3 18:58, Yinbo Zhu =E5=86=99=E9=81=93:
+> > The loongson gpio driver need select IRQ_DOMAIN_HIERARCHY and add
+> > such support.
+> >
+> > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> > ---
+> >   drivers/gpio/Kconfig | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> > index 55b7c5bae4aa..0f014411703e 100644
+> > --- a/drivers/gpio/Kconfig
+> > +++ b/drivers/gpio/Kconfig
+> > @@ -395,6 +395,7 @@ config GPIO_LOONGSON_64BIT
+> >       depends on LOONGARCH || COMPILE_TEST
+> >       select GPIO_GENERIC
+> >       select GPIOLIB_IRQCHIP
+> > +     select IRQ_DOMAIN_HIERARCHY
+> >       help
+> >         Say yes here to support the GPIO functionality of a number of
+> >         Loongson series of chips. The Loongson GPIO controller supports
+>
+> Hi Bartosz,
+>
+>
+> please help merge this patch on top of the existing series.
+>
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+I applied this, but please don't ping me an hour after you submit a
+patch on a Saturday.
 
+Bart
