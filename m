@@ -2,63 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC53641AB7
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Dec 2022 05:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55377641E12
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Dec 2022 17:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiLDEu5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Dec 2022 23:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S229995AbiLDQ7K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Dec 2022 11:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiLDEuz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Dec 2022 23:50:55 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A0814D15
-        for <linux-mips@vger.kernel.org>; Sat,  3 Dec 2022 20:50:53 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id o127so10649645yba.5
-        for <linux-mips@vger.kernel.org>; Sat, 03 Dec 2022 20:50:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ll505mTuuhfLc1+XZSIHO0whLDL6v0gWWrPnec0ii4Y=;
-        b=k5mVMRjqX7Si5uG9z+Uscvrtps9Lm4l+J08vtkBLLMictjduN7yw83tsE++Hu+Y+Aj
-         tzGMjHp1B1DVBsHBeaAno3yi2BVO1izqPQNjfE9efhoNad2WkUqtmN+u5ck7CRIJRDjF
-         YM/dl+7BGD8/nxeEUA1XSJ81WAfcs6vkCLEGMF0P2bL6CTiqD6TUfX0qPUwprGQelNlI
-         Y8aZ2lCfq+dEaYid+X7MscI8qzgPVVQAZJUwygBrxro7blbU3pOBNekJtI9+G2UshZ3G
-         GHc7S9u550foOhzqlp8cvkhkpghQSTF1P8bew1u3cg2NPkmwUqUch+maLgoYjzwwvL3H
-         yPNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ll505mTuuhfLc1+XZSIHO0whLDL6v0gWWrPnec0ii4Y=;
-        b=ySCjWSe61k7yuwDUBsbdRSZ70T++g3vaLktaDllc6+AyuivVj+lQaeQDLjI1xVrMjb
-         ChP+XBJFSGYrDgvmHfXYZy8nNypDt6pKzpLUpJIInSOC7BdK3DzUB8RR9+wiEEHBw5Hh
-         y2OlCOzkEEFJz6GcN++DgPp19nqyAMLDXfGwWX1u8vtcwF1fRIIf9IciJ/HO4BNdETU5
-         NpykjxXSm1iMX8TgVVhH7LlfmkqEMX0DSFs1Erzu85YXvqRKqWYti0wHLvciJ7ieHy3j
-         HZoU5rLA9VIDOwMht8uY5XlTFwBM2dibYKSUIFgUEZBEZkINQs+r37dZ5kmnaiu47mvc
-         sVSA==
-X-Gm-Message-State: ANoB5plOr/mc8aEehTUXWKgg8XAoXH7yn2x02Ng5MMlKbCo0Ozfo6FMR
-        aW3Y67DPA3jsd9oPxTrNnUhcrr5NYQscvZP1JczYxA==
-X-Google-Smtp-Source: AA0mqf52pBcclC9lDKWIBghKNsRoQBaHiaJZlm0JdUCM7v2WBwAs6EPMpN3sOutADe/7qyKy21QWPgWJqBBadM6ij9I=
-X-Received: by 2002:a25:ae08:0:b0:6fc:e336:3785 with SMTP id
- a8-20020a25ae08000000b006fce3363785mr10299755ybj.166.1670129451952; Sat, 03
- Dec 2022 20:50:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20220830193701.1702962-1-maskray@google.com> <20220910075316.no72fdyqjvunomwm@google.com>
- <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
- <9ce45cd2-dcd8-11f8-e496-7efe3649e241@csgroup.eu> <20221115004625.x4wl6zbg4iiuxl5t@google.com>
-In-Reply-To: <20221115004625.x4wl6zbg4iiuxl5t@google.com>
-From:   Fangrui Song <maskray@google.com>
-Date:   Sat, 3 Dec 2022 20:50:40 -0800
-Message-ID: <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
-Subject: Re: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic relocations
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        with ESMTP id S229785AbiLDQ7J (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Dec 2022 11:59:09 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2074.outbound.protection.outlook.com [40.107.9.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A2E25F9;
+        Sun,  4 Dec 2022 08:58:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e2CFlN/frUyykZTxHO0odZo5P8x+pDo8rJwpJlstYX0zAkhjzRDacbimtqWJgFUP8mKDv6HCDv5vJCLF+0p8hWo4ZHU6Q+LZ5Gl3WHdUFeCf+4/LoP0DM2BzKSOnf1DscUTrC1l+V8kCfeiiTaFh9HvXFzVSBnvWnXMENKWrpkDUG+XDBDa8938vUCrLtbP7VmeHEQ1sCaD7rsl32zSF5tQD6hXKFmE++coV8UnnNBSj55OzFsxSl0S16IsR4WORHiMRF0Hg4XCNHhYQ+znkGp/ccYpiZ7C8UWySqnUL7i0RFLfVoeUbItHUzesd/Yw/J/+5Z0VKuLj8abUrmdPOcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uiTlKtmrCEbTyTIEo/VtHtESVFh23ooKH8nOyPuBupw=;
+ b=YQT807CWFRHcMkm952FniEIeO2ywzjU3wW6grHyigx46mKzD05atl7C64unJBGrBCK8ZboJnZjP9M10PZwV/qmG4F2u2sTE5cpNkXk4wDHONFlaZC8HCVmPRko3Ze/h+PbuaPz5dF9J4WAOF5SKqXct92BPByZRyHHcgQaDm0f6LbfpN6opAUiQGa1/J0VNeEV3txIHqF80b8uYvAScjWXYDlUdmfJk+9nzJSlaAE6VbmVLZq0PAQ7vStn2wWwmDV+FyQ7EKQMCeHFvxbJk5cDukRvW6mrnamyJxDOtOc7hUPilv025aZa3TceQeJkqjeWyqBVEwSvL3/WbcpPwDdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uiTlKtmrCEbTyTIEo/VtHtESVFh23ooKH8nOyPuBupw=;
+ b=1Zo+HcTJbHIApBhtQX3b+lMSBTlak687uQJ+kWopkU58/BnmaAZ/m0HRb3cB5WuDnYYVdDhcixz/bLZ4pBbcaoyNoVjMS8J6aVpwVjdZNrXOr/gz3ivWk27ZfFWcVtZQZHyFh0asT2hSl/RbL/V79z9fZgOVkWv3FVceHkXb8CkaOW4+8Bs8JmQUdL5FMh1UiR1r2+MGLF+h5Zn96W3IN/ZFyYbBKwytTISpT2teh5THz/7hhjsAWQHsRckVBlxBDTmVOiTiw5S0Mn4z0hPNAGA83ou0Lu7o8FoS07g6VZzBPozrq2hNWJNf55TC3kkMUyzz3B8jufXr5ShNmeL27A==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB2922.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:18::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Sun, 4 Dec
+ 2022 16:58:53 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5880.013; Sun, 4 Dec 2022
+ 16:58:53 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Fangrui Song <maskray@google.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Andy Lutomirski <luto@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+CC:     Thomas Gleixner <tglx@linutronix.de>,
         "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
@@ -68,12 +52,93 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Subject: Re: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic
+ relocations
+Thread-Topic: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic
+ relocations
+Thread-Index: AQHYvKf5WSu8dJNxYk+eVO8ie3qNK63YW3QAgBwgtICASlSggIAAzUiAgB4gigCAAMt2gA==
+Date:   Sun, 4 Dec 2022 16:58:53 +0000
+Message-ID: <3ec9737e-3d1a-c014-b91a-0e2d406a3b3d@csgroup.eu>
+References: <20220830193701.1702962-1-maskray@google.com>
+ <20220910075316.no72fdyqjvunomwm@google.com>
+ <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
+ <9ce45cd2-dcd8-11f8-e496-7efe3649e241@csgroup.eu>
+ <20221115004625.x4wl6zbg4iiuxl5t@google.com>
+ <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
+In-Reply-To: <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB2922:EE_
+x-ms-office365-filtering-correlation-id: 6dffa5e2-b34c-4d31-aec4-08dad618d2eb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: s5srBfTcZSQqhCsk4pkNeLGiyT8kdkasof6tJAFsXH6tw2p4unC+33ChkDLe380wbd9FaxCHwlNwKONZGGI5wsARl3vdK3ox+WsCVkR76QyGWWDkb9WbafmfrKzd+30JqCK1khWyJtJtZtri5NFwBLsaVUbL/E6P6D/RO7OIZm0tpowKFfcuydEiNpv1fTSfiDh8FEyt4lDuqlNu0v3Ohy6jta9yMfkSo5ZFbxfAvELuIAAx2svyzK0WRrRhSHHcThTJUlfqyMR3MYoOri9+mnAHZGt4iVvG+d1XZftDGNshi+kMQSWzvQSenPFXsdvOFecOA6wX/rKeP89XxPXwlyjSvpTW+SyqghbAQwjyTFQkaWdnmBRp4C7gCyFcbieG16YyUv75IH5RJYC/UGvPs9pkGQQ/1amoz3kkovEsjQPbPFDCjxziN28gVHFN983Ia3yjtO+QiZB4C1b/Y0hvsidKVlU3bYAFezQ2Rbbq7dOzqwcCgQ2xE76sP/Q8fRP/p2FhFuVY/4Fd7lfVlMcWepYkJkRtibTFRsU+J6qbin/ALDrmMyrRMkozNmEhmzxbd5ynEAXuT17hLVefp8b9/Q7mB8j+PtaVz2y8bMwd5/ZlLbYxl3+dj8AUn08duX5LTk41VFl/TB5xCO0nfHQ4uqlDkUPheQzhdnYKycEAsVmBKXsmNiRzZEguwot0EjNQk+X3DoWKc+41hVJVMAIaW36tcixKTR5otCRge23RHnsSvvhR/wEDFUucliTpNgWBWetWwdiIqzRW7UY8TGsxpA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39840400004)(346002)(376002)(136003)(451199015)(71200400001)(53546011)(6506007)(186003)(2616005)(83380400001)(66574015)(38100700002)(66946007)(122000001)(6486002)(66446008)(66556008)(76116006)(64756008)(86362001)(7416002)(66476007)(4326008)(8676002)(41300700001)(8936002)(54906003)(110136005)(316002)(5660300002)(31686004)(478600001)(44832011)(91956017)(6512007)(38070700005)(4001150100001)(31696002)(2906002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?czdzdDF6Zk9BUXd2ZlgyNm45WTAvZ2pkS3pmQ3hvc2lHWjA3WHIzcGhzSkhF?=
+ =?utf-8?B?cm9ZNGxZTHQ3SHhRbXkzbnZ6ZUNaY3E4MEZTdU5zaGc4ekg4RllZdHhlTjZZ?=
+ =?utf-8?B?S1JSU0ZXMDA5TnlWVThMeWJ1ck9OSElJMEVDNGxHbU54alp1czh1dnhJZjRr?=
+ =?utf-8?B?bzBFWm1kNEE3WEpxWVBKNHlDUjB2SnJ6N0g1T1kzeWE5bktTeEZGRUFlVk5v?=
+ =?utf-8?B?WTlaYUViTUpuZ0hTcFRKUGtTUGFnQndqOU9XbisvMnp2VHF4VTM4ZG44NVdM?=
+ =?utf-8?B?Wm12TlcwckhDNXRPdE9KSEVQWUN4S3oveFo2TUFlZCtTaXk4VmJFUTA5QkZk?=
+ =?utf-8?B?OGtjVEt1Rjc3M1pjTkIzVlc2bTAyWkRobDhWVUZHbElHUXR3elFsYWszQ2c3?=
+ =?utf-8?B?cEJYczdkSzVuY05nZk9WVXcxZEZUWW52QTlvYXFQK0pReGtVd1RnMUVZOE1a?=
+ =?utf-8?B?K2ZoeTVVOEJsQzlYZnA1akZNMHpOaTZXQjNpenNmRVNNdmVhNzFlbUtpS1pT?=
+ =?utf-8?B?WHkzRlJITkd2ZmoyR2NVcmZKVjVkNHlBVHFWM05GdGxPc05uMVkwVmZRb1Bp?=
+ =?utf-8?B?d01SdnRpMzl2RWpuQ1FjeWNianJOTkRKUnJpWXNzQThjajIzY2VLOWljRXhE?=
+ =?utf-8?B?RmJhNW1EMHhoRlNHV1U4NXVxSldRUU9RK3NhWCtwYThybkZ3Nm9QMndiQzRO?=
+ =?utf-8?B?aytTbjE4NVdtWHoybjM2QWpUTVN5SUNGcklka09Mbm14cTFabHNFVlNqSTlQ?=
+ =?utf-8?B?M29GdlVDdkJ0RldKM1dLSVNETk11Vk54dHNBMUVRNWpOcEpBTm53cDdVbWxB?=
+ =?utf-8?B?cENxQ3dGRzhaWVhEcEJ0amFNY1ZINldPWmxhaVE5MnBwNldEaFpkZEZqTWNh?=
+ =?utf-8?B?MXdJK2FBTGZNMU53c21JM2pBL29ZTXBEVGRXaHlQM1NYNzRPL0RxcFNndTRM?=
+ =?utf-8?B?SFRGQUQrZk5QTml6b3NtVGJYTUJrdXM3VExLODBHQnpIRk9paE91alF6Ymxn?=
+ =?utf-8?B?eitsUkhsczQ0aUx0dmU5VmYyeWNjSE4xanJZeVB2MWNHYWhGVDdzMmpXbU9y?=
+ =?utf-8?B?bWQzMU5uMlFTTnE0aDRXQkV4azdTWkwvZjBZenhwWHNyc3dBL3R4RzBPaUFT?=
+ =?utf-8?B?WStxalZXazZhM0RFejRqdmhMVFdRNWtvdnZSWC9tajZTWmJqM0Rhb2JycUUz?=
+ =?utf-8?B?M0NLMmF3b01pVGM4V2RDVktkWndvbFViclhjdUI4RUtVOGtxaWFnRDhIVno4?=
+ =?utf-8?B?dW9JS2pvcXJXUHIxUEZDbkt5elo3aEtxZE1KTUM0TjNFOFg2OHVTZ2hPR1lu?=
+ =?utf-8?B?NXBSYzlEYkZ3QkM3OUpXeE9FWXFGb3JzNEE5aENwTHg0M3ZQMDdzNGhsK0cy?=
+ =?utf-8?B?OE9TSHB4TzhZS2ZDNnNMcDUzdU13Vy9RZy9td3FiUW8rZHdKVVBHVTh6NmRS?=
+ =?utf-8?B?TVBuY0NZMVJqNTh3VzlJMlJaOFZiM1pJWlIxMkc4d0ZWNzlXSVlHemFTNnd4?=
+ =?utf-8?B?ZDlFYkF4VWFoNm1YNjBZL2pDRThDRXlnVURQWktMNklvYnFWQkREdHJnS2ZO?=
+ =?utf-8?B?QWNnY2NoSmR6L0d6ekxPaTNBeXNTeVFQQXNvTWRYSkdlNVVoZ0JxbXZ3RXVr?=
+ =?utf-8?B?MVc0aE1EeUN1TWxYSkp2c0JoL0NBNjlCT0h2U2Jqc2lIelNQdWN1UWdiYlRW?=
+ =?utf-8?B?SC9sZU1oNE8zQm9jVUlJYVlTMjFxNGk1K0p6K0tvb2o1Rjg3TnQ1a2REeWxo?=
+ =?utf-8?B?T09jdVA5eFVBMWphQVNCKzRscWdCeWJsOHY5RGN5cXA2ejE1Vy9YL01Ic21Q?=
+ =?utf-8?B?MU9XM1puWHJXbU9BeG43R253eG9LNHBmUG9XdzBwNkltMGxzZFJuV21XaHRq?=
+ =?utf-8?B?TjFFdWQwWjhKdHBoQlhMb3VEZEtnTVcvbFQxKzhFSDlseXVyKzdUTHJvYmFp?=
+ =?utf-8?B?a1c1blhmc2paWXNrdjZjRkdJU0NIOGFpVDhEY0c2RHdNMXFncDFkajc5RW1o?=
+ =?utf-8?B?bjI4YlRRWlpYQ3Ntekt4MWxaWjlVZ2haeTNjNXBLWWdBR0lRWVVmeERIMjFm?=
+ =?utf-8?B?UzJTYzRycnBaT1NGTTBXUGlUd21uNFBqd0xqSURuUlJOa2RyYlp6cFRiL2JS?=
+ =?utf-8?B?VkkvR0wwRlk3WmVHMjFIcW0rTVNHTlMwZlRWdzFDYU03VWRoWUZ5M0V2ZU1u?=
+ =?utf-8?B?czhzSitnWjRZVHJmcElKYnh2OW80dkZObUdxMTdWLzduUVF0aEQyRDIrbmpk?=
+ =?utf-8?B?NmZ3OVJ1WGQxeWI2Y3orRkFDUUhnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C2B1CC23DAF1C04DB7526A2D63E0D88F@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6dffa5e2-b34c-4d31-aec4-08dad618d2eb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2022 16:58:53.2253
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qI7O9H5NmOmoLFFz3nzw4piuIMZtIgaNTcglG/xvWeK5J6HBygei7E8vVFrcMDza8Ecs4NOtbUXReM8Pi4miY+HMQtMJaXtGnLMtesF9gzk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2922
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,64 +146,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 4:46 PM Fangrui Song <maskray@google.com> wrote:
->
-> On 2022-11-14, Christophe Leroy wrote:
-> >
-> >
-> >Le 28/09/2022 =C3=A0 07:25, Fangrui Song a =C3=A9crit :
-> >> On Sat, Sep 10, 2022 at 12:53 AM Fangrui Song <maskray@google.com> wro=
-te:
-> >>>
-> >>> On 2022-08-30, Fangrui Song wrote:
-> >>>> The actual intention is that no dynamic relocation exists. However, =
-some
-> >>>> GNU ld ports produce unneeded R_*_NONE. (If a port is not care enoug=
-h to
-> >>>> determine the exact .rel[a].dyn size, the trailing zeros become R_*_=
-NONE
-> >>>> relocations. E.g. powerpc64le ld as of 2.38 has the issue with
-> >>>> defconfig.) R_*_NONE are generally no-op in the dynamic loaders. So =
-just
-> >>>> ignore them.
-> >>>>
-> >>>> With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS =
-is a
-> >>>> bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which =
-are
-> >>>> not called "absolute relocations". (The patch is motivated by the ar=
-m64
-> >>>> port missing R_AARCH64_RELATIVE.)
-> >>>>
-> >>>> While here, replace "egrep" with "grep" as "egrep" is deprecated in =
-GNU
-> >>>> grep 3.7.
-> >>>>
-> >>>> Signed-off-by: Fangrui Song <maskray@google.com>
-> >>>> ---
-> >>>> [...]
-> >>>>
-> >>>
-> >>> Ping.
-> >>
-> >> Ping^2 :)
-> >
-> >Can you explain which ARCH_REL_TYPE_ABS can be removed with this change =
-?
-> >How is the verification done if ARCH_REL_TYPE_ABS is removed ?
->
-> All ARCH_REL_TYPE_ABS relocation types can be removed. As explained, the
-> real intention is to check no dynamic relocation, and this is done by
-> the new
->
->    cmd_vdso_check =3D if $(READELF) -rW $@ | grep -v _NONE | grep -q "R_\=
-w*_"; \
->
-> in this patch.
->
-> grep -v _NONE is to work around some GNU ld ports (and likely older relea=
-ses
-> of some ports even if their latest versions are fixed) which produce
-> unneeded R_*_NONE dynamic relocations.
-
-Ping :)
+DQoNCkxlIDA0LzEyLzIwMjIgw6AgMDU6NTAsIEZhbmdydWkgU29uZyBhIMOpY3JpdMKgOg0KPiBP
+biBNb24sIE5vdiAxNCwgMjAyMiBhdCA0OjQ2IFBNIEZhbmdydWkgU29uZyA8bWFza3JheUBnb29n
+bGUuY29tPiB3cm90ZToNCj4+DQo+PiBPbiAyMDIyLTExLTE0LCBDaHJpc3RvcGhlIExlcm95IHdy
+b3RlOg0KPj4+DQo+Pj4NCj4+PiBMZSAyOC8wOS8yMDIyIMOgIDA3OjI1LCBGYW5ncnVpIFNvbmcg
+YSDDqWNyaXQgOg0KPj4+PiBPbiBTYXQsIFNlcCAxMCwgMjAyMiBhdCAxMjo1MyBBTSBGYW5ncnVp
+IFNvbmcgPG1hc2tyYXlAZ29vZ2xlLmNvbT4gd3JvdGU6DQo+Pj4+Pg0KPj4+Pj4gT24gMjAyMi0w
+OC0zMCwgRmFuZ3J1aSBTb25nIHdyb3RlOg0KPj4+Pj4+IFRoZSBhY3R1YWwgaW50ZW50aW9uIGlz
+IHRoYXQgbm8gZHluYW1pYyByZWxvY2F0aW9uIGV4aXN0cy4gSG93ZXZlciwgc29tZQ0KPj4+Pj4+
+IEdOVSBsZCBwb3J0cyBwcm9kdWNlIHVubmVlZGVkIFJfKl9OT05FLiAoSWYgYSBwb3J0IGlzIG5v
+dCBjYXJlIGVub3VnaCB0bw0KPj4+Pj4+IGRldGVybWluZSB0aGUgZXhhY3QgLnJlbFthXS5keW4g
+c2l6ZSwgdGhlIHRyYWlsaW5nIHplcm9zIGJlY29tZSBSXypfTk9ORQ0KPj4+Pj4+IHJlbG9jYXRp
+b25zLiBFLmcuIHBvd2VycGM2NGxlIGxkIGFzIG9mIDIuMzggaGFzIHRoZSBpc3N1ZSB3aXRoDQo+
+Pj4+Pj4gZGVmY29uZmlnLikgUl8qX05PTkUgYXJlIGdlbmVyYWxseSBuby1vcCBpbiB0aGUgZHlu
+YW1pYyBsb2FkZXJzLiBTbyBqdXN0DQo+Pj4+Pj4gaWdub3JlIHRoZW0uDQo+Pj4+Pj4NCj4+Pj4+
+PiBXaXRoIHRoZSBjaGFuZ2UsIHdlIGNhbiByZW1vdmUgQVJDSF9SRUxfVFlQRV9BQlMuIEFSQ0hf
+UkVMX1RZUEVfQUJTIGlzIGENCj4+Pj4+PiBiaXQgbWlzbm9tZXIgYXMgcG9ydHMgbWF5IGNoZWNr
+IFJFTEFWRVRJVkUvR0xPQl9EQVQvSlVNUF9TTE9UIHdoaWNoIGFyZQ0KPj4+Pj4+IG5vdCBjYWxs
+ZWQgImFic29sdXRlIHJlbG9jYXRpb25zIi4gKFRoZSBwYXRjaCBpcyBtb3RpdmF0ZWQgYnkgdGhl
+IGFybTY0DQo+Pj4+Pj4gcG9ydCBtaXNzaW5nIFJfQUFSQ0g2NF9SRUxBVElWRS4pDQo+Pj4+Pj4N
+Cj4+Pj4+PiBXaGlsZSBoZXJlLCByZXBsYWNlICJlZ3JlcCIgd2l0aCAiZ3JlcCIgYXMgImVncmVw
+IiBpcyBkZXByZWNhdGVkIGluIEdOVQ0KPj4+Pj4+IGdyZXAgMy43Lg0KPj4+Pj4+DQo+Pj4+Pj4g
+U2lnbmVkLW9mZi1ieTogRmFuZ3J1aSBTb25nIDxtYXNrcmF5QGdvb2dsZS5jb20+DQo+Pj4+Pj4g
+LS0tDQo+Pj4+Pj4gWy4uLl0NCj4+Pj4+Pg0KPj4+Pj4NCj4+Pj4+IFBpbmcuDQo+Pj4+DQo+Pj4+
+IFBpbmdeMiA6KQ0KPj4+DQo+Pj4gQ2FuIHlvdSBleHBsYWluIHdoaWNoIEFSQ0hfUkVMX1RZUEVf
+QUJTIGNhbiBiZSByZW1vdmVkIHdpdGggdGhpcyBjaGFuZ2UgPw0KPj4+IEhvdyBpcyB0aGUgdmVy
+aWZpY2F0aW9uIGRvbmUgaWYgQVJDSF9SRUxfVFlQRV9BQlMgaXMgcmVtb3ZlZCA/DQo+Pg0KPj4g
+QWxsIEFSQ0hfUkVMX1RZUEVfQUJTIHJlbG9jYXRpb24gdHlwZXMgY2FuIGJlIHJlbW92ZWQuIEFz
+IGV4cGxhaW5lZCwgdGhlDQo+PiByZWFsIGludGVudGlvbiBpcyB0byBjaGVjayBubyBkeW5hbWlj
+IHJlbG9jYXRpb24sIGFuZCB0aGlzIGlzIGRvbmUgYnkNCj4+IHRoZSBuZXcNCg0KV2VsbCwgdGhl
+cmUgd2FzIGEgdHlwbyBpbiBteSBxdWVzdGlvbiwgSSB3YW50ZWQgdG8gYXNrICd3aHknLCBub3Qg
+J3doaWNoJy4NCg0KPj4NCj4+ICAgICBjbWRfdmRzb19jaGVjayA9IGlmICQoUkVBREVMRikgLXJX
+ICRAIHwgZ3JlcCAtdiBfTk9ORSB8IGdyZXAgLXEgIlJfXHcqXyI7IFwNCj4+DQo+PiBpbiB0aGlz
+IHBhdGNoLg0KPj4NCj4+IGdyZXAgLXYgX05PTkUgaXMgdG8gd29yayBhcm91bmQgc29tZSBHTlUg
+bGQgcG9ydHMgKGFuZCBsaWtlbHkgb2xkZXIgcmVsZWFzZXMNCj4+IG9mIHNvbWUgcG9ydHMgZXZl
+biBpZiB0aGVpciBsYXRlc3QgdmVyc2lvbnMgYXJlIGZpeGVkKSB3aGljaCBwcm9kdWNlDQo+PiB1
+bm5lZWRlZCBSXypfTk9ORSBkeW5hbWljIHJlbG9jYXRpb25zLg0KPiANCj4gUGluZyA6KQ0KDQpP
+aywgdGhhdCBzZWVtcyB0byB3b3JrIG9uIHBvd2VycGMuDQoNClJldmlld2VkLWJ5OiBDaHJpc3Rv
+cGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQo=
