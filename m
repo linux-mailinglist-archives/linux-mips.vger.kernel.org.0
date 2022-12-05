@@ -2,120 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5AB6428CB
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Dec 2022 13:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489CD642D9D
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Dec 2022 17:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiLEMxT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Dec 2022 07:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
+        id S232815AbiLEQuR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Dec 2022 11:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbiLEMxS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Dec 2022 07:53:18 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29521A212;
-        Mon,  5 Dec 2022 04:53:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670244797; x=1701780797;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Qnk8evx1bCs9pSHx08fCvWXFHhwjrBycZptawhJUfPQ=;
-  b=fwdNAPfE+X9eH+iUJobJdm8ost4sW/QaAHRDp96ZclhPWrTw0K3qs8L0
-   SRUN0UxnD8gQ6rMX+zahJXbZ71X3gckFsgNpYFL8SceBeeZO7BX1PqHSh
-   4JFT4caoia0y2GjNIkCJbUKdNh2JVnxUAfpaTQAJ2ZOtduTy2JvrlGnWK
-   5S6/JV1VdjQ5dksTPIGxVPp4M4o0uCdnJewsdGTgAhrx8a44ZyJ5Uf8Us
-   3ulriDt5+k41jhqokZCRe2bbG50UsTZtO7gj/l2bFBNeQitOcOGYHpVRC
-   G4KCO/CkXiCmiWS/hnx3BA1ATYxbK5oacDxmfUsjUZ3ys2mvg+whnZsRN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="299765106"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="299765106"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 04:53:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="752176970"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="752176970"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Dec 2022 04:53:11 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1p2Ay5-004sPI-2Z;
-        Mon, 05 Dec 2022 14:53:09 +0200
-Date:   Mon, 5 Dec 2022 14:53:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-Subject: Re: [PATCH v10 1/2] gpio: loongson: add gpio driver support
-Message-ID: <Y43ptYqOznh+jhFG@smile.fi.intel.com>
-References: <20221201123220.7893-1-zhuyinbo@loongson.cn>
- <CACRpkdZm-4-5625szX_VqJoQH1OQZnw+jH3SqWsb9nr3S0Nbmw@mail.gmail.com>
- <35ff475a-e925-81eb-ffeb-448be43f59ff@loongson.cn>
- <Y4tq4i2CJdnQWFZC@smile.fi.intel.com>
- <Y4tuOyKOdZcQ4sjm@smile.fi.intel.com>
- <899d9d4c-36e8-6a4f-4243-dcf16f9ef29f@loongson.cn>
+        with ESMTP id S232128AbiLEQtp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Dec 2022 11:49:45 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3752E0F
+        for <linux-mips@vger.kernel.org>; Mon,  5 Dec 2022 08:49:04 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id f13-20020a1cc90d000000b003d08c4cf679so6693265wmb.5
+        for <linux-mips@vger.kernel.org>; Mon, 05 Dec 2022 08:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=Z2wBWagY9UnEZ+M5YPDdGkg6nVUsQfYS1BhjpcwGEao2GhG01+Mm/qvV+1fKOq1lbu
+         EFS78qR+UGfEwXQVt6IRXk6jTGT8mo+KAwwjj0fZxBmjE1jztugOoJP4/rka0x6XFhxu
+         W6iUCvsIDO6eHcdCHFvdIDlIVpJCsES5SD3xSnapoHClZmLcHlXbjXoeix+TX99ab7ry
+         BqOOHDFzUlmJeyU3OvUitATOsPkFA0DOczbi/Afsjm9NHI/YtApk72ny0qjFhFTXO+XP
+         yKXAtBeMHMlIwSKvmuRpEfOfWiK9b959mo8P7Fx64Ot+uHxQXUUrd10S+RG2s/yWLOX2
+         BSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=WC2Veon2bhdWJt4mm2+iH3REaT+MmB1LUOKSXKFW3pMcCCbSu9z4B/CIhel06IDIU1
+         JCQyYc13j3ed9yg8rPnPJgfu7qQf98ul9iF9hNGNkpAIFWx61ZzlFngJv6r9UhuAYRFA
+         ST+P787XgnqdkM/dcmL0VSCPuF9YKDbS/AVz64TbwPzKWOAL+1bYinGCuWSgDBEQtAHb
+         oJnUA3hcn1J7PhjKZnWjkizrEHw9N0tSaV3/x6AkKjW5T/uR5RVejmVJrEuQeTj1ZBM/
+         FUwEa/aZHqe8LcYV9DWTq+h6otZogXiav+ygwEiaJVtqRQQoS8u8buudWuaKe/qgdvYN
+         EoDQ==
+X-Gm-Message-State: ANoB5plwu50sAaFZaBH/4i7qEDaDoDBVuBQojbXOoMgQ/bs/rheEsTa1
+        VUxTyEfDt1wYy0K7do3qP26Zda1m+JjotyajjlM=
+X-Google-Smtp-Source: AA0mqf6LlThRqxALxahU+d5CDCL5XgA0Iri4oQFEx6hETTBFBZxUw9iI5CXyM5b3WvWotoaM22oBvK+CwFtVO/zgxX4=
+X-Received: by 2002:a7b:c8d0:0:b0:3cf:ca91:7094 with SMTP id
+ f16-20020a7bc8d0000000b003cfca917094mr60628535wml.24.1670258943314; Mon, 05
+ Dec 2022 08:49:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <899d9d4c-36e8-6a4f-4243-dcf16f9ef29f@loongson.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6000:5c1:0:0:0:0 with HTTP; Mon, 5 Dec 2022 08:49:02
+ -0800 (PST)
+Reply-To: phmanu14@hotmail.com
+From:   Philip Manul <zagbamdjala@gmail.com>
+Date:   Mon, 5 Dec 2022 08:49:02 -0800
+Message-ID: <CAPCnorG0wZz4L65xmUUzHEvxvuhrsq0nQnSPJqno3Ah89AhSwA@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 02:04:09PM +0800, Yinbo Zhu wrote:
-> 在 2022/12/3 23:41, Andy Shevchenko 写道:
-
-...
-
-> I just compile it that it is still okay when remove acpi.h, so I will remove
-> it in v11.
-
-You need to address all review comments. I don't remember if I reviewed this,
-but there are a lot of contribution from your side to the different subsystems
-where I have commented on your code and you can check those reviews because
-some of the remarks can be applied to this contribution as well.
-
-Nevertheless, please Cc me in your v11 when you consider it will be ready.
-Note, you have approx. month now to make it better. Of course you can
-send a version to review before that.
-
-...
-
-> and, I'm afraid I didn't catch your meaning about "
-> 
-> what that "nice" container of the platform device for."
-> 
-> you said is for following code ?
-> 144         struct platform_device *pdev =
-> 145                 container_of(chip->parent, struct platform_device, dev);
-
-Have you seen to_platform_device() macro?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--=20
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
