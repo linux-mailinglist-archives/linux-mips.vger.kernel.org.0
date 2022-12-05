@@ -2,104 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9723764282E
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Dec 2022 13:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5AB6428CB
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Dec 2022 13:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiLEMOK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Dec 2022 07:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S229919AbiLEMxT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Dec 2022 07:53:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbiLEMOJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Dec 2022 07:14:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40582AA;
-        Mon,  5 Dec 2022 04:14:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D26BB61032;
-        Mon,  5 Dec 2022 12:14:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D70EC433D7;
-        Mon,  5 Dec 2022 12:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670242448;
-        bh=aU0EeKX8NEFmCRSppqGIfcV+YjV+Rndty44Slx3vuG4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ow+BKXiEznsV2GNM7RNddJDg1iYqbvFIysjh1RjLt5Y7o/4papI+mp9pY87zIp2zD
-         EHTAFUr1NRlcSjDwetW0xHhvM+XigQvVqyid2Q2iqHpOiC316bSUvqF28ovhHjM1PA
-         ml32vQOJ1PGVzXOcfaSOKVts5vzArUCWdQtOwC7vlaswtZ/F+NwnWKWpBRjHJXJn0g
-         W7BLqW0iF3JBThtHy7BV40OuKE6dNoxPf1Nx8nyAMsdu6EtveOJsKfOByepu6e/YIf
-         sykM9QOGErQyAUCoezpBd7TXBibgoklVvKIEFWTB/GfiLpkPH/e7IznYwMurt0J/Xb
-         jnLt307EXsOUQ==
-Date:   Mon, 5 Dec 2022 12:14:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     kernelci@groups.io, sfr@canb.auug.org.au,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     info@kernelci.org, linux-next@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: next/pending-fixes build: 205 builds: 2 failed, 203 passed, 6
- errors, 40 warnings (v6.1-rc7-310-gb04468dba0c6)
-Message-ID: <Y43gij0rJWFWFeSz@sirena.org.uk>
-References: <638d2def.170a0220.a77ce.05fa@mx.google.com>
- <20221205105718.38e244a0@canb.auug.org.au>
+        with ESMTP id S231652AbiLEMxS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Dec 2022 07:53:18 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29521A212;
+        Mon,  5 Dec 2022 04:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670244797; x=1701780797;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Qnk8evx1bCs9pSHx08fCvWXFHhwjrBycZptawhJUfPQ=;
+  b=fwdNAPfE+X9eH+iUJobJdm8ost4sW/QaAHRDp96ZclhPWrTw0K3qs8L0
+   SRUN0UxnD8gQ6rMX+zahJXbZ71X3gckFsgNpYFL8SceBeeZO7BX1PqHSh
+   4JFT4caoia0y2GjNIkCJbUKdNh2JVnxUAfpaTQAJ2ZOtduTy2JvrlGnWK
+   5S6/JV1VdjQ5dksTPIGxVPp4M4o0uCdnJewsdGTgAhrx8a44ZyJ5Uf8Us
+   3ulriDt5+k41jhqokZCRe2bbG50UsTZtO7gj/l2bFBNeQitOcOGYHpVRC
+   G4KCO/CkXiCmiWS/hnx3BA1ATYxbK5oacDxmfUsjUZ3ys2mvg+whnZsRN
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="299765106"
+X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
+   d="scan'208";a="299765106"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 04:53:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="752176970"
+X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
+   d="scan'208";a="752176970"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Dec 2022 04:53:11 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1p2Ay5-004sPI-2Z;
+        Mon, 05 Dec 2022 14:53:09 +0200
+Date:   Mon, 5 Dec 2022 14:53:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Subject: Re: [PATCH v10 1/2] gpio: loongson: add gpio driver support
+Message-ID: <Y43ptYqOznh+jhFG@smile.fi.intel.com>
+References: <20221201123220.7893-1-zhuyinbo@loongson.cn>
+ <CACRpkdZm-4-5625szX_VqJoQH1OQZnw+jH3SqWsb9nr3S0Nbmw@mail.gmail.com>
+ <35ff475a-e925-81eb-ffeb-448be43f59ff@loongson.cn>
+ <Y4tq4i2CJdnQWFZC@smile.fi.intel.com>
+ <Y4tuOyKOdZcQ4sjm@smile.fi.intel.com>
+ <899d9d4c-36e8-6a4f-4243-dcf16f9ef29f@loongson.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="icqlFEUnd7CJ/mq/"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221205105718.38e244a0@canb.auug.org.au>
-X-Cookie: If it ain't broke, don't fix it.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <899d9d4c-36e8-6a4f-4243-dcf16f9ef29f@loongson.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, Dec 05, 2022 at 02:04:09PM +0800, Yinbo Zhu wrote:
+> 在 2022/12/3 23:41, Andy Shevchenko 写道:
 
---icqlFEUnd7CJ/mq/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Mon, Dec 05, 2022 at 10:57:18AM +1100, Stephen Rothwell wrote:
-> On Sun, 04 Dec 2022 15:31:59 -0800 (PST) "kernelci.org bot" <bot@kernelci=
-=2Eorg> wrote:
+> I just compile it that it is still okay when remove acpi.h, so I will remove
+> it in v11.
 
-> > mips:
-> >     fuloong2e_defconfig (gcc-10): 1 error
-> >     lemote2f_defconfig (gcc-10): 1 error
-> >     loongson2k_defconfig (gcc-10): 1 error
-> >     loongson3_defconfig (gcc-10): 1 error
+You need to address all review comments. I don't remember if I reviewed this,
+but there are a lot of contribution from your side to the different subsystems
+where I have commented on your code and you can check those reviews because
+some of the remarks can be applied to this contribution as well.
 
-> > Errors summary:
-> >=20
-> >     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with=
- =E2=80=98-mhard-float=E2=80=99
-> >     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr =
-r7,=3D0x'
-> >     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr =
-r3,=3D0x'
+Nevertheless, please Cc me in your v11 when you consider it will be ready.
+Note, you have approx. month now to make it better. Of course you can
+send a version to review before that.
 
-> These have been around for a very long time, now.  Is there some way we
-> can get them fixed?
+...
 
-Presumably, I've added Thomas as he's the MIPS maintainer.
+> and, I'm afraid I didn't catch your meaning about "
+> 
+> what that "nice" container of the platform device for."
+> 
+> you said is for following code ?
+> 144         struct platform_device *pdev =
+> 145                 container_of(chip->parent, struct platform_device, dev);
 
---icqlFEUnd7CJ/mq/
-Content-Type: application/pgp-signature; name="signature.asc"
+Have you seen to_platform_device() macro?
 
------BEGIN PGP SIGNATURE-----
+-- 
+With Best Regards,
+Andy Shevchenko
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmON4IoACgkQJNaLcl1U
-h9ArZQf/cOw6/R+ibZ4f2pZ8XY6whmqqxL0ui+/zK59xlDz97QR5hIQAkFwyUIX0
-E2TCfj8cpfo3E1JrbGAMnV3mJhcNdUv8njL4HzoegSOL1oeGOWxLSCudtt+Dtbp9
-NZ7gtaynOUG3gcqthLfi7FGhUZ3Rna3s8NlD7Cy2uMspzh/waHAyH7/cOBEDruoa
-V1OFkQCe/AOzscHO1XpVWJYtBXiOdekl7V6LPcKL5cMhrQg0wpeCl8SR1HVKvXSu
-SuwU3nYLrfG376x8JaKZZmxejt28+8NA5B5u/pZeB5aGQifXKffwknF6IAHEfesk
-UpAgRP0hehqs0mNMSH8lBJJBFq0CEg==
-=RTck
------END PGP SIGNATURE-----
 
---icqlFEUnd7CJ/mq/--
