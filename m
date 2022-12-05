@@ -2,117 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFED96420E5
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Dec 2022 01:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D48642254
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Dec 2022 05:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiLEA5h (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 4 Dec 2022 19:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S231286AbiLEEmY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Dec 2022 23:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiLEA5g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Dec 2022 19:57:36 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFA34BC01;
-        Sun,  4 Dec 2022 16:57:32 -0800 (PST)
-Received: from loongson.cn (unknown [117.133.84.183])
-        by gateway (Coremail) with SMTP id _____8CxpfD7QY1jHCoDAA--.7225S3;
-        Mon, 05 Dec 2022 08:57:31 +0800 (CST)
-Received: from [192.168.1.2] (unknown [117.133.84.183])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_eH6QY1jcKklAA--.27000S3;
-        Mon, 05 Dec 2022 08:57:30 +0800 (CST)
-Message-ID: <2b86e0a3-2367-c7e8-1086-ee79ffb19907@loongson.cn>
-Date:   Mon, 5 Dec 2022 08:57:30 +0800
+        with ESMTP id S230501AbiLEEmW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Dec 2022 23:42:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28DADF5D;
+        Sun,  4 Dec 2022 20:42:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 905BFB80D3F;
+        Mon,  5 Dec 2022 04:42:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52AECC433B5;
+        Mon,  5 Dec 2022 04:42:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670215339;
+        bh=hGVfY/YiMIoPWoZm2ky/fCC+ogF0sZ0/EbnMzxfrhSA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=aTIdErjWIAFHlkmIudnnK/lHMT9WGunKhrK1mkARmQwYEJVPkTGqVbNp/5QT/fE6B
+         DNTMACecptBlryHCBHuILZJsqgK6ZS9jUbI+awsghix0J6sP+CK1aAImyuqsKRssfB
+         8PjvY3A2xddM52aUBjbYiXcfkgkEaELQh7NqY+qIG9Vst97Yzq2iACVKLgNQaTmw48
+         D1QiWBPmOCYgK6/2/CupV3N3AIwwegG2BpM8EdA1wDJkw/s0VjmEo6XYFq9xyLuPPz
+         lDi/PeraYIw60t58ID3TYdOYKzbg3MsMIh2IaDjvWWkYtcxWr/ucSWJo1OVME4m4Nr
+         Bx/tuNdjTGajw==
+Received: by mail-ed1-f50.google.com with SMTP id i15so5946992edf.2;
+        Sun, 04 Dec 2022 20:42:19 -0800 (PST)
+X-Gm-Message-State: ANoB5plztQhPmgVdEgnF6kNlFfi1+xmOkhZGooPMaydXA5ninFQR0QBB
+        BTajT96f8tLSfH/ZNzJp91/aKBRgmJS+HRAbVFI=
+X-Google-Smtp-Source: AA0mqf5MDssRik4wMIBESdT1+8eu1S+9rF6HtZjXOMCf/xAYijoD9F8YmPYb7ZZeCKctDg5I5sULvpNRuuo8Lt60A98=
+X-Received: by 2002:a05:6402:2b91:b0:457:23cb:20ab with SMTP id
+ fj17-20020a0564022b9100b0045723cb20abmr7253315edb.254.1670215337551; Sun, 04
+ Dec 2022 20:42:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1] gpio: loongson: enable irqdomain hierarchy config
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+References: <20221114113824.1880-1-liupeibao@loongson.cn> <20221114113824.1880-2-liupeibao@loongson.cn>
+ <CAAhV-H4euj53v=5k7iw5Ts7i41fpnRfWCUaAKuOTPpjRDushFg@mail.gmail.com> <ea43e46f0ee749e4c00acb91fe670632@kernel.org>
+In-Reply-To: <ea43e46f0ee749e4c00acb91fe670632@kernel.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 5 Dec 2022 12:42:08 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5agisBN7G4eJRXLe4rKYY2T1bxtQHfLQ-MtAt_gOJVjw@mail.gmail.com>
+Message-ID: <CAAhV-H5agisBN7G4eJRXLe4rKYY2T1bxtQHfLQ-MtAt_gOJVjw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] irqchip: loongarch-cpu: add DT support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Liu Peibao <liupeibao@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <20221203105825.15886-1-zhuyinbo@loongson.cn>
- <b6b34bc4-4089-9c02-81b2-9eaf2c9a4663@loongson.cn>
- <CAMRc=MdqOA_xU6TdcMspF=GMYx0MbKv0MzrTNOuZ7W=kg2skDw@mail.gmail.com>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-In-Reply-To: <CAMRc=MdqOA_xU6TdcMspF=GMYx0MbKv0MzrTNOuZ7W=kg2skDw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_eH6QY1jcKklAA--.27000S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7XF4kWrWrCFy8GF4UtrWfuFg_yoWkArg_Cw
-        nFyFs7Cr1UGr929FsI9rWfZr9IkayDWr1rC3Wqqw13Xw12qay8uw1Yvwn3W3W7WrW7WFn7
-        ZrWSyFy7ZrWIgjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        17CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FAp5UUUUU==
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        wanghongliang <wanghongliang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-在 2022/12/3 23:01, Bartosz Golaszewski 写道:
-> On Sat, Dec 3, 2022 at 12:05 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->>
->> 在 2022/12/3 18:58, Yinbo Zhu 写道:
->>> The loongson gpio driver need select IRQ_DOMAIN_HIERARCHY and add
->>> such support.
->>>
->>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>> ---
->>>    drivers/gpio/Kconfig | 1 +
->>>    1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
->>> index 55b7c5bae4aa..0f014411703e 100644
->>> --- a/drivers/gpio/Kconfig
->>> +++ b/drivers/gpio/Kconfig
->>> @@ -395,6 +395,7 @@ config GPIO_LOONGSON_64BIT
->>>        depends on LOONGARCH || COMPILE_TEST
->>>        select GPIO_GENERIC
->>>        select GPIOLIB_IRQCHIP
->>> +     select IRQ_DOMAIN_HIERARCHY
->>>        help
->>>          Say yes here to support the GPIO functionality of a number of
->>>          Loongson series of chips. The Loongson GPIO controller supports
->> Hi Bartosz,
->>
->>
->> please help merge this patch on top of the existing series.
->>
-> I applied this, but please don't ping me an hour after you submit a
-> patch on a Saturday.
+On Fri, Dec 2, 2022 at 4:45 PM Marc Zyngier <maz@kernel.org> wrote:
 >
-> Bart
+> On 2022-12-02 02:07, Huacai Chen wrote:
+> > Hi, Peibao and Marc,
+> >
+> > I found this patch has merged but lkp report a problem, this can
+> > simply fixed by add "static" before loongarch_cpu_irq_of_init
+> > definition. Since Marc's next branch hasn't been tagged yet, can
+> > Peibao send a new version and Marc rebase it?
+>
+> Please send in a fix on top of the existing series.
+OK, I'll send a fix later.
 
-okay, I'll pay attention later.
-
-
-Thanks,
-
-Yinbo.
-
+Huacai
+>
+> Thanks,
+>
+>          M.
+> --
+> Jazz is not dead. It just smells funny...
