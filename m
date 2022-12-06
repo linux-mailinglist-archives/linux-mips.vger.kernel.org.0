@@ -2,124 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B9D644DA3
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Dec 2022 22:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986C46451C0
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Dec 2022 03:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiLFVCC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Dec 2022 16:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S229565AbiLGCH7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Dec 2022 21:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiLFVCB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Dec 2022 16:02:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C526C2F028;
-        Tue,  6 Dec 2022 13:02:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DAF6618F2;
-        Tue,  6 Dec 2022 21:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D33CC433D6;
-        Tue,  6 Dec 2022 21:01:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670360519;
-        bh=bvu32LFYIQ3mqvaTjtC2wlG+bQ9D2wDMKyzUQjMLf4M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mLTZZLRFOJuvTzmVeiD2+CyUjIalTOGm3M/E4TMnfX2uFbcuGdWa7eJLw1/8YlUI5
-         DbE+pdQmZNSGfU2yrVr37kqsQVuMvMq2z3g6OzCP6giGorFIO3+M+Jd0WHE2F6Sk8O
-         qIIRC7Yu4dDw202VtZGBeE1iMDdwvCfn3cTCt7ky0fRYQv5gZpxFGA0uE8VWJsoIMq
-         fqlWxLAhCX6knHHyU3u7iy4ECDBUKM9ynujSfKssDRRQanAv+c/MHu8BQbPfxXlUqQ
-         zurB1mt1f5M1xQlD1SXS9Z363LzSOTk4cIwZha01CKuz9YXkQ2oxSeoKQiSIcO+f0S
-         uIywgvgMBgt3w==
-Message-ID: <98a97883-3303-20eb-5a18-cfa00af9443e@kernel.org>
-Date:   Tue, 6 Dec 2022 15:01:54 -0600
+        with ESMTP id S229486AbiLGCH5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Dec 2022 21:07:57 -0500
+X-Greylist: delayed 6648 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Dec 2022 18:07:53 PST
+Received: from mail.academia-cj.ro (mail.academia-cj.ro [188.213.48.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FA5FAD6;
+        Tue,  6 Dec 2022 18:07:53 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.academia-cj.ro (Postfix) with ESMTP id 5B8CE243699;
+        Wed,  7 Dec 2022 01:17:47 +0200 (EET)
+Received: from mail.academia-cj.ro ([127.0.0.1])
+        by localhost (mail.academia-cj.ro [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id x-18NXs7Gmvu; Wed,  7 Dec 2022 01:17:47 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.academia-cj.ro (Postfix) with ESMTP id 5ECB424369F;
+        Wed,  7 Dec 2022 01:17:46 +0200 (EET)
+X-Virus-Scanned: amavisd-new at mail.academia-cj.ro
+Received: from mail.academia-cj.ro ([127.0.0.1])
+        by localhost (mail.academia-cj.ro [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Nfnz43wjVtqz; Wed,  7 Dec 2022 01:17:46 +0200 (EET)
+Received: from mail.academia-cj.ro (mail.academia-cj.ro [188.213.48.91])
+        by mail.academia-cj.ro (Postfix) with ESMTP id B406B1263F6;
+        Wed,  7 Dec 2022 01:17:43 +0200 (EET)
+Date:   Wed, 7 Dec 2022 01:17:43 +0200 (EET)
+From:   Lucas <theodor.constantiniu@academia-cj.ro>
+Reply-To: Lucas <lukas@marineinzynieriagleam-jobs.com>
+Message-ID: <435242145.17666.1670368663691.JavaMail.zimbra@academia-cj.ro>
+Subject: Direct Interview.
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 05/11] ARM: dts: socfpga: Fix pca9548 i2c-mux node name
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Stefan Agner <stefan@agner.ch>, Li Yang <leoyang.li@nxp.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org
-References: <cover.1669999298.git.geert+renesas@glider.be>
- <a7bcc2de6c2c0946f56b2d9f9584c55cf28545dc.1669999298.git.geert+renesas@glider.be>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <a7bcc2de6c2c0946f56b2d9f9584c55cf28545dc.1669999298.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [188.213.48.91]
+X-Mailer: Zimbra 8.8.15_GA_4308 (zclient/8.8.15_GA_4308)
+Thread-Index: BO6Cw47mectqSRB8dhVsSCAi6bv50A==
+Thread-Topic: Direct Interview.
+X-Spam-Status: No, score=4.7 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
+        BAYES_50,LOTS_OF_MONEY,MISSING_HEADERS,NA_DOLLARS,RCVD_IN_MSPIKE_H2,
+        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS,XFER_LOTSA_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hello,
+
+I am writing to you on behalf of Mr. Yusuf Habib. My name is Lukas, I am an investment portfolio Manager at MetLife, and my client (Mr. Yusuf Habib) has a large sum of money he is looking for someone to help him manage the funds.The Saudi government filed charges against my-client Mr. Yusuf Habib with the aim of keeping him in prison indefinitely. A variety of local and foreign politicians, civil activists, and journalists consider the process leading to the imprisonment of Mr. Yusuf to be politically motivated. 
+
+My client's involvement and financial support for Jamal Ahmad Khashoggi posed the most challenge ever to Mohammed bin Salman Al Saud who happens to be the current Crown Prince of Saudi Arabia the money is currently deposited in the name of an existing Investment entity.
+
+My client Mr. Yusuf Habib has presented a subtle offer that will need the help of a partner like you to complete successfully. Mr. Yusuf Habib is in a difficult situation, and he must immediately relocate certain sums of money and this must be done in such a way that it must not be tied to Mr. Yusuf Habib. The money is currently deposited in the name of an existing Investment entity. Your role will be to:
+
+[1]. Act as the original beneficiary of the funds.
+[2]. Receive the funds into a business / private bank account.
+[3]. Invest / Manage the funds outside of Turkey
+[4]. Value of funds: 35 million US Dollars.
 
 
-On 12/2/22 10:49, Geert Uytterhoeven wrote:
-> "make dtbs_check":
-> 
->      arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dtb: i2cswitch@70: $nodename:0: 'i2cswitch@70' does not match '^(i2c-?)?mux'
-> 	    From schema: Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
->      arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dtb: i2cswitch@70: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'i2c@0', 'i2c@1', 'i2c@2', 'i2c@3', 'i2c@4', 'i2c@5', 'i2c@6', 'i2c@7' were unexpected)
->          From schema: Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> 
-> Fix this by renaming the PCA9548 node to "i2c-mux", to match the I2C bus
-> multiplexer/switch DT bindings and the Generic Names Recommendation in
-> the Devicetree Specification.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->   arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts b/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-> index f24f17c2f5ee6bc4..e0630b0eed036d35 100644
-> --- a/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-> +++ b/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-> @@ -141,7 +141,7 @@ at24@50 {
->   		reg = <0x50>;
->   	};
->   
-> -	i2cswitch@70 {
-> +	i2c-mux@70 {
->   		compatible = "nxp,pca9548";
->   		#address-cells = <1>;
->   		#size-cells = <0>;
+Everything will be done legally to ensure the rights to the funds are transferred to you. If you agree to partner with Mr. Yusuf Habib in this partnership business proposal, he will compensate you with 35% percent of the total sum. Terms will be discussed when you show interest and if you aren't interested and you know of someone looking for an investor, please give him / her my contact.
 
-Applied!
+Should you prefer I re-contact you with more express facts. Then make your interest known.
 
-Thanks,
-Dinh
+Sincerely,
+Lukas.
