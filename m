@@ -2,35 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94730645E15
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Dec 2022 16:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552726460F1
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Dec 2022 19:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiLGPyA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Dec 2022 10:54:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
+        id S229521AbiLGSXY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Dec 2022 13:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGPxu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Dec 2022 10:53:50 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF0A6398;
-        Wed,  7 Dec 2022 07:53:48 -0800 (PST)
-Received: from [10.10.2.52] (unknown [10.10.2.52])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 1FCD3419E9E2;
-        Wed,  7 Dec 2022 15:53:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 1FCD3419E9E2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1670428425;
-        bh=ZqjWgzM76IO9LtCNbjUykwXARbXIbqlPZM1UrQpq3ks=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ISB1THlL3CUY0C+PSEouuJMJEpEcpHWayLTikFZgxBpOE3JnZ+2TAfqZzp4huoCVO
-         VNkx9CaMNZOYgo9i3H1kpimulaM4RUBNbacMvWFMxi9lN6DUc3i5ySftrU5DdFWKM3
-         5nfqlssAiM1T5zeteOwHzgP+gFVkUit4ig4Ku36c=
+        with ESMTP id S229497AbiLGSXX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Dec 2022 13:23:23 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1783FB80;
+        Wed,  7 Dec 2022 10:23:23 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id ay32so8779898qtb.11;
+        Wed, 07 Dec 2022 10:23:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nqV8Z3CejC4gM8mgMLeA4bf48l9B+DBUuSHPJZEt2rE=;
+        b=punNcy/XVTLMQCfvuz2BTh05uSCxzMrAI5GCcuPI6GuE8UgT7VOfLoAwIL0rxlXtIb
+         scaA6M07S3nAxoa6z2x5qweK5/g66S5BGT/guhKtuDJZVo56S1Ob6oNhsyOdZiYI8uCb
+         XuoxR3nwmNmyjDfZgoKfPIBd9j9KlS7dClrhcRVvyYiWMiPEyDazRSxgNVBfCNioBQ+g
+         lNsAji3YzUWCkFzMOknnicagQaGUK73dEEnwzcJwnM/ijtn6NFUPziP62VREXlBBuoLl
+         G7E4l4gX9KWvYM7PoIAFKISD50O1iCBZOnwxBrLuDyuLwsCkw5VAp+U8J8XgiEzNUTdq
+         oaow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nqV8Z3CejC4gM8mgMLeA4bf48l9B+DBUuSHPJZEt2rE=;
+        b=JD3UoCNHTQfoFfAyx81X3wL361k6hTesNSiEYRg0K2EvS+S1GF/44ip7s3IXLMSWpg
+         CmHhG1qdyWpJa4wypyNIbrbxMV2H4QYOUhBYNi01hUXzAWztq4AUob2oG4F3PfRBZaLJ
+         adIk2fQFkHCnKug98YIJ/N0mZgnSIszVNzJA029/ZBwEcE+zarSFw/uwQvsQ1gA7+uoo
+         TAMf3wxQc6HLgzQz9qzy4Tv7v1dIKJ3hSkXiIB86GLwFjd4tQWAwuPaGp6KBN47WhFUs
+         aoCGllBAsWpLoze245/w0hfhQ8yHN49P0RVcxPwUGNaP/Expuvz4u5JqU519Ubce8T9j
+         +ddw==
+X-Gm-Message-State: ANoB5pniqtYq1KB5jV4xuhEdZwgwIabcXCMLra4mDsvOhN0IYw8J/NTc
+        bbmOyIGZilgQ8VuOo5/4SCM=
+X-Google-Smtp-Source: AA0mqf5SwX7LwgxgBHyVAxIdeOS/0duODo1rGd9ETRaKxJVSiCg8TAsdK79fMZOLyMUE9dcqDmmySA==
+X-Received: by 2002:ac8:5645:0:b0:3a6:90cc:75bd with SMTP id 5-20020ac85645000000b003a690cc75bdmr26455594qtt.633.1670437402105;
+        Wed, 07 Dec 2022 10:23:22 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id hf13-20020a05622a608d00b003a5c60686b0sm13479465qtb.22.2022.12.07.10.23.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 10:23:21 -0800 (PST)
+Message-ID: <29f1887f-bce4-2065-8e0d-2faef30e38db@gmail.com>
+Date:   Wed, 7 Dec 2022 10:23:19 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
 Subject: Re: [lvc-project] [PATCH v2 2/2] MIPS: BCM63xx: Add check for NULL
  for clk in clk_enable
-To:     Anastasia Belova <abelova@astralinux.ru>,
+Content-Language: en-US
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Anastasia Belova <abelova@astralinux.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        lvc-project@linuxtesting.org, Randy Dunlap <rdunlap@infradead.org>,
+Cc:     lvc-project@linuxtesting.org, Randy Dunlap <rdunlap@infradead.org>,
         linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
         linux-kernel@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
@@ -38,100 +68,57 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         kernel test robot <lkp@intel.com>
 References: <20221207142824.8706-1-abelova@astralinux.ru>
  <20221207142824.8706-2-abelova@astralinux.ru>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <2f2047d6-64ec-3602-a115-cde06855e2ab@ispras.ru>
-Date:   Wed, 7 Dec 2022 18:53:44 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20221207142824.8706-2-abelova@astralinux.ru>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+ <2f2047d6-64ec-3602-a115-cde06855e2ab@ispras.ru>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <2f2047d6-64ec-3602-a115-cde06855e2ab@ispras.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07.12.2022 17:28, Anastasia Belova wrote:
-> Errors from previous version of patch fixed.
-> Check clk for NULL before calling clk_enable_unlocked where clk
-> is dereferenced. There is such check in other implementations
-> of clk_enable.
+On 12/7/22 07:53, Alexey Khoroshilov wrote:
+> On 07.12.2022 17:28, Anastasia Belova wrote:
+>> Errors from previous version of patch fixed.
+>> Check clk for NULL before calling clk_enable_unlocked where clk
+>> is dereferenced. There is such check in other implementations
+>> of clk_enable.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs.")
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+>> ---
+>>   arch/mips/bcm63xx/clk.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
+>> index 401140cf36d9..cf303d6e6693 100644
+>> --- a/arch/mips/bcm63xx/clk.c
+>> +++ b/arch/mips/bcm63xx/clk.c
+>> @@ -362,7 +362,7 @@ static struct clk clk_periph = {
+>>   int clk_enable(struct clk *clk)
+>>   {
+>>   	if (!clk)
+>> -		return;
+>> +		return 0;
+>>   
+>>   	mutex_lock(&clocks_mutex);
+>>   	clk_enable_unlocked(clk);
+>>
 > 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs.")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
-> ---
->  arch/mips/bcm63xx/clk.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
-> index 401140cf36d9..cf303d6e6693 100644
-> --- a/arch/mips/bcm63xx/clk.c
-> +++ b/arch/mips/bcm63xx/clk.c
-> @@ -362,7 +362,7 @@ static struct clk clk_periph = {
->  int clk_enable(struct clk *clk)
->  {
->  	if (!clk)
-> -		return;
-> +		return 0;
->  
->  	mutex_lock(&clocks_mutex);
->  	clk_enable_unlocked(clk);
-> 
+> Keeping in mind that the first patch is not applied yet, it does not
+> make sense to fix it by the second one. It is better to fix the first
+> patch itself by sending the next version.
 
-Keeping in mind that the first patch is not applied yet, it does not
-make sense to fix it by the second one. It is better to fix the first
-patch itself by sending the next version.
+Exactly, you would to combine both patches into a single patch and send 
+that as a version 3 now.
+-- 
+Florian
 
---
-Alexey
