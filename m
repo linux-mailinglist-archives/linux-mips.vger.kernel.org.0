@@ -2,157 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864BA64582C
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Dec 2022 11:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A431A645896
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Dec 2022 12:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiLGKvE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Dec 2022 05:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S229872AbiLGLKC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Dec 2022 06:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiLGKvC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Dec 2022 05:51:02 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23D92450A9;
-        Wed,  7 Dec 2022 02:50:59 -0800 (PST)
-Received: from loongson.cn (unknown [117.133.84.183])
-        by gateway (Coremail) with SMTP id _____8AxCekTcJBjDs4DAA--.5513S3;
-        Wed, 07 Dec 2022 18:50:59 +0800 (CST)
-Received: from [192.168.1.2] (unknown [117.133.84.183])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxn+ARcJBjGDEnAA--.31698S3;
-        Wed, 07 Dec 2022 18:50:58 +0800 (CST)
-Message-ID: <cfbfe5c1-2dbb-a057-b56c-13900ba8c953@loongson.cn>
-Date:   Wed, 7 Dec 2022 18:50:56 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1] irqchip: loongson-liointc: add hierarchy irq support
-To:     Marc Zyngier <maz@kernel.org>
+        with ESMTP id S229876AbiLGLJV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Dec 2022 06:09:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5B7BD6;
+        Wed,  7 Dec 2022 03:07:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FBF4613CA;
+        Wed,  7 Dec 2022 11:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81935C433D6;
+        Wed,  7 Dec 2022 11:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670411252;
+        bh=WiIeLZt0fOZzoZHz8ERnvXFAGGYuewcksszBjhqzUq8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U5ztpf6NHe8CDPtGfHUXwOnyDErDghHaVNfJwRYQWlt3iqzev4MeRM4tff/9Q5amI
+         vhL5y7xFnQm5qoqXZDGkzwU0zceM82Y6XfmHL/sUXY32qMNNejgLHS3AUz0qwKeODR
+         EDxH9D45LeMGFq7ExV7pgpbCFU4rBYqQHjrPrZOFzV0kSODbjSqIDAXH1HmQ1q/In6
+         Iqn1Cpgs5PZTvdgirHSS85uaveXD+BOQErcFNtvpSIWjhD/InIsvSfjxOGqa7aOqQo
+         YnZTVGZsEekYTindQOhMg80Ux5fDx1uSRpQiXX65aT4DEsu04gom22Pyvf21wb30kl
+         il9s/SkyRQ3vg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p2sGw-00B4Vg-Dt;
+        Wed, 07 Dec 2022 11:07:30 +0000
+Date:   Wed, 07 Dec 2022 11:07:29 +0000
+Message-ID: <86ilinlbf2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
 Cc:     Huacai Chen <chenhuacai@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuyinbo@loongson.cn
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] irqchip: loongson-liointc: add hierarchy irq support
+In-Reply-To: <cfbfe5c1-2dbb-a057-b56c-13900ba8c953@loongson.cn>
 References: <20221207014555.22465-1-zhuyinbo@loongson.cn>
- <874ju7tz4r.wl-maz@kernel.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-In-Reply-To: <874ju7tz4r.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxn+ARcJBjGDEnAA--.31698S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxCr4rur1Utw4UJw4kAw48tFb_yoW5ZF1fpF
-        W8Ca1avr45Jr12grW3Wr1UX34ay395JrZFyayfKF9ruFyDA34vkF109FnF9r4Syry8G3W2
-        vF1xWrW5uF15GaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
-        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
-        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
-        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8pnQUUUUU=
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+        <874ju7tz4r.wl-maz@kernel.org>
+        <cfbfe5c1-2dbb-a057-b56c-13900ba8c953@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: zhuyinbo@loongson.cn, chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, 07 Dec 2022 10:50:56 +0000,
+Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>=20
+>=20
+> =E5=9C=A8 2022/12/7 16:08, Marc Zyngier =E5=86=99=E9=81=93:
+> > On Wed, 07 Dec 2022 01:45:55 +0000,
+> > Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> >> When the irq of hierarchical interrupt chip was routed to liointc
+> >> that asked liointc driver to support hierarchy irq and this patch
+> >> was to add such support.
+> >>=20
+> >> In addition, this patch only consider dts, and acpi hierarchy irq
+> >> support will be added later as required.
+> >>=20
+> >> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> >> ---
+> >>   drivers/irqchip/irq-loongson-liointc.c | 31 ++++++++++++++++++++++++=
+++
+> >>   1 file changed, 31 insertions(+)
+> >>=20
+> >> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/=
+irq-loongson-liointc.c
+> >> index 0da8716f8f24..58e43a2cd02e 100644
+> >> --- a/drivers/irqchip/irq-loongson-liointc.c
+> >> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> >> @@ -177,6 +177,32 @@ static const struct irq_domain_ops acpi_irq_gc_op=
+s =3D {
+> >>   	.xlate	=3D liointc_domain_xlate,
+> >>   };
+> >>   +#ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
+> >> +static int liointc_domain_alloc(struct irq_domain *domain, unsigned i=
+nt virq,
+> >> +				unsigned int nr_irqs, void *arg)
+> >> +{
+> >> +	int i, ret;
+> >> +	irq_hw_number_t hwirq;
+> >> +	unsigned int type =3D IRQ_TYPE_NONE;
+> >> +	struct irq_fwspec *fwspec =3D arg;
+> >> +
+> >> +	ret =3D irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	for (i =3D 0; i < nr_irqs; i++)
+> >> +		irq_map_generic_chip(domain, virq + i, hwirq + i);
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +static const struct irq_domain_ops of_irq_gc_ops =3D {
+> >> +	.translate	=3D irq_domain_translate_twocell,
+> >> +	.alloc		=3D liointc_domain_alloc,
+> >> +	.free		=3D irq_domain_free_irqs_top,
+> >> +};
+> >> +#endif
+> >> +
+> >>   static int liointc_init(phys_addr_t addr, unsigned long size, int re=
+vision,
+> >>   		struct fwnode_handle *domain_handle, struct device_node *node)
+> >>   {
+> >> @@ -218,8 +244,13 @@ static int liointc_init(phys_addr_t addr, unsigne=
+d long size, int revision,
+> >>   		domain =3D irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IR=
+Q,
+> >>   					&acpi_irq_gc_ops, priv);
+> >>   	else
+> >> +#ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
+> >> +		domain =3D irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
+> >> +					&of_irq_gc_ops, priv);
+> >> +#else
+> >>   		domain =3D irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IR=
+Q,
+> >>   					&irq_generic_chip_ops, priv);
+> >> +#endif
+> > Two things:
+> >=20
+> > - Why do we need three calls to create the same domains depending on
+> >    what firmware is used and kernel configuration?
+> yes, It depend on firmeware and kernel configuration.
 
-在 2022/12/7 16:08, Marc Zyngier 写道:
-> On Wed, 07 Dec 2022 01:45:55 +0000,
-> Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->> When the irq of hierarchical interrupt chip was routed to liointc
->> that asked liointc driver to support hierarchy irq and this patch
->> was to add such support.
->>
->> In addition, this patch only consider dts, and acpi hierarchy irq
->> support will be added later as required.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   drivers/irqchip/irq-loongson-liointc.c | 31 ++++++++++++++++++++++++++
->>   1 file changed, 31 insertions(+)
->>
->> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
->> index 0da8716f8f24..58e43a2cd02e 100644
->> --- a/drivers/irqchip/irq-loongson-liointc.c
->> +++ b/drivers/irqchip/irq-loongson-liointc.c
->> @@ -177,6 +177,32 @@ static const struct irq_domain_ops acpi_irq_gc_ops = {
->>   	.xlate	= liointc_domain_xlate,
->>   };
->>   
->> +#ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
->> +static int liointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
->> +				unsigned int nr_irqs, void *arg)
->> +{
->> +	int i, ret;
->> +	irq_hw_number_t hwirq;
->> +	unsigned int type = IRQ_TYPE_NONE;
->> +	struct irq_fwspec *fwspec = arg;
->> +
->> +	ret = irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
->> +	if (ret)
->> +		return ret;
->> +
->> +	for (i = 0; i < nr_irqs; i++)
->> +		irq_map_generic_chip(domain, virq + i, hwirq + i);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct irq_domain_ops of_irq_gc_ops = {
->> +	.translate	= irq_domain_translate_twocell,
->> +	.alloc		= liointc_domain_alloc,
->> +	.free		= irq_domain_free_irqs_top,
->> +};
->> +#endif
->> +
->>   static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
->>   		struct fwnode_handle *domain_handle, struct device_node *node)
->>   {
->> @@ -218,8 +244,13 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
->>   		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
->>   					&acpi_irq_gc_ops, priv);
->>   	else
->> +#ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
->> +		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
->> +					&of_irq_gc_ops, priv);
->> +#else
->>   		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
->>   					&irq_generic_chip_ops, priv);
->> +#endif
-> Two things:
->
-> - Why do we need three calls to create the same domains depending on
->    what firmware is used and kernel configuration?
-yes, It depend on firmeware and kernel configuration.
->
-> - who is going to decide whether to select the
->    CONFIG_IRQ_DOMAIN_HIERARCHY option?
-The latest gpio driver will select  CONFIG_IRQ_DOMAIN_HIERARCHY
->
-> I'd really like to see a statement from the Loongson folks about what
-> this whole DT stuff is all about. AFAICT, the core ACPICA stuff isn't
-> even fully merged (i.e. we still rely on arch-specific hacks).
+Read again:
 
-The support of dts is mainly for Loongson embedded chips, such as 
-LoongArch Loongson-2
+why do we need 3 different calls to irq_domain_create_linear when you
+can *indirect* them with a pointer to the correct structure?
 
-series SoC.  and it use dts to descripte device and don't support acpi.
+> >=20
+> > - who is going to decide whether to select the
+> >    CONFIG_IRQ_DOMAIN_HIERARCHY option?
+> The latest gpio driver will select=C2=A0 CONFIG_IRQ_DOMAIN_HIERARCHY
 
->
-> Can you *please* finish what you've started before adding another
-> layer of quality stuff on top?
->
-> 	M.
->
+Then why do we need two different behaviours? The same kernel should
+run everywhere.
 
+> >=20
+> > I'd really like to see a statement from the Loongson folks about what
+> > this whole DT stuff is all about. AFAICT, the core ACPICA stuff isn't
+> > even fully merged (i.e. we still rely on arch-specific hacks).
+>=20
+> The support of dts is mainly for Loongson embedded chips, such as
+> LoongArch Loongson-2 series SoC.=C2=A0 and it use dts to descripte device
+> and don't support acpi.
+
+That doesn't answer my question. Please have a *consistent* approach
+to your interrupt handling, and work with your ACPI colleagues.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
