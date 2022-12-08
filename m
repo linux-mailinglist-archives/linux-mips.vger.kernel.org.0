@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8A16476B2
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Dec 2022 20:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B546476B6
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Dec 2022 20:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiLHTkn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Dec 2022 14:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        id S229942AbiLHTlH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Dec 2022 14:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiLHTkU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Dec 2022 14:40:20 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F20C1AA25
-        for <linux-mips@vger.kernel.org>; Thu,  8 Dec 2022 11:40:08 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-352e29ff8c2so24956157b3.21
-        for <linux-mips@vger.kernel.org>; Thu, 08 Dec 2022 11:40:08 -0800 (PST)
+        with ESMTP id S229819AbiLHTkY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Dec 2022 14:40:24 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DBD7B4C0
+        for <linux-mips@vger.kernel.org>; Thu,  8 Dec 2022 11:40:13 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a4-20020a5b0004000000b006fdc6aaec4fso2547948ybp.20
+        for <linux-mips@vger.kernel.org>; Thu, 08 Dec 2022 11:40:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4nLMUWhCbgygsyxQ4LP+FBPYpvg+KdNjD6AAx7BEWII=;
-        b=rW1pkR31ur5/8vzbX6I0g9dHa5ieQLfxMNHl7/CiYy31x1gmEotFcgfb6bMg1XD9l4
-         cVrOC8CHqZzC+Gd2V/LwvTlYuSZNohfxzCXcTVs+DyirYljuXOWNIY4uY7CZr2a2YKF5
-         72eri2VmsAQGQbk2L3oKVAoFTeSQShiiqL6JV3UiQ4QZOs2UwURjWE1AFC0PhC62yXox
-         X0dKf4S1b8a4rdREripCobtwsSCC9MJx4k5wGRfNkLSnee4Y5BiQ4yQ0Og5S8kz28vfk
-         0som8w77mpuwlpN/KA9+tJzi+pYWYZboOtEkERDzhNWA7MhWTNWQZafjFT2UdiruzKAQ
-         QPVA==
+        bh=XV6plMeF8MwFNJz3HbB05g+syGBZZ4afzsZVPB1fNOM=;
+        b=Or/+tQ35VJl1emV0K4s+0pZ6UBajubG9tq8FrCH/hA3kAwbcecTNaCZrvYWvTtsU9g
+         5JZnVfab3n41kCOJL7IiSST4+aKZY4JSEhz9//xqRqAsRUBEKxw9xl8ylX8pwq0BwIdV
+         I/Xh88N0cUIemHf3DBiDhLCAmUuyGnaY5gTHAU4MfbG4ILGutMlede6Fq/e7cS9eVM31
+         nHh094v1U0MR6DFbL/HmUOOC1ZS2/Zm3j4YdatXU4M2l2wqxp12xCNyRytDsAZdWIiVJ
+         2+SDuw6pj88vz17PG6Z8Q+mIQbHf2BO5E5P+E5Z5Z6J+LaEFzERjkL2lFcMUz4dZZ5j1
+         PSpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4nLMUWhCbgygsyxQ4LP+FBPYpvg+KdNjD6AAx7BEWII=;
-        b=afYP2lLuagwaF6GekkbI2nT4P5jkjeVT4ja1jYSs2jgQsUBCB8j2X8xPX+SUBjdwrA
-         6kBqe3m8FQZVBLzNZGZJvslzSGsePlHsKj66zEO2JWTeddRX2/PfRsFAw7wVYfmY0slQ
-         icdztlRQ82PjDywJX3ZdbETtQamYVMvtOvNcJf4rgnxM9dZ0E7jcZv07eGmeVYBKTCDu
-         9i84HwHCp+SEz5MfH2lc1q7Dah/+0zfsI2+s1RHmv7BV6DA7o+W75RSSHbMHx6ucz90D
-         Rf07frUWRjFYnqv+MqM6nHJFyC1wyYWVsbjmNHvrVWbRvTZ5gd/zbN84CKjRgTZn71C1
-         oYJQ==
-X-Gm-Message-State: ANoB5pkjUCw2/Ktm/lYMpAtGMLotmTYTmdlUoXDauSSjhU4XtLxbTWro
-        m9VlXzRCOn+srdZJSSZl6qY/9b61RlOpUQ==
-X-Google-Smtp-Source: AA0mqf5kUDO3Tr6gk/fzW/ARrxEhzmkAXRSHhWoL0H7mQ0gz5ri8bxcSR3iro0wxy+7xhENFLIaYZergQrtKPg==
+        bh=XV6plMeF8MwFNJz3HbB05g+syGBZZ4afzsZVPB1fNOM=;
+        b=RbMkDH5S+zbZbPRfFUhewLOBSCbgALRkxVX3cRLyliX0UUz6X4J8yDbZ6ZTKdgTTA/
+         rsA9ydgpernEi1sFl12fKkjICys07zaut7/BKdc9tUHlOh75+vcaGPuS0xBwescGn+/F
+         VzHq1LVhBybcYIZEh0rqSXde4S9j3H4/kdcu1mCidiAmNuyi37RABryIqgT4PMELn+Xp
+         lc+Nfd9vh5rJy1EhWjjnuPXdc7mtFVpDO8rYAUGvAoedsz3tBjrQ7MuLaSfCOLveXLjT
+         VaiEo/y/8gD2AargZT1E4YREkPjwEHyIKpEnsvJHhTsttg1HBs2iUDqCx4J2MJduPlkI
+         XJAA==
+X-Gm-Message-State: ANoB5pnv1vF+yjXxLYoM29i8/ys1q3Cc6GzU8BauUFDT78E2sy/CwWfJ
+        TZoc8TwCoNHJMHTvYstD24vhSjZjkFkCmg==
+X-Google-Smtp-Source: AA0mqf6Wkh0OUy4PlZrJU9hOTo3IInMenz2jMKiaSBByUieGZ1GCpj8vRhZKagSo80e6dZu+mbM8OPIkZWhBWg==
 X-Received: from dmatlack-n2d-128.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1309])
- (user=dmatlack job=sendgmr) by 2002:a25:5:0:b0:6fc:8f88:813b with SMTP id
- 5-20020a250005000000b006fc8f88813bmr27601586yba.629.1670528399532; Thu, 08
- Dec 2022 11:39:59 -0800 (PST)
-Date:   Thu,  8 Dec 2022 11:38:51 -0800
+ (user=dmatlack job=sendgmr) by 2002:a25:230b:0:b0:6f9:b1b0:67f5 with SMTP id
+ j11-20020a25230b000000b006f9b1b067f5mr28607189ybj.471.1670528401185; Thu, 08
+ Dec 2022 11:40:01 -0800 (PST)
+Date:   Thu,  8 Dec 2022 11:38:52 -0800
 In-Reply-To: <20221208193857.4090582-1-dmatlack@google.com>
 Mime-Version: 1.0
 References: <20221208193857.4090582-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221208193857.4090582-32-dmatlack@google.com>
-Subject: [RFC PATCH 31/37] KVM: x86/MMU: Use gfn_t in kvm_flush_remote_tlbs_range()
+Message-ID: <20221208193857.4090582-33-dmatlack@google.com>
+Subject: [RFC PATCH 32/37] KVM: Allow range-based TLB invalidation from common code
 From:   David Matlack <dmatlack@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
@@ -98,44 +98,64 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use gfn_t instead of u64 for the start_gfn parameter to
-kvm_flush_remote_tlbs_range(), since that is the standard type for GFNs
-throughout KVM.
+Make kvm_flush_remote_tlbs_range() visible in common code and create a
+default implementation that just invalidates the whole TLB. This will be
+used in future commits to clean up kvm_arch_flush_remote_tlbs_memslot()
+and to move the KVM/x86 TDP MMU to common code.
 
 No functional change intended.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c          | 2 +-
- arch/x86/kvm/mmu/mmu_internal.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kvm/mmu/mmu_internal.h | 1 -
+ include/linux/kvm_host.h        | 1 +
+ virt/kvm/kvm_main.c             | 9 +++++++++
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 4a28adaa92b4..19963ed83484 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -244,7 +244,7 @@ static inline bool kvm_available_flush_tlb_with_range(void)
- 	return kvm_x86_ops.tlb_remote_flush_with_range;
- }
- 
--void kvm_flush_remote_tlbs_range(struct kvm *kvm, u64 start_gfn, u64 pages)
-+void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages)
- {
- 	struct kvm_tlb_range range;
- 	int ret = -EOPNOTSUPP;
 diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-index d35a5b408b98..e44fe7ad3cfb 100644
+index e44fe7ad3cfb..df815cb84bd2 100644
 --- a/arch/x86/kvm/mmu/mmu_internal.h
 +++ b/arch/x86/kvm/mmu/mmu_internal.h
-@@ -65,7 +65,7 @@ void kvm_mmu_gfn_allow_lpage(const struct kvm_memory_slot *slot, gfn_t gfn);
+@@ -65,7 +65,6 @@ void kvm_mmu_gfn_allow_lpage(const struct kvm_memory_slot *slot, gfn_t gfn);
  bool kvm_mmu_slot_gfn_write_protect(struct kvm *kvm,
  				    struct kvm_memory_slot *slot, u64 gfn,
  				    int min_level);
--void kvm_flush_remote_tlbs_range(struct kvm *kvm, u64 start_gfn, u64 pages);
-+void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages);
+-void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages);
  unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
  
  extern int nx_huge_pages;
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index ec3a6de6d54e..d9a7f559d2c5 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1365,6 +1365,7 @@ int kvm_vcpu_yield_to(struct kvm_vcpu *target);
+ void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool usermode_vcpu_not_eligible);
+ 
+ void kvm_flush_remote_tlbs(struct kvm *kvm);
++void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages);
+ 
+ #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+ int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 0f1d48ed7d57..662ca280c0cf 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -379,6 +379,15 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+ EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
+ #endif
+ 
++/*
++ * Architectures that support range-based TLB invalidation can override this
++ * function.
++ */
++void __weak kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages)
++{
++	kvm_flush_remote_tlbs(kvm);
++}
++
+ static void kvm_flush_shadow_all(struct kvm *kvm)
+ {
+ 	kvm_arch_flush_shadow_all(kvm);
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
