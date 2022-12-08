@@ -2,88 +2,316 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FB2647560
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Dec 2022 19:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C9564764D
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Dec 2022 20:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiLHSJk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Dec 2022 13:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
+        id S229745AbiLHTjP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Dec 2022 14:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiLHSJi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Dec 2022 13:09:38 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA570578DC
-        for <linux-mips@vger.kernel.org>; Thu,  8 Dec 2022 10:09:37 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h12so2572020wrv.10
-        for <linux-mips@vger.kernel.org>; Thu, 08 Dec 2022 10:09:37 -0800 (PST)
+        with ESMTP id S229724AbiLHTjN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Dec 2022 14:39:13 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D9D85D0D
+        for <linux-mips@vger.kernel.org>; Thu,  8 Dec 2022 11:39:08 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id s16-20020a632c10000000b0047084b16f23so1614193pgs.7
+        for <linux-mips@vger.kernel.org>; Thu, 08 Dec 2022 11:39:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iwl5PjnUNgA1yLI2s2Oe1SRaxVEB0YXbiDz/jtRlLh8=;
-        b=NOAkNEwA8C4PvKW5Rg1yX0x+2soYIOq37j0jiNyKe8nXfGprQTqhITTcyfZoC3tsZ2
-         ylJeMW+GivmFi1xsQ+HDb0Xs6EHvF3lzogbR98Ij2AD6GkrcslE3RkpkIMzKgJMIYzvM
-         XO0b3/hMqhdjzmUP0lM9Lt7huVJCjVJQIIuDReeDdEddzQufylp3UvkKvMDynhJligkc
-         aDhQGwH6zCpYQ6ZbpbaL0NONEAQi7AP8Tjgijz+A4CAd45Mane+yUnSVDnSFbQHPcsUO
-         0rTJ/7/zuZ62+pp5bi5BIU5vIcTZARa0R2SQU8BKxOCDWXM21WXKEVRT8t7SH//8JHxI
-         6dkw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ujLJi7i8azU+eMc6VTcefpCoupmEeGtA9YqNEcSBses=;
+        b=cuzmQGCEldboJ2SHxjhYx+JlxduEJQcra1UJYiUT5ADduRS09xHWw7K4TJw1Q5jPem
+         KcWULiMtAf8RENHwaDz48Nz4wc0mOadnuYaM+NOwk+AV1c8kwUmctYnQ1GnTujQjYANW
+         UoERo9J18Ky3VKEwjcmPruTKMisazad9CVywJ25nL03PajUQw2Wf2MDEk0IdfkLBeD3J
+         G9AegsGcNrXObaDNrAuD1hyo4QJk9gcGNZ+ZlJPS+Q1U4EWY0km2jMLYRnIMLWiuNk9v
+         XjNoj3Jn+65wwAb2AkKPDDUs6bFJD/MvpR3zoNtTlr/HOQWjVuK/lQxa9oM9gzRO/VDs
+         xAPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iwl5PjnUNgA1yLI2s2Oe1SRaxVEB0YXbiDz/jtRlLh8=;
-        b=awoAdNqOweVHLX0A5Vs0EBZgzbCGE9PS94Ao/pZcADRUn8oEagAKQKiLTzSNlxeCE9
-         6Ia/53WEM7tu0bxMwOUhTBWknlEnZy7CZFFNEuD70OYXWVo27jvlo0S78KA3dAcdGtPU
-         ECnGICMUEIaTZB3O+IK32trF8RTa1+x4TqcammAMMtFDJnBrF64xowpLRGz6OuYK3b6C
-         xF54+/d2Sn3sQzphaVClp1I3sIzc5TTA3zBB6gjsEq0vjl8nc3SsCMnQYAu/md1IlWBk
-         5vGIl/cXQa4AetDSjytuVwTa85KuhNkVTSE067eWY/YOYlgsj0i6rvDOAbKg7Xt0yhsA
-         lRww==
-X-Gm-Message-State: ANoB5pk+N23VN6AZWybr4Kipro3b59CJcEYkOISegdV6mu4cZWMj+jML
-        KSy8BF360Hh1RZnDN8Jiq84AmHZ7UZw/rq6hNTU=
-X-Google-Smtp-Source: AA0mqf5YyP+xEaAXfxjjZoTM1P9/8W2arVO0sk4zVV6MzNeFi9plkgnZ54vNbXV3iUbdr9Yqt5q1Yg==
-X-Received: by 2002:a5d:4312:0:b0:241:997a:4f57 with SMTP id h18-20020a5d4312000000b00241997a4f57mr1799888wrq.39.1670522976154;
-        Thu, 08 Dec 2022 10:09:36 -0800 (PST)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id z5-20020adff745000000b002383fc96509sm22441223wrp.47.2022.12.08.10.09.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 10:09:35 -0800 (PST)
-Message-ID: <f2026eb3-4b2e-b837-f4d4-afc7c8f62bfb@linaro.org>
-Date:   Thu, 8 Dec 2022 19:09:34 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH] MIPS: OCTEON: warn only once if deprecated link status is
- being used
-Content-Language: en-US
-To:     Ladislav Michl <oss-lists@triops.cz>, linux-mips@vger.kernel.org
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>
-References: <Y5HJxeWqJFK0oWyS@lenoch>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <Y5HJxeWqJFK0oWyS@lenoch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ujLJi7i8azU+eMc6VTcefpCoupmEeGtA9YqNEcSBses=;
+        b=2elkXfoWHmlxItiQ7W0E7nfzU/fAwEYjcyYWLS5pvoq5l5821HBwUvrb5ZiH4nY7g4
+         wI0cjnhfbm2KW54WqcGhf6xIqcIJuNtEmboS8GShuqrZy0dqTOCdBZuqF0iEZpuA9wp1
+         Mi2qVaLTKVW3YQpc0sZwamCdoT/VxG5x6ry6HRLwOUKpHqIVP28ajIqZoJ8F9gAc0Frg
+         cEf9rPBs+No40pzNUyTr+JAyPialP2wNNB4uuJ6lCZktW6X+G+BidPzmljYRHhAu4aww
+         wEV7ra8Gzgy1qG7vWgqCKeV1nz1vEFZW6mlvTMqBmz+8dE/vYOrRHOz49yqFX+wtBP1z
+         Bslw==
+X-Gm-Message-State: ANoB5pkdfTugUF84IDuMf2HsiZXfZKpNdYarKfnyMsfMQJlxuoD8cb6u
+        J03SQs6OoeFZCZMZu1r4CblbSzc71azBMg==
+X-Google-Smtp-Source: AA0mqf7+VfQEHkQMkf8id2SowUe4yQgqt5tzohe0c2eiYcS+MDqzUzJHDLrfnnlooA+chsGoATzx5vrJ+8ydUg==
+X-Received: from dmatlack-n2d-128.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1309])
+ (user=dmatlack job=sendgmr) by 2002:a17:90b:f89:b0:219:5b3b:2b9f with SMTP id
+ ft9-20020a17090b0f8900b002195b3b2b9fmr4096840pjb.2.1670528346939; Thu, 08 Dec
+ 2022 11:39:06 -0800 (PST)
+Date:   Thu,  8 Dec 2022 11:38:20 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221208193857.4090582-1-dmatlack@google.com>
+Subject: [RFC PATCH 00/37] KVM: Refactor the KVM/x86 TDP MMU into common code
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Matlack <dmatlack@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Nadav Amit <namit@vmware.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
+        Colin Cross <ccross@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/12/22 12:25, Ladislav Michl wrote:
-> From: Ladislav Michl <ladis@linux-mips.org>
-> 
-> Avoid flooding kernel log with warnings.
-> 
-> Fixes: 2c0756d306c2 ("MIPS: OCTEON: warn if deprecated link status is being used")
-> Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
-> ---
->   arch/mips/cavium-octeon/executive/cvmx-helper-board.c | 2 +-
->   arch/mips/cavium-octeon/executive/cvmx-helper.c       | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+[ mm folks: You are being cc'd since this series includes a mm patch
+  ("mm: Introduce architecture-neutral PG_LEVEL macros"), but general
+  feedback is also welcome. I imagine there are a lot of lessons KVM can
+  learn from mm about sharing page table code across architectures. ]
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Hello,
+
+This series refactors the KVM/x86 "TDP MMU" into common code. This is
+the first step toward sharing TDP (aka Stage-2) page table management
+code across architectures that support KVM. For more background on this
+effort please see my talk from KVM Forum 2022 "Exploring an
+architecture-neutral MMU":
+
+  https://youtu.be/IBhW34fCFi0
+
+By the end of this series, 90% of the TDP MMU code is in common directories
+(virt/kvm/mmu/ and include/kvm/). The only pieces that remaing in
+arch/x86 are code that deals with constructing/inspecting/modifying PTEs
+and arch hooks to implement NX Huge Pages (a mitigation for an
+Intel-specific vulnerability).
+
+Before:
+
+  180 arch/x86/kvm/mmu/tdp_iter.c
+  118 arch/x86/kvm/mmu/tdp_iter.h
+ 1917 arch/x86/kvm/mmu/tdp_mmu.c
+   98 arch/x86/kvm/mmu/tdp_mmu.h
+ ----
+ 2313 total
+
+After:
+
+  178 virt/kvm/mmu/tdp_iter.c
+ 1867 virt/kvm/mmu/tdp_mmu.c
+  117 include/kvm/tdp_iter.h
+   78 include/kvm/tdp_mmu.h
+   39 include/kvm/tdp_pgtable.h
+ ----
+  184 arch/x86/kvm/mmu/tdp_pgtable.c
+   76 arch/x86/include/asm/kvm/tdp_pgtable.h
+ ----
+ 2539 total
+
+This series is very much an RFC, but it does build (I tested x86_64 and
+ARM64) and pass basic testing (KVM selftests and kvm-unit-tests on
+x86_64), so it is entirely functional aside from any bugs.
+
+The main areas I would like feedback are:
+
+ - NX Huge Pages support in the TDP MMU requires 5 arch hooks in
+   the common code, which IMO makes the NX Huge Pages implementation
+   harder to read. The alternative is to move the NX Huge Pages
+   implementation into common code, including the fields in struct
+   kvm_mmu_page and kvm_page_fault, which would increase memory usage
+   a tiny bit (for non-x86 architectures) and pollute the common code
+   with an x86-specific security mitigation. Ideas on better ways to
+   handle this would be appreciated.
+
+ - struct kvm_mmu_page increased by 64 bytes because the separation of
+   arch and common state eliminated the ability to use unions to
+   optimize the size of the struct. There's two things we can do to
+   reduce the size of the struct back down: (1) dynamically allocated
+   root-specific fields only for root page tables and (2) dynamically
+   allocate Shadow MMU state in kvm_mmu_page_arch only for Shadow MMU
+   pages. This should actually be a net *reduction* the size of
+   kvm_mmu_page relative today for most pages, but I have not
+   implemented it.
+
+   Note that an alternative approach I implemented avoided this problem
+   by creating an entirely separate struct for the common TDP MMU (e.g.
+   struct tdp_mmu_page). This however had a lot of downsides that I
+   don't think make it a good solution. Notably, it complicated a ton of
+   existing code in arch/x86/kvm/mmu/mmu.c (e.g. anything that touches
+   vcpu->arch.mmu->root and kvm_recover_nx_huge_pages()) and created a
+   new runtime failure mode in to_shadow_page().
+
+ - Naming. This series does not change the names of any existing code.
+   So all the KVM/x86 Shadow MMU-style terminology like
+   "shadow_page"/"sp"/"spte" persists. Should we keep that style in
+   common code or move toward something less shadow-paging-specific?
+   e.g. "page_table"/"pt"/"pte". Also do we want to keep "TDP" or switch
+   to something more familiar across architectures (e.g. ARM and RISC-V
+   both use "Stage-2")?
+
+Additionally, there are some warts to be aware of. For these I think
+they can be addressed in future series, since they only really matter
+once we are ready to enable the common TDP MMU on a non-x86
+architecture.
+
+ - Tracepoints. For now the common MMU continues to use the x86
+   tracepoints code and they are just stubbed (no-ops) for other
+   architectures.
+
+ - tdp_mmu_max_mapping_level() and tdp_mmu_max_gfn_exclusive() are
+   currently arch hooks but they can probably be made common code at
+   some point.
+
+Lastly, I still need to verify that there are no negative performance
+impacts of the changes in this series. My main concern is the new
+tdp_pte_*() functions adds overhead from not being able to be inlined.
+
+This series applies on top of kvm/queue commit 89b239585965 ("KVM:
+x86/mmu: Pivot on "TDP MMU enabled" when handling direct page faults"),
+since there are several recent series in kvm/queue that affect this
+refactor. A revert of 0c2a04128f50 ("KVM: x86: remove unnecessary
+exports") is also needed since it breaks the build on x86 (unrelated to
+this refactor).
+
+Thanks.
+
+P.S. Looking to the future... This is just the first step toward
+building a common TDP MMU for KVM. After this, We are looking at adding
+KUnit testing to the common TDP MMU as a way to offset the risk of
+sharing more code across architectures, and then targeting RISC-V as the
+first non-x86 architecture to use the common TDP MMU. If any RISC-V
+developer is interested in working on the port, please reach out.
+
+David Matlack (36):
+  KVM: x86/mmu: Store the address space ID directly in kvm_mmu_page_role
+  KVM: MMU: Move struct kvm_mmu_page_role into common code
+  KVM: MMU: Move tdp_ptep_t into common code
+  KVM: x86/mmu: Invert sp->tdp_mmu_page to sp->shadow_mmu_page
+  KVM: x86/mmu: Unify TDP MMU and Shadow MMU root refcounts
+  KVM: MMU: Move struct kvm_mmu_page to common code
+  mm: Introduce architecture-neutral PG_LEVEL macros
+  KVM: Move page size stats into common code
+  KVM: MMU: Move struct kvm_page_fault to common code
+  KVM: MMU: Move RET_PF_* into common code
+  KVM: x86/mmu: Use PG_LEVEL_{PTE,PMD,PUD} in the TDP MMU
+  KVM: MMU: Move sptep_to_sp() to common code
+  KVM: MMU: Introduce common macros for TDP page tables
+  KVM: x86/mmu: Add a common API for inspecting/modifying TDP PTEs
+  KVM: x86/mmu: Abstract away TDP MMU root lookup
+  KVM: Move struct kvm_gfn_range to kvm_types.h
+  KVM: x86/mmu: Add common API for creating TDP PTEs
+  KVM: x86/mmu: Add arch hooks for NX Huge Pages
+  KVM: x86/mmu: Abstract away computing the max mapping level
+  KVM: Introduce CONFIG_HAVE_TDP_MMU
+  KVM: x86: Select HAVE_TDP_MMU if X86_64
+  KVM: MMU: Move VM-level TDP MMU state to struct kvm
+  KVM: x86/mmu: Move kvm_mmu_hugepage_adjust() up to fault handler
+  KVM: x86/mmu: Pass root role to kvm_tdp_mmu_get_vcpu_root_hpa()
+  KVM: Move page table cache to struct kvm_vcpu
+  KVM: MMU: Move mmu_page_header_cache to common code
+  KVM: MMU: Stub out tracepoints on non-x86 architectures
+  KVM: x86/mmu: Collapse kvm_flush_remote_tlbs_with_{range,address}()
+    together
+  KVM: x86/mmu: Rename kvm_flush_remote_tlbs_with_address()
+  KVM: x86/MMU: Use gfn_t in kvm_flush_remote_tlbs_range()
+  KVM: Allow range-based TLB invalidation from common code
+  KVM: Move kvm_arch_flush_remote_tlbs_memslot() to common code
+  KVM: MMU: Move the TDP iterator to common code
+  KVM: x86/mmu: Move tdp_mmu_max_gfn_exclusive() to tdp_pgtable.c
+  KVM: x86/mmu: Move is_tdp_mmu_page() to mmu_internal.h
+  KVM: MMU: Move the TDP MMU to common code
+
+Jing Zhang (1):
+  KVM: selftests: Stop assuming stats are contiguous in
+    kvm_binary_stats_test
+
+ MAINTAINERS                                   |   6 +-
+ arch/arm64/include/asm/kvm_host.h             |   3 -
+ arch/arm64/kvm/arm.c                          |  10 +-
+ arch/arm64/kvm/mmu.c                          |   2 +-
+ arch/mips/include/asm/kvm_host.h              |   3 -
+ arch/mips/kvm/mips.c                          |  10 +-
+ arch/mips/kvm/mmu.c                           |   4 +-
+ arch/riscv/include/asm/kvm_host.h             |   3 -
+ arch/riscv/kvm/mmu.c                          |   8 +-
+ arch/riscv/kvm/vcpu.c                         |   4 +-
+ arch/x86/include/asm/kvm/mmu_types.h          | 138 ++++++
+ arch/x86/include/asm/kvm/tdp_pgtable.h        |  73 ++++
+ arch/x86/include/asm/kvm_host.h               | 122 +-----
+ arch/x86/include/asm/pgtable_types.h          |  12 +-
+ arch/x86/kvm/Kconfig                          |   1 +
+ arch/x86/kvm/Makefile                         |   2 +-
+ arch/x86/kvm/mmu.h                            |   5 -
+ arch/x86/kvm/mmu/mmu.c                        | 409 +++++++++--------
+ arch/x86/kvm/mmu/mmu_internal.h               | 221 ++--------
+ arch/x86/kvm/mmu/mmutrace.h                   |  20 +-
+ arch/x86/kvm/mmu/paging_tmpl.h                |  48 +-
+ arch/x86/kvm/mmu/spte.c                       |   7 +-
+ arch/x86/kvm/mmu/spte.h                       |  38 +-
+ arch/x86/kvm/mmu/tdp_pgtable.c                | 183 ++++++++
+ arch/x86/kvm/x86.c                            |  16 +-
+ include/kvm/mmu.h                             |  21 +
+ include/kvm/mmu_types.h                       | 179 ++++++++
+ include/kvm/mmutrace.h                        |  17 +
+ {arch/x86/kvm/mmu => include/kvm}/tdp_iter.h  |  19 +-
+ {arch/x86/kvm/mmu => include/kvm}/tdp_mmu.h   |  17 +-
+ include/kvm/tdp_pgtable.h                     |  39 ++
+ include/linux/kvm_host.h                      |  36 +-
+ include/linux/kvm_types.h                     |  17 +
+ include/linux/mm_types.h                      |   9 +
+ .../selftests/kvm/kvm_binary_stats_test.c     |  11 +-
+ virt/kvm/Kconfig                              |   3 +
+ virt/kvm/Makefile.kvm                         |   3 +
+ virt/kvm/kvm_main.c                           |  27 +-
+ {arch/x86 => virt}/kvm/mmu/tdp_iter.c         |  24 +-
+ {arch/x86 => virt}/kvm/mmu/tdp_mmu.c          | 412 ++++++++----------
+ 40 files changed, 1245 insertions(+), 937 deletions(-)
+ create mode 100644 arch/x86/include/asm/kvm/mmu_types.h
+ create mode 100644 arch/x86/include/asm/kvm/tdp_pgtable.h
+ create mode 100644 arch/x86/kvm/mmu/tdp_pgtable.c
+ create mode 100644 include/kvm/mmu.h
+ create mode 100644 include/kvm/mmu_types.h
+ create mode 100644 include/kvm/mmutrace.h
+ rename {arch/x86/kvm/mmu => include/kvm}/tdp_iter.h (90%)
+ rename {arch/x86/kvm/mmu => include/kvm}/tdp_mmu.h (87%)
+ create mode 100644 include/kvm/tdp_pgtable.h
+ rename {arch/x86 => virt}/kvm/mmu/tdp_iter.c (89%)
+ rename {arch/x86 => virt}/kvm/mmu/tdp_mmu.c (84%)
+
+
+base-commit: 89b2395859651113375101bb07cd6340b1ba3637
+prerequisite-patch-id: 19dc9f47392d43a9a86c0e4f3ce1f13b62004eeb
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
 
