@@ -2,80 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552726460F1
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Dec 2022 19:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2202E6466BD
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Dec 2022 03:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiLGSXY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Dec 2022 13:23:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
+        id S229555AbiLHCJ5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Dec 2022 21:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLGSXX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Dec 2022 13:23:23 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1783FB80;
-        Wed,  7 Dec 2022 10:23:23 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id ay32so8779898qtb.11;
-        Wed, 07 Dec 2022 10:23:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nqV8Z3CejC4gM8mgMLeA4bf48l9B+DBUuSHPJZEt2rE=;
-        b=punNcy/XVTLMQCfvuz2BTh05uSCxzMrAI5GCcuPI6GuE8UgT7VOfLoAwIL0rxlXtIb
-         scaA6M07S3nAxoa6z2x5qweK5/g66S5BGT/guhKtuDJZVo56S1Ob6oNhsyOdZiYI8uCb
-         XuoxR3nwmNmyjDfZgoKfPIBd9j9KlS7dClrhcRVvyYiWMiPEyDazRSxgNVBfCNioBQ+g
-         lNsAji3YzUWCkFzMOknnicagQaGUK73dEEnwzcJwnM/ijtn6NFUPziP62VREXlBBuoLl
-         G7E4l4gX9KWvYM7PoIAFKISD50O1iCBZOnwxBrLuDyuLwsCkw5VAp+U8J8XgiEzNUTdq
-         oaow==
+        with ESMTP id S229449AbiLHCJ4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Dec 2022 21:09:56 -0500
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1320670616;
+        Wed,  7 Dec 2022 18:09:56 -0800 (PST)
+Received: by mail-ot1-f50.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so98910otl.10;
+        Wed, 07 Dec 2022 18:09:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nqV8Z3CejC4gM8mgMLeA4bf48l9B+DBUuSHPJZEt2rE=;
-        b=JD3UoCNHTQfoFfAyx81X3wL361k6hTesNSiEYRg0K2EvS+S1GF/44ip7s3IXLMSWpg
-         CmHhG1qdyWpJa4wypyNIbrbxMV2H4QYOUhBYNi01hUXzAWztq4AUob2oG4F3PfRBZaLJ
-         adIk2fQFkHCnKug98YIJ/N0mZgnSIszVNzJA029/ZBwEcE+zarSFw/uwQvsQ1gA7+uoo
-         TAMf3wxQc6HLgzQz9qzy4Tv7v1dIKJ3hSkXiIB86GLwFjd4tQWAwuPaGp6KBN47WhFUs
-         aoCGllBAsWpLoze245/w0hfhQ8yHN49P0RVcxPwUGNaP/Expuvz4u5JqU519Ubce8T9j
-         +ddw==
-X-Gm-Message-State: ANoB5pniqtYq1KB5jV4xuhEdZwgwIabcXCMLra4mDsvOhN0IYw8J/NTc
-        bbmOyIGZilgQ8VuOo5/4SCM=
-X-Google-Smtp-Source: AA0mqf5SwX7LwgxgBHyVAxIdeOS/0duODo1rGd9ETRaKxJVSiCg8TAsdK79fMZOLyMUE9dcqDmmySA==
-X-Received: by 2002:ac8:5645:0:b0:3a6:90cc:75bd with SMTP id 5-20020ac85645000000b003a690cc75bdmr26455594qtt.633.1670437402105;
-        Wed, 07 Dec 2022 10:23:22 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id hf13-20020a05622a608d00b003a5c60686b0sm13479465qtb.22.2022.12.07.10.23.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 10:23:21 -0800 (PST)
-Message-ID: <29f1887f-bce4-2065-8e0d-2faef30e38db@gmail.com>
-Date:   Wed, 7 Dec 2022 10:23:19 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DVLUA4+byBBb5Ln2m9dCWWr48c4SZxEE3BQRnCIa2aw=;
+        b=qIZM5aIH8l2o10s4AkG6JRVChdyg2Pr+wxWzfjVXqPUbwhxNrJ3uptVfbErO7vvCcf
+         CpoHCbPChEAu2IEed3JKH6uf3rhhXpvpri7o1JppZuJTvFjTjJo9LQdYJsnLEfCHdK52
+         BFpHE4hG3L9rrwHHfm2b5lzk1X24e0TW54AjNshzQuMD69ZoUVqK7n4/X5KD/L43lGG8
+         RQxjjsDnEZm3pSyexHh8sBhBVZgHLfbWnvIKyGS7mIBUizVVVx5mx0YCdHI7KW1SoeUe
+         JanrED3y2QpWWgJM3uOk9aLgv/rLNmsDiLpT728E+vQ74PmhkA60pbZ354eNuE4dk+UR
+         GcIw==
+X-Gm-Message-State: ANoB5pk7vDHuaXQR/Kj5X6S90zQCACTrg53nTa61g2x4fKYvG2ffFQ30
+        2FabML//BxbTLQA6oY4xVg==
+X-Google-Smtp-Source: AA0mqf4vaVnHDI+WM9WbPmItOyfJxH1BenXSZmazdiFTa/ilsVjrRR7uHFHlxsA9W+Z6qVLixy2hoQ==
+X-Received: by 2002:a05:6830:1196:b0:670:6552:bac6 with SMTP id u22-20020a056830119600b006706552bac6mr2066715otq.313.1670465395193;
+        Wed, 07 Dec 2022 18:09:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v2-20020a05683018c200b006706cd202b0sm617566ote.11.2022.12.07.18.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 18:09:54 -0800 (PST)
+Received: (nullmailer pid 3371218 invoked by uid 1000);
+        Thu, 08 Dec 2022 02:09:54 -0000
+Date:   Wed, 7 Dec 2022 20:09:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Liu Peibao <liupeibao@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        wanghongliang <wanghongliang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: interrupt-controller: add yaml for
+ LoongArch CPU interrupt controller
+Message-ID: <20221208020954.GA3368836-robh@kernel.org>
+References: <20221114113824.1880-1-liupeibao@loongson.cn>
+ <20221114113824.1880-3-liupeibao@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [lvc-project] [PATCH v2 2/2] MIPS: BCM63xx: Add check for NULL
- for clk in clk_enable
-Content-Language: en-US
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Anastasia Belova <abelova@astralinux.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     lvc-project@linuxtesting.org, Randy Dunlap <rdunlap@infradead.org>,
-        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        kernel test robot <lkp@intel.com>
-References: <20221207142824.8706-1-abelova@astralinux.ru>
- <20221207142824.8706-2-abelova@astralinux.ru>
- <2f2047d6-64ec-3602-a115-cde06855e2ab@ispras.ru>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <2f2047d6-64ec-3602-a115-cde06855e2ab@ispras.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114113824.1880-3-liupeibao@loongson.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,42 +71,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/7/22 07:53, Alexey Khoroshilov wrote:
-> On 07.12.2022 17:28, Anastasia Belova wrote:
->> Errors from previous version of patch fixed.
->> Check clk for NULL before calling clk_enable_unlocked where clk
->> is dereferenced. There is such check in other implementations
->> of clk_enable.
->>
->> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs.")
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
->> ---
->>   arch/mips/bcm63xx/clk.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
->> index 401140cf36d9..cf303d6e6693 100644
->> --- a/arch/mips/bcm63xx/clk.c
->> +++ b/arch/mips/bcm63xx/clk.c
->> @@ -362,7 +362,7 @@ static struct clk clk_periph = {
->>   int clk_enable(struct clk *clk)
->>   {
->>   	if (!clk)
->> -		return;
->> +		return 0;
->>   
->>   	mutex_lock(&clocks_mutex);
->>   	clk_enable_unlocked(clk);
->>
+On Mon, Nov 14, 2022 at 07:38:24PM +0800, Liu Peibao wrote:
+> Current LoongArch compatible CPUs support 14 CPU IRQs. We can describe how
+> the 14 IRQs are wired to the platform's internal interrupt controller by
+> devicetree.
 > 
-> Keeping in mind that the first patch is not applied yet, it does not
-> make sense to fix it by the second one. It is better to fix the first
-> patch itself by sending the next version.
+> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+> ---
+>  .../loongarch,cpu-interrupt-controller.yaml   | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+> new file mode 100644
+> index 000000000000..2a1cf885c99d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+> @@ -0,0 +1,34 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LoongArch CPU Interrupt Controller
+> +
+> +maintainers:
+> +  - Liu Peibao <liupeibao@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    const: loongarch,cpu-interrupt-controller
 
-Exactly, you would to combine both patches into a single patch and send 
-that as a version 3 now.
--- 
-Florian
+This doesn't match what the kernel is using. It has loongson rather than 
+loongarch. Please send an incremental fix. (Don't forget the example)
 
+Rob
