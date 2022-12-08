@@ -2,57 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01064647698
+	by mail.lfdr.de (Postfix) with ESMTP id A11D864769A
 	for <lists+linux-mips@lfdr.de>; Thu,  8 Dec 2022 20:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiLHTkP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Dec 2022 14:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S229816AbiLHTkQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Dec 2022 14:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiLHTkD (ORCPT
+        with ESMTP id S229879AbiLHTkD (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Dec 2022 14:40:03 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A73389C0
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE672389C3
         for <linux-mips@vger.kernel.org>; Thu,  8 Dec 2022 11:39:43 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id i7-20020a056902068700b006f848e998b5so2562437ybt.10
+Received: by mail-pl1-x649.google.com with SMTP id h7-20020a170902f54700b00189deebdb91so2184391plf.9
         for <linux-mips@vger.kernel.org>; Thu, 08 Dec 2022 11:39:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CaDXua+LFbRv3ei+U1Fgv/kax6A2A04L4lM62rMK90Q=;
-        b=FQRVJBa4KRKObP8S3n7w3f2m+Bcx87+PQgURkRJCXrk7m4BdVxUrIfCvxY3dvCxGvX
-         DFNpL9OiA6gV3a7OA6rX48DXADwjzhjgTFiSwWT9yA/sZdiwLepPrDM/Dmol5FJsTFtd
-         1z4mxGJZs7yrfwU4FQjUHnKK5PWmnwdRAprtxH5S0Ua5f0HoeWKVyWfSamiqMLNdnacf
-         wBp7G+B2Y+E/qsY0zWkyQWEjRsad/cIklCbMqtgv/ZnA3GI3slUIM7MR6Z7bKiBB5z6N
-         n2PV1n0iU9J6gxAvFUL2pGUf26H+n9zVjk4Eh4mosAVvSNZBvAGEZTWWsWyjSDwLmgGs
-         n+cg==
+        bh=4Zxu59m+BC3IHN6G+DZ7Gfccf72aG4aOXJ0CWcNu+xQ=;
+        b=SdJhXds2L90YC8FNHmtWh5Fh9TEgerNWhfkuw8x3d9CBnfm/9eipZjv0gPdpJNH4I0
+         S+51SqBNWDjQiWTiQlTyu6PNy4niyZRnQhbIkbzuxQiNibwxH6mkZqPrFqBbyJTrkaSd
+         9Mn4ob8QKmJos009LfgYNnOTusdfrKp1xLSuoRmHmtBWBuBrOTTzfiu5JzBu+friunut
+         7j3QXKw2PfZd7vhhYsSAGJiGY/32mBAW8UAr3zD1WlpFMVlQcqneZ096cl3TmZsBGjzc
+         3x4d21+FAOrJhsugApLkXvPF1NkwgnZMzvQRH+9jPPL4ZLADP+yEglXH2v1r5QVynX/K
+         vjCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CaDXua+LFbRv3ei+U1Fgv/kax6A2A04L4lM62rMK90Q=;
-        b=nuO1fPotoX5qsHEakHIAdZy3t8up+L/HNrMDGXNkOU29iPWQGPPWScPSqFgI8XbvkU
-         9TSVVbQahiJbtoEFOkc/eBT3C9zGVt7GD76U6VoP1ZesYEWHe9LSrdeb+p24D2CUXu5Z
-         09LM100XBuXuHcvdm0ms8QQ62/Q/3VVFI3/2XoVVaZBFKsr0hwRu9FN5XCMcTqBZ5Izi
-         iXLFpAQMt/ynjTFvU3RP22dyZ7UF03bLbBaXr8YBxeC4GEyzwtAGcrV6j7fVpH0W6fHQ
-         PSGn5Pax1vs34Ylfot9EVsiFv89NzhyIp89xBucRmc8wRmBbPzNmFMWDmEju7jj5yRzi
-         oDlQ==
-X-Gm-Message-State: ANoB5pmBSTynJDQjU3BfvX/CABKJ9T7v7OeV/PxxryGt2qx+Nd4TJUTM
-        59owblSuCEeUguNF1KeFnsaSEWj70E015A==
-X-Google-Smtp-Source: AA0mqf5XxSPsh1gElJLISTCH8jBxKw2l85vxM5vFZMR7VtMxrzDAz9u8B+smh4G6eaCc3YG8CKpqOh9t0eSRDA==
+        bh=4Zxu59m+BC3IHN6G+DZ7Gfccf72aG4aOXJ0CWcNu+xQ=;
+        b=0IRetJZFmDy5zocERAAqPbSXTa4Vlcz1pDrDTJWVWEAAPtOxd7dahsu8DSfDUj3kUg
+         jbeINRUlzR9k95bYZzrvrM+SAhuVGKLAzIolSdHOQpJqfqZGDJPuCSWU71fMW3M5LHTb
+         VrJ5Zf4i8uovKAM4HSUzSBkQ7fYD1l8WEWuzY2kHJWaG8TMW60P7YEKxfGoRr5IV8H6n
+         OKu5gba8DDVR7N9Ary1iTSqfC1iWuSfSJbbmDzGojquiFMr+2rjHw3Kuw8m7qLEVdKqT
+         BHcuYONLb5PIpbff9HXiqFv/xU1k6KTMX0AWiONYGpl0B2SJIUxdtovCfPS42nTsZZbc
+         yIUA==
+X-Gm-Message-State: ANoB5pnLqyyUOhM4zMOZEbda4TMemEXI/Ka0UhyZ5HlC7t8+9m08abyG
+        wM1lohy2/ezsy5zG/lqEw+HbEIYo4VJt5g==
+X-Google-Smtp-Source: AA0mqf7xeoOaS0AA84SgKnbp6lpiXTBq7xMlUXV6MswQxMERGECN0IbonM/14NtNvPIycx9F8VqJbtOKzbBrCA==
 X-Received: from dmatlack-n2d-128.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1309])
- (user=dmatlack job=sendgmr) by 2002:a05:690c:b18:b0:388:7d2:587b with SMTP id
- cj24-20020a05690c0b1800b0038807d2587bmr8897906ywb.416.1670528380375; Thu, 08
- Dec 2022 11:39:40 -0800 (PST)
-Date:   Thu,  8 Dec 2022 11:38:40 -0800
+ (user=dmatlack job=sendgmr) by 2002:a17:90a:d3d5:b0:218:845f:36a1 with SMTP
+ id d21-20020a17090ad3d500b00218845f36a1mr97581242pjw.117.1670528382072; Thu,
+ 08 Dec 2022 11:39:42 -0800 (PST)
+Date:   Thu,  8 Dec 2022 11:38:41 -0800
 In-Reply-To: <20221208193857.4090582-1-dmatlack@google.com>
 Mime-Version: 1.0
 References: <20221208193857.4090582-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221208193857.4090582-21-dmatlack@google.com>
-Subject: [RFC PATCH 20/37] KVM: x86/mmu: Abstract away computing the max
- mapping level
+Message-ID: <20221208193857.4090582-22-dmatlack@google.com>
+Subject: [RFC PATCH 21/37] KVM: Introduce CONFIG_HAVE_TDP_MMU
 From:   David Matlack <dmatlack@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
@@ -91,7 +90,7 @@ Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,74 +98,29 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Abstract away kvm_mmu_max_mapping_level(), which is an x86-specific
-function for computing the max level that a given GFN can be mapped in
-KVM's page tables. This will be used in a future commit to enable moving
-the TDP MMU to common code.
+Introduce a new config option to gate support for the common TDP MMU.
+This will be used in future commits to avoid compiling the TDP MMU code
+and avoid adding fields to common structs (e.g. struct kvm) on
+architectures that do not support the TDP MMU yet.
 
-Provide a default implementation for non-x86 architectures that just
-returns the max level. This will result in more zapping than necessary
-when disabling dirty logging (i.e. less than optimal performance) but no
-correctness issues.
+No functional change intended.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c     | 14 ++++++++++----
- arch/x86/kvm/mmu/tdp_pgtable.c |  7 +++++++
- 2 files changed, 17 insertions(+), 4 deletions(-)
+ virt/kvm/Kconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 7670fbd8e72d..24d1dbd0a1ec 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1696,6 +1696,13 @@ void kvm_tdp_mmu_clear_dirty_pt_masked(struct kvm *kvm,
- 		clear_dirty_pt_masked(kvm, root, gfn, mask, wrprot);
- }
+diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+index 9fb1ff6f19e5..75d86794d6cf 100644
+--- a/virt/kvm/Kconfig
++++ b/virt/kvm/Kconfig
+@@ -92,3 +92,6 @@ config KVM_XFER_TO_GUEST_WORK
  
-+__weak int tdp_mmu_max_mapping_level(struct kvm *kvm,
-+				     const struct kvm_memory_slot *slot,
-+				     struct tdp_iter *iter)
-+{
-+	return TDP_MAX_HUGEPAGE_LEVEL;
-+}
+ config HAVE_KVM_PM_NOTIFIER
+        bool
 +
- static void zap_collapsible_spte_range(struct kvm *kvm,
- 				       struct kvm_mmu_page *root,
- 				       const struct kvm_memory_slot *slot)
-@@ -1727,15 +1734,14 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
- 		/*
- 		 * If iter.gfn resides outside of the slot, i.e. the page for
- 		 * the current level overlaps but is not contained by the slot,
--		 * then the SPTE can't be made huge.  More importantly, trying
--		 * to query that info from slot->arch.lpage_info will cause an
-+		 * then the SPTE can't be made huge. On x86, trying to query
-+		 * that info from slot->arch.lpage_info will cause an
- 		 * out-of-bounds access.
- 		 */
- 		if (iter.gfn < start || iter.gfn >= end)
- 			continue;
- 
--		max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
--							      iter.gfn, PG_LEVEL_NUM);
-+		max_mapping_level = tdp_mmu_max_mapping_level(kvm, slot, &iter);
- 		if (max_mapping_level < iter.level)
- 			continue;
- 
-diff --git a/arch/x86/kvm/mmu/tdp_pgtable.c b/arch/x86/kvm/mmu/tdp_pgtable.c
-index b07ed99b4ab1..840d063c45b8 100644
---- a/arch/x86/kvm/mmu/tdp_pgtable.c
-+++ b/arch/x86/kvm/mmu/tdp_pgtable.c
-@@ -163,3 +163,10 @@ void tdp_mmu_arch_unlink_sp(struct kvm *kvm, struct kvm_mmu_page *sp,
- 	if (shared)
- 		spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
- }
-+
-+int tdp_mmu_max_mapping_level(struct kvm *kvm,
-+			      const struct kvm_memory_slot *slot,
-+			      struct tdp_iter *iter)
-+{
-+	return kvm_mmu_max_mapping_level(kvm, slot, iter->gfn, PG_LEVEL_NUM);
-+}
++config HAVE_TDP_MMU
++       bool
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
