@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E5464768C
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Dec 2022 20:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9041864768F
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Dec 2022 20:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiLHTkG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Dec 2022 14:40:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S229822AbiLHTkJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Dec 2022 14:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiLHTjt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Dec 2022 14:39:49 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033931AA30
-        for <linux-mips@vger.kernel.org>; Thu,  8 Dec 2022 11:39:35 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-360b9418f64so24735187b3.7
-        for <linux-mips@vger.kernel.org>; Thu, 08 Dec 2022 11:39:35 -0800 (PST)
+        with ESMTP id S229807AbiLHTjy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Dec 2022 14:39:54 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9D21AA3B
+        for <linux-mips@vger.kernel.org>; Thu,  8 Dec 2022 11:39:39 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3b102317668so24885737b3.23
+        for <linux-mips@vger.kernel.org>; Thu, 08 Dec 2022 11:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RmR6EwIqCFDBLvxI6selt5ga3zw1fPd7MYyun7sh04=;
-        b=pUH2F0cXu3WIGRD2ce8NSaVZncsouuIq0PwSt3Hx5XNNzUTAHyLwoPUZmYYFi5CtSP
-         nVhq3u0B+puFODMcSNnljB/IQui4QQoBBoT7VK2vjldq5K0TcwfXSpD6l8CQHX5MJLf1
-         +ObCB8QWeBiWlCf7gO5CWF4MLRqEya3iXno1lfQYF2S+3pFzK9GESTP8LV94Jcgc/kmm
-         DGrmedpnRTomnz9+8f0JJ8smD91kG4llzTsIt3IMmR0C9KC9suLzy6zk0g20DYlyZJGB
-         ATs/tP0070Y72621Cd+brELKn4hhj6+ekuepajebi56ZFA2sqrDn/ZHk1U80/2BWwxTx
-         E8Jg==
+        bh=IqmyM2QEYva7JW7axwbl4xIkL86pAwW/H4sjSNNkIgM=;
+        b=dlUm8IzbDvKb7N133pMZbM/DFF2KBU+Uj9aLv9J4HYtcIkmIb26+E+NQc6WW5lGWbL
+         gRjhF2Xtb1+eYvjvVNPz1fbza7FzGrlR1Lu4PkwObVflvo1HWtD/PdV/GtwH/OYCGqmW
+         unzqYTbSQw2kEfHvH067uKfBCEte20dfejQENL3zjpmLPkBmJgJlntv4NgZXLQazrFdX
+         xuOUsmX6ghWNWZUkpgBa0nNKdgiEWdVdSAmfBWBxgOuca3Crx0ITb6PP4ZfWYj0CDybH
+         3DDCzi9SmVtrCH3Ln+bCV9cJJ5HGVNrG9C8r5e5Ny4xwAEq3sPHh7YTtyJKFJzf22O7k
+         p2Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RmR6EwIqCFDBLvxI6selt5ga3zw1fPd7MYyun7sh04=;
-        b=6YRU8tOWp1JbL6MHBwJfDjrWWhYapKYoUsLyn7s08d5Av6sLMUCmhEYnMRB+eXzcFn
-         0eVox78jh9gCfD3YevrRi6jYIGTpRlwQV/eNUROgoLLIYm2WXwQvLaPJHTCIIRopuaen
-         V1NPCzlvkmw84cEunVrlPox5QOK/QoMgUsNHok50+vs2VFVJ9rXbKpAF7NOkILCrWUwZ
-         eI/nGYFc+rUeFU/GmHnAdWx5kpiA+Twb357nHLvUdXokuhNFycBpC4HlWmWysel5tpP9
-         BC40P9zZ7BOTeSGI8vheL2qlPEmo9TR4gh/OTEr5NNXbi20Z66hTKQgVIocSVZKEXDAY
-         NfOA==
-X-Gm-Message-State: ANoB5pnzauRKWUTFmOiluLX3UnIYLswqGlc09OTeTbp68b/QfJvcytaR
-        2VHg0xrbbetLNPVIfSErQxeGLzNyxis6Qg==
-X-Google-Smtp-Source: AA0mqf7cV11l2t3OM7agzc6qRsrai4lnDlxSMNa6gi84ZckjSbH/wAyvmmZJEJroavTOpSqZ0tfjElEm8egcuA==
+        bh=IqmyM2QEYva7JW7axwbl4xIkL86pAwW/H4sjSNNkIgM=;
+        b=cpzeLn/LJYZyn7wRPtouTM8QzgrC46sCdQA32WgaVaQ5Wn8lFXpfktp+DmYc7nV96L
+         IDuRh9o8KFTaw+5KND8ui7c+xvScMsDqf7OsEv9nfDjyZ2MZ+BzMixX6pBB33zEjS/d3
+         bGLeZ7OsdM6thPcKU2gIPLG5pqMmbZ5IRqfM7sxFuT/OGvSpxbN3kQ0nJHj0L8Gi7fMu
+         8mMw7SjM5GLbZ5xQ4M4RB2/gle4wAFF56/0jH1LSiPDp/RoLUzmd18+YIHMaCN582NR1
+         a8CV22c4kkJr+8LSygTcDdaQjrcrD8NeYaVuqAnlu1d52wqwUF8v+f28sqgqDXcCX2T1
+         UGWA==
+X-Gm-Message-State: ANoB5plTS8v/niZPJ41w14h9oT8Gd/bNyMwUWGjWb+MsqEeV4v6WwBRl
+        y8qmJejWpLAT/C1DyZrOaHG44GisoNkMmA==
+X-Google-Smtp-Source: AA0mqf7z1vyD3rdlMeoQGriM43dtIzP7Gztt83Sfud7zIuPh1YZpIi0HN2kxDCnBaSlw5o2SzSSWGj7vYJ4cig==
 X-Received: from dmatlack-n2d-128.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1309])
- (user=dmatlack job=sendgmr) by 2002:a25:d9c1:0:b0:6fd:d054:a0a7 with SMTP id
- q184-20020a25d9c1000000b006fdd054a0a7mr25462879ybg.112.1670528375112; Thu, 08
- Dec 2022 11:39:35 -0800 (PST)
-Date:   Thu,  8 Dec 2022 11:38:37 -0800
+ (user=dmatlack job=sendgmr) by 2002:a81:7851:0:b0:3b6:e1ed:4185 with SMTP id
+ t78-20020a817851000000b003b6e1ed4185mr57305022ywc.330.1670528376810; Thu, 08
+ Dec 2022 11:39:36 -0800 (PST)
+Date:   Thu,  8 Dec 2022 11:38:38 -0800
 In-Reply-To: <20221208193857.4090582-1-dmatlack@google.com>
 Mime-Version: 1.0
 References: <20221208193857.4090582-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221208193857.4090582-18-dmatlack@google.com>
-Subject: [RFC PATCH 17/37] KVM: Move struct kvm_gfn_range to kvm_types.h
+Message-ID: <20221208193857.4090582-19-dmatlack@google.com>
+Subject: [RFC PATCH 18/37] KVM: x86/mmu: Add common API for creating TDP PTEs
 From:   David Matlack <dmatlack@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
@@ -90,7 +90,7 @@ Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,53 +98,156 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Move struct kvm_gfn_range to kvm_types.h so that it's definition can be
-accessed in a future commit by arch/x86/include/asm/kvm/tdp_pgtable.h
-without needing to include the mega-header kvm_host.h.
+Introduce an API for construction of TDP PTEs.
+
+- tdp_mmu_make_leaf_pte()
+- tdp_mmu_make_nonleaf_pte()
+- tdp_mmu_make_huge_page_split_pte()
+- tdp_mmu_make_changed_pte_notifier_pte()
+
+This will be used in a future commit to move the TDP MMU to common code,
+while PTE construction will stay in the architecture-specific code.
 
 No functional change intended.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- include/linux/kvm_host.h  | 7 -------
- include/linux/kvm_types.h | 8 ++++++++
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ arch/x86/include/asm/kvm/tdp_pgtable.h | 10 +++++++
+ arch/x86/kvm/mmu/tdp_mmu.c             | 18 +++++--------
+ arch/x86/kvm/mmu/tdp_pgtable.c         | 36 ++++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 22ecb7ce4d31..469ff4202a0d 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -256,13 +256,6 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
- #endif
+diff --git a/arch/x86/include/asm/kvm/tdp_pgtable.h b/arch/x86/include/asm/kvm/tdp_pgtable.h
+index c5c4e4cab24a..ff2691ced38b 100644
+--- a/arch/x86/include/asm/kvm/tdp_pgtable.h
++++ b/arch/x86/include/asm/kvm/tdp_pgtable.h
+@@ -4,6 +4,7 @@
  
- #ifdef KVM_ARCH_WANT_MMU_NOTIFIER
--struct kvm_gfn_range {
--	struct kvm_memory_slot *slot;
--	gfn_t start;
--	gfn_t end;
--	pte_t pte;
--	bool may_block;
--};
- bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
- bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
- bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
-diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-index 59cf958d69df..001aad9ea987 100644
---- a/include/linux/kvm_types.h
-+++ b/include/linux/kvm_types.h
-@@ -132,4 +132,12 @@ struct kvm_vcpu_stat_generic {
+ #include <linux/types.h>
+ #include <linux/kvm_types.h>
++#include <kvm/mmu_types.h>
  
- #define KVM_STATS_NAME_SIZE	48
+ struct kvm_mmu_page *tdp_mmu_root(struct kvm_vcpu *vcpu);
  
-+struct kvm_gfn_range {
-+	struct kvm_memory_slot *slot;
-+	gfn_t start;
-+	gfn_t end;
-+	pte_t pte;
-+	bool may_block;
-+};
+@@ -57,4 +58,13 @@ kvm_pfn_t tdp_pte_to_pfn(u64 pte);
+ 
+ void tdp_pte_check_leaf_invariants(u64 pte);
+ 
++struct tdp_iter;
 +
- #endif /* __KVM_TYPES_H__ */
++u64 tdp_mmu_make_leaf_pte(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
++			  struct tdp_iter *iter, bool *wrprot);
++u64 tdp_mmu_make_nonleaf_pte(struct kvm_mmu_page *sp);
++u64 tdp_mmu_make_changed_pte_notifier_pte(struct tdp_iter *iter,
++					  struct kvm_gfn_range *range);
++u64 tdp_mmu_make_huge_page_split_pte(struct kvm *kvm, u64 huge_spte,
++				     struct kvm_mmu_page *sp, int index);
+ #endif /* !__ASM_KVM_TDP_PGTABLE_H */
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 8155a9e79203..0172b0e44817 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1057,17 +1057,13 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
+ 					  struct tdp_iter *iter)
+ {
+ 	struct kvm_mmu_page *sp = sptep_to_sp(rcu_dereference(iter->sptep));
+-	u64 new_spte;
+ 	int ret = RET_PF_FIXED;
+ 	bool wrprot = false;
++	u64 new_spte;
+ 
+ 	WARN_ON(sp->role.level != fault->goal_level);
+-	if (unlikely(!fault->slot))
+-		new_spte = make_mmio_spte(vcpu, iter->gfn, ACC_ALL);
+-	else
+-		wrprot = make_spte(vcpu, sp, fault->slot, ACC_ALL, iter->gfn,
+-					 fault->pfn, iter->old_spte, fault->prefetch, true,
+-					 fault->map_writable, &new_spte);
++
++	new_spte = tdp_mmu_make_leaf_pte(vcpu, fault, iter, &wrprot);
+ 
+ 	if (new_spte == iter->old_spte)
+ 		ret = RET_PF_SPURIOUS;
+@@ -1117,7 +1113,7 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
+ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
+ 			   struct kvm_mmu_page *sp, bool shared)
+ {
+-	u64 spte = make_nonleaf_spte(sp->spt, !kvm_ad_enabled());
++	u64 spte = tdp_mmu_make_nonleaf_pte(sp);
+ 	int ret = 0;
+ 
+ 	if (shared) {
+@@ -1312,9 +1308,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+ 	tdp_mmu_set_spte(kvm, iter, 0);
+ 
+ 	if (!pte_write(range->pte)) {
+-		new_spte = kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
+-								  pte_pfn(range->pte));
+-
++		new_spte = tdp_mmu_make_changed_pte_notifier_pte(iter, range);
+ 		tdp_mmu_set_spte(kvm, iter, new_spte);
+ 	}
+ 
+@@ -1466,7 +1460,7 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
+ 	 * not been linked in yet and thus is not reachable from any other CPU.
+ 	 */
+ 	for (i = 0; i < TDP_PTES_PER_PAGE; i++)
+-		sp->spt[i] = make_huge_page_split_spte(kvm, huge_spte, sp->role, i);
++		sp->spt[i] = tdp_mmu_make_huge_page_split_pte(kvm, huge_spte, sp, i);
+ 
+ 	/*
+ 	 * Replace the huge spte with a pointer to the populated lower level
+diff --git a/arch/x86/kvm/mmu/tdp_pgtable.c b/arch/x86/kvm/mmu/tdp_pgtable.c
+index 97cc900e8818..e036ba0c6bee 100644
+--- a/arch/x86/kvm/mmu/tdp_pgtable.c
++++ b/arch/x86/kvm/mmu/tdp_pgtable.c
+@@ -5,6 +5,7 @@
+ 
+ #include "mmu.h"
+ #include "spte.h"
++#include "tdp_iter.h"
+ 
+ /* Removed SPTEs must not be misconstrued as shadow present PTEs. */
+ static_assert(!(REMOVED_TDP_PTE & SPTE_MMU_PRESENT_MASK));
+@@ -75,3 +76,38 @@ void tdp_pte_check_leaf_invariants(u64 pte)
+ 	check_spte_writable_invariants(pte);
+ }
+ 
++u64 tdp_mmu_make_leaf_pte(struct kvm_vcpu *vcpu,
++			  struct kvm_page_fault *fault,
++			  struct tdp_iter *iter,
++			  bool *wrprot)
++{
++	struct kvm_mmu_page *sp = sptep_to_sp(rcu_dereference(iter->sptep));
++	u64 new_spte;
++
++	if (unlikely(!fault->slot))
++		return make_mmio_spte(vcpu, iter->gfn, ACC_ALL);
++
++	*wrprot = make_spte(vcpu, sp, fault->slot, ACC_ALL, iter->gfn,
++			    fault->pfn, iter->old_spte, fault->prefetch, true,
++			    fault->map_writable, &new_spte);
++
++	return new_spte;
++}
++
++u64 tdp_mmu_make_nonleaf_pte(struct kvm_mmu_page *sp)
++{
++	return make_nonleaf_spte(sp->spt, !kvm_ad_enabled());
++}
++
++u64 tdp_mmu_make_changed_pte_notifier_pte(struct tdp_iter *iter,
++					  struct kvm_gfn_range *range)
++{
++	return kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
++						      pte_pfn(range->pte));
++}
++
++u64 tdp_mmu_make_huge_page_split_pte(struct kvm *kvm, u64 huge_spte,
++				     struct kvm_mmu_page *sp, int index)
++{
++	return make_huge_page_split_spte(kvm, huge_spte, sp->role, index);
++}
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
