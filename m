@@ -2,58 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B8464880A
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Dec 2022 18:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA517648879
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Dec 2022 19:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiLIR5q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Dec 2022 12:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S229813AbiLISa1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Dec 2022 13:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiLIR5p (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Dec 2022 12:57:45 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB93F1C43F
-        for <linux-mips@vger.kernel.org>; Fri,  9 Dec 2022 09:57:42 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3bfd998fa53so62055727b3.5
-        for <linux-mips@vger.kernel.org>; Fri, 09 Dec 2022 09:57:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bMZ9vaUyXosUBjlo9WUDdUBep5JMYYDWXkYuJRTyBRc=;
-        b=PNNz0qgco2CC6vK8iX8A8CdQ9XYG/eiYEJI0PFBFwEDrAJkafbZh+wNNez+eyMKsNW
-         dyYIVM2JUEXFIo3AsWaRZNjWiZwyFaVdNR0pQpuSKF0S76DLKWQFl1oZGEBDU5afM86c
-         4MHyLC00G+IV14UOCOsjUR6HTn+tapMh3yj6v/QPIYSR6ep3HNH6Adic+iJisjvPkwA/
-         hLPuSxDfDTXFbxYKTocYksmV9tgslNTPcnfgAPbkxh/jMNo9/8AxKFzwYVG9ZAJJI+XR
-         ZLWDlt7dnT+fbIaDz/1md454IG3J2J19ANvQ4CvzY4M0DlboF2jrnlXjyCT1tHR69aMt
-         lUDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bMZ9vaUyXosUBjlo9WUDdUBep5JMYYDWXkYuJRTyBRc=;
-        b=x6GQOmqa+VIRfP9puwpfr2N7/KyzfkwrGLz6dz6DHAQM6yn9ZWbdPzX8YGE0fEUp4l
-         o0BtgHt7Qyn4vEH8X4VIP/pD1x1YY3CCWdh4jV/AoUbn7iVhnhEn1EkVxlBW+eE8gPES
-         tZ0CgP1obQk6UewzgLVf2xL0WWcsLMJgyQeZ6v8Jf09v/73RaWKLTy5tI3avQCO/fWPi
-         n/ddz2zTZscckMvvSuyKwrZgEkt9smYYfSUNoTBxbcWxoz6QTKeG5v+JcyobhEKHLyoy
-         zY9Xp9ONOQ3qozutc46JSCWoB8uylIrHIVc5vaXiJf4g3Cxrgtz4gsZotiJPWf4Ch7Gm
-         J9/w==
-X-Gm-Message-State: ANoB5pnnVJb0/L9ubWIET7WtejTSLhQTdbrIukSKWQzfHfe1Bvf8dbt/
-        pZFZT1MJCFXAyGq1u+Q7lxm00xODB5/PYuzqVz4p7A==
-X-Google-Smtp-Source: AA0mqf7ZLFzH7tn8G3mgBGvDrhVn7KNrvvpffIzBOW371A0vYuDJaiDqvxR+ZPRcFAJZ2LX4aVuYJ3WS6sGEmfbkAcg=
-X-Received: by 2002:a81:148d:0:b0:36a:75b3:fdda with SMTP id
- 135-20020a81148d000000b0036a75b3fddamr7388556ywu.168.1670608661842; Fri, 09
- Dec 2022 09:57:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20221208193857.4090582-1-dmatlack@google.com> <20221208193857.4090582-24-dmatlack@google.com>
- <Y5NxCYz9XV3hgGYX@google.com>
-In-Reply-To: <Y5NxCYz9XV3hgGYX@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Fri, 9 Dec 2022 09:57:15 -0800
-Message-ID: <CALzav=f-qDqJcvPEo1ZxxVizAE77crMFsbKUVif5B-mNgGEHyQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 23/37] KVM: MMU: Move VM-level TDP MMU state to struct kvm
-To:     Oliver Upton <oliver.upton@linux.dev>
+        with ESMTP id S229640AbiLISaY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Dec 2022 13:30:24 -0500
+Received: from out-119.mta0.migadu.com (out-119.mta0.migadu.com [91.218.175.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C1B37F82
+        for <linux-mips@vger.kernel.org>; Fri,  9 Dec 2022 10:30:23 -0800 (PST)
+Date:   Fri, 9 Dec 2022 18:30:11 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670610621;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sp1A6UXIoqNJWGJtdonH4Zsm1F89DCGx3ZYcZ2op3bM=;
+        b=jR4PiHfMsMGnm69Suf71e/70K7WEW4Ckwww6P2DbR1hvNOndJUptnkqHKMBTt6fIGBmQdr
+        ov89mpeQhS51X1/M2mDXZLGgvayYnsNMKQf+C//bfr73BRyk9BbiZau9RKlj5+SRQzhmAd
+        54D8anc79u/KgI2hxA84HnHQ8nsdRfk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -86,32 +59,49 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
         kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH 23/37] KVM: MMU: Move VM-level TDP MMU state to
+ struct kvm
+Message-ID: <Y5N+s1BR7hacr8U/@google.com>
+References: <20221208193857.4090582-1-dmatlack@google.com>
+ <20221208193857.4090582-24-dmatlack@google.com>
+ <Y5NxCYz9XV3hgGYX@google.com>
+ <CALzav=f-qDqJcvPEo1ZxxVizAE77crMFsbKUVif5B-mNgGEHyQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=f-qDqJcvPEo1ZxxVizAE77crMFsbKUVif5B-mNgGEHyQ@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 9:32 AM Oliver Upton <oliver.upton@linux.dev> wrote:
->
-> Hey David,
->
-> On Thu, Dec 08, 2022 at 11:38:43AM -0800, David Matlack wrote:
-> > Move VM-level TDP MMU state to struct kvm so it can be accessed by
-> > common code in a future commit.
+On Fri, Dec 09, 2022 at 09:57:15AM -0800, David Matlack wrote:
+> On Fri, Dec 9, 2022 at 9:32 AM Oliver Upton <oliver.upton@linux.dev> wrote:
 > >
-> > No functional change intended.
->
-> Could you instead introduce a structure to hold all of the MMU state and
-> stick that in struct kvm? If the goal is to eventually supersede all
-> uses of the arm64 pgtable library we are going to need the ability to
-> operate outside of a KVM VM context.
+> > Hey David,
+> >
+> > On Thu, Dec 08, 2022 at 11:38:43AM -0800, David Matlack wrote:
+> > > Move VM-level TDP MMU state to struct kvm so it can be accessed by
+> > > common code in a future commit.
+> > >
+> > > No functional change intended.
+> >
+> > Could you instead introduce a structure to hold all of the MMU state and
+> > stick that in struct kvm? If the goal is to eventually supersede all
+> > uses of the arm64 pgtable library we are going to need the ability to
+> > operate outside of a KVM VM context.
+> 
+> This patch does introduce a tdp_mmu struct to hold all of the TDP MMU
+> state. Did you have something else in mind?
 
-This patch does introduce a tdp_mmu struct to hold all of the TDP MMU
-state. Did you have something else in mind?
+No, I'm just an idiot without caffeine. I read the patch then forgot
+about it when reading the changelog. Sorry!
+
+--
+Thanks,
+Oliver
