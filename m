@@ -2,99 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E2564A4AE
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 17:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7F664A610
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 18:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbiLLQST (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Dec 2022 11:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S231622AbiLLRjp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Dec 2022 12:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbiLLQSQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 11:18:16 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F79B13E28;
-        Mon, 12 Dec 2022 08:18:14 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670861892;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xj018pjLW2UkgQnmqILBUEjAhXT9K6CF9xEj+xIiOFE=;
-        b=dKy70Zi3FiVNICZwR1ZmCUEpDQ3v/TY50J/4hvfbOePjz8inPzy3fENnG8eMjkELCHMY8U
-        38zyt11Ffk1cmTWmB6ToWEZTugFnAY0I7ngiTNgllZaM+/f27zmb/uveKuqeVZZtLLbUow
-        LstYVR6VpXbY5gzJ6o+xdFVwAJ7GacdIDVFJjzkpdqszoQeGW9ekwsbN1D4np6IJBnA+xT
-        pjKnMILuN78kgX48D5Bulitb2TWj3LZFduti5L8HN3wQ0lBZZnak79HXBCp0UMxtM7ypeL
-        Q7GZi2E0KgDgV3rqQzfI+t1XG7SPNTWwb6uP+Tgd3EH0S9TO5mmr8mO4QLsFOA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670861892;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xj018pjLW2UkgQnmqILBUEjAhXT9K6CF9xEj+xIiOFE=;
-        b=wyzDgR0jttlml3luJKS9Im9oim6JOrsphSFktX57nGApgGMBCUL4+A9pqaB+oEGsO9mRnw
-        m6hOMh+W+d1iIFBw==
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 19/19] irqdomain: Switch to per-domain locking
-In-Reply-To: <Y5c6z3t+sV/kIMjF@hovoldconsulting.com>
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <20221209140150.1453-20-johan+linaro@kernel.org> <87mt7sbtf9.ffs@tglx>
- <Y5c6z3t+sV/kIMjF@hovoldconsulting.com>
-Date:   Mon, 12 Dec 2022 17:18:11 +0100
-Message-ID: <878rjcbnp8.ffs@tglx>
+        with ESMTP id S231566AbiLLRjn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 12:39:43 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106BF231
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 09:39:43 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id f3so8699286pgc.2
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 09:39:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9QS7ynIDmKRlIs3oQp3nNRq3SgpEDJuiT7l2fKUtqJA=;
+        b=Q0nnG/dD12oshnk2CykCxq72d8uZrdzzqkuH5dft2uszejZpVFSnXayz+SB3Bwgro8
+         BRpXeeCgbqfUn2wNBfcOZyX3qyFKQJ6SczkPWVABh1mpb57722xzOrsTLiE48vG5UkwV
+         bWLck3WppDEGsIUBHKKGTEWgFtdCLpnoSQ2bevYVQ/nLcPPAgPGAlA/9ZOfUNOvgOGId
+         G76GaBjjIODSpD0MI08sPApYWZ6pYb2TgRVicuKhWCGe6JSitmtMJPjC2xPhiXqe6dk1
+         lh4RR1K4cJ0EETmdVRDXbjpYPE9b76QlJk+PQjM9eohHtNpBi7HjhEH0vhjhhqilbAjf
+         2W6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9QS7ynIDmKRlIs3oQp3nNRq3SgpEDJuiT7l2fKUtqJA=;
+        b=6UtDTQn6YiZqJ34ao557m/oWRGoSbK5gFilkL9NQ86ofboVyJWO+wsKWum5bIF0/wt
+         mp5W4W9d6t/qghOx21F3D8EgcBbfmu71b5KBPH1tFBJX4XhiaiaF0jcEw3f4edr71Pa7
+         zh9P43elE0+tOHhW1wNYsKBJVb4p2duc0QCKc//c1Pevhme3mhAsupmZ/pjBiQ26dv2c
+         /PNAyo7yfmVn1Tuf+0Se0l+29yiuaH9ddFJ2WA4dO4fQwPLjINe24UJ70PR0yFElJaMk
+         CIovqsHAplRUmEsiBzHr+/yKb3ZkMDfJO3c4qQ7dQvShcg0W4Z5yA0ohDUMp9aToYGn6
+         k8cg==
+X-Gm-Message-State: ANoB5pnyEJn/+W3m6I1BtOqLYeOhJY50J6neQAWm1c3gxQNQ5fcaeQvE
+        sDFkTGhy30ydsaEzhSEWjUb2gA==
+X-Google-Smtp-Source: AA0mqf4fRjcF7yqcwPoqLk9QucrmsFbaTw1SZFxx+iK6d+zjxBOpK3Jkaq0gjsaSmdZVgYI9LkA78w==
+X-Received: by 2002:a05:6a00:27a4:b0:576:22d7:fd9e with SMTP id bd36-20020a056a0027a400b0057622d7fd9emr657961pfb.0.1670866782130;
+        Mon, 12 Dec 2022 09:39:42 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y10-20020aa793ca000000b0057555d35f79sm6092008pff.101.2022.12.12.09.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 09:39:41 -0800 (PST)
+Date:   Mon, 12 Dec 2022 17:39:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        "Amit, Nadav" <namit@vmware.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
+        Colin Cross <ccross@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [RFC PATCH 01/37] KVM: x86/mmu: Store the address space ID
+ directly in kvm_mmu_page_role
+Message-ID: <Y5dnWgJ0ine55/hN@google.com>
+References: <20221208193857.4090582-1-dmatlack@google.com>
+ <20221208193857.4090582-2-dmatlack@google.com>
+ <22fe2332-497e-fe30-0155-e026b0eded97@intel.com>
+ <Y5NvYmxpy6BPkmpW@google.com>
+ <CALzav=eju4LYyX=ufNneSww+5sraYJ8cfQSi4LTOHfHWmddX9A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=eju4LYyX=ufNneSww+5sraYJ8cfQSi4LTOHfHWmddX9A@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 12 2022 at 15:29, Johan Hovold wrote:
-> On Mon, Dec 12, 2022 at 03:14:34PM +0100, Thomas Gleixner wrote:
->> On Fri, Dec 09 2022 at 15:01, Johan Hovold wrote:
->> > The IRQ domain structures are currently protected by the global
->> > irq_domain_mutex. Switch to using more fine-grained per-domain locking,
->> > which may potentially speed up parallel probing somewhat.
->> >
->> > Note that the domain lock of the root domain (innermost domain) must be
->> > used for hierarchical domains. For non-hierarchical domain (as for root
->> > domains), the new root pointer is set to the domain itself so that
->> > domain->root->mutex can be used in shared code paths.
->> >
->> > Also note that hierarchical domains should be constructed using
->> > irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoid
->> > poking at irqdomain internals.
->> 
->> While I agree in principle, this change really makes me nervous.
->> 
->> Any fail in setting up domain->root correctly, e.g. by not using
->> irq_domain_create_hierarchy(), cannot be detected and creates nasty to
->> debug race conditions.
->> 
->> So we need some debug mechanism which allows to validate that
->> domain->root is set up correctly when domain->parent != NULL.
->
-> Lockdep will catch that due to the
->
-> 	lockdep_assert_held(&domain->root->mutex);
->
-> I added to irq_domain_set_mapping() and which is is called for each
-> (inner) domain in a hierarchy when allocating an IRQ.
+On Fri, Dec 09, 2022, David Matlack wrote:
+> On Fri, Dec 9, 2022 at 9:25 AM Oliver Upton <oliver.upton@linux.dev> wrote:
+> >
+> > On Fri, Dec 09, 2022 at 10:37:47AM +0800, Yang, Weijiang wrote:
+> > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > > index 4d188f056933..f375b719f565 100644
+> > > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > > @@ -5056,7 +5056,7 @@ kvm_calc_cpu_role(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
+> > > >     union kvm_cpu_role role = {0};
+> > > >     role.base.access = ACC_ALL;
+> > > > -   role.base.smm = is_smm(vcpu);
+> > > > +   role.base.as_id = is_smm(vcpu);
+> > >
+> > > I'm not familiar with other architectures, is there similar conception as
+> > > x86 smm mode?
+> 
+> The notion of address spaces is already existing architecture-neutral
+> concept in KVM (e.g. see uses of KVM_ADDRESS_SPACE_NUM in
+> virt/kvm/kvm_main.c), although SMM is the only use-case I'm aware of.
 
-Hmm. Indeed that should do the trick.
+Yes, SMM is currently the only use-case.
 
-Some comments would be appreciated as the rules around domain->root are
-far from obvious.
+> Architectures that do not use multiple address spaces will just leave
+> as_id is as always 0.
 
-Thanks,
+My preference would be to leave .smm in x86's page role.  IMO, defining multiple
+address spaces to support SMM emulation was a mistake that should be contained to
+SMM, i.e. should never be used for any other feature.  And with CONFIG_KVM_SMM,
+even x86 can opt out.
 
-        tglx
+For all potential use cases I'm aware of, SMM included, separate address spaces
+are overkill.  The SMM use case is to define a region of guest memory that is
+accessible if and only if the vCPU is operating in SMM.  Emulating something like
+TrustZone or EL3 would be quite similar.  Ditto for Intel's TXT Private Space
+(though I can't imagine KVM ever emulating TXT :-) ).
+
+Using separate address spaces means that userspace needs to define the overlapping
+GPA areas multiple times, which is inefficient for both memory and CPU usage.
+E.g. for SMM,  userspace needs to redefine all of "regular" memory for SMM in
+addition to memory that is SMM-only.  And more bizarelly, nothing prevents userspace
+from defining completely different memslot layouts for each address space, which
+might may not add complexity in terms of code, but does make it more difficult to
+reason about KVM behavior at the boundaries between modes.
+
+Unless I'm missing something, e.g. a need to map GPAs differently for SMM vs.
+non-SMM, SMM could have been implemented with a simple flag in a memslot to mark
+the memslot as SMM-only.  Or likely even better, as an overlay to track attributes,
+e.g. similar to how private vs. shared memory will be handled for protected VMs.
+That would be slightly less efficient for memslot searches for use cases where all
+memory is mutually exclusive, but simpler and more efficient overall.
+
+And separate address spaces become truly nasty if the CPU can access multiple
+protected regions, e.g. if the CPU can access type X and type Y at the same time,
+then there would need to be memslots for "regular", X, Y, and X+Y.
