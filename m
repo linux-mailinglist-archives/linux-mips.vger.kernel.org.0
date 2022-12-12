@@ -2,131 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5178964AA57
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 23:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3C364AA51
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 23:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiLLWdm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Dec 2022 17:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
+        id S233744AbiLLWc5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Dec 2022 17:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbiLLWdg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 17:33:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4915E2DE1
-        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:32:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670884360;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BHhE1QP3jUCpk1cxLuQ6KAYvI1S2lfEsXBvTRJ9YN5A=;
-        b=F6sM0inhhakwBBTX5N/jZ6Bini7lCXbRRoA1HcHGPYCOcWkgTW5gcK30YbLEA2wITfXQFh
-        aT5WPqf8TLPZPl779hZCwNw+5pJb5cWP7jR32D4FzM7aktT+ebUONIbHcomGjWQE42scxt
-        VqkpB3Cfs8fjjHb2hIXr6IetlReIuR4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-481-B5wra8GHPGCAm_PAyE34iw-1; Mon, 12 Dec 2022 17:32:38 -0500
-X-MC-Unique: B5wra8GHPGCAm_PAyE34iw-1
-Received: by mail-wm1-f71.google.com with SMTP id r129-20020a1c4487000000b003d153a83d27so3987953wma.0
-        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:32:38 -0800 (PST)
+        with ESMTP id S233780AbiLLWcy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 17:32:54 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11276BCA1
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:32:52 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id c66so15222838edf.5
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:32:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+Pjg7gEEIEiqG8qk2Ag4JmG2Wml3Gf+/D4oy6vrZzZk=;
+        b=xag3aT0psNGFTj6HoRP4mFN+Tv5GrB35lv/JUZKmQhtLPegCrvZwdDUSxVPaFKqFjX
+         jfxG7SrIBf3aEEfd1m8fT66MnkCbuaZaWRDbvFxAxtX2CsLOnRFN2uMTh+cKrftASE6K
+         nJ9u8XyOfoV4IDC8AqdJkUp9mz+OUNsGslBhJDTLNx+V7d+5LsZjZZz+AHD7q2QWRwJR
+         keEvy2cYu0H9a+jJlpX+2oDA6HJNi5Nq2if1Qu4L4gxi/nnhwBoH1Jbs5CfeEDWAFasa
+         ASctHEKRJFsKHmd6BVJiEYtT25v/8RODzt7/eNCOZb6fJ3puDG/7gs7xFWC7y2DfRSJV
+         +vMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BHhE1QP3jUCpk1cxLuQ6KAYvI1S2lfEsXBvTRJ9YN5A=;
-        b=z9NsWmoKOEnhCcYOxR1+X8VPvmDOTRLlsJ+z23oI1Y087cHjk/oEhRjqpnGmuByRS2
-         WdHqb4KCbjRaC4Xjq4fouhLwvY6T9UmOQQt2poIXl433EI3HT1tTHJucXtyu/sdwhdv6
-         VeYm1kDkT3E2tf+FTubQe5lq7RbUnMUTkG50vdX5xvhcO3+3gPl02F1thabyUNZKM63l
-         B2oeSbn8YhlfDPC2KVSKg0YsnDqvzvmixkqwwFNMa/ENPtvMoXIpomaHvl/TnU44fhhy
-         Q2e5d/efIUW5rVRJUeqCroDDG7VOAjSn0wbuUcch9s38Kw32CkVXNwIiVOhSDsZLE9mv
-         mFpg==
-X-Gm-Message-State: ANoB5pkmlae0Ly1WwSzUSfzVZ0ZLFmc+wWxcob0e54yCA56kEwd95lFZ
-        ritASfKfRG2+gJ4cbvRgBmMnGLrHB1sL5/e3SpluRpMI4IOqQ4m9ps7Q7iGx2FZRdFaYyoh46tJ
-        AWP1PhJbGB0OmStG/VjOU/g==
-X-Received: by 2002:a05:600c:3d8f:b0:3c6:e62e:2e74 with SMTP id bi15-20020a05600c3d8f00b003c6e62e2e74mr13978219wmb.15.1670884357780;
-        Mon, 12 Dec 2022 14:32:37 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5rK2wuh16AKn0g4El+6pmLN9CiGHMIzRy1p4C+zNER/+4S5U+s8UBV98mPUqtRVzVGakI9Nw==
-X-Received: by 2002:a05:600c:3d8f:b0:3c6:e62e:2e74 with SMTP id bi15-20020a05600c3d8f00b003c6e62e2e74mr13978185wmb.15.1670884357516;
-        Mon, 12 Dec 2022 14:32:37 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id o5-20020a05600c510500b003cfa3a12660sm186503wms.1.2022.12.12.14.32.35
+        bh=+Pjg7gEEIEiqG8qk2Ag4JmG2Wml3Gf+/D4oy6vrZzZk=;
+        b=Po6iOq3r4zXAi5oCkvsjJSW8oh233K6BVwIDDNiJLmD5uFnWVTl4h7k0uKhCXwbdXX
+         K+n5sfs4maAc2SmIlavN1RtfuN7nvphJsbF3fTbxHlX+ghXqOv0MJHt13jOQX6fvmh7f
+         Eqr4bQqEfPACEqWQivmH+L6iFxW5lVd8OhWlw+ZMDhrgosNk6THmNu3hbEVc0sVpiH0f
+         zX1zOWpPKm/99YqvRp8sNSWxQ4n0suZ5i+NUuyp7Tdlw1ccKASLBQnxe5Nhcv60sOHmL
+         Aaf3mIphgplA68f66DAnZdFd2t7URFOlH+s5o5sqXja7A/NBUi4PMiTHwypthfAtTm5q
+         jDbw==
+X-Gm-Message-State: ANoB5plD5EgPIBihxpos/QmDqWzXvFzSmAYYIfk4jjS4zFzAaHTuF0r2
+        hF3RuhF9g6flFPPptgQ/6KVmQQ==
+X-Google-Smtp-Source: AA0mqf4dgq6Z+VUlK2J2S80+mq9mLtLqx77Gpw8++bCFzvwCrmOS21zVC/w8NXL3b0+mwn2Zu0jkNg==
+X-Received: by 2002:aa7:db91:0:b0:461:9075:4161 with SMTP id u17-20020aa7db91000000b0046190754161mr14410616edt.15.1670884370561;
+        Mon, 12 Dec 2022 14:32:50 -0800 (PST)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id m15-20020a50930f000000b00463597d2c25sm4368051eda.74.2022.12.12.14.32.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 14:32:36 -0800 (PST)
-Message-ID: <0e159e42-ebca-c0d5-f2ae-29fa2344e720@redhat.com>
-Date:   Mon, 12 Dec 2022 23:32:34 +0100
+        Mon, 12 Dec 2022 14:32:50 -0800 (PST)
+Message-ID: <6509898d-a16a-7202-f650-0426936ecc34@linaro.org>
+Date:   Mon, 12 Dec 2022 23:32:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC PATCH 06/37] KVM: MMU: Move struct kvm_mmu_page to common
- code
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH v3 10/19] irqdomain: Clean up irq_domain_push/pop_irq()
 Content-Language: en-US
-To:     David Matlack <dmatlack@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Nadav Amit <namit@vmware.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
-        Colin Cross <ccross@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-References: <20221208193857.4090582-1-dmatlack@google.com>
- <20221208193857.4090582-7-dmatlack@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221208193857.4090582-7-dmatlack@google.com>
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
+ <20221209140150.1453-11-johan+linaro@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221209140150.1453-11-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/8/22 20:38, David Matlack wrote:
-> This commit increases the size of struct kvm_mmu_page by 64 bytes on
-> x86_64 (184 bytes -> 248 bytes). The size of this struct can be reduced
-> in future commits by moving TDP MMU root fields into a separate struct
-> and by dynamically allocating fields only used by the Shadow MMU.
+On 9/12/22 15:01, Johan Hovold wrote:
+> The irq_domain_push_irq() interface is used to add a new (outmost) level
+> to a hierarchical domain after IRQs have been allocated.
+> 
+> Possibly due to differing mental images of hierarchical domains, the
+> names used for the irq_data variables make these functions much harder
+> to understand than what they need to be.
+> 
+> Rename the struct irq_data pointer to the data embedded in the
+> descriptor as simply 'irq_data' and refer to the data allocated by this
+> interface as 'parent_irq_data' so that the names reflect how
+> hierarchical domains are implemented.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   kernel/irq/irqdomain.c | 65 +++++++++++++++++++++---------------------
+>   1 file changed, 32 insertions(+), 33 deletions(-)
 
-I think it's already possible to use a union like
-
-	union {
-		struct kvm_mmu_page_arch arch;
-		struct {
-			struct work_struct work;
-			void *data;
-		};
-	};
-
-Paolo
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
