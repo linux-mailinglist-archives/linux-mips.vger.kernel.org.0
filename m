@@ -2,57 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639FB64AA44
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 23:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5178964AA57
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 23:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbiLLWak (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Dec 2022 17:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S233803AbiLLWdm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Dec 2022 17:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiLLWai (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 17:30:38 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171D11AF1C
-        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:30:35 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 82so9241676pgc.0
-        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:30:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wDIyaaZP6Sx38V8+GZMMaiCN2LYY75lyx3Qk2zggJjY=;
-        b=AsH0HY9ES//YrqC7aVzHEC/CizcXUu59joNA74umGoNmkMvxLqS0wCffNxDluDxyKo
-         EAqtkusIPRaWsTDrdjn9/llFRUygCmGbtm2vECAI+G08t237WcwWOvji02G3iAivLRkK
-         XtmAOzz+XqYsq2GDP6d9iwh7sTltvZI9fxPTUGYZWGyPiUekYEmb0NyP6jBH0aSpM1QX
-         0tz4LyerHFPtS+ochp41KGvy5c0kQvu3ZBbrMJ4Y8A8WkC/7Ukk+1JDMNDpCdZbv+wUw
-         sB78NjP1UXJBhqkf6gNp2CwQYVDksQEYfo+cDNGLFgrv7+7q0LQlQIxLu11hgJt4KH7o
-         881Q==
+        with ESMTP id S233828AbiLLWdg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 17:33:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4915E2DE1
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:32:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670884360;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BHhE1QP3jUCpk1cxLuQ6KAYvI1S2lfEsXBvTRJ9YN5A=;
+        b=F6sM0inhhakwBBTX5N/jZ6Bini7lCXbRRoA1HcHGPYCOcWkgTW5gcK30YbLEA2wITfXQFh
+        aT5WPqf8TLPZPl779hZCwNw+5pJb5cWP7jR32D4FzM7aktT+ebUONIbHcomGjWQE42scxt
+        VqkpB3Cfs8fjjHb2hIXr6IetlReIuR4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-481-B5wra8GHPGCAm_PAyE34iw-1; Mon, 12 Dec 2022 17:32:38 -0500
+X-MC-Unique: B5wra8GHPGCAm_PAyE34iw-1
+Received: by mail-wm1-f71.google.com with SMTP id r129-20020a1c4487000000b003d153a83d27so3987953wma.0
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:32:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wDIyaaZP6Sx38V8+GZMMaiCN2LYY75lyx3Qk2zggJjY=;
-        b=cd4JGscIxmk+bpjR/xID33NqSLywoo0VkSkJGx1aLU5zBgq2RLyLEp2k9oH9c6kyVt
-         2uEN+UYaEDDkc9g7W1W0K3Rpye1tH9QwKjSs7F0EhiyQhESDMy69OmKyQlfw6SW8XSLn
-         cBtuWPPH25XJ/PZpTJ4hnpHzxJuG8feMMzPhh+O0knWSGr0UgrAfx2id0xEgoq4bZRsk
-         xelX5UUNYQdrXWO92wtMsyZzj4WDvQ5gMHHe12FlE2Fu40PD7LnRCPkxP8DoS7vDsCQw
-         LwZoeW3BF536qG3vGB9WWakq5tLy/mnaQilSAavpWKmKFbsdfP6fHh/zEe5Hz29R4dsY
-         0mPQ==
-X-Gm-Message-State: ANoB5pktTBNDvhmn+KSHAsDTKdkeooEk04KMt2uclut/OXq0phcSW8Cg
-        ilZzNNNVKBfsQTO3kAQ60kSRkw==
-X-Google-Smtp-Source: AA0mqf74FM6U4ztV3LqdnGXHnnnSC43RbbAIDoSZcE8bsILwNcSluJ+18YStm6rGNZYFVpgbA3RNLg==
-X-Received: by 2002:aa7:9a1c:0:b0:574:3e1d:72dd with SMTP id w28-20020aa79a1c000000b005743e1d72ddmr18119342pfj.19.1670884234340;
-        Mon, 12 Dec 2022 14:30:34 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id q13-20020aa7842d000000b0056d98e31439sm6499921pfn.140.2022.12.12.14.30.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 14:30:33 -0800 (PST)
-Date:   Mon, 12 Dec 2022 14:30:28 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BHhE1QP3jUCpk1cxLuQ6KAYvI1S2lfEsXBvTRJ9YN5A=;
+        b=z9NsWmoKOEnhCcYOxR1+X8VPvmDOTRLlsJ+z23oI1Y087cHjk/oEhRjqpnGmuByRS2
+         WdHqb4KCbjRaC4Xjq4fouhLwvY6T9UmOQQt2poIXl433EI3HT1tTHJucXtyu/sdwhdv6
+         VeYm1kDkT3E2tf+FTubQe5lq7RbUnMUTkG50vdX5xvhcO3+3gPl02F1thabyUNZKM63l
+         B2oeSbn8YhlfDPC2KVSKg0YsnDqvzvmixkqwwFNMa/ENPtvMoXIpomaHvl/TnU44fhhy
+         Q2e5d/efIUW5rVRJUeqCroDDG7VOAjSn0wbuUcch9s38Kw32CkVXNwIiVOhSDsZLE9mv
+         mFpg==
+X-Gm-Message-State: ANoB5pkmlae0Ly1WwSzUSfzVZ0ZLFmc+wWxcob0e54yCA56kEwd95lFZ
+        ritASfKfRG2+gJ4cbvRgBmMnGLrHB1sL5/e3SpluRpMI4IOqQ4m9ps7Q7iGx2FZRdFaYyoh46tJ
+        AWP1PhJbGB0OmStG/VjOU/g==
+X-Received: by 2002:a05:600c:3d8f:b0:3c6:e62e:2e74 with SMTP id bi15-20020a05600c3d8f00b003c6e62e2e74mr13978219wmb.15.1670884357780;
+        Mon, 12 Dec 2022 14:32:37 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5rK2wuh16AKn0g4El+6pmLN9CiGHMIzRy1p4C+zNER/+4S5U+s8UBV98mPUqtRVzVGakI9Nw==
+X-Received: by 2002:a05:600c:3d8f:b0:3c6:e62e:2e74 with SMTP id bi15-20020a05600c3d8f00b003c6e62e2e74mr13978185wmb.15.1670884357516;
+        Mon, 12 Dec 2022 14:32:37 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id o5-20020a05600c510500b003cfa3a12660sm186503wms.1.2022.12.12.14.32.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 14:32:36 -0800 (PST)
+Message-ID: <0e159e42-ebca-c0d5-f2ae-29fa2344e720@redhat.com>
+Date:   Mon, 12 Dec 2022 23:32:34 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [RFC PATCH 06/37] KVM: MMU: Move struct kvm_mmu_page to common
+ code
+Content-Language: en-US
+To:     David Matlack <dmatlack@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -69,12 +81,13 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Nadav Amit <namit@vmware.com>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
         Colin Cross <ccross@google.com>,
         Hugh Dickins <hughd@google.com>,
+        Ben Gardon <bgardon@google.com>,
         Mingwei Zhang <mizhang@google.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Ricardo Koller <ricarkol@google.com>,
@@ -83,106 +96,37 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
         kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org
-Subject: Re: [RFC PATCH 10/37] KVM: MMU: Move struct kvm_page_fault to common
- code
-Message-ID: <Y5erhA1QOBhqnO5C@google.com>
 References: <20221208193857.4090582-1-dmatlack@google.com>
- <20221208193857.4090582-11-dmatlack@google.com>
- <CANgfPd-DaxszBe6vLQGe=LKNKx8bDX-AC_30qLVAyYkQXwN7WA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANgfPd-DaxszBe6vLQGe=LKNKx8bDX-AC_30qLVAyYkQXwN7WA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20221208193857.4090582-7-dmatlack@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221208193857.4090582-7-dmatlack@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 10:24:31AM -0800, Ben Gardon wrote:
-> On Thu, Dec 8, 2022 at 11:39 AM David Matlack <dmatlack@google.com> wrote:
-> >
-> > Move struct kvm_page_fault to common code. This will be used in a future
-> > commit to move the TDP MMU to common code.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: David Matlack <dmatlack@google.com>
-> > ---
-[...]
-> > diff --git a/include/kvm/mmu_types.h b/include/kvm/mmu_types.h
-> > index a9da33d4baa8..9f0ca920bf68 100644
-> > --- a/include/kvm/mmu_types.h
-> > +++ b/include/kvm/mmu_types.h
-> > @@ -66,4 +66,48 @@ struct kvm_mmu_page {
-> >         struct kvm_mmu_page_arch arch;
-> >  };
-> >
-> > +struct kvm_page_fault {
-> > +       /* The raw faulting address. */
-> > +       const gpa_t addr;
-> > +
-> > +       /* Whether the fault was synthesized to prefetch a mapping. */
-> > +       const bool prefetch;
-> > +
-> > +       /* Information about the cause of the fault. */
-> > +       const bool write;
-> > +       const bool exec;
-> > +
-> > +       /* Shifted addr, or result of guest page table walk if shadow paging. */
-> > +       gfn_t gfn;
-> 
-> Is this redundant to have in common code? If we're not doing common
-> shadow paging, then this is just addr shifted. Would this be better
-> placed in the arch specific struct?
+On 12/8/22 20:38, David Matlack wrote:
+> This commit increases the size of struct kvm_mmu_page by 64 bytes on
+> x86_64 (184 bytes -> 248 bytes). The size of this struct can be reduced
+> in future commits by moving TDP MMU root fields into a separate struct
+> and by dynamically allocating fields only used by the Shadow MMU.
 
-Yes it's redundant but it is actually used by the TDP MMU, unlike @addr.
-So if anything I would rather move @addr to kvm_page_fault_arch.
+I think it's already possible to use a union like
 
-> 
-> > +
-> > +       /* The memslot that contains @gfn. May be NULL. */
-> > +       struct kvm_memory_slot *slot;
-> > +
-> > +       /* Maximum page size that can be created for this fault. */
-> > +       u8 max_level;
-> > +
-> > +       /*
-> > +        * Page size that can be created based on the max_level and the page
-> > +        * size used by the host mapping.
-> > +        */
-> > +       u8 req_level;
-> > +
-> > +       /* Final page size that will be created. */
-> > +       u8 goal_level;
-> > +
-> > +       /*
-> > +        * The value of kvm->mmu_invalidate_seq before fetching the host
-> > +        * mapping. Used to verify that the host mapping has not changed
-> > +        * after grabbing the MMU lock.
-> > +        */
-> > +       unsigned long mmu_seq;
-> 
-> Should this be ifdef'ed with  KVM_ARCH_WANT_MMU_NOTIFIER?
+	union {
+		struct kvm_mmu_page_arch arch;
+		struct {
+			struct work_struct work;
+			void *data;
+		};
+	};
 
-I'll have to take a closer look, but probably yes.
+Paolo
 
-> 
-> > +
-> > +       /* Information about the host mapping. */
-> > +       kvm_pfn_t pfn;
-> > +       hva_t hva;
-> > +       bool map_writable;
-> > +
-> > +       struct kvm_page_fault_arch arch;
-> > +};
-> > +
-> >  #endif /* !__KVM_MMU_TYPES_H */
-> > --
-> > 2.39.0.rc1.256.g54fd8350bd-goog
-> >
