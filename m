@@ -2,123 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFAF64AA80
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 23:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD5964AA7D
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 23:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbiLLWnW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Dec 2022 17:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        id S233944AbiLLWnJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Dec 2022 17:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233872AbiLLWmz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 17:42:55 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36434DF5D
-        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:42:54 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3b56782b3f6so167881317b3.13
-        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:42:54 -0800 (PST)
+        with ESMTP id S233947AbiLLWmq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 17:42:46 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6FF60C3
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:42:44 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id e13so15261312edj.7
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 14:42:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xlakFXRE5WR+eI81tSHGT8mBX3C2kTQwJgOLsFBL4OY=;
-        b=ndwFSRoXLSuq0mtL5gu3GohHZTtCmsXoG5LnB+4W5ntMQyw7hg7yWmVnEVKI/CMMjq
-         KrRV2sbCGqD+H+xzIvKYj1uByps5sG637+06KzojhBb8JdEZSaKaduwj2AG/udwtUpyt
-         ek+ZoO9A0+tsd50WkNyDpm1NuAuM3Y5dUIJvdzOEDIi6I+KRA7WOdHGwAFMZnvKcKJm8
-         sMmoQVLveW58rH19lDfr14dd1014L5iT8SfRCYVc1nc0+/mzoEy8/Q6/90V5+D11cSnV
-         VR0IEIuzVXTRNeTb22H3kEKuvjJHEQSBOYF1lXueeHZG7VZeReMvOUQqeeOQrxzxcfeM
-         2TJA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mG38vQpvA5iccE80A+eCvu435+Ju1Dt0GScT4GJHyIA=;
+        b=sVQLLedTvObWUJpjwiWHWO0FBf9i4r0HfaVwpyZyNf0HdOGTRVXT3YYQYbx1rvR2Vs
+         Hvj37s1n3Gf3hbvb3nql5GrU5xapgkoFId9+F6ELEnI7BN+D2keFG9LX2A80x8Uoo14B
+         6cYXuMIyVS/WWnwV0qQED1fXGWjHy+a2Onx8UShXbDEbgAf0yvuxXqefU4yfcZ++vXIp
+         uwy+oWeYEYU9Sn8ToQ2MbZqUrTXVlpaI27UxJQguUYMY2trOcWULUhF/aNNLjX5xLB6M
+         8CfdJPpy1caOMupBdP8H9qLN9uYWLITSzyvsIF6IoACHY4eKGcKEnz1z3dZopqimtvIt
+         3VDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xlakFXRE5WR+eI81tSHGT8mBX3C2kTQwJgOLsFBL4OY=;
-        b=VDO9pwYdHqspMaqe/SvZzTnR0g+NsgFeMiEz5xundpgKucT0G0FMjBQufjNmEe3gYI
-         8M830xM+vEjxb9gB3DEtEFgkMZ4OBbbPvdbedQNoJ3z9vOi1U2i+I7osEEnrlMh3tXMK
-         bWOjVnNlmJejsfv7sABcMNpZritsV26xs3P0ii6rP8flrID4P9aIyRy5Ml0wm+pYJP4p
-         qjwQot8uQ9nGR7paYR23+nCYogfJoUB6la0fQHB/RTXYa+IsuZM1C9y22dwMC2p4Ox/L
-         fJwRdE24kJ0uB3MEq+wtI0nsjWROFp06n0OY9Lv4Uvccw20ycFXpCTVULU1y4ULKDixl
-         1nYQ==
-X-Gm-Message-State: ANoB5pkVp+TYTDd0B9PZKQlTE+GmFI94sjoUON2Pr0+FQbcUlTt8SV8G
-        tgbwLpJ+c9LQ+ZV7SvM8U+z9HTvnUiAN7gkY/mOXng==
-X-Google-Smtp-Source: AA0mqf44l006Q6QVS5WsjpiBIi3T4SW6bvJpPAfR1juAzLaGPOaG7kqLyOnkKrJsuk2Vx7E4bBJKqTB5CVZjDntvdQc=
-X-Received: by 2002:a0d:df0a:0:b0:35f:9c14:144a with SMTP id
- i10-20020a0ddf0a000000b0035f9c14144amr26604984ywe.209.1670884973326; Mon, 12
- Dec 2022 14:42:53 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mG38vQpvA5iccE80A+eCvu435+Ju1Dt0GScT4GJHyIA=;
+        b=mwCRm5A+1JGYxXUYOQjDsM2aj//ZZwstOdEUHq3w6DpkxnZxgn5mHm6JFz+tF2NKQD
+         Zm/IUwKgr6ir1XF0qoBKGoXzJaVyHZG/oyeFXtWjNijOCbbLaAuCmBun8Ez5hFo+XVfH
+         Bg/iHJ73pd4UgBjZhE5Sj1Sij20VCgB4zxkSGaN5W8/UfHqSL5JA3sT7kxiZnrJWgsX3
+         /qPEXbg+6eZ8i9tmdwvLfUoPL5GE+T/FEA8HLOr3nJ8kjuXKocchQhHoeCwriW2thubx
+         gXcU6H0qMrBcF3C6kVdGlpyGOSU7VoWegANgzVAtykmHCeBtCJ5u53QRntCETdJHPWb3
+         uFiw==
+X-Gm-Message-State: ANoB5pkgF17SF3AsoAjKRo5RfT/i4dK2OA9Y4ljqu2YZdTO+5Bgd6NqN
+        RhL0YU8ysZ0btYQhsPuPDs+Ocw==
+X-Google-Smtp-Source: AA0mqf5YYi27giRG9AgrDoPYAP5CkuSmhAtXGnYQE82X3BdQxLfFlu6jo+vuaBLOnFCQ+f+pb/8zUg==
+X-Received: by 2002:a05:6402:22fc:b0:470:18a8:3ca6 with SMTP id dn28-20020a05640222fc00b0047018a83ca6mr2019481edb.23.1670884962368;
+        Mon, 12 Dec 2022 14:42:42 -0800 (PST)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id d24-20020a05640208d800b0046ab2bd784csm4201575edz.64.2022.12.12.14.42.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 14:42:42 -0800 (PST)
+Message-ID: <db784006-c13a-636a-50a0-765fd51db509@linaro.org>
+Date:   Mon, 12 Dec 2022 23:42:40 +0100
 MIME-Version: 1.0
-References: <20221208193857.4090582-1-dmatlack@google.com> <20221208193857.4090582-34-dmatlack@google.com>
- <CANgfPd_069QPNby+mR4GuOWDNJtFk_=9EOffb0=2_V5TH-ZCDA@mail.gmail.com>
-In-Reply-To: <CANgfPd_069QPNby+mR4GuOWDNJtFk_=9EOffb0=2_V5TH-ZCDA@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 12 Dec 2022 14:42:27 -0800
-Message-ID: <CALzav=fMX0g_n9pVFsLShZjEkPLquo2u_QpPMPzUMAGYtjZFOw@mail.gmail.com>
-Subject: Re: [RFC PATCH 33/37] KVM: Move kvm_arch_flush_remote_tlbs_memslot()
- to common code
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Nadav Amit <namit@vmware.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
-        Colin Cross <ccross@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH v3 16/19] irqchip/gic-v3-mbi: Use
+ irq_domain_create_hierarchy()
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
+ <20221209140150.1453-17-johan+linaro@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221209140150.1453-17-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 2:03 PM Ben Gardon <bgardon@google.com> wrote:
->
-> On Thu, Dec 8, 2022 at 11:40 AM David Matlack <dmatlack@google.com> wrote:
-> >
-> > Move kvm_arch_flush_remote_tlbs_memslot() to common code and drop
-> > "arch_" from the name. kvm_arch_flush_remote_tlbs_memslot() is just a
-> > range-based TLB invalidation where the range is defined by the memslot.
-> > Now that kvm_flush_remote_tlbs_range() can be called from common code we
-> > can just use that and drop a bunch of duplicate code from the arch
-> > directories.
-> >
-> > Note this adds a lockdep assertion for slot_lock being held when calling
-> > kvm_flush_remote_tlbs_memslot(), which was previously only asserted on
-> > x86.
->
-> Besides the one lockdep assertion, is there any benefit to having this
-> wrapper function? Open-coding "kvm_flush_remote_tlbs_range(kvm,
-> memslot->base_gfn, memslot->npages);" is only a slightly longer line
-> and, IMO, just as readable. I'm happy to see this cleanup, but it
-> might be just as easy to drop the function.
+On 9/12/22 15:01, Johan Hovold wrote:
+> Use the irq_domain_create_hierarchy() helper to create the hierarchical
+> domain, which both serves as documentation and avoids poking at
+> irqdomain internals.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/irqchip/irq-gic-v3-mbi.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 
-The wrapper makes lines shorter, adds a lockdep assertion, and is just
-as readable. What's the reason to drop it?
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
