@@ -2,77 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E26E649A13
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 09:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F8C649B90
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 11:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiLLIfJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Dec 2022 03:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S231962AbiLLKCC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Dec 2022 05:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbiLLIe5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 03:34:57 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E0F06151;
-        Mon, 12 Dec 2022 00:34:54 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8AxB_Gu55Zj4fkEAA--.11267S3;
-        Mon, 12 Dec 2022 16:34:54 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuCs55ZjGUEsAA--.41531S2;
-        Mon, 12 Dec 2022 16:34:53 +0800 (CST)
-Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20221121123803.3786-1-zhuyinbo@loongson.cn>
- <20221121123803.3786-2-zhuyinbo@loongson.cn>
- <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com>
- <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn>
- <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <b78f02f4-4329-602e-ca8d-adbe911c2a54@loongson.cn>
-Date:   Mon, 12 Dec 2022 16:34:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S231728AbiLLKB6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 05:01:58 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD8B964C0;
+        Mon, 12 Dec 2022 02:01:56 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1p4fdC-0003dF-00; Mon, 12 Dec 2022 11:01:54 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 7E038C01C5; Mon, 12 Dec 2022 11:01:49 +0100 (CET)
+Date:   Mon, 12 Dec 2022 11:01:49 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v6.2
+Message-ID: <20221212100149.GA4565@alpha.franken.de>
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxXuCs55ZjGUEsAA--.41531S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxurWkGw4DCF1kCrWDGF4UArb_yoW5Xw4xpF
-        W5Gayqkr4DJryIyw4vqw18ZF1fKa93uFy3Jr1Fk3s8Aryqqr93ZrWaqrWavF9ru3yUJr42
-        vF1Yk3yxu3WDAFJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8k-BtUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,77 +38,104 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
 
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
 
-在 2022/11/24 上午6:05, Linus Walleij 写道:
-> On Wed, Nov 23, 2022 at 9:02 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->> 在 2022/11/21 下午9:24, Linus Walleij 写道:
-> 
->>>> +static int loongson_gpio_request(
->>>> +                       struct gpio_chip *chip, unsigned int pin)
->>>> +{
->>>> +       if (pin >= chip->ngpio)
->>>> +               return -EINVAL;
->>>
->>> This is not needed, the gpiolib core already checks this. Drop it.
->> I check gpio_request in gpilib, I notice gpio_is_valid is not equal to
->> this condition, so I still kept it for byte mode.
-> 
-> This is because descriptors can only be obtained from gpiod_get() and
-> similar and gpiod_get() falls to gpiod_get_index() which will not
-> return a valid descriptor from either HW backend. gpiod_get()
-> will call gpiod_request() for if and only if the descriptor is valid.
-> 
-> The only reason to implement something like this is because of
-> using the legacy GPIO numberspace which we are getting rid
-> of so it is irrelevant, the consumers of your driver will only be
-> using gpio descriptors, will only come in through gpiod_get_index()
-> and will have desc validity check done before calling gpiod_request().
-> 
-> So drop this.
-> 
->>> I am bit suspicious that your IRQchip implementation expects consumers
->>> to call gpiod_to_irq() first and this is not legal.
->>
->> okay, I got it, and other driver use gpio interrupt doesn't rely on
->> gpiod_to_irq, but can use gpiod_to_irq.
-> 
-> Yes it can be used to look up the irq corresponding to a GPIO
-> but it is not mandatory to do that.
-> 
->> The reason is that gpio interrupt wasn't an independent module,  The
->> loongson interrupt controller liointc include lots of interrupt was
->> route to perpherial, such as i2c/spi .. gpio, so gpio interrupt as
->> normal perpherial interrupt, It is unnecessary and redundant to
->> implement a gpio irq chip. The liointc controller driver had cover all
->> interrupt.
-> 
-> This is fine, and it is common for GPIO drivers to implement
-> their own IRQchips.
-> 
-> But these drivers can not rely on the .gpio_to_irq() callback
-> to be called before an IRQ is requested and used.
-> 
->> in addition,  I don't like to use the dynamically allocated gpio base,
->> so I set the gpio base after call bgpio_init.
-> 
-> Don't do that because the GPIO maintainers love the
-> dynamic base and hate hardcoded bases. Set the base to -1
-> If you wonder why, read drivers/gpio/TODO.
-Hi Linus,
+are available in the Git repository at:
 
-I recenly verfied other peripheral on upstream, some peripheral driver
-need use gpio number, but if use dynamic base that gpio number will be
-meaningless.  in additon I notice that many gpio driver don't use
-dynamic base, although bgpio_int was called.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.2
 
-so I think the gpio number should be keep consistent with datasheet for
-some platform that need use gpio number.
+for you to fetch changes up to 4c587a982603d7e7e751b4925809a1512099a690:
 
-Yinbo.
+  MIPS: OCTEON: warn only once if deprecated link status is being used (2022-12-09 23:37:46 +0100)
 
-> 
-> Yours,
-> Linus Walleij
-> 
+----------------------------------------------------------------
+- DT cleanups
+- fix for early use of kzalloc on mt7621 platform
+- cleanups and fixes
 
+----------------------------------------------------------------
+Anastasia Belova (1):
+      MIPS: BCM63xx: Add check for NULL for clk in clk_enable
+
+Arınç ÜNAL (3):
+      mips: ralink: mt7621: fix phy-mode of external phy on GB-PC2
+      mips: ralink: mt7621: change DSA port labels to generic naming
+      mips: dts: remove label = "cpu" from DSA dt-binding
+
+Dmitry Torokhov (1):
+      MIPS: DTS: CI20: fix reset line polarity of the ethernet controller
+
+Geert Uytterhoeven (1):
+      MIPS: mscc: jaguar2: Fix pca9545 i2c-mux node names
+
+Genjian Zhang (1):
+      MIPS: Restore symbol versions for copy_page_cpu and clear_page_cpu
+
+Huacai Chen (1):
+      platform/mips: Adjust Kconfig to keep consistency
+
+John Thomson (3):
+      mips: ralink: mt7621: define MT7621_SYSC_BASE with __iomem
+      mips: ralink: mt7621: soc queries and tests as functions
+      mips: ralink: mt7621: do not use kzalloc too early
+
+Ladislav Michl (1):
+      MIPS: OCTEON: warn only once if deprecated link status is being used
+
+Rafał Miłecki (2):
+      mips: dts: bcm63268: add TWD block timer
+      mips: dts: brcm: bcm7435: add "interrupt-names" for NAND controller
+
+Sergio Paracuellos (2):
+      dt-bindings: mips: add CPU bindings for MIPS architecture
+      dt-bindings: mips: brcm: add Broadcom SoCs bindings
+
+Tiezhu Yang (1):
+      MIPS: Use "grep -E" instead of "egrep"
+
+Xu Panda (1):
+      MIPS: OCTEON: cvmx-bootmem: use strscpy() to instead of strncpy()
+
+Yang Yingliang (2):
+      MIPS: vpe-mt: fix possible memory leak while module exiting
+      MIPS: vpe-cmp: fix possible memory leak while module exiting
+
+zhang songyi (1):
+      mips/pci: use devm_platform_ioremap_resource()
+
+ .../devicetree/bindings/mips/brcm/brcm,bmips.txt   |   8 --
+ .../devicetree/bindings/mips/brcm/soc.yaml         |  96 +++++++++++++++++
+ Documentation/devicetree/bindings/mips/cpus.yaml   | 115 +++++++++++++++++++++
+ .../bindings/mips/ingenic/ingenic,cpu.yaml         |  69 -------------
+ arch/mips/Makefile                                 |   2 +-
+ arch/mips/bcm63xx/clk.c                            |   2 +
+ arch/mips/boot/dts/brcm/bcm63268.dtsi              |   5 +
+ arch/mips/boot/dts/brcm/bcm7435.dtsi               |   1 +
+ arch/mips/boot/dts/ingenic/ci20.dts                |   2 +-
+ arch/mips/boot/dts/mscc/jaguar2_pcb110.dts         |   4 +-
+ arch/mips/boot/dts/qca/ar9331.dtsi                 |   1 -
+ arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts |   2 +-
+ arch/mips/boot/dts/ralink/mt7621.dtsi              |  11 +-
+ arch/mips/cavium-octeon/executive/cvmx-bootmem.c   |   3 +-
+ .../cavium-octeon/executive/cvmx-helper-board.c    |   2 +-
+ arch/mips/cavium-octeon/executive/cvmx-helper.c    |   2 +-
+ arch/mips/include/asm/asm-prototypes.h             |   3 +
+ arch/mips/include/asm/mach-ralink/mt7621.h         |   4 +-
+ arch/mips/kernel/vpe-cmp.c                         |   4 +-
+ arch/mips/kernel/vpe-mt.c                          |   4 +-
+ arch/mips/pci/pci-rt3883.c                         |   4 +-
+ arch/mips/ralink/mt7621.c                          |  97 +++++++++++------
+ arch/mips/vdso/Makefile                            |   2 +-
+ drivers/platform/Kconfig                           |   2 -
+ drivers/platform/mips/Kconfig                      |   1 +
+ 25 files changed, 313 insertions(+), 133 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mips/brcm/brcm,bmips.txt
+ create mode 100644 Documentation/devicetree/bindings/mips/brcm/soc.yaml
+ create mode 100644 Documentation/devicetree/bindings/mips/cpus.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
