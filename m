@@ -2,113 +2,193 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CB16493D6
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Dec 2022 12:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 988786499EA
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Dec 2022 09:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiLKLPq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 11 Dec 2022 06:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S230457AbiLLIND (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Dec 2022 03:13:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiLKLPq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Dec 2022 06:15:46 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BA2BF7E
-        for <linux-mips@vger.kernel.org>; Sun, 11 Dec 2022 03:15:43 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 43E405C00A4;
-        Sun, 11 Dec 2022 06:15:43 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute2.internal (MEProxy); Sun, 11 Dec 2022 06:15:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1670757343; x=1670843743; bh=FIaazcUNm5x/Fanz8tfn5EZbXdufbCXLvzf
-        3vm1Tu8o=; b=HNis07/RGn2VMXK5urZxNzZIXtm0Td9POes9dtIcD6FcvjphA6Q
-        O3nAh8U9XE/82qBrYGewc9v2Dako8L88O3kkPTVARjbeFDPTEXL41415uTwsGnu1
-        HIYm+4H6IYbbIuIRRFiCHDel7xIhX+bOH9qzWRB8bYcpighviJYbEcvsMYXZbMqn
-        /2ZDRFJTjLli7FrmISLd+WILdElibUUsk+EXsv98tEO1E1kso3IaGSqGBsnGSl5l
-        boF/jrLNYaJp//gLifCYuOiYs+/rv4vhWMN+V7LclwA+RDP1oiKI3bxfIzjvpkMt
-        13vw92Bqv/2oCFlyNFRGtCBfoK8swiSn0Bw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1670757343; x=
-        1670843743; bh=FIaazcUNm5x/Fanz8tfn5EZbXdufbCXLvzf3vm1Tu8o=; b=e
-        Z9VVE7uTjiF7txoLiKy1eWz0FTDTSs3KRgFeP7eXReuTeX/2nSRFzTwbPGrjYfKe
-        TG0I0mLIgfmle5y/mr7FJROF5SoBlqd0Oe1bKBGXBT6qmg1M9LHL7YCDLhdr9w4D
-        nngFtihlPy5iGMVVzgyjySerAtyc5jtl0GGiJ15HZYiyyh54U+nyQqNvTrS53pNp
-        omb+nKJXgZJrjSV9xNQZdgPD1HveCXlDXYNM72ka3+k34ktAfhgts3zL8nXwWYQD
-        xQPkKQvMxbyzJ9R6uj4VCyOS4PpTV7F2gYgvGTBiV1+xUIDzlyDWqMb7/qCHj5qf
-        dtUPVvLxZ8kk6IW0GRF2A==
-X-ME-Sender: <xms:37uVY6P9xKOAqUMWMnUjTxtxPZlNeAgTCoPac32yQ3338gf952cM3Q>
-    <xme:37uVY4-M-ip0Ihe2st96H21PPxeofOa_MHWZbHhsH2f-Ieq59SVLbO7O9RQMUCI4F
-    -d_TVbCP4wBAsyHhdY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeigddviecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdflihgrgihu
-    nhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeeuhfdvheehgeduueetfeevjedtveelvdelhfeuhffffffgheev
-    geffgeeluefhgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:37uVYxSrKvRN0-WVpvnARNq0bJeBlHgYEYh6jecgVx5ZWrBn9783jg>
-    <xmx:37uVY6s7Mp-LwFs2Ihcy6HrNxb9EGEsCq4QKWRKs3DCkgoslH1rexA>
-    <xmx:37uVYyfO5nFdrumzNTezUFtE0_p3cZD7EoAiiLVbqNvRXjDvGgg8Sg>
-    <xmx:37uVY6mW8kdYwWLfPXcakbeL9CRjIRtv4Jt3_NansEk-bHMa8YT1EA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 158DF36A0073; Sun, 11 Dec 2022 06:15:43 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <183d63f9-c0d8-4054-8cec-7d01184fbaff@app.fastmail.com>
-Date:   Sun, 11 Dec 2022 11:15:22 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Cc:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Subject: Sunsetting some dead on arrival MIPS kernel features?
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229681AbiLLINC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 03:13:02 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FBCABF7F;
+        Mon, 12 Dec 2022 00:12:59 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxuuqJ4pZjHfkEAA--.11719S3;
+        Mon, 12 Dec 2022 16:12:57 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuJ84pZjVDwsAA--.42459S2;
+        Mon, 12 Dec 2022 16:12:55 +0800 (CST)
+Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn>
+ <20221121123803.3786-2-zhuyinbo@loongson.cn>
+ <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com>
+ <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn>
+ <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
+ <4c02570e-03d5-85f1-73fb-b66d6170c875@loongson.cn>
+ <CACRpkdbgP9m40t_Ky4H+SQi9TELikomT2M-JpF7+auKmzOxQdg@mail.gmail.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <ce858832-c052-1797-ffeb-2dbe654cbdd1@loongson.cn>
+Date:   Mon, 12 Dec 2022 16:12:44 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <CACRpkdbgP9m40t_Ky4H+SQi9TELikomT2M-JpF7+auKmzOxQdg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxHuJ84pZjVDwsAA--.42459S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZryrZw1xtFW8tF15Xry5Jwb_yoWrZr4fpF
+        W3Waya9r4kJF40gFyDG348ZFy3Jwn8JFW7AwsYy34xZ3WDZr9Ygr47tF1FvFyUWrZFvw4Y
+        vr1Fyry8uF1DAFJanT9S1TB71UUUUbUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
+        0_Jw0_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
+        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU81lk3UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi all,
 
-When I'm preparing kernel tree for some future MIPS architecture features like
-removal of branch delay slot and CPU identification instructions, I noticed there are
-some dead on arrival MIPS architecture features that still supported by kernel.
-Those features are increasing our maintenance burden without attracting actual
-users. 
 
-I think we should consider about get rid of them in case we can confirmed nobody is
-using them.
+在 2022/11/24 下午4:54, Linus Walleij 写道:
+> On Thu, Nov 24, 2022 at 3:22 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>> 在 2022/11/24 上午6:05, Linus Walleij 写道:
+> 
+>>> But these drivers can not rely on the .gpio_to_irq() callback
+>>> to be called before an IRQ is requested and used.
+>>
+>> I may not have made it clear before that the gpio irq chip for other
+>> platforms may need to be implemented, but the loongson platform may be
+>> special.
+>>
+>> I mean that the loongson platform use gpio irq does not need to rely on
+>> gpio_to_irq, because loongson interrupt controller driver has covered
+>> gpio irq.  The specific reason is my above explanation.
+>>
+>> so, Can I not realize gpio irq chip?
+> 
+> Isn't this a hierarchical irqchip then?
+> 
+> Please consult the following from
+> Documentation/driver-api/gpio/driver.rst:
+> 
+> ---------------------------------
+> 
+> GPIO drivers providing IRQs
+> ===========================
+> 
+> It is custom that GPIO drivers (GPIO chips) are also providing interrupts,
+> most often cascaded off a parent interrupt controller, and in some special
+> cases the GPIO logic is melded with a SoC's primary interrupt controller.
+> 
+> The IRQ portions of the GPIO block are implemented using an irq_chip, using
+> the header <linux/irq.h>. So this combined driver is utilizing two sub-
+> systems simultaneously: gpio and irq.
+> 
+> It is legal for any IRQ consumer to request an IRQ from any irqchip even if it
+> is a combined GPIO+IRQ driver. The basic premise is that gpio_chip and
+> irq_chip are orthogonal, and offering their services independent of each
+> other.
+> 
+> gpiod_to_irq() is just a convenience function to figure out the IRQ for a
+> certain GPIO line and should not be relied upon to have been called before
+> the IRQ is used.
+> 
+> Always prepare the hardware and make it ready for action in respective
+> callbacks from the GPIO and irq_chip APIs. Do not rely on gpiod_to_irq() having
+> been called first.
+> 
+> We can divide GPIO irqchips in two broad categories:
+> 
+> - CASCADED INTERRUPT CHIPS: this means that the GPIO chip has one common
+>    interrupt output line, which is triggered by any enabled GPIO line on that
+>    chip. The interrupt output line will then be routed to an parent interrupt
+>    controller one level up, in the most simple case the systems primary
+>    interrupt controller. This is modeled by an irqchip that will inspect bits
+>    inside the GPIO controller to figure out which line fired it. The irqchip
+>    part of the driver needs to inspect registers to figure this out and it
+>    will likely also need to acknowledge that it is handling the interrupt
+>    by clearing some bit (sometime implicitly, by just reading a status
+>    register) and it will often need to set up the configuration such as
+>    edge sensitivity (rising or falling edge, or high/low level interrupt for
+>    example).
+> 
+> - HIERARCHICAL INTERRUPT CHIPS: this means that each GPIO line has a dedicated
+>    irq line to a parent interrupt controller one level up. There is no need
+>    to inquire the GPIO hardware to figure out which line has fired, but it
+>    may still be necessary to acknowledge the interrupt and set up configuration
+>    such as edge sensitivity.
+Hi Linus,
 
-1. MIPS_CMP, MIPS_VPE_LOADER_CMP, MIPS_VPE_APSP_API_CMP:
-CMP framework was designed to abstract out SMP opreations between platforms.
-However it never get used by any platform beside MIPS malta EVB for M4K and
-M74K family. Even those EVBs can be supported by MIPS_CPS.
-Given that it have been marked as DEPRECATED for years, probably it's time to
-remove it.
+My patch had send it to v11, but I have some issues. it seems more
+appropriate add them here. the issue as follows:
 
-2. CPU_MICROMIPS:
-This option is for building kernel with microMIPS ISA, microMIPS is a compression
-extension of base MIPS ISA, hardware IP cores can be configured to be microMIPS
-only or support both microMIPS + MIPS32.
-However it is only implemented by a small number of MTI cores, also confirmed by
-hardware team, due to performance penalty it incurred, there is no core that capable
-to run Linux (i.e.: with MMU and sufficient memory) shipped as microMIPS only.
-Removal of this feature won't remove support for microMIPS user space support,
-just we won't be able to build a kernel for microMIPS only CPUs.
 
-Any thoughts?
+mask_irq/unmask_irq/irq_ack/ function always be called by
+handle_level_irq/handle_edge_irq in current irq domain. and the
+handle_level_irq/handle_edge_irq will be called  by handle_irq_desc that
+ask know which irq is.
 
-Thanks
-- Jiaxun
+when a peripheral need to use a gpio irq that gpio irq driver need know
+irq status and call irq desc->irq_handler.
+
+so I don't got it about which case it is unnecessary to know which irq.
+> 
+> ---------------------------------
+> 
+> You find an example of a hierarchical GPIO irqchip using the
+> GPIOLIB_IRQCHIP in drivers/gpio/gpio-ixp4xx.c.
+
+
+Loongson-2 gpio irq hardware only a enable register, and when a gpio irq 
+happen, then will has a such flow:  "cpuintc -> liointc -> gpioinc ->
+generic_handle_domain_irq -> handle_level_irq ->
+peripheral-action(action->handler)"
+
+generic_handle_domain_irq need rely on specific hwirq that ask gpio irq 
+hardware has a status register but Loongson-2 gpio irq hardware doesn't 
+have it.
+
+so I still think it wasn't appropriate that for loongson-2 gpio driver
+add a irq chip.
+
+Yinbo.
+> 
+> Yours,
+> Linus Walleij
+> 
+
