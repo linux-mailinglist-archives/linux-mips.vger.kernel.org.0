@@ -2,74 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3854364ABAE
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Dec 2022 00:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA7764ACB7
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Dec 2022 02:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiLLXoT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Dec 2022 18:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S233100AbiLMBCP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Dec 2022 20:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiLLXoS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 18:44:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0712EE
-        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 15:43:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670888603;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jEA/kHTqeoXaUaGcLLLnYDpNScpRzske2CPEB3QlR58=;
-        b=e918GRur/EjMhJxQNq/pAQAgdFY7rHb4fKyDGyudgKMFnPuZArtEUq8BikJHlrJhghdzqM
-        QxUT+yaIn0VoR9ewrtHTMFRw4qPp7UafQ1u1VTvJtgWoTsorc/pCEYDyHttqUfVDG+H7Up
-        2uR3ZGqtLe5DdqVV1qdO7bJxRrraULc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-139-QdFxQzXRMwqb8N_tY2Yhyg-1; Mon, 12 Dec 2022 18:43:21 -0500
-X-MC-Unique: QdFxQzXRMwqb8N_tY2Yhyg-1
-Received: by mail-wm1-f70.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso4013498wms.5
-        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 15:43:21 -0800 (PST)
+        with ESMTP id S230062AbiLMBCM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Dec 2022 20:02:12 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D07FCEB
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 17:02:11 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id a9so13915980pld.7
+        for <linux-mips@vger.kernel.org>; Mon, 12 Dec 2022 17:02:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6GqFhoQ5IFUAK9oX1MHOecDUK0USc3JCTx3X8yerj1o=;
+        b=FtjwIkrUOBV2twjG7aSDbbD70cPG5TPStSgDCsNV45Bhmz74eNy+ozucvejg73x4O1
+         Iohs4s0dpsdVjim7W9yTFCi/EcSDg8iCwzhlHWz1fotOSARecFpPQ4Hcfa3qQYCWl4fD
+         i1NYMRChruL7+5L6pSJLJXVhu8QmidC5EEUqHA/lI7bch3t3TIv1aCN57q4l7rtPFYua
+         FlWlimYfUfUgVCukMvVJuuDDKaWduMb0REZn22mFV2kYcjkEnorPqV83jL7/8bj0vUDj
+         SOGbsMyi3efvpD/4Q6/fjpBXN88wAA6q87W5qjPxSb+fHE/weIam6vo+2qT/aO85DhR1
+         U6LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jEA/kHTqeoXaUaGcLLLnYDpNScpRzske2CPEB3QlR58=;
-        b=eQTnR33NnVBmKdAov0vHY7LN7tUrK+g+mTEOFjtSwWWMg1YDNYG02Bd0vWt9csYDCf
-         aFhDqoagqWQ9G5CQYXHMcsDCrrAETojMWiQogpw71wVmeE/XHky3SBbTVuSTE6ODJ2PZ
-         nN/GszCupJuy/oB+vzJWG649oehO0eCVB3JtfSSQ2Ywt3L4OAbzGRtV3xwNRWdqKAr8i
-         JY7be7yTkCLCeblvex8y+eYsjWNwjdaUhzbmvn+8sL/jI8NgnFv/gF6UiPXmeQo/kipi
-         7MPciGjvSBn1d0B76bemgWyRoPvLrfUkEEKhnB2a9fXSFa1HCBPgfPr6uCvTQlJtOJ8c
-         VNHw==
-X-Gm-Message-State: ANoB5plwRP+iBQ+fU419HS48QgXYKvI6qxAea2Vgj0EuVfoKj8IhA95E
-        w6+yh2mWdRyrdTb/wGtA7w2erzOUKvGs6/glP2dZ9AYVfdep2bx/sAsJtn70+lOXtdYVmWfTCf4
-        /kFbjJMn0bEH+Nj6sC9cEYw==
-X-Received: by 2002:a05:6000:1a41:b0:232:be5d:4896 with SMTP id t1-20020a0560001a4100b00232be5d4896mr11068892wry.10.1670888600340;
-        Mon, 12 Dec 2022 15:43:20 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6FE6NAMqQtmSlBoZgWlaFymznZFcQYb9/qLkdQoBRkq0uuA5oTNuN3c0LKnzZL0EytBO3qiw==
-X-Received: by 2002:a05:6000:1a41:b0:232:be5d:4896 with SMTP id t1-20020a0560001a4100b00232be5d4896mr11068853wry.10.1670888600068;
-        Mon, 12 Dec 2022 15:43:20 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id j18-20020a5d5652000000b002427bfd17b6sm12017830wrw.63.2022.12.12.15.43.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 15:43:19 -0800 (PST)
-Message-ID: <f1026204-1895-1a7e-5bf8-3527223f3778@redhat.com>
-Date:   Tue, 13 Dec 2022 00:43:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC PATCH 00/37] KVM: Refactor the KVM/x86 TDP MMU into common
- code
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        David Matlack <dmatlack@google.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6GqFhoQ5IFUAK9oX1MHOecDUK0USc3JCTx3X8yerj1o=;
+        b=xj4glxnP8U3uCE1ao17Djz1ISMeC++y7AE01ot8hLK/iadlq9tKGKCen0nkCaQ053X
+         PDsf+2lTDTzhkAoFbT40QMisAD3jD0h6mKamZgchjv5YAOx9aKKH+SW4yLcYz1WFLobn
+         tCCiA9/1W6Z1wJJeUv9rYmEMFge+UxQqOwpPqDcjDLTcj/SzRlMsqcFkwfuEawp9KEPb
+         I9zyoLk5uafxOhRvrgNKkJ2h4lWPvBqLxvp4uU8PNIHIDUAJSMt2s385qPicbFTk/5SQ
+         qwgen3w9X+zxvo9aMqiPTePY7ZIX8erTHt+0A/nhTXhCNQdKfqO3A8IR0492ZxTICYUJ
+         mL+w==
+X-Gm-Message-State: ANoB5plmwSMt6xU78phuVTn8V69dinvv6h3jwr1lcHv/yn2tGEn6DoWv
+        yNDc+ipU95F5GabI4a+bjvsdhg==
+X-Google-Smtp-Source: AA0mqf6YEPI+D/p+C5vB/eTbMi0DUTnPh+gMPudwZTqoN9JqStWe3ScZcQMFez7S1hpnK/27SYk6nw==
+X-Received: by 2002:a17:90b:394b:b0:218:7bf2:4ff2 with SMTP id oe11-20020a17090b394b00b002187bf24ff2mr62913pjb.0.1670893330943;
+        Mon, 12 Dec 2022 17:02:10 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n15-20020a170903110f00b00186bc66d2cbsm7066219plh.73.2022.12.12.17.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 17:02:10 -0800 (PST)
+Date:   Tue, 13 Dec 2022 01:02:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
         James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Anup Patel <anup@brainfault.org>,
@@ -88,7 +76,6 @@ Cc:     Oliver Upton <oliver.upton@linux.dev>,
         Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
         Colin Cross <ccross@google.com>,
         Hugh Dickins <hughd@google.com>,
-        Ben Gardon <bgardon@google.com>,
         Mingwei Zhang <mizhang@google.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Ricardo Koller <ricarkol@google.com>,
@@ -97,35 +84,61 @@ Cc:     Oliver Upton <oliver.upton@linux.dev>,
         kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
         kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org
+Subject: Re: [RFC PATCH 20/37] KVM: x86/mmu: Abstract away computing the max
+ mapping level
+Message-ID: <Y5fPDqI7TBngeaj8@google.com>
 References: <20221208193857.4090582-1-dmatlack@google.com>
- <Y5OHVzBSHPmAq2FO@google.com>
- <eb93beee-9d43-1c1e-250c-28ab7e9ebed9@redhat.com>
- <Y5e4qxjHWoMt8YGs@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y5e4qxjHWoMt8YGs@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20221208193857.4090582-21-dmatlack@google.com>
+ <CANgfPd-6LNdZ42tb0DnC21r1Z5JGR_1Lvvop8RKJJ8hEz+PUDg@mail.gmail.com>
+ <CALzav=cashgJPmeKSRQnd_kdYg2EK0G4rygSCt6GaJWSYz3juw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=cashgJPmeKSRQnd_kdYg2EK0G4rygSCt6GaJWSYz3juw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/13/22 00:26, Sean Christopherson wrote:
->>> I would strongly be in favor of discarding the shadow paging residue if
->>> x86 folks are willing to part ways with it 😄
->> Yes, absolutely.  Something like to_shadow_page->to_mmu_data, sp->md,
->> spt->hpt, spte->spte, sptep->hptep.
-> "host" will be confusing if when the primary MMU is involved though, e.g. I always
-> think of the primary MMU's page tables as the "host page tables".
+On Mon, Dec 12, 2022, David Matlack wrote:
+> On Mon, Dec 12, 2022 at 11:32 AM Ben Gardon <bgardon@google.com> wrote:
+> >
+> > On Thu, Dec 8, 2022 at 11:39 AM David Matlack <dmatlack@google.com> wrote:
+> > >
+> > > Abstract away kvm_mmu_max_mapping_level(), which is an x86-specific
+> > > function for computing the max level that a given GFN can be mapped in
+> > > KVM's page tables. This will be used in a future commit to enable moving
+> > > the TDP MMU to common code.
+> > >
+> > > Provide a default implementation for non-x86 architectures that just
+> > > returns the max level. This will result in more zapping than necessary
+> > > when disabling dirty logging (i.e. less than optimal performance) but no
+> > > correctness issues.
+> >
+> > Apologies if you already implemented it in a later patch in this
+> > series, but would it not at least be possible to port
+> > host_pfn_mapping_level to common code and check that?
+> > I'm assuming, though I could be wrong, that all archs map GFNs with at
+> > most a host page table granularity mapping.
+> > I suppose that doesn't strictly need to be included in this series,
+> > but it would be worth addressing in the commit description.
 > 
-> What if we keep the "S" for SPT(E) and repurpose it to mean Secondary PTE?
+> It's not implemented later in this series, but I agree it's something
+> we should do. In fact, it's worth doing regardless of this series as a
+> way to share more code across architectures (e.g. KVM/ARM has it's own
+> version in arch/arm64/kvm/mmu.c:get_user_mapping_size()).
 
-Makes sense, so just to_shadow_page->to_secmmu_page?
+Ya, ARM converted to walking the host user page tables largely in response to
+x86's conversion.  After x86 switched, ARM was left holding the bag that was
+PageTransCompoundMap().
 
-Paolo
-
+On a related topic, I'm guessing all the comments in transparent_hugepage_adjust()
+about the code working _only_ for THP are stale.  Unless ARM support for HugeTLB
+works differently, walking host user page tables should Just Work for all hugepage
+types.
