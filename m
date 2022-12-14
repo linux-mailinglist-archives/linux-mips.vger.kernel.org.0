@@ -2,124 +2,303 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D889264CAD2
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 14:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEB264D02A
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 20:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238257AbiLNNNd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Dec 2022 08:13:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
+        id S238824AbiLNTmi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Dec 2022 14:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237595AbiLNNNP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 08:13:15 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD7D1E72D
-        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 05:13:14 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id b9so6569988ljr.5
-        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 05:13:14 -0800 (PST)
+        with ESMTP id S238688AbiLNTmh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 14:42:37 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD424248F4
+        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 11:42:35 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id w23so4421282ply.12
+        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 11:42:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a+g8bhbYuaQlXpPh9UOtgjVnfBA2QaGFWh99Dxpg4ZE=;
-        b=pH4lW0UzND66hSwgAr90gmNeJlHhMMjKxH++4eW3mWYQyc+QzxOJXFiGhRsFLzgJq3
-         k3+WVeQmb6prwQwLr5tbLcNSDjevfkbBMeexkjwydyfk5wzC2d01uaqZ9KTKR4ZbmmSj
-         P4BbNAO9HG/VNcHskBIak4fVt3eAS+98lwqxCaBfK7/840N6KSl+juF26s9XyI+9zx72
-         v0SctXCPovZc5s4h19qrHjlfhaBFG7899spkzEHoVKHOe5BCc8b80P8G48Su4s+kR1L/
-         flqXg0HjT5iXo4wesLl9SlcpG8/MXK43CZfSuMIKHUY2pU04i7qiRlmDFXAraT+VJGTV
-         D/TQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ku5jbuAQtkSIptaPybAlGHrWDUjqz+/sshvQ4yTXVKM=;
+        b=gFMFZTb9mro+iD15z0WKOAxzMvbSbzWPvCwsv8UgFNQWpsUuXMnYS1PD3tfN9vh+X7
+         TxVm4jwzNUIAZ9XHYIdI0sTAawVhxSLk731/QHHR0cEuSWQT3MUJ5gn4LDqw2kfypG1G
+         0bQIwCJGwPZ6AKpAq3T0x0kfjiXwM8lxNtxri7D8qhKTIK3pwuhtPFeLIU9CPCLftyT7
+         N4dlul+9Y12mjdb0gPr7ygr3Diy6uRM/rtN0bgjbPYE8emVLaRsMCD/6CMXfynWZUtV8
+         FUhysphsdX7xRND/cGG0xWBHmRXb2BmyzX1vpYoDF3NQ54Xr6HVNV1VJIIrs+JDUy6J7
+         CZcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a+g8bhbYuaQlXpPh9UOtgjVnfBA2QaGFWh99Dxpg4ZE=;
-        b=BP9+Ul22TpsuXcmBwACsJ4CWx8TlFcu740wiRhG2HPKd8PX3pUf+8K+u79vYV4tLdH
-         5eyuA99FLci95fdbBdoPgr6AgekG1Ujx9c1pdFTZE5zRII5LjT86oWf+6FO0rwT+Plev
-         mEsp7J8PLxXzFrU676q4VHp4OctnRg3fhBb33eOFud4lBvGPtKR2lMcs81NC8AxfYqg2
-         h3uNfvUgZ+5AMTszXROSUKmGJNKDUDzoJwP9GNLxMspygiW5M5FlpSBtXtZV+kLYi4E+
-         hM+LEgxFZNxZnmR1XOkVvQapjmO9NifPvhKVYOmlqokhoIVVKVuv7nXN3PB+v2nk3o6/
-         5Cww==
-X-Gm-Message-State: ANoB5pkwuB0VA8aIYOZiQUEj7qQkRa42FiYav0xcdYoWPIPuWO0hS0l0
-        S9eKJfiHbgwlkGYT1wY4uizQRQ==
-X-Google-Smtp-Source: AA0mqf5PHGVRyKqw0AGxvuMvc+S3bUW9QX8UFoENXdCLSqKdTBPI3OD0tyhSW0GEGTa31bX/AAwYJQ==
-X-Received: by 2002:a05:651c:883:b0:26f:db34:a157 with SMTP id d3-20020a05651c088300b0026fdb34a157mr5864463ljq.26.1671023592549;
-        Wed, 14 Dec 2022 05:13:12 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bd9-20020a05651c168900b00279e93c9c25sm596663ljb.29.2022.12.14.05.13.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 05:13:11 -0800 (PST)
-Message-ID: <9d7bda38-69c9-95c8-e867-8bd5733debe2@linaro.org>
-Date:   Wed, 14 Dec 2022 14:13:10 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ku5jbuAQtkSIptaPybAlGHrWDUjqz+/sshvQ4yTXVKM=;
+        b=AshEnQeb33VQ6KZI+NQPrEBJhh263i0AsdSdYrdsVSjGUM1WazqblMXMVo2/r9oHLz
+         1tz705Z8av2RQLlyWXJ9rr2UyLNt7b5V6w57yc/6GRbjQuufkgbVgQ4LUHbk7ZbvTJiW
+         a9EYNwLEo6MEvDpgJIWSBMiGo4Q0hzyTp25YwYFg6zV2335e5GofXQsNbikFTHneFmyr
+         6SZyL4bg1lWaJvuBH5l+okI8m47Z4zQEPcr8Hj4PCsH+LyI46s46ptEWm2KEuKqXmigj
+         hO2ebMTdB+zkYB0smEUBCAtDVQ3a2C/Qrm1FtggyW8DfxguMRFZPI0R8j3rkl6FhI1FI
+         sSkA==
+X-Gm-Message-State: ANoB5pkYJhMvJxi9MZ2DahQBxndx07ZyXYCZEXrC6y6RFNY1AtUzNCGv
+        A5SIKSFdVW3dr/zK6i4Qvr/wMw==
+X-Google-Smtp-Source: AA0mqf475+T6XuYTtV2Re11WEmkxZATJINn1AOgHBS3Ie2ZV2UqJ+on0NpT5StpdHjXPTHMnUH99rA==
+X-Received: by 2002:a17:90a:2a4f:b0:219:828e:ba2 with SMTP id d15-20020a17090a2a4f00b00219828e0ba2mr871582pjg.0.1671046955097;
+        Wed, 14 Dec 2022 11:42:35 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902710100b0018b025d9a40sm2204215pll.256.2022.12.14.11.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 11:42:33 -0800 (PST)
+Date:   Wed, 14 Dec 2022 19:42:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        "Amit, Nadav" <namit@vmware.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
+        Colin Cross <ccross@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [RFC PATCH 01/37] KVM: x86/mmu: Store the address space ID
+ directly in kvm_mmu_page_role
+Message-ID: <Y5onJulY3UQJNrmW@google.com>
+References: <20221208193857.4090582-1-dmatlack@google.com>
+ <20221208193857.4090582-2-dmatlack@google.com>
+ <22fe2332-497e-fe30-0155-e026b0eded97@intel.com>
+ <Y5NvYmxpy6BPkmpW@google.com>
+ <CALzav=eju4LYyX=ufNneSww+5sraYJ8cfQSi4LTOHfHWmddX9A@mail.gmail.com>
+ <Y5dnWgJ0ine55/hN@google.com>
+ <CAJhGHyBbjyKVEv3KcoOcPGQ28753FjR_rc9uNDEF3Dd-gNTRGQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 3/6] dt-bindings: pinctrl: mt7621: add proper function
- muxing binding
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20221213130430.172876-1-arinc.unal@arinc9.com>
- <20221213130430.172876-4-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221213130430.172876-4-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJhGHyBbjyKVEv3KcoOcPGQ28753FjR_rc9uNDEF3Dd-gNTRGQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 13/12/2022 14:04, Arınç ÜNAL wrote:
-> Not every function can be muxed to a group. Add proper binding which
-> documents which function can be muxed to a group or set of groups.
+On Wed, Dec 14, 2022, Lai Jiangshan wrote:
+> On Tue, Dec 13, 2022 at 1:47 AM Sean Christopherson <seanjc@google.com> wrote:
 > 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../pinctrl/ralink,mt7621-pinctrl.yaml        | 204 +++++++++++++++++-
->  1 file changed, 197 insertions(+), 7 deletions(-)
+> >
+> > My preference would be to leave .smm in x86's page role.  IMO, defining multiple
+> > address spaces to support SMM emulation was a mistake that should be contained to
+> > SMM, i.e. should never be used for any other feature.  And with CONFIG_KVM_SMM,
+> > even x86 can opt out.
+> >
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
-> index 61e5c847e8c8..0efb03f1d88e 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
-> @@ -29,21 +29,212 @@ patternProperties:
->          $ref: pinmux-node.yaml#
->  
->          properties:
-> -          groups:
-> -            description: The pin group to select.
-> -            enum: [i2c, jtag, mdio, pcie, rgmii1, rgmii2, sdhci, spi, uart1,
-> -                   uart2, uart3, wdt]
-> -
->            function:
-> -            description: The mux function to select.
-> +            description:
-> +              A string containing the name of the function to mux to the group.
->              enum: [gpio, i2c, i2s, jtag, mdio, nand1, nand2, pcie refclk,
->                     pcie rst, pcm, rgmii1, rgmii2, sdhci, spdif2, spdif3, spi,
->                     uart1, uart2, uart3, wdt refclk, wdt rst]
->  
-> +          groups:
-> +            description:
-> +              An array of strings. Each string contains the name of a group.
+> 
+> I think the name ASID in kvm/x86 should be used for vmcb's ASID,
+> vmcs's VPID, and PCID. Using the name ASID for other purposes
+> would only result in unnecessary confusion.
 
-Here and in all patches - please add maxItems:1. The definition of field
-should have some constraints (and your if:then: might miss a case).
+I agree in principle, but at this point fixing the problem would require a lot of
+churn since "as_id" is pervasive throughout the memslots code.
 
-Best regards,
-Krzysztof
+It should be possible though, as I don't think anything in KVM's uAPI explicitly
+takes an as_id, i.e. it's KVM-internal terminology for the most part.
+
+> There is a bug for shadow paging when it uses two separate sets
+> of memslots which are using two sets of rmap and page-tracking.
+> 
+> When SMM world is writing to a non-SMM page which happens to be
+> a guest pagetable in the non-SMM world, the write operation will
+> go smoothly without specially handled and the shadow page for the guest
+> pagetable is neither unshadowed nor marked unsync.  The shadow paging
+> code is unaware that the shadow page has deviated from the guest
+> pagetable.
+
+Won't the unsync code work as intended?  for_each_gfn_valid_sp_with_gptes()
+doesn't consume the slot and I don't see any explicit filtering on role.smm,
+i.e. should unsync all SPTEs for the gfn.
+
+Addressing the page-track case is a bit gross, but doesn't appear to be too
+difficult.  I wouldn't be surprised if there are other SMM => non-SMM bugs lurking
+though.
+
+---
+ arch/x86/include/asm/kvm_page_track.h |  2 +-
+ arch/x86/kvm/mmu/mmu.c                |  7 +++---
+ arch/x86/kvm/mmu/mmu_internal.h       |  3 ++-
+ arch/x86/kvm/mmu/page_track.c         | 32 +++++++++++++++++++--------
+ arch/x86/kvm/mmu/spte.c               |  2 +-
+ 5 files changed, 31 insertions(+), 15 deletions(-)
+
+diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
+index eb186bc57f6a..fdd9de31e160 100644
+--- a/arch/x86/include/asm/kvm_page_track.h
++++ b/arch/x86/include/asm/kvm_page_track.h
+@@ -63,7 +63,7 @@ void kvm_slot_page_track_add_page(struct kvm *kvm,
+ void kvm_slot_page_track_remove_page(struct kvm *kvm,
+ 				     struct kvm_memory_slot *slot, gfn_t gfn,
+ 				     enum kvm_page_track_mode mode);
+-bool kvm_slot_page_track_is_active(struct kvm *kvm,
++bool kvm_slot_page_track_is_active(struct kvm_vcpu *vcpu,
+ 				   const struct kvm_memory_slot *slot,
+ 				   gfn_t gfn, enum kvm_page_track_mode mode);
+ 
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 254bc46234e0..1c2200042133 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2715,9 +2715,10 @@ static void kvm_unsync_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+  * were marked unsync (or if there is no shadow page), -EPERM if the SPTE must
+  * be write-protected.
+  */
+-int mmu_try_to_unsync_pages(struct kvm *kvm, const struct kvm_memory_slot *slot,
++int mmu_try_to_unsync_pages(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
+ 			    gfn_t gfn, bool can_unsync, bool prefetch)
+ {
++	struct kvm *kvm = vcpu->kvm;
+ 	struct kvm_mmu_page *sp;
+ 	bool locked = false;
+ 
+@@ -2726,7 +2727,7 @@ int mmu_try_to_unsync_pages(struct kvm *kvm, const struct kvm_memory_slot *slot,
+ 	 * track machinery is used to write-protect upper-level shadow pages,
+ 	 * i.e. this guards the role.level == 4K assertion below!
+ 	 */
+-	if (kvm_slot_page_track_is_active(kvm, slot, gfn, KVM_PAGE_TRACK_WRITE))
++	if (kvm_slot_page_track_is_active(vcpu, slot, gfn, KVM_PAGE_TRACK_WRITE))
+ 		return -EPERM;
+ 
+ 	/*
+@@ -4127,7 +4128,7 @@ static bool page_fault_handle_page_track(struct kvm_vcpu *vcpu,
+ 	 * guest is writing the page which is write tracked which can
+ 	 * not be fixed by page fault handler.
+ 	 */
+-	if (kvm_slot_page_track_is_active(vcpu->kvm, fault->slot, fault->gfn, KVM_PAGE_TRACK_WRITE))
++	if (kvm_slot_page_track_is_active(vcpu, fault->slot, fault->gfn, KVM_PAGE_TRACK_WRITE))
+ 		return true;
+ 
+ 	return false;
+diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+index ac00bfbf32f6..38040ab27986 100644
+--- a/arch/x86/kvm/mmu/mmu_internal.h
++++ b/arch/x86/kvm/mmu/mmu_internal.h
+@@ -156,7 +156,8 @@ static inline bool kvm_mmu_page_ad_need_write_protect(struct kvm_mmu_page *sp)
+ 	return kvm_x86_ops.cpu_dirty_log_size && sp->role.guest_mode;
+ }
+ 
+-int mmu_try_to_unsync_pages(struct kvm *kvm, const struct kvm_memory_slot *slot,
++int mmu_try_to_unsync_pages(struct kvm_vcpu *vcpu,
++			    const struct kvm_memory_slot *slot,
+ 			    gfn_t gfn, bool can_unsync, bool prefetch);
+ 
+ void kvm_mmu_gfn_disallow_lpage(const struct kvm_memory_slot *slot, gfn_t gfn);
+diff --git a/arch/x86/kvm/mmu/page_track.c b/arch/x86/kvm/mmu/page_track.c
+index 2e09d1b6249f..0e9bc837257e 100644
+--- a/arch/x86/kvm/mmu/page_track.c
++++ b/arch/x86/kvm/mmu/page_track.c
+@@ -18,6 +18,7 @@
+ 
+ #include "mmu.h"
+ #include "mmu_internal.h"
++#include "smm.h"
+ 
+ bool kvm_page_track_write_tracking_enabled(struct kvm *kvm)
+ {
+@@ -171,27 +172,40 @@ void kvm_slot_page_track_remove_page(struct kvm *kvm,
+ }
+ EXPORT_SYMBOL_GPL(kvm_slot_page_track_remove_page);
+ 
++static bool __kvm_slot_page_track_is_active(const struct kvm_memory_slot *slot,
++					    gfn_t gfn, enum kvm_page_track_mode mode)
++{
++	int index;
++
++	if (!slot)
++		return false;
++
++	index = gfn_to_index(gfn, slot->base_gfn, PG_LEVEL_4K);
++	return !!READ_ONCE(slot->arch.gfn_track[mode][index]);
++}
++
+ /*
+  * check if the corresponding access on the specified guest page is tracked.
+  */
+-bool kvm_slot_page_track_is_active(struct kvm *kvm,
++bool kvm_slot_page_track_is_active(struct kvm_vcpu *vcpu,
+ 				   const struct kvm_memory_slot *slot,
+ 				   gfn_t gfn, enum kvm_page_track_mode mode)
+ {
+-	int index;
+-
+ 	if (WARN_ON(!page_track_mode_is_valid(mode)))
+ 		return false;
+ 
+-	if (!slot)
+-		return false;
+-
+ 	if (mode == KVM_PAGE_TRACK_WRITE &&
+-	    !kvm_page_track_write_tracking_enabled(kvm))
++	    !kvm_page_track_write_tracking_enabled(vcpu->kvm))
+ 		return false;
+ 
+-	index = gfn_to_index(gfn, slot->base_gfn, PG_LEVEL_4K);
+-	return !!READ_ONCE(slot->arch.gfn_track[mode][index]);
++	if (__kvm_slot_page_track_is_active(slot, gfn, mode))
++		return true;
++
++	if (!is_smm(vcpu))
++		return false;
++
++	return __kvm_slot_page_track_is_active(gfn_to_memslot(vcpu->kvm, gfn),
++					       gfn, mode);
+ }
+ 
+ void kvm_page_track_cleanup(struct kvm *kvm)
+diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+index c0fd7e049b4e..89ddd113c1b9 100644
+--- a/arch/x86/kvm/mmu/spte.c
++++ b/arch/x86/kvm/mmu/spte.c
+@@ -220,7 +220,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+ 		 * e.g. it's write-tracked (upper-level SPs) or has one or more
+ 		 * shadow pages and unsync'ing pages is not allowed.
+ 		 */
+-		if (mmu_try_to_unsync_pages(vcpu->kvm, slot, gfn, can_unsync, prefetch)) {
++		if (mmu_try_to_unsync_pages(vcpu, slot, gfn, can_unsync, prefetch)) {
+ 			pgprintk("%s: found shadow page for %llx, marking ro\n",
+ 				 __func__, gfn);
+ 			wrprot = true;
+
+base-commit: e0ef1f14e97ff65adf6e2157952dbbd1e482065c
+-- 
 
