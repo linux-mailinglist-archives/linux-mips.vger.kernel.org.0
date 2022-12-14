@@ -2,94 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2989464C1FD
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 02:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8291564C64E
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 10:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236968AbiLNBtN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Dec 2022 20:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
+        id S237966AbiLNJuY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Dec 2022 04:50:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236960AbiLNBtL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Dec 2022 20:49:11 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A1E2250D;
-        Tue, 13 Dec 2022 17:49:11 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id j206so19875950ybj.1;
-        Tue, 13 Dec 2022 17:49:10 -0800 (PST)
+        with ESMTP id S237964AbiLNJuW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 04:50:22 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873C7AE66;
+        Wed, 14 Dec 2022 01:50:20 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id c7so4036482pfc.12;
+        Wed, 14 Dec 2022 01:50:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xExdyQDhYTgV1IdxIuGP7o71ehB3CFKVoLy9PDmyibI=;
-        b=CpQZevHLxrKv/1hgs+V2M6cSkSoV06F4lrYnaOXQP0TPCfiOv3a3XN/FUVsGLczONc
-         Xoat0JVF6aWTnCtcoy0u8DaFnXLbOjr0GHowLyZMrkgrzMTSZuQb7jBkg29up3JFdnwb
-         z1xpRhcvLh6rCbteub8Jcjve+YrOKZGEMD7u0Lze3jmBJXrFTkMX5NNiAeXpg7USuUsU
-         H40QWeWHAWUskJKHXI/uEl0ZGO7h/DpvUk2CvRbW29DwT9GxFM07swURLZpZdI4fbjpV
-         Hlq89BIEjgQzeMI9bDbAYiB6D/gX0qGIS3aqm628+LMHVQ3l5rrxI4O+dCFluPi5Hu0T
-         Q+Rg==
+        bh=Jbas8k53VpTFWCNrs3oRHT/Z65GCtCU2WQLZf0mUIGE=;
+        b=afwPx6LdFoKaH5nf+ag3bcmEMnN8QxYCsgHz0tCKFfNGbcAhKAKWcHJS4u0Xa02rh9
+         1zx4dWkTQ16/1Xq2qNjpEn/3zEiV+mVtkVWXwDxrtry3ggQwYtHlzleK+hm+POGHPrEa
+         VR30Iiq3fwVosu3uFcFlghm/CQnobNW0jBUmqmTqKDJ18p6Vv3nTnv+YJd9Q5V9R2qRW
+         rK3qglYycZi9MnKCpxTmAdk5enZysYESnQUsKy4Dui9/9KOMamkgsKJVkSAwwlSq3qfb
+         OyhJNSoWvttRx7SrdvyCvHkwHTBdaB7W4Z0D/jUtQ/E84c2kEM0PIZMnID4mjv788Xgs
+         gp0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xExdyQDhYTgV1IdxIuGP7o71ehB3CFKVoLy9PDmyibI=;
-        b=cwuv0Nf/p/uJONpAcA45/3uH2+4a4TdlD8rz9leCiXuDfghCFEsIGb5nyS4JbHdYQi
-         4PVR5mQOk139lRT32JBbalVg1+HLd39qRkhD41Vv555po3LmmHO4SqqF0VcNucD+rKcD
-         3A+bbCHJiUoyMhmPUVhNuVtOKLYX5YeV2Qi6JzF2kUxyTx6MD3Dz5GawvhHCCBVUs68p
-         tRUkTrLbKtF1lLH9o2CJHCSvQCOGuVmHqafVNKarOV1khHlcUqAIT47rxYNvXFTaxjNr
-         3UIX2//xwkoCgszNhRX8ULeGsRJckejfIa4SKOgACY0d5scfTqQ7+Ki9bL2mV4fOpCbZ
-         qiGw==
-X-Gm-Message-State: ANoB5pm/sC5m0EP5Vq/1/90W1qRzAMXFphxWitQh68p4etb8kb5C0Ic7
-        nAOcBt1O3u0q3SQy6DMeMBtAUM3n49CkM78R/LrYtuBh
-X-Google-Smtp-Source: AA0mqf6aVToRrr31IEWqBS+HG0H/EHpXHAs4dR9uyadBVst6sowJPiHa9e2nz4BE/XZPJEaRMOKC5NsyelGKuryt+Ws=
-X-Received: by 2002:a25:6b4e:0:b0:6f9:91bd:c5de with SMTP id
- o14-20020a256b4e000000b006f991bdc5demr41309865ybm.497.1670982550268; Tue, 13
- Dec 2022 17:49:10 -0800 (PST)
+        bh=Jbas8k53VpTFWCNrs3oRHT/Z65GCtCU2WQLZf0mUIGE=;
+        b=JF7HuuQgh96hGxG5cRnAwHlxBmT/r5FubyzcMPCzM0Jqh9/oeCnvH80XxzSmZQg08Q
+         +niLlD3lVG7YDysFZ3/SHJqfD2GvW2GgF0A4kJm6uWGpICBKNMNzbi9CJLqh0DougV9r
+         yaR1cf1JvBPAwhuv2MY41AiGFZjipxaDsBrdtUEmT2rOGIYk0xVF/V2yElxQWI92QBfR
+         jhiFWs7ygDQ/o1N0L7habWpOgRY9cq1y3cH78HE3AQJO4YLWo/DwRwfOyH+hGISu3MO3
+         KwJZED1Nd75ytu+N6XHvn6390PRmiqeQvv8QQ3HFVVqCh8tVv4yjXdYNXvxPRK2tI+2r
+         3Njg==
+X-Gm-Message-State: ANoB5pn8M2vIlDMqcfMIgWtTpv0UCREFoQtJMoQutEsqo9kaJ19Ux1Ru
+        8Ta0oqJkYWHbQFUbbNVGFhJq3ENSSIJZH5oz7ao=
+X-Google-Smtp-Source: AA0mqf7w8TIU6K2l/8MuGzXNAAZ9FRqdURji/6nctthseH2MSfKX1yiUw7Qrbh0D1Res/crh8T4uAxCut4Jl7FykNkI=
+X-Received: by 2002:a63:e4a:0:b0:477:6cd0:9a04 with SMTP id
+ 10-20020a630e4a000000b004776cd09a04mr75781850pgo.433.1671011420030; Wed, 14
+ Dec 2022 01:50:20 -0800 (PST)
 MIME-Version: 1.0
-References: <b2ada465-8eec-a7e3-0265-df9d0e8492d2@gmail.com>
-In-Reply-To: <b2ada465-8eec-a7e3-0265-df9d0e8492d2@gmail.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 13 Dec 2022 17:48:59 -0800
-Message-ID: <CAMo8Bf+8Bn7pNNbBbXgphfe41Kxx7cHb9LTtBexy15mpL8hKuw@mail.gmail.com>
-Subject: Re: [PATCH] arch: change variable types to match those of what is
- assigned to them
-To:     Seija Kijin <doremylover123@gmail.com>
-Cc:     sstabellini@kernel.org, tsbogend@alpha.franken.de,
-        chris@zankel.net, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+References: <20221208193857.4090582-1-dmatlack@google.com> <20221208193857.4090582-2-dmatlack@google.com>
+ <22fe2332-497e-fe30-0155-e026b0eded97@intel.com> <Y5NvYmxpy6BPkmpW@google.com>
+ <CALzav=eju4LYyX=ufNneSww+5sraYJ8cfQSi4LTOHfHWmddX9A@mail.gmail.com> <Y5dnWgJ0ine55/hN@google.com>
+In-Reply-To: <Y5dnWgJ0ine55/hN@google.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 14 Dec 2022 17:50:07 +0800
+Message-ID: <CAJhGHyBbjyKVEv3KcoOcPGQ28753FjR_rc9uNDEF3Dd-gNTRGQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 01/37] KVM: x86/mmu: Store the address space ID
+ directly in kvm_mmu_page_role
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        "Amit, Nadav" <namit@vmware.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
+        Colin Cross <ccross@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Seija,
+On Tue, Dec 13, 2022 at 1:47 AM Sean Christopherson <seanjc@google.com> wrote:
 
-On Tue, Dec 13, 2022 at 4:51 PM Seija Kijin <doremylover123@gmail.com> wrote:
 >
-> There are many places where "int len = strlen(foo);" is written, just for len to be passed as a parameter of size_t.
+> My preference would be to leave .smm in x86's page role.  IMO, defining multiple
+> address spaces to support SMM emulation was a mistake that should be contained to
+> SMM, i.e. should never be used for any other feature.  And with CONFIG_KVM_SMM,
+> even x86 can opt out.
+>
 
-[...]
 
-> diff --git a/arch/xtensa/platforms/iss/console.c b/arch/xtensa/platforms/iss/console.c
-> index 10b79d3c74e0..3159917ffd2f 100644
-> --- a/arch/xtensa/platforms/iss/console.c
-> +++ b/arch/xtensa/platforms/iss/console.c
-> @@ -64,7 +64,7 @@ static int rs_write(struct tty_struct * tty,
->   static void rs_poll(struct timer_list *unused)
->   {
->       struct tty_port *port = &serial_port;
-> -    int i = 0;
-> +    size_t i = 0;
+I think the name ASID in kvm/x86 should be used for vmcb's ASID,
+vmcs's VPID, and PCID. Using the name ASID for other purposes
+would only result in unnecessary confusion.
 
-This is not what happens here at all.
+There is a bug for shadow paging when it uses two separate sets
+of memslots which are using two sets of rmap and page-tracking.
 
--- 
-Thanks.
--- Max
+When SMM world is writing to a non-SMM page which happens to be
+a guest pagetable in the non-SMM world, the write operation will
+go smoothly without specially handled and the shadow page for the guest
+pagetable is neither unshadowed nor marked unsync.  The shadow paging
+code is unaware that the shadow page has deviated from the guest
+pagetable.
+
+It means when SMM is enabled, shadow paging should be disabled,
+which also means it has to use tdp and not to use nested tdp.
+
+Thanks
+Lai
