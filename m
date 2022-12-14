@@ -2,113 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B686264C920
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 13:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7211764C9A6
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 14:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238254AbiLNMjA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Dec 2022 07:39:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S238511AbiLNNDu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Dec 2022 08:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238297AbiLNMil (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 07:38:41 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801CC23BC3;
-        Wed, 14 Dec 2022 04:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1671021430; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=HLzDDpFo+NMrWAFFyUZ9LuVUJTHVwxs+VXTyDfaqs9Q=;
-        b=xop6fV11aNUmenrUx59Oup4N5Niw2ZMg1q1ul/H5H7lsj2z9Ci1uiyTU528q8AiTyTzSCP
-        gX69xAHuHtARmUqSyjNNI+M61CdYnQeokcms2dEbkWQmRs8yugxr9XwDNztgvl89Cy9d/I
-        IpUOFSv9WkaFsPih5Lo7Ai3EzrPj3vI=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
-Subject: [PATCH] clk: ingenic: jz4760: Update M/N/OD calculation algorithm
-Date:   Wed, 14 Dec 2022 13:37:04 +0100
-Message-Id: <20221214123704.7305-1-paul@crapouillou.net>
+        with ESMTP id S238516AbiLNNDd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 08:03:33 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D82B1017;
+        Wed, 14 Dec 2022 05:03:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1671022986; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=UPY7i5SMkaWrKMVho/QYOQp0auQDrPT8dPO2l6K2foMyJvPZ8woJfjTPOwbVcwviT1KJgEjObe++Aj6yHYSHEFx2iDhYymbPdTknj39WyYQOY1O3J2N8CBZYXBh4I8iXaeL/yMl7hvn9o35WLK2xEEhRYl2zwjs4RrMKqD08KOM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1671022986; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=59iU0P1f3ab6WLKiO0UF7eRA1PQgts1QskhL9VDL5XA=; 
+        b=F7wxJUlZ7S353Io7/FyOqNEEr3c2tmNKmNwts6m9Ixq0KA5u5ZpZURNdOVN2BhW2bGuirz2faM5Bj92xNiD1ARN9188hgC0TGznT7BCuByKvJacRZusOjZlA5aU7/w+qoPPK0F5xuI9hlH1TbapupA3umXd/YjiZyfTP5cmfpUM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671022986;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=59iU0P1f3ab6WLKiO0UF7eRA1PQgts1QskhL9VDL5XA=;
+        b=NSuQkHVHGa+Sip6dofYz/aQLvD564zlFEhlUybh4SbnKYGY3TxmRjhMIZYpENZYY
+        5Nr4rMhdpF3SyySfl/sVWkx3u65QD6dr6dnQpusrPrCGPsks8AjQ9euCnUSQ3rJxG0n
+        3RZRtt7/b05X8q0DE4LKvTZ+Y7xL59iI3sM/Y4kY=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1671022984989152.47326119284412; Wed, 14 Dec 2022 05:03:04 -0800 (PST)
+Message-ID: <e4b6b334-44c3-9e73-adaa-9972ff9e6fd5@arinc9.com>
+Date:   Wed, 14 Dec 2022 16:03:00 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/6] dt-bindings: pinctrl: mt7620: add proper function
+ muxing binding
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20221213130430.172876-1-arinc.unal@arinc9.com>
+ <20221213130430.172876-3-arinc.unal@arinc9.com>
+ <4ffd94b2-e72c-a081-4326-5bc254603ddf@linaro.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <4ffd94b2-e72c-a081-4326-5bc254603ddf@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The previous algorithm was pretty broken.
+On 14.12.2022 14:55, Krzysztof Kozlowski wrote:
+> On 13/12/2022 14:04, Arınç ÜNAL wrote:
+>> Not every function can be muxed to a group. Add proper binding which
+>> documents which function can be muxed to a group or set of groups.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../pinctrl/ralink,mt7620-pinctrl.yaml        | 632 +++++++++++++++++-
+>>   1 file changed, 596 insertions(+), 36 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> index 6f17f3991640..06880c80ba80 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> @@ -29,47 +29,608 @@ patternProperties:
+>>           $ref: pinmux-node.yaml#
+>>   
+>>           properties:
+>> -          groups:
+>> -            description: The pin group to select.
+>> -            enum: [
+>> -              # common
+>> -              i2c, spi, wdt,
+>> -
+>> -              # For MT7620 SoC
+>> -              ephy, mdio, nd_sd, pa, pcie, rgmii1, rgmii2, spi refclk,
+>> -              uartf, uartlite, wled,
+>> -
+>> -              # For MT7628 and MT7688 SoCs
+>> -              gpio, i2s, p0led_an, p0led_kn, p1led_an, p1led_kn, p2led_an,
+>> -              p2led_kn, p3led_an, p3led_kn, p4led_an, p4led_kn, perst, pwm0,
+>> -              pwm1, refclk, sdmode, spi cs1, spis, uart0, uart1, uart2,
+>> -              wled_an, wled_kn,
+>> -            ]
+>> -
+>>             function:
+>> -            description: The mux function to select.
+>> -            enum: [
+>> -              # common
+>> -              gpio, i2c, refclk, spi,
+>> -
+>> -              # For MT7620 SoC
+>> -              ephy, gpio i2s, gpio uartf, i2s uartf, mdio, nand, pa,
+>> -              pcie refclk, pcie rst, pcm gpio, pcm i2s, pcm uartf,
+>> -              rgmii1, rgmii2, sd, spi refclk, uartf, uartlite, wdt refclk,
+>> -              wdt rst, wled,
+>> -
+>> -              # For MT7628 and MT7688 SoCs
+>> -              antenna, debug, i2s, jtag, p0led_an, p0led_kn,
+>> -              p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an, p3led_kn,
+>> -              p4led_an, p4led_kn, pcie, pcm, perst, pwm, pwm0, pwm1, pwm_uart2,
+>> -              rsvd, sdxc, sdxc d5 d4, sdxc d6, sdxc d7, spi cs1,
+>> -              spis, sw_r, uart0, uart1, uart2, utif, wdt, wled_an, wled_kn, -,
+>> -            ]
+>> +            description:
+>> +              A string containing the name of the function to mux to the group.
+>> +            anyOf:
+>> +              - description: For MT7620 SoC
+>> +                enum: [ephy, gpio, gpio i2s, gpio uartf, i2c, i2s uartf, mdio, nand, pa,
+>> +                       pcie refclk, pcie rst, pcm gpio, pcm i2s, pcm uartf, refclk,
+>> +                       rgmii1, rgmii2, sd, spi, spi refclk, uartf, uartlite, wdt refclk,
+>> +                       wdt rst, wled]
+>> +
+>> +              - description: For MT7628 and MT7688 SoCs
+>> +                enum: [antenna, debug, gpio, i2c, i2s, jtag, p0led_an, p0led_kn,
+>> +                       p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an, p3led_kn,
+>> +                       p4led_an, p4led_kn, pcie, pcm, perst, pwm, pwm0, pwm1, pwm_uart2,
+>> +                       refclk, rsvd, sdxc, sdxc d5 d4, sdxc d6, sdxc d7, spi, spi cs1,
+>> +                       spis, sw_r, uart0, uart1, uart2, utif, wdt, wled_an, wled_kn, -]
+>> +
+>> +          groups:
+>> +            description:
+>> +              An array of strings. Each string contains the name of a group.
+>>   
+>>           required:
+>>             - groups
+>>             - function
+>>   
+>> +        allOf:
+>> +          - if:
+>> +              properties:
+>> +                function:
+>> +                  const: antenna
+>> +            then:
+>> +              properties:
+>> +                groups:
+>> +                  enum: [i2s]
+> 
+> I have doubts such setup is maintainable and readable. I would suggest
+> to leave just few - maybe for gpio, jtag, refclk, utif.
 
-- The inner loop had a '(m > m_max)' condition, and the value of 'm'
-  would increase in each iteration;
+These bindings are not going to change once all properly defined and I'm 
+here as a maintainer so I don't see an issue with maintaining the binding.
 
-- Each iteration would actually multiply 'm' by two, so it is not needed
-  to re-compute the whole equation at each iteration;
+It's the whole pin configuration of an SoC squashed under a single 
+document. I guess this is the fate of the pinctrl bindings. The bindings 
+for mt7622 is not so different:
 
-- It would loop until (m & 1) == 0, which means it would loop at most
-  once.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/pinctrl/mediatek%2Cmt7622-pinctrl.yaml#n63
 
-- The outer loop would divide the 'n' value by two at the end of each
-  iteration. This meant that for a 12 MHz parent clock and a 1.2 GHz
-  requested clock, it would first try n=12, then n=6, then n=3, then
-  n=1, none of which would work; the only valid value is n=2 in this
-  case.
+It's still much better than reading the code:
 
-Simplify this algorithm with a single for loop, which decrements 'n'
-after each iteration, addressing all of the above problems.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pinctrl/ralink/pinctrl-mt7620.c
 
-Fixes: bdbfc029374f ("clk: ingenic: Add support for the JZ4760")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/clk/ingenic/jz4760-cgu.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/clk/ingenic/jz4760-cgu.c b/drivers/clk/ingenic/jz4760-cgu.c
-index ecd395ac8a28..e407f00bd594 100644
---- a/drivers/clk/ingenic/jz4760-cgu.c
-+++ b/drivers/clk/ingenic/jz4760-cgu.c
-@@ -58,7 +58,7 @@ jz4760_cgu_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
- 		       unsigned long rate, unsigned long parent_rate,
- 		       unsigned int *pm, unsigned int *pn, unsigned int *pod)
- {
--	unsigned int m, n, od, m_max = (1 << pll_info->m_bits) - 2;
-+	unsigned int m, n, od, m_max = (1 << pll_info->m_bits) - 1;
- 
- 	/* The frequency after the N divider must be between 1 and 50 MHz. */
- 	n = parent_rate / (1 * MHZ);
-@@ -66,19 +66,17 @@ jz4760_cgu_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
- 	/* The N divider must be >= 2. */
- 	n = clamp_val(n, 2, 1 << pll_info->n_bits);
- 
--	for (;; n >>= 1) {
--		od = (unsigned int)-1;
-+	rate /= MHZ;
-+	parent_rate /= MHZ;
- 
--		do {
--			m = (rate / MHZ) * (1 << ++od) * n / (parent_rate / MHZ);
--		} while ((m > m_max || m & 1) && (od < 4));
--
--		if (od < 4 && m >= 4 && m <= m_max)
--			break;
-+	for (m = m_max; m >= m_max && n >= 2; n--) {
-+		m = rate * n / parent_rate;
-+		od = m & 1;
-+		m <<= od;
- 	}
- 
- 	*pm = m;
--	*pn = n;
-+	*pn = n + 1;
- 	*pod = 1 << od;
- }
- 
--- 
-2.35.1
-
+Arınç
