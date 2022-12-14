@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE1364C9C8
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 14:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D889264CAD2
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 14:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238526AbiLNNKU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Dec 2022 08:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S238257AbiLNNNd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Dec 2022 08:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLNNKT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 08:10:19 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7D5DEBD
-        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 05:10:17 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j4so10417064lfk.0
-        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 05:10:17 -0800 (PST)
+        with ESMTP id S237595AbiLNNNP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 08:13:15 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD7D1E72D
+        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 05:13:14 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id b9so6569988ljr.5
+        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 05:13:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=L/OQxm+OmJ40HtGirwGYwb1GzeOKY9S3W4yB7HO1YOI=;
-        b=M8aMUswawauJab+7K7Jn2Gkzte5YHY7Wn6tCg37AUcPW73EjMsr4P7NHJrZDpLN60S
-         r6lDMHd+ySIdKe8NosoT/I9d/X1wBMJ5VC6kdckOmmZgxQzXrxOPvi8DFxBYEQi+ahAK
-         FqY1ER0G2r1sNO9GmOzwMMzYEiNI4NfN+cyiZ4DTA8N9U3ukL6H8OqJQocdJ7K47wSFG
-         n459EAdKKHRlnTeL2CurMSujEzBJPR6WjYKBzybCeTQdMJQbZQpBXhj0od7HIMTxOPI5
-         jcv2Q+pyTPBxCbLjOw2lgj4vW8HdpM2Bhs6TmlL8LMN10oVxlzoHAVd80q/rhMJOPv28
-         wsXA==
+        bh=a+g8bhbYuaQlXpPh9UOtgjVnfBA2QaGFWh99Dxpg4ZE=;
+        b=pH4lW0UzND66hSwgAr90gmNeJlHhMMjKxH++4eW3mWYQyc+QzxOJXFiGhRsFLzgJq3
+         k3+WVeQmb6prwQwLr5tbLcNSDjevfkbBMeexkjwydyfk5wzC2d01uaqZ9KTKR4ZbmmSj
+         P4BbNAO9HG/VNcHskBIak4fVt3eAS+98lwqxCaBfK7/840N6KSl+juF26s9XyI+9zx72
+         v0SctXCPovZc5s4h19qrHjlfhaBFG7899spkzEHoVKHOe5BCc8b80P8G48Su4s+kR1L/
+         flqXg0HjT5iXo4wesLl9SlcpG8/MXK43CZfSuMIKHUY2pU04i7qiRlmDFXAraT+VJGTV
+         D/TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L/OQxm+OmJ40HtGirwGYwb1GzeOKY9S3W4yB7HO1YOI=;
-        b=5rcjd2rVrQcahq2ylh+7olZ1lqiVcFEkU+CWMO8+pq2C+bVZ+qHEqxHw27nBilSxSS
-         KLaMNvWmYTg8Qv9o0OFl82RIsA0/iaguMle4NGMAV4iySYMzTcZMfSr7vLSU2SSsOcMB
-         UM/SjfG4m5Xl2iWme5hVK1esgwuB6NgUTYSKjwFEkgE0NlD8kbdGnyuVVJEVnwVTAy3R
-         NMiwNWq8g1hXA+6XQAAKrxuaj8jymjHGTdOotT0cCh5nQGPlUWEPfwvsJzy/WX1Am01C
-         r7t9UhNBMFgfxRrORVWtttG4QbAC5A94gKE2z8JVvUL8EHt2mQoKJuwsScRzP5nscfCv
-         RxVQ==
-X-Gm-Message-State: ANoB5pmWng9fdS8s06BkrapEvoNZyqXbTsmspfPYkPOXvFuKmQtv2b7z
-        sEWetVX6rMclefw9DCDf+5Z8qWfx7AdlFpVJ
-X-Google-Smtp-Source: AA0mqf5XSd1rI4+lxJqzcmku43nUYBc930QOD/2bY74bont7jGKG3lndTw+vMTbzm531t15ZEOYTdw==
-X-Received: by 2002:a05:6512:1386:b0:4b5:4606:7ad9 with SMTP id p6-20020a056512138600b004b546067ad9mr8121567lfa.39.1671023416204;
-        Wed, 14 Dec 2022 05:10:16 -0800 (PST)
+        bh=a+g8bhbYuaQlXpPh9UOtgjVnfBA2QaGFWh99Dxpg4ZE=;
+        b=BP9+Ul22TpsuXcmBwACsJ4CWx8TlFcu740wiRhG2HPKd8PX3pUf+8K+u79vYV4tLdH
+         5eyuA99FLci95fdbBdoPgr6AgekG1Ujx9c1pdFTZE5zRII5LjT86oWf+6FO0rwT+Plev
+         mEsp7J8PLxXzFrU676q4VHp4OctnRg3fhBb33eOFud4lBvGPtKR2lMcs81NC8AxfYqg2
+         h3uNfvUgZ+5AMTszXROSUKmGJNKDUDzoJwP9GNLxMspygiW5M5FlpSBtXtZV+kLYi4E+
+         hM+LEgxFZNxZnmR1XOkVvQapjmO9NifPvhKVYOmlqokhoIVVKVuv7nXN3PB+v2nk3o6/
+         5Cww==
+X-Gm-Message-State: ANoB5pkwuB0VA8aIYOZiQUEj7qQkRa42FiYav0xcdYoWPIPuWO0hS0l0
+        S9eKJfiHbgwlkGYT1wY4uizQRQ==
+X-Google-Smtp-Source: AA0mqf5PHGVRyKqw0AGxvuMvc+S3bUW9QX8UFoENXdCLSqKdTBPI3OD0tyhSW0GEGTa31bX/AAwYJQ==
+X-Received: by 2002:a05:651c:883:b0:26f:db34:a157 with SMTP id d3-20020a05651c088300b0026fdb34a157mr5864463ljq.26.1671023592549;
+        Wed, 14 Dec 2022 05:13:12 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b004b48e0f619asm805945lfr.48.2022.12.14.05.10.15
+        by smtp.gmail.com with ESMTPSA id bd9-20020a05651c168900b00279e93c9c25sm596663ljb.29.2022.12.14.05.13.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 05:10:15 -0800 (PST)
-Message-ID: <286bbd0f-1632-6071-7d08-e56ed16c234c@linaro.org>
-Date:   Wed, 14 Dec 2022 14:10:14 +0100
+        Wed, 14 Dec 2022 05:13:11 -0800 (PST)
+Message-ID: <9d7bda38-69c9-95c8-e867-8bd5733debe2@linaro.org>
+Date:   Wed, 14 Dec 2022 14:13:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 2/6] dt-bindings: pinctrl: mt7620: add proper function
+Subject: Re: [PATCH 3/6] dt-bindings: pinctrl: mt7621: add proper function
  muxing binding
 Content-Language: en-US
 To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
@@ -69,11 +69,9 @@ Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
 References: <20221213130430.172876-1-arinc.unal@arinc9.com>
- <20221213130430.172876-3-arinc.unal@arinc9.com>
- <4ffd94b2-e72c-a081-4326-5bc254603ddf@linaro.org>
- <e4b6b334-44c3-9e73-adaa-9972ff9e6fd5@arinc9.com>
+ <20221213130430.172876-4-arinc.unal@arinc9.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e4b6b334-44c3-9e73-adaa-9972ff9e6fd5@arinc9.com>
+In-Reply-To: <20221213130430.172876-4-arinc.unal@arinc9.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,36 +83,42 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14/12/2022 14:03, Arınç ÜNAL wrote:
-> On 14.12.2022 14:55, Krzysztof Kozlowski wrote:
->>>   
->>> +        allOf:
->>> +          - if:
->>> +              properties:
->>> +                function:
->>> +                  const: antenna
->>> +            then:
->>> +              properties:
->>> +                groups:
->>> +                  enum: [i2s]
->>
->> I have doubts such setup is maintainable and readable. I would suggest
->> to leave just few - maybe for gpio, jtag, refclk, utif.
+On 13/12/2022 14:04, Arınç ÜNAL wrote:
+> Not every function can be muxed to a group. Add proper binding which
+> documents which function can be muxed to a group or set of groups.
 > 
-> These bindings are not going to change once all properly defined and I'm 
-> here as a maintainer so I don't see an issue with maintaining the binding.
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../pinctrl/ralink,mt7621-pinctrl.yaml        | 204 +++++++++++++++++-
+>  1 file changed, 197 insertions(+), 7 deletions(-)
 > 
-> It's the whole pin configuration of an SoC squashed under a single 
-> document. I guess this is the fate of the pinctrl bindings. The bindings 
-> for mt7622 is not so different:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/pinctrl/mediatek%2Cmt7622-pinctrl.yaml#n63
+> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
+> index 61e5c847e8c8..0efb03f1d88e 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
+> @@ -29,21 +29,212 @@ patternProperties:
+>          $ref: pinmux-node.yaml#
+>  
+>          properties:
+> -          groups:
+> -            description: The pin group to select.
+> -            enum: [i2c, jtag, mdio, pcie, rgmii1, rgmii2, sdhci, spi, uart1,
+> -                   uart2, uart3, wdt]
+> -
+>            function:
+> -            description: The mux function to select.
+> +            description:
+> +              A string containing the name of the function to mux to the group.
+>              enum: [gpio, i2c, i2s, jtag, mdio, nand1, nand2, pcie refclk,
+>                     pcie rst, pcm, rgmii1, rgmii2, sdhci, spdif2, spdif3, spi,
+>                     uart1, uart2, uart3, wdt refclk, wdt rst]
+>  
+> +          groups:
+> +            description:
+> +              An array of strings. Each string contains the name of a group.
 
-It's much smaller number of if:then: than yours but if you want to
-manage it then sure:
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Here and in all patches - please add maxItems:1. The definition of field
+should have some constraints (and your if:then: might miss a case).
 
 Best regards,
 Krzysztof
