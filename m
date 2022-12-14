@@ -2,136 +2,197 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8291564C64E
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 10:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C03264C7D6
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Dec 2022 12:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237966AbiLNJuY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Dec 2022 04:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S237972AbiLNLXl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Dec 2022 06:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237964AbiLNJuW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 04:50:22 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873C7AE66;
-        Wed, 14 Dec 2022 01:50:20 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id c7so4036482pfc.12;
-        Wed, 14 Dec 2022 01:50:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jbas8k53VpTFWCNrs3oRHT/Z65GCtCU2WQLZf0mUIGE=;
-        b=afwPx6LdFoKaH5nf+ag3bcmEMnN8QxYCsgHz0tCKFfNGbcAhKAKWcHJS4u0Xa02rh9
-         1zx4dWkTQ16/1Xq2qNjpEn/3zEiV+mVtkVWXwDxrtry3ggQwYtHlzleK+hm+POGHPrEa
-         VR30Iiq3fwVosu3uFcFlghm/CQnobNW0jBUmqmTqKDJ18p6Vv3nTnv+YJd9Q5V9R2qRW
-         rK3qglYycZi9MnKCpxTmAdk5enZysYESnQUsKy4Dui9/9KOMamkgsKJVkSAwwlSq3qfb
-         OyhJNSoWvttRx7SrdvyCvHkwHTBdaB7W4Z0D/jUtQ/E84c2kEM0PIZMnID4mjv788Xgs
-         gp0Q==
+        with ESMTP id S238068AbiLNLXi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Dec 2022 06:23:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4E22ACB
+        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 03:22:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671016975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yxc01zNwMiugjthmgVOlTrtXQnLfLvXjRGMFtbZZLpc=;
+        b=TRsRFy5HWKRJqqxwbSC38MkkVL+pzQVaN48RIhRUvbQBZyedt24vDxP9faiB3QhLUvtPSW
+        jUDazLShTTjthZ9qY/reRE4y5Cap5trYiKq0KlvknrQ+4PgoYPXpD9HQWOo6Qg6rAtYfiW
+        /1ZfU7LhfXDdM3IHhUpPVAiJXEkDOlY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-587-zegnz7XqOjq4y5N4gV2-qQ-1; Wed, 14 Dec 2022 06:22:54 -0500
+X-MC-Unique: zegnz7XqOjq4y5N4gV2-qQ-1
+Received: by mail-wm1-f72.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso4042290wml.9
+        for <linux-mips@vger.kernel.org>; Wed, 14 Dec 2022 03:22:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Jbas8k53VpTFWCNrs3oRHT/Z65GCtCU2WQLZf0mUIGE=;
-        b=JF7HuuQgh96hGxG5cRnAwHlxBmT/r5FubyzcMPCzM0Jqh9/oeCnvH80XxzSmZQg08Q
-         +niLlD3lVG7YDysFZ3/SHJqfD2GvW2GgF0A4kJm6uWGpICBKNMNzbi9CJLqh0DougV9r
-         yaR1cf1JvBPAwhuv2MY41AiGFZjipxaDsBrdtUEmT2rOGIYk0xVF/V2yElxQWI92QBfR
-         jhiFWs7ygDQ/o1N0L7habWpOgRY9cq1y3cH78HE3AQJO4YLWo/DwRwfOyH+hGISu3MO3
-         KwJZED1Nd75ytu+N6XHvn6390PRmiqeQvv8QQ3HFVVqCh8tVv4yjXdYNXvxPRK2tI+2r
-         3Njg==
-X-Gm-Message-State: ANoB5pn8M2vIlDMqcfMIgWtTpv0UCREFoQtJMoQutEsqo9kaJ19Ux1Ru
-        8Ta0oqJkYWHbQFUbbNVGFhJq3ENSSIJZH5oz7ao=
-X-Google-Smtp-Source: AA0mqf7w8TIU6K2l/8MuGzXNAAZ9FRqdURji/6nctthseH2MSfKX1yiUw7Qrbh0D1Res/crh8T4uAxCut4Jl7FykNkI=
-X-Received: by 2002:a63:e4a:0:b0:477:6cd0:9a04 with SMTP id
- 10-20020a630e4a000000b004776cd09a04mr75781850pgo.433.1671011420030; Wed, 14
- Dec 2022 01:50:20 -0800 (PST)
+        bh=yxc01zNwMiugjthmgVOlTrtXQnLfLvXjRGMFtbZZLpc=;
+        b=CQRGkrE0L9eUdzisfdnXlQAFdGfVzDwi6/ggdOO5wgNuPhOfYI+ht4+byQuEyjZmEk
+         u3NTK9g8t/QdQsiY0Xp+PQnRX/NRVkQFR/dbe3IEtdFNpav4etXQe1GBOms7830p5YKE
+         xCxJTfBQEoflXmBldwEr4MuVndxx8PbdNEZJO9bqfwP7oJjeFc2It84Is8958v081AxA
+         AHcR+Ghb0xxFxvgk6g1hlZ8YHV1EP7GZZXMNhbFTtRfAWexhtZJF2TJqYqZ4xcdw/KYb
+         zdD+ZM6pDD5x0mjz+S4f8dHs/j4NRPiV+zgnZtTHlkKo/nhIKk5BwKe2SylyaMjnk939
+         CdQQ==
+X-Gm-Message-State: ANoB5pkHCMGDz6tBV+zbhC+LCF1K6ONqS7PcwMJhdS1zGsRHX7FL+pxd
+        5clAPcIgaZKf6hedoekpTQkw7FR5p1P3Mh+8xtee6ht/9uivkw/NPyBN1pYrphArBbPLP7eQDPE
+        +dJ8sx/iS1pB0Kdt4p8q7lg==
+X-Received: by 2002:a05:600c:1da2:b0:3cf:5fd2:87a0 with SMTP id p34-20020a05600c1da200b003cf5fd287a0mr17488487wms.40.1671016973459;
+        Wed, 14 Dec 2022 03:22:53 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4UNUk6/OXN07sN3FMRll3MrS2ehO8GnTfEO+JQv3BigUvXvNgLJLKqkas5vWijxjr/1KiucA==
+X-Received: by 2002:a05:600c:1da2:b0:3cf:5fd2:87a0 with SMTP id p34-20020a05600c1da200b003cf5fd287a0mr17488468wms.40.1671016973157;
+        Wed, 14 Dec 2022 03:22:53 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:7700:dd7c:92f8:481f:b96b? (p200300cbc7037700dd7c92f8481fb96b.dip0.t-ipconnect.de. [2003:cb:c703:7700:dd7c:92f8:481f:b96b])
+        by smtp.gmail.com with ESMTPSA id o3-20020a05600c510300b003cfa3a12660sm8504320wms.1.2022.12.14.03.22.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 03:22:52 -0800 (PST)
+Message-ID: <10bd4fc0-4fc0-bd98-6926-7d721a3bb12e@redhat.com>
+Date:   Wed, 14 Dec 2022 12:22:49 +0100
 MIME-Version: 1.0
-References: <20221208193857.4090582-1-dmatlack@google.com> <20221208193857.4090582-2-dmatlack@google.com>
- <22fe2332-497e-fe30-0155-e026b0eded97@intel.com> <Y5NvYmxpy6BPkmpW@google.com>
- <CALzav=eju4LYyX=ufNneSww+5sraYJ8cfQSi4LTOHfHWmddX9A@mail.gmail.com> <Y5dnWgJ0ine55/hN@google.com>
-In-Reply-To: <Y5dnWgJ0ine55/hN@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Wed, 14 Dec 2022 17:50:07 +0800
-Message-ID: <CAJhGHyBbjyKVEv3KcoOcPGQ28753FjR_rc9uNDEF3Dd-gNTRGQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 01/37] KVM: x86/mmu: Store the address space ID
- directly in kvm_mmu_page_role
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "Amit, Nadav" <namit@vmware.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
-        Colin Cross <ccross@google.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH mm-unstable RFC 00/26] mm: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE on all architectures with swap PTEs
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Chris Zankel <chris@zankel.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+References: <20221206144730.163732-1-david@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221206144730.163732-1-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 1:47 AM Sean Christopherson <seanjc@google.com> wrote:
+On 06.12.22 15:47, David Hildenbrand wrote:
+> This is the follow-up on [1]:
+> 	[PATCH v2 0/8] mm: COW fixes part 3: reliable GUP R/W FOLL_GET of
+> 	anonymous pages
+> 
+> After we implemented __HAVE_ARCH_PTE_SWP_EXCLUSIVE on most prominent
+> enterprise architectures, implement __HAVE_ARCH_PTE_SWP_EXCLUSIVE on all
+> remaining architectures that support swap PTEs.
+> 
+> This makes sure that exclusive anonymous pages will stay exclusive, even
+> after they were swapped out -- for example, making GUP R/W FOLL_GET of
+> anonymous pages reliable. Details can be found in [1].
+> 
+> This primarily fixes remaining known O_DIRECT memory corruptions that can
+> happen on concurrent swapout, whereby we can lose DMA reads to a page
+> (modifying the user page by writing to it).
+> 
+> To verify, there are two test cases (requiring swap space, obviously):
+> (1) The O_DIRECT+swapout test case [2] from Andrea. This test case tries
+>      triggering a race condition.
+> (2) My vmsplice() test case [3] that tries to detect if the exclusive
+>      marker was lost during swapout, not relying on a race condition.
+> 
+> 
+> For example, on 32bit x86 (with and without PAE), my test case fails
+> without these patches:
+> 	$ ./test_swp_exclusive
+> 	FAIL: page was replaced during COW
+> But succeeds with these patches:
+> 	$ ./test_swp_exclusive
+> 	PASS: page was not replaced during COW
+> 
+> 
+> Why implement __HAVE_ARCH_PTE_SWP_EXCLUSIVE for all architectures, even
+> the ones where swap support might be in a questionable state? This is the
+> first step towards removing "readable_exclusive" migration entries, and
+> instead using pte_swp_exclusive() also with (readable) migration entries
+> instead (as suggested by Peter). The only missing piece for that is
+> supporting pmd_swp_exclusive() on relevant architectures with THP
+> migration support.
+> 
+> As all relevant architectures now implement __HAVE_ARCH_PTE_SWP_EXCLUSIVE,,
+> we can drop __HAVE_ARCH_PTE_SWP_EXCLUSIVE in the last patch.
+> 
+> 
+> RFC because some of the swap PTE layouts are really tricky and I really
+> need some feedback related to deciphering these layouts and "using yet
+> unused PTE bits in swap PTEs". I tried cross-compiling all relevant setups
+> (phew, I might only miss some power/nohash variants), but only tested on
+> x86 so far.
 
->
-> My preference would be to leave .smm in x86's page role.  IMO, defining multiple
-> address spaces to support SMM emulation was a mistake that should be contained to
-> SMM, i.e. should never be used for any other feature.  And with CONFIG_KVM_SMM,
-> even x86 can opt out.
->
+As I was messing with sparc64 either way and got debian to boot under 
+QEMU, I verified that the sparc64 change also seems to work as expected 
+(under sun4u).
 
+-- 
+Thanks,
 
-I think the name ASID in kvm/x86 should be used for vmcb's ASID,
-vmcs's VPID, and PCID. Using the name ASID for other purposes
-would only result in unnecessary confusion.
+David / dhildenb
 
-There is a bug for shadow paging when it uses two separate sets
-of memslots which are using two sets of rmap and page-tracking.
-
-When SMM world is writing to a non-SMM page which happens to be
-a guest pagetable in the non-SMM world, the write operation will
-go smoothly without specially handled and the shadow page for the guest
-pagetable is neither unshadowed nor marked unsync.  The shadow paging
-code is unaware that the shadow page has deviated from the guest
-pagetable.
-
-It means when SMM is enabled, shadow paging should be disabled,
-which also means it has to use tdp and not to use nested tdp.
-
-Thanks
-Lai
