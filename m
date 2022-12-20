@@ -2,136 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FBE6519A5
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Dec 2022 04:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B781B6526C9
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Dec 2022 20:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbiLTDay (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Dec 2022 22:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
+        id S233234AbiLTTJ0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Dec 2022 14:09:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiLTDay (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Dec 2022 22:30:54 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2731154;
-        Mon, 19 Dec 2022 19:30:47 -0800 (PST)
-X-UUID: 75e0fbb66a1a4df2badb6ea42cae5b38-20221220
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=T+zbj0FiGEVmFNF2y0DWDBR6s5YDkdyhMts5oqZTM20=;
-        b=mJVOPZD21Jlvpph1p1C8n1xsH2sLQLDvcQ9zhMten8jeNIgZ1WA7+8G7kJpSrv3k2ml8xl8o+tyDN/QHCnDey3dEWqVBKJj/YMF1UdQzLQeb7gjl7Vz03CdYYxOSKuJ02kQ8qNqiINWoKNkPUnSvusbOcaQhBvrRZaxmZjn/KEI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:06a7866e-cb6c-4d30-8c6a-3da2e83986b9,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:dcaaed0,CLOUDID:92b265f3-ff42-4fb0-b929-626456a83c14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 75e0fbb66a1a4df2badb6ea42cae5b38-20221220
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <mark-pk.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1128956095; Tue, 20 Dec 2022 11:30:43 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 20 Dec 2022 11:30:42 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Tue, 20 Dec 2022 11:30:42 +0800
-From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To:     <johan+linaro@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        <maz@kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <tglx@linutronix.de>, <x86@kernel.org>, <yj.chiang@mediatek.com>,
-        <phil.chang@mediatek.com>, <mark-pk.tsai@mediatek.com>
-Subject: [PATCH v3 0/19] irqdomain: fix mapping race and clean up locking
-Date:   Tue, 20 Dec 2022 11:30:42 +0800
-Message-ID: <20221220033042.27724-1-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221209140150.1453-1-johan+linaro@kernel.org>
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
+        with ESMTP id S229536AbiLTTJY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Dec 2022 14:09:24 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA0EE0C3;
+        Tue, 20 Dec 2022 11:09:23 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so13133270pjj.4;
+        Tue, 20 Dec 2022 11:09:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1OBgH6qhxVhNETTJtpKxpJyJJwZSaJxAnc72NIfU7q8=;
+        b=UKLuyNP1k8kPnnBJmVy3aAk0U+W/95TQoufIGcDgjVFiLwIeIk2TBu1oY/qGg9+tud
+         IB50e+biUVM5s5wt5rOswlQCHfqug/M2Ei7YRJOChGAiCW2B4Q3XKxOMFSU5Vq4eAxvx
+         OK7eWudtHiUpS5Wtkd4Xwv9pbZRhA1lesJRxUKlb17aIxaAtIyrrBiwQHZk5NWEJjKxR
+         4NyGfKSLw8Bh1b9z72YGiLMcOt42EfNFO3niBDtur1JAstaVwgYTMI1tnjRzrSFQETl0
+         owZfWzbGPktA8S3I9qm6WGr1sSV1Omz8vD6jATxZRZbYoXB/EABKjT4O5faxS86UgOqg
+         WVBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1OBgH6qhxVhNETTJtpKxpJyJJwZSaJxAnc72NIfU7q8=;
+        b=YujHYemoKBQidgO8QyGYOJUdCkObKQlNoh3Rf1uujj3GjLKtUYjpMAeDPGgqXZTbvd
+         hDdauuSlWImcrnHXyCqD89v8q6aflep/CQK4R8tcMEETkiE1phxo9J6u6f/gp6p6RKQy
+         gexOyXMiXemDwsDon/6DvGxh5QtLDrptIdbFNrNyAXYDbJZlU1OiKf5t8ljpXpVDdeq9
+         ThCvGqvVlSN/rtnn/4DenmpoBnax8KjHXTvfD9dLs8SuqkuDScckmRqooBy4FQ5D2lpe
+         2OTXYeXcGC35+3S3GUJOlJzlzFgBYPf+W+kXGQap5pgKthXLP2hTPI6WVbORDsP0Byv1
+         DQtQ==
+X-Gm-Message-State: ANoB5pn5HaMDGG+RjDpKwTlYQa3F2zYmkeVOppLGKYIeDvw0eaJHpIF3
+        vOqitqA/vvrezd+CrEUudqM=
+X-Google-Smtp-Source: AA0mqf44hNs+GUi8hvM/wSk9nI9bt394TZ0kMyNtYXB/FndXQ6XulwJXq8q6c9Sbnw3nHrI8Qeo5Jw==
+X-Received: by 2002:a17:90a:3188:b0:219:3e5f:2a65 with SMTP id j8-20020a17090a318800b002193e5f2a65mr49327344pjb.36.1671563363053;
+        Tue, 20 Dec 2022 11:09:23 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o37-20020a17090a0a2800b00219ebdf797csm11358864pjo.24.2022.12.20.11.09.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 11:09:22 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-mips@lists.infradead.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] MIPS: dts: bcm63268: Add missing properties to the TWD node
+Date:   Tue, 20 Dec 2022 11:09:15 -0800
+Message-Id: <20221220190916.2681165-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> Parallel probing (e.g. due to asynchronous probing) of devices that
-> share interrupts can currently result in two mappings for the same
-> hardware interrupt to be created.
-> 
-> This series fixes this mapping race and clean up the irqdomain locking
-> so that in the end the global irq_domain_mutex is only used for managing
-> the likewise global irq_domain_list, while domain operations (e.g.
-> IRQ allocations) use per-domain (hierarchy) locking.
-> 
-> Johan
-> 
-> 
-> Changes in v2
->  - split out redundant-lookup cleanup (1/4)
->  - use a per-domain mutex to address mapping race (2/4)
->  - move kernel-doc to exported function (2/4)
->  - fix association race (3/4, new)
->  - use per-domain mutex for associations (4/4, new)
-> 
-> Changes in v3
->  - drop dead and bogus code (1--3/19, new)
->  - fix racy mapcount accesses (5/19, new)
->  - drop revmap mutex (6/19, new)
->  - use irq_domain_mutex to address mapping race (9/19)
->  - clean up irq_domain_push/pop_irq() (10/19, new)
->  - use irq_domain_create_hierarchy() to construct hierarchies
->    (11--18/19, new)
->  - switch to per-domain locking (19/19, new)
-> 
-> 
-> Johan Hovold (19):
->   irqdomain: Drop bogus fwspec-mapping error handling
->   irqdomain: Drop dead domain-name assignment
->   irqdomain: Drop leftover brackets
->   irqdomain: Fix association race
->   irqdomain: Fix disassociation race
->   irqdomain: Drop revmap mutex
->   irqdomain: Look for existing mapping only once
->   irqdomain: Refactor __irq_domain_alloc_irqs()
->   irqdomain: Fix mapping-creation race
->   irqdomain: Clean up irq_domain_push/pop_irq()
->   x86/ioapic: Use irq_domain_create_hierarchy()
->   x86/apic: Use irq_domain_create_hierarchy()
->   irqchip/alpine-msi: Use irq_domain_add_hierarchy()
->   irqchip/gic-v2m: Use irq_domain_create_hierarchy()
->   irqchip/gic-v3-its: Use irq_domain_create_hierarchy()
->   irqchip/gic-v3-mbi: Use irq_domain_create_hierarchy()
->   irqchip/loongson-pch-msi: Use irq_domain_create_hierarchy()
->   irqchip/mvebu-odmi: Use irq_domain_create_hierarchy()
->   irqdomain: Switch to per-domain locking
-> 
->  arch/x86/kernel/apic/io_apic.c         |   8 +-
->  arch/x86/platform/uv/uv_irq.c          |   7 +-
->  drivers/irqchip/irq-alpine-msi.c       |   8 +-
->  drivers/irqchip/irq-gic-v2m.c          |   5 +-
->  drivers/irqchip/irq-gic-v3-its.c       |  13 +-
->  drivers/irqchip/irq-gic-v3-mbi.c       |   5 +-
->  drivers/irqchip/irq-loongson-pch-msi.c |   9 +-
->  drivers/irqchip/irq-mvebu-odmi.c       |  13 +-
->  include/linux/irqdomain.h              |   6 +-
->  kernel/irq/irqdomain.c                 | 328 ++++++++++++++-----------
->  10 files changed, 220 insertions(+), 182 deletions(-)
-> 
-> -- 
-> 2.37.4
+We currently have a DTC warning with the current DTS due to the lack of
+a suitable #address-cells and #size-cells property:
 
-Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+  DTC     arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb
+arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /ubus/timer-mfd@10000080/timer@0:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+arch/mips/boot/dts/brcm/bcm63268.dtsi:120.5-22: Warning (reg_format): /ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format): /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12 bytes) (parent #address-cells == 1, child #address-cells == 2, #size-cells == 1)
 
-We have the same issue and this patch series fix that.
-Thanks!
+Fixes: d3db4b96ab7f ("mips: dts: bcm63268: add TWD block timer")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ arch/mips/boot/dts/brcm/bcm63268.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Link: https://lore.kernel.org/lkml/20221219130620.21092-1-mark-pk.tsai@mediatek.com/
+diff --git a/arch/mips/boot/dts/brcm/bcm63268.dtsi b/arch/mips/boot/dts/brcm/bcm63268.dtsi
+index c663efce91cf..7b788757cb1e 100644
+--- a/arch/mips/boot/dts/brcm/bcm63268.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm63268.dtsi
+@@ -109,6 +109,8 @@ timer-mfd@10000080 {
+ 			compatible = "brcm,bcm7038-twd", "simple-mfd", "syscon";
+ 			reg = <0x10000080 0x30>;
+ 			ranges = <0x0 0x10000080 0x30>;
++			#address-cells = <1>;
++			#size-cells = <1>;
+ 
+ 			timer@0 {
+ 				compatible = "brcm,bcm6345-timer";
+-- 
+2.34.1
+
