@@ -2,197 +2,303 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55352653269
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Dec 2022 15:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A696539EB
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Dec 2022 00:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbiLUOYY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Dec 2022 09:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S229620AbiLUXvz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Dec 2022 18:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234218AbiLUOYC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Dec 2022 09:24:02 -0500
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C342923BC7
-        for <linux-mips@vger.kernel.org>; Wed, 21 Dec 2022 06:23:53 -0800 (PST)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id 800bpW21Wv5uI800cpa5qP; Wed, 21 Dec 2022 15:23:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671632631; bh=hui9VHk/u2MBeugw0mFQ8B/VyPIY4Wmu9yCPevvSoaQ=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=IeAkCsg64XAqjZlxsa3c65KN8SBiy15EmsEO8HIB/pB4qJVeKflKUhVh2H4SA8BGV
-         L5o0J6jGfUPVkRPx/62EvcVpXJOZLQoiN9kfWux91EveVJ2xtF0i9Bg5q7EcNwqFIA
-         D7AIbG3qPNTwvwuccQlTvdu20Jwf0epYwF2sgbch55JraLjhnSWZ+dKsIsMSOGjSVE
-         DkQHMsjVaHu+YUZT0H8EiVwe4SXkaUnw8xQAZ0CcORYq1j+sbBmVKKVAX+u9QVhX7i
-         zqbRzwkiG/NXrOEwBztyOb8Aob0Or2L8ZJlhQc00GJIKEcdKibA49MdflYnbgxeu2y
-         v4PE7umVJ5mAA==
-Date:   Wed, 21 Dec 2022 15:23:49 +0100
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: OCTEON: octeon-usb: Consolidate error messages
-Message-ID: <Y6MW9Z4uhrqO4ocn@lenoch>
+        with ESMTP id S232013AbiLUXvy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Dec 2022 18:51:54 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8BF5F9F
+        for <linux-mips@vger.kernel.org>; Wed, 21 Dec 2022 15:51:51 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id fy4so230866pjb.0
+        for <linux-mips@vger.kernel.org>; Wed, 21 Dec 2022 15:51:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aRolca1xLJYStXB4O+QjEQI7hBejIakh3i9Q1ikiuAU=;
+        b=OwGD5+m2wcB5oZr3QQy4jQh4vye04wDMOltND8p76SrMT+vKiFD6FYB6L03PDrcIWk
+         wJ/QQShugUcQKxUrdAB6BoRTqMWW5TZ/RiQM4DHgAN0p/uBL9bJSbY9a/TivzJ2DLJIr
+         7KxPEPusddga+MyaPsRjLxb3qzj/El+ZGQ8QqrxAhk9WWtQchNYOzaOer7JRKMlOlWYf
+         bY4OZabUVBlIF7KYhvxhRhJSlqIsobu9eXFKDaR/yqHIiKTTOffW2puHpx/yWO237nfw
+         6/2LGqYQ56ON3yJufIpCvnKrE15uq5FdlkLgviTDPZn23sSuoJ/oLIAGUmvs/83qqbNm
+         dtbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aRolca1xLJYStXB4O+QjEQI7hBejIakh3i9Q1ikiuAU=;
+        b=zpcMo5B/y7JP2K9yx2VXNJUj5LSvz5hfvEYevaLz9ezzm8yCK9FdhmkjrxKUpWtNV3
+         49ZYNpSBILjG3cq21Kj5wEE0rgRCZklHmPQYYS76t/PkMqfhDrGRR9b7mD5TBswtOBo6
+         LgCJSa2tCLzQyYlq+LLx4j+J17AISgcmUKpdKzBx1sf+qQquHP04UBJwjO2s/g/GD0T8
+         iwiI2m7n/qU1bdjePNgClZ0Ivm3Q6WEj0sur7mH54GlhuP9jyUVrY2ku0+idqgJ3PYSt
+         qw+wRG2pmlye220w37csKPmYKkKoTrQ91HhPlfBevSdSdxlDTPKKNrg1fEQXp4HVscLW
+         90LQ==
+X-Gm-Message-State: AFqh2kpI8HkG/LBxGbvS7YFqxa9dcyPYUjHXVYGWeDmOzt3MVHqnOpiO
+        gGbcz9LwKpnyw5lMOqHaO8xQ7A==
+X-Google-Smtp-Source: AMrXdXtYlPG/xjTcFb+fb2sHAhxGlovOZc1Z+Aw4PiNu9XnLCiZLq6rvraXNAyFjtQZMpDZerR+EPw==
+X-Received: by 2002:a17:902:d4d1:b0:189:3a04:4466 with SMTP id o17-20020a170902d4d100b001893a044466mr928493plg.2.1671666711203;
+        Wed, 21 Dec 2022 15:51:51 -0800 (PST)
+Received: from google.com (25.11.145.34.bc.googleusercontent.com. [34.145.11.25])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170902d2c900b00176b84eb29asm11994070plc.301.2022.12.21.15.51.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 15:51:50 -0800 (PST)
+Date:   Wed, 21 Dec 2022 23:51:47 +0000
+From:   Fangrui Song <maskray@google.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v2] vdso: Improve cmd_vdso_check to check all dynamic
+ relocations
+Message-ID: <20221221235147.45lkqmosndritfpe@google.com>
+References: <20220830193701.1702962-1-maskray@google.com>
+ <20220910075316.no72fdyqjvunomwm@google.com>
+ <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
+ <9ce45cd2-dcd8-11f8-e496-7efe3649e241@csgroup.eu>
+ <20221115004625.x4wl6zbg4iiuxl5t@google.com>
+ <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
+ <3ec9737e-3d1a-c014-b91a-0e2d406a3b3d@csgroup.eu>
+ <CAFP8O3KZTkSbxXJ2yWt4w-F3xWHY_owCs03wN3Bhss57O-E_JQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-X-CMAE-Envelope: MS4wfJbZlS700P5nfQ7pPWhA8RkVfcj/+mPVIrLs5CwLQScyWXNFJ3MaAyJK19uFs9K9/rMM4mLImbuu+ErtsyR9jnJyQGzZaoxvLU3u0n2iCiq0NZX2QmOU
- y/lr8M4aeYJ9XS7d+s0mpqB5GDMgGDpGZnMTHyyEvnPS4C7OTHSEZjmi
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAFP8O3KZTkSbxXJ2yWt4w-F3xWHY_owCs03wN3Bhss57O-E_JQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ladislav Michl <ladis@linux-mips.org>
+The actual intention is that no dynamic relocation exists. However, some
+GNU ld ports produce unneeded R_*_NONE. (If a port fails to determine
+the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
+relocations. E.g. ld's powerpc port recently fixed
+https://sourceware.org/bugzilla/show_bug.cgi?id=29540) R_*_NONE are
+generally no-op in the dynamic loaders. So just ignore them.
 
-Console output currently looks like USB clocks initialized succesfully
-even in case of error. Fix that and use consistently dev_err for fatal
-errors otherwise dev_warn.
+With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
+bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
+not called "absolute relocations". (The patch is motivated by the arm64
+port missing R_AARCH64_RELATIVE.)
 
-Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+Signed-off-by: Fangrui Song <maskray@google.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- Hi there,
+Change from v1:
+* rebase after 8ac3b5cd3e0521d92f9755e90d140382fc292510 (lib/vdso: use "grep -E" instead of "egrep")
+* change the commit message to mention an example GNU ld bug; no longer say the patch fixes a deprecated egrep use
+---
+  arch/arm/vdso/Makefile            |  3 ---
+  arch/arm64/kernel/vdso/Makefile   |  3 ---
+  arch/arm64/kernel/vdso32/Makefile |  3 ---
+  arch/csky/kernel/vdso/Makefile    |  3 ---
+  arch/loongarch/vdso/Makefile      |  3 ---
+  arch/mips/vdso/Makefile           |  3 ---
+  arch/powerpc/kernel/vdso/Makefile |  1 -
+  arch/riscv/kernel/vdso/Makefile   |  3 ---
+  arch/s390/kernel/vdso32/Makefile  |  2 --
+  arch/s390/kernel/vdso64/Makefile  |  2 --
+  arch/x86/entry/vdso/Makefile      |  4 ----
+  lib/vdso/Makefile                 | 13 ++++---------
+  12 files changed, 4 insertions(+), 39 deletions(-)
 
- this is just cleanup before real work. Just note that even
- warning says "Invalid UCTL clock rate ..., using 100000000 instead"
- clock_rate is not set to 100000000. There's also some indentation
- fixes to be done.
-
- However my main concern is unimplemented errata 29206 as noted in
- OCTEON III CN70XX/CN71XX Known Issues Revision 1.9, released under
- NDA. You can see its implementation in coreboot here (line 196):
- https://fossies.org/linux/coreboot/src/vendorcode/cavium/bdk/libbdk-hal/bdk-usb.c
-
- Above looks like BSD license. I'll reimplement said errata
- from scratch, unless someone sees as a problem "Marvell Proprietary
- and Confidential" documentation is used as source.
-
- arch/mips/cavium-octeon/octeon-usb.c | 42 +++++++++++++---------------
- 1 file changed, 20 insertions(+), 22 deletions(-)
-
-diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
-index 5cffe1ed2447..28677c615175 100644
---- a/arch/mips/cavium-octeon/octeon-usb.c
-+++ b/arch/mips/cavium-octeon/octeon-usb.c
-@@ -245,7 +245,7 @@ static int dwc3_octeon_config_power(struct device *dev, u64 base)
- 			power_active_low = 0;
- 			gpio = gpio_pwr[1];
- 		} else {
--			dev_err(dev, "dwc3 controller clock init failure.\n");
-+			dev_err(dev, "invalid power configuration\n");
- 			return -EINVAL;
- 		}
- 		if ((OCTEON_IS_MODEL(OCTEON_CN73XX) ||
-@@ -278,7 +278,7 @@ static int dwc3_octeon_config_power(struct device *dev, u64 base)
- 		uctl_host_cfg.s.ppc_en = 0;
- 		uctl_host_cfg.s.ppc_active_high_en = 0;
- 		cvmx_write_csr(base + UCTL_HOST_CFG, uctl_host_cfg.u64);
--		dev_warn(dev, "dwc3 controller clock init failure.\n");
-+		dev_info(dev, "power control disabled\n");
- 	}
- 	return 0;
- }
-@@ -301,19 +301,19 @@ static int dwc3_octeon_clocks_start(struct device *dev, u64 base)
- 		i = of_property_read_u32(dev->of_node,
- 					 "refclk-frequency", &clock_rate);
- 		if (i) {
--			pr_err("No UCTL \"refclk-frequency\"\n");
-+			dev_err(dev, "No UCTL \"refclk-frequency\"\n");
- 			return -EINVAL;
- 		}
- 		i = of_property_read_string(dev->of_node,
- 					    "refclk-type-ss", &ss_clock_type);
- 		if (i) {
--			pr_err("No UCTL \"refclk-type-ss\"\n");
-+			dev_err(dev, "No UCTL \"refclk-type-ss\"\n");
- 			return -EINVAL;
- 		}
- 		i = of_property_read_string(dev->of_node,
- 					    "refclk-type-hs", &hs_clock_type);
- 		if (i) {
--			pr_err("No UCTL \"refclk-type-hs\"\n");
-+			dev_err(dev, "No UCTL \"refclk-type-hs\"\n");
- 			return -EINVAL;
- 		}
- 		if (strcmp("dlmc_ref_clk0", ss_clock_type) == 0) {
-@@ -322,29 +322,29 @@ static int dwc3_octeon_clocks_start(struct device *dev, u64 base)
- 			else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
- 				ref_clk_sel = 2;
- 			else
--				pr_err("Invalid HS clock type %s, using  pll_ref_clk instead\n",
--				       hs_clock_type);
-+				dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
-+					 hs_clock_type);
- 		} else if (strcmp(ss_clock_type, "dlmc_ref_clk1") == 0) {
- 			if (strcmp(hs_clock_type, "dlmc_ref_clk1") == 0)
- 				ref_clk_sel = 1;
- 			else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
- 				ref_clk_sel = 3;
- 			else {
--				pr_err("Invalid HS clock type %s, using  pll_ref_clk instead\n",
--				       hs_clock_type);
-+				dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
-+					 hs_clock_type);
- 				ref_clk_sel = 3;
- 			}
- 		} else
--			pr_err("Invalid SS clock type %s, using  dlmc_ref_clk0 instead\n",
--			       ss_clock_type);
-+			dev_warn(dev, "Invalid SS clock type %s, using dlmc_ref_clk0 instead\n",
-+				 ss_clock_type);
- 
- 		if ((ref_clk_sel == 0 || ref_clk_sel == 1) &&
--				  (clock_rate != 100000000))
--			pr_err("Invalid UCTL clock rate of %u, using 100000000 instead\n",
--			       clock_rate);
-+		    (clock_rate != 100000000))
-+			dev_warn(dev, "Invalid UCTL clock rate of %u, using 100000000 instead\n",
-+				 clock_rate);
- 
- 	} else {
--		pr_err("No USB UCTL device node\n");
-+		dev_err(dev, "No USB UCTL device node\n");
- 		return -EINVAL;
- 	}
- 
-@@ -396,8 +396,8 @@ static int dwc3_octeon_clocks_start(struct device *dev, u64 base)
- 	uctl_ctl.s.ref_clk_div2 = 0;
- 	switch (clock_rate) {
- 	default:
--		dev_err(dev, "Invalid ref_clk %u, using 100000000 instead\n",
--			clock_rate);
-+		dev_warn(dev, "Invalid ref_clk %u, using 100000000 instead\n",
-+			 clock_rate);
- 		fallthrough;
- 	case 100000000:
- 		mpll_mul = 0x19;
-@@ -438,10 +438,8 @@ static int dwc3_octeon_clocks_start(struct device *dev, u64 base)
- 	udelay(10);
- 
- 	/* Steo 8c: Setup power-power control. */
--	if (dwc3_octeon_config_power(dev, base)) {
--		dev_err(dev, "Error configuring power.\n");
-+	if (dwc3_octeon_config_power(dev, base))
- 		return -EINVAL;
--	}
- 
- 	/* Step 8d: Deassert UAHC reset signal. */
- 	uctl_ctl.u64 = cvmx_read_csr(uctl_ctl_reg);
-@@ -529,10 +527,10 @@ static int __init dwc3_octeon_device_init(void)
- 			}
- 
- 			mutex_lock(&dwc3_octeon_clocks_mutex);
--			dwc3_octeon_clocks_start(&pdev->dev, (u64)base);
-+			if (dwc3_octeon_clocks_start(&pdev->dev, (u64)base) == 0)
-+				dev_info(&pdev->dev, "clocks initialized.\n");
- 			dwc3_octeon_set_endian_mode((u64)base);
- 			dwc3_octeon_phy_reset((u64)base);
--			dev_info(&pdev->dev, "clocks initialized.\n");
- 			mutex_unlock(&dwc3_octeon_clocks_mutex);
- 			devm_iounmap(&pdev->dev, base);
- 			devm_release_mem_region(&pdev->dev, res->start,
+diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
+index a7ec06ce3785..e58197bba776 100644
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -1,8 +1,5 @@
+  # SPDX-License-Identifier: GPL-2.0
+  
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+  include $(srctree)/lib/vdso/Makefile
+  
+  hostprogs := vdsomunge
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index beaf9586338f..1f2427b13410 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -6,9 +6,6 @@
+  # Heavily based on the vDSO Makefiles for other archs.
+  #
+  
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_AARCH64_JUMP_SLOT|R_AARCH64_GLOB_DAT|R_AARCH64_ABS64
+  include $(srctree)/lib/vdso/Makefile
+  
+  obj-vdso := vgettimeofday.o note.o sigreturn.o
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index f59bd1a4ead6..d014162c5c71 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -3,9 +3,6 @@
+  # Makefile for vdso32
+  #
+  
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+  include $(srctree)/lib/vdso/Makefile
+  
+  # Same as cc-*option, but using CC_COMPAT instead of CC
+diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
+index 0b6909f10667..86c8c4de1b0f 100644
+--- a/arch/csky/kernel/vdso/Makefile
++++ b/arch/csky/kernel/vdso/Makefile
+@@ -1,8 +1,5 @@
+  # SPDX-License-Identifier: GPL-2.0-only
+  
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_CKCORE_ADDR32|R_CKCORE_JUMP_SLOT
+  include $(srctree)/lib/vdso/Makefile
+  
+  # Symbols present in the vdso
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index d89e2ac75f7b..1b2e0f149f55 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -1,9 +1,6 @@
+  # SPDX-License-Identifier: GPL-2.0
+  # Objects to go into the VDSO.
+  
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
+  include $(srctree)/lib/vdso/Makefile
+  
+  obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o sigreturn.o
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index 1f7d5c6c10b0..c060f3596304 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -4,9 +4,6 @@
+  # Sanitizer runtimes are unavailable and cannot be linked here.
+   KCSAN_SANITIZE			:= n
+  
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
+  include $(srctree)/lib/vdso/Makefile
+  
+  obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
+diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+index 6a977b0d8ffc..83c347e9136f 100644
+--- a/arch/powerpc/kernel/vdso/Makefile
++++ b/arch/powerpc/kernel/vdso/Makefile
+@@ -2,7 +2,6 @@
+  
+  # List of files in the vdso, has to be asm only for now
+  
+-ARCH_REL_TYPE_ABS := R_PPC_JUMP_SLOT|R_PPC_GLOB_DAT|R_PPC_ADDR32|R_PPC_ADDR24|R_PPC_ADDR16|R_PPC_ADDR16_LO|R_PPC_ADDR16_HI|R_PPC_ADDR16_HA|R_PPC_ADDR14|R_PPC_ADDR14_BRTAKEN|R_PPC_ADDR14_BRNTAKEN|R_PPC_REL24
+  include $(srctree)/lib/vdso/Makefile
+  
+  obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o note-32.o getcpu-32.o
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index 06e6b27f3bcc..d85c37e11b21 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -1,9 +1,6 @@
+  # SPDX-License-Identifier: GPL-2.0-only
+  # Copied from arch/tile/kernel/vdso/Makefile
+  
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
+  include $(srctree)/lib/vdso/Makefile
+  # Symbols present in the vdso
+  vdso-syms  = rt_sigreturn
+diff --git a/arch/s390/kernel/vdso32/Makefile b/arch/s390/kernel/vdso32/Makefile
+index 245bddfe9bc0..e795fdbbf484 100644
+--- a/arch/s390/kernel/vdso32/Makefile
++++ b/arch/s390/kernel/vdso32/Makefile
+@@ -2,8 +2,6 @@
+  # List of files in the vdso
+  
+  KCOV_INSTRUMENT := n
+-ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
+-ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
+  
+  include $(srctree)/lib/vdso/Makefile
+  obj-vdso32 = vdso_user_wrapper-32.o note-32.o
+diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
+index 9e2b95a222a9..47dbbfdfad68 100644
+--- a/arch/s390/kernel/vdso64/Makefile
++++ b/arch/s390/kernel/vdso64/Makefile
+@@ -2,8 +2,6 @@
+  # List of files in the vdso
+  
+  KCOV_INSTRUMENT := n
+-ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
+-ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
+  
+  include $(srctree)/lib/vdso/Makefile
+  obj-vdso64 = vdso_user_wrapper.o note.o
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 838613ac15b8..b292c24acb8e 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -3,10 +3,6 @@
+  # Building vDSO images for x86.
+  #
+  
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_X86_64_JUMP_SLOT|R_X86_64_GLOB_DAT|R_X86_64_RELATIVE|
+-ARCH_REL_TYPE_ABS += R_386_GLOB_DAT|R_386_JMP_SLOT|R_386_RELATIVE
+  include $(srctree)/lib/vdso/Makefile
+  
+  # Sanitizer runtimes are unavailable and cannot be linked here.
+diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
+index e814061d6aa0..9f031eafc465 100644
+--- a/lib/vdso/Makefile
++++ b/lib/vdso/Makefile
+@@ -5,18 +5,13 @@ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
+  
+  c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) := $(addprefix $(GENERIC_VDSO_DIR), gettimeofday.c)
+  
+-# This cmd checks that the vdso library does not contain absolute relocation
++# This cmd checks that the vdso library does not contain dynamic relocations.
+  # It has to be called after the linking of the vdso library and requires it
+  # as a parameter.
+  #
+-# $(ARCH_REL_TYPE_ABS) is defined in the arch specific makefile and corresponds
+-# to the absolute relocation types printed by "objdump -R" and accepted by the
+-# dynamic linker.
+-ifndef ARCH_REL_TYPE_ABS
+-$(error ARCH_REL_TYPE_ABS is not set)
+-endif
+-
++# As a workaround for some GNU ld ports which produce unneeded R_*_NONE
++# dynamic relocations, ignore R_*_NONE.
+  quiet_cmd_vdso_check = VDSOCHK $@
+-      cmd_vdso_check = if $(OBJDUMP) -R $@ | grep -E -h "$(ARCH_REL_TYPE_ABS)"; \
++      cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
+  		       then (echo >&2 "$@: dynamic relocations are not supported"; \
+  			     rm -f $@; /bin/false); fi
 -- 
-2.32.0
+2.39.0.314.g84b9a713c41-goog
 
