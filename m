@@ -2,67 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66511654E72
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Dec 2022 10:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FDA654FB1
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Dec 2022 12:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiLWJeq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Dec 2022 04:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
+        id S235814AbiLWL2G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Dec 2022 06:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiLWJen (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Dec 2022 04:34:43 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CDEA140C4;
-        Fri, 23 Dec 2022 01:34:42 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1p8eRs-0003Qe-00; Fri, 23 Dec 2022 10:34:40 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2DC68C254F; Fri, 23 Dec 2022 10:34:31 +0100 (CET)
-Date:   Fri, 23 Dec 2022 10:34:31 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v6.2
-Message-ID: <20221223093431.GA4961@alpha.franken.de>
+        with ESMTP id S230186AbiLWL2F (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Dec 2022 06:28:05 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7702FBF6B
+        for <linux-mips@vger.kernel.org>; Fri, 23 Dec 2022 03:28:03 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id vm8so4577134ejc.2
+        for <linux-mips@vger.kernel.org>; Fri, 23 Dec 2022 03:28:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rammhold-de.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lFeknuNwkrG7RSqHcx+1XNwP++s/iRA1VEaVxTgmg4g=;
+        b=hBbGx/sx0Xtj3qyO2DnwolsWWeXvKKEA29FnQw2uFnuLWUqZyGEpIfLpeWpV5eFEyH
+         HnvlBU4V1TXDCd5xvURIoA5VkDtmPHJRz7lpADizpMIQVg13g9TmNN0ynsnj2dvANv0r
+         lFdto2x+Zx78dAFxjFeyokkwCapQ6p9krN0nzxWGqRkR+aOZIs+jlLlVPEKT4goFw2VS
+         fOO+zEEeKYzFog9V1fNbWRx9i9doTd966dDU8OLs5Wwci0rCIOQbCLQIdpcOGYzvG41i
+         n70HL3EZVXV998EVqgv/IBFVODy3wTN1a0neae1iRlrsQHoAZf09UrrBMPIc6oVlTV0a
+         dwAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lFeknuNwkrG7RSqHcx+1XNwP++s/iRA1VEaVxTgmg4g=;
+        b=fMshqcAwzyaBAsM9Kf6NmYkVyCaE4SJrbSZCaoPT9TI1l6ACc73JcPPtiuGQ1hPo87
+         rX8oGGx83sPvhAJ8I68ctuV2AmFRUHc1LFRLRreM7u3/JjNGB9o7BPwyMKpJMPI2DJFS
+         QkWMKolvITN4XqyBphF75+Mck2Zi1iwNszdpn2he1dSIokqWX3baWKKagh+gIF4IwbU8
+         wzoFuP+6iNd2SHndBEOvSG09BT86V+aVafplwcKDBoA2H92Cu7uxMEtZZg+U9/kCYV7/
+         PhWOrwmnsr0U25wkpQrFZFaDscH3jue2BZ3vJt1aKgMbGIHujKdn/DTLVCaF1nJeJi4P
+         SBdw==
+X-Gm-Message-State: AFqh2kqABR0wXPzeednR2c/ivTi5nmgrdSGUrhc35yd0BeQ6WMSvdx22
+        VBrsikV+PLHR+pyGsQMuN78TtQ==
+X-Google-Smtp-Source: AMrXdXvezyb09TyK7KItP1R8P9rE/8Gjzwdr9cT8Z3YJHnqevqYEgHk0QLQW1O9Ph7jpPT2nb1ImMA==
+X-Received: by 2002:a17:906:5048:b0:7c0:b770:df94 with SMTP id e8-20020a170906504800b007c0b770df94mr7701482ejk.63.1671794881943;
+        Fri, 23 Dec 2022 03:28:01 -0800 (PST)
+Received: from localhost ([2a00:e67:3f2:a:a55e:fcc9:ef69:52ff])
+        by smtp.gmail.com with ESMTPSA id q9-20020a170906770900b0078ddb518a90sm1267202ejm.223.2022.12.23.03.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 03:28:00 -0800 (PST)
+From:   andreas@rammhold.de
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Andreas Rammhold <andreas@rammhold.de>, stable@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH] of/fdt: run soc memory setup when early_init_dt_scan_memory fails
+Date:   Fri, 23 Dec 2022 12:27:47 +0100
+Message-Id: <20221223112748.2935235-1-andreas@rammhold.de>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit 4c587a982603d7e7e751b4925809a1512099a690:
+From: Andreas Rammhold <andreas@rammhold.de>
 
-  MIPS: OCTEON: warn only once if deprecated link status is being used (2022-12-09 23:37:46 +0100)
+If memory has been found early_init_dt_scan_memory now returns 1. If
+it hasn't found any memory it will return 0, allowing other memory
+setup mechanisms to carry on.
 
-are available in the Git repository at:
+Previously early_init_dt_scan_memory always returned 0 without
+distinguishing between any kind of memory setup being done or not. Any
+code path after the early_init_dt_scan memory call in the ramips
+plat_mem_setup code wouldn't be executed anymore. Making
+early_init_dt_scan_memory the only way to initialize the memory.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.2_1
+Some boards, including my mt7621 based Cudy X6 board, depend on memory
+initialization being done via the soc_info.mem_detect function
+pointer. Those wouldn't be able to obtain memory and panic the kernel
+during early bootup with the message "early_init_dt_alloc_memory_arch:
+Failed to allocate 12416 bytes align=0x40".
 
-for you to fetch changes up to 24b333a866a10d4be47b9968b9c05a3e9f326ff5:
+Fixes: 1f012283e936 ("of/fdt: Rework early_init_dt_scan_memory() to call directly")
+Cc: stable@vger.kernel.org
+Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+---
+ arch/mips/ralink/of.c | 2 +-
+ drivers/of/fdt.c      | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-  MIPS: dts: bcm63268: Add missing properties to the TWD node (2022-12-21 10:46:10 +0100)
-
-----------------------------------------------------------------
-Fixes due to DT changes
-
-----------------------------------------------------------------
-Florian Fainelli (1):
-      MIPS: dts: bcm63268: Add missing properties to the TWD node
-
-Sergio Paracuellos (1):
-      MIPS: ralink: mt7621: avoid to init common ralink reset controller
-
- arch/mips/boot/dts/brcm/bcm63268.dtsi | 2 ++
- arch/mips/ralink/of.c                 | 4 +++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
+diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
+index ea8072acf8d94..6873b02634219 100644
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -63,7 +63,7 @@ void __init plat_mem_setup(void)
+ 	dtb = get_fdt();
+ 	__dt_setup_arch(dtb);
+ 
+-	if (!early_init_dt_scan_memory())
++	if (early_init_dt_scan_memory())
+ 		return;
+ 
+ 	if (soc_info.mem_detect)
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 7b571a6316397..4f88e8bbdd279 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1099,7 +1099,7 @@ u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
+  */
+ int __init early_init_dt_scan_memory(void)
+ {
+-	int node;
++	int node, found_memory = 0;
+ 	const void *fdt = initial_boot_params;
+ 
+ 	fdt_for_each_subnode(node, fdt, 0) {
+@@ -1139,6 +1139,8 @@ int __init early_init_dt_scan_memory(void)
+ 
+ 			early_init_dt_add_memory_arch(base, size);
+ 
++			found_memory = 1;
++
+ 			if (!hotpluggable)
+ 				continue;
+ 
+@@ -1147,7 +1149,7 @@ int __init early_init_dt_scan_memory(void)
+ 					base, base + size);
+ 		}
+ 	}
+-	return 0;
++	return found_memory;
+ }
+ 
+ int __init early_init_dt_scan_chosen(char *cmdline)
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.38.1
+
