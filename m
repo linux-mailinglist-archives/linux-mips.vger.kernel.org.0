@@ -2,136 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2957656878
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Dec 2022 09:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFDB656B1D
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Dec 2022 14:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiL0IfY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Dec 2022 03:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S231167AbiL0NAj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Dec 2022 08:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiL0IfX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Dec 2022 03:35:23 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC2464CC
-        for <linux-mips@vger.kernel.org>; Tue, 27 Dec 2022 00:35:20 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:312a:feb:527f:f392])
-        by albert.telenet-ops.be with bizsmtp
-        id 1LbH290023T8eJe06LbH8w; Tue, 27 Dec 2022 09:35:19 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pA5Qa-001J4O-Tj; Tue, 27 Dec 2022 09:35:16 +0100
-Date:   Tue, 27 Dec 2022 09:35:16 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     amd-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linuxppc-dev@lists.ozlabs.org, kasan-dev@googlegroups.com,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: Build regressions/improvements in v6.2-rc1
-In-Reply-To: <20221227082932.798359-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com> <20221227082932.798359-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S229873AbiL0NAi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Dec 2022 08:00:38 -0500
+Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301941158
+        for <linux-mips@vger.kernel.org>; Tue, 27 Dec 2022 05:00:34 -0800 (PST)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id A9ZFp0g7bPm6CA9ZHpzYPE; Tue, 27 Dec 2022 14:00:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1672146032; bh=0zFj23aVOFHwrvvLWeLUo12meYsxcDu1zgiJRN8KYy4=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=dMC2As045n9Hp5ofBJg3vDktqOwABx8Dg2zZSg7ojr83L/co979eKUxO3of1zSgZt
+         CImZ5lCDqcg3hBnAOHE8ekTe2aO77xKldni20rMVeOQzScocnNnfY5UlaDaYSj6dg0
+         lvfIafAyE1gOxIKAefGfzhcLC4qgKmK/9kkC/qoSGFAuYYv1fnPo2pkAUMNFHqTCLT
+         WuWw0y/CbbCgBgX1Nsnd+OczKqTwDbYCrtFw+f1FCAG1OeRQC2GOSKutjTgnpwDQIv
+         0zOrVnC4o33L95u59NNF2IjEg7AFHPTWwRPOBucxNmBL3hdAkuq4YxY2tnRN6KRbNS
+         lzMaFQ7ywlZCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1672146032; bh=0zFj23aVOFHwrvvLWeLUo12meYsxcDu1zgiJRN8KYy4=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=dMC2As045n9Hp5ofBJg3vDktqOwABx8Dg2zZSg7ojr83L/co979eKUxO3of1zSgZt
+         CImZ5lCDqcg3hBnAOHE8ekTe2aO77xKldni20rMVeOQzScocnNnfY5UlaDaYSj6dg0
+         lvfIafAyE1gOxIKAefGfzhcLC4qgKmK/9kkC/qoSGFAuYYv1fnPo2pkAUMNFHqTCLT
+         WuWw0y/CbbCgBgX1Nsnd+OczKqTwDbYCrtFw+f1FCAG1OeRQC2GOSKutjTgnpwDQIv
+         0zOrVnC4o33L95u59NNF2IjEg7AFHPTWwRPOBucxNmBL3hdAkuq4YxY2tnRN6KRbNS
+         lzMaFQ7ywlZCg==
+Date:   Tue, 27 Dec 2022 14:00:29 +0100
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     linux-mips@vger.kernel.org
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        YunQiang Su <wzssyqa@gmail.com>,
+        Anushka Singh <anushka.singh1@wipro.com>,
+        Lukasz Majczak <lma@semihalf.com>,
+        Peter Swain <peter.swain@marvell.com>
+Subject: Moving Octeon ethernet out of staging
+Message-ID: <Y6rsbaT0l5cNBGbu@lenoch>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1893319093-1672130116=:311423"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-CMAE-Envelope: MS4wfB+2pilL/QlGABLJyXWgBaw+WKCPKykJ6mutG5+B1BKK9rNpGNRltLkzWI5TBbrR1DsgO3uGxYdnmqE2OyrC85NDEVE4vZJcg+NDJc7aXxELOrnaBzvQ
+ kqY3L6JQELELs7JALlxkcon2napo/uaZNeXoWP1sQlqIzxCGQVl9iqcla/rzvhhZrNQOe3C+j4li+MQOJEj7QnwQY0dfH+3cMtyj2wG2jDQiHbzMT4EK3Yp2
+ nRDPrRmimXnljwpH5ms1PBkCa9Y7IXw9iuCnTUVT3WzFyiuERVg0Zju/e0x8sDNiZ5kOQ9/IusVU6D3Kt27JBn6brJWfBo+P9Q1PuZfkrheGRgozpbxVsJmR
+ g3s5OizlaVzKDRW2IPEQKowG+Cz1+A==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi there,
 
---8323329-1893319093-1672130116=:311423
-Content-Type: text/plain; charset=ISO-8859-15; format=flowed
-Content-Transfer-Encoding: 8BIT
+Octeon ethernet drivers were once kicked out of staging, just to be
+returned back a while after:
+https://lore.kernel.org/lkml/20200205001116.14096-1-chris.packham@alliedtelesis.co.nz/
 
-On Tue, 27 Dec 2022, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v6.2-rc1[1] compared to v6.1[2].
->
-> Summarized:
->  - build errors: +11/-13
+All that patchset ends with an optimistic comment:
+On Wed, 2020-03-04 Chris Packham wrote:
+> I have had a reply from Marvell. They've contracted support for the old
+> Cavium Octeon designs out to an external company. I'm not sure that
+> means that we'll see some action on these drivers any time soon but at
+> least they're doing something.
 
-amd-gfx@lists.freedesktop.org
-linux-arm-kernel@lists.infradead.org
-linux-media@vger.kernel.org
-linux-wireless@vger.kernel.org
-linux-mips@vger.kernel.org
-linux-sh@vger.kernel.org
-linux-f2fs-devel@lists.sourceforge.net
-linuxppc-dev@lists.ozlabs.org
-kasan-dev@googlegroups.com
-linux-xtensa@linux-xtensa.org
+Now based on Marvell's 277 patches long set against 5.4.30 it seems that
+'an external company' is Wipro and 'doing something' is the exact opposite
+to 'make driver self-contained' as described in drivers/staging/octeon/TODO
 
-   + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
-   + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
+That patchset contains dozen of *Sync-up-SE* patches which basically dumps
+mainline changes and replaces platform files with the BSD licensed ones
+common for Linux, U-Boot and Cavium tools. Ethernet driver is then synced
+to that changes, making it even more dependent on arch/mips/cavium-octeon
+code.
 
-arm64-gcc5/arm64-allmodconfig
+To fix staging driver to work with customer's CN7020 based board I'd had to
+either go Marvell's direction or use DT for driver configuration, so I
+partially did the latter. It is probably broken for anything else than
+CN70XX and it breaks the ABI, newer kernel will not work with older
+bindings. Is that okay for staging drivers? Does anyone even intend to
+use mainline kernel with Octeon SoCs? Of course I'd be happy hearing
+something changed at Marvell and they are willing to mainline support
+for their MIPS based SoCs ;-)
 
-   + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
-   + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
-
-m68k-gcc8/m68k-allmodconfig
-See also https://lore.kernel.org/all/CAMuHMdWpPX2mpqFEWjjbjsQvDBQOXyjjdpKnQu9qURAuVZXmMw@mail.gmail.com
-
-   + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
-
-In function 'u32_encode_bits',
-     inlined from 'ieee80211_mlo_multicast_tx' at /kisskb/src/net/mac80211/tx.c:4435:17,
-     inlined from 'ieee80211_subif_start_xmit' at /kisskb/src/net/mac80211/tx.c:4483:3:
-
-mipsel-gcc5/mips-allmodconfig
-
-   + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_262' declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().:  => 358:45
-   + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_263' declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().:  => 358:45
-
-In function 'follow_pmd_mask',
-     inlined from 'follow_pud_mask' at /kisskb/src/mm/gup.c:735:9,
-     inlined from 'follow_p4d_mask' at /kisskb/src/mm/gup.c:752:9,
-     inlined from 'follow_page_mask' at /kisskb/src/mm/gup.c:809:9:
-
-sh4-gcc11/sh-defconfig (Günter wondered if pmd_t should use union)
-
-   + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy' offset [0, 127] is out of the bounds [0, 0] [-Werror=array-bounds]:  => 57:33
-
-/kisskb/src/arch/s390/kernel/setup.c: In function 'setup_lowcore_dat_on':
-s390x-gcc11/s390-all{mod,yes}config
-
-   + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]:  => 59:33
-
-/kisskb/src/fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
-
-powerpc-gcc11/ppc64_book3e_allmodconfig
-powerpc-gcc11/powerpc-all{mod,yes}config
-
-   + /kisskb/src/kernel/kcsan/kcsan_test.c: error: the frame size of 1680 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]:  => 257:1
-
-xtensa-gcc11/xtensa-allmodconfig (patch available)
-
-   + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
-
-sh4-gcc11/sh-allmodconfig (ICE = internal compiler error)
-
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1b929c02afd37871d5afb9d498426f83432e71c2/ (all 152 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
---8323329-1893319093-1672130116=:311423--
+	ladis
