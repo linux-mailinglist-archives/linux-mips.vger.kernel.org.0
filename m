@@ -2,95 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB536658B1E
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Dec 2022 10:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4A9658B50
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Dec 2022 10:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbiL2Jiw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Dec 2022 04:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S233316AbiL2J6f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Dec 2022 04:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbiL2Jgt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Dec 2022 04:36:49 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A73413D41;
-        Thu, 29 Dec 2022 01:32:41 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id A20595C022E;
-        Thu, 29 Dec 2022 04:32:40 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 29 Dec 2022 04:32:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1672306360; x=1672392760; bh=dQitIKz9Zv
-        Mk4oytHD9JLdnkBzb2SNyrpGTj/IDH57g=; b=V/5Cv1VhfpH5iTFAIPNbee37+7
-        fGRfQGhS2cfvaoU5prjYmzEkJOixzWrHBayYA/LAbI8aGtT5NUL+owTmoaFj3n3B
-        LJoHwRocbJtfuMEyHSx/wyanvvQ13DDzevGclpYyw7qeYNEVViTXINcAj0D9vgsh
-        7pfvXG5yZXolmbAG1xnYy8Ot//4tvH7LNGG1PIQsV13T27gAt8TnwFw1loQa0vbD
-        oPcv9yAU1hrNnDzJ4hHBOxfksO9Tu+rLYKEWw8IH2L2YS5xRATHewhb6Zy3ABb5W
-        Th9HksHzXkv0qeIqDaZbZW8EtN2KMBSeSVjD4popm9MiVXhAr8il3YStrrLA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1672306360; x=1672392760; bh=dQitIKz9ZvMk4oytHD9JLdnkBzb2
-        SNyrpGTj/IDH57g=; b=iDQJHK36vHwWh1wRKl4E4QER7+DQKeClUsyglmglgxkg
-        EljL62jR2iZg18aei0CuCeH832VH529cwGFTM79QLvISe5DOGQCCaE9a5nVoNcdT
-        vRyncomABgBeJ3SsaAqCusYLubSRqSwkWTAzvRqkgUp7P/uDuSrSC8oJAPjjHwnG
-        Zd0Dd9LmkVGzRX1+/eSzkb96N8eNNz/u/R6Fm30nUUZjYR3EyVzLMio8jHJyXxIj
-        iQzshYRj6uSLjiurv3YD4ZUHN8c2WtRhXRw4+fHy6C13RBukmzzaZvqF15WJiEkO
-        SQyTebTGPXArLBywDKO2H+WZBi9s4A/HPkn50Hzk8Q==
-X-ME-Sender: <xms:t16tY_xTXyOBxZzRlwIxGAjI2ettOKadK7A9iMGmJP2qRljOTcBayg>
-    <xme:t16tY3RGUfHsWbJR8Ja2QCw0SFyKp0uowcI1CysTjogMdtCluR5C8uHqieGWGVAVH
-    SG9ndtEeyJsrl3xTZI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggddthecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:t16tY5WPN0eRhQuqkXR1eQBdMOuAo-5nAJJ36hmRXP0lPVn6iv5ojg>
-    <xmx:t16tY5hs5xXyUOxLtmXCD1t9iRdCyPGN1E3t5Pc7uUgssA87nClWZw>
-    <xmx:t16tYxCRfWeK3MQh1NvH9n9BHNHyKE86lXXcTf6N2kZ0kJveeEq2-A>
-    <xmx:uF6tY2yAnrmYZFHKR9Art5c4-CoKhKbO440aSm6r1v3bh4Mq4Q8mmQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AA077B60086; Thu, 29 Dec 2022 04:32:39 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <78b23407-bdd0-4b1b-bf6e-ecd4c00294ab@app.fastmail.com>
-In-Reply-To: <20221222114635.1251934-3-andrzej.hajda@intel.com>
-References: <20221222114635.1251934-1-andrzej.hajda@intel.com>
- <20221222114635.1251934-3-andrzej.hajda@intel.com>
-Date:   Thu, 29 Dec 2022 10:32:19 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Andrzej Hajda" <andrzej.hajda@intel.com>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S233293AbiL2Jzs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Dec 2022 04:55:48 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8D413E99;
+        Thu, 29 Dec 2022 01:54:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672307698; x=1703843698;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ekul8eGeWcmCvyM+3dUi16jfyX+OFQQRDZLG3bQVomQ=;
+  b=d+7bN+tjqh3eof9bdGje2kpI4zamfY6oXHKsH+IltfywydlGu2NF0yZG
+   4vIYv/W8lJbY30ukqxMBcjHIRPMCg9jmTJADrPDZdo1FJxI3F6MVBRfwY
+   BIgsMVcxs9JW7VBN0D8cQHYX+iVJvNWG3lWD/FemsFFxxPHFlM+r1fbYY
+   qVh8BxuHJ89OYNeXwCreHJSPhBe+76NSoPDLdOu7BGq1oDzOlJyyMm8DT
+   Ef4uT6gE+ggVAwsKhrxH9vy9WHVpZ+HRJiPSnjy/8deUA37o+bNIcgSHi
+   0elXSLbGnfbt6xofms5/X0zBh+1Hn27+PPdr9nHZYPjJGtGv4Kw4SFjyF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="318699298"
+X-IronPort-AV: E=Sophos;i="5.96,283,1665471600"; 
+   d="scan'208";a="318699298"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 01:54:57 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="742258354"
+X-IronPort-AV: E=Sophos;i="5.96,283,1665471600"; 
+   d="scan'208";a="742258354"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.17.178]) ([10.213.17.178])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 01:54:52 -0800
+Message-ID: <6e727952-3ad0-fcc3-82f1-c465dcffd56f@intel.com>
+Date:   Thu, 29 Dec 2022 10:54:50 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [PATCH 00/19] Introduce __xchg, non-atomic xchg
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
         linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Cc:     "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        "Mark Rutland" <mark.rutland@arm.com>
-Subject: Re: [PATCH 02/19] arch/arc: rename internal name __xchg to __arch_xchg
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20221222114635.1251934-1-andrzej.hajda@intel.com>
+ <20221222092147.d2bb177c67870884f2e59a9b@linux-foundation.org>
+Content-Language: en-US
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20221222092147.d2bb177c67870884f2e59a9b@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,25 +79,74 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 22, 2022, at 12:46, Andrzej Hajda wrote:
-> __xchg will be used for non-atomic xchg macro.
+Forgive me late response - Holidays,
+
+On 22.12.2022 18:21, Andrew Morton wrote:
+> On Thu, 22 Dec 2022 12:46:16 +0100 Andrzej Hajda <andrzej.hajda@intel.com> wrote:
 >
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> ---
->  arch/arc/include/asm/cmpxchg.h | 4 ++--
+>> Hi all,
+>>
+>> I hope there will be place for such tiny helper in kernel.
+>> Quick cocci analyze shows there is probably few thousands places
+>> where it could be useful.
+> So to clarify, the intent here is a simple readability cleanup for
+> existing open-coded exchange operations.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+And replace private helpers with common one, see the last patch - the 
+ultimate goal
+would be to replace all occurrences of fetch_and_zero with __xchg.
 
-for all the arch/*/include/asm/cmpxchg.h changes.
+> The intent is *not* to
+> identify existing xchg() sites which are unnecessarily atomic and to
+> optimize them by using the non-atomic version.
+>
+> Have you considered the latter?
 
-Since these patches are all the same, and they have identical
-subject and description texts, I would suggest combining them
-into a single patch to keep the series more compact.
+If you mean some way of (semi-)automatic detection of such cases, then 
+no. Anyway this could be quite interesting challenge.
 
-Having them separate would allow merging the patches through
-the individual architecture maintainer trees, but that in turn
-would mean waiting longer to get it all merged, but in this
-case it seems way easier to go through the asm-generic
-tree.
+>
+>> I am not sure who is good person to review/ack such patches,
+> I can take 'em.
+>
+>> so I've used my intuition to construct to/cc lists, sorry for mistakes.
+>> This is the 2nd approach of the same idea, with comments addressed[0].
+>>
+>> The helper is tiny and there are advices we can leave without it, so
+>> I want to present few arguments why it would be good to have it:
+>>
+>> 1. Code readability/simplification/number of lines:
+>>
+>> Real example from drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c:
+>> -       previous_min_rate = evport->qos.min_rate;
+>> -       evport->qos.min_rate = min_rate;
+>> +       previous_min_rate = __xchg(evport->qos.min_rate, min_rate);
+>>
+>> For sure the code is more compact, and IMHO more readable.
+>>
+>> 2. Presence of similar helpers in other somehow related languages/libs:
+>>
+>> a) Rust[1]: 'replace' from std::mem module, there is also 'take'
+>>      helper (__xchg(&x, 0)), which is the same as private helper in
+>>      i915 - fetch_and_zero, see latest patch.
+>> b) C++ [2]: 'exchange' from utility header.
+>>
+>> If the idea is OK there are still 2 qestions to answer:
+>>
+>> 1. Name of the helper, __xchg follows kernel conventions,
+>>      but for me Rust names are also OK.
+> I like replace(), or, shockingly, exchange().
+>
+> But...   Can we simply make swap() return the previous value?
+>
+> 	previous_min_rate = swap(&evport->qos.min_rate, min_rate);
 
-     Arnd
+As Alexander already pointed out, swap requires 'references' to two 
+variables,
+in contrast to xchg which requires reference to variable and value.
+So we cannot use swap for cases:
+     old_value = __xchg(&x, new_value);
+
+Regards
+Andrzej
+
