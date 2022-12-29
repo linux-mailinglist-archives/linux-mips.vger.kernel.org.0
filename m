@@ -2,131 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29353658EED
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Dec 2022 17:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C236591D3
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Dec 2022 21:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233644AbiL2QWv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Dec 2022 11:22:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S230160AbiL2UxV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Dec 2022 15:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233675AbiL2QW2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Dec 2022 11:22:28 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309E0DCE
-        for <linux-mips@vger.kernel.org>; Thu, 29 Dec 2022 08:22:27 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id b145so8840965pfb.2
-        for <linux-mips@vger.kernel.org>; Thu, 29 Dec 2022 08:22:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PMNgd8bQDMgdEx3QpMo3jWGl4T1DZKXjFMtqF5doPS4=;
-        b=qXEmllgjQDDILSAqKv5rHoGkicbo4R4i0RBYCEbuy5JWCS9/AA+DWTMXLQgqDAappW
-         903kwqubN40SB2KttGjjG54UgZAHr5bwFbysTxqCEokE3BNB09i/uefHEDV0SvFj1/tu
-         1Lu+CFCesVDE+jl4EXnA8KkiboPktg6mieeJ7onX1tkrVdG7KvaiHAaOG9gcqJyJPbGd
-         pCkV7szyzafl528HANkkvX+fSJQQtn4lOJvi8JPHEP8zM7yI6lOkG51EtxjdpiS6qS6y
-         bkQ9rcSKWrjbuS7i9mSjttcyHwgDwy/ruAPC9lLbcJkXlwaOVpsqeXNx1gIuMeQUkJfm
-         MIkA==
+        with ESMTP id S234086AbiL2UxR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Dec 2022 15:53:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD9AAE41
+        for <linux-mips@vger.kernel.org>; Thu, 29 Dec 2022 12:52:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672347148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DeG05ASAQvY/FceYSGJdKCGQ3OFwx25lz4jlpRPWbnU=;
+        b=CyydvGwzPP3fLVYWpVliXmXQqCrkO5vFWqD2G/eF6WnvrzLE9bE4odPOFEByCJPXx1zK7N
+        3CW4NLlm4xL0AqHnTqMhsk9cWBJ6Uuhsic1loBCpqEVeOVsFEOTwngBg+tn14ERoLM33Ac
+        yUygSuFg7+aLVxGsIqRVpizKmEoGM14=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-14-irsGEM0cPOOcfUpvj28z2w-1; Thu, 29 Dec 2022 15:52:27 -0500
+X-MC-Unique: irsGEM0cPOOcfUpvj28z2w-1
+Received: by mail-ej1-f72.google.com with SMTP id nb4-20020a1709071c8400b007c18ba778e9so13074489ejc.16
+        for <linux-mips@vger.kernel.org>; Thu, 29 Dec 2022 12:52:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PMNgd8bQDMgdEx3QpMo3jWGl4T1DZKXjFMtqF5doPS4=;
-        b=6IcONe7deDQ3dsVXD4+4PZqu4YOYaODBfCdfFg4/+/xnA6b7WK5oAxq7W2chM4bW6y
-         weHb1TD4hVoFjqow0NxxcPM6jMQ1+voChk13AVr7Uec/wrRCXY4WlErzc9R1WOIvigHX
-         G3CYMsDV/IGKjGTB6rXyakReMg3ed6XlKEHQxegze+VPg3FiVEOjYRUu0hrmbcbTw1sc
-         GjOWpkHZb/CwldpVf+YVLbRMFpgh4PntDxGLy5Pi5qY/VGOxSLVzXkbMwSiVLFMVht+6
-         nxmDZICfddw407rxHDOko1Fu8WI9FrI2PuFvV+1wMUHrkjYvAr1W9K9DfExVq+0OXQvu
-         B3OQ==
-X-Gm-Message-State: AFqh2kqY0JT5E3uGXyjVqRbBFWJQl95qVo02S7edVmkBPTM084gr7pKc
-        xLPMIjTaJxEe3N39SR7rlDU+MA==
-X-Google-Smtp-Source: AMrXdXtoQHTvZGkC4TohzHT3/NWYHx9KB7DMUUCuZrQkc/ivfhp4AP56ANclvtUxYpd25RIK3u76xw==
-X-Received: by 2002:a05:6a00:1c92:b0:576:f322:419f with SMTP id y18-20020a056a001c9200b00576f322419fmr28959611pfw.28.1672330946621;
-        Thu, 29 Dec 2022 08:22:26 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id l190-20020a6225c7000000b005771d583893sm12598441pfl.96.2022.12.29.08.22.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 08:22:26 -0800 (PST)
-Date:   Thu, 29 Dec 2022 08:22:26 -0800 (PST)
-X-Google-Original-Date: Thu, 29 Dec 2022 07:53:49 PST (-0800)
-Subject:     Re: [PATCH 13/19] arch/riscv: rename internal name __xchg to __arch_xchg
-In-Reply-To: <20221222114635.1251934-14-andrzej.hajda@intel.com>
-CC:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DeG05ASAQvY/FceYSGJdKCGQ3OFwx25lz4jlpRPWbnU=;
+        b=dtZ2wPIW1IW5sqggIlIeMLfskWAg8FIvMTkLGzyJ9HY6cOsz+ld58Ctfa9ha6CSsH0
+         FNoWlbcTmraQpZWs6EeQfUX35QUuG4deq79RMleMiQYzfju1ZgtLprwg3RCGk4WBkETV
+         rATk4nobAOTz1qiyNdRLxUMKzhD78yUNAW8noAfMpwqDmUJpaAmHMfX7vPucL2q/xjOj
+         zhyPMoSE/lYKsGwpcVQrVO0Q0n7YKLPNNq44AxmpobVfsaM0g25EB0+qtG4r+9S0aDO6
+         MfMR2B2NPsBXywyqs4vDkg//S0c8TmYzO5XM5uXSI62QZPryYdFwKYqBm7Rrraqpi3AT
+         Gzng==
+X-Gm-Message-State: AFqh2kqr/e7bbLNEWfYnOyb/ocAu3etmseG/ZI512L3XSE1meovt0BXV
+        uCgToW0OX7Tb1tybD2qTCRRBaPnEhYTxVxOea1buOD9N2CObI+eWpROec67693ZN9bzIM3eJxZy
+        Sy/16tln+QVdJonuB1ieR3A==
+X-Received: by 2002:a17:907:6f09:b0:7c1:37:6d5e with SMTP id sy9-20020a1709076f0900b007c100376d5emr4872269ejc.2.1672347146330;
+        Thu, 29 Dec 2022 12:52:26 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuAZx8SHyajJmJ++QT23AGJAvs5IxosEfN11APvih7Pbj5KPIpkonmPHiwyMLfqMEbO8Dqn3Q==
+X-Received: by 2002:a17:907:6f09:b0:7c1:37:6d5e with SMTP id sy9-20020a1709076f0900b007c100376d5emr4872244ejc.2.1672347146101;
+        Thu, 29 Dec 2022 12:52:26 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312::529? ([2001:b07:6468:f312::529])
+        by smtp.googlemail.com with ESMTPSA id 23-20020a170906301700b0084c90164a56sm1096571ejz.29.2022.12.29.12.52.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 12:52:25 -0800 (PST)
+Message-ID: <4d73d1b9-2c28-ab6a-2963-579bcc7a9e67@redhat.com>
+Date:   Thu, 29 Dec 2022 21:52:21 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 00/50] KVM: Rework kvm_init() and hardware enabling
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, andrzej.hajda@intel.com,
-        Arnd Bergmann <arnd@arndb.de>, rodrigo.vivi@intel.com,
-        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
-        peterz@infradead.org, boqun.feng@gmail.com, mark.rutland@arm.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     andrzej.hajda@intel.com
-Message-ID: <mhng-8937d883-402e-4523-a023-8171ed0e386b@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20221227130249.1650197-1-pbonzini@redhat.com>
+ <9acea262dec3511e9cf63081506f0bd7@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <9acea262dec3511e9cf63081506f0bd7@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 22 Dec 2022 03:46:29 PST (-0800), andrzej.hajda@intel.com wrote:
-> __xchg will be used for non-atomic xchg macro.
->
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> ---
->  arch/riscv/include/asm/atomic.h  | 2 +-
->  arch/riscv/include/asm/cmpxchg.h | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
-> index 0dfe9d857a762b..bba472928b5393 100644
-> --- a/arch/riscv/include/asm/atomic.h
-> +++ b/arch/riscv/include/asm/atomic.h
-> @@ -261,7 +261,7 @@ c_t arch_atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)	\
->  static __always_inline							\
->  c_t arch_atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)		\
->  {									\
-> -	return __xchg(&(v->counter), n, size);				\
-> +	return __arch_xchg(&(v->counter), n, size);			\
->  }									\
->  static __always_inline							\
->  c_t arch_atomic##prefix##_cmpxchg_relaxed(atomic##prefix##_t *v,	\
-> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-> index 12debce235e52d..2f4726d3cfcc25 100644
-> --- a/arch/riscv/include/asm/cmpxchg.h
-> +++ b/arch/riscv/include/asm/cmpxchg.h
-> @@ -114,7 +114,7 @@
->  					    _x_, sizeof(*(ptr)));	\
->  })
->
-> -#define __xchg(ptr, new, size)						\
-> +#define __arch_xchg(ptr, new, size)					\
->  ({									\
->  	__typeof__(ptr) __ptr = (ptr);					\
->  	__typeof__(new) __new = (new);					\
-> @@ -143,7 +143,7 @@
->  #define arch_xchg(ptr, x)						\
->  ({									\
->  	__typeof__(*(ptr)) _x_ = (x);					\
-> -	(__typeof__(*(ptr))) __xchg((ptr), _x_, sizeof(*(ptr)));	\
-> +	(__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));	\
->  })
->
->  #define xchg32(ptr, x)							\
+On 12/28/22 12:22, Marc Zyngier wrote:
+> 
+>> Queued, thanks.  I will leave this in kvm/queue after testing everything
+>> else and moving it to kvm/next; this way, we can wait for test results
+>> on other architectures.
+> 
+> Can you please make this a topic branch, and if possible based
+> on a released -rc? It would make it a lot easier for everyone.
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+This is now refs/heads/kvm-hw-enable-refactor in 
+https://git.kernel.org/pub/scm/virt/kvm/kvm.git.
 
-Thanks!
+The commits for this series start at hash fc471e831016.
+
+Paolo
+
