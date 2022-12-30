@@ -2,80 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED76659C3C
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Dec 2022 21:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2C16597D3
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Dec 2022 12:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbiL3Ujh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Dec 2022 15:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S229924AbiL3LqP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Dec 2022 06:46:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235329AbiL3Uj1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Dec 2022 15:39:27 -0500
-X-Greylist: delayed 20175 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Dec 2022 12:39:25 PST
-Received: from mail.vacuumatic.cc (vacuumatic.cc [163.123.140.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2CECD9;
-        Fri, 30 Dec 2022 12:39:25 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vacuumatic.cc (Postfix) with ESMTP id 2980C70E1E10;
-        Fri, 30 Dec 2022 05:10:13 -0500 (EST)
-Received: from mail.vacuumatic.cc ([127.0.0.1])
-        by localhost (mail.vacuumatic.cc [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CwMzyfTDikvJ; Fri, 30 Dec 2022 05:10:11 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vacuumatic.cc (Postfix) with ESMTP id E3E3570E1E17;
-        Fri, 30 Dec 2022 05:10:05 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.vacuumatic.cc E3E3570E1E17
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vacuumatic.cc;
-        s=BD5E5048-7767-11ED-9AB1-AEF27DAD29AF; t=1672395006;
-        bh=8OSRQtZ/XGMt0m+/MV768q5oZkUB/T254Ol9zod/hVE=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=oB017uJM3+VILepDVCRHqbBAxlNXvfFNju4QVc0p3VUhVHhYs4DgNfLDW9wz1lU46
-         4LWvcI5Awkb/hOzV1UgLqeDN0zRIp52gDKoo2R56wNemOOP++kCUyb+LReDz9kz0zK
-         mNCXcATQ2SymudADNCITJFseZyWRbXACBVwjCTIstpKFy+Q93NDCbFJX0ZZ/Jgrchi
-         f7UbK64NokFfXnjhWY684sMSS2ON3oE68SPMv1lcx7npNSiGe4+ekt9Y7sIS4nzz2/
-         fhtX+gTaQo6W1cQFj+jA4uw6d2lCDziIaWDuWF7XsaedWUmUrC0v7Mbl50/YLrvj47
-         11lF+1Ok3fjeQ==
-X-Virus-Scanned: amavisd-new at vacuumatic.cc
-Received: from mail.vacuumatic.cc ([127.0.0.1])
-        by localhost (mail.vacuumatic.cc [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dQge5yDQT0pW; Fri, 30 Dec 2022 05:10:05 -0500 (EST)
-Received: from mail.vacuumatic.cc (mail.vacuumatic.cc [163.123.140.34])
-        by mail.vacuumatic.cc (Postfix) with ESMTP id 82A4E70EDE27;
-        Fri, 30 Dec 2022 05:09:57 -0500 (EST)
-Date:   Fri, 30 Dec 2022 05:09:57 -0500 (EST)
-From:   Lukas Reinhardt <support@vacuumatic.cc>
-Reply-To: Lukas Reinhardt <lukreinhard1@vivaldi.net>
-Message-ID: <1565539681.269587.1672394997473.JavaMail.zimbra@vacuumatic.cc>
-In-Reply-To: <1397014707.241670.1672348232055.JavaMail.zimbra@vacuumatic.cc>
-References: <1397014707.241670.1672348232055.JavaMail.zimbra@vacuumatic.cc>
-Subject: 3% IR Loan Offer
+        with ESMTP id S229505AbiL3LqO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Dec 2022 06:46:14 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA0B62DB;
+        Fri, 30 Dec 2022 03:46:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672400773; x=1703936773;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+C+F27SERRX5/mMHkFvQQdCIf1T1mofGj6ltPhh/hUw=;
+  b=UEa/ZLr7wul3SdojNttLMFDxKCtJafnLcKDGVx2eUTSfftisfFJTgyoV
+   5C789plYN8K2eWqxSir8DfTBSxNyEfXLw9gBm+gw+lzx+0/b2rjnHXswE
+   RWLjkmnWzcxbsA9IgOQnKVyx3/6iOOL0azEJsf9u0JbN9AJAe1MYwVW1T
+   cXu9ndJl2S+mLa1StRaOs7CI96tGrDuBfZKhXewFdwhOt97eXfOQkagXw
+   CdUTWxHw5XwudfECJS7RnwsbNtLzLKik+EQU7Bq6/TKYhQahbQBB49Nb8
+   V6RE2kGCoc5YF6+OeVPnfpwFF2F2/b0PWickWF46BveCdnAxyo1iPHvUi
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="301567990"
+X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
+   d="scan'208";a="301567990"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 03:46:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="653865346"
+X-IronPort-AV: E=Sophos;i="5.96,287,1665471600"; 
+   d="scan'208";a="653865346"
+Received: from vsemouch-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.102])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 03:46:09 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     inux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/3] serial: Separate RT288x/Au1xxx code into own file
+Date:   Fri, 30 Dec 2022 13:46:00 +0200
+Message-Id: <20221230114603.16946-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [163.123.140.34]
-X-Mailer: Zimbra 8.8.15_GA_4484 (zclient/8.8.15_GA_4484)
-Thread-Topic: 3% IR Loan Offer
-Thread-Index: u96i7u0zPj8LOsjj2ctwnSi+vmZef3ojmbos
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+A non-trivial amount of RT288x/Au1xxx code is encapsulated into
+ifdeffery in 8250_port / 8250_early and some if/switch UPIO_AU blocks.
+Create a separate file from them and do a few additional cleanups.
 
-We are a Kuwait Based Investment company offering corporate and personal loans at 3% interest rate for the duration of 10 years. We also give 1% commission to brokers, who introduce project owners for finance or other opportunities.
+I kept the Kconfig entry as bool because the code has somewhat tricky
+dependency chain (mips arch code and 8250_of driver). It would be nice
+to make it tristate but I don't know how blocking some invalid =m + =y
+combinations would be best addressed. It should probably be best done
+on top of this series independent of the split itself anyway.
 
-Please get back to me if you are interested in more details.
+UPIO_AU could now be removed because it's same as UPIO_MEM for the
+remaining code path but I'm unsure if that's allowed (is the port
+iotype part of stable ABI or not)?
 
+Ilpo Järvinen (3):
+  serial: 8250: RT288x/Au1xxx code away from core
+  serial: 8250_rt288x: Name non-standard divisor latch reg
+  serial: 8250_rt288x: Remove unnecessary UART_REG_UNMAPPED
 
-Best Regards,
-Mr.Lukas Reinhardt
-Assistant Secretary
-General Global Financial Investment.
+ arch/mips/alchemy/common/platform.c   |  10 +-
+ drivers/tty/serial/8250/8250_core.c   |   4 +
+ drivers/tty/serial/8250/8250_early.c  |  21 ----
+ drivers/tty/serial/8250/8250_of.c     |   4 +-
+ drivers/tty/serial/8250/8250_port.c   |  78 ---------------
+ drivers/tty/serial/8250/8250_rt288x.c | 135 ++++++++++++++++++++++++++
+ drivers/tty/serial/8250/Makefile      |   1 +
+ include/linux/serial_8250.h           |  14 ++-
+ 8 files changed, 163 insertions(+), 104 deletions(-)
+ create mode 100644 drivers/tty/serial/8250/8250_rt288x.c
+
+-- 
+2.30.2
+
