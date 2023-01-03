@@ -2,99 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D6665AE38
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Jan 2023 09:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9C865BBC5
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Jan 2023 09:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbjABIiG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 Jan 2023 03:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S237009AbjACIPm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Jan 2023 03:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbjABIiB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Jan 2023 03:38:01 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD5FDB3;
-        Mon,  2 Jan 2023 00:38:01 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id bp44so19416724qtb.0;
-        Mon, 02 Jan 2023 00:38:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jo2CI5pKv7C2jtNLeQsFhlozXL/lFYNzin08UvE0x2c=;
-        b=xbgtQV+wPHPwDIM93AuAvm6WX6cGoQ1F4KIkbImS7rbjacPg0vKFBq4dxC58yjG8Mx
-         nIUSNFYwJbl7uPNcHqSDllfZYyOy06mtvncHJc0UuhGQNBQ5JczHS9Df6w48u8eZUzSp
-         TniX6oFCsLk7mSKnIPEkCvDufW/Kl2ChooylfZBACcQhF3dfzfmp7XFudVJ0fgT1AW+w
-         olBLlM2oz9KUSJNOvkpVgkYNYhsRNWl0SRBaEvbOMlm3vNZ6L/+v1VkCVj4yBUy2T8Fm
-         06GLJ8CX/bmFj94jcWysm+KJ7cj4j1WgF9OwIub3Rqxa5Z4WDtNbYXZ7VInQqEDv3x9x
-         AJgA==
-X-Gm-Message-State: AFqh2kq6SDiiBGvB2sRSZkgkOpV7zzeXBk8WjBOEGdI/e7rV1FXYUmKh
-        02pkriV6eTwkcy3mdezcl0xJM5Cqp8oEUA==
-X-Google-Smtp-Source: AMrXdXvvdSLfHxpqthAsfcybCi8mKs5HRIENs/LRGUqFwoQGphvc9t711phFovUpA1CbhJ28EYPN5g==
-X-Received: by 2002:ac8:785:0:b0:3a7:eab2:e461 with SMTP id l5-20020ac80785000000b003a7eab2e461mr42688176qth.25.1672648680473;
-        Mon, 02 Jan 2023 00:38:00 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id fb25-20020a05622a481900b003a5430ee366sm15917725qtb.60.2023.01.02.00.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 00:38:00 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id e141so29641506ybh.3;
-        Mon, 02 Jan 2023 00:38:00 -0800 (PST)
-X-Received: by 2002:a25:d243:0:b0:702:90b4:2e24 with SMTP id
- j64-20020a25d243000000b0070290b42e24mr2730771ybg.365.1672648260480; Mon, 02
- Jan 2023 00:31:00 -0800 (PST)
+        with ESMTP id S230211AbjACIPf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Jan 2023 03:15:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E68D2F6;
+        Tue,  3 Jan 2023 00:15:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D669B80E49;
+        Tue,  3 Jan 2023 08:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E73AC433EF;
+        Tue,  3 Jan 2023 08:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1672733729;
+        bh=J5e7O0O8iPEmHTzAk8tMEyAl6ywNl1X69dM6nO2IGHY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Fq3HU+lYmJklsIUNFgck/YL4t7LDH9H2spcUJwu1aNANn/+w6xWJQsRr7srJumgbP
+         YQOAuC9hTjDwS4lGSCeDTFlaUjBAlWrNINKvzkwtWncAltO/cZ5RvOE57UD+9k6j1r
+         NPtObH6O9hz0hZwZJ504GRJarQAky81IlIRS0xXo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 24/63] mips: add support for TIF_NOTIFY_SIGNAL
+Date:   Tue,  3 Jan 2023 09:13:54 +0100
+Message-Id: <20230103081310.018548519@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230103081308.548338576@linuxfoundation.org>
+References: <20230103081308.548338576@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-References: <78b23407-bdd0-4b1b-bf6e-ecd4c00294ab@app.fastmail.com> <20221229113338.2436892-1-andrzej.hajda@intel.com>
-In-Reply-To: <20221229113338.2436892-1-andrzej.hajda@intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 2 Jan 2023 09:30:48 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVaq9Xg3HrqLo1x5SCuwtJBsczLjWAWmH=23ZtNf_e9hQ@mail.gmail.com>
-Message-ID: <CAMuHMdVaq9Xg3HrqLo1x5SCuwtJBsczLjWAWmH=23ZtNf_e9hQ@mail.gmail.com>
-Subject: Re: [PATCH v2] arch: rename all internal names __xchg to __arch_xchg
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 12:34 PM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
-> __xchg will be used for non-atomic xchg macro.
->
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+From: Jens Axboe <axboe@kernel.dk>
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> [m68k]
+[ Upstream commit f45c184bce15f4a314c0210519bc3b4aab408838 ]
 
-Gr{oetje,eeting}s,
+Wire up TIF_NOTIFY_SIGNAL handling for mips.
 
-                        Geert
+Cc: linux-mips@vger.kernel.org
+Acked-By: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/mips/include/asm/thread_info.h |    4 +++-
+ arch/mips/kernel/signal.c           |    2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+--- a/arch/mips/include/asm/thread_info.h
++++ b/arch/mips/include/asm/thread_info.h
+@@ -115,6 +115,7 @@ static inline struct thread_info *curren
+ #define TIF_SECCOMP		4	/* secure computing */
+ #define TIF_NOTIFY_RESUME	5	/* callback before returning to user */
+ #define TIF_UPROBE		6	/* breakpointed or singlestepping */
++#define TIF_NOTIFY_SIGNAL	7	/* signal notifications exist */
+ #define TIF_RESTORE_SIGMASK	9	/* restore signal mask in do_signal() */
+ #define TIF_USEDFPU		16	/* FPU was used by this task this quantum (SMP) */
+ #define TIF_MEMDIE		18	/* is terminating due to OOM killer */
+@@ -139,6 +140,7 @@ static inline struct thread_info *curren
+ #define _TIF_SECCOMP		(1<<TIF_SECCOMP)
+ #define _TIF_NOTIFY_RESUME	(1<<TIF_NOTIFY_RESUME)
+ #define _TIF_UPROBE		(1<<TIF_UPROBE)
++#define _TIF_NOTIFY_SIGNAL	(1<<TIF_NOTIFY_SIGNAL)
+ #define _TIF_USEDFPU		(1<<TIF_USEDFPU)
+ #define _TIF_NOHZ		(1<<TIF_NOHZ)
+ #define _TIF_FIXADE		(1<<TIF_FIXADE)
+@@ -164,7 +166,7 @@ static inline struct thread_info *curren
+ /* work to do on interrupt/exception return */
+ #define _TIF_WORK_MASK		\
+ 	(_TIF_SIGPENDING | _TIF_NEED_RESCHED | _TIF_NOTIFY_RESUME |	\
+-	 _TIF_UPROBE)
++	 _TIF_UPROBE | _TIF_NOTIFY_SIGNAL)
+ /* work to do on any return to u-space */
+ #define _TIF_ALLWORK_MASK	(_TIF_NOHZ | _TIF_WORK_MASK |		\
+ 				 _TIF_WORK_SYSCALL_EXIT |		\
+--- a/arch/mips/kernel/signal.c
++++ b/arch/mips/kernel/signal.c
+@@ -903,7 +903,7 @@ asmlinkage void do_notify_resume(struct
+ 		uprobe_notify_resume(regs);
+ 
+ 	/* deal with pending signal delivery */
+-	if (thread_info_flags & _TIF_SIGPENDING)
++	if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+ 		do_signal(regs);
+ 
+ 	if (thread_info_flags & _TIF_NOTIFY_RESUME) {
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
