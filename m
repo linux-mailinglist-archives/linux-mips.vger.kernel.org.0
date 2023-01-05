@@ -2,57 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5736F65DD2E
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Jan 2023 20:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785FA65E1BC
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Jan 2023 01:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235145AbjADTzF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Jan 2023 14:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S235576AbjAEAlG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Jan 2023 19:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240113AbjADTy6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Jan 2023 14:54:58 -0500
+        with ESMTP id S240657AbjAEAiq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Jan 2023 19:38:46 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5706A17881;
-        Wed,  4 Jan 2023 11:54:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2985EB0E;
+        Wed,  4 Jan 2023 16:38:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEB8961805;
-        Wed,  4 Jan 2023 19:54:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A424AC433EF;
-        Wed,  4 Jan 2023 19:54:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1DED61888;
+        Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128B8C433F0;
+        Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672862096;
-        bh=wSbm0g/ASp2Rq+1sjo1z5jYMHVjuwfrl7bVt7IhiTdE=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=nmrz3pPrWgfV/pQ7uNJa5V63CxdAXhhyJms738yQDD4zWiY7UG7QN6OM/H942rh40
-         Kkj4yEix4MPJP+X9rf06gUznaQeUfwfghN4diJUSXuRRX7HX/av+LLXpB9tUPL1K4E
-         Px+6IhHORjZsb06F33MOW181JKnzRiHXHrlhsWojT3X71123sb2gLdPEaJkZW13BWN
-         WQrt5zC3gf4X+I0PjNogB0gLnExCX3CVmaJC8NzhbabiDMmAlveKyZP7Qthv4ZqmNu
-         m1BtWNRy3kpgXpy+w9FAbPFcWxnrOx7RxYog1yMutY8auoetBH9CmkZaHP+krcn6wK
-         wIaybXYU0kZUQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Wed, 04 Jan 2023 12:54:20 -0700
-Subject: [PATCH 03/14] MIPS: Prefer cc-option for additions to cflags
+        s=k20201202; t=1672879095;
+        bh=y8xRrU76YdOECfRSbYnfV2Bk66MTu1Uv/uSklehNSxg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IeGs2XWr+ifvcauS1t6kJhZsfDir+pO9qE+SmEvi+Sog0DQIef3EBJu8ofLTX4FnO
+         q2N17PIMXbO7h0rvE8z+Fruvfjfv6KIx6z4FtNuanxUPURmQnX1ygqH/KTGWSghf15
+         LR9BybAtj5nsWOWUx+8XI/hox2tkt/vcRHRdj4neuMipbmrnO20QywihHplvL4DsKL
+         4umYJ40GGFSOqElocb6+wrqdin9x2kbu3XyAbWhc4IUMkRqLa/JlEE8Rdwm71HI2cO
+         ed6lnoNZ7JEPvsESENzfaYpM8timAtBosa6km+HOTgCcKLn3s5jcfehpvrfodSD+4Y
+         M+59Q57JyUvHg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B9D2B5C08E5; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org
+Subject: [PATCH rcu 03/27] arch/mips/kvm: Remove "select SRCU"
+Date:   Wed,  4 Jan 2023 16:37:49 -0800
+Message-Id: <20230105003813.1770367-3-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221228-drop-qunused-arguments-v1-3-658cbc8fc592@kernel.org>
-References: <20221228-drop-qunused-arguments-v1-0-658cbc8fc592@kernel.org>
-In-Reply-To: <20221228-drop-qunused-arguments-v1-0-658cbc8fc592@kernel.org>
-To:     masahiroy@kernel.org, ndesaulniers@google.com
-Cc:     nicolas@fjasle.eu, trix@redhat.com, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org
-X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1776; i=nathan@kernel.org;
- h=from:subject:message-id; bh=wSbm0g/ASp2Rq+1sjo1z5jYMHVjuwfrl7bVt7IhiTdE=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMlbb3bdrVtlFFG7j31+9ZPnH3uW3Flc3Dc1V+LQg4Qpp/+s
- OxQk1FHKwiDGwSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAm8r2E4X9pr5kzM9tnKzPdZU/fPU
- wLDEtQ1/LMXBm39ufMtkfVT04xMux+NDNA91PoC059FaG22fJ/70z8v0JPpUvW02Gu1deXHowA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,47 +58,32 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-A future change will switch as-option to use KBUILD_AFLAGS instead of
-KBUILD_CFLAGS to allow clang to drop -Qunused-arguments, which may cause
-issues if the flag being tested requires a flag previously added to
-KBUILD_CFLAGS but not KBUILD_AFLAGS. Use cc-option for cflags additions
-so that the flags are tested properly.
+Now that the SRCU Kconfig option is unconditionally selected, there is
+no longer any point in selecting it.  Therefore, remove the "select SRCU"
+Kconfig statements.
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: <linux-mips@vger.kernel.org>
+Cc: <kvm@vger.kernel.org>
 ---
-Cc: tsbogend@alpha.franken.de
-Cc: linux-mips@vger.kernel.org
----
- arch/mips/Makefile             | 2 +-
- arch/mips/loongson2ef/Platform | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/mips/kvm/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index a00a6d94e16f..04e46ec24319 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -143,7 +143,7 @@ cflags-y += -fno-stack-check
- #
- # Avoid this by explicitly disabling that assembler behaviour.
- #
--cflags-y += $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
-+cflags-y += $(call cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
- 
- #
- # CPU-dependent compiler/assembler options for optimization.
-diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
-index eebabf9df6ac..c6f7a4b95997 100644
---- a/arch/mips/loongson2ef/Platform
-+++ b/arch/mips/loongson2ef/Platform
-@@ -25,7 +25,7 @@ cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f
- # binutils does not merge support for the flag then we can revisit & remove
- # this later - for now it ensures vendor toolchains don't cause problems.
- #
--cflags-$(CONFIG_CPU_LOONGSON2EF)	+= $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
-+cflags-$(CONFIG_CPU_LOONGSON2EF)	+= $(call cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
- 
- # Enable the workarounds for Loongson2f
- ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
-
+diff --git a/arch/mips/kvm/Kconfig b/arch/mips/kvm/Kconfig
+index 91d197bee9c0a..591f46a5d7be1 100644
+--- a/arch/mips/kvm/Kconfig
++++ b/arch/mips/kvm/Kconfig
+@@ -26,7 +26,6 @@ config KVM
+ 	select HAVE_KVM_VCPU_ASYNC_IOCTL
+ 	select KVM_MMIO
+ 	select MMU_NOTIFIER
+-	select SRCU
+ 	select INTERVAL_TREE
+ 	help
+ 	  Support for hosting Guest kernels.
 -- 
-2.39.0
+2.31.1.189.g2e36527f23
+
