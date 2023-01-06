@@ -2,88 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067496602F7
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Jan 2023 16:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E91660364
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Jan 2023 16:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233100AbjAFPS7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Jan 2023 10:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S235416AbjAFPhq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Jan 2023 10:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234496AbjAFPSl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Jan 2023 10:18:41 -0500
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E12C8B743;
-        Fri,  6 Jan 2023 07:18:40 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-476e643d1d5so26868567b3.1;
-        Fri, 06 Jan 2023 07:18:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oLTT10Q08SvcCsbZuYubvWn2TjFc+1wP3y0ZN/T09Wc=;
-        b=RKjEKEBjR7zbv+AXsvsl9YLEazD1LOHUJYucqol512xauguktXOj6/HU+n6iqsxWm0
-         hjj6YJ2gflxjwQtUAVqiUvnjJ6dz3UmzFB1UpxebYVqfLG/hnR3PONteMaMKP+WsNVNl
-         tuPBpxUsbXrdua/Wn5nRw858KOO1LRwrApKEwduv1kyFmeeInnH9+UW5foP9wBaMKGzs
-         h8dPxv82OrFNm4uHt6Z5qxcDmcjFD2mCBC8DuBeTNkugCympWU7RnJAubyI1OQhTacHa
-         EXq8utlSznSD11aMA+ORTa3k3sGhE7XqfIRs2k/zS2U/xwf5aqcfbjMUNF+9fldkoEAm
-         m+fg==
-X-Gm-Message-State: AFqh2koPd6GE8ygV7C9oydj/3zbObaU/TREB4s+QR+TaZW7eVKXyzzs+
-        VR6Wf5bdnaiFfa71ZJM+nWIpE46lON9pug==
-X-Google-Smtp-Source: AMrXdXubmLBSxEeWEOTXkzNQNH1yY4T0RdkGs7dNm/m+L3Vkn40L98eh7w/lB8z1bzTKRDFEzHxEog==
-X-Received: by 2002:a81:4e89:0:b0:487:b6b9:ff5d with SMTP id c131-20020a814e89000000b00487b6b9ff5dmr29500339ywb.45.1673018319407;
-        Fri, 06 Jan 2023 07:18:39 -0800 (PST)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id j19-20020a05620a411300b00704c1f4e756sm656168qko.14.2023.01.06.07.18.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 07:18:39 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-482363a1232so26741327b3.3;
-        Fri, 06 Jan 2023 07:18:38 -0800 (PST)
-X-Received: by 2002:a81:17ca:0:b0:46f:bd6:957d with SMTP id
- 193-20020a8117ca000000b0046f0bd6957dmr4281773ywx.383.1673018318622; Fri, 06
- Jan 2023 07:18:38 -0800 (PST)
+        with ESMTP id S231374AbjAFPhp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Jan 2023 10:37:45 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEAB73E3A;
+        Fri,  6 Jan 2023 07:37:44 -0800 (PST)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pDomj-0001nf-BJ; Fri, 06 Jan 2023 16:37:33 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pDomi-000T50-HK; Fri, 06 Jan 2023 16:37:32 +0100
+Subject: Re: [bpf-next v2] bpf: drop deprecated bpf_jit_enable == 2
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "tong@infragraf.org" <tong@infragraf.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.or" 
+        <linux-arm-kernel@lists.infradead.or>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
+Cc:     Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Hou Tao <houtao1@huawei.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        naveen.n.rao@linux.ibm.com, mpe@ellerman.id.au
+References: <20230105030614.26842-1-tong@infragraf.org>
+ <ea7673e1-40ec-18be-af89-5f4fd0f71742@csgroup.eu>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <71c83f39-f85f-d990-95b7-ab6068839e6c@iogearbox.net>
+Date:   Fri, 6 Jan 2023 16:37:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20221227082932.798359-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
- <c05bee5d-0d69-289b-fe4b-98f4cd31a4f5@physik.fu-berlin.de> <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com>
-In-Reply-To: <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 6 Jan 2023 16:18:27 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU8AKSdujbr=nwaBUy4q4z_R=MERnb5CBPPv=A63BVFXA@mail.gmail.com>
-Message-ID: <CAMuHMdU8AKSdujbr=nwaBUy4q4z_R=MERnb5CBPPv=A63BVFXA@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v6.2-rc1
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linuxppc-dev@lists.ozlabs.org, kasan-dev@googlegroups.com,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <ea7673e1-40ec-18be-af89-5f4fd0f71742@csgroup.eu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26773/Fri Jan  6 09:48:44 2023)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 4:17 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi John,
+On 1/5/23 6:53 PM, Christophe Leroy wrote:
+> Le 05/01/2023 à 04:06, tong@infragraf.org a écrit :
+>> From: Tonghao Zhang <tong@infragraf.org>
+>>
+>> The x86_64 can't dump the valid insn in this way. A test BPF prog
+>> which include subprog:
+>>
+>> $ llvm-objdump -d subprog.o
+>> Disassembly of section .text:
+>> 0000000000000000 <subprog>:
+>>          0:       18 01 00 00 73 75 62 70 00 00 00 00 72 6f 67 00 r1 = 29114459903653235 ll
+>>          2:       7b 1a f8 ff 00 00 00 00 *(u64 *)(r10 - 8) = r1
+>>          3:       bf a1 00 00 00 00 00 00 r1 = r10
+>>          4:       07 01 00 00 f8 ff ff ff r1 += -8
+>>          5:       b7 02 00 00 08 00 00 00 r2 = 8
+>>          6:       85 00 00 00 06 00 00 00 call 6
+>>          7:       95 00 00 00 00 00 00 00 exit
+>> Disassembly of section raw_tp/sys_enter:
+>> 0000000000000000 <entry>:
+>>          0:       85 10 00 00 ff ff ff ff call -1
+>>          1:       b7 00 00 00 00 00 00 00 r0 = 0
+>>          2:       95 00 00 00 00 00 00 00 exit
+>>
+>> kernel print message:
+>> [  580.775387] flen=8 proglen=51 pass=3 image=ffffffffa000c20c from=kprobe-load pid=1643
+>> [  580.777236] JIT code: 00000000: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+>> [  580.779037] JIT code: 00000010: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+>> [  580.780767] JIT code: 00000020: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+>> [  580.782568] JIT code: 00000030: cc cc cc
+>>
+>> $ bpf_jit_disasm
+>> 51 bytes emitted from JIT compiler (pass:3, flen:8)
+>> ffffffffa000c20c + <x>:
+>>      0:   int3
+>>      1:   int3
+>>      2:   int3
+>>      3:   int3
+>>      4:   int3
+>>      5:   int3
+>>      ...
+>>
+>> Until bpf_jit_binary_pack_finalize is invoked, we copy rw_header to header
+>> and then image/insn is valid. BTW, we can use the "bpftool prog dump" JITed instructions.
+> 
+> NACK.
+> 
+> Because the feature is buggy on x86_64, you remove it for all
+> architectures ?
+> 
+> On powerpc bpf_jit_enable == 2 works and is very usefull.
+> 
+> Last time I tried to use bpftool on powerpc/32 it didn't work. I don't
+> remember the details, I think it was an issue with endianess. Maybe it
+> is fixed now, but it needs to be verified.
+> 
+> So please, before removing a working and usefull feature, make sure
+> there is an alternative available to it for all architectures in all
+> configurations.
+> 
+> Also, I don't think bpftool is usable to dump kernel BPF selftests.
+> That's vital when a selftest fails if you want to have a chance to
+> understand why it fails.
 
-Bummer, "Hi Adrian", ofc ;-)
+If this is actively used by JIT developers and considered useful, I'd be
+ok to leave it for the time being. Overall goal is to reach feature parity
+among (at least major arch) JITs and not just have most functionality only
+available on x86-64 JIT. Could you however check what is not working with
+bpftool on powerpc/32? Perhaps it's not too much effort to just fix it,
+but details would be useful otherwise 'it didn't work' is too fuzzy.
 
-Gr{oetje,eeting}s,
+Also, with regards to the last statement that bpftool is not usable to
+dump kernel BPF selftests. Could you elaborate some more? I haven't used
+bpf_jit_enable == 2 in a long time and for debugging always relied on
+bpftool to dump xlated insns or JIT. Or do you mean by BPF selftests
+the test_bpf.ko module? Given it has a big batch with kernel-only tests,
+there I can see it's probably still useful.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Cheers,
+Daniel
