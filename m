@@ -2,80 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D41C65F9F3
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Jan 2023 04:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DE565FC2F
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Jan 2023 08:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjAFDJx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Jan 2023 22:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S229547AbjAFHhP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Jan 2023 02:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjAFDJw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Jan 2023 22:09:52 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18C661302;
-        Thu,  5 Jan 2023 19:09:47 -0800 (PST)
-X-UUID: e61e0c375c4c44d18ad8c0e2949f8c61-20230106
-X-CPASD-INFO: d01806789bfc403fbe00a7c65ba0d0cc@rYBrWF1oZWhlgqivg3N-oIKWYGCSY4O
-        Fd5yBYJJgj4OVhH5xTV5nX1V9gnNXZF5dXFV3dnBQY2BhXVJ3i3-XblBgXoZgUZB3s3JrWGBkZw==
-X-CLOUD-ID: d01806789bfc403fbe00a7c65ba0d0cc
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:197.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:1.0,CUTS:102.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:8,DUF:11735,ACD:193,DCD:193,SL:0,EISP:0,AG:0,CFC:0.139,CFSR:0.205,UAT:0
-        ,RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:
-        0,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: e61e0c375c4c44d18ad8c0e2949f8c61-20230106
-X-CPASD-BLOCK: 1001
-X-CPASD-STAGE: 1
-X-UUID: e61e0c375c4c44d18ad8c0e2949f8c61-20230106
-X-User: xurui@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xurui@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 889724476; Fri, 06 Jan 2023 11:09:46 +0800
-From:   xurui <xurui@kylinos.cn>
-To:     tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xurui <xurui@kylinos.cn>
-Subject: [RFC] MIPS: Fix a compilation issue
-Date:   Fri,  6 Jan 2023 11:09:56 +0800
-Message-Id: <20230106030956.1589041-1-xurui@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230059AbjAFHgn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Jan 2023 02:36:43 -0500
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EBDB43;
+        Thu,  5 Jan 2023 23:36:42 -0800 (PST)
+Received: by mail-wr1-f44.google.com with SMTP id s9so514208wru.13;
+        Thu, 05 Jan 2023 23:36:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RzVe0pLyjmPge14+7JwNFlVI9TqNDRuuVylOl2kg1Co=;
+        b=lI6epv+Y5sX3ssp9XynYH8y+m+luFo6GyWUtpBL+kXwvoKfjjzcFvi+xyu73XqHuXO
+         siAbQzHpcv0hHPtHzdfHmGius642dYcJ5wymj//N53ZEhhpMWBltBSnJsCpgoiSl18nz
+         gyYRjUX/MHO2LCPhEK+3WeD0QVw2DTPxPoRj/dqEf1AhrcxATHk55WpeOi2Ky0G3rZoF
+         SzeI4Wq53jKu9Vg7NlIwCZC4Lzz4qBEJdbcaoB0lveOtkojJ2mgf7PKprmKmL7zHuRAX
+         HFiAnXWCyQ0wF5fkvGd438y8YN38IS31nyzxFOEfxAbu0WvSf6Ml+3VQoik5aB3CImgH
+         RSjg==
+X-Gm-Message-State: AFqh2krdw1stMQjn1XofBm6xjXDQ2RovywESTCAqe99JdmAXTI/zGWv4
+        q3wmsd95ARyKqo1xF7anO3W2dI+c7Wg=
+X-Google-Smtp-Source: AMrXdXtPt0ag0rkCaE4nqXFoISH+uK3Zzq0fB085NZaWE0JE1aLA0Qe/fAu/SFnXktbO+CQ3h3sAGQ==
+X-Received: by 2002:a5d:67c3:0:b0:2a4:bd16:2931 with SMTP id n3-20020a5d67c3000000b002a4bd162931mr6037393wrw.62.1672990600904;
+        Thu, 05 Jan 2023 23:36:40 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id v14-20020adff68e000000b002365730eae8sm362278wrp.55.2023.01.05.23.36.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 23:36:40 -0800 (PST)
+Message-ID: <d5c3269e-b91b-087f-6b85-f5d55a9f7185@kernel.org>
+Date:   Fri, 6 Jan 2023 08:36:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230105124744.105950-1-ilpo.jarvinen@linux.intel.com>
+ <20230105124744.105950-2-ilpo.jarvinen@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v2 1/3] serial: 8250: RT288x/Au1xxx code away from core
+In-Reply-To: <20230105124744.105950-2-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-arch/mips/include/asm/mach-rc32434/pci.h:377:
-cc1: error: result of ‘-117440512 << 16’ requires 44 bits to represent, but ‘int’ only has 32 bits [-Werror=shift-overflow=]
+On 05. 01. 23, 13:47, Ilpo Järvinen wrote:
+> A non-trivial amount of RT288x/Au1xxx code is encapsulated into
+> ifdeffery in 8250_port / 8250_early and some if UPIO_AU blocks.
+> 
+> Create a separate file from them. Add mapsize, bugs, and divisor latch
+> read/write functions into plat_serial8250_port to carry the setup
+> necessary for these devices over to uart port.
+> 
+> Also handle errors properly in the cases where RT288x/Au1xxx code is
+> not configured.
+> 
+> It seems that 0x1000 mapsize is likely overkill but I've kept it the
+> same as previously (the value was shrunk to that value in b2b13cdfd05e
+> ("SERIAL 8250: Fixes for Alchemy UARTs.")). Seemingly, the driver only
+> needs to access register at 0x28 for the divisor latch.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+...
+> --- a/include/linux/serial_8250.h
+> +++ b/include/linux/serial_8250.h
+...
+> @@ -28,8 +32,11 @@ struct plat_serial8250_port {
+>   	unsigned char	has_sysrq;	/* supports magic SysRq */
+>   	upf_t		flags;		/* UPF_* flags */
+>   	unsigned int	type;		/* If UPF_FIXED_TYPE */
+> +	unsigned short	bugs;		/* port bugs */
+>   	unsigned int	(*serial_in)(struct uart_port *, int);
+>   	void		(*serial_out)(struct uart_port *, int, int);
+> +	int		(*dl_read)(struct uart_8250_port *);
+> +	void		(*dl_write)(struct uart_8250_port *, int);
 
-I guss we don`t need a left shift here?
+int sounds very weird in the write-to-HW context. Even though both the 
+others and the original are ints. They all should be simply u32.
 
-Signed-off-by: xurui <xurui@kylinos.cn>
----
- arch/mips/include/asm/mach-rc32434/pci.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>   	void		(*set_termios)(struct uart_port *,
+>   			               struct ktermios *new,
+>   			               const struct ktermios *old);
 
-diff --git a/arch/mips/include/asm/mach-rc32434/pci.h b/arch/mips/include/asm/mach-rc32434/pci.h
-index 9a6eefd12757..3eb767c8a4ee 100644
---- a/arch/mips/include/asm/mach-rc32434/pci.h
-+++ b/arch/mips/include/asm/mach-rc32434/pci.h
-@@ -374,7 +374,7 @@ struct pci_msu {
- 				 PCI_CFG04_STAT_SSE | \
- 				 PCI_CFG04_STAT_PE)
- 
--#define KORINA_CNFG1		((KORINA_STAT<<16)|KORINA_CMD)
-+#define KORINA_CNFG1		(KORINA_STAT | KORINA_CMD)
- 
- #define KORINA_REVID		0
- #define KORINA_CLASS_CODE	0
+Could you document the new ones in the kernel-doc manner above the 
+structure (but so far without the kernel-doc tag /**). So that:
+1) they are documented
+2) once someone decides to document them all, they can simply stick the 
+kernel-doc tag and document only the rest.
+
+thanks,
 -- 
-2.25.1
+js
+suse labs
 
