@@ -2,195 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19646660377
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Jan 2023 16:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D041E66090E
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Jan 2023 22:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbjAFPjX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Jan 2023 10:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
+        id S234603AbjAFV7U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Jan 2023 16:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbjAFPjQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Jan 2023 10:39:16 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943A776803;
-        Fri,  6 Jan 2023 07:39:15 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1322d768ba7so1877095fac.5;
-        Fri, 06 Jan 2023 07:39:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nOU74MfLltUT+h+F/CrT1EH2iRW8ZoWBGIJbj4ikcZg=;
-        b=kCHCa/r/NH7je4QvL7iXn+mGinMO0F8rBjuPT2QnoR6UCmONeCpDaIl710U7xlpmT6
-         ikc1XvbZrH2G6v6Ld0fca1JWE5cOEg+kijfMUaFDYx835qxVEn/NO4CRdNIV1hXhLi6O
-         rrlxk+4D9lTSqnIgV2F/N+SXbUbcjK/Jzijiqx247t8iDkut1B0x8qPdt36ZE01G1QZW
-         /5R0EoDpcDbcFNpofc0nZGeQSzfXDpRT+ZaQn6YmnNmhgSospP8Ca2nKXFCRIl9L06qc
-         0O0Hf1tAT1axF1D8RPs/Aprow4ZU5Du+LmsxjuIoYb/wQtuBG8ejJ4PRaBaX6KY3PrTK
-         u6vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nOU74MfLltUT+h+F/CrT1EH2iRW8ZoWBGIJbj4ikcZg=;
-        b=F06yqebb7xDQZgx5Q9Unc1dyLa0uAdcBtIxE/hScAQSQTFAAZQwheUupor8i7YfVHL
-         /zACm1DuV6124XiE7mRVsXnzpyIPj6tX8ljTSSJPIicc8Kc5ykFykjWIfyn+zxMmjz04
-         jANegVLyW2V8+MlYOlI2hPtmf9BRpndzlOgv0VuiWj+1HF0Uv1yW+i1oK3MyeAG9jx1P
-         DW7ZmZZ+tgiJaRn3i1y3xSPHqczD8Ec1p+OFxXkzw6zBTXoYHaSaBiLOJn/XCGs0+YGR
-         mvgkoTVlr3M1aRsUUsE0GdZkUHfUcJhMPcy3etpLSZhFdWg79hGTk/j0SHG/cjC2nuPR
-         QYeQ==
-X-Gm-Message-State: AFqh2kpznEWAIdcvsF+Ykyw8/xa8crhN01WjTbc8/hMU/dClaH2trXWC
-        dEopLJfOM6cFMYlg4EdMmLx3UyWvzklUPQBRVMY=
-X-Google-Smtp-Source: AMrXdXt0/0Yzb/5d06C0pGHF7OeoMwC1Beik/HhdgRVorPYXTJ/t6Z10/P3fO3icF9eUsmYUsIHQhJSZPSADJk9q0Qw=
-X-Received: by 2002:a05:6870:c59c:b0:150:d9aa:4011 with SMTP id
- ba28-20020a056870c59c00b00150d9aa4011mr1145315oab.96.1673019554943; Fri, 06
- Jan 2023 07:39:14 -0800 (PST)
+        with ESMTP id S231531AbjAFV7R (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Jan 2023 16:59:17 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B8A6B5F0;
+        Fri,  6 Jan 2023 13:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673042356; x=1704578356;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FTUwp6vti/6MjCft69xiR34bTAXHpf/OAp2V3llnAHs=;
+  b=D1tQDPo9TrhOYvZa93zi7L81VmQS9VqWkH6CGSaWBfGStkJpwd1u6ecF
+   TchpRB6A3AKwqgIxqWBIBlPbsdTw4o1LHEspKokxyCZ7fbhmJs5qVzlpU
+   1YNZGOyZHBITUfnqC+9Vfmczekl9PB89RbWs4tC77F6YjSR1tPYefy/xL
+   eHggPprNBhIacdKcj3By/z0NwhapEPlWKFsKiJS0fixvs0Po6hjsC9xjk
+   Px/5NLVLCnWyyCoSmACWYSUPUebYJvxdsHPlsRmgqFJ5ohGoO51VGhLbz
+   /tvo3XPcyaAS7VdMpL5zZNVd676wsRioB3GwUJ6euR3C0MUMYyHg84HY3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="387030696"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="387030696"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 13:59:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10582"; a="763652873"
+X-IronPort-AV: E=Sophos;i="5.96,306,1665471600"; 
+   d="scan'208";a="763652873"
+Received: from avenkata-desk0.sc.intel.com ([172.25.112.60])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Jan 2023 13:59:15 -0800
+From:   Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mips@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        sparclinux@vger.kernel.org,
+        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
+        Leon Romanovsky <leon@kernel.org>
+Subject: [PATCH net-next 0/7] Remove three Sun net drivers
+Date:   Fri,  6 Jan 2023 14:00:13 -0800
+Message-Id: <20230106220020.1820147-1-anirudh.venkataramanan@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20221227082932.798359-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
-In-Reply-To: <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 6 Jan 2023 10:39:03 -0500
-Message-ID: <CADnq5_PtJ2JxAH7vaQsMHomUmiAxhiOqn4suf1SAQkaqt=sg+g@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v6.2-rc1
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-sh@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-mips@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-f2fs-devel@lists.sourceforge.net, kasan-dev@googlegroups.com,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:34 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> On Tue, 27 Dec 2022, Geert Uytterhoeven wrote:
-> > Below is the list of build error/warning regressions/improvements in
-> > v6.2-rc1[1] compared to v6.1[2].
-> >
-> > Summarized:
-> >  - build errors: +11/-13
->
-> amd-gfx@lists.freedesktop.org
-> linux-arm-kernel@lists.infradead.org
-> linux-media@vger.kernel.org
-> linux-wireless@vger.kernel.org
-> linux-mips@vger.kernel.org
-> linux-sh@vger.kernel.org
-> linux-f2fs-devel@lists.sourceforge.net
-> linuxppc-dev@lists.ozlabs.org
-> kasan-dev@googlegroups.com
-> linux-xtensa@linux-xtensa.org
->
->    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/displ=
-ay_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 b=
-ytes [-Werror=3Dframe-larger-than=3D]:  =3D> 7082:1
->    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/disp=
-lay_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048=
- bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 7127:1
->
+This series removes the Sun Cassini, LDOM vswitch and sunvnet drivers.
 
-@Siqueira, Rodrigo @Mahfooz, Hamza
+In a recent patch series that touched these drivers [1], it was suggested
+that these drivers should be removed completely. git logs suggest that
+there hasn't been any significant feature addition, improvement or fixes
+to user-visible bugs in a while. A web search didn't indicate any recent
+discussions or any evidence that there are users out there who care about
+these drivers.
 
-Can you take a look at fixing the DML stack size here up?
+The idea behind putting out this series is to either establish that these
+drivers are used and should be maintained, or remove them.
 
-Alex
+While the bulk of the code removal is in the networking s, and so
+multiple subsystem lists are cc'd. Here's a quick breakdown:
+
+  - patches 1/7 and 5/7 remove the drivers (netdev)
+  - patch 2/7 removes Sun device IDs from pci_ids.h (linux-pci)
+  - patch 3/7 changes ppc6xx_defconfig (linuxppc)
+  - patch 4/7 changes MIPS mtx1_defconfig (linux-mips)
+  - patch 6/7 removes the event tracing header sunvnet.h (linux-trace)
+  - patch 7/7 changes sparc64_defconfig (sparclinux)
+
+This series was compile tested as follows:
+
+make O=b1 ARCH=mips CROSS_COMPILE=mips64-linux-gnu- defconfig
+make -j$(nproc) O=b1 ARCH=mips CROSS_COMPILE=mips64-linux-gnu- all
+
+make O=b2 ARCH=sparc64 CROSS_COMPILE=sparc64-linux-gnu- defconfig
+make -j$(nproc) O=b2 ARCH=sparc64 CROSS_COMPILE=sparc64-linux-gnu- all
+
+make O=b3 ARCH=powerpc CROSS_COMPILE=ppc64-linux-gnu- ppc6xx_defconfig
+make -j$(nproc) O=b3 ARCH=powerpc CROSS_COMPILE=ppc64-linux-gnu- all
+
+[1] https://lore.kernel.org/netdev/99629223-ac1b-0f82-50b8-ea307b3b0197@intel.com/T/#t
+
+Suggested-by: Leon Romanovsky <leon@kernel.org>
+Signed-off-by: Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
+
+Anirudh Venkataramanan (7):
+  ethernet: Remove the Sun Cassini driver
+  PCI: Remove PCI IDs used by the Sun Cassini driver
+  powerpc: configs: Remove reference to CONFIG_CASSINI
+  mips: configs: Remove reference to CONFIG_CASSINI
+  ethernet: Remove the Sun LDOM vswitch and sunvnet drivers
+  sunvnet: Remove event tracing file
+  sparc: configs: Remove references to CONFIG_SUNVNET and CONFIG_LDMVSW
+
+ arch/mips/configs/mtx1_defconfig          |    1 -
+ arch/powerpc/configs/ppc6xx_defconfig     |    1 -
+ arch/sparc/configs/sparc64_defconfig      |    2 -
+ drivers/net/ethernet/sun/Kconfig          |   35 -
+ drivers/net/ethernet/sun/Makefile         |    4 -
+ drivers/net/ethernet/sun/cassini.c        | 5215 ---------------------
+ drivers/net/ethernet/sun/cassini.h        | 2900 ------------
+ drivers/net/ethernet/sun/ldmvsw.c         |  476 --
+ drivers/net/ethernet/sun/sunvnet.c        |  567 ---
+ drivers/net/ethernet/sun/sunvnet_common.c | 1813 -------
+ drivers/net/ethernet/sun/sunvnet_common.h |  157 -
+ include/linux/pci_ids.h                   |    2 -
+ include/trace/events/sunvnet.h            |  140 -
+ 13 files changed, 11313 deletions(-)
+ delete mode 100644 drivers/net/ethernet/sun/cassini.c
+ delete mode 100644 drivers/net/ethernet/sun/cassini.h
+ delete mode 100644 drivers/net/ethernet/sun/ldmvsw.c
+ delete mode 100644 drivers/net/ethernet/sun/sunvnet.c
+ delete mode 100644 drivers/net/ethernet/sun/sunvnet_common.c
+ delete mode 100644 drivers/net/ethernet/sun/sunvnet_common.h
+ delete mode 100644 include/trace/events/sunvnet.h
 
 
-> arm64-gcc5/arm64-allmodconfig
->
->    + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: a=
-rray subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} =
-[-Werror=3Darray-bounds]:  =3D> 641:28
->    + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: a=
-rray subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} =
-[-Werror=3Darray-bounds]:  =3D> 641:28
->
-> m68k-gcc8/m68k-allmodconfig
-> See also https://lore.kernel.org/all/CAMuHMdWpPX2mpqFEWjjbjsQvDBQOXyjjdpK=
-nQu9qURAuVZXmMw@mail.gmail.com
->
->    + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overfl=
-ow' declared with attribute error: value doesn't fit into mask:  =3D> 151:3
->
-> In function 'u32_encode_bits',
->      inlined from 'ieee80211_mlo_multicast_tx' at /kisskb/src/net/mac8021=
-1/tx.c:4435:17,
->      inlined from 'ieee80211_subif_start_xmit' at /kisskb/src/net/mac8021=
-1/tx.c:4483:3:
->
-> mipsel-gcc5/mips-allmodconfig
->
->    + /kisskb/src/include/linux/compiler_types.h: error: call to '__compil=
-etime_assert_262' declared with attribute error: Unsupported access size fo=
-r {READ,WRITE}_ONCE().:  =3D> 358:45
->    + /kisskb/src/include/linux/compiler_types.h: error: call to '__compil=
-etime_assert_263' declared with attribute error: Unsupported access size fo=
-r {READ,WRITE}_ONCE().:  =3D> 358:45
->
-> In function 'follow_pmd_mask',
->      inlined from 'follow_pud_mask' at /kisskb/src/mm/gup.c:735:9,
->      inlined from 'follow_p4d_mask' at /kisskb/src/mm/gup.c:752:9,
->      inlined from 'follow_page_mask' at /kisskb/src/mm/gup.c:809:9:
->
-> sh4-gcc11/sh-defconfig (G=C3=BCnter wondered if pmd_t should use union)
->
->    + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy=
-' offset [0, 127] is out of the bounds [0, 0] [-Werror=3Darray-bounds]:  =
-=3D> 57:33
->
-> /kisskb/src/arch/s390/kernel/setup.c: In function 'setup_lowcore_dat_on':
-> s390x-gcc11/s390-all{mod,yes}config
->
->    + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memset=
-' pointer overflow between offset [28, 898293814] and size [-898293787, -1]=
- [-Werror=3Darray-bounds]:  =3D> 59:33
->
-> /kisskb/src/fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
->
-> powerpc-gcc11/ppc64_book3e_allmodconfig
-> powerpc-gcc11/powerpc-all{mod,yes}config
->
->    + /kisskb/src/kernel/kcsan/kcsan_test.c: error: the frame size of 1680=
- bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 25=
-7:1
->
-> xtensa-gcc11/xtensa-allmodconfig (patch available)
->
->    + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  =3D> 1718
->
-> sh4-gcc11/sh-allmodconfig (ICE =3D internal compiler error)
->
-> > [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1b929c02afd37=
-871d5afb9d498426f83432e71c2/ (all 152 configs)
-> > [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1=
-e9176028d02ef86f3cf76aa2476/ (all 152 configs)
->
-> Gr{oetje,eeting}s,
->
->                                                 Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                                             -- Linus Torv=
-alds
+base-commit: 6bd4755c7c499dbcef46eaaeafa1a319da583b29
+-- 
+2.37.2
+
