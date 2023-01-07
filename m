@@ -2,86 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E50660A53
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Jan 2023 00:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09864660B82
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Jan 2023 02:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbjAFXhl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Jan 2023 18:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
+        id S230201AbjAGBgZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Jan 2023 20:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbjAFXhk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Jan 2023 18:37:40 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81F78B75E;
-        Fri,  6 Jan 2023 15:37:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=4z8jlsGzKRXDnUPd0+0CGYVLXgFO5gR2NP0vR0jf1RQ=; b=GZ0GXf0dbZsAjRecTv0692X2ut
-        o9+eaPoq3vU7X5lCaZTx/RDqG0BoQkZ9dInEr3dd/WVUosKIGGgksXyVWfwMXwajmQnX1bqUZPbdO
-        OQiGwfxTrh4udC56u3menS0axqP4UlMKhqm7xK4yXt1IIM5b8VYCcYXGxmP/syRR4xCMVg1MLRpuv
-        J33swl3Gcw0ImVaIi7lqTOwoIEJR22fIpudpQSF6uFJWXq0BYfrHIwteL2nffUu5zhWKgFOTpkps2
-        v4KK6YKGkbYFYuwJMCjwKZ+KJQtvk8Cj8LTv5yizQhkmlUxmWgj99oU51vMvKtozlJsCCGfBr3hWO
-        ex26iu1g==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pDwH9-00FfeS-Ce; Fri, 06 Jan 2023 23:37:27 +0000
-Message-ID: <68bb3273-9795-8436-c588-8ff8da4aaa08@infradead.org>
-Date:   Fri, 6 Jan 2023 15:37:25 -0800
+        with ESMTP id S229751AbjAGBgY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Jan 2023 20:36:24 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4A67D9FD
+        for <linux-mips@vger.kernel.org>; Fri,  6 Jan 2023 17:36:19 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pDy88-001Dtj-Oh; Sat, 07 Jan 2023 02:36:16 +0100
+Received: from p57bd9807.dip0.t-ipconnect.de ([87.189.152.7] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pDy88-002IA8-GA; Sat, 07 Jan 2023 02:36:16 +0100
+Message-ID: <800d35d9-4ced-052e-aebe-683f431356ae@physik.fu-berlin.de>
+Date:   Sat, 7 Jan 2023 02:36:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [RFC] MIPS: Fix a compilation issue
+Subject: Re: [PATCH net-next 0/7] Remove three Sun net drivers
 Content-Language: en-US
-To:     xurui <xurui@kylinos.cn>, tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230106030956.1589041-1-xurui@kylinos.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230106030956.1589041-1-xurui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
+        netdev@vger.kernel.org
+Cc:     linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mips@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        sparclinux@vger.kernel.org, Leon Romanovsky <leon@kernel.org>
+References: <20230106220020.1820147-1-anirudh.venkataramanan@intel.com>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <20230106220020.1820147-1-anirudh.venkataramanan@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.152.7
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi--
+Hello!
 
-On 1/5/23 19:09, xurui wrote:
-> arch/mips/include/asm/mach-rc32434/pci.h:377:
-> cc1: error: result of ‘-117440512 << 16’ requires 44 bits to represent, but ‘int’ only has 32 bits [-Werror=shift-overflow=]
-> 
-> I guss we don`t need a left shift here?
-> 
-> Signed-off-by: xurui <xurui@kylinos.cn>
-> ---
->  arch/mips/include/asm/mach-rc32434/pci.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/include/asm/mach-rc32434/pci.h b/arch/mips/include/asm/mach-rc32434/pci.h
-> index 9a6eefd12757..3eb767c8a4ee 100644
-> --- a/arch/mips/include/asm/mach-rc32434/pci.h
-> +++ b/arch/mips/include/asm/mach-rc32434/pci.h
-> @@ -374,7 +374,7 @@ struct pci_msu {
->  				 PCI_CFG04_STAT_SSE | \
->  				 PCI_CFG04_STAT_PE)
->  
-> -#define KORINA_CNFG1		((KORINA_STAT<<16)|KORINA_CMD)
-> +#define KORINA_CNFG1		(KORINA_STAT | KORINA_CMD)
+On 1/6/23 23:00, Anirudh Venkataramanan wrote:
+> This series removes the Sun Cassini, LDOM vswitch and sunvnet drivers.
 
-I looked at all of the macro values here and this change makes sense to me,
-although I know nothing about these registers.
+This would affect a large number of Linux on SPARC users. Please don't!
 
-Thanks.
+We're still maintaining an active sparc64 port for Debian, see [1]. So
+does Gentoo [2].
 
->  
->  #define KORINA_REVID		0
->  #define KORINA_CLASS_CODE	0
+> In a recent patch series that touched these drivers [1], it was suggested
+> that these drivers should be removed completely. git logs suggest that
+> there hasn't been any significant feature addition, improvement or fixes
+> to user-visible bugs in a while. A web search didn't indicate any recent
+> discussions or any evidence that there are users out there who care about
+> these drivers.
+
+Well, these drivers just work and I don't see why there should be regular
+discussions about them or changes.
+
+Adrian
+
+> [1] https://cdimage.debian.org/cdimage/ports/snapshots/2022-12-09/
+> [2] https://www.gentoo.org/downloads/
 
 -- 
-~Randy
+  .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+
+
