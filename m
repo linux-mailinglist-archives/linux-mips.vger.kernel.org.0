@@ -2,161 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A67166113A
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Jan 2023 20:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59523661495
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Jan 2023 11:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjAGTQ3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Jan 2023 14:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        id S232979AbjAHKs4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Jan 2023 05:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjAGTQ1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Jan 2023 14:16:27 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018AB33D61;
-        Sat,  7 Jan 2023 11:16:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673118987; x=1704654987;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ZelTlSh8MwZV14bIuSMOOIKinM4gISpjva0lwBUHfwI=;
-  b=KgNrFQQK6rrAI7plVF+KsVruOiXxpiNEQ0X4GjSqLLnSU3flPZRKKoAI
-   Ro/upATCdZRxfNENJKExvIjAlJ5TTl1KMQn+Fw7ivIpHxZABPUdcMkx1K
-   M0gX7cxHMczV9WhUh9odW9vb+dQxF6WxU/tPu+FEd91dWtPhRXp1gnrci
-   SSpiuuhNpDclmSSbFdoiDjekVwUM4l6af/gmHOZiMFPnbPauy0+4SBhSG
-   l4Y8HDFoRzRIl3cANYTUjEVmXMdqHmKA8X6crhqkMXsIzBnyhFb8Wpw3f
-   MauP0ym4TrvZZ2Od7jAgIdz5PRRD6RftvAQ91+G82MvpOx+4K0RhiclCV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10583"; a="302360991"
-X-IronPort-AV: E=Sophos;i="5.96,308,1665471600"; 
-   d="scan'208";a="302360991"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2023 11:16:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10583"; a="658194551"
-X-IronPort-AV: E=Sophos;i="5.96,308,1665471600"; 
-   d="scan'208";a="658194551"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jan 2023 11:16:26 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sat, 7 Jan 2023 11:16:26 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sat, 7 Jan 2023 11:16:25 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Sat, 7 Jan 2023 11:16:25 -0800
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 7 Jan 2023 11:16:25 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P9ESu3H+N/XZAhm0u8n/Sy1eeqDQtFUlR8VaU7dvZ/1sQTmC5ZqXcFcG1emPndDRuq5H2nxdQ3Jk41PzzDqqH/+Fs2ts2JlEyZUHC4vmWTtlVRyGsIH77/JttobWG0iouZneXlPVO5g6opIoVUyv7O4F/Kd6yQVI/FjkTCxRrsvRVXQeJuMZV/hx5ZWyn+u5hLIguFpL01EW2j2acYjCqg5OdU77W/O/oHdynv+swbU9NYQbNOdkzXz45hEENf11sb+plE4AYoKVLRmnmFmkD2jluMs9fSWoUNF3PpztWbAIT3ElblzBOJMqE1BAj+S2LA8g0BdUpGj8PEal8cTkCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DCAqNmjjA0192SVeCf6B+d30So9/AQM6JGRblrfEA5o=;
- b=KXrrTaEab2fCVw68oJPFKv5iLTBPccZlrWlUW6BhWCWU4safWzVybq+xSK4jC3XpHGJM7Jnb+2xLcXT64tBTxI1jjk9x6xtU1bxB508MAAiefYMSHQUGOUIbKhNvcKriPxEmgJLwr2Z/H2f4HDbwAiSKsJnz0eqU22m2tM0KLiy14A7eM5/0omEJQKUmEpDvfWX8UVY+wCJMcIPKtuM0gTh4lJO+QKqahdeYj1Gq68MDl8+UUf+1br73YkYYo04vn4Y2mGeahZMoC0dJgRunvAZZv341bhi0SenyX2ryvo96nyt91NSJqpSwvVb8vUkmHQydSTsh9gF5IS3CtkvjNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW3PR11MB4764.namprd11.prod.outlook.com (2603:10b6:303:5a::16)
- by IA0PR11MB7258.namprd11.prod.outlook.com (2603:10b6:208:43d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Sat, 7 Jan
- 2023 19:16:23 +0000
-Received: from MW3PR11MB4764.namprd11.prod.outlook.com
- ([fe80::c1e:cae6:7636:43b8]) by MW3PR11MB4764.namprd11.prod.outlook.com
- ([fe80::c1e:cae6:7636:43b8%2]) with mapi id 15.20.5986.018; Sat, 7 Jan 2023
- 19:16:23 +0000
-Message-ID: <b9284d54-3153-e074-8a07-0812b26fd290@intel.com>
-Date:   Sat, 7 Jan 2023 11:16:20 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH net-next 1/7] ethernet: Remove the Sun Cassini driver
-To:     Anatoly Pugachev <matorola@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-mips@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        "Leon Romanovsky" <leon@kernel.org>
-References: <20230106220020.1820147-1-anirudh.venkataramanan@intel.com>
- <20230106220020.1820147-2-anirudh.venkataramanan@intel.com>
- <CADxRZqw2K1QT2cEa6U_4DUxgYrwMiZzU4Qy6iXVm2WRTYVa=xw@mail.gmail.com>
-Content-Language: en-US
-From:   Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
-In-Reply-To: <CADxRZqw2K1QT2cEa6U_4DUxgYrwMiZzU4Qy6iXVm2WRTYVa=xw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR13CA0020.namprd13.prod.outlook.com
- (2603:10b6:a03:180::33) To MW3PR11MB4764.namprd11.prod.outlook.com
- (2603:10b6:303:5a::16)
+        with ESMTP id S229822AbjAHKsz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Jan 2023 05:48:55 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2DC10B78;
+        Sun,  8 Jan 2023 02:48:54 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id z190so2650323vka.4;
+        Sun, 08 Jan 2023 02:48:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o+ulyHY5t1vIQHRPkJRkZkMsVhYDzl0Wi1NRRdUXX9E=;
+        b=khZsRl3/h6xFPtV+trGF8SoZlhUH7CXOkbNSVy0ph0vcxdY2POtEBg03zxNX8NOjKd
+         tk0nBaNgQ7Qkcbndq/9sUu9/ASJ7jbK4uYDbK/bTz5OlmFXDU8glJgzuEEv6Z/s6NMfA
+         mp4rpznbR52Td9JIJd+jemR2waWnWqaR5O+5xO3DbdqK/ncWuaOvXDjz4YwzrATW6+AT
+         M8+n4X/t1ZgquFU/5c+wBFLYST09b1qKcf+ZPYUk9m3W2UOYcUJY3wtRak73CebxOF2s
+         Srav0OegoVZNvk1eaPYqXHoJyRanQU2FIyrTJWyfZ4nP8ieu3yAmmAtAsqqtCCVbv2RA
+         wVmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o+ulyHY5t1vIQHRPkJRkZkMsVhYDzl0Wi1NRRdUXX9E=;
+        b=VJ+P9EjuVG/nOslkNTEPSl+LMHTxyVm/iF6uLpmHYxFbGuJKTjwC7TBLzBFYjBEQ6h
+         7ZtEfKTKrVMm4YNm8RJAURgXRoWW4rTpb8z9f/eIt92bBxeFdm5Tbtk2NOYP0gKLrpRD
+         7e53frsKVfzQxkgxbVhY0VTWWCwdAsT113nAsx1GmKt7CUXtJUxkW60GnD8JDKKGdVxj
+         t+cel5EjhrNgJlfNk3lQVtAknhismRosmGMEeS1fxAU0j2BJwhyHq1HFLtRlANS8lagv
+         14KaKAKdPndeR7q66UpPzXatELMAb+W1FWKJw4vz67tc5ofNHB3Nt814fQ8qm3REXm7U
+         pIcg==
+X-Gm-Message-State: AFqh2kqBqIKO8O9EWqR27mP2nS3s62cxaKToJdmqjcRmwN87yxl5HUnP
+        e4qoUgxexJOraT4VZFRLpsY2c1+JQrGDKvf9SH0=
+X-Google-Smtp-Source: AMrXdXsC9zjoSX3JUJXUNKpbqfCGbJ5sLgu3n0p9Rc2JNm9GFnGoyDe1ACeN5YOtUEET51RrQuI/o6A4avtvFhehWBM=
+X-Received: by 2002:a1f:2e4e:0:b0:3d5:5ea6:ccb9 with SMTP id
+ u75-20020a1f2e4e000000b003d55ea6ccb9mr6218898vku.7.1673174933379; Sun, 08 Jan
+ 2023 02:48:53 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW3PR11MB4764:EE_|IA0PR11MB7258:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19ba3264-0946-4f7d-9189-08daf0e3aa29
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I9f0R/yHgrzZlTTJsrBfwXvk9iQmXPBZilriXMiRkssZVQ4UKutH+FOo9q0586//NeK/ZljIBEwxozL4SJ3XBFzeTGR8gaVfZr4LG/B3rB8O0QfXALlw1wQ+9qbrQslTTpCWBgRv9dZExnmQeri/zEfMplRwwfXHkD5nYPdmvN6fcC/ptTmOX+Mmn+MKH4kkSALZZnsqdNV6ULdYsBH8h7rmam+pk3kmLyW83kufnNTPqQOUswK5xvRnaVKVmzIlZUpAyUaYvd9AlHIG1lTXES9Hf7o35bCeIiGXRn5s92EcYmnBjk1BQT8aeK7kedgZsYZy3h+V6DrbuKaM1FU3rExVg2a/ZlZgE99zxyyxYjohJ3VLDVrLHUMFoEBJ5klSiObTYaFdg3vp/fuVrkxelj+c2LfgEf3wJbwdClQxQd3RF1tThjp1RiPzBWZLht093dgjF7YMfNog3Q2jfz1zdtSBmXkLiwUGgfJ4hNdovPCQ/VmSzheZbT9ulPa7vs/JH3DUoUlCuPiD7dQXfZXAw4EPI3kx5DDUHPtR0iKhxeQsxPFfFaLCWBDjvmiyuHQ7KWbwNPXB+6Qu4iPJvCaFRjr572oSA3YmB98UEJ85OYyxfrK51nTT+ewAw8opQAwZPGfnf0bDtAow7eLJdZJKLR6wj6MUVSCfOx+L0cm17DiXc1zBEdulB3Bjlr/+m3z/cy2x+cg9hY6rjV19yfEUHD+lh/qWcwL8SU+eYNLMUkNW1W9tYl/lmAbc/xL57UDTWesBYR12FfFS4/xyAFzPhg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR11MB4764.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(376002)(136003)(346002)(366004)(451199015)(26005)(478600001)(186003)(41300700001)(966005)(6486002)(6512007)(31696002)(6916009)(5660300002)(2906002)(66556008)(86362001)(2616005)(66946007)(8676002)(66476007)(316002)(44832011)(36756003)(83380400001)(38100700002)(31686004)(4326008)(6506007)(53546011)(82960400001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3dxU3d4MUZ0bkdrUXZMa0ZnZUpjR1pTdnpYNG9peUNMejNXSFdLL1hpYXdV?=
- =?utf-8?B?WUkrY0U1Q041SUJ1RWxieGFJZmo0eEhIMHkzeEZJYmhrN1lhVG0xQzgxT2Nl?=
- =?utf-8?B?SStlNVhUUVphRElaR2RYOE9vRFBlTkN1d2JzS0Yxbm15dGtxU2VDYVhKNU01?=
- =?utf-8?B?K3NrekQ2VFVaTnVrYlpIaHZTRU1GMW4rUUFrZnpFb0I2THM1RDM5alFwWE5r?=
- =?utf-8?B?L1VuRUl1Y20zRDVyUzlWNm5DTDZSZkRTanNialZMYThldHFWYm5ZTmZLaTA3?=
- =?utf-8?B?YmNaTTYvL1kreWg1Z21PNm8zMEQzWnJzSkpRQVhoa1oyV21ac3pRMjdmUUto?=
- =?utf-8?B?Q2t3N2FzZDJ4eXl2NmNHdysxU05OWCtDUzdjb3BNWXNJQjhNdXg5R0VoRFRL?=
- =?utf-8?B?MVBvVE14T3I2Ynd5amRubndtd1NHZmtac1EzOTVNNktaSUJMY3I0aDNiTmVX?=
- =?utf-8?B?U0dnWFN4TU9maUt1S3gxQUxRcHJsTDFZRXlQWDFQYTU2Wnh3SXRRY0ZTa1Fs?=
- =?utf-8?B?NEhVNGJhakNGS1Q3WmZHRC96d2JZMFBicXZTSDBrVkVIN2dRdVRGMTRzSzNT?=
- =?utf-8?B?ZVhKbVJzUXcxdnVSemFPbW1tSk9icHhuNDFnbmJLd2QrVXVLZW01bTJKay9C?=
- =?utf-8?B?QlBQU0FrZlB6NEJNL3VUbXBhQTdOMC9GL3FJelBuSUUrUEJic0cvc09CSnJB?=
- =?utf-8?B?cG5wSTdKT0llN1VuMnZGNlp5eEorMnUzUjY5SlJocXl5TmN0RVRWZ21MVG56?=
- =?utf-8?B?UzhmM3BkSGc4dTR6NU5NeVR4Y2p4VWlEZlBTMXM4SzlqRnQrOUtYVkNTY2N4?=
- =?utf-8?B?amVETldjbVIwS0M5eW9sMzREQ3dXZ2VYMVVxRVFldDlxUGJGTy9sRi9RS0Ja?=
- =?utf-8?B?cVkwZ0tEQXRNNUJCNExFV3RKRDJidjYyR1plYkNqNVQ2UkNVOEhod3ovUHJq?=
- =?utf-8?B?am1vemRJL1pERnlvdzQ5N1hScXJKREFOTXBzRGJNWVBzY0pDc1ZhaHVIdHUr?=
- =?utf-8?B?dURNdHY2UWpwa3FaTG4yRDF6aWxueWg4WU84elhxMzUrUFQrbGVpT1VsN0xv?=
- =?utf-8?B?SWpSZytzYUxEU3VzNkY3c3JGY2xvaCs4Wk44MWNDM0xKYXJ3ODBHM2YyNHoy?=
- =?utf-8?B?dFFEeGM5VnNpYmdZdmVYdnI2UWJRNmhnUzJTbG9yVWZ6NldnMVlIUjNsOHFW?=
- =?utf-8?B?TlFtMUM1b05wMXFpSXhJUEJIek1NbnY3RTFpcjRwb0NZTlRUdWVBeFF4YS90?=
- =?utf-8?B?M2JwVmo2K21rTGNnNlRpbUQ5S0xBc2JtYkE3UTFLa0NVRExFV00xV2h6cFBM?=
- =?utf-8?B?SVFVaDRDM2hBKzhadFR0bGV4UElnZ0VhcUpEamt1SzNOWmtkdE5lNkdCNi9q?=
- =?utf-8?B?NVBKWWRLUCs2UzR0a1FLR3M0My83MHZkTVNDMXFtZmg0UnFyaGI4UmZNVndk?=
- =?utf-8?B?Y21zZ05tZkxhZXgraHBsM01RYS9hU1VLTnZOYlh2YS9UY000bjZuZjRWUnNv?=
- =?utf-8?B?Zkwzd1hPZ1Bsd29NUWxZQWJPcTFEWDcrU3NnVGV3ekgzTW5XNzBWMC9qZmZl?=
- =?utf-8?B?bUI3U09BZUIwcWpJWk5KOXpmS1dKWVp1RlVDWVFTQ3NKNDhwL0hTTyt5WlBy?=
- =?utf-8?B?ZEJlOFFoMlF5NytqbGNCM1RFRjNLSHF3WGtKMEJGS1BSM2R3R1doNjVmZzFi?=
- =?utf-8?B?MFJxRzdsTFl4MVNUWjhHcUJUbnpQVG52eU4wdUpYK1lVbEZ0b09iTmNXOWZ6?=
- =?utf-8?B?SlpiTnhjZmNFamYxYmNFanliblVzUE02Vm1Pd2tnNWs1M2E0VkhOcDBJNTlV?=
- =?utf-8?B?VkVjK0R2ZldVSkMweDlkUDdwRUo0cGhsamZmM3hlWHVKYXorVDJQUkNJV1o3?=
- =?utf-8?B?TE5KL0RiN1dyU0hHWDdGQndQTzl5YkkweVV1cENLMWcyMUI4TDkrUklMa1Zv?=
- =?utf-8?B?UCtIVUpBUDFVL3oyZVp2WUtZZElkREgxS2ZnajFpdlJZaGtpdUFKWi8vby9C?=
- =?utf-8?B?ZzZDQmxwT2ZOdjhTazVWU2pwK3BWTXRRNnB6RGxLaDNpOHE5UUY2bGZtSDlD?=
- =?utf-8?B?dS9rbVRFdGdiclJIaWV0UmFDM1Ricktza3NvU0NTTXRDUlRWdHlNUHE4Wk5z?=
- =?utf-8?B?WHl3cFR5ZXRGQWNGS1cvWjNwb0tmREtJOERSd1lNY2NyMmE4Y0JXNWdva2I4?=
- =?utf-8?Q?vJrr9dKzhviQaL/NHMUJCKo=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19ba3264-0946-4f7d-9189-08daf0e3aa29
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR11MB4764.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2023 19:16:23.1012
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NILFcK85o3hsMunurRybLbiTvSCuuRKwQmiZIKx249gqwTPyNW6UMWHjFhm/C2kTR4q6BiDrSg9dhWv7HHsYUO38nPrbimABTmx5mcqIYSICIXYjbc7FCXZnkWtZn+J5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7258
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <20221117082648.47526-1-yangyicong@huawei.com> <20221117082648.47526-3-yangyicong@huawei.com>
+ <Y7cToj5mWd1ZbMyQ@arm.com>
+In-Reply-To: <Y7cToj5mWd1ZbMyQ@arm.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Sun, 8 Jan 2023 18:48:41 +0800
+Message-ID: <CAGsJ_4yC0i6MYwvosRSrdQ1iT7n88ypmK3aOQJkuusqNKtddtg@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, will@kernel.org, anshuman.khandual@arm.com,
+        linux-doc@vger.kernel.org, corbet@lwn.net, peterz@infradead.org,
+        arnd@arndb.de, punit.agrawal@bytedance.com,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        yangyicong@hisilicon.com, huzhanyuan@oppo.com, lipeifeng@oppo.com,
+        zhangshiming@oppo.com, guojian@oppo.com, realmz6@gmail.com,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, wangkefeng.wang@huawei.com,
+        xhao@linux.alibaba.com, prime.zeng@hisilicon.com,
+        Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -164,50 +80,79 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 1/7/2023 4:25 AM, Anatoly Pugachev wrote:
-> On Sat, Jan 7, 2023 at 1:00 AM Anirudh Venkataramanan
-> <anirudh.venkataramanan@intel.com> wrote:
->>
->> In a recent patch series that touched this driver [1], it was suggested
->> that this driver should be removed completely. git logs suggest that
->> there hasn't been any significant feature addition, improvement or fixes to
->> user-visible bugs in a while. A web search didn't indicate any recent
->> discussions or any evidence that there are users out there who care about
->> this driver. Thus, remove this driver.
->>
->> Notes:
->>
->> checkpatch complains "WARNING: added, moved or deleted file(s), does
->> MAINTAINERS need updating?". The files being removed don't have their
->> own entries in the MAINTAINERS file, so there's nothing to remove.
->>
->> checkpatch also complains about the long lore link below.
->>
->> [1] https://lore.kernel.org/netdev/99629223-ac1b-0f82-50b8-ea307b3b0197@intel.com/T/#t
->>
->> Suggested-by: Leon Romanovsky <leon@kernel.org>
->> Signed-off-by: Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
-> 
-> Do we drop/delete a working functionality by only taking in account
-> git activity ?
+On Fri, Jan 6, 2023 at 2:15 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Thu, Nov 17, 2022 at 04:26:48PM +0800, Yicong Yang wrote:
+> > It is tested on 4,8,128 CPU platforms and shows to be beneficial on
+> > large systems but may not have improvement on small systems like on
+> > a 4 CPU platform. So make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends
+> > on CONFIG_EXPERT for this stage and make this disabled on systems
+> > with less than 8 CPUs. User can modify this threshold according to
+> > their own platforms by CONFIG_NR_CPUS_FOR_BATCHED_TLB.
+>
+> What's the overhead of such batching on systems with 4 or fewer CPUs? If
+> it isn't noticeable, I'd rather have it always on than some number
+> chosen on whichever SoC you tested.
 
-No, but in some cases it's enough to at least start asking the "who uses 
-this code? should we continue maintaining it?" type questions.
+On the one hand, tlb flush is cheap on a small system. so batching tlb flush
+helps very minorly.
 
-In the cover letter I did say this:
+On the other hand, since we have batched the tlb flush, new PTEs might be
+invisible to others before the final broadcast is done and Ack-ed. thus, there
+is a risk someone else might do mprotect or similar things  on those deferred
+pages which will ask for read-modify-write on those deferred PTEs. in this
+case, mm will do an explicit flush by flush_tlb_batched_pending which is
+not required if tlb flush is not deferred. the code is in:
 
-"The idea behind putting out this series is to either establish that 
-these drivers are used and should be maintained, or remove them."
+static unsigned long change_pte_range(struct mmu_gather *tlb,
+struct vm_area_struct *vma, pmd_t *pmd, unsigned long addr,
+unsigned long end, pgprot_t newprot, unsigned long cp_flags)
+{
+        ...
 
-We have established that these drivers are indeed used, and thus 
-shouldn't be removed.
+      pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
 
-> 
-> What is a proper way to decline patch series (vs Acked-by) ?
+      flush_tlb_batched_pending(vma->vm_mm);
+      arch_enter_lazy_mmu_mode();
+      do {
+                oldpte = *pte;
+                if (pte_present(oldpte)) {
+                           pte_t ptent;
+                ...
+}
 
-There's no tag that I am aware of. I have seen people say "NACK" or 
-"please don't do this" followed by an explanation of why the 
-patch/series is a bad idea. For example, see the other responses to this 
-series.
+since we don't have the mechanism to record which pages should be
+flushed in flush_tlb_batched_pending(), flush_tlb_batched_pending()
+is flushing the whole process,
 
-Ani
+void flush_tlb_batched_pending(struct mm_struct *mm)
+{
+       int batch = atomic_read(&mm->tlb_flush_batched);
+       int pending = batch & TLB_FLUSH_BATCH_PENDING_MASK;
+       int flushed = batch >> TLB_FLUSH_BATCH_FLUSHED_SHIFT;
+
+       if (pending != flushed) {
+               flush_tlb_mm(mm);
+        /*
+         * If the new TLB flushing is pending during flushing, leave
+         * mm->tlb_flush_batched as is, to avoid losing flushing.
+        */
+      atomic_cmpxchg(&mm->tlb_flush_batched, batch,
+           pending | (pending << TLB_FLUSH_BATCH_FLUSHED_SHIFT));
+     }
+}
+
+I guess mprotect things won't be that often for a running process especially
+when the system has begun to reclaim its memory. it might be more often
+only during the initialization of a process. And x86 has enabled this feature
+for a long time, probably this concurrency doesn't matter too much.
+
+but it is still case by case. That is why we have decided to be more
+conservative
+on globally enabling this feature and why it also depends on CONFIG_EXPERT.
+
+I believe Anshuman has contributed many points on this in those previous
+discussions.
+
+Thanks
+Barry
