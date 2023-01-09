@@ -2,134 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47229662C7D
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Jan 2023 18:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CFD662F96
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Jan 2023 19:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjAIRTP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Jan 2023 12:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S236994AbjAIS4P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Jan 2023 13:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbjAIRTN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Jan 2023 12:19:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D492C26D3;
-        Mon,  9 Jan 2023 09:19:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F2E2B80E77;
-        Mon,  9 Jan 2023 17:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 167BBC433F0;
-        Mon,  9 Jan 2023 17:19:02 +0000 (UTC)
-Date:   Mon, 9 Jan 2023 17:19:00 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, will@kernel.org, anshuman.khandual@arm.com,
-        linux-doc@vger.kernel.org, corbet@lwn.net, peterz@infradead.org,
-        arnd@arndb.de, punit.agrawal@bytedance.com,
-        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
-        yangyicong@hisilicon.com, huzhanyuan@oppo.com, lipeifeng@oppo.com,
-        zhangshiming@oppo.com, guojian@oppo.com, realmz6@gmail.com,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, wangkefeng.wang@huawei.com,
-        xhao@linux.alibaba.com, prime.zeng@hisilicon.com,
-        Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH v7 2/2] arm64: support batched/deferred tlb shootdown
- during page reclamation
-Message-ID: <Y7xMhPTAwcUT4O6b@arm.com>
-References: <20221117082648.47526-1-yangyicong@huawei.com>
- <20221117082648.47526-3-yangyicong@huawei.com>
- <Y7cToj5mWd1ZbMyQ@arm.com>
- <CAGsJ_4yC0i6MYwvosRSrdQ1iT7n88ypmK3aOQJkuusqNKtddtg@mail.gmail.com>
+        with ESMTP id S235359AbjAIS4O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Jan 2023 13:56:14 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CED14087
+        for <linux-mips@vger.kernel.org>; Mon,  9 Jan 2023 10:56:12 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id 16so9501561ybc.0
+        for <linux-mips@vger.kernel.org>; Mon, 09 Jan 2023 10:56:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=npK1pVWS9Y7zSvO0nWYdwcAA7TbeGlnyEckY5HPb/Qg=;
+        b=EHKm0/F2buMoOsKhjWg0lWsOuJldy/zfoO9SoYjwOUBjEtYFI7vDu+I5lwSpjMbW6Z
+         3ObtFaGnVjmdcg2O2Aret0FZO2bn7yqTJbEhANZLCO7TmNFgRBE+1H+8TwiSfzm06+sv
+         NoXn+BRIUqVauOHPZ13p93njC8trw+pKMvKGKG+JOay5G96uMzNCvp6yocnoligPU/KG
+         nsT5KAmMgHERAldXeigMGDd8xVH2mvsfpS/FV/+f0V+6HxueWNzcx2CaGaqz8pAq/Qe/
+         1IhIl/jFSe8NXCzMDt2iiVq0nAJOXzbL0gSR4VpeaFp+Z0f01ufRbR7OxltlcKWyJfdN
+         GLKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=npK1pVWS9Y7zSvO0nWYdwcAA7TbeGlnyEckY5HPb/Qg=;
+        b=l/dC1E5Q7TxWDG17Z7sZBXjihWezEk0TfHyMylDE8FfJjKvy0PJCNsGtJpynWiEYRk
+         Wn3QuWfAQe3WWeDLKaT3U9eSAqXW2/Y02u1h/A00t1oPEUjhWILZ6dIHI/TxSwYoPZI8
+         njd3KCrIHoRYzKZtYjm/l7s1UAmSD92XoslCsyQ7fZ+JeypIYq2Cm3vtit1c/cVwirRS
+         MphHh9TUJmMH0sgR9WqcLrd4AUJ3iYv7uhuaB7BsgzBYGLdm1ClJYebEG3LzlwNeg0sW
+         iZ4weWFYn2tbXPoZMdXrlpMijclqX1XA4uiWz8mM9TrzLM8NH8OaYved/VzwHTWoZHTZ
+         S6rw==
+X-Gm-Message-State: AFqh2kq4VyoQKcalL+m60MMpsCpl8MDovBaoz/E/EMUFkvgqKlw1J0GU
+        Sagfn5VEblNB9gSZMCBOexqQKPOyVJWgyMUKYHav3g==
+X-Google-Smtp-Source: AMrXdXuGuwlSiliqUzNPwuP95duqjm2wzwipEY34JM0d62JWS00zM7bbMqGhGQDGetcNhy7upYl68Cx0Wdx6BZEJfKU=
+X-Received: by 2002:a5b:1c8:0:b0:6fe:46c9:7479 with SMTP id
+ f8-20020a5b01c8000000b006fe46c97479mr7514517ybp.191.1673290571936; Mon, 09
+ Jan 2023 10:56:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGsJ_4yC0i6MYwvosRSrdQ1iT7n88ypmK3aOQJkuusqNKtddtg@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221208193857.4090582-1-dmatlack@google.com> <20221208193857.4090582-11-dmatlack@google.com>
+ <ce1ea196-d854-18bd-0e60-91985ed5aaea@redhat.com>
+In-Reply-To: <ce1ea196-d854-18bd-0e60-91985ed5aaea@redhat.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 9 Jan 2023 10:55:45 -0800
+Message-ID: <CALzav=fVbvKQMhSBD0AdrRTH+jDyRG0Hf5M-H7vCtRCR1Lk9sw@mail.gmail.com>
+Subject: Re: [RFC PATCH 10/37] KVM: MMU: Move struct kvm_page_fault to common code
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Nadav Amit <namit@vmware.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
+        Colin Cross <ccross@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 06:48:41PM +0800, Barry Song wrote:
-> On Fri, Jan 6, 2023 at 2:15 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Thu, Nov 17, 2022 at 04:26:48PM +0800, Yicong Yang wrote:
-> > > It is tested on 4,8,128 CPU platforms and shows to be beneficial on
-> > > large systems but may not have improvement on small systems like on
-> > > a 4 CPU platform. So make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends
-> > > on CONFIG_EXPERT for this stage and make this disabled on systems
-> > > with less than 8 CPUs. User can modify this threshold according to
-> > > their own platforms by CONFIG_NR_CPUS_FOR_BATCHED_TLB.
-> >
-> > What's the overhead of such batching on systems with 4 or fewer CPUs? If
-> > it isn't noticeable, I'd rather have it always on than some number
-> > chosen on whichever SoC you tested.
-> 
-> On the one hand, tlb flush is cheap on a small system. so batching tlb flush
-> helps very minorly.
+On Mon, Dec 12, 2022 at 2:27 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 12/8/22 20:38, David Matlack wrote:
+> > +
+> > +     /* Derived from mmu and global state.  */
+> > +     const bool is_tdp;
+>
+> I think this could stay in the architecture-independent part.
 
-Yes, it probably won't help on small systems but I don't like config
-options choosing the threshold, which may be different from system to
-system even if they have the same number of CPUs. A run-time tunable
-would be a better option.
-
-> On the other hand, since we have batched the tlb flush, new PTEs might be
-> invisible to others before the final broadcast is done and Ack-ed.
-
-The new PTEs could indeed be invisible at the TLB level but not at the
-memory (page table) level since this is done under the PTL IIUC.
-
-> thus, there
-> is a risk someone else might do mprotect or similar things  on those deferred
-> pages which will ask for read-modify-write on those deferred PTEs.
-
-And this should be fine, we have things like the PTL in place for the
-actual memory access to the page table.
-
-> in this
-> case, mm will do an explicit flush by flush_tlb_batched_pending which is
-> not required if tlb flush is not deferred.
-
-I don't fully understand why it's needed, or at least why it would be
-needed on arm64. At the end of an mprotect(), we have the final PTEs in
-place and we just need to issue a TLBI for that range.
-change_pte_range() for example has a tlb_flush_pte_range() if the PTE
-was present and that won't be done lazily. If there are other TLBIs
-pending for the same range, they'll be done later though likely
-unnecessarily but still cheaper than issuing a flush_tlb_mm().
-
-> void flush_tlb_batched_pending(struct mm_struct *mm)
-> {
->        int batch = atomic_read(&mm->tlb_flush_batched);
->        int pending = batch & TLB_FLUSH_BATCH_PENDING_MASK;
->        int flushed = batch >> TLB_FLUSH_BATCH_FLUSHED_SHIFT;
-> 
->        if (pending != flushed) {
->                flush_tlb_mm(mm);
->         /*
->          * If the new TLB flushing is pending during flushing, leave
->          * mm->tlb_flush_batched as is, to avoid losing flushing.
->         */
->       atomic_cmpxchg(&mm->tlb_flush_batched, batch,
->            pending | (pending << TLB_FLUSH_BATCH_FLUSHED_SHIFT));
->      }
-> }
-
-I guess this works on x86 better as it avoids the IPIs if this flush
-already happened. But on arm64 we already issued the TLBI, we just
-didn't wait for it to complete via a DSB.
-
-> I believe Anshuman has contributed many points on this in those previous
-> discussions.
-
-Yeah, I should re-read the old threads.
-
--- 
-Catalin
+I agree but until there's a use case for accessing it in common code
+I'm inclined to leave it in x86's kvm_page_fault_arch.
