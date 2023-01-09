@@ -2,119 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0450D66199E
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Jan 2023 22:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A912661BE9
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Jan 2023 02:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjAHVAE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Jan 2023 16:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
+        id S233920AbjAIBfB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Jan 2023 20:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbjAHVAE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Jan 2023 16:00:04 -0500
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0B5A191
-        for <linux-mips@vger.kernel.org>; Sun,  8 Jan 2023 13:00:02 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A81562C0615
-        for <linux-mips@vger.kernel.org>; Mon,  9 Jan 2023 09:59:56 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1673211596;
-        bh=jrfxNS8VspGoGBSTYozHKmy1GnYg3SxA3OZHjTHGl4g=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=WonOTXZctk16hZ/Tswz3MLeCjQ0ZxSC3snrBAav7U+CMiaHfEeusrJA750FTj6Ndi
-         lpT8ZbzW6YfDgZzPgkatq1/efmsU9O9O/6pa2iQHQi1YNRABL85rrb7vcl8nbUqjUm
-         y9V1CJZhRy33uKooXYNUmurvhyg6KEqttzntxblat8bIeoinBhzvMK4KMOG+G243KF
-         iT6DHgo4sOuKOHq077lihTfuaDYPg4Tzw0RMQ3b2kv/rfEPv5zZ3dYAp0uGATYnJbi
-         CeMi8Kg3zZpNwsIhPwyWMDeuPR87tyGEAVBd69rfkviMzQ4tBpw9/gaQwFb3ITBfs+
-         31JiG4pBaK4Wg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B63bb2ecc0001>; Mon, 09 Jan 2023 09:59:56 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 9 Jan 2023 09:59:56 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.044; Mon, 9 Jan 2023 09:59:56 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Ladislav Michl <oss-lists@triops.cz>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-CC:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        YunQiang Su <wzssyqa@gmail.com>,
-        Anushka Singh <anushka.singh1@wipro.com>,
-        Lukasz Majczak <lma@semihalf.com>,
-        Peter Swain <peter.swain@marvell.com>
-Subject: Re: Moving Octeon ethernet out of staging
-Thread-Topic: Moving Octeon ethernet out of staging
-Thread-Index: AQHZGfM7cvdCvkwCqUezP7qJBIeInq6UOn2A
-Date:   Sun, 8 Jan 2023 20:59:55 +0000
-Message-ID: <520df165-305c-2e18-568c-dfbfc1ce1a26@alliedtelesis.co.nz>
-References: <Y6rsbaT0l5cNBGbu@lenoch>
-In-Reply-To: <Y6rsbaT0l5cNBGbu@lenoch>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <98A3D469FCDF4C439FC92F877AAF0856@atlnz.lc>
-Content-Transfer-Encoding: base64
+        with ESMTP id S231325AbjAIBfB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Jan 2023 20:35:01 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B249B86F;
+        Sun,  8 Jan 2023 17:34:59 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.112.33])
+        by gateway (Coremail) with SMTP id _____8Bx7epBb7tjqWkAAA--.1141S3;
+        Mon, 09 Jan 2023 09:34:57 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.112.33])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxsOQ_b7tjZ3gWAA--.3588S2;
+        Mon, 09 Jan 2023 09:34:56 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     linux-rtc@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        zhaoxiao <zhaoxiao@uniontech.com>,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH V2 0/7] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+Date:   Mon,  9 Jan 2023 09:35:10 +0800
+Message-Id: <cover.1673227292.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=X/cs11be c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=RvmDmJFTN0MA:10 a=62ntRvTiAAAA:8 a=VwQbUJbxAAAA:8 a=CX02uB0dcGOkma7K7mQA:9 a=QEXdDO2ut3YA:10 a=pToNdpNmrtiFLRE6bQ9Z:22 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxsOQ_b7tjZ3gWAA--.3588S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uFW5JrWxAryUCryrAF4Utwb_yoW8ZFWkpa
+        1akwnxKrsrtr47Ars3ArykGF1rArWfJ3srAa13J34xurZ5Ca4UZ347tFWFy3y7Cr98G340
+        vFyrKF42gF45A3DanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
+        AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
+        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGkgTGFkaXMsDQoNCk9uIDI4LzEyLzIyIDAyOjAwLCBMYWRpc2xhdiBNaWNobCB3cm90ZToNCj4g
-SGkgdGhlcmUsDQo+DQo+IE9jdGVvbiBldGhlcm5ldCBkcml2ZXJzIHdlcmUgb25jZSBraWNrZWQg
-b3V0IG9mIHN0YWdpbmcsIGp1c3QgdG8gYmUNCj4gcmV0dXJuZWQgYmFjayBhIHdoaWxlIGFmdGVy
-Og0KPiBodHRwczovL3NjYW5tYWlsLnRydXN0d2F2ZS5jb20vP2M9MjA5ODgmZD1fZXlxNHdiX0Nm
-OEEyN01qeWxGVV9nWnBMTUVFdFpPbXdabS1scVQwUlEmdT1odHRwcyUzYSUyZiUyZmxvcmUlMmVr
-ZXJuZWwlMmVvcmclMmZsa21sJTJmMjAyMDAyMDUwMDExMTYlMmUxNDA5Ni0xLWNocmlzJTJlcGFj
-a2hhbSU0MGFsbGllZHRlbGVzaXMlMmVjbyUyZW56JTJmDQo+DQo+IEFsbCB0aGF0IHBhdGNoc2V0
-IGVuZHMgd2l0aCBhbiBvcHRpbWlzdGljIGNvbW1lbnQ6DQo+IE9uIFdlZCwgMjAyMC0wMy0wNCBD
-aHJpcyBQYWNraGFtIHdyb3RlOg0KPj4gSSBoYXZlIGhhZCBhIHJlcGx5IGZyb20gTWFydmVsbC4g
-VGhleSd2ZSBjb250cmFjdGVkIHN1cHBvcnQgZm9yIHRoZSBvbGQNCj4+IENhdml1bSBPY3Rlb24g
-ZGVzaWducyBvdXQgdG8gYW4gZXh0ZXJuYWwgY29tcGFueS4gSSdtIG5vdCBzdXJlIHRoYXQNCj4+
-IG1lYW5zIHRoYXQgd2UnbGwgc2VlIHNvbWUgYWN0aW9uIG9uIHRoZXNlIGRyaXZlcnMgYW55IHRp
-bWUgc29vbiBidXQgYXQNCj4+IGxlYXN0IHRoZXkncmUgZG9pbmcgc29tZXRoaW5nLg0KPiBOb3cg
-YmFzZWQgb24gTWFydmVsbCdzIDI3NyBwYXRjaGVzIGxvbmcgc2V0IGFnYWluc3QgNS40LjMwIGl0
-IHNlZW1zIHRoYXQNCj4gJ2FuIGV4dGVybmFsIGNvbXBhbnknIGlzIFdpcHJvIGFuZCAnZG9pbmcg
-c29tZXRoaW5nJyBpcyB0aGUgZXhhY3Qgb3Bwb3NpdGUNCj4gdG8gJ21ha2UgZHJpdmVyIHNlbGYt
-Y29udGFpbmVkJyBhcyBkZXNjcmliZWQgaW4gZHJpdmVycy9zdGFnaW5nL29jdGVvbi9UT0RPDQo+
-DQo+IFRoYXQgcGF0Y2hzZXQgY29udGFpbnMgZG96ZW4gb2YgKlN5bmMtdXAtU0UqIHBhdGNoZXMg
-d2hpY2ggYmFzaWNhbGx5IGR1bXBzDQo+IG1haW5saW5lIGNoYW5nZXMgYW5kIHJlcGxhY2VzIHBs
-YXRmb3JtIGZpbGVzIHdpdGggdGhlIEJTRCBsaWNlbnNlZCBvbmVzDQo+IGNvbW1vbiBmb3IgTGlu
-dXgsIFUtQm9vdCBhbmQgQ2F2aXVtIHRvb2xzLiBFdGhlcm5ldCBkcml2ZXIgaXMgdGhlbiBzeW5j
-ZWQNCj4gdG8gdGhhdCBjaGFuZ2VzLCBtYWtpbmcgaXQgZXZlbiBtb3JlIGRlcGVuZGVudCBvbiBh
-cmNoL21pcHMvY2F2aXVtLW9jdGVvbg0KPiBjb2RlLg0KPg0KPiBUbyBmaXggc3RhZ2luZyBkcml2
-ZXIgdG8gd29yayB3aXRoIGN1c3RvbWVyJ3MgQ043MDIwIGJhc2VkIGJvYXJkIEknZCBoYWQgdG8N
-Cj4gZWl0aGVyIGdvIE1hcnZlbGwncyBkaXJlY3Rpb24gb3IgdXNlIERUIGZvciBkcml2ZXIgY29u
-ZmlndXJhdGlvbiwgc28gSQ0KPiBwYXJ0aWFsbHkgZGlkIHRoZSBsYXR0ZXIuIEl0IGlzIHByb2Jh
-Ymx5IGJyb2tlbiBmb3IgYW55dGhpbmcgZWxzZSB0aGFuDQo+IENONzBYWCBhbmQgaXQgYnJlYWtz
-IHRoZSBBQkksIG5ld2VyIGtlcm5lbCB3aWxsIG5vdCB3b3JrIHdpdGggb2xkZXINCj4gYmluZGlu
-Z3MuIElzIHRoYXQgb2theSBmb3Igc3RhZ2luZyBkcml2ZXJzPyBEb2VzIGFueW9uZSBldmVuIGlu
-dGVuZCB0bw0KPiB1c2UgbWFpbmxpbmUga2VybmVsIHdpdGggT2N0ZW9uIFNvQ3M/IE9mIGNvdXJz
-ZSBJJ2QgYmUgaGFwcHkgaGVhcmluZw0KPiBzb21ldGhpbmcgY2hhbmdlZCBhdCBNYXJ2ZWxsIGFu
-ZCB0aGV5IGFyZSB3aWxsaW5nIHRvIG1haW5saW5lIHN1cHBvcnQNCj4gZm9yIHRoZWlyIE1JUFMg
-YmFzZWQgU29DcyA7LSkNCg0KIEZyb20gb3VyIGVuZCB3ZSBzdGlsbCBoYXZlIG91ciBPY3Rlb24g
-TUlQUyBiYXNlZCByb3V0ZXJzIHdoaWNoIHdlIHN0aWxsIA0Kd2FudCB0byBzdXBwb3J0IGJ1dCBm
-b3IgdmFyaW91cyByZWFzb25zIHRoZXNlIGFyZW4ndCBzZWVpbmcgdGhlIGtlcm5lbCANCnVwZGF0
-ZXMgdGhhdCBJIG1pZ2h0IGxpa2UuIEFuZCBiZWNhdXNlIHRoZXNlIGFyZSB0ZWNobmljYWxseSBs
-ZWdhY3kgSSdtIA0KaGF2aW5nIGEgaGFyZCB0aW1lIGNvbnZpbmNpbmcgYW55b25lIHRvIGRlZGlj
-YXRlIGFueSByZXNvdXJjZXMgdG8gDQpoZWxwaW5nIHdpdGggYW55IGVmZm9ydCB0byBpbXByb3Zl
-IHRoZXNlIGRyaXZlcnMgKHdoYXRldmVyIGlzIGhhcHBlbmluZyANCmlzIGp1c3QgInNwYXJlIHRp
-bWUiIHdvcmspLg0KDQpBcyBhIHVzZXIgSSBjYW4gc2F5IHRoYXQgd2UnZCBwcm9iYWJseSBiZSBP
-SyBpZiB3ZSBoYWQgdG8gbWFrZSBzb21lIGR0cyANCnVwZGF0ZXMgYXMgd2Ugc2hpcCBvdXIga2Vy
-bmVsK2R0Yitpbml0cmQgYXMgYSBGSVQgaW1hZ2Ugc28gd2UgY2FuIHVwZGF0ZSANCnRoZSBrZXJu
-ZWwrZHRiIGF0IHRoZSBzYW1lIHRpbWUgaWYgbmVjZXNzYXJ5Lg0K
+Hi all:
+
+The initial DT-base ls2x rtc driver was written by Wang Xuerui, He has
+released five versions of patchset before, and all related mail records
+are shown below if you are interested:
+
+https://lore.kernel.org/all/?q=ls2x-rtc
+
+In this series of patches, based on the code above, I have added the
+following support:
+
+1. Add ACPI-related support, as Loongson-3A5000 + LS7A is now ACPI-base
+   by default under LoongArch architecture;
+2. Add rtc alarm/walarm related functions.
+
+I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
+and Loongson-2K0500.
+
+BTW:
+There have been discussions about merging the rtc drivers of ls1x and
+ls2x, but the following reasons made the merger difficult to achieve:
+
+1. ls1x does not support ACPI, for it is only on MIPS-based system;
+2. ls1x does not support alarm function.
+
+Thanks.
+
+-------
+Changes since v1:
+1. Rebased on top of latest loongarch-next;
+2. Add interrupt descriptions to the ls2k and ls7a DTS files to avoid
+errors when the driver gets the IRQ number, Thanks to Qing Zhang for
+testing;
+3. Remove some inexact CONFIG_ACPI.
+
+Binbin Zhou (4):
+  rtc: Add support for the Loongson-2K/LS7A RTC
+  LoongArch: Enable LS2X RTC in loongson3_defconfig
+  MIPS: Loongson64: DTS: Add RTC support to LS7A
+  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+
+WANG Xuerui (3):
+  dt-bindings: rtc: Add Loongson LS2X RTC support
+  MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+  MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
+
+ .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+ arch/loongarch/configs/loongson3_defconfig    |   1 +
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   7 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +
+ arch/mips/configs/loongson2k_defconfig        |   1 +
+ arch/mips/configs/loongson3_defconfig         |   1 +
+ drivers/rtc/Kconfig                           |  11 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ls2x.c                        | 379 ++++++++++++++++++
+ 9 files changed, 410 insertions(+)
+ create mode 100644 drivers/rtc/rtc-ls2x.c
+
+-- 
+2.31.1
+
