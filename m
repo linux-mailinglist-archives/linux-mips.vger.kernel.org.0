@@ -2,95 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CFD662F96
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Jan 2023 19:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A32BC662FC0
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Jan 2023 20:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236994AbjAIS4P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Jan 2023 13:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        id S237128AbjAITC7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Jan 2023 14:02:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235359AbjAIS4O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Jan 2023 13:56:14 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CED14087
-        for <linux-mips@vger.kernel.org>; Mon,  9 Jan 2023 10:56:12 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 16so9501561ybc.0
-        for <linux-mips@vger.kernel.org>; Mon, 09 Jan 2023 10:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=npK1pVWS9Y7zSvO0nWYdwcAA7TbeGlnyEckY5HPb/Qg=;
-        b=EHKm0/F2buMoOsKhjWg0lWsOuJldy/zfoO9SoYjwOUBjEtYFI7vDu+I5lwSpjMbW6Z
-         3ObtFaGnVjmdcg2O2Aret0FZO2bn7yqTJbEhANZLCO7TmNFgRBE+1H+8TwiSfzm06+sv
-         NoXn+BRIUqVauOHPZ13p93njC8trw+pKMvKGKG+JOay5G96uMzNCvp6yocnoligPU/KG
-         nsT5KAmMgHERAldXeigMGDd8xVH2mvsfpS/FV/+f0V+6HxueWNzcx2CaGaqz8pAq/Qe/
-         1IhIl/jFSe8NXCzMDt2iiVq0nAJOXzbL0gSR4VpeaFp+Z0f01ufRbR7OxltlcKWyJfdN
-         GLKQ==
+        with ESMTP id S237026AbjAITCz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Jan 2023 14:02:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E30392CA
+        for <linux-mips@vger.kernel.org>; Mon,  9 Jan 2023 11:01:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673290890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bU+svoPcyEEDaWYmIcNec69dTXz5hTgyu3b7xJNjXUQ=;
+        b=NOt/j2pQ30uerawH0+X7lv3BSG0Q3QRQQsO+laAminXxtRnPi2sg78vn5sD1X5W/JQZ/wk
+        0vrdhSxMdz6Zkf0FkB6B+1pfrxT5KiIVObpRjx1suFyhCq2iSKh8FGm7ldA2B781ExMm/g
+        46U0I+4WWQwnC0hmBH36ZGXRSz6BK1c=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-356-m3XYGcJoM7GTacGMhrYlYw-1; Mon, 09 Jan 2023 14:01:29 -0500
+X-MC-Unique: m3XYGcJoM7GTacGMhrYlYw-1
+Received: by mail-qv1-f69.google.com with SMTP id cx11-20020a056214188b00b00531cacde854so5601894qvb.6
+        for <linux-mips@vger.kernel.org>; Mon, 09 Jan 2023 11:01:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=npK1pVWS9Y7zSvO0nWYdwcAA7TbeGlnyEckY5HPb/Qg=;
-        b=l/dC1E5Q7TxWDG17Z7sZBXjihWezEk0TfHyMylDE8FfJjKvy0PJCNsGtJpynWiEYRk
-         Wn3QuWfAQe3WWeDLKaT3U9eSAqXW2/Y02u1h/A00t1oPEUjhWILZ6dIHI/TxSwYoPZI8
-         njd3KCrIHoRYzKZtYjm/l7s1UAmSD92XoslCsyQ7fZ+JeypIYq2Cm3vtit1c/cVwirRS
-         MphHh9TUJmMH0sgR9WqcLrd4AUJ3iYv7uhuaB7BsgzBYGLdm1ClJYebEG3LzlwNeg0sW
-         iZ4weWFYn2tbXPoZMdXrlpMijclqX1XA4uiWz8mM9TrzLM8NH8OaYved/VzwHTWoZHTZ
-         S6rw==
-X-Gm-Message-State: AFqh2kq4VyoQKcalL+m60MMpsCpl8MDovBaoz/E/EMUFkvgqKlw1J0GU
-        Sagfn5VEblNB9gSZMCBOexqQKPOyVJWgyMUKYHav3g==
-X-Google-Smtp-Source: AMrXdXuGuwlSiliqUzNPwuP95duqjm2wzwipEY34JM0d62JWS00zM7bbMqGhGQDGetcNhy7upYl68Cx0Wdx6BZEJfKU=
-X-Received: by 2002:a5b:1c8:0:b0:6fe:46c9:7479 with SMTP id
- f8-20020a5b01c8000000b006fe46c97479mr7514517ybp.191.1673290571936; Mon, 09
- Jan 2023 10:56:11 -0800 (PST)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bU+svoPcyEEDaWYmIcNec69dTXz5hTgyu3b7xJNjXUQ=;
+        b=lHN9OMgEBWctXnKBW/64wdNPs257QieiR8hCJbn6vwjJB7zyRTKm5ehZGJeQyTESXT
+         xSQWxqJMa6saQR8m4q30opC20I9Y2DwummZlnEQczgiimZByvncwChMF4G3zD6zmEddz
+         NjS+Kr4oWEMHtgKbhpyVsGxrLU+g3ixJD8QnCGT0Bkb8nGMqFAZSCFs3BveDPH3L3G44
+         xZA6BgHKt2qDp+TohWx8NmNGtAIDvIUT1gbctrXptTHCVHecWHRTt+f7gBdr53tusqdF
+         4KLdpEp1KGktDLefdYq8V41TcgPERIaZYg9cl5KH+Mg45dN9KgDviNBFZGN7EjZ4Cc5W
+         ugPg==
+X-Gm-Message-State: AFqh2kpkCzGyo9uXS0BqUmm68vRhZXdhXWZbflQMGmp81AVlplgmrhtV
+        KlNPIeEtv7JDXOsZUEj2Kg3EpWFJDVdfE7LNybN2ShwRYftONq04WRwG63zkS0Y4aUWbypJgftg
+        EG92mQu7zVi2TEkp9e2Uq0g==
+X-Received: by 2002:ac8:7395:0:b0:3a7:ed31:a618 with SMTP id t21-20020ac87395000000b003a7ed31a618mr91336671qtp.7.1673290887985;
+        Mon, 09 Jan 2023 11:01:27 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXseRLv5+JCaBFPqzT7E7Yv2YOrloRSyhYUUSWRG6zA8srvH9gyrV5oV35teC9nwwkDxbanAYA==
+X-Received: by 2002:ac8:7395:0:b0:3a7:ed31:a618 with SMTP id t21-20020ac87395000000b003a7ed31a618mr91336646qtp.7.1673290887764;
+        Mon, 09 Jan 2023 11:01:27 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id cj12-20020a05622a258c00b0039cc0fbdb61sm4985479qtb.53.2023.01.09.11.01.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 11:01:27 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, Guo Ren <guoren@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v3 6/8] treewide: Trace IPIs sent via smp_send_reschedule()
+In-Reply-To: <CAAhV-H6Oii6t-4aHFjgPkCgFAd+LcVVg+7jMu_w4mEa0Ecuwaw@mail.gmail.com>
+References: <20221202155817.2102944-1-vschneid@redhat.com>
+ <20221202155817.2102944-7-vschneid@redhat.com>
+ <CAAhV-H6Oii6t-4aHFjgPkCgFAd+LcVVg+7jMu_w4mEa0Ecuwaw@mail.gmail.com>
+Date:   Mon, 09 Jan 2023 19:01:22 +0000
+Message-ID: <xhsmh5ydfedml.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20221208193857.4090582-1-dmatlack@google.com> <20221208193857.4090582-11-dmatlack@google.com>
- <ce1ea196-d854-18bd-0e60-91985ed5aaea@redhat.com>
-In-Reply-To: <ce1ea196-d854-18bd-0e60-91985ed5aaea@redhat.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 9 Jan 2023 10:55:45 -0800
-Message-ID: <CALzav=fVbvKQMhSBD0AdrRTH+jDyRG0Hf5M-H7vCtRCR1Lk9sw@mail.gmail.com>
-Subject: Re: [RFC PATCH 10/37] KVM: MMU: Move struct kvm_page_fault to common code
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Nadav Amit <namit@vmware.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, xu xin <cgel.zte@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Yu Zhao <yuzhao@google.com>,
-        Colin Cross <ccross@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,14 +100,21 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 2:27 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+On 08/01/23 20:17, Huacai Chen wrote:
+> Hi, Valentin,
 >
-> On 12/8/22 20:38, David Matlack wrote:
-> > +
-> > +     /* Derived from mmu and global state.  */
-> > +     const bool is_tdp;
+> On Fri, Dec 2, 2022 at 11:59 PM Valentin Schneider <vschneid@redhat.com> wrote:
+>> @@ -83,7 +83,7 @@ extern void show_ipi_list(struct seq_file *p, int prec);
+>>   * it goes straight through and wastes no time serializing
+>>   * anything. Worst case is that we lose a reschedule ...
+>>   */
+>> -static inline void smp_send_reschedule(int cpu)
+>> +static inline void arch_smp_send_reschedule(int cpu)
+>>  {
+>>         loongson_send_ipi_single(cpu, SMP_RESCHEDULE);
+>>  }
+> This function has been moved to arch/loongarch/kernel/smp.c since 6.2.
 >
-> I think this could stay in the architecture-independent part.
 
-I agree but until there's a use case for accessing it in common code
-I'm inclined to leave it in x86's kvm_page_fault_arch.
+Thanks! I'll make sure to rerun the coccinelle script for the next version.
+
