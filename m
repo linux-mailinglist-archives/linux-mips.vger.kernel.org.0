@@ -2,80 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A026F667D3A
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Jan 2023 19:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3795F667EB6
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Jan 2023 20:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjALSBg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Jan 2023 13:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S240317AbjALTIF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Jan 2023 14:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbjALSAq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Jan 2023 13:00:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3068D12A9C;
-        Thu, 12 Jan 2023 09:21:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF834B81F02;
-        Thu, 12 Jan 2023 17:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882A3C433D2;
-        Thu, 12 Jan 2023 17:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673544107;
-        bh=o7rPePvZaQDhl2ZpAhDIh2cz7WD2ro08e3IDoDoypXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g1SdsksPV8I4OGhRFfJFW2e7Mfe7i/6SaB8a3aA6go7HS8htWAPK+bO/7ykzUP3Y0
-         ywxqRA6azp8u4YUy9EXLmyYTAypEC7bHG0tnOMYEJco4Q93DekkiTn6AVIIVFj3eNL
-         hZJBsJutqWf4ciswJ16ZSBsLpfoFi+4OudDBYzTdJS1z2qRHMeiL1/Fulwplch4g2I
-         BJqEE8BUMB/CiY0NeXbeHq7kcqs0emD/FDL30zhHFkaqsHpp/NUDtozFo5cWlXPzn3
-         uIxIqRCFgOC7RwYPHn3o8anIXSFABOY+khRVV3sC4SiDoZzxVkdvK6BeLgR2+AIVba
-         SRkQA3LfoxDIQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pG1H0-0004pA-IB; Thu, 12 Jan 2023 18:21:55 +0100
-Date:   Thu, 12 Jan 2023 18:21:54 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 19/19] irqdomain: Switch to per-domain locking
-Message-ID: <Y8BBsid+Jaul3RDr@hovoldconsulting.com>
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <20221209140150.1453-20-johan+linaro@kernel.org>
- <87mt7sbtf9.ffs@tglx>
- <Y5c6z3t+sV/kIMjF@hovoldconsulting.com>
- <878rjcbnp8.ffs@tglx>
- <871qo1hqng.ffs@tglx>
+        with ESMTP id S240292AbjALTHW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Jan 2023 14:07:22 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF36D13B;
+        Thu, 12 Jan 2023 10:49:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1673549341; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=VVwndzmZa3T9qUUdXmyL13LbeRcCo5aJtQeRb7eBu+6OetmVkzSyFwgModVSbrGppw9715GZvPbcVBY//a3GKP0rFb8M7FXFYw6ZhmG6a0aXrqwtQlAZ6o2fQQad9XwefwqXhkYzcrvDeVobMcewjY0dNVne811j2LoXV9YGDgo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1673549341; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=xj1EqQifssBoeW2Mu0UMZouBhzUVXH9Qqd8rb3GME8I=; 
+        b=HjiaFjlPWYVDLgKpYM4LqTr6gdRXwjI8kdYbj83mbYvEzLluLd8ekB27EXQQXx2rKqz0yWxRttqk6rgO0zL857+7R4HYBxldp82pqPDHc/h0Ddp8EXEeQjIT1SZGEjOWFe9Lavv2WDJfun4fNhKEY5TXVAkYk/RgEtU6OT4A/6k=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673549341;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=xj1EqQifssBoeW2Mu0UMZouBhzUVXH9Qqd8rb3GME8I=;
+        b=MVVnnKfETDgCzyJ71jmAq0v6KG9MyoQ61/n28O/AOxxL50oAeLv599dp3ckuEkks
+        51maUW8rNrzLygfhxYZqnOXoqtZJuZa0ms6JcL0SJHezSd9qrbC3YObzlQa7AbVKyA1
+        DeQrTFmoYmu7mRK2OMYHgeJbOHyWzTqpDwLC7HF8=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1673549337883457.0526498585821; Thu, 12 Jan 2023 10:48:57 -0800 (PST)
+Message-ID: <c5412e5c-97ff-ba79-fd78-895889c129d2@arinc9.com>
+Date:   Thu, 12 Jan 2023 21:48:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871qo1hqng.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 3/6] dt-bindings: pinctrl: mt7621: add proper function
+ muxing binding
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, erkin.bozoglu@xeront.com
+References: <20221231160849.40544-1-arinc.unal@arinc9.com>
+ <20221231160849.40544-4-arinc.unal@arinc9.com>
+ <1b5880bb-d0ce-9dde-2fe6-e058f6efb6f1@linaro.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <1b5880bb-d0ce-9dde-2fe6-e058f6efb6f1@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 07:28:35PM +0100, Thomas Gleixner wrote:
-> On Mon, Dec 12 2022 at 17:18, Thomas Gleixner wrote:
-> > On Mon, Dec 12 2022 at 15:29, Johan Hovold wrote:
-> >> I added to irq_domain_set_mapping() and which is is called for each
-> >> (inner) domain in a hierarchy when allocating an IRQ.
-> >
-> > Hmm. Indeed that should do the trick.
-> >
-> > Some comments would be appreciated as the rules around domain->root are
-> > far from obvious.
+On 12.01.2023 12:01, Krzysztof Kozlowski wrote:
+> On 31/12/2022 17:08, Arınç ÜNAL wrote:
+>> Not every function can be muxed to a group. Add proper binding which
+>> documents which function can be muxed to a group or set of groups.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Any update on this one?
+> Didn't I already ack it?
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Sorry about the delay. I'll take a look at this tomorrow.
+I believe you only did for mt7620.
 
-Johan
+Thanks.
+Arınç
