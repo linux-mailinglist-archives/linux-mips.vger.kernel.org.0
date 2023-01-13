@@ -2,100 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD1D669A2D
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jan 2023 15:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34343669C6B
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jan 2023 16:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjAMObe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Jan 2023 09:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S229827AbjAMPdo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Jan 2023 10:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjAMOao (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Jan 2023 09:30:44 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC68848E4
-        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id q190so10498222iod.10
-        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
-        b=MK7e6Vy0okniHu3Q9+oSRGxZAwtfUcCw709gjtpmGqYm4W84IZvw4tBwf/JeD4Sz6H
-         3KURCQ1q7FJNLx+GLRWt1AGelsjK5K90b9GlN0sKUA6ZUg/qpGAmzhVkYIMi1e8GW14O
-         cFtXxDW3U7HKPR1h1QucXhqmNKCsZMoObgInYsIcK9GV+Q1SmTW3TNFPjIiYngs//Zw8
-         0a/3E2iFbnIOhj7mPg7o55ip5AqJcSu4cmOrbMNeUEYXVxQDLd1kY3ucGjxruvrrHS7M
-         XetQgLqP0j8VlFQPDJPkXr0ojEVpUsKfNGxzo9W4EnGlfHoCwYlTt4oOdX6QabpPSrPy
-         sowg==
+        with ESMTP id S230200AbjAMPdV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Jan 2023 10:33:21 -0500
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3736C7278D;
+        Fri, 13 Jan 2023 07:26:55 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-15eec491b40so1663919fac.12;
+        Fri, 13 Jan 2023 07:26:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
-        b=Nhq6VWcUR9+rdrOuThpspxUDu1rYgS7OwxSXaSA3ScDeHlKLjz76Ilv2IyCjRVLg93
-         ZduxQM2UbLf2WSnYxhZ6HwR4n/peccmAgx5SEdRJFYPYx7RF2XKVANSvK39U6DPGnYHv
-         cN2LlzzK4oHtlCuRGYCCanoGt4pMhKYOKyCTfLhGF6+0WJ35XwttNjAy8a8R7CwUB29A
-         EvLQawMuXiiszLD60llLSc1nAR5AKtbszv7pWLQxKgLKb//ekFLfeR7RKB3l39F3JZzw
-         EkvGpcinHR+1mAnnDcb1h+pl/2/JxIm3g42b/Ys2aRAOsRfE/o9deJ6ok4a+VBwLHYg/
-         oaqA==
-X-Gm-Message-State: AFqh2koVGAmJVN+bALO1p8OEh22quN1nSdXOL2oa3Wf/VK83/99IdfFL
-        ii0FjPwyYl1bL+ogMk2vQ1g6wu8Na+hZnZVIUrI=
-X-Google-Smtp-Source: AMrXdXshiBnmfviu9GpNb0RTPGnCcyaimsk+bKcdbNGmrDubcSeViaijlgxCq2yePIP/Xii+kaUmkoerHpw3FkTn4/M=
-X-Received: by 2002:a6b:7f08:0:b0:6e2:ec05:87c8 with SMTP id
- l8-20020a6b7f08000000b006e2ec0587c8mr6674474ioq.144.1673619821627; Fri, 13
- Jan 2023 06:23:41 -0800 (PST)
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EVGeTme+bKzd3d4knCGcoP4a5CWNlrIX9hy3r7ftn/g=;
+        b=CKJRPAZt/mbr402uVD6mN0iXocIEmvNbHpWC0APTDOHB7uDWOx7iXnxz1K//O+blPa
+         OcG7K/tIyu4KcR92T5PehebYeXvtgWAhMo3Qr6TUHrVyEQeiIcDnruCtIdjhe05yeBlT
+         NgRYNaMmezHy/uP4kRubzDIr2w8bq2nu6Zq4yPad999U8+M2ir0FmmUVy1/g8a+siHO2
+         NXUmSss4SSomaJddSKdEwhJ2jTK/AbfCh5zWf2a8CChfmyvLrySxQriiYyWaj9TBKyyf
+         0Jj/s8RZgEWdqn1AZ8xl5rS4koI0LzXUwQ7FUYBrHbe5SGodfcYcDfS6SHz/IhgPx3HX
+         oFTQ==
+X-Gm-Message-State: AFqh2krPuVBGu9iCogdlnQgilwn8Hu4ao85JtveYOZuvl4sSbKd3+Bex
+        QHSaC4k1e84duSfWxpA2HA==
+X-Google-Smtp-Source: AMrXdXsemvtKvDZG+AFU0Xve3Mn8xu129jjDjTlWOJCKaOUvqnRedXOSlnH9nBPF7clmH+pOTV2cYQ==
+X-Received: by 2002:a05:6871:93:b0:143:e045:7082 with SMTP id u19-20020a056871009300b00143e0457082mr29912421oaa.58.1673623614498;
+        Fri, 13 Jan 2023 07:26:54 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v12-20020a056870b50c00b0014fc049fc0asm10771366oap.57.2023.01.13.07.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 07:26:54 -0800 (PST)
+Received: (nullmailer pid 2224499 invoked by uid 1000);
+        Fri, 13 Jan 2023 15:26:52 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1282:b0:30d:c36b:403c with HTTP; Fri, 13 Jan 2023
- 06:23:41 -0800 (PST)
-Reply-To: hitnodeby23@yahoo.com
-From:   Hinda Itno Deby <atidigahcyril@gmail.com>
-Date:   Fri, 13 Jan 2023 06:23:41 -0800
-Message-ID: <CALHvQ-i=c6i56KKAWCU6YHCKu56RytXe0C3_h_MOPvHa0vgPTw@mail.gmail.com>
-Subject: Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d2a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5009]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [hitnodeby23[at]yahoo.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [atidigahcyril[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.6 URG_BIZ Contains urgent matter
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+From:   Rob Herring <robh@kernel.org>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20230113110738.1505973-2-keguang.zhang@gmail.com>
+References: <20230113110738.1505973-1-keguang.zhang@gmail.com>
+ <20230113110738.1505973-2-keguang.zhang@gmail.com>
+Message-Id: <167362342081.2212182.3990856069388425566.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Add binding for Loongson-1 clock driver
+Date:   Fri, 13 Jan 2023 09:26:52 -0600
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
--- 
-My name is Hinda Itno Deby Please I want us to discuss Urgent Business
-Proposal, if you are interested kindly reply to me so i can give you
-all the details.
 
-Thanks and God Bless You.
-Ms Hinda Itno Deby
+On Fri, 13 Jan 2023 19:07:37 +0800, Keguang Zhang wrote:
+> Add devicetree binding document for the Loongson-1 clock driver.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+>  .../bindings/clock/loongson,ls1x-clk.yaml     | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/clock/loongson,ls1x-clk.example.dts:36.39-41.15: Warning (unique_unit_address_if_enabled): /example-0/clocks/cpu_clk@1fe78034: duplicate unit-address (also used in node /example-0/clocks/ahb_clk@1fe78034)
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230113110738.1505973-2-keguang.zhang@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
