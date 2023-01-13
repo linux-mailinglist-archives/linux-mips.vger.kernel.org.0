@@ -2,60 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E4B669577
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jan 2023 12:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51F9669587
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jan 2023 12:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjAML3B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Jan 2023 06:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S238205AbjAMLaQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Jan 2023 06:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjAML1z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Jan 2023 06:27:55 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4379E87F2D
-        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 03:17:40 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id hw16so39706626ejc.10
-        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 03:17:40 -0800 (PST)
+        with ESMTP id S240683AbjAML3u (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Jan 2023 06:29:50 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62008B53C
+        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 03:19:37 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id u9so51615129ejo.0
+        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 03:19:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IAHsl98CG/fDYP0sHTVVPevitb6k0mLO+y4UR5S17ws=;
-        b=rO55n1kXDBRrBIHjuqo1touxvhO5hNjfwY90pyGz0sCM3W/856cTLNOOYRKpX5PcGL
-         rSQgkH1xRtwXkjqISOn+99ma+tsjgFJb9qRjuOt861vmBfi0nRX/iXf3oyWgf3y9cdGg
-         aI+CeupWYwoiNaT38kIOj7+2YapQGpuYrrXcXm+X79LTvAMFPw2Nb/beIiEpBsljbRtQ
-         6FwtNAZEo9j6JOSaxxTHi20/Um9j76HYDTe6yntvAmm15YTsvOlmhpWm+/BZKEPFpMOS
-         4J9mKOw95UKB27KbRnt13xpOVEA+n+6eIISbjDU/l87yt+IELSShkK94r7gHnK5iLuVJ
-         E8cw==
+        bh=nNpoWQlOxVCjJNH1/tWYzE33AytIwBJrxcIw+MQAk1E=;
+        b=YAc09V0LuRBCbE9h978g2eWv0ESqP6iDhWXWiOscMziFrCnja1+oAglJvYPWVXDyep
+         XnO+MwuT5Ni/nHQCK7FFduQEUsnuvZAYGSK9/yXWTieTtQHtpzzTVA1Ml55m7VmWx+6P
+         zRAHT+4BEEdL4DuvH6N76tG9ubYIa2nC+/SyiBjNTB/QvLy/Ht16vTaHzU21TNNWDF3W
+         yqo2S6QLzNOSk0lYNkTLXTJDC2Lo334xt+c13cr7mlnKkn/BDwY9ugO573ETe1C10mhb
+         F5U35mauKmu0s76EfuaWK1vLqXfytEy/OI65pMShir1XBDs9PP0RyWsXN/sPkE+qxNgk
+         KN0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IAHsl98CG/fDYP0sHTVVPevitb6k0mLO+y4UR5S17ws=;
-        b=jnLM7qnFsdUzOR/VkjJUBvRPzHr4b2MqwRdTG/JFRIIV+j5qaVGJerQkvj4psJ/M5o
-         V9IwFqWhinsFRdA3JE9X5xIrHcbX1MN0zB00owUeWFr5LAjv4pRWGoKcuRHck9g9RIev
-         dwxyNy5vWCxtlO+py4s1qbjUdrkaivIlVxgHiKXbvr3cEyETJutq6ZL8df55RmpkbYC9
-         4u5XHSC22Ya9fzeosSdoSQeaZyiqt6UdFUwE+gNjm+EUfheBMQi5TruvLwLimg/Y2dMq
-         SU8RIlvSsGN5bmnJoKltcHjnCa6qKghmnZHvcOQrpRtIJAQq0+va3sqaTNwzU/Izhegj
-         YvsA==
-X-Gm-Message-State: AFqh2kqRJg4LwcAlKcPlzdMIvQhpLTWuQpY3ywTuQD6JJnKDkHPpTScJ
-        yLwDEo9rrtS47F8Urgrj0dNPfA==
-X-Google-Smtp-Source: AMrXdXtK7YAEGRUOWzs41epBgJvNi/mOK9+XEuk1w/FCzjBdpqY4FoD7/7XhR3QePTmT+MlmLRnvTg==
-X-Received: by 2002:a17:907:73c1:b0:7c1:2868:65f1 with SMTP id es1-20020a17090773c100b007c1286865f1mr61779721ejc.72.1673608658631;
-        Fri, 13 Jan 2023 03:17:38 -0800 (PST)
+        bh=nNpoWQlOxVCjJNH1/tWYzE33AytIwBJrxcIw+MQAk1E=;
+        b=WZwLN58FOwEpFWuZEnjaGMLWL6ycaL/LGdUNIOryZrensvUYhsmMcYvngV85jLb82R
+         SY/kJtZatUTNXeWFBidusagJwULDv/euVCxGfDhItpZI4Tt7hm0/BpfIO6X8parRSq8x
+         ybRZ4wu+WOXQ7yMAYis+s/BY4tWqjAst+tF0DoTdP7xqE2LS6ozdzPmQODU0eNQCMxz8
+         +s0KFZkCsaIoKiTr1OrrkMcV4SOZ9idCZEKy2iWVlwOj915PsbGuyENH46FwaUlEQg/z
+         PDL6ktUAP5NxtL1mCfZSKuZjWhxrNIo5DYH3sa+Axpd1/H3KOSk6MySnj73xuIq8CvSn
+         OAsw==
+X-Gm-Message-State: AFqh2ko2eOLA4MdrHgXoP3E35lb90DLZUXN132/COPFvC/UyTtZSpIFs
+        dXCs3uXeftloEsmoqQrGBGW7sAA4p0qtA3iK
+X-Google-Smtp-Source: AMrXdXspYZjcBS1Yz9eGU+zh+BZTR4yIsg9PI+y6cZKg1n5HF52+7JotiGtPdug5EZcV7LcflFtXKQ==
+X-Received: by 2002:a17:907:6d26:b0:857:b916:94c1 with SMTP id sa38-20020a1709076d2600b00857b91694c1mr17660684ejc.61.1673608776266;
+        Fri, 13 Jan 2023 03:19:36 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u13-20020aa7db8d000000b004833aac6ef9sm7996567edt.62.2023.01.13.03.17.37
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906059100b007c16f120aacsm8356105ejn.121.2023.01.13.03.19.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 03:17:38 -0800 (PST)
-Message-ID: <63fdd223-c5e1-302d-ffef-9e582874e938@linaro.org>
-Date:   Fri, 13 Jan 2023 12:17:36 +0100
+        Fri, 13 Jan 2023 03:19:35 -0800 (PST)
+Message-ID: <a5d1bb62-1fbe-1ab9-b93d-f17d4b7f229f@linaro.org>
+Date:   Fri, 13 Jan 2023 12:19:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Add binding for Loongson-1 clock
- driver
+Subject: Re: [PATCH 2/2] clk: loongson1: Refactor to add devicetree support
 Content-Language: en-US
 To:     Keguang Zhang <keguang.zhang@gmail.com>, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -65,9 +64,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 References: <20230113110738.1505973-1-keguang.zhang@gmail.com>
- <20230113110738.1505973-2-keguang.zhang@gmail.com>
+ <20230113110738.1505973-3-keguang.zhang@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230113110738.1505973-2-keguang.zhang@gmail.com>
+In-Reply-To: <20230113110738.1505973-3-keguang.zhang@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,114 +80,32 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 13/01/2023 12:07, Keguang Zhang wrote:
-> Add devicetree binding document for the Loongson-1 clock driver.
-
-Subject: drop second/last, redundant "bindings". The "dt-bindings"
-prefix is already stating that these are bindings.
-
-Subject: Drop driver, not related to hardware.
-
+> This patch refactors Loongson-1 clock driver.
+> - Use CLK_OF_DECLARE() to declare the "early clocks"
+>   required by of_clk_init()
+> - Merge clk-loongson1b.c and clk-loongson1c.c into one driver
+>   because most of the differences between them will be moved to DT
+> - Add set_rate callback for ls1x_clk_divider
+> - Update the Kconfig/Makefile accordingly
+> - Update copyright
 > 
 > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 > ---
->  .../bindings/clock/loongson,ls1x-clk.yaml     | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
-> new file mode 100644
-> index 000000000000..4709c6757f1e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/loongson,ls1x-clk.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson-1 Clock Controller
+>  drivers/clk/Makefile                   |   2 +-
+>  drivers/clk/clk-loongson1.c            | 348 +++++++++++++++++++++++++
 
-Wasn't this already sent?
-https://lore.kernel.org/all/20190130194731.GA25716@bogus/
-Then this is a v4? Aren't you duplicating efforts (and reviewers efforts)?
+No, this is not a refactor. This is removal and re-add. NAK.
 
-> +
-> +maintainers:
-> +  - Keguang Zhang <keguang.zhang@gmail.com>
-> +
-> +properties:
+One change per commit, this is unreviewable.
 
-compatible is a first property.
+>  drivers/clk/loongson1/Makefile         |   4 -
+>  drivers/clk/loongson1/clk-loongson1b.c | 118 ---------
+>  drivers/clk/loongson1/clk-loongson1c.c |  95 -------
 
-> +  "#clock-cells":
-> +    const: 0
-> +
-> +  compatible:
-> +    enum:
-> +      - loongson,ls1b-clk-pll
-> +      - loongson,ls1b-clk-cpu
-> +      - loongson,ls1b-clk-ahb
-> +      - loongson,ls1c-clk-pll
-> +      - loongson,ls1c-clk-cpu
-> +      - loongson,ls1c-clk-ahb
+This is not explained at all. You are pushing some crappy vendor code
+here instead of merging with upstream code.
 
-Are you registering single clocks? It looks like. No, make a proper
-clock controller.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - "#clock-cells"
-> +  - compatible
-> +  - clocks
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clocks {
-
-No, not really related to the binding.
-
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +
-> +        xtal: xtal {
-
-Incorrect in this context. Missing unit address.
-
-> +            compatible = "fixed-clock";
-> +            #clock-cells = <0>;
-> +            clock-frequency = <33000000>;
-> +        };
-> +
-> +        pll: pll@1fe78030 {
-
-Node names should be generic, so "clock-controller"
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +            compatible = "loongson,ls1b-clk-pll";
-> +            #clock-cells = <0>;
-> +            clocks = <&xtal>;
-> +            reg = <0x1fe78030 0x4>;
-
-compatible is first property, then reg, then the rest.
-
-> +        };
-> +
-> +        cpu_clk: cpu_clk@1fe78034 {
-
-No underscores in node names. Anyway this should be gone - make a proper
-clock controller.
-
+Otherwise, explain the drop of directory. Why Loongson should be special?
 
 Best regards,
 Krzysztof
