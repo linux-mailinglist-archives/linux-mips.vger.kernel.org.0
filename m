@@ -2,111 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51F9669587
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jan 2023 12:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD1D669A2D
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jan 2023 15:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238205AbjAMLaQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Jan 2023 06:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
+        id S229538AbjAMObe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Jan 2023 09:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240683AbjAML3u (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Jan 2023 06:29:50 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62008B53C
-        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 03:19:37 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id u9so51615129ejo.0
-        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 03:19:37 -0800 (PST)
+        with ESMTP id S229552AbjAMOao (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Jan 2023 09:30:44 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC68848E4
+        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id q190so10498222iod.10
+        for <linux-mips@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nNpoWQlOxVCjJNH1/tWYzE33AytIwBJrxcIw+MQAk1E=;
-        b=YAc09V0LuRBCbE9h978g2eWv0ESqP6iDhWXWiOscMziFrCnja1+oAglJvYPWVXDyep
-         XnO+MwuT5Ni/nHQCK7FFduQEUsnuvZAYGSK9/yXWTieTtQHtpzzTVA1Ml55m7VmWx+6P
-         zRAHT+4BEEdL4DuvH6N76tG9ubYIa2nC+/SyiBjNTB/QvLy/Ht16vTaHzU21TNNWDF3W
-         yqo2S6QLzNOSk0lYNkTLXTJDC2Lo334xt+c13cr7mlnKkn/BDwY9ugO573ETe1C10mhb
-         F5U35mauKmu0s76EfuaWK1vLqXfytEy/OI65pMShir1XBDs9PP0RyWsXN/sPkE+qxNgk
-         KN0Q==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
+        b=MK7e6Vy0okniHu3Q9+oSRGxZAwtfUcCw709gjtpmGqYm4W84IZvw4tBwf/JeD4Sz6H
+         3KURCQ1q7FJNLx+GLRWt1AGelsjK5K90b9GlN0sKUA6ZUg/qpGAmzhVkYIMi1e8GW14O
+         cFtXxDW3U7HKPR1h1QucXhqmNKCsZMoObgInYsIcK9GV+Q1SmTW3TNFPjIiYngs//Zw8
+         0a/3E2iFbnIOhj7mPg7o55ip5AqJcSu4cmOrbMNeUEYXVxQDLd1kY3ucGjxruvrrHS7M
+         XetQgLqP0j8VlFQPDJPkXr0ojEVpUsKfNGxzo9W4EnGlfHoCwYlTt4oOdX6QabpPSrPy
+         sowg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nNpoWQlOxVCjJNH1/tWYzE33AytIwBJrxcIw+MQAk1E=;
-        b=WZwLN58FOwEpFWuZEnjaGMLWL6ycaL/LGdUNIOryZrensvUYhsmMcYvngV85jLb82R
-         SY/kJtZatUTNXeWFBidusagJwULDv/euVCxGfDhItpZI4Tt7hm0/BpfIO6X8parRSq8x
-         ybRZ4wu+WOXQ7yMAYis+s/BY4tWqjAst+tF0DoTdP7xqE2LS6ozdzPmQODU0eNQCMxz8
-         +s0KFZkCsaIoKiTr1OrrkMcV4SOZ9idCZEKy2iWVlwOj915PsbGuyENH46FwaUlEQg/z
-         PDL6ktUAP5NxtL1mCfZSKuZjWhxrNIo5DYH3sa+Axpd1/H3KOSk6MySnj73xuIq8CvSn
-         OAsw==
-X-Gm-Message-State: AFqh2ko2eOLA4MdrHgXoP3E35lb90DLZUXN132/COPFvC/UyTtZSpIFs
-        dXCs3uXeftloEsmoqQrGBGW7sAA4p0qtA3iK
-X-Google-Smtp-Source: AMrXdXspYZjcBS1Yz9eGU+zh+BZTR4yIsg9PI+y6cZKg1n5HF52+7JotiGtPdug5EZcV7LcflFtXKQ==
-X-Received: by 2002:a17:907:6d26:b0:857:b916:94c1 with SMTP id sa38-20020a1709076d2600b00857b91694c1mr17660684ejc.61.1673608776266;
-        Fri, 13 Jan 2023 03:19:36 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906059100b007c16f120aacsm8356105ejn.121.2023.01.13.03.19.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 03:19:35 -0800 (PST)
-Message-ID: <a5d1bb62-1fbe-1ab9-b93d-f17d4b7f229f@linaro.org>
-Date:   Fri, 13 Jan 2023 12:19:34 +0100
+        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
+        b=Nhq6VWcUR9+rdrOuThpspxUDu1rYgS7OwxSXaSA3ScDeHlKLjz76Ilv2IyCjRVLg93
+         ZduxQM2UbLf2WSnYxhZ6HwR4n/peccmAgx5SEdRJFYPYx7RF2XKVANSvK39U6DPGnYHv
+         cN2LlzzK4oHtlCuRGYCCanoGt4pMhKYOKyCTfLhGF6+0WJ35XwttNjAy8a8R7CwUB29A
+         EvLQawMuXiiszLD60llLSc1nAR5AKtbszv7pWLQxKgLKb//ekFLfeR7RKB3l39F3JZzw
+         EkvGpcinHR+1mAnnDcb1h+pl/2/JxIm3g42b/Ys2aRAOsRfE/o9deJ6ok4a+VBwLHYg/
+         oaqA==
+X-Gm-Message-State: AFqh2koVGAmJVN+bALO1p8OEh22quN1nSdXOL2oa3Wf/VK83/99IdfFL
+        ii0FjPwyYl1bL+ogMk2vQ1g6wu8Na+hZnZVIUrI=
+X-Google-Smtp-Source: AMrXdXshiBnmfviu9GpNb0RTPGnCcyaimsk+bKcdbNGmrDubcSeViaijlgxCq2yePIP/Xii+kaUmkoerHpw3FkTn4/M=
+X-Received: by 2002:a6b:7f08:0:b0:6e2:ec05:87c8 with SMTP id
+ l8-20020a6b7f08000000b006e2ec0587c8mr6674474ioq.144.1673619821627; Fri, 13
+ Jan 2023 06:23:41 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] clk: loongson1: Refactor to add devicetree support
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230113110738.1505973-1-keguang.zhang@gmail.com>
- <20230113110738.1505973-3-keguang.zhang@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230113110738.1505973-3-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Received: by 2002:a05:6e02:1282:b0:30d:c36b:403c with HTTP; Fri, 13 Jan 2023
+ 06:23:41 -0800 (PST)
+Reply-To: hitnodeby23@yahoo.com
+From:   Hinda Itno Deby <atidigahcyril@gmail.com>
+Date:   Fri, 13 Jan 2023 06:23:41 -0800
+Message-ID: <CALHvQ-i=c6i56KKAWCU6YHCKu56RytXe0C3_h_MOPvHa0vgPTw@mail.gmail.com>
+Subject: Reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d2a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5009]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [hitnodeby23[at]yahoo.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [atidigahcyril[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.6 URG_BIZ Contains urgent matter
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 13/01/2023 12:07, Keguang Zhang wrote:
-> This patch refactors Loongson-1 clock driver.
-> - Use CLK_OF_DECLARE() to declare the "early clocks"
->   required by of_clk_init()
-> - Merge clk-loongson1b.c and clk-loongson1c.c into one driver
->   because most of the differences between them will be moved to DT
-> - Add set_rate callback for ls1x_clk_divider
-> - Update the Kconfig/Makefile accordingly
-> - Update copyright
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
->  drivers/clk/Makefile                   |   2 +-
->  drivers/clk/clk-loongson1.c            | 348 +++++++++++++++++++++++++
+-- 
+My name is Hinda Itno Deby Please I want us to discuss Urgent Business
+Proposal, if you are interested kindly reply to me so i can give you
+all the details.
 
-No, this is not a refactor. This is removal and re-add. NAK.
-
-One change per commit, this is unreviewable.
-
->  drivers/clk/loongson1/Makefile         |   4 -
->  drivers/clk/loongson1/clk-loongson1b.c | 118 ---------
->  drivers/clk/loongson1/clk-loongson1c.c |  95 -------
-
-This is not explained at all. You are pushing some crappy vendor code
-here instead of merging with upstream code.
-
-Otherwise, explain the drop of directory. Why Loongson should be special?
-
-Best regards,
-Krzysztof
-
+Thanks and God Bless You.
+Ms Hinda Itno Deby
