@@ -2,98 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F7F66D03C
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Jan 2023 21:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5F166D058
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Jan 2023 21:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbjAPUcn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Jan 2023 15:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S231146AbjAPUo6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Jan 2023 15:44:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbjAPUcm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Jan 2023 15:32:42 -0500
-Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B832A165
-        for <linux-mips@vger.kernel.org>; Mon, 16 Jan 2023 12:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=dxZrgiFiSWE0neC/Zn81efMq20upjy192H3IxuR5/u8=;
-        b=acpUj4knulQkBKBaY+52P5qMowzl3CqetGOVLg/297AeK+8Ryp/AKK2Xhs78wcpqAWKMYggzJWDzB
-         biPi7fjApEW+sEGRVKj43UtyH27cyE30zC5xeKBIWLeDxMvBMaWIQ9C2KNsct8BVV/z5Xi2Z9xmXdN
-         iB2Tp6//DgFIal9nwQvjsa5mljq2hOLf4Zl++xLkESSZCEU8Wx7V/M8Yabz6d5rgsJjERIdkci8tJF
-         BzJIC9Ass7ItSJBCwTMvAx3dwBffjSnlLBYYHAB6/KYGwz02LqImL0TBBlVYOqzuWH81uTr8k+kGQw
-         oF52hXCmjcfEX0rspiuM5UBSj5DoeAQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=dxZrgiFiSWE0neC/Zn81efMq20upjy192H3IxuR5/u8=;
-        b=R3QeKkvU5DTf1usW/irfIsJev9hjfAQvABn1WhWFZnkOGF2yihtMhXjFJCHCSPYm0dh3TEmBVSzY6
-         8ufGRagDA==
-X-HalOne-ID: c3e8962f-95dc-11ed-8539-7703b0afff57
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay5 (Halon) with ESMTPSA
-        id c3e8962f-95dc-11ed-8539-7703b0afff57;
-        Mon, 16 Jan 2023 20:31:35 +0000 (UTC)
-Date:   Mon, 16 Jan 2023 21:31:34 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     daniel@ffwll.ch, airlied@gmail.com,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-rockchip@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 18/22] drm/sun4i: Remove unnecessary include statements
- for drm_crtc_helper.h
-Message-ID: <Y8W0JnmbyQnObFa+@ravnborg.org>
-References: <20230116131235.18917-1-tzimmermann@suse.de>
- <20230116131235.18917-19-tzimmermann@suse.de>
+        with ESMTP id S230040AbjAPUo5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Jan 2023 15:44:57 -0500
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D77244BA;
+        Mon, 16 Jan 2023 12:44:56 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 7A08D1FAA6;
+        Mon, 16 Jan 2023 21:44:53 +0100 (CET)
+Date:   Mon, 16 Jan 2023 21:44:52 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        openbmc@lists.ozlabs.org, linux-imx@nxp.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-iio@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        chrome-platform@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-arm-msm@vger.kernel.org,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Patrick Venture <venture@google.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Nancy Yuen <yuenn@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Andy Gross <agross@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Jishnu Prakash <quic_jprakash@quicinc.com>
+Subject: Re: [PATCH v3 12/15] iio: adc: qcom-spmi-adc5: convert to device
+ properties
+Message-ID: <20230116204452.il4gase2szipeexz@SoMainline.org>
+References: <20220715122903.332535-1-nuno.sa@analog.com>
+ <20220715122903.332535-13-nuno.sa@analog.com>
+ <20220806192048.0ca41cc5@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230116131235.18917-19-tzimmermann@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220806192048.0ca41cc5@jic23-huawei>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 02:12:31PM +0100, Thomas Zimmermann wrote:
-> Several source files include drm_crtc_helper.h without needing it or
-> only to get its transitive include statements; leading to unnecessary
-> compile-time dependencies.
+On 2022-08-06 19:20:48, Jonathan Cameron wrote:
+> On Fri, 15 Jul 2022 14:29:00 +0200
+> Nuno Sá <nuno.sa@analog.com> wrote:
 > 
-> Directly include required headers and drop drm_crtc_helper.h where
-> possible.
+> > Make the conversion to firmware agnostic device properties. As part of
+> > the conversion the IIO inkern interface 'of_xlate()' is also converted to
+> > 'fwnode_xlate()'. The goal is to completely drop 'of_xlate' and hence OF
+> > dependencies from IIO.
+> > 
+> > Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+> > Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> +CC Marijin who happend to post a patch for this driver that I just accepted
+> and hence probably has hardware access.  Any chance of a test for this series?
 > 
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
->  drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> If not, no problem as this is fairly mechanical and we have testing on some of
+> the other drivers using the new code.
 > 
-> diff --git a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
-> index 477cb6985b4d..37dc66332bbd 100644
-> --- a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
-> +++ b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
-> @@ -8,8 +8,8 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  
-> -#include <drm/drm_crtc_helper.h>
->  #include <drm/drm_of.h>
-> +#include <drm/drm_modeset_helper_vtables.h>
+> I'll probably queue this up in the meantime but it won't end up upstream
+> for a few weeks yet.
 
-Move one up to maintain sorting.
-With that fixed:
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Jonathan,
 
->  #include <drm/drm_simple_kms_helper.h>
->  
->  #include "sun8i_dw_hdmi.h"
-> -- 
-> 2.39.0
+This CC just surfaced in my inbox while searching for our current
+discussion around missing labels in qcom-spmi-vadc - and on the side a
+userspace @xx label name ABI break (in qcom-spmi-adc5) caused by this
+patch's fwnode_get_name change - we could've caught it if I had not
+accidentally marked it as read and/or forgot about it.  My apologies.
+
+- Marijn
