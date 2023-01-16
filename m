@@ -2,114 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817D566BF7B
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Jan 2023 14:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DC466C027
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Jan 2023 14:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjAPNQM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Jan 2023 08:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S231570AbjAPNvA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Jan 2023 08:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjAPNPg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Jan 2023 08:15:36 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE9A1D93E;
-        Mon, 16 Jan 2023 05:12:45 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S231540AbjAPNup (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Jan 2023 08:50:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F51D2197D;
+        Mon, 16 Jan 2023 05:50:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D486F3751A;
-        Mon, 16 Jan 2023 13:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673874763; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OO536y1oIIavqxJbggquU+Ve/xMHXk1PsPJeSriBnEc=;
-        b=Udkbksja4U2SmueaT/CBQsB1+CnfK2yVlqG1l9ZE5v78J3trCBUlXz2roVXvwoK8JV+j/5
-        RJBpTXJMbF1eF1IVQTt5IsaogDnmOtmBRNYkOH3qPIyZY2v7XlyXWADk1UpBB17xSI4khU
-        CZJDLkGyF0XQJr3XVOuEWpBhmMoHRt4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673874763;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OO536y1oIIavqxJbggquU+Ve/xMHXk1PsPJeSriBnEc=;
-        b=9MzN2mh+4Y19EA2xQcARcGH/wwJ5CLbTFhxyzTEtdsZAzOAJxfT4YnHxkMNDoB0Q8nvGy/
-        kHh7OuLMzJlFZ8AQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 94FAB138FA;
-        Mon, 16 Jan 2023 13:12:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WB17I0tNxWNrNQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 16 Jan 2023 13:12:43 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     sam@ravnborg.org, daniel@ffwll.ch, airlied@gmail.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-aspeed@lists.ozlabs.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07588B80F02;
+        Mon, 16 Jan 2023 13:50:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F863C433F0;
+        Mon, 16 Jan 2023 13:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673877040;
+        bh=WEDOJyVivaqZHP8mDzZn1TPqLohEFKgOiUS27FM0USs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XaAh4QOUuZU9HHz/bKg792uJ2CncCl7t1R7gY2Q5l256Q//MOsuZRWVyPofv03ow1
+         Hoh4QKTRVrIeGiC75IUbOnpT8zFxP/FiJx+1BeeDrSbXQ+EJJXrOKwsh4kBi+RLA8e
+         V97XeDPe06j9AsslBLEWK9x4jvQx2D9E9t6y4FgVZ1orGnxP8WsLhNnZn6wE1ru7Ix
+         kXpcbjOrTCjMmWA8RHtPy1G0rJzhaxZfMMzPzTqyU/tZ0Y74w+3LBbVWUKmbx+NNkn
+         9GDe0VIXSInL31BVma2GrXpIGoYmVM8cnqYwXpOgnKnp9pXlO1V3E0llE4BB1sHatW
+         bAHNhGLOFhlUQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pHPt4-0003ui-PH; Mon, 16 Jan 2023 14:50:59 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-rockchip@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH 22/22] drm/crtc-helper: Remove most include statements from drm_crtc_helper.h
-Date:   Mon, 16 Jan 2023 14:12:35 +0100
-Message-Id: <20230116131235.18917-23-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230116131235.18917-1-tzimmermann@suse.de>
-References: <20230116131235.18917-1-tzimmermann@suse.de>
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v4 00/19] irqdomain: fix mapping race and clean up locking
+Date:   Mon, 16 Jan 2023 14:50:25 +0100
+Message-Id: <20230116135044.14998-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.38.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove most include statements from crm_crtc_helper.h and forward-
-declare the contained types in drm_crtc_helper.h. Only keep <linux/types.h>
-for the definition of 'bool'.
+Parallel probing (e.g. due to asynchronous probing) of devices that
+share interrupts can currently result in two mappings for the same
+hardware interrupt to be created.
 
-Suggested-by: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
----
- include/drm/drm_crtc_helper.h | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+This series fixes this mapping race and clean up the irqdomain locking
+so that in the end the global irq_domain_mutex is only used for managing
+the likewise global irq_domain_list, while domain operations (e.g.
+IRQ allocations) use per-domain (hierarchy) locking.
 
-diff --git a/include/drm/drm_crtc_helper.h b/include/drm/drm_crtc_helper.h
-index 072bc4f90349..8c886fc46ef2 100644
---- a/include/drm/drm_crtc_helper.h
-+++ b/include/drm/drm_crtc_helper.h
-@@ -33,13 +33,17 @@
- #ifndef __DRM_CRTC_HELPER_H__
- #define __DRM_CRTC_HELPER_H__
- 
--#include <linux/spinlock.h>
- #include <linux/types.h>
--#include <linux/idr.h>
- 
--#include <drm/drm_crtc.h>
--#include <drm/drm_modeset_helper_vtables.h>
--#include <drm/drm_modeset_helper.h>
-+struct drm_atomic_state;
-+struct drm_connector;
-+struct drm_crtc;
-+struct drm_device;
-+struct drm_display_mode;
-+struct drm_encoder;
-+struct drm_framebuffer;
-+struct drm_mode_set;
-+struct drm_modeset_acquire_ctx;
- 
- void drm_helper_disable_unused_functions(struct drm_device *dev);
- int drm_crtc_helper_set_config(struct drm_mode_set *set,
+Johan
+
+
+Changes in v4
+ - add a comment to __irq_domain_add() as further documentation of the
+   domain lock and root pointer (19/19)
+ - add a comment documenting that the lockdep assertion in
+   irq_domain_set_mapping() also verifies that the domains in a
+   hierarchy point to the same root (19/19)
+
+Changes in v3
+ - drop dead and bogus code (1--3/19, new)
+ - fix racy mapcount accesses (5/19, new)
+ - drop revmap mutex (6/19, new)
+ - use irq_domain_mutex to address mapping race (9/19)
+ - clean up irq_domain_push/pop_irq() (10/19, new)
+ - use irq_domain_create_hierarchy() to construct hierarchies
+   (11--18/19, new)
+ - switch to per-domain locking (19/19, new)
+
+Changes in v2
+ - split out redundant-lookup cleanup (1/4)
+ - use a per-domain mutex to address mapping race (2/4)
+ - move kernel-doc to exported function (2/4)
+ - fix association race (3/4, new)
+ - use per-domain mutex for associations (4/4, new)
+
+
+Johan Hovold (19):
+  irqdomain: Drop bogus fwspec-mapping error handling
+  irqdomain: Drop dead domain-name assignment
+  irqdomain: Drop leftover brackets
+  irqdomain: Fix association race
+  irqdomain: Fix disassociation race
+  irqdomain: Drop revmap mutex
+  irqdomain: Look for existing mapping only once
+  irqdomain: Refactor __irq_domain_alloc_irqs()
+  irqdomain: Fix mapping-creation race
+  irqdomain: Clean up irq_domain_push/pop_irq()
+  x86/ioapic: Use irq_domain_create_hierarchy()
+  x86/apic: Use irq_domain_create_hierarchy()
+  irqchip/alpine-msi: Use irq_domain_add_hierarchy()
+  irqchip/gic-v2m: Use irq_domain_create_hierarchy()
+  irqchip/gic-v3-its: Use irq_domain_create_hierarchy()
+  irqchip/gic-v3-mbi: Use irq_domain_create_hierarchy()
+  irqchip/loongson-pch-msi: Use irq_domain_create_hierarchy()
+  irqchip/mvebu-odmi: Use irq_domain_create_hierarchy()
+  irqdomain: Switch to per-domain locking
+
+ arch/x86/kernel/apic/io_apic.c         |   8 +-
+ arch/x86/platform/uv/uv_irq.c          |   7 +-
+ drivers/irqchip/irq-alpine-msi.c       |   8 +-
+ drivers/irqchip/irq-gic-v2m.c          |   5 +-
+ drivers/irqchip/irq-gic-v3-its.c       |  13 +-
+ drivers/irqchip/irq-gic-v3-mbi.c       |   5 +-
+ drivers/irqchip/irq-loongson-pch-msi.c |   9 +-
+ drivers/irqchip/irq-mvebu-odmi.c       |  13 +-
+ include/linux/irqdomain.h              |   6 +-
+ kernel/irq/irqdomain.c                 | 341 ++++++++++++++-----------
+ 10 files changed, 233 insertions(+), 182 deletions(-)
+
 -- 
-2.39.0
+2.38.2
 
