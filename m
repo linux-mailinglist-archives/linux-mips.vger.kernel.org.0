@@ -2,64 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C889670B2D
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jan 2023 23:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C62670C29
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jan 2023 23:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjAQWEq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Jan 2023 17:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
+        id S229926AbjAQWxB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Jan 2023 17:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjAQWEF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Jan 2023 17:04:05 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554FB4F87F;
-        Tue, 17 Jan 2023 12:37:39 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pHsi7-002brB-VR; Tue, 17 Jan 2023 21:37:35 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pHsi7-003MvY-Or; Tue, 17 Jan 2023 21:37:35 +0100
-Message-ID: <0d238f02-4d78-6f14-1b1b-f53f0317a910@physik.fu-berlin.de>
-Date:   Tue, 17 Jan 2023 21:37:35 +0100
+        with ESMTP id S229459AbjAQWwF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Jan 2023 17:52:05 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105A74DCD7;
+        Tue, 17 Jan 2023 13:40:15 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673991592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MGlhxDfvMswyv1SvAr4PTIZoEWhp6ukErC3lnvtfzms=;
+        b=WCrx1f1BxleMDIz8u0yeTbWlkiEiKEN122P+7xwcPwRYApnZsKV1L7CNPoYK9myJHRs+Y4
+        pDyXg+Ki+0F5eGyXxqr9iMuHGNsqAXgYYBNmbh2B47lQQJTBGHsk+ahQKIpx386EeT0UIA
+        UHvdcGsnWrvn4lq605gpRNzK+0UTQzwGFe4lOzBs7fcxIjFnPjFrLuMUu6w+EWSPFjT0K2
+        omrVWTQ85N3CKAu2PX6dYrQn8R/C8LbwpTqI4OnC18PBbPi6PJP0UCmScHk/5uatomXpiC
+        mnlpFyjwlFt+B41gfzJuveVNkzsAMukT7zWeOtC8AJXTxr3rl8dq0OXR7/5E2g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673991592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MGlhxDfvMswyv1SvAr4PTIZoEWhp6ukErC3lnvtfzms=;
+        b=N6LgIkMUYxa6WRP/QzNw6ztcv7ZBHwqm2zHX/j2/UL0W2IqnlpbLf0d4Yx1U6dZcAdnhk4
+        yL+zZjZdkX1kfsBg==
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v4 09/19] irqdomain: Fix mapping-creation race
+In-Reply-To: <20230116135044.14998-10-johan+linaro@kernel.org>
+References: <20230116135044.14998-1-johan+linaro@kernel.org>
+ <20230116135044.14998-10-johan+linaro@kernel.org>
+Date:   Tue, 17 Jan 2023 22:39:51 +0100
+Message-ID: <87sfg8kfh4.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Calculating array sizes in C - was: Re: Build
- regressions/improvements in v6.2-rc1
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linuxppc-dev@lists.ozlabs.org, kasan-dev@googlegroups.com,
-        linux-xtensa@linux-xtensa.org,
-        Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20221227082932.798359-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
- <c05bee5d-0d69-289b-fe4b-98f4cd31a4f5@physik.fu-berlin.de>
- <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com>
- <3800eaa8-a4da-b2f0-da31-6627176cb92e@physik.fu-berlin.de>
- <CAMuHMdWbBRkhecrqcir92TgZnffMe8ku2t7PcVLqA6e6F-j=iw@mail.gmail.com>
- <429140e0-72fe-c91c-53bc-124d33ab5ffa@physik.fu-berlin.de>
- <CAMuHMdWpHSsAB3WosyCVgS6+t4pU35Xfj3tjmdCDoyS2QkS7iw@mail.gmail.com>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <CAMuHMdWpHSsAB3WosyCVgS6+t4pU35Xfj3tjmdCDoyS2QkS7iw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,25 +61,87 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi!
+On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
 
-On 1/17/23 21:05, Geert Uytterhoeven wrote:
->> Isn't this supposed to be caught by this check:
->>
->>          a, __same_type(a, NULL)
->>
->> ?
-> 
-> Yeah, but gcc thinks it is smarter than us...
-> Probably it drops the test, assuming UB cannot happen.
+> Parallel probing (e.g. due to asynchronous probing) of devices that share
+> interrupts can currently result in two mappings for the same hardware
+> interrupt to be created.
 
-Hmm, sounds like a GGC bug to me then. Not sure how to fix this then.
+This lacks an explanation why this can happen.
 
-Adrian
+> @@ -802,6 +811,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
+>  		type &= IRQ_TYPE_SENSE_MASK;
+>  
+> +	mutex_lock(&irq_domain_mutex);
+> +
+>  	/*
+>  	 * If we've already configured this interrupt,
+>  	 * don't do it again, or hell will break loose.
+> @@ -814,7 +825,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  		 * interrupt number.
+>  		 */
+>  		if (type == IRQ_TYPE_NONE || type == irq_get_trigger_type(virq))
+> -			return virq;
+> +			goto out;
+>  
+>  		/*
+>  		 * If the trigger type has not been set yet, then set
+> @@ -823,36 +834,43 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  		if (irq_get_trigger_type(virq) == IRQ_TYPE_NONE) {
+>  			irq_data = irq_get_irq_data(virq);
+>  			if (!irq_data)
+> -				return 0;
+> +				goto err;
+>  
+>  			irqd_set_trigger_type(irq_data, type);
+> -			return virq;
+> +			goto out;
+>  		}
+>  
+>  		pr_warn("type mismatch, failed to map hwirq-%lu for %s!\n",
+>  			hwirq, of_node_full_name(to_of_node(fwspec->fwnode)));
+> -		return 0;
+> +		goto err;
+>  	}
+>  
+>  	if (irq_domain_is_hierarchy(domain)) {
+> -		virq = irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, fwspec);
+> +		virq = ___irq_domain_alloc_irqs(domain, -1, 1, NUMA_NO_NODE,
+> +						fwspec, false, NULL);
+>  		if (virq <= 0)
+> -			return 0;
+> +			goto err;
+>  	} else {
+>  		/* Create mapping */
+>  		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
+>  		if (!virq)
+> -			return virq;
+> +			goto err;
+>  	}
+>  
+>  	irq_data = irq_get_irq_data(virq);
+>  	if (WARN_ON(!irq_data))
+> -		return 0;
+> +		goto err;
+>  
+>  	/* Store trigger type */
+>  	irqd_set_trigger_type(irq_data, type);
+> +out:
+> +	mutex_unlock(&irq_domain_mutex);
+>  
+>  	return virq;
+> +err:
+> +	mutex_unlock(&irq_domain_mutex);
+> +
+> +	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(irq_create_fwspec_mapping);
 
--- 
-  .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+You can spare that goto churn by renaming the existing function to
+irq_create_fwspec_mapping_locked() and invoked that guarded by the
+mutex, no?
 
+Thanks,
+
+        tglx
