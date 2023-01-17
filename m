@@ -2,214 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1B4670C9F
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 00:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AB7670DDB
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 00:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjAQXER (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Jan 2023 18:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S229684AbjAQXqf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Jan 2023 18:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjAQXDZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Jan 2023 18:03:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040B514E9C
-        for <linux-mips@vger.kernel.org>; Tue, 17 Jan 2023 13:37:24 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pHtch-0003AJ-Gz; Tue, 17 Jan 2023 22:36:03 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pHtcf-006lgW-EK; Tue, 17 Jan 2023 22:36:01 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pHtce-00DhTI-Jk; Tue, 17 Jan 2023 22:36:00 +0100
-Date:   Tue, 17 Jan 2023 22:35:56 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2
- channels, part 1
-Message-ID: <20230117213556.vdurctncvnjom62g@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
- <20221024205213.327001-2-paul@crapouillou.net>
- <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
- <CVZAKR.06MA7BGA170W3@crapouillou.net>
- <20221117132927.mom5klfd4eww5amk@pengutronix.de>
- <SKFJLR.07UMT1VWJOD52@crapouillou.net>
+        with ESMTP id S229472AbjAQXqA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Jan 2023 18:46:00 -0500
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5186A47432
+        for <linux-mips@vger.kernel.org>; Tue, 17 Jan 2023 14:52:21 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DF99E3F428;
+        Tue, 17 Jan 2023 23:42:53 +0100 (CET)
+Date:   Tue, 17 Jan 2023 23:42:51 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        openbmc@lists.ozlabs.org, linux-imx@nxp.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-iio@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        chrome-platform@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-arm-msm@vger.kernel.org,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Haibo Chen <haibo.chen@nxp.com>
+Subject: Re: [PATCH v3 12/15] iio: adc: qcom-spmi-adc5: convert to device
+ properties
+Message-ID: <20230117224251.wzxexdlfe5ydzjw5@SoMainline.org>
+References: <20220715122903.332535-1-nuno.sa@analog.com>
+ <20220715122903.332535-13-nuno.sa@analog.com>
+ <20220806192048.0ca41cc5@jic23-huawei>
+ <20230116204452.il4gase2szipeexz@SoMainline.org>
+ <CAHp75VdX9sFgn9STyzwcDCK1KYbU00ejFNcEP3FVnLk5J=Pktg@mail.gmail.com>
+ <CAHp75VdTftm1BE21rH1HVHiwUye-0Dvc66uCK2LE2qF4_zA6hg@mail.gmail.com>
+ <CAHp75VdyCA7mQdm--kg=hUbmQqX4-jfFMHgLxref5mNSM1vnMA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ffbebyuuq2pqxxtl"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SKFJLR.07UMT1VWJOD52@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHp75VdyCA7mQdm--kg=hUbmQqX4-jfFMHgLxref5mNSM1vnMA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 2023-01-17 11:40:42, Andy Shevchenko wrote:
+<snip>
+> > > > This CC just surfaced in my inbox while searching for our current
+> > > > discussion around missing labels in qcom-spmi-vadc - and on the side a
+> > > > userspace @xx label name ABI break (in qcom-spmi-adc5) caused by this
+> > > > patch's fwnode_get_name change - we could've caught it if I had not
+> > > > accidentally marked it as read and/or forgot about it.  My apologies.
+> > >
+> > > Does the following addition to the top of the
+> > > adc5_get_fw_channel_data() fix the issue?
+> > >
+> > > +       name = devm_kasprintf(adc->dev, GFP_KERNEL, "%pfwP", fwnode);
+> > > +       if (!name)
+> > > +               return -ENOMEM;
+> >
+> > Okay, it probably the same, so it might need additional code to
+> >
+> > + name[strchrnul(name, '@') - name] = '\0';
+> 
+> I have just sent a formal patch, please test on top of non-working kernel.
 
---ffbebyuuq2pqxxtl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I would've preferred to fix this in the same way as qcom-spmi-vadc by
+implementing read_label instead and basing it on the DT label or driver
+string literals instead [1], but dropping extend_name (hence changing
+sysfs filenames once again) would be considered an ABI break.
 
-Hello Paul,
+I've instead gone for a similar change that also ignores the node name
+in favour of falling back to the driver string literal (if no "label"
+property is available) while retaining extend_label [3] and the -
+however ugly they are - sysfs filenames, but that'll likely get rejected
+as strictly being an ABI break as well, not in the least because DT
+needs to be patched up [3] for it to work out.
 
-On Fri, Nov 18, 2022 at 09:55:40AM +0000, Paul Cercueil wrote:
-> Le jeu. 17 nov. 2022 =E0 14:29:27 +0100, Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> a =E9crit :
-> > Hello Paul,
-> >=20
-> > On Tue, Oct 25, 2022 at 11:02:00AM +0100, Paul Cercueil wrote:
-> > >  Le mar. 25 oct. 2022 =E0 08:21:29 +0200, Uwe Kleine-K=F6nig
-> > >  <u.kleine-koenig@pengutronix.de> a =E9crit :
-> > >  > Hello,
-> > >  >
-> > >  > On Mon, Oct 24, 2022 at 09:52:09PM +0100, Paul Cercueil wrote:
-> > >  > >  The "duty > cycle" trick to force the pin level of a disabled
-> > > TCU2
-> > >  > >  channel would only work when the channel had been enabled
-> > >  > > previously.
-> > >  > >
-> > >  > >  Address this issue by enabling the PWM mode in
-> > > jz4740_pwm_disable
-> > >  > >  (I know, right) so that the "duty > cycle" trick works before
-> > >  > > disabling
-> > >  > >  the PWM channel right after.
-> > >  > >
-> > >  > >  This issue went unnoticed, as the PWM pins on the majority of
-> > > the
-> > >  > > boards
-> > >  > >  tested would default to the inactive level once the
-> > > corresponding
-> > >  > > TCU
-> > >  > >  clock was enabled, so the first call to jz4740_pwm_disable()
-> > > would
-> > >  > > not
-> > >  > >  actually change the pin levels.
-> > >  > >
-> > >  > >  On the GCW Zero however, the PWM pin for the backlight (PWM1,
-> > > which
-> > >  > > is
-> > >  > >  a TCU2 channel) goes active as soon as the timer1 clock is
-> > > enabled.
-> > >  > >  Since the jz4740_pwm_disable() function did not work on
-> > > channels not
-> > >  > >  previously enabled, the backlight would shine at full
-> > > brightness
-> > >  > > from
-> > >  > >  the moment the backlight driver would probe, until the
-> > > backlight
-> > >  > > driver
-> > >  > >  tried to *enable* the PWM output.
-> > >  > >
-> > >  > >  With this fix, the PWM pins will be forced inactive as soon as
-> > >  > >  jz4740_pwm_apply() is called (and might be reconfigured to
-> > > active if
-> > >  > >  dictated by the pwm_state). This means that there is still a
-> > > tiny
-> > >  > > time
-> > >  > >  frame between the .request() and .apply() callbacks where the
-> > > PWM
-> > >  > > pin
-> > >  > >  might be active. Sadly, there is no way to fix this issue: it
-> > > is
-> > >  > >  impossible to write a PWM channel's registers if the
-> > > corresponding
-> > >  > > clock
-> > >  > >  is not enabled, and enabling the clock is what causes the PWM
-> > > pin
-> > >  > > to go
-> > >  > >  active.
-> > >  > >
-> > >  > >  There is a workaround, though, which complements this fix:
-> > > simply
-> > >  > >  starting the backlight driver (or any PWM client driver) with a
-> > >  > > "init"
-> > >  > >  pinctrl state that sets the pin as an inactive GPIO. Once the
-> > >  > > driver is
-> > >  > >  probed and the pinctrl state switches to "default", the
-> > > regular PWM
-> > >  > > pin
-> > >  > >  configuration can be used as it will be properly driven.
-> > >  > >
-> > >  > >  Fixes: c2693514a0a1 ("pwm: jz4740: Obtain regmap from parent
-> > > node")
-> > >  > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > >  > >  Cc: stable@vger.kernel.org
-> > >  >
-> > >  > OK, understood the issue. I think there is another similar issue:
-> > > The
-> > >  > clk is get and enabled only in the .request() callback. The
-> > > result is (I
-> > >  > think---depends on a few further conditions) that if you have the
-> > >  > backlight driver as a module and the bootloader enables the
-> > > backlight to
-> > >  > show a splash screen, the backlight goes off because of the
-> > >  > clk_disable_unused initcall.
-> > >=20
-> > >  I will have to verify, but I'm pretty sure disabling the clock
-> > > doesn't
-> > >  change the pin level back to inactive.
-> >=20
-> > Given that you set the clk's rate depending on the period to apply, I'd
-> > claim that you need to keep the clk on. Maybe it doesn't hurt, because
-> > another component of the system keeps the clk running, but it's wrong
-> > anyhow. Assumptions like these tend to break on new chip revisions.
->=20
-> If the backlight driver is a module then it will probe before the
-> clk_disable_unused initcall, unless something is really wrong.
+I'll at least test your patch when getting back to one of these devices.
 
-I'd claim the clk_disable_unused initcall is called before userspace
-starts and so before the module can be loaded. Who is wrong here?
+- Marijn
 
-> So the backlight would stay ON if it was enabled by the bootloader,
-> unless the DTB decides it doesn't have to be.
-
-Don't understand that. How could hte DTB decide the backlight can be
-disabled?
-=20
-> Anyway, I can try your suggestion, and move the trick to force-disable PWM
-> pins in the probe(). After that, the clocks can be safely disabled, so I =
-can
-> disable them (for the disabled PWMs) at the end of the probe and re-enable
-> them again in their respective .request() callback.
-
-I really lost track of the problem here and would appreciate a new
-submission of the remaining (and improved?) patches.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ffbebyuuq2pqxxtl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPHFLkACgkQwfwUeK3K
-7AkUMQgAns6EZuWoQbrriCFcoXRMg4koUFPdc/FSKe6eZ0FHjDDrSq7AHB0ScMAP
-8Hzb+8HTg7MfoGYxkbq63wpziNNpxMsqL1WP2SXNqDVsgfH6f9SZRiMshHhEHukO
-dgRvPGQ38iyZzRDERLAgt6PqPDvDsyTH8Tty8Urt4SdM7ipR2y0oBjwWoZw4nrNS
-0MhiwAZy90h7gopH3IE8xtewJJlYGeFOSIcp2/fPb6+9nceAfP9VWAu95MQi62iD
-8fkMNOgu3iroH5mhL1VjtGF8Iy72irnytMYAD1ikKG8K4RJT4zN9l63lJLsGoLVT
-UcZr84b3LhgJg5pd5luNIj0UVnJXvA==
-=U6a6
------END PGP SIGNATURE-----
-
---ffbebyuuq2pqxxtl--
+[1]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-6-marijn.suijten@somainline.org/
+[2]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-4-marijn.suijten@somainline.org/
+[3]: https://lore.kernel.org/linux-arm-msm/20221209215308.1781047-1-marijn.suijten@somainline.org/
