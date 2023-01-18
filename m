@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA6F6718BE
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 11:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B556718CF
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 11:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjARKPg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Jan 2023 05:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        id S229958AbjARKVL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Jan 2023 05:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjARKNX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Jan 2023 05:13:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD905955F;
-        Wed, 18 Jan 2023 01:22:03 -0800 (PST)
+        with ESMTP id S231153AbjARKUb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Jan 2023 05:20:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24F7798E6;
+        Wed, 18 Jan 2023 01:25:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EE18616ED;
-        Wed, 18 Jan 2023 09:22:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6099C433F2;
-        Wed, 18 Jan 2023 09:22:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70D31B81C11;
+        Wed, 18 Jan 2023 09:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0287FC433EF;
+        Wed, 18 Jan 2023 09:25:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674033723;
-        bh=DZS895Z+3sptXir0tPzxTsJKKkNp6DzwiYVTcI+Nxas=;
+        s=k20201202; t=1674033952;
+        bh=KlUPGKsZLEMxW1G8jfwVen6ljbFd7VXHSO70h2nSXKM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kQ7ipcJnCrbNJpn/1LWq84GZ6TR5qt3+KUz1dTKkr0XakM13mE2CdJADXrQLKwcR6
-         /Y3Z9lMY/yyTr/h9ZUnaD8+HXWyOE5ECHRk5Ms4N/Ok8HHvwCpTGqhjRA0VIalsHhM
-         Me7LShijNUwJaJ0wWn8jIkIIhcRWdLmHJ1kRfvMXLLv6X71hv3leQfEbYu6u3h9QRe
-         CgT19EWFPvSX+s3slPUT+xSyveq5YOLXegUVs4z8Ti9TPBsI0yH1Rys/JCC1QfWt8t
-         ughKXZz3GlLkly1qj6aT0KSqaw88dFUiVD4evJ91gGUyuExYpTAmMoCAcYMW+RlnUq
-         AdP1+leZLv+ng==
+        b=JWCyvuyz7uf/Kb7lnxvy3/MFAUTdmCGWdoadgzJguVTIgKQrgNzrjH+MJuTFboAyp
+         DKnAd3xZV0DNSuNHwo3bXRfT8/QYiOKf8g50aZh4fXuYcEwGN8alGYldTcdA/s5wKA
+         V7a7dRDlHxBXxx9mNBV75zXOQi/xCXCQxWoFjFN+2GW0XhupAwAQvGOc/IRW23LMaV
+         ey18YCyqhbhK6mK8fqgjHsJByTfTsTG720rE1ca+YHzZPQg6BxLVdl3/za/yz92Sjs
+         6bbVc5Dhy7M8u0xXmsbB9ULRXztPf71s1oTUhY4jPeuk5DN6U9ayxq8z+E1D8XvKcH
+         sfuOk7Obu5H8w==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1pI4eI-0001cJ-FS; Wed, 18 Jan 2023 10:22:27 +0100
-Date:   Wed, 18 Jan 2023 10:22:26 +0100
+        id 1pI4i0-0001fe-Aa; Wed, 18 Jan 2023 10:26:16 +0100
+Date:   Wed, 18 Jan 2023 10:26:16 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     Johan Hovold <johan+linaro@kernel.org>,
@@ -43,15 +43,15 @@ Cc:     Johan Hovold <johan+linaro@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
         Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 06/19] irqdomain: Drop revmap mutex
-Message-ID: <Y8e6Us0Qgt0p5S4R@hovoldconsulting.com>
+Subject: Re: [PATCH v4 07/19] irqdomain: Look for existing mapping only once
+Message-ID: <Y8e7OGlPXolkC1+R@hovoldconsulting.com>
 References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-7-johan+linaro@kernel.org>
- <871qnslut3.ffs@tglx>
+ <20230116135044.14998-8-johan+linaro@kernel.org>
+ <87wn5kkfqo.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <871qnslut3.ffs@tglx>
+In-Reply-To: <87wn5kkfqo.ffs@tglx>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,33 +61,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:23:20PM +0100, Thomas Gleixner wrote:
+On Tue, Jan 17, 2023 at 10:34:07PM +0100, Thomas Gleixner wrote:
 > On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
-> > The global irq_domain_mutex is now held in all paths that update the
-> > revmap structures so there is no longer any need for the revmap mutex.
+> > Avoid looking for an existing mapping twice when creating a new mapping
+> > using irq_create_fwspec_mapping() by factoring out the actual allocation
+> > which is shared with irq_create_mapping_affinity().
 > 
-> This can also go after the 3rd race fix, but ...
+> This changelog is incomplete and it took me a while to figure out why
+> this is before the race fix.
 > 
-> >  static void irq_domain_clear_mapping(struct irq_domain *domain,
-> >  				     irq_hw_number_t hwirq)
-> >  {
-> > +	lockdep_assert_held(&irq_domain_mutex);
+> The point is that you need __irq_create_mapping_affinity() later to fix
+> the shared mapping race. The double check avoidance is just a nice side
+> effect.
 > 
-> these lockdep asserts want to be part of the [dis]association race
-> fixes. They are completely unrelated to the removal of the revmap_mutex.
+> So please spell it out and make it clear that this needs to be
+> backported too, e.g. by adding:
+> 
+> The split out internal function will be used to fix a shared interrupt
+> mapping race. This change is therefore tagged with the same fixes tag.
+> 
+> Fixes: ....
 
-No, they are very much related to the removal of the revmap_mutex. These
-functions deal with the revmap structures which before this patch were
-clearly only modified with the revmap_mutex held.
+Sure. It was originally part of the fix of the race, but I was told to
+clean up the code first (and not worry about backporting).
 
-The lockdep assert is here to guarantee that my claim that all current
-(and future) paths that end up modifying these structures do so under
-the irq_domain_mutex instead.
+I'll see what I can do about reordering these again with the aim of
+making things easier to backport.
 
-> Your race fixes change the locking and you want to ensure that all
-> callers comply right there, no?
+> > +static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
+> > +						  irq_hw_number_t hwirq,
+> > +						  const struct irq_affinity_desc *affinity)
+> 
+> Please rename to irq_create_mapping_affinity_locked() so it's clear what
+> this is about and what the calling convention is. A lockdep assert to
+> that effect would be nice too.
 
-I want to make sure that all callers of these function comply, yes.
-That's why the asserts belong in this patch.
+Will do.
 
 Johan
