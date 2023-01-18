@@ -2,385 +2,328 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60776721EE
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 16:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A12E672543
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 18:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjARPqr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Jan 2023 10:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S231224AbjARRnQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Jan 2023 12:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjARPqY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Jan 2023 10:46:24 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579143A879;
-        Wed, 18 Jan 2023 07:45:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674056747; x=1705592747;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3Dk5QUjYmMt75G/oTijf96vMy1X35zBJ81+sI2c6ELA=;
-  b=eZsEim18a7cSYD51FsRPaQKbk/lPmBeAjeu9PEJGbXvLWIzgYUFJW+o6
-   TBrnZNQlZzC3odRVkXavq3Jd82sArAUOimiv4TA7d3FrQiaCT6j1e4rLI
-   gEdWO05uIRJXJW5bNMKkjWZdgTGiZB0qoP5dDYZ9SXSNY+0Hx8T16PIjB
-   pNzmhidC04IpHR8r+Pwp4d7lRJgfmn6wR+GJBFkl1NDud531fUDDEKPzJ
-   CX9TTSPXs0f9VMHc9q+I2rzCIr1bUnvR8hOOfgY3MaPhvxrdmCd0aclwi
-   pRzbPg3djAKusENMl5kgTFr7xu1WUu0JE9yjbmkZNthHAFdRjze+qcZmg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322701446"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="322701446"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 07:45:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="661759408"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="661759408"
-Received: from lab-ah.igk.intel.com ([10.102.42.211])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 07:45:40 -0800
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v5 7/7] drm/i915/gt: use __xchg instead of internal helper
-Date:   Wed, 18 Jan 2023 16:44:50 +0100
-Message-Id: <20230118154450.73842-7-andrzej.hajda@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230118154450.73842-1-andrzej.hajda@intel.com>
-References: <20230118153529.57695-1-andrzej.hajda@intel.com>
- <20230118154450.73842-1-andrzej.hajda@intel.com>
+        with ESMTP id S230144AbjARRmx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Jan 2023 12:42:53 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CCA3CE01;
+        Wed, 18 Jan 2023 09:42:20 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id mp20so38478289ejc.7;
+        Wed, 18 Jan 2023 09:42:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GpEuzue5d7ygPxB29FruCUnMnsWzWZ3lXy2MX+rDytc=;
+        b=W4GyWlsm8ALFRSIsMwvrTySOOS9hTBdV1OpvndBADGEMCQmWskkBoGTZ10dO14lWCf
+         9s1n4M/XC9OkFc3nvfoiyyKAMYrMlPJ0ppYyY+z8s2eN1loLgOBwv4z6v+2FLlrF90bv
+         6ZQb0cEa3IV6p0ZdEwQIujwy2ozbVyqJAY7e6Yk5uyW9Llgr7+WvB5XW3wcqIg/dx2yT
+         17z5d97RmSdOjf5TThzOxk0Us4hQ4yEz6sdImR7U3ItWvIdR8t6+FSY2EQHJLxcM+eqW
+         5J2agrByKnKRNQN3SrcInPeeW4duGeXWPdMGDvkLB3GJ62GM7FerjTYlFLjh3dYLIy/B
+         FVcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GpEuzue5d7ygPxB29FruCUnMnsWzWZ3lXy2MX+rDytc=;
+        b=MrOAbseckeuIlF+d93yPtIBIh5bzjSZjr2kkeaOnVsaPcqc1biF7QA70AzxMvPY5M9
+         +pUylyC8pHHp22cXB9BfYaEaOxVXXL5PBGfEIFAhub3hBVJC4mxcxLpYFDlnlNRFKVuA
+         dEnnWkNW4xeuiHEoII5Mo6jSwjZloXqd7J+uJ4LdWX3KEX04DEhXMMFOCVKZQG+sHaoq
+         csvfweF9KH7U186ywbMBzkQKK/Elp5GFQRe6ke/l55vSkOT2yVj0olC/CsDWJGGQ86yZ
+         Fj/T++Hnb+lxoKgF86Yrec8ioIqk78fJn6A0pM5NC5mWwfZ+ZgCFHNtG84NYSDvVnen5
+         x9Fg==
+X-Gm-Message-State: AFqh2kpIWQHShFBBgEqcIIUARtPIbcNyUlPBRBF4DO/0EzdweJXM62zQ
+        8ols6+2fVvC+jGYzjsgQ7SCXsx9O+I+H2GWmjb8=
+X-Google-Smtp-Source: AMrXdXuMaX0n1Hxu6XGSukmrVfG28F8T8Ib+RkX+SQ8+JvzXGjjDRpkDNnyAZVdVPrYouEW9ECCsgOvI5WFVc49eZlI=
+X-Received: by 2002:a17:906:40d7:b0:836:e897:648a with SMTP id
+ a23-20020a17090640d700b00836e897648amr470430ejk.94.1674063739084; Wed, 18 Jan
+ 2023 09:42:19 -0800 (PST)
 MIME-Version: 1.0
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230105030614.26842-1-tong@infragraf.org> <ea7673e1-40ec-18be-af89-5f4fd0f71742@csgroup.eu>
+ <71c83f39-f85f-d990-95b7-ab6068839e6c@iogearbox.net> <5836b464-290e-203f-00f2-fc6632c9f570@csgroup.eu>
+ <147A796D-12C0-482F-B48A-16E67120622B@infragraf.org> <0b46b813-05f2-5083-9f2e-82d72970dae2@csgroup.eu>
+ <4380D454-3ED0-43F4-9A79-102BB0E3577A@infragraf.org> <d91bbb9e-484b-d43d-e62d-0474ff21cf91@iogearbox.net>
+ <7159E8F8-AE66-4563-8A29-D10D66EFAF3D@infragraf.org> <CAADnVQLf_UhRP76i9+OaLGrmuoM942QebMXT3OA3mgrP_UV0KA@mail.gmail.com>
+ <d807b7fb-dbd2-8e4c-812c-48a1a01c190e@csgroup.eu>
+In-Reply-To: <d807b7fb-dbd2-8e4c-812c-48a1a01c190e@csgroup.eu>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 18 Jan 2023 09:42:07 -0800
+Message-ID: <CAADnVQKAAhbL-9qGPfRFsfw3oh6KnrEpeYLnfhrKUSzX8VmFuQ@mail.gmail.com>
+Subject: Re: [bpf-next v2] bpf: drop deprecated bpf_jit_enable == 2
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Tonghao Zhang <tong@infragraf.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.or" 
+        <linux-arm-kernel@lists.infradead.or>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Hou Tao <houtao1@huawei.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Prefer core helper if available.
+On Tue, Jan 17, 2023 at 11:36 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 18/01/2023 =C3=A0 03:21, Alexei Starovoitov a =C3=A9crit :
+> > On Tue, Jan 17, 2023 at 6:13 PM Tonghao Zhang <tong@infragraf.org> wrot=
+e:
+> >>
+> >>
+> >>
+> >>> On Jan 17, 2023, at 11:59 PM, Daniel Borkmann <daniel@iogearbox.net> =
+wrote:
+> >>>
+> >>> On 1/17/23 3:22 PM, Tonghao Zhang wrote:
+> >>>>> On Jan 17, 2023, at 3:30 PM, Christophe Leroy <christophe.leroy@csg=
+roup.eu> wrote:
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>> Le 17/01/2023 =C3=A0 06:30, Tonghao Zhang a =C3=A9crit :
+> >>>>>>
+> >>>>>>
+> >>>>>>> On Jan 9, 2023, at 4:15 PM, Christophe Leroy <christophe.leroy@cs=
+group.eu> wrote:
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>> Le 06/01/2023 =C3=A0 16:37, Daniel Borkmann a =C3=A9crit :
+> >>>>>>>> On 1/5/23 6:53 PM, Christophe Leroy wrote:
+> >>>>>>>>> Le 05/01/2023 =C3=A0 04:06, tong@infragraf.org a =C3=A9crit :
+> >>>>>>>>>> From: Tonghao Zhang <tong@infragraf.org>
+> >>>>>>>>>>
+> >>>>>>>>>> The x86_64 can't dump the valid insn in this way. A test BPF p=
+rog
+> >>>>>>>>>> which include subprog:
+> >>>>>>>>>>
+> >>>>>>>>>> $ llvm-objdump -d subprog.o
+> >>>>>>>>>> Disassembly of section .text:
+> >>>>>>>>>> 0000000000000000 <subprog>:
+> >>>>>>>>>>           0:       18 01 00 00 73 75 62 70 00 00 00 00 72 6f 6=
+7 00 r1
+> >>>>>>>>>> =3D 29114459903653235 ll
+> >>>>>>>>>>           2:       7b 1a f8 ff 00 00 00 00 *(u64 *)(r10 - 8) =
+=3D r1
+> >>>>>>>>>>           3:       bf a1 00 00 00 00 00 00 r1 =3D r10
+> >>>>>>>>>>           4:       07 01 00 00 f8 ff ff ff r1 +=3D -8
+> >>>>>>>>>>           5:       b7 02 00 00 08 00 00 00 r2 =3D 8
+> >>>>>>>>>>           6:       85 00 00 00 06 00 00 00 call 6
+> >>>>>>>>>>           7:       95 00 00 00 00 00 00 00 exit
+> >>>>>>>>>> Disassembly of section raw_tp/sys_enter:
+> >>>>>>>>>> 0000000000000000 <entry>:
+> >>>>>>>>>>           0:       85 10 00 00 ff ff ff ff call -1
+> >>>>>>>>>>           1:       b7 00 00 00 00 00 00 00 r0 =3D 0
+> >>>>>>>>>>           2:       95 00 00 00 00 00 00 00 exit
+> >>>>>>>>>>
+> >>>>>>>>>> kernel print message:
+> >>>>>>>>>> [  580.775387] flen=3D8 proglen=3D51 pass=3D3 image=3Dffffffff=
+a000c20c
+> >>>>>>>>>> from=3Dkprobe-load pid=3D1643
+> >>>>>>>>>> [  580.777236] JIT code: 00000000: cc cc cc cc cc cc cc cc cc =
+cc cc
+> >>>>>>>>>> cc cc cc cc cc
+> >>>>>>>>>> [  580.779037] JIT code: 00000010: cc cc cc cc cc cc cc cc cc =
+cc cc
+> >>>>>>>>>> cc cc cc cc cc
+> >>>>>>>>>> [  580.780767] JIT code: 00000020: cc cc cc cc cc cc cc cc cc =
+cc cc
+> >>>>>>>>>> cc cc cc cc cc
+> >>>>>>>>>> [  580.782568] JIT code: 00000030: cc cc cc
+> >>>>>>>>>>
+> >>>>>>>>>> $ bpf_jit_disasm
+> >>>>>>>>>> 51 bytes emitted from JIT compiler (pass:3, flen:8)
+> >>>>>>>>>> ffffffffa000c20c + <x>:
+> >>>>>>>>>>       0:   int3
+> >>>>>>>>>>       1:   int3
+> >>>>>>>>>>       2:   int3
+> >>>>>>>>>>       3:   int3
+> >>>>>>>>>>       4:   int3
+> >>>>>>>>>>       5:   int3
+> >>>>>>>>>>       ...
+> >>>>>>>>>>
+> >>>>>>>>>> Until bpf_jit_binary_pack_finalize is invoked, we copy rw_head=
+er to
+> >>>>>>>>>> header
+> >>>>>>>>>> and then image/insn is valid. BTW, we can use the "bpftool pro=
+g dump"
+> >>>>>>>>>> JITed instructions.
+> >>>>>>>>>
+> >>>>>>>>> NACK.
+> >>>>>>>>>
+> >>>>>>>>> Because the feature is buggy on x86_64, you remove it for all
+> >>>>>>>>> architectures ?
+> >>>>>>>>>
+> >>>>>>>>> On powerpc bpf_jit_enable =3D=3D 2 works and is very usefull.
+> >>>>>>>>>
+> >>>>>>>>> Last time I tried to use bpftool on powerpc/32 it didn't work. =
+I don't
+> >>>>>>>>> remember the details, I think it was an issue with endianess. M=
+aybe it
+> >>>>>>>>> is fixed now, but it needs to be verified.
+> >>>>>>>>>
+> >>>>>>>>> So please, before removing a working and usefull feature, make =
+sure
+> >>>>>>>>> there is an alternative available to it for all architectures i=
+n all
+> >>>>>>>>> configurations.
+> >>>>>>>>>
+> >>>>>>>>> Also, I don't think bpftool is usable to dump kernel BPF selfte=
+sts.
+> >>>>>>>>> That's vital when a selftest fails if you want to have a chance=
+ to
+> >>>>>>>>> understand why it fails.
+> >>>>>>>>
+> >>>>>>>> If this is actively used by JIT developers and considered useful=
+, I'd be
+> >>>>>>>> ok to leave it for the time being. Overall goal is to reach feat=
+ure parity
+> >>>>>>>> among (at least major arch) JITs and not just have most function=
+ality only
+> >>>>>>>> available on x86-64 JIT. Could you however check what is not wor=
+king with
+> >>>>>>>> bpftool on powerpc/32? Perhaps it's not too much effort to just =
+fix it,
+> >>>>>>>> but details would be useful otherwise 'it didn't work' is too fu=
+zzy.
+> >>>>>>>
+> >>>>>>> Sure I will try to test bpftool again in the coming days.
+> >>>>>>>
+> >>>>>>> Previous discussion about that subject is here:
+> >>>>>>> https://patchwork.kernel.org/project/linux-riscv/patch/2021041509=
+3250.3391257-1-Jianlin.Lv@arm.com/#24176847=3D
+> >>>>>> Hi Christophe
+> >>>>>> Any progress? We discuss to deprecate the bpf_jit_enable =3D=3D 2 =
+in 2021, but bpftool can not run on powerpc.
+> >>>>>> Now can we fix this issue?
+> >>>>>
+> >>>>> Hi Tong,
+> >>>>>
+> >>>>> I have started to look at it but I don't have any fruitfull feedbac=
+k yet.
+> >>>>>
+> >>>>> In the meantime, were you able to confirm that bpftool can also be =
+used
+> >>>>> to dump jitted tests from test_bpf.ko module on x86_64 ? In that ca=
+n you
+> >>>>> tell me how to proceed ?
+> >>>> Now I do not test, but we can dump the insn after bpf_prog_select_ru=
+ntime in test_bpf.ko. bpf_map_get_info_by_fd can copy the insn to userspace=
+, but we can
+> >>>> dump them in test_bpf.ko in the same way.
+> >>>
+> >>> Issue is that these progs are not consumable from userspace (and ther=
+efore not bpftool).
+> >>> it's just simple bpf_prog_alloc + copy of test insns + bpf_prog_selec=
+t_runtime() to test
+> >>> JITs (see generate_filter()). Some of them could be converted over to=
+ test_verifier, but
+> >>> not all might actually pass verifier, iirc. Don't think it's a good i=
+dea to allow exposing
+> >>> them via fd tbh.
+> >> Hi
+> >> I mean that, can we invoke the bpf_jit_dump in test_bpf.ko directly ?.=
+ bpf_prog_get_info_by_fd copy the insn to userspace, but we only dump insn =
+in test_bpf.ko
+> >>
+> >>                  if (bpf_dump_raw_ok(file->f_cred)) {// code copied fr=
+om bpf_prog_get_info_by_fd, not tested
+> >>
+> >>                          /* for multi-function programs, copy the JITe=
+d
+> >>                           * instructions for all the functions
+> >>                           */
+> >>                          if (prog->aux->func_cnt) {
+> >>                                  for (i =3D 0; i < prog->aux->func_cnt=
+; i++) {
+> >>                                          len =3D prog->aux->func[i]->j=
+ited_len;
+> >>                                          img =3D (u8 *) prog->aux->fun=
+c[i]->bpf_func;
+> >>                                          bpf_jit_dump(1, len, 1, img);
+> >>                                  }
+> >>                          } else {
+> >>                                  bpf_jit_dump(1, ulen, 1, prog->bpf_fu=
+nc);
+> >>                          }
+> >>                  }
+> >
+> > Let's not reinvent the wheel.
+> > bpftool prog dump jited
+> > is our supported command.
+> > ppc issue with bpftool is related to endianness of embedded skeleton.
+> > which means that none of the bpftool prog commands work on ppc.
+> > It's a bigger issue to address with cross compilation of bpftool.
+> >
+> > bpftool supports gnu and llvm disassembler. It retrieves and
+> > prints BTF, line info and source code along with asm.
+> > The user experience is at different level comparing to bpf_jit_dump.
+>
+> Hi Alexei,
+>
+> Fair enough, we are going to try and fix bpftool.
+>
+> But for test_bpf.ko module, how do you use bpftool to dump the BPF tests
+> ? Even on x86 I have not been able to use bpftool for that until now.
+> Can you tell me how you do ?
 
-Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
----
- drivers/gpu/drm/i915/gt/intel_engine_cs.c            | 2 +-
- drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c     | 4 ++--
- drivers/gpu/drm/i915/gt/intel_execlists_submission.c | 4 ++--
- drivers/gpu/drm/i915/gt/intel_ggtt.c                 | 4 ++--
- drivers/gpu/drm/i915/gt/intel_gsc.c                  | 2 +-
- drivers/gpu/drm/i915/gt/intel_gt.c                   | 4 ++--
- drivers/gpu/drm/i915/gt/intel_gt_pm.c                | 2 +-
- drivers/gpu/drm/i915/gt/intel_lrc.c                  | 6 +++---
- drivers/gpu/drm/i915/gt/intel_migrate.c              | 2 +-
- drivers/gpu/drm/i915/gt/intel_rc6.c                  | 2 +-
- drivers/gpu/drm/i915/gt/intel_rps.c                  | 2 +-
- drivers/gpu/drm/i915/gt/selftest_context.c           | 2 +-
- drivers/gpu/drm/i915/gt/selftest_ring_submission.c   | 2 +-
- drivers/gpu/drm/i915/gt/selftest_timeline.c          | 2 +-
- drivers/gpu/drm/i915/gt/uc/intel_gsc_uc.c            | 2 +-
- drivers/gpu/drm/i915/gt/uc/intel_uc.c                | 2 +-
- drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c             | 2 +-
- drivers/gpu/drm/i915/i915_utils.h                    | 1 +
- 18 files changed, 24 insertions(+), 23 deletions(-)
+test_bpf.ko is useful to JIT developers when they're starting
+to work on it, but its test coverage is inadequate for real
+world bpf usage comparing to selftests/bpf.
+Johan Almbladh did some great additions to test_bpf.ko back in 2021.
+Since then there wasn't much.
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-index 922f1bb22dc685..9712bfc2c6523d 100644
---- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-+++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-@@ -1042,7 +1042,7 @@ static void cleanup_status_page(struct intel_engine_cs *engine)
- 	/* Prevent writes into HWSP after returning the page to the system */
- 	intel_engine_set_hwsp_writemask(engine, ~0u);
- 
--	vma = fetch_and_zero(&engine->status_page.vma);
-+	vma = __xchg(&engine->status_page.vma, 0);
- 	if (!vma)
- 		return;
- 
-diff --git a/drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c b/drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
-index 9a527e1f5be655..09befcc6a84fa1 100644
---- a/drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
-+++ b/drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
-@@ -229,7 +229,7 @@ static void heartbeat(struct work_struct *wrk)
- 	mutex_unlock(&ce->timeline->mutex);
- out:
- 	if (!engine->i915->params.enable_hangcheck || !next_heartbeat(engine))
--		i915_request_put(fetch_and_zero(&engine->heartbeat.systole));
-+		i915_request_put(__xchg(&engine->heartbeat.systole, 0));
- 	intel_engine_pm_put(engine);
- }
- 
-@@ -244,7 +244,7 @@ void intel_engine_unpark_heartbeat(struct intel_engine_cs *engine)
- void intel_engine_park_heartbeat(struct intel_engine_cs *engine)
- {
- 	if (cancel_delayed_work(&engine->heartbeat.work))
--		i915_request_put(fetch_and_zero(&engine->heartbeat.systole));
-+		i915_request_put(__xchg(&engine->heartbeat.systole, 0));
- }
- 
- void intel_gt_unpark_heartbeats(struct intel_gt *gt)
-diff --git a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-index 18ffe55282e594..5c985e6fa1be2f 100644
---- a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-+++ b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-@@ -3199,7 +3199,7 @@ static void execlists_reset_cancel(struct intel_engine_cs *engine)
- 		RB_CLEAR_NODE(rb);
- 
- 		spin_lock(&ve->base.sched_engine->lock);
--		rq = fetch_and_zero(&ve->request);
-+		rq = __xchg(&ve->request, NULL);
- 		if (rq) {
- 			if (i915_request_mark_eio(rq)) {
- 				rq->engine = engine;
-@@ -3604,7 +3604,7 @@ static void rcu_virtual_context_destroy(struct work_struct *wrk)
- 
- 		spin_lock_irq(&ve->base.sched_engine->lock);
- 
--		old = fetch_and_zero(&ve->request);
-+		old = __xchg(&ve->request, NULL);
- 		if (old) {
- 			GEM_BUG_ON(!__i915_request_is_complete(old));
- 			__i915_request_submit(old);
-diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt.c b/drivers/gpu/drm/i915/gt/intel_ggtt.c
-index fe64c13fd3b4aa..6f441c3d3d1cef 100644
---- a/drivers/gpu/drm/i915/gt/intel_ggtt.c
-+++ b/drivers/gpu/drm/i915/gt/intel_ggtt.c
-@@ -684,7 +684,7 @@ static void fini_aliasing_ppgtt(struct i915_ggtt *ggtt)
- {
- 	struct i915_ppgtt *ppgtt;
- 
--	ppgtt = fetch_and_zero(&ggtt->alias);
-+	ppgtt = __xchg(&ggtt->alias, NULL);
- 	if (!ppgtt)
- 		return;
- 
-@@ -1238,7 +1238,7 @@ bool i915_ggtt_resume_vm(struct i915_address_space *vm)
- 				   was_bound);
- 
- 		if (obj) { /* only used during resume => exclusive access */
--			write_domain_objs |= fetch_and_zero(&obj->write_domain);
-+			write_domain_objs |= __xchg(&obj->write_domain, 0);
- 			obj->read_domains |= I915_GEM_DOMAIN_GTT;
- 		}
- 	}
-diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-index bcc3605158dbde..38fbea757ba741 100644
---- a/drivers/gpu/drm/i915/gt/intel_gsc.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-@@ -70,7 +70,7 @@ gsc_ext_om_alloc(struct intel_gsc *gsc, struct intel_gsc_intf *intf, size_t size
- 
- static void gsc_ext_om_destroy(struct intel_gsc_intf *intf)
- {
--	struct drm_i915_gem_object *obj = fetch_and_zero(&intf->gem_obj);
-+	struct drm_i915_gem_object *obj = __xchg(&intf->gem_obj, 0);
- 
- 	if (!obj)
- 		return;
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-index f0dbfc434e0773..884458507969e6 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-@@ -753,7 +753,7 @@ int intel_gt_init(struct intel_gt *gt)
- 	intel_uc_fini(&gt->uc);
- err_engines:
- 	intel_engines_release(gt);
--	i915_vm_put(fetch_and_zero(&gt->vm));
-+	i915_vm_put(__xchg(&gt->vm, 0));
- err_pm:
- 	intel_gt_pm_fini(gt);
- 	intel_gt_fini_scratch(gt);
-@@ -800,7 +800,7 @@ void intel_gt_driver_release(struct intel_gt *gt)
- {
- 	struct i915_address_space *vm;
- 
--	vm = fetch_and_zero(&gt->vm);
-+	vm = __xchg(&gt->vm, 0);
- 	if (vm) /* FIXME being called twice on error paths :( */
- 		i915_vm_put(vm);
- 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.c b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
-index cef3d6f5c34e01..2527c5ae72e59b 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt_pm.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
-@@ -124,7 +124,7 @@ static int __gt_unpark(struct intel_wakeref *wf)
- static int __gt_park(struct intel_wakeref *wf)
- {
- 	struct intel_gt *gt = container_of(wf, typeof(*gt), wakeref);
--	intel_wakeref_t wakeref = fetch_and_zero(&gt->awake);
-+	intel_wakeref_t wakeref = __xchg(&gt->awake, 0);
- 	struct drm_i915_private *i915 = gt->i915;
- 
- 	GT_TRACE(gt, "\n");
-diff --git a/drivers/gpu/drm/i915/gt/intel_lrc.c b/drivers/gpu/drm/i915/gt/intel_lrc.c
-index 7771a19008c604..9dfa3c10ddc85f 100644
---- a/drivers/gpu/drm/i915/gt/intel_lrc.c
-+++ b/drivers/gpu/drm/i915/gt/intel_lrc.c
-@@ -1144,7 +1144,7 @@ __lrc_alloc_state(struct intel_context *ce, struct intel_engine_cs *engine)
- static struct intel_timeline *
- pinned_timeline(struct intel_context *ce, struct intel_engine_cs *engine)
- {
--	struct intel_timeline *tl = fetch_and_zero(&ce->timeline);
-+	struct intel_timeline *tl = __xchg(&ce->timeline, 0);
- 
- 	return intel_timeline_create_from_engine(engine, page_unmask_bits(tl));
- }
-@@ -1261,8 +1261,8 @@ void lrc_fini(struct intel_context *ce)
- 	if (!ce->state)
- 		return;
- 
--	intel_ring_put(fetch_and_zero(&ce->ring));
--	i915_vma_put(fetch_and_zero(&ce->state));
-+	intel_ring_put(__xchg(&ce->ring, 0));
-+	i915_vma_put(__xchg(&ce->state, 0));
- }
- 
- void lrc_destroy(struct kref *kref)
-diff --git a/drivers/gpu/drm/i915/gt/intel_migrate.c b/drivers/gpu/drm/i915/gt/intel_migrate.c
-index 3f638f19879685..3eab1867a4abee 100644
---- a/drivers/gpu/drm/i915/gt/intel_migrate.c
-+++ b/drivers/gpu/drm/i915/gt/intel_migrate.c
-@@ -1147,7 +1147,7 @@ void intel_migrate_fini(struct intel_migrate *m)
- {
- 	struct intel_context *ce;
- 
--	ce = fetch_and_zero(&m->context);
-+	ce = __xchg(&m->context, 0);
- 	if (!ce)
- 		return;
- 
-diff --git a/drivers/gpu/drm/i915/gt/intel_rc6.c b/drivers/gpu/drm/i915/gt/intel_rc6.c
-index 5c91622dfca420..ca6b0c905accb3 100644
---- a/drivers/gpu/drm/i915/gt/intel_rc6.c
-+++ b/drivers/gpu/drm/i915/gt/intel_rc6.c
-@@ -702,7 +702,7 @@ void intel_rc6_fini(struct intel_rc6 *rc6)
- 
- 	intel_rc6_disable(rc6);
- 
--	pctx = fetch_and_zero(&rc6->pctx);
-+	pctx = __xchg(&rc6->pctx, 0);
- 	if (pctx)
- 		i915_gem_object_put(pctx);
- 
-diff --git a/drivers/gpu/drm/i915/gt/intel_rps.c b/drivers/gpu/drm/i915/gt/intel_rps.c
-index 9ad3bc7201cbaa..e34ca33b09d2e7 100644
---- a/drivers/gpu/drm/i915/gt/intel_rps.c
-+++ b/drivers/gpu/drm/i915/gt/intel_rps.c
-@@ -1831,7 +1831,7 @@ static void rps_work(struct work_struct *work)
- 	u32 pm_iir = 0;
- 
- 	spin_lock_irq(gt->irq_lock);
--	pm_iir = fetch_and_zero(&rps->pm_iir) & rps->pm_events;
-+	pm_iir = __xchg(&rps->pm_iir, 0) & rps->pm_events;
- 	client_boost = atomic_read(&rps->num_waiters);
- 	spin_unlock_irq(gt->irq_lock);
- 
-diff --git a/drivers/gpu/drm/i915/gt/selftest_context.c b/drivers/gpu/drm/i915/gt/selftest_context.c
-index 76fbae358072df..3f49ca1debc6ce 100644
---- a/drivers/gpu/drm/i915/gt/selftest_context.c
-+++ b/drivers/gpu/drm/i915/gt/selftest_context.c
-@@ -171,7 +171,7 @@ static int live_context_size(void *arg)
- 		 * active state is sufficient, we are only checking that we
- 		 * don't use more than we planned.
- 		 */
--		saved = fetch_and_zero(&engine->default_state);
-+		saved = __xchg(&engine->default_state, 0);
- 
- 		/* Overlaps with the execlists redzone */
- 		engine->context_size += I915_GTT_PAGE_SIZE;
-diff --git a/drivers/gpu/drm/i915/gt/selftest_ring_submission.c b/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
-index 87ceb0f374b673..a01aaca4fbf5ff 100644
---- a/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
-+++ b/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
-@@ -269,7 +269,7 @@ static int live_ctx_switch_wa(void *arg)
- 		if (IS_GRAPHICS_VER(gt->i915, 4, 5))
- 			continue; /* MI_STORE_DWORD is privileged! */
- 
--		saved_wa = fetch_and_zero(&engine->wa_ctx.vma);
-+		saved_wa = __xchg(&engine->wa_ctx.vma, 0);
- 
- 		intel_engine_pm_get(engine);
- 		err = __live_ctx_switch_wa(engine);
-diff --git a/drivers/gpu/drm/i915/gt/selftest_timeline.c b/drivers/gpu/drm/i915/gt/selftest_timeline.c
-index 522d0190509ccc..d14d5159024ec7 100644
---- a/drivers/gpu/drm/i915/gt/selftest_timeline.c
-+++ b/drivers/gpu/drm/i915/gt/selftest_timeline.c
-@@ -892,7 +892,7 @@ static int create_watcher(struct hwsp_watcher *w,
- static int check_watcher(struct hwsp_watcher *w, const char *name,
- 			 bool (*op)(u32 hwsp, u32 seqno))
- {
--	struct i915_request *rq = fetch_and_zero(&w->rq);
-+	struct i915_request *rq = __xchg(&w->rq, NULL);
- 	u32 offset, end;
- 	int err;
- 
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_gsc_uc.c b/drivers/gpu/drm/i915/gt/uc/intel_gsc_uc.c
-index fd21dbd2663bec..3f85d3f6fc6e92 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_gsc_uc.c
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_gsc_uc.c
-@@ -110,7 +110,7 @@ void intel_gsc_uc_fini(struct intel_gsc_uc *gsc)
- 	flush_work(&gsc->work);
- 
- 	if (gsc->ce)
--		intel_engine_destroy_pinned_context(fetch_and_zero(&gsc->ce));
-+		intel_engine_destroy_pinned_context(__xchg(&gsc->ce, NULL));
- 
- 	i915_vma_unpin_and_release(&gsc->local, 0);
- 
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_uc.c b/drivers/gpu/drm/i915/gt/uc/intel_uc.c
-index 9a8a1abf71d7fe..0292212cffbcb9 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_uc.c
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_uc.c
-@@ -169,7 +169,7 @@ static void __uc_capture_load_err_log(struct intel_uc *uc)
- 
- static void __uc_free_load_err_log(struct intel_uc *uc)
- {
--	struct drm_i915_gem_object *log = fetch_and_zero(&uc->load_err_log);
-+	struct drm_i915_gem_object *log = __xchg(&uc->load_err_log, NULL);
- 
- 	if (log)
- 		i915_gem_object_put(log);
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
-index 65672ff8260540..3f684f34469581 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
-@@ -1119,7 +1119,7 @@ void intel_uc_fw_cleanup_fetch(struct intel_uc_fw *uc_fw)
- 	if (!intel_uc_fw_is_available(uc_fw))
- 		return;
- 
--	i915_gem_object_put(fetch_and_zero(&uc_fw->obj));
-+	i915_gem_object_put(__xchg(&uc_fw->obj, NULL));
- 
- 	intel_uc_fw_change_status(uc_fw, INTEL_UC_FIRMWARE_SELECTED);
- }
-diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
-index 2c430c0c3badde..be7df2c384c832 100644
---- a/drivers/gpu/drm/i915/i915_utils.h
-+++ b/drivers/gpu/drm/i915/i915_utils.h
-@@ -26,6 +26,7 @@
- #define __I915_UTILS_H
- 
- #include <linux/list.h>
-+#include <linux/non-atomic/xchg.h>
- #include <linux/overflow.h>
- #include <linux/sched.h>
- #include <linux/string_helpers.h>
--- 
-2.34.1
-
+Here it's important to distinguish the target user.
+Is it a kernel JIT developer or user space bpf prog developer?
+When it's a kernel developer they can easily
+add print_hex_dump() in the right places.
+That's what I did when I was developing bpf trampoline.
+bpf is more than just JIT. There are trampoline, kfuncs, dispatch.
+The kernel devs should not add a debug code.
+Long ago bpf_jit_enable=3D2 was useful to user space bpf developers.
+They wanted to see how JITed code look like to optimize it and what not.
+Now 'perf record' captures bpf asm and annotates it in 'perf report',
+so performance analysis problem is solved that way.
+bpftool prog dump jit addressed the needs of users and admins who
+want to understand what bpf progs are loaded and what are they doing.
+Both 'dump jited' and 'dump xlated' are useful for this case.
+So bpf_jit_enable=3D2 remained useful to kernel developers only and
+in that sense it become a kernel debug feature for a narrow set of
+JIT developers. On x86 bpf_jit_dump() was neglected and broken.
+I suspect the other archs will follow the same fate. If not already.
+Having a sysctl for kernel developers is not something the kernel
+developers should have around. Hence the cleanup of this patch.
