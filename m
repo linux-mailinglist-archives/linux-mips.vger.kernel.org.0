@@ -2,105 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9446716CE
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 10:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452776717BB
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 10:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjARJA0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Jan 2023 04:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        id S230077AbjARJ2i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Jan 2023 04:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjARI7N (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Jan 2023 03:59:13 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04FDEC65
-        for <linux-mips@vger.kernel.org>; Wed, 18 Jan 2023 00:17:10 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pI3cu-0005iS-4F; Wed, 18 Jan 2023 09:16:56 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pI3ct-006rqX-8R; Wed, 18 Jan 2023 09:16:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pI3cs-00Do1d-I9; Wed, 18 Jan 2023 09:16:54 +0100
-Date:   Wed, 18 Jan 2023 09:16:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2
- channels, part 1
-Message-ID: <20230118081654.qggjaockxwg2u2sg@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
- <20221024205213.327001-2-paul@crapouillou.net>
- <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
- <CVZAKR.06MA7BGA170W3@crapouillou.net>
- <20221117132927.mom5klfd4eww5amk@pengutronix.de>
- <SKFJLR.07UMT1VWJOD52@crapouillou.net>
- <20230117213556.vdurctncvnjom62g@pengutronix.de>
- <846b27400a72db8ca9b7497a6c032bdaacd62fc6.camel@crapouillou.net>
+        with ESMTP id S230273AbjARJZO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Jan 2023 04:25:14 -0500
+Received: from mail.bostmarktrun.com (mail.bostmarktrun.com [135.125.238.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F275470B1
+        for <linux-mips@vger.kernel.org>; Wed, 18 Jan 2023 00:50:35 -0800 (PST)
+Received: by mail.bostmarktrun.com (Postfix, from userid 1002)
+        id 0F834A274A; Wed, 18 Jan 2023 08:50:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bostmarktrun.com;
+        s=mail; t=1674031834;
+        bh=gfWmJwOZk+B/IN1TMPg7emKhIvoExrJdUiyEL8yd2Jk=;
+        h=Date:From:To:Subject:From;
+        b=aHMODYRBzGRF5ajEq1XqO5F1Qvf4mwwfmrcY/NPGx2hIziVRR9Rht4fBUEimmyWH2
+         cNI0YQf3PujQL+GA6yElBo3TGYEQiuKLQpsEhRTqpKUS+U7mC+9AA3rbtXoku3XS/S
+         XOjYiBW0VWNxmMRW926X0mfWyRN5uLmlIuLSQHH3JPJl1Kqipfxe14k0FtcpmmcQdy
+         rkcJtkB/7SuoJjzN2qsi1IF72kSI3HzOIqYwlbWdlKpo8jQP33VsF1QDm/bof8LarZ
+         BceTLGej7VpE/68Z3Jj0zvCRiDiRy/tmXfybNJbCnqA3GrHQaO6/qEn2BOVyuYZ66X
+         GNw0S0weVxwaA==
+Received: by mail.bostmarktrun.com for <linux-mips@vger.kernel.org>; Wed, 18 Jan 2023 08:50:31 GMT
+Message-ID: <20230118074500-0.1.4p.wrp3.0.0irg2ftfio@bostmarktrun.com>
+Date:   Wed, 18 Jan 2023 08:50:31 GMT
+From:   "Corey Webb" <corey.webb@bostmarktrun.com>
+To:     <linux-mips@vger.kernel.org>
+Subject: Custom Software Development
+X-Mailer: mail.bostmarktrun.com
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j264dxttbxzuunju"
-Content-Disposition: inline
-In-Reply-To: <846b27400a72db8ca9b7497a6c032bdaacd62fc6.camel@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: bostmarktrun.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [135.125.238.46 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: bostmarktrun.com]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi,=20
 
---j264dxttbxzuunju
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I would like to reach the person responsible for the implementation of yo=
+ur company's goals, vision and mission or the decision-maker in the devel=
+opment of your technology strategy.
 
-Hello Paul,
+I represent provider of lucrative IT solutions that remove the barriers t=
+o process development resulting from limited access to appropriate IT res=
+ources.
 
-On Tue, Jan 17, 2023 at 11:05:10PM +0000, Paul Cercueil wrote:
-> > I really lost track of the problem here and would appreciate a new
-> > submission of the remaining (and improved?) patches.
->=20
-> Sure. I still have the patchset on the backburner and plan to
-> (eventually) send an updated version.
->=20
-> If you are fishing for patches I think you can take patches 3/5 and 4/5
-> of this patchset. Then I won't have to send them again in v2.
+We guarantee you access to the knowledge and experience of outstanding 3,=
+000 software developers from Poland and 500 professional consultants and =
+senior developers in the United States and other Western countries. =20
 
-These are already in Linus' tree :-)
+We respond to a variety of needs, ranging from expanding your project tea=
+m with specialists with specific skills to supporting project managers, e=
+xperienced innovation teams to creating a Minimum Viable Project (MVP).
+
+The comprehensiveness of our services guarantees you dynamic software dev=
+elopment including creation, testing and implementation systems that are =
+the backbone of effective management of the entire organization.
+
+A partnership that lasts for years is the best proof that our clients mee=
+t their unique requirements within a specific timeframe, introduce new op=
+portunities and grow their business while we solve their problems.
+
+Are you available for a brief call? I will be looking forward to hearing =
+from you.
+
 
 Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---j264dxttbxzuunju
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPHqvMACgkQwfwUeK3K
-7AmjYQf/WDoRbGo4RiKUlL/jqsaejKvM+ue+qPcwVdGY4h9cxjc4Gn4B9atEPSoB
-sPQpq1or9Zz5YwRRVeNTrLl386e0HzoKJXJl9lc+bdIjweHZCr1XvW2naauqtwjP
-pXaDGv2YJrCzbIl4qIrFSsu2xO+B68UVocfAF93jEaNJqdgD7UvDSjhAf9MIuryV
-SpCK3vIyUrkEdNY7TnRQFKprUE47XzoE6IUrMnqeaTN+i2IKKTPHnDYvD33axQ3v
-9vOC9NDpGCqxgwo8moEO5ESaUvbgVr8wX54ar/Z2pH1opR/WQ382S92SmO0d/cCs
-zTFvsc+MzysY135/3omJsXTfHuO4HQ==
-=V8+j
------END PGP SIGNATURE-----
-
---j264dxttbxzuunju--
+Corey Webb
