@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B556718CF
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 11:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAD46718E8
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jan 2023 11:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjARKVL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Jan 2023 05:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S229607AbjARK0j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Jan 2023 05:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbjARKUb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Jan 2023 05:20:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24F7798E6;
-        Wed, 18 Jan 2023 01:25:54 -0800 (PST)
+        with ESMTP id S229913AbjARKZn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Jan 2023 05:25:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D02666EEA;
+        Wed, 18 Jan 2023 01:30:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70D31B81C11;
-        Wed, 18 Jan 2023 09:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0287FC433EF;
-        Wed, 18 Jan 2023 09:25:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C1FEB81C13;
+        Wed, 18 Jan 2023 09:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C573EC433D2;
+        Wed, 18 Jan 2023 09:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674033952;
-        bh=KlUPGKsZLEMxW1G8jfwVen6ljbFd7VXHSO70h2nSXKM=;
+        s=k20201202; t=1674034205;
+        bh=3XyBFQNLnTyo9L+X0vrC5knpbLQfzzDd/EREfX7SuV8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JWCyvuyz7uf/Kb7lnxvy3/MFAUTdmCGWdoadgzJguVTIgKQrgNzrjH+MJuTFboAyp
-         DKnAd3xZV0DNSuNHwo3bXRfT8/QYiOKf8g50aZh4fXuYcEwGN8alGYldTcdA/s5wKA
-         V7a7dRDlHxBXxx9mNBV75zXOQi/xCXCQxWoFjFN+2GW0XhupAwAQvGOc/IRW23LMaV
-         ey18YCyqhbhK6mK8fqgjHsJByTfTsTG720rE1ca+YHzZPQg6BxLVdl3/za/yz92Sjs
-         6bbVc5Dhy7M8u0xXmsbB9ULRXztPf71s1oTUhY4jPeuk5DN6U9ayxq8z+E1D8XvKcH
-         sfuOk7Obu5H8w==
+        b=MiOTsPzfhCtG5D2uMQmCk52l/VOS8fqxJvZPWk57KOq8xyLCHSOgS6UY4qI+N7kPI
+         /JOk6EDQXbDnhyqJuIDv8wP9EfKfmhNa5WIaVYIF05q1YvJOEcOyYUjNYFEBrCDH9Y
+         ItuJ+LdqkqD39zPRSoLHzSyaHNXURNNkWUZsGJs2erhOqDliW7SGP8I4WeeFLT1Y7R
+         7y3XZQHlKo4yxIgYBWQcFXtoigA0dKA0ioeiG7D4zLHgLO6HQPGL1GLnnfYDoLC7Ut
+         AfrVDOuoOVdg+pGi/Cbi8sE+qokWA6U2JBzMGzMgLhpvlP0PSczfsxmiV2U4bp3GPN
+         chX0f98MBfIEA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1pI4i0-0001fe-Aa; Wed, 18 Jan 2023 10:26:16 +0100
-Date:   Wed, 18 Jan 2023 10:26:16 +0100
+        id 1pI4m6-0001jE-0W; Wed, 18 Jan 2023 10:30:30 +0100
+Date:   Wed, 18 Jan 2023 10:30:30 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     Johan Hovold <johan+linaro@kernel.org>,
@@ -43,15 +43,15 @@ Cc:     Johan Hovold <johan+linaro@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
         Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 07/19] irqdomain: Look for existing mapping only once
-Message-ID: <Y8e7OGlPXolkC1+R@hovoldconsulting.com>
+Subject: Re: [PATCH v4 08/19] irqdomain: Refactor __irq_domain_alloc_irqs()
+Message-ID: <Y8e8Nm2lu1jFE6Mx@hovoldconsulting.com>
 References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-8-johan+linaro@kernel.org>
- <87wn5kkfqo.ffs@tglx>
+ <20230116135044.14998-9-johan+linaro@kernel.org>
+ <87v8l4kfpr.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87wn5kkfqo.ffs@tglx>
+In-Reply-To: <87v8l4kfpr.ffs@tglx>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,41 +61,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:34:07PM +0100, Thomas Gleixner wrote:
+On Tue, Jan 17, 2023 at 10:34:40PM +0100, Thomas Gleixner wrote:
 > On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
-> > Avoid looking for an existing mapping twice when creating a new mapping
-> > using irq_create_fwspec_mapping() by factoring out the actual allocation
-> > which is shared with irq_create_mapping_affinity().
-> 
-> This changelog is incomplete and it took me a while to figure out why
-> this is before the race fix.
-> 
-> The point is that you need __irq_create_mapping_affinity() later to fix
-> the shared mapping race. The double check avoidance is just a nice side
-> effect.
-> 
-> So please spell it out and make it clear that this needs to be
-> backported too, e.g. by adding:
-> 
-> The split out internal function will be used to fix a shared interrupt
-> mapping race. This change is therefore tagged with the same fixes tag.
-> 
-> Fixes: ....
 
-Sure. It was originally part of the fix of the race, but I was told to
-clean up the code first (and not worry about backporting).
-
-I'll see what I can do about reordering these again with the aim of
-making things easier to backport.
-
-> > +static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
-> > +						  irq_hw_number_t hwirq,
-> > +						  const struct irq_affinity_desc *affinity)
+> > -int __irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
+> > -			    unsigned int nr_irqs, int node, void *arg,
+> > -			    bool realloc, const struct irq_affinity_desc *affinity)
+> > +static int ___irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
+> > +				    unsigned int nr_irqs, int node, void *arg,
+> > +				    bool realloc, const struct irq_affinity_desc *affinity)
 > 
-> Please rename to irq_create_mapping_affinity_locked() so it's clear what
-> this is about and what the calling convention is. A lockdep assert to
-> that effect would be nice too.
+> __ vs. ___ is almost undistinguishable.
+> 
+> irq_domain_alloc_irqs_locked() nicely explains what this is about, no?
 
-Will do.
+Yeah, wasn't too happy about those three underscores either, but with
+the exported function unfortunately already having a double underscore
+prefix... I'll try switching to a 'locked' suffix instead.
 
 Johan
