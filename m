@@ -2,55 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01179673FAC
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Jan 2023 18:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8F4673FD4
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jan 2023 18:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjASROo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Jan 2023 12:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
+        id S229654AbjASRYy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Jan 2023 12:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjASROn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 19 Jan 2023 12:14:43 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9648384D
-        for <linux-mips@vger.kernel.org>; Thu, 19 Jan 2023 09:14:42 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id q9so2050231pgq.5
-        for <linux-mips@vger.kernel.org>; Thu, 19 Jan 2023 09:14:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h3m6FnRHon/ERdNuMp939FY03hOnkC/3DfqdGHHNZVo=;
-        b=NZnk8qAovjYt9d3M1s9Ed5R/SzYS10fphjbMp0Qm9eEu2q/Ehkf3+pz3Iz8dY5jpD4
-         EhYeMq2MoG4Y5XN2GnpybBkjybdFyqBtQNMk0vpZsEOPYopuFi4vyPQzqyMao6Djew1Z
-         eEntn5yb8iXVqoEKyIYOUekjO8DVRF3fhgsoePHjhAFtDrtu5vQA41uLgLxEXem4eDHf
-         6XWqtHPGos7auud7cSkHdJi/QRWsyfQ1XNpoIVyanUogFvJ9hrjTarqtF3+qwA7154E2
-         3685e5v3o9QVK/UeKtvoIRQt7WJyRCSoLAzCMN0Mhw76RdScYb6VyS6nw81RWkgeu6p0
-         XF/A==
+        with ESMTP id S229482AbjASRYx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 19 Jan 2023 12:24:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654B5B764
+        for <linux-mips@vger.kernel.org>; Thu, 19 Jan 2023 09:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674149043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ZLCun6ndTUYHIhway+dCjRST8plu+DLSlmudJ+9iGA=;
+        b=AwUHVlvca/P1enDYHLffc/PbuhEbLyoF1TfBP0WLiB+CculT7cAxNfqKOrjcLisxxlzMfj
+        ZPkWoTopkCgcnu3qKXooGcoyVECFA3IPE1d3QcOg8eff0a2ozcePoiAvgowDXz7AJdfJ/W
+        sbxXxM9fqmQMZ7UicsJ8z+6Slc1PQJk=
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
+ [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-465-CsLX0k70OqeTBU1h_yASyA-1; Thu, 19 Jan 2023 12:24:02 -0500
+X-MC-Unique: CsLX0k70OqeTBU1h_yASyA-1
+Received: by mail-ua1-f69.google.com with SMTP id a38-20020ab04969000000b0060a19a7ee3cso761558uad.0
+        for <linux-mips@vger.kernel.org>; Thu, 19 Jan 2023 09:24:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h3m6FnRHon/ERdNuMp939FY03hOnkC/3DfqdGHHNZVo=;
-        b=J+x078ibqU22KxaOOjzDSdMRsa4iGHvcYGL7a9QWucmQhUrIvjj2eiFYLgiW5U6K+v
-         mBwe4PWmUlevQnc49m1M8mJkrW0OJ3mI41mZWevqxU5SmsTJv2lJdVa8bfWuy3Kn3TdQ
-         sOkOPkjG8nls9NkTqQkD1d2L0M/NqMy2D6wTmaa2IerhR9cWAEPS1ybQ2qioRUczZTGS
-         rDnM9/zbSgQGFtA9CLJ/PzcUvx3FnqFF2e6oI1UzsgouAjKEhhUO+gWNX35a1eZPxMC5
-         QyRcpPbA1TmPlwLA3SqFQ8gnUHi/h70+K+z9EXPAO1XRgaqoNG8KgWFCSV5oKy2xSdTl
-         s7cg==
-X-Gm-Message-State: AFqh2kpWyJ4j5P6swQm7jzkjVU3mrAIpreQzVm/GGO/bg7UpR8qgiOMn
-        ZtgxP08ZT0X+Q8HiFQO4SRsi+w==
-X-Google-Smtp-Source: AMrXdXuzV1QqiuKjtYWMTtGC8EBn/MaadWuvHkkuJ9ZASZGXOhkdhowXaNHl2xYH7k1qU1kPQqtwDA==
-X-Received: by 2002:a05:6a00:1c84:b0:581:4260:a650 with SMTP id y4-20020a056a001c8400b005814260a650mr10769799pfw.33.1674148481271;
-        Thu, 19 Jan 2023 09:14:41 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id b20-20020aa79514000000b0058d91fb2239sm9246817pfp.63.2023.01.19.09.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 09:14:40 -0800 (PST)
-Date:   Thu, 19 Jan 2023 09:14:34 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7ZLCun6ndTUYHIhway+dCjRST8plu+DLSlmudJ+9iGA=;
+        b=HO15q0gVX6tOPm3MaYcbzahCothu+RQX61VcVTGSv2EoHytdCzG97rau3VMuGI5qiA
+         AwXHzh5TN9uRXUd9jX6dffrGmFPKCMA8/guMtxlOMt5hAQK9CfFlJcsgnWY4brSdh/aM
+         M0Nb5dUryuG0/HXBYMZSA0NCD122C3SgrNX0HiV7dWKCXfZNNxIkH+67nU7AdqB11a20
+         LfN0ZdTV2Z/RKJyIif8hWO+gvBunRz2s0dHd2UuQcIrYrJ0NOl69wGxcIPPxqPeqTM9L
+         lXLGmFk7dYQzU4PSzuyy/o7xKuMvL2xrhLv4g0MOMGz3QBa+c3KdWUu+El/TD74QaU9X
+         BZog==
+X-Gm-Message-State: AFqh2krsm2t0zFMdLPrTJUWUzvSqaLHOx/Q4Y2RuRshjW1qjf9rZB/hh
+        PW4FbxSNV1nmdd/Qfr/RwddXEMZvfGnPXDgupyfV0HWSbde9TKKWljU9BMlKj12cpBR9lKlxMeZ
+        M+s19dxwbLp1YyHK4q59M3kuUGZiwcG8rf1qlAQ==
+X-Received: by 2002:a05:6102:3d14:b0:3b5:2762:568b with SMTP id i20-20020a0561023d1400b003b52762568bmr1578190vsv.62.1674149041479;
+        Thu, 19 Jan 2023 09:24:01 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtKcbEgINpJzFLAqIx7zgVheHf3U2vYRZ/ijgft8zgf2upp0swiwUYbMZZIryC08LRzFEnE4XMqgG5fhaMKrn4=
+X-Received: by 2002:a05:6102:3d14:b0:3b5:2762:568b with SMTP id
+ i20-20020a0561023d1400b003b52762568bmr1578157vsv.62.1674149041226; Thu, 19
+ Jan 2023 09:24:01 -0800 (PST)
+MIME-Version: 1.0
+References: <20221208193857.4090582-1-dmatlack@google.com> <Y8l6egh2wWN7BUlZ@google.com>
+In-Reply-To: <Y8l6egh2wWN7BUlZ@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Thu, 19 Jan 2023 18:23:49 +0100
+Message-ID: <CABgObfaTEZ1_SaQ9ThbeMe8gX2y35ZGTFzgb9K9yZwz8dbOYdQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/37] KVM: Refactor the KVM/x86 TDP MMU into common code
+To:     David Matlack <dmatlack@google.com>
 Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -85,18 +93,10 @@ Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         linux-riscv@lists.infradead.org,
         Alexandre Ghiti <alexghiti@rivosinc.com>,
         Raghavendra Rao Ananta <rananta@google.com>
-Subject: Re: [RFC PATCH 00/37] KVM: Refactor the KVM/x86 TDP MMU into common
- code
-Message-ID: <Y8l6egh2wWN7BUlZ@google.com>
-References: <20221208193857.4090582-1-dmatlack@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208193857.4090582-1-dmatlack@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,56 +104,12 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 11:38:20AM -0800, David Matlack wrote:
-> 
-> Hello,
-> 
-> This series refactors the KVM/x86 "TDP MMU" into common code. This is
-> the first step toward sharing TDP (aka Stage-2) page table management
-> code across architectures that support KVM.
+On Thu, Jan 19, 2023 at 6:14 PM David Matlack <dmatlack@google.com> wrote:
+> Paolo and Sean, what are your thoughts on merging the Common MMU
+> refactor without RISC-V support?
 
-Thank you everyone for the feedback on this RFC. I have a couple of
-updates to share and a question at the end.
+I have no objection. We know what the long-term plan is, and it's not
+so long-term anyway.
 
-First, Alexandre Ghiti from Rivos is going to work on the RISC-V port.
-I'd like to target RISC-V first, since it has significantly lower risk
-and complexity than e.g. ARM (which has pKVM, stage-1 walkers, and
-[soon] nested virtualization to deal with).
+Paolo
 
-Before I send a v2 I am working on sending several related patches.
-These are patches that should have enough justification to be merged
-regardless of the fate of the Common MMU. By sending them out
-separately, I figure they will be easier to review, allow me to make
-incremental progress, and ultimately simplify the v2 of this series.
-
-What I've sent so far:
-
- - https://lore.kernel.org/kvm/20230117222707.3949974-1-dmatlack@google.com/
- - https://lore.kernel.org/kvm/20230118175300.790835-1-dmatlack@google.com/
-
-What's coming soon:
-
- - A series to add a common API for range-based TLB flushing (patches
-   29-33 from this series, plus another cleanup). This cleanup stands on
-   its own, plus Raghavendra from Google has need of this for his ARM
-   series to add range-based TLBI support [1]
-
- - A patch to move sp->tdp_mmu_page into sp->role.tdp_mmu. This was
-   suggested by Paolo as an alternative to patch 4, and saves a byte
-   from struct kvm_mmu_page.
-
-There will probably be more related cleanups I will send but this is
-everything I'm tracking so far. If anyone wants to see a complete v2
-sooner, let me know.
-
-Paolo and Sean, what are your thoughts on merging the Common MMU
-refactor without RISC-V support? e.g. Should Alexandre and I work on
-developing a functional prototype first, or are you open to merging the
-refactor and then building RISC-V support on top of that? My preference
-is the latter so that there is a more stable base on which to build the
-RISC-V support, we can make incremental progress, and keep everyone
-upstream more involved in the development.
-
-Thanks.
-
-[2] https://lore.kernel.org/kvm/20230109215347.3119271-4-rananta@google.com/
