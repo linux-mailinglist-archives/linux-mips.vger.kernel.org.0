@@ -2,49 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF6B6752E3
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Jan 2023 12:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEAC675344
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Jan 2023 12:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjATLBJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 Jan 2023 06:01:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S229645AbjATLP2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 Jan 2023 06:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjATLBI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Jan 2023 06:01:08 -0500
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CE7F81994;
-        Fri, 20 Jan 2023 03:01:01 -0800 (PST)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 30KArkBe026992;
-        Fri, 20 Jan 2023 04:53:46 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 30KArgxi026991;
-        Fri, 20 Jan 2023 04:53:42 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 20 Jan 2023 04:53:41 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Rob Landley <rob@landley.net>
-Cc:     "Michael.Karcher" <Michael.Karcher@fu-berlin.de>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-sh@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-mips@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: Re: Calculating array sizes in C - was: Re: Build regressions/improvements in v6.2-rc1
-Message-ID: <20230120105341.GI25951@gate.crashing.org>
-References: <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg> <c05bee5d-0d69-289b-fe4b-98f4cd31a4f5@physik.fu-berlin.de> <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com> <3800eaa8-a4da-b2f0-da31-6627176cb92e@physik.fu-berlin.de> <CAMuHMdWbBRkhecrqcir92TgZnffMe8ku2t7PcVLqA6e6F-j=iw@mail.gmail.com> <429140e0-72fe-c91c-53bc-124d33ab5ffa@physik.fu-berlin.de> <CAMuHMdWpHSsAB3WosyCVgS6+t4pU35Xfj3tjmdCDoyS2QkS7iw@mail.gmail.com> <0d238f02-4d78-6f14-1b1b-f53f0317a910@physik.fu-berlin.de> <1732342f-49fe-c20e-b877-bc0a340e1a50@fu-berlin.de> <0f51dac4-836b-0ff2-38c6-5521745c1c88@landley.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        with ESMTP id S229575AbjATLP1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Jan 2023 06:15:27 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4D83584;
+        Fri, 20 Jan 2023 03:15:26 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CD80A660230B;
+        Fri, 20 Jan 2023 11:15:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674213324;
+        bh=CASdzRtoHYplP6yd6/mt/6hm04+ftfOht/MoW2dAnK8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YaLvVsczluXVfnE14rTAqsOFML8ibEN1/3WdsV84rBmyv56rm0yhbjdLUhD+eXUI3
+         yKn2Ye+ICWEX+swXtC8nTyojSyi5j8aVZuPYvhCHx1sWbnW1CWR4J/WG6G5TcHOWq+
+         13fRRh3EqjgwoQo7KnaqPqj0ur/D2OH2xexc1gB7gf/Hlbt7rT5ZQgwX6J3xN0YQdo
+         SrTxkQ28Dw8AuQNXaTwK75BGopNLRf82Lq2KW9Jw2yZz9otY2jWkfw+0AnSgNmiMk3
+         /A+CAQqcuPdlo4xosz+MWz7duPvfGPQgBCRsPxfwYxeslWq4G5I77YLn6dGajAqHo7
+         NKDsK9qZMT2Aw==
+Message-ID: <1e924d3b-1283-b9f9-d2a0-0e42db656d4e@collabora.com>
+Date:   Fri, 20 Jan 2023 12:15:19 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 3/3] drm: Convert users of drm_of_component_match_add
+ to component_match_add_of
+Content-Language: en-US
+To:     Sean Anderson <sean.anderson@seco.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, Jyri Sarha <jyri.sarha@iki.fi>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        John Stultz <jstultz@google.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mihail Atanassov <mihail.atanassov@arm.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Samuel Holland <samuel@sholland.org>,
+        Sean Paul <sean@poorly.run>, Tian Tao <tiantao6@hisilicon.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        etnaviv@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20230119191040.1637739-1-sean.anderson@seco.com>
+ <20230119191040.1637739-4-sean.anderson@seco.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230119191040.1637739-4-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0f51dac4-836b-0ff2-38c6-5521745c1c88@landley.net>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,60 +91,18 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 09:31:21PM -0600, Rob Landley wrote:
-> On 1/19/23 16:11, Michael.Karcher wrote:
-> > I don't see a clear bug at this point. We are talking about the C expression
-> > 
-> >    __same_type((void*)0, (void*)0)? 0 : sizeof((void*)0)/sizeof(*((void*0))
+Il 19/01/23 20:10, Sean Anderson ha scritto:
+> Every user of this function either uses component_compare_of or
+> something equivalent. Most of them immediately put the device node as
+> well. Convert these users to component_match_add_of and remove
+> drm_of_component_match_add.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> Acked-by: Jyri Sarha <jyri.sarhaÄ±@iki.fi>
+> Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
 
-(__same_type is a kernel macro, it expands to something with
-__builtin_compatible_type()).
+For MediaTek mtk_drm_drv:
 
-> *(void*) is type "void" which does not have a size.
-
-It has size 1, in GCC, so that you can do arithmetic on pointers to
-void.  This is a long-standing and very widely used GCC extension.
-
-"""
-6.24 Arithmetic on 'void'- and Function-Pointers
-================================================
-
-In GNU C, addition and subtraction operations are supported on pointers
-to 'void' and on pointers to functions.  This is done by treating the
-size of a 'void' or of a function as 1.
-
- A consequence of this is that 'sizeof' is also allowed on 'void' and on
-function types, and returns 1.
-
- The option '-Wpointer-arith' requests a warning if these extensions are
-used.
-"""
-
-> The problem is gcc "optimizing out" an earlier type check, the same way it
-> "optimizes out" checks for signed integer math overflowing, or "optimizes out" a
-> comparison to pointers from two different local variables from different
-> function calls trying to calculate the amount of stack used, or "optimizes out"
-
-Are you saying something in the kernel code here is invalid code?
-Because your other examples are.
-
-> using char *x = (char *)1; as a flag value and then doing "if (!(x-1)) because
-> it can "never happen"...
-
-Like here.  And no, this is not allowed by -fno-strict-aliasing.
-
-> > I suggest to file a bug against gcc complaining about a "spurious 
-> > warning", and using "-Werror -Wno-error-sizeof-pointer-div" until gcc is 
-> > adapted to not emit the warning about the pointer division if the result 
-> > is not used.
-
-Yeah.  If the first operand of a conditional operator is non-zero, the
-second operand is not evaluated, and if the first is zero, the third
-operand is not evaluated.  It is better if we do not warn about
-something we do not evaluate.  In cases like here where it is clear at
-compile time which branch is taken, that shouldn't be too hard.
-
-Can someone please file a GCC PR?  With reduced testcase preferably.
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
-Segher
