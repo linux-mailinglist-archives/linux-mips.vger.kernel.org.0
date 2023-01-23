@@ -2,42 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DCD6776C3
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Jan 2023 09:52:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 967386779AF
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Jan 2023 11:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjAWIwa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Jan 2023 03:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
+        id S231638AbjAWK6L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Jan 2023 05:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjAWIw3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Jan 2023 03:52:29 -0500
-X-Greylist: delayed 473 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 00:52:02 PST
-Received: from mail.tryweryn.pl (mail.tryweryn.pl [5.196.29.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34481E5C0
-        for <linux-mips@vger.kernel.org>; Mon, 23 Jan 2023 00:52:02 -0800 (PST)
-Received: by mail.tryweryn.pl (Postfix, from userid 1002)
-        id 65A90A29D5; Mon, 23 Jan 2023 08:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tryweryn.pl; s=mail;
-        t=1674463419; bh=Bo+/jg3TCpOeS79PpZREuOWEeqJV//jojylD9dSrSik=;
-        h=Date:From:To:Subject:From;
-        b=pTeOn8/TQJx/jMzZhSgPL/vmkdHZtai1Ur05X9HkbZsC1caST8p+/dA8ZunmPAAL5
-         S7fNT9uoVt4rEw+AwFHu0wG5GsrgW+q8apER1ovaTL5w/GYxPRkNAuOIAJO1PfwfOH
-         bVYu1cYkCR1TRj3ajKbFF4Usl1C/IOhr9AYaxYaDRQil+hUXbTbGT9bLdPlsN18nBr
-         y4QBzZf6IEBrF0JY5HbxbXBvsh/Cw4v0rA/dU72cVLW/4gDzERYaZtMx7WY9QMkEem
-         koIUiNmQ7m7+vpbvwF3TiWbGztHguBpqmlv+aCfemt4KiKrOi65GOLyWJL5nUW7mfU
-         PB3sM3JX6hjZg==
-Received: by mail.tryweryn.pl for <linux-mips@vger.kernel.org>; Mon, 23 Jan 2023 08:42:54 GMT
-Message-ID: <20230123081829-0.1.7p.2rwtj.0.whdd1gkbem@tryweryn.pl>
-Date:   Mon, 23 Jan 2023 08:42:54 GMT
-From:   "Karol Michun" <karol.michun@tryweryn.pl>
-To:     <linux-mips@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.tryweryn.pl
+        with ESMTP id S231735AbjAWK6E (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Jan 2023 05:58:04 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D84CA39
+        for <linux-mips@vger.kernel.org>; Mon, 23 Jan 2023 02:58:01 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so4117847wmq.1
+        for <linux-mips@vger.kernel.org>; Mon, 23 Jan 2023 02:58:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GurJgwjoFQNdZqxTjXXtdzYvuIXsPElEsE5t8iRI348=;
+        b=g4dvnAt/e720eUN0Hw3mkuPvGH+bA9swS9a77z573C2TdQWW6YccWP0BkoVi78A7fD
+         9k0EDsHOFkjnhw2wOEifD+LuTl/asks5WHcBsVRuAWdUJEmWeCb5sfiPEmcBupKXco7L
+         GbvFD/7MEwApELk4GAbMkvKPw8jqR4On0BEH3X+b1r7t6TVjEb9KegIn8YBGFz3Vv8fw
+         Jh0FiWJzDYchnJxivLRKF4Wflf4aRgMtJaDCLIK/Po9RydhxUm8dX6Qe93tyzuQYH5D1
+         Lg/g6wjAGZI6WGgQ22tQbhjn6II6Mckqt+Hjv3IKqVUmi0cBYkGR5LBWB5l5q+psIVBr
+         2gFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GurJgwjoFQNdZqxTjXXtdzYvuIXsPElEsE5t8iRI348=;
+        b=Co5jzuar260KoNReqmB6xhxssQd/r2592cD59dtFSLcXWO5XBResSGsA7zjnyI1+nD
+         oKKCzgfsq9cXSzVX7R6r5ljrNNKpEJHZoDurNG6ov2NqYNMeIdERDmvw6rFFPZ2/Vqv/
+         CHa8eg5BZIpbG1jAcgjKD9c4qNkiKZjyyNEgJLemvIcr7nIXi/TXcnsShdhFmy67dE7Z
+         mkN06Xqls/FZt7IKwf3G+D2cEOy46NNHImkwR1SRWNWF5x8stNE4RY3qoiAQClLJT7x1
+         KGVU0qwSyV117GciLSatsI+dMyubKJTHp90iWmNENHPrwDZEaKBGFbQP65vNskgpySYJ
+         z3tA==
+X-Gm-Message-State: AFqh2kpjFl2QZ7UkQR7utoZIZBttn6OypvQEx+9s/xP/fUn8Pb1V1EfA
+        UkAh6N4WJznZkL+dpuCM3batAw==
+X-Google-Smtp-Source: AMrXdXsPRwYrnaXw9xX4B1eeQb0D5xrFH9eOI3n097aQpLYDHeyfCXKP4eQdFGO4lnW4dO+O4hOv4w==
+X-Received: by 2002:a05:600c:3545:b0:3c6:e60f:3f4a with SMTP id i5-20020a05600c354500b003c6e60f3f4amr23649013wmq.1.1674471479963;
+        Mon, 23 Jan 2023 02:57:59 -0800 (PST)
+Received: from ?IPV6:2a02:8011:e80c:0:c17d:2d7f:4a94:488b? ([2a02:8011:e80c:0:c17d:2d7f:4a94:488b])
+        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003b47b80cec3sm10322397wmc.42.2023.01.23.02.57.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 02:57:59 -0800 (PST)
+Message-ID: <20dbac19-d510-c8f5-fd3d-588cb08a3afa@isovalent.com>
+Date:   Mon, 23 Jan 2023 10:57:58 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [bpf-next v2] bpf: drop deprecated bpf_jit_enable == 2
+Content-Language: en-GB
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Tonghao Zhang <tong@infragraf.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Hou Tao <houtao1@huawei.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>
+References: <20230105030614.26842-1-tong@infragraf.org>
+ <ea7673e1-40ec-18be-af89-5f4fd0f71742@csgroup.eu>
+ <71c83f39-f85f-d990-95b7-ab6068839e6c@iogearbox.net>
+ <5836b464-290e-203f-00f2-fc6632c9f570@csgroup.eu>
+ <147A796D-12C0-482F-B48A-16E67120622B@infragraf.org>
+ <0b46b813-05f2-5083-9f2e-82d72970dae2@csgroup.eu>
+ <0792068b-9aff-d658-5c7d-086e6d394c6c@csgroup.eu>
+ <C811FC00-CE38-4227-B2E8-4CD8989D8B94@infragraf.org>
+ <4ab9aafe-6436-b90d-5448-f74da22ddddb@csgroup.eu>
+ <376f9737-f9a4-da68-8b7f-26020021613c@isovalent.com>
+ <21b09e52-142d-92f5-4f8b-e4190f89383b@csgroup.eu>
+ <43e6cd9f-ac54-46da-dba9-d535a2a77207@isovalent.com>
+ <26e09ae3-dc7a-858d-c15c-7c2ff080d36d@csgroup.eu>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <26e09ae3-dc7a-858d-c15c-7c2ff080d36d@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,24 +104,43 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dzie=C5=84 dobry!
+2023-01-23 07:57 UTC+0000 ~ Christophe Leroy <christophe.leroy@csgroup.eu>
+> 
+> 
+> Le 17/01/2023 à 16:42, Quentin Monnet a écrit :
+>>
+>> In the meantime, you could disable the use of skeletons in bpftool, by
+>> removing "clang-bpf-co-re" from FEATURE_TESTS from the Makefile. You
+>> should get a functional binary, which would only miss a few features
+>> (namely, printing the pids of programs holding references to BPF
+>> programs, and the "bpftool prog profile" command).
+> 
+> Ok, with "clang-bpf-co-re" removed, bpftool doesn't complain.
+> 
+> However, does it work at all ?
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+Yes it does.
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+> 
+> I started a 'tcpdump', I confirmed with ' bpf_jit_enable == 2' that a 
+> BPF jitted program is created by tcpdump.
+> 
+> 'bptool prog show' and 'bpftool prog list' returns no result.
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+Bpftool works with eBPF, not with the older "classic" BPF (cBPF) used by
+tcpdump. You should see programs listed if you load anything eBPF, for
+example by using BCC tools, bpftrace, or load an eBPF program any other
+way from user space:
 
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+	$ echo "int main(void) {return 0;}" | \
+		clang -O2 -target bpf -c -o foo.o -x c -
+	# bpftool prog load foo.o /sys/fs/bpf/foo type xdp
+	# bpftool prog list
+	# bpftool prog dump jited name main
+	# rm /sys/fs/bpf/foo
 
+I know tcpdump itself can show the cBPF bytecode for its programs, but I
+don't know of another way to dump the JIT-ed image for cBPF programs.
+Drgn could probably do it, with kernel debug symbols.
 
-Pozdrawiam
-Karol Michun
+Quentin
