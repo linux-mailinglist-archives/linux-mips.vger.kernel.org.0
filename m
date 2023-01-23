@@ -2,145 +2,327 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967386779AF
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Jan 2023 11:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507F6677D39
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Jan 2023 14:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbjAWK6L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Jan 2023 05:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S231873AbjAWN60 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Jan 2023 08:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbjAWK6E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Jan 2023 05:58:04 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D84CA39
-        for <linux-mips@vger.kernel.org>; Mon, 23 Jan 2023 02:58:01 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so4117847wmq.1
-        for <linux-mips@vger.kernel.org>; Mon, 23 Jan 2023 02:58:01 -0800 (PST)
+        with ESMTP id S231852AbjAWN6Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Jan 2023 08:58:25 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA2724105
+        for <linux-mips@vger.kernel.org>; Mon, 23 Jan 2023 05:58:22 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id q125so12998720vsb.0
+        for <linux-mips@vger.kernel.org>; Mon, 23 Jan 2023 05:58:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GurJgwjoFQNdZqxTjXXtdzYvuIXsPElEsE5t8iRI348=;
-        b=g4dvnAt/e720eUN0Hw3mkuPvGH+bA9swS9a77z573C2TdQWW6YccWP0BkoVi78A7fD
-         9k0EDsHOFkjnhw2wOEifD+LuTl/asks5WHcBsVRuAWdUJEmWeCb5sfiPEmcBupKXco7L
-         GbvFD/7MEwApELk4GAbMkvKPw8jqR4On0BEH3X+b1r7t6TVjEb9KegIn8YBGFz3Vv8fw
-         Jh0FiWJzDYchnJxivLRKF4Wflf4aRgMtJaDCLIK/Po9RydhxUm8dX6Qe93tyzuQYH5D1
-         Lg/g6wjAGZI6WGgQ22tQbhjn6II6Mckqt+Hjv3IKqVUmi0cBYkGR5LBWB5l5q+psIVBr
-         2gFQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AXeVUOI3tJuZ9T2gK/O+SpNhk9weOWc0rxA2abMay4I=;
+        b=f+oPJtggRr/AYVdmrJrdS5cvNI2FHQdGZvYkdPk4YSPwKdkthwTzW0LGvrv+2Iev18
+         LTtk76HyV0eGltMB3lS7aV0gQHsu9A1aU8DBeAponH7TvZkQzuskeukPsYCeynQufcNx
+         fcxG8G7laVPAYJTAJev/5kHxuvP9AnL/z8S8antD4PXc+eAkzF7StSQ9Ky39fB1TN97Y
+         nVN9P85z2XjZIqX09CDbuOASyb1TZw/uKqwphI+nSKTLlutEnW87WeXVKH6HSG9UBGGN
+         sWMlv/GrLlc0Lm0WpHYvhLjd613mF9cwKcT35EILIGcTtDy3u7eB1q9hGBJzz2ddczCD
+         HR7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GurJgwjoFQNdZqxTjXXtdzYvuIXsPElEsE5t8iRI348=;
-        b=Co5jzuar260KoNReqmB6xhxssQd/r2592cD59dtFSLcXWO5XBResSGsA7zjnyI1+nD
-         oKKCzgfsq9cXSzVX7R6r5ljrNNKpEJHZoDurNG6ov2NqYNMeIdERDmvw6rFFPZ2/Vqv/
-         CHa8eg5BZIpbG1jAcgjKD9c4qNkiKZjyyNEgJLemvIcr7nIXi/TXcnsShdhFmy67dE7Z
-         mkN06Xqls/FZt7IKwf3G+D2cEOy46NNHImkwR1SRWNWF5x8stNE4RY3qoiAQClLJT7x1
-         KGVU0qwSyV117GciLSatsI+dMyubKJTHp90iWmNENHPrwDZEaKBGFbQP65vNskgpySYJ
-         z3tA==
-X-Gm-Message-State: AFqh2kpjFl2QZ7UkQR7utoZIZBttn6OypvQEx+9s/xP/fUn8Pb1V1EfA
-        UkAh6N4WJznZkL+dpuCM3batAw==
-X-Google-Smtp-Source: AMrXdXsPRwYrnaXw9xX4B1eeQb0D5xrFH9eOI3n097aQpLYDHeyfCXKP4eQdFGO4lnW4dO+O4hOv4w==
-X-Received: by 2002:a05:600c:3545:b0:3c6:e60f:3f4a with SMTP id i5-20020a05600c354500b003c6e60f3f4amr23649013wmq.1.1674471479963;
-        Mon, 23 Jan 2023 02:57:59 -0800 (PST)
-Received: from ?IPV6:2a02:8011:e80c:0:c17d:2d7f:4a94:488b? ([2a02:8011:e80c:0:c17d:2d7f:4a94:488b])
-        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003b47b80cec3sm10322397wmc.42.2023.01.23.02.57.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 02:57:59 -0800 (PST)
-Message-ID: <20dbac19-d510-c8f5-fd3d-588cb08a3afa@isovalent.com>
-Date:   Mon, 23 Jan 2023 10:57:58 +0000
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AXeVUOI3tJuZ9T2gK/O+SpNhk9weOWc0rxA2abMay4I=;
+        b=o3DjsNwuHWw8td7ATwS2R177+/V/YSWpInzVzjsUkupgzVCrgnkLZeyUwrewaOnsc4
+         uq+BHmH5HN4iPZdWdaRUgamzBmlhhLpk2wOWwszc7j+DPdzwjqZAXQnRE8pguPSwvAgn
+         ghhLSkEy8gcgi6w6t4XBhr4+g8TED3EMNDTB5MOUYRTgvjaCfsZMIDpDRVP1uVm66yIQ
+         YIa16G9QdyIXw34YcE7VWU4123TaNUO5G06Hj8y1e6dP2r344S38tBmU2D3+LL+RwKka
+         2KfmsyY2btqjmuaV5TdoMIgtInEMgvxBbsE/HpNvumN0ocROQT2r9gOpo9xgxDtm/TMc
+         UspQ==
+X-Gm-Message-State: AFqh2krYxL36bYrRPQwgv0ooxT9xuqd9N3WI+TLux8r8kO17a/8kGPlO
+        HnIMj7RV8ZoTJnzYeDTIU/VRZ5bOmsNQToZQgX76vQ==
+X-Google-Smtp-Source: AMrXdXv3SdbW1OMymcwSw+UKgdSwlNT3pqbo79BE5ANCHiPz/DLfWupVOzWQju3/tf20XCLIQDK8JmT9SUQGBmNn37g=
+X-Received: by 2002:a67:f9d8:0:b0:3d0:8947:f6f6 with SMTP id
+ c24-20020a67f9d8000000b003d08947f6f6mr3340629vsq.3.1674482300949; Mon, 23 Jan
+ 2023 05:58:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [bpf-next v2] bpf: drop deprecated bpf_jit_enable == 2
-Content-Language: en-GB
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Tonghao Zhang <tong@infragraf.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Hou Tao <houtao1@huawei.com>,
-        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>
-References: <20230105030614.26842-1-tong@infragraf.org>
- <ea7673e1-40ec-18be-af89-5f4fd0f71742@csgroup.eu>
- <71c83f39-f85f-d990-95b7-ab6068839e6c@iogearbox.net>
- <5836b464-290e-203f-00f2-fc6632c9f570@csgroup.eu>
- <147A796D-12C0-482F-B48A-16E67120622B@infragraf.org>
- <0b46b813-05f2-5083-9f2e-82d72970dae2@csgroup.eu>
- <0792068b-9aff-d658-5c7d-086e6d394c6c@csgroup.eu>
- <C811FC00-CE38-4227-B2E8-4CD8989D8B94@infragraf.org>
- <4ab9aafe-6436-b90d-5448-f74da22ddddb@csgroup.eu>
- <376f9737-f9a4-da68-8b7f-26020021613c@isovalent.com>
- <21b09e52-142d-92f5-4f8b-e4190f89383b@csgroup.eu>
- <43e6cd9f-ac54-46da-dba9-d535a2a77207@isovalent.com>
- <26e09ae3-dc7a-858d-c15c-7c2ff080d36d@csgroup.eu>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <26e09ae3-dc7a-858d-c15c-7c2ff080d36d@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+In-Reply-To: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 23 Jan 2023 19:28:10 +0530
+Message-ID: <CA+G9fYs58vWj705MdaBKomVfHxNJ5ekSTmf53S4=4oVmc43CZg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
+        trix@redhat.com, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
+        linux-mips@vger.kernel.org, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-2023-01-23 07:57 UTC+0000 ~ Christophe Leroy <christophe.leroy@csgroup.eu>
-> 
-> 
-> Le 17/01/2023 à 16:42, Quentin Monnet a écrit :
->>
->> In the meantime, you could disable the use of skeletons in bpftool, by
->> removing "clang-bpf-co-re" from FEATURE_TESTS from the Makefile. You
->> should get a functional binary, which would only miss a few features
->> (namely, printing the pids of programs holding references to BPF
->> programs, and the "bpftool prog profile" command).
-> 
-> Ok, with "clang-bpf-co-re" removed, bpftool doesn't complain.
-> 
-> However, does it work at all ?
+Hi Nathan,
 
-Yes it does.
+On Thu, 12 Jan 2023 at 08:35, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi all,
+>
+> Clang can emit a few different warnings when it encounters a flag that it
+> recognizes but does not support internally. These warnings are elevated t=
+o
+> errors within {as,cc}-option via -Werror to catch unsupported flags that =
+should
+> not be added to KBUILD_{A,C}FLAGS; see commit c3f0d0bc5b01 ("kbuild, LLVM=
+Linux:
+> Add -Werror to cc-option to support clang").
+>
+> If an unsupported flag is unconditionally to KBUILD_{A,C}FLAGS, all subse=
+quent
+> {as,cc}-option will always fail, preventing supported and even potentiall=
+y
+> necessary flags from getting adding to the tool flags.
+>
+> One would expect these warnings to be visible in the kernel build logs si=
+nce
+> they are added to KBUILD_{A,C}FLAGS but unfortunately, these warnings are
+> hidden with clang's -Qunused-arguments flag, which is added to KBUILD_CPP=
+FLAGS
+> and used for both compiling and assembling files.
+>
+> Patches 1-4 address the internal inconsistencies of invoking the assemble=
+r
+> within kbuild by using KBUILD_AFLAGS consistently and using '-x
+> assembler-with-cpp' over '-x assembler'. This matches how assembly files =
+are
+> built across the kernel and helps avoid problems in situations where macr=
+o
+> definitions or warning flags are present in KBUILD_AFLAGS, which cause
+> instances of -Wunused-command-line-argument when the preprocessor is not =
+called
+> to consume them. There were a couple of places in architecture code where=
+ this
+> change would break things so those are fixed first.
+>
+> Patches 5-12 clean up warnings that will show up when -Qunused-argument i=
+s
+> dropped. I hope none of these are controversial.
+>
+> Patch 13 turns two warnings into errors so that the presence of unused fl=
+ags
+> cannot be easily ignored.
+>
+> Patch 14 drops -Qunused-argument. This is done last so that it can be eas=
+ily
+> reverted if need be.
+>
+> This series has seen my personal test framework, which tests several diff=
+erent
+> configurations and architectures, with LLVM tip of tree (16.0.0). I have =
+done
+> defconfig, allmodconfig, and allnoconfig builds for arm, arm64, i386, mip=
+s,
+> powerpc, riscv, s390, and x86_64 with GCC 12.2.0 as well but I am hoping =
+the
+> rest of the test infrastructure will catch any lurking problems.
+>
+> I would like this series to stay together so that there is no opportunity=
+ for
+> breakage so please consider giving acks so that this can be carried via t=
+he
+> kbuild tree (and many thanks to the people who have already provided such
+> tags).
+>
+> ---
+> Changes in v2:
+> - Pick up tags where provided (thank you everyone!)
+> - Patch 6 and 9: Clarify that '-s' is a compiler flag that is only releva=
+nt to
+>   the linking phase and remove all mention of the assembler's '-s' flag, =
+as the
+>   assembler is never directly invoked (Nick, Segher)
+> - Patch 7: Move '-z noexecstack' into new ldflags-y variable (Nick)
+> - Patch 8: Reword commit message to explain the problem in a clearer mann=
+er
+>   (Nick)
+> - Link to v1: https://lore.kernel.org/r/20221228-drop-qunused-arguments-v=
+1-0-658cbc8fc592@kernel.org
+>
+> ---
+> Nathan Chancellor (12):
+>       MIPS: Always use -Wa,-msoft-float and eliminate GAS_HAS_SET_HARDFLO=
+AT
+>       MIPS: Prefer cc-option for additions to cflags
+>       powerpc: Remove linker flag from KBUILD_AFLAGS
+>       powerpc/vdso: Remove unused '-s' flag from ASFLAGS
+>       powerpc/vdso: Improve linker flags
+>       powerpc/vdso: Remove an unsupported flag from vgettimeofday-32.o wi=
+th clang
+>       s390/vdso: Drop unused '-s' flag from KBUILD_AFLAGS_64
+>       s390/vdso: Drop '-shared' from KBUILD_CFLAGS_64
+>       s390/purgatory: Remove unused '-MD' and unnecessary '-c' flags
+>       drm/amd/display: Do not add '-mhard-float' to dml_ccflags for clang
+>       kbuild: Turn a couple more of clang's unused option warnings into e=
+rrors
+>       kbuild: Stop using '-Qunused-arguments' with clang
+>
+> Nick Desaulniers (2):
+>       x86/boot/compressed: prefer cc-option for CFLAGS additions
+>       kbuild: Update assembler calls to use proper flags and language tar=
+get
+>
+>  Makefile                                    |  1 -
+>  arch/mips/Makefile                          | 13 ++-------
+>  arch/mips/include/asm/asmmacro-32.h         |  4 +--
+>  arch/mips/include/asm/asmmacro.h            | 42 ++++++++++++++---------=
+------
+>  arch/mips/include/asm/fpregdef.h            | 14 ----------
+>  arch/mips/include/asm/mipsregs.h            | 20 +++-----------
+>  arch/mips/kernel/genex.S                    |  2 +-
+>  arch/mips/kernel/r2300_fpu.S                |  4 +--
+>  arch/mips/kernel/r4k_fpu.S                  | 12 ++++-----
+>  arch/mips/kvm/fpu.S                         |  6 ++---
+>  arch/mips/loongson2ef/Platform              |  2 +-
+>  arch/powerpc/Makefile                       |  2 +-
+>  arch/powerpc/kernel/vdso/Makefile           | 25 +++++++++++------
+>  arch/s390/kernel/vdso64/Makefile            |  4 +--
+>  arch/s390/purgatory/Makefile                |  2 +-
+>  arch/x86/boot/compressed/Makefile           |  2 +-
+>  drivers/gpu/drm/amd/display/dc/dml/Makefile |  3 ++-
+>  scripts/Kconfig.include                     |  2 +-
+>  scripts/Makefile.clang                      |  2 ++
+>  scripts/Makefile.compiler                   |  8 +++---
+>  scripts/as-version.sh                       |  2 +-
+>  21 files changed, 74 insertions(+), 98 deletions(-)
 
-> 
-> I started a 'tcpdump', I confirmed with ' bpf_jit_enable == 2' that a 
-> BPF jitted program is created by tcpdump.
-> 
-> 'bptool prog show' and 'bpftool prog list' returns no result.
 
-Bpftool works with eBPF, not with the older "classic" BPF (cBPF) used by
-tcpdump. You should see programs listed if you load anything eBPF, for
-example by using BCC tools, bpftrace, or load an eBPF program any other
-way from user space:
+FYI,
+[ please provide comments, feedback and improvements on build/ ltp smoke te=
+sts ]
 
-	$ echo "int main(void) {return 0;}" | \
-		clang -O2 -target bpf -c -o foo.o -x c -
-	# bpftool prog load foo.o /sys/fs/bpf/foo type xdp
-	# bpftool prog list
-	# bpftool prog dump jited name main
-	# rm /sys/fs/bpf/foo
+LKFT test farm have fetched your patch series [1]
+[PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
+ [1] https://lore.kernel.org/llvm/20221228-drop-qunused-arguments-v2-0-9adb=
+ddd20d86@kernel.org/
 
-I know tcpdump itself can show the cBPF bytecode for its programs, but I
-don't know of another way to dump the JIT-ed image for cBPF programs.
-Drgn could probably do it, with kernel debug symbols.
+Following build warnings and errors reported.
 
-Quentin
+sh:
+gcc-11-defconfig =E2=80=94 FAIL
+gcc-11-shx3_defconfig =E2=80=94 FAIL
+https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/h=
+ttps___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbddd20d=
+86_kernel_org/testrun/14221835/suite/build/tests/
+
+mainline getting passed.
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/tes=
+trun/14298156/suite/build/test/gcc-11-defconfig/history/
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/tes=
+trun/14298156/suite/build/test/gcc-11-shx3_defconfig/history/
+
+Build error:
+In function 'follow_pmd_mask',
+    inlined from 'follow_pud_mask' at /builds/linux/mm/gup.c:735:9,
+    inlined from 'follow_p4d_mask' at /builds/linux/mm/gup.c:752:9,
+    inlined from 'follow_page_mask' at /builds/linux/mm/gup.c:809:9:
+/builds/linux/include/linux/compiler_types.h:358:45: error: call to
+'__compiletime_assert_263' declared with attribute error: Unsupported
+access size for {READ,WRITE}_ONCE().
+  358 |         _compiletime_assert(condition, msg,
+__compiletime_assert_, __COUNTER__)
+
+
+s390:
+clang-15-defconfig =E2=80=94 FAIL
+https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/h=
+ttps___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbddd20d=
+86_kernel_org/testrun/14221913/suite/build/tests/
+
+mainline getting passed.
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/tes=
+trun/14300495/suite/build/test/clang-15-defconfig/history/
+
+Build error:
+make --silent --keep-going --jobs=3D8
+O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM_IAS=3D0 ARCH=3Ds390
+CROSS_COMPILE=3Ds390x-linux-gnu- 'HOSTCC=3Dsccache clang' 'CC=3Dsccache
+clang'
+`.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+defined in discarded section `.exit.text' of fs/fuse/inode.o
+`.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+defined in discarded section `.exit.text' of fs/fuse/inode.o
+`.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
+defined in discarded section `.exit.text' of crypto/algboss.o
+`.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
+defined in discarded section `.exit.text' of drivers/scsi/sd.o
+`.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+defined in discarded section `.exit.text' of drivers/md/md.o
+`.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+defined in discarded section `.exit.text' of drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+drivers/md/md.o: defined in discarded section `.exit.text' of
+drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+drivers/md/md.o: defined in discarded section `.exit.text' of
+drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+net/iucv/iucv.o: defined in discarded section `.exit.text' of
+net/iucv/iucv.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/cio/qdio_thinint.o: defined in discarded section
+`.exit.text' of drivers/s390/cio/qdio_thinint.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/net/qeth_l3_main.o: defined in discarded section
+`.exit.text' of drivers/s390/net/qeth_l3_main.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/net/qeth_l3_main.o: defined in discarded section
+`.exit.text' of drivers/s390/net/qeth_l3_main.o
+s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
+fail ../../bfd/elf64-s390.c:3349
+make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
+
+But,
+Build and boot pass on arm64, arm, x86_64 and i386.
+Build test performed for mips, parisc, riscv, s390, sh, sparc and
+powerpc (known build errors for maple_defconfig and cell_defconfig),
+
+Please refer following link for detailed build, boot, LTP smoketest.
+https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/h=
+ttps___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbddd20d=
+86_kernel_org/?failures_only=3Dfalse&results_layout=3Dtable#!#test-results
+
+Best regards
+Naresh Kamboju
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+> ---
+> base-commit: 88603b6dc419445847923fcb7fe5080067a30f98
+> change-id: 20221228-drop-qunused-arguments-0c5c7dae54fb
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+>
