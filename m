@@ -2,243 +2,223 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC466679D7D
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Jan 2023 16:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CACCE679EA9
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Jan 2023 17:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234937AbjAXPaN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Jan 2023 10:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S233521AbjAXQa7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Jan 2023 11:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbjAXPaM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Jan 2023 10:30:12 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325F23B643
-        for <linux-mips@vger.kernel.org>; Tue, 24 Jan 2023 07:30:11 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id m17so3827083uap.7
-        for <linux-mips@vger.kernel.org>; Tue, 24 Jan 2023 07:30:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UyCfMSVt5YQ93dvQzsfOUKEDIKXZpwg4MvkDLyqNHiA=;
-        b=XZ2VY4ncaYA9BICy27D7vfCt1S+bUXYea16Cc2fJhPUE0OX1kj8HsB47D77IsDONZl
-         U6Cf5/aXnbFjyoJeW1LaVZ0Kw7VnuZvBsCo/9vOQkt8jCc6eTkSOZJaQ35OEDIebTY4e
-         wjfhJgqG6HfeXBAulPceXNd5fs697ZnmJhzHhbgdi8A72RuX/LdvU2wr7GWOWSyJ6p3P
-         vXBUBFY+QVUd9X8Out3vC1ZXZ7XMAtzXt/A5seZeMwxTDUohxC6h/ktDqD4qVtfwcrDA
-         qpxk9+y+gGehYvlG9VMUupGcLXEPj8YK5MYH8uzIwwlrpGSEhJZdRnBGcARX68T3MR2A
-         ys1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UyCfMSVt5YQ93dvQzsfOUKEDIKXZpwg4MvkDLyqNHiA=;
-        b=Rr6NwKmEZnwdIpybB50zgYYV803mAAHvOG6dKXdc66yCa+g+ft+knDPs1FCkUFYSu1
-         4QSBV5rro2Ds6nZJ5xmY+BZIKVaSeKFIt2WQaVpWQWi7hNy/UfOdHYBx0N3cmbCj4l9T
-         /dAesNViFRQxGiK4uQnXSKb0JDu/dI+PBrJuAnVYYQ/aBkxP2RRR21UASqzvCcan3617
-         HKaAXODKDmuv3l63qg4M1Swa5JLFZLKgSiLTFJelAHeEblUCA4C4uzFSjBbrlSUk43Ws
-         FLGbn2jVau7zmbX/bmzLm+krQu8BWQ+EDiyVRuburcSIo6GIwvaHa/7qsDuqx5UeaeUb
-         wfGw==
-X-Gm-Message-State: AFqh2krDaq99+T7GXqPveHXVvfcv94l0nh7iHkqaENpLARNzHTkm9lRm
-        es8/lW/WhjW298arco5cKxDic5H6zp1/5EL/+1GCLg==
-X-Google-Smtp-Source: AMrXdXuKRuAD41xpguf1eHKBlJO8W4vD7lac7tM28Emygp2ffmu3CfYnqjmwkMJDzMpgKkJSkz2p0bDht+YE9XQTmVE=
-X-Received: by 2002:a9f:3263:0:b0:5d5:d02:8626 with SMTP id
- y32-20020a9f3263000000b005d50d028626mr3149869uad.115.1674574209956; Tue, 24
- Jan 2023 07:30:09 -0800 (PST)
+        with ESMTP id S229546AbjAXQa6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Jan 2023 11:30:58 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2084.outbound.protection.outlook.com [40.107.8.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779CE11EA1;
+        Tue, 24 Jan 2023 08:30:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dfIh6JNpiUm0Puxa1OFBkpxr49M/+uX5wd6fDzyjApSO06Y47ua9ci2g3csuT8tb8ks9H4jNT5c+doN8vvNgcR+gZQA1WoJguviMPbPajXLw0615MDuKAkp+fXyAd6FrdgPG8jpoNEFVWacXWES8G1dawqrdA4JtYVBs6LS46SXoHr/Ag4fdWsUEM08Ug3I+ma82rwiumiKso1Gx58YJCXfQRMZsG19UeanMKBuFRddzY32QLRpOkRawf7HY0B+VVWaJO8TInNp+aWlM3PuyR7Ww35JoFItqOqOFJZZH26YYzc8LkAZN72zIb2+0t/vjVmVGF2dE17xtYxaymyn+3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9UgTGLBhEQVscQNBG4YCWvYiYDlgp001c0bxw//T5Y0=;
+ b=K3S/DqbqDCDZ5MUEOTqQd46T2NqUcvrNcO2Aiuj0jIJIY6eBu9Y4V8SgEyPRj52AX/Nmj1AlXMSQKWOfzU8UgSfxMggQ3jTF8AOXv5doSmrHgxx5Mr9aPerQ1f5l4bxXesqBt55+AYCe4AleqCPTSwkgWq7Hv1e/se3J/o9Zy2NbnXmsnzEEZPTpG4SCNWXv4XKlTpFsBEwP38iZJ1QqSsOBwlif+fDvQMXfGYVbgnmcdHyOhm4YX1jwOa335ZVQ12x1Zmu0dh8DdG2TTGUHLNCjM36NfaJts+RN5jFI2jlcgptgigsMX9IcZfq4TG/2XOHDpRccoYc39LjDErqOPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9UgTGLBhEQVscQNBG4YCWvYiYDlgp001c0bxw//T5Y0=;
+ b=iHsIiIZ3Os0ujjdYYltFsxpnBxGS2S+Bu3qE7XgI8BJmHbNb0eEA7i+f4ayy+7bNhihVRLLQXPW9BmzBIQ+T3p7LuHwyz4Vh3PCYu4IcgFSaOJjDi47XnQzpjlg6rIGFa8Uz2Cbxo+ghavZOd4vO0fyYR6J0Xy9sZSOtRxsBZjpFt+NfV2Mwv3+x+KsCxqKw6Uc3eSXJpGC107KyhUgBzwzjaiWgOH3zJxmi3dmK+FRu8fzHzWJ3Y6QJo0npMUiErSq0ujvv6c/XkD7iDmaabFpSLVLEb8i7T8bA/1AhZDTJKvyUSMbskkN46hEuuH3vBKLxOGhIf8XLvZeeyw68PA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by DU2PR03MB9999.eurprd03.prod.outlook.com (2603:10a6:10:490::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 16:30:54 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::6b03:ac16:24b5:9166]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::6b03:ac16:24b5:9166%2]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 16:30:54 +0000
+Message-ID: <5cc63796-fd46-98d6-fd01-54a8281cf995@seco.com>
+Date:   Tue, 24 Jan 2023 11:30:49 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 0/8] generic command line v5
+Content-Language: en-US
+To:     Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Cc:     xe-linux-external@cisco.com, linux-efi@vger.kernel.org
+References: <20220929023301.3344694-1-danielwa@cisco.com>
+From:   Sean Anderson <sean.anderson@seco.com>
+In-Reply-To: <20220929023301.3344694-1-danielwa@cisco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR20CA0005.namprd20.prod.outlook.com
+ (2603:10b6:208:e8::18) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
 MIME-Version: 1.0
-References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
- <CA+G9fYs58vWj705MdaBKomVfHxNJ5ekSTmf53S4=4oVmc43CZg@mail.gmail.com> <Y86xyqe+Rd9wri7I@dev-arch.thelio-3990X>
-In-Reply-To: <Y86xyqe+Rd9wri7I@dev-arch.thelio-3990X>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 Jan 2023 20:59:58 +0530
-Message-ID: <CA+G9fYv1cAfGUDmz-+XC-E7aXQdU55D7SW=-WFc_RiUuNgGNsw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
-        trix@redhat.com, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
-        linux-mips@vger.kernel.org, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DU2PR03MB9999:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f9b0c36-b9fc-4457-fae2-08dafe285d09
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1Hxp6HmeF/ueRYPWUFjY/p9TAhlgUzb5DzMUFrynG7B7LDdgyEGSYlv8T2QY99/2/CARY6nFFBZC7ga32Q3+JNSovFqYjpuy7G9gG7Gogkr4ymt9ujES94QJCU5lbKdbiZzwOhHfN6xuwpHGaBulXMEV8gpfPLViiVNRONK+pzEUtvPe7g4aW3tVzSLa0mUNMYS/Jb+K95/XOS/F7AtFshDKK/Ad44QeJhtnQghNqiMGEwLNmDVmBk8SZsSgDRyJGm6CWYCTzg+UhbhqTHzffc3XT3rL5i2L2f7VBFrvbn45LALbseKEROqrxohgtFrdgzH6sxeJPaaDJXAjVfJD6vGiDTCBSFxZwx3KgPQ6WRL3wonAlIJ1xGj+usm9t17Sy69Xq38TfbTM8ZVBFOA0MpTA30AX1aZFI5IG55Q7gIFyIRoaHTrX4oIptMzNWoLX8mMx/HiDrprtIN8oLEQFK3HeF/iYhg5eyFf8s6JQD2zkPwNasACTZzGcJLNjKJSjiE6uc2LLR0LTBjg9ytGVrX0mnSzHVa6EvXf7+MYrUM4jSZZzobFYkIVWMa29jtR5RXCIqdRwOA5KdQ0ECqXFQR3tkKDJPThyCzWFZ1OWYCNRtv76aTFTcRtlqeU4nxI8My3EZytrGOWMjFFXUFhciirKNA5g/4lBGM5B0cwVlFV07AXVwQ7nesUI8c/DmFPgUAXvF6KxsRoFg44NFHjxlUlMa8AfrRMB/36ICZojGlT91Y2sLMBBlaJhRoacClr/co5VsfqltAqrJN1k+GwxgJuddR3RurkZIOAPlg8/3S0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39850400004)(136003)(396003)(376002)(346002)(451199015)(31686004)(31696002)(316002)(110136005)(478600001)(52116002)(36756003)(86362001)(2616005)(38100700002)(921005)(38350700002)(83380400001)(26005)(186003)(53546011)(6512007)(5660300002)(2906002)(6666004)(44832011)(6486002)(6506007)(41300700001)(7416002)(66476007)(8936002)(8676002)(66946007)(66556008)(4326008)(41533002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGpTVEhNd1ZrK0xrdnJRWHdsMVM4M1A4MVhWYVk3VE9uVUNxNytMS2ZTSGJl?=
+ =?utf-8?B?NjRXWEVsLytYMnYzK3dZQUhqZnZPTUhoZm54bFlzeGhWUjVWa0tPQmoyMDZ5?=
+ =?utf-8?B?aG9xT004NnZkUjZFR1p6NzRmL1Q4UVFGTGZvSTZlN0NMUU9WR0t0ZXJ0amRG?=
+ =?utf-8?B?K3NWKzdISmRXaDFHYTlvai8xWUlFOHlxREFibTNSSWE5THIrUGdpOGVxYlpJ?=
+ =?utf-8?B?amtEY3RCaEhpNE5TdjFIelQ1YjBEaHBLTlJtTkJoZVI5aWJRelA4TkZtL2cz?=
+ =?utf-8?B?b1lGQmhYNTF6eitHc2ZFalQ0YU1NV3Fpejc0OExQUms1N2RucWplUHVLOWg3?=
+ =?utf-8?B?TnRnODYrN3hFMjQ0T1FlOU5OUkVhQjZFcDBlRG9ITXpTamZZT3BtY2Y0M0J3?=
+ =?utf-8?B?S2Z0VGFxSEJ5NHVCSFZFZllXNHJmVTEvc1ZCN0hMZzdoZ3BQcFF2N0NqT0tt?=
+ =?utf-8?B?N0VsOGFkclhGR3hLdDZCMjRJYzh5ZGpmaC9pRHpEajAzOEV0Q0RsRHhab2hB?=
+ =?utf-8?B?cjk2Zm9nOEc5a3dwQ1llaE9JbU05ZWwyOVV6anBWUTcrY3RESGpxWkhhNDJp?=
+ =?utf-8?B?NklWaVkzUldxbWxDVkFiZ3RoY3hpSThQUklnYzlYS00wUlB1WmVrbEpzcXg2?=
+ =?utf-8?B?Y2lIYjF2NFRlWW1xWVQ4b082QmRqeVJIMXR4K1NGWHF6aGM2RjlqR2xHWFU3?=
+ =?utf-8?B?WFpSL0x0WmtoZmQ4Q09xR1RGMzdzRDU3dTgxalRkVnFQZHNuaXhpdDc5RkpE?=
+ =?utf-8?B?ZHBscmFzOFNtaFJsWWdOMFh5cWZSVURKdXpVNFFKbGQzczNGUlA4UWhPb1VB?=
+ =?utf-8?B?RzRTNWVCTitpZzBOZktMa3l6a0wzTkNVejZVcUd2L0plTGZBdGNsNE9ubGxj?=
+ =?utf-8?B?WktIY1A5UENtYThKL3BvUDFuYU1SVjRsSFUvV0xrcUk0ZG94VHBVeThCZmJt?=
+ =?utf-8?B?aFNGK3lEWjc0NkhVc21FQUQ1UGk2Y3ltSnFyTzdDVmk0V3RCL1dLVTVWeVFE?=
+ =?utf-8?B?clVkTk82VHV1eDVrMDJ2SWRodXpEZ1ZyT0hRaEpPS0lvMHYwU1Mxem5iZlpW?=
+ =?utf-8?B?a0I2bGt1dG1lSkIwNFN2c1NPL2RJTC8zaUVTeFE0OGt2TVlBVmpodk9HSmxo?=
+ =?utf-8?B?VFV4NlU0aWdvMmFsMG9DV3dGN1l1VGx4Tnc4blMxa1Z2WGt4UUM0dVUySVJ1?=
+ =?utf-8?B?MjArNXFCbHJGejRPSE40N3FvOFk4T1poN25EcFdQbFB2bFVLdWFnWUVXazdO?=
+ =?utf-8?B?dGxRWVRDSDBXN3BZWUhHVFpldVRPd29SZFFsZ3ZZaXYzOEdJcmdwdjJFMnFm?=
+ =?utf-8?B?QVJzRVVVSG5TN2NwQkw3VG9YNTBkaFhBTWMwUi9HeTJMZFdHajkvc1pCdmd5?=
+ =?utf-8?B?a3k4OVlleHpObWs0cHNqaWRaN0JZT05UaGNoZkk1d004azFuZUVvMjlLdVo1?=
+ =?utf-8?B?akJCakRMc0E3TkMwVmNqcEFzUmorWDhMYWV4TEcvZjFheVlGdmRvaTEwNUxE?=
+ =?utf-8?B?eDNNL1JHemdoKzRWWTVnZ0dnaFE2enRzZW5PQklOcFZlblhJWVFyV2xVK3pC?=
+ =?utf-8?B?SW90WWZjVHRDQ0hwZXhLSENOUFNTNkxSY3JKVC93OXQyT09ubkVpWm9GYnpK?=
+ =?utf-8?B?Ny9uMEplV05RQlk3b3VRMGExZGlwVTZERjJydXZBUFNUSzBoQy90QURQQjM3?=
+ =?utf-8?B?NDhMUWlXd1R6KzZGcmIzREhiWW5YODZKTXNpeGQwWnBJTC9pTVRmY294MnQ3?=
+ =?utf-8?B?UWtFNjdWZTZRZ0p2UHZzSis5eHFWQm9oRDc2TFZYVkhMdm5HbnQ5YmtzdW5h?=
+ =?utf-8?B?TUpiQ1hOc091ZU45QnBOVkI3Si83OFZuU0pFem9CdFdRUVZ5cDM0M3p0QS9M?=
+ =?utf-8?B?YkwxQW4xcjFKWXRhQ2xYOWNOOVBJeFZ5L2t2c2kzblJtTmVXQ1NrMHFScnNM?=
+ =?utf-8?B?UUxaektWaTlGWHZsVk1zWW1LRDZ3NlJWSTdHT1RxbkRIMEtBZ1dmZkZ4Tmd4?=
+ =?utf-8?B?QmNDb2ozRll3MU5WQ3Qyd1lWbXJSMGZLMzllTHdRcXRnWnR3TzRPWnZVUjZK?=
+ =?utf-8?B?bU8rTXFacE5jNHQ1Z1hhM3JZZGM1SE1pNUhwWFdxa3dxVGQ5QUJUcDBzREk4?=
+ =?utf-8?B?US9FczVYYW40Uk1jTXY3ZFEvbEpyLzQ5aitSU0FueTZ6SnBXN1ZQOFJMUTBO?=
+ =?utf-8?B?VUE9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f9b0c36-b9fc-4457-fae2-08dafe285d09
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 16:30:54.1616
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xND+A2DB21t/vPRp6zi3b+cLTiMXbvUbW+dRhVMH0Lf0BLAqcYhuNQ2o1+fKgZsDYZpbH7KcsGmRnx46tAuxvA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR03MB9999
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nathan,
+On 9/28/22 22:32, Daniel Walker wrote:
+> v5 release changes. Generally a rebase from v4.
+> 
+> * Modified OF changes to move the ugly code into the cmdline.h
+> 
+> * Minor compliation update in arm64. Added ifndef __ASSEMBLY__ in
+>   a few places.
+> 
+> * Worked around arm64 kaslr_early.c.
+> 
+> 	This code needs some additional review and consideration. 
+> 	It appears this code is missing the opposite option to nokaslr
+> 	which is kaslr.disabled=1/0 which would allow kaslr to be turn
+> 	back on later in the command line. For example,
+> 
+> 	console=ttyS0 nokaslr root=/dev/ram0 nosmp kaslr.disabled=0 loglevel=7
+> 	
+> 	On arm64 in arch/arm64/kernel/idreg-override.c this is parsed correctly
+> 	to turn on kaslr, but the kaslr_early.c is missing this logic.
+> 	Doing this results in kaslr getting disabled with the following message,
+> 
+> 	KASLR disabled due to lack of seed
+> 
+> 	Even when there is a seed in the device tree.	
+> 
+> 	So change to the generic command line would leave built in command
+> 	lines with nokaslr with no option to re-enable kaslr in in the bootloader
+> 	arguments.
+> 
+> 
+> Daniel Walker (8):
+>   CMDLINE: add generic builtin command line
+>   scripts: insert-sys-cert: add command line insert capability
+>   scripts: insert-sys-cert: change name to insert-symbol
+>   CMDLINE: mips: convert to generic builtin command line
+>   drivers: firmware: efi: libstub: enable generic commandline
+>   CMDLINE: x86: convert to generic builtin command line
+>   of: replace command line handling
+>   CMDLINE: arm64: convert to generic builtin command line
+> 
+>  arch/arm64/Kconfig                            |  33 +--
+>  arch/arm64/include/asm/setup.h                |   4 +
+>  arch/arm64/include/uapi/asm/setup.h           |   2 +
+>  arch/arm64/kernel/idreg-override.c            |   9 +-
+>  arch/arm64/kernel/pi/kaslr_early.c            |  14 +-
+>  arch/mips/Kconfig                             |   4 +-
+>  arch/mips/Kconfig.debug                       |  44 ----
+>  arch/mips/configs/ar7_defconfig               |   9 +-
+>  arch/mips/configs/bcm47xx_defconfig           |   8 +-
+>  arch/mips/configs/bcm63xx_defconfig           |  15 +-
+>  arch/mips/configs/bmips_be_defconfig          |  11 +-
+>  arch/mips/configs/bmips_stb_defconfig         |   6 +-
+>  arch/mips/configs/ci20_defconfig              |   9 +-
+>  arch/mips/configs/cu1000-neo_defconfig        |  10 +-
+>  arch/mips/configs/cu1830-neo_defconfig        |  10 +-
+>  arch/mips/configs/generic_defconfig           |   6 +-
+>  arch/mips/configs/gpr_defconfig               |  18 +-
+>  arch/mips/configs/loongson3_defconfig         |  12 +-
+>  arch/mips/include/asm/setup.h                 |   2 +
+>  arch/mips/kernel/relocate.c                   |  17 +-
+>  arch/mips/kernel/setup.c                      |  36 +--
+>  arch/mips/pic32/pic32mzda/early_console.c     |   2 +-
+>  arch/mips/pic32/pic32mzda/init.c              |   3 +-
+>  arch/x86/Kconfig                              |  44 +---
+>  arch/x86/kernel/setup.c                       |  18 +-
+>  .../firmware/efi/libstub/efi-stub-helper.c    |  29 +++
+>  drivers/firmware/efi/libstub/efi-stub.c       |   9 +
+>  drivers/firmware/efi/libstub/efistub.h        |   1 +
+>  drivers/firmware/efi/libstub/x86-stub.c       |  13 +-
+>  drivers/of/fdt.c                              |  22 +-
+>  include/linux/cmdline.h                       | 137 ++++++++++
+>  init/Kconfig                                  |  78 ++++++
+>  lib/Kconfig                                   |   4 +
+>  lib/Makefile                                  |   3 +
+>  lib/generic_cmdline.S                         |  53 ++++
+>  lib/test_cmdline1.c                           | 139 ++++++++++
+>  scripts/Makefile                              |   2 +-
+>  .../{insert-sys-cert.c => insert-symbol.c}    | 243 ++++++++++++------
+>  38 files changed, 724 insertions(+), 355 deletions(-)
+>  create mode 100644 include/linux/cmdline.h
+>  create mode 100644 lib/generic_cmdline.S
+>  create mode 100644 lib/test_cmdline1.c
+>  rename scripts/{insert-sys-cert.c => insert-symbol.c} (72%)
+> 
 
-On Mon, 23 Jan 2023 at 21:41, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Naresh,
->
-> On Mon, Jan 23, 2023 at 07:28:10PM +0530, Naresh Kamboju wrote:
-> > FYI,
-> > [ please provide comments, feedback and improvements on build/ ltp smok=
-e tests ]
-> >
-> > LKFT test farm have fetched your patch series [1]
-> > [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
-> >  [1] https://lore.kernel.org/llvm/20221228-drop-qunused-arguments-v2-0-=
-9adbddd20d86@kernel.org/
->
-> Thank you a lot for testing this series, it is much appreciated!
->
-> It looks like this was applied on top of 6.2-rc3 if I am reading your
-> logs right but your mainline testing is recent, 6.2-rc5. I think the
-> errors you are seeing here are just existing mainline regressions that
-> were later fixed.
->
-> > Following build warnings and errors reported.
-> >
-> > sh:
-> > gcc-11-defconfig =E2=80=94 FAIL
-> > gcc-11-shx3_defconfig =E2=80=94 FAIL
-> > https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/bui=
-ld/https___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbdd=
-d20d86_kernel_org/testrun/14221835/suite/build/tests/
-> >
-> > mainline getting passed.
-> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
-/testrun/14298156/suite/build/test/gcc-11-defconfig/history/
-> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
-/testrun/14298156/suite/build/test/gcc-11-shx3_defconfig/history/
-> >
-> > Build error:
-> > In function 'follow_pmd_mask',
-> >     inlined from 'follow_pud_mask' at /builds/linux/mm/gup.c:735:9,
-> >     inlined from 'follow_p4d_mask' at /builds/linux/mm/gup.c:752:9,
-> >     inlined from 'follow_page_mask' at /builds/linux/mm/gup.c:809:9:
-> > /builds/linux/include/linux/compiler_types.h:358:45: error: call to
-> > '__compiletime_assert_263' declared with attribute error: Unsupported
-> > access size for {READ,WRITE}_ONCE().
-> >   358 |         _compiletime_assert(condition, msg,
-> > __compiletime_assert_, __COUNTER__)
->
-> I think this was fixed with mainline commit 526970be53d5 ("sh/mm: Fix
-> pmd_t for real"), released in 6.2-rc4. You can see a previous build
-> failing in the same manner:
->
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc3-9=
--g5a41237ad1d4/testrun/14056384/suite/build/tests/
->
-> > s390:
-> > clang-15-defconfig =E2=80=94 FAIL
-> > https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/bui=
-ld/https___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbdd=
-d20d86_kernel_org/testrun/14221913/suite/build/tests/
-> >
-> > mainline getting passed.
-> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
-/testrun/14300495/suite/build/test/clang-15-defconfig/history/
-> >
-> > Build error:
-> > make --silent --keep-going --jobs=3D8
-> > O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM_IAS=3D0 ARCH=3Ds3=
-90
-> > CROSS_COMPILE=3Ds390x-linux-gnu- 'HOSTCC=3Dsccache clang' 'CC=3Dsccache
-> > clang'
-> > `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
-> > defined in discarded section `.exit.text' of fs/fuse/inode.o
-> > `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
-> > defined in discarded section `.exit.text' of fs/fuse/inode.o
-> > `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-> > defined in discarded section `.exit.text' of crypto/algboss.o
-> > `.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
-> > defined in discarded section `.exit.text' of drivers/scsi/sd.o
-> > `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
-> > defined in discarded section `.exit.text' of drivers/md/md.o
-> > `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
-> > defined in discarded section `.exit.text' of drivers/md/md.o
-> > `.exit.text' referenced in section `.altinstructions' of
-> > drivers/md/md.o: defined in discarded section `.exit.text' of
-> > drivers/md/md.o
-> > `.exit.text' referenced in section `.altinstructions' of
-> > drivers/md/md.o: defined in discarded section `.exit.text' of
-> > drivers/md/md.o
-> > `.exit.text' referenced in section `.altinstructions' of
-> > net/iucv/iucv.o: defined in discarded section `.exit.text' of
-> > net/iucv/iucv.o
-> > `.exit.text' referenced in section `__bug_table' of
-> > drivers/s390/cio/qdio_thinint.o: defined in discarded section
-> > `.exit.text' of drivers/s390/cio/qdio_thinint.o
-> > `.exit.text' referenced in section `__bug_table' of
-> > drivers/s390/net/qeth_l3_main.o: defined in discarded section
-> > `.exit.text' of drivers/s390/net/qeth_l3_main.o
-> > `.exit.text' referenced in section `__bug_table' of
-> > drivers/s390/net/qeth_l3_main.o: defined in discarded section
-> > `.exit.text' of drivers/s390/net/qeth_l3_main.o
-> > s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
-> > fail ../../bfd/elf64-s390.c:3349
-> > make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error=
- 1
->
-> This should be fixed with mainline commit a494398bde27 ("s390: define
-> RUNTIME_DISCARD_EXIT to fix link error with GNU ld < 2.36"), released in
-> 6.2-rc4 as well. Same as before, visible in mainline at one point
-> without this series:
->
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc3-9=
--g5a41237ad1d4/testrun/14057142/suite/build/tests/
->
-> > But,
-> > Build and boot pass on arm64, arm, x86_64 and i386.
-> > Build test performed for mips, parisc, riscv, s390, sh, sparc and
-> > powerpc (known build errors for maple_defconfig and cell_defconfig),
->
-> Good to hear!
->
-> Please consider retesting this series on top of 6.2-rc5 or testing the
-> current kbuild tree, which has this series applied in it:
+For arm64:
 
-This is the perfect place to test.
+Tested-by: Sean Anderson <sean.anderson@seco.com>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.gi=
-t/log/?h=3Dfor-next
-
-Build test pass on arm, arm64, i386, mips, parisc, powerpc, riscv, s390, sh=
-,
-sparc and x86_64.
-Boot and LTP smoke pass on qemu-arm64, qemu-armv7, qemu-i386 and qemu-x86_6=
-4.
-
-  Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-  Tested-by: Anders Roxell <anders.roxell@linaro.org>
-
-Please refer to the following link for details of testing.
-  https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build=
-/linux-kbuild_masahiroy-branch-kbuild-20230124/?failures_only=3Dfalse&resul=
-ts_layout=3Dtable#!#test-results
-
-metadata:
-  git_describe : v6.2-rc5-46-ga778c9dd138b
-  git_repo : https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linu=
-x-kbuild.git
-  git_sha : a778c9dd138b4f4410779705b444d58ce6f8fc44
-  git_short_log : a778c9dd138b ("builddeb: clean generated package content"=
-)
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
->
-> Cheers,
-> Nathan
+Thanks!
