@@ -2,407 +2,243 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DEE678C0F
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Jan 2023 00:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC466679D7D
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Jan 2023 16:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbjAWXeI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Jan 2023 18:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S234937AbjAXPaN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Jan 2023 10:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjAWXeH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Jan 2023 18:34:07 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC333A91;
-        Mon, 23 Jan 2023 15:34:05 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0884D1BF203;
-        Mon, 23 Jan 2023 23:34:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674516843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QiBvzWJ4h7GTZASo+BoK0bhH2f2VIgwoNcpsiUcFzG4=;
-        b=Q9Qn2HPlYgnFvR+h1n8QbIrH2NQpqg/flUOx+fx0N02cpUM3q+hyl2R55VfkzMXPuObVQj
-        8z5YDyJcZjf+H9CReBAMerSWVc44EnIqe+nwTQD7h+NK37wDe5+Y34wB9cvv9nj9UDFSoo
-        GjuhzrwUjtmmKRb1MKuQwIuzla6v2cOeqgMM/HrP2UvnjbhoY5zEsok9/1N/fNrqFciIL8
-        b24JdLrQLgCiki7eCHc5GTYSHbyDrRGnte3is1ryYLQ3prHg4MyBHVGmKXu1evhJMs/gDZ
-        tXnrSl7urvwMasBovvhExoWMKEc7ncl1DJ3DwJU7GYl0rhWOJquKA7SE4vaOrw==
-Date:   Tue, 24 Jan 2023 00:34:01 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
-        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>
-Subject: Re: [PATCH V2 2/7] rtc: Add support for the Loongson-2K/LS7A RTC
-Message-ID: <Y88ZaWnh9ERRocPv@mail.local>
-References: <cover.1673227292.git.zhoubinbin@loongson.cn>
- <8cd5e1b763951d4ce69188cdff95d8adaf12755f.1673227292.git.zhoubinbin@loongson.cn>
+        with ESMTP id S233939AbjAXPaM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Jan 2023 10:30:12 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325F23B643
+        for <linux-mips@vger.kernel.org>; Tue, 24 Jan 2023 07:30:11 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id m17so3827083uap.7
+        for <linux-mips@vger.kernel.org>; Tue, 24 Jan 2023 07:30:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UyCfMSVt5YQ93dvQzsfOUKEDIKXZpwg4MvkDLyqNHiA=;
+        b=XZ2VY4ncaYA9BICy27D7vfCt1S+bUXYea16Cc2fJhPUE0OX1kj8HsB47D77IsDONZl
+         U6Cf5/aXnbFjyoJeW1LaVZ0Kw7VnuZvBsCo/9vOQkt8jCc6eTkSOZJaQ35OEDIebTY4e
+         wjfhJgqG6HfeXBAulPceXNd5fs697ZnmJhzHhbgdi8A72RuX/LdvU2wr7GWOWSyJ6p3P
+         vXBUBFY+QVUd9X8Out3vC1ZXZ7XMAtzXt/A5seZeMwxTDUohxC6h/ktDqD4qVtfwcrDA
+         qpxk9+y+gGehYvlG9VMUupGcLXEPj8YK5MYH8uzIwwlrpGSEhJZdRnBGcARX68T3MR2A
+         ys1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UyCfMSVt5YQ93dvQzsfOUKEDIKXZpwg4MvkDLyqNHiA=;
+        b=Rr6NwKmEZnwdIpybB50zgYYV803mAAHvOG6dKXdc66yCa+g+ft+knDPs1FCkUFYSu1
+         4QSBV5rro2Ds6nZJ5xmY+BZIKVaSeKFIt2WQaVpWQWi7hNy/UfOdHYBx0N3cmbCj4l9T
+         /dAesNViFRQxGiK4uQnXSKb0JDu/dI+PBrJuAnVYYQ/aBkxP2RRR21UASqzvCcan3617
+         HKaAXODKDmuv3l63qg4M1Swa5JLFZLKgSiLTFJelAHeEblUCA4C4uzFSjBbrlSUk43Ws
+         FLGbn2jVau7zmbX/bmzLm+krQu8BWQ+EDiyVRuburcSIo6GIwvaHa/7qsDuqx5UeaeUb
+         wfGw==
+X-Gm-Message-State: AFqh2krDaq99+T7GXqPveHXVvfcv94l0nh7iHkqaENpLARNzHTkm9lRm
+        es8/lW/WhjW298arco5cKxDic5H6zp1/5EL/+1GCLg==
+X-Google-Smtp-Source: AMrXdXuKRuAD41xpguf1eHKBlJO8W4vD7lac7tM28Emygp2ffmu3CfYnqjmwkMJDzMpgKkJSkz2p0bDht+YE9XQTmVE=
+X-Received: by 2002:a9f:3263:0:b0:5d5:d02:8626 with SMTP id
+ y32-20020a9f3263000000b005d50d028626mr3149869uad.115.1674574209956; Tue, 24
+ Jan 2023 07:30:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8cd5e1b763951d4ce69188cdff95d8adaf12755f.1673227292.git.zhoubinbin@loongson.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+ <CA+G9fYs58vWj705MdaBKomVfHxNJ5ekSTmf53S4=4oVmc43CZg@mail.gmail.com> <Y86xyqe+Rd9wri7I@dev-arch.thelio-3990X>
+In-Reply-To: <Y86xyqe+Rd9wri7I@dev-arch.thelio-3990X>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 24 Jan 2023 20:59:58 +0530
+Message-ID: <CA+G9fYv1cAfGUDmz-+XC-E7aXQdU55D7SW=-WFc_RiUuNgGNsw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
+        trix@redhat.com, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
+        linux-mips@vger.kernel.org, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        lkft-triage@lists.linaro.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+Hi Nathan,
 
+On Mon, 23 Jan 2023 at 21:41, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Naresh,
+>
+> On Mon, Jan 23, 2023 at 07:28:10PM +0530, Naresh Kamboju wrote:
+> > FYI,
+> > [ please provide comments, feedback and improvements on build/ ltp smok=
+e tests ]
+> >
+> > LKFT test farm have fetched your patch series [1]
+> > [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
+> >  [1] https://lore.kernel.org/llvm/20221228-drop-qunused-arguments-v2-0-=
+9adbddd20d86@kernel.org/
+>
+> Thank you a lot for testing this series, it is much appreciated!
+>
+> It looks like this was applied on top of 6.2-rc3 if I am reading your
+> logs right but your mainline testing is recent, 6.2-rc5. I think the
+> errors you are seeing here are just existing mainline regressions that
+> were later fixed.
+>
+> > Following build warnings and errors reported.
+> >
+> > sh:
+> > gcc-11-defconfig =E2=80=94 FAIL
+> > gcc-11-shx3_defconfig =E2=80=94 FAIL
+> > https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/bui=
+ld/https___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbdd=
+d20d86_kernel_org/testrun/14221835/suite/build/tests/
+> >
+> > mainline getting passed.
+> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
+/testrun/14298156/suite/build/test/gcc-11-defconfig/history/
+> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
+/testrun/14298156/suite/build/test/gcc-11-shx3_defconfig/history/
+> >
+> > Build error:
+> > In function 'follow_pmd_mask',
+> >     inlined from 'follow_pud_mask' at /builds/linux/mm/gup.c:735:9,
+> >     inlined from 'follow_p4d_mask' at /builds/linux/mm/gup.c:752:9,
+> >     inlined from 'follow_page_mask' at /builds/linux/mm/gup.c:809:9:
+> > /builds/linux/include/linux/compiler_types.h:358:45: error: call to
+> > '__compiletime_assert_263' declared with attribute error: Unsupported
+> > access size for {READ,WRITE}_ONCE().
+> >   358 |         _compiletime_assert(condition, msg,
+> > __compiletime_assert_, __COUNTER__)
+>
+> I think this was fixed with mainline commit 526970be53d5 ("sh/mm: Fix
+> pmd_t for real"), released in 6.2-rc4. You can see a previous build
+> failing in the same manner:
+>
+> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc3-9=
+-g5a41237ad1d4/testrun/14056384/suite/build/tests/
+>
+> > s390:
+> > clang-15-defconfig =E2=80=94 FAIL
+> > https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/bui=
+ld/https___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbdd=
+d20d86_kernel_org/testrun/14221913/suite/build/tests/
+> >
+> > mainline getting passed.
+> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
+/testrun/14300495/suite/build/test/clang-15-defconfig/history/
+> >
+> > Build error:
+> > make --silent --keep-going --jobs=3D8
+> > O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM_IAS=3D0 ARCH=3Ds3=
+90
+> > CROSS_COMPILE=3Ds390x-linux-gnu- 'HOSTCC=3Dsccache clang' 'CC=3Dsccache
+> > clang'
+> > `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+> > defined in discarded section `.exit.text' of fs/fuse/inode.o
+> > `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+> > defined in discarded section `.exit.text' of fs/fuse/inode.o
+> > `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
+> > defined in discarded section `.exit.text' of crypto/algboss.o
+> > `.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
+> > defined in discarded section `.exit.text' of drivers/scsi/sd.o
+> > `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+> > defined in discarded section `.exit.text' of drivers/md/md.o
+> > `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+> > defined in discarded section `.exit.text' of drivers/md/md.o
+> > `.exit.text' referenced in section `.altinstructions' of
+> > drivers/md/md.o: defined in discarded section `.exit.text' of
+> > drivers/md/md.o
+> > `.exit.text' referenced in section `.altinstructions' of
+> > drivers/md/md.o: defined in discarded section `.exit.text' of
+> > drivers/md/md.o
+> > `.exit.text' referenced in section `.altinstructions' of
+> > net/iucv/iucv.o: defined in discarded section `.exit.text' of
+> > net/iucv/iucv.o
+> > `.exit.text' referenced in section `__bug_table' of
+> > drivers/s390/cio/qdio_thinint.o: defined in discarded section
+> > `.exit.text' of drivers/s390/cio/qdio_thinint.o
+> > `.exit.text' referenced in section `__bug_table' of
+> > drivers/s390/net/qeth_l3_main.o: defined in discarded section
+> > `.exit.text' of drivers/s390/net/qeth_l3_main.o
+> > `.exit.text' referenced in section `__bug_table' of
+> > drivers/s390/net/qeth_l3_main.o: defined in discarded section
+> > `.exit.text' of drivers/s390/net/qeth_l3_main.o
+> > s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
+> > fail ../../bfd/elf64-s390.c:3349
+> > make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error=
+ 1
+>
+> This should be fixed with mainline commit a494398bde27 ("s390: define
+> RUNTIME_DISCARD_EXIT to fix link error with GNU ld < 2.36"), released in
+> 6.2-rc4 as well. Same as before, visible in mainline at one point
+> without this series:
+>
+> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc3-9=
+-g5a41237ad1d4/testrun/14057142/suite/build/tests/
+>
+> > But,
+> > Build and boot pass on arm64, arm, x86_64 and i386.
+> > Build test performed for mips, parisc, riscv, s390, sh, sparc and
+> > powerpc (known build errors for maple_defconfig and cell_defconfig),
+>
+> Good to hear!
+>
+> Please consider retesting this series on top of 6.2-rc5 or testing the
+> current kbuild tree, which has this series applied in it:
 
-On 09/01/2023 09:35:12+0800, Binbin Zhou wrote:
-> This RTC module is integrated into the Loongson-2K SoC and the LS7A
-> bridge chip. This version is almost entirely rewritten to make use of
-> current kernel API, and it supports both ACPI and DT.
-> 
-> This driver is shared by MIPS-based Loongson-3A4000 system (use FDT) and
-> LoongArch-based Loongson-3A5000 system (use ACPI).
-> 
+This is the perfect place to test.
 
-checkpatch.pl --strict complains, please fix the warnings and checks
+> https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.gi=
+t/log/?h=3Dfor-next
 
+Build test pass on arm, arm64, i386, mips, parisc, powerpc, riscv, s390, sh=
+,
+sparc and x86_64.
+Boot and LTP smoke pass on qemu-arm64, qemu-armv7, qemu-i386 and qemu-x86_6=
+4.
 
-> +#ifdef CONFIG_ACPI
-> +static u32 ls2x_acpi_fix_handler(void *id)
-> +{
-> +	int ret;
-> +	struct ls2x_rtc_priv *priv = (struct ls2x_rtc_priv *)id;
-> +
-> +	spin_lock(&priv->rtc_reglock);
-> +
-> +	/* Disable acpi rtc enabled */
-> +	ret = readl(priv->acpi_base + PM1_EN_REG) & ~RTC_EN;
-> +	writel(ret, priv->acpi_base + PM1_EN_REG);
-> +
-> +	/* Clear acpi rtc interrupt Status */
-> +	writel(RTC_STS, priv->acpi_base + PM1_STS_REG);
-> +
-> +	spin_unlock(&priv->rtc_reglock);
-> +
-> +	/*
-> +	 * The TOY_MATCH0_REG should be cleared 0 here,
-> +	 * otherwise the interrupt cannot be cleared.
-> +	 * Because the match condition is still satisfied
-> +	 */
-> +	ret = regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
-> +	if (ret < 0)
-> +		return ret;
+  Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+  Tested-by: Anders Roxell <anders.roxell@linaro.org>
 
-How is this an ACPI related issue? I guess the same would happen on
-!ACPI.
+Please refer to the following link for details of testing.
+  https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build=
+/linux-kbuild_masahiroy-branch-kbuild-20230124/?failures_only=3Dfalse&resul=
+ts_layout=3Dtable#!#test-results
 
-> +
-> +	rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
+metadata:
+  git_describe : v6.2-rc5-46-ga778c9dd138b
+  git_repo : https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linu=
+x-kbuild.git
+  git_sha : a778c9dd138b4f4410779705b444d58ce6f8fc44
+  git_short_log : a778c9dd138b ("builddeb: clean generated package content"=
+)
 
-This is not useful, at that time, userspace has had no chance to open
-the RTC device file as it is not created yet.
+--
+Linaro LKFT
+https://lkft.linaro.org
 
-> +	return 0;
-> +}
-> +#endif
-> +
-> +static inline void ls2x_rtc_regs_to_time(struct ls2x_rtc_regs *regs,
-
-Those static inline functions seem to be used only once, you should just
-put the code in the proper location.
-
-> +					 struct rtc_time *tm)
-> +{
-> +	tm->tm_year = regs->reg1;
-> +	tm->tm_sec = FIELD_GET(TOY_SEC, regs->reg0);
-> +	tm->tm_min = FIELD_GET(TOY_MIN, regs->reg0);
-> +	tm->tm_hour = FIELD_GET(TOY_HOUR, regs->reg0);
-> +	tm->tm_mday = FIELD_GET(TOY_DAY, regs->reg0);
-> +	tm->tm_mon = FIELD_GET(TOY_MON, regs->reg0) - 1;
-> +}
-> +
-> +static inline void ls2x_rtc_time_to_regs(struct rtc_time *tm,
-> +					 struct ls2x_rtc_regs *regs)
-> +{
-> +	regs->reg0 = FIELD_PREP(TOY_SEC, tm->tm_sec);
-> +	regs->reg0 |= FIELD_PREP(TOY_MIN, tm->tm_min);
-> +	regs->reg0 |= FIELD_PREP(TOY_HOUR, tm->tm_hour);
-> +	regs->reg0 |= FIELD_PREP(TOY_DAY, tm->tm_mday);
-> +	regs->reg0 |= FIELD_PREP(TOY_MON, tm->tm_mon + 1);
-> +	regs->reg1 = tm->tm_year;
-> +}
-> +
-> +static inline void ls2x_rtc_alarm_regs_to_time(struct ls2x_rtc_regs *regs,
-> +					 struct rtc_time *tm)
-> +{
-> +	tm->tm_sec = FIELD_GET(TOY_MATCH_SEC, regs->reg0);
-> +	tm->tm_min = FIELD_GET(TOY_MATCH_MIN, regs->reg0);
-> +	tm->tm_hour = FIELD_GET(TOY_MATCH_HOUR, regs->reg0);
-> +	tm->tm_mday = FIELD_GET(TOY_MATCH_DAY, regs->reg0);
-> +	tm->tm_mon = FIELD_GET(TOY_MATCH_MON, regs->reg0) - 1;
-> +	/*
-> +	 * The rtc SYS_TOYMATCH0/YEAR bit field is only 6 bits, so it means 63
-> +	 * years at most. Therefore, The RTC alarm years can be set from 1900
-> +	 * to 1963. This causes the initialization of alarm fail during call
-> +	 * __rtc_read_alarm.
-> +	 * We add 64 years offset to ls2x_rtc_read_alarm. After adding the
-> +	 * offset, the RTC alarm clock can be set from 1964 to 2027.
-> +	 */
-> +	tm->tm_year = FIELD_GET(TOY_MATCH_YEAR, regs->reg0) + 64;
-
-This is not symmetric with ls2x_rtc_time_to_alarm_regs, how can it work?
-
-> +}
-> +
-> +static inline void ls2x_rtc_time_to_alarm_regs(struct rtc_time *tm,
-> +					 struct ls2x_rtc_regs *regs)
-> +{
-> +	regs->reg0 = FIELD_PREP(TOY_MATCH_SEC, tm->tm_sec);
-> +	regs->reg0 |= FIELD_PREP(TOY_MATCH_MIN, tm->tm_min);
-> +	regs->reg0 |= FIELD_PREP(TOY_MATCH_HOUR, tm->tm_hour);
-> +	regs->reg0 |= FIELD_PREP(TOY_MATCH_DAY, tm->tm_mday);
-> +	regs->reg0 |= FIELD_PREP(TOY_MATCH_MON, tm->tm_mon + 1);
-> +	regs->reg0 |= FIELD_PREP(TOY_MATCH_YEAR, tm->tm_year);
-> +}
-> +
-> +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	int ret;
-> +	struct ls2x_rtc_regs regs;
-> +	struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> +
-> +	ret = regmap_read(priv->regmap, TOY_READ1_REG, &regs.reg1);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = regmap_read(priv->regmap, TOY_READ0_REG, &regs.reg0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-
-I never got a reply to my question:
-
-"
-I'm actually wondering why you read first TOY_READ1_REG then
-TOY_READ0_REG. ls1x does the opposite and the ls1c datasheet I found
-doesn't mention any latching happening. So unless latching is done on
-TOY_READ1_REG, you could use regmap_bulk_read and simply avoid struct
-ls2x_rtc_regs.
-If there is no latching, you may need to read TOY_READ0_REG at least
-twice. Because TOY_READ1_REG only contains the year, it is an issue only
-on 31 of December and it will not be easy to reproduce.
-"
-
-
-> +	ls2x_rtc_regs_to_time(&regs, tm);
-> +	return 0;
-> +}
-> +
-> +static int ls2x_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	int ret;
-> +	struct ls2x_rtc_regs regs;
-> +	struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> +
-> +	ls2x_rtc_time_to_regs(tm, &regs);
-> +
-> +	ret = regmap_write(priv->regmap, TOY_WRITE0_REG, regs.reg0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return regmap_write(priv->regmap, TOY_WRITE1_REG, regs.reg1);
-> +}
-> +
-> +static int ls2x_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	int ret;
-> +	struct ls2x_rtc_regs regs;
-> +	struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> +
-> +	ret = regmap_read(priv->regmap, TOY_MATCH0_REG, &regs.reg0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ls2x_rtc_alarm_regs_to_time(&regs, &alrm->time);
-> +	alrm->enabled = !!(readl(priv->acpi_base + PM1_EN_REG) & RTC_EN);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ls2x_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-> +{
-> +	u32 val;
-> +	struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> +
-> +	spin_lock(&priv->rtc_reglock);
-> +	val = readl(priv->acpi_base + PM1_EN_REG);
-> +
-> +	/* Enalbe RTC alarm */
-Typo
-
-> +	writel((enabled ? val | RTC_EN : val & ~RTC_EN),
-> +	       priv->acpi_base + PM1_EN_REG);
-> +	spin_unlock(&priv->rtc_reglock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ls2x_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	int ret;
-> +	struct ls2x_rtc_regs regs;
-> +	struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> +
-> +	ls2x_rtc_time_to_alarm_regs(&alrm->time, &regs);
-> +
-> +	ret = regmap_write(priv->regmap, TOY_MATCH0_REG, regs.reg0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return ls2x_rtc_alarm_irq_enable(dev, alrm->enabled);
-> +}
-> +
-> +static const struct rtc_class_ops ls2x_rtc_ops = {
-> +	.read_time = ls2x_rtc_read_time,
-> +	.set_time = ls2x_rtc_set_time,
-> +	.read_alarm = ls2x_rtc_read_alarm,
-> +	.set_alarm = ls2x_rtc_set_alarm,
-> +	.alarm_irq_enable = ls2x_rtc_alarm_irq_enable,
-> +};
-> +
-> +static int ls2x_enable_rtc(struct ls2x_rtc_priv *priv)
-> +{
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = regmap_read(priv->regmap, RTC_CTRL_REG, &val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return regmap_write(priv->regmap, RTC_CTRL_REG,
-> +			    val | TOY_ENABLE | OSC_ENABLE);
-> +}
-> +
-> +static int ls2x_rtc_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +	void __iomem *regs;
-> +	struct ls2x_rtc_priv *priv;
-> +	struct device *dev = &pdev->dev;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->irq = platform_get_irq(pdev, 0);
-> +	if (priv->irq < 0)
-> +		return dev_err_probe(dev, priv->irq, "platform_get_irq failed\n");
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(regs))
-> +		return dev_err_probe(dev, PTR_ERR(regs),
-> +				     "devm_platform_ioremap_resource failed\n");
-> +
-> +	priv->regmap = devm_regmap_init_mmio(dev, regs,
-> +					     &ls2x_rtc_regmap_config);
-> +	if (IS_ERR(priv->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(priv->regmap),
-> +				     "devm_regmap_init_mmio failed\n");
-> +
-> +	priv->rtcdev = devm_rtc_allocate_device(dev);
-> +	if (IS_ERR(priv->rtcdev))
-> +		return dev_err_probe(dev, PTR_ERR(priv->rtcdev),
-> +				     "devm_rtc_allocate_device failed\n");
-> +
-> +	/* Due to hardware erratum, all years multiple of 4 are considered
-> +	 * leap year, so only years 2000 through 2099 are usable.
-> +	 *
-> +	 * Previous out-of-tree versions of this driver wrote tm_year directly
-> +	 * into the year register, so epoch 2000 must be used to preserve
-> +	 * semantics on shipped systems.
-> +	 */
-> +	priv->rtcdev->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	priv->rtcdev->range_max = RTC_TIMESTAMP_END_2099;
-> +	priv->rtcdev->ops = &ls2x_rtc_ops;
-> +	priv->acpi_base = regs - PM_RTC_OFFSET;
-> +	spin_lock_init(&priv->rtc_reglock);
-> +	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, priv->rtcdev->features);
-
-Why?
-
-> +
-> +#ifdef CONFIG_ACPI
-> +	if (!acpi_disabled)
-> +		acpi_install_fixed_event_handler(ACPI_EVENT_RTC,
-> +						 ls2x_acpi_fix_handler, priv);
-> +#endif
-> +
-> +	ret = ls2x_enable_rtc(priv);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "ls2x_enable_rtc failed\n");
-
-This should not be done in probe but on the first set_time. This then
-allows you to know whether the time has been set and is valid in
-read_time. Please add the check.
-
-> +
-> +	ret = devm_request_threaded_irq(dev, priv->irq, NULL, ls2x_rtc_isr,
-> +					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-> +					"ls2x-alarm", priv);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Unable to request irq %d\n",
-> +				     priv->irq);
-> +
-> +	if (!device_can_wakeup(&pdev->dev))
-> +		device_init_wakeup(dev, 1);
-> +
-> +	return devm_rtc_register_device(priv->rtcdev);
-> +}
-> +
-> +static const struct of_device_id ls2x_rtc_of_match[] = {
-> +	{ .compatible = "loongson,ls2x-rtc" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ls2x_rtc_of_match);
-> +
-> +static const struct acpi_device_id ls2x_rtc_acpi_match[] = {
-> +	{ "LOON0001" }, /* Loongson LS7A */
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, ls2x_rtc_acpi_match);
-> +
-> +static struct platform_driver ls2x_rtc_driver = {
-> +	.probe		= ls2x_rtc_probe,
-> +	.driver		= {
-> +		.name	= "ls2x-rtc",
-> +		.of_match_table = ls2x_rtc_of_match,
-> +		.acpi_match_table = ls2x_rtc_acpi_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(ls2x_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("Loongson LS2X RTC driver");
-> +MODULE_AUTHOR("WANG Xuerui <git@xen0n.name>");
-> +MODULE_AUTHOR("Huacai Chen <chenhuacai@kernel.org>");
-> +MODULE_AUTHOR("Binbin Zhou <zhoubinbin@loongson.cn>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.31.1
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> Cheers,
+> Nathan
