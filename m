@@ -2,101 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C8067EAE7
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jan 2023 17:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1454267F22D
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Jan 2023 00:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbjA0Q25 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Jan 2023 11:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S232949AbjA0XTk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 27 Jan 2023 18:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234068AbjA0Q24 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Jan 2023 11:28:56 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9876B21A11;
-        Fri, 27 Jan 2023 08:28:54 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pLRav-0002kp-03; Fri, 27 Jan 2023 17:28:53 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 3A4C6C2638; Fri, 27 Jan 2023 17:28:30 +0100 (CET)
-Date:   Fri, 27 Jan 2023 17:28:30 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] MIPS: remove CONFIG_MIPS_LD_CAN_LINK_VDSO
-Message-ID: <20230127162830.GD6090@alpha.franken.de>
-References: <20230120063351.433502-1-masahiroy@kernel.org>
+        with ESMTP id S232922AbjA0XTj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Jan 2023 18:19:39 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B18093FD
+        for <linux-mips@vger.kernel.org>; Fri, 27 Jan 2023 15:19:38 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id e8-20020a17090a9a8800b0022c387f0f93so5076941pjp.3
+        for <linux-mips@vger.kernel.org>; Fri, 27 Jan 2023 15:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8CUiuR0W5E+PBhliE9B5Xpc1hgvQcn7IvZXYHXz1Ztk=;
+        b=paJf4L9cWbEi06hvXF3W+dvDzKcJfx5lCtIJZryT2W6x9jn8QFdqdeSxBXueWWBz4l
+         rmERWAhF8Jm6eVjAbcEKqXWk92TaZ81krplTYlrMd/cx7BLYELfqbb5CODOLpDvn3Wml
+         kRDg2FG0oQukaBrpadAmUfS7JdX6dtNX5Yhxfrmh9fF25lANpaUbh+OUe4mJnDmapjXX
+         gkAdUczu4u3q5myPePEFbhYsOrjzSYhCHKeHI7PmJlrIZYidHb64mfDumPwdlk9pOjoP
+         gInzuu73k1EMmj9geC+hKbAVQjTYtmE/jHVcj9mm7ngPUJ7ymq4p0azycwmTjONcP99X
+         kwzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8CUiuR0W5E+PBhliE9B5Xpc1hgvQcn7IvZXYHXz1Ztk=;
+        b=ag+Sd3qIZMc/9fL2CKObldd/RlJMCNAqK8PkDgzrktgZY8V6TxgYnJiBKcYtf+Ew+W
+         zuUEPXOL7V/nBvec60jJioSYCj7mP+1nRQmIc91CGgvf/NdZlolEw2vFRJ1R+aPKv0Ur
+         L0v6XXyBozemSG1VYUDCzjlfqCKr0h5aXlNuGWCPo3fccpFMQJ+oxsD28qzsOYbtrwfm
+         FG0ticFW5AdKfN+TaRmpBDd+GIr00cMCO8IyUiaddPybEqsIAvBX5TZhNhzFDqi77pVG
+         M7rJHYoWLQWlwg7EIhU5w4j2B0zDacuieCcwTUlAh7BnD+uqt6FjZWv2d/0gtiv5sEq9
+         lzqA==
+X-Gm-Message-State: AO0yUKXpQOIk7zifgsGz6SulUOXN51jv6aOBHEsMqvfDomu/E+uOX14t
+        o3kVm1twOQpDSUAnQaPXxl8Zxii7ZjkMHhDXojzgRA==
+X-Google-Smtp-Source: AK7set86nD7AHLHjFHADNw68YHO3+pTEXmPYEX73qRUo91NxvyvumPLImtBCeS4GMfu57Ja5MOsxUjtYU3znLSUgghw=
+X-Received: by 2002:a17:90a:2ec7:b0:22c:419a:f4cd with SMTP id
+ h7-20020a17090a2ec700b0022c419af4cdmr750919pjs.74.1674861577303; Fri, 27 Jan
+ 2023 15:19:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120063351.433502-1-masahiroy@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221221235147.45lkqmosndritfpe@google.com> <mhng-17d41c33-7f33-4a1c-8af2-ae7d07134e8c@palmer-ri-x1c9>
+In-Reply-To: <mhng-17d41c33-7f33-4a1c-8af2-ae7d07134e8c@palmer-ri-x1c9>
+From:   Fangrui Song <maskray@google.com>
+Date:   Fri, 27 Jan 2023 18:19:25 -0500
+Message-ID: <CAFP8O3J1Pn+_BMKXtxB+avtYyZ+bBKffHfNOXoJPMD5QHv5obQ@mail.gmail.com>
+Subject: Re: [PATCH v2] vdso: Improve cmd_vdso_check to check all dynamic relocations
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     christophe.leroy@csgroup.eu, Palmer Dabbelt <palmer@dabbelt.com>,
+        luto@kernel.org, tglx@linutronix.de, vincenzo.frascino@arm.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 03:33:51PM +0900, Masahiro Yamada wrote:
-> Given commit e4412739472b ("Documentation: raise minimum supported
-> version of binutils to 2.25"), CONFIG_MIPS_LD_CAN_LINK_VDSO is always
-> 'y'.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  arch/mips/vdso/Kconfig  | 14 +-------------
->  arch/mips/vdso/Makefile |  3 ---
->  2 files changed, 1 insertion(+), 16 deletions(-)
-> 
-> diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
-> index a665f6108cb5..70140248da72 100644
-> --- a/arch/mips/vdso/Kconfig
-> +++ b/arch/mips/vdso/Kconfig
-> @@ -1,18 +1,6 @@
-> -# For the pre-R6 code in arch/mips/vdso/vdso.h for locating
-> -# the base address of VDSO, the linker will emit a R_MIPS_PC32
-> -# relocation in binutils > 2.25 but it will fail with older versions
-> -# because that relocation is not supported for that symbol. As a result
-> -# of which we are forced to disable the VDSO symbols when building
-> -# with < 2.25 binutils on pre-R6 kernels. For more references on why we
-> -# can't use other methods to get the base address of VDSO please refer to
-> -# the comments on that file.
-> -#
->  # GCC (at least up to version 9.2) appears to emit function calls that make use
->  # of the GOT when targeting microMIPS, which we can't use in the VDSO due to
->  # the lack of relocations. As such, we disable the VDSO for microMIPS builds.
->  
-> -config MIPS_LD_CAN_LINK_VDSO
-> -	def_bool LD_VERSION >= 22500 || LD_IS_LLD
-> -
->  config MIPS_DISABLE_VDSO
-> -	def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
-> +	def_bool CPU_MICROMIPS
-> diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-> index 1f7d5c6c10b0..18af9474ed0e 100644
-> --- a/arch/mips/vdso/Makefile
-> +++ b/arch/mips/vdso/Makefile
-> @@ -52,9 +52,6 @@ endif
->  CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE)
->  
->  ifdef CONFIG_MIPS_DISABLE_VDSO
-> -  ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
-> -    $(warning MIPS VDSO requires binutils >= 2.25)
-> -  endif
->    obj-vdso-y := $(filter-out vgettimeofday.o, $(obj-vdso-y))
->  endif
->  
-> -- 
-> 2.34.1
+On Thu, Dec 29, 2022 at 11:22 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Wed, 21 Dec 2022 15:51:47 PST (-0800), maskray@google.com wrote:
+> > The actual intention is that no dynamic relocation exists. However, some
+> > GNU ld ports produce unneeded R_*_NONE. (If a port fails to determine
+> > the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
+> > relocations. E.g. ld's powerpc port recently fixed
+> > https://sourceware.org/bugzilla/show_bug.cgi?id=29540) R_*_NONE are
+> > generally no-op in the dynamic loaders. So just ignore them.
+> >
+> > With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
+> > bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
+> > not called "absolute relocations". (The patch is motivated by the arm64
+> > port missing R_AARCH64_RELATIVE.)
+> >
+> > Signed-off-by: Fangrui Song <maskray@google.com>
+> > Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > ---
+> > Change from v1:
+> > * rebase after 8ac3b5cd3e0521d92f9755e90d140382fc292510 (lib/vdso: use "grep -E" instead of "egrep")
+> > * change the commit message to mention an example GNU ld bug; no longer say the patch fixes a deprecated egrep use
+> > ---
+> >   arch/arm/vdso/Makefile            |  3 ---
+> >   arch/arm64/kernel/vdso/Makefile   |  3 ---
+> >   arch/arm64/kernel/vdso32/Makefile |  3 ---
+> >   arch/csky/kernel/vdso/Makefile    |  3 ---
+> >   arch/loongarch/vdso/Makefile      |  3 ---
+> >   arch/mips/vdso/Makefile           |  3 ---
+> >   arch/powerpc/kernel/vdso/Makefile |  1 -
+> >   arch/riscv/kernel/vdso/Makefile   |  3 ---
+> >   arch/s390/kernel/vdso32/Makefile  |  2 --
+> >   arch/s390/kernel/vdso64/Makefile  |  2 --
+> >   arch/x86/entry/vdso/Makefile      |  4 ----
+> >   lib/vdso/Makefile                 | 13 ++++---------
+> >   12 files changed, 4 insertions(+), 39 deletions(-)
+>
+> [snip]
+>
+> > diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+> > index 06e6b27f3bcc..d85c37e11b21 100644
+> > --- a/arch/riscv/kernel/vdso/Makefile
+> > +++ b/arch/riscv/kernel/vdso/Makefile
+> > @@ -1,9 +1,6 @@
+> >   # SPDX-License-Identifier: GPL-2.0-only
+> >   # Copied from arch/tile/kernel/vdso/Makefile
+> >
+> > -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> > -# the inclusion of generic Makefile.
+> > -ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
+> >   include $(srctree)/lib/vdso/Makefile
+> >   # Symbols present in the vdso
+> >   vdso-syms  = rt_sigreturn
+>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+>
+> Thanks!
 
-applied to mips-next.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Looks like this patch hasn't been picked yet...
