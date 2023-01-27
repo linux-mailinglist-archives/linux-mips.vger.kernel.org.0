@@ -2,34 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E860667EAE8
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jan 2023 17:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4260C67EAE9
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jan 2023 17:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbjA0Q25 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Jan 2023 11:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S234803AbjA0Q26 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 27 Jan 2023 11:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbjA0Q24 (ORCPT
+        with ESMTP id S234882AbjA0Q24 (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Jan 2023 11:28:56 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98EB621A20
-        for <linux-mips@vger.kernel.org>; Fri, 27 Jan 2023 08:28:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BB867BBE0;
+        Fri, 27 Jan 2023 08:28:55 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pLRav-0002kp-00; Fri, 27 Jan 2023 17:28:53 +0100
+        id 1pLRav-0002kp-01; Fri, 27 Jan 2023 17:28:53 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 8A7D7C261D; Fri, 27 Jan 2023 17:27:13 +0100 (CET)
-Date:   Fri, 27 Jan 2023 17:27:13 +0100
+        id A0ADDC2638; Fri, 27 Jan 2023 17:27:55 +0100 (CET)
+Date:   Fri, 27 Jan 2023 17:27:55 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Ladislav Michl <oss-lists@triops.cz>
-Cc:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: OCTEON: octeon-usb: Consolidate error messages
-Message-ID: <20230127162713.GA6090@alpha.franken.de>
-References: <Y6MW9Z4uhrqO4ocn@lenoch>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Olliver Schinagl <oliver@schinagl.nl>
+Subject: Re: [PATCH] mips: Realtek RTL: select NO_EXCEPT_FILL
+Message-ID: <20230127162755.GB6090@alpha.franken.de>
+References: <20230115121922.6359-1-sander@svanheule.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6MW9Z4uhrqO4ocn@lenoch>
+In-Reply-To: <20230115121922.6359-1-sander@svanheule.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -39,33 +40,43 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 03:23:49PM +0100, Ladislav Michl wrote:
-> From: Ladislav Michl <ladis@linux-mips.org>
+On Sun, Jan 15, 2023 at 01:19:22PM +0100, Sander Vanheule wrote:
+> The CPUs in these SoCs support MIPS32 R2, and allow ebase relocation.
+> Even if the default exception base of 0x80000000 is used, the
+> MIPS_GENERIC load address of 0x80100000 leaves sufficient space to not
+> need an extra 0x400 bytes of padding.
 > 
-> Console output currently looks like USB clocks initialized succesfully
-> even in case of error. Fix that and use consistently dev_err for fatal
-> errors otherwise dev_warn.
-> 
-> Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+> Suggested-by: Olliver Schinagl <oliver@schinagl.nl>
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
 > ---
->  Hi there,
+> Olliver has suggested to make this change, in order to reduce the delta
+> with a fully generic MIPS kernel.
+> I hope the patch description makes sense, as I based the argumentation
+> on the behaviour of the code, and similar commits 7d6d28377783 ("MIPS:
+> Loongson64: select NO_EXCEPT_FILL") and dd54dedd947d ("MIPS: BCM47XX:
+> select NO_EXCEPT_FILL"). The change was tested on an RTL8380 and an
+> RTL8393 device, where it appears to work as expected.
 > 
->  this is just cleanup before real work. Just note that even
->  warning says "Invalid UCTL clock rate ..., using 100000000 instead"
->  clock_rate is not set to 100000000. There's also some indentation
->  fixes to be done.
+> Best,
+> Sander
 > 
->  However my main concern is unimplemented errata 29206 as noted in
->  OCTEON III CN70XX/CN71XX Known Issues Revision 1.9, released under
->  NDA. You can see its implementation in coreboot here (line 196):
->  https://fossies.org/linux/coreboot/src/vendorcode/cavium/bdk/libbdk-hal/bdk-usb.c
+>  arch/mips/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->  Above looks like BSD license. I'll reimplement said errata
->  from scratch, unless someone sees as a problem "Marvell Proprietary
->  and Confidential" documentation is used as source.
-> 
->  arch/mips/cavium-octeon/octeon-usb.c | 42 +++++++++++++---------------
->  1 file changed, 20 insertions(+), 22 deletions(-)
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 2db5c853992e..a8895aaa490e 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -627,6 +627,7 @@ config MACH_REALTEK_RTL
+>  	select IRQ_MIPS_CPU
+>  	select CEVT_R4K
+>  	select CSRC_R4K
+> +	select NO_EXCEPT_FILL
+>  	select SYS_HAS_CPU_MIPS32_R1
+>  	select SYS_HAS_CPU_MIPS32_R2
+>  	select SYS_SUPPORTS_32BIT_KERNEL
+> -- 
+> 2.39.0
 
 applied to mips-next.
 
