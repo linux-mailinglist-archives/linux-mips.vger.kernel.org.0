@@ -2,108 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03EE68010C
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Jan 2023 20:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2235068025C
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Jan 2023 23:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbjA2TAW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Jan 2023 14:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S234867AbjA2Wrf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Jan 2023 17:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjA2TAV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Jan 2023 14:00:21 -0500
-X-Greylist: delayed 172 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 Jan 2023 11:00:20 PST
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1BF18B05;
-        Sun, 29 Jan 2023 11:00:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675018631; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=HR1S7lcbkVRGFxrxvbDExW//GLek5S1JwH267gecTUbHX+uU86A1Iujcd+ANveWwrA
-    1EyF+TGynGYG+hBLQgv2utb80QC+psN2noOpdtTVnHgpSh/UPNH0sJzaiVrTucwqraAv
-    xdXMXgQRdtgZV1Yh+MtTA3WE0/kv28j+4/YwFaraONZNYHDrPIPgxl9Op6OAbJ2EXjlv
-    0MXx9DoPLu5BjplerSSq9lZSEWCaP8NLhLLbSNrTItpAAhveYWXipR1HI263k8nACRi6
-    HJClzMFi3gKXD61CC1qALCxmZCSP8Kp5ccxWdv5d92LevP+KopLEk096hliMzTKSfFBi
-    2tow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675018631;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=hdb0RhMA/W7iN9ASZsM7cnZYyO0Ib+35iRVsKYcQ5ek=;
-    b=n5+RlhKvMP1+jn3OjHvWKl0LrqNMsB9FEqRz9rSh+ns2E02O14z9zFp+leN6zqx49o
-    uFr19EJMiN5JyyeKs/T6XCfMapiBQDGXCQN47n5VtDCX+euzL16zSAwps08nP2p+Rd0O
-    MFGBDAKgoOfZKDPv8zYKquu5SSKctmN1H5WkZHAx+aMUBz76S+vZoIsE2II3gYlSVcGf
-    V8//L3DHzHYllbTjuW2L10tfXgJQyo6E1U2oOn2HrhpWx/Ry53Ijvp0ikSAMwhQtHh76
-    l4BB+TYmkNBtoSiSccWDqzO+CM2vzJdQeT5RYYHecqj/stCQjNeiSsHbR65rkrvuTlC5
-    W3iw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675018631;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=hdb0RhMA/W7iN9ASZsM7cnZYyO0Ib+35iRVsKYcQ5ek=;
-    b=E+aDT93U3y9S01cTyej6zxM3jIN3/VWByxf0osZiqiKxlSQ3N3NiFvUHrH05ZqOhie
-    3EnnAEWN6l7xqpnd4H3liApdqETkGdDEHSCffo34YxMYuHkfwkhbfUHfOvTIGkH4Hj0x
-    gFdlj2qr0TGzgOjLb7uuh+oDYDoZC5GOmcaK1QrAsOzEzRIALpRHVwOqHFEIsTrDtgD1
-    Liq55aTjCKTlyUfpnCbeAJdE4ZUjrADk9oZeIfQb9Fct27EZLKozJcmUUl9H5O4Udh+0
-    d7qbmWGBR3pogfZ9dBQdLMy8tIKN48KUp9PhJmo0QhwjD9rke0cpfO4NkScgiklmAwoJ
-    Vxrg==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1iTDUhfN4hi3qVZrW/J"
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 49.2.2 SBL|AUTH)
-    with ESMTPSA id e4ab20z0TIvBI4C
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 29 Jan 2023 19:57:11 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        "H. Nikolaus Schaller" <hns@goldelico.com>, stable@vger.kernel.org
-Subject: [PATCH v2] MIPS: DTS: CI20: fix otg power gpio
-Date:   Sun, 29 Jan 2023 19:57:04 +0100
-Message-Id: <8bcf9311284b4cab8be36922d6027813bfdf2bae.1675018624.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S230206AbjA2Wre (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Jan 2023 17:47:34 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB36EC7E;
+        Sun, 29 Jan 2023 14:47:33 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TKt2co013055;
+        Sun, 29 Jan 2023 22:47:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=pz1ywBEq/ZKmnYoUn2kuXEYh//BmHNMh4u/KXr1iiiU=;
+ b=VcM/bhdueXhhdhPVmsOGjLqdkweYpmKu1wsBwPdrTqSg3CPZKNTi72tDd1XiuBvUTXXu
+ dCma52p0SBYfBr2xvnRhn+vsUPd8uWQeJCDZ7brc7NdRjmrwM1Uki4T6nPtgoJnBesnw
+ /hETGNGbbAwQvu8U+JqtkUrranLFz3iOCVWoJCjdt78uIj+KxrZg8hkg7xXmDT5C9TuV
+ VaHbNg5/OOZkrtRzITlLDJ6RuNi/8K9EdxgIo4+4kMyVtzkgQ8WBvArZhNMDDpCmgc56
+ P1s+zRXi+QRblZHTBf1EAtqKplxvGEpPHWpVDkojS5Ik9Yox3RzmZGkNu/W06mD9sXEw zQ== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddv1804n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 22:47:28 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30SNcJqQ028153;
+        Sun, 29 Jan 2023 22:47:26 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ncvuqs3mc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 22:47:26 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30TMlMRl50921786
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 29 Jan 2023 22:47:22 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D54E720040;
+        Sun, 29 Jan 2023 22:47:22 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B8072004D;
+        Sun, 29 Jan 2023 22:47:22 +0000 (GMT)
+Received: from localhost (unknown [9.171.0.52])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Sun, 29 Jan 2023 22:47:22 +0000 (GMT)
+Date:   Sun, 29 Jan 2023 23:47:20 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Terrell <terrelln@fb.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH 0/1] s390: fix initrd corruption in decompressor with new
+ zstd version
+Message-ID: <cover.thread-41c676.your-ad-here.call-01675030179-ext-9637@work.hours>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Patchwork-Bot: notify
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rFoTAHYwBymq2nbXk4_0G1HhpEVvYCgo
+X-Proofpoint-GUID: rFoTAHYwBymq2nbXk4_0G1HhpEVvYCgo
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-29_11,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=594 adultscore=0
+ clxscore=1011 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301290224
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-According to schematics it is PF15 and not PF14 (MIC_SW_EN).
-Seems as if it was hidden and not noticed during testing since
-there is no sound DT node.
+The new version of zstd library integrated in the kernel since v6.2-rc1
+https://lore.kernel.org/all/20221024202606.404049-1-nickrterrell@gmail.com/
+contains commit
+https://github.com/facebook/zstd/commit/6a7ede3dfccb
+which introduces a side effect for historical usage of __decompress() function,
+i.e. not specifying "out_len" parameter and expecting that no writes beyond
+uncompressed kernel image are performed. More details are in follow up fix.
 
-Fixes: 158c774d3c64 ("MIPS: Ingenic: Add missing nodes for Ingenic SoCs and boards.")
-Cc: stable@vger.kernel.org
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-Acked-by: Paul Cercueil <paul@crapouillou.net>
----
- arch/mips/boot/dts/ingenic/ci20.dts | 2 +-
+From architectures which claim HAVE_KERNEL_ZSTD, s390 and MIPS use
+__decompress() without specifying "out_len". On s390 this leads to
+initrd corruption.
+https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2003348
+
+I haven't looked in details for MIPS but I've added Thomas as the
+maintainer and MIPS list in Cc.
+
+The follow up fix addresses that for s390.
+
+Vasily Gorbik (1):
+  s390/decompressor: specify __decompress() buf len to avoid overflow
+
+ arch/s390/boot/decompressor.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 9819abb2465dd..a276488c0f752 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -115,7 +115,7 @@ otg_power: fixedregulator@2 {
- 		regulator-min-microvolt = <5000000>;
- 		regulator-max-microvolt = <5000000>;
- 
--		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
-+		gpio = <&gpf 15 GPIO_ACTIVE_LOW>;
- 		enable-active-high;
- 	};
- };
 -- 
 2.38.1
-
