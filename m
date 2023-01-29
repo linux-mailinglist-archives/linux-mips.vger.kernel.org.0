@@ -2,205 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6E267FEC8
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Jan 2023 13:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BFB67FF01
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Jan 2023 13:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234915AbjA2MF6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Jan 2023 07:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S234950AbjA2MnL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Jan 2023 07:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234913AbjA2MF4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Jan 2023 07:05:56 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DA623647;
-        Sun, 29 Jan 2023 04:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1674993893; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yR258zPvf0vX2EOy31knRww44w8mPVrFUXCg6iYmgXQ=;
-        b=bJ2JWZrwbRM6k6sF2xEwFcNaxI+xfs0me9P4SYjPztYSJB13ERuqOAOeQvQAZOkjFid//x
-        gLBzJcp73MpZRJV9/UAlQ1ga7gLsidJ6DOWgbHGfnaZ3VjD0cE7Gh9J7hQoRWMJA5c7+Tl
-        jr4Z5tovxaVH3brO3Hrxx/v2uO2ORAc=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        list@opendingux.net, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 4/4] rtc: jz4740: Register clock provider for the CLK32K pin
-Date:   Sun, 29 Jan 2023 12:04:42 +0000
-Message-Id: <20230129120442.22858-5-paul@crapouillou.net>
-In-Reply-To: <20230129120442.22858-1-paul@crapouillou.net>
-References: <20230129120442.22858-1-paul@crapouillou.net>
+        with ESMTP id S232009AbjA2MnK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Jan 2023 07:43:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8620125A7;
+        Sun, 29 Jan 2023 04:43:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C17B2CE09E5;
+        Sun, 29 Jan 2023 12:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E716EC433D2;
+        Sun, 29 Jan 2023 12:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674996176;
+        bh=8RQZps3hA/u1mdRRQGYSzSx3iKFm4iTs/37kan3EXRs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nZUZmSKw7/syf9RrBIFurd/O3AkMNzmfegfK+1AS6FvCaH0OhJOzBAu3UXC6av8P5
+         uY9AOa46F/d5yj77Ho8Ndgvw8xxJHw4nNHTmwjtslAXWyegt5vS1IKaYW+Stnwyuiy
+         2a+kHtcUtcTQ5Rqh9d7F2WecpHec0CXwi5TSyt1qClHpJLOA2sydJTb6OF8VZPCNps
+         3fd8EBQ67Wgcl+xTfrf7oQnKtinBQv8tebZZGSc5tamZZbBvwb6yYhdPyn1uALV1nu
+         d2H6gUYCo1lWTN9F7fs+AKTM2279BJ7XhGhJhYj0+jZo3axy2AgunU1xbS8ZdbQ6oz
+         oCSDE8gtPikyw==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, "Mike Rapoport (IBM)" <rppt@kernel.org>
+Subject: [PATCH v2 0/4] mm, arch: add generic implementation of pfn_valid() for FLATMEM
+Date:   Sun, 29 Jan 2023 14:42:31 +0200
+Message-Id: <20230129124235.209895-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On JZ4770 and JZ4780, the CLK32K pin is configurable. By default, it is
-configured as a GPIO in input mode, and its value can be read through
-GPIO PD14.
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-With this change, clients can now request the 32 kHz clock on the CLK32K
-pin, through Device Tree. This clock is simply a pass-through of the
-input oscillator's clock with enable/disable operations.
+Hi,
 
-This will permit the WiFi/Bluetooth chip to work on the MIPS CI20 board,
-which does source one of its clocks from the CLK32K pin.
+Every architecture that supports FLATMEM memory model defines its own
+version of pfn_valid() that essentially compares a pfn to max_mapnr.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Use mips/powerpc version implemented as static inline as a generic
+implementation of pfn_valid() and drop its per-architecture definitions
 
----
-v3: - Use dev_err_probe()
-    - Use __clk_hw_get() to get a pointer to the parent clock, instead
-      of doing it by name.
-    - Add Kconfig dependency on CONFIG_COMMON_CLK
-    - Register CLK32K clock if the #clock-cells device property is
-      present, instead of doing it based on the compatible string
----
- drivers/rtc/Kconfig      |  2 +-
- drivers/rtc/rtc-jz4740.c | 56 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+), 1 deletion(-)
+v2:
+* fix build on ARM and xtensa
+* add Acked- and Reviewed-by, thanks everybody
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 677d2601d305..d2b6d20a6745 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1690,7 +1690,7 @@ config RTC_DRV_MPC5121
- config RTC_DRV_JZ4740
- 	tristate "Ingenic JZ4740 SoC"
- 	depends on MIPS || COMPILE_TEST
--	depends on OF
-+	depends on OF && COMMON_CLK
- 	help
- 	  If you say yes here you get support for the Ingenic JZ47xx SoCs RTC
- 	  controllers.
-diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index 9ffa764aa71e..59d279e3e6f5 100644
---- a/drivers/rtc/rtc-jz4740.c
-+++ b/drivers/rtc/rtc-jz4740.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/clk-provider.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
-@@ -13,6 +14,7 @@
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pm_wakeirq.h>
-+#include <linux/property.h>
- #include <linux/reboot.h>
- #include <linux/rtc.h>
- #include <linux/slab.h>
-@@ -26,6 +28,7 @@
- #define JZ_REG_RTC_WAKEUP_FILTER	0x24
- #define JZ_REG_RTC_RESET_COUNTER	0x28
- #define JZ_REG_RTC_SCRATCHPAD	0x34
-+#define JZ_REG_RTC_CKPCR	0x40
- 
- /* The following are present on the jz4780 */
- #define JZ_REG_RTC_WENR	0x3C
-@@ -45,6 +48,9 @@
- #define JZ_RTC_WAKEUP_FILTER_MASK	0x0000FFE0
- #define JZ_RTC_RESET_COUNTER_MASK	0x00000FE0
- 
-+#define JZ_RTC_CKPCR_CK32PULL_DIS	BIT(4)
-+#define JZ_RTC_CKPCR_CK32CTL_EN		(BIT(2) | BIT(1))
-+
- enum jz4740_rtc_type {
- 	ID_JZ4740,
- 	ID_JZ4760,
-@@ -57,6 +63,8 @@ struct jz4740_rtc {
- 
- 	struct rtc_device *rtc;
- 
-+	struct clk_hw clk32k;
-+
- 	spinlock_t lock;
- };
- 
-@@ -254,6 +262,7 @@ static void jz4740_rtc_power_off(void)
- static const struct of_device_id jz4740_rtc_of_match[] = {
- 	{ .compatible = "ingenic,jz4740-rtc", .data = (void *)ID_JZ4740 },
- 	{ .compatible = "ingenic,jz4760-rtc", .data = (void *)ID_JZ4760 },
-+	{ .compatible = "ingenic,jz4770-rtc", .data = (void *)ID_JZ4780 },
- 	{ .compatible = "ingenic,jz4780-rtc", .data = (void *)ID_JZ4780 },
- 	{},
- };
-@@ -295,6 +304,38 @@ static void jz4740_rtc_set_wakeup_params(struct jz4740_rtc *rtc,
- 	jz4740_rtc_reg_write(rtc, JZ_REG_RTC_RESET_COUNTER, reset_ticks);
- }
- 
-+static int jz4740_rtc_clk32k_enable(struct clk_hw *hw)
-+{
-+	struct jz4740_rtc *rtc = container_of(hw, struct jz4740_rtc, clk32k);
-+
-+	return jz4740_rtc_reg_write(rtc, JZ_REG_RTC_CKPCR,
-+				    JZ_RTC_CKPCR_CK32PULL_DIS |
-+				    JZ_RTC_CKPCR_CK32CTL_EN);
-+}
-+
-+static void jz4740_rtc_clk32k_disable(struct clk_hw *hw)
-+{
-+	struct jz4740_rtc *rtc = container_of(hw, struct jz4740_rtc, clk32k);
-+
-+	jz4740_rtc_reg_write(rtc, JZ_REG_RTC_CKPCR, 0);
-+}
-+
-+static int jz4740_rtc_clk32k_is_enabled(struct clk_hw *hw)
-+{
-+	struct jz4740_rtc *rtc = container_of(hw, struct jz4740_rtc, clk32k);
-+	u32 ckpcr;
-+
-+	ckpcr = jz4740_rtc_reg_read(rtc, JZ_REG_RTC_CKPCR);
-+
-+	return !!(ckpcr & JZ_RTC_CKPCR_CK32CTL_EN);
-+}
-+
-+static const struct clk_ops jz4740_rtc_clk32k_ops = {
-+	.enable = jz4740_rtc_clk32k_enable,
-+	.disable = jz4740_rtc_clk32k_disable,
-+	.is_enabled = jz4740_rtc_clk32k_is_enabled,
-+};
-+
- static int jz4740_rtc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -364,6 +405,21 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
- 			dev_warn(dev, "Poweroff handler already present!\n");
- 	}
- 
-+	if (device_property_present(dev, "#clock-cells")) {
-+		rtc->clk32k.init = CLK_HW_INIT_HW("clk32k", __clk_get_hw(clk),
-+						  &jz4740_rtc_clk32k_ops, 0);
-+
-+		ret = devm_clk_hw_register(dev, &rtc->clk32k);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					     "Unable to register clk32k clock\n");
-+
-+		ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, &rtc->clk32k);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					     "Unable to register clk32k clock provider\n");
-+	}
-+
- 	return 0;
- }
- 
+v1: https://lore.kernel.org/all/20230125190757.22555-1-rppt@kernel.org
+
+Mike Rapoport (IBM) (4):
+  arm: include asm-generic/memory_model.h from page.h rather than
+    memory.h
+  m68k: use asm-generic/memory_model.h for both MMU and !MMU
+  mips: drop definition of pfn_valid() for DISCONTIGMEM
+  mm, arch: add generic implementation of pfn_valid() for FLATMEM
+
+ arch/alpha/include/asm/page.h      |  4 ----
+ arch/arc/include/asm/page.h        |  1 -
+ arch/arm/include/asm/memory.h      |  2 --
+ arch/arm/include/asm/page.h        |  2 ++
+ arch/csky/include/asm/page.h       |  1 -
+ arch/hexagon/include/asm/page.h    |  1 -
+ arch/ia64/include/asm/page.h       |  4 ----
+ arch/loongarch/include/asm/page.h  | 13 -------------
+ arch/m68k/include/asm/page.h       |  6 +-----
+ arch/m68k/include/asm/page_mm.h    |  1 -
+ arch/m68k/include/asm/page_no.h    |  4 ----
+ arch/microblaze/include/asm/page.h |  1 -
+ arch/mips/include/asm/page.h       | 28 ----------------------------
+ arch/nios2/include/asm/page.h      |  9 ---------
+ arch/openrisc/include/asm/page.h   |  2 --
+ arch/parisc/include/asm/page.h     |  4 ----
+ arch/powerpc/include/asm/page.h    |  9 ---------
+ arch/riscv/include/asm/page.h      |  5 -----
+ arch/sh/include/asm/page.h         |  3 ---
+ arch/sparc/include/asm/page_32.h   |  1 -
+ arch/um/include/asm/page.h         |  1 -
+ arch/x86/include/asm/page_32.h     |  4 ----
+ arch/x86/include/asm/page_64.h     |  4 ----
+ arch/xtensa/include/asm/page.h     |  4 ++--
+ include/asm-generic/memory_model.h | 12 ++++++++++++
+ include/asm-generic/page.h         |  2 --
+ 26 files changed, 17 insertions(+), 111 deletions(-)
+
+
+base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
 -- 
-2.39.0
+2.35.1
 
