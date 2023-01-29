@@ -2,60 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDF867F900
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Jan 2023 16:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D44A67FEB8
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Jan 2023 13:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbjA1PN3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 28 Jan 2023 10:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S231631AbjA2ME4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Jan 2023 07:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbjA1PN3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 28 Jan 2023 10:13:29 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8341526861;
-        Sat, 28 Jan 2023 07:13:27 -0800 (PST)
-Message-ID: <2bf4523a-ae8a-1fe2-32b1-25c7e3ae7092@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674918805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E9bS3BnZ6WdEi1IEG6Dt2LIop6JFZjAkpCsRjTjS4xo=;
-        b=jt3z+BQBkKlHupD4cZv/rULpNLuG3ljKqRTWB2BhKhINtWzcn2jFHlPNdLWWeqV1aXBjXw
-        d2+VhlurXz3cxfOsajAxP1JiFFkAky0fH6g+e6459Yil+Grinzf3IRQ4giMhEF4jt5OFvw
-        Hyy0M3x+hbhOHjehN6Hu1b0aqdcMfKY=
-Date:   Sat, 28 Jan 2023 23:12:50 +0800
+        with ESMTP id S229519AbjA2MEz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Jan 2023 07:04:55 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCB6212AD;
+        Sun, 29 Jan 2023 04:04:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1674993889; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=FMxvNvScFeDpnWHOGLZpFA/TtqLA5G8GagZO9Tylivo=;
+        b=z3zESg1noeFor04quLxNTJchiE2tZxdyOECgsz5OgJvYLA+bF8+jkU0ok5W8dTsQRvQ/VB
+        LunP1AShAH8JSouVV+zirYDpXhIhqNZz1v01dJYpErYz3XNIwoPkafiNqd4QwNiwI1Yopy
+        HNQFPjHq5KcK6MnVKTuuYISdy7yKkcY=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        list@opendingux.net, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v3 0/4] rtc: jz4740: Various updates
+Date:   Sun, 29 Jan 2023 12:04:38 +0000
+Message-Id: <20230129120442.22858-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 2/7] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
-Content-Language: en-US
-To:     David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        Raghavendra Rao Ananta <rananta@google.com>
-References: <20230126184025.2294823-1-dmatlack@google.com>
- <20230126184025.2294823-3-dmatlack@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Zenghui Yu <zenghui.yu@linux.dev>
-In-Reply-To: <20230126184025.2294823-3-dmatlack@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -65,27 +44,37 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2023/1/27 02:40, David Matlack wrote:
-> Use kvm_arch_flush_remote_tlbs() instead of
-> CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL. The two mechanisms solve the same
-> problem, allowing architecture-specific code to provide a non-IPI
-> implementation of remote TLB flushing.
-> 
-> Dropping CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL allows KVM to standardize
-> all architectures on kvm_arch_flush_remote_tlbs() instead of maintaining
-> two mechanisms.
-> 
-> Opt to standardize on kvm_arch_flush_remote_tlbs() since it avoids
-> duplicating the generic TLB stats across architectures that implement
-> their own remote TLB flush.
-> 
-> This adds an extra function call to the ARM64 kvm_flush_remote_tlbs()
-> path, but that is a small cost in comparison to flushing remote TLBs.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
+Hi,
 
-Looks good,
+Here's a revised patchset that introduces a few updates to the
+jz4740-rtc driver.
 
-Reviewed-by: Zenghui Yu <zenghui.yu@linux.dev>
+Patch [1/4] used to break ABI, it does not anymore.
+Patch [2/4] did not change, patch [3/4] is new.
+
+Patch [3/4] has been updated to use dev_err_probe(), use __clk_hw_get()
+instead of looking up the parent's clock by name, and will now register
+the CLK32K clock when the #clock-cells device property is present
+instead of doing it based on the compatible string.
+
+V2 had an extra patch to add support for fine-tuning the RTC; but since
+it was not tested enough I decided to drop it from the V3 until it's
+ready for prime time.
+
+Cheers,
+-Paul
+
+Paul Cercueil (4):
+  dt-bindings: rtc: Add #clock-cells property
+  rtc: jz4740: Use readl_poll_timeout
+  rtc: jz4740: Use dev_err_probe()
+  rtc: jz4740: Register clock provider for the CLK32K pin
+
+ .../devicetree/bindings/rtc/ingenic,rtc.yaml  | 29 ++++++
+ drivers/rtc/Kconfig                           |  2 +-
+ drivers/rtc/rtc-jz4740.c                      | 94 ++++++++++++++-----
+ 3 files changed, 99 insertions(+), 26 deletions(-)
+
+-- 
+2.39.0
+
