@@ -2,96 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6741567FFD9
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Jan 2023 16:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E81B680097
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Jan 2023 18:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjA2PVO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Jan 2023 10:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S229910AbjA2Ry1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Jan 2023 12:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjA2PVO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Jan 2023 10:21:14 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43E71557E;
-        Sun, 29 Jan 2023 07:21:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1675005665; bh=xRgh7PbWbByuQaQYTffFheMpg4Zu7Fic4S+r4wSdVRw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=ThSei0M1nvQljzV080X0oty9H14FXdAQeZoA2Mw6aWnuxzTWg4xwfdMNtHFcIWRw+
-         53ZIvcf+/t54gavCLDIyI6jSctjETndFfR44DWFp4JrlreUZPHx2S4Zx/H5nlpjOWQ
-         NdxRV9kgRget5G9LZuBzUqagFrd2CFHEv1r7eKyffLfwcb3TVj0HHfBXqUVRbdIoEg
-         2hlZ9nMi1QnqMpTOVlZbnrY7D0B1KiK8FUiC+1uXwHjo21fYFNrZQ9TeeIAjlg+xRQ
-         EGtnogea+/bJo+HNWbjqAuHHA93d0xgFUP2mq2YPqNS4XtoFnWi+PsDzImLLxpZbc1
-         Us0N2TJogHygA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mq2jC-1oqiPr0q3e-00nAwo; Sun, 29
- Jan 2023 16:21:05 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-mips@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        with ESMTP id S229885AbjA2Ry1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Jan 2023 12:54:27 -0500
+X-Greylist: delayed 356 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 Jan 2023 09:54:25 PST
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30DA1BEF;
+        Sun, 29 Jan 2023 09:54:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1675014501; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=nEv2Qjex5GrWowG4Tg2/4TJVTzLYTIcr8lE7dLcoLejZpSUxZlaL+MyLsAXwBke0dA
+    LdDX1YKPYWsHDSdwihLuG50+y+nlcUB6pjN0O3ZB99hZk158j7Ac5W5ZOl8wrlxAaa2D
+    ch2NKCcEwRFdKd337RUsB/x44/d3ich7P9WIuQ3NBlKZg2VQhAibOC1RAFbBkCLupGea
+    gXqdGcNrDN/KrRB1L/Ezut8nfaPM8MY6HM7kwodXdl1ynPiLgwYz111gdO0xvWiAuqxt
+    f/t3mMudYL8pKiJw3MitUZ7pOngnKLiJePhIzdssTFZQ9YAKdT8p6wJxqWEvgeO3dsa/
+    WdGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675014501;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=yGRM7cEfo5aFqSY1gp1TMJFXgu2PUQKG5rOicfC2/UM=;
+    b=Ubxu5ZB2rt/ZvfyyeiCisvS8yfUt1Bzp8/KU7Rkv+dTy02cr7cWGXkkd7xz5bqTTG0
+    9UuisNmN9WKlSIJGf1wspIAhhZpdMcVrONCpCeU8abxZ1JFy8R9M9sf3DHZCwHUn6uwL
+    JikBlaHih4d/0P+c+LCJBLUFX/df5XJZoVl/IIe/DtkuQQT08qs3LIvWp3P1nYrcwsgE
+    O9uy9+kjZANSCPJHYIHkkDBtSJ01UxoOP1b8SUan0gNYmIshn2m9jM9M/Q2xXWfySFCn
+    HPitcJnM8pOtYWFdy20vXv3QeE85bOffFu535T9gtR1d5fjOIxzvNj8Sto9iW+SzxBKe
+    YCyw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675014501;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=yGRM7cEfo5aFqSY1gp1TMJFXgu2PUQKG5rOicfC2/UM=;
+    b=YGgxX1rZkRfkfhsomTXlfklMo3l8Zp1Nhf75BARGaQ+UPfWUZ5f8VhF/vgj5grWvTg
+    5UGfMx+do+BhUeIfKPgJ04r1ENzjWTQMYqavts/CHPdqRMkEuXVhYJWo54YEBg6zMW/K
+    ypyFoAVsrA/K1GS5osDkyowWE2AJ2Q61aM3dPHgFmC+6FULVI5jc/89+x9D8kHZVPGr5
+    wLoSlKMs7HVEXpw0UpUoqpsL9lMFG3htTB68j1HpOzU02UeytGKu6tnoIYW45WrDKSMZ
+    +O1dx0E1SML60oa+nRoPTCoz37Ej45GYXgdYe3t2N+fGw0ZFKhaq1BpwOgfE+BRt5mkT
+    /xqg==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1iTDUhfN4hi3qVZrW/J"
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 49.2.2 SBL|AUTH)
+    with ESMTPSA id e4ab20z0THmKHyv
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 29 Jan 2023 18:48:20 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: dts: lantiq: Remove bogus interrupt-parent; line
-Date:   Sun, 29 Jan 2023 16:20:58 +0100
-Message-Id: <20230129152059.1535947-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.0
+        =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH] MIPS: DTS: CI20: fix otg power gpio
+Date:   Sun, 29 Jan 2023 18:48:15 +0100
+Message-Id: <1e102159b4be526af88883374d112d558e3ac3f5.1675014494.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:79+nw1R6XzrDUiZM56FJ3RqShSSXfL5QGkYw2TG2nvX2Fn3Lfhc
- Lr3ck/8z/+VDVpR1ruxmNKAQkTpujQjkmwFSj3QvIdBeqZIUat5MLNSCc/D+wOhwKtjKGRM
- yPrsmNeRGlFS3dJxp2svz6SnhQh19cO7QReZrZI13BNltEDIQ6ZLb9BPjuiJ/9ZMGBAx2L7
- 2nuvoWj5Kxiq8Z5N8FlaA==
-UI-OutboundReport: notjunk:1;M01:P0:GjLIrHJYGHI=;bZzdnh82rfg+slMLyZEISZYjev7
- i+betdkgaSyESjBL4YtqItqH8xWRPFYNDUleTl9kR7ulLnsyOP1M2Wu1HuIroUzXmir0fdyUU
- j7/Y6A9+Edm4jfnIdKZhaTm6Xv2dODzEgAjP4hhg7j6ISWPzAYfX0SJnIAgoAI9SMO76UVcmA
- /l2fzTGL52BSXTaX9lvYGJHrSCQgkJhR+7woVfbw4Kyd+KR5RM7AeTnOcp4KmvVcro9vuDSh3
- RnJgpm5e9iz+rn3ZwrWD7jk7JaYhJCzsF/6qLRa9PhVq4bKnNWK/lfM2MH8Ubiho2YEqKPgTN
- crUn5z7GfSL57g2Oadc5e1hH79tzNIiRHk7UMEMHGgk5Hy63rObfbmKbIl///XGYZnjLbyM4P
- Fc46SC8adAPP6k/F4b3d9Ep13dbh+2uBJQq96c8ycpL6J38tdvvGjsMp1sT0haMsHehIhOkPt
- jQX82XOPCEdglTgGigsvSM+E2UvTcsUfMTR8bL+2mFz6hZd/FtXRo477qQfd0GTpsd9P3Eg0I
- MhKkZ1nSZgTUF4PRmhqboa/6NOkwRWNIKhgxGVGMLtnAKHJ3xOMBylCDc4Bk6X5e1Cm+Pw16H
- V/kvbVOMj8fuWXzleVtjSk39NZLEbJ9AgA+kubdEbnHbnZi2qVbhSNnhzjN2TUK1tuKw0LfgM
- fay5ox2Er75EEbOobSiH9DSpsrHN3fDw7D/id5hWz4NX2G0e1TtLPTBStHy9svE+Y3lLRQv2f
- mmP00cKwBxACoAezuESwqtLLMaqfbs6wJobn6daCXyEKnPbV4vWxT6I3XdWSje/+9tYsdCtBD
- yhRLpWMZK0DBgB1ONmQpfN4biHz1TCKJvW/uk6zoT/k2d2RNZdSxjq4XrQJrF1pEkwZ7P6N6a
- Zo9VCmrJCx7ivQ2yKeWgP3tbnJgtAKj6Cwwqwjd09DDtf+yO3OOjzF/o+KeLz+GLsBo21pipP
- Nbj6dMkCm0ciI7SqB3OJ9+GG4MI=
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Specifying interrupt-parent without a value (in other words, as a bool)
-doesn't really mean anything. Remove one such property in the Lantiq
-Danube DT, at /sram@1f000000/eiu@101000.
+According to schematics it is PF15 and not PF14 (MIC_SW_EN).
+Seems as if it was hidden and not noticed during testing since
+there is no sound DT node.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- arch/mips/boot/dts/lantiq/danube.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+Fixes: 158c774d3c64 ("MIPS: Ingenic: Add missing nodes for Ingenic SoCs and boards.")
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+---
+ arch/mips/boot/dts/ingenic/ci20.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/lantiq/danube.dtsi b/arch/mips/boot/dts/la=
-ntiq/danube.dtsi
-index 510be63c8bdf1..7a7ba66aa5349 100644
-=2D-- a/arch/mips/boot/dts/lantiq/danube.dtsi
-+++ b/arch/mips/boot/dts/lantiq/danube.dtsi
-@@ -40,7 +40,6 @@ sram@1f000000 {
- 		eiu0: eiu@101000 {
- 			#interrupt-cells =3D <1>;
- 			interrupt-controller;
--			interrupt-parent;
- 			compatible =3D "lantiq,eiu-xway";
- 			reg =3D <0x101000 0x1000>;
- 		};
-=2D-
-2.39.0
+diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+index 9819abb2465dd..a276488c0f752 100644
+--- a/arch/mips/boot/dts/ingenic/ci20.dts
++++ b/arch/mips/boot/dts/ingenic/ci20.dts
+@@ -115,7 +115,7 @@ otg_power: fixedregulator@2 {
+ 		regulator-min-microvolt = <5000000>;
+ 		regulator-max-microvolt = <5000000>;
+ 
+-		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
++		gpio = <&gpf 15 GPIO_ACTIVE_LOW>;
+ 		enable-active-high;
+ 	};
+ };
+-- 
+2.38.1
 
