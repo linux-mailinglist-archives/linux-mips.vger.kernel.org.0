@@ -2,92 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7E9681390
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jan 2023 15:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E12A6813E5
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jan 2023 15:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237779AbjA3OmI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Jan 2023 09:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S235858AbjA3O5m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Jan 2023 09:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjA3OmG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Jan 2023 09:42:06 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2C91CAD7;
-        Mon, 30 Jan 2023 06:42:01 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UDq7a8020611;
-        Mon, 30 Jan 2023 14:41:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : cc :
- subject : in-reply-to : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=ERu5pi4CSQQZRqkLlHDNtcPDWXqI3pr9EixQuwHCvMc=;
- b=Fi0BTcH9yYnk6I84BszmSMx+hCZl3BN4120WKIVXGDsi1MhNQbEiUGkWszLBJ1WBXgMF
- CsBVJ5fC8b/1r8zYLaReF58KDbjCfLbajxviclHnlltbf1l8GiUwarmAw8C5EzYTQRsJ
- ivb4S2umLcGym2VZxG3q0onGGeWHH76CKztHOL5MmebhJ2q7YB8C9z0ljKjTlEEGoWPn
- z7hmz+Tbl68bCJTuAKkBhe1pD1QCsUIqBin8YyMJoOkgTYn5wBVvBNCYD4WrAkNx/8QR
- +RMgeC0D5PQ8hTQxWG6cwP75D56W+jWf8TxYGgJQDSIJPq5pPNRLqhW0HscuhXHwJfD/ mw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nef5h1an8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 14:41:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30U55SqN026906;
-        Mon, 30 Jan 2023 14:41:56 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ncvs7jbxm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 14:41:55 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30UEflg543581838
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Jan 2023 14:41:47 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AA5AE20043;
-        Mon, 30 Jan 2023 14:41:47 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 873E020040;
-        Mon, 30 Jan 2023 14:41:47 +0000 (GMT)
-Received: from localhost (unknown [9.171.84.174])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 30 Jan 2023 14:41:47 +0000 (GMT)
-From:   Alexander Egorenkov <egorenar@linux.ibm.com>
-To:     gor@linux.ibm.com
-Cc:     egorenar@linux.ibm.com, hca@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, terrelln@fb.com,
-        tsbogend@alpha.franken.de
-Subject: Re: [PATCH 1/1] s390/decompressor: specify __decompress() buf len
- to avoid overflow
-In-Reply-To: <patch-1.thread-41c676.git-41c676c2d153.your-ad-here.call-01675030179-ext-9637@work.hours>
-In-Reply-To: 
-Date:   Mon, 30 Jan 2023 15:41:47 +0100
-Message-ID: <875yco6q50.fsf@oc8242746057.ibm.com>
+        with ESMTP id S235441AbjA3O5l (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Jan 2023 09:57:41 -0500
+X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 Jan 2023 06:57:39 PST
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A46729435
+        for <linux-mips@vger.kernel.org>; Mon, 30 Jan 2023 06:57:39 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:248c:95e8:a1ca:b26b])
+        by xavier.telenet-ops.be with bizsmtp
+        id F2sc2900x0Ggu3t012scby; Mon, 30 Jan 2023 15:52:36 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pMVWO-007t2N-Kb;
+        Mon, 30 Jan 2023 15:52:36 +0100
+Date:   Mon, 30 Jan 2023 15:52:36 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+cc:     linux-mips@vger.kernel.org
+Subject: Re: Build regressions/improvements in v6.2-rc6
+In-Reply-To: <20230130144829.4116738-1-geert@linux-m68k.org>
+Message-ID: <556e38d-4eec-abf-e7ac-137a3f7b366d@linux-m68k.org>
+References: <CAHk-=wiJcsgmgjEitJ97x3unFpaKv1d=YyNr_5NbOTGsGqCG=A@mail.gmail.com> <20230130144829.4116738-1-geert@linux-m68k.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bnjgtFnHs_w3Qq4-qGTcGdwXXlxp6nhb
-X-Proofpoint-GUID: bnjgtFnHs_w3Qq4-qGTcGdwXXlxp6nhb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_13,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
- mlxlogscore=561 priorityscore=1501 suspectscore=0 bulkscore=0
- impostorscore=0 mlxscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300141
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Vasily,
+On Mon, 30 Jan 2023, Geert Uytterhoeven wrote:
+> JFYI, when comparing v6.2-rc6[1] to v6.2-rc5[3], the summaries are:
+>  - build errors: +4/-1
 
-thanks for the fix, tested on s390 + KVM + buildroot + linux-next.
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: 'gimple_call_addr_fndecl' was not declared in this scope:  => 2790:10
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: 'is_gimple_reg' was not declared in this scope:  => 2556:18
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field 'call_clobbered' has incomplete type 'pt_solution':  => 284:22
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field 'call_used' has incomplete type 'pt_solution':  => 283:22
 
-Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+mipsel-gcc5/mips-allmodconfig
 
-Regards
-Alex
+Looks like an issue with the gcc plugins installed on kisskb.
+
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6d796c50f84ca79f1722bb131799e5a5710c4700/ (all 152 configs)
+> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/2241ab53cbb5cdb08a6b2d4688feb13971058f65/ (all 152 configs)
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
