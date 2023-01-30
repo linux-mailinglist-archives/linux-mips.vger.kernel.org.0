@@ -2,107 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4061168054A
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jan 2023 05:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21ED0680562
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jan 2023 06:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjA3E6L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Jan 2023 23:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S235570AbjA3FGk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Jan 2023 00:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjA3E6K (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Jan 2023 23:58:10 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C80EC51;
-        Sun, 29 Jan 2023 20:58:08 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S234955AbjA3FGi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Jan 2023 00:06:38 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200651700;
+        Sun, 29 Jan 2023 21:06:36 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 58CCE21A54;
-        Mon, 30 Jan 2023 04:58:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1675054684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QsEAPOMyaeu/9McoDoMoMk0k2EHIrCJNQvu263sxO1U=;
-        b=DuB4cgq2LIabTM8uZnAWF0eU1FHiS4CQQ2JFBzn+0d/xZ7kIKXp7iSZGWs+TcR0UkgGjJy
-        Q+Ap+x7Ycxwu7xvNd7IUtiWyzX+iIo1yc7Zp079jxprwVrbrIZHmYIPA3m4c5Ny1YcF3XI
-        +gJDo8xIK80N/4RSAYqBddgj9Uip/6w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1675054684;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QsEAPOMyaeu/9McoDoMoMk0k2EHIrCJNQvu263sxO1U=;
-        b=Ci2ysmXzLi2CtQmPQ6E555lg6r2QDTpj3135rPpTFD3SXKzx0T5vBmMeFOGjFioX35x/eT
-        69X8ZFwmaPeV29CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23F1413A09;
-        Mon, 30 Jan 2023 04:57:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /YhgLVdO12PzegAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 30 Jan 2023 04:57:59 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4x3f2mrfz4x1T;
+        Mon, 30 Jan 2023 16:06:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1675055194;
+        bh=POOClJ+owuBj9sqRPRjffc3znhNYliSlDQdzT8YO/i8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=L+Neft2adsFGU4wPfkdQqIkCCGEbr0KQklfStEOOSubA4D5/b8QWn1Ym/KJAv6xRm
+         TUPYPpT88DNlhDmu8F6Zq0+Eg9/CqOQ7vjZ2tzDW9COm2h6kbQ9aR9CgKDe6jB7oUN
+         qbkny9xOnw6qtVzbwY2BQEDmrhadqj+bjJEBVbHomTuJEKrCDFpofvG56kNiVlQ2h/
+         4kZhpVx3EpSRTAM6jXtFLXQAZAY3/mQ2GHog2lMch2wJzrLcG7TkdRQuYdqLp8OdqG
+         ahVRL+XE6UXObccshlEZ6yQOBI9fBlohqkPxNq06FIH8Kl9t0Zt68ScSYNpNUYJhy7
+         uUVQKm0hFQMqg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
+ pfn_valid() for FLATMEM
+In-Reply-To: <20230129124235.209895-5-rppt@kernel.org>
+References: <20230129124235.209895-1-rppt@kernel.org>
+ <20230129124235.209895-5-rppt@kernel.org>
+Date:   Mon, 30 Jan 2023 16:06:21 +1100
+Message-ID: <87o7qgsjaq.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Paul Cercueil" <paul@crapouillou.net>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        =?utf-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org
-Subject: Re: [PATCH] MIPS: DTS: CI20: fix otg power gpio
-In-reply-to: <b7745c417d5ac46efa273f1fc45217bb6254ea4f.camel@crapouillou.net>
-References: <1e102159b4be526af88883374d112d558e3ac3f5.1675014494.git.hns@goldelico.com>,
- <b7745c417d5ac46efa273f1fc45217bb6254ea4f.camel@crapouillou.net>
-Date:   Mon, 30 Jan 2023 15:57:53 +1100
-Message-id: <167505467359.23017.2124580706077477317@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-T24gTW9uLCAzMCBKYW4gMjAyMywgUGF1bCBDZXJjdWVpbCB3cm90ZToKPiBMZSBkaW1hbmNoZSAy
-OSBqYW52aWVyIDIwMjMgw6AgMTg6NDggKzAxMDAsIEguIE5pa29sYXVzIFNjaGFsbGVyIGEKPiDD
-qWNyaXTCoDoKPiA+IEFjY29yZGluZyB0byBzY2hlbWF0aWNzIGl0IGlzIFBGMTUgYW5kIG5vdCBQ
-RjE0IChNSUNfU1dfRU4pLgo+ID4gU2VlbXMgYXMgaWYgaXQgd2FzIGhpZGRlbiBhbmQgbm90IG5v
-dGljZWQgZHVyaW5nIHRlc3Rpbmcgc2luY2UKPiA+IHRoZXJlIGlzIG5vIHNvdW5kIERUIG5vZGUu
-Cj4gPiAKPiA+IEZpeGVzOiAxNThjNzc0ZDNjNjQgKCJNSVBTOiBJbmdlbmljOiBBZGQgbWlzc2lu
-ZyBub2RlcyBmb3IgSW5nZW5pYwo+ID4gU29DcyBhbmQgYm9hcmRzLiIpCj4gPiBTaWduZWQtb2Zm
-LWJ5OiBILiBOaWtvbGF1cyBTY2hhbGxlciA8aG5zQGdvbGRlbGljby5jb20+Cj4gCj4gSSBtaXNz
-ZWQgaXQsIGJ1dCBldmVyeSB0aW1lIHlvdSBoYXZlIGEgRml4ZXM6IHRhZywgeW91IGFsc28gbmVl
-ZCB0byBhZGQKPiBiZWxvdzoKPiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwoKSSBkb24ndCB0
-aGluayB5b3UgZG8gYW55IG1vcmUuICBUaGUgc3RhYmxlIHRlYW0gZ3JhYnMgYW55dGhpbmcgdGhh
-dApsb29rcyBldmVuIHZhZ3VlbHkgbGlrZSBhIGZpeCBhbmQgYXBwbGllcyBpdC4gIEhhdmluZyBh
-IHZhbGlkIEZpeGVzIHRhZwppcyBlbm91Z2ggZm9yIHRoZSBzdGFibGUgdGVhbSB0byB0YWtlIGlu
-dGVyZXN0LgoKTmVpbEJyb3duCgoKPiAKPiB1bmxlc3MgdGhlIGJ1ZyB5b3UgZml4IGlzIGluIG9u
-ZSBvZiB0aGUgUkNzIChhbmQgbm90IGluIGEgcmVsZWFzZWQKPiBrZXJuZWwpLgo+IAo+IEkgdGhp
-bmsgeW91IHNob3VsZCBzZW5kIGEgVjIgd2l0aCB0aGlzIHRhZyAoYW5kIG15IEFDSykuCj4gCj4g
-Q2hlZXJzLAo+IC1QYXVsCj4gCj4gPiAtLS0KPiA+IMKgYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2Vu
-aWMvY2kyMC5kdHMgfCAyICstCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
-MSBkZWxldGlvbigtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9taXBzL2Jvb3QvZHRzL2lu
-Z2VuaWMvY2kyMC5kdHMKPiA+IGIvYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2VuaWMvY2kyMC5kdHMK
-PiA+IGluZGV4IDk4MTlhYmIyNDY1ZGQuLmEyNzY0ODhjMGY3NTIgMTAwNjQ0Cj4gPiAtLS0gYS9h
-cmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9jaTIwLmR0cwo+ID4gKysrIGIvYXJjaC9taXBzL2Jv
-b3QvZHRzL2luZ2VuaWMvY2kyMC5kdHMKPiA+IEBAIC0xMTUsNyArMTE1LDcgQEAgb3RnX3Bvd2Vy
-OiBmaXhlZHJlZ3VsYXRvckAyIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-cmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwMD47Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoHJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDUwMDAwMDA+Owo+ID4g
-wqAKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvID0gPCZncGYgMTQgR1BJ
-T19BQ1RJVkVfTE9XPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvID0g
-PCZncGYgMTUgR1BJT19BQ1RJVkVfTE9XPjsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgZW5hYmxlLWFjdGl2ZS1oaWdoOwo+ID4gwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiDCoH07
-Cj4gCj4gCg==
+Mike Rapoport <rppt@kernel.org> writes:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>
+> Every architecture that supports FLATMEM memory model defines its own
+> version of pfn_valid() that essentially compares a pfn to max_mapnr.
+>
+> Use mips/powerpc version implemented as static inline as a generic
+> implementation of pfn_valid() and drop its per-architecture definitions.
+>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Guo Ren <guoren@kernel.org>		# csky
+> Acked-by: Huacai Chen <chenhuacai@loongson.cn>	# LoongArch
+> Acked-by: Stafford Horne <shorne@gmail.com>	# OpenRISC
+> ---
+>  arch/alpha/include/asm/page.h      |  4 ----
+>  arch/arc/include/asm/page.h        |  1 -
+>  arch/csky/include/asm/page.h       |  1 -
+>  arch/hexagon/include/asm/page.h    |  1 -
+>  arch/ia64/include/asm/page.h       |  4 ----
+>  arch/loongarch/include/asm/page.h  | 13 -------------
+>  arch/m68k/include/asm/page_no.h    |  2 --
+>  arch/microblaze/include/asm/page.h |  1 -
+>  arch/mips/include/asm/page.h       | 13 -------------
+>  arch/nios2/include/asm/page.h      |  9 ---------
+>  arch/openrisc/include/asm/page.h   |  2 --
+>  arch/parisc/include/asm/page.h     |  4 ----
+>  arch/powerpc/include/asm/page.h    |  9 ---------
+
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+cheers
