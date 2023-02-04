@@ -2,44 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F2E68A5CB
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Feb 2023 23:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAEF68A77A
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Feb 2023 02:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbjBCWJI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Feb 2023 17:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S233097AbjBDBMw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Feb 2023 20:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbjBCWIQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Feb 2023 17:08:16 -0500
+        with ESMTP id S232932AbjBDBMv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Feb 2023 20:12:51 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA32AF0FA;
-        Fri,  3 Feb 2023 14:06:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E614D677B4;
+        Fri,  3 Feb 2023 17:12:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1361062038;
-        Fri,  3 Feb 2023 22:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C566CC433EF;
-        Fri,  3 Feb 2023 22:06:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C2A262045;
+        Sat,  4 Feb 2023 01:12:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C7FC433B3;
+        Sat,  4 Feb 2023 01:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675461982;
-        bh=nXrabXpKFkbXCMFjc3rmCrrnT82/WMJleHEGw691mcc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o8eHohITAVmxjRXNbpfeL/cd8yNdoWWWFTWag8bI9FPvrbMJMbn7FDeWO6jeb5YOD
-         09wPFTEb38+tMtIgPe9CHEcvDL5qejhmyy++aNANFxprUQblrITcsG2eqHUbL8gmjP
-         4gSQVCoZOcsy77T+LMkCLBQL3ugwMFw9fYlynnFYPAuVOyx0fjaF1UNV9fyR8q62PB
-         h633UkAqPNNQmIqlOFdeaLl3kp8E9fQrbTqg4QDEu+JRFrn1I6ApIrNEekrHOTvbXp
-         jHiZ0SPsYXyBzSGzOGZrRgHnyMS++i5x/iAEJAM5eK7R7f/TB4A4nPAJaqn+bn24YL
-         BOf5EfzEJfk4Q==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     jgross@suse.com, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        s=k20201202; t=1675473165;
+        bh=0asfVCpuy+ETCtLElPtYddrgJX0d+emBWsKYbAvgUSg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NjHUnR2SMV6z1nYlDsx18pdaYVqRNoWc0qy+JZKYvWy9A2/aNWDT/Zcc1VuN3LpBk
+         BHO7a+UWkrCbr7tIMsbiJcW08mJQrutSae8sjzbY2yTquduGD1S75JptE2V94CuHZ9
+         dttGDlygN+PlAgKrEnBbh02BTSkPcbJjD/mmZ2OjVdwp+2zUSzzJYuLie36CRMRH2m
+         BCNEg1yW8DiqcrRuXnMz7q97kPUCf/igZlztYEFMXkxu4lTgwVsHT2Y4vPB+fv2I45
+         treDdxLfVm4Xo9kIGz/U0PB3fSsQxF7GAvG09BPdoaWSqVqEDw/Bl5+LonXCOZV8EM
+         8X69FQT7ZO2hA==
+Received: by mail-ej1-f43.google.com with SMTP id me3so19972308ejb.7;
+        Fri, 03 Feb 2023 17:12:45 -0800 (PST)
+X-Gm-Message-State: AO0yUKW/dqF4r+NlFvJf02FENnxf+zlqZzdHCjmvztJVP+OClSd11Lby
+        BJbZuQsXDCT/4yBXfGaM8t9kttWTlIRK73BtbzA=
+X-Google-Smtp-Source: AK7set8d2wN/FrByoELlHyIqk75D2M0EbNicNZv8b+fs1zPJUylkd4dAYoofH/2BIYKRkzzgrVhuEwXH3PfZW7NSuUo=
+X-Received: by 2002:a17:906:8419:b0:884:c19c:7c6 with SMTP id
+ n25-20020a170906841900b00884c19c07c6mr3300870ejx.120.1675473163646; Fri, 03
+ Feb 2023 17:12:43 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1675461757.git.jpoimboe@kernel.org> <f860f3a1c1a53c437a99abc53e8f1a798aef6881.1675461757.git.jpoimboe@kernel.org>
+In-Reply-To: <f860f3a1c1a53c437a99abc53e8f1a798aef6881.1675461757.git.jpoimboe@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 4 Feb 2023 09:12:31 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSKe3ve4_rsOYpmSBOyUSU5rpLHyijn9i2-i+WfLqxzYw@mail.gmail.com>
+Message-ID: <CAJF2gTSKe3ve4_rsOYpmSBOyUSU5rpLHyijn9i2-i+WfLqxzYw@mail.gmail.com>
+Subject: Re: [PATCH 05/22] csky/cpu: Make sure arch_cpu_idle_dead() doesn't return
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, linux-alpha@vger.kernel.org,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        loongarch@lists.linux.dev, f.fainelli@gmail.com,
         bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
         linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
         mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
@@ -53,15 +69,7 @@ Cc:     jgross@suse.com, richard.henderson@linaro.org,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         paulmck@kernel.org
-Subject: [PATCH 22/22] sched/idle: Mark arch_cpu_idle_dead() __noreturn
-Date:   Fri,  3 Feb 2023 14:05:31 -0800
-Message-Id: <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.1675461757.git.jpoimboe@kernel.org>
-References: <cover.1675461757.git.jpoimboe@kernel.org>
-MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,59 +79,51 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Before commit 076cbf5d2163 ("x86/xen: don't let xen_pv_play_dead()
-return"), in Xen, when a previously offlined CPU was brought back
-online, it unexpectedly resumed execution where it left off in the
-middle of the idle loop.
+On Sat, Feb 4, 2023 at 6:05 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> arch_cpu_idle_dead() doesn't return.  Make that more explicit with a
+> BUG().
+>
+> BUG() is preferable to unreachable() because BUG() is a more explicit
+> failure mode and avoids undefined behavior like falling off the edge of
+> the function into whatever code happens to be next.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  arch/csky/kernel/smp.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+> index b45d1073307f..0ec20efaf5fd 100644
+> --- a/arch/csky/kernel/smp.c
+> +++ b/arch/csky/kernel/smp.c
+> @@ -317,5 +317,7 @@ void arch_cpu_idle_dead(void)
+>                 "jmpi   csky_start_secondary"
+>                 :
+>                 : "r" (secondary_stack));
+> +
+> +       BUG();
+Why not:
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index f26ab2675f7d..1d3bf903add2 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -285,6 +285,7 @@ static void do_idle(void)
+                        tick_nohz_idle_stop_tick();
+                        cpuhp_report_idle_dead();
+                        arch_cpu_idle_dead();
++                       BUG();
+                }
 
-There were some hacks to make that work, but the behavior was surprising
-as do_idle() doesn't expect an offlined CPU to return from the dead (in
-arch_cpu_idle_dead()).
+                arch_cpu_idle_enter();
 
-Now that Xen has been fixed, and the arch-specific implementations of
-arch_cpu_idle_dead() also don't return, give it a __noreturn attribute.
+>  }
+>  #endif
+> --
+> 2.39.0
+>
 
-This will cause the compiler to complain if an arch-specific
-implementation might return.  It also improves code generation for both
-caller and callee.
 
-Also fixes the following warning:
-
-  vmlinux.o: warning: objtool: do_idle+0x25f: unreachable instruction
-
-Reported-by: Paul E. McKenney <paulmck@kernel.org>
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- include/linux/cpu.h   | 2 +-
- tools/objtool/check.c | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index f83e4519c5f0..8582a7142623 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -182,7 +182,7 @@ void arch_cpu_idle(void);
- void arch_cpu_idle_prepare(void);
- void arch_cpu_idle_enter(void);
- void arch_cpu_idle_exit(void);
--void arch_cpu_idle_dead(void);
-+void __noreturn arch_cpu_idle_dead(void);
- 
- int cpu_report_state(int cpu);
- int cpu_check_up_prepare(int cpu);
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 0f67c6a8bc98..e3fa2279d612 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -167,6 +167,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"__reiserfs_panic",
- 		"__stack_chk_fail",
- 		"__ubsan_handle_builtin_unreachable",
-+		"arch_cpu_idle_dead",
- 		"cpu_bringup_and_idle",
- 		"cpu_startup_entry",
- 		"do_exit",
 -- 
-2.39.0
-
+Best Regards
+ Guo Ren
