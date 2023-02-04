@@ -2,123 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31B068A7CC
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Feb 2023 03:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B0A68AAB4
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Feb 2023 15:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjBDC3i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Feb 2023 21:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S232098AbjBDO5E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 4 Feb 2023 09:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBDC3h (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Feb 2023 21:29:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C4A74C15;
-        Fri,  3 Feb 2023 18:29:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229516AbjBDO5D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Feb 2023 09:57:03 -0500
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295191EBF8;
+        Sat,  4 Feb 2023 06:57:02 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 819AA6204D;
-        Sat,  4 Feb 2023 02:29:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4882FC433D2;
-        Sat,  4 Feb 2023 02:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675477775;
-        bh=A31zSwlgRwgvDbdSE2DEbrUbqrKSeAqq7FjkMqnStZw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sys04XZk8jqh8pRKO4mghhMIaZOJaNysJlIGALRMdUzBCxAI7G298EYXo2zlMRvSr
-         v1L58VM1ZHs7x81UItVoBpt9wcZHmGDg5tNF+6JViYATk8zllrsyuNPci/+h9ThQNC
-         KW//e75t+wHxZCqRUkgsCKq4iGfhZGkJ2TH63kQJ9oR+CjCAQa7/KkH2zX9Gq7ZUzT
-         JuXMK4xLEjNS6GRz1ijKyXH/9LrhEwsou1WQe6fwvelXFDxVFZwSA9iJKcPffsY87l
-         1jDSihH/HYx9/w9lxJwcSwTV40QPZPI04Z41AbBuYIqH66hVf0PVr4wNkI33bF0LF/
-         Ts2VwRwiP4moA==
-Date:   Fri, 3 Feb 2023 18:29:32 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux-alpha@vger.kernel.org,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-Subject: Re: [PATCH 05/22] csky/cpu: Make sure arch_cpu_idle_dead() doesn't
- return
-Message-ID: <20230204022932.k24laszjs3v4bc3v@treble>
-References: <cover.1675461757.git.jpoimboe@kernel.org>
- <f860f3a1c1a53c437a99abc53e8f1a798aef6881.1675461757.git.jpoimboe@kernel.org>
- <CAJF2gTSKe3ve4_rsOYpmSBOyUSU5rpLHyijn9i2-i+WfLqxzYw@mail.gmail.com>
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4P8Fwn69HKz9sbk;
+        Sat,  4 Feb 2023 15:56:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1675522617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tkq61IaaphmcCMy0jeb65pNFPN5hEwtKvlzCHHr65SY=;
+        b=ruCLNv4uxzOg+gYnZ7UzWq7RiWqSDJ0QW9FrjBvl5nFIn2EOs21ywIcAwYkQ0sLzcXs32A
+        bm+duLT69SGjMfynzUu3dVffG7JQNkssaZdn3poOBLVMELOmCQ5oi61PijbP026JQuoKYf
+        tNKMLme+W7F1B0xugy08/Vn/U6xfeT3mTlxwrmW9fbZMxzMBP2rxKLFz4UYr1KY9xXPHOQ
+        pA54WmUSGh07PxKMcVmcObPmBgycvapcUvwI1W2NHb2EdYF8JlnlYWjCkZyu2uaS2DCnVA
+        h83rvIkQuNyM0RtotiIfMfraBTIeoJ33gg8cupnjrPVc5R3+S+BvTO1OjvLSOA==
+From:   Alexander Lobakin <alobakin@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1675522615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tkq61IaaphmcCMy0jeb65pNFPN5hEwtKvlzCHHr65SY=;
+        b=ld9b3hQqb4aXsilESfxm1s3sG6h9RTAz0Z9f9GD6FQp2qw57/XuWtfZnfTTGYOT5e8aHWQ
+        5BiOSz5avatdO8aCg+EanfxIvueWdUB0n0dE5VI20Jphl+YI3GySMha8LCa9g8qxreQzXK
+        rTot9G4vCMtmZwRzelH1qbySUtc8ntNIPWocVJ+xpgKwpIbSOwoQY3xqyEjRMZMQVnKmAd
+        dMdoDaFe/JJclmqVTI8pJ6JvuyRsTBhHYbICfYU0OjwDcIQj4bt4XT+uoOYvh3oF2X2jmt
+        5I1bNB23mGN4moVDvd7yBwa1CuYZIhJG4Tg/I+vKbg0+6vcLsFcSE7qHZQ7RXQ==
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Alexander Lobakin <alobakin@mailbox.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Remove CONFIG_MIPS check in Makefile
+Date:   Sat,  4 Feb 2023 15:56:41 +0100
+Message-Id: <20230204145641.66417-1-alobakin@mailbox.org>
+In-Reply-To: <1675328702-8328-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1675328702-8328-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTSKe3ve4_rsOYpmSBOyUSU5rpLHyijn9i2-i+WfLqxzYw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: tpypxy5rexgmtbkqmk8b5b618i9quz5c
+X-MBO-RS-ID: 28265f7d666235e2d41
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 09:12:31AM +0800, Guo Ren wrote:
-> On Sat, Feb 4, 2023 at 6:05 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> >
-> > arch_cpu_idle_dead() doesn't return.  Make that more explicit with a
-> > BUG().
-> >
-> > BUG() is preferable to unreachable() because BUG() is a more explicit
-> > failure mode and avoids undefined behavior like falling off the edge of
-> > the function into whatever code happens to be next.
-> >
-> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> > ---
-> >  arch/csky/kernel/smp.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
-> > index b45d1073307f..0ec20efaf5fd 100644
-> > --- a/arch/csky/kernel/smp.c
-> > +++ b/arch/csky/kernel/smp.c
-> > @@ -317,5 +317,7 @@ void arch_cpu_idle_dead(void)
-> >                 "jmpi   csky_start_secondary"
-> >                 :
-> >                 : "r" (secondary_stack));
-> > +
-> > +       BUG();
-> Why not:
-> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-> index f26ab2675f7d..1d3bf903add2 100644
-> --- a/kernel/sched/idle.c
-> +++ b/kernel/sched/idle.c
-> @@ -285,6 +285,7 @@ static void do_idle(void)
->                         tick_nohz_idle_stop_tick();
->                         cpuhp_report_idle_dead();
->                         arch_cpu_idle_dead();
-> +                       BUG();
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Date: Thu,  2 Feb 2023 17:05:02 +0800
 
-Without the BUG() in csky arch_cpu_idle_dead(), the compiler will warn
-about arch_cpu_idle_dead() returning, because it's marked __noreturn but
-doesn't clearly return (as far as the compiler knows).
+> CONFIG_MIPS is set as y by default in Kconfig, no need to check
+> it in Makefile.
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/mips/Makefile | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> index 490dea0..6ed41c8b 100644
+> --- a/arch/mips/Makefile
+> +++ b/arch/mips/Makefile
+> @@ -316,11 +316,9 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+>  
+>  KBUILD_LDFLAGS		+= -m $(ld-emul)
+>  
+> -ifdef CONFIG_MIPS
+>  CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
+>  	grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+>  	sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
+> -endif
 
-And we want it marked __noreturn so we'll be more likely to catch such
-bugs at build time.
+When you run `make clean/mrproper/distclean`, .config is not read. Thus,
+this block may actually provoke errors when cleaning, that's why it's
+guarded.
+At least it was like that a couple years ago, can't say for sure if
+these guards are needed, but better recheck.
 
-And as a bonus we get better code generation and clearer code semantics
-which helps both humans and tooling understand the intent of the code.
+>  
+>  OBJCOPYFLAGS		+= --remove-section=.reginfo
+>  
+> -- 
+> 2.1.0
 
--- 
-Josh
+Thanks,
+Olek
