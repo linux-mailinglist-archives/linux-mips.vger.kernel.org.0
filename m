@@ -2,107 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B0A68AAB4
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Feb 2023 15:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9861B68ACA5
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Feb 2023 22:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjBDO5E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 4 Feb 2023 09:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
+        id S229877AbjBDVoK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 4 Feb 2023 16:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjBDO5D (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Feb 2023 09:57:03 -0500
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295191EBF8;
-        Sat,  4 Feb 2023 06:57:02 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4P8Fwn69HKz9sbk;
-        Sat,  4 Feb 2023 15:56:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1675522617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tkq61IaaphmcCMy0jeb65pNFPN5hEwtKvlzCHHr65SY=;
-        b=ruCLNv4uxzOg+gYnZ7UzWq7RiWqSDJ0QW9FrjBvl5nFIn2EOs21ywIcAwYkQ0sLzcXs32A
-        bm+duLT69SGjMfynzUu3dVffG7JQNkssaZdn3poOBLVMELOmCQ5oi61PijbP026JQuoKYf
-        tNKMLme+W7F1B0xugy08/Vn/U6xfeT3mTlxwrmW9fbZMxzMBP2rxKLFz4UYr1KY9xXPHOQ
-        pA54WmUSGh07PxKMcVmcObPmBgycvapcUvwI1W2NHb2EdYF8JlnlYWjCkZyu2uaS2DCnVA
-        h83rvIkQuNyM0RtotiIfMfraBTIeoJ33gg8cupnjrPVc5R3+S+BvTO1OjvLSOA==
-From:   Alexander Lobakin <alobakin@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1675522615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tkq61IaaphmcCMy0jeb65pNFPN5hEwtKvlzCHHr65SY=;
-        b=ld9b3hQqb4aXsilESfxm1s3sG6h9RTAz0Z9f9GD6FQp2qw57/XuWtfZnfTTGYOT5e8aHWQ
-        5BiOSz5avatdO8aCg+EanfxIvueWdUB0n0dE5VI20Jphl+YI3GySMha8LCa9g8qxreQzXK
-        rTot9G4vCMtmZwRzelH1qbySUtc8ntNIPWocVJ+xpgKwpIbSOwoQY3xqyEjRMZMQVnKmAd
-        dMdoDaFe/JJclmqVTI8pJ6JvuyRsTBhHYbICfYU0OjwDcIQj4bt4XT+uoOYvh3oF2X2jmt
-        5I1bNB23mGN4moVDvd7yBwa1CuYZIhJG4Tg/I+vKbg0+6vcLsFcSE7qHZQ7RXQ==
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexander Lobakin <alobakin@mailbox.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Remove CONFIG_MIPS check in Makefile
-Date:   Sat,  4 Feb 2023 15:56:41 +0100
-Message-Id: <20230204145641.66417-1-alobakin@mailbox.org>
-In-Reply-To: <1675328702-8328-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1675328702-8328-1-git-send-email-yangtiezhu@loongson.cn>
+        with ESMTP id S229648AbjBDVoK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Feb 2023 16:44:10 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FBF29411;
+        Sat,  4 Feb 2023 13:44:06 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id me3so24465674ejb.7;
+        Sat, 04 Feb 2023 13:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gSolVd9RWMTQSGbJqovrCQiB4009f4Lndk05i70gnIY=;
+        b=lQ4aNoWvyVyDWs2ag2z6wtGto/556ysvijhmA4FO6nliibbt063l2SOFtxffM+cppz
+         xhRj3qEklIxr7eDtOanI05D9BQPhD8XWLCKB2R/ZtY8pWnTbjdiY57pN1D8y3Cdwrt35
+         MpgWgKucuXggwxbQz4cCCkjQa268odK4CJ29r8CBmaQewBuWClMoiLIk8wf4qHuQsIA8
+         x4WUvhuAILtcInBdzz9k7lW90xQ2Sm4+lQ6JaycC6QRurGD88R0I79uZJlUz6MIAvpH5
+         vtG7iKPcJZ6IVKjjFrB3ISJIe1wMWyc7tyw7TfAwGE+Lgf8i5m0yKUaNGeztp/JSaTn9
+         6Gkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gSolVd9RWMTQSGbJqovrCQiB4009f4Lndk05i70gnIY=;
+        b=YLMPZWLbcZRX1hS+PydGbC63g2L1eMeFduEZ/EHFpgjbBEU0Xgz7Zy43AGj7YDq+Ww
+         tYPFO89W9j9TV1pqeIurMRMqP2CP8JlPKepAFX6tcvpzBhmk6up23lj8jyWCNEdr4GKG
+         njwHyRAd8CVsvi4qGt7+KD2cqkNZRpl1Tj3irLiRsgrlNc6aejT4lzz8JSrJlfHqo10e
+         z/u07jmbxW9tXzLwqPiT32ZEQ0a9fvRpuEvCJLUAzCE5fRiZ/EmshlmzdvaFHfKNE1E7
+         MC3/I8tyOF5+sgnZ0ewHs8ZO4Tns2iN3B3HzGOWFE8pFX0Krln/VprRDmMrL4/rT59hH
+         qNJw==
+X-Gm-Message-State: AO0yUKXKskaGXh7pM+R5iDK6gIcVWf6gz8DuSq7lvuJmGuOsfkQ+nsyv
+        OQIKVvBOI7JLSpRbqbBwoBM=
+X-Google-Smtp-Source: AK7set/DmWvUisy2uLNLU53cfFYRwZomx58/Y39PhmCOQ6PjHWamFCJNQIzoZ3JtB7cgCoMaskNykQ==
+X-Received: by 2002:a17:907:9d08:b0:87b:f7dd:792f with SMTP id kt8-20020a1709079d0800b0087bf7dd792fmr6718214ejc.8.1675547045136;
+        Sat, 04 Feb 2023 13:44:05 -0800 (PST)
+Received: from arinc9-PC.lan ([37.120.152.236])
+        by smtp.gmail.com with ESMTPSA id oq26-20020a170906cc9a00b00886faa3d569sm3295453ejb.58.2023.02.04.13.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 13:44:04 -0800 (PST)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com
+Subject: [PATCH] mips: ralink: make SOC_MT7621 select PINCTRL_MT7621 and fix help section
+Date:   Sun,  5 Feb 2023 00:42:49 +0300
+Message-Id: <20230204214249.134937-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: tpypxy5rexgmtbkqmk8b5b618i9quz5c
-X-MBO-RS-ID: 28265f7d666235e2d41
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Date: Thu,  2 Feb 2023 17:05:02 +0800
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-> CONFIG_MIPS is set as y by default in Kconfig, no need to check
-> it in Makefile.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/Makefile | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index 490dea0..6ed41c8b 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -316,11 +316,9 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
->  
->  KBUILD_LDFLAGS		+= -m $(ld-emul)
->  
-> -ifdef CONFIG_MIPS
->  CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
->  	grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
->  	sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
-> -endif
+The dt-binding of the MT7621 SoC uses the pinctrl driver. Therefore, have
+this driver selected by default.
 
-When you run `make clean/mrproper/distclean`, .config is not read. Thus,
-this block may actually provoke errors when cleaning, that's why it's
-guarded.
-At least it was like that a couple years ago, can't say for sure if
-these guards are needed, but better recheck.
+The help section for SOC_MT7621 exceeds 80 columns which is the preferred
+limit of a single line. A tab character is 8 columns. Rearrange the text
+accordingly.
 
->  
->  OBJCOPYFLAGS		+= --remove-section=.reginfo
->  
-> -- 
-> 2.1.0
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+---
+ arch/mips/ralink/Kconfig | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thanks,
-Olek
+diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+index f9fe15630abb..06031796c87b 100644
+--- a/arch/mips/ralink/Kconfig
++++ b/arch/mips/ralink/Kconfig
+@@ -54,10 +54,11 @@ choice
+ 		select HAVE_PCI
+ 		select PCI_DRIVERS_GENERIC
+ 		select SOC_BUS
++		select PINCTRL_MT7621
+ 
+ 		help
+-		  The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc dual-core CPU,
+-		  a 5-port 10/100/1000 switch/PHY and one RGMII.
++		  The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc
++		  dual-core CPU, a 5-port 10/100/1000 switch/PHY and one RGMII.
+ endchoice
+ 
+ choice
+-- 
+2.37.2
+
