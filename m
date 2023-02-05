@@ -2,37 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375B568B0E2
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Feb 2023 17:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0250868B0E9
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Feb 2023 17:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjBEQTq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 5 Feb 2023 11:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
+        id S229582AbjBEQTr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 5 Feb 2023 11:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjBEQTp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Feb 2023 11:19:45 -0500
+        with ESMTP id S229511AbjBEQTq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Feb 2023 11:19:46 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E520D6EA3;
-        Sun,  5 Feb 2023 08:19:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DADD5900E;
+        Sun,  5 Feb 2023 08:19:44 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pOhjy-0000RS-02; Sun, 05 Feb 2023 17:19:42 +0100
+        id 1pOhjy-0000RS-03; Sun, 05 Feb 2023 17:19:42 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E13A4C265A; Sun,  5 Feb 2023 17:03:01 +0100 (CET)
-Date:   Sun, 5 Feb 2023 17:03:01 +0100
+        id EDE31C265A; Sun,  5 Feb 2023 17:19:29 +0100 (CET)
+Date:   Sun, 5 Feb 2023 17:19:29 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: dts: lantiq: Remove bogus interrupt-parent; line
-Message-ID: <20230205160301.GC4459@alpha.franken.de>
-References: <20230129152059.1535947-1-j.neuschaefer@gmx.net>
+To:     Olliver Schinagl <oliver@schinagl.nl>
+Cc:     Sander Vanheule <sander@svanheule.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: Realtek RTL: select NO_EXCEPT_FILL
+Message-ID: <20230205161929.GD4459@alpha.franken.de>
+References: <20230115121922.6359-1-sander@svanheule.net>
+ <20230127162755.GB6090@alpha.franken.de>
+ <46724036-fabf-7bae-41f8-1e95c5f1db5c@schinagl.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230129152059.1535947-1-j.neuschaefer@gmx.net>
+In-Reply-To: <46724036-fabf-7bae-41f8-1e95c5f1db5c@schinagl.nl>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -42,32 +42,30 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 04:20:58PM +0100, Jonathan Neuschäfer wrote:
-> Specifying interrupt-parent without a value (in other words, as a bool)
-> doesn't really mean anything. Remove one such property in the Lantiq
-> Danube DT, at /sram@1f000000/eiu@101000.
+On Sat, Jan 28, 2023 at 03:39:59PM +0100, Olliver Schinagl wrote:
+> Thanks Thomas, may I take this moment to poke you about a nother issue I
+> don't quite understand how to resolve/figure out.
 > 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> ---
->  arch/mips/boot/dts/lantiq/danube.dtsi | 1 -
->  1 file changed, 1 deletion(-)
 > 
-> diff --git a/arch/mips/boot/dts/lantiq/danube.dtsi b/arch/mips/boot/dts/lantiq/danube.dtsi
-> index 510be63c8bdf1..7a7ba66aa5349 100644
-> --- a/arch/mips/boot/dts/lantiq/danube.dtsi
-> +++ b/arch/mips/boot/dts/lantiq/danube.dtsi
-> @@ -40,7 +40,6 @@ sram@1f000000 {
->  		eiu0: eiu@101000 {
->  			#interrupt-cells = <1>;
->  			interrupt-controller;
-> -			interrupt-parent;
->  			compatible = "lantiq,eiu-xway";
->  			reg = <0x101000 0x1000>;
->  		};
-> --
-> 2.39.0
+> I made the realtek target work with the GENERIC_MIPS_KERNEL, but only if I
+> disable SWAP_IO_SPACE[0].
 
-applied to mips-next.
+is this little endian or big endian ? 
+
+> While I could act all smart and ask what this is for, I better ask, why is
+> this concidered 'generic'. The comment in mangle-port [1] mentions 'sane
+> hardware'. I don't know what is considered sane here, as the number of
+> targets following generic mips seem to be around 5.
+
+I always thought that SWAP_IO_SPACE is needed for big endian, but
+looking at arch/mips/Kconfig I see a lot of SWAP_IO_SPACE for pure
+little endian machines. I need to dig deeper to understand why.
+
+> So any pointers (other then doing SWAP_IO_SPACE if !REALTEK_SOC, which I
+> have now) would be appreciated
+
+such a change would defeat the generic part of GENERIC_MIPS_KERNEL,
+because it will then only work on REALTEC_SOC and nothing else. 
 
 Thomas.
 
