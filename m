@@ -2,134 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C95B68BAA6
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Feb 2023 11:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B422E68BAFE
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Feb 2023 12:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjBFKpJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Feb 2023 05:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S229706AbjBFLKq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Feb 2023 06:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjBFKpJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Feb 2023 05:45:09 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAACE768F
-        for <linux-mips@vger.kernel.org>; Mon,  6 Feb 2023 02:45:07 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id r2so9913073wrv.7
-        for <linux-mips@vger.kernel.org>; Mon, 06 Feb 2023 02:45:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2NrnM3FG0e7QhbFCjFG7aIqrnfRYfB8sX8+GS0tlerk=;
-        b=g7VaVQIaZuUW0FvSZehAeCHC5dlDxe5XlqNw/7/w7jSeWiyZcILcm5XydsKtsZ3aIN
-         oHTVOMsefhsAFwJcJklu4e4q22lat2SMV3qdNbr7fSCj9Pt2wDHHPv0IrPGPAoBnfrQz
-         k9ByUyRieI7X9Ndn2hkK5CrcYnBBfFRwsE1mY4kPUWeMSpplgT5/I0H5YpJ1ZP5Di1aT
-         b0+awITw9L4SQgaDrH9sXRMtKYgcqLxOknqLdJ5G5Jv4Dba6Mermzt4KV2drSUu57bbF
-         lVCGcNeYa6evqMJGSvtIILc4b5kudF1I2MkgE6PwIIPNCRdV/dC4KNfWm+Eo47fG1sSh
-         kAjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2NrnM3FG0e7QhbFCjFG7aIqrnfRYfB8sX8+GS0tlerk=;
-        b=stoRVSa5SNGcewo+scYAz0RJER5YSEOpdXhkqIVCM2QNSkkk2zwB3DtmhU+92BMVF3
-         LHwRud45Kg38TLXK7rPj+4tPQB6gIWv4FLRI7TH5xa4JFPE6XunM+G0SW0QkKj7qkTgE
-         BjiOvTq6Ywz9jSopvvVgb7m99B7UbV2RSHerMoutx4S4sUR0OgxY6NRktct/hkY4FZ/Y
-         YNW3q/8gzKEr2fuH8D8v5wjPLsezYxacNgsmFb964cHRJrqWCFkTGdZPkak6dsxOQUdM
-         xA+1x4lSPseFXZlyuxk2NNNjbihu0eb0t3heJiCUB00YLMka9TK36XfXPmPyU7USardi
-         xSfQ==
-X-Gm-Message-State: AO0yUKWIAOwQ4UmdwZivXzDRFGhn7BYm2/AYISJ8tN+BUqoDsl5VjlUl
-        dC2mfAdwi2TLH2dHOKX1ILHB8Q==
-X-Google-Smtp-Source: AK7set98dqxPimNIdMv8ZWaDeY74ILWNJFHHUvcX0aaDiko9DbYMvXVwMFPziFrbh8Gil435TSMhkg==
-X-Received: by 2002:a5d:6351:0:b0:2c3:dfa7:9155 with SMTP id b17-20020a5d6351000000b002c3dfa79155mr6346758wrw.59.1675680306443;
-        Mon, 06 Feb 2023 02:45:06 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id e20-20020a5d5954000000b002bfd524255esm8632069wri.43.2023.02.06.02.45.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 02:45:05 -0800 (PST)
-Message-ID: <13261104-4544-b198-0d0c-0d39651f27c9@linaro.org>
-Date:   Mon, 6 Feb 2023 10:45:03 +0000
+        with ESMTP id S229526AbjBFLKp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Feb 2023 06:10:45 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D31213D71;
+        Mon,  6 Feb 2023 03:10:44 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P9NpV6n6sz4x1f;
+        Mon,  6 Feb 2023 22:10:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1675681839;
+        bh=kUcid2K08WtpFrwk3dq6n2jc2ZZxMaSNsif8b2qLpcI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=JSr9bUqckLWxlQvgXrqHdLKjhZNKCyo4/W+R7iqEdoTwQny8JL4fA9p8KLiKopoBY
+         5u53AQEtGGXSUIVhYTsKoGTQqHAWk/L2OGiEhn+0/8fSth4VXKAS3aT226D33i5p+m
+         FdbPDX2xoyL2dmmxuKSPL38q4OEI/nwe/wpGmzrwBTQTovoqi6LZ4omZBFLcu1QcvH
+         OCmTE96dRBgZqYLhxf1uVZpSZUhhjl9pivy58AnZ8D9ntUKLxW5BuUV2Rkfq3DMiAR
+         1E1dDbWxoKsiTVWbw5buAHInDRJ1Jkci48lbw53vA/21E8Kh226KSjdHUbEkKMeduf
+         u7otQ9CqmaTuA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     jgross@suse.com, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Subject: Re: [PATCH 12/22] powerpc/cpu: Mark start_secondary_resume()
+ __noreturn
+In-Reply-To: <b5d065218265e79daa23f82bb84efc6a7ea120fc.1675461757.git.jpoimboe@kernel.org>
+References: <cover.1675461757.git.jpoimboe@kernel.org>
+ <b5d065218265e79daa23f82bb84efc6a7ea120fc.1675461757.git.jpoimboe@kernel.org>
+Date:   Mon, 06 Feb 2023 22:10:22 +1100
+Message-ID: <87v8kfdp7l.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/2] nvmem: brcm_nvram: use bcm47xx buffered data
-Content-Language: en-US
-To:     arinc9.unal@gmail.com,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Willem-Jan de Hoog <wdehoog@exalondelft.nl>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        erkin.bozoglu@xeront.com
-References: <20230206101642.22720-1-wdehoog@exalondelft.nl>
- <20230206101642.22720-3-wdehoog@exalondelft.nl>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230206101642.22720-3-wdehoog@exalondelft.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Josh Poimboeuf <jpoimboe@kernel.org> writes:
+> start_secondary_resume() doesn't return.  Annotate it as such.  By
+> extension this also makes arch_cpu_idle_dead() noreturn.
 
+Can we also mark arch_cpu_idle_dead() (the C function) __noreturn ?
 
-On 06/02/2023 10:16, arinc9.unal@gmail.com wrote:
-> From: Willem-Jan de Hoog <wdehoog@exalondelft.nl>
-> 
-> The bcm47xx module has a copy of the NVRAM data in ram. When available, use
-> this one instead of reading from io memory since it causes mtd/ubi to fail.
-> 
-> [ arinc.unal@arinc9.com: Improved patch subject and log ]
-> 
-> Signed-off-by: Willem-Jan de Hoog <wdehoog@exalondelft.nl>
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->   drivers/nvmem/brcm_nvram.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
-> index 34130449f2d2..f74bcb1c948e 100644
-> --- a/drivers/nvmem/brcm_nvram.c
-> +++ b/drivers/nvmem/brcm_nvram.c
-> @@ -33,6 +33,12 @@ struct brcm_nvram_header {
->   static int brcm_nvram_read(void *context, unsigned int offset, void *val,
->   			   size_t bytes)
->   {
-> +#ifdef CONFIG_BCM47XX_NVRAM
-> +
-Hmm this is not the right way to fix/add support for this, consider 
-adding SoC specific compatible and based on that you can take right 
-choice at runtime.
+Seems like it would be good documentation, even if it's not required
+once the generic prototype is __noreturn.
 
-there are 2 issues with this patch which you should probably consider.
-1. no dependency expressed in any way in Kconfig.
-2. If we build these as modules everything will break as the symbol is 
-not exported.
+But not a show-stopper.
 
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
---srini
-> +	return bcm47xx_nvram_read(offset, val, bytes);
-> +
-> +#else
-> +
->   	struct brcm_nvram *priv = context;
->   	u8 *dst = val;
->   
-> @@ -40,6 +46,8 @@ static int brcm_nvram_read(void *context, unsigned int offset, void *val,
->   		*dst++ = readb(priv->base + offset++);
->   
->   	return 0;
-> +
-> +#endif
->   }
->   
->   static int brcm_nvram_add_cells(struct brcm_nvram *priv, uint8_t *data,
+cheers
+
+> diff --git a/arch/powerpc/include/asm/smp.h b/arch/powerpc/include/asm/smp.h
+> index f63505d74932..cfd42ca8765c 100644
+> --- a/arch/powerpc/include/asm/smp.h
+> +++ b/arch/powerpc/include/asm/smp.h
+> @@ -66,7 +66,7 @@ void start_secondary(void *unused);
+>  extern int smp_send_nmi_ipi(int cpu, void (*fn)(struct pt_regs *), u64 delay_us);
+>  extern int smp_send_safe_nmi_ipi(int cpu, void (*fn)(struct pt_regs *), u64 delay_us);
+>  extern void smp_send_debugger_break(void);
+> -extern void start_secondary_resume(void);
+> +extern void __noreturn start_secondary_resume(void);
+>  extern void smp_generic_give_timebase(void);
+>  extern void smp_generic_take_timebase(void);
+>  
+> -- 
+> 2.39.0
