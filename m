@@ -2,49 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA77768C940
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Feb 2023 23:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7FD68C987
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Feb 2023 23:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjBFWWL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Feb 2023 17:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S230137AbjBFWgf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Feb 2023 17:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjBFWWL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Feb 2023 17:22:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D935BA7;
-        Mon,  6 Feb 2023 14:22:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CECFCB81636;
-        Mon,  6 Feb 2023 22:22:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D76C433D2;
-        Mon,  6 Feb 2023 22:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675722127;
-        bh=g8nY4KWQRGHZ+UEBU3IfsGHHp9POeugLWf+ks7MhlYI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ku27bb49TXnifj4vDKUwLt//IhS+AuKgNZHjSBzmgIygXsWngoTvqzjsyI4aaPcuH
-         Ne/GMb6QblTp2Jv681blYtCgjkXaPsQUgkrsec8L+xRVWuKD28hd8t9BRChWBzJwZK
-         gFEWXSU7jaZZgPnPMEvOqqaXTfNHVDYUbsIUYWKlmuEb7nAEqsRD53T6hGhLZYqx/u
-         DQUcYnhTaFCk/Smt9vORx+U2SLIPq7vHqyxTh+SxZ9//C/gkazIzBXyvCtcwtDa+nk
-         Ec2/QPURQbIa9r42wgKqNXQHC6PZxrciIKrlgpzWDw6z2c/ntsIbU896+w3wVQ78cR
-         a9GpVI+CKZooA==
-Date:   Mon, 6 Feb 2023 14:22:02 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux-alpha@vger.kernel.org,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        with ESMTP id S229574AbjBFWge (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Feb 2023 17:36:34 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8B130287;
+        Mon,  6 Feb 2023 14:36:32 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id cr22so14753358qtb.10;
+        Mon, 06 Feb 2023 14:36:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DY9UghIbQImNpjY3G2+UNsb+fzCnSZLDGPSaq6J2Oe0=;
+        b=JRNn2PN7IQA8wrp++7waMCjV2w3MVSBHQy2yaFY5E1eD/qAR5eFFrTUqd7HHZZgOOh
+         BKtoIdcfXcvfEkOkPxAPoMpSqz/4LLVV5QTg6sU/i6Ss894Zt1lunVB1YipN7YIy8x0+
+         QHb2wW9sDuw07wqO8wKDOF74KYPEloiw8B7aDMqTs/WEYWrqrWe8u2TVT6mCHQjo3ppz
+         BtPI49HLyU8i9EE65/3VpD4dZ9wc31UuOfGfWqaEw5Yo34lcugLN63L7bFLGCgoYQWwI
+         4GTPN3tXbT1k6DU4Gcw03RgD0rJtIc2M2RiwxziJmhZNdqrRvanB+Br5nnhGtkocLLSf
+         9qtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DY9UghIbQImNpjY3G2+UNsb+fzCnSZLDGPSaq6J2Oe0=;
+        b=DCD4ubFSEasil0B2Iohro+4xTZuxGTJtWzCQCeWtyejpk2vIZjWPuo/drvhotFrVFa
+         npCQrO9t5VoV7Gy9b/TPeoPffhodUBXsHI5xUyqtaPg6jZFj9Uu39vkPO8PFE8E60MCa
+         kMsgLO7mRotgYekbSyx8Nuax2P78ohyABnQpaOxO1kjA4hQpa9XhnO++l8cKfZQw33+l
+         gNSnYzOvoD2oSdmohuGzs8IGVpQGSwPnhXhrDLqngXoqTohX00A6bCj1GM/FU3pDrUXf
+         upfx89UpTPgQC2dyYAkw+E3qe/aK1uQnWJMAeFIb9gNsFdpzz8JapZIuwtjX8YiB7OY5
+         pSbQ==
+X-Gm-Message-State: AO0yUKXpYDFTnf5SBu7Uo9iAg/yWzZxgDAZs0lIAay4gfeh611cfW9lj
+        wywu6sKB8L8fynWBoq2LeyI=
+X-Google-Smtp-Source: AK7set9k2xF1YO2aQZ8CAhnjLiRZSUooGquww3S7+RRW4y3x8DAu2vUxYsVCmwjFnjGnk8wBa2p/ww==
+X-Received: by 2002:a05:622a:19a5:b0:3b6:9736:2e9b with SMTP id u37-20020a05622a19a500b003b697362e9bmr1444580qtc.26.1675722991277;
+        Mon, 06 Feb 2023 14:36:31 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d11-20020ac8614b000000b003b856b73e8bsm8147231qtm.16.2023.02.06.14.36.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 14:36:30 -0800 (PST)
+Message-ID: <efaa5dfa-cf00-d68f-2b7c-911b70b4cb5e@gmail.com>
+Date:   Mon, 6 Feb 2023 14:36:02 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 09/22] mips/cpu: Expose play_dead()'s prototype definition
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     jgross@suse.com, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
         bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
         linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
         linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
         dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
         sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
@@ -55,43 +77,29 @@ Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         paulmck@kernel.org
-Subject: Re: [PATCH 12/22] powerpc/cpu: Mark start_secondary_resume()
- __noreturn
-Message-ID: <20230206222202.zreg3pyhynhvyggy@treble>
 References: <cover.1675461757.git.jpoimboe@kernel.org>
- <b5d065218265e79daa23f82bb84efc6a7ea120fc.1675461757.git.jpoimboe@kernel.org>
- <87v8kfdp7l.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87v8kfdp7l.fsf@mpe.ellerman.id.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <a532966831383927f5f4fbec0a1e13304588685a.1675461757.git.jpoimboe@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <a532966831383927f5f4fbec0a1e13304588685a.1675461757.git.jpoimboe@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 10:10:22PM +1100, Michael Ellerman wrote:
-> Josh Poimboeuf <jpoimboe@kernel.org> writes:
-> > start_secondary_resume() doesn't return.  Annotate it as such.  By
-> > extension this also makes arch_cpu_idle_dead() noreturn.
+On 2/3/23 14:05, Josh Poimboeuf wrote:
+> Include <asm/smp.h> to make sure play_dead() matches its prototype going
+> forward.
 > 
-> Can we also mark arch_cpu_idle_dead() (the C function) __noreturn ?
-> 
-> Seems like it would be good documentation, even if it's not required
-> once the generic prototype is __noreturn.
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Yeah, agreed.  Maybe I'll do that (for all the implementations) with
-patch 22.
-
-> But not a show-stopper.
-> 
-> Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-
-Thanks!
-
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Josh
+Florian
+
