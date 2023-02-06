@@ -2,108 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922F168C386
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Feb 2023 17:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5551268C43D
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Feb 2023 18:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjBFQoM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Feb 2023 11:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S229727AbjBFRKD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Feb 2023 12:10:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjBFQoL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Feb 2023 11:44:11 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA5D2884C;
-        Mon,  6 Feb 2023 08:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675701850; x=1707237850;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v2++oyGuH9P+b0x5albN7pQyNMNnT/4CSX17EwiEmgo=;
-  b=Edb2wvWD0gC6TG+AlqZ4eDOYs/zjmj2X5ukOTcWUTromlYQAACnqKf8S
-   XTGnPjTH9QJAQVOqOGEK8tsIqTEYeSlYw3vPe+VpetU9JQq0SMVNtLIDg
-   E0hoUSXKgtPkfUwdUXu23XzBnhAkLFjJaBHiLikT/qJX2LDsqPY7XWOnT
-   Gy6+DDuv5oiOJsBE+4i0Zv4s2Cjhf6jM+7Y4AIB5ZByeU91EgYLkmyOWR
-   V8eOTav2K9eeaWitiBB2frqQwsw1nF7ezzy2UOoIbpQAoIfliyfqNhNpi
-   T09OchBL0FLuR1OWeW9sLdjV+kLK/yImkx/oN7mpJhfGI14/IOJ46/4IC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="393850416"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="393850416"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 08:44:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="735196096"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="735196096"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Feb 2023 08:44:06 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pP4b8-0002gS-0R;
-        Mon, 06 Feb 2023 16:44:06 +0000
-Date:   Tue, 7 Feb 2023 00:43:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     arinc9.unal@gmail.com,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Willem-Jan de Hoog <wdehoog@exalondelft.nl>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        erkin.bozoglu@xeront.com
-Subject: Re: [PATCH v2 2/2] nvmem: brcm_nvram: use bcm47xx buffered data
-Message-ID: <202302070008.J1xnBnSn-lkp@intel.com>
-References: <20230206101642.22720-3-wdehoog@exalondelft.nl>
+        with ESMTP id S229447AbjBFRKC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Feb 2023 12:10:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9332449C;
+        Mon,  6 Feb 2023 09:10:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05A68B81588;
+        Mon,  6 Feb 2023 17:10:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B9AC433D2;
+        Mon,  6 Feb 2023 17:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675703398;
+        bh=T6nMlMtjoX6nM1kpqNXBW0g7A7KPs11O2AjUDAhAjpU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U0iz1ivBLo8y3bHaI0HhMvcjLRjKFd7jHbXOPOwRjnOL9QgQLUfpscK36uj77LWqr
+         uMKcdc/u3eiEng7jQJiGj32RvMDS0zXDoIaCraxqTBFcCXxwRTn1qj76FTusigz9Mr
+         dAU5KiZwtk4knDj8wAMj1CBUQpjH1bJV3jomqw3XTks/ABa9u2tnWPWThu3JEXn2di
+         kvhaItUMCgcyDbpvZhIlFwwyRFw3X1RpruZulQWXLgbDs5JGirmZ8+wW+VMqr2kdI3
+         HvtBWmrF5EzVL5patiEo2KmKLbA729GvQWSDjgJo6fZCwT9lzFYAFfcbjx4pmOL41U
+         ENFnNFe3jzyAw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pP50f-0000MO-HS; Mon, 06 Feb 2023 18:10:29 +0100
+Date:   Mon, 6 Feb 2023 18:10:29 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v4 06/19] irqdomain: Drop revmap mutex
+Message-ID: <Y+E0hRcvjMb9bynE@hovoldconsulting.com>
+References: <20230116135044.14998-1-johan+linaro@kernel.org>
+ <20230116135044.14998-7-johan+linaro@kernel.org>
+ <871qnslut3.ffs@tglx>
+ <Y8e6Us0Qgt0p5S4R@hovoldconsulting.com>
+ <87r0vshu1y.ffs@tglx>
+ <Y8fv3KWoxmaykrP6@hovoldconsulting.com>
+ <87zg9rx7o1.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230206101642.22720-3-wdehoog@exalondelft.nl>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87zg9rx7o1.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Mon, Feb 06, 2023 at 02:09:02PM +0100, Thomas Gleixner wrote:
+> On Wed, Jan 18 2023 at 14:10, Johan Hovold wrote:
+> > On Wed, Jan 18, 2023 at 02:05:29PM +0100, Thomas Gleixner wrote:
+> >> You can do this in a two step approach.
+> >> 
+> >>     1) Add the new locking and ensure that the lock is held when
+> >>        the functions are called
+> >
+> > But the new locking has nothing to do with these functions. They are
+> > added because they fix various races elsewhere. Adding lockdep
+> > assertions in unrelated function as part of those fixes doesn't really
+> > make much sense.
+> 
+> Seriously? The point is that revmap_mutex is not protecting against any
+> of the races which you are trying to protect against. Ergo, any callsite
+> which does not hold the irqdomain mutex is part of the problem you are
+> trying to solve, no?
 
-Thank you for the patch! Yet something to improve:
+The current locking using the revmap_mutex is indeed incomplete as it
+only serialises updates of the revmap structures themselves and
+specifically does not prevent two mappings for the same interrupt to be
+created. It basically just protects the integrity of the revmap tree.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.2-rc7 next-20230206]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The association and disassocation fixes are not sufficient to address the
+mapping race, but those two changes do guarantee that all current paths
+that access the revmap structures hold the irq_domain_mutex.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/arinc9-unal-gmail-com/firmware-bcm47xx_nvram-allow-to-read-from-buffered-nvram-data/20230206-181817
-patch link:    https://lore.kernel.org/r/20230206101642.22720-3-wdehoog%40exalondelft.nl
-patch subject: [PATCH v2 2/2] nvmem: brcm_nvram: use bcm47xx buffered data
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230207/202302070008.J1xnBnSn-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/33f35258e56cfe526d23f263596e9c76ea2d5925
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review arinc9-unal-gmail-com/firmware-bcm47xx_nvram-allow-to-read-from-buffered-nvram-data/20230206-181817
-        git checkout 33f35258e56cfe526d23f263596e9c76ea2d5925
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+Once that has been established, there is no point in keeping the
+revmap_mutex around for the update path (lookups are still protected by
+RCU).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+But this change is separate from the race that the disassociation fix
+addressed (e.g. the racy updates of the domain mapcount) and it is also
+independent of the fix for the mapping race (which still exists after
+removing the revmap mutex with the current order of the patches).
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Therefore the dropping the revmap mutex belongs in its own patch and I
+placed it here after the disassociation fix to highlight that it is
+indeed independent of the later fixes for the mapping race.
 
->> ERROR: modpost: "bcm47xx_nvram_read" [drivers/nvmem/nvmem_brcm_nvram.ko] undefined!
+It can be moved after, but I still think the lockdep asserts belong in
+the patch that removes the revmap tree lock.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Johan
