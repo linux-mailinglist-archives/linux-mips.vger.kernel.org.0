@@ -2,171 +2,342 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B3068DA5C
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Feb 2023 15:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA03268DEFD
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Feb 2023 18:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjBGOSb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Feb 2023 09:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
+        id S231439AbjBGRdW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Feb 2023 12:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjBGOSb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Feb 2023 09:18:31 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DE339B98
-        for <linux-mips@vger.kernel.org>; Tue,  7 Feb 2023 06:18:23 -0800 (PST)
-Received: from [IPV6:2001:861:4a40:8620:7b9f:2478:5d44:165f] (unknown [IPv6:2001:861:4a40:8620:7b9f:2478:5d44:165f])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S230421AbjBGRdV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Feb 2023 12:33:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9733CE32;
+        Tue,  7 Feb 2023 09:33:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FEBB660206A;
-        Tue,  7 Feb 2023 14:18:22 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675779502;
-        bh=KPSO8WzHlNF+W+tdi9PgWYpAK6OsrsSOcgvRdXxJUEw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HXpd8lMz92l+tee50GPW8eraj1j0karWkzNjZgN72ggJJyitKoOQwnk2mez7bH1e2
-         0Q90j0cTSkI0SDnYI3TNh1ecY33vJgDkUBbaCNvwxePCQc09xjczP2Uj/dN6FSI1nv
-         57AdcfB6D3RcksU96c7uj5zA+Us5jAKnQADjcPgfTKv0UTp9FPhqOm7xDL3pPRWqeP
-         Nhi1buEMQ5POoeX3FLGIOMGEMf3NDliggas6ccf/kN8YS9BDc/whtdExEqo77O+cHk
-         MGWJ591nxPf4Hv1z8sNXygXGS1sOfiZdKbT9cXtwCz64C1jsvVF6rjO4AodaZFxC/q
-         9fzGhXpHjqQJg==
-Message-ID: <85031c0c-d981-031e-8a50-bc4fad2ddcd8@collabora.com>
-Date:   Tue, 7 Feb 2023 15:19:12 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E891F60F95;
+        Tue,  7 Feb 2023 17:33:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45330C433EF;
+        Tue,  7 Feb 2023 17:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675791189;
+        bh=OOFodDg/RJjo5qTVphmNP/E/fr/ShyEQVDZAWMtFoM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tXxwcE/gOF0eNx0XF92RAoYkNum7JZnXOZnnavM7kzrO0MQevxJJtXQxPJNmPEoZR
+         tAMLz9nlYUiMrkjH/XKT2k/4CJZ7++RadCYpn6C4IHt8JHwnxoVyjFlB66hlg6cJRQ
+         RtVlmuj69eecz4+uNG9d2OCUVRkR6tgweGdQ7Ag3A9B3i0x3l1Z/3o2JXHp4uErqyf
+         t3GKQ32zFVa94qvR26M0CjRf2YghqCdXlloIl2kbFkmDdMkoXcoi91RlDvfyQm8h4p
+         fB3bxwZHldFOuKK/WwIFRqJvJxjNiXAvBoMPfmM9C2dJCIEbPzS8z2Zbf2jvHi7ZV3
+         3Wl3kMwIvcAmA==
+Date:   Tue, 7 Feb 2023 09:33:04 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     jgross@suse.com, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Subject: [PATCH v1.1 22/22] sched/idle: Mark arch_cpu_idle_dead() __noreturn
+Message-ID: <20230207173304.le5rvsz2emasye7s@treble>
+References: <cover.1675461757.git.jpoimboe@kernel.org>
+ <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: tip/master build: 205 builds: 5 failed, 200 passed, 9 errors, 22
- warnings (v6.2-rc7-273-gd67c17ddc899)
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     mingo@kernel.org, x86@kernel.org,
-        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>,
-        "kernelci-results@groups.io" <kernelci-results@groups.io>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-References: <63e1f7e0.170a0220.7142.de7c@mx.google.com>
- <Y+IRiiRtXvUzXOGp@gmail.com>
- <c3cd3489-ca32-bdf5-4538-d95532bf9430@collabora.com>
- <Y+JU07y+lvYAtZQT@sirena.org.uk>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <Y+JU07y+lvYAtZQT@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+Thomas Bogendoerfer +linux-mips
+Before commit 076cbf5d2163 ("x86/xen: don't let xen_pv_play_dead()
+return"), in Xen, when a previously offlined CPU was brought back
+online, it unexpectedly resumed execution where it left off in the
+middle of the idle loop.
 
-On 07/02/2023 14:40, Mark Brown wrote:
-> On Tue, Feb 07, 2023 at 10:56:04AM +0100, Guillaume Tucker wrote:
->> On 07/02/2023 09:53, Ingo Molnar wrote:
-> 
->>>>     4    cc1: error: ‘-mloongson-mmi’ must be used with ‘-mhard-float’
->>>
->>> ... but this exact same error was 'reported' a year ago on January 22:
->>>
->>>>    2    cc1: error: ‘-mloongson-mmi’ must be used with ‘-mhard-float’
-> 
->>> So these regression reports are useless in this form and they clutter 
->>> people's inboxes. Is any person reading them and acting on them to make 
->>> sure these emails are sensible?
-> 
->> About the actual kernel build error, I guess it's a shame nobody
->> has fixed this yet.  I'll take a look what the root cause might
->> be.  If it's a KernelCI build configuration issue e.g. using
->> wrong compiler flags then we can fix that, otherwise it's
->> probably something to report more directly to some MIPS
->> maintainers.
-> 
-> Honestly at this point I think we should just drop the affected MIPS
-> configurations at this point, as Ingo says they've been failing for
-> so long with nobody caring.
+There were some hacks to make that work, but the behavior was surprising
+as do_idle() doesn't expect an offlined CPU to return from the dead (in
+arch_cpu_idle_dead()).
 
-Maybe the MIPS people just haven't seen this.  I've added Thomas
-and the linux-mips list to confirm.
+Now that Xen has been fixed, and the arch-specific implementations of
+arch_cpu_idle_dead() also don't return, give it a __noreturn attribute.
 
-After some investigation, it turns out the error happens when
-doing "make modules_install".  Here's the issue:
+This will cause the compiler to complain if an arch-specific
+implementation might return.  It also improves code generation for both
+caller and callee.
 
-* modules_install is listed in "no-compiler-targets" in the
-top-level Makefile
+Also fixes the following warning:
 
-* as a result, scripts/Makefile.compiler is not included
+  vmlinux.o: warning: objtool: do_idle+0x25f: unreachable instruction
 
-* arch/mips/loongson64/Platform requires the "cc-option" function
-  to add -mnon-loongson-mmi
+Reported-by: Paul E. McKenney <paulmck@kernel.org>
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+v1.1:
+- add __noreturn to the implementations (in addition to just the
+  prototype)
 
-* since "cc-option" is not defined when just doing "make
-  modules_install", the flag is not added and the error mentioned
-  above occurs
+ arch/alpha/kernel/process.c     | 2 +-
+ arch/arm/kernel/smp.c           | 2 +-
+ arch/arm64/kernel/process.c     | 2 +-
+ arch/csky/kernel/smp.c          | 2 +-
+ arch/ia64/kernel/process.c      | 2 +-
+ arch/loongarch/kernel/process.c | 2 +-
+ arch/mips/kernel/process.c      | 2 +-
+ arch/parisc/kernel/process.c    | 2 +-
+ arch/powerpc/kernel/smp.c       | 2 +-
+ arch/riscv/kernel/cpu-hotplug.c | 2 +-
+ arch/s390/kernel/idle.c         | 2 +-
+ arch/sh/kernel/idle.c           | 2 +-
+ arch/sparc/kernel/process_64.c  | 2 +-
+ arch/x86/kernel/process.c       | 2 +-
+ arch/xtensa/kernel/smp.c        | 2 +-
+ include/linux/cpu.h             | 2 +-
+ tools/objtool/check.c           | 1 +
+ 17 files changed, 17 insertions(+), 16 deletions(-)
 
-GitHub issue: https://github.com/kernelci/kernelci-project/issues/176
-
-Here's a hack to prove this point, need-compiler is defined in
-the top-level Makefile so it shouldn't be used here but
-this "fixes" the problem:
-
-
-
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index 490dea07d4e0..024f62dbef76 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -317,10 +317,12 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
- KBUILD_LDFLAGS         += -m $(ld-emul)
+diff --git a/arch/alpha/kernel/process.c b/arch/alpha/kernel/process.c
+index 94938f856545..c9a5ed23c5a6 100644
+--- a/arch/alpha/kernel/process.c
++++ b/arch/alpha/kernel/process.c
+@@ -60,7 +60,7 @@ void arch_cpu_idle(void)
+ 	wtint(0);
+ }
  
- ifdef CONFIG_MIPS
-+ifdef need-compiler
- CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
-        grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
-        sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
- endif
-+endif
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	wtint(INT_MAX);
+ 	BUG();
+diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
+index adcd417c526b..c2daa0f2f784 100644
+--- a/arch/arm/kernel/smp.c
++++ b/arch/arm/kernel/smp.c
+@@ -320,7 +320,7 @@ void __cpu_die(unsigned int cpu)
+  * of the other hotplug-cpu capable cores, so presumably coming
+  * out of idle fixes this.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	unsigned int cpu = smp_processor_id();
  
- OBJCOPYFLAGS           += --remove-section=.reginfo
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 71d59b5abede..089ced6d6bd6 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -69,7 +69,7 @@ void (*pm_power_off)(void);
+ EXPORT_SYMBOL_GPL(pm_power_off);
  
-
-
-I guess another way would be to unconditionally add the options
-to the cflags, in fact there are other places where this appears
-to be done.  I'm not sure which GCC or Clang versions support it
-or not, so that may not work in practice.
-
-
-
-diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-index 473404cae1c4..b7b2db13f1a2 100644
---- a/arch/mips/loongson64/Platform
-+++ b/arch/mips/loongson64/Platform
-@@ -12,7 +12,7 @@ endif
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+        cpu_die();
+ }
+diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+index 0ec20efaf5fd..9c7a20b73ac6 100644
+--- a/arch/csky/kernel/smp.c
++++ b/arch/csky/kernel/smp.c
+@@ -300,7 +300,7 @@ void __cpu_die(unsigned int cpu)
+ 	pr_notice("CPU%u: shutdown\n", cpu);
+ }
  
- # Some -march= flags enable MMI instructions, and GCC complains about that
- # support being enabled alongside -msoft-float. Thus explicitly disable MMI.
--cflags-y += $(call cc-option,-mno-loongson-mmi)
-+cflags-y += -mno-loongson-mmi
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	idle_task_exit();
  
- #
- # Loongson Machines' Support
-
-
-
-This was reproduced using GCC 10 with the latest
-kernelci/gcc-10:mips-kselftest-kernelci Docker image running as
-root.
-
-
-Is this something someone familiar with MIPS would like to fix
-properly?  If not then please confirm that we should just drop
-the loongson2k_defconfig builds from KernelCI.  Is this kernel
-config actually still maintained in mainline?
-
-Thanks,
-Guillaume
+diff --git a/arch/ia64/kernel/process.c b/arch/ia64/kernel/process.c
+index 78f5794b2dde..9a5cd9fad3a9 100644
+--- a/arch/ia64/kernel/process.c
++++ b/arch/ia64/kernel/process.c
+@@ -225,7 +225,7 @@ static inline void __noreturn play_dead(void)
+ }
+ #endif /* CONFIG_HOTPLUG_CPU */
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
+index edfd220a3737..ba70e94eb996 100644
+--- a/arch/loongarch/kernel/process.c
++++ b/arch/loongarch/kernel/process.c
+@@ -61,7 +61,7 @@ unsigned long boot_option_idle_override = IDLE_NO_OVERRIDE;
+ EXPORT_SYMBOL(boot_option_idle_override);
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index 093dbbd6b843..a3225912c862 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -40,7 +40,7 @@
+ #include <asm/stacktrace.h>
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
+index c064719b49b0..97c6f875bd0e 100644
+--- a/arch/parisc/kernel/process.c
++++ b/arch/parisc/kernel/process.c
+@@ -159,7 +159,7 @@ EXPORT_SYMBOL(running_on_qemu);
+ /*
+  * Called from the idle thread for the CPU which has been shutdown.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ #ifdef CONFIG_HOTPLUG_CPU
+ 	idle_task_exit();
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index 6b90f10a6c81..f62e5e651bcd 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1752,7 +1752,7 @@ void __cpu_die(unsigned int cpu)
+ 		smp_ops->cpu_die(cpu);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	/*
+ 	 * Disable on the down path. This will be re-enabled by
+diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
+index f7a832e3a1d1..59b80211c25f 100644
+--- a/arch/riscv/kernel/cpu-hotplug.c
++++ b/arch/riscv/kernel/cpu-hotplug.c
+@@ -71,7 +71,7 @@ void __cpu_die(unsigned int cpu)
+ /*
+  * Called from the idle thread for the CPU which has been shutdown.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	idle_task_exit();
+ 
+diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
+index cb653c87018f..481ca32e628e 100644
+--- a/arch/s390/kernel/idle.c
++++ b/arch/s390/kernel/idle.c
+@@ -143,7 +143,7 @@ void arch_cpu_idle_exit(void)
+ {
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	cpu_die();
+ }
+diff --git a/arch/sh/kernel/idle.c b/arch/sh/kernel/idle.c
+index 114f0c4abeac..d662503b0665 100644
+--- a/arch/sh/kernel/idle.c
++++ b/arch/sh/kernel/idle.c
+@@ -30,7 +30,7 @@ void default_idle(void)
+ 	clear_bl_bit();
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
+index 91c2b8124527..b51d8fb0ecdc 100644
+--- a/arch/sparc/kernel/process_64.c
++++ b/arch/sparc/kernel/process_64.c
+@@ -95,7 +95,7 @@ void arch_cpu_idle(void)
+ }
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	sched_preempt_enable_no_resched();
+ 	cpu_play_dead();
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index f1ec36caf1d8..3e30147a537e 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -727,7 +727,7 @@ void arch_cpu_idle_enter(void)
+ 	local_touch_nmi();
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/xtensa/kernel/smp.c b/arch/xtensa/kernel/smp.c
+index 7bad78495536..054bd64eab19 100644
+--- a/arch/xtensa/kernel/smp.c
++++ b/arch/xtensa/kernel/smp.c
+@@ -322,7 +322,7 @@ void __cpu_die(unsigned int cpu)
+ 	pr_err("CPU%u: unable to kill\n", cpu);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	cpu_die();
+ }
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index f83e4519c5f0..8582a7142623 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -182,7 +182,7 @@ void arch_cpu_idle(void);
+ void arch_cpu_idle_prepare(void);
+ void arch_cpu_idle_enter(void);
+ void arch_cpu_idle_exit(void);
+-void arch_cpu_idle_dead(void);
++void __noreturn arch_cpu_idle_dead(void);
+ 
+ int cpu_report_state(int cpu);
+ int cpu_check_up_prepare(int cpu);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 0f67c6a8bc98..e3fa2279d612 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -167,6 +167,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+ 		"__reiserfs_panic",
+ 		"__stack_chk_fail",
+ 		"__ubsan_handle_builtin_unreachable",
++		"arch_cpu_idle_dead",
+ 		"cpu_bringup_and_idle",
+ 		"cpu_startup_entry",
+ 		"do_exit",
+-- 
+2.39.0
 
