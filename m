@@ -2,147 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB78E68EF6F
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Feb 2023 13:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D30168EFDD
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Feb 2023 14:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjBHM7S convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 8 Feb 2023 07:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        id S230310AbjBHNf0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Feb 2023 08:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjBHM7R (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Feb 2023 07:59:17 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8311FF08;
-        Wed,  8 Feb 2023 04:59:03 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pPk2F-002T4M-JL; Wed, 08 Feb 2023 13:58:51 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pPk2F-000LfL-Bn; Wed, 08 Feb 2023 13:58:51 +0100
-Message-ID: <3a5a4bee5c0739a3b988a328376a6eed3c385fda.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for
- CONFIG_CPUMASK_OFFSTACK
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Wed, 08 Feb 2023 13:58:50 +0100
-In-Reply-To: <20220714084136.570176-3-chenhuacai@loongson.cn>
-References: <20220714084136.570176-1-chenhuacai@loongson.cn>
-         <20220714084136.570176-3-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S229505AbjBHNfZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Feb 2023 08:35:25 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7455F35AB;
+        Wed,  8 Feb 2023 05:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=PMp0gXsVfVTqwcUhaqwEjQxmo111+Dr+n4G2THRRgz4=; b=nv1U4Cs2toJAUKTbNLnEh3GkOY
+        7TafoARROVHQSw9xJfz56g9qot5qCf4w6m4SWQjlNps1Oe5T2sHs3KDsj7DDyHZsEule4Fc1EDsFi
+        1ot7N3tXnfTdb0UAUOhw7OBfMJkQv96CLrRBbzSzT9W9CzOllOmN6OP7nihODAjH1GrmhpTSrxXbw
+        +FQ3rTbD5HBPPVYU6nfEd7rZEnlmQKhiACj6Chvr3AVC+hWz7Ee5CIY899SSczPizMsfNgyHKXZEr
+        J+yG9hswiuu8WG3XCLcbAsJkbqGmrnhF93OGExxTKKUafWDJ+5Nvu8CB5rz+/ij9RclHTGYLDqeqN
+        r07kkj+g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPkbR-001F0R-Gf; Wed, 08 Feb 2023 13:35:13 +0000
+Date:   Wed, 8 Feb 2023 13:35:13 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Yin, Fengwei" <fengwei.yin@intel.com>
+Cc:     Alexandre Ghiti <alex@ghiti.fr>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: API for setting multiple PTEs at once
+Message-ID: <Y+OlEUqJotSN3tLV@casper.infradead.org>
+References: <Y9wnr8SGfGGbi/bk@casper.infradead.org>
+ <Y+K0O35jNNzxiXE6@casper.infradead.org>
+ <ba99ed28-61e4-4acd-ce17-338f5a49ef26@ghiti.fr>
+ <b44d5dc7-ee7a-80e0-5401-829bf5740de5@intel.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b44d5dc7-ee7a-80e0-5401-829bf5740de5@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 2022-07-14 at 16:41 +0800, Huacai Chen wrote:
-> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> cpu_max_bits_warn() generates a runtime warning similar as below while
-> we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-> instead of NR_CPUS to iterate CPUs.
+On Wed, Feb 08, 2023 at 08:09:00PM +0800, Yin, Fengwei wrote:
 > 
-> [    3.052463] ------------[ cut here ]------------
-> [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
-> [    3.070072] Modules linked in: efivarfs autofs4
-> [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-> [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
-> [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
-> [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
-> [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
-> [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
-> [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
-> [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
-> [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
-> [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
-> [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
-> [    3.195868]         ...
-> [    3.199917] Call Trace:
-> [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
-> [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
-> [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
-> [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-> [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
-> [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
-> [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
-> [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
-> [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
-> [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
-> [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
-> [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
 > 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/sh/kernel/cpu/proc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
-> index a306bcd6b341..5f6d0e827bae 100644
-> --- a/arch/sh/kernel/cpu/proc.c
-> +++ b/arch/sh/kernel/cpu/proc.c
-> @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->  
->  static void *c_start(struct seq_file *m, loff_t *pos)
->  {
-> -	return *pos < NR_CPUS ? cpu_data + *pos : NULL;
-> +	return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
->  }
->  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
->  {
+> On 2/8/2023 7:23 PM, Alexandre Ghiti wrote:
+> > Hi Matthew,
+> > 
+> > On 2/7/23 21:27, Matthew Wilcox wrote:
+> >> On Thu, Feb 02, 2023 at 09:14:23PM +0000, Matthew Wilcox wrote:
+> >>> For those of you not subscribed, linux-mm is currently discussing
+> >>> how best to handle page faults on large folios.  I simply made it work
+> >>> when adding large folio support.  Now Yin Fengwei is working on
+> >>> making it fast.
+> >> OK, here's an actual implementation:
+> >>
+> >> https://lore.kernel.org/linux-mm/20230207194937.122543-3-willy@infradead.org/
+> >>
+> >> It survives a run of xfstests.  If your architecture doesn't store its
+> >> PFNs at PAGE_SHIFT, you're going to want to implement your own set_ptes(),
+> > 
+> > 
+> > riscv stores its pfn at PAGE_PFN_SHIFT instead of PAGE_SHIFT, se we need to reimplement set_ptes. But I have been playing with your patchset and we never fall into the case where set_ptes is called with nr > 1, any idea why? I booted a large ubuntu defconfig and launched will_it_scale.page_fault4.
+> Need to use xfs filesystem to get large folio for file mapping.
+> Other filesystem may be also OK. But I just tried xfs. Thanks.
 
-I build-tested the patch and also booted the patched kernel successfully
-on my SH-7785LCR board.
+XFS is certainly the flagship filesystem to support large folios, but
+others have added support, AFS and EROFS.  You can also get large folios
+in tmpfs (which is slightly different as it focuses on THPs rather than
+generic large folios).
 
-Showing the contents of /proc/cpuinfo works fine, too:
-
-root@tirpitz:~> cat /proc/cpuinfo
-machine         : SH7785LCR
-processor       : 0
-cpu family      : sh4a
-cpu type        : SH7785
-cut             : 7.x
-cpu flags       : fpu perfctr llsc
-cache type      : split (harvard)
-icache size     : 32KiB (4-way)
-dcache size     : 32KiB (4-way)
-address sizes   : 32 bits physical
-bogomips        : 599.99
-root@tirpitz:~>
-
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-
-I am not sure yet whether the change is also correct as I don't know whether
-it's possible to change the number of CPUs at runtime on SuperH.
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+You also have to have CONFIG_TRANSPARENT_HUGEPAGE selected, which riscv
+can do.  That restriction will be lifted at some point, but for now
+large folios depends on the THP infrastructure.
