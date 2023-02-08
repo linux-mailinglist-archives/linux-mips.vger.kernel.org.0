@@ -2,105 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF7368ED34
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Feb 2023 11:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3114B68EDD4
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Feb 2023 12:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjBHKpU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Feb 2023 05:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S229827AbjBHLXv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Feb 2023 06:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBHKpT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Feb 2023 05:45:19 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47DA93F6;
-        Wed,  8 Feb 2023 02:45:18 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id eq11so19821927edb.6;
-        Wed, 08 Feb 2023 02:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RfQJVoDpp53Spswv7FcdMIifhn6yPvTxoUHHpA992iU=;
-        b=fOB79nWDRKyjTj6hwehY0vyJ6SzLwPUCH3HNwrVxMCaWpaLrUksVVdTTqe9AOu/Y8K
-         /acwY1GbCwQASaSnaEn6fgli9/FZrjaVZVE9BXf+IhIRoEDBaBI6D9v5TK/PmGbam+qy
-         pbGHjMdxu0TNxiXX0ShlyERy3JuPCHZi/MXa4VAa5pKSUG/Zqc0aKlquILlPf/35Ph97
-         rHBRYdH4PdMEuiSqq2QdOWUU1BFatvI6B92xD0Ol/nnP5Gzbtj1VdchsSg6ym4oty7mT
-         NritxWoSHHMvRpeVIIN4ikKG4LDxMVwLsFt9H2i7jQ1qATTlGVS4v0Yom6ysB1YM3dZ5
-         f0ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RfQJVoDpp53Spswv7FcdMIifhn6yPvTxoUHHpA992iU=;
-        b=xZO2zTjdnnggV8v8J1koDWJbBwLfyS8UjO18BIGMwTjolLeCUS0RAAvDU/YfSwkV49
-         BSlk+gejaIwe6jez0p4TsHnuVZka8uTb9MrglsdE/zHSnyCgclIapg855TLW1i6Anh2Z
-         s3GeIKiTOCoUdyKf34sWamUKFRkp7+hn0Tc3Q/DvlyK854av8LuHw09QrA/lij+cwZ6z
-         8DXDHwnphZMRLgyIUbla0cjX4cbJPIAU/mI//ZPNj8Q7rd/jH6GlLMXeVbxqKSED626b
-         qB+gTXSWzi4wdHzt86aQzAyloQeuVoQ9/moC2ciiBnxOrnLvr3k96tCcC+HSv5kgrWYM
-         /QHg==
-X-Gm-Message-State: AO0yUKVKX+1gWU6bI47X5BMwq4l6AZy341upNCVkAcTqZHQEia2JAPgh
-        Zer14w5AkKvhl5fh6sB8BJU=
-X-Google-Smtp-Source: AK7set9/vnzvUmJrUGg6dhm7bt4UYcIMTdZ896Tssshddyq3Xq5FaSCqufz7wVdpJMFmXO3rtC8Mgg==
-X-Received: by 2002:a50:d55d:0:b0:497:233d:3ef5 with SMTP id f29-20020a50d55d000000b00497233d3ef5mr7334716edj.23.1675853117362;
-        Wed, 08 Feb 2023 02:45:17 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id x91-20020a50bae4000000b0049b58744f93sm5935024ede.81.2023.02.08.02.45.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 02:45:16 -0800 (PST)
-Message-ID: <e3ee64da-e8d9-ba8d-f4d4-f166b7ca825f@gmail.com>
-Date:   Wed, 8 Feb 2023 11:45:15 +0100
+        with ESMTP id S229527AbjBHLXv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Feb 2023 06:23:51 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA4FB74B;
+        Wed,  8 Feb 2023 03:23:20 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9D4FA20008;
+        Wed,  8 Feb 2023 11:23:09 +0000 (UTC)
+Message-ID: <ba99ed28-61e4-4acd-ce17-338f5a49ef26@ghiti.fr>
+Date:   Wed, 8 Feb 2023 12:23:09 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH v3 2/2] nvmem: brcm_nvram: use bcm47xx buffered data
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Willem-Jan de Hoog <wdehoog@exalondelft.nl>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1675717472.git.wdehoog@exalondelft.nl>
- <e179c12f73a6035690e814b842f677bbb38f5c96.1675717472.git.wdehoog@exalondelft.nl>
- <0496ff17-0a02-1192-3c9a-412656a38b6a@gmail.com>
- <2e2ff1ec-34a9-db77-64d2-c088e5f1a13d@arinc9.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <2e2ff1ec-34a9-db77-64d2-c088e5f1a13d@arinc9.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Alexandre Ghiti <alex@ghiti.fr>
+Subject: Re: API for setting multiple PTEs at once
+To:     Matthew Wilcox <willy@infradead.org>, linux-arch@vger.kernel.org
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+        linux-alpha@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+References: <Y9wnr8SGfGGbi/bk@casper.infradead.org>
+ <Y+K0O35jNNzxiXE6@casper.infradead.org>
+Content-Language: en-US
+In-Reply-To: <Y+K0O35jNNzxiXE6@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8.02.2023 11:29, Arınç ÜNAL wrote:
-> On 8.02.2023 13:25, Rafał Miłecki wrote:
->> On 7.02.2023 09:42, Willem-Jan de Hoog wrote:
->>> From: Willem-Jan de Hoog <wdehoog@exalondelft.nl>
->>>
->>> The bcm47xx module has a copy of the NVRAM data in ram. When available, use
->>> this one instead of reading from io memory since it causes mtd/ubi to fail.
->>
->> This doesn't explain anything. Why do we need that? If anything we
->> should rather get rid of that NVRAM firmware driver. It was needed
->> before we had all NVMEM stuff in place. Finally how can reading
->> iomem break mtd/ubi?!
-> 
-> Did you take a look at the bootlog on this post on the thread, I've mentioned your user handle a few times but received no response on the forum.
-> 
-> https://forum.openwrt.org/t/asus-rt-ac88u-hw-a6-broken-in-22-03-3/147882/6?u=arinc9
+Hi Matthew,
 
-Well, it doesn't really matter *in context* of getting this patch
-accepted for mainline. It needs to be properly described on its own so
-people can review it without looking through dozens of forum posts.
+On 2/7/23 21:27, Matthew Wilcox wrote:
+> On Thu, Feb 02, 2023 at 09:14:23PM +0000, Matthew Wilcox wrote:
+>> For those of you not subscribed, linux-mm is currently discussing
+>> how best to handle page faults on large folios.  I simply made it work
+>> when adding large folio support.  Now Yin Fengwei is working on
+>> making it fast.
+> OK, here's an actual implementation:
+>
+> https://lore.kernel.org/linux-mm/20230207194937.122543-3-willy@infradead.org/
+>
+> It survives a run of xfstests.  If your architecture doesn't store its
+> PFNs at PAGE_SHIFT, you're going to want to implement your own set_ptes(),
 
-Sorry for not following that closely, I lagged behind due to my work on
-other Broadcom topics. Broken LZMA, broken Linksys device support,
-broken BCM5358. I'll see if I can figure out sth from that thread.
+
+riscv stores its pfn at PAGE_PFN_SHIFT instead of PAGE_SHIFT, se we need 
+to reimplement set_ptes. But I have been playing with your patchset and 
+we never fall into the case where set_ptes is called with nr > 1, any 
+idea why? I booted a large ubuntu defconfig and launched 
+will_it_scale.page_fault4.
+
+I'll come up with the proper implementation of set_ptes anyway soon.
+
+Thanks,
+
+Alex
+
+
+> or you'll see entirely the wrong pages mapped into userspace.  You may
+> also wish to implement set_ptes() if it can be done more efficiently
+> than __pte(pteval(pte) + PAGE_SIZE).
+>
+> Architectures that implement things like flush_icache_page() and
+> update_mmu_cache() may want to propose batched versions of those.
+> That's alpha, csky, m68k, mips, nios2, parisc, sh,
+> arm, loongarch, openrisc, powerpc, riscv, sparc and xtensa.
+> Maintainers BCC'd, mailing lists CC'd.
+>
+> I'm happy to collect implementations and submit them as part of a v6.
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
