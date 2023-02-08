@@ -2,138 +2,208 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C36268E8AF
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Feb 2023 08:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD74268EC3C
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Feb 2023 11:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjBHHE3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Feb 2023 02:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S229942AbjBHKAN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Feb 2023 05:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjBHHEA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Feb 2023 02:04:00 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329F9442FF
-        for <linux-mips@vger.kernel.org>; Tue,  7 Feb 2023 23:03:07 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id gr7so48827875ejb.5
-        for <linux-mips@vger.kernel.org>; Tue, 07 Feb 2023 23:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=chaPZb3F1Lj55Ua2qpU1dZJDJeBr2I3XOT3p/iRZEPY=;
-        b=D++CmrWBHOjCYs6e19/eu4f1Uhtjj7qdTpyWaVbtecL3ZCDAWPcoaJFW9EVLDxwfxE
-         THRHUdaTK0JwL9veeStxC/1emhKRLp92VbcPtLzympV2d2cfgXeNhSH9nOvnX/1Y7tM2
-         kIf6QesuB9owHDzUNPPJBfitlQg52XzluT1F7hvSEZDtRhKucrvwHjWqLyNa3dXE922Y
-         hiWjc9wLc+L7SsgANf9HEy6lqrA5+nauoGSuKZISmhCQVUeyy9JALDXmmq27NJ2Nz6KR
-         XODtJh8JeZiB1WN/a1EgyTd3Vgar7oFBiho4s1ux19oTWFgA5N1Z5geEF/wEaJZyr3uN
-         1SXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=chaPZb3F1Lj55Ua2qpU1dZJDJeBr2I3XOT3p/iRZEPY=;
-        b=ZSPdD1lYfF3lcBoJnzVfjsE1wwMUAOorOxvslPX/tals1KbVwPt1UgsFaf/iehs5DV
-         GaJpxr77yaG9Te0+nJ4G8n2GvEH7zO8iyHdjr0XC7KrZfLmPAWN94KJ4IUnHJFRgq2CQ
-         V8oKXe6Y/B3xXHcf12E8fG/lwOjhr2Dxuq8Vu6UlgaGa28XqjHFQH6qdgtqQIc4QCIEc
-         jDu1i0NIjaVcU+sFy2hJgJqMssUsu16p15jtYorkus9xhp3nZ1NQRdJZmADR4SccDETf
-         734DEkIs63uDFLajdl5LzDhoUI02lIvyoZE9QNYPhAKUgtKzQL8sYG3zxki0hTA3iEd/
-         5o2Q==
-X-Gm-Message-State: AO0yUKWl9bdauCSTZGnwHAi/X1lEqIl2RPIhwX7DXcxZ3eKiKD8C8Qqg
-        egj7PArwcMcOoeEnFoJa/ilBfA40Fc0=
-X-Google-Smtp-Source: AK7set9mg2NylHdJAwb7S9qUAz5hnUogZfGFTeo873DgdIxbs//6TtSFBa3pVtn6HjV/4T5uttf0Ow==
-X-Received: by 2002:a17:906:29d0:b0:888:b471:8e46 with SMTP id y16-20020a17090629d000b00888b4718e46mr6100625eje.50.1675839785788;
-        Tue, 07 Feb 2023 23:03:05 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id b14-20020a1709063f8e00b0088dc98e4510sm7944266ejj.112.2023.02.07.23.03.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 23:03:05 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] MIPS: BCM47XX: Add support for Linksys E2500 V3
-Date:   Wed,  8 Feb 2023 08:03:01 +0100
-Message-Id: <20230208070301.5338-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229822AbjBHKAM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Feb 2023 05:00:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960291EFD3;
+        Wed,  8 Feb 2023 02:00:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AA43615E4;
+        Wed,  8 Feb 2023 10:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99653C433EF;
+        Wed,  8 Feb 2023 10:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675850410;
+        bh=s4vaxrnc1mvUSnF8N75rkyowNIgbPMRpjaPxjxZkNdA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=X6aQJuDLJ8b0xyWlTxlWTqJluGbIRsWyhr0yE99EhnqK64aGHk5SplHb3ADAuxb9I
+         o7DkMUvAeYEwlXRfj1uSn00lrZWZErjXZfs3IyR9hLdwM8mNgae0qDwf7AmUQBPHQp
+         CZYblt4ABUbD2odM8Po7srQVHiRqdWBx0Bgz8TUKR+uWgCxY7qoV+v1SGx9hob3vXa
+         Tb4Zo14DqDmL2RBpsPVwV4KlL8vhxPOdnyf3ZRvQmyeFd2O/vwBu6/eoa672voZI02
+         IpiG6dFe3aoxTS+WXFA0IbjccXU9LBG8AYQS4mV2enjY1awcs0z4cLIKiPrmViGvDs
+         JgHcm3sag7j3g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pPhFG-008cXn-Rw;
+        Wed, 08 Feb 2023 10:00:08 +0000
+Date:   Wed, 08 Feb 2023 10:00:06 +0000
+Message-ID: <86o7q4zdcp.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        Raghavendra Rao Ananta <rananta@google.com>
+Subject: Re: [PATCH v2 2/7] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
+In-Reply-To: <20230126184025.2294823-3-dmatlack@google.com>
+References: <20230126184025.2294823-1-dmatlack@google.com>
+        <20230126184025.2294823-3-dmatlack@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: dmatlack@google.com, pbonzini@redhat.com, james.morse@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, yuzenghui@huawei.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup@brainfault.org, atishp@atishpatra.org, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, seanjc@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, rananta@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Thu, 26 Jan 2023 18:40:20 +0000,
+David Matlack <dmatlack@google.com> wrote:
+> 
+> Use kvm_arch_flush_remote_tlbs() instead of
+> CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL. The two mechanisms solve the same
+> problem, allowing architecture-specific code to provide a non-IPI
+> implementation of remote TLB flushing.
+> 
+> Dropping CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL allows KVM to standardize
+> all architectures on kvm_arch_flush_remote_tlbs() instead of maintaining
+> two mechanisms.
+> 
+> Opt to standardize on kvm_arch_flush_remote_tlbs() since it avoids
+> duplicating the generic TLB stats across architectures that implement
+> their own remote TLB flush.
+> 
+> This adds an extra function call to the ARM64 kvm_flush_remote_tlbs()
+> path, but that is a small cost in comparison to flushing remote TLBs.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_host.h | 3 +++
+>  arch/arm64/kvm/Kconfig            | 1 -
+>  arch/arm64/kvm/mmu.c              | 6 +++---
+>  virt/kvm/Kconfig                  | 3 ---
+>  virt/kvm/kvm_main.c               | 2 --
+>  5 files changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 113e20fdbb56..062800f1dc54 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -998,6 +998,9 @@ int __init kvm_set_ipa_limit(void);
+>  #define __KVM_HAVE_ARCH_VM_ALLOC
+>  struct kvm *kvm_arch_alloc_vm(void);
+>  
+> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+> +
+>  static inline bool kvm_vm_is_protected(struct kvm *kvm)
+>  {
+>  	return false;
+> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> index ca6eadeb7d1a..e9ac57098a0b 100644
+> --- a/arch/arm64/kvm/Kconfig
+> +++ b/arch/arm64/kvm/Kconfig
+> @@ -25,7 +25,6 @@ menuconfig KVM
+>  	select MMU_NOTIFIER
+>  	select PREEMPT_NOTIFIERS
+>  	select HAVE_KVM_CPU_RELAX_INTERCEPT
+> -	select HAVE_KVM_ARCH_TLB_FLUSH_ALL
+>  	select KVM_MMIO
+>  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>  	select KVM_XFER_TO_GUEST_WORK
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 01352f5838a0..8840f65e0e40 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -80,15 +80,15 @@ static bool memslot_is_logging(struct kvm_memory_slot *memslot)
+>  }
+>  
+>  /**
+> - * kvm_flush_remote_tlbs() - flush all VM TLB entries for v7/8
+> + * kvm_arch_flush_remote_tlbs() - flush all VM TLB entries for v7/8
+>   * @kvm:	pointer to kvm structure.
+>   *
+>   * Interface to HYP function to flush all VM TLB entries
+>   */
+> -void kvm_flush_remote_tlbs(struct kvm *kvm)
+> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>  {
+> -	++kvm->stat.generic.remote_tlb_flush_requests;
+>  	kvm_call_hyp(__kvm_tlb_flush_vmid, &kvm->arch.mmu);
+> +	return 0;
+>  }
+>  
+>  static bool kvm_is_device_pfn(unsigned long pfn)
+> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> index b74916de5183..484d0873061c 100644
+> --- a/virt/kvm/Kconfig
+> +++ b/virt/kvm/Kconfig
+> @@ -62,9 +62,6 @@ config HAVE_KVM_CPU_RELAX_INTERCEPT
+>  config KVM_VFIO
+>         bool
+>  
+> -config HAVE_KVM_ARCH_TLB_FLUSH_ALL
+> -       bool
+> -
+>  config HAVE_KVM_INVALID_WAKEUPS
+>         bool
+>  
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 277507463678..fefd3e3c8fe1 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -347,7 +347,6 @@ bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req)
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_make_all_cpus_request);
+>  
+> -#ifndef CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
+>  void kvm_flush_remote_tlbs(struct kvm *kvm)
+>  {
+>  	++kvm->stat.generic.remote_tlb_flush_requests;
+> @@ -368,7 +367,6 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+>  		++kvm->stat.generic.remote_tlb_flush;
+>  }
 
-It's a BCM5358 based home WiFi router. 16 MiB flash, 64 MiB RAM, BCM5325
-switch, on-SoC 802.11n radio.
+For context, we currently have this:
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- arch/mips/bcm47xx/board.c                          | 1 +
- arch/mips/bcm47xx/buttons.c                        | 9 +++++++++
- arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h | 1 +
- 3 files changed, 11 insertions(+)
+	if (!kvm_arch_flush_remote_tlb(kvm)
+	    || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
+		++kvm->stat.generic.remote_tlb_flush;
 
-diff --git a/arch/mips/bcm47xx/board.c b/arch/mips/bcm47xx/board.c
-index 8ef002471b9c..90fb48b046c0 100644
---- a/arch/mips/bcm47xx/board.c
-+++ b/arch/mips/bcm47xx/board.c
-@@ -130,6 +130,7 @@ struct bcm47xx_board_type_list2 bcm47xx_board_list_boot_hw[] __initconst = {
- 	{{BCM47XX_BOARD_LINKSYS_E1000V21, "Linksys E1000 V2.1"}, "E1000", "2.1"},
- 	{{BCM47XX_BOARD_LINKSYS_E1200V2, "Linksys E1200 V2"}, "E1200", "2.0"},
- 	{{BCM47XX_BOARD_LINKSYS_E2000V1, "Linksys E2000 V1"}, "Linksys E2000", "1.0"},
-+	{{BCM47XX_BOARD_LINKSYS_E2500V3, "Linksys E2500 V3"}, "E2500", "1.0"},
- 	/* like WRT610N v2.0 */
- 	{{BCM47XX_BOARD_LINKSYS_E3000V1, "Linksys E3000 V1"}, "E300", "1.0"},
- 	{{BCM47XX_BOARD_LINKSYS_E3200V1, "Linksys E3200 V1"}, "E3200", "1.0"},
-diff --git a/arch/mips/bcm47xx/buttons.c b/arch/mips/bcm47xx/buttons.c
-index 38e4a9cbcf4e..437a737c01dd 100644
---- a/arch/mips/bcm47xx/buttons.c
-+++ b/arch/mips/bcm47xx/buttons.c
-@@ -222,6 +222,12 @@ bcm47xx_buttons_linksys_e2000v1[] __initconst = {
- 	BCM47XX_GPIO_KEY(8, KEY_RESTART),
- };
- 
-+static const struct gpio_keys_button
-+bcm47xx_buttons_linksys_e2500v3[] __initconst = {
-+	BCM47XX_GPIO_KEY(9, KEY_WPS_BUTTON),
-+	BCM47XX_GPIO_KEY(10, KEY_RESTART),
-+};
-+
- static const struct gpio_keys_button
- bcm47xx_buttons_linksys_e3000v1[] __initconst = {
- 	BCM47XX_GPIO_KEY(4, KEY_WPS_BUTTON),
-@@ -617,6 +623,9 @@ int __init bcm47xx_buttons_register(void)
- 	case BCM47XX_BOARD_LINKSYS_E2000V1:
- 		err = bcm47xx_copy_bdata(bcm47xx_buttons_linksys_e2000v1);
- 		break;
-+	case BCM47XX_BOARD_LINKSYS_E2500V3:
-+		err = bcm47xx_copy_bdata(bcm47xx_buttons_linksys_e2500v3);
-+		break;
- 	case BCM47XX_BOARD_LINKSYS_E3000V1:
- 		err = bcm47xx_copy_bdata(bcm47xx_buttons_linksys_e3000v1);
- 		break;
-diff --git a/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h b/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
-index 30f4114ab872..3c401f11655e 100644
---- a/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
-+++ b/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
-@@ -61,6 +61,7 @@ enum bcm47xx_board {
- 	BCM47XX_BOARD_LINKSYS_E1000V21,
- 	BCM47XX_BOARD_LINKSYS_E1200V2,
- 	BCM47XX_BOARD_LINKSYS_E2000V1,
-+	BCM47XX_BOARD_LINKSYS_E2500V3,
- 	BCM47XX_BOARD_LINKSYS_E3000V1,
- 	BCM47XX_BOARD_LINKSYS_E3200V1,
- 	BCM47XX_BOARD_LINKSYS_E4200V1,
+Is there any reason why we shouldn't move the KVM_REQ_TLB_FLUSH call
+into the arch-specific helpers? This is architecture specific, even if
+the majority of the supported architecture cannot do broadcast
+invalidation like arm64 does.
+
+Thanks,
+
+	M.
+
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
