@@ -2,67 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F83968F060
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Feb 2023 15:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C3B68F363
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Feb 2023 17:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjBHONB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Feb 2023 09:13:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S231620AbjBHQkI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Feb 2023 11:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjBHONA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Feb 2023 09:13:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4887D38E98
-        for <linux-mips@vger.kernel.org>; Wed,  8 Feb 2023 06:12:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675865532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MVdXAMmBKMdGVdB031db9qoOwXwbq1WnNqDyKF+cm50=;
-        b=dLwSavBU4t06fi51AXk6R87JknE+gFYHznnwXgX5QTAxgvNDLfAldR6i0/T+7Kdw7RvxWT
-        WigG6t9fWr8ISG3Tt+XgDnQ7cCZvwsT+aiPM4xA4Dt1b3nIkyDqb7LtTkYLWXcBKitdFPP
-        5suV0rYX7dtkXQpbXC1qoZXdo1Y1NKU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-136-vy5riKM5OgKRxojl0jXIOw-1; Wed, 08 Feb 2023 09:12:11 -0500
-X-MC-Unique: vy5riKM5OgKRxojl0jXIOw-1
-Received: by mail-wm1-f71.google.com with SMTP id l31-20020a05600c1d1f00b003deab30bb8bso8967431wms.2
-        for <linux-mips@vger.kernel.org>; Wed, 08 Feb 2023 06:12:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MVdXAMmBKMdGVdB031db9qoOwXwbq1WnNqDyKF+cm50=;
-        b=06Zu8bL1eoJZrtuqcB+PE4SULeecj7fNjDRzSmyO60LMjwxLS8dZfbriObu6FjKSmO
-         +OVYjaNY0pcaTNQQF0EWr11bYx5+9rRwibp/dM3vHQlIC4w6/fMCYcC3D99oh+gxFkip
-         H3vikjW+yE2sz+dX4k14Qnl3PQRP5VWf64hmYaXKm7k3Dg/nNltBW1dlCrn7zI4Hi4W9
-         ofYWzrDT19oIzktNd/cS0eWu04+qR+24+HYt+VNeM1BDVNLD+tb4ZCHxD87WxwN//S5h
-         /55bPS/kM4xMdL7c6EmEUjh9tf6Ak4EWz5rYOjkSdFeb3IaQCETRj5I+FvHGYdqHJiRw
-         U80g==
-X-Gm-Message-State: AO0yUKWEI/TojL5u+44c/S6JYSRUaG/X0WU/kRjEef1DGohIQdFjSEp2
-        GHiITea/Cul8Mml8YEcfJzMqsvdGzOiyghU3sVTZwts6tmDkf2RhQpt6Lr30AndSG/WrpVKXeyq
-        qJ1LUL3Io7/7lDSZX+tL9aA==
-X-Received: by 2002:a05:600c:2ac8:b0:3d9:fb59:c16b with SMTP id t8-20020a05600c2ac800b003d9fb59c16bmr6807539wme.36.1675865529851;
-        Wed, 08 Feb 2023 06:12:09 -0800 (PST)
-X-Google-Smtp-Source: AK7set9buY9+5cxJmjHAU1gwkYhkjh45ggBfiU2I1/g0SGqFxOSQ99Rkm86npGHpTIA79oxlUNrbqQ==
-X-Received: by 2002:a05:600c:2ac8:b0:3d9:fb59:c16b with SMTP id t8-20020a05600c2ac800b003d9fb59c16bmr6807491wme.36.1675865529588;
-        Wed, 08 Feb 2023 06:12:09 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:b300:758c:6214:cd51:8ab0? (p200300cbc704b300758c6214cd518ab0.dip0.t-ipconnect.de. [2003:cb:c704:b300:758c:6214:cd51:8ab0])
-        by smtp.gmail.com with ESMTPSA id a3-20020a05600c224300b003db01178b62sm2066527wmm.40.2023.02.08.06.12.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 06:12:08 -0800 (PST)
-Message-ID: <39fd91e3-c93b-23c6-afc6-cbe473bb0ca9@redhat.com>
-Date:   Wed, 8 Feb 2023 15:12:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S231519AbjBHQkG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Feb 2023 11:40:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563514DE2C;
+        Wed,  8 Feb 2023 08:39:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D682261718;
+        Wed,  8 Feb 2023 16:39:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C217C433EF;
+        Wed,  8 Feb 2023 16:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675874394;
+        bh=k2WDmJefTVbmF4UtYjVTRVt38vEfq5VHOD9s78R7eyg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rm1BIDwVjM+vtyitHjo1e7C/8O3osDSw3ddUWkl4Wx2bC5t9PAYPPNOMyPOnhDGBE
+         x0/ntl8Z+mYIwUFJ4SJYgRaphWg6Yt4w739Gu/lXfntdZ6JeZX0Y+rfAbGvNs2ZHt8
+         st0eJcGbt8o4IXvW5Pd80HgnuHqj+dz7ZtRrgPBzs0UpJBQvPfkACmHMCJmVksp2u1
+         7j+OBIBzFLzMDdGcGKQCjlEbr0xBVw1CpjWop+Te/iJBfsS4i7ncKglT5iTBbI8VBo
+         HOM9qBR39AlYqQf2ZmUflFWYvSQAKch5roLODmzzrvB8D8QMKelVKI/xJc21XFfhdD
+         dus+tchf6H0SA==
+Date:   Wed, 8 Feb 2023 16:39:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
@@ -85,91 +56,75 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
         Russell King <linux@armlinux.org.uk>
-References: <20230113171026.582290-1-david@redhat.com>
- <20230113171026.582290-5-david@redhat.com> <Y+GcDFMNHw2cdDN1@sirena.org.uk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
 Subject: Re: [PATCH mm-unstable v1 04/26] arm/mm: support
  __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-In-Reply-To: <Y+GcDFMNHw2cdDN1@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <Y+PQUMwH4AZSVpjb@sirena.org.uk>
+References: <20230113171026.582290-1-david@redhat.com>
+ <20230113171026.582290-5-david@redhat.com>
+ <Y+GcDFMNHw2cdDN1@sirena.org.uk>
+ <39fd91e3-c93b-23c6-afc6-cbe473bb0ca9@redhat.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="W0tQR/5xWRekS1hu"
+Content-Disposition: inline
+In-Reply-To: <39fd91e3-c93b-23c6-afc6-cbe473bb0ca9@redhat.com>
+X-Cookie: Walk softly and carry a megawatt laser.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07.02.23 01:32, Mark Brown wrote:
-> On Fri, Jan 13, 2023 at 06:10:04PM +0100, David Hildenbrand wrote:
->> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE by stealing one bit from the
->> offset. This reduces the maximum swap space per file to 64 GiB (was 128
->> GiB).
->>
->> While at it drop the PTE_TYPE_FAULT from __swp_entry_to_pte() which is
->> defined to be 0 and is rather confusing because we should be dealing
->> with "Linux PTEs" not "hardware PTEs". Also, properly mask the type in
->> __swp_entry().
-> 
-> Today's -next (and at least back to Friday, older logs are unclear - I
-> only noticed -next issues today) fails to NFS boot on an AT91SAM9G20-EK
-> (an old ARMv5 platform) with multi_v5_defconfig, a bisect appears to
-> point to this patch (20aae9eff5acd8f5 in today's -next) as the culprit.
 
-It's been in -next for quite a while, thanks for the report!
+--W0tQR/5xWRekS1hu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> The failure happens at some point after starting userspace, the kernel
-> starts spamming the console with messages in the form:
-> 
->      get_swap_device: Bad swap file entry 10120d20
-> 
+On Wed, Feb 08, 2023 at 03:12:06PM +0100, David Hildenbrand wrote:
+> On 07.02.23 01:32, Mark Brown wrote:
 
-_swap_info_get() tells us that the swp type seems to be bad.
-I assume we're dealing with a migration entry, if swap is disabled, and fail to
-detect is_migration_entry() correctly because the type is messed up.
+> > Today's -next (and at least back to Friday, older logs are unclear - I
+> > only noticed -next issues today) fails to NFS boot on an AT91SAM9G20-EK
+> > (an old ARMv5 platform) with multi_v5_defconfig, a bisect appears to
+> > point to this patch (20aae9eff5acd8f5 in today's -next) as the culprit.
 
-Could you give the following a test?
+> It's been in -next for quite a while, thanks for the report!
 
+Yeah, there's been some other things obscuring the issue.
 
- From 8c4bdbd9862f85782d5919d044c172b584063e83 Mon Sep 17 00:00:00 2001
-From: David Hildenbrand <david@redhat.com>
-Date: Wed, 8 Feb 2023 15:08:01 +0100
-Subject: [PATCH] arm/mm: Fix swp type masking in __swp_entry()
+> Could you give the following a test?
+>=20
+>=20
+> From 8c4bdbd9862f85782d5919d044c172b584063e83 Mon Sep 17 00:00:00 2001
+> From: David Hildenbrand <david@redhat.com>
+> Date: Wed, 8 Feb 2023 15:08:01 +0100
+> Subject: [PATCH] arm/mm: Fix swp type masking in __swp_entry()
+>=20
+> We're masking with the number of type bits instead of the type mask, which
+> is obviously wrong.
 
-We're masking with the number of type bits instead of the type mask, which
-is obviously wrong.
+Tested-by: Mark Brown <broonie@kernel.org>
 
-Fixes: 20aae9eff5ac ("arm/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE")
-Reported-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-  arch/arm/include/asm/pgtable.h | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+but note that I had to manually apply it, though it's pretty trivial so
+I probably applied the right thing.
 
-diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
-index 2e626e6da9a3..a58ccbb406ad 100644
---- a/arch/arm/include/asm/pgtable.h
-+++ b/arch/arm/include/asm/pgtable.h
-@@ -292,7 +292,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-  
-  #define __swp_type(x)		(((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
-  #define __swp_offset(x)		((x).val >> __SWP_OFFSET_SHIFT)
--#define __swp_entry(type, offset) ((swp_entry_t) { (((type) & __SWP_TYPE_BITS) << __SWP_TYPE_SHIFT) | \
-+#define __swp_entry(type, offset) ((swp_entry_t) { (((type) & __SWP_TYPE_MASK) << __SWP_TYPE_SHIFT) | \
-  						   ((offset) << __SWP_OFFSET_SHIFT) })
-  
-  #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
--- 
-2.39.1
+--W0tQR/5xWRekS1hu
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Thanks,
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPj0FAACgkQJNaLcl1U
+h9C7hQf/VKRwP16M1jInUqUdUtyzPdvalnHTpasxKVZ8Sy0U3jwXMqNUqmnpEOSO
+UB3Q8audVEzRc8pj92dk3jilZBDPHyP58UUKRsjkrZVz22Q2/R16FcjaLrdlwNlj
+GWMfEWv5OKYPHaxP4W/VX0sXzS0XMTuulvAF1BOQRlOAS3L3jYsYUtzI2pkzJm1G
+64ICND0ZQRerzQmdQd6oO2tVhymhv8Y1LPY4TT0HikINGVpwwCJoOiocmstgqqGW
+uE+M+XJ9Lp/p78SIjfccjF1rdCWlc5MJJLS/qZzYnm6OnkKMOlBAUX9bwqvyrvE9
+quDK6fshhrFo/uJ5YVAQnAEuDKLv9g==
+=rC9E
+-----END PGP SIGNATURE-----
 
-David / dhildenb
-
+--W0tQR/5xWRekS1hu--
