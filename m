@@ -2,86 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D959369138E
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Feb 2023 23:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE29E691635
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 02:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbjBIWkG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Feb 2023 17:40:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S230207AbjBJB2I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Feb 2023 20:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjBIWjQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Feb 2023 17:39:16 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB1F6BABE;
-        Thu,  9 Feb 2023 14:38:47 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 796CA100004;
-        Thu,  9 Feb 2023 22:38:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675982325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GlmlRq1SwmIoi67aUVNcS7ctofjzfmDlTqR+bZ6hmVg=;
-        b=GyHZle2edxB4Pl2ob6GyRhceamq4ZPeyBsxTMi8lsmZdGLJwLEYKtxnGFCrcg59J7qdMyY
-        fGL/E+WH29LnkgMXcjHndhwpe6NHCCAsxOEhzA4NKuNtpP3DXKXMOQ08Nw1zyL4qCQZyYM
-        EcEAwnT/hO2LFwAIIrmuH8BQu4VBpKqS8t3enrSHDDkHtlqCFD0upMQk4CH6ThbYZ34Gv4
-        Aic9WnwO5hAne8ECWhy3bAqDJwU69QHIUld+ZDUWZIoIXDjiSmbJmhaFeUGXXtZwFsaJSl
-        rbn9M0rP9BTkO5qQgf+O8IvWnqp3nJ7X8RyHdMSbI1ltH/e+4ox2Q/Ay1yV7jA==
-Date:   Thu, 9 Feb 2023 23:38:43 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        list@opendingux.net
-Subject: Re: [PATCH v3 0/4] rtc: jz4740: Various updates
-Message-ID: <167598230483.1658778.17605710915150090375.b4-ty@bootlin.com>
-References: <20230129120442.22858-1-paul@crapouillou.net>
+        with ESMTP id S229695AbjBJB2H (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Feb 2023 20:28:07 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947825D3D5
+        for <linux-mips@vger.kernel.org>; Thu,  9 Feb 2023 17:28:04 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d8so3722909plr.10
+        for <linux-mips@vger.kernel.org>; Thu, 09 Feb 2023 17:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mnobgm7/BRwA5boztD22jzgEkU3wNnOY9D1aetlEf20=;
+        b=csIO68IIOhsu6e+pdejTTT2+w48D/sWWLOeOIyNJYGX8uv7NM4VXMJmzIiRrpc2byB
+         oNF30v46MfMUr/zM1Y9pIBSYlUDIVF+op3/R/inHFDRjbUPyvEWGmS8g+4aYPNOLXmI1
+         k4gFifjP8fAfy+Pj0D/2S3/yl0kgg472XcQ7oejDQhBv7j6e61xvYtTNJxFhtCLHkUR0
+         vwFGPM0W1k1+6VAy/nE3sRCRvI1WK//Zg5F92Z7EstjU8c++zH/a/c8dOrVkEQhduubT
+         CTG0B3v3Gj7juI3iy68AbH4UWi8S6xjEzA/lWDNstS1PF9tuSuPj4tgHC/qRIAxoM46N
+         zJcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mnobgm7/BRwA5boztD22jzgEkU3wNnOY9D1aetlEf20=;
+        b=U33ogmx3HEM6yUBhBklKl4trZvtRdWC7e0v6RJS7T/gGBf4rCE8ene8kcLcA4k7kx5
+         gBhw5Ta3YcGqqfX3nkFLrUmBW9ccvJNCPNWdACn6daNe3XsmJx8ngjQw2HQ9CBwPhned
+         TPZFR6IGAThZbv6T0sLrEQei/JzP419fUx6+9DdImXDLUnfYR7zxpNmK/2kj/D8brq7m
+         9lASvQTiB0jLbIIlZ3MTY6sISPaf0jgbYjQ+cGG4RLsDpSmR2tLmSFrdbtFKIe+SHjyj
+         B14W+ogJdPtllGIcw4jn57+cAsonZnNB27OqwEqLz3vRXMkUjMsH7j2fKZh6yvG5wZdN
+         qncw==
+X-Gm-Message-State: AO0yUKV54TJB35fbsdFp6467A0e/B9CibfMbacQpBaxdVwALe6lWEifZ
+        8UYA+rxdvSx0luTpJR5pHV0RIg==
+X-Google-Smtp-Source: AK7set9Obj4DfpjGpxNp3bHnBxnNHSIelzzZM7dkpr8wS73Skb7zUOHunDsTlPiKfqLt2v8la2CkZg==
+X-Received: by 2002:a17:903:264c:b0:198:af4f:de0c with SMTP id je12-20020a170903264c00b00198af4fde0cmr103011plb.12.1675992483947;
+        Thu, 09 Feb 2023 17:28:03 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id jk11-20020a170903330b00b00198da1ce519sm2143807plb.111.2023.02.09.17.28.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 17:28:02 -0800 (PST)
+Date:   Fri, 10 Feb 2023 01:27:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        Raghavendra Rao Ananta <rananta@google.com>
+Subject: Re: [PATCH v2 2/7] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
+Message-ID: <Y+Wdn+mYVYhwut5l@google.com>
+References: <20230126184025.2294823-1-dmatlack@google.com>
+ <20230126184025.2294823-3-dmatlack@google.com>
+ <86o7q4zdcp.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230129120442.22858-1-paul@crapouillou.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <86o7q4zdcp.wl-maz@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-On Sun, 29 Jan 2023 12:04:38 +0000, Paul Cercueil wrote:
-> Here's a revised patchset that introduces a few updates to the
-> jz4740-rtc driver.
+On Wed, Feb 08, 2023, Marc Zyngier wrote:
+> On Thu, 26 Jan 2023 18:40:20 +0000, David Matlack <dmatlack@google.com> wrote:
+> > @@ -368,7 +367,6 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+> >  		++kvm->stat.generic.remote_tlb_flush;
+> >  }
 > 
-> Patch [1/4] used to break ABI, it does not anymore.
-> Patch [2/4] did not change, patch [3/4] is new.
+> For context, we currently have this:
 > 
-> Patch [3/4] has been updated to use dev_err_probe(), use __clk_hw_get()
-> instead of looking up the parent's clock by name, and will now register
-> the CLK32K clock when the #clock-cells device property is present
-> instead of doing it based on the compatible string.
+> 	if (!kvm_arch_flush_remote_tlb(kvm)
+> 	    || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
+> 		++kvm->stat.generic.remote_tlb_flush;
 > 
-> [...]
+> Is there any reason why we shouldn't move the KVM_REQ_TLB_FLUSH call
+> into the arch-specific helpers? This is architecture specific, even if
+> the majority of the supported architecture cannot do broadcast
+> invalidation like arm64 does.
 
-Applied, thanks!
+s390 and PPC don't implement kvm_arch_flush_remote_tlb() at all, forcing them to
+implement the function just to implement what everyone except ARM does doesn't
+seem like the right trade off.
 
-[1/4] dt-bindings: rtc: Add #clock-cells property
-      commit: 4737a703528c769c4fde6b68462f656f91f4ad99
-[2/4] rtc: jz4740: Use readl_poll_timeout
-      commit: d644b133f78d6d8efd36f7b1703bebca09036f0b
-[3/4] rtc: jz4740: Use dev_err_probe()
-      commit: ff6fd3770e9687d7b849a0e826a32563bfcb98da
-[4/4] rtc: jz4740: Register clock provider for the CLK32K pin
-      commit: 5ddfa148de8cf5491fd1c89522c7cad859db8c88
+As usual, x86 is the real oddball.  All other architectures either use the purely
+generic KVM_REQ_TLB_FLUSH or they don't.  x86 is the only one that sometimes wants
+to fallback.  I can't see a clean way around that though, especially since MIPS
+apparently needs a notification _and_ a generic flush.
 
-Best regards,
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Can the ARM hook be inlined?  That would eliminate the extra call and should allow
+the compiler to optimize out the conditional and the request.
