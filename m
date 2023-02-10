@@ -2,172 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5471691EEF
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 13:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC4D691F5E
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 13:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbjBJMRr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Feb 2023 07:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S232057AbjBJM5K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Feb 2023 07:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjBJMRq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 07:17:46 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41CD7289B;
-        Fri, 10 Feb 2023 04:17:44 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso3916277wms.4;
-        Fri, 10 Feb 2023 04:17:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=85Jcqp/n5GNk4Jt2RN2nNjpswbRqJZ3Mt7tqEL5Vzsk=;
-        b=KU4zhpdKF64gnPrZSYtRctPRLhs18rAmuzm73jQWx1HnMfCJmhcCsD+puNvmFx+wTM
-         5hXWGs2wYVB6tzARbIFZfdIZJs2E5L1ikjnoRMy/8mlq52h69ra1WH7cB/ScK+hyUtns
-         UmIHo3Qx996o1d4Y4+ExP0Kemq34n0F8Z9U9krPtWLpi6+z04spnIPlebMOe5m//ZtZB
-         OUJSgL44cDCq8MsKd+lYeFqcBXrVCtuT1K4BIGziyzMr57rcHLMsaMe98/WF+XvDjYCY
-         KksOnWAtCKu8o1xCcdAVGHl/BgRAbAbGGII6aFreadXRE9xpjdGPVyggPsFjDeYV/oeo
-         sJSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=85Jcqp/n5GNk4Jt2RN2nNjpswbRqJZ3Mt7tqEL5Vzsk=;
-        b=5VQuAvjQOE/9Fvx6qKrDiTDSzzKEmoVw/9lXxpkG5oA0YVFpubtl0IoUpJg7U83Yym
-         3ouwE1cXR+EFWPgg9eawFNeyKOZj0ZBsisVxQWCXh6W0WusKPcjctlwW+43N6aj7AD89
-         gcOsG43DJDXFQ1oZqnq8o+6rQxJ3zR3SUa+il9qzOVUcNm3+Z1wGYHCifV9WW1felrjA
-         AeGS9tkQ3WEkhL7YQFDEb3/tIxtK8kc5FUD+8gI8PkTt/4q77fWjiIPhMBOd41z6cTJI
-         y/3dchTFPxpZdZUNhdt4w+M0AcLAaYOKDHeJR+AWJ6juIu8P6uZsaQNshR/i97gBjXWk
-         mzRQ==
-X-Gm-Message-State: AO0yUKV4zDZwVX9D/keOjchd7eGw5R7SQmSjDsw1+9F8j8fhs/x7UjX1
-        EtcTtZKCy64VTE9cVTlgBUqyLhkHULw=
-X-Google-Smtp-Source: AK7set+qS6x4BJ+LtKe95F/2SO4xZ8r/N6WDScelOSSAg3g2uSEJKjzn5Lnq9yVuJJ9xzfPxkUroEw==
-X-Received: by 2002:a05:600c:1887:b0:3dc:4318:d00d with SMTP id x7-20020a05600c188700b003dc4318d00dmr12224825wmp.11.1676031462935;
-        Fri, 10 Feb 2023 04:17:42 -0800 (PST)
-Received: from localhost.localdomain (23.red-88-10-60.dynamicip.rima-tde.net. [88.10.60.23])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05600c468d00b003e001afa274sm5359820wmo.2.2023.02.10.04.17.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 04:17:42 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v2 4/4] watchdog: mt7621-wdt: avoid ralink architecture dependent code
-Date:   Fri, 10 Feb 2023 13:17:35 +0100
-Message-Id: <20230210121735.639089-5-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230210121735.639089-1-sergio.paracuellos@gmail.com>
-References: <20230210121735.639089-1-sergio.paracuellos@gmail.com>
+        with ESMTP id S232026AbjBJM5I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 07:57:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9B53D925;
+        Fri, 10 Feb 2023 04:57:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8740EB82364;
+        Fri, 10 Feb 2023 12:57:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44405C433D2;
+        Fri, 10 Feb 2023 12:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676033819;
+        bh=1Vcqa1iCdDbfvxfUxGBiXpNM9JirYvElkN4exLpYZOA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tqcLuXFQ9nykzcFlr1OREL4e3g6mvAgH51Qg2WXcUnJ/XVz+VOsY9coDArD/g9EUi
+         VQFHqPlsnzGBAKyVoxtNiCEVJtULNoEZM2v8MBBRHcfOmFSXYnZl+Ez17yKgUEWHfo
+         NkV8fOdEXRRG42SAIMeq0M2H5tQJsgmRhIolMXMiwvGQGJcQ/GnxSTAimRrohZClKu
+         TWiwh1PLklHkH1xEI4Z5/Z6/2pk4QRHI/R466pbIVMEK3iIZRrByFIOx1238GQi01S
+         c4W9vSLmnA900pebzji66AppOJNwjXsGK1NuseVcP5BW0OosT94BoJLJxX/EhA84/0
+         DCbuhUv93/S3w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pQSyC-0001mH-RL; Fri, 10 Feb 2023 13:57:41 +0100
+Date:   Fri, 10 Feb 2023 13:57:40 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v5 19/19] irqdomain: Switch to per-domain locking
+Message-ID: <Y+Y/RDRPhgm0pLWk@hovoldconsulting.com>
+References: <20230209132323.4599-1-johan+linaro@kernel.org>
+ <20230209132323.4599-20-johan+linaro@kernel.org>
+ <86cz6izv48.wl-maz@kernel.org>
+ <Y+YUs6lzalneLyz7@hovoldconsulting.com>
+ <86bkm1zr59.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86bkm1zr59.wl-maz@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MT7621 SoC has a system controller node. Watchdog need to access to reset
-status register. Ralink architecture and related driver are old and from
-the beggining they are using some architecture dependent operations for
-accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
-header file. However this is not ideal from a driver perspective which can
-just access to the system controller registers in an arch independent way
-using regmap syscon APIs. Update Kconfig accordingly to select new added
-dependencies and allow driver to be compile tested.
+On Fri, Feb 10, 2023 at 11:38:58AM +0000, Marc Zyngier wrote:
+> On Fri, 10 Feb 2023 09:56:03 +0000,
+> Johan Hovold <johan@kernel.org> wrote:
+> > 
+> > On Thu, Feb 09, 2023 at 04:00:55PM +0000, Marc Zyngier wrote:
+> > > On Thu, 09 Feb 2023 13:23:23 +0000,
+> > > Johan Hovold <johan+linaro@kernel.org> wrote:
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/watchdog/Kconfig      |  2 ++
- drivers/watchdog/mt7621_wdt.c | 19 ++++++++++++++-----
- 2 files changed, 16 insertions(+), 5 deletions(-)
+> > I went back and forth over that a bit, but decided to only use
+> > domain->root->mutex in paths that can be called for hierarchical
+> > domains (i.e. the "shared code paths" mentioned above).
+> > 
+> > Using it in paths that are clearly only called for non-hierarchical
+> > domains where domain->root == domain felt a bit lazy.
+> 
+> My concern here is that as this code gets further refactored, it may
+> become much harder to reason about what is the correct level of
+> locking.
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index b64bc49c7..0759de670 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1865,6 +1865,8 @@ config GXP_WATCHDOG
- config MT7621_WDT
- 	tristate "Mediatek SoC watchdog"
- 	select WATCHDOG_CORE
-+	select REGMAP_MMIO
-+	select MFD_SYSCON
- 	depends on SOC_MT7620 || SOC_MT7621
- 	help
- 	  Hardware driver for the Mediatek/Ralink MT7621/8 SoC Watchdog Timer.
-diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
-index f1c702971..a7480fd2b 100644
---- a/drivers/watchdog/mt7621_wdt.c
-+++ b/drivers/watchdog/mt7621_wdt.c
-@@ -15,8 +15,8 @@
- #include <linux/moduleparam.h>
- #include <linux/platform_device.h>
- #include <linux/mod_devicetable.h>
--
--#include <asm/mach-ralink/ralink_regs.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/regmap.h>
- 
- #define SYSC_RSTSTAT			0x38
- #define WDT_RST_CAUSE			BIT(1)
-@@ -34,6 +34,7 @@
- struct mt7621_wdt_data {
- 	void __iomem *base;
- 	struct reset_control *rst;
-+	struct regmap *sysc;
- 	struct watchdog_device wdt;
- };
- 
-@@ -104,9 +105,12 @@ static int mt7621_wdt_stop(struct watchdog_device *w)
- 	return 0;
- }
- 
--static int mt7621_wdt_bootcause(void)
-+static int mt7621_wdt_bootcause(struct mt7621_wdt_data *d)
- {
--	if (rt_sysc_r32(SYSC_RSTSTAT) & WDT_RST_CAUSE)
-+	u32 val;
-+
-+	regmap_read(d->sysc, SYSC_RSTSTAT, &val);
-+	if (val & WDT_RST_CAUSE)
- 		return WDIOF_CARDRESET;
- 
- 	return 0;
-@@ -134,6 +138,7 @@ static const struct watchdog_ops mt7621_wdt_ops = {
- 
- static int mt7621_wdt_probe(struct platform_device *pdev)
- {
-+	struct device_node *np = pdev->dev.of_node;
- 	struct device *dev = &pdev->dev;
- 	struct watchdog_device *mt7621_wdt;
- 	struct mt7621_wdt_data *drvdata;
-@@ -143,6 +148,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
- 	if (!drvdata)
- 		return -ENOMEM;
- 
-+	drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "ralink,sysctl");
-+	if (IS_ERR(drvdata->sysc))
-+		return PTR_ERR(drvdata->sysc);
-+
- 	drvdata->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(drvdata->base))
- 		return PTR_ERR(drvdata->base);
-@@ -158,7 +167,7 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
- 	mt7621_wdt->max_timeout = 0xfffful / 1000;
- 	mt7621_wdt->parent = dev;
- 
--	mt7621_wdt->bootstatus = mt7621_wdt_bootcause();
-+	mt7621_wdt->bootstatus = mt7621_wdt_bootcause(drvdata);
- 
- 	watchdog_init_timeout(mt7621_wdt, mt7621_wdt->max_timeout, dev);
- 	watchdog_set_nowayout(mt7621_wdt, nowayout);
--- 
-2.25.1
+Yeah, that's conceivable.
 
+> > The counter argument is of course that using domain->root->lock allows
+> > people to think less about the code they are changing, but that's not
+> > necessarily always a good thing.
+> 
+> Eventually, non-hierarchical domains should simply die and be replaced
+> with a single level hierarchy. Having a unified locking in place will
+> definitely make the required work clearer.
+> 
+> > Also note that the lockdep asserts in the revmap helpers would catch
+> > anyone using domain->mutex where they should not (i.e. using
+> > domain->mutex for an hierarchical domain).
+> 
+> Lockdep is great, but lockdep is a runtime thing. It doesn't help
+> reasoning about what gets locked when changing this code.
+
+Contributers are expected to test their changes with lockdep enabled,
+right?
+
+But sure, using root->domain->mutex throughout may prevent prevent
+people from getting this wrong.
+
+I'll update this for v6.
+ 
+> > > > @@ -1132,6 +1147,7 @@ struct irq_domain *irq_domain_create_hierarchy(struct irq_domain *parent,
+> > > >  	else
+> > > >  		domain = irq_domain_create_tree(fwnode, ops, host_data);
+> > > >  	if (domain) {
+> > > > +		domain->root = parent->root;
+> > > >  		domain->parent = parent;
+> > > >  		domain->flags |= flags;
+> > > 
+> > > So we still have a bug here, as we have published a domain that we
+> > > keep updating. A parallel probing could find it in the interval and do
+> > > something completely wrong.
+> > 
+> > Indeed we do, even if device links should make this harder to hit these
+> > days.
+> > 
+> > > Splitting the work would help, as per the following patch.
+> > 
+> > Looks good to me. Do you want to submit that as a patch that I'll rebase
+> > on or should I submit it as part of a v6?
+> 
+> Just take it directly.
+
+Ok, thanks.
+
+I guess this turns the "Use irq_domain_create_hierarchy()" patches into
+fixes that should be backported as well.
+
+But note that your proposed diff may not be sufficient to prevent
+lookups from racing with domain registration generally. Many drivers
+still update the bus token after the domain has been added (and
+apparently some still set flags also after creating hierarchies I just
+noticed, e.g. amd_iommu_create_irq_domain).
+
+It seems we'd need to expose a separate allocation and registration
+interface, or at least pass in the bus token to a new combined
+interface.
+
+Johan
