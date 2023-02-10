@@ -2,249 +2,188 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2905B691C02
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 10:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6B3691C36
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 11:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbjBJJz2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Feb 2023 04:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S231269AbjBJKDe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Feb 2023 05:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjBJJzY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 04:55:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB75F728A4;
-        Fri, 10 Feb 2023 01:55:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3682D61D46;
-        Fri, 10 Feb 2023 09:55:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 306F4C433EF;
-        Fri, 10 Feb 2023 09:55:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676022922;
-        bh=1i9ZElDatR0OqMwUgiiOwJCcLUFMDfJa3A7e3mF2FQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aGpZ07KDLLN52qEj1kKD0UP+JpHfcTFAWYCaQVHt/K03wZUO/TrWZe9hl9q7qOJ6e
-         Z4oKct+9pdyGEnO+rlFY6gXwRALYsP4K8pA+47OjETFcpCkLUZDANUqKgpyKvjgFUE
-         oSPaHGvH+MDEwVieN50WWPZaqLcyLfkhBkaQPFIlUZQnpdG3t5zVuzthBIJvuS0QJL
-         nlW0n8294SAFr61SPmMWTM+HMY9qRLYgdj8rfd+zAGuI+dcE3vWoFlIm1pSh8cLvAx
-         3fmCGqFpuvn/gROkZq8R2UZjf97aSjlcj6qVh7Y0rBH2UeLNLgNlJgSb/qC0WYJd9q
-         ZinxqipP6thvw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pQQ8R-0005X7-Nb; Fri, 10 Feb 2023 10:56:03 +0100
-Date:   Fri, 10 Feb 2023 10:56:03 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v5 19/19] irqdomain: Switch to per-domain locking
-Message-ID: <Y+YUs6lzalneLyz7@hovoldconsulting.com>
-References: <20230209132323.4599-1-johan+linaro@kernel.org>
- <20230209132323.4599-20-johan+linaro@kernel.org>
- <86cz6izv48.wl-maz@kernel.org>
+        with ESMTP id S231579AbjBJKDa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 05:03:30 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF3930FC;
+        Fri, 10 Feb 2023 02:03:21 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id hx15so14323498ejc.11;
+        Fri, 10 Feb 2023 02:03:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XHUKpkdGd++gIe1TTqGxf+onHwGJzdjk6BqCtOyUWvo=;
+        b=B25J+RQN4hbCSUxZHXRFFwp33OvvgN0dBQzT282s5MI7kUYCNiby7K17JStLnnUCcC
+         46mdcIDgqSfpVzx1xpKPLTud12CfnL15O+g5lyV7si4Vuwmlp6JoVi3bGsbf4mck+MnF
+         kVQ1nDv85/hVeOQSXgre5inRNCMh0FPNSUtY3MbtAP7f9eutqv2Fj9JOsWwIRWVMY0rE
+         OG/tNEROztQ5uJQjLkZj5Xd68jOtfHi3FgmCMY6B76A3/zhmKXBvUFM8WS0eNFOSpRAf
+         kz67laa3To7OxMpGMEL1CEmZPrOOuZt9gcE1rmsbFKS1aIXXuSBsDl7f1WuvTT0Z+A5D
+         9ShA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XHUKpkdGd++gIe1TTqGxf+onHwGJzdjk6BqCtOyUWvo=;
+        b=69mY0iPBggEDAebyCEsGfb73nkoZszA2xkppYqpdiGsWL/spQl4JdEf7fCuCg/d+d0
+         JN/+9JZKzZ0QgPUbvC7mqKsplZVRQcFiiMr0IT6GrpI6XjWAxx4IemT3NeANV5f1kDzM
+         pcXRUXGfjvxkf8cmi1ZAF6xttAhqUhFJuOhe3bJyg46686ppChlD1YQwLJrEU4DDvGhE
+         zHVj5BDIFJy/UzoatF3C/bmsxQd+Y7FdjCUiiT2oOa4myomgNWt2dHl9EHTWR1SsUXgY
+         H7TYVWG0644VA5KnoLf5AJSiYkS18/yDUZi32Xm1bwZe4vXE6jfZH4YsLOlX73G+gA3n
+         JKzg==
+X-Gm-Message-State: AO0yUKVwj8BCIhPBI+jZiCvcPgPzlBNlfvkFnddhMt6p+7y5/IWm8P4B
+        PX8LnQpgN6BQ25TiEMZrN2kS8m9db2dT0xdkuyI=
+X-Google-Smtp-Source: AK7set8Me7MZ4F9pBrAU7Tp/HAMc22VtwSTNVx3364jQvI8VRWK34oOx3/MuG5UbwaGmdEfiy06Y4EjoA9wWAaCaaFc=
+X-Received: by 2002:a17:907:c715:b0:8af:449f:8fae with SMTP id
+ ty21-20020a170907c71500b008af449f8faemr763617ejc.3.1676023400392; Fri, 10 Feb
+ 2023 02:03:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86cz6izv48.wl-maz@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1673227292.git.zhoubinbin@loongson.cn> <Y88VIXerF5Wk/9kj@mail.local>
+ <CAMpQs4+8m0r98eGMHO7ktS2_AuNCA_u3Yk1q06i99TdbVZJ_Cg@mail.gmail.com>
+In-Reply-To: <CAMpQs4+8m0r98eGMHO7ktS2_AuNCA_u3Yk1q06i99TdbVZJ_Cg@mail.gmail.com>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Fri, 10 Feb 2023 18:03:07 +0800
+Message-ID: <CAMpQs4+uW75TdkMicdfU+5LYQxA_7kfbdabwO=iDiKwW-PzO9Q@mail.gmail.com>
+Subject: Re: [PATCH V2 0/7] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
+        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        zhaoxiao <zhaoxiao@uniontech.com>, zhzhl555@gmail.com,
+        Kelvin Cheung <keguang.zhang@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 04:00:55PM +0000, Marc Zyngier wrote:
-> On Thu, 09 Feb 2023 13:23:23 +0000,
-> Johan Hovold <johan+linaro@kernel.org> wrote:
-> > 
-> > The IRQ domain structures are currently protected by the global
-> > irq_domain_mutex. Switch to using more fine-grained per-domain locking,
-> > which can speed up parallel probing by reducing lock contention.
-> > 
-> > On a recent arm64 laptop, the total time spent waiting for the locks
-> > during boot drops from 160 to 40 ms on average, while the maximum
-> > aggregate wait time drops from 550 to 90 ms over ten runs for example.
-> > 
-> > Note that the domain lock of the root domain (innermost domain) must be
-> > used for hierarchical domains. For non-hierarchical domains (as for root
-> > domains), the new root pointer is set to the domain itself so that
-> > domain->root->mutex can be used in shared code paths.
-> > 
-> > Also note that hierarchical domains should be constructed using
-> > irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoid
-> > poking at irqdomain internals. As a safeguard, the lockdep assertion in
-> > irq_domain_set_mapping() will catch any offenders that fail to set the
-> > root domain pointer.
-> > 
-> > Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  include/linux/irqdomain.h |  4 +++
-> >  kernel/irq/irqdomain.c    | 61 +++++++++++++++++++++++++--------------
-> >  2 files changed, 44 insertions(+), 21 deletions(-)
-> > 
-> > diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
-> > index 16399de00b48..cad47737a052 100644
-> > --- a/include/linux/irqdomain.h
-> > +++ b/include/linux/irqdomain.h
-> > @@ -125,6 +125,8 @@ struct irq_domain_chip_generic;
-> >   *		core code.
-> >   * @flags:	Per irq_domain flags
-> >   * @mapcount:	The number of mapped interrupts
-> > + * @mutex:	Domain lock, hierarhical domains use root domain's lock
-> 
-> nit: hierarchical
-> 
-> > + * @root:	Pointer to root domain, or containing structure if non-hierarchical
+On Tue, Jan 31, 2023 at 8:59 PM Binbin Zhou <zhoubb.aaron@gmail.com> wrote:
+>
+> Hi Kelvin:
+>
+> Excuse me.
+> I am submitting the Loongson-2K/LS7A RTC driver and Alexandre would
+> like me to merge the ls1x rtc driver in parallel.
+> Unfortunately I found out that the loongson-1 does not yet support DT
+> and would like to ask if you have any plans to support DT?
+>
+> I think this is the prerequisite for the merge.
+>
+> Regards.
+> Binbin
+>
+>
 
-> > @@ -226,6 +226,17 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
-> >  
-> >  	domain->revmap_size = size;
-> >  
-> > +	/*
-> > +	 * Hierarchical domains use the domain lock of the root domain
-> > +	 * (innermost domain).
-> > +	 *
-> > +	 * For non-hierarchical domains (as for root domains), the root
-> > +	 * pointer is set to the domain itself so that domain->root->mutex
-> > +	 * can be used in shared code paths.
-> > +	 */
-> > +	mutex_init(&domain->mutex);
-> > +	domain->root = domain;
-> > +
-> >  	irq_domain_check_hierarchy(domain);
-> >  
-> >  	mutex_lock(&irq_domain_mutex);
+Hi Alexandre:
 
-> > @@ -518,7 +529,11 @@ static void irq_domain_set_mapping(struct irq_domain *domain,
-> >  				   irq_hw_number_t hwirq,
-> >  				   struct irq_data *irq_data)
-> >  {
-> > -	lockdep_assert_held(&irq_domain_mutex);
-> > +	/*
-> > +	 * This also makes sure that all domains point to the same root when
-> > +	 * called from irq_domain_insert_irq() for each domain in a hierarchy.
-> > +	 */
-> > +	lockdep_assert_held(&domain->root->mutex);
-> >  
-> >  	if (irq_domain_is_nomap(domain))
-> >  		return;
-> > @@ -540,7 +555,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
-> >  
-> >  	hwirq = irq_data->hwirq;
-> >  
-> > -	mutex_lock(&irq_domain_mutex);
-> > +	mutex_lock(&domain->mutex);
-> 
-> So you made that point about being able to uniformly using root>mutex,
-> which I think is a good invariant. Yet you hardly make use of it. Why?
+Unfortunately there has been no reply from Keguang for the past week
+or so. Can we try rtc-ls2x and rtc-ls1x to coexist until Loongson-1
+supports DT?
+Later on, if Keguang or someone else familiar with Loongson-1 adds DT
+support, I would be happy to continue trying to merge the two drivers.
 
-I went back and forth over that a bit, but decided to only use
-domain->root->mutex in paths that can be called for hierarchical
-domains (i.e. the "shared code paths" mentioned above).
+Regards.
+Binbin
 
-Using it in paths that are clearly only called for non-hierarchical
-domains where domain->root == domain felt a bit lazy.
-
-The counter argument is of course that using domain->root->lock allows
-people to think less about the code they are changing, but that's not
-necessarily always a good thing.
-
-Also note that the lockdep asserts in the revmap helpers would catch
-anyone using domain->mutex where they should not (i.e. using
-domain->mutex for an hierarchical domain).
-
-> >  	irq_set_status_flags(irq, IRQ_NOREQUEST);
-> >  
-> > @@ -562,7 +577,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
-> >  	/* Clear reverse map for this hwirq */
-> >  	irq_domain_clear_mapping(domain, hwirq);
-> >  
-> > -	mutex_unlock(&irq_domain_mutex);
-> > +	mutex_unlock(&domain->mutex);
-> >  }
-> >  
-> >  static int irq_domain_associate_locked(struct irq_domain *domain, unsigned int virq,
-> > @@ -612,9 +627,9 @@ int irq_domain_associate(struct irq_domain *domain, unsigned int virq,
-> >  {
-> >  	int ret;
-> >  
-> > -	mutex_lock(&irq_domain_mutex);
-> > +	mutex_lock(&domain->mutex);
-> >  	ret = irq_domain_associate_locked(domain, virq, hwirq);
-> > -	mutex_unlock(&irq_domain_mutex);
-> > +	mutex_unlock(&domain->mutex);
-> >  
-> >  	return ret;
-> >  }
-> > @@ -731,7 +746,7 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
-> >  		return 0;
-> >  	}
-> >  
-> > -	mutex_lock(&irq_domain_mutex);
-> > +	mutex_lock(&domain->mutex);
-> >  
-> >  	/* Check if mapping already exists */
-> >  	virq = irq_find_mapping(domain, hwirq);
-> > @@ -742,7 +757,7 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
-> >  
-> >  	virq = irq_create_mapping_affinity_locked(domain, hwirq, affinity);
-> >  out:
-> > -	mutex_unlock(&irq_domain_mutex);
-> > +	mutex_unlock(&domain->mutex);
-> >  
-> >  	return virq;
-> >  }
-> > @@ -811,7 +826,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
-> >  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
-> >  		type &= IRQ_TYPE_SENSE_MASK;
-> >  
-> > -	mutex_lock(&irq_domain_mutex);
-> > +	mutex_lock(&domain->root->mutex);
-> >  
-> >  	/*
-> >  	 * If we've already configured this interrupt,
-> > @@ -864,11 +879,11 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
-> >  	/* Store trigger type */
-> >  	irqd_set_trigger_type(irq_data, type);
-> >  out:
-> > -	mutex_unlock(&irq_domain_mutex);
-> > +	mutex_unlock(&domain->root->mutex);
-> >  
-> >  	return virq;
-> >  err:
-> > -	mutex_unlock(&irq_domain_mutex);
-> > +	mutex_unlock(&domain->root->mutex);
-> >  
-> >  	return 0;
-> >  }
-> > @@ -1132,6 +1147,7 @@ struct irq_domain *irq_domain_create_hierarchy(struct irq_domain *parent,
-> >  	else
-> >  		domain = irq_domain_create_tree(fwnode, ops, host_data);
-> >  	if (domain) {
-> > +		domain->root = parent->root;
-> >  		domain->parent = parent;
-> >  		domain->flags |= flags;
-> 
-> So we still have a bug here, as we have published a domain that we
-> keep updating. A parallel probing could find it in the interval and do
-> something completely wrong.
-
-Indeed we do, even if device links should make this harder to hit these
-days.
-
-> Splitting the work would help, as per the following patch.
-
-Looks good to me. Do you want to submit that as a patch that I'll rebase
-on or should I submit it as part of a v6?
-
-Johan
+>
+>
+> On Tue, Jan 24, 2023 at 7:24 AM Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
+> >
+> > On 09/01/2023 09:35:10+0800, Binbin Zhou wrote:
+> > > Hi all:
+> > >
+> > > The initial DT-base ls2x rtc driver was written by Wang Xuerui, He has
+> > > released five versions of patchset before, and all related mail records
+> > > are shown below if you are interested:
+> > >
+> > > https://lore.kernel.org/all/?q=ls2x-rtc
+> > >
+> > > In this series of patches, based on the code above, I have added the
+> > > following support:
+> > >
+> > > 1. Add ACPI-related support, as Loongson-3A5000 + LS7A is now ACPI-base
+> > >    by default under LoongArch architecture;
+> > > 2. Add rtc alarm/walarm related functions.
+> > >
+> > > I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
+> > > and Loongson-2K0500.
+> > >
+> > > BTW:
+> > > There have been discussions about merging the rtc drivers of ls1x and
+> > > ls2x, but the following reasons made the merger difficult to achieve:
+> > >
+> > > 1. ls1x does not support ACPI, for it is only on MIPS-based system;
+> >
+> > This is not a good justification, you have to support both in your
+> > driver anyway, as shown by your CONFIG_ACPI ifdefery.
+> >
+> > > 2. ls1x does not support alarm function.
+> >
+> > It is just a matter of clearing a single bit, this is not difficult at
+> > all.
+> >
+> > >
+> > > Thanks.
+> > >
+> > > -------
+> > > Changes since v1:
+> > > 1. Rebased on top of latest loongarch-next;
+> > > 2. Add interrupt descriptions to the ls2k and ls7a DTS files to avoid
+> > > errors when the driver gets the IRQ number, Thanks to Qing Zhang for
+> > > testing;
+> > > 3. Remove some inexact CONFIG_ACPI.
+> > >
+> > > Binbin Zhou (4):
+> > >   rtc: Add support for the Loongson-2K/LS7A RTC
+> > >   LoongArch: Enable LS2X RTC in loongson3_defconfig
+> > >   MIPS: Loongson64: DTS: Add RTC support to LS7A
+> > >   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+> > >
+> > > WANG Xuerui (3):
+> > >   dt-bindings: rtc: Add Loongson LS2X RTC support
+> > >   MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+> > >   MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
+> > >
+> > >  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+> > >  arch/loongarch/configs/loongson3_defconfig    |   1 +
+> > >  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   7 +
+> > >  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +
+> > >  arch/mips/configs/loongson2k_defconfig        |   1 +
+> > >  arch/mips/configs/loongson3_defconfig         |   1 +
+> > >  drivers/rtc/Kconfig                           |  11 +
+> > >  drivers/rtc/Makefile                          |   1 +
+> > >  drivers/rtc/rtc-ls2x.c                        | 379 ++++++++++++++++++
+> > >  9 files changed, 410 insertions(+)
+> > >  create mode 100644 drivers/rtc/rtc-ls2x.c
+> > >
+> > > --
+> > > 2.31.1
+> > >
+> >
+> > --
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> >
