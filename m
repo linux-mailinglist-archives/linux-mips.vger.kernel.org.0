@@ -2,61 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516FA691DAC
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 12:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8007F691DD3
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 12:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbjBJLKS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Feb 2023 06:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S231490AbjBJLNQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Feb 2023 06:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbjBJLKO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 06:10:14 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4431B71018;
-        Fri, 10 Feb 2023 03:10:12 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so5167573pjb.5;
-        Fri, 10 Feb 2023 03:10:12 -0800 (PST)
+        with ESMTP id S231724AbjBJLNP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 06:13:15 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A330772DEB;
+        Fri, 10 Feb 2023 03:12:34 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id k13so6173995plg.0;
+        Fri, 10 Feb 2023 03:12:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mg+Lezo/UluuzY/CQgV39sLNfOJ9ZHhdDTuSYUasXFg=;
-        b=qOMjJN0yAoYucwzDuzlOK+CeG72O+1lswmk/pKjljUvpEcu4fyNh/+0n32iS98ijYP
-         +ICIrd5uAwpJO8/RJxYJ8Y5Qy4pddCSlFdVtoBHERpQd63Paxz4+azDij7IYfGWZRUPr
-         RSNuR+4MdT/IzZ3vsnyEKc+Vbo3O23WKzj//iCPMgCfOCibC2LWUYj83iWWujwNMkOiK
-         afmO+fRbVk7mvEk/XH0q5lxNGqRntjXWVL/9A43lXGTOCLezAkAzVXPFvleETA5sJZXs
-         8WS2NU2DJosR9IewVDJIPyAaPVoQJ2WGJJc5f4c1Z1g/M7+SsbGrwLGNz4W5u1brYbD+
-         cz5g==
+        bh=4V9spyiEwfehqA2gEWTBlez2WNzN4xeTbha22bMXzas=;
+        b=duaPPcn1vtiqWc2seQlgLf+6XBvC259l5kfLfhuox3u6Szpziiv0VMuEP8dPqJ4Uip
+         gc128eNCgFyiNKfwtWbTISSdWV9W2mWkMHjyh2zy6Yvlo3GuZlsAY0p4G+YH7kVQpqX4
+         9B+DitvhRX+YsGxPiQEyq//7nbVp33ckG92XfQmBua04OwssH6/o3Rn8yAy0z8oYx8Yl
+         2mh6a9hoOw6Lnx4S7aXFQgjrExoCWMGjsp0kYmhdim5JWSzqgTyLlL11UkqfQriZQkZs
+         p1kZWAQDhTGkrbLAlcIYPGUIdUBXkRdWHb9kEpo/d5rQDuuA1I3FUQwei9M19e6JJ1c5
+         P+hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Mg+Lezo/UluuzY/CQgV39sLNfOJ9ZHhdDTuSYUasXFg=;
-        b=6nB9p2CQZqzy1CftuBNHeBMsOZNUCcYWM6oLIbqG076M9+7JBM6xwgGO6JDUvJUmMK
-         vfE/2FLaxWk7Pxx45G07pOSpIZirHj1roDqFpWooVzCknOp8TB1otYw249muecEi2NMV
-         SzPlrvgeMrqbiww53Uu6wRPXWi43qFhq5vcSvVQjeqJBSJqI+xh9jh6wP1glUYaUgxtR
-         Fh/OIhyhNdoxiVWt3vmL8lRVtUwT3nozfCGLq1IXFZKbRlBzfLNUzZf03KnnE3+cR4/k
-         zi8rED/LNibIjW5bIrfkGkqm+nzgwZZBda88LaJQ+MARA+GCPRxhw0F13VgTKSsUEuKb
-         iong==
-X-Gm-Message-State: AO0yUKUYtyPxRJaLV79SLYlY0LR9guifCFH4S55ba+IzWUKPN/Uxe12I
-        djWN6AHuHrmfSyB6B6R057HNC2aszCUAbg==
-X-Google-Smtp-Source: AK7set9eP40cF5oQ2gyuZ9lgHH7wj2QLFyKLxnKtg6E4Z8Er1idp0R8Rz36dM/eA3Y3z8LKKr2ufhg==
-X-Received: by 2002:a17:902:e30a:b0:19a:6acc:1de2 with SMTP id q10-20020a170902e30a00b0019a6acc1de2mr2856106plc.35.1676027411453;
-        Fri, 10 Feb 2023 03:10:11 -0800 (PST)
+        bh=4V9spyiEwfehqA2gEWTBlez2WNzN4xeTbha22bMXzas=;
+        b=dcH8V7xHwFzqklZkCJi/xf9oGlEBQoQ3xsHij6agn2tWJ/XPdC9BcbOzhetAOlsvCF
+         WBejJg7OcsnqUPFZ/OY3rmoV4sB3gAyIFnGse26gHCSPDO84kLiF123COuA63Gv9fqa3
+         kI8inDE0ZKaOMJ4378r/bvIcWxHhuBFl+2VFLf2a+mV5msw+V5mWjWYTnClw8yE3fJEk
+         ByVEWbbafMQA2OPCyy4jg64IPolm3VpAPcoWcmHpBsZMeYsmL2PJ+pt3+B4k2ADgQf6V
+         v/+byouGsVt06bX4l4AMmnwxrPjQt4iPxvNL6RA1PPRcHyggrPOcKhJdSaRzEJqXJNrT
+         5lfw==
+X-Gm-Message-State: AO0yUKUvCigDSZ8bWVXK0Phx8zvTgGOjzgPdQQFe7IbMD5jUGI//lfeB
+        qXYp5oJEI0ik3U+mlG66juVLWuamv4yHvQ==
+X-Google-Smtp-Source: AK7set8RAS551R5LFayDhHImXHHMj5qqQ9IxGdmdZoYBKJm7B2BgpygY9dxXkQlYzXbtSxLVikzJag==
+X-Received: by 2002:a17:90a:195a:b0:231:284:ea4d with SMTP id 26-20020a17090a195a00b002310284ea4dmr11934030pjh.22.1676027550879;
+        Fri, 10 Feb 2023 03:12:30 -0800 (PST)
 Received: from kelvin-ThinkPad-L14-Gen-1.. (ec2-18-163-35-77.ap-east-1.compute.amazonaws.com. [18.163.35.77])
-        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b00198df32b41csm3152267plb.29.2023.02.10.03.10.08
+        by smtp.gmail.com with ESMTPSA id z8-20020a17090a66c800b00232e9ff80acsm2518524pjl.56.2023.02.10.03.12.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 03:10:10 -0800 (PST)
+        Fri, 10 Feb 2023 03:12:30 -0800 (PST)
 From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
+To:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH] MIPS: loongson32: Drop obsolete cpufreq platform device
-Date:   Fri, 10 Feb 2023 19:09:34 +0800
-Message-Id: <20230210110934.1379482-1-keguang.zhang@gmail.com>
+Subject: [PATCH] MIPS: loongson32: Update the clock initialization
+Date:   Fri, 10 Feb 2023 19:11:41 +0800
+Message-Id: <20230210111141.1379645-1-keguang.zhang@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,104 +71,54 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The obsolete cpufreq driver was removed, drop the platform device
-and data accordingly.
+The Loongson-1 clock driver is under re-implementation
+to add DT support. As a result, ls1x_clk_init() will be dropped soon.
+Therefore, call of_clk_init() for clock initialization instead.
 
-Link: https://lore.kernel.org/all/20230112135342.3927338-1-keguang.zhang@gmail.com
+Link: https://lore.kernel.org/all/20230209132614.1079198-3-keguang.zhang@gmail.com
+Link: https://lore.kernel.org/all/20230209132614.1079198-4-keguang.zhang@gmail.com
 Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 ---
- .../mips/include/asm/mach-loongson32/cpufreq.h | 18 ------------------
- .../include/asm/mach-loongson32/platform.h     |  1 -
- arch/mips/loongson32/common/platform.c         | 16 ----------------
- arch/mips/loongson32/ls1b/board.c              |  1 -
- 4 files changed, 36 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-loongson32/cpufreq.h
+ arch/mips/include/asm/mach-loongson32/platform.h | 1 -
+ arch/mips/loongson32/common/time.c               | 3 ++-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/include/asm/mach-loongson32/cpufreq.h b/arch/mips/include/asm/mach-loongson32/cpufreq.h
-deleted file mode 100644
-index e422a32883ae..000000000000
---- a/arch/mips/include/asm/mach-loongson32/cpufreq.h
-+++ /dev/null
-@@ -1,18 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (c) 2014 Zhang, Keguang <keguang.zhang@gmail.com>
-- *
-- * Loongson 1 CPUFreq platform support.
-- */
--
--#ifndef __ASM_MACH_LOONGSON32_CPUFREQ_H
--#define __ASM_MACH_LOONGSON32_CPUFREQ_H
--
--struct plat_ls1x_cpufreq {
--	const char	*clk_name;	/* CPU clk */
--	const char	*osc_clk_name;	/* OSC clk */
--	unsigned int	max_freq;	/* in kHz */
--	unsigned int	min_freq;	/* in kHz */
--};
--
--#endif /* __ASM_MACH_LOONGSON32_CPUFREQ_H */
 diff --git a/arch/mips/include/asm/mach-loongson32/platform.h b/arch/mips/include/asm/mach-loongson32/platform.h
-index e3fe93ba1bdb..2cdcfb5f6012 100644
+index 86e1a6aab4e5..2cdcfb5f6012 100644
 --- a/arch/mips/include/asm/mach-loongson32/platform.h
 +++ b/arch/mips/include/asm/mach-loongson32/platform.h
-@@ -12,7 +12,6 @@
- #include <nand.h>
+@@ -20,7 +20,6 @@ extern struct platform_device ls1x_gpio1_pdev;
+ extern struct platform_device ls1x_rtc_pdev;
+ extern struct platform_device ls1x_wdt_pdev;
  
- extern struct platform_device ls1x_uart_pdev;
--extern struct platform_device ls1x_cpufreq_pdev;
- extern struct platform_device ls1x_eth0_pdev;
- extern struct platform_device ls1x_eth1_pdev;
- extern struct platform_device ls1x_ehci_pdev;
-diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
-index 311dc1580bbd..64d7979394e6 100644
---- a/arch/mips/loongson32/common/platform.c
-+++ b/arch/mips/loongson32/common/platform.c
-@@ -15,7 +15,6 @@
+-void __init ls1x_clk_init(void);
+ void __init ls1x_rtc_set_extclk(struct platform_device *pdev);
+ void __init ls1x_serial_set_uartclk(struct platform_device *pdev);
  
- #include <platform.h>
- #include <loongson1.h>
--#include <cpufreq.h>
- #include <dma.h>
- #include <nand.h>
+diff --git a/arch/mips/loongson32/common/time.c b/arch/mips/loongson32/common/time.c
+index 459b15c96d3b..965c04aa56fd 100644
+--- a/arch/mips/loongson32/common/time.c
++++ b/arch/mips/loongson32/common/time.c
+@@ -4,6 +4,7 @@
+  */
  
-@@ -62,21 +61,6 @@ void __init ls1x_serial_set_uartclk(struct platform_device *pdev)
- 		p->uartclk = clk_get_rate(clk);
- }
+ #include <linux/clk.h>
++#include <linux/of_clk.h>
+ #include <linux/interrupt.h>
+ #include <linux/sizes.h>
+ #include <asm/time.h>
+@@ -211,7 +212,7 @@ void __init plat_time_init(void)
+ 	struct clk *clk = NULL;
  
--/* CPUFreq */
--static struct plat_ls1x_cpufreq ls1x_cpufreq_pdata = {
--	.clk_name	= "cpu_clk",
--	.osc_clk_name	= "osc_clk",
--	.max_freq	= 266 * 1000,
--	.min_freq	= 33 * 1000,
--};
--
--struct platform_device ls1x_cpufreq_pdev = {
--	.name		= "ls1x-cpufreq",
--	.dev		= {
--		.platform_data = &ls1x_cpufreq_pdata,
--	},
--};
--
- /* Synopsys Ethernet GMAC */
- static struct stmmac_mdio_bus_data ls1x_mdio_bus_data = {
- 	.phy_mask	= 0,
-diff --git a/arch/mips/loongson32/ls1b/board.c b/arch/mips/loongson32/ls1b/board.c
-index 727e06718dab..fed8d432ef20 100644
---- a/arch/mips/loongson32/ls1b/board.c
-+++ b/arch/mips/loongson32/ls1b/board.c
-@@ -35,7 +35,6 @@ static const struct gpio_led_platform_data ls1x_led_pdata __initconst = {
+ 	/* initialize LS1X clocks */
+-	ls1x_clk_init();
++	of_clk_init(NULL);
  
- static struct platform_device *ls1b_platform_devices[] __initdata = {
- 	&ls1x_uart_pdev,
--	&ls1x_cpufreq_pdev,
- 	&ls1x_eth0_pdev,
- 	&ls1x_eth1_pdev,
- 	&ls1x_ehci_pdev,
+ #ifdef CONFIG_CEVT_CSRC_LS1X
+ 	/* setup LS1X PWM timer */
 
 base-commit: 159c610af8cdf2b3c915e59162fc867b557cbe7e
-prerequisite-patch-id: a73e24e76a88f519d85fdeb7230e93d53c61434a
+prerequisite-patch-id: 6a8c8d604fca8bce5d9e35cac080b87a33be2b5c
 -- 
 2.34.1
 
