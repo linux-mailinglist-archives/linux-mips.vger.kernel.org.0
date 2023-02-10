@@ -2,60 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4205691D70
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 12:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DF4691D7E
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 12:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjBJLAs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Feb 2023 06:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
+        id S232282AbjBJLCq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Feb 2023 06:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbjBJLAr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 06:00:47 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3186FEBB
-        for <linux-mips@vger.kernel.org>; Fri, 10 Feb 2023 03:00:44 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id r2so4668916wrv.7
-        for <linux-mips@vger.kernel.org>; Fri, 10 Feb 2023 03:00:44 -0800 (PST)
+        with ESMTP id S231946AbjBJLCp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 06:02:45 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E57FF19
+        for <linux-mips@vger.kernel.org>; Fri, 10 Feb 2023 03:02:44 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id j25so4693198wrc.4
+        for <linux-mips@vger.kernel.org>; Fri, 10 Feb 2023 03:02:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NbWtz/vqb341qaiav7lomSBFYNGOQ0+fBEtimwkEASk=;
-        b=OCyvf5V5jB58eve8zjPzfIBgFkVcV62Mt9MZ7BurJszgZh6FyGS0/Qo1LSJh1mPJOQ
-         RJFK/wQgovdhJ6No0buYoSa9INQnVB6voGreDPQ+0hFxGzJHjnFm6bQ8aYtOzlxgS0fI
-         Yw2gDBP9h+6MhuSYgP2i5M7wFPtdhDSWPwYu+HheUnS10mR8evvqxkDVMwgbpkAIr1kK
-         72EvPjK4m8tXtomzVCTXM/3ttve6T8idxGjVWRz9urYJxCy/qWjXB6MUHDfdLawkFfh0
-         Efb2/43+2IoYIQ/BKH3+g5zpdOZIJrnAOPB8FFyl54ca3BFLph0lRPlXdVnnx6on6F8s
-         2Uqg==
+        bh=+EnqTz1YFzzm355lric6PP3Xk3l60GjJs6A/Opi0T5A=;
+        b=ZXaq5KdSHlBXKfBrRY6zyvMfZ3KaFxSBYA99mbg9F/SU1qO2oVTyR8+2ueUD/DhQf0
+         lKWXiUL709Htq6HKwxPA0yHNZOqmDV6GJnFYWyIP5LvhopWfoI/t8DPfSuLg4Ys8ykWK
+         JA3MMsbWJSNJXg2zPAAl9QZ2QYGEulElXq5JXMFws1lsyFuLIXh4ShIi/qmbNtshI0AQ
+         Xowd4+00/LL86CodqQk4slCCIhvB/FSdpRLGrgy1gy1hmFYJKZ/UdeOO3u+O/ES2PVxq
+         V/tQCvkfmisOE8kIEiSLDbkc/LH1TsG6xu3EIkpmX8zjv+MZ49mOq7rsl888/MyBVTh4
+         542w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NbWtz/vqb341qaiav7lomSBFYNGOQ0+fBEtimwkEASk=;
-        b=u11s8I/jhNXzC3qY09iN8m8zMQosEY1B576JknYSvkKn03tuDxO9+5GuD8Hu6yVxPg
-         r0qrFi7yXN8k9ecQbm4aX3aHV1TQ/bCfqeY99K4lHs597F85/+7GugOtUtJ4bEVIsOsD
-         ewdvDDyacj+DFUcLNWUV0i8sXB0Hsr+poD47Y7d70usfonSBH/HId8fITueQpgqxw+f7
-         XcVPoOCZQcCOHe3NTCBFBBLzudFNqXOfZNVzpWHHCuUWImDytc6N3Rw7VpwUv0HIwNbt
-         WRs3RZjBYxFpUz4q2tchGisb8E2KOmfj3HwWfR3q0emkdEJWR1cHBMUPCx10H/ZNZilN
-         2o3g==
-X-Gm-Message-State: AO0yUKWRMbkoJ8/wMN5QAEcCAsqagsiqCJE15V3qs4xAL3YkJZwC+t3f
-        Onr2sAn7Irf/HkXedxNun+BdRA==
-X-Google-Smtp-Source: AK7set8aWP0+1zZ5iWKQSeK7bsa3F/xXP9JsTQh08Y4HQtfwFbAaE1eYljewBGKEbB8fe0d6noFToQ==
-X-Received: by 2002:a5d:4146:0:b0:2c5:4aad:db7e with SMTP id c6-20020a5d4146000000b002c54aaddb7emr1211541wrq.58.1676026843430;
-        Fri, 10 Feb 2023 03:00:43 -0800 (PST)
+        bh=+EnqTz1YFzzm355lric6PP3Xk3l60GjJs6A/Opi0T5A=;
+        b=Aqv/8A3I0n2mtSeiozrE62XFin5S+Et8lftU1YxwPJY+AMpxg9SnYHlSjCIJcKBUj2
+         cqLoiJl3NRCBIpsKK6ea/dS1nTVIVjm30Ad7eJWctEgkTm7O1vuLqGrF6C2b3exYIxgo
+         YfEQemmiTG/ucnnZYrIxXYF2KPLvm9FoqQIU2JaaxGSF0jSjlLh7G7VpJn6TgJb6Dbql
+         LIQJmun+kt7J0qA3No+9L0EuWPJf1VnWzj+9+yGnO7QvBBSegCBUCue9KA7J9ztcBoUe
+         rAwjYG86AJj8iAPhK5NZqfyr6jOhytJPYTezIFqNw5PiGCX3OGH11n+nX8W5QCflWfyh
+         jBPw==
+X-Gm-Message-State: AO0yUKUt64YhFjaF8Qs0v/k1xkGb0Skch2mtWUy/W1oJWQjL05c7SXJj
+        bIBcO9xTW7PWF5dCCPqo5CPMrA==
+X-Google-Smtp-Source: AK7set9xnP131W6BXBX3n7EiErBvLgvay/AsVe09DA7FZSxUa2WHmsg0LQjhBIdoU1pd90N59kMalA==
+X-Received: by 2002:adf:ee52:0:b0:2bd:e7a0:6b5e with SMTP id w18-20020adfee52000000b002bde7a06b5emr16104273wro.40.1676026963167;
+        Fri, 10 Feb 2023 03:02:43 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s12-20020adfdb0c000000b002c3ec1fbc0bsm3336916wri.94.2023.02.10.03.00.42
+        by smtp.gmail.com with ESMTPSA id w13-20020a5d608d000000b002c54b6382c8sm811552wrt.82.2023.02.10.03.02.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 03:00:43 -0800 (PST)
-Message-ID: <23d2f23f-b063-c417-e85d-40f09b509d04@linaro.org>
-Date:   Fri, 10 Feb 2023 12:00:41 +0100
+        Fri, 10 Feb 2023 03:02:42 -0800 (PST)
+Message-ID: <21af8c63-f489-8c3f-e1e3-cf976b1d20d0@linaro.org>
+Date:   Fri, 10 Feb 2023 12:02:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 2/3] mips: dts: ralink: mt7621: add phandle to system
- controller node for watchdog
+Subject: Re: [PATCH 3/3] watchdog: mt7621-wdt: avoid globals and arch
+ dependencies
 Content-Language: en-US
 To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         linux-watchdog@vger.kernel.org
@@ -65,15 +65,14 @@ Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org
 References: <20230210065621.598120-1-sergio.paracuellos@gmail.com>
- <20230210065621.598120-3-sergio.paracuellos@gmail.com>
+ <20230210065621.598120-4-sergio.paracuellos@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230210065621.598120-3-sergio.paracuellos@gmail.com>
+In-Reply-To: <20230210065621.598120-4-sergio.paracuellos@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,30 +80,52 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 10/02/2023 07:56, Sergio Paracuellos wrote:
-> To allow to access system controller registers from watchdog driver code
-> add a phandle in the watchdog 'wdt' node. This avoid using arch dependent
-
-??? This does not make sense.
-
-> operations in driver code.
+> MT7621 SoC has a system controller node. Watchdog need to access to reset
+> status register. Ralink architecture and related driver are old and from
+> the beggining they ar providing some architecture dependent operations
+> for accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
+> header file. However this is not ideal from a driver perspective which can
+> just access to the system controller registers in am arch independent way
+> using regmap syscon APIs. Hence, add a new structure for driver data and
+> use it along the code. This way architecture dependencies and global vars
+> are not needed anymore. Update Kconfig accordingly to select new added
+> dependencies and allow driver to be compile tested.
 > 
 > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > ---
->  arch/mips/boot/dts/ralink/mt7621.dtsi | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/watchdog/Kconfig      |   4 +-
+>  drivers/watchdog/mt7621_wdt.c | 121 ++++++++++++++++++++++------------
+>  2 files changed, 83 insertions(+), 42 deletions(-)
 > 
-> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> index 5ca40fd21..ebee23a2b 100644
-> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> @@ -71,8 +71,9 @@ sysc: syscon@0 {
->  		};
->  
->  		wdt: wdt@100 {
-> -			compatible = "mediatek,mt7621-wdt";
-> +			compatible = "mediatek,mt7621-wdt", "syscon";
 
-Why do you need syscon?
+
+> -
+>  static int mt7621_wdt_probe(struct platform_device *pdev)
+>  {
+> +	struct device_node *np = pdev->dev.of_node;
+>  	struct device *dev = &pdev->dev;
+> -	mt7621_wdt_base = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(mt7621_wdt_base))
+> -		return PTR_ERR(mt7621_wdt_base);
+> +	struct watchdog_device *mt7621_wdt;
+> +	struct mt7621_wdt_data *drvdata;
+> +	int err;
+> +
+> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+>  
+> -	mt7621_wdt_reset = devm_reset_control_get_exclusive(dev, NULL);
+> -	if (!IS_ERR(mt7621_wdt_reset))
+> -		reset_control_deassert(mt7621_wdt_reset);
+> +	drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "ralink,sysctl");
+> +	if (IS_ERR(drvdata->sysc))
+> +		return PTR_ERR(drvdata->sysc);
+
+You claim in commit title that you remove some global usage, but you add
+here several new features and refactor the code significantly. You need
+to split refactorings, improvements from completely new features. The
+entire patch is very difficult to understand in current form.
 
 Best regards,
 Krzysztof
