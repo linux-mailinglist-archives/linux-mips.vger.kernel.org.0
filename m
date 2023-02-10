@@ -2,57 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BC1691E68
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 12:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C0B691E70
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Feb 2023 12:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjBJLgO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Feb 2023 06:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
+        id S231488AbjBJLiK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Feb 2023 06:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbjBJLgN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 06:36:13 -0500
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5140E233CF;
-        Fri, 10 Feb 2023 03:36:12 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-16aa71c1600so6243773fac.11;
-        Fri, 10 Feb 2023 03:36:12 -0800 (PST)
+        with ESMTP id S231429AbjBJLiJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 06:38:09 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CFB4A1D2;
+        Fri, 10 Feb 2023 03:38:08 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-15ff0a1f735so6297212fac.5;
+        Fri, 10 Feb 2023 03:38:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TboQQzoO+DB2tudXmL0VoYEafVQP7KOEkR8OjKkKyi4=;
-        b=DAxdjoIWihc6/4Ci+X1kQo+m90XHZSRxwoPQcz8baTZLQf2AUElFbermnTOWaf6NQG
-         MyUFh1RAQ2CegihtUXZsIFyRz+VGaiHVl3CFpLQpm+T7qi96t7b8R3iTx1NdJxPQ/v3y
-         /dRCg1uKM6ujl/QPBBA2+AjbysUdFWt/yRmoMUR4e/U/WuaJpFTKwl/YTVMenPjcE3Vy
-         D+QPJQlacpsLQbxfHo3Yi+Vx52MQks4Y53HIXRFx3dND7xCSMe0ttpIk7RkiiDsPugxo
-         DJ6FVzIIfhZ5VcRuCErijJg7YEGK7UKuX7YaH7vT9bdL9CtIYwxV6YxQX1MJ3ie3DVd+
-         0yCw==
+        bh=wQAje8o9vKu1sVJcWpM4QT60HNT24tOCm7UUbonsHnk=;
+        b=qUYpbnpitSihuJEV3O/lbnxaQO00x5IeaDYHb8975dPCFnl7B8SygHfMoXEhAhaCC6
+         LIiU1g2pGB2S6ETkCqQzmKfIlGr/9ZPtpRC/8jSeB6TFHAkv57f71RgsnFgyIXnEPcht
+         PxXPoBTYHbeBcxVlamzu1WrC5hAVmf86NBZKv2Xz9G0/CGjJUyvjL6lB+Dwaa8AJv9uJ
+         KcUKTH7dqwEn8Lq/whTvCv6ZUg1RNvBCnz4uLAq6tN4P+t+IXEXKc3uYI1mBRWMsZGPt
+         FM7lV5dESm6t96vE2CmuxKrZQuHTPKGn5UkKVqaYWdZQz63sUyZWx7z10rE1dRqXZXDI
+         wWXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TboQQzoO+DB2tudXmL0VoYEafVQP7KOEkR8OjKkKyi4=;
-        b=TXrrDi4JXhVvqOdafv0O25rIRZ+Mp0PBZiQhLdIyKKSq37Fa3pD9CC17QLpLd5Q0Ev
-         c1TPGbrUlJafntTkHQXwICXaxzjv4JA2btS0L9LQ4oybLNI7Fl4cmwEutE8t0r3T4Ieo
-         xYsOvno5K79vH0Gk8AeNjzqkAN/wMK67W5i2XErfXnJrwpHYbWIj3xaaNOxRUcWqhTEG
-         APkO0w+cn3CSdqgDdVEl5vBOVkMW9qbVVeXVpsDFWU+sBc/T63JJfjScMMBK3JPK5EgH
-         +RleXbbwHDMLYerh85KZAK30+uqJ9K0E+tEga1ULDUJJJ3FsXqZe/hlf77WHP8xdcJ66
-         m2Qw==
-X-Gm-Message-State: AO0yUKXd+/dHLykdv8u5NDX/2kcqzb72gVv+bEbv+HdJ/hPFEepeX1+K
-        YJV9seu7XerndLRdn42CaooZjZlkEVBNu3lUI80=
-X-Google-Smtp-Source: AK7set8L0VR/tq7/utba6z1b5OC1F5KsVo0lRmwzZoq7V2gRlcQC0espZ1c74jDNcJAGsrHOuQVylC1WmbcpCN3XiwI=
-X-Received: by 2002:a05:6870:63a2:b0:16a:a8b5:16fe with SMTP id
- t34-20020a05687063a200b0016aa8b516femr1400348oap.144.1676028970841; Fri, 10
- Feb 2023 03:36:10 -0800 (PST)
+        bh=wQAje8o9vKu1sVJcWpM4QT60HNT24tOCm7UUbonsHnk=;
+        b=UDckWOp/+qRT5YFLBRGoruKQGQSin3lEiIKIEs2soQ8aWVmK9W8NWjMNyIbuHYkGuN
+         AmbpFO7nJRBbjJffiWqYLpgd0dNlx3WGs9eJa2QD81Rk00zAH5RpyXuVPj6zgDQdo2IU
+         Ty/P0zNCmvzn/oCitVrv/hLzkRd9ZVn7GQiK9akdvdSAadt42cXB4KwBKI2D78BO4LQv
+         uKlKJQ1jVF7995NoJIeBtF3CBllPOMfPTBi+rXAeddzVlT4h/p53ZdEPgpqk0wK8oU0j
+         exMQhOKTIxp/GyIfXc1tXSPHWYCtJdX0Rcy55bD3reaVjtmqybyIY6I+LhEK/8rXQ2sX
+         zv+w==
+X-Gm-Message-State: AO0yUKW9ECrQWhwKc1Pl0ACWaOf+qwyAc+ptZRpCGUqrpgNLyfhkWhy/
+        qLwuU1jgnoXRE4JAZtbROg+fDBnq347wW8gGr5U=
+X-Google-Smtp-Source: AK7set+yCZllVEn/omsFqEsC7Eu7/3DWeJiJvOgrjEdNoya54mxHSCR4nA1rr870dt00x3uzT/p1O09cMK4vs666ecM=
+X-Received: by 2002:a05:6870:9615:b0:169:fabf:b222 with SMTP id
+ d21-20020a056870961500b00169fabfb222mr1840803oaq.83.1676029088227; Fri, 10
+ Feb 2023 03:38:08 -0800 (PST)
 MIME-Version: 1.0
 References: <20230210065621.598120-1-sergio.paracuellos@gmail.com>
- <20230210065621.598120-4-sergio.paracuellos@gmail.com> <21af8c63-f489-8c3f-e1e3-cf976b1d20d0@linaro.org>
-In-Reply-To: <21af8c63-f489-8c3f-e1e3-cf976b1d20d0@linaro.org>
+ <20230210065621.598120-3-sergio.paracuellos@gmail.com> <23d2f23f-b063-c417-e85d-40f09b509d04@linaro.org>
+ <CAMhs-H-rozEWNvRV0_CA1UeAZ9YJtg8PsHWjRnwBZp8ojqOcjQ@mail.gmail.com> <cd94db40-32c1-6541-c1a7-bf937802e464@linaro.org>
+In-Reply-To: <cd94db40-32c1-6541-c1a7-bf937802e464@linaro.org>
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 10 Feb 2023 12:35:59 +0100
-Message-ID: <CAMhs-H8O634ZbRW7BVkQmTA=B7p3Osu6d9hFGZ7DqXtXydkHBQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] watchdog: mt7621-wdt: avoid globals and arch dependencies
+Date:   Fri, 10 Feb 2023 12:37:57 +0100
+Message-ID: <CAMhs-H9NBF1jUBzrcX_D-3fP0O+dorR_T+_G_r6i5t9Tp0gUrA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mips: dts: ralink: mt7621: add phandle to system
+ controller node for watchdog
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
         linux@roeck-us.net, robh+dt@kernel.org,
@@ -71,74 +73,35 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Krzysztof,
-
-On Fri, Feb 10, 2023 at 12:02 PM Krzysztof Kozlowski
+On Fri, Feb 10, 2023 at 12:31 PM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 10/02/2023 07:56, Sergio Paracuellos wrote:
-> > MT7621 SoC has a system controller node. Watchdog need to access to reset
-> > status register. Ralink architecture and related driver are old and from
-> > the beggining they ar providing some architecture dependent operations
-> > for accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
-> > header file. However this is not ideal from a driver perspective which can
-> > just access to the system controller registers in am arch independent way
-> > using regmap syscon APIs. Hence, add a new structure for driver data and
-> > use it along the code. This way architecture dependencies and global vars
-> > are not needed anymore. Update Kconfig accordingly to select new added
-> > dependencies and allow driver to be compile tested.
+> On 10/02/2023 12:29, Sergio Paracuellos wrote:
+> > Hi Krzysztof,
 > >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >  drivers/watchdog/Kconfig      |   4 +-
-> >  drivers/watchdog/mt7621_wdt.c | 121 ++++++++++++++++++++++------------
-> >  2 files changed, 83 insertions(+), 42 deletions(-)
+> > On Fri, Feb 10, 2023 at 12:00 PM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 10/02/2023 07:56, Sergio Paracuellos wrote:
+> >>> To allow to access system controller registers from watchdog driver code
+> >>> add a phandle in the watchdog 'wdt' node. This avoid using arch dependent
+> >>
+> >> ??? This does not make sense.
 > >
+> > What do you mean? The commit message itself? I need the phandle to
+> > 'sysc' system controller node for accessing reset status registers
+> > inside the watchdog driver code.
 >
->
-> > -
-> >  static int mt7621_wdt_probe(struct platform_device *pdev)
-> >  {
-> > +     struct device_node *np = pdev->dev.of_node;
-> >       struct device *dev = &pdev->dev;
-> > -     mt7621_wdt_base = devm_platform_ioremap_resource(pdev, 0);
-> > -     if (IS_ERR(mt7621_wdt_base))
-> > -             return PTR_ERR(mt7621_wdt_base);
-> > +     struct watchdog_device *mt7621_wdt;
-> > +     struct mt7621_wdt_data *drvdata;
-> > +     int err;
-> > +
-> > +     drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> > +     if (!drvdata)
-> > +             return -ENOMEM;
-> >
-> > -     mt7621_wdt_reset = devm_reset_control_get_exclusive(dev, NULL);
-> > -     if (!IS_ERR(mt7621_wdt_reset))
-> > -             reset_control_deassert(mt7621_wdt_reset);
-> > +     drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "ralink,sysctl");
-> > +     if (IS_ERR(drvdata->sysc))
-> > +             return PTR_ERR(drvdata->sysc);
->
-> You claim in commit title that you remove some global usage, but you add
-> here several new features and refactor the code significantly. You need
-> to split refactorings, improvements from completely new features. The
-> entire patch is very difficult to understand in current form.
+> The message makes sense. The message for the code does not make anymore.
+> I meant, you want to access system controller registers from watchdog,
+> so you add syscon to watchdog...
 
-I am removing global usage and architecture dependencies using a
-watchdog driver data structure so I thought the changes were easy
-enough to review in this way. It seems they are not according to your
-reply :). If preferred I can split this in two commits:
-- Avoid globals using and introducing all the related new driver data
-structure.
-- Add request for regmap syscon from the phandle and remove the
-architecture dependent calls and includes.
-
-Thanks in advance for your comments.
-
-Best regards,
-    Sergio Paracuellos
+I got your point now, thanks. Will remove the syscon compatible from
+the watchdog node.
 
 >
 > Best regards,
 > Krzysztof
 >
+Best regards,
+   Sergio Paracuellos
