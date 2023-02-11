@@ -2,249 +2,271 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82709692D4A
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Feb 2023 03:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E7E692D6B
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Feb 2023 03:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjBKCPA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Feb 2023 21:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
+        id S229532AbjBKCl4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Feb 2023 21:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjBKCO7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 21:14:59 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D0674990;
-        Fri, 10 Feb 2023 18:14:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676081698; x=1707617698;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AFH7pAzH8z3MkAsbKr3xo6FcBDF2BLc1KAFzqHwB5bs=;
-  b=iaOyw950XhTEXZnHQmzPxwxShOGfoqYKmq1odEQ1fz6PdXhIo5I+AH71
-   WlbWu7O6CEAi9aCg9ljAD7mwcDpu2WusYoug7T+9bkpWsu15+ZuWmx7Ew
-   k1n62CFi+dsVid0s5iS3+1TA64rQB84mJPAtWllHBWuFIuJ64l0YR1avf
-   QFnOSVLUcEaJLzFB5FWrvkboUPsaxtiBWMGkYkYyr0avBG97Hi3snBzaH
-   y3DBTaUYaJiCJ1fRctAqAQ/QOtcodYGOwyeikXJHNS/sgC1u5rf0iQ9YA
-   8UsepKmaangeYUOJEAxLUJTW4ohQi9WvNxThBD9+WZmKbBt9oGKED/1ep
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="330582016"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="330582016"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 18:14:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="842213075"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="842213075"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 10 Feb 2023 18:14:53 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQfPg-0006B7-2O;
-        Sat, 11 Feb 2023 02:14:52 +0000
-Date:   Sat, 11 Feb 2023 10:14:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        intel-gfx@lists.freedesktop.org, fsverity@lists.linux.dev,
-        asahi@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 6ba8a227fd19d19779005fb66ad7562608e1df83
-Message-ID: <63e6fa07.0LOPaAs7kdy2KqZw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229437AbjBKCly (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Feb 2023 21:41:54 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC2E315570;
+        Fri, 10 Feb 2023 18:41:51 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.108.204])
+        by gateway (Coremail) with SMTP id _____8BxLutuAOdjYRsRAA--.33874S3;
+        Sat, 11 Feb 2023 10:41:50 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.108.204])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxjb5tAOdjVNwwAA--.30227S2;
+        Sat, 11 Feb 2023 10:41:50 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH] irqchip/loongson-eiointc: Add DT init support
+Date:   Sat, 11 Feb 2023 10:41:56 +0800
+Message-Id: <20230211024156.3530526-1-zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxjb5tAOdjVNwwAA--.30227S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Xr15XrWktw4UJr1fJw4ruFg_yoWxXr4Dpa
+        yUAF98trWrXFy7WrWftw4DX343Aws5u3y7Xa4fWFWftFsrCry8GF1FyFyqkryjk3yrXF4a
+        vF4UZF1Uu3W5KaUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
+        AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
+        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUcVWlDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 6ba8a227fd19d19779005fb66ad7562608e1df83  Add linux-next specific files for 20230210
+Add DT support for EIOINTC irqchip, which is needed for the Loongson-2K
+series, e.g. Loongson-2K500 soc.
 
-Error/Warning reports:
+Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+---
+ drivers/irqchip/irq-loongson-eiointc.c | 119 ++++++++++++++++++-------
+ 1 file changed, 85 insertions(+), 34 deletions(-)
 
-https://lore.kernel.org/oe-kbuild-all/202301302110.mEtNwkBD-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301310939.TAgCOEZb-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302061911.C7xvHX9v-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302062224.ByzeTXh1-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302092211.54EYDhYH-lkp@intel.com
-
-Error/Warning: (recently discovered and may have been fixed)
-
-Documentation/sphinx/templates/kernel-toc.html: 1:36 Invalid token: #}
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c:1011:6: warning: no previous prototype for 'hubbub31_init' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_hubbub.c:948:6: warning: no previous prototype for 'hubbub32_init' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_hubp.c:158:6: warning: no previous prototype for 'hubp32_init' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c:62:18: warning: variable 'cursor_bpp' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:1296:32: warning: variable 'result_write_min_hblank' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:280:42: warning: variable 'ds_port' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training.c:1586:38: warning: variable 'result' set but not used [-Wunused-but-set-variable]
-ftrace-ops.c:(.init.text+0x2c3): undefined reference to `__udivdi3'
-
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-drivers/clk/ingenic/jz4760-cgu.c:80 jz4760_cgu_calc_m_n_od() error: uninitialized symbol 'od'.
-drivers/iommu/apple-dart.c:1281:1: sparse: sparse: symbol 'apple_dart_pm_ops' was not declared. Should it be static?
-drivers/media/i2c/max9286.c:802 max9286_s_stream() error: buffer overflow 'priv->fmt' 4 <= 32
-drivers/thermal/qcom/tsens-v0_1.c:106:40: sparse: sparse: symbol 'tsens_9607_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:26:40: sparse: sparse: symbol 'tsens_8916_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:42:40: sparse: sparse: symbol 'tsens_8939_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:62:40: sparse: sparse: symbol 'tsens_8974_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v0_1.c:84:40: sparse: sparse: symbol 'tsens_8974_backup_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v1.c:24:40: sparse: sparse: symbol 'tsens_qcs404_nvmem' was not declared. Should it be static?
-drivers/thermal/qcom/tsens-v1.c:45:40: sparse: sparse: symbol 'tsens_8976_nvmem' was not declared. Should it be static?
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-fs/verity/enable.c:29:2: warning: Null pointer passed as 1st argument to memory set function [clang-analyzer-unix.cstring.NullArg]
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- alpha-buildonly-randconfig-r006-20230210
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arm-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arm-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arm64-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn31-dcn31_hubbub.c:warning:no-previous-prototype-for-hubbub31_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_hubbub.c:warning:no-previous-prototype-for-hubbub32_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_hubp.c:warning:no-previous-prototype-for-hubp32_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arm64-randconfig-m041-20230210
-|   |-- drivers-clk-ingenic-jz4760-cgu.c-jz4760_cgu_calc_m_n_od()-error:uninitialized-symbol-od-.
-|   `-- drivers-media-i2c-max9286.c-max9286_s_stream()-error:buffer-overflow-priv-fmt
-|-- arm64-randconfig-s042-20230210
-|   `-- drivers-iommu-apple-dart.c:sparse:sparse:symbol-apple_dart_pm_ops-was-not-declared.-Should-it-be-static
-|-- i386-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn31-dcn31_hubbub.c:warning:no-previous-prototype-for-hubbub31_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_hubbub.c:warning:no-previous-prototype-for-hubbub32_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_hubp.c:warning:no-previous-prototype-for-hubp32_init
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-ds_port-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|   `-- ftrace-ops.c:(.init.text):undefined-reference-to-__udivdi3
-|-- i386-randconfig-m021
-|   `-- kernel-trace-trace_events_synth.c-trace_event_raw_event_synth()-warn:inconsistent-indenting
-|-- i386-randconfig-s001
-|   |-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- i386-randconfig-s002
-|   `-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
-|-- i386-randconfig-s003
-clang_recent_errors
-`-- s390-randconfig-c005-20230210
-    `-- fs-verity-enable.c:warning:Null-pointer-passed-as-1st-argument-to-memory-set-function-clang-analyzer-unix.cstring.NullArg
-
-elapsed time: 1238m
-
-configs tested: 71
-configs skipped: 8
-
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                        nsimosci_defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm                      footbridge_defconfig
-arm                            qcom_defconfig
-arm                           sunxi_defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                          randconfig-a016
-i386                          randconfig-c001
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                        m5272c3_defconfig
-m68k                       m5275evb_defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-mips                       bmips_be_defconfig
-mips                         db1xxx_defconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                               defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-sh                        edosk7760_defconfig
-sh                          sdk7786_defconfig
-sh                           se7343_defconfig
-sh                     sh7710voipgw_defconfig
-sparc                             allnoconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                        randconfig-a006
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-
-clang tested configs:
-i386                              allnoconfig
-i386                          randconfig-a006
-mips                        qi_lb60_defconfig
-powerpc                     mpc5200_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                      ppc64e_defconfig
-powerpc              randconfig-c003-20230210
-riscv                randconfig-c006-20230210
-s390                 randconfig-c005-20230210
-s390                 randconfig-r044-20230210
-x86_64                        randconfig-a005
-x86_64                        randconfig-a016
-x86_64                          rhel-8.3-rust
-
+diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+index d15fd38c1756..d5e1ee6aada6 100644
+--- a/drivers/irqchip/irq-loongson-eiointc.c
++++ b/drivers/irqchip/irq-loongson-eiointc.c
+@@ -39,6 +39,7 @@ static int nr_pics;
+ 
+ struct eiointc_priv {
+ 	u32			node;
++	u32			vec_count;
+ 	nodemask_t		node_map;
+ 	cpumask_t		cpuspan_map;
+ 	struct fwnode_handle	*domain_handle;
+@@ -156,18 +157,19 @@ static int eiointc_router_init(unsigned int cpu)
+ 	if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0) {
+ 		eiointc_enable();
+ 
+-		for (i = 0; i < VEC_COUNT / 32; i++) {
++		for (i = 0; i < eiointc_priv[0]->vec_count / 32; i++) {
++			pr_info("");
+ 			data = (((1 << (i * 2 + 1)) << 16) | (1 << (i * 2)));
+ 			iocsr_write32(data, EIOINTC_REG_NODEMAP + i * 4);
+ 		}
+ 
+-		for (i = 0; i < VEC_COUNT / 32 / 4; i++) {
++		for (i = 0; i < eiointc_priv[0]->vec_count / 32 / 4; i++) {
+ 			bit = BIT(1 + index); /* Route to IP[1 + index] */
+ 			data = bit | (bit << 8) | (bit << 16) | (bit << 24);
+ 			iocsr_write32(data, EIOINTC_REG_IPMAP + i * 4);
+ 		}
+ 
+-		for (i = 0; i < VEC_COUNT / 4; i++) {
++		for (i = 0; i < eiointc_priv[0]->vec_count / 4; i++) {
+ 			/* Route to Node-0 Core-0 */
+ 			if (index == 0)
+ 				bit = BIT(cpu_logical_map(0));
+@@ -178,7 +180,7 @@ static int eiointc_router_init(unsigned int cpu)
+ 			iocsr_write32(data, EIOINTC_REG_ROUTE + i * 4);
+ 		}
+ 
+-		for (i = 0; i < VEC_COUNT / 32; i++) {
++		for (i = 0; i < eiointc_priv[0]->vec_count / 32; i++) {
+ 			data = 0xffffffff;
+ 			iocsr_write32(data, EIOINTC_REG_ENABLE + i * 4);
+ 			iocsr_write32(data, EIOINTC_REG_BOUNCE + i * 4);
+@@ -198,7 +200,7 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
+ 
+ 	chained_irq_enter(chip, desc);
+ 
+-	for (i = 0; i < VEC_REG_COUNT; i++) {
++	for (i = 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG; i++) {
+ 		pending = iocsr_read64(EIOINTC_REG_ISR + (i << 3));
+ 		iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
+ 		while (pending) {
+@@ -316,7 +318,7 @@ static void eiointc_resume(void)
+ 	eiointc_router_init(0);
+ 
+ 	for (i = 0; i < nr_pics; i++) {
+-		for (j = 0; j < VEC_COUNT; j++) {
++		for (j = 0; j < eiointc_priv[i]->vec_count; j++) {
+ 			desc = irq_resolve_mapping(eiointc_priv[i]->eiointc_domain, j);
+ 			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
+ 				raw_spin_lock(&desc->lock);
+@@ -373,11 +375,44 @@ static int __init acpi_cascade_irqdomain_init(void)
+ 	return 0;
+ }
+ 
++static int __init eiointc_init(struct eiointc_priv *priv, int parent_irq,
++			       u64 node_map)
++{
++	int i;
++
++	node_map = node_map ? node_map : -1ULL;
++	for_each_possible_cpu(i) {
++		if (node_map & (1ULL << (cpu_to_eio_node(i)))) {
++			node_set(cpu_to_eio_node(i), priv->node_map);
++			cpumask_or(&priv->cpuspan_map, &priv->cpuspan_map,
++				   cpumask_of(i));
++		}
++	}
++
++	priv->eiointc_domain = irq_domain_create_linear(priv->domain_handle,
++							priv->vec_count,
++							&eiointc_domain_ops,
++							priv);
++	if (!priv->eiointc_domain) {
++		pr_err("loongson-extioi: cannot add IRQ domain\n");
++		return -ENOMEM;
++	}
++
++	eiointc_priv[nr_pics++] = priv;
++	eiointc_router_init(0);
++	irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
++	register_syscore_ops(&eiointc_syscore_ops);
++	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
++				  "irqchip/loongarch/intc:starting",
++				  eiointc_router_init, NULL);
++
++	return 0;
++}
++
+ int __init eiointc_acpi_init(struct irq_domain *parent,
+ 				     struct acpi_madt_eio_pic *acpi_eiointc)
+ {
+-	int i, ret, parent_irq;
+-	unsigned long node_map;
++	int parent_irq, ret;
+ 	struct eiointc_priv *priv;
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+@@ -391,39 +426,20 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
+ 		goto out_free_priv;
+ 	}
+ 
++	priv->vec_count = VEC_COUNT;
+ 	priv->node = acpi_eiointc->node;
+-	node_map = acpi_eiointc->node_map ? : -1ULL;
+-
+-	for_each_possible_cpu(i) {
+-		if (node_map & (1ULL << cpu_to_eio_node(i))) {
+-			node_set(cpu_to_eio_node(i), priv->node_map);
+-			cpumask_or(&priv->cpuspan_map, &priv->cpuspan_map, cpumask_of(i));
+-		}
+-	}
+-
+-	/* Setup IRQ domain */
+-	priv->eiointc_domain = irq_domain_create_linear(priv->domain_handle, VEC_COUNT,
+-					&eiointc_domain_ops, priv);
+-	if (!priv->eiointc_domain) {
+-		pr_err("loongson-eiointc: cannot add IRQ domain\n");
+-		goto out_free_handle;
+-	}
+-
+-	eiointc_priv[nr_pics++] = priv;
+-
+-	eiointc_router_init(0);
+-
+ 	parent_irq = irq_create_mapping(parent, acpi_eiointc->cascade);
+-	irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
+ 
+-	register_syscore_ops(&eiointc_syscore_ops);
+-	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
+-				  "irqchip/loongarch/intc:starting",
+-				  eiointc_router_init, NULL);
++	ret = eiointc_init(priv, parent_irq, acpi_eiointc->node_map);
++	if (ret < 0)
++		goto out_free_handle;
+ 
+ 	acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, pch_group);
+ 	acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, msi_group);
++
+ 	ret = acpi_cascade_irqdomain_init();
++	if (ret < 0)
++		goto out_free_handle;
+ 
+ 	return ret;
+ 
+@@ -435,3 +451,39 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
+ 
+ 	return -ENOMEM;
+ }
++
++static int __init eiointc_of_init(struct device_node *of_node,
++				  struct device_node *parent)
++{
++	int parent_irq, ret;
++	struct eiointc_priv *priv;
++
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	parent_irq = of_irq_get_byname(of_node, "cascade");
++	if (parent_irq <= 0) {
++		ret = -ENODEV;
++		goto out_free_priv;
++	}
++
++	ret = of_property_read_u32(of_node, "vec_count", &priv->vec_count);
++	if (ret < 0)
++		goto out_free_priv;
++
++	priv->node = 0;
++	priv->domain_handle = of_node_to_fwnode(of_node);
++
++	ret = eiointc_init(priv, parent_irq, 0);
++	if (ret < 0)
++		goto out_free_priv;
++
++	return 0;
++
++out_free_priv:
++	kfree(priv);
++	return ret;
++}
++
++IRQCHIP_DECLARE(loongson_eiointc, "loongson,eiointc", eiointc_of_init);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.0
+
