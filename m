@@ -2,66 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4523693608
-	for <lists+linux-mips@lfdr.de>; Sun, 12 Feb 2023 05:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20A669366E
+	for <lists+linux-mips@lfdr.de>; Sun, 12 Feb 2023 09:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjBLEsm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 11 Feb 2023 23:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S229513AbjBLINu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 12 Feb 2023 03:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBLEsm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Feb 2023 23:48:42 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E3914235;
-        Sat, 11 Feb 2023 20:48:40 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qw12so24748833ejc.2;
-        Sat, 11 Feb 2023 20:48:40 -0800 (PST)
+        with ESMTP id S229449AbjBLINu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 12 Feb 2023 03:13:50 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2663BE38B;
+        Sun, 12 Feb 2023 00:13:47 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id bh15so7956723oib.4;
+        Sun, 12 Feb 2023 00:13:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LstY/FNwY38eZnkgHmBb8qMyEMi+3HIYCx7mpO5fNdw=;
-        b=KBoj0BTmORLrQ4S5flWIPMgY3gtin8RLP7GA0PFKNlYMjVYRePhwaNAQ4r26YuSDtL
-         uM5mXITGII75aOqw34CPhQ4Nmtwb1H6fZuPMFMyWbmiHUy5PRZvumu22smnkzIxSb250
-         UnXRzCu/Y0FQSc/JHteuMGCa58E2j0EtS73qFupPRacs7gm79u10J/DGBTkJG0LwqksZ
-         3BxjjiqdInJzPQiwup0sDadNclyXW/ofdZduuPnAR696aKgQOj811T5Z7izVCZzfco0M
-         Y1UeY4ho7FM0Y3KDJUIheqo0f4E7NHNXHES/Qll5D6Y+uJOk0eUHA2PhnDrv8Qa+GX2h
-         1FHQ==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nvROq1Ysin4iKmF7L5qnmUmZE+huLZ31SHq6Mu5DVtg=;
+        b=IaRYWpQ6frsgDcsD6edPNdjfb3TkXXkD203hGwxUJrrP8YSzYq8RnvIfgXQzF9iON5
+         BLsNdc96tgMCGfADIwaqmZ95eJF85v/VnGTDQIFMvkrHDoJo81Q3sfcSRzlMBwe6Fyu+
+         P6991khDl4+CUo5euTWmh4W6XHehUs104R6KRrFuwUkzAIOJM5cy9YwwQmyQucJ6blQC
+         9VAksPKdR7Nt7OlYtFRwMoFSawY0Rwj/H9rjznMcZBdmlU5orWtgIpzIFFw6Rwaogyjf
+         x2rmyiSGZVesaeFwNUO11MYWzZWBduvP558YTbi6TJ021im6zcCxfWXaY760cX6hetEP
+         oFnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LstY/FNwY38eZnkgHmBb8qMyEMi+3HIYCx7mpO5fNdw=;
-        b=O/PZy+eyOQoxEv9WpwVbh9eV6qd59+6c9iaStE5LYHFNdPUE+YDOBxskW7PlL0WLQR
-         7QhzkPVJT1hfZctS1r1fqZ+F7O/gVUSkoHU/xZFdl8G5viW49mNRt3nAaopXfdH+Nxw2
-         6cOcIdx5Q7mkRlRB5I87miAqaAg1MAXREGc5q5zmxpY0nYiRlFxw8L2wCU++4faaxFaO
-         XpL85F8pDJdD6JIVdUq0xJLagttQiarj/jrrjOvBQINto5+IYvabAykr05w2iosV+QFD
-         RAnPm0IxJleqc00ZGVUgTPEaWVCEWuVEuWxW3RNUgZJ83KW1pn85Dwv4//i0H23FD6wh
-         Wbig==
-X-Gm-Message-State: AO0yUKVEIoTbtHxu+odwsFqWDiPVl7xAaYjCFvFhBXkZqnd/Cuk4V+bm
-        ANGhYtqtPf1/+Aezesm/0afnBVz1bw23qtxriZI=
-X-Google-Smtp-Source: AK7set/TI9DMhTPOLfacLmASytV4UR6bLaYXY/53EuOB2pq4CRysomi35WFLaPjTMZN1mJ0Awb2tKCFjxpdJRFSu9Xw=
-X-Received: by 2002:a17:907:a06e:b0:8ad:cdc3:b2c8 with SMTP id
- ia14-20020a170907a06e00b008adcdc3b2c8mr2854349ejc.2.1676177319028; Sat, 11
- Feb 2023 20:48:39 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nvROq1Ysin4iKmF7L5qnmUmZE+huLZ31SHq6Mu5DVtg=;
+        b=7EOf4MNyeHDcy7igUG5/v+s2h8APq82xa2mc+EKHelfSDx3oq+vuE6HOSTeoE6iQTi
+         cM4uk99pAGKI+cl/OlaokzdM6xCX0KTbNiClkGvPtV3GbjUqjUfBSWxr8cRePX9JzES0
+         tUX31tf24D4PXa6n8M403ViP4aid2CT89B/6OOTvCSuDvPtlrERFX6CbwMQ/Ipiqxv83
+         cLx6Z2xuOMPFb1ETtV9PFFvUdDF3ZOocui48AwvVQVDBCUkpVgmYpfYa6s3ixV7BI2YP
+         TFdOsgnoV+rQ7tKzCITXXPhutO+2ZcloyZCu3wpX10aiMXrxvhSuQpP1HVdNr8lSiH9g
+         4dgA==
+X-Gm-Message-State: AO0yUKVzAWpYfSVF362HD0Gu8pPxB6e9+exk49Mvd2/uw92eLVAaxMxo
+        OXt8njNISuZxNoyURiekhfeXx7v42Ob7jjL9ISk=
+X-Google-Smtp-Source: AK7set8TnzNOFqImJjPpCHh5tW2QRdderphK8943iNYTmjtSAMNRrq5sZirKjtzelCQLw2PZ/6HszLn+vhUv4VID4Bs=
+X-Received: by 2002:a05:6808:60d:b0:37b:7c36:4df8 with SMTP id
+ y13-20020a056808060d00b0037b7c364df8mr1570866oih.144.1676189626284; Sun, 12
+ Feb 2023 00:13:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20230211024156.3530526-1-zhoubinbin@loongson.cn> <CAAhV-H5JOD4WRyN2rZq9qZAja2--Vg5gdVWYU9Ue0OfioRLJPQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H5JOD4WRyN2rZq9qZAja2--Vg5gdVWYU9Ue0OfioRLJPQ@mail.gmail.com>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Sun, 12 Feb 2023 12:48:26 +0800
-Message-ID: <CAMpQs4+wVszOM6RuOZD3q8N2yNpbmgsD0_8p_mDJpGnLjit0BA@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/loongson-eiointc: Add DT init support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
+ <20230211073357.755893-2-sergio.paracuellos@gmail.com> <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
+ <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
+ <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com> <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
+ <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
+In-Reply-To: <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sun, 12 Feb 2023 09:13:35 +0100
+Message-ID: <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
+ access system controller registers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,231 +78,91 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 9:53 AM Huacai Chen <chenhuacai@kernel.org> wrote:
+On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Hi, Binbin,
+> On 11/02/2023 12:01, Sergio Paracuellos wrote:
+> > On Sat, Feb 11, 2023 at 11:47 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@=
+arinc9.com> wrote:
+> >>
+> >> On 11.02.2023 13:41, Sergio Paracuellos wrote:
+> >>> On Sat, Feb 11, 2023 at 10:10 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.una=
+l@arinc9.com> wrote:
+> >>>>
+> >>>> Is this mediatek,sysctl property required after your changes on the
+> >>>> watchdog code?
+> >>>
+> >>> I don't really understand the question :-) Yes, it is. Since we have
+> >>> introduced a new phandle in the watchdog node to be able to access th=
+e
+> >>> reset status register through the 'sysc' syscon node.
+> >>> We need the bindings to be aligned with the mt7621.dtsi file and we
+> >>> are getting the syscon regmap handler via
+> >>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Ar=C4=
+=B1n=C3=A7.
+> >>
+> >> I believe you need to put mediatek,sysctl under "required:".
+> >
+> > Ah, I understood your question now :-). You meant 'required' property.
+> > I need more coffee, I guess :-). I am not sure if you can add
+> > properties as required after bindings are already mainlined for
+> > compatibility issues. The problem with this SoC is that drivers become
+> > mainlined before the device tree was so if things are properly fixed
+> > now this kind of issues appear.  Let's see Krzysztof and Rob comments
+> > for this.
 >
-> On Sat, Feb 11, 2023 at 10:41 AM Binbin Zhou <zhoubinbin@loongson.cn> wrote:
-> >
-> > Add DT support for EIOINTC irqchip, which is needed for the Loongson-2K
-> > series, e.g. Loongson-2K500 soc.
-> Use SOC instead of soc.
+> If your driver fails to probe without mediatek,sysctl, you already made
+> it required (thus broke the ABI) regardless what dt-binding is saying.
+> In such case you should update dt-binding to reflect reality.
 >
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  drivers/irqchip/irq-loongson-eiointc.c | 119 ++++++++++++++++++-------
-> >  1 file changed, 85 insertions(+), 34 deletions(-)
-> >
-> > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-> > index d15fd38c1756..d5e1ee6aada6 100644
-> > --- a/drivers/irqchip/irq-loongson-eiointc.c
-> > +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> > @@ -39,6 +39,7 @@ static int nr_pics;
-> >
-> >  struct eiointc_priv {
-> >         u32                     node;
-> > +       u32                     vec_count;
-> >         nodemask_t              node_map;
-> >         cpumask_t               cpuspan_map;
-> >         struct fwnode_handle    *domain_handle;
-> > @@ -156,18 +157,19 @@ static int eiointc_router_init(unsigned int cpu)
-> >         if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0) {
-> >                 eiointc_enable();
-> >
-> > -               for (i = 0; i < VEC_COUNT / 32; i++) {
-> > +               for (i = 0; i < eiointc_priv[0]->vec_count / 32; i++) {
-> > +                       pr_info("");
-> Why print an empty string?
->
-Sorry, I forgot to remove the debug message.
-I will fix it.
+> Now ABI break is different case. Usually you should not break it without
+> valid reasons (e.g. it was never working before). Your commit msg
+> suggests that you only improve the code, thus ABI break is not really
+> justified. In such case - binding is correct, driver should be reworked
+> to accept DTS without the new property.
 
-Thanks.
-Binbin
+Thanks for clarification, Krzysztof. Ok, so if this is the case I need
+to add this property required (as Arinc was properly pointing out in
+previous mail) since without it the driver is going to fail on probe
+(PATCH 5 of the series). I understand the "it was never working
+before" argument reason for ABI breaks. What happens if the old driver
+code was not ideal and totally dependent on architecture specific
+operations when this could be totally avoided and properly make arch
+independent agnostic drivers? This driver was added in 2016 [0]. There
+was not a device tree file in the kernel for this SoC mainlined until
+2022 [1]. I also personally migrated this watchdog binding in 2022
+from text to YAML and maintained it without changes [2]. When this was
+mainlined not all drivers were properly reviewed and the current code
+was just maintained as it is. Most users of this SoC are in the
+openWRT community where the dtsi of the mainline is not used yet and
+they maintain their own mt7621.dtsi files. Also, when a new version of
+the openWRT selected kernel is added they also modify and align with
+its mt7621.dtsi file without maintaining previous dtb's. If "make the
+driver arch independent to be able to be compile tested" and this kind
+of arguments are not valid at all I need to know because I have
+started to review driver code for this SoC and other drivers also have
+the same arch dependency that ideally should be avoided in the same
+way. This at the end means to break the ABI again in the future for
+those drivers / bindings. So I can just let them be as it is and not
+provide any change at all and continue without being compile tested
+and other beneficial features to detect future driver breakage.
 
-> Others look good to me.
+Thanks in advance for clarification.
+
+Best regards,
+    Sergio Paracuellos
+
+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
+mit/drivers/watchdog/mt7621_wdt.c?id=3Dab3f09fe16d158cb4f84e558c61ec5d6d601=
+f2e0
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
+mit/arch/mips/boot/dts/ralink/mt7621.dtsi?id=3D7a6ee0bbab2551d7189ce0f5e625=
+fef4d612ebea
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
+mit/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml?id=
+=3D9023e05b7a5809593a7ea09896eee0bbb6ae1685
+
 >
-> Huacai
-> >                         data = (((1 << (i * 2 + 1)) << 16) | (1 << (i * 2)));
-> >                         iocsr_write32(data, EIOINTC_REG_NODEMAP + i * 4);
-> >                 }
-> >
-> > -               for (i = 0; i < VEC_COUNT / 32 / 4; i++) {
-> > +               for (i = 0; i < eiointc_priv[0]->vec_count / 32 / 4; i++) {
-> >                         bit = BIT(1 + index); /* Route to IP[1 + index] */
-> >                         data = bit | (bit << 8) | (bit << 16) | (bit << 24);
-> >                         iocsr_write32(data, EIOINTC_REG_IPMAP + i * 4);
-> >                 }
-> >
-> > -               for (i = 0; i < VEC_COUNT / 4; i++) {
-> > +               for (i = 0; i < eiointc_priv[0]->vec_count / 4; i++) {
-> >                         /* Route to Node-0 Core-0 */
-> >                         if (index == 0)
-> >                                 bit = BIT(cpu_logical_map(0));
-> > @@ -178,7 +180,7 @@ static int eiointc_router_init(unsigned int cpu)
-> >                         iocsr_write32(data, EIOINTC_REG_ROUTE + i * 4);
-> >                 }
-> >
-> > -               for (i = 0; i < VEC_COUNT / 32; i++) {
-> > +               for (i = 0; i < eiointc_priv[0]->vec_count / 32; i++) {
-> >                         data = 0xffffffff;
-> >                         iocsr_write32(data, EIOINTC_REG_ENABLE + i * 4);
-> >                         iocsr_write32(data, EIOINTC_REG_BOUNCE + i * 4);
-> > @@ -198,7 +200,7 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
-> >
-> >         chained_irq_enter(chip, desc);
-> >
-> > -       for (i = 0; i < VEC_REG_COUNT; i++) {
-> > +       for (i = 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG; i++) {
-> >                 pending = iocsr_read64(EIOINTC_REG_ISR + (i << 3));
-> >                 iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
-> >                 while (pending) {
-> > @@ -316,7 +318,7 @@ static void eiointc_resume(void)
-> >         eiointc_router_init(0);
-> >
-> >         for (i = 0; i < nr_pics; i++) {
-> > -               for (j = 0; j < VEC_COUNT; j++) {
-> > +               for (j = 0; j < eiointc_priv[i]->vec_count; j++) {
-> >                         desc = irq_resolve_mapping(eiointc_priv[i]->eiointc_domain, j);
-> >                         if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
-> >                                 raw_spin_lock(&desc->lock);
-> > @@ -373,11 +375,44 @@ static int __init acpi_cascade_irqdomain_init(void)
-> >         return 0;
-> >  }
-> >
-> > +static int __init eiointc_init(struct eiointc_priv *priv, int parent_irq,
-> > +                              u64 node_map)
-> > +{
-> > +       int i;
-> > +
-> > +       node_map = node_map ? node_map : -1ULL;
-> > +       for_each_possible_cpu(i) {
-> > +               if (node_map & (1ULL << (cpu_to_eio_node(i)))) {
-> > +                       node_set(cpu_to_eio_node(i), priv->node_map);
-> > +                       cpumask_or(&priv->cpuspan_map, &priv->cpuspan_map,
-> > +                                  cpumask_of(i));
-> > +               }
-> > +       }
-> > +
-> > +       priv->eiointc_domain = irq_domain_create_linear(priv->domain_handle,
-> > +                                                       priv->vec_count,
-> > +                                                       &eiointc_domain_ops,
-> > +                                                       priv);
-> > +       if (!priv->eiointc_domain) {
-> > +               pr_err("loongson-extioi: cannot add IRQ domain\n");
-> > +               return -ENOMEM;
-> > +       }
-> > +
-> > +       eiointc_priv[nr_pics++] = priv;
-> > +       eiointc_router_init(0);
-> > +       irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
-> > +       register_syscore_ops(&eiointc_syscore_ops);
-> > +       cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
-> > +                                 "irqchip/loongarch/intc:starting",
-> > +                                 eiointc_router_init, NULL);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> >  int __init eiointc_acpi_init(struct irq_domain *parent,
-> >                                      struct acpi_madt_eio_pic *acpi_eiointc)
-> >  {
-> > -       int i, ret, parent_irq;
-> > -       unsigned long node_map;
-> > +       int parent_irq, ret;
-> >         struct eiointc_priv *priv;
-> >
-> >         priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> > @@ -391,39 +426,20 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
-> >                 goto out_free_priv;
-> >         }
-> >
-> > +       priv->vec_count = VEC_COUNT;
-> >         priv->node = acpi_eiointc->node;
-> > -       node_map = acpi_eiointc->node_map ? : -1ULL;
-> > -
-> > -       for_each_possible_cpu(i) {
-> > -               if (node_map & (1ULL << cpu_to_eio_node(i))) {
-> > -                       node_set(cpu_to_eio_node(i), priv->node_map);
-> > -                       cpumask_or(&priv->cpuspan_map, &priv->cpuspan_map, cpumask_of(i));
-> > -               }
-> > -       }
-> > -
-> > -       /* Setup IRQ domain */
-> > -       priv->eiointc_domain = irq_domain_create_linear(priv->domain_handle, VEC_COUNT,
-> > -                                       &eiointc_domain_ops, priv);
-> > -       if (!priv->eiointc_domain) {
-> > -               pr_err("loongson-eiointc: cannot add IRQ domain\n");
-> > -               goto out_free_handle;
-> > -       }
-> > -
-> > -       eiointc_priv[nr_pics++] = priv;
-> > -
-> > -       eiointc_router_init(0);
-> > -
-> >         parent_irq = irq_create_mapping(parent, acpi_eiointc->cascade);
-> > -       irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
-> >
-> > -       register_syscore_ops(&eiointc_syscore_ops);
-> > -       cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
-> > -                                 "irqchip/loongarch/intc:starting",
-> > -                                 eiointc_router_init, NULL);
-> > +       ret = eiointc_init(priv, parent_irq, acpi_eiointc->node_map);
-> > +       if (ret < 0)
-> > +               goto out_free_handle;
-> >
-> >         acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, pch_group);
-> >         acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, msi_group);
-> > +
-> >         ret = acpi_cascade_irqdomain_init();
-> > +       if (ret < 0)
-> > +               goto out_free_handle;
-> >
-> >         return ret;
-> >
-> > @@ -435,3 +451,39 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
-> >
-> >         return -ENOMEM;
-> >  }
-> > +
-> > +static int __init eiointc_of_init(struct device_node *of_node,
-> > +                                 struct device_node *parent)
-> > +{
-> > +       int parent_irq, ret;
-> > +       struct eiointc_priv *priv;
-> > +
-> > +       priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> > +       if (!priv)
-> > +               return -ENOMEM;
-> > +
-> > +       parent_irq = of_irq_get_byname(of_node, "cascade");
-> > +       if (parent_irq <= 0) {
-> > +               ret = -ENODEV;
-> > +               goto out_free_priv;
-> > +       }
-> > +
-> > +       ret = of_property_read_u32(of_node, "vec_count", &priv->vec_count);
-> > +       if (ret < 0)
-> > +               goto out_free_priv;
-> > +
-> > +       priv->node = 0;
-> > +       priv->domain_handle = of_node_to_fwnode(of_node);
-> > +
-> > +       ret = eiointc_init(priv, parent_irq, 0);
-> > +       if (ret < 0)
-> > +               goto out_free_priv;
-> > +
-> > +       return 0;
-> > +
-> > +out_free_priv:
-> > +       kfree(priv);
-> > +       return ret;
-> > +}
-> > +
-> > +IRQCHIP_DECLARE(loongson_eiointc, "loongson,eiointc", eiointc_of_init);
-> > --
-> > 2.39.0
-> >
-> >
+> Best regards,
+> Krzysztof
 >
