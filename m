@@ -2,87 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FAA6937EF
-	for <lists+linux-mips@lfdr.de>; Sun, 12 Feb 2023 16:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB08693859
+	for <lists+linux-mips@lfdr.de>; Sun, 12 Feb 2023 17:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBLP1d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 12 Feb 2023 10:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S229666AbjBLQNZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 12 Feb 2023 11:13:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBLP1c (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 12 Feb 2023 10:27:32 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CD872A5;
-        Sun, 12 Feb 2023 07:27:31 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id e12-20020a0568301e4c00b0068bc93e7e34so3055436otj.4;
-        Sun, 12 Feb 2023 07:27:31 -0800 (PST)
+        with ESMTP id S229477AbjBLQNX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 12 Feb 2023 11:13:23 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C060111E81;
+        Sun, 12 Feb 2023 08:13:22 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-16ab8581837so12596940fac.4;
+        Sun, 12 Feb 2023 08:13:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NX5etp7sNgQW31W+eS3Z/fP5ehJy19HrlSlAqRah7P8=;
-        b=TtkAj4YRsTE3UnTPmJN8IdU5AEtV4HK2NkFkA6YYbn2vtmOJn2KgBRgYMASyll6S7c
-         LR6eXAlIALnXBqula2hZI/kT7EeP1lAlPWC4CwetoELWcrweqI3WuWwW4TbcAoLFM567
-         pQLA0VsPzTBTkLA1Ur1vw3MkWZUK7h51jF6bEprmq7n+hAb2lmKkA0vxloH+dZSR+F3n
-         cgyFpM1gDkWniZxHxOH7l6AZAkQM6FYm8Togl5OEr5NOeXxzE8vqahOtPYSOwpJ/Vq6N
-         BooDnoihKKejL5d21ex6ryanbMOC3RjbvqpUn1eonen6a1UYMICeztkDPloAy83HtMyF
-         4Dbg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m9JNrWha4YKLX9rD9uaO4Le+Z0yMwIJejyvjLhFB0mM=;
+        b=RPfdfqoXr1Cw8prltm7TREoupX5eaNpNd+CDIlDXf9L709PnPoKQLyqZ+zboWylzWR
+         vxu85Zr3W8llfd+943ctWIFMuj/eUOowqYJKaVeMEAuOZh7DSd87i28bvDxNAQ6PoOwC
+         wXW2mjy0Nv7rWdLT7K6lR96N0WQft3GWf2KAFrqyzdPjhTZH7LFIYRkc0u2koR60TrCD
+         1hpxf+WoKXg0JbOE+h0e0CkhGndeecaH5fbwJ/zhVif01anzu3CRcpBwMXBGR6L77UGt
+         T0ZqZhaH9160JyrIQvfc6bBDGV0wnlmjvzDTuOmCpyHfThC29vCqk4lTBNsczBdn8qUd
+         qBXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NX5etp7sNgQW31W+eS3Z/fP5ehJy19HrlSlAqRah7P8=;
-        b=Vlv3j5pgKCv8BIvpg+xZvwSzVngLaYIgINr4YH3I/ZobhLgsSriLMLuAUrtBkKUWqK
-         1fK+5bikWIXfDF/A0SyLw9o2nu/IZQHwGkWZHcRK3TGm3g2hpN/r4B+ARx/LNO1t9JlK
-         jK453v+eXObsLFDbiqpaC5gMn/MwrjLeCYKlHyX/3TMVo8FANHHvpUb59UjAdMmXwGk7
-         aZ0UPFNUSA2OU0ec6SsgnR1YnLVt2W/QRy/r05i7sX3qDqSa1hKEwKUZq/4pCstYJ+Vv
-         F+x9agxb3r1FRjmnk5vrlFQjOLOF6ywS5S5kLIHHfkWKGp7M2g3Hwv4aa3K9tzrYmadc
-         6mvA==
-X-Gm-Message-State: AO0yUKUKki6ygL76mbYE7mhHiQ1RZ7biAYNJHz1LlwWZB8LHmTQ2OJ3o
-        va9io6K81zV8I61dPNvKTes=
-X-Google-Smtp-Source: AK7set9IpjmklLbVpbBSq6Mef69hw8Oe9HBpaZJYrzGrqv7C4aVPYZj6CQo4rq3xKN1KdYvPDkW2VQ==
-X-Received: by 2002:a9d:7d01:0:b0:68b:ce98:1f9f with SMTP id v1-20020a9d7d01000000b0068bce981f9fmr12218060otn.34.1676215651177;
-        Sun, 12 Feb 2023 07:27:31 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9-20020a056830044900b0068be372babfsm4385983otc.47.2023.02.12.07.27.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Feb 2023 07:27:30 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m9JNrWha4YKLX9rD9uaO4Le+Z0yMwIJejyvjLhFB0mM=;
+        b=pgVrLQ0TtL6Y1aeMbU/cj5pgmiN3b9wgXaXsWtBGoWPC8Hv00vm4ikwrFK5VvWH5Mc
+         CYKn2xP0M4IrvO/4nKMUSmmyn+4CkpzZ1ahPkKQAgieSKT3hgkbrg0EBj9+T+bmi/FSg
+         h+p4Ko1zU+a/kw3GtiF/mId8mgFipikeRTREJ3cpXkiysNAbswcr1EB5zE9ZrUHWHylt
+         p8jYzr/a0yiChnltVFK+uDZ50zzqrujMqGkWuCCTADsgcqLhLCiZLCMkHRlusTy/MXf1
+         xqlrVqKqEdPM7xtWK+SsppGCNZ8JXvd/9gwNqxxNvWmCs9R7qb3rzpu1EP8PTtTKm4p9
+         DdYw==
+X-Gm-Message-State: AO0yUKXYSK0FMa6uiD5G2zZ+pWI1Cfs+D7vrmet9sEQ6CFUXT5oZR2JQ
+        Z37vCKKmWW8wijDTf1nd5GA=
+X-Google-Smtp-Source: AK7set9kfP8sfCh4EsN95J/ZdmLAzZQPNePNkWSy8sPECM/cP6PHARZOJXcrMxdY1LlBw1JK0pRDxg==
+X-Received: by 2002:a05:6870:b48d:b0:16d:ec6a:71ec with SMTP id y13-20020a056870b48d00b0016dec6a71ecmr2441541oap.27.1676218402068;
+        Sun, 12 Feb 2023 08:13:22 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n2-20020a056870844200b0010c727a3c79sm3225235oak.26.2023.02.12.08.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Feb 2023 08:13:21 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <afe68663-8ade-ae5a-00a1-083b2f263cb0@roeck-us.net>
-Date:   Sun, 12 Feb 2023 07:27:28 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
- access system controller registers
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
- <20230211073357.755893-2-sergio.paracuellos@gmail.com>
- <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
- <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
- <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com>
- <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
- <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
- <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
+Date:   Sun, 12 Feb 2023 08:13:20 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
+ pfn_valid() for FLATMEM
+Message-ID: <20230212161320.GA3784076@roeck-us.net>
+References: <20230129124235.209895-1-rppt@kernel.org>
+ <20230129124235.209895-5-rppt@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230129124235.209895-5-rppt@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,76 +105,49 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2/12/23 00:13, Sergio Paracuellos wrote:
-> On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 11/02/2023 12:01, Sergio Paracuellos wrote:
->>> On Sat, Feb 11, 2023 at 11:47 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>>>
->>>> On 11.02.2023 13:41, Sergio Paracuellos wrote:
->>>>> On Sat, Feb 11, 2023 at 10:10 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>>>>>
->>>>>> Is this mediatek,sysctl property required after your changes on the
->>>>>> watchdog code?
->>>>>
->>>>> I don't really understand the question :-) Yes, it is. Since we have
->>>>> introduced a new phandle in the watchdog node to be able to access the
->>>>> reset status register through the 'sysc' syscon node.
->>>>> We need the bindings to be aligned with the mt7621.dtsi file and we
->>>>> are getting the syscon regmap handler via
->>>>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Arınç.
->>>>
->>>> I believe you need to put mediatek,sysctl under "required:".
->>>
->>> Ah, I understood your question now :-). You meant 'required' property.
->>> I need more coffee, I guess :-). I am not sure if you can add
->>> properties as required after bindings are already mainlined for
->>> compatibility issues. The problem with this SoC is that drivers become
->>> mainlined before the device tree was so if things are properly fixed
->>> now this kind of issues appear.  Let's see Krzysztof and Rob comments
->>> for this.
->>
->> If your driver fails to probe without mediatek,sysctl, you already made
->> it required (thus broke the ABI) regardless what dt-binding is saying.
->> In such case you should update dt-binding to reflect reality.
->>
->> Now ABI break is different case. Usually you should not break it without
->> valid reasons (e.g. it was never working before). Your commit msg
->> suggests that you only improve the code, thus ABI break is not really
->> justified. In such case - binding is correct, driver should be reworked
->> to accept DTS without the new property.
+On Sun, Jan 29, 2023 at 02:42:35PM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> Thanks for clarification, Krzysztof. Ok, so if this is the case I need
-> to add this property required (as Arinc was properly pointing out in
-> previous mail) since without it the driver is going to fail on probe
-> (PATCH 5 of the series). I understand the "it was never working
-> before" argument reason for ABI breaks. What happens if the old driver
-> code was not ideal and totally dependent on architecture specific
-> operations when this could be totally avoided and properly make arch
-> independent agnostic drivers? This driver was added in 2016 [0]. There
-> was not a device tree file in the kernel for this SoC mainlined until
-> 2022 [1]. I also personally migrated this watchdog binding in 2022
-> from text to YAML and maintained it without changes [2]. When this was
-> mainlined not all drivers were properly reviewed and the current code
-> was just maintained as it is. Most users of this SoC are in the
-> openWRT community where the dtsi of the mainline is not used yet and
-> they maintain their own mt7621.dtsi files. Also, when a new version of
-> the openWRT selected kernel is added they also modify and align with
-> its mt7621.dtsi file without maintaining previous dtb's. If "make the
-> driver arch independent to be able to be compile tested" and this kind
-> of arguments are not valid at all I need to know because I have
-> started to review driver code for this SoC and other drivers also have
-> the same arch dependency that ideally should be avoided in the same
-> way. This at the end means to break the ABI again in the future for
-> those drivers / bindings. So I can just let them be as it is and not
-> provide any change at all and continue without being compile tested
-> and other beneficial features to detect future driver breakage.
+> Every architecture that supports FLATMEM memory model defines its own
+> version of pfn_valid() that essentially compares a pfn to max_mapnr.
+> 
+> Use mips/powerpc version implemented as static inline as a generic
+> implementation of pfn_valid() and drop its per-architecture definitions.
 > 
 
-Problem is that there are (presumably) shipped systems out there with
-the old devicetree file. The watchdog driver would no longer instantiate
-on those systems.
+With this patch in the tree, sh4 and sh4eb qemu emulations no longer boot.
+Reverting this patch fixes the problem.
 
 Guenter
 
+---
+# bad: [6ba8a227fd19d19779005fb66ad7562608e1df83] Add linux-next specific files for 20230210
+# good: [4ec5183ec48656cec489c49f989c508b68b518e3] Linux 6.2-rc7
+git bisect start 'HEAD' 'v6.2-rc7'
+# good: [94613f0efc69ed41f9229ef5c294db3ec37145da] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect good 94613f0efc69ed41f9229ef5c294db3ec37145da
+# good: [19e62c715fe70dae4582c2874ed3e66715d09af6] Merge branch 'rcu/next' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+git bisect good 19e62c715fe70dae4582c2874ed3e66715d09af6
+# good: [5d8b7ecef7f4a681b6e5538db59ff26c389c0ab6] Merge branch 'for-next' of https://gitlab.com/peda-linux/mux.git
+git bisect good 5d8b7ecef7f4a681b6e5538db59ff26c389c0ab6
+# good: [c349bf6ec83903b20fe570c5609b9a864a64e09c] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git
+git bisect good c349bf6ec83903b20fe570c5609b9a864a64e09c
+# good: [5a06a9f17454df38f35672be522ff5eb9b4277d2] selftest: add testing unsharing and counting ksm zero page
+git bisect good 5a06a9f17454df38f35672be522ff5eb9b4277d2
+# bad: [f5d115a7b06e5661ed5218ffa9a2644c4ff1c135] Merge branch 'mm-nonmm-unstable' into mm-everything
+git bisect bad f5d115a7b06e5661ed5218ffa9a2644c4ff1c135
+# bad: [acb018d6ea0c055381fba7dddaef386ee28f8075] mm/vmalloc.c: allow vread() to read out vm_map_ram areas
+git bisect bad acb018d6ea0c055381fba7dddaef386ee28f8075
+# good: [1a5d9782ac969dc6e61c6786500b5160603188ea] mm/mmap: remove __vma_adjust()
+git bisect good 1a5d9782ac969dc6e61c6786500b5160603188ea
+# good: [4b32363697de957dcc890b6245bec3f58903639a] arm: include asm-generic/memory_model.h from page.h rather than memory.h
+git bisect good 4b32363697de957dcc890b6245bec3f58903639a
+# bad: [328cf3fa6682ce6a4de6f8bb8009c833dc33f3c8] mm/migrate: convert isolate_movable_page() to use folios
+git bisect bad 328cf3fa6682ce6a4de6f8bb8009c833dc33f3c8
+# bad: [b704c765b08cabe82adf76a4d1a74f3688eee410] mm/mempolicy: convert queue_pages_pmd() to queue_folios_pmd()
+git bisect bad b704c765b08cabe82adf76a4d1a74f3688eee410
+# bad: [e5734c8b0edfd2a053a5c256189586a3b1e9f63d] mm, arch: add generic implementation of pfn_valid() for FLATMEM
+git bisect bad e5734c8b0edfd2a053a5c256189586a3b1e9f63d
+# good: [ad8aecea034c591b9754bc5908da9719853aa7fa] mips: drop definition of pfn_valid() for DISCONTIGMEM
+git bisect good ad8aecea034c591b9754bc5908da9719853aa7fa
+# first bad commit: [e5734c8b0edfd2a053a5c256189586a3b1e9f63d] mm, arch: add generic implementation of pfn_valid() for FLATMEM
