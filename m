@@ -2,130 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB78693F2A
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Feb 2023 08:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2831693FC6
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Feb 2023 09:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjBMHyo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Feb 2023 02:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S230053AbjBMIiL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Feb 2023 03:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBMHyn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Feb 2023 02:54:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD259422A;
-        Sun, 12 Feb 2023 23:54:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4871F60EC3;
-        Mon, 13 Feb 2023 07:54:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3884FC433EF;
-        Mon, 13 Feb 2023 07:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676274881;
-        bh=6metnuiv9QkmKFu+JTHLVBvZLre3nFtuNi3AR7PlA78=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P/NLBLn1QBccO0iLmwEVdjTRTOu/1JTVdr0CvbgYz4ThLcAoENpkQwi1mRk7/P19V
-         Brn+rbVYSD8LBBQWtetps+o6x9tV427CYirqerxd+gmGggehAz5OXTZeiD3MkT7U29
-         s/as2HenQlPGtPPTTf3fp/G4jLA+MmtrrPcey6hAK36CzGgOAg/0LtwnODYIfT0DI9
-         MUeph4dw/P2V8jMyhN9SftHlhcEV/JNhGKIKb6cMv7netYSdbt356AlVVkhPoiPUvd
-         r4aExWVaj3CL3McIngU/VdH3ENcuJwfiC6rBQVcgRCzZo3MtbE8U1j5N/4s5pn2pxp
-         sfCWQJUUPJk8Q==
-Date:   Mon, 13 Feb 2023 09:54:17 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
- pfn_valid() for FLATMEM
-Message-ID: <Y+nsqV6u/PqNlwDS@kernel.org>
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-5-rppt@kernel.org>
- <20230212161320.GA3784076@roeck-us.net>
- <Y+mRz6Wfocopv9jw@kernel.org>
- <15a2c023-fdfa-9543-ac36-a846e5f8a000@roeck-us.net>
+        with ESMTP id S229604AbjBMIiK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Feb 2023 03:38:10 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90D3CDED
+        for <linux-mips@vger.kernel.org>; Mon, 13 Feb 2023 00:38:08 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id n13so8129718wmr.4
+        for <linux-mips@vger.kernel.org>; Mon, 13 Feb 2023 00:38:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x93TSjXtO2TlBbQBk5NGYGAmIwuwgwhV00wjEqEE7Ys=;
+        b=cENjSiAp/PKrOCayJWJN1sfYW7o5AjlEiGfBmJW6RbMtdZDQ+Tgr5Lz/zBpkcdTiZw
+         lY9XIPWbgwgPKc83YQDqDJic4iWhRledbERbyDRX9vv5VKn9kzqi582th6XVx/qr+AFA
+         3bdwU116Zd0XZkPh6/RmFVKrrBQK1NO6DFqaAKl+LocAHAdSD1TFKOQkRxldhBLVwro1
+         Jzm5hW1reFVAcD9AEqHSvFpGN2xw8bACf+/SMZD/U/bWmRLg+rAibvGdbnfMcs1Sc+0i
+         a/gr21XFHk7ZoHXs3/+vyxLufhJ8rOSxqkDJzux/IxJw9RiFbnP67n3j80xfCRNcz26R
+         SjOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x93TSjXtO2TlBbQBk5NGYGAmIwuwgwhV00wjEqEE7Ys=;
+        b=05yF1ycEr7hBEVGfdYGoFQUoJRwMLzLnycFrpGNJqnZuj3iXawLr/Hsx0L6cVx36gM
+         qTsqbh6Cmc3uIYAMil8+yU6+4/rHr+2a2iMJrzUVsEvyAC9KkxVdvN1zdXuYxBoRHq0T
+         /GWTGlthkvOjnM9zJLRXBqDFdtWoDPUckGWGeY8UdrCBbvuk8slwcyXlRKDoP9WD0eBM
+         ykMDAmxf4/yJReqYxURSnm7pEwt7OdfdLV2vlhDQIZZNkGrGn493fd4ERas7R1LKz8Q2
+         YaFd5m0lUN+xHoJ/57g4cxBB5GvgW8+pDKwzFYSALTL/H09t8/t4KzxNh6jV3AODyadq
+         /iMw==
+X-Gm-Message-State: AO0yUKX/zqqKN2u1zmLuX5ppcLqweyo3BmOlAee5d35Z36qQcYlfflvs
+        7ygLN5Ds5ZPlGPlG1eT5cEBi1Q==
+X-Google-Smtp-Source: AK7set/x2ojpgyB5m1IoMLipum1xi70lchdc6voJigmp6PgY5rE/K5spEew1vHApe+/oMNVamvMVCQ==
+X-Received: by 2002:a05:600c:491d:b0:3da:2a78:d7a4 with SMTP id f29-20020a05600c491d00b003da2a78d7a4mr18267334wmp.21.1676277487553;
+        Mon, 13 Feb 2023 00:38:07 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c379300b003b47b80cec3sm16081969wmr.42.2023.02.13.00.38.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 00:38:07 -0800 (PST)
+Message-ID: <d10e541a-cdfd-08af-6a2c-eb7edcdb486a@linaro.org>
+Date:   Mon, 13 Feb 2023 09:38:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <15a2c023-fdfa-9543-ac36-a846e5f8a000@roeck-us.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
+ access system controller registers
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
+ <20230211073357.755893-2-sergio.paracuellos@gmail.com>
+ <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
+ <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
+ <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com>
+ <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
+ <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
+ <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Andrew, 
-
-On Sun, Feb 12, 2023 at 10:37:15PM -0800, Guenter Roeck wrote:
-> On 2/12/23 17:26, Mike Rapoport wrote:
-> > On Sun, Feb 12, 2023 at 08:13:20AM -0800, Guenter Roeck wrote:
-> > > On Sun, Jan 29, 2023 at 02:42:35PM +0200, Mike Rapoport wrote:
-> > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > > > 
-> > > > Every architecture that supports FLATMEM memory model defines its own
-> > > > version of pfn_valid() that essentially compares a pfn to max_mapnr.
-> > > > 
-> > > > Use mips/powerpc version implemented as static inline as a generic
-> > > > implementation of pfn_valid() and drop its per-architecture definitions.
-> > > > 
-> > > 
-> > > With this patch in the tree, sh4 and sh4eb qemu emulations no longer boot.
-> > > Reverting this patch fixes the problem.
-> > 
-> > This should be a better fix than a revert:
-> > 
-> > diff --git a/arch/sh/mm/init.c b/arch/sh/mm/init.c
-> > index 506784702430..bf1b54055316 100644
-> > --- a/arch/sh/mm/init.c
-> > +++ b/arch/sh/mm/init.c
-> > @@ -301,6 +301,7 @@ void __init paging_init(void)
-> >   	 */
-> >   	max_low_pfn = max_pfn = memblock_end_of_DRAM() >> PAGE_SHIFT;
-> >   	min_low_pfn = __MEMORY_START >> PAGE_SHIFT;
-> > +	set_max_mapnr(max_low_pfn - min_low_pfn);
-> >   	nodes_clear(node_online_map);
+On 12/02/2023 09:13, Sergio Paracuellos wrote:
+> On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 11/02/2023 12:01, Sergio Paracuellos wrote:
+>>> On Sat, Feb 11, 2023 at 11:47 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+>>>>
+>>>> On 11.02.2023 13:41, Sergio Paracuellos wrote:
+>>>>> On Sat, Feb 11, 2023 at 10:10 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+>>>>>>
+>>>>>> Is this mediatek,sysctl property required after your changes on the
+>>>>>> watchdog code?
+>>>>>
+>>>>> I don't really understand the question :-) Yes, it is. Since we have
+>>>>> introduced a new phandle in the watchdog node to be able to access the
+>>>>> reset status register through the 'sysc' syscon node.
+>>>>> We need the bindings to be aligned with the mt7621.dtsi file and we
+>>>>> are getting the syscon regmap handler via
+>>>>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Arınç.
+>>>>
+>>>> I believe you need to put mediatek,sysctl under "required:".
+>>>
+>>> Ah, I understood your question now :-). You meant 'required' property.
+>>> I need more coffee, I guess :-). I am not sure if you can add
+>>> properties as required after bindings are already mainlined for
+>>> compatibility issues. The problem with this SoC is that drivers become
+>>> mainlined before the device tree was so if things are properly fixed
+>>> now this kind of issues appear.  Let's see Krzysztof and Rob comments
+>>> for this.
+>>
+>> If your driver fails to probe without mediatek,sysctl, you already made
+>> it required (thus broke the ABI) regardless what dt-binding is saying.
+>> In such case you should update dt-binding to reflect reality.
+>>
+>> Now ABI break is different case. Usually you should not break it without
+>> valid reasons (e.g. it was never working before). Your commit msg
+>> suggests that you only improve the code, thus ABI break is not really
+>> justified. In such case - binding is correct, driver should be reworked
+>> to accept DTS without the new property.
 > 
-> Confirmed, this fixes the problem for me.
- 
-What is your preference for this and m68k fix? Fixups on top of mm-stable
-or v3 of the entire series? 
+> Thanks for clarification, Krzysztof. Ok, so if this is the case I need
+> to add this property required (as Arinc was properly pointing out in
+> previous mail) since without it the driver is going to fail on probe
+> (PATCH 5 of the series). I understand the "it was never working
+> before" argument reason for ABI breaks. What happens if the old driver
+> code was not ideal and totally dependent on architecture specific
+> operations when this could be totally avoided and properly make arch
+> independent agnostic drivers?
 
-> Thanks,
-> Guenter
+It's just an improvement and improvements should be incremental and not
+break ABI.
 
--- 
-Sincerely yours,
-Mike.
+> This driver was added in 2016 [0]. There
+> was not a device tree file in the kernel for this SoC mainlined until
+> 2022 [1]. 
+
+2022 march was almost a year ago, so there were kernel releases with
+this ABI.
+
+Also, what about all out of tree DTS? What about other operating
+systems, bootloaders, firmwares etc?
+
+
+Best regards,
+Krzysztof
+
