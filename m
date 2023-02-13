@@ -2,97 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E28693E73
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Feb 2023 07:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EE5693F04
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Feb 2023 08:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBMGoC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Feb 2023 01:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S229867AbjBMHni (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Feb 2023 02:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjBMGoB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Feb 2023 01:44:01 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD49F6EA6;
-        Sun, 12 Feb 2023 22:43:56 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id s11so3717610edd.10;
-        Sun, 12 Feb 2023 22:43:56 -0800 (PST)
+        with ESMTP id S229838AbjBMHni (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Feb 2023 02:43:38 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F72BEB47
+        for <linux-mips@vger.kernel.org>; Sun, 12 Feb 2023 23:43:36 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id r2so11113703wrv.7
+        for <linux-mips@vger.kernel.org>; Sun, 12 Feb 2023 23:43:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rupOtt5ylLjo3fhbHlzPJE20iu9FpqDjZ+/K/Redjx8=;
-        b=RcloBeKyGiN5jhXwNZnYJooc9NETmlpmcBG0PCwG//qfKJxVGf0biHLkDx5aShb7DL
-         /UB3zX5Ab+pa7uY69n/QM/4BccnvWZk7aVRdg8NS5uRWfVQ5zdVhcqH4FGpacZWKLcur
-         4oxgQMtFOEEQv2WA4o2f/9vKx2VB7ZKkXhST8lhNCF91mRQ8miAt3ruYLDQ1fi16QmTq
-         VTevFJpeL6yrO2nJYmwu39TwBlO0A9/wnAQjjfzH7uUskS3JEje+pbYbXnOsBj3lM9k1
-         /iKxtiyK4QCurN3hjyVa4uBXHI9crjgOo0d1Be/nxe2Ay+XsTSVvUvJqKhSziot9tkWB
-         sdKQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WncHzNCIjcRzD7asQuwseiFiSKek+vLGFO0rnFKEEi8=;
+        b=uN6XDCOjm5ZdbOyb5vsUqiOZNqidqI+E4JlgDjPqBPOQ0qUYBP/hQMWox752A64/0d
+         TKji/Mx9+JjdM4BGEpitRNfyLugnWh+rAP+3KrAYRaUL0Xn1CGDEOvqbsGPC6Q7YuLs6
+         XLllIAk35qsRSQsWQmRT8CvRrExqRirdCHcMasPkWch08MRId9Dn9ApCse3Bw5MxwT++
+         peeBrKyEzjl4/qyJw3QGQVe6traTHkLa/5PaFyUEYGYi5lMT9tkW+sQl3ldUFmVUYTxU
+         0tTxpBnzZuqxQfzXt1DcwzTo0Z8U5TJCLtG5jk6MeARg/QpMB8YrHkku+YZHa3shV7wm
+         Y/Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rupOtt5ylLjo3fhbHlzPJE20iu9FpqDjZ+/K/Redjx8=;
-        b=N67GSDler+tkkimOevmasEF3hd5sLSyWEHB0VVFKX8QKSopDzdeIX/XieyNBxkK5Sj
-         lv+olAjvLz40tMGHJ/7bE3zWdblbcVsf3F3eqAFkVvHcdlBbf+KpjZbbWTKXtpeFX1kG
-         4TnAFoaL1ssfdcIjQDAwh/1ifYzcPbRjaSi1EOQijOd9UamjVsblhF6hk1zcWxU7bmLd
-         O95kZJ4mJOrsgbY94FMhhvhVWbWWV1AjiXUZz0wayYLvAp6lmBetUHU+rOMz9XrTFDu9
-         j8pgP0b7k1ocbImUy6YfBJDSAQuW4RqHpvXQJMsdWYnRHK+vESw/GHs7YKHG9P3Guiq3
-         TC5g==
-X-Gm-Message-State: AO0yUKVzrnXQvYz8PBwnUgg0P5mtdA1tR9eIEioYOKss+KwUytjpzQx6
-        ibfWooUImN0Xv4pZrInroxsjRiKsNYk156sM60o=
-X-Google-Smtp-Source: AK7set/hbslv9tB2aTA07MPLpW6tzHMxN4NvFICuLuZaCEMs+04VVTiV26HkiYJEQ7IMxrN4pUx4eXnJfGdqT06vU0g=
-X-Received: by 2002:a50:f61b:0:b0:4ac:b528:5728 with SMTP id
- c27-20020a50f61b000000b004acb5285728mr2940770edn.2.1676270635423; Sun, 12 Feb
- 2023 22:43:55 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WncHzNCIjcRzD7asQuwseiFiSKek+vLGFO0rnFKEEi8=;
+        b=zQ6/BaqnV/ngXFpLCIlCCvRz9pKOjdPEqZkdo1KH0Gtd18JNUGRZ12Cv0McmByn1t7
+         dDHWd6JZpgiTHXzKxYAEsM3InazWNUSpNM5BSCIERiSXSB2fmSYCrFdQZDaaNwRPfmSk
+         3xHLtViqmcDdHEsl+j7YdHbMtE1G7NJrmyabMTs6jpa0hEuU5lynD8QjlyyVS5Vc3tU9
+         DzvP/dTXQZIyrwZhmLwW6sMnmgbHk5tXYFerbFVmrMnp/CP9WYPPwyjFOVE/e8FajE4C
+         i43x0ODZWclDzkP6gOWSwEgG0jg1B+bme9dxASQkBKHusvRiu1/iDhmAqjL9Z5n0n/RR
+         DWGg==
+X-Gm-Message-State: AO0yUKVAYkTxW3o+nO0FVSsD1mtnWjHB/b+L7tZAmVJ+K1ptUu93Pajm
+        PbkvaLdZ2KyAtns4w0bfvKaivuyLrWfjUmji
+X-Google-Smtp-Source: AK7set9gM3U6nf6XubMsmOVtYAlQ4bJVEMUUhTbjkzZQuQBRvr4ASHMO65QFkbNJ2sG+BF21KyhkTQ==
+X-Received: by 2002:a5d:6307:0:b0:2c3:e993:9d81 with SMTP id i7-20020a5d6307000000b002c3e9939d81mr22074934wru.66.1676274214913;
+        Sun, 12 Feb 2023 23:43:34 -0800 (PST)
+Received: from [192.168.30.216] ([81.0.6.76])
+        by smtp.gmail.com with ESMTPSA id o16-20020a5d6850000000b002bfbda53b98sm9812603wrw.35.2023.02.12.23.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Feb 2023 23:43:34 -0800 (PST)
+Message-ID: <3318261e-ce1c-3a6b-f206-898bda86d0d7@linaro.org>
+Date:   Mon, 13 Feb 2023 08:43:33 +0100
 MIME-Version: 1.0
-References: <20230211024156.3530526-1-zhoubinbin@loongson.cn> <87lel3kssq.wl-maz@kernel.org>
-In-Reply-To: <87lel3kssq.wl-maz@kernel.org>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Mon, 13 Feb 2023 14:43:40 +0800
-Message-ID: <CAMpQs4KwCgUA24apw=wmN=k7n+ERiip8gG9-8kirCQ+-HDP1Jg@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/loongson-eiointc: Add DT init support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH] MIPS: dts: Boston: Fix dtc 'pci_device_reg' warning
+Content-Language: en-US
+To:     Genjian <zhanggenjian123@gmail.com>, paulburton@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+References: <20230213062451.1688755-1-zhanggenjian@kylinos.cn>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230213062451.1688755-1-zhanggenjian@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 7:49 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Sat, 11 Feb 2023 02:41:56 +0000,
-> Binbin Zhou <zhoubinbin@loongson.cn> wrote:
-> >
-> > Add DT support for EIOINTC irqchip, which is needed for the Loongson-2K
-> > series, e.g. Loongson-2K500 soc.
->
-> Where is the binding? I'm pretty sure other drivers need updating.
-> Where are they?
+On 13/2/23 07:24, Genjian wrote:
+> From: Genjian Zhang <zhanggenjian@kylinos.cn>
+> 
+> dtbs_check currently complains that:
+> arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg):
+> /pci@14000000/pci2_root@0,0,0: PCI unit address format error,
+> expected "0,0"
+> The unit-address format should be '<device>,<function>'.
+> Fix the unit-address accordingly.
+> 
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+> ---
+>   arch/mips/boot/dts/img/boston.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi Marc:
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-I will add the binding file in my next version patchset.
 
-Thanks.
-Binbin
-
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
->
