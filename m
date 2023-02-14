@@ -2,40 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239ED69559B
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 01:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FABD6955BE
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 02:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjBNAyG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Feb 2023 19:54:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
+        id S230120AbjBNBJr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Feb 2023 20:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBNAyF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Feb 2023 19:54:05 -0500
+        with ESMTP id S229812AbjBNBJp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Feb 2023 20:09:45 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1B3105;
-        Mon, 13 Feb 2023 16:54:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5662D2D7C;
+        Mon, 13 Feb 2023 17:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=maH2SZy98/KPk5SI0WVIPKnJ0GBrmU/W71CMItL8ib8=; b=U05NZKDIp4T6btFRFUQTHY/uOV
-        swOuky79Glp29Yi1jzXUjH8YvkxuxZ/u9EqDYiqUCX7SZBUPiE/alTvIt4VB4FEaIPBcLOn742fcK
-        6mC7Xx+WWKug2znulWwdEDg158RNYjlTtLUyKQK12F2tBaKt8pNdMtJeQVnY6d8RU6v7+4Nw2267H
-        KBfZKFB1kY4F2v4+VkhTA+g5t/G3Co6sRzNgasrZ7+hrydpA/j4wlkOydRKOYxZLvw7XTvpP6F8zV
-        Yh9YGM/KUQUmvh4LjSBfPr8MLgwYyHLWPUHQw+0UAlPHjJxMzBvwAgyrCY+JPmU8ndkkzLeDbqyfk
-        YWZ/PRmg==;
+        bh=/eABX6egoR0ltWSchldSbx/9FFqW2AHIMhWCGphM4EY=; b=2hzbhy8v65THGe976hZPPjc08P
+        oegSFNkNGtnSaT2ET0jQuZ3GspnlP1n22uio3LGfxKOuibZ5NeJJvdl70qrZ7M13DkrBNtbzemhE7
+        50GiaYhRG14WEmd7l7Er+7zySyJYfat4fhBygkIs3Pz2YIQImzAhDl9GBkE25PydIiF9DLy4wAYDk
+        BN+f0L/CwUpz0FTSNJTGnw6nWOl8PajrW8XZvBApaBf7IzcsnNUnN3tDf+MICUUn5y+cQj4hwjIvd
+        LZWBTkkxKXyuLR+N2e6qzPH0S9GfvGdq77rndxV9foCaT73RCP6jGQcE53G7opvOX7OmrlYhXwhi5
+        JiswBvag==;
 Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pRja5-00GwhC-Db; Tue, 14 Feb 2023 00:54:01 +0000
+        id 1pRjpH-00GyUj-4f; Tue, 14 Feb 2023 01:09:43 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Song Liu <song@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        John Crispin <john@phrozen.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org
-Subject: [PATCH] module: fix MIPS module_layout -> module_memory
-Date:   Mon, 13 Feb 2023 16:54:00 -0800
-Message-Id: <20230214005400.17137-1-rdunlap@infradead.org>
+Subject: [PATCH] MIPS: vpe-mt: provide a default 'physical_memsize'
+Date:   Mon, 13 Feb 2023 17:09:42 -0800
+Message-Id: <20230214010942.25143-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,34 +50,45 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Correct the struct's field/member name from mod_mem to mem.
+When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
+declared. This causes the build to fail with:
 
-Fixes this build error:
-../arch/mips/kernel/vpe.c: In function 'vpe_elfload':
-../arch/mips/kernel/vpe.c:643:41: error: 'struct module' has no member named 'mod_mem'
-  643 |         v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
+mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
+arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
 
-Fixes: 2ece476a2346 ("module: replace module_layout with module_memory")
+Fix this by declaring a 0-value physical_memsize with neither LANTIQ
+nor MIPS_MALTA is set, like LANTIQ does.
+
+Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Song Liu <song@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
+Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+Cc: John Crispin <john@phrozen.org>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: linux-mips@vger.kernel.org
 ---
-Has this already been fixed?
+How has this build error not been detected for 10 years?
 
- arch/mips/kernel/vpe.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/kernel/vpe-mt.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff -- a/arch/mips/kernel/vpe.c b/arch/mips/kernel/vpe.c
---- a/arch/mips/kernel/vpe.c
-+++ b/arch/mips/kernel/vpe.c
-@@ -640,7 +640,7 @@ static int vpe_elfload(struct vpe *v)
- 		layout_sections(&mod, hdr, sechdrs, secstrings);
- 	}
+diff -- a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
+--- a/arch/mips/kernel/vpe-mt.c
++++ b/arch/mips/kernel/vpe-mt.c
+@@ -22,6 +22,15 @@ static int major;
+ /* The number of TCs and VPEs physically available on the core */
+ static int hw_tcs, hw_vpes;
  
--	v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
-+	v->load_addr = alloc_progmem(mod.mem[MOD_TEXT].size);
- 	if (!v->load_addr)
- 		return -ENOMEM;
- 
++#if !defined(CONFIG_MIPS_MALTA) && !defined(CONFIG_LANTIQ)
++/* The 2 above provide their own 'physical_memsize' variable. */
++/*
++ * This is needed by the vpe-mt loader code, just set it to 0 and assume
++ * that the firmware hardcodes this value to something useful.
++ */
++unsigned long physical_memsize = 0L;
++#endif
++
+ /* We are prepared so configure and start the VPE... */
+ int vpe_run(struct vpe *v)
+ {
