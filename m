@@ -2,138 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FDA695FDC
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 10:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9073E695FF1
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 10:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbjBNJyj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 04:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
+        id S232528AbjBNJ4r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 04:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjBNJya (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 04:54:30 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787241E5D0
-        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 01:54:28 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id k3so7370247wrv.5
-        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 01:54:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RgvF89o6ZcBymJMWYMDUfo/mipTfyd/qv7ZfD7kB7f8=;
-        b=LYqKURiyfJTPtTDUTgxztjHHTrcwpBdRJ8gWzviECue8nZDvONWw7gmmrgFge8NIol
-         rSdfPI7maNIwe/51tu3oE/x5h5O2bVV1NmXoPrVOEjyRKJkUtwYcB61sYZRlnQ0l3kCz
-         Ne1DAW2AoBUvxARiGm3vr4xOugiZaLYc5HJ+PSnva4dPk1PuEFnoOJey2rnUWSjEosVv
-         2oq/WOBf2udzzqHejwzw2y6QuCagUnvTY7yauoynbnxl3V2yDkIVo/l85yF/xNDUg2G4
-         VIqQN2cXRELU219cc4krQJgMvzY4KKH4BG+EeaYxymLbgWlL3SnpTbxJJ7x5tEm30vnA
-         /Fpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RgvF89o6ZcBymJMWYMDUfo/mipTfyd/qv7ZfD7kB7f8=;
-        b=mRW2gP4NQnrVfHbkABesGVwLvCoAhgbg9Nf3yM4CW5qszbknmYvaiI5GNudC/5PMxz
-         ZWc/afYu2AkDdcBeLFS9HJj05OEV1vXj2oxuJNh9KdPq+l3k13Umy8uN19Y7Cv0SWnCd
-         KLxfO/IQX9LxYuasaKkCzz9jUVpscNCz4/rT4/LrrleEbnivnVDaq0MTp1c3RZqMn51S
-         mXjTHQRk5cc5hIr61kcANI0GE7qrRGsr6plLUfEQroYcnb5E5tPNmL/0ICQqqnODiw1g
-         /A7UerZDfa9kwMlf7IwG5NmzTRYFfy91goDjOFe0PRwjmLBtqltKyG9OHxjIZHf0BmrE
-         v72g==
-X-Gm-Message-State: AO0yUKX1TYIuuEwtbiV3PGzdYW6Qxeyf9CiubaPqY8BVDhb4RyPYFBp5
-        v3RQC0EyL5uRho7COCsuEW2I2w==
-X-Google-Smtp-Source: AK7set/k8I3ls3Dk3K9u1Ly5QLY21zRXzjLQRRJQp+VJzwjjdN22mbPH9pkx/RgZgoS2yCOs60bxwQ==
-X-Received: by 2002:adf:e6c5:0:b0:2bf:95d6:4789 with SMTP id y5-20020adfe6c5000000b002bf95d64789mr1117227wrm.2.1676368467087;
-        Tue, 14 Feb 2023 01:54:27 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u14-20020adff88e000000b002c56046a3b5sm2624973wrp.53.2023.02.14.01.54.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:54:26 -0800 (PST)
-Message-ID: <f224fc29-4954-60f0-3eea-0973a94b29f4@linaro.org>
-Date:   Tue, 14 Feb 2023 10:54:25 +0100
+        with ESMTP id S232571AbjBNJ4L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 04:56:11 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEE724CB5;
+        Tue, 14 Feb 2023 01:55:53 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id AB0771BF20A;
+        Tue, 14 Feb 2023 09:55:43 +0000 (UTC)
+Message-ID: <0bf59207-838b-2a0b-a95e-925a6bbf1913@ghiti.fr>
+Date:   Tue, 14 Feb 2023 10:55:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
- dependent code
+Subject: Re: API for setting multiple PTEs at once
 Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
- <20230213200519.889503-4-sergio.paracuellos@gmail.com>
- <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
- <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com>
- <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
- <CAMhs-H8Ls2oTZ8LYguCdizNZN3cUC8kKA4e_L6BD3C3cFDP0tA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMhs-H8Ls2oTZ8LYguCdizNZN3cUC8kKA4e_L6BD3C3cFDP0tA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Matthew Wilcox <willy@infradead.org>, linux-arch@vger.kernel.org
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+        linux-alpha@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+References: <Y9wnr8SGfGGbi/bk@casper.infradead.org>
+ <Y+K0O35jNNzxiXE6@casper.infradead.org>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <Y+K0O35jNNzxiXE6@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14/02/2023 10:50, Sergio Paracuellos wrote:
-> On Tue, Feb 14, 2023 at 10:33 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 14/02/2023 09:54, Sergio Paracuellos wrote:
->>>>>       return 0;
->>>>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
->>>>>       if (!drvdata)
->>>>>               return -ENOMEM;
->>>>>
->>>>> +     drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
->>>>> +     if (IS_ERR(drvdata->sysc))
->>>>> +             return PTR_ERR(drvdata->sysc);
->>>>
->>>> This should be the backup/error path for original code using syscon
->>>> property. Looking up by compatible is really not portable/re-usable.
->>>
->>> I can change the code in the way you are pointing out here but...
->>> Why is it not re-usable? Compatible is not supposed to be changed
->>> since in other cases the DTB ABI will be broken. I am totally lost
->>> about what is an ABI breakage, then.
->>
->> How do you use it on other platform?
-> 
-> I see, thanks.
-> 
-> So if I am understanding you correctly I have to maintain the
-> 'mediatek,sysctl' phandle and use it in the first instance and if it
-> fails I have to use regmap_loopup_by_compatible() stuff, right?
-> Something like:
-> 
-> ...
-> 
-> drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "mediatek,sysctl");
-> if (IS_ERR(drvdata->sysc)) {
->          drvdata->sysc =
-> syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
->          if (IS_ERR(drvdata->sysc))
->               return PTR_ERR(drvdata->sysc);
-> }
-> 
-> ....
-> 
-> So in that case, we can add the new phandle to the bindings without
-> any kind of ABI breakage and we can use old dtbs using new watchdog
-> driver code.
-> 
+Hi Matthew,
 
-Yes.
+On 2/7/23 21:27, Matthew Wilcox wrote:
+> On Thu, Feb 02, 2023 at 09:14:23PM +0000, Matthew Wilcox wrote:
+>> For those of you not subscribed, linux-mm is currently discussing
+>> how best to handle page faults on large folios.  I simply made it work
+>> when adding large folio support.  Now Yin Fengwei is working on
+>> making it fast.
+> OK, here's an actual implementation:
+>
+> https://lore.kernel.org/linux-mm/20230207194937.122543-3-willy@infradead.org/
+>
+> It survives a run of xfstests.  If your architecture doesn't store its
+> PFNs at PAGE_SHIFT, you're going to want to implement your own set_ptes(),
+> or you'll see entirely the wrong pages mapped into userspace.  You may
+> also wish to implement set_ptes() if it can be done more efficiently
+> than __pte(pteval(pte) + PAGE_SIZE).
+>
+> Architectures that implement things like flush_icache_page() and
+> update_mmu_cache() may want to propose batched versions of those.
+> That's alpha, csky, m68k, mips, nios2, parisc, sh,
+> arm, loongarch, openrisc, powerpc, riscv, sparc and xtensa.
+> Maintainers BCC'd, mailing lists CC'd.
+>
+> I'm happy to collect implementations and submit them as part of a v6.
 
-Best regards,
-Krzysztof
+
+Please find below the riscv implementation for set_ptes:
+
+diff --git a/arch/riscv/include/asm/pgtable.h 
+b/arch/riscv/include/asm/pgtable.h
+index ebee56d47003..10bf812776a4 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -463,6 +463,20 @@ static inline void set_pte_at(struct mm_struct *mm,
+         __set_pte_at(mm, addr, ptep, pteval);
+  }
+
++#define set_ptes set_ptes
++static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
++                           pte_t *ptep, pte_t pte, unsigned int nr)
++{
++       for (;;) {
++               set_pte_at(mm, addr, ptep, pte);
++               if (--nr == 0)
++                       break;
++               ptep++;
++               addr += PAGE_SIZE;
++               pte = __pte(pte_val(pte) + (1 << _PAGE_PFN_SHIFT));
++       }
++}
++
+  static inline void pte_clear(struct mm_struct *mm,
+         unsigned long addr, pte_t *ptep)
+  {
+
+
+Thanks,
+
+Alex
 
