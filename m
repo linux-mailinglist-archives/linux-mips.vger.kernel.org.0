@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE20696C7B
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 19:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2CF696CB0
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 19:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbjBNSLQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 13:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S231793AbjBNSX3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 13:23:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233309AbjBNSLO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 13:11:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C763C1C;
-        Tue, 14 Feb 2023 10:11:07 -0800 (PST)
+        with ESMTP id S232171AbjBNSX2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 13:23:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E342BF04;
+        Tue, 14 Feb 2023 10:23:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 851CBB81EB3;
-        Tue, 14 Feb 2023 18:11:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F352C4339B;
-        Tue, 14 Feb 2023 18:11:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81FDB6181E;
+        Tue, 14 Feb 2023 18:23:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3376FC433EF;
+        Tue, 14 Feb 2023 18:23:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676398265;
-        bh=TKLtb/CYAjL8ExEwN2xeP7hJFXlbI5pH9qu3eQ0qmvA=;
+        s=k20201202; t=1676399005;
+        bh=6EEHFrLsabjvymp2QY0maJnB4Ezo1N96TizvWsxliSs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n8kTCiR3nrn23S9SyNNUTkXUfCumSDdFWvPXylR4gSXNC6g+2D+lxgO1fwXaaokrY
-         YVuLXGZbvvPMISaAP3wcazASy0rreHUgKB6li+yndvVqSXl0jqLsa1A9ETU4D4baHD
-         +///MI1JyNrU0ZT9OEzao9lmsZ8IdtbTtCxXLGbZAyZGrD2bN6mrI5UH2cs9usKRiY
-         bQMkI5fWLLowvUmtkCaAN5DN5oB/0AQwqle2Bn8qcUvo4LBvfw0VUZsTdIt2ANhZAW
-         wrih0yuj8p3luuIs6lJTwcX1j3ukAvE1/aQWQn2g4hCMVpjAMdZ4HwZ/dNztV4bKzz
-         l6j7aiyTxWddw==
-Date:   Tue, 14 Feb 2023 10:11:01 -0800
+        b=ewo4sNIkf4SKN8X81e1VZLV0gftWY9x5Idojfu6eT2b5ZqWCugH7cdipfgrW/yItW
+         dqagFjGOxb/3bL82FQa8uuxe//ztDAd9OjP7hBFIDi33dsqHZZjtip3V1HJ2oMssgq
+         JOC+Yor+xpMwuL0MvLKpSDnAPlafCWbIbj+fVaPjRgLXxBLYj2+reObJ0duhgkj1On
+         B/RwdybgTkIi3ajOUQ2j7ORpSeUDMZz187rZ02sRoCPqHerIGi+6Ive3pLH2MHMcC/
+         Wt6l7B+BR9KKMKD4veoKROyWZ38VxJ/Bk61QLyW3eGZbXyZkY95I+3EgwPU2h+98Tw
+         pND7dbVAeFWAA==
+Date:   Tue, 14 Feb 2023 10:23:22 -0800
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
@@ -55,17 +55,16 @@ Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         paulmck@kernel.org
-Subject: Re: [PATCH v2 09/24] mips/cpu: Expose play_dead()'s prototype
- definition
-Message-ID: <20230214181101.3a2tscbmwdnwbqpu@treble>
+Subject: Re: [PATCH v2 19/24] xtensa/cpu: Make sure cpu_die() doesn't return
+Message-ID: <20230214182322.r5tyeowxzloiuh72@treble>
 References: <cover.1676358308.git.jpoimboe@kernel.org>
- <39835bc75af2e812fce56400533cb2ab41bcf0e2.1676358308.git.jpoimboe@kernel.org>
- <080a5ccb-7fa0-1a75-538f-a09dc146fc4e@linaro.org>
+ <cca346b5c87693499e630291d78fb0bf12c24290.1676358308.git.jpoimboe@kernel.org>
+ <1b4afd82-83cb-0060-7cab-8e16d2e69ff9@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <080a5ccb-7fa0-1a75-538f-a09dc146fc4e@linaro.org>
+In-Reply-To: <1b4afd82-83cb-0060-7cab-8e16d2e69ff9@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,74 +74,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 08:46:41AM +0100, Philippe Mathieu-Daudé wrote:
+On Tue, Feb 14, 2023 at 08:55:32AM +0100, Philippe Mathieu-Daudé wrote:
 > Hi Josh,
 > 
 > On 14/2/23 08:05, Josh Poimboeuf wrote:
-> > Include <asm/smp.h> to make sure play_dead() matches its prototype going
-> > forward.
+> > cpu_die() doesn't return.  Make that more explicit with a BUG().
 > > 
-> > Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> > BUG() is preferable to unreachable() because BUG() is a more explicit
+> > failure mode and avoids undefined behavior like falling off the edge of
+> > the function into whatever code happens to be next.
+> > 
 > > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 > > ---
-> >   arch/mips/kernel/smp-bmips.c | 1 +
-> >   1 file changed, 1 insertion(+)
+> >   arch/xtensa/kernel/smp.c | 2 ++
+> >   1 file changed, 2 insertions(+)
 > > 
-> > diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-> > index f5d7bfa3472a..df9158e8329d 100644
-> > --- a/arch/mips/kernel/smp-bmips.c
-> > +++ b/arch/mips/kernel/smp-bmips.c
-> > @@ -38,6 +38,7 @@
-> >   #include <asm/traps.h>
-> >   #include <asm/barrier.h>
-> >   #include <asm/cpu-features.h>
-> > +#include <asm/smp.h>
+> > diff --git a/arch/xtensa/kernel/smp.c b/arch/xtensa/kernel/smp.c
+> > index 4dc109dd6214..7bad78495536 100644
+> > --- a/arch/xtensa/kernel/smp.c
+> > +++ b/arch/xtensa/kernel/smp.c
 > 
-> What about the other implementations?
+> Can you update the documentation along? Currently we have:
 > 
-> $ git grep -L asm/smp.h $(git grep -wlF 'play_dead(void)' arch/mips)
-> arch/mips/cavium-octeon/smp.c
-> arch/mips/kernel/smp-bmips.c
-> arch/mips/kernel/smp-cps.c
-> arch/mips/loongson64/smp.c
+>   /*
+>    * Called from the idle thread for the CPU which has been shutdown.
+>    *
+>    * Note that we disable IRQs here, but do not re-enable them
+>    * before returning to the caller. This is also the behaviour
+>    * of the other hotplug-cpu capable cores, so presumably coming
+>    * out of idle fixes this.
+>    */
 
-Indeed.  I really wish we had -Wmissing-prototypes.
+void __ref cpu_die(void)
+{
+	idle_task_exit();
+	local_irq_disable();
+	__asm__ __volatile__(
+			"	movi	a2, cpu_restart\n"
+			"	jx	a2\n");
 
-I'll squash this in:
+	BUG();
+}
 
-diff --git a/arch/mips/cavium-octeon/smp.c b/arch/mips/cavium-octeon/smp.c
-index 89954f5f87fb..4212584e6efa 100644
---- a/arch/mips/cavium-octeon/smp.c
-+++ b/arch/mips/cavium-octeon/smp.c
-@@ -20,6 +20,7 @@
- #include <asm/mmu_context.h>
- #include <asm/time.h>
- #include <asm/setup.h>
-+#include <asm/smp.h>
- 
- #include <asm/octeon/octeon.h>
- 
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index bcd6a944b839..6d69a9ba8167 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -20,6 +20,7 @@
- #include <asm/mipsregs.h>
- #include <asm/pm-cps.h>
- #include <asm/r4kcache.h>
-+#include <asm/smp.h>
- #include <asm/smp-cps.h>
- #include <asm/time.h>
- #include <asm/uasm.h>
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index c81c2bd07c62..df8d789ede3c 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -14,6 +14,7 @@
- #include <linux/cpufreq.h>
- #include <linux/kexec.h>
- #include <asm/processor.h>
-+#include <asm/smp.h>
- #include <asm/time.h>
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
+Hm, not only is the comment wrong, but it seems to be branching to
+cpu_restart?  That doesn't seem right at all.
+
+Max/Chris?
+
+-- 
+Josh
