@@ -2,85 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39484695F04
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 10:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0A3695F47
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 10:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbjBNJ0e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 04:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S232372AbjBNJdl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 04:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbjBNJ0R (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 04:26:17 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3300C24480
-        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 01:25:55 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id o15so11607585wrc.9
-        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 01:25:54 -0800 (PST)
+        with ESMTP id S232265AbjBNJdk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 04:33:40 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEE655A4
+        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 01:33:33 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id o15so11629477wrc.9
+        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 01:33:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QDxRPg0tzmSlpSdGNasFtKDU/RizntlcLVEvFLg/3J0=;
-        b=NES+X0jitlSFN9CMyxtOBnwXvr4UEkpCwjSf8ktPB+wXMhbktMrNUflH+JM2ssaH9K
-         1szwzK+H0w1R1obMWrGYq2h5EqmbiN8TzRSCSDfQ0xIRnMtUM0YXe0sOqWpLCMwXuGjf
-         pq5Tp+btAH/Jp2UMc+IUaq03lyRqROMWnwZHj0SyNjg2aEHISp2YzMuCIH2fFqgRFL2C
-         nh8rUW+D8G8ohs7qk9rK8//cKtczB59ooJFvWHa+cMfxk4FIJRL/sUbUY+TwB9aq5oQ6
-         5XNgdahaS2tg0VmMYr3n7xy9L8AkuRxwtGbyTzFH3A9vsOSJ49wrhdrqe9fR4BHUPm/1
-         +QNw==
+        bh=cfs+Q3/NCe1EQO+5Ft904kfT2AxcjZbiWamdz5bJvaY=;
+        b=NBHd90XfEE+9tYmS2wB/jBXfk75s5nVkMimrJFGyXaOOIMZa0vkXAJOOHXF1u5XY9t
+         xplGnNakc/TE5VfShtEHgvbB8At5wt8XtDhR7SuH29r0Y7aMzwZPloOMait+35FZHqie
+         NYvksuYtcQdpbwfkMJ4o7bwaDzn2BZi9L9H6OQ9KmTRHLN/Oq26c1dD5rNv9ZEEbv2oX
+         I1plKNd8RdeKsdQXmlEtI6hsz0cq8Lh0+aFPmuEBE1LWPiXx7qgQbYC49AhIaJJZj+sQ
+         6BRubrd+kaochlSJDFS5OXlEnPM4V3JcargCwm5zMCrAq6ep0eOqWJcIPRi7r3D+NONd
+         hsrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QDxRPg0tzmSlpSdGNasFtKDU/RizntlcLVEvFLg/3J0=;
-        b=Dt/2o3jbquN16GY+BZSahMo4NByEHI746a0usnjEGQb6nEZnLH3Mmk0MvNzZHuyaqu
-         y7M9gv5oI6bkzqFrpyWKrmdBqGumy58hkK7aOmfSRCRpgkTnFfAWSMuQZoJjgwh5BcC3
-         Vfse+PuTOtkMnBSDyUnp//vyeup3S87s5MmNY5uFLCLM2sFNCT3HNhx+6imgunNHxJn9
-         y9G3uGb1weAj+bZndtW295JMo/tvyqhH7VidkJGPQ+oS+yRXY4yGDTC6c1aK/ujgU3QC
-         YzSMokiaFbrUWhSmTfIw4WsMuMdvI4tTglpqUjM4Nb3PHZVYgvrXonUB7gQc7CV/KvRM
-         Jocw==
-X-Gm-Message-State: AO0yUKWxaqqy8vX8WFq1lcJd9RpOGWmMGqlqEWdmXjdIiaxpuSmVBNAc
-        o8ghFsgNCuuedLBfYmfZqJjmvQ==
-X-Google-Smtp-Source: AK7set/9MnT573XDoeCr+EYDww6Z0dgS8IXweDvdGBdO2qa8Cb9d8o+MYY77g+qurwoNXDnWtaacEA==
-X-Received: by 2002:adf:e9c5:0:b0:2c5:4dbf:587 with SMTP id l5-20020adfe9c5000000b002c54dbf0587mr1635221wrn.57.1676366753443;
-        Tue, 14 Feb 2023 01:25:53 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id d15-20020a5d6dcf000000b002c3f9404c45sm12906865wrz.7.2023.02.14.01.25.50
+        bh=cfs+Q3/NCe1EQO+5Ft904kfT2AxcjZbiWamdz5bJvaY=;
+        b=p3wwMe8ntPxfqUH6SSURPNeZlTd7ayihwrQ1ID8bylqkaI6rWcOPB+vLmqa9n6tlg3
+         mY12t/ddlySZQdEU8aFCFXOszQrs7GhXxX7yqlTpROkllvLlC/BPROKaPeNXx5rrSQql
+         uzi5VN6s28M89/zTYrjddtnynOa8xQpxVRS41yBWjRTC5oOj19EmFZ4D9NuQtZpymSKE
+         fKimaYgHpznOChlKU2w7MAn/vBjgXzInMk/mrZ9DKHJdqEXWJzxPQvEaL4uX0ur2P/1a
+         475fxT/j40oNhG6/zLo9CohH2+G8KmWryZWunqRJl6q7UwsrqBjGSWBeziJdfMXMrrkt
+         CW2w==
+X-Gm-Message-State: AO0yUKUw7URgT+aKQHW3UsYmabiSqYJJckMKJCYSRgb7oZX0FsDRvYQ/
+        RiibaBjTlHYs5RhQvhomndrH+w==
+X-Google-Smtp-Source: AK7set+dVtdtCDNLgA5545ILg7PF/u84//tVlT2VUmHK0xnzko5rFmzjH7eBd7V/o9AYBTmJjQEE+g==
+X-Received: by 2002:adf:f8c6:0:b0:2bf:95d0:fa5d with SMTP id f6-20020adff8c6000000b002bf95d0fa5dmr2093230wrq.9.1676367211857;
+        Tue, 14 Feb 2023 01:33:31 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n6-20020adffe06000000b002c559843748sm4162918wrr.10.2023.02.14.01.33.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:25:53 -0800 (PST)
-Message-ID: <a48ebe98-82b5-8f7b-8327-4e60bdb231c8@linaro.org>
-Date:   Tue, 14 Feb 2023 10:25:50 +0100
+        Tue, 14 Feb 2023 01:33:31 -0800 (PST)
+Message-ID: <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
+Date:   Tue, 14 Feb 2023 10:33:29 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v2 00/24] cpu,sched: Mark arch_cpu_idle_dead() __noreturn
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
+ dependent code
 Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     jgross@suse.com, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-References: <cover.1676358308.git.jpoimboe@kernel.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <cover.1676358308.git.jpoimboe@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
+ <20230213200519.889503-4-sergio.paracuellos@gmail.com>
+ <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
+ <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -92,16 +82,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14/2/23 08:05, Josh Poimboeuf wrote:
-> v2:
-> - make arch_call_rest_init() and rest_init() __noreturn
-> - make objtool 'global_returns' work for weak functions
-> - rebase on tip/objtool/core with dependencies merged in (mingo)
-> - add acks
+On 14/02/2023 09:54, Sergio Paracuellos wrote:
+>>>       return 0;
+>>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
+>>>       if (!drvdata)
+>>>               return -ENOMEM;
+>>>
+>>> +     drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
+>>> +     if (IS_ERR(drvdata->sysc))
+>>> +             return PTR_ERR(drvdata->sysc);
+>>
+>> This should be the backup/error path for original code using syscon
+>> property. Looking up by compatible is really not portable/re-usable.
 > 
-> v1.1:
-> - add __noreturn to all arch_cpu_idle_dead() implementations (mpe)
+> I can change the code in the way you are pointing out here but...
+> Why is it not re-usable? Compatible is not supposed to be changed
+> since in other cases the DTB ABI will be broken. I am totally lost
+> about what is an ABI breakage, then.
 
-Possible similar candidates: panic_smp_self_stop, nmi_panic_self_stop
-and kexec.
+How do you use it on other platform?
+
+Best regards,
+Krzysztof
 
