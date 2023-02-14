@@ -2,163 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B40695CF2
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 09:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD81695CF9
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 09:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbjBNIbU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 03:31:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S231804AbjBNIcG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 03:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbjBNIbT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 03:31:19 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EBB6A70
-        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 00:31:17 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id he5so2593695wmb.3
-        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 00:31:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=os/Pu/ytp1Ibc8eJhaBf3RWMghtAOmFyabVWn60UWeE=;
-        b=mn9sMGtSZU0HO8NAKb8Ow2EVR7hrQRUVGDYjifb+WyJ8p1TOaUueYUorNDlzasrt5e
-         nIDDL4dOXkOIZgmbqyBHm1Digb4sY7DnRLcDCtqztcySZFNIjagFUwn75DrJc2OyBgHI
-         XW0EJr41sz7biU98YQ7A3OBwRAMDuTx9ZZLVgKgSa+Bn3+lOlcXF7Po4mAmzcd6jteBW
-         alKTLBugea5aSphDOlMFSH2+ZJc6aBfJUAJ4S56OEokpoyvVe+2Fv3LRMAZEw44HOhj1
-         Jsg8O9qD1skBMkWypOCJTNjtRL9CxJDHLDkprEruV97iDBU50l2pGrqOAaFgAMbQFvC9
-         3YBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=os/Pu/ytp1Ibc8eJhaBf3RWMghtAOmFyabVWn60UWeE=;
-        b=TxHxSuPpULJS4UYK3GlPtmx439zHbGDvDPhdDUOPRE/5Cq1HLSygfbn2UWreA9AvGK
-         K1xV4V8Pcn5iT6x16NmPAmmGKr7TdIpdiBRDya8N8KjRimPAITkFzeHq+3aucvAFx17S
-         rGYaeDbAyi0txOr44wInEoD2Ajtd17/kPVd8M2p5NCv+n7wrsugt5XrEBNnG/hIGw0zi
-         cy3GSVrpioQwdlTK2qi1CBfgxT468i7eLLk7lKf/5Ay/ledWnUTg3t/B4usdqaNaFDCE
-         /OUCWBC1odhEtNM8+uGwCOnY2HCY4xvqZ/xYk1jXRoOIsr/Ft0KbBv0oFH53SyU1XnCX
-         bjyg==
-X-Gm-Message-State: AO0yUKWwlahzBwPeLejY+eX70K1eYiYauVheznOBTTDON1R14F1497XN
-        aSdrnvm45JWD/JFHaqO0ppy/7g==
-X-Google-Smtp-Source: AK7set/1tDyZOmr9NeHyiA+DvIFIP6+HQ+LlDLNyXkj/u+3DXu9qyEFqG5yjJimmW874DmxSBGzAbg==
-X-Received: by 2002:a05:600c:1695:b0:3dc:561a:79e7 with SMTP id k21-20020a05600c169500b003dc561a79e7mr1294842wmn.2.1676363476339;
-        Tue, 14 Feb 2023 00:31:16 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m23-20020a7bca57000000b003de8a1b06c0sm19380466wml.7.2023.02.14.00.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 00:31:15 -0800 (PST)
-Message-ID: <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
-Date:   Tue, 14 Feb 2023 09:31:14 +0100
+        with ESMTP id S229880AbjBNIcF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 03:32:05 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F8D3C29;
+        Tue, 14 Feb 2023 00:32:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1676363505; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=iualKzOx4/tXV8fnCcIs5szqt55CddsE9QRpRAZMbcIlKV4pC14z23m9vbFNrm/RYaSeznxNACs4a4V48yII+jUBa7zw7EvDTllUkQ4JFBNr6qmRoQxGPF1T5PjFLyEseIDkveEAPXKKV7hcr+CZmsEnm6QdUE+AQRpX8pFA38s=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1676363505; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=IDHUVK6k6nJv+wJzQGsZyu/MG5qaz5nXBO6YgZMfEpo=; 
+        b=mciP8mZiBPztYw/VHZaOMd2CUEgMByjOjVFXtsUOEWz/f3UNj1Sh+PtXxi1SrhQVrZHuwbch2SlKGD0Axwel3cP5cxeqrpGZCFOiy1nieTXfwO72kWxbb2TeSXfLqaefe7TxY+23LNQxDHN2p64S/ezOGv7wcYsJo2SUtdY5Uws=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1676363505;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=IDHUVK6k6nJv+wJzQGsZyu/MG5qaz5nXBO6YgZMfEpo=;
+        b=ii+webR7VyQL/Z2HY0Pw0/+n6zo52eGzn0DL0sT6bUrH0zHLl7ER+9SW467Z7k87
+        EKUZz2UP1DtbU8Hv2G06A7BAruLOkIPLQNRwu4iP1D29VbTvalortWzcotqqWuwtOwe
+        6CSXyBYaa4HdzTWrNOzingPGXlOtAnnl0XXGtaMo=
+Received: from [10.10.9.4] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1676363503759332.83192985950996; Tue, 14 Feb 2023 00:31:43 -0800 (PST)
+Message-ID: <b302c25e-5365-c335-c790-71b3135847d0@arinc9.com>
+Date:   Tue, 14 Feb 2023 11:31:37 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
- dependent code
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 0/3] watchdog: mt7621-wdt: avoid globals and arch
+ dependencies
 Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         linux-watchdog@vger.kernel.org
 Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
 References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
- <20230213200519.889503-4-sergio.paracuellos@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230213200519.889503-4-sergio.paracuellos@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <7bff7c46-ed03-ba7d-6a88-f94dfd0cb1a5@arinc9.com>
+In-Reply-To: <7bff7c46-ed03-ba7d-6a88-f94dfd0cb1a5@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 13/02/2023 21:05, Sergio Paracuellos wrote:
-> MT7621 SoC has a system controller node. Watchdog need to access to reset
-> status register. Ralink architecture and related driver are old and from
-> the beggining they are using some architecture dependent operations for
-> accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
-> header file. However this is not ideal from a driver perspective which can
-> just access to the system controller registers in an arch independent way
-> using regmap syscon APIs. Update Kconfig accordingly to select new added
-> dependencies and allow driver to be compile tested.
+On 14.02.2023 11:12, Arınç ÜNAL wrote:
+> On 13.02.2023 23:05, Sergio Paracuellos wrote:
+>> Hi all,
+>>
+>> This series make an update in the MT7621 SoC's watchdog driver code. This
+>> SoC already provides a system controller node to access reset status
+>> register needed for the watchdog. Instead of using MIPS architecture
+>> dependent operations in header 'asm/mach-ralink/ralink_regs.h' get
+>> node syscon regmap using 'syscon_regmap_lookup_by_compatible()' and use.
+>> regmap APIS. Driver is also using some globals that are not needed at
+>> all if a driver data structure is used along the code. Hence, add all
+>> new needed stuff inside a new driver data structure. With this changes
+>> driver can be properly compile tested.
+>>
+>> Thanks in advance for reviewing this!
+>>
+>> v1 of this series here [0].
+>> v2 of this series here [1].
+>> v3 of this series here [2].
+>> v4 of this series here [3].
+>> v5 of this series here [4].
+>>
+>> Changes in v6:
+>>      - Get regmap syscon using 'syscon_regmap_lookup_by_compatible()'
+>>      - Add COMPILE_TEST and dependencies to Kconfig.
+>>      - Collect Philippe Mathieu-Daudé 'Reviewed-by' tag for watchdog node
+>>        warning fix.
+>>
+>> Changes in v5:
+>>      - Drop patches related with device tree ABI breakage and only
+>>        maintain the rest.
 > 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> ---
->  drivers/watchdog/Kconfig      |  4 +++-
->  drivers/watchdog/mt7621_wdt.c | 18 +++++++++++++-----
->  2 files changed, 16 insertions(+), 6 deletions(-)
+> This makes me regret taking mt7621-dts out of drivers/staging. Clearly 
+> there were improvements to be made on the MT7621 drivers that would 
+> affect the devicetree binding. I don't think one would bat an eye to 
+> make dt-binding changes on a devicetree on drivers/staging.
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index b64bc49c7..cf752ad64 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1865,7 +1865,9 @@ config GXP_WATCHDOG
->  config MT7621_WDT
->  	tristate "Mediatek SoC watchdog"
->  	select WATCHDOG_CORE
-> -	depends on SOC_MT7620 || SOC_MT7621
-> +	select REGMAP_MMIO
-> +	select MFD_SYSCON
-> +	depends on SOC_MT7620 || SOC_MT7621 || COMPILE_TEST
->  	help
->  	  Hardware driver for the Mediatek/Ralink MT7621/8 SoC Watchdog Timer.
->  
-> diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
-> index 40fb2c9ba..22e979bdd 100644
-> --- a/drivers/watchdog/mt7621_wdt.c
-> +++ b/drivers/watchdog/mt7621_wdt.c
-> @@ -15,8 +15,8 @@
->  #include <linux/moduleparam.h>
->  #include <linux/platform_device.h>
->  #include <linux/mod_devicetable.h>
-> -
-> -#include <asm/mach-ralink/ralink_regs.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/regmap.h>
->  
->  #define SYSC_RSTSTAT			0x38
->  #define WDT_RST_CAUSE			BIT(1)
-> @@ -34,6 +34,7 @@
->  struct mt7621_wdt_data {
->  	void __iomem *base;
->  	struct reset_control *rst;
-> +	struct regmap *sysc;
->  	struct watchdog_device wdt;
->  };
->  
-> @@ -104,9 +105,12 @@ static int mt7621_wdt_stop(struct watchdog_device *w)
->  	return 0;
->  }
->  
-> -static int mt7621_wdt_bootcause(void)
-> +static int mt7621_wdt_bootcause(struct mt7621_wdt_data *d)
->  {
-> -	if (rt_sysc_r32(SYSC_RSTSTAT) & WDT_RST_CAUSE)
-> +	u32 val;
-> +
-> +	regmap_read(d->sysc, SYSC_RSTSTAT, &val);
-> +	if (val & WDT_RST_CAUSE)
->  		return WDIOF_CARDRESET;
->  
->  	return 0;
-> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
->  	if (!drvdata)
->  		return -ENOMEM;
->  
-> +	drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
-> +	if (IS_ERR(drvdata->sysc))
-> +		return PTR_ERR(drvdata->sysc);
+> I also want to make a similar change that would break the ABI. I want to 
+> split the MediaTek MIPS (currently called Ralink) pinctrl subdrivers 
+> further, namely mt7620.c, to split MT7628/MT7688 pinmux data from 
+> MT7620, so I can properly document which function can be given to which 
+> group(s) for the MT7628/MT7688 SoCs.
+> 
+> This means I've got to introduce a new compatible string for the MT76X8 
+> SoCs which would cause the pinctrl driver to stop working with an old DT 
+> for the MT76X8 SoCs. By the nature of the change, I can't make a way 
+> around with the code like Sergio did in v6.
 
-This should be the backup/error path for original code using syscon
-property. Looking up by compatible is really not portable/re-usable.
+Now that I think about it, I think there's a way I can introduce a new 
+compatible string for the sake of better documentation, and keep the 
+driver working with old DTs. I'd not like to convolute this series with 
+this conversation. I'll send a mail to the related mailing list when the 
+time is right.
 
-Best regards,
-Krzysztof
-
+Arınç
