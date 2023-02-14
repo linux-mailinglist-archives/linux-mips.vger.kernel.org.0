@@ -2,72 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47EC695A87
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 08:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E636695AB8
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 08:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjBNHWH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 02:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S230071AbjBNHkG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 02:40:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBNHWG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 02:22:06 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B4EDBE8
-        for <linux-mips@vger.kernel.org>; Mon, 13 Feb 2023 23:22:05 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id m14so14600011wrg.13
-        for <linux-mips@vger.kernel.org>; Mon, 13 Feb 2023 23:22:04 -0800 (PST)
+        with ESMTP id S229927AbjBNHkF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 02:40:05 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202651A491
+        for <linux-mips@vger.kernel.org>; Mon, 13 Feb 2023 23:40:04 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso12988725wmp.3
+        for <linux-mips@vger.kernel.org>; Mon, 13 Feb 2023 23:40:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=m+TwnjAXxTTAQQ8LXT0M5l2YQ9gFoLEmULHa8JKTYR4=;
-        b=jx0MSCW2gt8kaWQHxlwOyC9fvgmMYQH3jnWJtmqSFUZxwCE96pzCUMxc/FC5NBfq8z
-         JlKLCpnm/ciYpV9rvN4EnknEmRhZ0fjcv2sTD8Oho7d7pVcOdEJBvam/LR8x/MKEHU2S
-         qN8GheCstJSHRIjJgiIcMaD1Ne6NnzLShaXYVDnXC3wJkaTF0VN07cXqRj5ZVZrMxSMb
-         rU1wJfebjaFnUHmYVWukmU1sEUgvk9CrY2nBlYl1h4RJm+QRcCrOvgJVLJO0pkghZnMx
-         gygNvk8fVywtJC8DN9LIFEWC088ec/EbtVu/blu561Nz1yXvYtEEF9eptlCdpExccXYM
-         X2Vw==
+        bh=MfAKDwWJ43uFMrmQCmp4cmYVyE9a/ZNUU9+gyhO73kk=;
+        b=Wm4NDDwPgFj2N8AhEGdtG7Dk6poXCBt+/LRu8lqvLRpGJfDIXMNYWR/f31pUxPxChD
+         dQDJ00ytooDrCNR3EybyI7px9PcoUmHseqyyTJf8yMFrHHGRBcXCIevd5gFuCmHAe2IV
+         rku8wWWBlnDbnlzTRJPGZkL7csljK846s18eTu/wmdqqdkcML+/Yf8BDOYvTqGZ8HXm+
+         6rBzVteyCjeFNxnZ8IhXvT1xx4I1fMJVzxn5EXLt0PkLOpVy5tgIoEaU7rMG4YzvN39f
+         llTKto+ozJAYbbW7R+evJr+DRvXUm1MPzoXmq0bFrpp/rnIZmkVMx1WedYOtabFPZ6BT
+         vxZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m+TwnjAXxTTAQQ8LXT0M5l2YQ9gFoLEmULHa8JKTYR4=;
-        b=Uv+cMNgwv/3d6dfx4DFmDz2MBHe5PvmzysaymMOoBitQmPwnEi7RkpLhGzYk0j3uWX
-         cypx9FmD6G4rPNN6boLw16bBoDHkJOUrb8jcVftXbyaEH72UUA/ptHfR7aDNR3dRf1Ok
-         axjGi9sS/SzAmSEf4VhhYz0kXEJEjPGxGLgqOaRYGghlYBhVtrvm3tGQlCWxvhyjMmF5
-         d/wfFwfnrNuYo7VyqhVfBjbP9NN4eGgEY/lgaS2LT3862KqWfW5jUT+1oVg1kuBWAMgN
-         sJBwLOPOD4YMdCwxfQ02mosyU8kexBBS4E7fUWZ5VHy9NXVqjzc/moRC/BaYMzGWCIiT
-         fkuQ==
-X-Gm-Message-State: AO0yUKXyGqqLrDlnObg0nvBLCQmuQ0tTzc9c4IdMo3bZuNf3LRaNQxZ0
-        VaTyDb00E345riIu5RTRrrXDoQ==
-X-Google-Smtp-Source: AK7set/u8IAuSg7A7VxtiJt2hjuOIFjvoIRsVVtaR5dwCCQMZITd3akSq1tUSYkwidR+nKUUkb5bzg==
-X-Received: by 2002:adf:f8d2:0:b0:2c5:4ca6:96f6 with SMTP id f18-20020adff8d2000000b002c54ca696f6mr987050wrq.22.1676359323645;
-        Mon, 13 Feb 2023 23:22:03 -0800 (PST)
+        bh=MfAKDwWJ43uFMrmQCmp4cmYVyE9a/ZNUU9+gyhO73kk=;
+        b=b2oLGjx4ilmCHnHmhRzdpECauqYhUjP9lO2jOBIO6k+3fuiKGHnCmGsNd4FVAtCGRP
+         wtbNDUh2Nv1D9oLOZ0ezOAu8Xb1fBJUiFXSNbHCR5eIVXoTJBKZPBZvyQMVwr2GIWD/2
+         pWyTFg51iY+8vArADkmAwTklihRjTWQtSmsYZRkl1OCGcyerHsBJDy8oszd9gh6XtuMn
+         HTIz+JXccMacigCdgTZBihmOvCepHrVtW485ATKfyN06a6hBTT45alKHiMepbBUMQylK
+         BNz32Xc0iQp16QDT1nAvbj1Iv2FPWhGlCEKGUQLtfjv+VQ2yawozjUPKdGwsnSqqmNye
+         iGMw==
+X-Gm-Message-State: AO0yUKVBZATV3UFu1NEJj2eqGCXewTu32Hihf9zuef9ncwsij9WFHZ1o
+        o+QmSD1EctJl3AB+nZw5QfUFQWsazeW2hrf/
+X-Google-Smtp-Source: AK7set8nUaCpcrcYlg0w3N6yvmYAWAs/RHYXPBxo1cIRik5qDPXHQ8TOHnIg5Z74kyzqZY9p4kiuzw==
+X-Received: by 2002:a05:600c:4d97:b0:3de:1d31:1042 with SMTP id v23-20020a05600c4d9700b003de1d311042mr1128996wmp.23.1676360402677;
+        Mon, 13 Feb 2023 23:40:02 -0800 (PST)
 Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id z13-20020adfe54d000000b002c567e3808bsm481145wrm.40.2023.02.13.23.22.02
+        by smtp.gmail.com with ESMTPSA id k7-20020a05600c080700b003daf672a616sm15378729wmp.22.2023.02.13.23.40.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 23:22:03 -0800 (PST)
-Message-ID: <59c0ba61-c5d6-b74f-0fbd-844b08d13e5d@linaro.org>
-Date:   Tue, 14 Feb 2023 08:22:02 +0100
+        Mon, 13 Feb 2023 23:40:02 -0800 (PST)
+Message-ID: <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
+Date:   Tue, 14 Feb 2023 08:40:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH] module: fix MIPS module_layout -> module_memory
+Subject: Re: [PATCH] MIPS: vpe-mt: provide a default 'physical_memsize'
 Content-Language: en-US
 To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Song Liu <song@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+Cc:     kernel test robot <lkp@intel.com>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        John Crispin <john@phrozen.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-References: <20230214005400.17137-1-rdunlap@infradead.org>
+        linux-mips@vger.kernel.org, Qais Yousef <qyousef@layalina.io>
+References: <20230214010942.25143-1-rdunlap@infradead.org>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230214005400.17137-1-rdunlap@infradead.org>
+In-Reply-To: <20230214010942.25143-1-rdunlap@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,42 +79,64 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Randy,
 
-On 14/2/23 01:54, Randy Dunlap wrote:
-> Correct the struct's field/member name from mod_mem to mem.
+On 14/2/23 02:09, Randy Dunlap wrote:
+> When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
+> declared. This causes the build to fail with:
 > 
-> Fixes this build error:
-> ../arch/mips/kernel/vpe.c: In function 'vpe_elfload':
-> ../arch/mips/kernel/vpe.c:643:41: error: 'struct module' has no member named 'mod_mem'
->    643 |         v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
+> mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
+> arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
 > 
-> Fixes: 2ece476a2346 ("module: replace module_layout with module_memory")
-
-On which tree is your patch based?
-
-fatal: ambiguous argument '2ece476a2346': unknown revision or path not 
-in the working tree.
-
+> Fix this by declaring a 0-value physical_memsize with neither LANTIQ
+> nor MIPS_MALTA is set, like LANTIQ does.
+> 
+> Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
 > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
+> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+> Cc: John Crispin <john@phrozen.org>
 > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > Cc: linux-mips@vger.kernel.org
 > ---
-> Has this already been fixed?
+> How has this build error not been detected for 10 years?
 > 
->   arch/mips/kernel/vpe.c |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   arch/mips/kernel/vpe-mt.c |    9 +++++++++
+>   1 file changed, 9 insertions(+)
 > 
-> diff -- a/arch/mips/kernel/vpe.c b/arch/mips/kernel/vpe.c
-> --- a/arch/mips/kernel/vpe.c
-> +++ b/arch/mips/kernel/vpe.c
-> @@ -640,7 +640,7 @@ static int vpe_elfload(struct vpe *v)
->   		layout_sections(&mod, hdr, sechdrs, secstrings);
->   	}
+> diff -- a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
+> --- a/arch/mips/kernel/vpe-mt.c
+> +++ b/arch/mips/kernel/vpe-mt.c
+> @@ -22,6 +22,15 @@ static int major;
+>   /* The number of TCs and VPEs physically available on the core */
+>   static int hw_tcs, hw_vpes;
 >   
-> -	v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
-> +	v->load_addr = alloc_progmem(mod.mem[MOD_TEXT].size);
->   	if (!v->load_addr)
->   		return -ENOMEM;
->   
+> +#if !defined(CONFIG_MIPS_MALTA) && !defined(CONFIG_LANTIQ)
+> +/* The 2 above provide their own 'physical_memsize' variable. */
 
+Which seems dubious. The variable should be defined once, likely in
+arch/mips/kernel/vpe-mt.c, since arch/mips/include/asm/vpe.h declares
+it.
+
+I'm surprised CONFIG_MIPS_MALTA always links malta-dtshim.o, but
+malta-dtshim.o depends on MIPS_VPE_LOADER_MT, and I can't find a
+CONFIG_MIPS_MALTA -> MIPS_VPE_LOADER_MT Kconfig dep.
+
+> +/*
+> + * This is needed by the vpe-mt loader code, just set it to 0 and assume
+> + * that the firmware hardcodes this value to something useful.
+> + */
+> +unsigned long physical_memsize = 0L;
+
+I agree this is where this variable has be be declared / initialized,
+but having this dependent on CONFIG_MIPS_MALTA/CONFIG_LANTIQ machines
+doesn't seem right.
+
+> +#endif
+> +
+>   /* We are prepared so configure and start the VPE... */
+>   int vpe_run(struct vpe *v)
+>   {
+
+Regards,
+
+Phil.
