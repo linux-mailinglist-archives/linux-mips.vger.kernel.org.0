@@ -2,132 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAE4695F9A
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 10:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07545695FC4
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 10:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbjBNJqG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 04:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
+        id S231809AbjBNJvY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 04:51:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjBNJpz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 04:45:55 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443A723328;
-        Tue, 14 Feb 2023 01:45:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1676367870; bh=ERFp+UKx/iNbj6Y6kJUSMmT/xdPleSppwgENqVxf/VM=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Za6u4dReX/HTRyphBPafGiLsxCJ+KKmFXzBp1N3wK/BdK0FrKi1Znyq7KSHyqIyd/
-         kgfg1K7p6XNdoVzNndtK42V0pk1FbtgyitZSCQWfWujqXuBYwphv2YLUpu/j4syKSL
-         9RAZMIGf3dW2anwxyU5UMo1EVcbifIrk3T62A2sIhCPMYdsaAzhIY5t2nwHlg40Zt7
-         HtazUlk5mlSfLPOR/KKhdC1Dq5qLUvlQDvzaYGy2cDXLDVpukIxIWr8q4OHqWuB3tT
-         6cx52IlEbcB5iPGAwJpjsjaFv5wT4dz6E7YwfLhROeby+gu9v1sPXxrdEBwhQ+jslK
-         7mKSZA/LRAQdg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.155.167]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mr9Bu-1ooy3k2CyE-00oHk0; Tue, 14
- Feb 2023 10:44:30 +0100
-Message-ID: <32c2584a-8777-26b9-ae29-80df9dfa7833@gmx.de>
-Date:   Tue, 14 Feb 2023 10:44:14 +0100
+        with ESMTP id S232176AbjBNJvC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 04:51:02 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B82C646;
+        Tue, 14 Feb 2023 01:50:44 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1442977d77dso18340010fac.6;
+        Tue, 14 Feb 2023 01:50:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xe8yVPzrMnIUl6apEVzc55u9ThbSlOHTJt+d/XNqBpQ=;
+        b=FoNlIGMEkbUto+SUjmjcd8L1dsx8fku+QXe8RDMZV0KOl13DFXKrlcDXbaqDmevAk7
+         y3dnOg2t62bxT+P4SmEIrZa19OwClG50D1Lc9B86ebEA+Y2cdcy9e3O+RjIn1roLZKfo
+         hFTgDhsQt7HPqa4DHB91uBpyhnEkiuFC3SMOVeleNR7sfWjpkjFWqSWvH66sCNSz15MZ
+         las0joADsaX1/wbx20f33H5pZRI8eIN29h64MWBbqR1WXs01d3c/xVJM+3mNgX1IpEHX
+         YHw5aDbNWbVuSL04pDo/3FbectVgXHbImLyrN5AWWbt3UsDo4oPE/3RFVs3+ln8cHqCb
+         1Piw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xe8yVPzrMnIUl6apEVzc55u9ThbSlOHTJt+d/XNqBpQ=;
+        b=3bkB14UQHlViv1fsvGUVuRw9E+8d3TE24b+p021dpGjKdEmEj/44V8PdeT2shA1RmD
+         ZLaF7i+HBNTnIdPUlh8773p3a7jx1+3wp3YNaU9ZgSGePCir9WnuJndMst+syol0Asyw
+         TjcRZyCBm/MFGz0W7eMJoEqjz4QKaK1rMc+eX4syblMmOTAbb3Rr5YVTk3hoptwJA6/L
+         FPhhv/b2y1M3gbzRaoDBlKriHwNmKDSRCpeeKTak4J9yniErWDyuRKvSBGbYv38wtgvR
+         +RdDcuzF8l2lY+Kz8Myfe0nXmL9vBr4E+WBTFqkOv79wcR6RCmsHSF+jyZnXGPX10me3
+         0GIA==
+X-Gm-Message-State: AO0yUKWorA/NZMKjdBYXPV/mLoxrqmFn3IQ+rImo/AORsUi3pOIUV60f
+        3vNfsvFUebF31RgMwlNmM9687y/egbFFWqZTYRo=
+X-Google-Smtp-Source: AK7set8yA4TFrz9HOcyIs8LGc+zMAs4Po5lzbzpOpbhri3fyBOhpF1ltlVqWyx2vHsKD6paMBlECrXhIQB3mcSovaUg=
+X-Received: by 2002:a05:6870:9615:b0:169:fabf:b222 with SMTP id
+ d21-20020a056870961500b00169fabfb222mr3832733oaq.83.1676368244005; Tue, 14
+ Feb 2023 01:50:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 19/24] parisc: Remove empty <uapi/asm/setup.h>
-Content-Language: en-US
-To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>
-References: <20230214074925.228106-1-alexghiti@rivosinc.com>
- <20230214074925.228106-20-alexghiti@rivosinc.com>
- <6f9c7a6b-4f6b-dead-2d9b-14b405f18397@linaro.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <6f9c7a6b-4f6b-dead-2d9b-14b405f18397@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6i9MLH1uyN4UjvbKa9qFgGzxyogAl9vzFG+CnYpeJmhfg1aCjEo
- fgPVjxDy4iWSOp0fQduaCkCLS49XMnxFV3Cebj1wXgxrmR7Mk+7ALLo+bEOtaCQ7LtdzxdY
- sCyP+X8u7wZGNhDO2HoSYGEmEl3/72yEi0kFbG3gxrNGYWo22p1QITkOnVbWjeRtGq3QAhO
- 81HzmD9N+fT9Dd0qQJFHw==
-UI-OutboundReport: notjunk:1;M01:P0:/sXWrTs+GHs=;mOBmE8xN1RO7T/4g1DSsoRwJcwg
- 9UZR9rEyA6LxshPy2Pz3oePTMgiIj4+AJ5S/kMjQzK+6c4x3H5hr27yLtzKfDT5PmjzMBJ+Of
- 3zfIEJQlV54kh1Ta/E2FfIdf+80zKMSI52rgvhwMkMmCjI3cvExJnD5nlbysiqstKtT+wFzv2
- Z260NQ1Y6j9s9OOAoLni9UrAct6Rzpr/LUuWUMgXKKuXfF7kU52/jKJgDV1uBFAO6e5+U9ium
- VU7bbslf79RWKAUFAz+cqTgWfg2fuGDImyE9L+3DmCjQMG4Je3gjyU6QTxHzjARx67lC7Pl/p
- bedRk356yNR+IaCi4+oVkCwy2AY9dZJ/arcneDsIauL5AATahoUIulBRN7BP8SDlfJek6s/Jl
- DdbP1C/VuGwfRMSoxHG8JGSkxMV5vKemlpgKIjZBdDtJFI77SS55OS105zLh5z4ZUEQAw5+iD
- gVWGMHv/5YX1gJCtlIOQqpAHCfa/KUliQGzWaNumDuHSbS1WfcGa+yV5bTGOpiX0VvFOGSRQB
- U8RMxnOZrwFy8bBzFJhabD91opgpUnM1Drax9wp+qCBQVYPpwhhcgl6on9cy9pH9R+aFk3mO1
- nccDm7RKozeMO0SgmShqcIoAo/MMXzhU+k4jUwmlvTNKux7KYJMrIZ3ji9OPa5aewlpMHOTna
- SozD4wCdOT6JL2dhqNqhu36n4+0Z9IWZgWgaFVcSdY0J6JSMrCZl1PwuiDm7p3APkGs2WM/5J
- r7eIJOkBYD6bzCYdI23czK+lvIluKLxeFS4fLTCAb1WjYXxNnV13KwV1j8Yk4Fb+FVUt28ZT4
- 0LWoGNHs7csGcm5b93meJrBGDiIruUcZg9DNckv8YppQk7vzTqpr/lTUzz0R/0FKX3/+tbfQa
- Xa6y4Nti/opEugZMRO7Vpm0AV2+BhhBkSR95zi7OPWYYGnYk/coI5tYGHEiard+vIs75wAtJz
- L71IAbhumB1qAsU4XQRHfRtAGXM=
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
+ <20230213200519.889503-4-sergio.paracuellos@gmail.com> <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
+ <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com> <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
+In-Reply-To: <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 14 Feb 2023 10:50:32 +0100
+Message-ID: <CAMhs-H8Ls2oTZ8LYguCdizNZN3cUC8kKA4e_L6BD3C3cFDP0tA@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
+ dependent code
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2/14/23 10:08, Philippe Mathieu-Daud=C3=A9 wrote:
-> On 14/2/23 08:49, Alexandre Ghiti wrote:
->> From: Palmer Dabbelt <palmer@rivosinc.com>
->>
->> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> ---
->> =C2=A0 arch/parisc/include/uapi/asm/setup.h | 5 -----
->> =C2=A0 1 file changed, 5 deletions(-)
->> =C2=A0 delete mode 100644 arch/parisc/include/uapi/asm/setup.h
+On Tue, Feb 14, 2023 at 10:33 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+> On 14/02/2023 09:54, Sergio Paracuellos wrote:
+> >>>       return 0;
+> >>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
+> >>>       if (!drvdata)
+> >>>               return -ENOMEM;
+> >>>
+> >>> +     drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
+> >>> +     if (IS_ERR(drvdata->sysc))
+> >>> +             return PTR_ERR(drvdata->sysc);
+> >>
+> >> This should be the backup/error path for original code using syscon
+> >> property. Looking up by compatible is really not portable/re-usable.
+> >
+> > I can change the code in the way you are pointing out here but...
+> > Why is it not re-usable? Compatible is not supposed to be changed
+> > since in other cases the DTB ABI will be broken. I am totally lost
+> > about what is an ABI breakage, then.
+>
+> How do you use it on other platform?
 
-Acked-by: Helge Deller <deller@gmx.de>
+I see, thanks.
 
+So if I am understanding you correctly I have to maintain the
+'mediatek,sysctl' phandle and use it in the first instance and if it
+fails I have to use regmap_loopup_by_compatible() stuff, right?
+Something like:
 
+...
+
+drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "mediatek,sysctl");
+if (IS_ERR(drvdata->sysc)) {
+         drvdata->sysc =
+syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
+         if (IS_ERR(drvdata->sysc))
+              return PTR_ERR(drvdata->sysc);
+}
+
+....
+
+So in that case, we can add the new phandle to the bindings without
+any kind of ABI breakage and we can use old dtbs using new watchdog
+driver code.
+
+I really hope I finally understood this properly. Thanks for your
+patience, Krzysztof.
+
+Best regards,
+    Sergio Paracuellos
+
+>
+> Best regards,
+> Krzysztof
+>
