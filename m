@@ -2,127 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F160D6967B5
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 16:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFE8696A5B
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 17:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232874AbjBNPNG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 10:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S232202AbjBNQwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 11:52:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjBNPNF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 10:13:05 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2431018147;
-        Tue, 14 Feb 2023 07:13:05 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1442977d77dso19381010fac.6;
-        Tue, 14 Feb 2023 07:13:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zQOQuIF4OrW9D2zr50BWcnhTroIr9Ceg7lObbpZeMhk=;
-        b=nGKPVX/3PIKqUdMy0UtHsv0IvveUo9mKvNhzILdDImr99pX0GueMuw3agyDoRtAbxv
-         iO0AXKqg7M929DIo3x9ormySTA47gM36yZmlPmfvHnyfjR01Vfpa6EgFNatP4C6FG8sn
-         tOK6rQf86Wp6+Oner0iiyRn1pB6Fp5Lu2hFqejhvINDRadpHCuDKF4JyTCZ6ZhLaeXQa
-         qmLKrnHX4Tv2xOdZLQTE/JBIcpZVHiE23dRo8hl1crn9t0K0041qtyK78bNCv8QahcXh
-         A/e843qsdLmpQCqmuwd9nWxHleV4CjrRlO/w2aQ+avgKbLs8oZydqJWKmWpQ/V0YHFTi
-         PRzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zQOQuIF4OrW9D2zr50BWcnhTroIr9Ceg7lObbpZeMhk=;
-        b=WaYVQci9fT64UFi1+aHjMPjqgIwjfmvL4cBQoI0YyN/9vjdz4BB2lIB2G0WBFHVGdX
-         34kyFA12AWVmGmQrOLPt50Avc6q+cohb4Aa2CBYNXC7GXm5sNeAz/oovwfAll25TFrUd
-         xUtuphJvDRhJi5W+XP0J373DsjIdfKEcwvhbg6eTgGqemdB9Bo5J9xk6uctoxYrtm5HS
-         hBmqVr/n5cLDWSXulOLmkRSTKs1L+8KG3mGJF4TeBPZq7ZnvpuI3LyYbyx8NWbUDuk0Q
-         HptEDkE53PyC9tryH2vkPMTrWOugJvq+k3eevFYZLamkj9MxUzXxgE9j2AyOHV4GOsws
-         X3GA==
-X-Gm-Message-State: AO0yUKVwNrEVOkIysjnYbi8KytQN0T+1dl76kSTfFRkpXl+L4FbdtUVc
-        gsdnZQHFqzYc0qZG5htkGNRfJ6lolPuLHAthb2w=
-X-Google-Smtp-Source: AK7set/IB4IyAoSaBvVlK9Dzn0peBaqsU6p/h5b5dqivZuU5Ch3pvzoxiAdMqIaq2aZJ3HU/gmdBkyy/t8tjpH9RXmg=
-X-Received: by 2002:a05:6870:9615:b0:169:fabf:b222 with SMTP id
- d21-20020a056870961500b00169fabfb222mr3942918oaq.83.1676387584439; Tue, 14
- Feb 2023 07:13:04 -0800 (PST)
+        with ESMTP id S230171AbjBNQwd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 11:52:33 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CAD2D141;
+        Tue, 14 Feb 2023 08:52:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=agNXxSvgHeipQocwNTjMKFzMaSrH58IPKqeehvfo9CA=; b=MKZroS1EsP8KPZyhQMaHp8HDuH
+        W3DcMOgVq3jUQOsQYl2b7zlAGH1pc9YKseSkGqtCp+Bz5g4VUcxyDqLkQMDKAQZ6UBHDJ3l5vYdRO
+        HMNO3rCPGskmRp9DOhchSSb6sN50OwJMLAfSzHckRVOQ0AhjllU9+DEGS815SXriKaCd+sdQfsQzh
+        wlTachyk2axTdjLPlbjH9VTvrGQq8gGW8emYPKHY3hFKzTKZhIAWKnCLkev5sXVA6sxgg1Hy+pH/b
+        i2lax/AslqrYgUwsbFlIuef8pDLeBlLSCbolvurU4wDI3XLT1qv6pkEiqkEtT95FCUXhAfsDVNuRN
+        0VnwFBOA==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRyXE-002uGl-MU; Tue, 14 Feb 2023 16:52:04 +0000
+Message-ID: <2e17b8f6-0c2d-e705-63b9-47077b442d68@infradead.org>
+Date:   Tue, 14 Feb 2023 08:52:04 -0800
 MIME-Version: 1.0
-References: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
- <20230214103936.1061078-3-sergio.paracuellos@gmail.com> <20230214151101.GB742354@roeck-us.net>
-In-Reply-To: <20230214151101.GB742354@roeck-us.net>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 14 Feb 2023 16:12:52 +0100
-Message-ID: <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
-Subject: Re: [PATCH v7 2/5] mips: dts: ralink: mt7621: rename watchdog node
- from 'wdt' into 'watchdog'
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
-        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] module: fix MIPS module_layout -> module_memory
+Content-Language: en-US
+To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Song Liu <song@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+References: <20230214005400.17137-1-rdunlap@infradead.org>
+ <59c0ba61-c5d6-b74f-0fbd-844b08d13e5d@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <59c0ba61-c5d6-b74f-0fbd-844b08d13e5d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 4:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Tue, Feb 14, 2023 at 11:39:33AM +0100, Sergio Paracuellos wrote:
-> > Watchdog nodes must use 'watchdog' for node name. When a 'make dtbs_che=
-ck'
-> > is performed the following warning appears:
-> >
-> > wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-f]=
-)?$'
-> >
-> > Fix this warning up properly renaming the node into 'watchdog'.
-> >
-> > Reviewed-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
->
-> Note that we can not apply this and the next patch of the series
-> through the watchdog tree since it crosses a maintainer boundary.
 
-I was expecting Thomas to get these two arch/mips patches or get an
-Acked-by from him in order for you to apply them.
 
-Thanks,
-    Sergio Paracuellos
+On 2/13/23 23:22, Philippe Mathieu-Daudé wrote:
+> Hi Randy,
+> 
+> On 14/2/23 01:54, Randy Dunlap wrote:
+>> Correct the struct's field/member name from mod_mem to mem.
+>>
+>> Fixes this build error:
+>> ../arch/mips/kernel/vpe.c: In function 'vpe_elfload':
+>> ../arch/mips/kernel/vpe.c:643:41: error: 'struct module' has no member named 'mod_mem'
+>>    643 |         v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
+>>
+>> Fixes: 2ece476a2346 ("module: replace module_layout with module_memory")
+> 
+> On which tree is your patch based?
 
->
-> Guenter
->
-> > ---
-> >  arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts=
-/ralink/mt7621.dtsi
-> > index 5ca40fd21662..ac818fd721ae 100644
-> > --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > @@ -70,7 +70,7 @@ sysc: syscon@0 {
-> >                                            "250m", "270m";
-> >               };
-> >
-> > -             wdt: wdt@100 {
-> > +             wdt: watchdog@100 {
-> >                       compatible =3D "mediatek,mt7621-wdt";
-> >                       reg =3D <0x100 0x100>;
-> >               };
-> > --
-> > 2.25.1
-> >
+linux-next-20230213.
+
+> fatal: ambiguous argument '2ece476a2346': unknown revision or path not in the working tree.
+> 
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Song Liu <song@kernel.org>
+>> Cc: Luis Chamberlain <mcgrof@kernel.org>
+>> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>> Cc: linux-mips@vger.kernel.org
+>> ---
+>> Has this already been fixed?
+>>
+>>   arch/mips/kernel/vpe.c |    2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff -- a/arch/mips/kernel/vpe.c b/arch/mips/kernel/vpe.c
+>> --- a/arch/mips/kernel/vpe.c
+>> +++ b/arch/mips/kernel/vpe.c
+>> @@ -640,7 +640,7 @@ static int vpe_elfload(struct vpe *v)
+>>           layout_sections(&mod, hdr, sechdrs, secstrings);
+>>       }
+>>   -    v->load_addr = alloc_progmem(mod.mod_mem[MOD_TEXT].size);
+>> +    v->load_addr = alloc_progmem(mod.mem[MOD_TEXT].size);
+>>       if (!v->load_addr)
+>>           return -ENOMEM;
+>>   
+> 
+
+-- 
+~Randy
