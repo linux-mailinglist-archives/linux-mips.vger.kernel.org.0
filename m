@@ -2,63 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD81695CF9
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 09:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C769695D37
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 09:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjBNIcG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 03:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S232091AbjBNIkq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 03:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjBNIcF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 03:32:05 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F8D3C29;
-        Tue, 14 Feb 2023 00:32:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1676363505; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=iualKzOx4/tXV8fnCcIs5szqt55CddsE9QRpRAZMbcIlKV4pC14z23m9vbFNrm/RYaSeznxNACs4a4V48yII+jUBa7zw7EvDTllUkQ4JFBNr6qmRoQxGPF1T5PjFLyEseIDkveEAPXKKV7hcr+CZmsEnm6QdUE+AQRpX8pFA38s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1676363505; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=IDHUVK6k6nJv+wJzQGsZyu/MG5qaz5nXBO6YgZMfEpo=; 
-        b=mciP8mZiBPztYw/VHZaOMd2CUEgMByjOjVFXtsUOEWz/f3UNj1Sh+PtXxi1SrhQVrZHuwbch2SlKGD0Axwel3cP5cxeqrpGZCFOiy1nieTXfwO72kWxbb2TeSXfLqaefe7TxY+23LNQxDHN2p64S/ezOGv7wcYsJo2SUtdY5Uws=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1676363505;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=IDHUVK6k6nJv+wJzQGsZyu/MG5qaz5nXBO6YgZMfEpo=;
-        b=ii+webR7VyQL/Z2HY0Pw0/+n6zo52eGzn0DL0sT6bUrH0zHLl7ER+9SW467Z7k87
-        EKUZz2UP1DtbU8Hv2G06A7BAruLOkIPLQNRwu4iP1D29VbTvalortWzcotqqWuwtOwe
-        6CSXyBYaa4HdzTWrNOzingPGXlOtAnnl0XXGtaMo=
-Received: from [10.10.9.4] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1676363503759332.83192985950996; Tue, 14 Feb 2023 00:31:43 -0800 (PST)
-Message-ID: <b302c25e-5365-c335-c790-71b3135847d0@arinc9.com>
-Date:   Tue, 14 Feb 2023 11:31:37 +0300
+        with ESMTP id S231905AbjBNIka (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 03:40:30 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D60D7AB4;
+        Tue, 14 Feb 2023 00:40:20 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E8Vi22004628;
+        Tue, 14 Feb 2023 08:38:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=XmTTRTqN8QHhuqqaK0B4wcZMFk6wbx4+9SlCVYUudEg=;
+ b=q0CFhD00GHRgiAn5Lc7+9XPoIXhbH37jo9LPP5gO0FR/vTvQM2oqGpmnUzQ/izmDF9v0
+ KdAdBX+lzRH997zibc6I+ZDhX9NkR3s4PeteSiWnk3qMLqykhF7VHts/j4ounccd62iV
+ 6zcE2d9N3AcFvu42RVPJGqHk19n5kfAfYcELyf5vZX21pLHO9cWuVpRgVcF4ehkFPB9o
+ K9L59Nu09a5yT/SgLgfiy57OTzuJRb0tm23G7nl+ZAEOvsDYZRkFKkNDE7G+veUt0tTq
+ kDWPNL6pCGB2ooJtc34IbfhYfLJPh8EqpCM4gyBz9pzkOASeQq1W919Hg2daScb2Sld3 rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nr6v9r5bg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 08:38:57 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31E8bEt7027902;
+        Tue, 14 Feb 2023 08:38:55 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nr6v9r5as-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 08:38:55 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31E65wsH017640;
+        Tue, 14 Feb 2023 08:38:52 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6kqqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 08:38:52 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31E8cnPQ39649594
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 08:38:49 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DDF1E20043;
+        Tue, 14 Feb 2023 08:38:48 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C3EAF20040;
+        Tue, 14 Feb 2023 08:38:47 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.244])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 14 Feb 2023 08:38:47 +0000 (GMT)
+Date:   Tue, 14 Feb 2023 09:38:47 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
+Message-ID: <Y+tIl07KOOrGZ2Et@osiris>
+References: <20230214074925.228106-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 0/3] watchdog: mt7621-wdt: avoid globals and arch
- dependencies
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
- <7bff7c46-ed03-ba7d-6a88-f94dfd0cb1a5@arinc9.com>
-In-Reply-To: <7bff7c46-ed03-ba7d-6a88-f94dfd0cb1a5@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214074925.228106-1-alexghiti@rivosinc.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lcWVAyn8KN60Dj6qJ5LWCkwvnMHsQyNY
+X-Proofpoint-GUID: QnuEgtAeE2k8CuQJG5mickOtwsFFWUEl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_05,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 mlxscore=0 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140067
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,58 +129,33 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14.02.2023 11:12, Arınç ÜNAL wrote:
-> On 13.02.2023 23:05, Sergio Paracuellos wrote:
->> Hi all,
->>
->> This series make an update in the MT7621 SoC's watchdog driver code. This
->> SoC already provides a system controller node to access reset status
->> register needed for the watchdog. Instead of using MIPS architecture
->> dependent operations in header 'asm/mach-ralink/ralink_regs.h' get
->> node syscon regmap using 'syscon_regmap_lookup_by_compatible()' and use.
->> regmap APIS. Driver is also using some globals that are not needed at
->> all if a driver data structure is used along the code. Hence, add all
->> new needed stuff inside a new driver data structure. With this changes
->> driver can be properly compile tested.
->>
->> Thanks in advance for reviewing this!
->>
->> v1 of this series here [0].
->> v2 of this series here [1].
->> v3 of this series here [2].
->> v4 of this series here [3].
->> v5 of this series here [4].
->>
->> Changes in v6:
->>      - Get regmap syscon using 'syscon_regmap_lookup_by_compatible()'
->>      - Add COMPILE_TEST and dependencies to Kconfig.
->>      - Collect Philippe Mathieu-Daudé 'Reviewed-by' tag for watchdog node
->>        warning fix.
->>
->> Changes in v5:
->>      - Drop patches related with device tree ABI breakage and only
->>        maintain the rest.
+On Tue, Feb 14, 2023 at 08:49:01AM +0100, Alexandre Ghiti wrote:
+> This all came up in the context of increasing COMMAND_LINE_SIZE in the
+> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+> maximum length of /proc/cmdline and userspace could staticly rely on
+> that to be correct.
 > 
-> This makes me regret taking mt7621-dts out of drivers/staging. Clearly 
-> there were improvements to be made on the MT7621 drivers that would 
-> affect the devicetree binding. I don't think one would bat an eye to 
-> make dt-binding changes on a devicetree on drivers/staging.
+> Usually I wouldn't mess around with changing this sort of thing, but
+> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+> increasing, but they're from before the UAPI split so I'm not quite sure
+> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+> asm-generic/setup.h.").
 > 
-> I also want to make a similar change that would break the ABI. I want to 
-> split the MediaTek MIPS (currently called Ralink) pinctrl subdrivers 
-> further, namely mt7620.c, to split MT7628/MT7688 pinmux data from 
-> MT7620, so I can properly document which function can be given to which 
-> group(s) for the MT7628/MT7688 SoCs.
+> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+> part of the uapi to begin with, and userspace should be able to handle
+> /proc/cmdline of whatever length it turns out to be.  I don't see any
+> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+> search, but that's not really enough to consider it unused on my end.
 > 
-> This means I've got to introduce a new compatible string for the MT76X8 
-> SoCs which would cause the pinctrl driver to stop working with an old DT 
-> for the MT76X8 SoCs. By the nature of the change, I can't make a way 
-> around with the code like Sergio did in v6.
+> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
+> shouldn't be part of uapi, so this now touches all the ports.  I've
+> tried to split this all out and leave it bisectable, but I haven't
+> tested it all that aggressively.
 
-Now that I think about it, I think there's a way I can introduce a new 
-compatible string for the sake of better documentation, and keep the 
-driver working with old DTs. I'd not like to convolute this series with 
-this conversation. I'll send a mail to the related mailing list when the 
-time is right.
-
-Arınç
+Just to confirm this assumption a bit more: that's actually the same
+conclusion that we ended up with when commit 3da0243f906a ("s390: make
+command line configurable") went upstream.
