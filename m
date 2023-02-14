@@ -2,179 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526D66963B0
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 13:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E606963D1
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Feb 2023 13:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbjBNMnm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 07:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S231824AbjBNMrY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Feb 2023 07:47:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbjBNMnl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 07:43:41 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B0F2129C
-        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 04:43:39 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so11514834wms.0
-        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 04:43:39 -0800 (PST)
+        with ESMTP id S231995AbjBNMrT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 07:47:19 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD9322A33;
+        Tue, 14 Feb 2023 04:47:18 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id o8so14564117pls.11;
+        Tue, 14 Feb 2023 04:47:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nAjMRsfCXAltgo5iFCDivnEztMCY0Q2l+8tj6K+rLFY=;
-        b=E7vKL7YiZ2n7wSHDpNKqYHbizdd5zMroMUc9DlZxroJWVcNjyltejMRL3Qjbpd78U0
-         gt+Eo0+cQj4wycKXYYLZ2QlCRTjrJjb5sapO4jDIjoFifZTGrhzLcQDbHnt6FTGpOBjM
-         hIGeGdw8ARNB2JEtwdnssRxPDcEOQKSX2H7Kc0pbSpez57vwbPaMbbj29HeGHzvHeUAA
-         fulZhtEUEKka1nZZ5y2dGM9DiVN9ekVO6nhL7okSBv1Krcai0Nj9gsox/y8L0AXrGHsN
-         kMxd2P6ycOIXDbvuwd0/Q0UGKxzKcaPa2WXCqpXXxzCPNoVR0HroazzclLNoT+3Mw4bH
-         Ms4w==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=//PUD5f7GplM89519c0hmn3dKQI620mHmk1UnlP9FPs=;
+        b=XNPocGj7eiVthaKGOlegbMgkhofmsHsGcNdlNwjpQdYwAny3M5QEpXJe0VmLiF6xxr
+         /rXwTQZkegRR11PvKJL3YEULFvw+FtKn3U4QtH9lGtG50xveeknTG2ZbxXqm3p4icUWo
+         Tb3ApuzTX+rBRTCJTUIlAuPNNjlLQhkwLwiExWPwX4E9QX0822kRSzwimJPPUCS+oUrK
+         hHgE7W0ChecHAsJYcyX/wAY4y+F5w8me7BbUw8tIDJqjj83BeWfp48J5HOLzoUL2RRjI
+         WkgLqIqDw7b2/ZDO9q+xBrbmrUY7gZZ90kwKcRSdbgbIUYy2olrnv8r7g1Tg0mVTRlqB
+         JBbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nAjMRsfCXAltgo5iFCDivnEztMCY0Q2l+8tj6K+rLFY=;
-        b=JyOz53mSQTmlfFNifw7OXGve2QY3T839kASIxiMWqaHeZoxi4Jr5PZnW3H/yLM6Kv1
-         RNhZIxPbju8eqOTXdd3Q89eAJVi8FLVTGj2WUO22zGABhGE4OVeJXmNpiLKmYHB2sug+
-         1b9yftJVpG95+nwS23VAa2a9V4iZTsEWlki75VE2Os1zXlX04OfzYfs8qeauAVHzwGnn
-         r7X2LOySJ8x8+2rW513kKaC9tYcEjA5Wrs0Z3cvPM3fCZmI2nsWdg5KDypPNrUfHNUFM
-         c5Pb+23Bqrrb2xDbUyobSyNXC2ApT/8TZo12hoyTsymY7lfLvG3dswVd/Awl5+HVMafb
-         OuWg==
-X-Gm-Message-State: AO0yUKXqUBVvEfsdywGgziWmrfT3eVEC0lLMu8/Au/BDzSQ0l/N1hBQj
-        BWMtE2C3vg/VRjwkWJD4ZvE9+g==
-X-Google-Smtp-Source: AK7set+tyMuXDWxzWtn+YJ8SdrR1sLZrsYgFO/g9k7MQQcrmb9dnjwFCZpIoVUaTa5Xt4cGwiuPVsg==
-X-Received: by 2002:a05:600c:3acd:b0:3d3:4f99:bb32 with SMTP id d13-20020a05600c3acd00b003d34f99bb32mr1789250wms.36.1676378618477;
-        Tue, 14 Feb 2023 04:43:38 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id ja13-20020a05600c556d00b003dc4b4dea31sm16156283wmb.27.2023.02.14.04.43.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 04:43:37 -0800 (PST)
-Message-ID: <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org>
-Date:   Tue, 14 Feb 2023 13:43:36 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=//PUD5f7GplM89519c0hmn3dKQI620mHmk1UnlP9FPs=;
+        b=uqAij0xq1+Ga2tYb/wYujbdiKaIsawCnqdzHiHeWdh2KPPZRuJwrcsLKzotO4VLAPN
+         /Dm03brzAZuJWiq1k29QDPz6VLNQmgkEA8z8Hus2PbbDMT14MSMoD51c0KjarVbeO40Q
+         O1h+bnBdQGsRiBzJnUvXLqnJuh5c3Vlv9NfsZPRFfbxyJFzGUOf5wGpeI26FV4GkB1ix
+         CVfQn3RqR5uEChOYVauWcF8sHIJWi3gZM/aanQw6mVSqjSRkVmLnJ62l+H4CGks8Oy8q
+         FjZ3yxd144KLTiipZSQH971e+L3K+l5dyCK32Au3Y6xY+472nMWXar4bBlkeYqU3va9S
+         Db9w==
+X-Gm-Message-State: AO0yUKV85qjPCq2J8w3Hl92N/tg5Oo1H8SXM4pkli+FFcOcCoyg0+ZAO
+        KYc8omRdoqGihyoeJLfx1oWsWB9oSLWZOIXqxYY=
+X-Google-Smtp-Source: AK7set+2pnH1CKd+RN83wqleMusbpFy3FlkYCo/TdXhpVa1RoyC5/XuwIYKjr9SCKABLrHl8FZUY+III+SgNUgOF72M=
+X-Received: by 2002:a17:90a:ac18:b0:233:c5e8:7213 with SMTP id
+ o24-20020a17090aac1800b00233c5e87213mr2422754pjq.93.1676378838445; Tue, 14
+ Feb 2023 04:47:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
-Content-Language: en-US
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <cover.1676289084.git.zhoubinbin@loongson.cn>
- <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
- <df464409-9a93-c057-5f66-923a9e24696a@linaro.org>
- <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1676358308.git.jpoimboe@kernel.org> <ad801544cab7c26a0f3bbf7cfefb67303f4cd866.1676358308.git.jpoimboe@kernel.org>
+In-Reply-To: <ad801544cab7c26a0f3bbf7cfefb67303f4cd866.1676358308.git.jpoimboe@kernel.org>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Tue, 14 Feb 2023 04:47:06 -0800
+Message-ID: <CAMo8BfJsxu0Q1a0KOq2giBCESZE-Y10nqTOT43XQje0FtM7ixQ@mail.gmail.com>
+Subject: Re: [PATCH v2 20/24] xtensa/cpu: Mark cpu_die() __noreturn
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, linux-alpha@vger.kernel.org,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, linux-xtensa@linux-xtensa.org,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14/02/2023 13:40, Binbin Zhou wrote:
-> On Tue, Feb 14, 2023 at 5:53 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 13/02/2023 13:15, Binbin Zhou wrote:
->>> Add Loongson Extended I/O Interrupt controller binding with DT schema
->>> format using json-schema.
->>>
->>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
->>> ---
->>>  .../loongson,eiointc.yaml                     | 80 +++++++++++++++++++
->>>  1 file changed, 80 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
->>> new file mode 100644
->>> index 000000000000..88580297f955
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
->>> @@ -0,0 +1,80 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: "http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#"
->>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->>
->> Drop quotes from bopth.
->>
->>> +
->>> +title: Loongson Extended I/O Interrupt Controller
->>> +
->>> +maintainers:
->>> +  - Binbin Zhou <zhoubinbin@loongson.cn>
->>> +
->>> +description: |
->>> +  This interrupt controller is found on the Loongson-3 family chips and
->>> +  Loongson-2K0500 chip and is used to distribute interrupts directly to
->>> +  individual cores without forwarding them through the HT's interrupt line.
->>> +
->>> +allOf:
->>> +  - $ref: /schemas/interrupt-controller.yaml#
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - loongson,eiointc-1.0
->>
->> Why not using SoC based compatible? It is preferred.
-> 
-> Hi Krzysztof:
-> 
-> So far, from the datasheet, I know that only the EXIOINTC of the
-> Loongson-2K0500 is different from the other chips, and that is the
-> "loongson,eio-num-vecs" below, which is 128, while all the others are
-> 256.
-> My original idea was to add this property to make compatible
-> consistent, and also to make it easier to add new chips if they have
-> different eio-num-vecs.
+On Mon, Feb 13, 2023 at 11:07 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> cpu_die() doesn't return.  Annotate it as such.  By extension this also
+> makes arch_cpu_idle_dead() noreturn.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  arch/xtensa/include/asm/smp.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-We talk about different things. SoC based compatibles are preferred over
-version ones. This was on the lists expressed many times. Please provide
-a reason why you deviate from general recommendation. Flexibility and
-genericness of bindings is not a reason - it's the opposite of the
-argument, thus this will be a: NAK. :(
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-
-> 
->>
->>> +
->>> +  reg:
->>> +    minItems: 1
->>> +    maxItems: 3
->>
->> You need to describe the items.
->>
->>> +
->>> +  interrupt-controller: true
->>> +
->>> +  interrupts:
->>> +    description:
->>> +      Interrupt source of the CPU interrupts.
->>
->> You need to describe the items.
-> 
-> Do you mean a more detailed description?
-
-I mean constraints on interrupts and/or description if they are not obvious.
-
-Best regards,
-Krzysztof
-
+-- 
+Thanks.
+-- Max
