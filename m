@@ -2,149 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F88697EB9
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Feb 2023 15:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DF4698218
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Feb 2023 18:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbjBOOvB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Feb 2023 09:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S230100AbjBORcb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Feb 2023 12:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjBOOvB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Feb 2023 09:51:01 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35D738B7A;
-        Wed, 15 Feb 2023 06:50:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676472659; x=1708008659;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bwfn9iLSdbAEiFOdAhEpJrxKbpghfRzY7pn4NQ6Y3GY=;
-  b=lhvLG27SfpSkGtns1W42aT2VPZe20YtISkHr7+P+5pdQMHfouTzwZdR4
-   VtxmGNHnbyBkUVsSY7WBXsVpepTa7Zw6ZpX4jfq6u75lo/brTa73fwLSb
-   t6Gbif6LFpahBoceVZsxQ4qPrFcLagBqveImQEhC+TfVyQ5yM1HpRyHYX
-   iRHuXuby1ZOBtggnpXluT5iR/3IoBCKT0x09Oitz/g6H6bducppDMoYlx
-   /UAHHLNEfxNhh8rVP4SWjws8l/qn5k1Jqr14+6Hun5tns6/gkXZPrwmDo
-   DkmiOU/YiKH5VAydxXwxxDlrvMSRZBGENX1XyoNlGckyn+m6D9v500T1m
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="331442778"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="331442778"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 06:50:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="699994163"
-X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="699994163"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 15 Feb 2023 06:50:55 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pSJ7R-0009Sn-21;
-        Wed, 15 Feb 2023 14:50:49 +0000
-Date:   Wed, 15 Feb 2023 22:50:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Willem-Jan de Hoog <arinc9.unal@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        with ESMTP id S230106AbjBORc2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Feb 2023 12:32:28 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CFD3B0C0;
+        Wed, 15 Feb 2023 09:32:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1676482320; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=lWVu/79ca+93h6jMeSMlnFeeBVM7mvnPj8rL1DQE2H0erZKkUZQkJFj8TD7PR/UQtc
+    AME7VGWtS7sS7cnAkq8hn6XjQ6zRcc2Vp2lBvfPqddyhF7l+yPpYNsZj5vr+PpDdSDiy
+    hHxDiqja4ghxfsyc1DcxzCYiSMHd87XyQZ9PK0YFriWzXZHPszP6AMZe6ntHhIOzrRcr
+    /6I6syrvGT2aFMuvLjdZjdf8jai7rdGYt50JoiF11YLqGrdBqXwG+ATaS9UJDV3g4zJM
+    yakbIiKbk15hTizbw0zp0NElvlcv5iZvyQN9Wq53uiHdAzM/T1YVtaAC2va0HhTuduaE
+    nGTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1676482320;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=bbHmsUjBPSu5l9/TxHE+oHyJRc0agWyhyIiPL5eQgSs=;
+    b=D4a+GO0n0EYgIDcjiFWfce2rARO8keGb7eVzogKNh83Z+18Wv6wWqVsd1WAqec/Kf+
+    bsUslEj752Zo3BCxBq9+FIpRo1rIMw7JF+uJeKh+17Z1RDLr2OQBf8KVaYoWiUD//7KA
+    8eTvC8nT6SoJKY/qVjj28/W1zpyzqOIHGCNXvWNAFGp3zzggmcRt3LZG3FQaAtnvSYi+
+    wVMyAizGTkGOwBdhiR+XbhwkoNeZ/Xqrd89jJwHtTFCfSHzxRBY2uOELRxrN3WOPtALN
+    GGUcBIUWGqsdUkMj5mq6prB8ux+1vNa5Adg8+i5QTMOg0trlJAWcPyixWk9YFRXTJ+Ex
+    b2Qg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1676482320;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=bbHmsUjBPSu5l9/TxHE+oHyJRc0agWyhyIiPL5eQgSs=;
+    b=qZUkv5MmC6X6qSsnaKNKmqBmFYozWJvR0TJJRr0pgBCjmQB66sBKXA86TrgvHnuugJ
+    H15eaqaGNpy+IBm2s8j7ncI31iHXycT2psq49YNkkgHtfkFnF+vLkTB/w9fA3R3QdpUK
+    jdGJ9JZozuRRZUMtb6u+Zw6x3Ick1iQCkwiYerXKpLNpxd7p54EZFixNQoFLFGYL35c5
+    LfDlVYdqh1SEFuriz9bV++ZWuzSwN0by9NSSzNgwIOKXiauhyR5T5d6pJbOHX2fIrbiU
+    P0g/nztd3C2tTSTlWsc7BhZxWfTL869uYnCnP0gCACvoFGatpy6AhT55L8cXbSSVkJIT
+    7oqA==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1iTDUhfN4hi3qVZrWLJ"
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 49.3.0 DYNA|AUTH)
+    with ESMTPSA id 326d57z1FHVxZCO
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 15 Feb 2023 18:31:59 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Willem-Jan de Hoog <wdehoog@exalondelft.nl>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        erkin.bozoglu@xeront.com
-Subject: Re: [PATCH 1/2] firmware: bcm47xx_nvram: allow to read from buffered
- nvram data
-Message-ID: <202302152222.wtVZ1npH-lkp@intel.com>
-References: <20230206100502.20243-2-wdehoog@exalondelft.nl>
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     riccardo Mottola <riccardo.mottola@libero.it>, paul@boddie.org.uk,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [RFC 0/3] Make WLAN and Bluetooth basically work for CI20
+Date:   Wed, 15 Feb 2023 18:31:55 +0100
+Message-Id: <cover.1676482318.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206100502.20243-2-wdehoog@exalondelft.nl>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Willem-Jan,
+RFC V1 2023-02-15 18:31:58:
+With the applied patch
 
-Thank you for the patch! Perhaps something to improve:
+rtc: jz4740: Register clock provider for the CLK32K pin
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc8 next-20230215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+by Paul Cercueil <paul@crapouillou.net> it is now possible to make the
+CI20 WiFi and Bluetooth setup do something reasonable.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Willem-Jan-de-Hoog/firmware-bcm47xx_nvram-allow-to-read-from-buffered-nvram-data/20230206-180737
-patch link:    https://lore.kernel.org/r/20230206100502.20243-2-wdehoog%40exalondelft.nl
-patch subject: [PATCH 1/2] firmware: bcm47xx_nvram: allow to read from buffered nvram data
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20230215/202302152222.wtVZ1npH-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/763f6661565b50b967e4f22e41cf46d27e14e58f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Willem-Jan-de-Hoog/firmware-bcm47xx_nvram-allow-to-read-from-buffered-nvram-data/20230206-180737
-        git checkout 763f6661565b50b967e4f22e41cf46d27e14e58f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/broadcom/
+This series adds #clock-cells to the jz4780 and fixes the device tree for
+the CI20. It contains two ugly workarounds since BL_WAKE and WL_WAKE can not
+be controlled as shutdown-gpios or device-wakeup-gpios by the drivers.
+We also update the power setup and sequencing and add a clock chain for
+the 32 kHz clock.
+Finally, we enable some required CONFIGs for the CI20.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302152222.wtVZ1npH-lkp@intel.com/
+Tested on CI20 with v6.2-rc6.
 
-All warnings (new ones prefixed by >>):
+H. Nikolaus Schaller (3):
+  MIPS: DTS: jz4780: add #clock-cells to rtc_dev
+  MIPS: DTS: CI20: fixes for WiFi/Bluetooth
+  MIPS: configs: ci20: enable drivers we need for WiFi/Bluetooth
 
-   In file included from drivers/net/ethernet/broadcom/bgmac.c:15:
-   include/linux/bcm47xx_nvram.h:56:2: error: expected identifier or '(' before ':' token
-      56 | }:
-         |  ^
-   In file included from include/linux/ethtool.h:19,
-                    from include/linux/phy.h:16,
-                    from drivers/net/ethernet/broadcom/bgmac.c:16:
->> include/uapi/linux/ethtool.h:125:49: warning: 'struct ethtool_cmd' declared inside parameter list will not be visible outside of this definition or declaration
-     125 | static inline void ethtool_cmd_speed_set(struct ethtool_cmd *ep,
-         |                                                 ^~~~~~~~~~~
-   include/uapi/linux/ethtool.h: In function 'ethtool_cmd_speed_set':
-   include/uapi/linux/ethtool.h:128:11: error: invalid use of undefined type 'struct ethtool_cmd'
-     128 |         ep->speed = (__u16)(speed & 0xFFFF);
-         |           ^~
-   include/uapi/linux/ethtool.h:129:11: error: invalid use of undefined type 'struct ethtool_cmd'
-     129 |         ep->speed_hi = (__u16)(speed >> 16);
-         |           ^~
-   include/uapi/linux/ethtool.h: At top level:
-   include/uapi/linux/ethtool.h:132:52: warning: 'struct ethtool_cmd' declared inside parameter list will not be visible outside of this definition or declaration
-     132 | static inline __u32 ethtool_cmd_speed(const struct ethtool_cmd *ep)
-         |                                                    ^~~~~~~~~~~
-   include/uapi/linux/ethtool.h: In function 'ethtool_cmd_speed':
-   include/uapi/linux/ethtool.h:134:19: error: invalid use of undefined type 'const struct ethtool_cmd'
-     134 |         return (ep->speed_hi << 16) | ep->speed;
-         |                   ^~
-   include/uapi/linux/ethtool.h:134:41: error: invalid use of undefined type 'const struct ethtool_cmd'
-     134 |         return (ep->speed_hi << 16) | ep->speed;
-         |                                         ^~
-
-
-vim +125 include/uapi/linux/ethtool.h
-
-607ca46e97a1b6 David Howells    2012-10-13  124  
-607ca46e97a1b6 David Howells    2012-10-13 @125  static inline void ethtool_cmd_speed_set(struct ethtool_cmd *ep,
-607ca46e97a1b6 David Howells    2012-10-13  126  					 __u32 speed)
-607ca46e97a1b6 David Howells    2012-10-13  127  {
-85a624403c77c3 Jesse Brandeburg 2016-10-13  128  	ep->speed = (__u16)(speed & 0xFFFF);
-607ca46e97a1b6 David Howells    2012-10-13  129  	ep->speed_hi = (__u16)(speed >> 16);
-607ca46e97a1b6 David Howells    2012-10-13  130  }
-607ca46e97a1b6 David Howells    2012-10-13  131  
+ arch/mips/boot/dts/ingenic/ci20.dts    | 77 ++++++++++++++++++++++----
+ arch/mips/boot/dts/ingenic/jz4780.dtsi |  2 +
+ arch/mips/configs/ci20_defconfig       | 18 +++++-
+ 3 files changed, 84 insertions(+), 13 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.38.1
+
