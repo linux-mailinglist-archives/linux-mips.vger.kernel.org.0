@@ -2,59 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B48F697CD4
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Feb 2023 14:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F88697EB9
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Feb 2023 15:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbjBONJg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Feb 2023 08:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S229517AbjBOOvB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Feb 2023 09:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjBONJf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Feb 2023 08:09:35 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FF061B0;
-        Wed, 15 Feb 2023 05:09:34 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F7ABFEC;
-        Wed, 15 Feb 2023 05:10:16 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.89.142])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8797A3F663;
-        Wed, 15 Feb 2023 05:09:26 -0800 (PST)
-Date:   Wed, 15 Feb 2023 13:09:21 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        jgross@suse.com, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-Subject: Re: [PATCH v2 04/24] arm64/cpu: Mark cpu_die() __noreturn
-Message-ID: <Y+zZgZIP7RPIgyQf@FVFF77S0Q05N>
-References: <cover.1676358308.git.jpoimboe@kernel.org>
- <e47fc487980d5330e6059ac6e16416bec88cda0e.1676358308.git.jpoimboe@kernel.org>
- <14274f04-2991-95bd-c29b-07e86e8755c1@linaro.org>
+        with ESMTP id S229516AbjBOOvB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Feb 2023 09:51:01 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35D738B7A;
+        Wed, 15 Feb 2023 06:50:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676472659; x=1708008659;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Bwfn9iLSdbAEiFOdAhEpJrxKbpghfRzY7pn4NQ6Y3GY=;
+  b=lhvLG27SfpSkGtns1W42aT2VPZe20YtISkHr7+P+5pdQMHfouTzwZdR4
+   VtxmGNHnbyBkUVsSY7WBXsVpepTa7Zw6ZpX4jfq6u75lo/brTa73fwLSb
+   t6Gbif6LFpahBoceVZsxQ4qPrFcLagBqveImQEhC+TfVyQ5yM1HpRyHYX
+   iRHuXuby1ZOBtggnpXluT5iR/3IoBCKT0x09Oitz/g6H6bducppDMoYlx
+   /UAHHLNEfxNhh8rVP4SWjws8l/qn5k1Jqr14+6Hun5tns6/gkXZPrwmDo
+   DkmiOU/YiKH5VAydxXwxxDlrvMSRZBGENX1XyoNlGckyn+m6D9v500T1m
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="331442778"
+X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
+   d="scan'208";a="331442778"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 06:50:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="699994163"
+X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
+   d="scan'208";a="699994163"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 15 Feb 2023 06:50:55 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSJ7R-0009Sn-21;
+        Wed, 15 Feb 2023 14:50:49 +0000
+Date:   Wed, 15 Feb 2023 22:50:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Willem-Jan de Hoog <arinc9.unal@gmail.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Willem-Jan de Hoog <wdehoog@exalondelft.nl>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com
+Subject: Re: [PATCH 1/2] firmware: bcm47xx_nvram: allow to read from buffered
+ nvram data
+Message-ID: <202302152222.wtVZ1npH-lkp@intel.com>
+References: <20230206100502.20243-2-wdehoog@exalondelft.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <14274f04-2991-95bd-c29b-07e86e8755c1@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230206100502.20243-2-wdehoog@exalondelft.nl>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,56 +71,80 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 09:13:08AM +0100, Philippe Mathieu-Daudé wrote:
-> On 14/2/23 08:05, Josh Poimboeuf wrote:
-> > cpu_die() doesn't return.  Annotate it as such.  By extension this also
-> > makes arch_cpu_idle_dead() noreturn.
-> > 
-> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> > ---
-> >   arch/arm64/include/asm/smp.h | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-> > index fc55f5a57a06..5733a31bab08 100644
-> > --- a/arch/arm64/include/asm/smp.h
-> > +++ b/arch/arm64/include/asm/smp.h
-> > @@ -100,7 +100,7 @@ static inline void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
-> >   extern int __cpu_disable(void);
-> >   extern void __cpu_die(unsigned int cpu);
-> > -extern void cpu_die(void);
-> > +extern void __noreturn cpu_die(void);
-> >   extern void cpu_die_early(void);
-> 
-> Shouldn't cpu_operations::cpu_die() be declared noreturn first?
+Hi Willem-Jan,
 
-The cpu_die() function ends with a BUG(), and so does not return, even if a
-cpu_operations::cpu_die() function that it calls erroneously returned.
+Thank you for the patch! Perhaps something to improve:
 
-We *could* mark cpu_operations::cpu_die() as noreturn, but I'd prefer that we
-did not so that the compiler doesn't optimize away the BUG() which is there to
-catch such erroneous returns.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc8 next-20230215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-That said, could we please add __noreturn to the implementation of cpu_die() in
-arch/arm64/kernel/smp.c? i.e. the fixup below.
+url:    https://github.com/intel-lab-lkp/linux/commits/Willem-Jan-de-Hoog/firmware-bcm47xx_nvram-allow-to-read-from-buffered-nvram-data/20230206-180737
+patch link:    https://lore.kernel.org/r/20230206100502.20243-2-wdehoog%40exalondelft.nl
+patch subject: [PATCH 1/2] firmware: bcm47xx_nvram: allow to read from buffered nvram data
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20230215/202302152222.wtVZ1npH-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/763f6661565b50b967e4f22e41cf46d27e14e58f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Willem-Jan-de-Hoog/firmware-bcm47xx_nvram-allow-to-read-from-buffered-nvram-data/20230206-180737
+        git checkout 763f6661565b50b967e4f22e41cf46d27e14e58f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/broadcom/
 
-With that fixup:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302152222.wtVZ1npH-lkp@intel.com/
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+All warnings (new ones prefixed by >>):
 
-Mark.
+   In file included from drivers/net/ethernet/broadcom/bgmac.c:15:
+   include/linux/bcm47xx_nvram.h:56:2: error: expected identifier or '(' before ':' token
+      56 | }:
+         |  ^
+   In file included from include/linux/ethtool.h:19,
+                    from include/linux/phy.h:16,
+                    from drivers/net/ethernet/broadcom/bgmac.c:16:
+>> include/uapi/linux/ethtool.h:125:49: warning: 'struct ethtool_cmd' declared inside parameter list will not be visible outside of this definition or declaration
+     125 | static inline void ethtool_cmd_speed_set(struct ethtool_cmd *ep,
+         |                                                 ^~~~~~~~~~~
+   include/uapi/linux/ethtool.h: In function 'ethtool_cmd_speed_set':
+   include/uapi/linux/ethtool.h:128:11: error: invalid use of undefined type 'struct ethtool_cmd'
+     128 |         ep->speed = (__u16)(speed & 0xFFFF);
+         |           ^~
+   include/uapi/linux/ethtool.h:129:11: error: invalid use of undefined type 'struct ethtool_cmd'
+     129 |         ep->speed_hi = (__u16)(speed >> 16);
+         |           ^~
+   include/uapi/linux/ethtool.h: At top level:
+   include/uapi/linux/ethtool.h:132:52: warning: 'struct ethtool_cmd' declared inside parameter list will not be visible outside of this definition or declaration
+     132 | static inline __u32 ethtool_cmd_speed(const struct ethtool_cmd *ep)
+         |                                                    ^~~~~~~~~~~
+   include/uapi/linux/ethtool.h: In function 'ethtool_cmd_speed':
+   include/uapi/linux/ethtool.h:134:19: error: invalid use of undefined type 'const struct ethtool_cmd'
+     134 |         return (ep->speed_hi << 16) | ep->speed;
+         |                   ^~
+   include/uapi/linux/ethtool.h:134:41: error: invalid use of undefined type 'const struct ethtool_cmd'
+     134 |         return (ep->speed_hi << 16) | ep->speed;
+         |                                         ^~
 
----->8----
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index ffc5d76cf695..a98a76f7c1c6 100644
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -361,7 +361,7 @@ void __cpu_die(unsigned int cpu)
-  * Called from the idle thread for the CPU which has been shutdown.
-  *
-  */
--void cpu_die(void)
-+void __noreturn cpu_die(void)
- {
-        unsigned int cpu = smp_processor_id();
-        const struct cpu_operations *ops = get_cpu_ops(cpu);
+
+vim +125 include/uapi/linux/ethtool.h
+
+607ca46e97a1b6 David Howells    2012-10-13  124  
+607ca46e97a1b6 David Howells    2012-10-13 @125  static inline void ethtool_cmd_speed_set(struct ethtool_cmd *ep,
+607ca46e97a1b6 David Howells    2012-10-13  126  					 __u32 speed)
+607ca46e97a1b6 David Howells    2012-10-13  127  {
+85a624403c77c3 Jesse Brandeburg 2016-10-13  128  	ep->speed = (__u16)(speed & 0xFFFF);
+607ca46e97a1b6 David Howells    2012-10-13  129  	ep->speed_hi = (__u16)(speed >> 16);
+607ca46e97a1b6 David Howells    2012-10-13  130  }
+607ca46e97a1b6 David Howells    2012-10-13  131  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
