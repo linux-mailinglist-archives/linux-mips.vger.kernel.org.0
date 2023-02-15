@@ -2,76 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BC7697446
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Feb 2023 03:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3F86975C6
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Feb 2023 06:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjBOCRH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Feb 2023 21:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
+        id S232953AbjBOFW3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Feb 2023 00:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjBOCRG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Feb 2023 21:17:06 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CF025941;
-        Tue, 14 Feb 2023 18:17:04 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id lf10so12839604ejc.5;
-        Tue, 14 Feb 2023 18:17:04 -0800 (PST)
+        with ESMTP id S232750AbjBOFW2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Feb 2023 00:22:28 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71AF34012
+        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 21:22:25 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id y25so2576851pfw.11
+        for <linux-mips@vger.kernel.org>; Tue, 14 Feb 2023 21:22:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6LxxlzPg4mizXqJNDigPYQlPuo1iqpw5WjKtKqM6DiE=;
-        b=mdtXMHguzvpQUS5lrmb4Pf8yWnMPy5O161mHqUuRD4pHl7RTCZeGex5H/ndl31zNNY
-         PS/JLb/hknFAl07aGpTgHTffCShUXFfsoR83lCCdp6qPLn+XUaNaAuRpRx2i0ZMdl5yu
-         vUqNqN0aQsm+cIXEE6YdIeJNwJON5NAvKLyN93ICk5Mf3Kfg46o6Qoy9twk5KthbGvTQ
-         ufMkFNE4fOy3I2lS3W6V2sIiJ8k2Fxy9zu11Yv8ucnvQD5EQ8jjV4l7aR4g61xEXQJwt
-         0BIYHSA1BtjqoBOQ7w01yVI2/zpT3paAa2Qm5OP7iLl2lhL3Nkc0VZrAVf8PGEiaHBrQ
-         NUjg==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tV+nl5/6nbPk/6HA5pQX/rHuTHF5S4E9f4KJMF/h5x0=;
+        b=fhWxOvSg47bnqh1vlUb0tg8U7zRfENd11uhGOf5Jsz/ZocWHFEI68pLXo5d9vBVXvT
+         wSDFNO3/CV6QVriW/uJf7uSjBsTIo2nfhwr90ljf0Mtrv3l+ZNz03APZ/NoeYJxIi8AS
+         eT1BnG6scYkTL0mRsKAhicVLLfSox5xFSJlK+m4CcZ2f/19AZeBmn0TeLDNpHHUJ+j//
+         pNGe52xRL7NHFqYuRqi8NBAMhHiUAqm3krXcV9gB6lQ+ZUL8htkaq+hcUOto2vJWmQ/P
+         1t61ly6hek8z31+cUX+0shb1PAvYlU/KvbO9KdB05jwbmNe1/Zq0XZpFJiImeu8sqMJC
+         uFRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6LxxlzPg4mizXqJNDigPYQlPuo1iqpw5WjKtKqM6DiE=;
-        b=RsMxikBrgweD5weN1KyuH1pXEO8hJ51mJ3bniOiuikHcKdpXYJpjXI+CxmPyoQkqVJ
-         UrMUU6EpoQnIVhokPzU92HiXDcz6EpJ4QTwv8ZptZUVO99mNGLMi+7SIswhr93ZztKdc
-         29xujbYWK+xyIDt5NWshhcWt57KZfIIBiQfAJsTnv+CfPc5mr1SBfaW/AwE78oy2+USn
-         OCxNMvrq/bqksQRJ13juPmBco9BNqkp8acXU1ohLVJ02ZKrC4lYS+CMyG4h9dJJrz93j
-         /5n6YwiHwcRvFnOU+cSJdq0BvshmChFvDSMX1Wn8P/d4ZCbqS314J6u0iY/MCPGwp6L/
-         Lrjw==
-X-Gm-Message-State: AO0yUKUK9k0kGovI7onUsCUDidYSFW9V8iAiPahX/ti6ePPVT+JwPeck
-        SDt+fGO5HNNlvLynuMljzuZEBTboK9rAfLZM1uw=
-X-Google-Smtp-Source: AK7set/fzpOM02wfNk52NdqUIG77iAJxisnDk9pzjjI5GCx7b+6LlJ3SFgk59YpfC9G6AH0tDasj2Vs3AbAXQYTg2Sw=
-X-Received: by 2002:a17:906:5ad4:b0:877:747e:f076 with SMTP id
- x20-20020a1709065ad400b00877747ef076mr300787ejs.0.1676427422995; Tue, 14 Feb
- 2023 18:17:02 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1673227292.git.zhoubinbin@loongson.cn> <Y88VIXerF5Wk/9kj@mail.local>
- <CAMpQs4+8m0r98eGMHO7ktS2_AuNCA_u3Yk1q06i99TdbVZJ_Cg@mail.gmail.com>
- <CAMpQs4+uW75TdkMicdfU+5LYQxA_7kfbdabwO=iDiKwW-PzO9Q@mail.gmail.com> <Y+wWp61zxZ3V316d@mail.local>
-In-Reply-To: <Y+wWp61zxZ3V316d@mail.local>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Wed, 15 Feb 2023 10:16:46 +0800
-Message-ID: <CAJhJPsX2qLYMaVOR1bwS75sju4EPf3PcVX4L6Tyuz7NMv4Z2eQ@mail.gmail.com>
-Subject: Re: [PATCH V2 0/7] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
-        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>, zhzhl555@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tV+nl5/6nbPk/6HA5pQX/rHuTHF5S4E9f4KJMF/h5x0=;
+        b=CD01T7+7QeE2FOyZOzEmA4rJs9e2CK0+1L7J21xPa9djZMTwnAaLwoAkBR7cPYXl1g
+         c0ibPjrzGOCyk0ortDfsEBDVfBEQ5HvFrzcKND8P/rGAbHWQgZdzDZgsNYnaPjQ5TP1m
+         nMlJyHPAkoiozi6aCvPpvP8DIkp3qQE1qN2+SBbTp+QHTRo74lwkCMeGMYvaU+XEsE7r
+         31BV4AtUXBnaNCEmai9lWjNG6EugJFTQ22Eh7ettMlf+I+bL++STP7HwG4MGS9OMDgMc
+         YswndzRFL71Hc/lEFD3Rk9NXG0UOilaUSe2G2ZcL2jGjhtWQ+c2UtRyJjYbZ1Xg0uxPe
+         Oijg==
+X-Gm-Message-State: AO0yUKWTAcrirQghuiocuXZK+d71NbDzaPcD6BRjpEHSo7TNITp8Ewck
+        O/u7XImrX0SR29CInS9rSeqYuj63mqbSy0wgtwY=
+X-Google-Smtp-Source: AK7set/rdrNLm8tItidqjsvagDbtl5rYMULe1MueAmQXNPzlIf4+Jxy35EVuWqAlcqe6sRrK/ndqkQ==
+X-Received: by 2002:aa7:9f85:0:b0:577:272f:fdb with SMTP id z5-20020aa79f85000000b00577272f0fdbmr600755pfr.29.1676438545117;
+        Tue, 14 Feb 2023 21:22:25 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id n14-20020aa78a4e000000b005a8d396ae27sm2788868pfa.8.2023.02.14.21.22.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 21:22:24 -0800 (PST)
+Date:   Tue, 14 Feb 2023 21:22:24 -0800 (PST)
+X-Google-Original-Date: Tue, 14 Feb 2023 21:22:11 PST (-0800)
+Subject:     Re: [PATCH 13/19] arch/riscv: rename internal name __xchg to __arch_xchg
+In-Reply-To: <20221222114635.1251934-14-andrzej.hajda@intel.com>
+CC:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, andrzej.hajda@intel.com,
+        Arnd Bergmann <arnd@arndb.de>, rodrigo.vivi@intel.com,
+        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
+        peterz@infradead.org, boqun.feng@gmail.com, mark.rutland@arm.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     andrzej.hajda@intel.com
+Message-ID: <mhng-e75808d7-21de-4ef8-a606-b7c652a1f38e@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,137 +82,49 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Alexandre,
-I will maintain rtc-ls1x continuously.
-And I'm adding DT support for it.
-
-On Wed, Feb 15, 2023 at 7:18 AM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
+On Thu, 22 Dec 2022 03:46:29 PST (-0800), andrzej.hajda@intel.com wrote:
+> __xchg will be used for non-atomic xchg macro.
 >
-> On 10/02/2023 18:03:07+0800, Binbin Zhou wrote:
-> > On Tue, Jan 31, 2023 at 8:59 PM Binbin Zhou <zhoubb.aaron@gmail.com> wrote:
-> > >
-> > > Hi Kelvin:
-> > >
-> > > Excuse me.
-> > > I am submitting the Loongson-2K/LS7A RTC driver and Alexandre would
-> > > like me to merge the ls1x rtc driver in parallel.
-> > > Unfortunately I found out that the loongson-1 does not yet support DT
-> > > and would like to ask if you have any plans to support DT?
-> > >
-> > > I think this is the prerequisite for the merge.
-> > >
-> > > Regards.
-> > > Binbin
-> > >
-> > >
-> >
-> > Hi Alexandre:
-> >
-> > Unfortunately there has been no reply from Keguang for the past week
-> > or so. Can we try rtc-ls2x and rtc-ls1x to coexist until Loongson-1
-> > supports DT?
-> > Later on, if Keguang or someone else familiar with Loongson-1 adds DT
-> > support, I would be happy to continue trying to merge the two drivers.
-> >
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> ---
+>  arch/riscv/include/asm/atomic.h  | 2 +-
+>  arch/riscv/include/asm/cmpxchg.h | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> My point is exactly that if nobody in Loongson wants to maintain
-> rtc-ls1x, we may just drop it. This also probably tells a lot about how
-> rtc-ls2x is going to be maintained once upstreamed...
+> diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+> index 0dfe9d857a762b..bba472928b5393 100644
+> --- a/arch/riscv/include/asm/atomic.h
+> +++ b/arch/riscv/include/asm/atomic.h
+> @@ -261,7 +261,7 @@ c_t arch_atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)	\
+>  static __always_inline							\
+>  c_t arch_atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)		\
+>  {									\
+> -	return __xchg(&(v->counter), n, size);				\
+> +	return __arch_xchg(&(v->counter), n, size);			\
+>  }									\
+>  static __always_inline							\
+>  c_t arch_atomic##prefix##_cmpxchg_relaxed(atomic##prefix##_t *v,	\
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> index 12debce235e52d..2f4726d3cfcc25 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -114,7 +114,7 @@
+>  					    _x_, sizeof(*(ptr)));	\
+>  })
 >
-> > Regards.
-> > Binbin
-> >
-> > >
-> > >
-> > > On Tue, Jan 24, 2023 at 7:24 AM Alexandre Belloni
-> > > <alexandre.belloni@bootlin.com> wrote:
-> > > >
-> > > > On 09/01/2023 09:35:10+0800, Binbin Zhou wrote:
-> > > > > Hi all:
-> > > > >
-> > > > > The initial DT-base ls2x rtc driver was written by Wang Xuerui, He has
-> > > > > released five versions of patchset before, and all related mail records
-> > > > > are shown below if you are interested:
-> > > > >
-> > > > > https://lore.kernel.org/all/?q=ls2x-rtc
-> > > > >
-> > > > > In this series of patches, based on the code above, I have added the
-> > > > > following support:
-> > > > >
-> > > > > 1. Add ACPI-related support, as Loongson-3A5000 + LS7A is now ACPI-base
-> > > > >    by default under LoongArch architecture;
-> > > > > 2. Add rtc alarm/walarm related functions.
-> > > > >
-> > > > > I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
-> > > > > and Loongson-2K0500.
-> > > > >
-> > > > > BTW:
-> > > > > There have been discussions about merging the rtc drivers of ls1x and
-> > > > > ls2x, but the following reasons made the merger difficult to achieve:
-> > > > >
-> > > > > 1. ls1x does not support ACPI, for it is only on MIPS-based system;
-> > > >
-> > > > This is not a good justification, you have to support both in your
-> > > > driver anyway, as shown by your CONFIG_ACPI ifdefery.
-> > > >
-> > > > > 2. ls1x does not support alarm function.
-> > > >
-> > > > It is just a matter of clearing a single bit, this is not difficult at
-> > > > all.
-> > > >
-> > > > >
-> > > > > Thanks.
-> > > > >
-> > > > > -------
-> > > > > Changes since v1:
-> > > > > 1. Rebased on top of latest loongarch-next;
-> > > > > 2. Add interrupt descriptions to the ls2k and ls7a DTS files to avoid
-> > > > > errors when the driver gets the IRQ number, Thanks to Qing Zhang for
-> > > > > testing;
-> > > > > 3. Remove some inexact CONFIG_ACPI.
-> > > > >
-> > > > > Binbin Zhou (4):
-> > > > >   rtc: Add support for the Loongson-2K/LS7A RTC
-> > > > >   LoongArch: Enable LS2X RTC in loongson3_defconfig
-> > > > >   MIPS: Loongson64: DTS: Add RTC support to LS7A
-> > > > >   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
-> > > > >
-> > > > > WANG Xuerui (3):
-> > > > >   dt-bindings: rtc: Add Loongson LS2X RTC support
-> > > > >   MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
-> > > > >   MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
-> > > > >
-> > > > >  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
-> > > > >  arch/loongarch/configs/loongson3_defconfig    |   1 +
-> > > > >  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   7 +
-> > > > >  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +
-> > > > >  arch/mips/configs/loongson2k_defconfig        |   1 +
-> > > > >  arch/mips/configs/loongson3_defconfig         |   1 +
-> > > > >  drivers/rtc/Kconfig                           |  11 +
-> > > > >  drivers/rtc/Makefile                          |   1 +
-> > > > >  drivers/rtc/rtc-ls2x.c                        | 379 ++++++++++++++++++
-> > > > >  9 files changed, 410 insertions(+)
-> > > > >  create mode 100644 drivers/rtc/rtc-ls2x.c
-> > > > >
-> > > > > --
-> > > > > 2.31.1
-> > > > >
-> > > >
-> > > > --
-> > > > Alexandre Belloni, co-owner and COO, Bootlin
-> > > > Embedded Linux and Kernel engineering
-> > > > https://bootlin.com
-> > > >
+> -#define __xchg(ptr, new, size)						\
+> +#define __arch_xchg(ptr, new, size)					\
+>  ({									\
+>  	__typeof__(ptr) __ptr = (ptr);					\
+>  	__typeof__(new) __new = (new);					\
+> @@ -143,7 +143,7 @@
+>  #define arch_xchg(ptr, x)						\
+>  ({									\
+>  	__typeof__(*(ptr)) _x_ = (x);					\
+> -	(__typeof__(*(ptr))) __xchg((ptr), _x_, sizeof(*(ptr)));	\
+> +	(__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));	\
+>  })
 >
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+>  #define xchg32(ptr, x)							\
 
-
-
--- 
-Best regards,
-
-Kelvin Cheung
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
