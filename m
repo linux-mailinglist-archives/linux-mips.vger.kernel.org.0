@@ -2,82 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69E2698E53
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Feb 2023 09:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98700698E8A
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Feb 2023 09:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjBPIKq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Feb 2023 03:10:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
+        id S229889AbjBPIU1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Feb 2023 03:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjBPIKn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Feb 2023 03:10:43 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEB128855
-        for <linux-mips@vger.kernel.org>; Thu, 16 Feb 2023 00:10:36 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id jg8so3205196ejc.6
-        for <linux-mips@vger.kernel.org>; Thu, 16 Feb 2023 00:10:36 -0800 (PST)
+        with ESMTP id S229881AbjBPIUZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Feb 2023 03:20:25 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1915A26879
+        for <linux-mips@vger.kernel.org>; Thu, 16 Feb 2023 00:20:19 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id 10so2494058ejc.10
+        for <linux-mips@vger.kernel.org>; Thu, 16 Feb 2023 00:20:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oW0V6umLJy0hS07mWMTA08LmxSLhrAJj8WzjMCOF2bw=;
-        b=Q/l20dOw+fFU30ZZsMO3nTpWbTXVMGX9nDXDEIIrCD/27js0WE/SpBC8PjaueADFv2
-         2TdpVfe/hJ0ftL4MGJIj+EmbR/GyCkTdnThpauSxR5AY2zNwl9E/TjGht6H+Gn6O7JqT
-         4RkgrLo0C15R2KnaZOyUtXliU+tZf1riBT+99p75VOiXtUhX2XKudTrsRuMAMen3dlKa
-         qvE92lbnqbViniVNKeDsc3Ut31Ev5a/E1fLy/GvJF//vB1QTkt66bXKf0JgdxkMNKLfr
-         O7O7AM7i9Ctgj7wsSa1w/oIKxnJhTzcEhFPzqsz4TvMaOYNZuXuM+7vt/8W06U9ZG15t
-         HfXw==
+        bh=g9hfU2Fl5/j4A3QnaJpUGjRq1/KXRcgp861nKkf/nNw=;
+        b=FZJzzH1JQE4zZJfEpbXHoNj8o9hV8HehrRzPhVUsyc3lBjhsoqWpAR2BAYj0Qccw3t
+         wpxXp14Qr5EE9xu9CWMbcAKLn1ckqsqYWNFvISMIXlwAnkbdxKSD0V4EaJMxPHdPYOP3
+         Q/RHiTlf+SrFj4Soo+wqFuVT9KJt3QYpwkIG8ZWYuBCOwY2UtoVEl7Fylwfl/KLi4Oq6
+         88g2MuMD7QDRoPkMP3tlSKuOUy/EnyEReWCDPfx42GyAnsnxyAJM8nErZA2sL/QQ4/U7
+         0uoWCY/K//o8ozFnCllcXwUd4UjSE0PTGZuahmsa9kjNiMl3Vb/fSfuYdWn1K80UKJ+X
+         Zr3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oW0V6umLJy0hS07mWMTA08LmxSLhrAJj8WzjMCOF2bw=;
-        b=L7Wy9+KE+gi41SjL+dugHvoY0K+5vfuhjZAEBOUtT+JsvFzwYRtE16ccCdUVyAVWAt
-         rp/9dUaTJrI7wC/sygolhi77YImKItoNAphWR4d55mkPI44eOTXYSck7My42eO+b6805
-         OtqhhZ6ZrsfOYEeilHzr6CMtf6KS8Bw/bnV7WHHWupxKNTzY+USBmJ3/eLNK5C7B5bwD
-         +KPSL9ySmNkh5r7Moy8HS6q0WmD1W9Y+qKdtAVHUiMHSOFyPOKS92mFEf+s+6gjccha+
-         MJgqWLTX7gEps2fp2H2+jOYz/ulP8p82/c0AUvuT7RzY1STo5fH0Rov9fS6rFLqUZZ8l
-         Q4ww==
-X-Gm-Message-State: AO0yUKXK6Z21SpmWKTbjlrl/F7Kr2UwSahDBYK/0Ww73mZjZaYwUKJkj
-        5S5NX0p4uWkGAt0yh0m95DZVfg==
-X-Google-Smtp-Source: AK7set+IG8aKhp/1WTD7nwtbH604B/L6qXfYbtPaA03zUfX6H1lEkvKZrd0aeoZ70gQgV5BAX4wwyQ==
-X-Received: by 2002:a17:906:288b:b0:88a:888b:c8b with SMTP id o11-20020a170906288b00b0088a888b0c8bmr5504301ejd.35.1676535034591;
-        Thu, 16 Feb 2023 00:10:34 -0800 (PST)
+        bh=g9hfU2Fl5/j4A3QnaJpUGjRq1/KXRcgp861nKkf/nNw=;
+        b=Pj1YmbNhYaWdzGUlYVA9Ew+VdgNwPGMh4JTuahvnHpB/rTJkc7Gp1SwxIa3xVMftUW
+         gS/AXk+mYC2Sv6eDQodHwAQlBn2rZPeRg1O9YYZoFXDPEbxx50N/3sL5LyFApPjtN2Uw
+         uc91CztK9pJlNEJKIxUPrsX8DU8VRUiAGCOWQfxf3Gnefe+FGd7vKTi6yLwWLt5SoS3A
+         VR9YDaQz33uqdhUKm+y7s5a4dEXm82c0+0Ye40S3iD/LD6bmKTjnu/7wjT/wxa3NPpfK
+         oQ2NKoViho4SQMKP6XrPu/IRoQ7zEdzufLaicsys4gH3Ok5NbOTmAebUj1BkhPipkFg+
+         fssg==
+X-Gm-Message-State: AO0yUKVnD5oxwu3Cppx5v2XWOopKecH//O2pEq1Z4fvAMJ1MWn4oYZuE
+        W1hvi1kVv/TD8kw5gK8gd/MS8g==
+X-Google-Smtp-Source: AK7set9HeLdz9xi9BB7rkdqCHJi4WyceVUvbWuT5oEQ0FuJ2pmvnuibIKYF7wC8OyZ5RPuSE0jy6eA==
+X-Received: by 2002:a17:906:ca47:b0:8b1:2d40:a399 with SMTP id jx7-20020a170906ca4700b008b12d40a399mr5111853ejb.42.1676535617582;
+        Thu, 16 Feb 2023 00:20:17 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id jt8-20020a170906dfc800b008b13ce1c460sm477556ejc.40.2023.02.16.00.10.32
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090685cf00b008b1435bd1cbsm488199ejy.105.2023.02.16.00.20.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 00:10:34 -0800 (PST)
-Message-ID: <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org>
-Date:   Thu, 16 Feb 2023 09:10:32 +0100
+        Thu, 16 Feb 2023 00:20:17 -0800 (PST)
+Message-ID: <5ab1d573-aaf2-6747-291d-0c64a01b9ffc@linaro.org>
+Date:   Thu, 16 Feb 2023 09:20:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
+Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
+ dependent code
 Content-Language: en-US
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <cover.1676289084.git.zhoubinbin@loongson.cn>
- <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
- <df464409-9a93-c057-5f66-923a9e24696a@linaro.org>
- <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
- <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org>
- <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
+ <20230213200519.889503-4-sergio.paracuellos@gmail.com>
+ <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
+ <aa68fc8c-cfa1-902d-b95e-4fcbd3154f93@roeck-us.net>
+ <c23f78fe-8ea4-1a5c-c36e-fd981a2c381d@linaro.org>
+ <7c815038-e3d2-dd78-26af-8a6f498a6a1e@roeck-us.net>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
+In-Reply-To: <7c815038-e3d2-dd78-26af-8a6f498a6a1e@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,104 +85,149 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 16/02/2023 02:46, Binbin Zhou wrote:
-> On Tue, Feb 14, 2023 at 8:43 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 14/02/2023 13:40, Binbin Zhou wrote:
->>> On Tue, Feb 14, 2023 at 5:53 PM Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 13/02/2023 13:15, Binbin Zhou wrote:
->>>>> Add Loongson Extended I/O Interrupt controller binding with DT schema
->>>>> format using json-schema.
+On 14/02/2023 16:07, Guenter Roeck wrote:
+> On 2/14/23 04:15, Krzysztof Kozlowski wrote:
+>> On 14/02/2023 13:10, Guenter Roeck wrote:
+>>> On 2/14/23 00:31, Krzysztof Kozlowski wrote:
+>>>> On 13/02/2023 21:05, Sergio Paracuellos wrote:
+>>>>> MT7621 SoC has a system controller node. Watchdog need to access to reset
+>>>>> status register. Ralink architecture and related driver are old and from
+>>>>> the beggining they are using some architecture dependent operations for
+>>>>> accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
+>>>>> header file. However this is not ideal from a driver perspective which can
+>>>>> just access to the system controller registers in an arch independent way
+>>>>> using regmap syscon APIs. Update Kconfig accordingly to select new added
+>>>>> dependencies and allow driver to be compile tested.
 >>>>>
->>>>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+>>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 >>>>> ---
->>>>>  .../loongson,eiointc.yaml                     | 80 +++++++++++++++++++
->>>>>  1 file changed, 80 insertions(+)
->>>>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+>>>>>    drivers/watchdog/Kconfig      |  4 +++-
+>>>>>    drivers/watchdog/mt7621_wdt.c | 18 +++++++++++++-----
+>>>>>    2 files changed, 16 insertions(+), 6 deletions(-)
 >>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..88580297f955
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
->>>>> @@ -0,0 +1,80 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id: "http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#"
->>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>>>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>>>>> index b64bc49c7..cf752ad64 100644
+>>>>> --- a/drivers/watchdog/Kconfig
+>>>>> +++ b/drivers/watchdog/Kconfig
+>>>>> @@ -1865,7 +1865,9 @@ config GXP_WATCHDOG
+>>>>>    config MT7621_WDT
+>>>>>    	tristate "Mediatek SoC watchdog"
+>>>>>    	select WATCHDOG_CORE
+>>>>> -	depends on SOC_MT7620 || SOC_MT7621
+>>>>> +	select REGMAP_MMIO
+>>>>> +	select MFD_SYSCON
+>>>>> +	depends on SOC_MT7620 || SOC_MT7621 || COMPILE_TEST
+>>>>>    	help
+>>>>>    	  Hardware driver for the Mediatek/Ralink MT7621/8 SoC Watchdog Timer.
+>>>>>    
+>>>>> diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
+>>>>> index 40fb2c9ba..22e979bdd 100644
+>>>>> --- a/drivers/watchdog/mt7621_wdt.c
+>>>>> +++ b/drivers/watchdog/mt7621_wdt.c
+>>>>> @@ -15,8 +15,8 @@
+>>>>>    #include <linux/moduleparam.h>
+>>>>>    #include <linux/platform_device.h>
+>>>>>    #include <linux/mod_devicetable.h>
+>>>>> -
+>>>>> -#include <asm/mach-ralink/ralink_regs.h>
+>>>>> +#include <linux/mfd/syscon.h>
+>>>>> +#include <linux/regmap.h>
+>>>>>    
+>>>>>    #define SYSC_RSTSTAT			0x38
+>>>>>    #define WDT_RST_CAUSE			BIT(1)
+>>>>> @@ -34,6 +34,7 @@
+>>>>>    struct mt7621_wdt_data {
+>>>>>    	void __iomem *base;
+>>>>>    	struct reset_control *rst;
+>>>>> +	struct regmap *sysc;
+>>>>>    	struct watchdog_device wdt;
+>>>>>    };
+>>>>>    
+>>>>> @@ -104,9 +105,12 @@ static int mt7621_wdt_stop(struct watchdog_device *w)
+>>>>>    	return 0;
+>>>>>    }
+>>>>>    
+>>>>> -static int mt7621_wdt_bootcause(void)
+>>>>> +static int mt7621_wdt_bootcause(struct mt7621_wdt_data *d)
+>>>>>    {
+>>>>> -	if (rt_sysc_r32(SYSC_RSTSTAT) & WDT_RST_CAUSE)
+>>>>> +	u32 val;
+>>>>> +
+>>>>> +	regmap_read(d->sysc, SYSC_RSTSTAT, &val);
+>>>>> +	if (val & WDT_RST_CAUSE)
+>>>>>    		return WDIOF_CARDRESET;
+>>>>>    
+>>>>>    	return 0;
+>>>>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
+>>>>>    	if (!drvdata)
+>>>>>    		return -ENOMEM;
+>>>>>    
+>>>>> +	drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
+>>>>> +	if (IS_ERR(drvdata->sysc))
+>>>>> +		return PTR_ERR(drvdata->sysc);
 >>>>
->>>> Drop quotes from bopth.
+>>>> This should be the backup/error path for original code using syscon
+>>>> property. Looking up by compatible is really not portable/re-usable.
 >>>>
->>>>> +
->>>>> +title: Loongson Extended I/O Interrupt Controller
->>>>> +
->>>>> +maintainers:
->>>>> +  - Binbin Zhou <zhoubinbin@loongson.cn>
->>>>> +
->>>>> +description: |
->>>>> +  This interrupt controller is found on the Loongson-3 family chips and
->>>>> +  Loongson-2K0500 chip and is used to distribute interrupts directly to
->>>>> +  individual cores without forwarding them through the HT's interrupt line.
->>>>> +
->>>>> +allOf:
->>>>> +  - $ref: /schemas/interrupt-controller.yaml#
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    enum:
->>>>> +      - loongson,eiointc-1.0
->>>>
->>>> Why not using SoC based compatible? It is preferred.
 >>>
->>> Hi Krzysztof:
+>>> I really disagree here.
 >>>
->>> So far, from the datasheet, I know that only the EXIOINTC of the
->>> Loongson-2K0500 is different from the other chips, and that is the
->>> "loongson,eio-num-vecs" below, which is 128, while all the others are
->>> 256.
->>> My original idea was to add this property to make compatible
->>> consistent, and also to make it easier to add new chips if they have
->>> different eio-num-vecs.
+>>> $ git grep syscon_regmap_lookup_by_compatible | wc
+>>>        90     326    8940
+>>>
+>>> I have not yet reviewed this code, but I do not accept this argument against it.
 >>
->> We talk about different things. SoC based compatibles are preferred over
->> version ones. This was on the lists expressed many times. Please provide
->> a reason why you deviate from general recommendation. Flexibility and
->> genericness of bindings is not a reason - it's the opposite of the
->> argument, thus this will be a: NAK. :(
+>> First, argument that bad pattern is being used is not an argument to
+>> keep it and repeat it.
 >>
+>> Second, we already had examples that:
+>> 1. Author used syscon_regmap_lookup_by_compatible() and assumed "we will
+>> never add new variant/soc".
+>> 2. Then turns out that new variants are obviously added and
+>> syscon_regmap_lookup_by_compatible() stops scaling.
 >>
-> Hi Krzysztof:
 > 
-> Allow me to give a brief overview of the current status of eiointc (DT-based):
->      Loongson-3A series supports eiointc;
->      Loongson-2K1000 does not support eiointc now;
->      Loongson-2K0500 supports eiointc, with differences from
-> Loongson-3, e.g. only up to 128 devices are supported;
->      Loongson-2K2000 supports eiointc, similar to Loongson-3.
->      ....
+> Your arguments only applies if 1) there is ever going to be a new Mediatek/Ralink
+> chip with the same watchdog core, and 2) that chip also has the same watchdog
+> related registers in its syscon node.
 > 
-> As can be seen, there is now a bit of confusion in the chip's design of eiointc.
-> 
-> The design of eiointc is probably refined step by step with the chip.
-> The same version of eiointc can be used for multiple chips, and the
-> same chip series may also use different versions of eiointc. Low-end
-> chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
-> depending on the time it's produced.
-> 
-> So in the Loongson-2K series I have defined the current state as
-> eiointc-1.0, using the dts property to indicate the maximum number of
-> devices supported by eiointc that can be used directly in the driver.
-> 
-> If there are new changes to the design later on, such as the
-> definition of registers, we can call it eiointc-2.0, which can also
-> cover more than one chip.
+> Both is highly unlikely to happen. There already is a more generic watchdog
+> driver for later Mediatek chips (mtk_wdt.c). Even if Mediatek/Ralink ever
+> decides to revive this specific watchdog core for whatever reason,
+> the time to make the code more generic would have been at that time, at the same
+> time ensuring that the more generic code actually works and does have the
+> same syscon registers to obtain the boot status.
 
-Just go with SoC-based compatibles. If your version is not specific
-enough, then it is not a good way to represent the hardware.
+Sure. In other cases we experienced, people also claimed that this will
+not happen. But it happened... I cannot judge whether this will happen
+here or not, thus I give generic guideline. If you (singular and plural)
+are sure this will not happen, then the code is fine.
+
+> 
+>> Whether any new variant/compatible/platform can appear for this watchdog
+>> - I don't know.
+>>
+>> Third, with syscon_regmap_lookup_by_compatible() you have undocumented
+>> (not in the binding) dependency between blocks which:
+>> a. stops any reusability,
+>> b. affects device links and probe ordering (simply - there is no, device
+>> must defer probe),
+>> c. is simply undocumented.
+>>
+>> The usage of syscon_regmap_lookup_by_compatible() has clear drawbacks
+>> thus new code should rather use syscon phandles which solve all of above.
+>>
+> 
+> "new code". Exactly. This isn't new code.
+
+New code not as "new driver" but new code adding syscon usage. Syscon is
+new here so we have flexibility to make it differently, and IMHO, one
+way is better than other (for the reasons I stated).
+
+> 
+> In order to make progress, I'll accept v7, assuming its updated devicetree
+> description is going to be accepted, but my argument still stands.
+
 
 Best regards,
 Krzysztof
