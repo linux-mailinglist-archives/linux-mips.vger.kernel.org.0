@@ -2,48 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4174969A9A3
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 12:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3C369A9A6
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 12:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjBQLFm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Feb 2023 06:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S229504AbjBQLFn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Feb 2023 06:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjBQLFk (ORCPT
+        with ESMTP id S229652AbjBQLFk (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 06:05:40 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF8F42C660;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4D9D642E9;
         Fri, 17 Feb 2023 03:05:10 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pSyXr-0008WE-01; Fri, 17 Feb 2023 12:04:51 +0100
+        id 1pSyXr-0008WE-02; Fri, 17 Feb 2023 12:04:51 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 07845C28A0; Fri, 17 Feb 2023 12:03:07 +0100 (CET)
-Date:   Fri, 17 Feb 2023 12:03:06 +0100
+        id ED554C28A0; Fri, 17 Feb 2023 12:04:37 +0100 (CET)
+Date:   Fri, 17 Feb 2023 12:04:37 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     arinc9.unal@gmail.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-Subject: Re: [PATCH 2/2] mips: dts: ralink: mt7621: add port@5 as CPU port
-Message-ID: <20230217110306.GB7138@alpha.franken.de>
-References: <20230211104915.116253-1-arinc.unal@arinc9.com>
- <20230211104915.116253-2-arinc.unal@arinc9.com>
+To:     Genjian <zhanggenjian123@gmail.com>
+Cc:     paulburton@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: Re: [PATCH] MIPS: dts: Boston: Fix dtc 'pci_device_reg' warning
+Message-ID: <20230217110437.GC7138@alpha.franken.de>
+References: <20230213062451.1688755-1-zhanggenjian@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230211104915.116253-2-arinc.unal@arinc9.com>
+In-Reply-To: <20230213062451.1688755-1-zhanggenjian@kylinos.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,22 +43,37 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 01:49:15PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Mon, Feb 13, 2023 at 02:24:51PM +0800, Genjian wrote:
+> From: Genjian Zhang <zhanggenjian@kylinos.cn>
 > 
-> On MT7621AT, MT7621DAT, and MT7621ST SoCs, port 5 of the MT7530 switch is
-> connected to the second MAC of the SoC as a CPU port. Add the port and set
-> up the second MAC on the bindings. Revert PHY muxing on GB-PC1.
+> dtbs_check currently complains that:
+> arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg):
+> /pci@14000000/pci2_root@0,0,0: PCI unit address format error,
+> expected "0,0"
+> The unit-address format should be '<device>,<function>'.
+> Fix the unit-address accordingly.
 > 
-> There's an external PHY connected to the second MAC of the SoC on GB-PC2,
-> therefore, disable port@5 for this device.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
 > ---
->  .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  | 16 +++++-----------
->  .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  |  9 ++++++++-
->  arch/mips/boot/dts/ralink/mt7621.dtsi         | 19 ++++++++++++++++++-
->  3 files changed, 31 insertions(+), 13 deletions(-)
+>  arch/mips/boot/dts/img/boston.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/boot/dts/img/boston.dts b/arch/mips/boot/dts/img/boston.dts
+> index 84328afa3a55..72f7605d2e31 100644
+> --- a/arch/mips/boot/dts/img/boston.dts
+> +++ b/arch/mips/boot/dts/img/boston.dts
+> @@ -125,7 +125,7 @@ pci2_intc: interrupt-controller {
+>  			#interrupt-cells = <1>;
+>  		};
+>  
+> -		pci2_root@0,0,0 {
+> +		pci2_root@0,0 {
+>  			compatible = "pci10ee,7021";
+>  			reg = <0x00000000 0 0 0 0>;
+>  
+> -- 
+> 2.25.1
 
 applied to mips-next.
 
