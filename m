@@ -2,85 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0694B69A5AB
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 07:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0284069A728
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 09:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjBQGjD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Feb 2023 01:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S229592AbjBQIk4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Feb 2023 03:40:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBQGjC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 01:39:02 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC83A093;
-        Thu, 16 Feb 2023 22:39:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=CzxUXmaoKaTawDsDS62APQKN1CPdfaYIP+YvlMfEd5Y=; b=p4jz++3oZNOf6OwuXb4XnNQw9N
-        EXbztLL9VyfBsGK6U2rT948ui+yy3vLUZSO44gMQtdA25nUIEBtQR+40rlnA8HZ34BroSVQcH78og
-        p/UGPaVdk1IxmXxVYIoMrd1HZzZTnSQwTI8ogR+GiPGHLycp23ZC0p8JjVn7CjGsRqhrGmHOXC6fj
-        EyaiuzGc9d49DOvDvYnajuC9Nsxs5FXMAVbBx7Qlc7/5NOWnPBd92QrBsAmmzJ0VPzUt1EhPxwJKC
-        vWpYeWr639i6z54nfiNIDdM8GWNbhK6OnZE5OMVWFhvz6+SeaVr5DFEoeDYMIHE7zWblBfcXBCI7J
-        j7at1odg==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pSuOZ-00Cxjx-48; Fri, 17 Feb 2023 06:38:59 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Dengcheng Zhu <dzhu@wavecomp.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [RFC PATCH] MIPS: SMP-CPS: fix build error when HOTPLUG_CPU not set
-Date:   Thu, 16 Feb 2023 22:38:58 -0800
-Message-Id: <20230217063858.28311-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S229566AbjBQIkz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 03:40:55 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BC21BF0
+        for <linux-mips@vger.kernel.org>; Fri, 17 Feb 2023 00:40:54 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id j20so3009350edw.0
+        for <linux-mips@vger.kernel.org>; Fri, 17 Feb 2023 00:40:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yNlzdhkOQHzq20NVyGLukWTdEN+zeap3hr8OBMls538=;
+        b=xD6/IJpi470BpQTRI/51fSBug+Im2ui4QtKq+o4q97OX5PiWIG3hNYI27KdZnkUYgh
+         kosxXQJkJhA0oRORMQKnD2L8v3TsBt1bcb/Wp5wxbdmKuejaoBsrPMKGYWa3l3xM4NIu
+         SDYChuxobHu2bS4v0WbwIm/U3GMasJcboFEumhaepTHUzGNo+2oTYY0MfjaQYPVaXYcE
+         vpSbqMdqCaRcdbcPqAzLbFISfPMETDr9GZSS5h17oYPSPy9RmjgamOAyCMnfrar5xmaC
+         11YwTblo+ykwObG+HDz4V2xHFmwBj/X3WYOt8+acK5thggzxlI2bThv6thANwTn5D7T6
+         JE9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yNlzdhkOQHzq20NVyGLukWTdEN+zeap3hr8OBMls538=;
+        b=t58g1ml4H/6ErHYXExrA1haGmmkKJ/XOmHNLcXnS5BPPw0ps8aYdhQTq2LBtDx/ULA
+         O3X2t6+YSgLcy8JihhxjG/m7Xg2cZ9I77bL2MF3NHSMcQ3kme3PrKdLte39qsddTiQE9
+         No7lnB5J0KCT9nkNdaf7sCOIYXLDA3k0cHEjrsm8n44w6fe+vBFUEmtLVV9ReZCYtTMk
+         NKp5+3kdfOTg4OxdmXFj0Mu0MdiYluhe+MZ6kQDavcqbDtFLgv04CIWFyVV1hCmtaC35
+         c8yDzZR0f4zHYEbqdqG51Snt8nMVPPbMWNzbctbM4F1j4v40/oE4W2E/NhsvLK57jq3k
+         hC7Q==
+X-Gm-Message-State: AO0yUKVd6Z/S0yJVr2oV92jHcXSOifD87cftM5AH6B3uZvZi/vY03vsT
+        tnSl8iyIAFapxi8dbkKatlzBoQ==
+X-Google-Smtp-Source: AK7set9PRGCfdro26MLR7ocLmnYzrc1z44bpXULKIiN9W8O9OqdmP07SWABEAtqN/zho+4rT/h7Ovw==
+X-Received: by 2002:a17:906:308a:b0:8b1:81eb:159e with SMTP id 10-20020a170906308a00b008b181eb159emr1395860ejv.7.1676623252738;
+        Fri, 17 Feb 2023 00:40:52 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id lt13-20020a170906fa8d00b00888d593ce76sm1859298ejb.72.2023.02.17.00.40.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 00:40:52 -0800 (PST)
+Message-ID: <4dcaaa70-11e0-fc9d-da03-224d34e36983@linaro.org>
+Date:   Fri, 17 Feb 2023 09:40:50 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson
+ EIOINTC
+Content-Language: en-US
+To:     Binbin Zhou <zhoubb.aaron@gmail.com>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+References: <cover.1676289084.git.zhoubinbin@loongson.cn>
+ <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
+ <df464409-9a93-c057-5f66-923a9e24696a@linaro.org>
+ <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
+ <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org>
+ <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
+ <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org>
+ <CAMpQs4KennWg60ccQ5NYOs=5a9gqTk_bKY26noQ3u0qLQSBg_w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMpQs4KennWg60ccQ5NYOs=5a9gqTk_bKY26noQ3u0qLQSBg_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When MIPS_CPS=y, MIPS_CPS_PM is not set, HOTPLUG_CPU is not set, and
-KEXEC=y, cps_shutdown_this_cpu() attempts to call cps_pm_enter_state(),
-which is not built when MIPS_CPS_PM is not set.
-Conditionally execute the else branch based on CONFIG_HOTPLUG_CPU
-to remove the build error.
-This build failure is from a randconfig file.
+On 17/02/2023 07:09, Binbin Zhou wrote:
 
-mips-linux-ld: arch/mips/kernel/smp-cps.o: in function `$L162':
-smp-cps.c:(.text.cps_kexec_nonboot_cpu+0x31c): undefined reference to `cps_pm_enter_state'
+>>> Hi Krzysztof:
+>>>
+>>> Allow me to give a brief overview of the current status of eiointc (DT-based):
+>>>      Loongson-3A series supports eiointc;
+>>>      Loongson-2K1000 does not support eiointc now;
+>>>      Loongson-2K0500 supports eiointc, with differences from
+>>> Loongson-3, e.g. only up to 128 devices are supported;
+>>>      Loongson-2K2000 supports eiointc, similar to Loongson-3.
+>>>      ....
+>>>
+>>> As can be seen, there is now a bit of confusion in the chip's design of eiointc.
+>>>
+>>> The design of eiointc is probably refined step by step with the chip.
+>>> The same version of eiointc can be used for multiple chips, and the
+>>> same chip series may also use different versions of eiointc. Low-end
+>>> chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
+>>> depending on the time it's produced.
+>>>
+>>> So in the Loongson-2K series I have defined the current state as
+>>> eiointc-1.0, using the dts property to indicate the maximum number of
+>>> devices supported by eiointc that can be used directly in the driver.
+>>>
+>>> If there are new changes to the design later on, such as the
+>>> definition of registers, we can call it eiointc-2.0, which can also
+>>> cover more than one chip.
+>>
+>> Just go with SoC-based compatibles. If your version is not specific
+>> enough, then it is not a good way to represent the hardware.
+>>
+> 
+> Hi Krzysztof:
+> 
+> I have tried to write the following  SoC-based compatibles,  is it fine?
+> 
+> compatible:
+>     enum:
+>       - loongson,ls3a-eiointc  # For MIPS Loongson-3A if necessary.
+>       - loongson,ls2k0500-eiointc
+>       - loongson,ls2k200-eiointc
 
-Fixes: 1447864bee4c ("MIPS: kexec: CPS systems to halt nonboot CPUs")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
----
- arch/mips/kernel/smp-cps.c |    2 ++
- 1 file changed, 2 insertions(+)
+Looks good, but didn't you state these are compatible between each
+other? I have impression there is a common set, so maybe one compatible
+work on other device with reduced number of devices?
 
-diff -- a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -424,9 +424,11 @@ static void cps_shutdown_this_cpu(enum c
- 			wmb();
- 		}
- 	} else {
-+#ifdef CONFIG_HOTPLUG_CPU
- 		pr_debug("Gating power to core %d\n", core);
- 		/* Power down the core */
- 		cps_pm_enter_state(CPS_PM_POWER_GATED);
-+#endif /* CONFIG_HOTPLUG_CPU */
- 	}
- }
- 
+Best regards,
+Krzysztof
+
