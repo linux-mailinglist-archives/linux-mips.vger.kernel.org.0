@@ -2,73 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4370869A735
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 09:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7AB69A8E5
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 11:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjBQInJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Feb 2023 03:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S229508AbjBQKMS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Feb 2023 05:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBQInI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 03:43:08 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887A4298EC;
-        Fri, 17 Feb 2023 00:43:07 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bi36so591704lfb.6;
-        Fri, 17 Feb 2023 00:43:07 -0800 (PST)
+        with ESMTP id S229534AbjBQKMR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 05:12:17 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E13627E4;
+        Fri, 17 Feb 2023 02:12:16 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id ez12so2353315edb.1;
+        Fri, 17 Feb 2023 02:12:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QvlfKQyT4/yiRm0UBTgKuh4h9yI1+vauMqU7ek9YADE=;
-        b=HvgtBGAcZZ+w5leSYQJ6ynfoCZIc2vrHNcyODIKLu3hBruVHyeF3zFt2P+vrk8G9dU
-         sP8IW9reAOAtnuhwSy+UY6bgW3SwX9rb2a7aCz+Ef2ZzXkgNiz3Q5nE5aWpcZ1zl55+e
-         E2fOVJtTr7zaXBhUm3IUJd24/6tGf/Xz926FT7XV1TaQJZbmMC4WaQ8dpgChfzR0T0w4
-         xHlXBq19AeUEDGrGagmuYB5BjLZe8BmyNHoMydb11cmdywvqU47VviC82lqKF2r8qVjC
-         SUL8XyQ1d8w0kLk1OQRqJ4OaIiMmdQIwPWdreGYhAfwdIQ7qy7fFXc1l2CucHXVAFImS
-         iQWg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7hw648BlWiWtBk/f0KKzoPuGmE7KbLFt/y3M1QgpRb8=;
+        b=DkGgz7LrrshUUqf98FEQHx+4ZLsw1fmj5xlLMYyg/apRAjsxEw7p1q2hYhewpY//AC
+         JgOSPxlI58u/6CrB5nHfIey6F8vFzD+IG3h1qtADCX3oNJnQ9VuURgFNHi9tc2KKhQ3Y
+         T7cRhAo/RxwKzzcpWDvHV4kJRYaTe3ZU5R4DFUcINE8j4tEYgcDBxmVD9MAKeJayMoFL
+         s+cpWPIhjOUCWh+HZPwXIWgujNEJrGjyWRFZLc2Ph8F+9Tj2N54bsdJ4+9gbMYFO5+ME
+         ZMjzQcSSj5F3MJtyWzD6nHA/Vj/ff9wONV3GbAUHv9o3HdcwAF1IQ1JX6zFdJsQ/hGcZ
+         iU6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QvlfKQyT4/yiRm0UBTgKuh4h9yI1+vauMqU7ek9YADE=;
-        b=QzXEfXbGKpcytsDzdPaZ0vBThuTpfDzxmuQMoCkztC3ANFCUSrmPhZQld2JKVcQZCH
-         KR+dfyj3aRw+2c7rqEhHoIClIzi8cppXHVfput8+mrTrRvJ21SaPAODpGIYmfJIRlEda
-         T/LFXL4AOKWdbcBJWWaByDXyEPkNQw82K9AIcXVTjc47lCdCFYNVKDlkPCtJkkgmCmDz
-         yEfZ0BynvXFZcAt+Ych4CBhTar/YNrzwlk9dkUbUpoPlxxG5lPbUCrYP3fEO0+rZ4tQx
-         iY9EoKP8bfEUIIb90ft/eNyDG+yK9Cop5O/ByNsNdo11RZz72dsJQypBXsr1pjgjfC/P
-         S5LQ==
-X-Gm-Message-State: AO0yUKVl8F6jMcKHrDul6dFrXLeDT1Hu2XR4Jwwqtr7Nt6iKk4/o9O/3
-        ApTwXhgKAhOSxiUsTzgOsOpaloX8F7Q=
-X-Google-Smtp-Source: AK7set9eWO+FkyX4qsaCLqgPX67GJlmo64d7yQmXKdTsuncTXfsYoDvGTNhRuWR5z9ln/N/UUkUmNg==
-X-Received: by 2002:ac2:4c1b:0:b0:4d8:6540:a72c with SMTP id t27-20020ac24c1b000000b004d86540a72cmr3609950lfq.46.1676623385503;
-        Fri, 17 Feb 2023 00:43:05 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.86.21])
-        by smtp.gmail.com with ESMTPSA id y4-20020ac24464000000b004cb14fa604csm609731lfl.262.2023.02.17.00.43.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 00:43:05 -0800 (PST)
-Subject: Re: [RFC PATCH] MIPS: SMP-CPS: fix build error when HOTPLUG_CPU not
- set
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Dengcheng Zhu <dzhu@wavecomp.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-References: <20230217063858.28311-1-rdunlap@infradead.org>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <5e36b62c-9326-dc8b-3d7e-dfa79b75472b@gmail.com>
-Date:   Fri, 17 Feb 2023 11:43:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7hw648BlWiWtBk/f0KKzoPuGmE7KbLFt/y3M1QgpRb8=;
+        b=BLFx10LkRaBafgzqD6uyLL8qh0YZB8e41yxP621iZVpvHK9m8J1H61SloIK8ztQWiF
+         h8OFtYQTQlZia34h3SdT1VxLwV7I2jmo5+g17Koj0OEOdAK1iQqAXepAlS4Zo6kS9rxJ
+         PlLUrql1HMsDefAyjy7niEgQUsHFHqSulKPbhvAvsZ8MShVG7KSmUgeSGcqv233oIwwx
+         peDCRDbVxZnR2YHYmAnSTkepIK0ufJrUl1edp6fcgmhxf8NA1Kvw5ze+MhCAANHTH9ws
+         58W7bcUJ5nadH3aZ92BKlUj8gilfCTebPjr2tlj3liGR02oP7Dyzj/cMOR4BM7A+7oBn
+         Y27w==
+X-Gm-Message-State: AO0yUKXM8105Az32Bw2C0tMqgy3hp13nzK6VQjG8rScWrK4kD1HOx6hC
+        XS35pO5PzxllvzCE8/LEDmLddvVxIIU+4enbDE8=
+X-Google-Smtp-Source: AK7set+GT0Ah3I/6vPnxNmj3RSo2G/EDRSHCWkFAtQuG+sMISDYexJpAIhdh9LnTy7Wf3Mb443eJzI2NRdM6y6KK2Zo=
+X-Received: by 2002:a17:907:76ad:b0:8b1:749f:b2c6 with SMTP id
+ jw13-20020a17090776ad00b008b1749fb2c6mr1849103ejc.2.1676628734827; Fri, 17
+ Feb 2023 02:12:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20230217063858.28311-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <cover.1676289084.git.zhoubinbin@loongson.cn> <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
+ <df464409-9a93-c057-5f66-923a9e24696a@linaro.org> <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
+ <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org> <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
+ <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org> <CAMpQs4KennWg60ccQ5NYOs=5a9gqTk_bKY26noQ3u0qLQSBg_w@mail.gmail.com>
+ <4dcaaa70-11e0-fc9d-da03-224d34e36983@linaro.org>
+In-Reply-To: <4dcaaa70-11e0-fc9d-da03-224d34e36983@linaro.org>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Fri, 17 Feb 2023 18:12:01 +0800
+Message-ID: <CAMpQs4KpE7RLyxw4++4z4RhjR_ix300mtDfwh6KgJJw1B43CqA@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson EIOINTC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,47 +80,75 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2/17/23 9:38 AM, Randy Dunlap wrote:
+On Fri, Feb 17, 2023 at 4:40 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 17/02/2023 07:09, Binbin Zhou wrote:
+>
+> >>> Hi Krzysztof:
+> >>>
+> >>> Allow me to give a brief overview of the current status of eiointc (DT-based):
+> >>>      Loongson-3A series supports eiointc;
+> >>>      Loongson-2K1000 does not support eiointc now;
+> >>>      Loongson-2K0500 supports eiointc, with differences from
+> >>> Loongson-3, e.g. only up to 128 devices are supported;
+> >>>      Loongson-2K2000 supports eiointc, similar to Loongson-3.
+> >>>      ....
+> >>>
+> >>> As can be seen, there is now a bit of confusion in the chip's design of eiointc.
+> >>>
+> >>> The design of eiointc is probably refined step by step with the chip.
+> >>> The same version of eiointc can be used for multiple chips, and the
+> >>> same chip series may also use different versions of eiointc. Low-end
+> >>> chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
+> >>> depending on the time it's produced.
+> >>>
+> >>> So in the Loongson-2K series I have defined the current state as
+> >>> eiointc-1.0, using the dts property to indicate the maximum number of
+> >>> devices supported by eiointc that can be used directly in the driver.
+> >>>
+> >>> If there are new changes to the design later on, such as the
+> >>> definition of registers, we can call it eiointc-2.0, which can also
+> >>> cover more than one chip.
+> >>
+> >> Just go with SoC-based compatibles. If your version is not specific
+> >> enough, then it is not a good way to represent the hardware.
+> >>
+> >
+> > Hi Krzysztof:
+> >
+> > I have tried to write the following  SoC-based compatibles,  is it fine?
+> >
+> > compatible:
+> >     enum:
+> >       - loongson,ls3a-eiointc  # For MIPS Loongson-3A if necessary.
+> >       - loongson,ls2k0500-eiointc
+> >       - loongson,ls2k200-eiointc
+>
+> Looks good, but didn't you state these are compatible between each
+> other? I have impression there is a common set, so maybe one compatible
+> work on other device with reduced number of devices?
+>
 
-> When MIPS_CPS=y, MIPS_CPS_PM is not set, HOTPLUG_CPU is not set, and
-> KEXEC=y, cps_shutdown_this_cpu() attempts to call cps_pm_enter_state(),
-> which is not built when MIPS_CPS_PM is not set.
-> Conditionally execute the else branch based on CONFIG_HOTPLUG_CPU
-> to remove the build error.
-> This build failure is from a randconfig file.
-> 
-> mips-linux-ld: arch/mips/kernel/smp-cps.o: in function `$L162':
-> smp-cps.c:(.text.cps_kexec_nonboot_cpu+0x31c): undefined reference to `cps_pm_enter_state'
-> 
-> Fixes: 1447864bee4c ("MIPS: kexec: CPS systems to halt nonboot CPUs")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
-> ---
->  arch/mips/kernel/smp-cps.c |    2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff -- a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -424,9 +424,11 @@ static void cps_shutdown_this_cpu(enum c
->  			wmb();
->  		}
->  	} else {
-> +#ifdef CONFIG_HOTPLUG_CPU
+So far, the difference between ls2k SOCs is the number of devices
+supported by eiointc.
 
-   Perhaps, instead of #ifdef'ery, ude the following:
+Do you mean use unified compatible and reuse loongson,eio-num-vecs?
 
-	} else if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
+Would this be possible, e.g.
+compatible:
+     const: loongson,ls2k-eiointc
 
->  		pr_debug("Gating power to core %d\n", core);
->  		/* Power down the core */
->  		cps_pm_enter_state(CPS_PM_POWER_GATED);
-> +#endif /* CONFIG_HOTPLUG_CPU */
->  	}
->  }
->  
+  loongson,eio-num-vecs:
+    description:
+      The number of devices supported by the extended I/O interrupt vector.
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 1
+    maximum: 256
 
-MBR, Sergey
+Thanks.
+Binbin
+
+> Best regards,
+> Krzysztof
+>
