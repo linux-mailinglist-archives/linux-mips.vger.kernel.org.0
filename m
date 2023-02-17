@@ -2,52 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3FA69A32A
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 01:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD5669A57F
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 07:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjBQAxc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Feb 2023 19:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
+        id S229656AbjBQGJk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Feb 2023 01:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBQAxc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Feb 2023 19:53:32 -0500
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E944AFC8;
-        Thu, 16 Feb 2023 16:53:16 -0800 (PST)
-X-QQ-mid: bizesmtp76t1676594995t3oi78ew
-Received: from localhost.localdomain ( [116.30.131.224])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 17 Feb 2023 08:49:53 +0800 (CST)
-X-QQ-SSF: 01200000000000C0T000000A0000000
-X-QQ-FEAT: bhet8yMU7vlmY6nuENHCzNJu1BZZpDnRn9I+XyAaob1f8dWHf98iPQrpDZqXH
-        saXuQiK7JfX4+FJfqSo0pANHueQ39kPgOQmPV+7/hAn2V/SOXd7Q5k4WCXpOCYTTMUm/1Tg
-        kFRyl/FNxEq1JFEt0XGcoPA/dx12sbPDOU9L2dS93/hIsAInN2myDtZjNiOLQxoXbPurBvp
-        fIU5W4KQ1Ux/5rSWVx5ivQGb6Xb1+I5COlKhiyo5nGqae/XaJv5Hv7zAmeoKKDbn13r+A/Y
-        R1iSuadlTtKkEdykgqJe4rcmsOQRBqc29PLqjbmqeWUtBKk5nraoKf3iwl1j/is1RxmW9Ll
-        ytcfjDeeI0Al4XlYDCWQIkKi0n0/0kS0ShmbDFb8mQzm9mZlDOKnLA40hi4cq8AYCb++qHU
-X-QQ-GoodBg: 0
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>, Willy Tarreau <w@1wt.eu>,
-        Paul Burton <paulburton@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nicholas Mc Guire <hofrat@osadl.org>,
-        Zhangjin Wu <falcon@tinylab.org>
-Subject: [RFC PATCH 5/5] nolibc: Record used syscalls in their own sections
-Date:   Fri, 17 Feb 2023 08:49:25 +0800
-Message-Id: <cbcbfbb37cabfd9aed6088c75515e4ea86006cff.1676594211.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1676594211.git.falcon@tinylab.org>
-References: <cover.1676594211.git.falcon@tinylab.org>
+        with ESMTP id S229593AbjBQGJj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 01:09:39 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7145971A;
+        Thu, 16 Feb 2023 22:09:33 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id d40so11515422eda.8;
+        Thu, 16 Feb 2023 22:09:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PtVZueFf795vFNiS/F0qWJesHcrC0oubN9RD4XuzgFA=;
+        b=MGL/TkVJPptPxBlf66mae7qkZeaQUdTOAroZx1TE1sKA3LyDPUeOlsU1jSYyzaDsMh
+         FIEVlXUn1jKf79YLmx3V7ALEm792jAKh31ZVysrE+5uPfZ7YjmGyZujSCRPAG7LqhDrE
+         4URGIvYjWennyEts6ahumeBmUZxwXn+4ImWT/YnHRYE77MHNiRYMDjRBgrtWgws5lyNz
+         NBvHea0+6xkiCzr7UM8vWpgIQmh5oVejcq+3dmee9u1KgoI1EZO8kYlRS0EBFBnW8X0b
+         KHswRGkvJEVVfMB22aibav0aSnyKKX9S+y8EANVI7aWvrhsAKWhM9NsNu86PwDicCr4Q
+         4ayA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PtVZueFf795vFNiS/F0qWJesHcrC0oubN9RD4XuzgFA=;
+        b=dPAJtApXnwLbfhEIHw5S728iboJ/ZcKhzzNciZ878r1EMGdz8JVgw/FUVkZ6+cTDsD
+         Fj8MpMK8h7P0ZHu4F2yMGe1HazwgkNj2VsD+vtMnfc4ziwNi80SDshDj45csehhfPxye
+         Wt9g39pD4RyPg9Ayhv/XhClYauiUATBVKGyaWOV4AsFj6F07f8BmzLgeHQQfBL2PL7Ty
+         KXyF40UtIOrFmEyOoMcZLgNMu8KN2Wu/YjqP39nRyr5vgLIkBLo/uEwLIa1T7tkxT30m
+         otT5lYc11RIWldXBTuHz4WWDuiIfOA/kjkJ4DXREDIn1qC0ShgGk4ssFdbOvxnPwZUyC
+         S17g==
+X-Gm-Message-State: AO0yUKU7mdS0SYmc5FD1fgyd/LkiZtt0Zq2ucJdteqDYCtmsAcXK1QIE
+        MbMg7Qcixcq/OmfuBUpTH7+WNT7v2BE/DGUu0Q4=
+X-Google-Smtp-Source: AK7set9Bu2tGTO4MLrq+l4cMPuC3nYjn7sdpEzh7v8DtnqKyi850WRRsUnY3QcZw/u/AOuhzzkv3chvpLCoe2cV3dio=
+X-Received: by 2002:a17:906:c306:b0:8af:38c9:d52d with SMTP id
+ s6-20020a170906c30600b008af38c9d52dmr128027ejz.2.1676614171784; Thu, 16 Feb
+ 2023 22:09:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <cover.1676289084.git.zhoubinbin@loongson.cn> <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
+ <df464409-9a93-c057-5f66-923a9e24696a@linaro.org> <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
+ <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org> <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
+ <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org>
+In-Reply-To: <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Fri, 17 Feb 2023 14:09:18 +0800
+Message-ID: <CAMpQs4KennWg60ccQ5NYOs=5a9gqTk_bKY26noQ3u0qLQSBg_w@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson EIOINTC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,644 +79,124 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-A new section is added for every system call, the section is encoded
-with the syscall name and syscall number. for example:
+On Thu, Feb 16, 2023 at 4:10 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 16/02/2023 02:46, Binbin Zhou wrote:
+> > On Tue, Feb 14, 2023 at 8:43 PM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 14/02/2023 13:40, Binbin Zhou wrote:
+> >>> On Tue, Feb 14, 2023 at 5:53 PM Krzysztof Kozlowski
+> >>> <krzysztof.kozlowski@linaro.org> wrote:
+> >>>>
+> >>>> On 13/02/2023 13:15, Binbin Zhou wrote:
+> >>>>> Add Loongson Extended I/O Interrupt controller binding with DT schema
+> >>>>> format using json-schema.
+> >>>>>
+> >>>>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> >>>>> ---
+> >>>>>  .../loongson,eiointc.yaml                     | 80 +++++++++++++++++++
+> >>>>>  1 file changed, 80 insertions(+)
+> >>>>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> >>>>> new file mode 100644
+> >>>>> index 000000000000..88580297f955
+> >>>>> --- /dev/null
+> >>>>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> >>>>> @@ -0,0 +1,80 @@
+> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>>>> +%YAML 1.2
+> >>>>> +---
+> >>>>> +$id: "http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#"
+> >>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> >>>>
+> >>>> Drop quotes from bopth.
+> >>>>
+> >>>>> +
+> >>>>> +title: Loongson Extended I/O Interrupt Controller
+> >>>>> +
+> >>>>> +maintainers:
+> >>>>> +  - Binbin Zhou <zhoubinbin@loongson.cn>
+> >>>>> +
+> >>>>> +description: |
+> >>>>> +  This interrupt controller is found on the Loongson-3 family chips and
+> >>>>> +  Loongson-2K0500 chip and is used to distribute interrupts directly to
+> >>>>> +  individual cores without forwarding them through the HT's interrupt line.
+> >>>>> +
+> >>>>> +allOf:
+> >>>>> +  - $ref: /schemas/interrupt-controller.yaml#
+> >>>>> +
+> >>>>> +properties:
+> >>>>> +  compatible:
+> >>>>> +    enum:
+> >>>>> +      - loongson,eiointc-1.0
+> >>>>
+> >>>> Why not using SoC based compatible? It is preferred.
+> >>>
+> >>> Hi Krzysztof:
+> >>>
+> >>> So far, from the datasheet, I know that only the EXIOINTC of the
+> >>> Loongson-2K0500 is different from the other chips, and that is the
+> >>> "loongson,eio-num-vecs" below, which is 128, while all the others are
+> >>> 256.
+> >>> My original idea was to add this property to make compatible
+> >>> consistent, and also to make it easier to add new chips if they have
+> >>> different eio-num-vecs.
+> >>
+> >> We talk about different things. SoC based compatibles are preferred over
+> >> version ones. This was on the lists expressed many times. Please provide
+> >> a reason why you deviate from general recommendation. Flexibility and
+> >> genericness of bindings is not a reason - it's the opposite of the
+> >> argument, thus this will be a: NAK. :(
+> >>
+> >>
+> > Hi Krzysztof:
+> >
+> > Allow me to give a brief overview of the current status of eiointc (DT-based):
+> >      Loongson-3A series supports eiointc;
+> >      Loongson-2K1000 does not support eiointc now;
+> >      Loongson-2K0500 supports eiointc, with differences from
+> > Loongson-3, e.g. only up to 128 devices are supported;
+> >      Loongson-2K2000 supports eiointc, similar to Loongson-3.
+> >      ....
+> >
+> > As can be seen, there is now a bit of confusion in the chip's design of eiointc.
+> >
+> > The design of eiointc is probably refined step by step with the chip.
+> > The same version of eiointc can be used for multiple chips, and the
+> > same chip series may also use different versions of eiointc. Low-end
+> > chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
+> > depending on the time it's produced.
+> >
+> > So in the Loongson-2K series I have defined the current state as
+> > eiointc-1.0, using the dts property to indicate the maximum number of
+> > devices supported by eiointc that can be used directly in the driver.
+> >
+> > If there are new changes to the design later on, such as the
+> > definition of registers, we can call it eiointc-2.0, which can also
+> > cover more than one chip.
+>
+> Just go with SoC-based compatibles. If your version is not specific
+> enough, then it is not a good way to represent the hardware.
+>
 
-    .rodata.syscall.__NR_exit.4001
-    .rodata.syscall.__NR_getpid.(4000+20)
-    .rodata.syscall.__NR_kill.(4000+37)
-    .rodata.syscall.__NR_write.(4000+4)
-    .rodata.syscall.__NR_reboot.(4000+88)
+Hi Krzysztof:
 
-Both such sections and the unused syscalls can be printed by the
--Wl,--print-gc-sections option of ld (with -ffunction-sections
--fdata-sections and -Wl,--gc-sections together):
+I have tried to write the following  SoC-based compatibles,  is it fine?
 
-    removing unused section '.text.sys_getpid' in file '/tmp/ccbRltF4.o'
-    removing unused section '.text.sys_kill' in file '/tmp/ccbRltF4.o'
-    removing unused section '.rodata.syscall.__NR_exit.4001' in file '/tmp/cc0vNiof.o'
-    removing unused section '.rodata.syscall.__NR_getpid.(4000+20)' in file '/tmp/ccbRltF4.o'
-    removing unused section '.rodata.syscall.__NR_kill.(4000+37)' in file '/tmp/ccbRltF4.o'
-    removing unused section '.rodata.syscall.__NR_write.(4000+4)' in file '/tmp/ccbRltF4.o'
-    removing unused section '.rodata.syscall.__NR_reboot.(4000+88)' in file '/tmp/ccbRltF4.o'
+compatible:
+    enum:
+      - loongson,ls3a-eiointc  # For MIPS Loongson-3A if necessary.
+      - loongson,ls2k0500-eiointc
+      - loongson,ls2k200-eiointc
+       ....
+Also remove the 'loongson,eio-num-vecs' property.
 
-To get the used syscalls, we can use:
+Thanks.
+Binbin
 
-    the group of '.rodata.syscall.*' - the group of '.text.sys_*'
-
-At last, we get:
-
-    __NR_exit.4001
-    __NR_write.(4000+4)
-    __NR_reboot.(4000+88)
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/Makefile       |  2 +-
- tools/include/nolibc/arch-aarch64.h | 17 ++++---
- tools/include/nolibc/arch-arm.h     | 15 +++---
- tools/include/nolibc/arch-i386.h    | 17 ++++---
- tools/include/nolibc/arch-mips.h    | 15 +++---
- tools/include/nolibc/arch-riscv.h   | 17 ++++---
- tools/include/nolibc/arch-x86_64.h  | 17 ++++---
- tools/include/nolibc/arch.h         |  2 +
- tools/include/nolibc/record.h       | 77 +++++++++++++++++++++++++++++
- 9 files changed, 138 insertions(+), 41 deletions(-)
- create mode 100644 tools/include/nolibc/record.h
-
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index cfd06764b5ae..f06cbb24124e 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -26,7 +26,7 @@ endif
- nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
- arch_file := arch-$(nolibc_arch).h
- all_files := ctype.h errno.h nolibc.h signal.h std.h stdio.h stdlib.h string.h \
--             sys.h time.h types.h unistd.h
-+             sys.h time.h types.h unistd.h record.h
- 
- # install all headers needed to support a bare-metal compiler
- all: headers
-diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
-index f68baf8f395f..9f7f5f662cd3 100644
---- a/tools/include/nolibc/arch-aarch64.h
-+++ b/tools/include/nolibc/arch-aarch64.h
-@@ -62,7 +62,7 @@ struct sys_stat_struct {
-  */
- #define __ARCH_WANT_SYS_PSELECT6
- 
--#define my_syscall0(num)                                                      \
-+#define _my_syscall0(num)                                                     \
- ({                                                                            \
- 	register long _num  __asm__ ("x8") = (num);                           \
- 	register long _arg1 __asm__ ("x0");                                   \
-@@ -76,7 +76,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall1(num, arg1)                                                \
-+#define _my_syscall1(num, arg1)                                               \
- ({                                                                            \
- 	register long _num  __asm__ ("x8") = (num);                           \
- 	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
-@@ -91,7 +91,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall2(num, arg1, arg2)                                          \
-+#define _my_syscall2(num, arg1, arg2)                                         \
- ({                                                                            \
- 	register long _num  __asm__ ("x8") = (num);                           \
- 	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
-@@ -107,7 +107,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall3(num, arg1, arg2, arg3)                                    \
-+#define _my_syscall3(num, arg1, arg2, arg3)                                   \
- ({                                                                            \
- 	register long _num  __asm__ ("x8") = (num);                           \
- 	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
-@@ -124,7 +124,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
-+#define _my_syscall4(num, arg1, arg2, arg3, arg4)                             \
- ({                                                                            \
- 	register long _num  __asm__ ("x8") = (num);                           \
- 	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
-@@ -142,7 +142,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
-+#define _my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                       \
- ({                                                                            \
- 	register long _num  __asm__ ("x8") = (num);                           \
- 	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
-@@ -161,7 +161,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
-+#define _my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                 \
- ({                                                                            \
- 	register long _num  __asm__ ("x8") = (num);                           \
- 	register long _arg1 __asm__ ("x0") = (long)(arg1);                    \
-@@ -181,6 +181,8 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
-+#include "record.h"
-+
- /* startup code */
- __asm__ (".section .text\n"
-     ".weak _start\n"
-@@ -194,6 +196,7 @@ __asm__ (".section .text\n"
-     "bl main\n"                   // main() returns the status code, we'll exit with it.
-     "mov x8, 93\n"                // NR_exit == 93
-     "svc #0\n"
-+    asm_record_exit(93)
-     "");
- 
- #endif // _NOLIBC_ARCH_AARCH64_H
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index f31be8e967d6..7e9f190b8d48 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -75,7 +75,7 @@ struct sys_stat_struct {
-  */
- #define __ARCH_WANT_SYS_OLD_SELECT
- 
--#define my_syscall0(num)                                                      \
-+#define _my_syscall0(num)                                                     \
- ({                                                                            \
- 	register long _num __asm__ ("r7") = (num);                            \
- 	register long _arg1 __asm__ ("r0");                                   \
-@@ -89,7 +89,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall1(num, arg1)                                                \
-+#define _my_syscall1(num, arg1)                                               \
- ({                                                                            \
- 	register long _num __asm__ ("r7") = (num);                            \
- 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
-@@ -104,7 +104,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall2(num, arg1, arg2)                                          \
-+#define _my_syscall2(num, arg1, arg2)                                         \
- ({                                                                            \
- 	register long _num __asm__ ("r7") = (num);                            \
- 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
-@@ -120,7 +120,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall3(num, arg1, arg2, arg3)                                    \
-+#define _my_syscall3(num, arg1, arg2, arg3)                                   \
- ({                                                                            \
- 	register long _num __asm__ ("r7") = (num);                            \
- 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
-@@ -137,7 +137,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
-+#define _my_syscall4(num, arg1, arg2, arg3, arg4)                             \
- ({                                                                            \
- 	register long _num __asm__ ("r7") = (num);                            \
- 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
-@@ -155,7 +155,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
-+#define _my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                       \
- ({                                                                            \
- 	register long _num __asm__ ("r7") = (num);                            \
- 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
-@@ -174,6 +174,8 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
-+#include "record.h"
-+
- /* startup code */
- __asm__ (".section .text\n"
-     ".weak _start\n"
-@@ -199,6 +201,7 @@ __asm__ (".section .text\n"
-     "bl main\n"                   // main() returns the status code, we'll exit with it.
-     "movs r7, $1\n"               // NR_exit == 1
-     "svc $0x00\n"
-+    asm_record_exit(1)
-     "");
- 
- #endif // _NOLIBC_ARCH_ARM_H
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index d7e7212346e2..de8ea6b32cc4 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
-@@ -63,7 +63,7 @@ struct sys_stat_struct {
-  */
- #define __ARCH_WANT_SYS_OLD_SELECT
- 
--#define my_syscall0(num)                                                      \
-+#define _my_syscall0(num)                                                     \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num __asm__ ("eax") = (num);                           \
-@@ -77,7 +77,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall1(num, arg1)                                                \
-+#define _my_syscall1(num, arg1)                                               \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num __asm__ ("eax") = (num);                           \
-@@ -93,7 +93,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall2(num, arg1, arg2)                                          \
-+#define _my_syscall2(num, arg1, arg2)                                         \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num __asm__ ("eax") = (num);                           \
-@@ -110,7 +110,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall3(num, arg1, arg2, arg3)                                    \
-+#define _my_syscall3(num, arg1, arg2, arg3)                                   \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num __asm__ ("eax") = (num);                           \
-@@ -128,7 +128,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
-+#define _my_syscall4(num, arg1, arg2, arg3, arg4)                             \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num __asm__ ("eax") = (num);                           \
-@@ -147,7 +147,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
-+#define _my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                       \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num __asm__ ("eax") = (num);                           \
-@@ -167,7 +167,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)	\
-+#define _my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)	\
- ({								\
- 	long _eax  = (long)(num);				\
- 	long _arg6 = (long)(arg6); /* Always in memory */	\
-@@ -190,6 +190,8 @@ struct sys_stat_struct {
- 	_eax;							\
- })
- 
-+#include "record.h"
-+
- /* startup code */
- /*
-  * i386 System V ABI mandates:
-@@ -214,6 +216,7 @@ __asm__ (".section .text\n"
-     "movl $1, %eax\n"           // NR_exit == 1
-     "int $0x80\n"               // exit now
-     "hlt\n"                     // ensure it does not
-+    asm_record_exit(1)
-     "");
- 
- #endif // _NOLIBC_ARCH_I386_H
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index 7380093ba9e7..719eef58b187 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -67,7 +67,7 @@ struct sys_stat_struct {
-  *     don't have to experience issues with register constraints.
-  */
- 
--#define my_syscall0(num)                                                      \
-+#define _my_syscall0(num)                                                     \
- ({                                                                            \
- 	register long _num __asm__ ("v0") = (num);                            \
- 	register long _arg4 __asm__ ("a3");                                   \
-@@ -84,7 +84,7 @@ struct sys_stat_struct {
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
--#define my_syscall1(num, arg1)                                                \
-+#define _my_syscall1(num, arg1)                                               \
- ({                                                                            \
- 	register long _num __asm__ ("v0") = (num);                            \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -103,7 +103,7 @@ struct sys_stat_struct {
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
--#define my_syscall2(num, arg1, arg2)                                          \
-+#define _my_syscall2(num, arg1, arg2)                                         \
- ({                                                                            \
- 	register long _num __asm__ ("v0") = (num);                            \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -123,7 +123,7 @@ struct sys_stat_struct {
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
--#define my_syscall3(num, arg1, arg2, arg3)                                    \
-+#define _my_syscall3(num, arg1, arg2, arg3)                                   \
- ({                                                                            \
- 	register long _num __asm__ ("v0")  = (num);                           \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -144,7 +144,7 @@ struct sys_stat_struct {
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
--#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
-+#define _my_syscall4(num, arg1, arg2, arg3, arg4)                             \
- ({                                                                            \
- 	register long _num __asm__ ("v0") = (num);                            \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -165,7 +165,7 @@ struct sys_stat_struct {
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
--#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
-+#define _my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                       \
- ({                                                                            \
- 	register long _num __asm__ ("v0") = (num);                            \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -188,6 +188,8 @@ struct sys_stat_struct {
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
-+#include "record.h"
-+
- /* startup code, note that it's called __start on MIPS */
- __asm__ (".section .text\n"
-     ".weak __start\n"
-@@ -212,6 +214,7 @@ __asm__ (".section .text\n"
-     "syscall\n"
-     ".end __start\n"
-     ".set pop\n"
-+    asm_record_exit(4001)
-     "");
- 
- #endif // _NOLIBC_ARCH_MIPS_H
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index a3bdd9803f8c..700d02860ecd 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -64,7 +64,7 @@ struct sys_stat_struct {
-  */
- #define __ARCH_WANT_SYS_PSELECT6
- 
--#define my_syscall0(num)                                                      \
-+#define _my_syscall0(num)                                                     \
- ({                                                                            \
- 	register long _num  __asm__ ("a7") = (num);                           \
- 	register long _arg1 __asm__ ("a0");                                   \
-@@ -78,7 +78,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall1(num, arg1)                                                \
-+#define _my_syscall1(num, arg1)                                               \
- ({                                                                            \
- 	register long _num  __asm__ ("a7") = (num);                           \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);		      \
-@@ -92,7 +92,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall2(num, arg1, arg2)                                          \
-+#define _my_syscall2(num, arg1, arg2)                                         \
- ({                                                                            \
- 	register long _num  __asm__ ("a7") = (num);                           \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -108,7 +108,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall3(num, arg1, arg2, arg3)                                    \
-+#define _my_syscall3(num, arg1, arg2, arg3)                                   \
- ({                                                                            \
- 	register long _num  __asm__ ("a7") = (num);                           \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -125,7 +125,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
-+#define _my_syscall4(num, arg1, arg2, arg3, arg4)                             \
- ({                                                                            \
- 	register long _num  __asm__ ("a7") = (num);                           \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -143,7 +143,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
-+#define _my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                       \
- ({                                                                            \
- 	register long _num  __asm__ ("a7") = (num);                           \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -162,7 +162,7 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
--#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
-+#define _my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                 \
- ({                                                                            \
- 	register long _num  __asm__ ("a7") = (num);                           \
- 	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-@@ -182,6 +182,8 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
- 
-+#include "record.h"
-+
- /* startup code */
- __asm__ (".section .text\n"
-     ".weak _start\n"
-@@ -199,6 +201,7 @@ __asm__ (".section .text\n"
-     "call  main\n"               // main() returns the status code, we'll exit with it.
-     "li a7, 93\n"                // NR_exit == 93
-     "ecall\n"
-+    asm_record_exit(93)
-     "");
- 
- #endif // _NOLIBC_ARCH_RISCV_H
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index 0e1e9eb8545d..5628b27a6f25 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -65,7 +65,7 @@ struct sys_stat_struct {
-  *
-  */
- 
--#define my_syscall0(num)                                                      \
-+#define _my_syscall0(num)                                                     \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num  __asm__ ("rax") = (num);                          \
-@@ -79,7 +79,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall1(num, arg1)                                                \
-+#define _my_syscall1(num, arg1)                                               \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num  __asm__ ("rax") = (num);                          \
-@@ -95,7 +95,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall2(num, arg1, arg2)                                          \
-+#define _my_syscall2(num, arg1, arg2)                                         \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num  __asm__ ("rax") = (num);                          \
-@@ -112,7 +112,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall3(num, arg1, arg2, arg3)                                    \
-+#define _my_syscall3(num, arg1, arg2, arg3)                                   \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num  __asm__ ("rax") = (num);                          \
-@@ -130,7 +130,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
-+#define _my_syscall4(num, arg1, arg2, arg3, arg4)                             \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num  __asm__ ("rax") = (num);                          \
-@@ -149,7 +149,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
-+#define _my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                       \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num  __asm__ ("rax") = (num);                          \
-@@ -169,7 +169,7 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
--#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
-+#define _my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                 \
- ({                                                                            \
- 	long _ret;                                                            \
- 	register long _num  __asm__ ("rax") = (num);                          \
-@@ -190,6 +190,8 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
- 
-+#include "record.h"
-+
- /* startup code */
- /*
-  * x86-64 System V ABI mandates:
-@@ -210,6 +212,7 @@ __asm__ (".section .text\n"
-     "mov $60, %eax\n"           // NR_exit == 60
-     "syscall\n"                 // really exit
-     "hlt\n"                     // ensure it does not return
-+    asm_record_exit(60)
-     "");
- 
- #endif // _NOLIBC_ARCH_X86_64_H
-diff --git a/tools/include/nolibc/arch.h b/tools/include/nolibc/arch.h
-index 4c6992321b0d..e0552934eb77 100644
---- a/tools/include/nolibc/arch.h
-+++ b/tools/include/nolibc/arch.h
-@@ -29,4 +29,6 @@
- #include "arch-riscv.h"
- #endif
- 
-+#include "record.h"
-+
- #endif /* _NOLIBC_ARCH_H */
-diff --git a/tools/include/nolibc/record.h b/tools/include/nolibc/record.h
-new file mode 100644
-index 000000000000..95e02092cecf
---- /dev/null
-+++ b/tools/include/nolibc/record.h
-@@ -0,0 +1,77 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Copyright (C) 2023 Zhangjin Wu <falcon@tinylab.org>
-+ */
-+
-+#ifndef _NOLIBC_RECORD_H
-+#define _NOLIBC_RECORD_H
-+
-+/* To record syscalls used, please pass -DRECORD_SYSCALL to gcc */
-+#ifdef RECORD_SYSCALL
-+#define __asm_record_syscall(name, val) 				\
-+	".pushsection .rodata.syscall." name "." #val ",\"a\"\n"	\
-+	".word (" #val ")\n"     		              		\
-+	".popsection\n"
-+
-+#define asm_record_syscall(num) __asm_record_syscall(#num, num)
-+#define asm_record_exit(num) __asm_record_syscall("__NR_exit", num)
-+
-+#define record_syscall(name, val)	 				\
-+({									\
-+	__asm__ volatile (						\
-+		__asm_record_syscall(name, val)				\
-+	); 								\
-+})
-+
-+#else /* RECORD_SYSCALL */
-+#define asm_record_exit(num) ""
-+#define record_syscall(name, val) do { } while (0)
-+#endif /* !RECORD_SYSCALL */
-+
-+#define my_syscall0(num)						\
-+({									\
-+	record_syscall(#num, num);					\
-+	_my_syscall0(num);						\
-+})
-+
-+#define my_syscall1(num, arg1)						\
-+({									\
-+	record_syscall(#num, num);					\
-+	_my_syscall1(num, arg1);					\
-+})
-+
-+#define my_syscall2(num, arg1, arg2)					\
-+({									\
-+	record_syscall(#num, num);					\
-+	_my_syscall2(num, arg1, arg2);					\
-+})
-+
-+#define my_syscall3(num, arg1, arg2, arg3)				\
-+({									\
-+	record_syscall(#num, num);					\
-+	_my_syscall3(num, arg1, arg2, arg3);				\
-+})
-+
-+#define my_syscall4(num, arg1, arg2, arg3, arg4)			\
-+({									\
-+	record_syscall(#num, num);					\
-+	_my_syscall4(num, arg1, arg2, arg3, arg4);			\
-+})
-+
-+#ifdef _my_syscall5
-+#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)			\
-+({									\
-+	record_syscall(#num, num);					\
-+	_my_syscall5(num, arg1, arg2, arg3, arg4, arg5);		\
-+})
-+#endif
-+
-+#ifdef _my_syscall6
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)		\
-+({									\
-+	record_syscall(#num, num);					\
-+	_my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6);		\
-+})
-+#endif
-+
-+#endif /* _NOLIBC_RECORD_H */
--- 
-2.25.1
-
+> Best regards,
+> Krzysztof
+>
