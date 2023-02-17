@@ -2,142 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355B6699C8B
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Feb 2023 19:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C8F69A31A
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 01:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjBPSnC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Feb 2023 13:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S229534AbjBQAuC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Feb 2023 19:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjBPSm7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Feb 2023 13:42:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54569766;
-        Thu, 16 Feb 2023 10:42:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A5C962067;
-        Thu, 16 Feb 2023 18:42:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2134C433D2;
-        Thu, 16 Feb 2023 18:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676572972;
-        bh=TlkXm7VNtzsJ7EfaEbNCQ0jrF6Prk2gRLM56xZV0kHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gKpTH6Xma+bwkChOl4NLqIndv0Q0HNEGdo6fSGe2zx9UY2BJokLjGScUyDUFIyjs9
-         wHG7zTGmWy1W1NXsvoAG52q2DP0SVTJfLhB/sg40zsXEkiXxqQfCmiK5HkoaXoi50K
-         RajXDINrwduwnFFcetLEurxPZRsCdQSD9lXzw5lPbEjrfxkkYiP49ODJA32x+gCeCZ
-         Qz7xF5LCN8Pkp+5JWe3iXQAVfIJDqbiEKe6CoSERnlnc9RX8jR98iPo7qWnXozME9c
-         lzv2gmFirTvDhgkYO8L7uGcZgBqTJWPnxzROBXQ924iZHTN2zPNmp9qGv97dKbm8K7
-         3PR4cj03EaGxg==
-Date:   Thu, 16 Feb 2023 10:42:49 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux-alpha@vger.kernel.org,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-Subject: [PATCH v2.1 09/24] mips/cpu: Expose play_dead()'s prototype
- definition
-Message-ID: <20230216184249.ogaqsaykottpxtcb@treble>
-References: <cover.1676358308.git.jpoimboe@kernel.org>
- <39835bc75af2e812fce56400533cb2ab41bcf0e2.1676358308.git.jpoimboe@kernel.org>
- <080a5ccb-7fa0-1a75-538f-a09dc146fc4e@linaro.org>
- <20230214181101.3a2tscbmwdnwbqpu@treble>
- <c56dc4b9-035d-7773-ecb2-0e1ac6af7abc@linaro.org>
+        with ESMTP id S229905AbjBQAuC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Feb 2023 19:50:02 -0500
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F20454D2B;
+        Thu, 16 Feb 2023 16:49:58 -0800 (PST)
+X-QQ-mid: bizesmtp76t1676594968txapoplj
+Received: from localhost.localdomain ( [116.30.131.224])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 17 Feb 2023 08:49:27 +0800 (CST)
+X-QQ-SSF: 01200000000000C0T000000A0000000
+X-QQ-FEAT: XBN7tc9DADICBB7k9+bU2BGS/LL6SOD01z1AvX6M7TbM1IcrrUquN8VoZSqxR
+        z7Nk+jrerltyFZKM69igDS4EKfCoEx4eH6SS0q3im5pC77mpjTus7/qkaA/0Ohf5qWxBiSC
+        4Hu8t+EjNzV8mnlaxl1RoP2a/5sdzMO7dKFr4PtGFbPx5rSV0crjKNH4ttqQ0A/7z7SWxWg
+        aMh+cL67CSCH4xi5C/PYiEmJeaIhgaE2hjsHbq5zyRgiIf199tLovOH5MfKhtGcX+ZRBUtS
+        /F5sSaWtSDT54mwaeY3AWMVidSPEJQFeZ4yEZQ1Ona/TpGryQoxiRjY8ah9acgpXRU6BL00
+        6KmZ3DS5NXoEdmkiTnOykaFz6Cu8YR/8elR/E2knszdeujRYJlXTp5UEK5Y9VGt5LfrcCrG
+X-QQ-GoodBg: 0
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Palmer Dabbelt <palmer@rivosinc.com>, Willy Tarreau <w@1wt.eu>,
+        Paul Burton <paulburton@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Nicholas Mc Guire <hofrat@osadl.org>,
+        Zhangjin Wu <falcon@tinylab.org>
+Subject: [RFC PATCH 0/5] Add dead syscalls elimination support
+Date:   Fri, 17 Feb 2023 08:49:20 +0800
+Message-Id: <cover.1676594211.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c56dc4b9-035d-7773-ecb2-0e1ac6af7abc@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Include <asm/smp.h> to make sure play_dead() matches its prototype going
-forward.
+Hi, all
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION allows to eliminate dead code
+and data, this patchset allows to further eliminate dead syscalls which
+are not used in target system.
+
+It includes 5 patches:
+
+- syscall: Allow configure used system calls
+
+  This adds a new CONFIG_SYSCALLS_USED option to allow users or tools to
+  tell kernel what syscalls are used in target system. A list of
+  used syscalls can be passed to it.
+
+- MIPS: Add dead syscalls elimination support
+
+  Add CONFIG_SYSCALLS_USED support for mips, it simply adds a 'used'
+  variant for the syscall*.tbl and accordingly updates the kernel apis
+  and eventually the sys_call_table. The unused ones in the table are
+  replaced by sys_ni_syscall and therefore if they are also not used by
+  kernel itself, they will be eliminated by gc-sections.
+
+  The old architectures use syscall*.tbl, so, they can use this method.
+
+- RISC-V: Enable dead code elimination
+
+  Select HAVE_LD_DEAD_CODE_DATA_ELIMINATION for riscv.
+
+- RISC-V: Add dead syscalls elimination support
+
+  Add CONFIG_SYSCALLS_USED support for riscv, it simply adds a 'used'
+  variant for the *syscall_table.c and eventually the sys_call_table.
+
+  The new architectures use generic unistd.h, they can use this method.
+
+- nolibc: Record used syscalls in their own sections
+
+  This allows to record syscalls used by a nolibc based application. It
+  is possible to eliminate dead syscalls automatically while building
+  the monolithic kernel+nolibc software.
+
+Testing shows, on both mips and riscv, with a small config, gc-sections
+shrinks ~10% and syscalls_used shrinks another ~5%.
+
+This patchset is only a prototype implementation, welcome your feedback
+and suggestion, Thanks.
+
+Related emails:
+
+- Re: Re: Kernel-only deployments
+  https://lore.kernel.org/lkml/20230216130935.37976-1-falcon@tinylab.org/
+
+- Re: Re: RISC-V: Enable dead code elimination
+  https://lore.kernel.org/linux-riscv/Y+qSBu3YZH0JPY4I@spud/T/#t
+
+Best Regards,
+- Zhangjin Wu
+
 ---
- arch/mips/cavium-octeon/smp.c | 1 +
- arch/mips/kernel/smp-bmips.c  | 1 +
- arch/mips/kernel/smp-cps.c    | 1 +
- arch/mips/loongson64/smp.c    | 1 +
- 4 files changed, 4 insertions(+)
 
-diff --git a/arch/mips/cavium-octeon/smp.c b/arch/mips/cavium-octeon/smp.c
-index 89954f5f87fb..4212584e6efa 100644
---- a/arch/mips/cavium-octeon/smp.c
-+++ b/arch/mips/cavium-octeon/smp.c
-@@ -20,6 +20,7 @@
- #include <asm/mmu_context.h>
- #include <asm/time.h>
- #include <asm/setup.h>
-+#include <asm/smp.h>
- 
- #include <asm/octeon/octeon.h>
- 
-diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index f5d7bfa3472a..df9158e8329d 100644
---- a/arch/mips/kernel/smp-bmips.c
-+++ b/arch/mips/kernel/smp-bmips.c
-@@ -38,6 +38,7 @@
- #include <asm/traps.h>
- #include <asm/barrier.h>
- #include <asm/cpu-features.h>
-+#include <asm/smp.h>
- 
- static int __maybe_unused max_cpus = 1;
- 
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index bcd6a944b839..6d69a9ba8167 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -20,6 +20,7 @@
- #include <asm/mipsregs.h>
- #include <asm/pm-cps.h>
- #include <asm/r4kcache.h>
-+#include <asm/smp.h>
- #include <asm/smp-cps.h>
- #include <asm/time.h>
- #include <asm/uasm.h>
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index 660e1de4412a..4e24b317e7cb 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -14,6 +14,7 @@
- #include <linux/cpufreq.h>
- #include <linux/kexec.h>
- #include <asm/processor.h>
-+#include <asm/smp.h>
- #include <asm/time.h>
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
+Zhangjin Wu (5):
+  syscall: Allow configure used system calls
+  MIPS: Add dead syscalls elimination support
+  RISC-V: Enable dead code elimination
+  RISC-V: Add dead syscalls elimination support
+  nolibc: Record used syscalls in their own sections
+
+ arch/mips/Kconfig                   |  1 +
+ arch/mips/kernel/syscalls/Makefile  | 24 ++++++++-
+ arch/riscv/Kconfig                  |  2 +
+ arch/riscv/kernel/Makefile          |  5 +-
+ arch/riscv/kernel/syscalls/Makefile | 38 ++++++++++++++
+ arch/riscv/kernel/vmlinux.lds.S     |  2 +-
+ init/Kconfig                        | 22 +++++++++
+ tools/include/nolibc/Makefile       |  2 +-
+ tools/include/nolibc/arch-aarch64.h | 17 ++++---
+ tools/include/nolibc/arch-arm.h     | 15 +++---
+ tools/include/nolibc/arch-i386.h    | 17 ++++---
+ tools/include/nolibc/arch-mips.h    | 15 +++---
+ tools/include/nolibc/arch-riscv.h   | 17 ++++---
+ tools/include/nolibc/arch-x86_64.h  | 17 ++++---
+ tools/include/nolibc/arch.h         |  2 +
+ tools/include/nolibc/record.h       | 77 +++++++++++++++++++++++++++++
+ 16 files changed, 226 insertions(+), 47 deletions(-)
+ create mode 100644 arch/riscv/kernel/syscalls/Makefile
+ create mode 100644 tools/include/nolibc/record.h
+
 -- 
-2.39.1
+2.25.1
 
