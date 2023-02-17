@@ -2,97 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CE169B377
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 21:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D77C869B37C
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Feb 2023 21:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjBQUEi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Feb 2023 15:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S229625AbjBQUHx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Feb 2023 15:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjBQUEh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 15:04:37 -0500
+        with ESMTP id S229699AbjBQUHw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 15:07:52 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C055F263;
-        Fri, 17 Feb 2023 12:04:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1A76A5B;
+        Fri, 17 Feb 2023 12:07:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=5ZKk9eZRmxXOeK7jW2ClkWIye0HvEXy2M9d5irZbdk0=; b=yPMh8Nzs0+vcsYlJIVrdY/bUTK
-        gQ+u0IMkeOpa/1GcYr95ruigZ6+AryVSuspR778Q8rTxgaWX/8iBkb0wZlrdbORdYV6TLPwgkChrB
-        UaR526Y9nQrpMYeImT36puuAWISjncxiPvdgzKXRniKoqw8F2IbR7lGAt+e/EFe+9TrYUQGb5QahX
-        fHiH/lKTsfThO64Kk5v+xh6B6RVAlnnHKt0hFuz+qtiHx/5ujfTaFciG4xAUegEQZNN8YWYUcTr/C
-        cCH06bW6Q5cl2A8QCw7AnSCItcyWhimH6eVpNTH5tg7VbTZb7UxT4+ZFDxzW10fwMd56sB1MooOZe
-        x9oK/Hkg==;
-Received: from [2601:1c2:980:9ec0::df2f]
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=ikxt7TJ0ayrq85Qabt4jcejgaojp5IVrlaJ78MvqmxE=; b=vDGOi91GLYfOmXTgPZBTsxjp7h
+        BIIwy0qjcxCsLTr9FWBJuLw7Rlq3lT+R8OcX+ICpcV1Axbuw/q96952DDyBzOYFTrye+pWX0MydJK
+        7fiRvFwT6nzLbrW1FKK89JYh7q6Bmf6V6iXXR5RihUP7QH7rMvJcWHarSNJsUHkbqH590rdDOxpIX
+        Bs0NDrHAa+irTOrTOCMURugXpsu9o2YRoihlML9nCrWJ5joxqLkegXZRrcY7G7d/CXD3tGLw8vtA/
+        vi4ipGGGCl8jThMGJmq7WJxk+IEF+or3gGwfgpMUOGMd7reor2vcLMi1yRUeoQAZZXdoBE2OGiiTj
+        OQXGFNVw==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pT6y6-00Fa6I-2c; Fri, 17 Feb 2023 20:04:32 +0000
-Message-ID: <3c0fd19c-693e-465b-bc79-3a0cd4c71319@infradead.org>
-Date:   Fri, 17 Feb 2023 12:04:29 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] MIPS: vpe-mt: provide a default 'physical_memsize'
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dengcheng Zhu <dzhu@wavecomp.com>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        Qais Yousef <qyousef@layalina.io>
-References: <20230214010942.25143-1-rdunlap@infradead.org>
- <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
- <a2a7806b-ba53-9f37-938b-d3f48ea217f2@infradead.org>
- <20230217115713.GA7701@alpha.franken.de>
+        id 1pT71K-00FaUC-GQ; Fri, 17 Feb 2023 20:07:50 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230217115713.GA7701@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Subject: [PATCH v2] MIPS: SMP-CPS: fix build error when HOTPLUG_CPU not set
+Date:   Fri, 17 Feb 2023 12:07:49 -0800
+Message-Id: <20230217200749.1001-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+When MIPS_CPS=y, MIPS_CPS_PM is not set, HOTPLUG_CPU is not set, and
+KEXEC=y, cps_shutdown_this_cpu() attempts to call cps_pm_enter_state(),
+which is not built when MIPS_CPS_PM is not set.
+Conditionally execute the else branch based on CONFIG_HOTPLUG_CPU
+to remove the build error.
+This build failure is from a randconfig file.
 
+mips-linux-ld: arch/mips/kernel/smp-cps.o: in function `$L162':
+smp-cps.c:(.text.cps_kexec_nonboot_cpu+0x31c): undefined reference to `cps_pm_enter_state'
 
-On 2/17/23 03:57, Thomas Bogendoerfer wrote:
-> On Wed, Feb 15, 2023 at 10:59:35PM -0800, Randy Dunlap wrote:
->>> I agree this is where this variable has be be declared / initialized,
->>> but having this dependent on CONFIG_MIPS_MALTA/CONFIG_LANTIQ machines
->>> doesn't seem right.
->>
->> So far I have been able to consolidate the LANTIQ code into a general
->> patch, but not MALTA.
-> 
-> if I didn't miss something physical_memory is always 0 for LANTIQ 
-> and something for MALTA depending on command line/DT. Now
-> 
-> arch/mips/kernel/vpe-mt.c contains
-> 
->         /*
->          * The sde-kit passes 'memsize' to __start in $a3, so set something
->          * here...  Or set $a3 to zero and define DFLT_STACK_SIZE and
->          * DFLT_HEAP_SIZE when you compile your program
->          */
->         mttgpr(6, v->ntcs);
->         mttgpr(7, physical_memsize);
-> 
-> so the 0 for LANTIQ is fine with the correct VPE payload. But for
-> MALTA could cause major problems, if the VPE payload uses the top
-> of memory for it's stack. So I would guess nobody uses this "mode".
-> Therefore let's get rid of physical_memory in vpe.c completly.
+Fixes: 1447864bee4c ("MIPS: kexec: CPS systems to halt nonboot CPUs")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+---
+v2: use IS_ENABLED() instead of #ifdef-ery (Sergei)
 
-Hi Thomas,
+ arch/mips/kernel/smp-cps.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-I had already concluded that MALTA's dtshim and physical_memsize
-are independent so I should ignore those in any changes/patches.
-
-I'll check into your suggestion to see what that looks like.
-
-Thanks for the comments.
--- 
-~Randy
+diff -- a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+--- a/arch/mips/kernel/smp-cps.c
++++ b/arch/mips/kernel/smp-cps.c
+@@ -424,9 +424,11 @@ static void cps_shutdown_this_cpu(enum c
+ 			wmb();
+ 		}
+ 	} else {
+-		pr_debug("Gating power to core %d\n", core);
+-		/* Power down the core */
+-		cps_pm_enter_state(CPS_PM_POWER_GATED);
++		if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
++			pr_debug("Gating power to core %d\n", core);
++			/* Power down the core */
++			cps_pm_enter_state(CPS_PM_POWER_GATED);
++		}
+ 	}
+ }
+ 
