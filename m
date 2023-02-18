@@ -2,98 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427F369B66E
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Feb 2023 00:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1AE69B9F7
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Feb 2023 13:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjBQXYK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Feb 2023 18:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
+        id S229481AbjBRMWy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 18 Feb 2023 07:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjBQXYK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Feb 2023 18:24:10 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE895457E5;
-        Fri, 17 Feb 2023 15:24:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=UjS1u+gmVzuL5FxBbKJQNccOBVKsZ9PBAvdbdSMHdSM=; b=en8a4SUIl777LJK5ENO7Zv6t+Z
-        0h8bsAAXNomTqFyetZK5sebb0DAWa7o56pBxH2uDKY98XP9wDp97ZBFimdiFQALVM/vyv7WVggcnY
-        jWN144IsO5xX+o2LzUh3G9cnv4OTxsodCZtJAcYt3RxxqbNcwA9pLpfbVAkUedMZC+Opd+PYwhivp
-        utTujW8+o5YVy/Bqayc5jP23K6YIM6LK84P4/x0qIgdnJ7u0cWYWb/AhOmO6GwplfEYVef2nC8hON
-        w3x1UEa2fdKIupyAOoXPhaoivv2ELl1F0JQNtosuy4NGnNvmPuAtVWqSOBaM6dke1cuYzVyKOdwSu
-        5Q6yyoIA==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pTA5E-00Fwjw-Uu; Fri, 17 Feb 2023 23:24:05 +0000
-Message-ID: <fec9d8ca-b385-b2e4-8f20-db427c2ae964@infradead.org>
-Date:   Fri, 17 Feb 2023 15:24:04 -0800
+        with ESMTP id S229568AbjBRMWx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Feb 2023 07:22:53 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9049C199FA;
+        Sat, 18 Feb 2023 04:22:47 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id b6so285192pff.2;
+        Sat, 18 Feb 2023 04:22:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AwTSqQb3wjPt6eNO90ccFFM1V4xy3OiFS52of0iH9l8=;
+        b=aC85b7fvrlsjWF4tk2mJ+nIV/NQ118Bm3jHMBli98saai5JsnLpKn6ZphYdRCXdZgb
+         OGEpSdta7SXtZcdNnKrCc6sRTsESzIl2I738JCnbTCSxCngeJ9SOlocCVvMuEMS5+B0h
+         wsIPecN4cdCe2Fq0E/GFTc496lwToxl23bP6SKgnfRDlrK2oWRId2ae+v3V+f8clGSeb
+         aKCvdt/y+1P/vqQ2hTAujYSS89TgFQnpflqGt7sUixN7qlGmm3Mr8ONJwmqMhfhJZGjs
+         hRdHmYu6yiveu0rL+biv7trM8BtzHwuzRU5Ldxwdn7wLy4R+VpocJ/HcRD26WbGvZGz9
+         7tQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AwTSqQb3wjPt6eNO90ccFFM1V4xy3OiFS52of0iH9l8=;
+        b=bY+nlmvguOtpCWNyLVjHz7Vxy7a45ZvZlEfTRV8lVtu6p6jOEOdxmfHa6i5BNYAj+L
+         53EB9oQ1yDaPJfIs98Dv4A9C+JtY4z1lFCfsPmITIEUUHfEOq1n8Ds7PaNUK9tBo3utC
+         EBZXAa3To2ByI0Vjx6glfvstat+T1YRKezd0u+6+qRizDixHZqm57WMYuiXT+Y+Rp6SP
+         KmD82853t/24QdCI+HPzHa4lkJgAILWne32+/YvodzLunKSZckM5zNgeUwccVoL3FM/7
+         Iu0cbDqevQMJhSNfiP6S3d/fjqEiNz4MvFqMcvqgRSIje1XQ1rtiPA/mKQMPMqGOf7O/
+         aoeg==
+X-Gm-Message-State: AO0yUKXEZGk6vEBw8xDolJNN8viwafyW38IgQ8GhKU6nd2SCew1frE1S
+        UOaqLb7SlmOkXM9W836sJj8nF2gQebEqgdrN
+X-Google-Smtp-Source: AK7set+MhnHfv0oMsca/LdCR9oO5HwnkYdn/MDvzxZD/ofOMr1UP9mLNTHncgbKoY0VqFhsztpOufQ==
+X-Received: by 2002:a62:7b4b:0:b0:5a9:b910:6d98 with SMTP id w72-20020a627b4b000000b005a9b9106d98mr5966352pfc.13.1676722966646;
+        Sat, 18 Feb 2023 04:22:46 -0800 (PST)
+Received: from kelvin-ThinkPad-L14-Gen-1.. ([223.85.203.147])
+        by smtp.gmail.com with ESMTPSA id c16-20020aa78810000000b005a8dcd32851sm4714732pfo.11.2023.02.18.04.22.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 04:22:46 -0800 (PST)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH] dt-bindings: interrupt-controller: convert loongson,ls1x-intc.txt to json-schema
+Date:   Sat, 18 Feb 2023 20:22:36 +0800
+Message-Id: <20230218122236.1919465-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] MIPS: vpe-mt: provide a default 'physical_memsize'
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dengcheng Zhu <dzhu@wavecomp.com>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        Qais Yousef <qyousef@layalina.io>
-References: <20230214010942.25143-1-rdunlap@infradead.org>
- <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
- <a2a7806b-ba53-9f37-938b-d3f48ea217f2@infradead.org>
- <20230217115713.GA7701@alpha.franken.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230217115713.GA7701@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Convert the Loongson1 interrupt controller dt-bindings to json-schema.
 
+Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+---
+ .../loongson,ls1x-intc.txt                    | 24 ---------
+ .../loongson,ls1x-intc.yaml                   | 51 +++++++++++++++++++
+ 2 files changed, 51 insertions(+), 24 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
 
-On 2/17/23 03:57, Thomas Bogendoerfer wrote:
-> On Wed, Feb 15, 2023 at 10:59:35PM -0800, Randy Dunlap wrote:
->>> I agree this is where this variable has be be declared / initialized,
->>> but having this dependent on CONFIG_MIPS_MALTA/CONFIG_LANTIQ machines
->>> doesn't seem right.
->>
->> So far I have been able to consolidate the LANTIQ code into a general
->> patch, but not MALTA.
-> 
-> if I didn't miss something physical_memory is always 0 for LANTIQ 
-> and something for MALTA depending on command line/DT. Now
-> 
-> arch/mips/kernel/vpe-mt.c contains
-> 
->         /*
->          * The sde-kit passes 'memsize' to __start in $a3, so set something
->          * here...  Or set $a3 to zero and define DFLT_STACK_SIZE and
->          * DFLT_HEAP_SIZE when you compile your program
->          */
->         mttgpr(6, v->ntcs);
->         mttgpr(7, physical_memsize);
-> 
-> so the 0 for LANTIQ is fine with the correct VPE payload. But for
-> MALTA could cause major problems, if the VPE payload uses the top
-> of memory for it's stack. So I would guess nobody uses this "mode".
-> Therefore let's get rid of physical_memory in vpe.c completly.
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
+deleted file mode 100644
+index a63ed9fcb535..000000000000
+--- a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.txt
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Loongson ls1x Interrupt Controller
+-
+-Required properties:
+-
+-- compatible : should be "loongson,ls1x-intc". Valid strings are:
+-
+-- reg : Specifies base physical address and size of the registers.
+-- interrupt-controller : Identifies the node as an interrupt controller
+-- #interrupt-cells : Specifies the number of cells needed to encode an
+-  interrupt source. The value shall be 2.
+-- interrupts : Specifies the CPU interrupt the controller is connected to.
+-
+-Example:
+-
+-intc: interrupt-controller@1fd01040 {
+-	compatible = "loongson,ls1x-intc";
+-	reg = <0x1fd01040 0x18>;
+-
+-	interrupt-controller;
+-	#interrupt-cells = <2>;
+-
+-	interrupt-parent = <&cpu_intc>;
+-	interrupts = <2>;
+-};
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
+new file mode 100644
+index 000000000000..4cea3ee9fbb1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls1x-intc.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/loongson,ls1x-intc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Loongson-1 Interrupt Controller
++
++maintainers:
++  - Keguang Zhang <keguang.zhang@gmail.com>
++
++description: |
++  Loongson-1 interrupt controller is connected to the MIPS core interrupt
++  controller, which controls several groups of interrupts.
++
++properties:
++  compatible:
++    const: loongson,ls1x-intc
++
++  reg:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 2
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupt-controller
++  - '#interrupt-cells'
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    intc0: interrupt-controller@1fd01040 {
++        compatible = "loongson,ls1x-intc";
++        reg = <0x1fd01040 0x18>;
++
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++        interrupt-parent = <&cpu_intc>;
++        interrupts = <2>;
++    };
 
-Hi Thomas,
-
-What is this line doing?
-          mttgpr(6, v->ntcs);
-
-Does it need to stay?
-But the comment and mttgpr(7, physical_memsize); can be deleted?
-
-thanks.
+base-commit: 25eba1598c8e1e804c02e3a0da50782c50c11c41
 -- 
-~Randy
+2.34.1
+
