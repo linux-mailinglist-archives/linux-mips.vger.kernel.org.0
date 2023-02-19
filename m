@@ -2,105 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6A069C2D0
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Feb 2023 23:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1F969C358
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Feb 2023 00:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjBSWMi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Feb 2023 17:12:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S229659AbjBSXPe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Feb 2023 18:15:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbjBSWMh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Feb 2023 17:12:37 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE46818144
-        for <linux-mips@vger.kernel.org>; Sun, 19 Feb 2023 14:12:34 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id bp28so1123423wrb.2
-        for <linux-mips@vger.kernel.org>; Sun, 19 Feb 2023 14:12:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S0WA0UCtV1YGr2Z4saHTI+WmdRjphAcW9zwN+Zfitf8=;
-        b=LcBH5xzawqDvf0nV/TO0Sq30kGcVrxLQ0AjW1ngV1cech4mSu6tMZ/Kt2hQ3viEwxg
-         /rSjOWHzg6X7k/pq0zM6yTrEEVRsTv3BqlUa6iC4RmMwN5VyDfIKhLb86DHe8yV2WTwz
-         xEdA1EQC15ylrAvDM20SFKC4eKOL2MjwDPTpETTk4VE2tm76V601iqu4hM0HUWp7UU+T
-         QIXe4HhZGk8Bfnnwiu4EGxJ5SRSFGMAM2Y5c00WpH0C8tB4qhez5RVbBk449Kqv8IyLR
-         Dm+KaKhSrSM5DU4jp+CpbfZ7CeSxFMvhu5GPz/UYFkfDHjXEvi0+xtk5LX2K7TSkf+ID
-         l5MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S0WA0UCtV1YGr2Z4saHTI+WmdRjphAcW9zwN+Zfitf8=;
-        b=3kIMQl4aoa8Tl4lV0UfEEMrVZtcWDV5p/q5dVz22clLYzO3ESt6QH8kcnQYuCenQP7
-         DwVmy2LVHlX+ebm7H2IoAgBVMoYcMh73sQ+HkC2/p47aaBpJTAIQ1V8VpMH61aipI2h9
-         LkvO4wQBT1o5YTyR59xPjohfE1QQ/xKn/18oFJHOXl5pK3Kb4+4veyjehpZHsF2s2MLK
-         KMJ9JuXSHIiikCaavy+wYtH4ghH0ql1mNoh6q+lBDOc5daf7kxm02P4G2MO0rCKjDO1c
-         34FLRQT10d2xUYsgo9jJnd/0x1341IgwyXz0MJZf3LAGp2cdPqz/SLF73wAXEG0DcjfP
-         KoUw==
-X-Gm-Message-State: AO0yUKX28mk8SNPnzmWpOE2NAGJ+dWYmneaXKoYdaTN46DU9oPOypZ60
-        6huaGKAVpS0K57ou6Q3ORJFSIw==
-X-Google-Smtp-Source: AK7set9G6ZxoZhX6iSLL78bMWWenq7qXuiX7eWCHgDlJlzJsX3DzMHdpbEgnC8tyC/Z+LG8cEeSZNA==
-X-Received: by 2002:adf:ce8c:0:b0:2c5:7eb5:9797 with SMTP id r12-20020adfce8c000000b002c57eb59797mr1134575wrn.8.1676844753196;
-        Sun, 19 Feb 2023 14:12:33 -0800 (PST)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id g11-20020a5d698b000000b002c5a1bd5280sm967330wru.95.2023.02.19.14.12.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Feb 2023 14:12:32 -0800 (PST)
-Message-ID: <014a5c7c-c9ab-3814-4d87-2f8bb9c08440@linaro.org>
-Date:   Sun, 19 Feb 2023 23:12:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v2] MIPS: SMP-CPS: fix build error when HOTPLUG_CPU not
- set
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Dengcheng Zhu <dzhu@wavecomp.com>,
-        Paul Burton <paulburton@kernel.org>,
+        with ESMTP id S229656AbjBSXPe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Feb 2023 18:15:34 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7451A67F;
+        Sun, 19 Feb 2023 15:15:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=uS4cWikPVXiTQ453M9jkXQ6H6A9rByEcXI4R3QotgUM=; b=QeT6zOvuqCSQ9vd0vABhZmNBNQ
+        P62HvftNURvPjrvnGJougtaXa1qE8lzm0XQSDDbwemDL7UAmJqdA09Spy+naSH7EaQrZxaFvY7Slg
+        r0A/QUk5r3YeVzZLNZPnVbUMExO87G5gbQhoq9pdmepqIxZmbMtczik4DBkhhR2rZt5hL9MwpH/zU
+        tcqWuWQWP1nhppdMlPSKffQyaqCRQItQI6Lg6kNxhSEvDQDd6ahCNFldvIcF0EAEvnoMcU+3xKVmE
+        +ZrHJutdmm7Lzz8VoUE6jjI473PglhQ+xH5jsdOFSGRIPkVFL1kBvuXoeuneAH4BkOVLefOOx85b0
+        Wi0G4dZg==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pTsty-002Tem-Rp; Sun, 19 Feb 2023 23:15:26 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        John Crispin <john@phrozen.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-References: <20230217200749.1001-1-rdunlap@infradead.org>
-Content-Language: en-US
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230217200749.1001-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        "Steven J. Hill" <Steven.Hill@imgtec.com>,
+        Qais Yousef <Qais.Yousef@imgtec.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH v2] MIPS: vpe-mt: drop physical_memsize
+Date:   Sun, 19 Feb 2023 15:15:25 -0800
+Message-Id: <20230219231525.21542-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/2/23 21:07, Randy Dunlap wrote:
-> When MIPS_CPS=y, MIPS_CPS_PM is not set, HOTPLUG_CPU is not set, and
-> KEXEC=y, cps_shutdown_this_cpu() attempts to call cps_pm_enter_state(),
-> which is not built when MIPS_CPS_PM is not set.
-> Conditionally execute the else branch based on CONFIG_HOTPLUG_CPU
-> to remove the build error.
-> This build failure is from a randconfig file.
-> 
-> mips-linux-ld: arch/mips/kernel/smp-cps.o: in function `$L162':
-> smp-cps.c:(.text.cps_kexec_nonboot_cpu+0x31c): undefined reference to `cps_pm_enter_state'
-> 
-> Fixes: 1447864bee4c ("MIPS: kexec: CPS systems to halt nonboot CPUs")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
-> Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-> ---
-> v2: use IS_ENABLED() instead of #ifdef-ery (Sergei)
-> 
->   arch/mips/kernel/smp-cps.c |    8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
+When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
+declared. This causes the build to fail with:
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
+arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
 
+LANTIQ is not using 'physical_memsize' and MIPS_MALTA's use of it is
+self-contained in mti-malta/malta-dtshim.c.
+Use of physical_memsize in vpe-mt.c appears to be unused, so eliminate
+this loader mode completely and require VPE programs to be compiled with
+DFLT_STACK_SIZE and DFLT_HEAP_SIZE defined.
+
+Fixes: 9050d50e2244 ("MIPS: lantiq: Set physical_memsize")
+Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
+Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+Cc: John Crispin <john@phrozen.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Philippe Mathieu-Daudé <philmd@linaro.org>
+Cc: "Steven J. Hill" <Steven.Hill@imgtec.com>
+Cc: Qais Yousef <Qais.Yousef@imgtec.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: linux-mips@vger.kernel.org
+---
+v2 changes: instead of providing a default physical_memsize of 0, which
+    is not correct for MIPS_MALTA, just eliminate its use in vpe-mt.c.
+
+ arch/mips/include/asm/vpe.h |    1 -
+ arch/mips/kernel/vpe-mt.c   |    7 +++----
+ arch/mips/lantiq/prom.c     |    6 ------
+ 3 files changed, 3 insertions(+), 11 deletions(-)
+
+diff -- a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
+--- a/arch/mips/lantiq/prom.c
++++ b/arch/mips/lantiq/prom.c
+@@ -23,12 +23,6 @@ DEFINE_SPINLOCK(ebu_lock);
+ EXPORT_SYMBOL_GPL(ebu_lock);
+ 
+ /*
+- * This is needed by the VPE loader code, just set it to 0 and assume
+- * that the firmware hardcodes this value to something useful.
+- */
+-unsigned long physical_memsize = 0L;
+-
+-/*
+  * this struct is filled by the soc specific detection code and holds
+  * information about the specific soc type, revision and name
+  */
+diff -- a/arch/mips/include/asm/vpe.h b/arch/mips/include/asm/vpe.h
+--- a/arch/mips/include/asm/vpe.h
++++ b/arch/mips/include/asm/vpe.h
+@@ -102,7 +102,6 @@ struct vpe_control {
+ 	struct list_head tc_list;       /* Thread contexts */
+ };
+ 
+-extern unsigned long physical_memsize;
+ extern struct vpe_control vpecontrol;
+ extern const struct file_operations vpe_fops;
+ 
+diff -- a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
+--- a/arch/mips/kernel/vpe-mt.c
++++ b/arch/mips/kernel/vpe-mt.c
+@@ -92,12 +92,11 @@ int vpe_run(struct vpe *v)
+ 	write_tc_c0_tchalt(read_tc_c0_tchalt() & ~TCHALT_H);
+ 
+ 	/*
+-	 * The sde-kit passes 'memsize' to __start in $a3, so set something
+-	 * here...  Or set $a3 to zero and define DFLT_STACK_SIZE and
+-	 * DFLT_HEAP_SIZE when you compile your program
++	 * We don't pass the memsize here, so VPE programs need to be
++	 * compiled with DFLT_STACK_SIZE and DFLT_HEAP_SIZE defined.
+ 	 */
++	mttgpr(7, 0);
+ 	mttgpr(6, v->ntcs);
+-	mttgpr(7, physical_memsize);
+ 
+ 	/* set up VPE1 */
+ 	/*
