@@ -2,139 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1F969C358
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Feb 2023 00:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2923269C3D2
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Feb 2023 02:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjBSXPe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Feb 2023 18:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S229709AbjBTBA7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Feb 2023 20:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjBSXPe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Feb 2023 18:15:34 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7451A67F;
-        Sun, 19 Feb 2023 15:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=uS4cWikPVXiTQ453M9jkXQ6H6A9rByEcXI4R3QotgUM=; b=QeT6zOvuqCSQ9vd0vABhZmNBNQ
-        P62HvftNURvPjrvnGJougtaXa1qE8lzm0XQSDDbwemDL7UAmJqdA09Spy+naSH7EaQrZxaFvY7Slg
-        r0A/QUk5r3YeVzZLNZPnVbUMExO87G5gbQhoq9pdmepqIxZmbMtczik4DBkhhR2rZt5hL9MwpH/zU
-        tcqWuWQWP1nhppdMlPSKffQyaqCRQItQI6Lg6kNxhSEvDQDd6ahCNFldvIcF0EAEvnoMcU+3xKVmE
-        +ZrHJutdmm7Lzz8VoUE6jjI473PglhQ+xH5jsdOFSGRIPkVFL1kBvuXoeuneAH4BkOVLefOOx85b0
-        Wi0G4dZg==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pTsty-002Tem-Rp; Sun, 19 Feb 2023 23:15:26 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Dengcheng Zhu <dzhu@wavecomp.com>,
-        John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        "Steven J. Hill" <Steven.Hill@imgtec.com>,
-        Qais Yousef <Qais.Yousef@imgtec.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH v2] MIPS: vpe-mt: drop physical_memsize
-Date:   Sun, 19 Feb 2023 15:15:25 -0800
-Message-Id: <20230219231525.21542-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S229567AbjBTBA5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Feb 2023 20:00:57 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6B5C177;
+        Sun, 19 Feb 2023 17:00:55 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKkcZ5RDfz4x81;
+        Mon, 20 Feb 2023 12:00:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1676854853;
+        bh=F/BA55hncJJcUXKiAlKImZaWKF9J7v8lLnKr9dq21p4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=XslnKyUEjBPQ1U1pxlZfaOackH5Uc53v2LGKi4H/fZCzwS12mRxSKUo5Y0d1NKeZn
+         awyroz/jmv/ppUpYp1TDhtbm3Xr2UbxbQ7SLm7HpIZR367un5O+1m6RO8MFNGLc4tN
+         bOsgsJ/QSRuN9qLOaQNEAnGHLCgJYRh2AmA+hh1/q0GxiYmMbgWuXckkgvhyXESi3z
+         pkyDk+R2FxF/Bbq8WxwITYwB8LWISeRkdVED0wYKG14B7OppQx/VBH6ejWIfX4nrhf
+         +DPFJJxnIwj6xY4eD5/CyK6ZQt6qJeWIa8XOq0dKk/I3y+LAhnFdM5gYPtu4P26I4l
+         sm8Hu7By7kuYg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com
+Cc:     rick.p.edgecombe@intel.com, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        Michal Simek <monstr@monstr.eu>,
+        Dinh Nguyen <dinguyen@kernel.org>, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v6 13/41] mm: Make pte_mkwrite() take a VMA
+In-Reply-To: <20230218211433.26859-14-rick.p.edgecombe@intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-14-rick.p.edgecombe@intel.com>
+Date:   Mon, 20 Feb 2023 12:00:46 +1100
+Message-ID: <875ybxywu9.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
-declared. This causes the build to fail with:
+Rick Edgecombe <rick.p.edgecombe@intel.com> writes:
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which requires some core mm changes to function
+> properly.
+...
+> ---
+> Hi Non-x86 Arch=E2=80=99s,
+>
+> x86 has a feature that allows for the creation of a special type of
+> writable memory (shadow stack) that is only writable in limited specific
+> ways. Previously, changes were proposed to core MM code to teach it to
+> decide when to create normally writable memory or the special shadow stack
+> writable memory, but David Hildenbrand suggested[0] to change
+> pXX_mkwrite() to take a VMA, so awareness of shadow stack memory can be
+> moved into x86 code.
+>
+> Since pXX_mkwrite() is defined in every arch, it requires some tree-wide
+> changes. So that is why you are seeing some patches out of a big x86
+> series pop up in your arch mailing list. There is no functional change.
+> After this refactor, the shadow stack series goes on to use the arch
+> helpers to push shadow stack memory details inside arch/x86.
+...
+> ---
+>  Documentation/mm/arch_pgtable_helpers.rst    |  9 ++++++---
+>  arch/alpha/include/asm/pgtable.h             |  6 +++++-
+>  arch/arc/include/asm/hugepage.h              |  2 +-
+>  arch/arc/include/asm/pgtable-bits-arcv2.h    |  7 ++++++-
+>  arch/arm/include/asm/pgtable-3level.h        |  7 ++++++-
+>  arch/arm/include/asm/pgtable.h               |  2 +-
+>  arch/arm64/include/asm/pgtable.h             |  4 ++--
+>  arch/csky/include/asm/pgtable.h              |  2 +-
+>  arch/hexagon/include/asm/pgtable.h           |  2 +-
+>  arch/ia64/include/asm/pgtable.h              |  2 +-
+>  arch/loongarch/include/asm/pgtable.h         |  4 ++--
+>  arch/m68k/include/asm/mcf_pgtable.h          |  2 +-
+>  arch/m68k/include/asm/motorola_pgtable.h     |  6 +++++-
+>  arch/m68k/include/asm/sun3_pgtable.h         |  6 +++++-
+>  arch/microblaze/include/asm/pgtable.h        |  2 +-
+>  arch/mips/include/asm/pgtable.h              |  6 +++---
+>  arch/nios2/include/asm/pgtable.h             |  2 +-
+>  arch/openrisc/include/asm/pgtable.h          |  2 +-
+>  arch/parisc/include/asm/pgtable.h            |  6 +++++-
+>  arch/powerpc/include/asm/book3s/32/pgtable.h |  2 +-
+>  arch/powerpc/include/asm/book3s/64/pgtable.h |  4 ++--
+>  arch/powerpc/include/asm/nohash/32/pgtable.h |  2 +-
+>  arch/powerpc/include/asm/nohash/32/pte-8xx.h |  2 +-
+>  arch/powerpc/include/asm/nohash/64/pgtable.h |  2 +-
 
-mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
-arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
+Looks like you discovered the joys of ppc's at-least 5 different MMU
+implementations, sorry :)
 
-LANTIQ is not using 'physical_memsize' and MIPS_MALTA's use of it is
-self-contained in mti-malta/malta-dtshim.c.
-Use of physical_memsize in vpe-mt.c appears to be unused, so eliminate
-this loader mode completely and require VPE programs to be compiled with
-DFLT_STACK_SIZE and DFLT_HEAP_SIZE defined.
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Fixes: 9050d50e2244 ("MIPS: lantiq: Set physical_memsize")
-Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
-Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-Cc: John Crispin <john@phrozen.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Philippe Mathieu-Daudé <philmd@linaro.org>
-Cc: "Steven J. Hill" <Steven.Hill@imgtec.com>
-Cc: Qais Yousef <Qais.Yousef@imgtec.com>
-Cc: Yang Yingliang <yangyingliang@huawei.com>
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: linux-mips@vger.kernel.org
----
-v2 changes: instead of providing a default physical_memsize of 0, which
-    is not correct for MIPS_MALTA, just eliminate its use in vpe-mt.c.
-
- arch/mips/include/asm/vpe.h |    1 -
- arch/mips/kernel/vpe-mt.c   |    7 +++----
- arch/mips/lantiq/prom.c     |    6 ------
- 3 files changed, 3 insertions(+), 11 deletions(-)
-
-diff -- a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
---- a/arch/mips/lantiq/prom.c
-+++ b/arch/mips/lantiq/prom.c
-@@ -23,12 +23,6 @@ DEFINE_SPINLOCK(ebu_lock);
- EXPORT_SYMBOL_GPL(ebu_lock);
- 
- /*
-- * This is needed by the VPE loader code, just set it to 0 and assume
-- * that the firmware hardcodes this value to something useful.
-- */
--unsigned long physical_memsize = 0L;
--
--/*
-  * this struct is filled by the soc specific detection code and holds
-  * information about the specific soc type, revision and name
-  */
-diff -- a/arch/mips/include/asm/vpe.h b/arch/mips/include/asm/vpe.h
---- a/arch/mips/include/asm/vpe.h
-+++ b/arch/mips/include/asm/vpe.h
-@@ -102,7 +102,6 @@ struct vpe_control {
- 	struct list_head tc_list;       /* Thread contexts */
- };
- 
--extern unsigned long physical_memsize;
- extern struct vpe_control vpecontrol;
- extern const struct file_operations vpe_fops;
- 
-diff -- a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
---- a/arch/mips/kernel/vpe-mt.c
-+++ b/arch/mips/kernel/vpe-mt.c
-@@ -92,12 +92,11 @@ int vpe_run(struct vpe *v)
- 	write_tc_c0_tchalt(read_tc_c0_tchalt() & ~TCHALT_H);
- 
- 	/*
--	 * The sde-kit passes 'memsize' to __start in $a3, so set something
--	 * here...  Or set $a3 to zero and define DFLT_STACK_SIZE and
--	 * DFLT_HEAP_SIZE when you compile your program
-+	 * We don't pass the memsize here, so VPE programs need to be
-+	 * compiled with DFLT_STACK_SIZE and DFLT_HEAP_SIZE defined.
- 	 */
-+	mttgpr(7, 0);
- 	mttgpr(6, v->ntcs);
--	mttgpr(7, physical_memsize);
- 
- 	/* set up VPE1 */
- 	/*
+cheers
