@@ -2,60 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA4C69DD92
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 11:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B87D69DDC3
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 11:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbjBUKJz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Feb 2023 05:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S233070AbjBUKWH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Feb 2023 05:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233675AbjBUKJy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 05:09:54 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4E320D0D;
-        Tue, 21 Feb 2023 02:09:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1676974178; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=cKXclDJnOR+glU4wDT8iZ04RWKFBwEmZYZoTl1XqtC1SU0ZrfOASGRXqrzJJYSoruUO7Dx7nN2XLda8T225IVwPUmqOzoXCyqzf9gUxwg2zcYoOcBy9Y79PwZmrHXUG8v7vTBGALC+nGonM8nmxWg0DOE6yW051Rq54xsuHVcV0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1676974178; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=I18HypflR5Yn9dvjeX0N0iWo/tlnOKACxPwne4yaBUk=; 
-        b=QtvALihmveuBP14O3zvGme+x2DajcB2562YIkiuYo08lOXAjHg3LSwEwUYc4Rg1M2EDaCN2iCFfu+QjkuudfEpVlfr8ftWzOBH6HC05cOcIUDjmsIsLDEYd//zNUIh/c8tA4k8e1ywBtjPGgZoQq1tklbDSsncis3mPjKe1UK/k=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1676974178;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=I18HypflR5Yn9dvjeX0N0iWo/tlnOKACxPwne4yaBUk=;
-        b=XNqbRyaJSXib7hYHP8k1pXwwtFy0xuduiEUyxbtqsj+YkKJZzIPAS6/yrz/FIKx+
-        8KcvMCgNveENxUyYD0BFAJHEDa+9K/VRt6AvH6VCuV/6rFXvlaytULj7bkBnS3t6W4J
-        oJpNbKjuxLG5DdmmRkUCJGQ9Uqe+aYAvTeEqmsvY=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1676974153569756.4162754277759; Tue, 21 Feb 2023 02:09:13 -0800 (PST)
-Message-ID: <85a39e81-51a3-e90f-622e-f2cc7528aa92@arinc9.com>
-Date:   Tue, 21 Feb 2023 13:09:10 +0300
+        with ESMTP id S232793AbjBUKWG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 05:22:06 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C81E10428;
+        Tue, 21 Feb 2023 02:22:05 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id h6-20020a9d7986000000b0068bd8c1e836so692213otm.3;
+        Tue, 21 Feb 2023 02:22:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=30shyJsOAw2zs6Sgq+PUulpeZPcaVAnq8cjIhLP8b54=;
+        b=elznRG7Pcy5Yc4r13B85Rv7Bb/wSbDxBrGsxqTtE4BDZkGHucYkpj4EOaS8TrEB40c
+         dbKiG2oMsgB4BbiurMCLRitbQ5qXrWR6DbFU3Bvd+CdQNdziLtEmGd5YRGPXoHSso1iu
+         0QDrBn1lhOWBp1ZbNiPHZGd+5rRKA018QmBLt+f4s5kY8sKfBEAYqEzv8J2OCGyNcl/g
+         Q521vs0aJoAI5Igv6eblmgFIuIMRGB/Ll7uw0OEbDJWIGEKBrQTrLg0hizAPniyazVqp
+         C4g//etSa4Mdiax2wpETKvZF3luMrTKZKr280C5koJ1mTRTbdkb5aRQz74QdcL9/YkVO
+         IYHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=30shyJsOAw2zs6Sgq+PUulpeZPcaVAnq8cjIhLP8b54=;
+        b=HKSLjW3WoMvktonqxhl2xvDHOxnwvZf9Khhql7Lx42F8jwsk63SH2+Bdn8h5o9Pk+i
+         ErGh96uZAkqNU6KansRfyTQN2JAKDlnrNL0vM9i6aJsCTzWBT59r2M/cYoUOeJzZvjFv
+         3EGmDjuvd2AewaW19FLvTqUrXUtIIcs9XhL0JZF49K/nHrzJpNnKBYHpHXoWp5isUI6+
+         d1I6JtFM3V8oZYVOZx95L8CaVs6svB2pqYWK2MyFCUI9A6tQVfACdBzjkGwV0xR2Whaq
+         NJ/BbpBK/L/vx7VTjvzJluknP27SpA9KzdyHccp5GnLTEbQTsPja65jzCEUjZUBH/tlC
+         uVNw==
+X-Gm-Message-State: AO0yUKU703iE5q496UtJb7rjdvVp3WU6pnG/DU/uOUgD37YMKzjpLxN7
+        k9kxPwlSqyJGfTq6opEup8K4rBBHjkdkeyyr9lelzhk7tOA=
+X-Google-Smtp-Source: AK7set/LMCWIpWdHwoyBDJak/9l2Ne166sgq+MuWerSv36XxA3hiTz0NvEqvSSMqcauwSt0h4Cf6gjVyxOZc44SjW0g=
+X-Received: by 2002:a05:6830:30af:b0:690:f512:20a with SMTP id
+ g47-20020a05683030af00b00690f512020amr228730ots.3.1676974924525; Tue, 21 Feb
+ 2023 02:22:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+References: <20230221092435.22069-1-arinc.unal@arinc9.com> <20230221092435.22069-2-arinc.unal@arinc9.com>
+ <CAMhs-H9qLw6uhjPnFWovQBMFe38y95Q_VvG8Bj9wovSR+1J_2g@mail.gmail.com> <85a39e81-51a3-e90f-622e-f2cc7528aa92@arinc9.com>
+In-Reply-To: <85a39e81-51a3-e90f-622e-f2cc7528aa92@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 21 Feb 2023 11:21:53 +0100
+Message-ID: <CAMhs-H_eLwxjA7-EKGSyKOZLQF05N-FNASZWtGgsV2S=txU=yQ@mail.gmail.com>
 Subject: Re: [PATCH 2/2] mips: ralink: make SOC_MT7621 select PINCTRL
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
-References: <20230221092435.22069-1-arinc.unal@arinc9.com>
- <20230221092435.22069-2-arinc.unal@arinc9.com>
- <CAMhs-H9qLw6uhjPnFWovQBMFe38y95Q_VvG8Bj9wovSR+1J_2g@mail.gmail.com>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CAMhs-H9qLw6uhjPnFWovQBMFe38y95Q_VvG8Bj9wovSR+1J_2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,55 +70,80 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 21.02.2023 12:38, Sergio Paracuellos wrote:
-> Hi Arınç,
-> 
-> On Tue, Feb 21, 2023 at 10:24 AM <arinc9.unal@gmail.com> wrote:
->>
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Currently, out of every Ralink SoC, only the dt-binding of the MT7621 SoC
->> uses pinctrl. Because of this, PINCTRL is not selected at all. Make
->> SOC_MT7621 select PINCTRL.
->>
->> Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled under
->> the PINCTRL_MT7621 option.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
->>   arch/mips/ralink/Kconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
->> index 06031796c87b..83e61e147b90 100644
->> --- a/arch/mips/ralink/Kconfig
->> +++ b/arch/mips/ralink/Kconfig
->> @@ -54,7 +54,7 @@ choice
->>                  select HAVE_PCI
->>                  select PCI_DRIVERS_GENERIC
->>                  select SOC_BUS
->> -               select PINCTRL_MT7621
->> +               select PINCTRL
->>
->>                  help
->>                    The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc
->> --
->> 2.37.2
->>
-> 
-> Which git tree are you working against? CONFIG_SOC_MT7621 is not
-> selecting PINCTRL_MT7621 at all in v6.2 [0]. I think it should select
+On Tue, Feb 21, 2023 at 11:09 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
+c9.com> wrote:
+>
+> On 21.02.2023 12:38, Sergio Paracuellos wrote:
+> > Hi Ar=C4=B1n=C3=A7,
+> >
+> > On Tue, Feb 21, 2023 at 10:24 AM <arinc9.unal@gmail.com> wrote:
+> >>
+> >> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >>
+> >> Currently, out of every Ralink SoC, only the dt-binding of the MT7621 =
+SoC
+> >> uses pinctrl. Because of this, PINCTRL is not selected at all. Make
+> >> SOC_MT7621 select PINCTRL.
+> >>
+> >> Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled =
+under
+> >> the PINCTRL_MT7621 option.
+> >>
+> >> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >> ---
+> >>   arch/mips/ralink/Kconfig | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+> >> index 06031796c87b..83e61e147b90 100644
+> >> --- a/arch/mips/ralink/Kconfig
+> >> +++ b/arch/mips/ralink/Kconfig
+> >> @@ -54,7 +54,7 @@ choice
+> >>                  select HAVE_PCI
+> >>                  select PCI_DRIVERS_GENERIC
+> >>                  select SOC_BUS
+> >> -               select PINCTRL_MT7621
+> >> +               select PINCTRL
+> >>
+> >>                  help
+> >>                    The MT7621 system-on-a-chip includes an 880 MHz MIP=
+S1004Kc
+> >> --
+> >> 2.37.2
+> >>
+> >
+> > Which git tree are you working against? CONFIG_SOC_MT7621 is not
+> > selecting PINCTRL_MT7621 at all in v6.2 [0]. I think it should select
+>
+> mips/linux.git mips-next tree.
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
 
-mips/linux.git mips-next tree.
+I see :). Thanks!
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
+>
+> > 'PINCTRL_MT7621' and the 'select PINCTRL' stuff added inside the
+> > PINCTRL_RALINK option in [1].
+>
+> I'm working on that, although not exactly the way you describe here, on
+> this branch of mine.
 
-> 'PINCTRL_MT7621' and the 'select PINCTRL' stuff added inside the
-> PINCTRL_RALINK option in [1].
+So, in which way do you get PINCTRL_MT7621 automatically selected for
+this SoC now? I think looking into the Kconfig for ralink pinctrl [0]
+all of them at the end need the missing PINCTRL option to be added and
+all of them are currently selecting PINCTRL_RALINK . Hence just adding
+the PINCTRL option inside PINCTRL_RALINK looks convenient.
 
-I'm working on that, although not exactly the way you describe here, on 
-this branch of mine.
+>
+> https://github.com/arinc9/linux/commits/ralink-pinctrl
 
-https://github.com/arinc9/linux/commits/ralink-pinctrl
+Wow! Tons of changes here ;-). Keep going!!
 
-Arınç
+>
+> Ar=C4=B1n=C3=A7
+
+Best regards,
+    Sergio Paracuellos
+
+[0]: https://elixir.bootlin.com/linux/v6.2/source/drivers/pinctrl/ralink/Kc=
+onfig
