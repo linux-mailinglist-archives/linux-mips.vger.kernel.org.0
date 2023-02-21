@@ -2,61 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0D969DA91
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 07:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F326369DCD2
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 10:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbjBUGIg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Feb 2023 01:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S233919AbjBUJYm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Feb 2023 04:24:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbjBUGIa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 01:08:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD72224134
-        for <linux-mips@vger.kernel.org>; Mon, 20 Feb 2023 22:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676959663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u1NKntO/QfPCOBzWgJ4dShR6SEblbk9yft7GyEY5yCo=;
-        b=MLM3H2o7/8cczAs7GRlrE2aTEyqk1V5ECdLdNUbVC+Y19oqpMpsaqvgNeobkCuxOV4pr7o
-        3sZe5qFsUUGke/012mWDdXHO/wCj4PC4znrOFvIwZuOwZSxRRki9e0YLAVXLUGW7xckAgh
-        opk4xdznldJ8zQ9Q+dazmTJqQySiD1U=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-394-64ARo8UCM-23MdKA0rH2cg-1; Tue, 21 Feb 2023 01:07:37 -0500
-X-MC-Unique: 64ARo8UCM-23MdKA0rH2cg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B5AD3C0F189;
-        Tue, 21 Feb 2023 06:07:36 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-7.pek2.redhat.com [10.72.13.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 30FFE492B04;
-        Tue, 21 Feb 2023 06:07:30 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, arnd@arndb.de, hch@infradead.org,
-        mcgrof@kernel.org, Baoquan He <bhe@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: [RFC PATCH 1/2] mips: add <asm-generic/io.h> including
-Date:   Tue, 21 Feb 2023 14:07:22 +0800
-Message-Id: <20230221060723.26291-2-bhe@redhat.com>
-In-Reply-To: <20230221060723.26291-1-bhe@redhat.com>
-References: <20230221060723.26291-1-bhe@redhat.com>
+        with ESMTP id S233181AbjBUJYm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 04:24:42 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDD51A495;
+        Tue, 21 Feb 2023 01:24:41 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id l1so3358298wry.10;
+        Tue, 21 Feb 2023 01:24:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JLu8BAlgI+WIHMoE24yhy4uizQcXzvZPeYYNkmurpEY=;
+        b=jo7F1ZZBWvqv8QLrf5wk7dhFktSC9S8/P/W1hifkRtCX+oPAfT0HQ2+dms6OlYM21g
+         rOgBa0tra7S9tj+MvFG2DNLLSJJFV+c3RpOf0oiAUcFohM2RK6/bvhEsPYGD/EKPxCuY
+         fdKXEANJmTA38ICI3sYfbIWoDwHKF8tLShTL/CVYJWCXuuCqZ3sVtgb+VnTSXZpZw0jh
+         9s3JCCXOCFaJDYpoX8/WMBpKiXZmD/q9/CUGRbgeVFN2s3RBWsd4zFhxCMOSrx5jX4mt
+         69LwdDZz4yHPmdjBEw1XyHd3Wx69pI3f3XgyXe8oDB0ZCY2HRI89/OCYlqrnYWHNQDN3
+         VmWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JLu8BAlgI+WIHMoE24yhy4uizQcXzvZPeYYNkmurpEY=;
+        b=l5/qjMXt9GzwkJC2GMCDMsQC5cki0mMg1SLpKeNCC0I3uZjWJCioz0iP55WOPdQVJQ
+         w7j8OmcjD3ipxSmJ7cmI2j3xJ2QBGZy/E28DmkRxQfolo/PNpzrjuJQl30/4oZ5yRW1X
+         cUBSuX2UsQ2YaOaq1wn96OGxPr3aYliAaTCVaoz28QFVah3p8kzDJ4E0l/DAcn5tGp6W
+         h+8xiSL8s6vbT8X2IYNSt0j3IVzUKWSLFCc5zixZTc+uJ/m8/Eo6DVAYkrExpw7Ujrjs
+         yjlxM3MtX5OUFFgKcK/j8P7Bt54RW9bjgI5mg5g54yEkCG31JxsHBbClypVDNPj7Vqdu
+         bGTA==
+X-Gm-Message-State: AO0yUKUcgAbageYrdyirWG5pY4MrtanLydAinRYFrLhw8YMYnzlJCWt+
+        hayv9ooy0tbpyAR1oZzzOAsDbnlSQwl9n606
+X-Google-Smtp-Source: AK7set/6t+7Br79GBudhEtbOxGJOEHMxW+14bTe+NLfFGJglW223EOybF9tkF/XntutQdUoAjj2syA==
+X-Received: by 2002:a05:6000:1252:b0:2c5:505d:9078 with SMTP id j18-20020a056000125200b002c5505d9078mr2164411wrx.31.1676971479469;
+        Tue, 21 Feb 2023 01:24:39 -0800 (PST)
+Received: from arinc9-PC.lan ([37.120.152.236])
+        by smtp.gmail.com with ESMTPSA id i18-20020adfe492000000b002c56287bd2csm4272573wrm.114.2023.02.21.01.24.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 01:24:38 -0800 (PST)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com
+Subject: [PATCH 1/2] mips: remove SYS_HAS_CPU_MIPS32_R1 from RALINK
+Date:   Tue, 21 Feb 2023 12:24:34 +0300
+Message-Id: <20230221092435.22069-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,119 +73,35 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-With the adding, some default ioremap_xx methods defined in
-asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-NULL.
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
+All MIPS processors on the Ralink SoCs implement the MIPS32 Release 2
+Architecture. Remove SYS_HAS_CPU_MIPS32_R1.
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+---
+
+The RT2880 SoC is MIPS 4KEc, the remaining SoCs are MIPS 24KEc. All of
+which implement the MIPS32 Release 2 Architecture, if I understand
+correctly. My incentive for this is to automatically have MIPS32R2 selected
+as the CPU type.
 
 ---
- arch/mips/include/asm/io.h     | 46 ++++++++++++++++++++++++++++++++++
- arch/mips/include/asm/mmiowb.h |  2 --
- 2 files changed, 46 insertions(+), 2 deletions(-)
+ arch/mips/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index e6d5ccaa309e..c89804a5802a 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -129,6 +129,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
-  *     almost all conceivable cases a device driver should not be using
-  *     this function
-  */
-+#define phys_to_virt phys_to_virt
- static inline void * phys_to_virt(unsigned long address)
- {
- 	return __va(address);
-@@ -481,14 +482,17 @@ BUILDSTRING(l, u32)
- BUILDSTRING(q, u64)
- #endif
- 
-+#define memset_io memset_io
- static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
- {
- 	memset((void __force *) addr, val, count);
- }
-+#define memcpy_fromio memcpy_fromio
- static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
- {
- 	memcpy(dst, (void __force *) src, count);
- }
-+#define memcpy_toio memcpy_toio
- static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
- {
- 	memcpy((void __force *) dst, src, count);
-@@ -549,6 +553,46 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
- #define csr_out32(v, a) (*(volatile u32 *)((unsigned long)(a) + __CSR_32_ADJUST) = (v))
- #define csr_in32(a)    (*(volatile u32 *)((unsigned long)(a) + __CSR_32_ADJUST))
- 
-+
-+#define inb_p inb_p
-+#define inw_p inw_p
-+#define inl_p inl_p
-+#define insb insb
-+#define insw insw
-+#define insl insl
-+
-+#define outb_p outb_p
-+#define outw_p outw_p
-+#define outl_p outl_p
-+#define outsb outsb
-+#define outsw outsw
-+#define outsl outsl
-+
-+#define readb readb
-+#define readw readw
-+#define readl readl
-+#define writeb writeb
-+#define writew writew
-+#define writel writel
-+
-+#define readsb readsb
-+#define readsw readsw
-+#define readsl readsl
-+#define readsq readsq
-+#define writesb writesb
-+#define writesw writesw
-+#define writesl writesl
-+#define writesq writesq
-+
-+#define __raw_readb __raw_readb
-+#define __raw_readw __raw_readw
-+#define __raw_readl __raw_readl
-+#define __raw_readq __raw_readq
-+#define __raw_writeb __raw_writeb
-+#define __raw_writew __raw_writew
-+#define __raw_writel __raw_writel
-+#define __raw_writeq __raw_writeq
-+
- /*
-  * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-  * access
-@@ -557,4 +601,6 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
- 
- void __ioread64_copy(void *to, const void __iomem *from, size_t count);
- 
-+#include <asm-generic/io.h>
-+
- #endif /* _ASM_IO_H */
-diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
-index a40824e3ef8e..007fe55bc7d1 100644
---- a/arch/mips/include/asm/mmiowb.h
-+++ b/arch/mips/include/asm/mmiowb.h
-@@ -2,8 +2,6 @@
- #ifndef _ASM_MMIOWB_H
- #define _ASM_MMIOWB_H
- 
--#include <asm/io.h>
--
- #define mmiowb()	iobarrier_w()
- 
- #include <asm-generic/mmiowb.h>
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 37072e15b263..0e8dab9a57de 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -610,7 +610,6 @@ config RALINK
+ 	select DMA_NONCOHERENT
+ 	select IRQ_MIPS_CPU
+ 	select USE_OF
+-	select SYS_HAS_CPU_MIPS32_R1
+ 	select SYS_HAS_CPU_MIPS32_R2
+ 	select SYS_SUPPORTS_32BIT_KERNEL
+ 	select SYS_SUPPORTS_LITTLE_ENDIAN
 -- 
-2.34.1
+2.37.2
 
