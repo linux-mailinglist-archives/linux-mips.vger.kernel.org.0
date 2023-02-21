@@ -2,70 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E601E69DCD5
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 10:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA53E69DD06
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 10:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjBUJYo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Feb 2023 04:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
+        id S232845AbjBUJjI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Feb 2023 04:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233921AbjBUJYn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 04:24:43 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309501A67E;
-        Tue, 21 Feb 2023 01:24:42 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id c12so3636255wrw.1;
-        Tue, 21 Feb 2023 01:24:42 -0800 (PST)
+        with ESMTP id S233972AbjBUJjH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 04:39:07 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDB3241C6;
+        Tue, 21 Feb 2023 01:39:06 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-17211366c6aso4047502fac.13;
+        Tue, 21 Feb 2023 01:39:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zj1tWf52J//HqTj7v4fnk+SHbatlNJyYhDkNDwjnWLI=;
-        b=jQPWrwJ9BFRMxt4ko0FDpUzvVxLURzjsioTAtz0Q13xhHZhYNfKaldXSsd21hvu3dl
-         SdLhg/NZaqSpS6E8Kf6M+UoEsXfFV4sPLh63XeUU468wGmN7WARp8iBdX0mrK83yWLxt
-         hcdCavCWDXqptZaQAju7QCSb95MMG5J/xVoAZy9wJxBSClFbX5//uHxCVQ6fcXdO4Yhu
-         CS6uNwH7DAASJhm0ra+PtXFiFhThCrCLLKCeptxESIUWD2iMjR7R454OalqvSJTaqsUi
-         zb4TTvYqx6LzsZF7hr/0++aflYP+VOjtmGFxgaUQkyqcK2tn9fobYgFZ3y1IIlFAPb9G
-         mF7A==
+        bh=cYzG5ssaLA2O4RX+ksz66ZZSsXVKW2HZLIvI31k/qio=;
+        b=IAEFnu7JMucY6HTgVO/Mo16xU6IEXaBtr59F7PlD+cw+lXksJcGgFRWpfMOPuMmNbf
+         DuMb6Opy5YxCwbQe8rf507osk+iyyE7Gpmo4OzBAKpnLsvcUVT0iWWbhOqb7oJib0RHo
+         /UxwqyPQCGau7a7H8A2WLsj94cd5s9QKFKmQrTAlMUOJSn1S2uRs7rvHXJqlhsx+U6JA
+         +C+SDw7u0fUzQAdp37YUDnWxaJS/JepbAP/9l2EFpysmI/yPBAi31aqTqq1LPqpK6/9C
+         O6bRE0mrkyXeZGzCzy6PHtQ49BqTv/EJ2qptIv6JoaxUmVnOmT8JTubvVyVKjWoOAh3W
+         sbfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zj1tWf52J//HqTj7v4fnk+SHbatlNJyYhDkNDwjnWLI=;
-        b=gYKsB9zKaU9UKkD6PKM6XbmpzREpaub2LFrppyXMnuViXfIXqvEJlHGzJo5NSRW/0n
-         /9CW23yLu2fNWNp3+cKvShuUsX6lbVvy56KGiyWB4+Ad4OfGC8ZsvMZ6Lts8eNZ/QrxV
-         cJl1aaYrVM/fGgD/F3r1+lHmY94zxO/DZeGk4w9cBoicW0hVJfDN95iYczG8ajnMmRyz
-         msHqrw6vKuH+/x/5PpJ8NRV95wDa18CZtDP0cdPZfYIjd0A0zjZRvQf6JDeGpxRtVhoN
-         VKeQcao2lszaK5mqGnmN89dZaBw1NIdxBdVEmF6AZ7XlNVUGECx04nyGitDlPhI9HwZA
-         l2gg==
-X-Gm-Message-State: AO0yUKWAknYruhOj3wEOUR5kFyHs6VI0t5Xe0uPHOn9XabzmOjWrPljy
-        OFpVH8bqmFplUUqd+JNglDo=
-X-Google-Smtp-Source: AK7set8CJ8+KKQtN0pDVYaDjnrpvJDbxFT9JF1rviXW2IefJQ2QpZNM0gQKqZxbGcBAjzKvxbXZxLw==
-X-Received: by 2002:adf:ea83:0:b0:2c5:6180:516e with SMTP id s3-20020adfea83000000b002c56180516emr2254316wrm.39.1676971480545;
-        Tue, 21 Feb 2023 01:24:40 -0800 (PST)
-Received: from arinc9-PC.lan ([37.120.152.236])
-        by smtp.gmail.com with ESMTPSA id i18-20020adfe492000000b002c56287bd2csm4272573wrm.114.2023.02.21.01.24.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 01:24:40 -0800 (PST)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        erkin.bozoglu@xeront.com
-Subject: [PATCH 2/2] mips: ralink: make SOC_MT7621 select PINCTRL
-Date:   Tue, 21 Feb 2023 12:24:35 +0300
-Message-Id: <20230221092435.22069-2-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230221092435.22069-1-arinc.unal@arinc9.com>
-References: <20230221092435.22069-1-arinc.unal@arinc9.com>
+        bh=cYzG5ssaLA2O4RX+ksz66ZZSsXVKW2HZLIvI31k/qio=;
+        b=ePHIRxmu9HGQtQnJk2MaAFNKsOYH3tjYbcJHeZzboFUJEP9mqgJbqT3yNad7IJwPv0
+         zlPIN0K6cXusaff+IDhy0MWWaamt2+QvXamN9GVf2s5fl0AihBE5gKKi1F8wViGHB4o6
+         0atQtdfDNLT52c2qYmR7+RlUfC8ZQ3g5Wc04LBbw9DapTDYTw5yuqTr1WVe795pKbXKj
+         lyMknrHFnSsMeB8OaKrRd+dJENAA9AfghNPXEfan7yeUBfO3cWA9/r/Q1TM2rESXZaFY
+         K2uPjSZn8hu1itkpXYh8ixCeT4zlE3gu/yV3c4tO3BJYt0LxkepF2fY3IoBaTcFl011Y
+         9Oaw==
+X-Gm-Message-State: AO0yUKXZG1GBGWgcCw9f6qv3dMlCpTPEe/hIpGXd43PY5za3BUiB1fQU
+        Tdi3R4HdVDA761NFokCbOg2ZwwSgmLTScT4emF70Vcp17TU=
+X-Google-Smtp-Source: AK7set/2DC3PaB9vJnX4CdCdeihpzX1Y/N0+fFoiXCMXoWMSjD85u4MM56c2lC74m3WDTL56wPjCTB3C0IAWOItIl4I=
+X-Received: by 2002:a05:6870:b016:b0:171:f3aa:8da5 with SMTP id
+ y22-20020a056870b01600b00171f3aa8da5mr383773oae.239.1676972343433; Tue, 21
+ Feb 2023 01:39:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230221092435.22069-1-arinc.unal@arinc9.com> <20230221092435.22069-2-arinc.unal@arinc9.com>
+In-Reply-To: <20230221092435.22069-2-arinc.unal@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 21 Feb 2023 10:38:52 +0100
+Message-ID: <CAMhs-H9qLw6uhjPnFWovQBMFe38y95Q_VvG8Bj9wovSR+1J_2g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mips: ralink: make SOC_MT7621 select PINCTRL
+To:     arinc9.unal@gmail.com
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,33 +71,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+Hi Ar=C4=B1n=C3=A7,
 
-Currently, out of every Ralink SoC, only the dt-binding of the MT7621 SoC
-uses pinctrl. Because of this, PINCTRL is not selected at all. Make
-SOC_MT7621 select PINCTRL.
+On Tue, Feb 21, 2023 at 10:24 AM <arinc9.unal@gmail.com> wrote:
+>
+> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+>
+> Currently, out of every Ralink SoC, only the dt-binding of the MT7621 SoC
+> uses pinctrl. Because of this, PINCTRL is not selected at all. Make
+> SOC_MT7621 select PINCTRL.
+>
+> Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled und=
+er
+> the PINCTRL_MT7621 option.
+>
+> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> ---
+>  arch/mips/ralink/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+> index 06031796c87b..83e61e147b90 100644
+> --- a/arch/mips/ralink/Kconfig
+> +++ b/arch/mips/ralink/Kconfig
+> @@ -54,7 +54,7 @@ choice
+>                 select HAVE_PCI
+>                 select PCI_DRIVERS_GENERIC
+>                 select SOC_BUS
+> -               select PINCTRL_MT7621
+> +               select PINCTRL
+>
+>                 help
+>                   The MT7621 system-on-a-chip includes an 880 MHz MIPS100=
+4Kc
+> --
+> 2.37.2
+>
 
-Remove PINCTRL_MT7621, enabling it for the MT7621 SoC will be handled under
-the PINCTRL_MT7621 option.
+Which git tree are you working against? CONFIG_SOC_MT7621 is not
+selecting PINCTRL_MT7621 at all in v6.2 [0]. I think it should select
+'PINCTRL_MT7621' and the 'select PINCTRL' stuff added inside the
+PINCTRL_RALINK option in [1].
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- arch/mips/ralink/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Am I missing something?
 
-diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-index 06031796c87b..83e61e147b90 100644
---- a/arch/mips/ralink/Kconfig
-+++ b/arch/mips/ralink/Kconfig
-@@ -54,7 +54,7 @@ choice
- 		select HAVE_PCI
- 		select PCI_DRIVERS_GENERIC
- 		select SOC_BUS
--		select PINCTRL_MT7621
-+		select PINCTRL
- 
- 		help
- 		  The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc
--- 
-2.37.2
+Thanks,
+    Sergio Paracuellos
 
+[0]: https://elixir.bootlin.com/linux/v6.2/source/arch/mips/ralink/Kconfig
+[1]: https://elixir.bootlin.com/linux/v6.2/source/drivers/pinctrl/ralink/Kc=
+onfig#L5
