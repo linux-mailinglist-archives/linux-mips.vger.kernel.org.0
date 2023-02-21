@@ -2,157 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A8D69DE99
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 12:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B3F69E0A5
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 13:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbjBULSo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Feb 2023 06:18:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S234447AbjBUMqY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Feb 2023 07:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233887AbjBULSl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 06:18:41 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6010A24B
-        for <linux-mips@vger.kernel.org>; Tue, 21 Feb 2023 03:18:39 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id o12so16118249edb.9
-        for <linux-mips@vger.kernel.org>; Tue, 21 Feb 2023 03:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=te3p4bKydyp/MbIlm34Ds4b8t0tdrCO/k0x0oPR5HmA=;
-        b=sjV1W157Nd2uD+N+AFPnMckchyhrGh5QiQNKESz4iHvU2+4NW6LDaJyh6mwplvbenr
-         Q89gbbsgzbWULv4GlgcsLIciNpn5KsXcgGN54b6kLQyU/jDWR6tx587ZdsqybTkAbyKa
-         oVMcINL8ypDqOZNvMeayu6+Xn13pAPWuAjNnPyIHhXUb5c404idEDDzKuTV3a2Gg02EA
-         xkSaU90014O4rZidTioVUiwxQ3zsOBAj68RkXh5zRH5XWz5M9vYDuHB0JcVNQQ1u0ooN
-         BFD8OHn8sF3aYWJwcrIrC23fe4jWMcS+6NJlKlqyHoGKCRX5QurkfADwi4ewXm5/QpRT
-         swfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=te3p4bKydyp/MbIlm34Ds4b8t0tdrCO/k0x0oPR5HmA=;
-        b=p/Vl4ZGwmNdP3MIyywTOQYL32rvk1UoNFzigSgQgXKBdSPuJs7/MTodpr59kxmBJH0
-         IuuOTey4YWjRnG8onaWl35t8bNc+QX4thx0kLZ7bToRDyeKfWigegEme4XeNo/hBH0z8
-         vWW8erqv7FWXPH/lNU9DK837eMCiC1EfUR9KZR4kwyN/mfqz/WTqLXOzwvPfVXFuQzCa
-         1shad34xeQEft1LyCDrph8HUV+6q1XjiNki0q1uBPe1iOawqqrOPayOj6+lX3H1Ax/EY
-         zR6UmBwz7h+agrWqmm7VyTGUgg27grCqW+/olOz4jkmJrYkqKfFMZSx21HNoY8W8XxBD
-         6WJw==
-X-Gm-Message-State: AO0yUKVFDEcxTZNGUcSlsJfK3gX1FzjZAqM5HuBr59kyS5BVhASdxINX
-        NtXueupShnG7beI8YDwfs0LsXQ==
-X-Google-Smtp-Source: AK7set/OO+e1W/Ws56sG5Ah5QjKrNgdFollXBGhuh6EuaPZ5R/SRBjgvMBb2POELMIB/xkjfl5peYA==
-X-Received: by 2002:a05:6402:34d5:b0:4ae:eae1:2be0 with SMTP id w21-20020a05640234d500b004aeeae12be0mr3044763edc.14.1676978318384;
-        Tue, 21 Feb 2023 03:18:38 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g13-20020a056402090d00b004acbda55f6bsm1096399edz.27.2023.02.21.03.18.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 03:18:37 -0800 (PST)
-Message-ID: <aded9eca-bf6d-9a55-d791-29f635323332@linaro.org>
-Date:   Tue, 21 Feb 2023 12:18:35 +0100
+        with ESMTP id S233939AbjBUMqY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 07:46:24 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D240B12F0C;
+        Tue, 21 Feb 2023 04:46:22 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 45DF23200929;
+        Tue, 21 Feb 2023 07:46:21 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 21 Feb 2023 07:46:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1676983580; x=1677069980; bh=o1ZGzAY+2IAq6iM9F+Xf8a1cE
+        huTp9TD8y5vFZAwf2Y=; b=EMJBt3zyvDdk72wNVD6Rp0MSRXuNpRO1l4RTro2Bm
+        Q68vwd6ylAHTjrNFljCyq/JBIn3lPPXfgc4/6kk8pQgPkHmUfQCfVhmtTjfoAUiq
+        E/1Z2y3iMjQZb/AYwTUje2WUwJPnsW8dGeROQUPzZMMapCpNieebulQ6b1s5lOgS
+        LsUuGRK/I5d2SJ4y4WrcSJPckasYkpldbLC2L/xjAJasWeEQOnOy2/fv6z6QdazG
+        0CV9dHfdja/HMB+EHvRjIXBskQYkKM8Cr3uY3SLxOq0hcNokeOxDrhxM0XZPuvTO
+        HuWtbpT/vjLX4Qq5womPSW0644hrxyBElJ44X/bD6TpwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1676983580; x=1677069980; bh=o1ZGzAY+2IAq6iM9F+Xf8a1cEhuTp9TD8y5
+        vFZAwf2Y=; b=th8zsIYP60+WQlHRLMTjitDNcmVVDGTJ4WbmTbjgZDhRpdcEwlE
+        aCund/RrXSmSkquNlWkBr2iMp0JV5Mm+P3VNM29fo27vJM/A4nzKB4CevyDHad2J
+        djFJxRQhZHNRUSRui7eG0RgbSYGhXbPbvdKUr0VjPNaZggFS+fMolbh72aV8uyI0
+        hHatvxsKUdaK10Q7JbiQHjloeYstWVihqVySVTiuHHwHxi5ZbeiX8esoglNsHTSp
+        A+K0VLkheajhYIwiap8e8HA+U850GivU0NLEI6wpmTCGdBRiQFVW87ycfljjvf9i
+        hofR4SCjfv1ATpwx0NjJq6viCycYj/SCpsA==
+X-ME-Sender: <xms:G730YyDtoU_NWr-nX8omgYp9iWEj_Cpb88tfMFG7GUF6i_qqaeMpsg>
+    <xme:G730Y8jScgS-F_7op8B22ovm68GLn8BL6vO8AryrQRCvto2J2QuiFdFn-oTd1ADFM
+    -RIkx4qSaRWuSc4ifk>
+X-ME-Received: <xmr:G730Y1nHA8Z1dGd7OMFxUBeSeLbmsED_OBnzecdttXlDAJIOTc0UGAsii8Lx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedggeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:G730YwxDpe2tLRi9YpZeLRv_SsYUczt_Urwj0V4BSAXYzA3yHIJG_w>
+    <xmx:G730Y3QY7hzjzjJ6ucBUr7Fv_xJmTC1vaxZ7xNPsrtwTXLSaCN9l0A>
+    <xmx:G730Y7Y9L98rNX2KaPH3_pmFqXa3yTp3iFs8SR4cGFrKqw-5p3Xx1Q>
+    <xmx:HL30Y8Kvm1mRR7-cnzS-00Ff_ZzvPWOsyBWtSIbb2hjIGU1m7Ec61A>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Feb 2023 07:46:17 -0500 (EST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, robh+dt@kernel.org,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/7] MIPS DMA coherence fixes
+Date:   Tue, 21 Feb 2023 12:46:06 +0000
+Message-Id: <20230221124613.2859-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
-Content-Language: en-US
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <cover.1676289084.git.zhoubinbin@loongson.cn>
- <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
- <df464409-9a93-c057-5f66-923a9e24696a@linaro.org>
- <CAMpQs4JX0Vgf5tvv5Yw5eLGANFfn1p=iQ_kMS0yQPV6kE2tN1g@mail.gmail.com>
- <23068d0c-d37c-0563-e1c1-e4d112059f5b@linaro.org>
- <CAMpQs4K+aYGrOoWy04vrbEy53kba9zUzGkOwD34pwAH0c=D8iA@mail.gmail.com>
- <49c8255e-66f3-fa1f-2949-1f03f77a0fa4@linaro.org>
- <CAMpQs4KennWg60ccQ5NYOs=5a9gqTk_bKY26noQ3u0qLQSBg_w@mail.gmail.com>
- <4dcaaa70-11e0-fc9d-da03-224d34e36983@linaro.org>
- <CAMpQs4KpE7RLyxw4++4z4RhjR_ix300mtDfwh6KgJJw1B43CqA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMpQs4KpE7RLyxw4++4z4RhjR_ix300mtDfwh6KgJJw1B43CqA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/02/2023 11:12, Binbin Zhou wrote:
-> On Fri, Feb 17, 2023 at 4:40 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 17/02/2023 07:09, Binbin Zhou wrote:
->>
->>>>> Hi Krzysztof:
->>>>>
->>>>> Allow me to give a brief overview of the current status of eiointc (DT-based):
->>>>>      Loongson-3A series supports eiointc;
->>>>>      Loongson-2K1000 does not support eiointc now;
->>>>>      Loongson-2K0500 supports eiointc, with differences from
->>>>> Loongson-3, e.g. only up to 128 devices are supported;
->>>>>      Loongson-2K2000 supports eiointc, similar to Loongson-3.
->>>>>      ....
->>>>>
->>>>> As can be seen, there is now a bit of confusion in the chip's design of eiointc.
->>>>>
->>>>> The design of eiointc is probably refined step by step with the chip.
->>>>> The same version of eiointc can be used for multiple chips, and the
->>>>> same chip series may also use different versions of eiointc. Low-end
->>>>> chips may use eiointc-2.0, and high-end chips may use eiointc-1.0,
->>>>> depending on the time it's produced.
->>>>>
->>>>> So in the Loongson-2K series I have defined the current state as
->>>>> eiointc-1.0, using the dts property to indicate the maximum number of
->>>>> devices supported by eiointc that can be used directly in the driver.
->>>>>
->>>>> If there are new changes to the design later on, such as the
->>>>> definition of registers, we can call it eiointc-2.0, which can also
->>>>> cover more than one chip.
->>>>
->>>> Just go with SoC-based compatibles. If your version is not specific
->>>> enough, then it is not a good way to represent the hardware.
->>>>
->>>
->>> Hi Krzysztof:
->>>
->>> I have tried to write the following  SoC-based compatibles,  is it fine?
->>>
->>> compatible:
->>>     enum:
->>>       - loongson,ls3a-eiointc  # For MIPS Loongson-3A if necessary.
->>>       - loongson,ls2k0500-eiointc
->>>       - loongson,ls2k200-eiointc
->>
->> Looks good, but didn't you state these are compatible between each
->> other? I have impression there is a common set, so maybe one compatible
->> work on other device with reduced number of devices?
->>
-> 
-> So far, the difference between ls2k SOCs is the number of devices
-> supported by eiointc.
-> 
-> Do you mean use unified compatible and reuse loongson,eio-num-vecs?
-> 
-> Would this be possible, e.g.
 
-No. I meant that maybe all these three should have been made compatible.
+Jiaxun Yang (7):
+  MIPS: Remove DMA_PERDEV_COHERENT
+  MIPS: Always select ARCH_HAS_SYNC_DMA_FOR_CPU for noncoherent
+    platforms
+  MIPS: c-r4k: Always install dma flush functions
+  dma-mapping: Always provide dma_default_coherent
+  dma-mapping: Provide CONFIG_ARCH_DMA_DEFAULT_COHERENT
+  riscv: Select ARCH_DMA_DEFAULT_COHERENT
+  of: address: Use dma_default_coherent to determine default coherency
 
-Best regards,
-Krzysztof
+ arch/mips/Kconfig           | 16 ++--------------
+ arch/mips/mm/c-r4k.c        | 12 +++---------
+ arch/powerpc/Kconfig        |  1 -
+ arch/riscv/Kconfig          |  2 +-
+ drivers/of/Kconfig          |  4 ----
+ drivers/of/address.c        |  2 +-
+ include/linux/dma-map-ops.h |  1 +
+ kernel/dma/Kconfig          |  3 +++
+ kernel/dma/mapping.c        |  6 +++++-
+ 9 files changed, 16 insertions(+), 31 deletions(-)
+
+-- 
+2.37.1 (Apple Git-137.1)
 
