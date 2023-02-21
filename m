@@ -2,72 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D47E69E126
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 14:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDAC69E127
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Feb 2023 14:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbjBUNRO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Feb 2023 08:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        id S233930AbjBUNRQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Feb 2023 08:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233049AbjBUNRN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 08:17:13 -0500
+        with ESMTP id S233049AbjBUNRP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Feb 2023 08:17:15 -0500
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332B029179
-        for <linux-mips@vger.kernel.org>; Tue, 21 Feb 2023 05:17:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4814429179
+        for <linux-mips@vger.kernel.org>; Tue, 21 Feb 2023 05:17:14 -0800 (PST)
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 784F03200927;
-        Tue, 21 Feb 2023 08:17:11 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id 8FE613200920;
+        Tue, 21 Feb 2023 08:17:13 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 21 Feb 2023 08:17:11 -0500
+  by compute1.internal (MEProxy); Tue, 21 Feb 2023 08:17:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1676985431; x=1677071831; bh=so
-        IEw043qbh3VHCqLZk6b0OectivLIKNL02ynxkpo1U=; b=jEqiEms4ov0begsrb0
-        AG13v/orcZPNs+ZqF+tchGm1y38kDsuvbKXGGoNDGURKmCudmCh4JjKdAhxmr4kM
-        1927WJyiGJdSssmIvLYBp81GOlWcrGh9M3+sZHWSoLKAQ8bIkI8JlES+Y8QI4Eoe
-        ssRn4Tq5YVNbZ/PeU/eqFuWHk+66samH/Al0gPhQ9vLYYFHyP+8f2iCt1RAQhfts
-        slB5IPUIwBpmXW5p/x1i9Zd2+8/melrKHViwF2SnRpsnYuHLfGmMy7swJkVSrAj5
-        KJVi9zV5DIMnCYODd2dYW2x8+loUKgSeG9jHiWTFRliLVDDWVGQDJ+n3j4RbkKgp
-        y7QA==
+        :subject:subject:to:to; s=fm2; t=1676985433; x=1677071833; bh=mo
+        1bJEa7CJebImT2SNtjRH/cOmsKYWugneFAx1k4vQE=; b=Y8hyt/wC0hy8XAT6oh
+        QgWv76V95pui0sVCJjIpVraKXS3mGaIMxQ8hgaADlgx04TQBRfKYVyWm17tJBOvR
+        R8kZMu9NZlk/PzzaVymOQ2OMI1yUiYAmCHxU8Q+C37bT8mXLrQ/RtFfsnLxUOs9D
+        GzrEdE3G+wTwz7zNki1zSJ5DywV53SX9TZXl528Q+kRAGafo9Df9EuMrja4DcnGH
+        x5JFTg7DY1AV9RKoiMf17bHauCwutlzhAgf1EWqRJ5J/6ipAx2d7NZmQttOLnWtK
+        u+qZlVvqzeFSjfBnVzQacERw5/oo9NL1+WmXPhs46I0WxPwqhdwyuByzL0xurAk+
+        SVzg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1676985431; x=1677071831; bh=soIEw043qbh3V
-        HCqLZk6b0OectivLIKNL02ynxkpo1U=; b=CvGwQ5rwTZijw6bX54Er19aSzJYgC
-        1aCmifJVLdVKvt4BgSqJu4WAIURxNgbmDgHqA6Sa8zEFpszsTSZF/3ldeddhDzpn
-        Noy+JY/guDuQFxOXYV2/CiBkW7hIMECiVcKtQssmLMBNS9wFUeOOzV4oe9vnhPy/
-        XY7Th23BFdpjiQkrCUawyRcnUnKud4mRuFxPiPg6aua5kD02cV79fMt4zBpkXFLd
-        pj5LTPIN0cleQyZzZQM4xB7RHdK0Yy3yGVQ7yxHE8Bm6F+/8cv29PNI10ElmLunZ
-        BhEUcn7rSIyNsNIJsNKCMreFggCw/zMCldHdRCkOrE8nUHBfladw6Hapw==
-X-ME-Sender: <xms:VsT0Yw_LwpHdTeS_6tErrGPsS-2gMSXH44OINgje6OOy8jOHDj7Vgw>
-    <xme:VsT0Y4sLKo5JFgFiYh8GmKLgmve0hgV6TJMSuVNElzYj3lLPww-Ib16QP9pFoUWIQ
-    LDRnrepzx1aYXhXwTs>
-X-ME-Received: <xmr:VsT0Y2AkynPiQ2wbQgNge9pmIy3xYJSPMugzzFEJb-pL3gdtFLxEbJLF7uLL>
+        :x-sasl-enc; s=fm1; t=1676985433; x=1677071833; bh=mo1bJEa7CJebI
+        mT2SNtjRH/cOmsKYWugneFAx1k4vQE=; b=lS9kwT0uiZs/Ok0He65BGTIezivGb
+        A6adeIZSZ0U44OTk+m8g/AZ+zKz8SdfQWWsJt44kFQk5Cma/DThr2P2Kf8DhdivU
+        7SeFicK+oGGgBEV3Xvs9Yrdn56e5+VjuBENGgn5FLH+QXa7lBtD8TfASDwB0DR/i
+        I9aULX6kfuPm6pNvjscPY9N0MEpe1cL8mMU30iLsJ9IT/Wa2bmexQ9p+gs3X32Ji
+        cVlJujOr6SyTx/yZQT3xUVtqjctalZgfuEV6YIry6lHHQa1SbvzgOuNjcA8NMTXH
+        Qmt0iTWumnw+k1gojWp4nCWojARdinBZKAwZdZ+2qbOdqx60a8pcwV5BA==
+X-ME-Sender: <xms:WcT0Y_JwnJaxYflkeMh3iVSbok6gqAOCkOhOXNuxPsQw_CQa8R6mMw>
+    <xme:WcT0YzKfI_EKKzPJTuUlxRrsNULTst8SPbnQTLuAGPjIx9C7D-oupxkPec68U8Xl6
+    UEuQhHcAmUo7JUohaY>
+X-ME-Received: <xmr:WcT0Y3sMqsJE6RyHawxXdZFAM_qxz9OHuo1wuZSOs5ZIRPDa_9m4sYlmw0K5>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedggeelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
     ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludefheegvdeuvd
     dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
+    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomh
-X-ME-Proxy: <xmx:VsT0YwcpI_eFp_gvDcjIzoh3Gkl296wzfW6_kbISCESCHAFjpHobEw>
-    <xmx:VsT0Y1OGjPHW0DGM_mgJT0btLbY9_hmNEDZWaUnlqoiz6ShwTsnHmA>
-    <xmx:VsT0Y6lf7mj8u6b55gOGnfzCIw90uCn-0ah-Lt7sWoHeMw97WZF0Ug>
-    <xmx:V8T0Y-bqVB6QN1nxpXGGQ4Vh4bTK-BIZ6ssDTD1dW2ALbsuYDdmcOQ>
+X-ME-Proxy: <xmx:WcT0Y4Y-5Rl7hRjb0DYjGqlPq3qDdBMThBaSqJSCfPH11u4yA5eBmg>
+    <xmx:WcT0Y2bHkxC1r2tTqAXUEiwKBtMIlhWn83gXh2hqfnsPRxOw0XDwxg>
+    <xmx:WcT0Y8AmAJuwnzBELcYJCiNOtDVPPcVLamg36oqvvrXaOtZGicCP_Q>
+    <xmx:WcT0Y1kbbtTJBD0kGFYaM_99_P-b_apWhXxyZHCfdzjbHO-9410nTQ>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Feb 2023 08:17:09 -0500 (EST)
+ 21 Feb 2023 08:17:12 -0500 (EST)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, chenhuacai@kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 3/5] MIPS: Loongson64: smp: Correct nudge_writes usage
-Date:   Tue, 21 Feb 2023 13:16:56 +0000
-Message-Id: <20230221131658.5381-4-jiaxun.yang@flygoat.com>
+Subject: [PATCH 4/5] MIPS: Loongson64: Remove CPU_HAS_WB
+Date:   Tue, 21 Feb 2023 13:16:57 +0000
+Message-Id: <20230221131658.5381-5-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 In-Reply-To: <20230221131658.5381-1-jiaxun.yang@flygoat.com>
 References: <20230221131658.5381-1-jiaxun.yang@flygoat.com>
@@ -83,101 +83,68 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Previously every write to SMP regisers are followed by nudge_writes,
-this incures a huge performance penalty because nudge_writes involves
-SYNC, which will be globalized on chip.
+Q: Do we have really have write buffer
+A: Yes, on newer Loongson processors there is a "store fill buffer"
+   that will collect *cached* writes, on all Loongson processors
+   AXI crossbar will buffer all writes.
 
-Only set off nudge_writes when we really want other cores to see the
-result ASAP. Also replace read/write functions to relaxed version because
-we don't need extra barriers to protect against DMA.
+Q: Then why do we want to remove CPU_HAS_WB?
+A: Because CPU_HAS_WB introduces wbflush, which intends to flush
+   all write reuqests to mmio device. We won't be affected by store
+   fill buffer because it won't buffer uncached writes. And a regular
+   memory barrier is sufficient to flush crossbar write buffer.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/loongson64/smp.c | 38 ++++++++++++--------------------------
- 1 file changed, 12 insertions(+), 26 deletions(-)
+ arch/mips/Kconfig            |  1 -
+ arch/mips/loongson64/setup.c | 15 ---------------
+ 2 files changed, 16 deletions(-)
 
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index e9d91da7fe24..90c783981197 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -34,23 +34,6 @@ static void __iomem *ipi_en0_regs[16];
- static void __iomem *ipi_mailbox_buf[16];
- static uint32_t core0_c0count[NR_CPUS];
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 04a9a3889d75..04b09b82cb76 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -489,7 +489,6 @@ config MACH_LOONGSON64
+ 	select BOARD_SCACHE
+ 	select CSRC_R4K
+ 	select CEVT_R4K
+-	select CPU_HAS_WB
+ 	select FORCE_PCI
+ 	select ISA
+ 	select I8259
+diff --git a/arch/mips/loongson64/setup.c b/arch/mips/loongson64/setup.c
+index 3cd11c2b308b..257038e18779 100644
+--- a/arch/mips/loongson64/setup.c
++++ b/arch/mips/loongson64/setup.c
+@@ -6,7 +6,6 @@
+ #include <linux/export.h>
+ #include <linux/init.h>
  
--/* read a 32bit value from ipi register */
--#define loongson3_ipi_read32(addr) readl(addr)
--/* read a 64bit value from ipi register */
--#define loongson3_ipi_read64(addr) readq(addr)
--/* write a 32bit value to ipi register */
--#define loongson3_ipi_write32(action, addr)	\
--	do {					\
--		writel(action, addr);		\
--		nudge_writes();			\
--	} while (0)
--/* write a 64bit value to ipi register */
--#define loongson3_ipi_write64(action, addr)	\
--	do {					\
--		writeq(action, addr);		\
--		nudge_writes();			\
--	} while (0)
+-#include <asm/wbflush.h>
+ #include <asm/bootinfo.h>
+ #include <linux/libfdt.h>
+ #include <linux/of_fdt.h>
+@@ -17,20 +16,6 @@
+ 
+ void *loongson_fdt_blob;
+ 
+-static void wbflush_loongson(void)
+-{
+-	asm(".set\tpush\n\t"
+-	    ".set\tnoreorder\n\t"
+-	    ".set mips3\n\t"
+-	    "sync\n\t"
+-	    "nop\n\t"
+-	    ".set\tpop\n\t"
+-	    ".set mips0\n\t");
+-}
 -
- static u32 (*ipi_read_clear)(int cpu);
- static void (*ipi_write_action)(int cpu, u32 action);
- static void (*ipi_write_enable)(int cpu);
-@@ -136,26 +119,28 @@ static u32 legacy_ipi_read_clear(int cpu)
- 	u32 action;
- 
- 	/* Load the ipi register to figure out what we're supposed to do */
--	action = loongson3_ipi_read32(ipi_status0_regs[cpu_logical_map(cpu)]);
-+	action = readl_relaxed(ipi_status0_regs[cpu_logical_map(cpu)]);
- 	/* Clear the ipi register to clear the interrupt */
--	loongson3_ipi_write32(action, ipi_clear0_regs[cpu_logical_map(cpu)]);
-+	writel_relaxed(action, ipi_clear0_regs[cpu_logical_map(cpu)]);
-+	nudge_writes();
- 
- 	return action;
- }
- 
- static void legacy_ipi_write_action(int cpu, u32 action)
+-void (*__wbflush)(void) = wbflush_loongson;
+-EXPORT_SYMBOL(__wbflush);
+-
+ void __init plat_mem_setup(void)
  {
--	loongson3_ipi_write32((u32)action, ipi_set0_regs[cpu]);
-+	writel_relaxed((u32)action, ipi_set0_regs[cpu]);
-+	nudge_writes();
- }
- 
- static void legacy_ipi_write_enable(int cpu)
- {
--	loongson3_ipi_write32(0xffffffff, ipi_en0_regs[cpu_logical_map(cpu)]);
-+	writel_relaxed(0xffffffff, ipi_en0_regs[cpu_logical_map(cpu)]);
- }
- 
- static void legacy_ipi_clear_buf(int cpu)
- {
--	loongson3_ipi_write64(0, ipi_mailbox_buf[cpu_logical_map(cpu)] + 0x0);
-+	writeq_relaxed(0, ipi_mailbox_buf[cpu_logical_map(cpu)] + 0x0);
- }
- 
- static void legacy_ipi_write_buf(int cpu, struct task_struct *idle)
-@@ -171,14 +156,15 @@ static void legacy_ipi_write_buf(int cpu, struct task_struct *idle)
- 	pr_debug("CPU#%d, func_pc=%lx, sp=%lx, gp=%lx\n",
- 			cpu, startargs[0], startargs[1], startargs[2]);
- 
--	loongson3_ipi_write64(startargs[3],
-+	writeq_relaxed(startargs[3],
- 			ipi_mailbox_buf[cpu_logical_map(cpu)] + 0x18);
--	loongson3_ipi_write64(startargs[2],
-+	writeq_relaxed(startargs[2],
- 			ipi_mailbox_buf[cpu_logical_map(cpu)] + 0x10);
--	loongson3_ipi_write64(startargs[1],
-+	writeq_relaxed(startargs[1],
- 			ipi_mailbox_buf[cpu_logical_map(cpu)] + 0x8);
--	loongson3_ipi_write64(startargs[0],
-+	writeq_relaxed(startargs[0],
- 			ipi_mailbox_buf[cpu_logical_map(cpu)] + 0x0);
-+	nudge_writes();
- }
- 
- static void csr_ipi_probe(void)
+ 	if (loongson_fdt_blob)
 -- 
 2.37.1 (Apple Git-137.1)
 
