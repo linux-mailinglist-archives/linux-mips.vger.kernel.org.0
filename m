@@ -2,120 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F1069F7A2
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Feb 2023 16:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C145069F866
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Feb 2023 16:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjBVPXI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Feb 2023 10:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S232676AbjBVPzl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Feb 2023 10:55:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjBVPXH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Feb 2023 10:23:07 -0500
-Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9E91EFE1;
-        Wed, 22 Feb 2023 07:23:04 -0800 (PST)
-Received: from [10.2.12.86] (unknown [10.2.12.86])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by 7of9.schinagl.nl (Postfix) with ESMTPSA id BB40418ADB0A;
-        Wed, 22 Feb 2023 16:23:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
-        t=1677079382; bh=6ys811cYe9j7H/i56BAUWtzK7RJRsX+4S+UzwtWhGDA=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To;
-        b=LWa++/hHB80lVpGDpNIxFO2kO8iu/llMqR0MOHCBGq8rC0ywJMbq2I4tFRs+ABiz1
-         BSHHRt4rkolh4gHHapqgFNlPtSnNRJvlXPSh6lpLUNZ5SihgcuR2dMW+hSS0gdNQW+
-         5AUhKUwbGtEyC72I44hfRbJgCdjtcNn5T7oXxPn0=
-Message-ID: <c11860ec-9c9f-4929-6d1b-0cc2ffa079d1@schinagl.nl>
-Date:   Wed, 22 Feb 2023 16:23:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mips: Realtek RTL: select NO_EXCEPT_FILL
-Content-Language: nl
-From:   Olliver Schinagl <oliver@schinagl.nl>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Sander Vanheule <sander@svanheule.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230115121922.6359-1-sander@svanheule.net>
- <20230127162755.GB6090@alpha.franken.de>
- <46724036-fabf-7bae-41f8-1e95c5f1db5c@schinagl.nl>
- <20230205161929.GD4459@alpha.franken.de>
- <f9c1be9c-478e-55e8-ad34-370641181015@schinagl.nl>
- <20230217173708.GA14134@alpha.franken.de>
- <af2cdad5-ee32-7956-cd77-2a18777a3857@schinagl.nl>
- <20230219090248.GE2924@alpha.franken.de>
- <54238ab7-b7c0-a3a3-38e9-f7879866fb3c@schinagl.nl>
- <20230219103112.GA4095@alpha.franken.de>
- <8bc77a68-ec04-863e-0c46-1ea442e392ee@schinagl.nl>
-In-Reply-To: <8bc77a68-ec04-863e-0c46-1ea442e392ee@schinagl.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232686AbjBVPzk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Feb 2023 10:55:40 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA923B3FA;
+        Wed, 22 Feb 2023 07:55:35 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id BF0335C01A5;
+        Wed, 22 Feb 2023 10:55:34 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 22 Feb 2023 10:55:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677081334; x=
+        1677167734; bh=w67oEu2E19AZfAjVi0U6OotIuBhYGM6gAf2Nt5qYYBU=; b=B
+        w3Y7oWb6zR5Hy1tIOLHDPZwtv+tzKifOSl2K7jIA6SWWH8GNw7a6SDHmwQLrdBuQ
+        e/noD0F4HdYwQvk5Vk2pS/iJWAMAKVQa3omEz+Qo6kDa2hyWa/VfVyxWkDy+23zF
+        89Ytetx5+OInv03VdiNvB81vUum98r3Ig7KwaE7yfUieFQF5RMKaTvBgN+sq5idY
+        v+32DQZMj4Z4EHdoyn5qmxTYIBlHwkCsUBE0ZKb6B1NA/YDktW4EKwsUp8hDspQI
+        d0kszAiklI0yq+AfnnF322KyI4RXoH/r/PmB/MuuSVYRtaaGduYOHR/9vtQdVqf3
+        CKGtfIpym8qMcgEubu6yA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677081334; x=
+        1677167734; bh=w67oEu2E19AZfAjVi0U6OotIuBhYGM6gAf2Nt5qYYBU=; b=g
+        3z+0c2oLRO9m2vG7FYwPiirPv2tmDR4JTPz/L696D7dTzEHPcamN9tcD0242eWRn
+        VcEiGX9OXUdrHQ0tHNu0kep7ry54Km8oG2cEcoAKc6TzWldLPUH5Isg+vdLgU8OE
+        RdM6FDAIPu/ix24rWP0XaVZRBJOIRtnYmfxoLOdrNwFNwQHm9Llc9L9UZ14gTQ5L
+        KXE5n9YVunWkQgm0SDDcJ7Srz8D3EuXWYqtyCS4szzw+DC/Kdo56ne1AsHgZ1JAC
+        FvrjFVurYPQSBFUwyW9Z+9SwscA1PX9ApgNZpaY47Gc6DqoE6NuZ+CeFd+1dI33c
+        ZZpDuQXFMfP0CBsKY4k8g==
+X-ME-Sender: <xms:9Tr2Y84p9rx2_U9mTVCy2jC7J-xXkMqdYPoMPhb1i5XBdeAVv75Dzw>
+    <xme:9Tr2Y978PBRzrhsd43EZEzXxVfQjYqcFv30n8xp_v0iu2SW6drrlLFdp_2BAd7ZVV
+    caXa4xjJ_RUXy3N1rc>
+X-ME-Received: <xmr:9Tr2Y7d2LwF0HO9JahyvBZIIxVsyiyfWMKUvYHg60ZAzD3vDry8p9ORwgImmGOUh38Us>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:9Tr2YxJidY20RX6wrJ4ef8Tvw837BX92FROYlm7Yp8d__tzfADpb6A>
+    <xmx:9Tr2YwKy8vGbMO44sGnG5YM9rl5jTcLkWR2LVo2gOxPhSrXbL3sbpQ>
+    <xmx:9Tr2YywzAmdQFIOq81iYwotob1yANO2k334rmGd-und2_KtuASxoSA>
+    <xmx:9jr2Y-xoexrMS1sbQ9FyOyXs-6P7Zk_BSjXjqG6_s0lk4FJzeOuN5g>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Feb 2023 10:55:31 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH 2/3] riscv: Set dma_default_coherent to true
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <Y/YrvDBJcYUQt4WC@spud>
+Date:   Wed, 22 Feb 2023 15:55:19 +0000
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, linux-riscv@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6BBA7BEA-8595-436D-B4BF-D7DB95069C53@flygoat.com>
+References: <20230222133712.8079-1-jiaxun.yang@flygoat.com>
+ <20230222133712.8079-3-jiaxun.yang@flygoat.com> <Y/YrvDBJcYUQt4WC@spud>
+To:     Conor Dooley <conor@kernel.org>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hey Thomas,
 
-I'm digging deeper into this and understand less of it :)
 
-For one, we currently use both ioread32 (our timer driver for example) 
-and ioread32be (our GPIO driver) and thus both variants of register 
-access I would think without problems.
+> 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 14:50=EF=BC=8CConor Dooley =
+<conor@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Wed, Feb 22, 2023 at 01:37:11PM +0000, Jiaxun Yang wrote:
+>> For riscv our assumption is unless a device states it is =
+non-coherent,
+>> we take it to be DMA coherent.
+>>=20
+>> For devicetree probed devices that have been true since very begining
+>> with OF_DMA_DEFAULT_COHERENT selected.
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>> arch/riscv/kernel/setup.c | 3 +++
+>> 1 file changed, 3 insertions(+)
+>>=20
+>> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+>> index 376d2827e736..34b371180976 100644
+>> --- a/arch/riscv/kernel/setup.c
+>> +++ b/arch/riscv/kernel/setup.c
+>> @@ -300,6 +300,9 @@ void __init setup_arch(char **cmdline_p)
+>> riscv_init_cbom_blocksize();
+>> riscv_fill_hwcap();
+>> apply_boot_alternatives();
+>> +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
+>> + dma_default_coherent =3D true;
+>> +#endif
+>=20
+> Do we really need to add ifdeffery for this here?
+> It's always coherent by default, so why do we need to say set it in
+> setup_arch() when we know that, regardless of options, it is true?
 
-I also see that a few devices override? (is that possible at all) 
-mangle-port.h, though I didn't dig into this too much, just noticed some 
-other boards with those headers. Is this an option at all? just supply a 
-SoC specific mangle-port.h?
+Because this symbol is only a variable when:
 
-Loonking at mangle-port.h (and only at the 32 bit case), basically, 
-there's ioswabl and __mem_ioswabl that I should be concerned about. 
-Grepping for those functions however, only yields me one result, where  
-__relaxed_ioswabl gets defined to  __ioswabl, __mem_iosawbl is unused. 
-Even more frustrating, is that git grep also doesn't find a user for 
-__relaxed_ioswabl. I'm sure there's some non-greppable magic missing :) 
-as the failures of setting this define of course are real.
+defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
 
-So to further my search, how does this work then?
+Which is only true if  CONFIG_RISCV_DMA_NONCOHERENT is selected.
 
-Olliver
+Otherwise this symbol is defined to true and we can=E2=80=99t make a =
+assignment to it.
 
-On 19-02-2023 17:07, Olliver Schinagl wrote:
-> Hey Thomas,
->
-> On 19-02-2023 11:31, Thomas Bogendoerfer wrote:
->> On Sun, Feb 19, 2023 at 10:27:17AM +0100, Olliver Schinagl wrote:
->>> It's still odd though; as we do not have _anything_ PCI, but it
->>> SWAP_IO_SPACE causes the crash.
->> but something uses readX/write() calls. If you aren't using any driver
->> existing driver but only newly written dedicated for that SOC
->> you could use raw_read/raw_writeX() instead. These type of functions
->> are always using native endianess.
-> Ok that is valueable information. I think currently the only driver
-> (that I can think of right now) that we use 'off the shelf' is the uart
-> driver, so I hope that's written cleanly :)
->
-> As for readX/writeX, for sure that is being used, and I intended to
-> refactor that while going to proper and clean drivers (the realtek
-> support in openwrt is a big mess right now).
->
-> So you say raw_readX, but what about ioread32 which I thought was preferred?
->
-> I'll meanwhile read into what readX vs raw_readX to learn more with
-> regards to endianess.
->
-> Thank you so mcuh so far!
->
->>> What makes SWAP_IO_SPACE generic then? :)
->> als long as hardware presents memory used with readX/writeX is
->> seen as little endian independant from CPU endianess it's generic.
-> 'little endian independent'? What does that mean, that the register maps
-> follow the CPU endianess?
->
->> Thomas.
->>
+Thanks
+- Jiaxun
+
+
+>=20
+> Cheers,
+> Conor.
+>=20
+>> if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
+>>     riscv_isa_extension_available(NULL, ZICBOM))
+>> riscv_noncoherent_supported();
+>> --=20
+>> 2.37.1 (Apple Git-137.1)
+
 
