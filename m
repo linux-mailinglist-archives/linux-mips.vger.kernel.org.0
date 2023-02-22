@@ -2,157 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B8E69FA17
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Feb 2023 18:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EEA69FA99
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Feb 2023 18:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbjBVRZS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Feb 2023 12:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S231377AbjBVR6C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Feb 2023 12:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjBVRZR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Feb 2023 12:25:17 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FC6D410B1;
-        Wed, 22 Feb 2023 09:24:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 996D41063;
-        Wed, 22 Feb 2023 09:25:28 -0800 (PST)
-Received: from [10.57.16.42] (unknown [10.57.16.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE2E83F881;
-        Wed, 22 Feb 2023 09:24:43 -0800 (PST)
-Message-ID: <e9d882f4-d57d-f6b4-7ae0-bbfea0f5aa59@arm.com>
-Date:   Wed, 22 Feb 2023 17:24:36 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
+        with ESMTP id S230048AbjBVR6B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Feb 2023 12:58:01 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D013F241E8;
+        Wed, 22 Feb 2023 09:58:00 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 774765C0179;
+        Wed, 22 Feb 2023 12:57:58 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 22 Feb 2023 12:57:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677088678; x=
+        1677175078; bh=nwLpEjWmPs3D70+3STrydy7bvzs4kmjkM2HWhBxwqA4=; b=j
+        ikmgFtpuxcvGFE3qLG9zGDa67/AhicEIaxG3nROOylRG77UraKUHrKHE4w0DkqCN
+        juLgoFbkmxEUvlgTPLkhRcIfocLwQ6rYblkMYvB767KjwC2R72bJ/mntoP7Mu06U
+        01SVQ7azBcy8yh8Usc3r4O9rM+5y8iSk4FjpTjK9OUET8LAT2jgNVFhkVNd2bFpG
+        WtAHzyW3z+GpKcPVxYEwL6fKI3djbcCtCB+1407xPzdsqdCqpqo4JjTvWKTYZovZ
+        D/ynxL5ek8xImyl1sMZv1P4tydrJoM9BGbMP6AQ+90SlNhjqGx3nkxYVSvtRJaSX
+        a09azk2gcGDSrgt4qacaA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677088678; x=
+        1677175078; bh=nwLpEjWmPs3D70+3STrydy7bvzs4kmjkM2HWhBxwqA4=; b=F
+        1WqK9/ULyFs4gxOGhyvCmiJIQB3mGUP18D7cWzo1zWxHL1pWVzaBXJQBpP2/pYVw
+        mmt2W9b6KHDtXmOC7SmwehKJO4vQKLiA8J33wetjZme0BDi6w8GTTFW6YnLp8jOv
+        Z5bvi7H8rtZDtMsGxQurQZMQzpbD6ysgyuJgbt5nRJKkmAPByAlbi249wFnGjk1e
+        st0tyo6nbYf5TAkZXd59fuvxuOUasD7yQJyMkPlI4wyvKnu/DLCt7VFJU1b15rmE
+        yzi0lZA00myG3rVP44ujENo9lFlCJMLct6pPu3EgEU84xGSdrZRPIXeeA+xnCwVC
+        WRD4q2Egwg2PXv4La+Ewg==
+X-ME-Sender: <xms:pVf2Yzx8OrQqCZ0sOnDXREkTOheOAE0JcfVq1ZutGu1XPMZnuzSGWw>
+    <xme:pVf2Y7Tpyh8Ajut76gG4bVgfgl2kyimD5FMoTAJchnC78gsU6Avt3cN9Gy62Vsu07
+    vLH7onUHnxeqj30AGo>
+X-ME-Received: <xmr:pVf2Y9WRrVgvM0qGmbtV2Tdkf6Z_FgWSLNhnBkLRdSo_LxZidN0vUJQ7fb9fGL4lF-3_>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
+    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
+    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:pVf2Y9jhKx6uMWMcE7nOTDP86zbRG4nuGBKhwOTVk-hAypdTn0-d7A>
+    <xmx:pVf2Y1D9-gQ2sodvvOhtRVec4qTLdZ-EYxDa1iDfW1muxI-TTh9E5w>
+    <xmx:pVf2Y2JXGgWxYdnIBo1a9TApluAVvgnGtcOCiKd4dMOrAK0SEp3lZg>
+    <xmx:plf2Y56DW5KT5B5mFPh4C-TOYY2smqCXhc4nxf8Om2SRBXv__88Xxg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Feb 2023 12:57:55 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
 Subject: Re: [PATCH 3/3] of: address: Use dma_default_coherent to determine
  default coherency
-Content-Language: en-GB
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, robh+dt@kernel.org,
-        hch@lst.de, m.szyprowski@samsung.com,
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <e9d882f4-d57d-f6b4-7ae0-bbfea0f5aa59@arm.com>
+Date:   Wed, 22 Feb 2023 17:57:44 +0000
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
         linux-riscv@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3E55E1F7-7A34-4165-9BF4-C2AAF6A6CFC1@flygoat.com>
 References: <20230222133712.8079-1-jiaxun.yang@flygoat.com>
  <20230222133712.8079-4-jiaxun.yang@flygoat.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230222133712.8079-4-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <e9d882f4-d57d-f6b4-7ae0-bbfea0f5aa59@arm.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2023-02-22 13:37, Jiaxun Yang wrote:
-> As for now all arches have dma_default_coherent matched with default
-> DMA coherency for of devices, so there is no need to have a standalone
-> config option.
-> 
-> This also fixes a case that for some MIPS platforms, coherency information
-> is not carried in devicetree and kernel will override dma_default_coherent
-> at early boot.
-> 
-> Note for PowerPC: CONFIG_OF_DMA_DEFUALT_COHERENT was only selected when
-> CONFIG_NOT_COHERENT_CACHE is false, in this case dma_default_coherent will
-> be true, so it still matches present behavior.
-> 
-> Note for RISC-V: dma_default_coherent is set to true at init code in this
-> series.
 
-OK, so the fundamental problem here is that we have two slightly 
-different conflicting mechanisms, the ex-PowerPC config option, and the 
-ex-MIPS dma_default_coherent for which of_dma_is_coherent() has 
-apparently been broken forever.
 
-I'd agree that it's worth consolidating the two, but please separate out 
-the fix as below, so it's feasible to backport without having to muck 
-about in arch code.
+> 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 17:24=EF=BC=8CRobin Murphy =
+<robin.murphy@arm.com> =E5=86=99=E9=81=93=EF=BC=9A
 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->   arch/powerpc/Kconfig | 1 -
->   arch/riscv/Kconfig   | 1 -
->   drivers/of/Kconfig   | 4 ----
->   drivers/of/address.c | 2 +-
->   4 files changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 2c9cdf1d8761..c67e5da714f7 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -272,7 +272,6 @@ config PPC
->   	select NEED_PER_CPU_PAGE_FIRST_CHUNK	if PPC64
->   	select NEED_SG_DMA_LENGTH
->   	select OF
-> -	select OF_DMA_DEFAULT_COHERENT		if !NOT_COHERENT_CACHE
->   	select OF_EARLY_FLATTREE
->   	select OLD_SIGACTION			if PPC32
->   	select OLD_SIGSUSPEND
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 1d46a268ce16..406c6816d289 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -119,7 +119,6 @@ config RISCV
->   	select MODULES_USE_ELF_RELA if MODULES
->   	select MODULE_SECTIONS if MODULES
->   	select OF
-> -	select OF_DMA_DEFAULT_COHERENT
->   	select OF_EARLY_FLATTREE
->   	select OF_IRQ
->   	select PCI_DOMAINS_GENERIC if PCI
-> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> index 644386833a7b..e40f10bf2ba4 100644
-> --- a/drivers/of/Kconfig
-> +++ b/drivers/of/Kconfig
-> @@ -102,8 +102,4 @@ config OF_OVERLAY
->   config OF_NUMA
->   	bool
->   
-> -config OF_DMA_DEFAULT_COHERENT
-> -	# arches should select this if DMA is coherent by default for OF devices
-> -	bool
-> -
->   endif # OF
-> diff --git a/drivers/of/address.c b/drivers/of/address.c
-> index 4c0b169ef9bf..23ade4919853 100644
-> --- a/drivers/of/address.c
-> +++ b/drivers/of/address.c
-> @@ -1103,7 +1103,7 @@ phys_addr_t __init of_dma_get_max_cpu_address(struct device_node *np)
->   bool of_dma_is_coherent(struct device_node *np)
->   {
->   	struct device_node *node;
-> -	bool is_coherent = IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT);
-> +	bool is_coherent = dma_default_coherent;
+[...]
 
-AFAICS, all you should actually need is a single self-contained addition 
-here, something like:
+>=20
+> AFAICS, all you should actually need is a single self-contained =
+addition here, something like:
+>=20
+> + /*
+> +  * DT-based MIPS doesn't use OF_DMA_DEFAULT_COHERENT, but
+> +  * might override the system-wide default at runtime.
+> +  */
+> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+> + defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+> + defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
+> + is_coherent =3D dma_default_coherent;
+> +#endif
 
-+	/*
-+	 * DT-based MIPS doesn't use OF_DMA_DEFAULT_COHERENT, but
-+	 * might override the system-wide default at runtime.
-+	 */
-+#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-+	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-+	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
-+	is_coherent = dma_default_coherent;
-+#endif
+That makes more sense, thanks.
+I=E2=80=99ll append CONFIG_MIPS as a condition here as well because it =
+may break RISC-V whose dma_default_coherent
+is not set to true from very beginning.
 
->   
->   	node = of_node_get(np);
->   
+>=20
+>>     node =3D of_node_get(np);
+>> =20
+>=20
+> Then *after* that's fixed, we can do a more comprehensive refactoring =
+to merge the two mechanisms properly. FWIW I think I'd prefer an =
+approach closer to the first one, where config options control the =
+initial value of dma_default_coherent rather than architectures having =
+to override it unconditionally (and TBH I'd also like to have a generic =
+config symbol for whether an arch supports per-device coherency or not).
 
-Then *after* that's fixed, we can do a more comprehensive refactoring to 
-merge the two mechanisms properly. FWIW I think I'd prefer an approach 
-closer to the first one, where config options control the initial value 
-of dma_default_coherent rather than architectures having to override it 
-unconditionally (and TBH I'd also like to have a generic config symbol 
-for whether an arch supports per-device coherency or not).
+Ok I=E2=80=99ll try to revert to the initial way.
+Is there any reason that an arch can=E2=80=99t support per-device =
+coherency?
 
-Thanks,
-Robin.
+Thanks
+- Jiaxun
+
+
+>=20
+> Thanks,
+> Robin.
+
+
