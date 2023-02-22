@@ -2,144 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EEA69FA99
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Feb 2023 18:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E74D69FB05
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Feb 2023 19:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjBVR6C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Feb 2023 12:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
+        id S229598AbjBVSan (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Feb 2023 13:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjBVR6B (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Feb 2023 12:58:01 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D013F241E8;
-        Wed, 22 Feb 2023 09:58:00 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 774765C0179;
-        Wed, 22 Feb 2023 12:57:58 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 22 Feb 2023 12:57:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677088678; x=
-        1677175078; bh=nwLpEjWmPs3D70+3STrydy7bvzs4kmjkM2HWhBxwqA4=; b=j
-        ikmgFtpuxcvGFE3qLG9zGDa67/AhicEIaxG3nROOylRG77UraKUHrKHE4w0DkqCN
-        juLgoFbkmxEUvlgTPLkhRcIfocLwQ6rYblkMYvB767KjwC2R72bJ/mntoP7Mu06U
-        01SVQ7azBcy8yh8Usc3r4O9rM+5y8iSk4FjpTjK9OUET8LAT2jgNVFhkVNd2bFpG
-        WtAHzyW3z+GpKcPVxYEwL6fKI3djbcCtCB+1407xPzdsqdCqpqo4JjTvWKTYZovZ
-        D/ynxL5ek8xImyl1sMZv1P4tydrJoM9BGbMP6AQ+90SlNhjqGx3nkxYVSvtRJaSX
-        a09azk2gcGDSrgt4qacaA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677088678; x=
-        1677175078; bh=nwLpEjWmPs3D70+3STrydy7bvzs4kmjkM2HWhBxwqA4=; b=F
-        1WqK9/ULyFs4gxOGhyvCmiJIQB3mGUP18D7cWzo1zWxHL1pWVzaBXJQBpP2/pYVw
-        mmt2W9b6KHDtXmOC7SmwehKJO4vQKLiA8J33wetjZme0BDi6w8GTTFW6YnLp8jOv
-        Z5bvi7H8rtZDtMsGxQurQZMQzpbD6ysgyuJgbt5nRJKkmAPByAlbi249wFnGjk1e
-        st0tyo6nbYf5TAkZXd59fuvxuOUasD7yQJyMkPlI4wyvKnu/DLCt7VFJU1b15rmE
-        yzi0lZA00myG3rVP44ujENo9lFlCJMLct6pPu3EgEU84xGSdrZRPIXeeA+xnCwVC
-        WRD4q2Egwg2PXv4La+Ewg==
-X-ME-Sender: <xms:pVf2Yzx8OrQqCZ0sOnDXREkTOheOAE0JcfVq1ZutGu1XPMZnuzSGWw>
-    <xme:pVf2Y7Tpyh8Ajut76gG4bVgfgl2kyimD5FMoTAJchnC78gsU6Avt3cN9Gy62Vsu07
-    vLH7onUHnxeqj30AGo>
-X-ME-Received: <xmr:pVf2Y9WRrVgvM0qGmbtV2Tdkf6Z_FgWSLNhnBkLRdSo_LxZidN0vUJQ7fb9fGL4lF-3_>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejledguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:pVf2Y9jhKx6uMWMcE7nOTDP86zbRG4nuGBKhwOTVk-hAypdTn0-d7A>
-    <xmx:pVf2Y1D9-gQ2sodvvOhtRVec4qTLdZ-EYxDa1iDfW1muxI-TTh9E5w>
-    <xmx:pVf2Y2JXGgWxYdnIBo1a9TApluAVvgnGtcOCiKd4dMOrAK0SEp3lZg>
-    <xmx:plf2Y56DW5KT5B5mFPh4C-TOYY2smqCXhc4nxf8Om2SRBXv__88Xxg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Feb 2023 12:57:55 -0500 (EST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH 3/3] of: address: Use dma_default_coherent to determine
- default coherency
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <e9d882f4-d57d-f6b4-7ae0-bbfea0f5aa59@arm.com>
-Date:   Wed, 22 Feb 2023 17:57:44 +0000
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        with ESMTP id S232127AbjBVSal (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Feb 2023 13:30:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEEF3C7BF;
+        Wed, 22 Feb 2023 10:30:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0270B81233;
+        Wed, 22 Feb 2023 18:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD7B6C433EF;
+        Wed, 22 Feb 2023 18:30:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677090637;
+        bh=JnUZuH1esjrp1GlU9kN3wYCVcbLioydsVEkddTaeMXY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fRg/4GZ9KB2rS2K0VHFITqEinzX0LuqhZ1sVveL/g9D/IJaLoMLxJG3AY0R8V5Neu
+         eM6ug9NRvSvRCtgGcKNS4jtDE2ZyAGu42vKfq8Zd59KC8J1MgRocKjmY74q0/HWuOo
+         3qyu1ZCszdAJOf0NSmKp+VSBlGdSj/qSLRBQIasg3QtVrcwBykgOep9+Oty2I9+AUb
+         zwcS4lJ0W20t1trvUJdtJS6DMhkm65rC59pRzs7w2IOhMfyOMPtTsf+lazPf0PvVF0
+         icFi4czUiIA19Fqy2W6fy+qpyTj7YEAvraz3Bde9NhVvW2cAxJ4lbbhtcOcM5/j3Zv
+         6xm19U4BTD7gA==
+Message-ID: <76bc79c9-a892-c43e-1f49-d07b54f52c90@kernel.org>
+Date:   Wed, 22 Feb 2023 19:30:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] dt-bindings: display: Add Loongson display controller
+Content-Language: en-US
+To:     suijingfeng <suijingfeng@loongson.cn>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
-        linux-riscv@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3E55E1F7-7A34-4165-9BF4-C2AAF6A6CFC1@flygoat.com>
-References: <20230222133712.8079-1-jiaxun.yang@flygoat.com>
- <20230222133712.8079-4-jiaxun.yang@flygoat.com>
- <e9d882f4-d57d-f6b4-7ae0-bbfea0f5aa59@arm.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230222165514.684729-1-suijingfeng@loongson.cn>
+ <20230222165514.684729-2-suijingfeng@loongson.cn>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230222165514.684729-2-suijingfeng@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 22/02/2023 17:55, suijingfeng wrote:
+> This patch add a trival DT usages for loongson display controller found
+> in LS2k1000 SoC.
+
+Trivial yet so many things to improve... if you only started from recent
+kernel tree (since you Cced wrong address, I doubt you did) and bindings
+you would avoid half of these comments.
+
+> 
+> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+> ---
+>  .../loongson/loongson,display-controller.yaml | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> new file mode 100644
+> index 000000000000..98b78f449a80
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+
+Filename based on compatible, so "loongson,ls2k1000-dc.yaml"
+
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
 
 
-> 2023=E5=B9=B42=E6=9C=8822=E6=97=A5 17:24=EF=BC=8CRobin Murphy =
-<robin.murphy@arm.com> =E5=86=99=E9=81=93=EF=BC=9A
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson Display Controller Device Tree Bindings
 
-[...]
+Drop "Device Tree Bindings"
 
->=20
-> AFAICS, all you should actually need is a single self-contained =
-addition here, something like:
->=20
-> + /*
-> +  * DT-based MIPS doesn't use OF_DMA_DEFAULT_COHERENT, but
-> +  * might override the system-wide default at runtime.
-> +  */
-> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-> + defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-> + defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
-> + is_coherent =3D dma_default_coherent;
-> +#endif
+> +
+> +maintainers:
+> +  - Sui Jingfeng <suijingfeng@loongson.cn>
+> +
+> +description: |+
 
-That makes more sense, thanks.
-I=E2=80=99ll append CONFIG_MIPS as a condition here as well because it =
-may break RISC-V whose dma_default_coherent
-is not set to true from very beginning.
+Drop |+
 
->=20
->>     node =3D of_node_get(np);
->> =20
->=20
-> Then *after* that's fixed, we can do a more comprehensive refactoring =
-to merge the two mechanisms properly. FWIW I think I'd prefer an =
-approach closer to the first one, where config options control the =
-initial value of dma_default_coherent rather than architectures having =
-to override it unconditionally (and TBH I'd also like to have a generic =
-config symbol for whether an arch supports per-device coherency or not).
+> +
 
-Ok I=E2=80=99ll try to revert to the initial way.
-Is there any reason that an arch can=E2=80=99t support per-device =
-coherency?
+No need for blank line. Do you see it anywhere else in the bindings?
 
-Thanks
-- Jiaxun
+> +  The display controller is a PCI device, it has two display pipe.
+> +  For the DC in LS2K1000 each way has a DVO output interface which
+> +  provide RGB888 signals, vertical & horizontal synchronisations
+> +  and the pixel clock. Each CRTC is able to support 1920x1080@60Hz,
+> +  the maximum resolution is 2048x2048 according to the hardware spec.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
 
+Drop nodename.
 
->=20
-> Thanks,
-> Robin.
+> +
+> +  compatible:
+> +    oneOf:
 
+Drop oneOf
+
+> +      - items:
+
+and items...
+
+> +          - enum:
+> +              - loongson,ls2k1000-dc
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    bus {
+> +
+
+Drop blank line.
+
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +        #interrupt-cells = <2>;
+
+Why do you need interrupt-cells?
+
+> +
+> +        display-controller@6,0 {
+> +            compatible = "loongson,ls2k1000-dc";
+> +            reg = <0x3000 0x0 0x0 0x0 0x0>;> +            interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
+> +        };
+> +    };
+> +
+> +...
+
+Best regards,
+Krzysztof
 
