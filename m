@@ -2,139 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872C36A05A4
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 11:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9A26A05AF
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 11:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbjBWKJP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Feb 2023 05:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S233478AbjBWKKc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Feb 2023 05:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjBWKJN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 05:09:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31D842BDD;
-        Thu, 23 Feb 2023 02:09:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 151FEB819A1;
-        Thu, 23 Feb 2023 10:09:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E63C433EF;
-        Thu, 23 Feb 2023 10:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677146948;
-        bh=ltP+sqQ59O17JJFCXy0EhCXvNdKIgKqIbNAMj0PypVw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YCi0EnFWBDgzKvrjBRjBgH8/MnsbEY22udCE488IaaU5CiIrwnq+kcdKiQ7m4yXDJ
-         3HEOtZMpgb8byjEoyQW/WSK0uToHXdI0nSTTYsLzaVomssyj9Q9lXwyO70VMHnRTiG
-         9I8Jc0MrU3BiPWt7cxlRfuY2rdyxiCyH9BWpYfEZAZDYWQv+XowV6NV+bJqLOhahMd
-         3rvGyqugMiVIXAcrMBiKwJzSgQKzw1t2P1/qu8gz5h3pltg5NFzHHBWATG8yi+Ahf0
-         80JxzFBZT2Xv/ZV7VUqzFLUglxf+Bm/vDQd41ZGKujeE9JzrPYY6NMT7QfQCyghg0q
-         tJfUs83Nm8A3g==
-Message-ID: <bc67a5c3-a844-472a-74bf-f08f49ca99bb@kernel.org>
-Date:   Thu, 23 Feb 2023 11:09:01 +0100
+        with ESMTP id S233704AbjBWKK3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 05:10:29 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E40515E9
+        for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 02:10:18 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id qi12-20020a17090b274c00b002341621377cso12050756pjb.2
+        for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 02:10:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q8pTyXMbqgjmHwENw9d+YaYdxp8SYMRKyJFLzvCwDT8=;
+        b=pr+OJuJc0aIQruCQBm/G/I0SmMi+9ve74/N02LFBP2SF9YF1UCP9B0lIgbsJQ7wdZz
+         RT9/2kaH0WUYA1nfmPjFddcx8OY7O5EndTfpmV0+lZsEVYSMrkP7VcYZtGWC8rbqSYsB
+         LhfUz5KB1QoRcvaHPPxKWlUww2/C5cj3ApuLobKu5JmhQkgoirvXRIT9MBnYSQZuJIti
+         vAmxndH/YLCvSjNSEgbodAt0gyY2dp6SYvfhmqAobI4nqmYYAOBqgvK4Hms6q/xsa7dZ
+         CSwKzq0ivytwyXfzyUhQPm8jehE/P18C+7osTa5kwBDthfy8UPebUW3q+gtExz2VVyzn
+         d2uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q8pTyXMbqgjmHwENw9d+YaYdxp8SYMRKyJFLzvCwDT8=;
+        b=cxnlZiPkUVaa7x5XeBc7mbelDjdq+g1zlbIxUfSuseUPMmK+yFMW3gIvNd3w3BuzfP
+         0fvfYesGWwBadKpPSTQOMj/aIUqt/2OnMH8CrL1dpo8ezHAYL/cEKlckhJV30w/tKTXw
+         7b5BsWSHyexBcsWxvABComDL3WIEUqjbw4GRZsfhPEXM6PT+pZeeh0G4/9Plu8LCnWdl
+         LCqEu1EMgMgz8iCuhL9VSiswvISHx5OZgXhjSEHQVd1SwJZ3Hegjt+gVz8p39YoeepPb
+         lfFKj8qm26y5Ml+J4yq9pHbnL2/RwbbeCczr3uV4foUMlxblAGjjgd+QwyLIRxhOc4VT
+         jRow==
+X-Gm-Message-State: AO0yUKXw39xXFoLgCsNBzhv/IyL55nOPZs4DBch7p5r6VC8hFQXaGPv9
+        OqfN6ViQ/vVSUv0ae2u+b5TAPJSqQ3kXRibMGMp0oiDL0VqCx4LPKE4=
+X-Google-Smtp-Source: AK7set/yNWJYaO4UBy+wk5SROh+wtuNxdnuOXVrvBeF3/ECsNSOG69Dgi0lLlVMfqwUfcoUOs63KHq0HprhgR9E35jc=
+X-Received: by 2002:a17:90b:384d:b0:237:50b6:983c with SMTP id
+ nl13-20020a17090b384d00b0023750b6983cmr1044697pjb.116.1677147018158; Thu, 23
+ Feb 2023 02:10:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] dt-bindings: display: Add Loongson display controller
-To:     suijingfeng <suijingfeng@loongson.cn>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <20230222161222.11879-1-jiaxun.yang@flygoat.com> <20230222161222.11879-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230222161222.11879-2-jiaxun.yang@flygoat.com>
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date:   Thu, 23 Feb 2023 11:10:07 +0100
+Message-ID: <CAM1=_QQRmTaAnn0w6wteQ_FKgoF=vGX_okfbiUHdyUB0ZzNghQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: ebpf jit: Implement DADDI workarounds
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230222165514.684729-1-suijingfeng@loongson.cn>
- <20230222165514.684729-2-suijingfeng@loongson.cn>
- <76bc79c9-a892-c43e-1f49-d07b54f52c90@kernel.org>
- <84796070-7740-eb69-65c0-9a3d8e464a0f@loongson.cn>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <84796070-7740-eb69-65c0-9a3d8e464a0f@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        tsbogend@alpha.franken.de, paulburton@kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23/02/2023 10:51, suijingfeng wrote:
->>> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>> new file mode 100644
->>> index 000000000000..98b78f449a80
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> Filename based on compatible, so "loongson,ls2k1000-dc.yaml"
-> 
-> what if we have more than one SoC,
-> 
-> we have  loongson,ls2k1000-dc, loongson,ls2k2000-dc and loongson,ls2k0500-dc
-> 
-> we will have loongson,ls2k3000-dc in the future, then how should i write 
-> this?
+On Wed, Feb 22, 2023 at 5:12 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> For DADDI errata we just workaround by disable immediate operation
+> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
 
-Then it is fine.
+Good, this is an elegant solution to trigger fallback to the
+register-only operation. Does the DADDI errata only affect the DADDIU,
+not DADDI?
 
-> 
-> I want a single file yaml file include them all.
-> 
-> I'm asking because we don't know which method is good, write three piece 
-> of yaml or just one.
-> 
-> Just tell me how to write this, i will follow you instruction.
-> 
->>> @@ -0,0 +1,58 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
->>>
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Loongson Display Controller Device Tree Bindings
->> Drop "Device Tree Bindings"
-> OK,
->>> +
->>> +maintainers:
->>> +  - Sui Jingfeng <suijingfeng@loongson.cn>
->>> +
->>> +description: |+
->> Drop |+
->>
->>> +
->> No need for blank line. Do you see it anywhere else in the bindings?
-> OK, acceptable.
->>> +  The display controller is a PCI device, it has two display pipe.
->>> +  For the DC in LS2K1000 each way has a DVO output interface which
->>> +  provide RGB888 signals, vertical & horizontal synchronisations
->>> +  and the pixel clock. Each CRTC is able to support 1920x1080@60Hz,
->>> +  the maximum resolution is 2048x2048 according to the hardware spec.
->>> +
->>> +properties:
->>> +  $nodename:
->>> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
->> Drop nodename.
-> 
-> Are you sure about this?  When i  write this property, I'm reference the 
-> ingenic,lcd.yaml .
-> 
-> ingenic,lcd.yaml has nodename too.
-> 
-> If I delete $nodename, then the test results say 
-> '^display-controller@[0-9a-f],[0-9a-f]$'  is not of type 'object'.
-> 
-> log is pasted at below.
+>
+> All other use cases in JIT won't cause overflow thus they are all safe.
 
-I meant, drop entire nodename and pattern.
+There are quite a few other places where DADDIU is emitted. How do you
+know those are safe? I am interested in your reasoning here, as I
+don't know what would be safe and not.
 
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/Kconfig            | 1 -
+>  arch/mips/net/bpf_jit_comp.c | 8 ++++++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 37072e15b263..df0910e3895c 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -64,7 +64,6 @@ config MIPS
+>         select HAVE_DMA_CONTIGUOUS
+>         select HAVE_DYNAMIC_FTRACE
+>         select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+> -                               !CPU_DADDI_WORKAROUNDS && \
+>                                 !CPU_R4000_WORKAROUNDS && \
+>                                 !CPU_R4400_WORKAROUNDS
+>         select HAVE_EXIT_THREAD
+> diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
+> index b17130d510d4..7110a6687f7a 100644
+> --- a/arch/mips/net/bpf_jit_comp.c
+> +++ b/arch/mips/net/bpf_jit_comp.c
+> @@ -218,9 +218,17 @@ bool valid_alu_i(u8 op, s32 imm)
+>                 /* All legal eBPF values are valid */
+>                 return true;
+>         case BPF_ADD:
+> +#ifdef CONFIG_64BIT
 
+DADDI/DADDIU are only available on 64-bit CPUs, so the errata would
+only be applicable to that. No need for the CONFIG_64BIT conditional.
 
-Best regards,
-Krzysztof
-
+> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> +                       return false;
+> +#endif
+>                 /* imm must be 16 bits */
+>                 return imm >= -0x8000 && imm <= 0x7fff;
+>         case BPF_SUB:
+> +#ifdef CONFIG_64BIT
+> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> +                       return false;
+> +#endif
+>                 /* -imm must be 16 bits */
+>                 return imm >= -0x7fff && imm <= 0x8000;
+>         case BPF_AND:
+> --
+> 2.37.1 (Apple Git-137.1)
+>
