@@ -2,62 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9A26A05AF
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 11:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CDA6A0603
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 11:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbjBWKKc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Feb 2023 05:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S233092AbjBWKXJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Feb 2023 05:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbjBWKK3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 05:10:29 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E40515E9
-        for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 02:10:18 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id qi12-20020a17090b274c00b002341621377cso12050756pjb.2
-        for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 02:10:18 -0800 (PST)
+        with ESMTP id S234224AbjBWKW7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 05:22:59 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058613AB0
+        for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 02:22:55 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id oe18-20020a17090b395200b00236a0d55d3aso12039128pjb.3
+        for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 02:22:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=q8pTyXMbqgjmHwENw9d+YaYdxp8SYMRKyJFLzvCwDT8=;
-        b=pr+OJuJc0aIQruCQBm/G/I0SmMi+9ve74/N02LFBP2SF9YF1UCP9B0lIgbsJQ7wdZz
-         RT9/2kaH0WUYA1nfmPjFddcx8OY7O5EndTfpmV0+lZsEVYSMrkP7VcYZtGWC8rbqSYsB
-         LhfUz5KB1QoRcvaHPPxKWlUww2/C5cj3ApuLobKu5JmhQkgoirvXRIT9MBnYSQZuJIti
-         vAmxndH/YLCvSjNSEgbodAt0gyY2dp6SYvfhmqAobI4nqmYYAOBqgvK4Hms6q/xsa7dZ
-         CSwKzq0ivytwyXfzyUhQPm8jehE/P18C+7osTa5kwBDthfy8UPebUW3q+gtExz2VVyzn
-         d2uA==
+        bh=8XdgTiTQNQEwsXE5pqovlVd84glWLCGpX2xXzua3LWo=;
+        b=VSUKpsgMMB3wW4V/PL/BsM/fogLl/13whlKI52Bd29FJSvDxaM+KHBEcBBJ0lf2Skt
+         s94Hco/mdtp9QSRaDMDdC2xam7ldKj1iYv0lWMBTkhBXalm3gBd0+C7/OeQ7vuVPb4Jr
+         sqFGryW442ZIWkxq/nTLDXmlX36nsrmzua2/sgzayKhVIIH9dZlQ3/b1ekO6AuOIFoQl
+         eb2tVsGAzmwNJQ6/eMSuWIym51Pma27tVy+R7RMCSvgU0zW8z/VSM3mcD75AwnsSlm3D
+         i7GwpYj1gyabBmXQP4sObtEh909yV64c1/GhKjjqFZhNeuD1BBIdSCAsVHSW0qQ19/QG
+         bxsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=q8pTyXMbqgjmHwENw9d+YaYdxp8SYMRKyJFLzvCwDT8=;
-        b=cxnlZiPkUVaa7x5XeBc7mbelDjdq+g1zlbIxUfSuseUPMmK+yFMW3gIvNd3w3BuzfP
-         0fvfYesGWwBadKpPSTQOMj/aIUqt/2OnMH8CrL1dpo8ezHAYL/cEKlckhJV30w/tKTXw
-         7b5BsWSHyexBcsWxvABComDL3WIEUqjbw4GRZsfhPEXM6PT+pZeeh0G4/9Plu8LCnWdl
-         LCqEu1EMgMgz8iCuhL9VSiswvISHx5OZgXhjSEHQVd1SwJZ3Hegjt+gVz8p39YoeepPb
-         lfFKj8qm26y5Ml+J4yq9pHbnL2/RwbbeCczr3uV4foUMlxblAGjjgd+QwyLIRxhOc4VT
-         jRow==
-X-Gm-Message-State: AO0yUKXw39xXFoLgCsNBzhv/IyL55nOPZs4DBch7p5r6VC8hFQXaGPv9
-        OqfN6ViQ/vVSUv0ae2u+b5TAPJSqQ3kXRibMGMp0oiDL0VqCx4LPKE4=
-X-Google-Smtp-Source: AK7set/yNWJYaO4UBy+wk5SROh+wtuNxdnuOXVrvBeF3/ECsNSOG69Dgi0lLlVMfqwUfcoUOs63KHq0HprhgR9E35jc=
+        bh=8XdgTiTQNQEwsXE5pqovlVd84glWLCGpX2xXzua3LWo=;
+        b=n17nYVCCEOJNGuC9tLIqUJJgr1ZDkT1FWiwCjP8zz46i1o5cZCYdwJh+vsp3SfEtsq
+         attKiq2Qb4RfU8SyZdELuHWmczejj4t6I2LzpRz6MQOr6/Cdu4DHxAHoD4M/iNTMD/Iq
+         jAOzb6PxVPwhJVKTh+9jddCfMy33piYxoiU1JcVZdtZ8C7u+vAmIP5gC26pFjDSeY72B
+         KshKj3yCjshGLz9Q1/ZFlck+48rz212L84fGO9WjMWz1Ewdglz5D05sRr9V4ElpX7VEd
+         X1jibYQcIUntnWv9S4hsmvnpLUsqJeCf0UOHyC6Y3jvynrADGxJDnvUaWpEccidKx7sT
+         k/4g==
+X-Gm-Message-State: AO0yUKVWB37dB3EYDDR42LB8UH1rtqS/UuNBeUAMGJ19jIUOINbCYl53
+        nS8c6TNYExFqCJU8EO8+lbde09Oarg+VIXKwdjD+I6LDeLF2rqRiSQJrmA==
+X-Google-Smtp-Source: AK7set9I0Pd1vzjhdIfJFuY1Qt1ZAEkjuKoYDYuiisbN1VUQrOG44GsRAR3GmjhiWJl7kyBTulghkDn8DFnffgIEDVs=
 X-Received: by 2002:a17:90b:384d:b0:237:50b6:983c with SMTP id
- nl13-20020a17090b384d00b0023750b6983cmr1044697pjb.116.1677147018158; Thu, 23
- Feb 2023 02:10:18 -0800 (PST)
+ nl13-20020a17090b384d00b0023750b6983cmr1056123pjb.116.1677147774407; Thu, 23
+ Feb 2023 02:22:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20230222161222.11879-1-jiaxun.yang@flygoat.com> <20230222161222.11879-2-jiaxun.yang@flygoat.com>
-In-Reply-To: <20230222161222.11879-2-jiaxun.yang@flygoat.com>
+References: <20230222161222.11879-1-jiaxun.yang@flygoat.com> <20230222161222.11879-3-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230222161222.11879-3-jiaxun.yang@flygoat.com>
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Thu, 23 Feb 2023 11:10:07 +0100
-Message-ID: <CAM1=_QQRmTaAnn0w6wteQ_FKgoF=vGX_okfbiUHdyUB0ZzNghQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] MIPS: ebpf jit: Implement DADDI workarounds
+Date:   Thu, 23 Feb 2023 11:22:43 +0100
+Message-ID: <CAM1=_QTDkYJANgxYwkgPZB+hUX6Rr_Pvnn7cFwSJFHQtLrpQMA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] MIPS: ebpf jit: Implement R4000 workarounds
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         tsbogend@alpha.franken.de, paulburton@kernel.org,
         bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
@@ -70,65 +70,89 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Wed, Feb 22, 2023 at 5:12 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> For DADDI errata we just workaround by disable immediate operation
-> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
-
-Good, this is an elegant solution to trigger fallback to the
-register-only operation. Does the DADDI errata only affect the DADDIU,
-not DADDI?
-
+> For R4000 erratas around multiplication and division instructions,
+> as our use of those instructions are always followed by mflo/mfhi
+> instructions, the only issue we need care is
 >
-> All other use cases in JIT won't cause overflow thus they are all safe.
-
-There are quite a few other places where DADDIU is emitted. How do you
-know those are safe? I am interested in your reasoning here, as I
-don't know what would be safe and not.
-
+> "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0" Errata 28:
+> "A double-word or a variable shift may give an incorrect result if
+> executed while an integer multiplication is in progress."
+>
+> We just emit a mfhi $0 to ensure the operation is completed after
+> every multiplication instruction accorading to workaround suggestion
+> in the document.
 >
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  arch/mips/Kconfig            | 1 -
->  arch/mips/net/bpf_jit_comp.c | 8 ++++++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
+>  arch/mips/Kconfig              | 4 +---
+>  arch/mips/net/bpf_jit_comp32.c | 4 ++++
+>  arch/mips/net/bpf_jit_comp64.c | 3 +++
+>  3 files changed, 8 insertions(+), 3 deletions(-)
 >
 > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 37072e15b263..df0910e3895c 100644
+> index df0910e3895c..5ea07c833c5b 100644
 > --- a/arch/mips/Kconfig
 > +++ b/arch/mips/Kconfig
-> @@ -64,7 +64,6 @@ config MIPS
+> @@ -63,9 +63,7 @@ config MIPS
+>         select HAVE_DEBUG_STACKOVERFLOW
 >         select HAVE_DMA_CONTIGUOUS
 >         select HAVE_DYNAMIC_FTRACE
->         select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
-> -                               !CPU_DADDI_WORKAROUNDS && \
->                                 !CPU_R4000_WORKAROUNDS && \
->                                 !CPU_R4400_WORKAROUNDS
+> -       select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+> -                               !CPU_R4000_WORKAROUNDS && \
+> -                               !CPU_R4400_WORKAROUNDS
+
+Is the R4400 errata also covered by this workaround?
+
+> +       select HAVE_EBPF_JIT if !CPU_MICROMIPS
 >         select HAVE_EXIT_THREAD
-> diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
-> index b17130d510d4..7110a6687f7a 100644
-> --- a/arch/mips/net/bpf_jit_comp.c
-> +++ b/arch/mips/net/bpf_jit_comp.c
-> @@ -218,9 +218,17 @@ bool valid_alu_i(u8 op, s32 imm)
->                 /* All legal eBPF values are valid */
->                 return true;
->         case BPF_ADD:
-> +#ifdef CONFIG_64BIT
+>         select HAVE_FAST_GUP
+>         select HAVE_FTRACE_MCOUNT_RECORD
+> diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
+> index ace5db3fbd17..fee334544d2f 100644
+> --- a/arch/mips/net/bpf_jit_comp32.c
+> +++ b/arch/mips/net/bpf_jit_comp32.c
+> @@ -446,6 +446,9 @@ static void emit_mul_i64(struct jit_context *ctx, const u8 dst[], s32 imm)
+>                 } else {
+>                         emit(ctx, multu, hi(dst), src);
+>                         emit(ctx, mflo, hi(dst));
+> +                       /* Ensure multiplication is completed */
+> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
+> +                               emit(ctx, mfhi, MIPS_R_ZERO);
+>                 }
+>
+>                 /* hi(dst) = hi(dst) - lo(dst) */
+> @@ -504,6 +507,7 @@ static void emit_mul_r64(struct jit_context *ctx,
+>         } else {
+>                 emit(ctx, multu, lo(dst), lo(src));
+>                 emit(ctx, mflo, lo(dst));
+> +               /* No need for workaround because we have this mfhi */
+>                 emit(ctx, mfhi, tmp);
+>         }
 
-DADDI/DADDIU are only available on 64-bit CPUs, so the errata would
-only be applicable to that. No need for the CONFIG_64BIT conditional.
+R4000 is a 64-bit CPU, so the 32-bit JIT implementation will not be
+used. From the Makefile:
 
-> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-> +                       return false;
-> +#endif
->                 /* imm must be 16 bits */
->                 return imm >= -0x8000 && imm <= 0x7fff;
->         case BPF_SUB:
-> +#ifdef CONFIG_64BIT
-> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-> +                       return false;
-> +#endif
->                 /* -imm must be 16 bits */
->                 return imm >= -0x7fff && imm <= 0x8000;
->         case BPF_AND:
+ifeq ($(CONFIG_32BIT),y)
+        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
+else
+        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
+endif
+
+>
+> diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
+> index 0e7c1bdcf914..5f5a93f997bc 100644
+> --- a/arch/mips/net/bpf_jit_comp64.c
+> +++ b/arch/mips/net/bpf_jit_comp64.c
+> @@ -228,6 +228,9 @@ static void emit_alu_r64(struct jit_context *ctx, u8 dst, u8 src, u8 op)
+>                 } else {
+>                         emit(ctx, dmultu, dst, src);
+>                         emit(ctx, mflo, dst);
+> +                       /* Ensure multiplication is completed */
+> +                       if (IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS))
+> +                               emit(ctx, mfhi, MIPS_R_ZERO);
+>                 }
+>                 break;
+>         /* dst = dst / src */
 > --
 > 2.37.1 (Apple Git-137.1)
 >
