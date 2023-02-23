@@ -2,33 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366816A03B8
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 09:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EBF6A03F6
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 09:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbjBWIWB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Feb 2023 03:22:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
+        id S233294AbjBWIiz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Feb 2023 03:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbjBWIV6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 03:21:58 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 006B5149BA;
-        Thu, 23 Feb 2023 00:21:56 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8Cxf80iIvdj6QsEAA--.2497S3;
-        Thu, 23 Feb 2023 16:21:54 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxK74gIvdjK4I5AA--.39097S3;
-        Thu, 23 Feb 2023 16:21:52 +0800 (CST)
-Message-ID: <61df255c-1637-ed60-7542-4b00e41597e6@loongson.cn>
-Date:   Thu, 23 Feb 2023 16:21:52 +0800
+        with ESMTP id S233226AbjBWIiy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 03:38:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E083228216;
+        Thu, 23 Feb 2023 00:38:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 845E8B8197A;
+        Thu, 23 Feb 2023 08:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2121C433EF;
+        Thu, 23 Feb 2023 08:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677141521;
+        bh=2xByn5gj+14HGE2qtWBmwdRYXqCL9+KnKTUsW3DEcSk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AEl4VlGpIRi0DfR5vuvDM63Cpqnpr8dFXv5hpMaGw6x+2PEZwazJqL6Ahlb1WY58H
+         MITxLy5wBfldzQ6hdPBAzjzm7JdIJHj4WR2Hjtq0f6jziWoTI9qA/LjwbuCcXRu9WR
+         VSVNrIr/m2RyAiSHsy53Xt+k55EyW7/LoRS9ZUHae2BRP/EDFeWTUBIXpFMbxiGGDF
+         16WmnHGM9dp0C2nT0Cv14LO+sxFjhjuU+6ow24pCltGLenX/4IL2nbVt5n6TBj/msO
+         0oEku0fCYmYgjCU2wcwwqNEKTpuAOYSS5bf5Us2M/UlLSE0/aNFbgzcAUQfkL0AYke
+         KsGWnRVi1+GDQ==
+Message-ID: <c463de0c-afae-4539-0a03-51ed5071e5ff@kernel.org>
+Date:   Thu, 23 Feb 2023 09:38:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+ Thunderbird/102.8.0
 Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
  device node
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
+To:     suijingfeng <suijingfeng@loongson.cn>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -41,109 +52,98 @@ References: <20230222165514.684729-1-suijingfeng@loongson.cn>
  <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
  <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
  <9e890c83-495b-87d5-68bf-838c7cf0c003@kernel.org>
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <9e890c83-495b-87d5-68bf-838c7cf0c003@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <61df255c-1637-ed60-7542-4b00e41597e6@loongson.cn>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <61df255c-1637-ed60-7542-4b00e41597e6@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxK74gIvdjK4I5AA--.39097S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXrW8ur47JF1DKrWfArWDurg_yoW5Xr4DpF
-        1UAa1DKr40yF17Xr4Sq34UJrnIvFWFyF1DWrsrGr1UJ3sIv3W2vr1fJr1rGry8Xry3Aayj
-        v3W8CF42gFn8AaUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 23/02/2023 09:21, suijingfeng wrote:
+> 
+> On 2023/2/23 16:05, Krzysztof Kozlowski wrote:
+>> On 23/02/2023 08:58, Krzysztof Kozlowski wrote:
+>>> On 23/02/2023 04:19, Sui jingfeng wrote:
+>>>> Hi,
+>>>>
+>>>> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
+>>>>> On 22/02/2023 17:55, suijingfeng wrote:
+>>>>>> The display controller is a pci device, it's pci vendor id is
+>>>>>> 0x0014, it's pci device id is 0x7a06.
+>>>>>>
+>>>>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>>>>>> ---
+>>>>>>    .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
+>>>>>>    1 file changed, 21 insertions(+)
+>>>>>>
+>>>>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>>>> index 8143a61111e3..a528af3977d9 100644
+>>>>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>>>> @@ -31,6 +31,18 @@ memory@200000 {
+>>>>>>    			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
+>>>>>>    	};
+>>>>>>    
+>>>>>> +	reserved-memory {
+>>>>>> +		#address-cells = <2>;
+>>>>>> +		#size-cells = <2>;
+>>>>>> +		ranges;
+>>>>>> +
+>>>>>> +		display_reserved: framebuffer@30000000 {
+>>>>>> +			compatible = "shared-dma-pool";
+>>>>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
+>>>>>> +			linux,cma-default;
+>>>>>> +		};
+>>>>>> +	};
+>>>>>> +
+>>>>>>    	cpu_clk: cpu_clk {
+>>>>>>    		#clock-cells = <0>;
+>>>>>>    		compatible = "fixed-clock";
+>>>>>> @@ -198,6 +210,15 @@ sata@8,0 {
+>>>>>>    				interrupt-parent = <&liointc0>;
+>>>>>>    			};
+>>>>>>    
+>>>>>> +			display-controller@6,0 {
+>>>>>> +				compatible = "loongson,ls2k1000-dc";
+>>>>>> +
+>>>>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
+>>>>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
+>>>>>> +				interrupt-parent = <&liointc0>;
+>>>>>> +				memory-region = <&display_reserved>;
+>>>>> NAK.
+>>>> Err :(,  please give me a chance to explain
+>>>>> Test your code against the bindings you send.
+>>>> I can guarantee to you that I test may code more than twice. The code
+>>>> used to testing is listed at link [1].
+>>> I wrote - test against the bindings. I don't believe that it was tested.
+>>> Please paste the output of the testing (dtbs_check).
+>> OTOH, dtschema has some hickups on loongsoon DTS, so I doubt you could
+>> even test it. Anyway, where is above property memory-region described in
+>> the bindings?
+> 
+> Yes, you are right. I forget to write memory-region property.
+> 
+> but the code provided in  loongson64-2k1000.dtsi is correct.
+> 
+> I do run dt_binding_check, the results seems good.
 
-On 2023/2/23 16:05, Krzysztof Kozlowski wrote:
-> On 23/02/2023 08:58, Krzysztof Kozlowski wrote:
->> On 23/02/2023 04:19, Sui jingfeng wrote:
->>> Hi,
->>>
->>> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
->>>> On 22/02/2023 17:55, suijingfeng wrote:
->>>>> The display controller is a pci device, it's pci vendor id is
->>>>> 0x0014, it's pci device id is 0x7a06.
->>>>>
->>>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->>>>> ---
->>>>>    .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
->>>>>    1 file changed, 21 insertions(+)
->>>>>
->>>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>>> index 8143a61111e3..a528af3977d9 100644
->>>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>>> @@ -31,6 +31,18 @@ memory@200000 {
->>>>>    			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
->>>>>    	};
->>>>>    
->>>>> +	reserved-memory {
->>>>> +		#address-cells = <2>;
->>>>> +		#size-cells = <2>;
->>>>> +		ranges;
->>>>> +
->>>>> +		display_reserved: framebuffer@30000000 {
->>>>> +			compatible = "shared-dma-pool";
->>>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
->>>>> +			linux,cma-default;
->>>>> +		};
->>>>> +	};
->>>>> +
->>>>>    	cpu_clk: cpu_clk {
->>>>>    		#clock-cells = <0>;
->>>>>    		compatible = "fixed-clock";
->>>>> @@ -198,6 +210,15 @@ sata@8,0 {
->>>>>    				interrupt-parent = <&liointc0>;
->>>>>    			};
->>>>>    
->>>>> +			display-controller@6,0 {
->>>>> +				compatible = "loongson,ls2k1000-dc";
->>>>> +
->>>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
->>>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
->>>>> +				interrupt-parent = <&liointc0>;
->>>>> +				memory-region = <&display_reserved>;
->>>> NAK.
->>> Err :(,  please give me a chance to explain
->>>> Test your code against the bindings you send.
->>> I can guarantee to you that I test may code more than twice. The code
->>> used to testing is listed at link [1].
->> I wrote - test against the bindings. I don't believe that it was tested.
->> Please paste the output of the testing (dtbs_check).
-> OTOH, dtschema has some hickups on loongsoon DTS, so I doubt you could
-> even test it. Anyway, where is above property memory-region described in
-> the bindings?
+dt_binding_check checks the binding. We talk about your DTS.
 
-Yes, you are right. I forget to write memory-region property.
+> 
+> there are some problem when make dtbs_check, but it seems not relevant 
+> to me.
 
-but the code provided in  loongson64-2k1000.dtsi is correct.
+Yeah, the dtbs_check hash troubles with interrupt cells and it does not
+give reasonable warning message.
 
-I do run dt_binding_check, the results seems good.
-
-there are some problem when make dtbs_check, but it seems not relevant 
-to me.
-
-please give me more time to figure it out, i will reply to you later.
-
-> Best regards,
-> Krzysztof
+Best regards,
+Krzysztof
 
