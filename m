@@ -2,1505 +2,173 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B6269FB3D
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Feb 2023 19:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF836A0178
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 04:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbjBVSls (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Feb 2023 13:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        id S231493AbjBWDTd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Feb 2023 22:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbjBVSlX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Feb 2023 13:41:23 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7B143444;
-        Wed, 22 Feb 2023 10:40:42 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id c12so8755981wrw.1;
-        Wed, 22 Feb 2023 10:40:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JGSNKz0q0gsC5HLgSbrlpiQsXVswleKhPPANT6X3ZpI=;
-        b=GYafZWwDleHBnO/XlsX3CZ/87Pf2sxrXHGv2JBHFJGTRi8Ixhpk48QnV+XQomsohF0
-         XDEZlJPvVH696bvNEENlheCJ3Q4r0OXlLdTzl4Eu+7yL2gK07lKLFFHI11IXY156SXAK
-         5MWPBI9C5zJtNnkw917bVtQavhldG/kIlDvzD0UpO1GGzkwxYpll4MV1QznCs9p66oKN
-         In5i/CTJVS3wYms2I3Sy64sOd9TZA5it7XCiwD2YITSM3Fpz8XH/gTJmS1MLKjOxonyh
-         AnBRPnTKxGCNi6mrDd0KkFlK/pIsSX3y6YrXex69P6Z8iIK9S6rAN60s/Jz0hEF5Xptd
-         WqNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JGSNKz0q0gsC5HLgSbrlpiQsXVswleKhPPANT6X3ZpI=;
-        b=lL+4iMtSWsKcZzwiJOdkyKlw8WRqY4/HZVMiymTUbRXAs8ctqar3FPPgR+SqZUKaIC
-         J+NCySy9hAFgG1PrQWDyxBJa5BCAp40x7XJkIS17vajb9Ud8bkAWgAjW5fpq3bNX6aFX
-         ydp6IDjSLCGGSSbYV9go5pfgPm9cSU9rnjrp6khwZfJ140NpzDEcAmawof2bimhAuHG9
-         ap1eJ56POMzggDyqAOjUKezWC1eksnew3ywP0y6VW4hzQLUWXXVEFKuEf3z7bvaRfkdD
-         qIGObIrHqIcTO+KhRfaFTFOC+JDxdlgl0c3XIsWrF9z9kmMtMixejSEijd1O/Wo+z9Pe
-         RRAQ==
-X-Gm-Message-State: AO0yUKVp3uw/oXw2/4NJLuh3JgdgjEtGxGDkr10RGHRViSo7BFTw3DgH
-        iGV0JWVgB4KomX4v+TjCAl0=
-X-Google-Smtp-Source: AK7set9XZ6fejEokWr/EtWMPZHKgIkMVbfEKSDaxuwCBb7P6IStu3GLCN2B9q0DPRJkFROsTrHVOKQ==
-X-Received: by 2002:adf:dfd0:0:b0:2c5:54a7:3646 with SMTP id q16-20020adfdfd0000000b002c554a73646mr7460724wrn.5.1677091240944;
-        Wed, 22 Feb 2023 10:40:40 -0800 (PST)
-Received: from arinc9-PC.lan ([37.120.152.236])
-        by smtp.gmail.com with ESMTPSA id l18-20020a5d4112000000b002c56179d39esm9372845wrp.44.2023.02.22.10.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 10:40:40 -0800 (PST)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-Subject: [RFC PATCH 16/16] dt-bindings: pinctrl: mediatek: improve schemas
-Date:   Wed, 22 Feb 2023 21:39:32 +0300
-Message-Id: <20230222183932.33267-17-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230222183932.33267-1-arinc.unal@arinc9.com>
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+        with ESMTP id S230114AbjBWDTd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Feb 2023 22:19:33 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C97FE31E1D;
+        Wed, 22 Feb 2023 19:19:30 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.133])
+        by gateway (Coremail) with SMTP id _____8Axkk5A2_ZjoPUDAA--.2443S3;
+        Thu, 23 Feb 2023 11:19:28 +0800 (CST)
+Received: from [10.20.42.133] (unknown [10.20.42.133])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxOL0+2_ZjXWQ5AA--.38818S3;
+        Thu, 23 Feb 2023 11:19:26 +0800 (CST)
+Message-ID: <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
+Date:   Thu, 23 Feb 2023 11:19:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
+ device node
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230222165514.684729-1-suijingfeng@loongson.cn>
+ <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
+Content-Language: en-US
+From:   Sui jingfeng <suijingfeng@loongson.cn>
+In-Reply-To: <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8AxOL0+2_ZjXWQ5AA--.38818S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXF17try5AF4DZw1UJF13Jwb_yoW5ur17pF
+        sxCanxKr4kJF12vr4rXryUJrn3Za95AFyDCrsrKr1Uu3sxZ3Wqvry8JF4FgrWxZr17Ja4j
+        vF1rWr4I9Fn8CaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+Hi,
 
-Some schemas include "MediaTek", some "Mediatek". Rename all to "MediaTek"
-to address the naming inconsistency.
+On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
+> On 22/02/2023 17:55, suijingfeng wrote:
+>> The display controller is a pci device, it's pci vendor id is
+>> 0x0014, it's pci device id is 0x7a06.
+>>
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
+>>   1 file changed, 21 insertions(+)
+>>
+>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> index 8143a61111e3..a528af3977d9 100644
+>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> @@ -31,6 +31,18 @@ memory@200000 {
+>>   			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
+>>   	};
+>>   
+>> +	reserved-memory {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		display_reserved: framebuffer@30000000 {
+>> +			compatible = "shared-dma-pool";
+>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
+>> +			linux,cma-default;
+>> +		};
+>> +	};
+>> +
+>>   	cpu_clk: cpu_clk {
+>>   		#clock-cells = <0>;
+>>   		compatible = "fixed-clock";
+>> @@ -198,6 +210,15 @@ sata@8,0 {
+>>   				interrupt-parent = <&liointc0>;
+>>   			};
+>>   
+>> +			display-controller@6,0 {
+>> +				compatible = "loongson,ls2k1000-dc";
+>> +
+>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
+>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
+>> +				interrupt-parent = <&liointc0>;
+>> +				memory-region = <&display_reserved>;
+> NAK.
+Err :(,  please give me a chance to explain
+> Test your code against the bindings you send.
 
-Change the style of description properties to plain style where there's no
-need to preserve the line endings, and vice versa.
+I can guarantee to you that I test may code more than twice. The code 
+used to testing is listed at link [1].
 
-Fit the schemas to 80 columns for each line.
+This patchset  mainly used to illustrate how  we made the driver in [1] 
+usable on our SoC platform.
 
-Set patternProperties to '^.*mux.*$' on mediatek,mt7986-pinctrl.yaml.
+> It's the same
+> patchset. You basically send something which the same moment is incorrect.
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- .../pinctrl/mediatek,mt65xx-pinctrl.yaml      | 24 +++---
- .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 33 +++++----
- .../pinctrl/mediatek,mt6795-pinctrl.yaml      | 33 +++++----
- .../pinctrl/mediatek,mt7620-pinctrl.yaml      |  2 +-
- .../pinctrl/mediatek,mt7621-pinctrl.yaml      |  2 +-
- .../pinctrl/mediatek,mt7622-pinctrl.yaml      | 26 +++----
- .../pinctrl/mediatek,mt76x8-pinctrl.yaml      |  2 +-
- .../pinctrl/mediatek,mt7981-pinctrl.yaml      | 35 +++++----
- .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 64 ++++++++--------
- .../pinctrl/mediatek,mt8183-pinctrl.yaml      | 26 ++++---
- .../pinctrl/mediatek,mt8186-pinctrl.yaml      | 47 ++++++------
- .../pinctrl/mediatek,mt8188-pinctrl.yaml      | 74 ++++++++++---------
- .../pinctrl/mediatek,mt8192-pinctrl.yaml      | 47 ++++++------
- .../pinctrl/mediatek,mt8195-pinctrl.yaml      | 38 +++++-----
- .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 28 +++----
- .../pinctrl/mediatek,rt2880-pinctrl.yaml      |  2 +-
- .../pinctrl/mediatek,rt305x-pinctrl.yaml      |  2 +-
- .../pinctrl/mediatek,rt3352-pinctrl.yaml      |  2 +-
- .../pinctrl/mediatek,rt3883-pinctrl.yaml      |  2 +-
- .../pinctrl/mediatek,rt5350-pinctrl.yaml      |  2 +-
- 20 files changed, 256 insertions(+), 235 deletions(-)
+Loongson display controller IP has been integrated in both Loongson
+North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
+and ls2k2000 etc), it even has been included in Loongson BMC(ls2k0500 bmc)
+products.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml
-index a55c8e4ff26e..206fa8ba9502 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml
-@@ -4,13 +4,13 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt65xx-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT65xx Pin Controller
-+title: MediaTek MT65xx Pin Controller
- 
- maintainers:
-   - Sean Wang <sean.wang@kernel.org>
- 
--description: |+
--  The Mediatek's Pin controller is used to control SoC pins.
-+description:
-+  The MediaTek's Pin controller is used to control SoC pins.
- 
- properties:
-   compatible:
-@@ -30,7 +30,7 @@ properties:
- 
-   pins-are-numbered:
-     $ref: /schemas/types.yaml#/definitions/flag
--    description: |
-+    description:
-       Specify the subnodes are using numbered pinmux to specify pins. (UNUSED)
-     deprecated: true
- 
-@@ -38,10 +38,10 @@ properties:
- 
-   "#gpio-cells":
-     const: 2
--    description: |
--      Number of cells in GPIO specifier. Since the generic GPIO
--      binding is used, the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+    description:
-+      Number of cells in GPIO specifier. Since the generic GPIO binding is used,
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
- 
-   mediatek,pctl-regmap:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
-@@ -49,7 +49,7 @@ properties:
-       maxItems: 1
-     minItems: 1
-     maxItems: 2
--    description: |
-+    description:
-       Should be phandles of the syscfg node.
- 
-   interrupt-controller: true
-@@ -77,7 +77,7 @@ patternProperties:
-       '(^pins|pins?$)':
-         type: object
-         additionalProperties: false
--        description: |
-+        description:
-           A pinctrl node should contain at least one subnodes representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
-@@ -95,7 +95,7 @@ patternProperties:
-           bias-disable: true
- 
-           bias-pull-up:
--            description: |
-+            description:
-               Besides generic pinconfig options, it can be used as the pull up
-               settings for 2 pull resistors, R0 and R1. User can configure those
-               special pins. Some macros have been defined for this usage, such
-@@ -117,7 +117,7 @@ patternProperties:
-           input-schmitt-disable: true
- 
-           drive-strength:
--            description: |
-+            description:
-               Can support some arguments, such as MTK_DRIVE_4mA, MTK_DRIVE_6mA,
-               etc. See dt-bindings/pinctrl/mt65xx.h for valid arguments.
- 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-index a2141eb0854e..17046d204087 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-@@ -4,15 +4,15 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt6779-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT6779 Pin Controller
-+title: MediaTek MT6779 Pin Controller
- 
- maintainers:
-   - Andy Teng <andy.teng@mediatek.com>
-   - Sean Wang <sean.wang@kernel.org>
- 
- description:
--  The MediaTek pin controller on MT6779 is used to control pin
--  functions, pull up/down resistance and drive strength options.
-+  The MediaTek pin controller on MT6779 is used to control pin functions, pull
-+  up/down resistance and drive strength options.
- 
- properties:
-   compatible:
-@@ -29,22 +29,22 @@ properties:
- 
-   "#gpio-cells":
-     const: 2
--    description: |
--      Number of cells in GPIO specifier. Since the generic GPIO
--      binding is used, the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+    description:
-+      Number of cells in GPIO specifier. Since the generic GPIO binding is used,
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
- 
-   gpio-ranges:
-     minItems: 1
-     maxItems: 5
--    description: |
-+    description:
-       GPIO valid number range.
- 
-   interrupt-controller: true
- 
-   interrupts:
-     maxItems: 1
--    description: |
-+    description:
-       Specifies the summary IRQ.
- 
-   "#interrupt-cells":
-@@ -118,19 +118,20 @@ patternProperties:
-     patternProperties:
-       '-pins*$':
-         type: object
--        description: |
-+        description:
-           A pinctrl node should contain at least one subnodes representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
--          configuration, pullups, drive strength, input enable/disable and input schmitt.
-+          configuration, pullups, drive strength, input enable/disable and input
-+          schmitt.
-         $ref: "/schemas/pinctrl/pincfg-node.yaml"
- 
-         properties:
-           pinmux:
-             description:
-               integer array, represents gpio pin number and mux setting.
--              Supported pin number and mux varies for different SoCs, and are defined
--              as macros in boot/dts/<soc>-pinfunc.h directly.
-+              Supported pin number and mux varies for different SoCs, and are
-+              defined as macros in boot/dts/<soc>-pinfunc.h directly.
- 
-           bias-disable: true
- 
-@@ -159,7 +160,8 @@ patternProperties:
-           mediatek,pull-up-adv:
-             description: |
-               Pull up setings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
-+              configure those special pins. Valid arguments are described as
-+              below:
-               0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-               1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-               2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-@@ -170,7 +172,8 @@ patternProperties:
-           mediatek,pull-down-adv:
-             description: |
-               Pull down settings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
-+              configure those special pins. Valid arguments are described as
-+              below:
-               0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-               1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-               2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml
-index c5131f053b61..5bd78e88fea3 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml
-@@ -4,14 +4,14 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt6795-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT6795 Pin Controller
-+title: MediaTek MT6795 Pin Controller
- 
- maintainers:
-   - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-   - Sean Wang <sean.wang@kernel.org>
- 
--description: |
--  The Mediatek's Pin controller is used to control SoC pins.
-+description:
-+  The MediaTek's MT6795 Pin controller is used to control SoC pins.
- 
- properties:
-   compatible:
-@@ -22,8 +22,8 @@ properties:
-   '#gpio-cells':
-     description: |
-       Number of cells in GPIO specifier. Since the generic GPIO binding is used,
--      the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
-     const: 2
- 
-   gpio-ranges:
-@@ -65,8 +65,8 @@ patternProperties:
-           A pinctrl node should contain at least one subnodes representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
--          configuration, pullups, drive strength, input enable/disable and
--          input schmitt.
-+          configuration, pullups, drive strength, input enable/disable and input
-+          schmitt.
-           An example of using macro:
-           pincontroller {
-             /* GPIO0 set as multifunction GPIO0 */
-@@ -86,11 +86,10 @@ patternProperties:
- 
-         properties:
-           pinmux:
--            description: |
-+            description:
-               Integer array, represents gpio pin number and mux setting.
-               Supported pin number and mux varies for different SoCs, and are
--              defined as macros in dt-bindings/pinctrl/<soc>-pinfunc.h
--              directly.
-+              defined as macros in dt-bindings/pinctrl/<soc>-pinfunc.h directly.
- 
-           drive-strength:
-             enum: [2, 4, 6, 8, 10, 12, 14, 16]
-@@ -100,7 +99,7 @@ patternProperties:
-               - type: boolean
-               - enum: [100, 101, 102, 103]
-                 description: mt6795 pull down PUPD/R0/R1 type define value.
--            description: |
-+            description:
-                For normal pull down type, it is not necessary to specify R1R0
-                values; When pull down type is PUPD/R0/R1, adding R1R0 defines
-                will set different resistance values.
-@@ -110,10 +109,10 @@ patternProperties:
-               - type: boolean
-               - enum: [100, 101, 102, 103]
-                 description: mt6795 pull up PUPD/R0/R1 type define value.
--            description: |
-+            description:
-                For normal pull up type, it is not necessary to specify R1R0
--               values; When pull up type is PUPD/R0/R1, adding R1R0 defines
--               will set different resistance values.
-+               values; When pull up type is PUPD/R0/R1, adding R1R0 defines will
-+               set different resistance values.
- 
-           bias-disable: true
- 
-@@ -132,7 +131,8 @@ patternProperties:
-           mediatek,pull-up-adv:
-             description: |
-               Pull up setings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
-+              configure those special pins. Valid arguments are described as
-+              below:
-               0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-               1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-               2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-@@ -143,7 +143,8 @@ patternProperties:
-           mediatek,pull-down-adv:
-             description: |
-               Pull down settings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
-+              configure those special pins. Valid arguments are described as
-+              below:
-               0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-               1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-               2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-index ea4a1194fbc4..2a5495a3a717 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
--description:
-+description: |
-   MediaTek MT7620 pin controller for MT7620 SoC.
-   The pin controller can only set the muxing of pin groups. Muxing individual
-   pins is not supported. There is no pinconf support.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
-index 4dfe3da5fd40..1fc227c27bd0 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
--description:
-+description: |
-   MediaTek MT7621 pin controller for MT7621 SoC.
-   The pin controller can only set the muxing of pin groups. Muxing individual
-   pins is not supported. There is no pinconf support.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
-index ac93eb8f01a6..740a26e1ede1 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
-@@ -4,12 +4,12 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt7622-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT7622 Pin Controller
-+title: MediaTek MT7622 Pin Controller
- 
- maintainers:
-   - Sean Wang <sean.wang@kernel.org>
- 
--description: |+
-+description:
-   The MediaTek's MT7622 Pin controller is used to control SoC pins.
- 
- properties:
-@@ -29,10 +29,10 @@ properties:
- 
-   "#gpio-cells":
-     const: 2
--    description: |
--      Number of cells in GPIO specifier. Since the generic GPIO
--      binding is used, the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+    description:
-+      Number of cells in GPIO specifier. Since the generic GPIO binding is used,
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
- 
-   interrupt-controller: true
- 
-@@ -68,18 +68,18 @@ patternProperties:
-       '^mux(-|$)':
-         type: object
-         additionalProperties: false
--        description: |
-+        description:
-           pinmux configuration nodes.
-         $ref: "/schemas/pinctrl/pinmux-node.yaml"
-         properties:
-           function:
--            description: |
-+            description:
-               A string containing the name of the function to mux to the group.
-             enum: [emmc, eth, i2c, i2s, ir, led, flash, pcie, pmic, pwm, sd,
-                    spi, tdm, uart, watchdog, wifi]
- 
-           groups:
--            description: |
-+            description:
-               An array of strings. Each string contains the name of a group.
- 
-           drive-strength:
-@@ -247,7 +247,7 @@ patternProperties:
-       '^conf(-|$)':
-         type: object
-         additionalProperties: false
--        description: |
-+        description:
-           pinconf configuration nodes.
-         $ref: "/schemas/pinctrl/pincfg-node.yaml"
- 
-@@ -258,7 +258,7 @@ patternProperties:
-               Valid values are the same as the pinmux node.
- 
-           pins:
--            description: |
-+            description:
-               An array of strings. Each string contains the name of a pin.
-             enum: [GPIO_A, I2S1_IN, I2S1_OUT, I2S_BCLK, I2S_WS, I2S_MCLK, TXD0,
-                    RXD0, SPI_WP, SPI_HOLD, SPI_CLK, SPI_MOSI, SPI_MISO, SPI_CS,
-@@ -315,14 +315,14 @@ patternProperties:
-             enum: [0, 1]
- 
-           mediatek,tdsel:
--            description: |
-+            description:
-               An integer describing the steps for output level shifter duty
-               cycle when asserted (high pulse width adjustment). Valid arguments
-               are from 0 to 15.
-             $ref: /schemas/types.yaml#/definitions/uint32
- 
-           mediatek,rdsel:
--            description: |
-+            description:
-               An integer describing the steps for input level shifter duty cycle
-               when asserted (high pulse width adjustment). Valid arguments are
-               from 0 to 63.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
-index c818c8947866..48d563886e57 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
--description:
-+description: |
-   MediaTek MT76X8 pin controller for MT7628 and MT7688 SoCs.
-   The pin controller can only set the muxing of pin groups. Muxing individual
-   pins is not supported. There is no pinconf support.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
-index 74c66fbcb2ae..10717cee9058 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt7981-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT7981 Pin Controller
-+title: MediaTek MT7981 Pin Controller
- 
- maintainers:
-   - Daniel Golle <daniel@makrotopia.org>
-@@ -37,7 +37,7 @@ properties:
- 
-   "#gpio-cells":
-     const: 2
--    description: >
-+    description:
-       Number of cells in GPIO specifier. Since the generic GPIO binding is used,
-       the amount of cells must be specified as 2. See the below mentioned gpio
-       binding representation for description of particular cells.
-@@ -111,7 +111,9 @@ patternProperties:
-           "watchdog1"            "watchdog"  13
-           "udi"                  "udi"       9, 10, 11, 12, 13
-           "drv_vbus"             "usb"       14
--          "emmc_45"              "flash"     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
-+          "emmc_45"              "flash"     15, 16, 17, 18, 19, 20, 21, 22, 23,
-+                                             24, 25
-+
-           "snfi"                 "flash"     16, 17, 18, 19, 20, 21
-           "spi0"                 "spi"       16, 17, 18, 19
-           "spi0_wp_hold"         "spi"       20, 21
-@@ -148,7 +150,7 @@ patternProperties:
-           "wf5g_led0"            "led"       31
-           "wf5g_led1"            "led"       35
-           "mt7531_int"           "eth"       38
--          "ant_sel"              "ant"       14, 15, 16, 17, 18, 19, 20, 21, 22
-+          "ant_sel"              "ant"       14, 15, 16, 17, 18, 19, 20, 21, 22,
-                                              23, 24, 25, 34, 35
- 
-         $ref: /schemas/pinctrl/pinmux-node.yaml
-@@ -256,7 +258,8 @@ patternProperties:
-             then:
-               properties:
-                 groups:
--                  enum: [gbe_led0, gbe_led1, wf2g_led0, wf2g_led1, wf5g_led0, wf5g_led1]
-+                  enum: [gbe_led0, gbe_led1, wf2g_led0, wf2g_led1, wf5g_led0,
-+                         wf5g_led1]
-           - if:
-               properties:
-                 function:
-@@ -275,7 +278,8 @@ patternProperties:
-               properties:
-                 groups:
-                   items:
--                    enum: [spi1_0, spi0, spi0_wp_hold, spi1_1, spi2, spi2_wp_hold]
-+                    enum: [spi1_0, spi0, spi0_wp_hold, spi1_1, spi2,
-+                           spi2_wp_hold]
-                   maxItems: 4
-           - if:
-               properties:
-@@ -332,13 +336,14 @@ patternProperties:
-                      JTAG_JTDO, JTAG_JTDI, JTAG_JTMS, JTAG_JTCLK, JTAG_JTRST_N,
-                      WO_JTAG_JTDO, WO_JTAG_JTDI, WO_JTAG_JTMS, WO_JTAG_JTCLK,
-                      WO_JTAG_JTRST_N, USB_VBUS, PWM0, SPI0_CLK, SPI0_MOSI,
--                     SPI0_MISO, SPI0_CS, SPI0_HOLD, SPI0_WP, SPI1_CLK, SPI1_MOSI,
--                     SPI1_MISO, SPI1_CS, SPI2_CLK, SPI2_MOSI, SPI2_MISO, SPI2_CS,
--                     SPI2_HOLD, SPI2_WP, UART0_RXD, UART0_TXD, PCIE_CLK_REQ,
--                     PCIE_WAKE_N, SMI_MDC, SMI_MDIO, GBE_INT, GBE_RESET,
--                     WF_DIG_RESETB, WF_CBA_RESETB, WF_XO_REQ, WF_TOP_CLK,
--                     WF_TOP_DATA, WF_HB1, WF_HB2, WF_HB3, WF_HB4, WF_HB0,
--                     WF_HB0_B, WF_HB5, WF_HB6, WF_HB7, WF_HB8, WF_HB9, WF_HB10]
-+                     SPI0_MISO, SPI0_CS, SPI0_HOLD, SPI0_WP, SPI1_CLK,
-+                     SPI1_MOSI, SPI1_MISO, SPI1_CS, SPI2_CLK, SPI2_MOSI,
-+                     SPI2_MISO, SPI2_CS, SPI2_HOLD, SPI2_WP, UART0_RXD,
-+                     UART0_TXD, PCIE_CLK_REQ, PCIE_WAKE_N, SMI_MDC, SMI_MDIO,
-+                     GBE_INT, GBE_RESET, WF_DIG_RESETB, WF_CBA_RESETB,
-+                     WF_XO_REQ, WF_TOP_CLK, WF_TOP_DATA, WF_HB1, WF_HB2, WF_HB3,
-+                     WF_HB4, WF_HB0, WF_HB0_B, WF_HB5, WF_HB6, WF_HB7, WF_HB8,
-+                     WF_HB9, WF_HB10]
-             maxItems: 57
- 
-           bias-disable: true
-@@ -348,7 +353,7 @@ patternProperties:
-               - type: boolean
-                 description: normal pull up.
-               - enum: [100, 101, 102, 103]
--                description: >
-+                description:
-                   PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0 defines in
-                   dt-bindings/pinctrl/mt65xx.h.
- 
-@@ -357,7 +362,7 @@ patternProperties:
-               - type: boolean
-                 description: normal pull down.
-               - enum: [100, 101, 102, 103]
--                description: >
-+                description:
-                   PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0 defines in
-                   dt-bindings/pinctrl/mt65xx.h.
- 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-index 216b356cd519..f5e982375b44 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-@@ -4,12 +4,12 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt7986-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT7986 Pin Controller
-+title: MediaTek MT7986 Pin Controller
- 
- maintainers:
-   - Sean Wang <sean.wang@kernel.org>
- 
--description: |+
-+description:
-   The MediaTek's MT7986 Pin controller is used to control SoC pins.
- 
- properties:
-@@ -37,15 +37,15 @@ properties:
- 
-   "#gpio-cells":
-     const: 2
--    description: |
--      Number of cells in GPIO specifier. Since the generic GPIO
--      binding is used, the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+    description:
-+      Number of cells in GPIO specifier. Since the generic GPIO binding is used,
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
- 
-   gpio-ranges:
-     minItems: 1
-     maxItems: 5
--    description: |
-+    description:
-       GPIO valid number range.
- 
-   interrupt-controller: true
-@@ -72,7 +72,7 @@ patternProperties:
-     additionalProperties: false
- 
-     patternProperties:
--      '.*mux.*':
-+      '^.*mux.*$':
-         type: object
-         additionalProperties: false
-         description: |
-@@ -81,7 +81,7 @@ patternProperties:
-           The following table shows the effective values of "group", "function"
-           properties and chip pinout pins
- 
--          groups	    function    pins (in pin#)
-+          groups            function    pins (in pin#)
-           ---------------------------------------------------------------------
-           "watchdog"        "watchdog"  0
-           "wifi_led"        "led"       1, 2
-@@ -97,8 +97,9 @@ patternProperties:
-           "pwm1_0"          "pwm"       22,
-           "snfi"            "flash"     23, 24, 25, 26, 27, 28
-           "spi1_2"          "spi"       29, 30, 31, 32
--          "emmc_45"         "emmc"      22, 23, 24, 25, 26, 27, 28, 29, 30,
--                                        31, 32
-+          "emmc_45"         "emmc"      22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-+                                        32
-+
-           "spi1_1"          "spi"       23, 24, 25, 26
-           "uart1_2_rx_tx"   "uart"      29, 30
-           "uart1_2_cts_rts" "uart"      31, 32
-@@ -115,8 +116,9 @@ patternProperties:
-           "pcie_pereset"    "pcie"      41
-           "uart1"           "uart"      42, 43, 44, 45
-           "uart2"           "uart"      46, 47, 48, 49
--          "emmc_51"         "emmc"      50, 51, 52, 53, 54, 55, 56, 57, 57,
--                                        59, 60, 61
-+          "emmc_51"         "emmc"      50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
-+                                        60, 61
-+
-           "pcm"             "audio"     62, 63, 64, 65
-           "i2s"             "audio"     62, 63, 64, 65
-           "switch_int"      "eth"       66
-@@ -129,18 +131,17 @@ patternProperties:
-         $ref: "/schemas/pinctrl/pinmux-node.yaml"
-         properties:
-           function:
--            description: |
-+            description:
-               A string containing the name of the function to mux to the group.
-               There is no "audio", "pcie" functions on mt7986b, you can only use
-               those functions on mt7986a.
-             enum: [audio, emmc, eth, i2c, led, flash, pcie, pwm, spi, uart,
-                    watchdog, wifi]
-           groups:
--            description: |
-+            description:
-               An array of strings. Each string contains the name of a group.
--              There is no "pcie_pereset", "uart1", "uart2" "emmc_51", "pcm",
--              and "i2s" groups on mt7986b, you can only use those groups on
--              mt7986a.
-+              There is no "pcie_pereset", "uart1", "uart2" "emmc_51", "pcm", and
-+              "i2s" groups on mt7986b, you can only use those groups on mt7986a.
-         required:
-           - function
-           - groups
-@@ -258,7 +259,7 @@ patternProperties:
-       '.*conf.*':
-         type: object
-         additionalProperties: false
--        description: |
-+        description:
-           pinconf configuration nodes.
-         $ref: "/schemas/pinctrl/pincfg-node.yaml"
- 
-@@ -271,16 +272,17 @@ patternProperties:
-             items:
-               enum: [SYS_WATCHDOG, WF2G_LED, WF5G_LED, I2C_SCL, I2C_SDA, GPIO_0,
-                      GPIO_1, GPIO_2, GPIO_3, GPIO_4, GPIO_5, GPIO_6, GPIO_7,
--                     GPIO_8, GPIO_9, GPIO_10, GPIO_11, GPIO_12, GPIO_13, GPIO_14,
--                     GPIO_15, PWM0, PWM1, SPI0_CLK, SPI0_MOSI, SPI0_MISO, SPI0_CS,
--                     SPI0_HOLD, SPI0_WP, SPI1_CLK, SPI1_MOSI, SPI1_MISO, SPI1_CS,
--                     SPI2_CLK, SPI2_MOSI, SPI2_MISO, SPI2_CS, SPI2_HOLD, SPI2_WP,
--                     UART0_RXD, UART0_TXD, PCIE_PERESET_N, UART1_RXD, UART1_TXD,
--                     UART1_CTS, UART1_RTS, UART2_RXD, UART2_TXD, UART2_CTS,
--                     UART2_RTS, EMMC_DATA_0, EMMC_DATA_1, EMMC_DATA_2,
--                     EMMC_DATA_3, EMMC_DATA_4, EMMC_DATA_5, EMMC_DATA_6,
--                     EMMC_DATA_7, EMMC_CMD, EMMC_CK, EMMC_DSL, EMMC_RSTB, PCM_DTX,
--                     PCM_DRX, PCM_CLK, PCM_FS, MT7531_INT, SMI_MDC, SMI_MDIO,
-+                     GPIO_8, GPIO_9, GPIO_10, GPIO_11, GPIO_12, GPIO_13,
-+                     GPIO_14, GPIO_15, PWM0, PWM1, SPI0_CLK, SPI0_MOSI,
-+                     SPI0_MISO, SPI0_CS, SPI0_HOLD, SPI0_WP, SPI1_CLK,
-+                     SPI1_MOSI, SPI1_MISO, SPI1_CS, SPI2_CLK, SPI2_MOSI,
-+                     SPI2_MISO, SPI2_CS, SPI2_HOLD, SPI2_WP, UART0_RXD,
-+                     UART0_TXD, PCIE_PERESET_N, UART1_RXD, UART1_TXD, UART1_CTS,
-+                     UART1_RTS, UART2_RXD, UART2_TXD, UART2_CTS, UART2_RTS,
-+                     EMMC_DATA_0, EMMC_DATA_1, EMMC_DATA_2, EMMC_DATA_3,
-+                     EMMC_DATA_4, EMMC_DATA_5, EMMC_DATA_6, EMMC_DATA_7,
-+                     EMMC_CMD, EMMC_CK, EMMC_DSL, EMMC_RSTB, PCM_DTX, PCM_DRX,
-+                     PCM_CLK, PCM_FS, MT7531_INT, SMI_MDC, SMI_MDIO,
-                      WF0_DIG_RESETB, WF0_CBA_RESETB, WF0_XO_REQ, WF0_TOP_CLK,
-                      WF0_TOP_DATA, WF0_HB1, WF0_HB2, WF0_HB3, WF0_HB4, WF0_HB0,
-                      WF0_HB0_B, WF0_HB5, WF0_HB6, WF0_HB7, WF0_HB8, WF0_HB9,
-@@ -297,7 +299,7 @@ patternProperties:
-               - type: boolean
-                 description: normal pull up.
-               - enum: [100, 101, 102, 103]
--                description: |
-+                description:
-                   PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0 defines in
-                   dt-bindings/pinctrl/mt65xx.h.
- 
-@@ -306,7 +308,7 @@ patternProperties:
-               - type: boolean
-                 description: normal pull down.
-               - enum: [100, 101, 102, 103]
--                description: |
-+                description:
-                   PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0 defines in
-                   dt-bindings/pinctrl/mt65xx.h.
- 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-index c30cd0d010dd..3b1be7949e8c 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-@@ -4,12 +4,12 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt8183-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT8183 Pin Controller
-+title: MediaTek MT8183 Pin Controller
- 
- maintainers:
-   - Sean Wang <sean.wang@kernel.org>
- 
--description: |+
-+description:
-   The MediaTek's MT8183 Pin controller is used to control SoC pins.
- 
- properties:
-@@ -37,15 +37,15 @@ properties:
- 
-   "#gpio-cells":
-     const: 2
--    description: |
--      Number of cells in GPIO specifier. Since the generic GPIO
--      binding is used, the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+    description:
-+      Number of cells in GPIO specifier. Since the generic GPIO binding is used,
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
- 
-   gpio-ranges:
-     minItems: 1
-     maxItems: 5
--    description: |
-+    description:
-       GPIO valid number range.
- 
-   interrupt-controller: true
-@@ -74,7 +74,7 @@ patternProperties:
-       '^pins':
-         type: object
-         additionalProperties: false
--        description: |
-+        description:
-           A pinctrl node should contain at least one subnodes representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
-@@ -139,7 +139,8 @@ patternProperties:
-           mediatek,pull-up-adv:
-             description: |
-               Pull up setings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
-+              configure those special pins. Valid arguments are described as
-+              below:
-               0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-               1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-               2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-@@ -150,7 +151,8 @@ patternProperties:
-           mediatek,pull-down-adv:
-             description: |
-               Pull down settings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
-+              configure those special pins. Valid arguments are described as
-+              below:
-               0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-               1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-               2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-@@ -159,14 +161,14 @@ patternProperties:
-             enum: [0, 1, 2, 3]
- 
-           mediatek,tdsel:
--            description: |
-+            description:
-               An integer describing the steps for output level shifter duty
-               cycle when asserted (high pulse width adjustment). Valid arguments
-               are from 0 to 15.
-             $ref: /schemas/types.yaml#/definitions/uint32
- 
-           mediatek,rdsel:
--            description: |
-+            description:
-               An integer describing the steps for input level shifter duty cycle
-               when asserted (high pulse width adjustment). Valid arguments are
-               from 0 to 63.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8186-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8186-pinctrl.yaml
-index 32d64416eb16..c7abc13a167d 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8186-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8186-pinctrl.yaml
-@@ -4,13 +4,13 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt8186-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT8186 Pin Controller
-+title: MediaTek MT8186 Pin Controller
- 
- maintainers:
-   - Sean Wang <sean.wang@mediatek.com>
- 
--description: |
--  The Mediatek's Pin controller is used to control SoC pins.
-+description:
-+  The MediaTek's MT8186 Pin controller is used to control SoC pins.
- 
- properties:
-   compatible:
-@@ -19,10 +19,10 @@ properties:
-   gpio-controller: true
- 
-   '#gpio-cells':
--    description: |
-+    description:
-       Number of cells in GPIO specifier. Since the generic GPIO binding is used,
--      the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
-     const: 2
- 
-   gpio-ranges:
-@@ -31,13 +31,13 @@ properties:
-   gpio-line-names: true
- 
-   reg:
--    description: |
-+    description:
-       Physical address base for gpio base registers. There are 8 different GPIO
-       physical address base in mt8186.
-     maxItems: 8
- 
-   reg-names:
--    description: |
-+    description:
-       Gpio base register names.
-     items:
-       - const: iocfg0
-@@ -60,9 +60,9 @@ properties:
- 
-   mediatek,rsel-resistance-in-si-unit:
-     type: boolean
--    description: |
--      Identifying i2c pins pull up/down type which is RSEL. It can support
--      RSEL define or si unit value(ohm) to set different resistance.
-+    description:
-+      Identifying i2c pins pull up/down type which is RSEL. It can support RSEL
-+      define or si unit value(ohm) to set different resistance.
- 
- # PIN CONFIGURATION NODES
- patternProperties:
-@@ -77,8 +77,8 @@ patternProperties:
-           A pinctrl node should contain at least one subnodes representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
--          configuration, pullups, drive strength, input enable/disable and
--          input schmitt.
-+          configuration, pullups, drive strength, input enable/disable and input
-+          schmitt.
-           An example of using macro:
-           pincontroller {
-             /* GPIO0 set as multifunction GPIO0 */
-@@ -98,11 +98,10 @@ patternProperties:
- 
-         properties:
-           pinmux:
--            description: |
-+            description:
-               Integer array, represents gpio pin number and mux setting.
-               Supported pin number and mux varies for different SoCs, and are
--              defined as macros in dt-bindings/pinctrl/<soc>-pinfunc.h
--              directly.
-+              defined as macros in dt-bindings/pinctrl/<soc>-pinfunc.h directly.
- 
-           drive-strength:
-             enum: [2, 4, 6, 8, 10, 12, 14, 16]
-@@ -129,10 +128,10 @@ patternProperties:
-               For pull down type is RSEL, it can add RSEL define & resistance
-               value(ohm) to set different resistance by identifying property
-               "mediatek,rsel-resistance-in-si-unit".
--              It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
--              & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
--              define in mt8186. It can also support resistance value(ohm)
--              "75000" & "5000" in mt8186.
-+              It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001" &
-+              "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011" define in
-+              mt8186. It can also support resistance value(ohm) "75000" & "5000"
-+              in mt8186.
-               An example of using RSEL define:
-               pincontroller {
-                 i2c0_pin {
-@@ -174,10 +173,10 @@ patternProperties:
-               For pull up type is RSEL, it can add RSEL define & resistance
-               value(ohm) to set different resistance by identifying property
-               "mediatek,rsel-resistance-in-si-unit".
--              It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
--              & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
--              define in mt8186. It can also support resistance value(ohm)
--              "1000" & "5000" & "10000" & "75000" in mt8186.
-+              It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001" &
-+              "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011" define in
-+              mt8186. It can also support resistance value(ohm) "1000" & "5000"
-+              & "10000" & "75000" in mt8186.
-               An example of using si unit resistance value(ohm):
-               &pio {
-                 mediatek,rsel-resistance-in-si-unit;
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
-index 7e750f1e643d..51b3d1247614 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
-@@ -9,7 +9,7 @@ title: MediaTek MT8188 Pin Controller
- maintainers:
-   - Hui Liu <hui.liu@mediatek.com>
- 
--description: |
-+description:
-   The MediaTek's MT8188 Pin controller is used to control SoC pins.
- 
- properties:
-@@ -19,10 +19,10 @@ properties:
-   gpio-controller: true
- 
-   '#gpio-cells':
--    description: |
--      Number of cells in GPIO specifier, should be two. The first cell
--      is the pin number, the second cell is used to specify optional
--      parameters which are defined in <dt-bindings/gpio/gpio.h>.
-+    description:
-+      Number of cells in GPIO specifier, should be two. The first cell is the
-+      pin number, the second cell is used to specify optional parameters which
-+      are defined in <dt-bindings/gpio/gpio.h>.
-     const: 2
- 
-   gpio-ranges:
-@@ -59,10 +59,11 @@ properties:
- 
-   mediatek,rsel-resistance-in-si-unit:
-     type: boolean
--    description: |
--      We provide two methods to select the resistance for I2C when pull up or pull down.
--      The first is by RSEL definition value, another one is by resistance value(ohm).
--      This flag is used to identify if the method is resistance(si unit) value.
-+    description:
-+      We provide two methods to select the resistance for I2C when pull up or
-+      pull down. The first is by RSEL definition value, another one is by
-+      resistance value(ohm). This flag is used to identify if the method is
-+      resistance(si unit) value.
- 
- # PIN CONFIGURATION NODES
- patternProperties:
-@@ -75,16 +76,16 @@ patternProperties:
-         type: object
-         $ref: "/schemas/pinctrl/pincfg-node.yaml"
-         additionalProperties: false
--        description: |
-+        description:
-           A pinctrl node should contain at least one subnode representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
--          configuration, pullups, drive strength, input enable/disable and
--          input schmitt.
-+          configuration, pullups, drive strength, input enable/disable and input
-+          schmitt.
- 
-         properties:
-           pinmux:
--            description: |
-+            description:
-               Integer array, represents gpio pin number and mux setting.
-               Supported pin number and mux varies for different SoCs, and are
-               defined as macros in dt-bindings/pinctrl/mediatek,<soc>-pinfunc.h
-@@ -106,18 +107,21 @@ patternProperties:
-               - enum: [75000, 5000]
-                 description: mt8188 pull down RSEL type si unit value(ohm).
-             description: |
--              For pull down type is normal, it doesn't need add RSEL & R1R0 define
--              and resistance value.
-+              For pull down type is normal, it doesn't need add RSEL & R1R0
-+              define and resistance value.
-               For pull down type is PUPD/R0/R1 type, it can add R1R0 define to
-               set different resistance. It can support "MTK_PUPD_SET_R1R0_00" &
--              "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" & "MTK_PUPD_SET_R1R0_11"
--              define in mt8188.
--              For pull down type is RSEL, it can add RSEL define & resistance value(ohm)
--              to set different resistance by identifying property "mediatek,rsel-resistance-in-si-unit".
--              It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
--              & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011" & "MTK_PULL_SET_RSEL_100"
--              & "MTK_PULL_SET_RSEL_101" & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
--              define in mt8188. It can also support resistance value(ohm) "75000" & "5000" in mt8188.
-+              "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" &
-+              "MTK_PUPD_SET_R1R0_11" define in mt8188.
-+              For pull down type is RSEL, it can add RSEL define & resistance
-+              value(ohm) to set different resistance by identifying property
-+              "mediatek,rsel-resistance-in-si-unit". It can support
-+              "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001" &
-+              "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011" &
-+              "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101" &
-+              "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111" define in
-+              mt8188. It can also support resistance value(ohm) "75000" & "5000"
-+              in mt8188.
- 
-           bias-pull-up:
-             oneOf:
-@@ -131,17 +135,19 @@ patternProperties:
-             description: |
-               For pull up type is normal, it don't need add RSEL & R1R0 define
-               and resistance value.
--              For pull up type is PUPD/R0/R1 type, it can add R1R0 define to
--              set different resistance. It can support "MTK_PUPD_SET_R1R0_00" &
--              "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" & "MTK_PUPD_SET_R1R0_11"
--              define in mt8188.
--              For pull up type is RSEL, it can add RSEL define & resistance value(ohm)
--              to set different resistance by identifying property "mediatek,rsel-resistance-in-si-unit".
--              It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
--              & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011" & "MTK_PULL_SET_RSEL_100"
--              & "MTK_PULL_SET_RSEL_101" & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
--              define in mt8188. It can also support resistance value(ohm)
--              "1000" & "1500" & "2000" & "3000" & "4000" & "5000" & "10000" & "75000" in mt8188.
-+              For pull up type is PUPD/R0/R1 type, it can add R1R0 define to set
-+              different resistance. It can support "MTK_PUPD_SET_R1R0_00" &
-+              "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" &
-+              "MTK_PUPD_SET_R1R0_11" define in mt8188.
-+              For pull up type is RSEL, it can add RSEL define & resistance
-+              value(ohm) to set different resistance by identifying property
-+              "mediatek,rsel-resistance-in-si-unit". It can support
-+              "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001" &
-+              "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011" &
-+              "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101" &
-+              "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111" define in
-+              mt8188. It can also support resistance value(ohm) "1000" & "1500"
-+              & "2000" & "3000" & "4000" & "5000" & "10000" & "75000" in mt8188.
- 
-           bias-disable: true
- 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8192-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8192-pinctrl.yaml
-index e764cb0f8c1a..88a466769938 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8192-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8192-pinctrl.yaml
-@@ -4,13 +4,13 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt8192-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT8192 Pin Controller
-+title: MediaTek MT8192 Pin Controller
- 
- maintainers:
-   - Sean Wang <sean.wang@mediatek.com>
- 
--description: |
--  The Mediatek's Pin controller is used to control SoC pins.
-+description:
-+  The MediaTek's MT8192 Pin controller is used to control SoC pins.
- 
- properties:
-   compatible:
-@@ -19,10 +19,10 @@ properties:
-   gpio-controller: true
- 
-   '#gpio-cells':
--    description: |
-+    description:
-       Number of cells in GPIO specifier. Since the generic GPIO binding is used,
--      the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
-     const: 2
- 
-   gpio-ranges:
-@@ -32,13 +32,13 @@ properties:
-   gpio-line-names: true
- 
-   reg:
--    description: |
--      Physical address base for gpio base registers. There are 11 GPIO
--      physical address base in mt8192.
-+    description:
-+      Physical address base for gpio base registers. There are 11 GPIO physical
-+      address base in mt8192.
-     maxItems: 11
- 
-   reg-names:
--    description: |
-+    description:
-       Gpio base register names.
-     maxItems: 11
- 
-@@ -59,25 +59,26 @@ patternProperties:
-     patternProperties:
-       '^pins':
-         type: object
--        description: |
-+        description:
-           A pinctrl node should contain at least one subnodes representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
--          configuration, pullups, drive strength, input enable/disable and
--          input schmitt.
-+          configuration, pullups, drive strength, input enable/disable and input
-+          schmitt.
-         $ref: "pinmux-node.yaml"
- 
-         properties:
-           pinmux:
--            description: |
-+            description:
-               Integer array, represents gpio pin number and mux setting.
--              Supported pin number and mux varies for different SoCs, and are defined
--              as macros in dt-bindings/pinctrl/<soc>-pinfunc.h directly.
-+              Supported pin number and mux varies for different SoCs, and are
-+              defined as macros in dt-bindings/pinctrl/<soc>-pinfunc.h directly.
- 
-           drive-strength:
--            description: |
--              It can support some arguments, such as MTK_DRIVE_4mA, MTK_DRIVE_6mA, etc. See
--              dt-bindings/pinctrl/mt65xx.h. It can only support 2/4/6/8/10/12/14/16mA in mt8192.
-+            description:
-+              It can support some arguments, such as MTK_DRIVE_4mA,
-+              MTK_DRIVE_6mA, etc. See dt-bindings/pinctrl/mt65xx.h. It can only
-+              support 2/4/6/8/10/12/14/16mA in mt8192.
-             enum: [2, 4, 6, 8, 10, 12, 14, 16]
- 
-           drive-strength-microamp:
-@@ -91,8 +92,8 @@ patternProperties:
-                 description: PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0_
-                   defines in dt-bindings/pinctrl/mt65xx.h.
-               - enum: [200, 201, 202, 203]
--                description: RSEL pull down type. See MTK_PULL_SET_RSEL_
--                  defines in dt-bindings/pinctrl/mt65xx.h.
-+                description: RSEL pull down type. See MTK_PULL_SET_RSEL_ defines
-+                  in dt-bindings/pinctrl/mt65xx.h.
- 
-           bias-pull-up:
-             oneOf:
-@@ -102,8 +103,8 @@ patternProperties:
-                 description: PUPD/R1/R0 pull up type. See MTK_PUPD_SET_R1R0_
-                   defines in dt-bindings/pinctrl/mt65xx.h.
-               - enum: [200, 201, 202, 203]
--                description: RSEL pull up type. See MTK_PULL_SET_RSEL_
--                  defines in dt-bindings/pinctrl/mt65xx.h.
-+                description: RSEL pull up type. See MTK_PULL_SET_RSEL_ defines
-+                  in dt-bindings/pinctrl/mt65xx.h.
- 
-           bias-disable: true
- 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-index 7b3dfc14eedc..c1c8c99ba139 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-@@ -4,13 +4,13 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt8195-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT8195 Pin Controller
-+title: MediaTek MT8195 Pin Controller
- 
- maintainers:
-   - Sean Wang <sean.wang@mediatek.com>
- 
--description: |
--  The Mediatek's Pin controller is used to control SoC pins.
-+description:
-+  The MediaTek's MT8195 Pin controller is used to control SoC pins.
- 
- properties:
-   compatible:
-@@ -19,10 +19,10 @@ properties:
-   gpio-controller: true
- 
-   '#gpio-cells':
--    description: |
-+    description:
-       Number of cells in GPIO specifier. Since the generic GPIO binding is used,
--      the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
-     const: 2
- 
-   gpio-ranges:
-@@ -32,13 +32,13 @@ properties:
-   gpio-line-names: true
- 
-   reg:
--    description: |
--      Physical address base for gpio base registers. There are 8 GPIO
--      physical address base in mt8195.
-+    description:
-+      Physical address base for gpio base registers. There are 8 GPIO physical
-+      address base in mt8195.
-     maxItems: 8
- 
-   reg-names:
--    description: |
-+    description:
-       Gpio base register names.
-     maxItems: 8
- 
-@@ -53,9 +53,9 @@ properties:
- 
-   mediatek,rsel-resistance-in-si-unit:
-     type: boolean
--    description: |
--      Identifying i2c pins pull up/down type which is RSEL. It can support
--      RSEL define or si unit value(ohm) to set different resistance.
-+    description:
-+      Identifying i2c pins pull up/down type which is RSEL. It can support RSEL
-+      define or si unit value(ohm) to set different resistance.
- 
- # PIN CONFIGURATION NODES
- patternProperties:
-@@ -70,8 +70,8 @@ patternProperties:
-           A pinctrl node should contain at least one subnodes representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
--          configuration, pullups, drive strength, input enable/disable and
--          input schmitt.
-+          configuration, pullups, drive strength, input enable/disable and input
-+          schmitt.
-           An example of using macro:
-           pincontroller {
-             /* GPIO0 set as multifunction GPIO0 */
-@@ -91,7 +91,7 @@ patternProperties:
- 
-         properties:
-           pinmux:
--            description: |
-+            description:
-               Integer array, represents gpio pin number and mux setting.
-               Supported pin number and mux varies for different SoCs, and are
-               defined as macros in dt-bindings/pinctrl/<soc>-pinfunc.h
-@@ -174,9 +174,9 @@ patternProperties:
-               & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
-               & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
-               & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
--              define in mt8195. It can also support resistance value(ohm)
--              "1000" & "1500" & "2000" & "3000" & "4000" & "5000" & "10000" &
--              "75000" in mt8195.
-+              define in mt8195. It can also support resistance value(ohm) "1000"
-+              & "1500" & "2000" & "3000" & "4000" & "5000" & "10000" & "75000"
-+              in mt8195.
-               An example of using RSEL define:
-               pincontroller {
-                 i2c0-pins {
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-index 4b96884a1afc..1cd9d6e55866 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
-@@ -4,13 +4,13 @@
- $id: http://devicetree.org/schemas/pinctrl/mediatek,mt8365-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Mediatek MT8365 Pin Controller
-+title: MediaTek MT8365 Pin Controller
- 
- maintainers:
-   - Zhiyong Tao <zhiyong.tao@mediatek.com>
-   - Bernhard Rosenkränzer <bero@baylibre.com>
- 
--description: |
-+description:
-   The MediaTek's MT8365 Pin controller is used to control SoC pins.
- 
- properties:
-@@ -26,17 +26,17 @@ properties:
-       maxItems: 1
-     minItems: 1
-     maxItems: 2
--    description: |
-+    description:
-       Should be phandles of the syscfg node.
- 
-   gpio-controller: true
- 
-   "#gpio-cells":
-     const: 2
--    description: |
--      Number of cells in GPIO specifier. Since the generic GPIO
--      binding is used, the amount of cells must be specified as 2. See the below
--      mentioned gpio binding representation for description of particular cells.
-+    description:
-+      Number of cells in GPIO specifier. Since the generic GPIO binding is used,
-+      the amount of cells must be specified as 2. See the below mentioned gpio
-+      binding representation for description of particular cells.
- 
-   interrupt-controller: true
- 
-@@ -54,7 +54,7 @@ patternProperties:
-       "pins$":
-         type: object
-         additionalProperties: false
--        description: |
-+        description:
-           A pinctrl node should contain at least one subnode representing the
-           pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
-@@ -72,7 +72,7 @@ patternProperties:
-           bias-disable: true
- 
-           bias-pull-up:
--            description: |
-+            description:
-               Besides generic pinconfig options, it can be used as the pull up
-               settings for 2 pull resistors, R0 and R1. User can configure those
-               special pins.
-@@ -120,7 +120,8 @@ patternProperties:
-           mediatek,pull-up-adv:
-             description: |
-               Pull up setings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
-+              configure those special pins. Valid arguments are described as
-+              below:
-               0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-               1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-               2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-@@ -131,7 +132,8 @@ patternProperties:
-           mediatek,pull-down-adv:
-             description: |
-               Pull down settings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
-+              configure those special pins. Valid arguments are described as
-+              below:
-               0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-               1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-               2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-@@ -140,14 +142,14 @@ patternProperties:
-             enum: [0, 1, 2, 3]
- 
-           mediatek,tdsel:
--            description: |
-+            description:
-               An integer describing the steps for output level shifter duty
-               cycle when asserted (high pulse width adjustment). Valid arguments
-               are from 0 to 15.
-             $ref: /schemas/types.yaml#/definitions/uint32
- 
-           mediatek,rdsel:
--            description: |
-+            description:
-               An integer describing the steps for input level shifter duty cycle
-               when asserted (high pulse width adjustment). Valid arguments are
-               from 0 to 63.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt2880-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt2880-pinctrl.yaml
-index 7395e4434e64..fa03560a13f8 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt2880-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt2880-pinctrl.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
--description:
-+description: |
-   MediaTek RT2880 pin controller for RT2880 SoC.
-   The pin controller can only set the muxing of pin groups. Muxing individual
-   pins is not supported. There is no pinconf support.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-index 1e6c7e7f2fe2..11b46aee36d4 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
--description:
-+description: |
-   MediaTek RT305X pin controller for RT3050, RT3052, and RT3350 SoCs.
-   The pin controller can only set the muxing of pin groups. Muxing individual
-   pins is not supported. There is no pinconf support.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
-index 7a74c1602afc..c88b9fefb9ef 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
--description:
-+description: |
-   MediaTek RT3352 pin controller for RT3352 SoC.
-   The pin controller can only set the muxing of pin groups. Muxing individual
-   pins is not supported. There is no pinconf support.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt3883-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3883-pinctrl.yaml
-index ab20f67c47f0..bafc2b820dd8 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt3883-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3883-pinctrl.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
--description:
-+description: |
-   MediaTek RT3883 pin controller for RT3883 SoC.
-   The pin controller can only set the muxing of pin groups. Muxing individual
-   pins is not supported. There is no pinconf support.
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt5350-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt5350-pinctrl.yaml
-index 5184cea62640..070a9d59e639 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt5350-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt5350-pinctrl.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
--description:
-+description: |
-   MediaTek RT5350 pin controller for RT5350 SoC.
-   The pin controller can only set the muxing of pin groups. Muxing individual
-   pins is not supported. There is no pinconf support.
--- 
-2.37.2
+When use this driver on Loongson embedded platform(say ls2k2000, 
+ls2k1000 and ls2k0500)  ,
+
+the PMON/Uboot firmware(my company using pmon most of time) will pass a 
+DT to the kernel.
+
+Different boards will pass different DTs. But when using this driver on 
+Loongson server and
+
+PC platform( ls3c5000/ls3a5000+ls7a1000/ls7a2000), there will no DT 
+supplied. The firmware
+
+and kernel side developer of Loongson choose ACPI+UEFI for such 
+platform, more discussion
+
+can be found at [2]. Therefore, on such a situation we decide to send 
+the patch at separate patchset.
+
+It is not like the arm  and risc-v, as the binding would not be always 
+exits. If we put those patches
+
+into a same patchset, some reviewers would suggest us to revise our code.
+
+To a form that the code *ALWAYS*  probed from the DT, this is not desired.
+
+Besides, the driver code + dt support is petty large, separate it is 
+more easy to review and manage.
+
+
+Finally,  Thanks your kindly guiding and valuable reviews.
+
+
+[1] https://patchwork.freedesktop.org/patch/523409/?series=113566&rev=4
+
+[2] https://lkml.org/lkml/2022/7/15/135
+
+> Best regards,
+> Krzysztof
 
