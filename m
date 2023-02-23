@@ -2,62 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD0B6A043E
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 09:56:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213F06A044D
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 09:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbjBWI4F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Feb 2023 03:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S233786AbjBWI7u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Feb 2023 03:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233299AbjBWI4E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 03:56:04 -0500
-Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D963E0B0
-        for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 00:56:03 -0800 (PST)
-Received: by mail.corrib.pl (Postfix, from userid 1001)
-        id E878FA3596; Thu, 23 Feb 2023 08:56:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
-        t=1677142567; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
-        h=Date:From:To:Subject:From;
-        b=fObG38bPRpDDu294K0dzUuxAbFmdiusfJBswzJJ4X0JIsmdYyt5Z2ebgveCcA3/WP
-         ZM4O6dTXAfqUrmjnqKdGibQNPvQO4xVsKowQUl+8VN5QMbrAwhRxjlT45X3dhk4dob
-         ZkdFhTA8YVaWfoi8+jQG3bwBYLaqXUkPJHh02mt3CQKqUF8r/Jj1Tz2QCKLkCI5Sx/
-         qQAcOkrSEPRG96M6ONnSXnJSE9mM8watO80AZdAORf5FR50Qmq7s7IdJbVBGR/Lqdw
-         EUa/ZAG1CJHJ/j/h2aiE6WsRmy8Q9qGqZ6cPrFRXYkVuz3+oEcdM2KfhROcoX9D0m+
-         498S64Pv0DLRw==
-Received: by mail.corrib.pl for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 08:56:04 GMT
-Message-ID: <20230223074501-0.1.5o.fis8.0.w3y7on6eae@corrib.pl>
-Date:   Thu, 23 Feb 2023 08:56:04 GMT
-From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
-        <szczepan.kielbasa@corrib.pl>
-To:     <linux-mips@vger.kernel.org>
-Subject: Faktoring
-X-Mailer: mail.corrib.pl
+        with ESMTP id S233777AbjBWI7t (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 03:59:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D099038;
+        Thu, 23 Feb 2023 00:59:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38810B818EE;
+        Thu, 23 Feb 2023 08:59:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57AA2C433EF;
+        Thu, 23 Feb 2023 08:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677142785;
+        bh=F0o0cKnSDpDn6p6gfaa0cgORZZdfAcpmNCptMtkWGMo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cWrCNgIUCWybMOAM65p3P8Ow7EW0oV6gLvfnfB/z7oHJ4WQlBpGYoPSjRDxs75i1S
+         /y3xaaYRQMn2K71c0cuM61aUdMHwjWbPme53J95CMuedEHrUlaM3mr1jnQFAdlLqGF
+         8V9TlH0NE9pOXcxb9J+90DFGde7JdY8JnkwV7R1PSD35KUKQKgLFjar5ohBDeR8H51
+         fZvVOZPXID4zCgXjav67l1hONvzxcmwfIA7sDGupVrVYmOZU/c96qPn5VUbYsTcDZG
+         mdVKWcKM2oDD5VN7LHxgfIFWscSc80S1GGrsa98kDfX0rbqfg+Ws/+VF+CmLrfd5IV
+         JdWA6tfarKVKQ==
+Message-ID: <53cc20a0-bc9d-a094-13bc-6a5ef78069d1@kernel.org>
+Date:   Thu, 23 Feb 2023 09:59:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
+ device node
+Content-Language: en-US
+To:     suijingfeng <suijingfeng@loongson.cn>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230222165514.684729-1-suijingfeng@loongson.cn>
+ <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
+ <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
+ <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
+ <6662546a-2c83-71bd-7050-903331201bdc@loongson.cn>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <6662546a-2c83-71bd-7050-903331201bdc@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 23/02/2023 09:40, suijingfeng wrote:
+> 
+> On 2023/2/23 15:58, Krzysztof Kozlowski wrote:
+>> On 23/02/2023 04:19, Sui jingfeng wrote:
+>>> Hi,
+>>>
+>>> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
+>>>> On 22/02/2023 17:55, suijingfeng wrote:
+>>>>> The display controller is a pci device, it's pci vendor id is
+>>>>> 0x0014, it's pci device id is 0x7a06.
+>>>>>
+>>>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>>>>> ---
+>>>>>    .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
+>>>>>    1 file changed, 21 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>>> index 8143a61111e3..a528af3977d9 100644
+>>>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>>>> @@ -31,6 +31,18 @@ memory@200000 {
+>>>>>    			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
+>>>>>    	};
+>>>>>    
+>>>>> +	reserved-memory {
+>>>>> +		#address-cells = <2>;
+>>>>> +		#size-cells = <2>;
+>>>>> +		ranges;
+>>>>> +
+>>>>> +		display_reserved: framebuffer@30000000 {
+>>>>> +			compatible = "shared-dma-pool";
+>>>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
+>>>>> +			linux,cma-default;
+>>>>> +		};
+>>>>> +	};
+>>>>> +
+>>>>>    	cpu_clk: cpu_clk {
+>>>>>    		#clock-cells = <0>;
+>>>>>    		compatible = "fixed-clock";
+>>>>> @@ -198,6 +210,15 @@ sata@8,0 {
+>>>>>    				interrupt-parent = <&liointc0>;
+>>>>>    			};
+>>>>>    
+>>>>> +			display-controller@6,0 {
+>>>>> +				compatible = "loongson,ls2k1000-dc";
+>>>>> +
+>>>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
+>>>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
+>>>>> +				interrupt-parent = <&liointc0>;
+>>>>> +				memory-region = <&display_reserved>;
+>>>> NAK.
+>>> Err :(,  please give me a chance to explain
+>>>> Test your code against the bindings you send.
+>>> I can guarantee to you that I test may code more than twice. The code
+>>> used to testing is listed at link [1].
+>> I wrote - test against the bindings. I don't believe that it was tested.
+>> Please paste the output of the testing (dtbs_check).
 
-rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
-ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
-wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
+                                          ^^^^^^^^^^^^
+Do you see this                       ----------^^^^?
 
-Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
-stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
-z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
- kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
-adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
-Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
+But you pasted:
+
+> 
+> I *do* run the test against the bindings and the test result say nothing.
+> 
+> I reset my modify today made, then re-run the test again.
+> 
+> I'm telling the truth: the test result say nothing. I paste the log at 
+> below:
+> 
+> make -j$(nproc) ARCH=loongarch 
+> CROSS_COMPILE=loongarch64-unknown-linux-gnu- dt_binding_check 
+
+This -------------------------------------------^^^^^^^^^^^^
 
 
-Pozdrawiam
-Szczepan Kie=C5=82basa
+Best regards,
+Krzysztof
+
