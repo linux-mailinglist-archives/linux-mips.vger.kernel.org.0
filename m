@@ -2,175 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235B66A0404
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 09:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD0B6A043E
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 09:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbjBWIlD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Feb 2023 03:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S233728AbjBWI4F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Feb 2023 03:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbjBWIlC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 03:41:02 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5211E13DC2;
-        Thu, 23 Feb 2023 00:40:39 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8Axkk6FJvdjYw0EAA--.2595S3;
-        Thu, 23 Feb 2023 16:40:37 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX+SBJvdjAIQ5AA--.4780S3;
-        Thu, 23 Feb 2023 16:40:35 +0800 (CST)
-Message-ID: <6662546a-2c83-71bd-7050-903331201bdc@loongson.cn>
-Date:   Thu, 23 Feb 2023 16:40:33 +0800
+        with ESMTP id S233299AbjBWI4E (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 03:56:04 -0500
+Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D963E0B0
+        for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 00:56:03 -0800 (PST)
+Received: by mail.corrib.pl (Postfix, from userid 1001)
+        id E878FA3596; Thu, 23 Feb 2023 08:56:07 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
+        t=1677142567; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
+        h=Date:From:To:Subject:From;
+        b=fObG38bPRpDDu294K0dzUuxAbFmdiusfJBswzJJ4X0JIsmdYyt5Z2ebgveCcA3/WP
+         ZM4O6dTXAfqUrmjnqKdGibQNPvQO4xVsKowQUl+8VN5QMbrAwhRxjlT45X3dhk4dob
+         ZkdFhTA8YVaWfoi8+jQG3bwBYLaqXUkPJHh02mt3CQKqUF8r/Jj1Tz2QCKLkCI5Sx/
+         qQAcOkrSEPRG96M6ONnSXnJSE9mM8watO80AZdAORf5FR50Qmq7s7IdJbVBGR/Lqdw
+         EUa/ZAG1CJHJ/j/h2aiE6WsRmy8Q9qGqZ6cPrFRXYkVuz3+oEcdM2KfhROcoX9D0m+
+         498S64Pv0DLRw==
+Received: by mail.corrib.pl for <linux-mips@vger.kernel.org>; Thu, 23 Feb 2023 08:56:04 GMT
+Message-ID: <20230223074501-0.1.5o.fis8.0.w3y7on6eae@corrib.pl>
+Date:   Thu, 23 Feb 2023 08:56:04 GMT
+From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
+        <szczepan.kielbasa@corrib.pl>
+To:     <linux-mips@vger.kernel.org>
+Subject: Faktoring
+X-Mailer: mail.corrib.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
- device node
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230222165514.684729-1-suijingfeng@loongson.cn>
- <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
- <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
- <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxX+SBJvdjAIQ5AA--.4780S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGFyDtryUCrWDZF4rCr18AFb_yoWrJFW3pF
-        nxAanrKr40yF17ZryFq348JrnIvFyrAF1DWFsrtw1UJ3sIva12vr4rJr1ruF48ZrW7Za4j
-        vF1rKrWIgF1kAaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-On 2023/2/23 15:58, Krzysztof Kozlowski wrote:
-> On 23/02/2023 04:19, Sui jingfeng wrote:
->> Hi,
->>
->> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
->>> On 22/02/2023 17:55, suijingfeng wrote:
->>>> The display controller is a pci device, it's pci vendor id is
->>>> 0x0014, it's pci device id is 0x7a06.
->>>>
->>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->>>> ---
->>>>    .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
->>>>    1 file changed, 21 insertions(+)
->>>>
->>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>> index 8143a61111e3..a528af3977d9 100644
->>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->>>> @@ -31,6 +31,18 @@ memory@200000 {
->>>>    			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
->>>>    	};
->>>>    
->>>> +	reserved-memory {
->>>> +		#address-cells = <2>;
->>>> +		#size-cells = <2>;
->>>> +		ranges;
->>>> +
->>>> +		display_reserved: framebuffer@30000000 {
->>>> +			compatible = "shared-dma-pool";
->>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
->>>> +			linux,cma-default;
->>>> +		};
->>>> +	};
->>>> +
->>>>    	cpu_clk: cpu_clk {
->>>>    		#clock-cells = <0>;
->>>>    		compatible = "fixed-clock";
->>>> @@ -198,6 +210,15 @@ sata@8,0 {
->>>>    				interrupt-parent = <&liointc0>;
->>>>    			};
->>>>    
->>>> +			display-controller@6,0 {
->>>> +				compatible = "loongson,ls2k1000-dc";
->>>> +
->>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
->>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
->>>> +				interrupt-parent = <&liointc0>;
->>>> +				memory-region = <&display_reserved>;
->>> NAK.
->> Err :(,  please give me a chance to explain
->>> Test your code against the bindings you send.
->> I can guarantee to you that I test may code more than twice. The code
->> used to testing is listed at link [1].
-> I wrote - test against the bindings. I don't believe that it was tested.
-> Please paste the output of the testing (dtbs_check).
+rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
+ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
+wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
 
-I *do* run the test against the bindings and the test result say nothing.
-
-I reset my modify today made, then re-run the test again.
-
-I'm telling the truth: the test result say nothing. I paste the log at 
-below:
-
-make -j$(nproc) ARCH=loongarch 
-CROSS_COMPILE=loongarch64-unknown-linux-gnu- dt_binding_check 
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml 
-dtbs_check 
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
-
-   DTEX 
-Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dts
-   DTC_CHK 
-Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dtb
+Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
+stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
+z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
+ kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
+adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
+Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
 
 
-I remember, if there anything wrong, rob's test robot will complain.
-
-let's wait and witness.
-
->> This patchset  mainly used to illustrate how  we made the driver in [1]
->> usable on our SoC platform.
->>
->>> It's the same
->>> patchset. You basically send something which the same moment is incorrect.
->> Loongson display controller IP has been integrated in both Loongson
->> North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
->> and ls2k2000 etc), it even has been included in Loongson BMC(ls2k0500 bmc)
->> products.
-> I don't understand how your reply here is relevant to incorrect bindings
-> or incorrect DTS according to bindings.
-
-Ok, now I know that you refer to the bindings.
-
-I'm a newbie at DT bindings, but i will correct all of the problem you 
-mentioned.
-
-It takes a few time, thanks for  your valuable advice.
-
->
-> Best regards,
-> Krzysztof
-
+Pozdrawiam
+Szczepan Kie=C5=82basa
