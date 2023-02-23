@@ -2,73 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6F36A02A6
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 07:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514CA6A0370
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Feb 2023 08:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjBWGCg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Feb 2023 01:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S233228AbjBWH7I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Feb 2023 02:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbjBWGCf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 01:02:35 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4EC28228;
-        Wed, 22 Feb 2023 22:02:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677132127; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=DIzq2l3H4WTqdlWLW2VWNcBP97sE4gt5oo+hksxZCt//lBhPoIP/lExLhjp94atUtFHgN4EyPPVfYbin64IVUB86UOrokuDHfgKbHe3veGP9nIfT3Qr3O1FgMvNgPUFrytwpLymruJDBrVa7zhzO6ElX5vTcyV4Lz7giutoiYYA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677132127; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=fY/rYZ/QSdL3EXsPZDuBUtoL1olQYQkD3lDEY+ykYo8=; 
-        b=Bl11M0rzEUMQIlZf06U01wkUBGWse4NxABzpXv1O7tVKSrujJuJ+PBz0/0TEjslrJcwvrkzGay5YxY2GJtQMt2wt0QSJBCBCY3b7cD+S1V2Hr+xG/1GH+03br8QLlf5M4AzcdJ/S871a4PZIQUGm+Mx2vJULXQoWyEYIuOR3Mws=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677132127;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=fY/rYZ/QSdL3EXsPZDuBUtoL1olQYQkD3lDEY+ykYo8=;
-        b=ImdvYPi59x5HDhSWSS9w6Fiep1G2P1O8DhCt1FsW2I50vp33aQNz3VDmdDlYslDD
-        wO7wgx8nLmuPJvZgdREzQTkYbIcsKJmAXNFbOTZRtDmB2f0UOttqfCinJDMSr2nZuoE
-        IKgny9ZRGAZx7RA/Nk7bRp2c/3qsNOUdHsjomhHc=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 167713212609062.82464009307694; Wed, 22 Feb 2023 22:02:06 -0800 (PST)
-Message-ID: <286c6f85-8c5c-907f-a77b-b0c62e97a18a@arinc9.com>
-Date:   Thu, 23 Feb 2023 09:01:59 +0300
+        with ESMTP id S230356AbjBWH7I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Feb 2023 02:59:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3210F1A4A6;
+        Wed, 22 Feb 2023 23:59:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DBC6EB818F2;
+        Thu, 23 Feb 2023 07:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51339C4339B;
+        Thu, 23 Feb 2023 07:58:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677139142;
+        bh=hhUhD+GQIDGu4qZjQp3HxpY6cANDAYNuHS1oWM0ZPlM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OPAwjxfVt3BWAo8pRpkfdmFfsBnQ+4B4vRmL95IgBBE+Jwxz66RsUbpLkDv1ZmAu/
+         N9CiOGsyStMaLBXrAb3eQQsJjM5lsfW102cwA3Xxw9WoA0KNI+F5TLzTaeIwZvbWqy
+         1+ENEmNZ1DZczh5owKalrU6nXVMMOU/T90Obomn5vEsKN3PpmvFEctKOdyrMPOcmTF
+         YUu/lXD7MQg7kH0mo7weC1UYthJqBAZM+rmQEEHkKtcCA+g6JpvOYBRtPeMNNUeZb1
+         j0s63k7dRIFwJUWhX/qf1To9iNPFnYb2L0yhOlxzbU3LAnm1hAZZmaTXwd23vKRgNm
+         KpMaDBSGv+kmA==
+Message-ID: <f1cb010c-be28-9b1b-da1f-93d5e2fb213f@kernel.org>
+Date:   Thu, 23 Feb 2023 08:58:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 00/16] pinctrl: ralink: fix ABI, improve driver, move
- to mediatek, improve dt-bindings
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] Mips: ls2k1000: dts: add the display controller
+ device node
+To:     Sui jingfeng <suijingfeng@loongson.cn>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <CAMhs-H8cKG_aQaE_JBuEfchQ4jNZT5NRPEypywWFuFtsc2MiZg@mail.gmail.com>
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230222165514.684729-1-suijingfeng@loongson.cn>
+ <f153bb62-ec3c-c16d-5b43-f53b5319c2e6@kernel.org>
+ <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
 Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CAMhs-H8cKG_aQaE_JBuEfchQ4jNZT5NRPEypywWFuFtsc2MiZg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <32a56a81-e9b5-138b-4dff-35c2525cc0b6@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,73 +64,79 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23.02.2023 07:58, Sergio Paracuellos wrote:
-> Hi Arınç,
+On 23/02/2023 04:19, Sui jingfeng wrote:
+> Hi,
 > 
-> All of this looks pretty good to me. You did a really big effort with
-> this series. Thanks for doing this!
+> On 2023/2/23 02:32, Krzysztof Kozlowski wrote:
+>> On 22/02/2023 17:55, suijingfeng wrote:
+>>> The display controller is a pci device, it's pci vendor id is
+>>> 0x0014, it's pci device id is 0x7a06.
+>>>
+>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>>> ---
+>>>   .../boot/dts/loongson/loongson64-2k1000.dtsi  | 21 +++++++++++++++++++
+>>>   1 file changed, 21 insertions(+)
+>>>
+>>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>> index 8143a61111e3..a528af3977d9 100644
+>>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>>> @@ -31,6 +31,18 @@ memory@200000 {
+>>>   			<0x00000001 0x10000000 0x00000001 0xb0000000>; /* 6912 MB at 4352MB */
+>>>   	};
+>>>   
+>>> +	reserved-memory {
+>>> +		#address-cells = <2>;
+>>> +		#size-cells = <2>;
+>>> +		ranges;
+>>> +
+>>> +		display_reserved: framebuffer@30000000 {
+>>> +			compatible = "shared-dma-pool";
+>>> +			reg = <0x0 0x30000000 0x0 0x04000000>; /* 64M */
+>>> +			linux,cma-default;
+>>> +		};
+>>> +	};
+>>> +
+>>>   	cpu_clk: cpu_clk {
+>>>   		#clock-cells = <0>;
+>>>   		compatible = "fixed-clock";
+>>> @@ -198,6 +210,15 @@ sata@8,0 {
+>>>   				interrupt-parent = <&liointc0>;
+>>>   			};
+>>>   
+>>> +			display-controller@6,0 {
+>>> +				compatible = "loongson,ls2k1000-dc";
+>>> +
+>>> +				reg = <0x3000 0x0 0x0 0x0 0x0>;
+>>> +				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
+>>> +				interrupt-parent = <&liointc0>;
+>>> +				memory-region = <&display_reserved>;
+>> NAK.
+> Err :(,  please give me a chance to explain
+>> Test your code against the bindings you send.
 > 
-> On Wed, Feb 22, 2023 at 7:39 PM <arinc9.unal@gmail.com> wrote:
->>
->> This is an ambitious effort I've been wanting to do for months.
->>
->> Straight off the bat, I'm fixing the ABI that I broke a while back, by
->> reintroducing the ralink,rt2880-pinmux compatible string.
->>
->> If you take a look at the schema for mt7620 and rt305x, some functions got
->> multiple lists for groups. Like refclk on mt7620. Because mt7620 and
->> mt7628/mt7688 SoCs use the same compatible string, it's impossible to
->> differentiate on the binding which SoC a devicetree is actually for.
->> Therefore, the binding will allow all groups listed for that function. For
->> example, if the SoC is mt7620, only the refclk function for the mdio group
->> can be used. If one were to put "spi cs1" as the function there, there
->> wouldn't be a warning.
->>
->> I address this by introducing new compatible strings for these SoCs, then
->> split the schemas. I also separate mt7628/mt7688 from mt7620 pinctrl
->> subdriver in the process.
->>
->> I wanted to split the rt305x driver too but too much code would be reused
->> so I backed down from that.
->>
->> Ralink was acquired by MediaTek in 2011. These SoCs have been rebranded as
->> MediaTek. We're moving the Ralink pinctrl driver to MediaTek, and rename
->> the schemas to mediatek.
->>
->> I've renamed the ralink core driver to mtmips. I decided to call the core
->> mtmips as I've seen folks from MediaTek use the same name when they added
->> support for MT7621 pinctrl on U-Boot. Feel free to comment on this.
->>
->> The MTMIPS pinctrl driver requires rt_sysc_membase from
->> arch/mips/ralink/of.c, so, for COMPILE_TEST to be useful, RALINK must be
->> selected. These headers, asm/mach-ralink/ralink_regs.h and
->> asm/mach-ralink/mt7620.h, from arch/mips/include are also required but
->> they can easily be included:
->>
->> ifeq ($(CONFIG_COMPILE_TEST),y)
->> CFLAGS_pinctrl-mtmips.o                 += -I$(srctree)/arch/mips/include
->> endif
->>
->> Sergio, do you see a way to make the pinctrl driver independent of
->> architecture code? At least avoid using rt_sysc_membase.
-> 
-> The only really dependent architecture code in these drivers now is
-> because of the use of
-> 'rt_sysc_r32()' and 'rt_sysc_w32()' in 'ralink_pmx_group_enable()'
-> function [0]. This is just to set the gpio mode. The read and write
-> registers here  SYSC_REG_GPIO_MODE and  SYSC_REG_GPIO_MODE2 are in the
-> system controller area. In all single ralink platform 'sysc' nodes
-> should be a syscon that can be accessed from the driver side. That way
-> you can just get those syscon areas via regmap APIs and properly read
-> and write desired registers. For the mt7621.dtsi file, the node is
-> already a syscon [1]. Other ralink device tree files should also be
-> modified to include this in its 'sysc' node (I think in openWRT dts
-> files at least for mt7620 is already included). You have to add that
-> in all of them since 'ralink_pmx_group_enable()' is common code for
-> all. I think this can be done in a different patch series. I can help
-> you to do this after this series is reviewed and accepted.
+> I can guarantee to you that I test may code more than twice. The code 
+> used to testing is listed at link [1].
 
-Awesome, thanks a lot! Note to self, "depends on RALINK" menu entries 
-should be changed to "depends on OF" when this happens.
+I wrote - test against the bindings. I don't believe that it was tested.
+Please paste the output of the testing (dtbs_check).
 
-Arınç
+> 
+> This patchset  mainly used to illustrate how  we made the driver in [1] 
+> usable on our SoC platform.
+> 
+>> It's the same
+>> patchset. You basically send something which the same moment is incorrect.
+> 
+> Loongson display controller IP has been integrated in both Loongson
+> North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
+> and ls2k2000 etc), it even has been included in Loongson BMC(ls2k0500 bmc)
+> products.
+
+I don't understand how your reply here is relevant to incorrect bindings
+or incorrect DTS according to bindings.
+
+
+Best regards,
+Krzysztof
+
