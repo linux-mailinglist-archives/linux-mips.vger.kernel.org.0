@@ -2,123 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C32A6A2C03
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Feb 2023 23:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEA16A3391
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Feb 2023 20:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjBYWKv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Feb 2023 17:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
+        id S229702AbjBZTR7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Feb 2023 14:17:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjBYWKv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Feb 2023 17:10:51 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95429144B3
-        for <linux-mips@vger.kernel.org>; Sat, 25 Feb 2023 14:10:50 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0D43F5C00A8;
-        Sat, 25 Feb 2023 17:10:50 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sat, 25 Feb 2023 17:10:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1677363050; x=1677449450; bh=1e
-        QdSzSFqoTiPj1Bkk1jN4IjVVEv4YaL00W02oLxvHE=; b=fHRlIrALJZnbZXVdSv
-        3hNIQqvaissxcg4kYwhLTUGwBLdeWpG5WMgyEEyI9DojSMJoHWph6POuWPZ8dGPk
-        AZ2tLhsAKWazpwfVS5x9tErOPME1fko047J16uwDQSF2T+M53Pa4waQAGM0spNkK
-        pDQbJNB9nnxR7436tLGfSL+ppGwMRl3HaalWKttU7duLmrYNUqQyhZlvOon9CsJm
-        KfyKwLTlUX2IB+tEKVaDOGyhdwuss87kK8E3pbv+h/c553gJoiu0nb1kQESmX2jh
-        dNmVOjdGAl/CN202uGKD6CaL6GMm0+V6mYXuFkmDl02Wd+8ZrYpwulJ/JGBnjngE
-        k35w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677363050; x=1677449450; bh=1eQdSzSFqoTiP
-        j1Bkk1jN4IjVVEv4YaL00W02oLxvHE=; b=ZbU4CymJQuzs2Rk7o2PdqkEVvF8Rl
-        ulugcZ3yGvaNlI2jMsOtK0tArkfb+unQIpGVdyKoGy02p9tkdT3A8Aj/O5qYold8
-        PaAniEFrfDfv+bETPmzKthkBEqJTnDqdLftJUVahIODZo5YJlDAlWD1xYjB1j/f0
-        6ScAgi/qw71JUnUm9qp0K9WbTL9BWvbmj6D9RZWRN3lcRqnr8MblsPyVJtC7KsNb
-        FZs7WR1/hGkNFltzDxj+XKeN9OQ9ly77D9Lubp8jWA4O2GPpzmT6H3BcwZF3mg05
-        PeEUkCw5NNtN7UuadepHTXr4QKmB8iMs8pzQWwRT+1SREu0VkqzU7/Riw==
-X-ME-Sender: <xms:aYf6Y9VlISkpzote3_fn1neOFPfjIAHvSpOb6G3V9fMFks-RqbZaLg>
-    <xme:aYf6Y9nVB2NE9mSc8A9LlsldkO6HhH4AOaLf4ZzlXzT6EX7KTYUHxQFYCruOwxrDo
-    fKRSFrEiCgh14DAl70>
-X-ME-Received: <xmr:aYf6Y5Zb4315eaojK1uybjBEjlluGGKESO1t5KLnySgqmSoAIMc1DW7ntIy8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekiedgleehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludefheegvdeuvd
-    dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
-    hgohgrthdrtghomh
-X-ME-Proxy: <xmx:aYf6YwUvQqXQimABJXnYvEFJJyH12vug3zSI-agsbliJoCzKn4mY2A>
-    <xmx:aYf6Y3lHTL6w7nwxlofc-pZgNR3Shb6uAkoBGRcyUxAqJ7suyCACUQ>
-    <xmx:aYf6Y9fAI-HNFeLgnepnmgl-yxPhzovT-VRYrjhIv--Th21rxK0qIQ>
-    <xmx:aof6Y_s1zGrhzjpfsVmK_bihhXgAP7pIGLCefELcvyO1eCbo_XW1QA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 25 Feb 2023 17:10:49 -0500 (EST)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 2/2] MIPS: cevt-r4k: Offset counter value for clearing compare interrupt
-Date:   Sat, 25 Feb 2023 22:10:08 +0000
-Message-Id: <20230225221008.8520-3-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230225221008.8520-1-jiaxun.yang@flygoat.com>
-References: <20230225221008.8520-1-jiaxun.yang@flygoat.com>
+        with ESMTP id S229470AbjBZTR6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Feb 2023 14:17:58 -0500
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6515F6E9D;
+        Sun, 26 Feb 2023 11:17:57 -0800 (PST)
+Received: by mail-il1-f175.google.com with SMTP id s8so2875160ilv.10;
+        Sun, 26 Feb 2023 11:17:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kq1ivKD6RivZCMPyh5AoByorkVQ4XKKDpGw+zbHBm8c=;
+        b=YeulEnZFqVOeS1/m3SVCyZFLXJiziFBL0Cpm6LJi59RpEvt9Ppk5OncmioVH/yPYTl
+         NLWyhTRmKxNLtMJ0Yt1jp9RCl69+IIeCnR1Y409SCJXvH+oLx7IAewV61GPd0FfqTF3D
+         S7IE5V3H67CqIvnAXvRchuly/NwCkTPHlI+m5645ezt08wpUPNtL0td4jPjwSCRKwQ7u
+         RJIV6wKfmZGNSj8ZKV1dW2UlIhdPgynIsmtMEbrlChduMrIwy7FyAOlOGP7d8UmwWj4b
+         JptIHx6hOY0fb17JSeJm0wXw1VECOi1DgIUJ9pvUPyvomu4g4vbpyr/v+x5R8XigYvlR
+         RW/A==
+X-Gm-Message-State: AO0yUKUtTkxHymfSwK0FCznvmVGqp2/D6C7phsBkAbd9uRIFrT5xJw2u
+        nRl7eR3N7SQWL7ynG2ghFw==
+X-Google-Smtp-Source: AK7set9Hu4Sy+NQhvjCSJqK0tY1a0Hk6P5CLj7F5TClDXfRfHpsboyEPsry+SsYb4Kjo0zofxpn/UA==
+X-Received: by 2002:a05:6e02:214f:b0:316:fcbe:397c with SMTP id d15-20020a056e02214f00b00316fcbe397cmr10307752ilv.27.1677439076618;
+        Sun, 26 Feb 2023 11:17:56 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:8069:8ddf:ff6b:c94c:94fd:4442])
+        by smtp.gmail.com with ESMTPSA id g23-20020a02bb97000000b003a58ae912aasm1558577jan.28.2023.02.26.11.17.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 11:17:56 -0800 (PST)
+Received: (nullmailer pid 163984 invoked by uid 1000);
+        Sun, 26 Feb 2023 19:17:52 -0000
+Date:   Sun, 26 Feb 2023 13:17:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: mips: loongson: Add Loongson-1 based
+ boards
+Message-ID: <167743907191.163906.16111583186738971743.robh@kernel.org>
+References: <20230221110142.2121482-1-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221110142.2121482-1-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In c0_compare_int_usable we clear compare interrupt by write value
-just read out from counter to compare register.
 
-However sometimes if those all instructions are graduated together
-then it's possible that at the time compare register is written, the
-counter haven't progressed, thus the interrupt is triggered again.
+On Tue, 21 Feb 2023 19:01:42 +0800, Keguang Zhang wrote:
+> Add two Loongson-1 based boards: LSGZ 1B and Smartloong 1C.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+> V2 -> V3: Amend the vendor prefix
+> V1 -> V2: Add the according vendor prefix
+>           Change the board string to enum
+>           Modify the board description
+> ---
+>  .../devicetree/bindings/mips/loongson/devices.yaml   | 12 ++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml         |  2 ++
+>  2 files changed, 14 insertions(+)
+> 
 
-It also applies to QEMU that instructions is execuated significantly
-faster then counter.
-
-Offset the counter value a litlle bit to prevent that happen.
-
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/kernel/cevt-r4k.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-index 32ec67c9ab67..bbc422376e97 100644
---- a/arch/mips/kernel/cevt-r4k.c
-+++ b/arch/mips/kernel/cevt-r4k.c
-@@ -200,6 +200,8 @@ int c0_compare_int_usable(void)
- 	 */
- 	if (c0_compare_int_pending()) {
- 		cnt = read_c0_count();
-+		// Drawdown a little bit in case counter haven't progressed
-+		cnt -= COMPARE_INT_SEEN_TICKS;
- 		write_c0_compare(cnt);
- 		back_to_back_c0_hazard();
- 		while (read_c0_count() < (cnt  + COMPARE_INT_SEEN_TICKS))
-@@ -228,6 +230,7 @@ int c0_compare_int_usable(void)
- 	if (!c0_compare_int_pending())
- 		return 0;
- 	cnt = read_c0_count();
-+	cnt -= COMPARE_INT_SEEN_TICKS;
- 	write_c0_compare(cnt);
- 	back_to_back_c0_hazard();
- 	while (read_c0_count() < (cnt + COMPARE_INT_SEEN_TICKS))
--- 
-2.37.1 (Apple Git-137.1)
+Reviewed-by: Rob Herring <robh@kernel.org>
 
