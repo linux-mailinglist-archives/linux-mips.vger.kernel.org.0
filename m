@@ -2,100 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDC06A49B5
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 19:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FA26A4A25
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 19:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjB0S2j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 13:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
+        id S230110AbjB0Sqi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Feb 2023 13:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB0S2i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 13:28:38 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B84C674;
-        Mon, 27 Feb 2023 10:28:37 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-172a623ad9aso8295604fac.13;
-        Mon, 27 Feb 2023 10:28:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YAghNcZOo+DAEQczVV+zv0Sggl3SkEdcXf3iJdRX+qk=;
-        b=OUkPwmEvflkLguE5alwGcSqXhZiIduv5OUQFGnZFHBnXltl/m0nws7520LpbvtbFZm
-         stTgzoFGqZtd4lYCwWm98YHT0R5EJDNHP2sKAIy00n6JaLuqN1Ri439TS2gTwEAsW2WJ
-         hxaM89vOl6ZQkCkTHHQk08gVXChEdfbiwEvFRWOJP6nvD7Zz+tDO4UnaAzo0oxccWcc8
-         URvs+XpXDRv32Cpb0r1h3+g8SGTdMZ3N3FS+kN9ZIPm1FAlSPUEXvtKCOzMOPys1/tal
-         pskmVvUtGkK1/IJBXr62neSWo6tbLDKg8Q4RoVOuCXD0G2/ejyOCvM+If3d1VT5ai3XP
-         vjkA==
-X-Gm-Message-State: AO0yUKWjYdk5+n7jsNEA+kaMcpHtfD5JrdE7iTQpG8tAB/UOAhshBaFT
-        tVPTqOTFUTwaKOZ5pUVrFQ==
-X-Google-Smtp-Source: AK7set/ULx8pV2pjX31TC7ROkyj+jY51+b6GTXfea/+pI9KrZayzKReMok9/Qx/EcdnrO9jg9Ki0Ww==
-X-Received: by 2002:a05:6870:350f:b0:172:6b1b:ea34 with SMTP id k15-20020a056870350f00b001726b1bea34mr11703038oah.8.1677522514914;
-        Mon, 27 Feb 2023 10:28:34 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n1-20020a056870034100b001724d631f92sm2520796oaf.30.2023.02.27.10.28.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 10:28:34 -0800 (PST)
-Received: (nullmailer pid 639117 invoked by uid 1000);
-        Mon, 27 Feb 2023 18:28:33 -0000
-Date:   Mon, 27 Feb 2023 12:28:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-Subject: Re: [RFC PATCH 16/16] dt-bindings: pinctrl: mediatek: improve schemas
-Message-ID: <20230227182833.GA605986-robh@kernel.org>
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-17-arinc.unal@arinc9.com>
+        with ESMTP id S230052AbjB0Sqh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 13:46:37 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B882057B
+        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 10:46:34 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id BDE535C0055;
+        Mon, 27 Feb 2023 13:46:33 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 27 Feb 2023 13:46:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1677523593; x=1677609993; bh=k7xoS8wRwxWAy+JxfJuVES/Lu
+        x/LzCk+nkMTBmHCciI=; b=SQx/ShkgEIHM50cVBNruOAOPcJkTVl8vmWgmHN5MQ
+        7Vv5iYBx3Hd4ccDG5VRydM2JI84zMPKo76qD/QOJ3ht4OQFhBvrgwFHDmmMS/jcR
+        8D6JhsIGeOVUXBKHqR/2Y4eGsjOEqzFGkRBpwC3tPOecI6/P1i7auF9737lfAMzm
+        3ZsV2hfOf5XEJULEr/lNlW9o091O/DD7IsS9GGtOzNJQWgUpC5rkYk0cEmR7bNO2
+        3lPTZPlhdhdsKjKHuCoDhku6pfallOYpsjhcQy1iUKrZWX4WohROdlzRtrM1KgVK
+        xeczpyyEavhR2lQvDiUPRp8z6+bkgPyEvNs1Zzmg5VZyg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1677523593; x=1677609993; bh=k7xoS8wRwxWAy+JxfJuVES/Lux/LzCk+nkM
+        TBmHCciI=; b=HZB92WesvJFTOHVQY+ZqoLLDp3YHQzNXAZjHMOUgh5mZgt6aOey
+        dza66hqhJZf+fCb2JSO8GvZ95EoOL/zXOfc1j7KVxy591griXJhW95aLdDb2TgxM
+        EQpRzsU3JFWswa/wIEl5VW4LAR6ybEmTvyz/DH0hpP262Es98D5jmTGBFl5XJa2S
+        TmZ91ZDE5wy0AlDL87XuDkj6jBOVyyYGL+3QPYvM7TXIswstKfNiYcpcnPYKw03Q
+        PZ6sRbbhgqaI+zpRpD1x4Aj1i2U735tslq61gc1DciBequWSh58V0+DC2j/zP0ej
+        G/TxMbQg0k62Xp1FNLIYTIosvw6RD4LF0Dw==
+X-ME-Sender: <xms:iPr8Y1gGC1UlWISekB0oU54_9XwxXl0Ij-2kaQA3c39--8WtZ5bhVQ>
+    <xme:iPr8Y6Dfeo5AEHdbuP0MqlwDZEeGcCEMV00JiqLHDsoRD-MoAw-hX65W9s2uDZaz5
+    jG__dK1dluUHhin4wk>
+X-ME-Received: <xmr:iPr8Y1FPG-5kvmV-82RBYSmtk2UfBz3vSzXv1nx6gLD-pdAAYZLm7g38S2jO-cG1AX-mFER2DdrHisV7M6a1wMtlEE21JyczmAIh1g4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddguddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
+    dtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpefhtedutdduveeileejje
+    etffehueejudehgfffjeduhfeuleeludfffefgffevkeenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihgh
+    horghtrdgtohhm
+X-ME-Proxy: <xmx:iPr8Y6T3coxB1-DkGwXrzcNbEpBGhkUf0lYaptyTpAm32WCiwbH-Dg>
+    <xmx:iPr8YyyN5NY2aNbmhs6Whd7X6PmEX7mJA9ypNtE7HeWzIduhM18v8w>
+    <xmx:iPr8Yw5AnKPokFejt_sTP9GShiGBoP_ac0P8-_6jdaCZNCUK8degjA>
+    <xmx:ifr8Y9-TSx-ZttM-bl0WuUpigErx8LolFinbk_Y-_FOhRNVPRtDQLw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Feb 2023 13:46:31 -0500 (EST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, philmd@linaro.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 0/2] MIPS Booting fixes
+Date:   Mon, 27 Feb 2023 18:46:12 +0000
+Message-Id: <20230227184614.70026-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230222183932.33267-17-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 09:39:32PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Some schemas include "MediaTek", some "Mediatek". Rename all to "MediaTek"
-> to address the naming inconsistency.
-> 
-> Change the style of description properties to plain style where there's no
-> need to preserve the line endings, and vice versa.
-> 
-> Fit the schemas to 80 columns for each line.
-> 
-> Set patternProperties to '^.*mux.*$' on mediatek,mt7986-pinctrl.yaml.
+Hi all,
 
-This at least should be a separate patch. Really, this is probably 3 
-patches.
+This patchset fixes two issues that was found when doing reboot
+stress test on Malta/Boston FPGA board with various MIPS cores.
 
-The changes themselves look fine.
+Perhaps they should go through the mips-fixes tree.
 
-Rob
+Thanks
+
+Jiaxun Yang (2):
+  MIPS: smp-cps: Don't rely on CP0_CMGCRBASE
+  MIPS: cevt-r4k: Offset the value used to clear compare interrupt
+
+ arch/mips/include/asm/smp-cps.h |  4 ++++
+ arch/mips/kernel/cevt-r4k.c     |  4 ++--
+ arch/mips/kernel/cps-vec.S      | 35 ++++++++++++++-------------------
+ arch/mips/kernel/smp-cps.c      |  2 ++
+ 4 files changed, 23 insertions(+), 22 deletions(-)
+
+-- 
+2.37.1 (Apple Git-137.1)
 
