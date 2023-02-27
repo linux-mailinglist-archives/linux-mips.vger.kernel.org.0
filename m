@@ -2,304 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767326A4AD1
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 20:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA8F6A4B7D
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 20:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjB0TZc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 14:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S230308AbjB0TrR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Feb 2023 14:47:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjB0TZb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 14:25:31 -0500
-X-Greylist: delayed 723 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Feb 2023 11:25:27 PST
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8884C23862
-        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 11:25:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677524843; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=lq0yLehKlFG/jxPN5dmprydYBhqFoo/hYgRD9hLfJ39Q2ilSMmAD+0Dyx93205Af6s
-    OhKOOmfuWi8H7cSgsXqhMBsrOK0wSFj/nyRgdFE0Eq5Ya0JQrZZlIl4XkDGgaSHA+sxy
-    DkNwVVDaYIEnWTVgLZ1NyWVrRV3MkzEyI2lHTh3bIyNi8JGRF6QsI+xhXjTdmASS68lJ
-    VHFriwmYTdwLumkTn7EyT+cAvnaRgnH7t2d0yTMfTEXDk39QKVOiNAgb3eZKXA0CrCn6
-    fSiZCJuyZehLiTZNN4yDw7cL/BbSMAya8QmKSTq7891SIZSt+4npQJZNrMAys7Ir8T18
-    lT7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1677524843;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=SCNnrfRfgYtJkgagR7PT+nuWe2DttbEbFxEiAZ3T8JU=;
-    b=iVcn//ch/paGeGUTbOUrCaG0qbNN8FK5sQfIB/da2Lv3VHKAhdnAcdXDm4InA6z4VC
-    V+T9v2gssU02P5OVVuYFP1oe5bjrS4wibM+aokefLjG1gkZDp0SOIUg9MF/JFMd6gify
-    iMtSsGJVMrzeRRGiIHu+JBTBxJGUqk+2wqS+5hlnJx/GTcToQkaL09iHeAAHPRcPxR7A
-    /fKrydTk4r0bpGnenNp2pfTTHLJsUgbxvonLN2yWuuEaW5lS7FO1WI/nSREKIhlbUh0B
-    AcbwUBXLW16GuRI0AdhM6E3LQ3yPWGfFf3/TaC0Z4PnREtSXpGaGmc8OyRBBQ26hgIIp
-    8nww==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1677524843;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=SCNnrfRfgYtJkgagR7PT+nuWe2DttbEbFxEiAZ3T8JU=;
-    b=khNjWqiIkNp8gzAKWMBc9yncWEKCsLCzBBsx3Opd24Aa/mQ3BCbysw0+OoUePjp2EY
-    kZvcG5u4Driv3b0CM8pgDLMeZV8Bng0qF7fUYDD2uhgcS5w0yigTt1DLxncIB8LNKNja
-    G7qAR64C06gvpuSJKkWt2cbpig+UrAAt6TNTgFYtw5fCTAMl0XUeKqKJuzuwv4z2ZvZF
-    C+0IQdjEEAM5xFoxDShBuWfRG6rfwttYZ611Jnz2yaFJWfaAYYtQkGBsE+/b5MXUOEiS
-    VAXGaT8n/fimA4oVTIIGtw6uFeN64LWtNmbJsMZSbITCTtsGwribwMg7KzIcnKqAf3Ca
-    +OAA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.3.0 AUTH)
-    with ESMTPSA id x84a76z1RJ7MrbT
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 27 Feb 2023 20:07:22 +0100 (CET)
-Message-ID: <1daa9f1f-6a68-273f-0866-72a4496cd0db@hartkopp.net>
-Date:   Mon, 27 Feb 2023 20:07:16 +0100
+        with ESMTP id S230268AbjB0TrQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 14:47:16 -0500
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EA028202;
+        Mon, 27 Feb 2023 11:46:48 -0800 (PST)
+Received: by mail-qt1-f181.google.com with SMTP id w23so8016473qtn.6;
+        Mon, 27 Feb 2023 11:46:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zgbfP6t1iEXlYeQDHgpgkGKrmlu/wPbkfmiZJDZsq5c=;
+        b=PeklCc/BUNFCM4ElJPmsx7n8MV2Iwl7q5/6ZPW3lCqlV0dMVC71bUn6ySKhihacRzX
+         IhLjkT0taaowmeHkjhqcFjY42CZF3KDVUY920L/intcsjFkVCc92QmU6ESE91dLH9qqs
+         V3sLiIIK128WszIJ9B7tbufuqevD12qezThCbonkuk3CPRtE9KNzSf+rSsBX0KMmXCT3
+         +Yjkpx/NDjxKtTNEsS7Lw4xz/pqZVVRInUsB7OPGfgDt+AWZsfiYWcwVyZRQoHcUkzDM
+         zBLMNGBSVhgNGmNAK4cWhJW8rVsEcT3kNheHkBquP/cEltZS6iHTNcLNoBthBFvRZfmE
+         406w==
+X-Gm-Message-State: AO0yUKU2kiVR8Z6e10D3Yg2rJy4ajsfSR3Icpd5EZkzuMmyjFb/fVh/f
+        9rbA4MyhoEEmv4O+n6cUCizaH3lW93uHzw==
+X-Google-Smtp-Source: AK7set/pQ6JDnl+0gvg72l8iO9kyYF90JvlZkNPQjMM+HJ4miR7SQEsMKDfQzYgWmCLw7AgxTXFqhg==
+X-Received: by 2002:a05:622a:50:b0:3bf:ce27:e1fc with SMTP id y16-20020a05622a005000b003bfce27e1fcmr1053059qtw.7.1677527206826;
+        Mon, 27 Feb 2023 11:46:46 -0800 (PST)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id s184-20020a372cc1000000b0073bb00eb0besm5463580qkh.22.2023.02.27.11.46.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 11:46:45 -0800 (PST)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-536cb25982eso206302047b3.13;
+        Mon, 27 Feb 2023 11:46:45 -0800 (PST)
+X-Received: by 2002:a5b:d4e:0:b0:967:f8b2:7a42 with SMTP id
+ f14-20020a5b0d4e000000b00967f8b27a42mr7816406ybr.7.1677527205039; Mon, 27 Feb
+ 2023 11:46:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Manuel Lauss <manuel.lauss@gmail.com>,
-        Olof Johansson <olof@lixom.net>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-References: <20230227133457.431729-1-arnd@kernel.org>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20230227133457.431729-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230113171026.582290-1-david@redhat.com> <20230113171026.582290-12-david@redhat.com>
+ <CAMuHMdX-FDga8w=pgg1myskEx6wp+oyZifhPPPFnWrc1zW7ZpQ@mail.gmail.com>
+ <9ed766a6-cf06-535d-3337-ea6ff25c2362@redhat.com> <CAMuHMdWSaoKqO1Nx7QMDCcXrRmFbqqX8uwDRezXs8g+HdEFjKA@mail.gmail.com>
+ <c145a2db-f92c-65aa-3e68-07dbb2e097a6@redhat.com>
+In-Reply-To: <c145a2db-f92c-65aa-3e68-07dbb2e097a6@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 Feb 2023 20:46:31 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX7MND++KXgTpx4jscfctQA_-zPt3EN9-+79EWE7e+OjA@mail.gmail.com>
+Message-ID: <CAMuHMdX7MND++KXgTpx4jscfctQA_-zPt3EN9-+79EWE7e+OjA@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1 11/26] microblaze/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        Michal Simek <monstr@monstr.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Arnd,
+Hi David,
 
-On 27.02.23 14:34, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Feb 27, 2023 at 6:01 PM David Hildenbrand <david@redhat.com> wrote:
+> >>>>    /*
+> >>>>     * Externally used page protection values.
+> >>>> diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
+> >>>> index 42f5988e998b..7e3de54bf426 100644
+> >>>> --- a/arch/microblaze/include/asm/pgtable.h
+> >>>> +++ b/arch/microblaze/include/asm/pgtable.h
 
-(..)
+> >>>>     * - All other bits of the PTE are loaded into TLBLO without
+> >>>>     *  * modification, leaving us only the bits 20, 21, 24, 25, 26, 30 for
+> >>>>     * software PTE bits.  We actually use bits 21, 24, 25, and
+> >>>> @@ -155,6 +155,9 @@ extern pte_t *va_to_pte(unsigned long address);
+> >>>>    #define _PAGE_ACCESSED 0x400   /* software: R: page referenced */
+> >>>>    #define _PMD_PRESENT   PAGE_MASK
+> >>>>
+> >>>> +/* We borrow bit 24 to store the exclusive marker in swap PTEs. */
+> >>>> +#define _PAGE_SWP_EXCLUSIVE    _PAGE_DIRTY
+> >>>
+> >>> _PAGE_DIRTY is 0x80, so this is also bit 7, thus the new comment is
+> >>> wrong?
+> >>
+> >> In the example, I use MSB-0 bit numbering (which I determined to be
+> >> correct in microblaze context eventually, but I got confused a couple a
+> >> times because it's very inconsistent). That should be MSB-0 bit 24.
+> >
+> > Thanks, TIL microblaze uses IBM bit numbering...
+>
+> I assume IBM bit numbering corresponds to MSB-0 bit numbering, correct?
 
-> The remaining cardbus/yenta support is essentially a PCI hotplug driver
-> with a slightly unusual sysfs interface, and it would still support all
-> 32-bit cardbus hosts and cards, but no longer work with the even older
-> 16-bit cards that require the pcmcia_driver infrastructure.
+Correct, as seen in s370 and PowerPC manuals...
 
-I'm using a 2005 Samsung X20 laptop (Pentium M 1.6GHz, Centrino) with 
-PCMCIA (type 2) CAN bus cards:
+> I recall that I used the comment above "/* Definitions for MicroBlaze.
+> */" as an orientation.
+>
+> 0  1  2  3  4  ... 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+> RPN.....................  0  0 EX WR ZSEL.......  W  I  M  G
 
-- EMS PCMCIA
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/sja1000/ems_pcmcia.c
+Indeed, that's where I noticed the "unconventional" numbering...
 
-- PEAK PCCard
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/sja1000/peak_pcmcia.c
+> So ... either we adjust both or we leave it as is. (again, depends on
+> what the right thing to to is -- which I don't know :) )
 
-As I still maintain the EMS PCMCIA and had to tweak and test a patch 
-recently (with a 5.16-rc2 kernel):
+It depends whether you want to match the hardware documentation,
+or the Linux BIT() macro and friends...
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/can/sja1000/ems_pcmcia.c?id=3ec6ca6b1a8e64389f0212b5a1b0f6fed1909e45
+Gr{oetje,eeting}s,
 
-I assume these CAN bus PCMCIA interfaces won't work after your patch 
-set, right?
+                        Geert
 
-Here is the dmesg output of the PCMCIA driver and the CAN drivers from 
-the 5.16-rc2 kernel:
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-[   17.167938] yenta_cardbus 0000:02:09.0: CardBus bridge found [144d:c01a]
-[   17.304252] yenta_cardbus 0000:02:09.0: ISA IRQ mask 0x0cb8, PCI irq 16
-[   17.304266] yenta_cardbus 0000:02:09.0: Socket status: 30000006
-[   17.304275] yenta_cardbus 0000:02:09.0: pcmcia: parent PCI bridge 
-window: [io  0x4000-0x4fff]
-[   17.304282] pcmcia_socket pcmcia_socket0: cs: IO port probe 
-0x4000-0x4fff:
-[   17.305582]  excluding 0x4000-0x40ff 0x4400-0x44ff
-[   17.318112] yenta_cardbus 0000:02:09.0: pcmcia: parent PCI bridge 
-window: [mem 0xb8000000-0xb80fffff]
-[   17.318122] pcmcia_socket pcmcia_socket0: cs: memory probe 
-0xb8000000-0xb80fffff:
-[   17.318129]  excluding 0xb8000000-0xb801ffff
-[   18.481675] pcmcia_socket pcmcia_socket0: cs: IO port probe 0x100-0x3af:
-[   18.482680]  excluding 0x170-0x177 0x1f0-0x1f7 0x370-0x377
-[   18.483428] pcmcia_socket pcmcia_socket0: cs: IO port probe 0x3e0-0x4ff:
-[   18.484196]  excluding 0x3f0-0x3f7 0x4d0-0x4d7
-[   18.484570] pcmcia_socket pcmcia_socket0: cs: IO port probe 0x820-0x8ff:
-[   18.485149]  clean
-[   18.485178] pcmcia_socket pcmcia_socket0: cs: IO port probe 0xc00-0xcf7:
-[   18.485818]  clean
-[   18.485856] pcmcia_socket pcmcia_socket0: cs: memory probe 
-0x0c0000-0x0fffff:
-[   18.485863]  excluding 0xc0000-0xc7fff 0xd8000-0xfffff
-[   18.485908] pcmcia_socket pcmcia_socket0: cs: memory probe 
-0xa0000000-0xa0ffffff:
-[   18.485929]  clean
-[   18.485958] pcmcia_socket pcmcia_socket0: cs: memory probe 
-0x60000000-0x60ffffff:
-[   18.485972]  excluding 0x60000000-0x60ffffff
-[   18.486005] pcmcia_socket pcmcia_socket0: cs: IO port probe 0xa00-0xaff:
-[   18.486663]  clean
-
-(..)
-
-[  176.999473] pcmcia_socket pcmcia_socket0: pccard: PCMCIA card 
-inserted into slot 0
-[  176.999489] pcmcia_socket pcmcia_socket0: cs: memory probe 
-0xb8020000-0xb80fffff:
-[  177.009792]  clean
-[  177.010039] pcmcia 0.0: pcmcia: registering new device pcmcia0.0 (IRQ: 3)
-[  177.119671] CAN device driver interface
-[  177.140214] sja1000 CAN netdevice driver
-[  177.204920] ems_pcmcia: registered can0 on channel #0 at 0xbd4852ee, 
-irq 3
-[  177.212167] ems_pcmcia: registered can1 on channel #1 at 0x081f55b8, 
-irq 3
-[ 1003.014730] pcmcia_socket pcmcia_socket0: pccard: card ejected from 
-slot 0
-[ 1003.014801] ems_pcmcia: removing can0 on channel #0
-[ 1003.027520] ems_pcmcia: removing can1 on channel #1
-[ 1019.943489] pcmcia_socket pcmcia_socket0: pccard: PCMCIA card 
-inserted into slot 0
-[ 1019.943715] pcmcia 0.0: pcmcia: registering new device pcmcia0.0 (IRQ: 3)
-[ 1020.035605] peak_pcmcia 0.0: PEAK-System pcmcia card PC_CAN_CARD fw 1.5
-[ 1020.039539] peak_pcmcia 0.0: can0 on channel 0 at 0x55749494 irq 3
-[ 1020.045816] peak_pcmcia 0.0: can1 on channel 1 at 0x415066ba irq 3
-
-Best regards,
-Oliver
-
-
-> 
-> I don't expect this to be a problem normal laptop support, as the last
-> PC models that predate Cardbus support (e.g. 1997 ThinkPad 380ED) are
-> all limited to i586MMX CPUs and 80MB of RAM. This is barely enough to
-> boot Tiny Core Linux but not a regular distro.
-> 
-> Support for device drivers is somewhat less clear. Losing support for
-> 16-bit cards in cardbus sockets is obviously a limiting factor for
-> anyone who still has those cards, but there is also a good chance that
-> the only reason to keep the cards around is for using them in pre-cardbus
-> machines that cannot be upgrade to 32-bit devices.
-> 
-> Completely removing the 16-bit PCMCIA support would however break some
-> 20+ year old embedded machines that rely on CompactFlash cards as their
-> mass-storage device (extension), this notably includes early PocketPC
-> models and the reference implementations for OMAP1, StrongARM1100,
-> Alchemy and PA-Semi. All of these are still maintained, though most
-> of the PocketPC machines got removed in the 6.3 merge window and the
-> PA-Semi Electra board is the only one that was introduced after
-> 2003.
-> 
-> The approach that I take in this series is to split drivers/pcmcia
-> into two mutually incompatible parts: the Cardbus support contains
-> all the code that is relevant for post-1997 laptops and gets moved
-> to drivers/pci/hotplug, while the drivers/pcmcia/ subsystem is
-> retained for both the older laptops and the embedded systems but no
-> longer works with the yenta socket host driver. The BCM63xx
-> PCMCIA/Cardbus host driver appears to be unused and conflicts with
-> this series, so it is removed in the process.
-> 
-> My series does not touch any of the pcmcia_driver instances, but
-> if there is consensus about splitting out the cardbus support,
-> a lot of them can probably get removed as a follow-up.
-> 
-> [1] https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
-> [2] https://lore.kernel.org/all/c5b39544-a4fb-4796-a046-0b9be9853787@app.fastmail.com/
-> [3] https://lore.kernel.org/all/20230222092302.6348-1-jirislaby@kernel.org/
-> 
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: H Hartley Sweeten <hsweeten@visionengravers.com>
-> Cc: Ian Abbott <abbotti@mev.co.uk>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kevin Cernekee <cernekee@gmail.com>
-> Cc: Lukas Wunner <lukas@wunner.de>
-> Cc: Manuel Lauss <manuel.lauss@gmail.com>
-> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-> Cc: Olof Johansson <olof@lixom.net>
-> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-> Cc: YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
-> Cc: bcm-kernel-feedback-list@broadcom.com
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> 
-> Arnd Bergmann (6):
->    pccard: remove bcm63xx socket driver
->    pccard: split cardbus support from pcmcia
->    yenta_socket: copy pccard core code into driver
->    yenta_socket: remove dead code
->    pccard: drop remnants of cardbus support
->    pci: hotplug: move cardbus code from drivers/pcmcia
-> 
->   arch/mips/bcm63xx/Makefile                    |    2 +-
->   arch/mips/bcm63xx/boards/board_bcm963xx.c     |   14 -
->   arch/mips/bcm63xx/dev-pcmcia.c                |  144 -
->   arch/mips/configs/bcm63xx_defconfig           |    1 -
->   .../asm/mach-bcm63xx/bcm63xx_dev_pcmcia.h     |   14 -
->   arch/mips/pci/ops-bcm63xx.c                   |  294 --
->   arch/mips/pci/pci-bcm63xx.c                   |   44 -
->   drivers/Makefile                              |    2 +-
->   drivers/pci/hotplug/Kconfig                   |   56 +
->   drivers/pci/hotplug/Makefile                  |    1 +
->   drivers/pci/hotplug/yenta_socket.c            | 4056 +++++++++++++++++
->   drivers/pcmcia/Kconfig                        |   63 +-
->   drivers/pcmcia/Makefile                       |   13 +-
->   drivers/pcmcia/bcm63xx_pcmcia.c               |  538 ---
->   drivers/pcmcia/bcm63xx_pcmcia.h               |   61 -
->   drivers/pcmcia/cardbus.c                      |  124 -
->   drivers/pcmcia/cistpl.c                       |   10 +-
->   drivers/pcmcia/cs.c                           |  103 +-
->   drivers/pcmcia/cs_internal.h                  |   10 +-
->   drivers/pcmcia/ds.c                           |   14 +-
->   drivers/pcmcia/i82092.c                       |    2 +-
->   drivers/pcmcia/i82365.c                       |    2 +-
->   drivers/pcmcia/o2micro.h                      |  183 -
->   drivers/pcmcia/pd6729.c                       |    3 +-
->   drivers/pcmcia/ricoh.h                        |  169 -
->   drivers/pcmcia/socket_sysfs.c                 |    2 -
->   drivers/pcmcia/ti113x.h                       |  978 ----
->   drivers/pcmcia/topic.h                        |  168 -
->   drivers/pcmcia/yenta_socket.c                 | 1455 ------
->   drivers/pcmcia/yenta_socket.h                 |  136 -
->   {drivers => include}/pcmcia/i82365.h          |    0
->   include/pcmcia/ss.h                           |   21 -
->   32 files changed, 4147 insertions(+), 4536 deletions(-)
->   delete mode 100644 arch/mips/bcm63xx/dev-pcmcia.c
->   delete mode 100644 arch/mips/include/asm/mach-bcm63xx/bcm63xx_dev_pcmcia.h
->   create mode 100644 drivers/pci/hotplug/yenta_socket.c
->   delete mode 100644 drivers/pcmcia/bcm63xx_pcmcia.c
->   delete mode 100644 drivers/pcmcia/bcm63xx_pcmcia.h
->   delete mode 100644 drivers/pcmcia/cardbus.c
->   delete mode 100644 drivers/pcmcia/o2micro.h
->   delete mode 100644 drivers/pcmcia/ti113x.h
->   delete mode 100644 drivers/pcmcia/topic.h
->   delete mode 100644 drivers/pcmcia/yenta_socket.c
->   delete mode 100644 drivers/pcmcia/yenta_socket.h
->   rename {drivers => include}/pcmcia/i82365.h (100%)
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
