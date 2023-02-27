@@ -2,145 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA8F6A4B7D
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 20:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442D86A4BE0
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 21:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjB0TrR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 14:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S230274AbjB0UAz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Feb 2023 15:00:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjB0TrQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 14:47:16 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EA028202;
-        Mon, 27 Feb 2023 11:46:48 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id w23so8016473qtn.6;
-        Mon, 27 Feb 2023 11:46:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zgbfP6t1iEXlYeQDHgpgkGKrmlu/wPbkfmiZJDZsq5c=;
-        b=PeklCc/BUNFCM4ElJPmsx7n8MV2Iwl7q5/6ZPW3lCqlV0dMVC71bUn6ySKhihacRzX
-         IhLjkT0taaowmeHkjhqcFjY42CZF3KDVUY920L/intcsjFkVCc92QmU6ESE91dLH9qqs
-         V3sLiIIK128WszIJ9B7tbufuqevD12qezThCbonkuk3CPRtE9KNzSf+rSsBX0KMmXCT3
-         +Yjkpx/NDjxKtTNEsS7Lw4xz/pqZVVRInUsB7OPGfgDt+AWZsfiYWcwVyZRQoHcUkzDM
-         zBLMNGBSVhgNGmNAK4cWhJW8rVsEcT3kNheHkBquP/cEltZS6iHTNcLNoBthBFvRZfmE
-         406w==
-X-Gm-Message-State: AO0yUKU2kiVR8Z6e10D3Yg2rJy4ajsfSR3Icpd5EZkzuMmyjFb/fVh/f
-        9rbA4MyhoEEmv4O+n6cUCizaH3lW93uHzw==
-X-Google-Smtp-Source: AK7set/pQ6JDnl+0gvg72l8iO9kyYF90JvlZkNPQjMM+HJ4miR7SQEsMKDfQzYgWmCLw7AgxTXFqhg==
-X-Received: by 2002:a05:622a:50:b0:3bf:ce27:e1fc with SMTP id y16-20020a05622a005000b003bfce27e1fcmr1053059qtw.7.1677527206826;
-        Mon, 27 Feb 2023 11:46:46 -0800 (PST)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id s184-20020a372cc1000000b0073bb00eb0besm5463580qkh.22.2023.02.27.11.46.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 11:46:45 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-536cb25982eso206302047b3.13;
-        Mon, 27 Feb 2023 11:46:45 -0800 (PST)
-X-Received: by 2002:a5b:d4e:0:b0:967:f8b2:7a42 with SMTP id
- f14-20020a5b0d4e000000b00967f8b27a42mr7816406ybr.7.1677527205039; Mon, 27 Feb
- 2023 11:46:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20230113171026.582290-1-david@redhat.com> <20230113171026.582290-12-david@redhat.com>
- <CAMuHMdX-FDga8w=pgg1myskEx6wp+oyZifhPPPFnWrc1zW7ZpQ@mail.gmail.com>
- <9ed766a6-cf06-535d-3337-ea6ff25c2362@redhat.com> <CAMuHMdWSaoKqO1Nx7QMDCcXrRmFbqqX8uwDRezXs8g+HdEFjKA@mail.gmail.com>
- <c145a2db-f92c-65aa-3e68-07dbb2e097a6@redhat.com>
-In-Reply-To: <c145a2db-f92c-65aa-3e68-07dbb2e097a6@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Feb 2023 20:46:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX7MND++KXgTpx4jscfctQA_-zPt3EN9-+79EWE7e+OjA@mail.gmail.com>
-Message-ID: <CAMuHMdX7MND++KXgTpx4jscfctQA_-zPt3EN9-+79EWE7e+OjA@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1 11/26] microblaze/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Michal Simek <monstr@monstr.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229653AbjB0UAy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 15:00:54 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F20523D85;
+        Mon, 27 Feb 2023 12:00:52 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id AF5825C0072;
+        Mon, 27 Feb 2023 14:53:32 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 27 Feb 2023 14:53:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677527612; x=1677614012; bh=yC30tR58lD
+        WMAbC3WznvtUEL6VSBZ1Xu0Ye4jfaff4E=; b=jkSIlNorAIKuVx/vedrggy/bfW
+        oydMrIo9XFGFDAbd8/D5bVMHMfyhG/wiEytF8dkgRqFzFcit17qG1ITq+ByzC+77
+        RaezKUIBNHiWC2+XMoLCqXZ4G3iOl5D3uWMYqb37YX78pqX6V2SBuNBQkOslmzlh
+        sHPCJSELqlpK+HSmC8QPO4TbkZ7D1tqNpfJwt6v0QzZzxfI/SPdZ570TvYcztU8S
+        FfHiDPMmb7gkwO7gyvD/eUy7gvAWlzxNP9g/dw5UGorTv+eaPciRfpJZQTxFFg9N
+        4H71GsoX5OxdNUlTA2NEaLoYRozfZZAc+zQhOq+UI/3lNKQ5QUkHyVPIWGnA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677527612; x=1677614012; bh=yC30tR58lDWMAbC3WznvtUEL6VSB
+        Z1Xu0Ye4jfaff4E=; b=CaznXqVrGCF/7CkuE4qsh1nNvy3qZ0VsgAzx/RYeDcvW
+        hajBnnqt020TlccB7ZrjN6n3k/76uiBjIRrsdfj5JReYYtjAST3p7GnKdkCLIxjj
+        zbzLehkioMkAaehIoCaQ10+ix08xHgrTZ5bffa3gguQ6Av21r42tmyho7twwxYLx
+        alDf3y0Sxgv9asu+X1qwBjMvTU7r2cJS5PbXw+dRrf6m5o+za7SXBhIHH9marFRb
+        Ru6bwY4qFkSTLFRNkBLtxcsffMnwoInR1YsfBNDLaX7NE3MBTDH90GPmejp48LDs
+        JSx3RI6u5cLSjIkBYS/Skbr6c5CNkpoeQI3FSl+P5g==
+X-ME-Sender: <xms:Owr9Y5CjfJQMxjg0vkuoq5FGG0-w9czhxzJYAZrdl_9gLzm6Yby8lg>
+    <xme:Owr9Y3gguyQCvcLGy0iQLYUIfgRzhcuI29r8g53fk3-A66BsgTeiufX0PcwWx9ImR
+    RRLfOxRBWNd73EaemM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddguddviecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeelgffhgedvueeuffdtveeutddtfeehlefffeetvdffleejjeevffejjeek
+    teevgeenucffohhmrghinhepsghoohhtlhhinhdrtghomhdpkhgvrhhnvghlrdhorhhgne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgu
+    segrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Owr9Y0n72Lh-6iiY43f1qXuG1cB1AMF4XSH1BKzMPkjzFIUVeu3Jpg>
+    <xmx:Owr9YzwAVuC3mXk5s674S4oBdOv2YfNu4TDmIJS4Ciudk7zx_HL9Ew>
+    <xmx:Owr9Y-TFZ0Q62NIaUS35WBkpKDZPoqNSRxcCKISuk8mvUblpI9AWFA>
+    <xmx:PAr9Y8nu7ufuM1nV1G_gYiQuX9hLo0sw9jeSyhnO2nbhntu-nwIOuw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3EF77B60086; Mon, 27 Feb 2023 14:53:31 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <c5ea695e-8693-4033-9941-c582f1c6f6be@app.fastmail.com>
+In-Reply-To: <1daa9f1f-6a68-273f-0866-72a4496cd0db@hartkopp.net>
+References: <20230227133457.431729-1-arnd@kernel.org>
+ <1daa9f1f-6a68-273f-0866-72a4496cd0db@hartkopp.net>
+Date:   Mon, 27 Feb 2023 20:53:09 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Oliver Hartkopp" <socketcan@hartkopp.net>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org
+Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Hartley Sweeten" <hsweeten@visionengravers.com>,
+        "Ian Abbott" <abbotti@mev.co.uk>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Kevin Cernekee" <cernekee@gmail.com>,
+        "Lukas Wunner" <lukas@wunner.de>,
+        "Manuel Lauss" <manuel.lauss@gmail.com>,
+        "Olof Johansson" <olof@lixom.net>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi David,
-
-On Mon, Feb 27, 2023 at 6:01 PM David Hildenbrand <david@redhat.com> wrote:
-> >>>>    /*
-> >>>>     * Externally used page protection values.
-> >>>> diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
-> >>>> index 42f5988e998b..7e3de54bf426 100644
-> >>>> --- a/arch/microblaze/include/asm/pgtable.h
-> >>>> +++ b/arch/microblaze/include/asm/pgtable.h
-
-> >>>>     * - All other bits of the PTE are loaded into TLBLO without
-> >>>>     *  * modification, leaving us only the bits 20, 21, 24, 25, 26, 30 for
-> >>>>     * software PTE bits.  We actually use bits 21, 24, 25, and
-> >>>> @@ -155,6 +155,9 @@ extern pte_t *va_to_pte(unsigned long address);
-> >>>>    #define _PAGE_ACCESSED 0x400   /* software: R: page referenced */
-> >>>>    #define _PMD_PRESENT   PAGE_MASK
-> >>>>
-> >>>> +/* We borrow bit 24 to store the exclusive marker in swap PTEs. */
-> >>>> +#define _PAGE_SWP_EXCLUSIVE    _PAGE_DIRTY
-> >>>
-> >>> _PAGE_DIRTY is 0x80, so this is also bit 7, thus the new comment is
-> >>> wrong?
-> >>
-> >> In the example, I use MSB-0 bit numbering (which I determined to be
-> >> correct in microblaze context eventually, but I got confused a couple a
-> >> times because it's very inconsistent). That should be MSB-0 bit 24.
-> >
-> > Thanks, TIL microblaze uses IBM bit numbering...
+On Mon, Feb 27, 2023, at 20:07, Oliver Hartkopp wrote:
+> Hello Arnd,
 >
-> I assume IBM bit numbering corresponds to MSB-0 bit numbering, correct?
-
-Correct, as seen in s370 and PowerPC manuals...
-
-> I recall that I used the comment above "/* Definitions for MicroBlaze.
-> */" as an orientation.
+> On 27.02.23 14:34, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
 >
-> 0  1  2  3  4  ... 18 19 20 21 22 23 24 25 26 27 28 29 30 31
-> RPN.....................  0  0 EX WR ZSEL.......  W  I  M  G
+> (..)
+>
+>> The remaining cardbus/yenta support is essentially a PCI hotplug driver
+>> with a slightly unusual sysfs interface, and it would still support all
+>> 32-bit cardbus hosts and cards, but no longer work with the even older
+>> 16-bit cards that require the pcmcia_driver infrastructure.
+>
+> I'm using a 2005 Samsung X20 laptop (Pentium M 1.6GHz, Centrino) with 
+> PCMCIA (type 2) CAN bus cards:
+>
+> - EMS PCMCIA
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/sja1000/ems_pcmcia.c
+>
+> - PEAK PCCard
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/sja1000/peak_pcmcia.c
+>
+> As I still maintain the EMS PCMCIA and had to tweak and test a patch 
+> recently (with a 5.16-rc2 kernel):
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/can/sja1000/ems_pcmcia.c?id=3ec6ca6b1a8e64389f0212b5a1b0f6fed1909e45
+>
+> I assume these CAN bus PCMCIA interfaces won't work after your patch 
+> set, right?
 
-Indeed, that's where I noticed the "unconventional" numbering...
+Correct, the patch series in its current form breaks this since
+your laptop is cardbus compatible. The options I can see are:
 
-> So ... either we adjust both or we leave it as is. (again, depends on
-> what the right thing to to is -- which I don't know :) )
+- abandon my series and keep everything unchanged, possibly removing
+  some of the pcmcia drivers that Dominik identified as candidates
 
-It depends whether you want to match the hardware documentation,
-or the Linux BIT() macro and friends...
+- decide on a future timeline for when you are comfortable with
+  discontinuing this setup and require any CAN users with cardbus
+  laptops to move to USB or cardbus CAN adapters, apply the series
+  then
 
-Gr{oetje,eeting}s,
+- duplicate the yenta_socket driver to have two variants of that,
+  require the user to choose between the cardbus and the pcmcia
+  variant depending on what card is going to be used.
 
-                        Geert
+Can you give more background on who is using the EMS PCMCIA card?
+I.e. are there reasons to use this device on modern kernels with
+machines that could also support the USB, expresscard or cardbus
+variants, or are you likely the only one doing this for the
+purpose of maintaining the driver?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+      Arnd
