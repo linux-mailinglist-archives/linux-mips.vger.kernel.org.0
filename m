@@ -2,175 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC356A3FD7
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 11:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E196A411C
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 12:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjB0K7B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 05:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        id S229379AbjB0LpQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Feb 2023 06:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjB0K6Z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 05:58:25 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7155D10AAE;
-        Mon, 27 Feb 2023 02:58:21 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so3559817wmq.2;
-        Mon, 27 Feb 2023 02:58:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LUIj51PNz0xKbBS1KQE1NGFBEuNj+zGXmUx8EwDrEEo=;
-        b=TJYUtDgqq9fjYccEW/VNEByBE9lmodlqJVkF6UoDUTECzXGQdVxmSRkGnC4sgATJ3C
-         OpV7BIvpnGMbb7e69N6ba26mdPG9o4UWaAMeMFP2M3c7urK3w3RT4ftZBgAHY1V+DMIL
-         90aS0fgh3JohfkogcQBFi2Kt1DY36wNdY9iOzRZ31CUkyzQUPnOEeNrFkdr7ka54XUaM
-         /lZ/W9DlOkXM50U25a06s5tX4JAh5Ns5MfDkuDmNC2zWOc7ZgXQJHYBppp5RdzzqQzqe
-         EL2rlrcA8QcuAJ6JpAQOpbNh5q4gGhhrZ1/sGnin3kTYE7H/Ixh1OpS0h6FtvSQLqwNs
-         NSnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LUIj51PNz0xKbBS1KQE1NGFBEuNj+zGXmUx8EwDrEEo=;
-        b=18PhZNM2JKTkS/imc+fwP4Icb9490dJYlWjPDcXIMJTSq8hvuPk0cTGOzdgUdvMeCR
-         7Ma0pJTxVzgMYd49b3V6AWeBzRY9CoZ1bfpFMcYVZ5bGl7qeEe9SSXCcsye4FvRdXdyj
-         ZIViPWG2/Q9+mAywtdzBKxS6BufswwBFsddlL674h268vaIpVtiDEZXPJw8kQXjUONdV
-         t/eWrpt2ZaTnpvZvq76mXe/BQeDKpWx6uQQcQPSJHDzRKpoC9t1B6RTOpu7lYTkzrlSM
-         SuAhTov+6dBUX9nLKRpprZwcGaxFfw4L6GPzXTFEzBVCvIjklC8eJGXiX7AIzY+otZ4g
-         yGNw==
-X-Gm-Message-State: AO0yUKV5zaTt/40pIH9i7PCG7AXJI7Fol1kyeWlpQBs1oQjjEiADwC10
-        UWVGm25s3s9Hszu31V1XThmJbllWpiI=
-X-Google-Smtp-Source: AK7set8P3IPV4EDc0sawNE5O19VB7XhcUX9DCeoL6NHPAEmlnNulXRB7DJzxpQ1Nlmp34Q5Xp35isg==
-X-Received: by 2002:a05:600c:19cb:b0:3eb:4cb5:e13 with SMTP id u11-20020a05600c19cb00b003eb4cb50e13mr386314wmq.31.1677495499660;
-        Mon, 27 Feb 2023 02:58:19 -0800 (PST)
-Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
-        by smtp.gmail.com with ESMTPSA id a4-20020a5d5704000000b002c559843748sm6806122wrv.10.2023.02.27.02.58.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 02:58:19 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, git@johnthomson.fastmail.com.au
-Subject: [PATCH 12/12] mips: ralink: mt7620: introduce 'soc_device' initialization
-Date:   Mon, 27 Feb 2023 11:58:06 +0100
-Message-Id: <20230227105806.2394101-13-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230227105806.2394101-1-sergio.paracuellos@gmail.com>
-References: <20230227105806.2394101-1-sergio.paracuellos@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229566AbjB0LpP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 06:45:15 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3007AB9
+        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 03:45:03 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id A9B9A320090D;
+        Mon, 27 Feb 2023 06:45:02 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 27 Feb 2023 06:45:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677498302; x=
+        1677584702; bh=/NTTKTkIyXjSNbjfUDX725jgeGwv8aaQYHAS65/2+AA=; b=n
+        9nksoMfAhd/JPkT9RS80r10pOgE3Z6rLiCQdlV7q/uzmR5UFRx+JpdcMkQBG2PHS
+        c6YRJo5dSZyexvVxf3a2XbBxG+8Yn6XTQp1zjpstOhTAnoxZi3qBuTlFqO48K4DJ
+        Y2uUBzngMZBDAPxuzYqpIEyN1HfLaA78WOtiGk79Hx7hDpxeaIDmvvGe+xM127vK
+        LdieIYsbOUF1CYtFy78m9izXgrcVo6XbmgfYdCCXHNP2Qw9YbD48F7CJ+UQu3XjX
+        ywSy11adTu800Q0OQ7UFagSq8+ImQkVocplKfsfhHmIya6aNIS69myC/G8jbKxMZ
+        1BiP0l+436tMDi+xCE6Xg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677498302; x=
+        1677584702; bh=/NTTKTkIyXjSNbjfUDX725jgeGwv8aaQYHAS65/2+AA=; b=R
+        3MTk0maP10QjmPk6qkJustDXs0mDAesi4x47S5/ENRgS0y+/qJ8JMqdlRtwZ7FFW
+        p6L/xWCuaEN0COb5kHulAd+XsVAV2nxDqNCT0KsVDk+fDtQ7UXrmG4Njar3xfzGf
+        ssTBv4hRch5Zb0/2ePajQ70WOqVssebCMwn+MRvx3uRJsVoL8e27wmnTzjrDPyw5
+        wDvE4GmTXUr8IuzMvhNA4iO/qn7iIUQWIGM4PL+5SC5CU2K/B0ugeq+VWChB2gD1
+        5qkm09wlNMu7HXAeetQS5o70tC0LUmeQCwJp8GZxMBCBvTt/deZ1cGZQzPBNP8hW
+        4Nz5tj3juTW4WJ8Bbes9g==
+X-ME-Sender: <xms:vZf8Yx-Ksk0gq5MGYKk3fSIqbAZ5OHyRHD2qiVGJR-xJ2UieVvU0gg>
+    <xme:vZf8Y1vFpvvIk4bgJRkPAYPlumSjfLVj9ylvCz312SURUbBbAobulyZU6YVsm2qLe
+    cVZqQhG7hLlI3o52Zk>
+X-ME-Received: <xmr:vZf8Y_Ahlsyw8vNh8pS3TuYbSDTr17WMhbGf69wVPzlLHERREkeg8ShExDZagHPC2DB8ZBIonyCGShARNbyuiT77J5eXU7-7>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:vZf8Y1d_jay6Nu5K9Q9WiPPJgERnH-OPZ4_LSOdaMLspfJZHQgEV2Q>
+    <xmx:vZf8Y2MmH6tXbpgXovUObIyA2P_8ONFykqFsX69S1ghhpq6UdDP4jA>
+    <xmx:vZf8Y3nm6pZj9PCNm_OeXMKiy0r1rjHQYszPeMPSdCVnpPQq7wBsUw>
+    <xmx:vpf8YwWNa77mCN5-fzZAa41MSNr8N0fY4fEf97ZWB4zOafFP9iUwYA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Feb 2023 06:45:01 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [PATCH 2/2] MIPS: cevt-r4k: Offset counter value for clearing
+ compare interrupt
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230227093126.GA6152@alpha.franken.de>
+Date:   Mon, 27 Feb 2023 11:44:48 +0000
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <1386E355-383C-464E-9821-34BA8ED4DCE3@flygoat.com>
+References: <20230225221008.8520-1-jiaxun.yang@flygoat.com>
+ <20230225221008.8520-3-jiaxun.yang@flygoat.com>
+ <20230226232331.GA9208@alpha.franken.de>
+ <579403EF-8E0D-4AC9-9AB1-51CBB433E114@flygoat.com>
+ <20230227093126.GA6152@alpha.franken.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MT7620 SoCs have their own 'ralink_soc_info' structure with some
-information about the soc itself. In order to be able to retrieve this
-information from driver code and avoid architecture dependencies for
-retrieving these details introduce this 'soc_device'. Set 'data' pointer
-points to the struct 'ralink_soc_info' to be able to export also current
-soc information using this mechanism. We need to select 'SOC_BUS' in
-Kconfig configuration for these SoCs.
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- arch/mips/ralink/Kconfig  |  1 +
- arch/mips/ralink/mt7620.c | 44 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
 
-diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-index 3e01e2df96b0..088d46f16800 100644
---- a/arch/mips/ralink/Kconfig
-+++ b/arch/mips/ralink/Kconfig
-@@ -44,6 +44,7 @@ choice
- 		bool "MT7620/8"
- 		select CPU_MIPSR2_IRQ_VI
- 		select HAVE_PCI
-+		select SOC_BUS
- 
- 	config SOC_MT7621
- 		bool "MT7621"
-diff --git a/arch/mips/ralink/mt7620.c b/arch/mips/ralink/mt7620.c
-index 8604d91f3375..4435f50b8d24 100644
---- a/arch/mips/ralink/mt7620.c
-+++ b/arch/mips/ralink/mt7620.c
-@@ -11,6 +11,8 @@
- #include <linux/kernel.h>
- #include <linux/init.h>
- #include <linux/bug.h>
-+#include <linux/slab.h>
-+#include <linux/sys_soc.h>
- 
- #include <asm/mipsregs.h>
- #include <asm/mach-ralink/ralink_regs.h>
-@@ -49,6 +51,8 @@
- /* does the board have sdram or ddram */
- static int dram_type;
- 
-+static struct ralink_soc_info *soc_info_ptr;
-+
- static __init u32
- mt7620_calc_rate(u32 ref_rate, u32 mul, u32 div)
- {
-@@ -410,6 +414,44 @@ static const char __init *mt7620_get_soc_name(struct ralink_soc_info *soc_info)
- 	}
- }
- 
-+static const char __init *mt7620_get_soc_id_name(void)
-+{
-+	if (ralink_soc == MT762X_SOC_MT7620A)
-+		return "mt7620a";
-+	else if (ralink_soc == MT762X_SOC_MT7620N)
-+		return "mt7620n";
-+	else if (ralink_soc == MT762X_SOC_MT7688)
-+		return "mt7688";
-+	else if (ralink_soc == MT762X_SOC_MT7628AN)
-+		return "mt7628n";
-+	else
-+		return "invalid";
-+}
-+
-+static int __init mt7620_soc_dev_init(void)
-+{
-+	struct soc_device *soc_dev;
-+	struct soc_device_attribute *soc_dev_attr;
-+
-+	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
-+	if (!soc_dev_attr)
-+		return -ENOMEM;
-+
-+	soc_dev_attr->family = "Ralink";
-+	soc_dev_attr->soc_id = mt7620_get_soc_id_name();
-+
-+	soc_dev_attr->data = soc_info_ptr;
-+
-+	soc_dev = soc_device_register(soc_dev_attr);
-+	if (IS_ERR(soc_dev)) {
-+		kfree(soc_dev_attr);
-+		return PTR_ERR(soc_dev);
-+	}
-+
-+	return 0;
-+}
-+device_initcall(mt7620_soc_dev_init);
-+
- void __init prom_soc_init(struct ralink_soc_info *soc_info)
- {
- 	const char *name = mt7620_get_soc_name(soc_info);
-@@ -444,4 +486,6 @@ void __init prom_soc_init(struct ralink_soc_info *soc_info)
- 		(pmu0 & PMU_SW_SET) ? ("sw") : ("hw"));
- 	pr_info("Digital PMU set to %s control\n",
- 		(pmu1 & DIG_SW_SEL) ? ("sw") : ("hw"));
-+
-+	soc_info_ptr = soc_info;
- }
--- 
-2.25.1
+> 2023=E5=B9=B42=E6=9C=8827=E6=97=A5 09:31=EF=BC=8CThomas Bogendoerfer =
+<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Mon, Feb 27, 2023 at 01:22:47AM +0000, Jiaxun Yang wrote:
+>>=20
+>>=20
+>>=20
+[...]
+>> Clearing interrupt happens in write_c0_compare but the problem is the =
+interrupt
+>> does really get cleared because it triggered again straight away.
+>=20
+> the function you are patching is a test function whether =
+counter/compare
+> is usable, so it's not in the normal timer handling. See a problem =
+there
+> would more to broken hardware than to a bug in that function.
+
+The problem is sometimes on a multi-core system this function managed
+to run on one of the core but then fail on another.
+
+In our real use of compare interrupt, we are clearing interrupt by =
+writing back
+old value of compare, which is guarenteed to be smaller then current =
+count
+because there are so many instructions being executed from exception =
+vector
+to here.
+
+Also as we have no way to disable compare interrupt, if this function =
+determined
+compare to be broken then it won=E2=80=99t register event_handler =
+function, which will
+cause panic for null pointer when unexpected-ish interrupt comes.
+
+>=20
+>> Had confirmed issue on MIPS I6500 uarch simulation trace.
+>=20
+> so not seen on real hardware ?
+
+It was discovered on FPGA and then I tried to debug with simulation to =
+reveal what=E2=80=99s
+going on hardware side.
+
+Thanks
+- Jiaxun
+
+>=20
+> Thomas.
+>=20
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not =
+necessarily a
+> good idea.                                                [ RFC1925, =
+2.3 ]
+
 
