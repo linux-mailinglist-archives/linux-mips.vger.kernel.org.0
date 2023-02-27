@@ -2,222 +2,193 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E302A6A42B2
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 14:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0178E6A42CD
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 14:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjB0Nct (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 08:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S229719AbjB0Nfa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Feb 2023 08:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjB0Ncf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 08:32:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F23820D02
-        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 05:31:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677504702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V+6qFC7OXniFoFqHVWKESI1xjQfVcOUspp9yumvENXI=;
-        b=ex46fXXrhKmDPYEWGcB+af8vCe1J2IzZwA/e2KmgnAYszjSYEeJRhD0SpcUuO1qPy3fF9X
-        XAUmcoTTxXm+25+CGrHsNBZUTmHTyITfycVgVEzyB9To6mrfHrZuTHv/h//7qCbivgE7jW
-        G/8xMJixjPXbKePOGt18zoDHMoIkxVA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-148-44LnH5nyMlWjIsrirzBjbw-1; Mon, 27 Feb 2023 08:31:41 -0500
-X-MC-Unique: 44LnH5nyMlWjIsrirzBjbw-1
-Received: by mail-wr1-f70.google.com with SMTP id g6-20020adfa486000000b002c55ef1ec94so839177wrb.0
-        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 05:31:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V+6qFC7OXniFoFqHVWKESI1xjQfVcOUspp9yumvENXI=;
-        b=XhmKaa7ioXxGT5LsKHzGDsHefDVD9NPa4e/eDQl4T/y3hsDB7KTAtgLp/ji+mqoUt+
-         sjQk23PQyDvPsfpN8IgNA8m/6dbPhPHhuViEDiAeL4g8pg6gJVHt2RAjFt6/Xp3dM/WC
-         b9f0PBZr6uJZsK+qOdSwrTIVdk0N+hs2r0LBLNjNzIjNrmCeVcNAV8DmqK/OHwnb5jjQ
-         MRKQCPCMPsmZ1nsj0YGtSPo1+1AKBtLo5n89BiNWAX/O9xRKPJJ1aGR6XnkGEYpE8n6U
-         cMHAGcLrbJGYjZO8vL+3lSDYxY/dzMIPw8HdUH8/JfkNfbWW4e/DK3puvhmI9ITNGy5x
-         7uNw==
-X-Gm-Message-State: AO0yUKX6oNKpFsSJIg945LM1n2mPAGjj1WY4Ub7bAfaWM0myKo0NTtGq
-        dn+XaH9rpmifaDHoox0nir1//F2EI1RzU/LXuc0lpE4Ye+Cw3qd1QZjwjhxvaqeQzgnHfYSMwvA
-        hKvhr1S9bT+gWstrREdWd8w==
-X-Received: by 2002:a05:600c:3d9b:b0:3ea:f6c4:5f2a with SMTP id bi27-20020a05600c3d9b00b003eaf6c45f2amr11631369wmb.17.1677504699852;
-        Mon, 27 Feb 2023 05:31:39 -0800 (PST)
-X-Google-Smtp-Source: AK7set9k8OE3X06H0t6ffblDghDw4p6MluetLQ2Nt3K/GymnPq5PiNVd71t1cUTwSWsd1hBXO2jKVw==
-X-Received: by 2002:a05:600c:3d9b:b0:3ea:f6c4:5f2a with SMTP id bi27-20020a05600c3d9b00b003eaf6c45f2amr11631342wmb.17.1677504699482;
-        Mon, 27 Feb 2023 05:31:39 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:1f00:7816:2307:5967:2228? (p200300cbc7031f007816230759672228.dip0.t-ipconnect.de. [2003:cb:c703:1f00:7816:2307:5967:2228])
-        by smtp.gmail.com with ESMTPSA id m34-20020a05600c3b2200b003df5be8987esm14091432wms.20.2023.02.27.05.31.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 05:31:38 -0800 (PST)
-Message-ID: <9ed766a6-cf06-535d-3337-ea6ff25c2362@redhat.com>
-Date:   Mon, 27 Feb 2023 14:31:37 +0100
+        with ESMTP id S229558AbjB0Nf3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 08:35:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEC392;
+        Mon, 27 Feb 2023 05:35:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C651B60C8C;
+        Mon, 27 Feb 2023 13:35:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A26C433EF;
+        Mon, 27 Feb 2023 13:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677504922;
+        bh=d2Lq3RBqNZi5D42D4fx6Gg5riTJj4LbmcuLWDvTa4rU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HlILoM4N/Quib/DDjMXNKGh0uKYNnukoM4TWIyiEcCNPDxsI+x7eMxEMC+aWZBhBy
+         BIGIxnJF9+flEIjkU0+uhHhjJD5E7cTtmrJiCrpLUUNz7YgPt4miqaKIFyjJHql6P+
+         aCtb4/R4QDL1ILQAu3FS9/0xTrNeWn7aHjNG6qFZZgTeOejqNNrcS06xZc4uXQselv
+         F/5YoCmEZNEkCGTt4kSQgBKyWaWyVTEMja9q6p13az4cP48+f1jj6ldPAlLCwV25ML
+         yfd65nxGtqy2PXCzz5CJ4cbNKp+CEgCMxHyEDFtl+12r25MJLJ/RWuyJNBvjzQRJxW
+         WS95XWFRg86sw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Olof Johansson <olof@lixom.net>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+Date:   Mon, 27 Feb 2023 14:34:51 +0100
+Message-Id: <20230227133457.431729-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Michal Simek <monstr@monstr.eu>
-References: <20230113171026.582290-1-david@redhat.com>
- <20230113171026.582290-12-david@redhat.com>
- <CAMuHMdX-FDga8w=pgg1myskEx6wp+oyZifhPPPFnWrc1zW7ZpQ@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH mm-unstable v1 11/26] microblaze/mm: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-In-Reply-To: <CAMuHMdX-FDga8w=pgg1myskEx6wp+oyZifhPPPFnWrc1zW7ZpQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 26.02.23 21:13, Geert Uytterhoeven wrote:
-> Hi David,
+From: Arnd Bergmann <arnd@arndb.de>
 
-Hi Geert,
+Based on some recent discussions [1][2][3], I experimented wtih what
+drivers/pcmcia would look like if we completely removed 16-bit support,
+which was one of the options that Dominik suggested for winding down
+pcmcia maintenance.
 
-> 
-> On Fri, Jan 13, 2023 at 6:16 PM David Hildenbrand <david@redhat.com> wrote:
->> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE by stealing one bit
->> from the type. Generic MM currently only uses 5 bits for the type
->> (MAX_SWAPFILES_SHIFT), so the stolen bit is effectively unused.
->>
->> The shift by 2 when converting between PTE and arch-specific swap entry
->> makes the swap PTE layout a little bit harder to decipher.
->>
->> While at it, drop the comment from paulus---copy-and-paste leftover
->> from powerpc where we actually have _PAGE_HASHPTE---and mask the type in
->> __swp_entry_to_pte() as well.
->>
->> Cc: Michal Simek <monstr@monstr.eu>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
-> 
-> Thanks for your patch, which is now commit b5c88f21531c3457
-> ("microblaze/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE") in
-> 
+The remaining cardbus/yenta support is essentially a PCI hotplug driver
+with a slightly unusual sysfs interface, and it would still support all
+32-bit cardbus hosts and cards, but no longer work with the even older
+16-bit cards that require the pcmcia_driver infrastructure.
 
-Right, it went upstream, so we can only fixup.
+I don't expect this to be a problem normal laptop support, as the last
+PC models that predate Cardbus support (e.g. 1997 ThinkPad 380ED) are
+all limited to i586MMX CPUs and 80MB of RAM. This is barely enough to
+boot Tiny Core Linux but not a regular distro.
 
->>   arch/m68k/include/asm/mcf_pgtable.h   |  4 +--
-> 
-> What is this m68k change doing here?
-> Sorry for not noticing this earlier.
+Support for device drivers is somewhat less clear. Losing support for
+16-bit cards in cardbus sockets is obviously a limiting factor for
+anyone who still has those cards, but there is also a good chance that
+the only reason to keep the cards around is for using them in pre-cardbus
+machines that cannot be upgrade to 32-bit devices.
 
-Thanks for the late review, still valuable :)
+Completely removing the 16-bit PCMCIA support would however break some
+20+ year old embedded machines that rely on CompactFlash cards as their
+mass-storage device (extension), this notably includes early PocketPC
+models and the reference implementations for OMAP1, StrongARM1100,
+Alchemy and PA-Semi. All of these are still maintained, though most
+of the PocketPC machines got removed in the 6.3 merge window and the
+PA-Semi Electra board is the only one that was introduced after
+2003.
 
-That hunk should have gone into the previous patch, looks like I messed 
-that up when reworking.
+The approach that I take in this series is to split drivers/pcmcia
+into two mutually incompatible parts: the Cardbus support contains
+all the code that is relevant for post-1997 laptops and gets moved
+to drivers/pci/hotplug, while the drivers/pcmcia/ subsystem is
+retained for both the older laptops and the embedded systems but no
+longer works with the yenta socket host driver. The BCM63xx
+PCMCIA/Cardbus host driver appears to be unused and conflicts with
+this series, so it is removed in the process.
 
-> 
-> Furthermore, several things below look strange to me...
-> 
->>   arch/microblaze/include/asm/pgtable.h | 45 +++++++++++++++++++++------
->>   2 files changed, 37 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/m68k/include/asm/mcf_pgtable.h b/arch/m68k/include/asm/mcf_pgtable.h
->> index 3f8f4d0e66dd..e573d7b649f7 100644
->> --- a/arch/m68k/include/asm/mcf_pgtable.h
->> +++ b/arch/m68k/include/asm/mcf_pgtable.h
->> @@ -46,8 +46,8 @@
->>   #define _CACHEMASK040          (~0x060)
->>   #define _PAGE_GLOBAL040                0x400   /* 68040 global bit, used for kva descs */
->>
->> -/* We borrow bit 7 to store the exclusive marker in swap PTEs. */
->> -#define _PAGE_SWP_EXCLUSIVE    0x080
->> +/* We borrow bit 24 to store the exclusive marker in swap PTEs. */
->> +#define _PAGE_SWP_EXCLUSIVE    CF_PAGE_NOCACHE
-> 
-> CF_PAGE_NOCACHE is 0x80, so this is still bit 7, thus the new comment
-> is wrong?
+My series does not touch any of the pcmcia_driver instances, but
+if there is consensus about splitting out the cardbus support,
+a lot of them can probably get removed as a follow-up.
 
-You're right, it's still bit 7 (and we use LSB-0 bit numbering in that 
-file). I'll send a fixup.
+[1] https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
+[2] https://lore.kernel.org/all/c5b39544-a4fb-4796-a046-0b9be9853787@app.fastmail.com/
+[3] https://lore.kernel.org/all/20230222092302.6348-1-jirislaby@kernel.org/
 
-> 
->>
->>   /*
->>    * Externally used page protection values.
->> diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
->> index 42f5988e998b..7e3de54bf426 100644
->> --- a/arch/microblaze/include/asm/pgtable.h
->> +++ b/arch/microblaze/include/asm/pgtable.h
->> @@ -131,10 +131,10 @@ extern pte_t *va_to_pte(unsigned long address);
->>    * of the 16 available.  Bit 24-26 of the TLB are cleared in the TLB
->>    * miss handler.  Bit 27 is PAGE_USER, thus selecting the correct
->>    * zone.
->> - * - PRESENT *must* be in the bottom two bits because swap cache
->> - * entries use the top 30 bits.  Because 4xx doesn't support SMP
->> - * anyway, M is irrelevant so we borrow it for PAGE_PRESENT.  Bit 30
->> - * is cleared in the TLB miss handler before the TLB entry is loaded.
->> + * - PRESENT *must* be in the bottom two bits because swap PTEs use the top
->> + * 30 bits.  Because 4xx doesn't support SMP anyway, M is irrelevant so we
->> + * borrow it for PAGE_PRESENT.  Bit 30 is cleared in the TLB miss handler
->> + * before the TLB entry is loaded.
-> 
-> So the PowerPC 4xx comment is still here?
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: H Hartley Sweeten <hsweeten@visionengravers.com>
+Cc: Ian Abbott <abbotti@mev.co.uk>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Kevin Cernekee <cernekee@gmail.com>
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: Manuel Lauss <manuel.lauss@gmail.com>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Olof Johansson <olof@lixom.net>
+Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+Cc: YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-can@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
 
-I only dropped the comment above __swp_type(). I guess you mean that we 
-could also drop the "Because 4xx doesn't support SMP anyway, M is 
-irrelevant so we borrow it for PAGE_PRESENT." sentence, correct? Not 
-sure about the "Bit 30 is cleared in the TLB miss handler" comment, if 
-that can similarly be dropped.
+Arnd Bergmann (6):
+  pccard: remove bcm63xx socket driver
+  pccard: split cardbus support from pcmcia
+  yenta_socket: copy pccard core code into driver
+  yenta_socket: remove dead code
+  pccard: drop remnants of cardbus support
+  pci: hotplug: move cardbus code from drivers/pcmcia
 
-> 
->>    * - All other bits of the PTE are loaded into TLBLO without
->>    *  * modification, leaving us only the bits 20, 21, 24, 25, 26, 30 for
->>    * software PTE bits.  We actually use bits 21, 24, 25, and
->> @@ -155,6 +155,9 @@ extern pte_t *va_to_pte(unsigned long address);
->>   #define _PAGE_ACCESSED 0x400   /* software: R: page referenced */
->>   #define _PMD_PRESENT   PAGE_MASK
->>
->> +/* We borrow bit 24 to store the exclusive marker in swap PTEs. */
->> +#define _PAGE_SWP_EXCLUSIVE    _PAGE_DIRTY
-> 
-> _PAGE_DIRTY is 0x80, so this is also bit 7, thus the new comment is
-> wrong?
-
-In the example, I use MSB-0 bit numbering (which I determined to be 
-correct in microblaze context eventually, but I got confused a couple a 
-times because it's very inconsistent). That should be MSB-0 bit 24.
-
-Thanks!
+ arch/mips/bcm63xx/Makefile                    |    2 +-
+ arch/mips/bcm63xx/boards/board_bcm963xx.c     |   14 -
+ arch/mips/bcm63xx/dev-pcmcia.c                |  144 -
+ arch/mips/configs/bcm63xx_defconfig           |    1 -
+ .../asm/mach-bcm63xx/bcm63xx_dev_pcmcia.h     |   14 -
+ arch/mips/pci/ops-bcm63xx.c                   |  294 --
+ arch/mips/pci/pci-bcm63xx.c                   |   44 -
+ drivers/Makefile                              |    2 +-
+ drivers/pci/hotplug/Kconfig                   |   56 +
+ drivers/pci/hotplug/Makefile                  |    1 +
+ drivers/pci/hotplug/yenta_socket.c            | 4056 +++++++++++++++++
+ drivers/pcmcia/Kconfig                        |   63 +-
+ drivers/pcmcia/Makefile                       |   13 +-
+ drivers/pcmcia/bcm63xx_pcmcia.c               |  538 ---
+ drivers/pcmcia/bcm63xx_pcmcia.h               |   61 -
+ drivers/pcmcia/cardbus.c                      |  124 -
+ drivers/pcmcia/cistpl.c                       |   10 +-
+ drivers/pcmcia/cs.c                           |  103 +-
+ drivers/pcmcia/cs_internal.h                  |   10 +-
+ drivers/pcmcia/ds.c                           |   14 +-
+ drivers/pcmcia/i82092.c                       |    2 +-
+ drivers/pcmcia/i82365.c                       |    2 +-
+ drivers/pcmcia/o2micro.h                      |  183 -
+ drivers/pcmcia/pd6729.c                       |    3 +-
+ drivers/pcmcia/ricoh.h                        |  169 -
+ drivers/pcmcia/socket_sysfs.c                 |    2 -
+ drivers/pcmcia/ti113x.h                       |  978 ----
+ drivers/pcmcia/topic.h                        |  168 -
+ drivers/pcmcia/yenta_socket.c                 | 1455 ------
+ drivers/pcmcia/yenta_socket.h                 |  136 -
+ {drivers => include}/pcmcia/i82365.h          |    0
+ include/pcmcia/ss.h                           |   21 -
+ 32 files changed, 4147 insertions(+), 4536 deletions(-)
+ delete mode 100644 arch/mips/bcm63xx/dev-pcmcia.c
+ delete mode 100644 arch/mips/include/asm/mach-bcm63xx/bcm63xx_dev_pcmcia.h
+ create mode 100644 drivers/pci/hotplug/yenta_socket.c
+ delete mode 100644 drivers/pcmcia/bcm63xx_pcmcia.c
+ delete mode 100644 drivers/pcmcia/bcm63xx_pcmcia.h
+ delete mode 100644 drivers/pcmcia/cardbus.c
+ delete mode 100644 drivers/pcmcia/o2micro.h
+ delete mode 100644 drivers/pcmcia/ti113x.h
+ delete mode 100644 drivers/pcmcia/topic.h
+ delete mode 100644 drivers/pcmcia/yenta_socket.c
+ delete mode 100644 drivers/pcmcia/yenta_socket.h
+ rename {drivers => include}/pcmcia/i82365.h (100%)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.39.2
 
