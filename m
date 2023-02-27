@@ -2,137 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99206A3BFE
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 09:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27266A3E5E
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 10:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjB0IJU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 03:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S229567AbjB0Jbs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Feb 2023 04:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjB0IJT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 03:09:19 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87999C14E
-        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 00:09:17 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id r27so7355946lfe.10
-        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 00:09:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OeD9abmV393jlsifpzKT+MGLG7UiUgA6cDKKqFjBQY0=;
-        b=lMSlEUZWmWuycrI2Pe0Tbx9f2fIYm0nFZoWFzQcj7UrTMFRv2yfXFEakTC6lrm8mEo
-         vVz9t3Et4HZ/fs9s/OKUvqsyYR1qizD8txi/KQ2K7p/+QQGvhRh6EXoj8q2IQwNG6JNN
-         3LZYY58ZJJwmC8PQsjc6ZP2DVShTMZZV/PQba64cGujeB75AAn00BkUn/FqyAyNAZxMw
-         BC+i9SOLgDVVlv9IgxDPCDooNljiytVM0nJJymZ/9zfayLuIInFtjY6NNnU2tdNnuLuU
-         k3itk9at1TpHhwyM8Ssgn+pKnS6DWbdH18uLG2BsGlHifP8rhlZ38AyUVya4WXiUSHrY
-         tQ6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OeD9abmV393jlsifpzKT+MGLG7UiUgA6cDKKqFjBQY0=;
-        b=FOLzKNkKRzAGv7SQVT0fDFHbBbvc/BpWvP8723PudhjlrCDxJaxyx4GTKQ50ey6/aE
-         94Dey2qwOyRVemeYuXyRCTy3+zUhQIdSUx+Zv5GrlLqSfVKZisEkiY7VrgUGWIUPnvJ6
-         kQarXOKOKlxDHjuhtWxmiwQPr3TXZ55zm8KitDBGP0vrscx2CVdvvdSQFpYB+e/gkbkS
-         HxGwa6sCUzPhyNEszw/m6Vy6mg3yEvqZg4tJB1wIqyTC1rHMkKjHeadQKDULJdP0eA+c
-         ODir3A0h0DrmfS2owf/wf1DXUGVH/+ywor1ck7vjScuPMzUk84Q93e7serfIYhsmso2u
-         2Mhw==
-X-Gm-Message-State: AO0yUKXUBLMHxxdRgomEAZe6MiQHHkq4exaedNcrB1IfaIR/ijMKFUaZ
-        QLklRQ0gYKQKoCYGBPh3Yww=
-X-Google-Smtp-Source: AK7set95kmMjVS/jsy+aD8ADnvFETtxn9n+WX0VxzX3hFtSOh+vf4vz6JQMBUVom4iZV1RlQr9BdJw==
-X-Received: by 2002:ac2:4c93:0:b0:4dc:807a:d144 with SMTP id d19-20020ac24c93000000b004dc807ad144mr6925242lfl.39.1677485355661;
-        Mon, 27 Feb 2023 00:09:15 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id 14-20020ac25f0e000000b004cca1658a41sm829094lfq.300.2023.02.27.00.09.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 00:09:14 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] MIPS: BCM47XX: Add support for Huawei B593u-12
-Date:   Mon, 27 Feb 2023 09:09:11 +0100
-Message-Id: <20230227080911.15039-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229690AbjB0Jbs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 04:31:48 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ED93900F
+        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 01:31:45 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pWZrE-0000sc-00; Mon, 27 Feb 2023 10:31:44 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id B00E7C0244; Mon, 27 Feb 2023 10:31:26 +0100 (CET)
+Date:   Mon, 27 Feb 2023 10:31:26 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH 2/2] MIPS: cevt-r4k: Offset counter value for clearing
+ compare interrupt
+Message-ID: <20230227093126.GA6152@alpha.franken.de>
+References: <20230225221008.8520-1-jiaxun.yang@flygoat.com>
+ <20230225221008.8520-3-jiaxun.yang@flygoat.com>
+ <20230226232331.GA9208@alpha.franken.de>
+ <579403EF-8E0D-4AC9-9AB1-51CBB433E114@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <579403EF-8E0D-4AC9-9AB1-51CBB433E114@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Mon, Feb 27, 2023 at 01:22:47AM +0000, Jiaxun Yang wrote:
+> 
+> 
+> > 2023年2月26日 23:23，Thomas Bogendoerfer <tsbogend@alpha.franken.de> 写道：
+> > 
+> > On Sat, Feb 25, 2023 at 10:10:08PM +0000, Jiaxun Yang wrote:
+> >> In c0_compare_int_usable we clear compare interrupt by write value
+> >> just read out from counter to compare register.
+> >> 
+> >> However sometimes if those all instructions are graduated together
+> >> then it's possible that at the time compare register is written, the
+> >> counter haven't progressed, thus the interrupt is triggered again.
+> >> 
+> >> It also applies to QEMU that instructions is execuated significantly
+> >> faster then counter.
+> >> 
+> >> Offset the counter value a litlle bit to prevent that happen.
+> >> 
+> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >> ---
+> >> arch/mips/kernel/cevt-r4k.c | 3 +++
+> >> 1 file changed, 3 insertions(+)
+> >> 
+> >> diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
+> >> index 32ec67c9ab67..bbc422376e97 100644
+> >> --- a/arch/mips/kernel/cevt-r4k.c
+> >> +++ b/arch/mips/kernel/cevt-r4k.c
+> >> @@ -200,6 +200,8 @@ int c0_compare_int_usable(void)
+> >> */
+> >> if (c0_compare_int_pending()) {
+> >> cnt = read_c0_count();
+> >> + // Drawdown a little bit in case counter haven't progressed
+> > 
+> > no C++ comments
+> > 
+> >> + cnt -= COMPARE_INT_SEEN_TICKS;
+> >> write_c0_compare(cnt);
+> >> back_to_back_c0_hazard();
+> >> while (read_c0_count() < (cnt  + COMPARE_INT_SEEN_TICKS))
+> > 
+> > this doesn't make sense. clearing of the interrupts happes because of
+> > this loop. So either COMPARE_INT_SEEN_TICKS is too small or you are
+> > hunting a different bug.
+> 
+> Clearing interrupt happens in write_c0_compare but the problem is the interrupt
+> does really get cleared because it triggered again straight away.
 
-It's a BCM5358 based home router. One of very few bcm47xx devices with
-cellular modems (here: LTE).
+the function you are patching is a test function whether counter/compare
+is usable, so it's not in the normal timer handling. See a problem there
+would more to broken hardware than to a bug in that function.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- arch/mips/bcm47xx/board.c                          | 1 +
- arch/mips/bcm47xx/leds.c                           | 8 ++++++++
- arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h | 1 +
- 3 files changed, 10 insertions(+)
+> Had confirmed issue on MIPS I6500 uarch simulation trace.
 
-diff --git a/arch/mips/bcm47xx/board.c b/arch/mips/bcm47xx/board.c
-index 90fb48b046c0..b487f687f62d 100644
---- a/arch/mips/bcm47xx/board.c
-+++ b/arch/mips/bcm47xx/board.c
-@@ -193,6 +193,7 @@ struct bcm47xx_board_type_list1 bcm47xx_board_list_board_id[] __initconst = {
- /* boardtype, boardnum, boardrev */
- static const
- struct bcm47xx_board_type_list3 bcm47xx_board_list_board[] __initconst = {
-+	{{BCM47XX_BOARD_HUAWEI_B593U_12, "Huawei B593u-12"}, "0x053d", "1234", "0x1301"},
- 	{{BCM47XX_BOARD_HUAWEI_E970, "Huawei E970"}, "0x048e", "0x5347", "0x11"},
- 	{{BCM47XX_BOARD_PHICOMM_M1, "Phicomm M1"}, "0x0590", "80", "0x1104"},
- 	{{BCM47XX_BOARD_ZTE_H218N, "ZTE H218N"}, "0x053d", "1234", "0x1305"},
-diff --git a/arch/mips/bcm47xx/leds.c b/arch/mips/bcm47xx/leds.c
-index 8e257d0896d2..64e37505b9b4 100644
---- a/arch/mips/bcm47xx/leds.c
-+++ b/arch/mips/bcm47xx/leds.c
-@@ -222,6 +222,11 @@ bcm47xx_leds_dlink_dir330[] __initconst = {
- 
- /* Huawei */
- 
-+static const struct gpio_led
-+bcm47xx_leds_huawei_b593u_12[] __initconst = {
-+	BCM47XX_GPIO_LED(5, "blue", "wlan", 0, LEDS_GPIO_DEFSTATE_OFF),
-+};
-+
- static const struct gpio_led
- bcm47xx_leds_huawei_e970[] __initconst = {
- 	BCM47XX_GPIO_LED(0, "unk", "wlan", 0, LEDS_GPIO_DEFSTATE_OFF),
-@@ -672,6 +677,9 @@ void __init bcm47xx_leds_register(void)
- 		bcm47xx_set_pdata(bcm47xx_leds_dlink_dir330);
- 		break;
- 
-+	case BCM47XX_BOARD_HUAWEI_B593U_12:
-+		bcm47xx_set_pdata(bcm47xx_leds_huawei_b593u_12);
-+		break;
- 	case BCM47XX_BOARD_HUAWEI_E970:
- 		bcm47xx_set_pdata(bcm47xx_leds_huawei_e970);
- 		break;
-diff --git a/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h b/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
-index 3c401f11655e..4bd8c86ec6c3 100644
---- a/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
-+++ b/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
-@@ -53,6 +53,7 @@ enum bcm47xx_board {
- 	BCM47XX_BOARD_DLINK_DIR130,
- 	BCM47XX_BOARD_DLINK_DIR330,
- 
-+	BCM47XX_BOARD_HUAWEI_B593U_12,
- 	BCM47XX_BOARD_HUAWEI_E970,
- 
- 	BCM47XX_BOARD_LINKSYS_E900V1,
+so not seen on real hardware ?
+
+Thomas.
+
 -- 
-2.34.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
