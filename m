@@ -2,105 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27266A3E5E
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 10:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E626A3EA7
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 10:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjB0Jbs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 04:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
+        id S229960AbjB0JxW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Feb 2023 04:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjB0Jbs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 04:31:48 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ED93900F
-        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 01:31:45 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pWZrE-0000sc-00; Mon, 27 Feb 2023 10:31:44 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id B00E7C0244; Mon, 27 Feb 2023 10:31:26 +0100 (CET)
-Date:   Mon, 27 Feb 2023 10:31:26 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 2/2] MIPS: cevt-r4k: Offset counter value for clearing
- compare interrupt
-Message-ID: <20230227093126.GA6152@alpha.franken.de>
-References: <20230225221008.8520-1-jiaxun.yang@flygoat.com>
- <20230225221008.8520-3-jiaxun.yang@flygoat.com>
- <20230226232331.GA9208@alpha.franken.de>
- <579403EF-8E0D-4AC9-9AB1-51CBB433E114@flygoat.com>
+        with ESMTP id S229835AbjB0JxV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 04:53:21 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9710D9764;
+        Mon, 27 Feb 2023 01:53:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677491596; x=1709027596;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dwUo3BFORgMJVeDfksL8jP7HkkuWEuVDbhgyCpyAFqs=;
+  b=XiETXY2S2vPWGu9yDgaMGervupGgpNAWSnf2uSqMAHhwMJJL+zL/QsN2
+   E7PMdb4TlNTzlZY5bCYQLkg3plUcz/9Wm8Z6h0W3T6Gkz/KBlUNhMg5mG
+   iGxsJFULGkbNS3ee+lVGpI8OvkAIug+PHTZVCUh8n+Zs0a5iqZFItgFk6
+   RhBSWw1Z5cUvjIQDd/EjeTZdl3SI2ZkHpxVUI4cLF25wC6C/ciJpIJRH3
+   WVVvjqJuEo7Ne1DGMHjThUSQ644fO09YGnHNm9i0KMg7GycktKHBzTxwc
+   dBkJVjchVfVnpXkdIxK8Jpdnp68mCta/TBVx9zhsJRapClhcz6j8iunkU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="336101810"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="336101810"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 01:53:15 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="847756370"
+X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
+   d="scan'208";a="847756370"
+Received: from jrissane-mobl2.ger.corp.intel.com (HELO intel.com) ([10.249.41.42])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 01:53:07 -0800
+Date:   Mon, 27 Feb 2023 10:53:03 +0100
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [Intel-gfx] [PATCH v5 1/7] arch: rename all internal names
+ __xchg to __arch_xchg
+Message-ID: <Y/x9fxS1cFsa1ylP@ashyti-mobl2.lan>
+References: <20230118153529.57695-1-andrzej.hajda@intel.com>
+ <20230118154450.73842-1-andrzej.hajda@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <579403EF-8E0D-4AC9-9AB1-51CBB433E114@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230118154450.73842-1-andrzej.hajda@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 01:22:47AM +0000, Jiaxun Yang wrote:
+Hi Andrzej,
+
+On Wed, Jan 18, 2023 at 04:44:44PM +0100, Andrzej Hajda wrote:
+> __xchg will be used for non-atomic xchg macro.
 > 
-> 
-> > 2023年2月26日 23:23，Thomas Bogendoerfer <tsbogend@alpha.franken.de> 写道：
-> > 
-> > On Sat, Feb 25, 2023 at 10:10:08PM +0000, Jiaxun Yang wrote:
-> >> In c0_compare_int_usable we clear compare interrupt by write value
-> >> just read out from counter to compare register.
-> >> 
-> >> However sometimes if those all instructions are graduated together
-> >> then it's possible that at the time compare register is written, the
-> >> counter haven't progressed, thus the interrupt is triggered again.
-> >> 
-> >> It also applies to QEMU that instructions is execuated significantly
-> >> faster then counter.
-> >> 
-> >> Offset the counter value a litlle bit to prevent that happen.
-> >> 
-> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >> ---
-> >> arch/mips/kernel/cevt-r4k.c | 3 +++
-> >> 1 file changed, 3 insertions(+)
-> >> 
-> >> diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-> >> index 32ec67c9ab67..bbc422376e97 100644
-> >> --- a/arch/mips/kernel/cevt-r4k.c
-> >> +++ b/arch/mips/kernel/cevt-r4k.c
-> >> @@ -200,6 +200,8 @@ int c0_compare_int_usable(void)
-> >> */
-> >> if (c0_compare_int_pending()) {
-> >> cnt = read_c0_count();
-> >> + // Drawdown a little bit in case counter haven't progressed
-> > 
-> > no C++ comments
-> > 
-> >> + cnt -= COMPARE_INT_SEEN_TICKS;
-> >> write_c0_compare(cnt);
-> >> back_to_back_c0_hazard();
-> >> while (read_c0_count() < (cnt  + COMPARE_INT_SEEN_TICKS))
-> > 
-> > this doesn't make sense. clearing of the interrupts happes because of
-> > this loop. So either COMPARE_INT_SEEN_TICKS is too small or you are
-> > hunting a different bug.
-> 
-> Clearing interrupt happens in write_c0_compare but the problem is the interrupt
-> does really get cleared because it triggered again straight away.
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> [m68k]
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> [riscv]
 
-the function you are patching is a test function whether counter/compare
-is usable, so it's not in the normal timer handling. See a problem there
-would more to broken hardware than to a bug in that function.
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
-> Had confirmed issue on MIPS I6500 uarch simulation trace.
-
-so not seen on real hardware ?
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Thanks,
+Andi
