@@ -2,189 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472796A414A
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 13:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C906A418D
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Feb 2023 13:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjB0MBB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 07:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        id S229816AbjB0MSH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Feb 2023 07:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0MBA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 07:01:00 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97016E046
-        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 04:00:58 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pWcBd-00027t-00; Mon, 27 Feb 2023 13:00:57 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2DC10C0920; Mon, 27 Feb 2023 12:59:59 +0100 (CET)
-Date:   Mon, 27 Feb 2023 12:59:59 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH 1/2] MIPS: smp-cps: Don't rely on CP0_CMGCRBASE
-Message-ID: <20230227115959.GA13590@alpha.franken.de>
-References: <20230225221008.8520-1-jiaxun.yang@flygoat.com>
- <20230225221008.8520-2-jiaxun.yang@flygoat.com>
+        with ESMTP id S229529AbjB0MSG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 07:18:06 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B83B472
+        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 04:18:05 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id p6so3440222pga.0
+        for <linux-mips@vger.kernel.org>; Mon, 27 Feb 2023 04:18:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8O3Wbk4PyzeJv8vEVqhgTB6nRT41+PZyv3EpdVvZLss=;
+        b=kLBr+8AAjfUN+W39IHft0s19JEo3QXQvA4IJHevtsTRa6ZWK6ueOUV11+5pyKRXV0Z
+         87V1gl2zCTQjCKRVo6peImHHVA0SnxHk8FBWi4FMPsK0IlmBTUT6WARMogA3vTBxDV+y
+         e4gD477Z/23mreZ44MJtExd040W89lvvtvqn79KApu/reuqUz4cYnb+onBTUxdlDsesO
+         mCo2T4HnwBIVcsKdgZpfKqXP53Y5dUUDNb/HcnGRiMY85y7D3Y+HQQ9B+AwW8o7N/xmQ
+         3+OQwcI8Bkn8lvDN3/9VJyaooFFguSDsDIJj0a0Bp9PBJtuY7oHMo+RusdQv4VsRvCvl
+         MD/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8O3Wbk4PyzeJv8vEVqhgTB6nRT41+PZyv3EpdVvZLss=;
+        b=0lu3gD5AB+w77z3O2WAi1M0jy12r3I7pT9tRzLpe5+PYIpFZ4xIlrlu8oCIYfZxmj+
+         SxsAwGbMd7USl0rUWNf4q4QGg/mXEC7cbujnWCav7s4NAFfJ45BHoeSHeNtMELVpPzvb
+         F7uzgkCCLMM+TBczF7SOLDylFzepiH8XDga4Q+GI/XBM1TgYHHJSU1dhDzQ2l0rLdlws
+         BNpWcF+w8ZuqQBYWok6cGT87jrzsoUkMKlMNVEHPsPZxi4CR7OPhumS11rTb/ffJpOqM
+         SNwBEhmBvkY4fuQayVDjfD0ZT/k/q0ImQbAc9O6TxU+7mQ3od/OIagjMb2X6DrsJf038
+         1S0A==
+X-Gm-Message-State: AO0yUKVccCGMBz/UV9ijy+tg+omvtUrj2VO7dR3vqrSRmQbhig9Z7XUY
+        uSGlbUWotsG9hmtPrFMb+WZzH4dB5RaJkH+KgdnwNgwzZmG9ngH59KE=
+X-Google-Smtp-Source: AK7set8wIvfOUTxpgUk1eqPvVSg2OskvjVdzsJ3NgROYebIQXNVp3jUycVc1FS2zPrMjnKbVJwVF3adhec31up6OZDw=
+X-Received: by 2002:a62:864d:0:b0:5e5:7376:ea4d with SMTP id
+ x74-20020a62864d000000b005e57376ea4dmr3475333pfd.1.1677500284525; Mon, 27 Feb
+ 2023 04:18:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230225221008.8520-2-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230222161222.11879-1-jiaxun.yang@flygoat.com>
+ <20230222161222.11879-2-jiaxun.yang@flygoat.com> <CAM1=_QQRmTaAnn0w6wteQ_FKgoF=vGX_okfbiUHdyUB0ZzNghQ@mail.gmail.com>
+ <7CAF04EF-FC1D-4BE1-A639-92D677525C63@flygoat.com>
+In-Reply-To: <7CAF04EF-FC1D-4BE1-A639-92D677525C63@flygoat.com>
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date:   Mon, 27 Feb 2023 13:17:53 +0100
+Message-ID: <CAM1=_QRVEG0Fw9U99V3ohMe60h0DwMzyWvV_gYdJ=SrQ1D11Fg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: ebpf jit: Implement DADDI workarounds
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "paulburton@kernel.org" <paulburton@kernel.org>,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 10:10:07PM +0000, Jiaxun Yang wrote:
-> CP0_CMGCRBASE is not always available on CPS enabled system
-> such as early proAptiv.
-> 
-> We patch the entry of CPS NMI vector to inject CMGCR address
-> directly into register during early core bringup.
-> 
-> For VPE bringup as the core is already coherenct at that point
-> we just read the variable to obtain the address.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  arch/mips/include/asm/smp-cps.h |  4 ++++
->  arch/mips/kernel/cps-vec.S      | 35 ++++++++++++++-------------------
->  arch/mips/kernel/smp-cps.c      |  2 ++
->  3 files changed, 21 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/smp-cps.h b/arch/mips/include/asm/smp-cps.h
-> index 7e5b9411faee..22a572b70fe3 100644
-> --- a/arch/mips/include/asm/smp-cps.h
-> +++ b/arch/mips/include/asm/smp-cps.h
-> @@ -7,6 +7,8 @@
->  #ifndef __MIPS_ASM_SMP_CPS_H__
->  #define __MIPS_ASM_SMP_CPS_H__
->  
-> +#define CPS_ENTRY_PATCH_INSNS	6
-> +
->  #ifndef __ASSEMBLY__
->  
->  struct vpe_boot_config {
-> @@ -30,6 +32,8 @@ extern void mips_cps_boot_vpes(struct core_boot_config *cfg, unsigned vpe);
->  extern void mips_cps_pm_save(void);
->  extern void mips_cps_pm_restore(void);
->  
-> +extern void *mips_cps_core_entry_patch_end;
-> +
->  #ifdef CONFIG_MIPS_CPS
->  
->  extern bool mips_cps_smp_in_use(void);
-> diff --git a/arch/mips/kernel/cps-vec.S b/arch/mips/kernel/cps-vec.S
-> index 975343240148..fece0cca5548 100644
-> --- a/arch/mips/kernel/cps-vec.S
-> +++ b/arch/mips/kernel/cps-vec.S
-> @@ -13,6 +13,7 @@
->  #include <asm/mipsregs.h>
->  #include <asm/mipsmtregs.h>
->  #include <asm/pm.h>
-> +#include <asm/smp-cps.h>
->  
->  #define GCR_CPC_BASE_OFS	0x0088
->  #define GCR_CL_COHERENCE_OFS	0x2008
-> @@ -80,25 +81,20 @@
->  	 nop
->  	.endm
->  
-> -	/* Calculate an uncached address for the CM GCRs */
-> -	.macro	cmgcrb	dest
-> -	.set	push
-> -	.set	noat
-> -	MFC0	$1, CP0_CMGCRBASE
-> -	PTR_SLL	$1, $1, 4
-> -	PTR_LI	\dest, UNCAC_BASE
-> -	PTR_ADDU \dest, \dest, $1
-> -	.set	pop
-> -	.endm
->  
->  .balign 0x1000
->  
->  LEAF(mips_cps_core_entry)
->  	/*
-> -	 * These first 4 bytes will be patched by cps_smp_setup to load the
-> -	 * CCA to use into register s0.
-> +	 * These first several instructions will be patched by cps_smp_setup to load the
-> +	 * CCA to use into register s0 and GCR base address to register s1.
->  	 */
-> -	.word	0
-> +	.rept   CPS_ENTRY_PATCH_INSNS
-> +    nop
-> +   .endr
-> +
-> +	.global mips_cps_core_entry_patch_end
-> +mips_cps_core_entry_patch_end:
->  
->  	/* Check whether we're here due to an NMI */
->  	mfc0	k0, CP0_STATUS
-> @@ -121,8 +117,7 @@ not_nmi:
->  	mtc0	t0, CP0_STATUS
->  
->  	/* Skip cache & coherence setup if we're already coherent */
-> -	cmgcrb	v1
-> -	lw	s7, GCR_CL_COHERENCE_OFS(v1)
-> +	lw	s7, GCR_CL_COHERENCE_OFS(s1)
->  	bnez	s7, 1f
->  	 nop
->  
-> @@ -132,7 +127,7 @@ not_nmi:
->  
->  	/* Enter the coherent domain */
->  	li	t0, 0xff
-> -	sw	t0, GCR_CL_COHERENCE_OFS(v1)
-> +	sw	t0, GCR_CL_COHERENCE_OFS(s1)
->  	ehb
->  
->  	/* Set Kseg0 CCA to that in s0 */
-> @@ -305,8 +300,7 @@ LEAF(mips_cps_core_init)
->   */
->  LEAF(mips_cps_get_bootcfg)
->  	/* Calculate a pointer to this cores struct core_boot_config */
-> -	cmgcrb	t0
-> -	lw	t0, GCR_CL_ID_OFS(t0)
-> +	lw	t0, GCR_CL_ID_OFS(s1)
->  	li	t1, COREBOOTCFG_SIZE
->  	mul	t0, t0, t1
->  	PTR_LA	t1, mips_cps_core_bootcfg
-> @@ -366,8 +360,9 @@ LEAF(mips_cps_boot_vpes)
->  	has_vp	t0, 5f
->  
->  	/* Find base address of CPC */
-> -	cmgcrb	t3
-> -	PTR_L	t1, GCR_CPC_BASE_OFS(t3)
-> +	PTR_LA	t1, mips_gcr_base
-> +	PTR_L	t1, 0(t1)
-> +	PTR_L	t1, GCR_CPC_BASE_OFS(t1)
->  	PTR_LI	t2, ~0x7fff
->  	and	t1, t1, t2
->  	PTR_LI	t2, UNCAC_BASE
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index f2df0cae1b4d..4fc288bb85b9 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -162,6 +162,8 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
->  	 */
->  	entry_code = (u32 *)&mips_cps_core_entry;
->  	uasm_i_addiu(&entry_code, 16, 0, cca);
-> +	UASM_i_LA(&entry_code, 17, (long)mips_gcr_base);
-> +	BUG_ON((void *)entry_code > (void *)&mips_cps_core_entry_patch_end);
->  	blast_dcache_range((unsigned long)&mips_cps_core_entry,
->  			   (unsigned long)entry_code);
->  	bc_wback_inv((unsigned long)&mips_cps_core_entry,
+On Thu, Feb 23, 2023 at 11:29=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.c=
+om> wrote:
+> I didn=E2=80=99t see any place emitting DADDI.
 
-why do you need to patch that in ? Would replacing cmgcrb by a
-PTR_LA  t1, mips_gcr_base in arch/mips/kernel/cps-vec.S do the same thing ?
+Right, the JIT only uses unsigned arithmetics :)
 
-Thomas.
+> Yes I analysed all other place, most of them are just calculating memory
+> address offsets and they should never overflow. Other two is doing additi=
+on
+> to zero to load immediate, which should be still fine.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Ok.
+
+> >> --- a/arch/mips/net/bpf_jit_comp.c
+> >> +++ b/arch/mips/net/bpf_jit_comp.c
+> >> @@ -218,9 +218,17 @@ bool valid_alu_i(u8 op, s32 imm)
+> >>                /* All legal eBPF values are valid */
+> >>                return true;
+> >>        case BPF_ADD:
+> >> +#ifdef CONFIG_64BIT
+> >
+> > DADDI/DADDIU are only available on 64-bit CPUs, so the errata would
+> > only be applicable to that. No need for the CONFIG_64BIT conditional.
+>
+> It=E2=80=99s possible to compile a 32bit kernel for R4000 with CONFIG_CPU=
+_DADDI_WORKAROUNDS
+> enabled.
+
+Yes, but DADDI/DADDIU are 64-bit instructions so they would not be
+available when compiling the kernel in 32-bit mode for R4000, and
+hence the workaround would not be applicable, right? If this is
+correct, I would imagine CONFIG_CPU_DADDI_WORKAROUNDS itself to be
+conditional on CONFIG_64BIT. That way the this relationship is
+expressed once in the Kconfig file, instead of being spread out over
+multiple places in the code.
