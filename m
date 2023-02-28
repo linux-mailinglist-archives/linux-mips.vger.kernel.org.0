@@ -2,34 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0526A624C
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 23:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF9D6A624F
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 23:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjB1WTR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Feb 2023 17:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S229936AbjB1WTS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Feb 2023 17:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjB1WTQ (ORCPT
+        with ESMTP id S229935AbjB1WTQ (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 17:19:16 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C4B71C322
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 14:19:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7D07211F2;
+        Tue, 28 Feb 2023 14:19:10 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pX8JQ-000338-00; Tue, 28 Feb 2023 23:19:08 +0100
+        id 1pX8JQ-000338-01; Tue, 28 Feb 2023 23:19:08 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 44C1AC10C2; Tue, 28 Feb 2023 23:15:01 +0100 (CET)
-Date:   Tue, 28 Feb 2023 23:15:01 +0100
+        id A88F4C1149; Tue, 28 Feb 2023 23:15:40 +0100 (CET)
+Date:   Tue, 28 Feb 2023 23:15:40 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, nathan@kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3] MIPS: Workaround clang inline compat branch issue
-Message-ID: <20230228221501.GA15457@alpha.franken.de>
-References: <20230228193459.15365-1-jiaxun.yang@flygoat.com>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Subject: Re: [PATCH v7 2/5] mips: dts: ralink: mt7621: rename watchdog node
+ from 'wdt' into 'watchdog'
+Message-ID: <20230228221540.GB15457@alpha.franken.de>
+References: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
+ <20230214103936.1061078-3-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230228193459.15365-1-jiaxun.yang@flygoat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230214103936.1061078-3-sergio.paracuellos@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -39,29 +48,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 07:34:59PM +0000, Jiaxun Yang wrote:
-> Clang is unable to handle the situation that a chunk of inline
-> assembly ends with a compat branch instruction and then compiler
-> generates another control transfer instruction immediately after
-> this compat branch. The later instruction will end up in forbidden
-> slot and cause exception.
+On Tue, Feb 14, 2023 at 11:39:33AM +0100, Sergio Paracuellos wrote:
+> Watchdog nodes must use 'watchdog' for node name. When a 'make dtbs_check'
+> is performed the following warning appears:
 > 
-> Workaround by add a option to control the use of compact branch.
-> Currently it's selected by CC_IS_CLANG and hopefully we can change
-> it to a version check in future if clang manages to fix it.
+> wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-f])?$'
 > 
-> Fix boot on boston board.
+> Fix this warning up properly renaming the node into 'watchdog'.
 > 
-> Link: https://github.com/llvm/llvm-project/issues/61045
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Acked-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > ---
-> v2: Add Link tag to LLVM bug
-> v3: Docuement issue link in Kconfig as well
-> ---
->  arch/mips/Kconfig           | 4 ++++
->  arch/mips/include/asm/asm.h | 2 +-
->  2 files changed, 5 insertions(+), 1 deletion(-)
+>  arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> index 5ca40fd21662..ac818fd721ae 100644
+> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
+> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> @@ -70,7 +70,7 @@ sysc: syscon@0 {
+>  					     "250m", "270m";
+>  		};
+>  
+> -		wdt: wdt@100 {
+> +		wdt: watchdog@100 {
+>  			compatible = "mediatek,mt7621-wdt";
+>  			reg = <0x100 0x100>;
+>  		};
+> -- 
+> 2.25.1
 
 applied to mips-next.
 
