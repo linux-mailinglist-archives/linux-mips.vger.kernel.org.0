@@ -2,113 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358756A5C93
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 16:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD136A5D67
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 17:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjB1P55 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Feb 2023 10:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S229732AbjB1QrW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Feb 2023 11:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjB1P5n (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 10:57:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9677432CC7
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 07:56:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677599795;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V7pSWC5euLmUDx9YG5RWzWaGkcDB950fdhQfUYWKICc=;
-        b=L7YliKV/d3202CCEuU9Fu2ac86tPOoUC+750FU1UZiFNnKKVsSvv9T7SgjZOSG/zn0wRsS
-        KY458A7FWA74fitA5SLEBpgpLgM7VD7z6cx4ectDFvde8wsW2gXG2GVzJ6wVslmhqI/Rb1
-        YK4AHB1E0McrSW3VjATaBEavJpoDBjY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-639-HF4pFzYmOuWib6fH5KXt9A-1; Tue, 28 Feb 2023 10:56:34 -0500
-X-MC-Unique: HF4pFzYmOuWib6fH5KXt9A-1
-Received: by mail-wm1-f72.google.com with SMTP id az39-20020a05600c602700b003e97eb80524so7077307wmb.4
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 07:56:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V7pSWC5euLmUDx9YG5RWzWaGkcDB950fdhQfUYWKICc=;
-        b=zdT/6mAQKd9NaQyRIBH7NqG+oseY8d3IT33I3FFkv35xNxDlBOsZ9UgJq2MiusUELV
-         8MJoWwtL5fq7ucfixLYQyJlgvGEGsCTbx/EKxNWgpd7Ji6qoIVLBfmyi5/Zq/08X0OIb
-         CqVQBxvjVZqMbe62qndLt5rcVU9WLdxch1+ltiwygvcOmhOGXH1GUgySjNut+P3L9fau
-         ykPIdxk5gOIYZeDJ2iHUT+0xYikM2exrCicixEeEnqUGrWm4LTROA+o4tqjBVrI9TF35
-         u0dhy0Hh2t3+YmbUyfTQngIT6lYMb7hNdBR96kbItC91kbBzZ7q2RwYN4rm+FE6PwMYP
-         lxVw==
-X-Gm-Message-State: AO0yUKUOHl3rYB7yFpPfNPmnro5jVVVuc3ER3ry/yyAhhL6fDyPeEcki
-        xNcHj3YNaVY55+QW1U1lEExRnVC80a0rJDNVJ9ZSfLfovo7AVsEK7YRV5E1t5Ym0XqZ/0unWILY
-        SOysPaPf3tYrlcmZJ8RJXYw==
-X-Received: by 2002:a05:600c:1e20:b0:3df:9858:c037 with SMTP id ay32-20020a05600c1e2000b003df9858c037mr9985241wmb.12.1677599793386;
-        Tue, 28 Feb 2023 07:56:33 -0800 (PST)
-X-Google-Smtp-Source: AK7set/U2v9f8GltbBAhuiD5VLcyopD+EwumVs1dLk0qMzdF/fI8DkaFn74NX3LW8zhnIM6FtbCCQg==
-X-Received: by 2002:a05:600c:1e20:b0:3df:9858:c037 with SMTP id ay32-20020a05600c1e2000b003df9858c037mr9985221wmb.12.1677599793078;
-        Tue, 28 Feb 2023 07:56:33 -0800 (PST)
-Received: from ?IPV6:2003:cb:c706:b800:3757:baed:f95e:20ac? (p200300cbc706b8003757baedf95e20ac.dip0.t-ipconnect.de. [2003:cb:c706:b800:3757:baed:f95e:20ac])
-        by smtp.gmail.com with ESMTPSA id hn6-20020a05600ca38600b003e21f01c426sm13465165wmb.9.2023.02.28.07.56.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:56:32 -0800 (PST)
-Message-ID: <bd656b2c-9a20-dea9-dcef-9cc965bccc9e@redhat.com>
-Date:   Tue, 28 Feb 2023 16:56:30 +0100
+        with ESMTP id S229569AbjB1QrV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 11:47:21 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073FD34F40;
+        Tue, 28 Feb 2023 08:47:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677602805; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=bq2Q8ygL/SEUX6cgcpwKrWziBtCDM/1IyP1Bgqp4n/3yvzLpkGRt7eQBgYDMx0OHYx6oF829Rf7nUJTL+fgDj16Tej2RUqb7gcIqmL+AYtYF2sVOCOv8IDsqe9+mdEODYNHOSqbssLZ7rzec9nddA7bhNsViYCAHhTx6ivMPiYg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1677602805; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=YzP0t2qNfnd3V6PK1d7LQSBOy5pePAV5wJ9vr1fobF0=; 
+        b=lZIygUMLbMVTtXXx6MBZkWDnMik2/GkFQIURsEyey+wf7fPUujaeBrDdAjN9vIKzGV02VK1e27euViDv22GKRko5yHFDH7xJioBw9qQEFb9LQ+MZO2WAu/5ZiHDcRX3x/RYzMZ+EuAmqIs8BDgk49BRv06x8fgnFM3I/o1hiCtA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677602805;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=YzP0t2qNfnd3V6PK1d7LQSBOy5pePAV5wJ9vr1fobF0=;
+        b=MS9/DjXzffLDauoiF3iu8V30lwh6+BRt3Nb1ESoJ8UABM5AQs2FrN0oPDNIpDag6
+        tAbI2EtXCNtY+5T00swlN5ZrYFr7nn3vlW3COsvzRbWfGw/C/kRkyLOK1P65A0rfMUl
+        IRLyIIqRcqW6yAwuC2vOiqXhWn+qOVJD1II6eeGs=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1677602802848981.7442252849089; Tue, 28 Feb 2023 08:46:42 -0800 (PST)
+Message-ID: <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
+Date:   Tue, 28 Feb 2023 19:46:36 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH mm-unstable v1 19/26] riscv/mm: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
+ compatible strings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-8-arinc.unal@arinc9.com>
+ <20230227173333.GA496999-robh@kernel.org>
 Content-Language: en-US
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        hughd@google.com, jhubbard@nvidia.com, jgg@nvidia.com,
-        rppt@linux.ibm.com, shy828301@gmail.com, vbabka@suse.cz,
-        namit@vmware.com, aarcange@redhat.com, peterx@redhat.com,
-        linux-mm@kvack.org, x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu
-References: <mhng-b8dc8a57-dde0-4995-bbb7-3948a95ba0b1@palmer-ri-x1c9a>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <mhng-b8dc8a57-dde0-4995-bbb7-3948a95ba0b1@palmer-ri-x1c9a>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230227173333.GA496999-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 28.02.23 16:50, Palmer Dabbelt wrote:
-> On Fri, 13 Jan 2023 09:10:19 PST (-0800), david@redhat.com wrote:
->> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE by stealing one bit
->> from the offset. This reduces the maximum swap space per file: on 32bit
->> to 16 GiB (was 32 GiB).
+On 27/02/2023 20:33, Rob Herring wrote:
+> On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> Add the ralink,rt2880-pinmux compatible string. It had been removed from
+>> the driver which broke the ABI.
+>>
+>> Add the mediatek compatible strings. Change the compatible string on the
+>> examples with the mediatek compatible strings.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
+>>   .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
+>>   .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
+>>   .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
+>>   .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
+>>   5 files changed, 25 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> index 1e63ea34146a..531b5f616c3d 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>> @@ -17,7 +17,10 @@ description:
+>>   
+>>   properties:
+>>     compatible:
+>> -    const: ralink,mt7620-pinctrl
+>> +    enum:
+>> +      - mediatek,mt7620-pinctrl
+>> +      - ralink,mt7620-pinctrl
 > 
-> Seems fine to me, I doubt anyone wants a huge pile of swap on rv32.
+> We don't update compatible strings based on acquistions nor marketing
+> whims. If you want to use 'mediatek' for new things, then fine.
 
-Patch is already upstream, so we can't add tags unfortunately. Thanks 
-for the review!
+Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs 
+share the same architecture from Ralink, so they were incorrectly called 
+Ralink SoCs.
 
--- 
-Thanks,
+I can remove the new strings from Ralink SoCs and add them only for 
+MediaTek SoCs. Or you could make an exception for this one, regarding 
+the situation. Whatever you think is best.
 
-David / dhildenb
-
+Arınç
