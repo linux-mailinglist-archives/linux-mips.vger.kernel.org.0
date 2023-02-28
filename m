@@ -2,278 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF24E6A5456
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 09:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA346A5481
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 09:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjB1IYa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Feb 2023 03:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
+        id S229765AbjB1Ihs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Feb 2023 03:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjB1IY3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 03:24:29 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5993BE3AC
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 00:24:27 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so8892112wms.2
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 00:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677572666;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qCa9eFA4MAuvdUpjEutbEhVDEXa13F9jRr5aGoUB3t8=;
-        b=R97enwMN3XC+NbplCZTfX0/1FWjL0/ibd4Ss7LWrablB8qE+oj645pJM4lUVcG2EEO
-         vT4qiDpVqbxagWtoO1z4PLBqy4XmiPInZ3XxdKejzfVzudVwj4+Hg09nkH1aPUwX0Kdu
-         2ltBKOx6NpeHs8/c3p/XXEDTB/fCeTS/L//E0hZwGieMPAKebRtYtD+RKcM5udhu/3Y0
-         Uryt7404F5L8593ZAXq4ttqTT7UQxkwlm5S4PepoiclPT6AdtZqf+SSJXIT1LKcYiFIS
-         Sl49KwNlUkrQjzXfad09XVJMs2nWT2saj8lRZV5LrmtCdhYPKSeNONnLhSCJ7Xiyhnvl
-         ZEqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677572666;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qCa9eFA4MAuvdUpjEutbEhVDEXa13F9jRr5aGoUB3t8=;
-        b=ieBgqPSGAtKc2/2MRoi2BV7DY8xhBe0GNMPsKzPctBI6CtnLYsv6ihZ6nwpHN3zfOD
-         3mzw+C7o9YeM0R72pBBSpn7SmcvR6WZCeAUDP1M7091sdDJIw48+AWMa3EEPVl1OfMa6
-         uOR3U5GhKqTJlM8wrVQ1Y9HRuOYNN0ziYkLsx7ACrTN8y5xpfk3+Bo3jmeIA0I2olmjO
-         N3+NqCQaokinjpQPLp/ijbtlnOCx1BiN6My97EKZJy6dI7gBmE9Cl7KW+brKz2kPdIJI
-         WcXydUcq8EMpQiNO8CLMXhC+EOsI7nCnWFdRBo0UODowcqz6ZG5i8L+/GFL7Yk3TtO0o
-         njqA==
-X-Gm-Message-State: AO0yUKWMDFv1HxttvVZPt7TP+Aw0JJvhVOkxckh1n001tgLylKYaGpSK
-        A4pRrPIjjyb0SP/+OOGqhy5J7g==
-X-Google-Smtp-Source: AK7set+561ScUMYHwh6Ics+VWI683XONjmmmO5cGE2PRQI2VyhOWzhywPrSMutxHQNhiUzsuMT3LiA==
-X-Received: by 2002:a05:600c:1d29:b0:3eb:2708:86ce with SMTP id l41-20020a05600c1d2900b003eb270886cemr1337572wms.31.1677572665796;
-        Tue, 28 Feb 2023 00:24:25 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p15-20020a7bcdef000000b003e200d3b2d1sm11651518wmj.38.2023.02.28.00.24.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 00:24:25 -0800 (PST)
-Message-ID: <1cf02768-aa92-3ad4-af00-566c16128352@linaro.org>
-Date:   Tue, 28 Feb 2023 09:24:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 09/16] dt-bindings: pinctrl: mediatek: rt305x: split
- binding
-Content-Language: en-US
-To:     arinc9.unal@gmail.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-10-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230222183932.33267-10-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229511AbjB1Ihr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 03:37:47 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2023919F25;
+        Tue, 28 Feb 2023 00:37:46 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id E32B15C0145;
+        Tue, 28 Feb 2023 03:37:42 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 28 Feb 2023 03:37:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677573462; x=1677659862; bh=bNOL6dMp9i
+        YZZl04z0RBXD9l8jOntO4AqkKsmgHnVhU=; b=CHUa3o94TMUNVsX9/Zz0vsJdyc
+        h35O81glpTkF7T0THcVqLDhw2FyfsdFJ/CK9ibW6acuCcCoPKvcmqdUy6EXTgqyU
+        /oWv2XbimJgMoK8YgkMagzaGMp3WodRMpaaQyIxiquJPBgIfQLjYFR1Tu2jVX9AV
+        8upruDIliKA4pIK/5SFjYlz2oI9sM6VJ8FMAURTEZscP4haviwvn1Wv0sZTtdQDg
+        YWQwesFjdPS8gHKuX13hkgU4YwPdObQpg72Y0OkKLkye8COjw1bxJxYWlxw8WecJ
+        u39EFqpRYLdWZGJIScKAfUg8yX+2DSD3kF1S/47nUV9aDyQ9qHaAO36TjyVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677573462; x=1677659862; bh=bNOL6dMp9iYZZl04z0RBXD9l8jOn
+        tO4AqkKsmgHnVhU=; b=FcIAbpq39dKkCVB7/nrEL0HSMu/Goub43y5d3EMN0I0B
+        hzTD0gTG4c/SID9bYAUMxXKiW0OQvCaWQ9sXTGkCQFkK/4V+JNG/yCqYeG6WAx0Q
+        WI0pmNVzARviAS8ZDHZ3PrAITMpMp8JYOcICgHsfbmLzCYaGZO4UbDu+NOL2smxe
+        KSx6oKNNyIbLmZOWgjoL41PWAXwPPEvxq8iMJWznfIRkJ1qDDvGLjxrcSkJI8fbW
+        31jSogKn/joHfvRO2J03jWZdPLmauq/77zkShzY+cm8aiVdSID7oK8gyXTDh2JXI
+        0Cr/f//NBEAZkj5miFjq1mUoX8loHNumTfR+koU4MA==
+X-ME-Sender: <xms:Vb39Y331EKqm317YZFalHXGw8zQZYR56_YI_8Ma2KFR43yiU-eTUjg>
+    <xme:Vb39Y2Hw-KK-HVckWZ7vg9_kcZKjlo4iBxBiEEpJjazvu_7gR7_s6QOddmrCSM3ba
+    srY65NA69GG6gx5Uhw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeluddguddulecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Vb39Y37Xwbp3uTv7MbACAMzNl093eYyjGC3A5tvrsC11pLDiafXMNA>
+    <xmx:Vb39Y81gL92BaiTKkD-Z36O4mNZee3sVHnl1bnzw7cPWPumBMzhWjw>
+    <xmx:Vb39Y6EpZP0HNBSt-sGMUio4fM51BHjkEol9LDUiXqzcpMJwW-yy8g>
+    <xmx:Vr39Y9mYuRWLy_dmJncffFhN8xGp91P4cbj8JMvmINamP-ovc-JHmg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8CBFFB60089; Tue, 28 Feb 2023 03:37:41 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <31fee002-db3b-43d9-b8bc-5a869516c2d7@app.fastmail.com>
+In-Reply-To: <18be9b45-e7c1-9f81-afeb-3e0d4cfe5f73@lwfinger.net>
+References: <20230227133457.431729-1-arnd@kernel.org>
+ <3d8f28d7-78df-5276-612c-85b5262a987a@lwfinger.net>
+ <c17bff4e-031e-4101-8564-51f6298b1c68@app.fastmail.com>
+ <e9f8501f-ede0-4d38-6585-d3dc2469d3fe@lwfinger.net>
+ <7085019b-4fad-4d8d-89c0-1dd33fb27bb7@app.fastmail.com>
+ <18be9b45-e7c1-9f81-afeb-3e0d4cfe5f73@lwfinger.net>
+Date:   Tue, 28 Feb 2023 09:37:21 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Larry Finger" <Larry.Finger@lwfinger.net>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org
+Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Hartley Sweeten" <hsweeten@visionengravers.com>,
+        "Ian Abbott" <abbotti@mev.co.uk>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Kevin Cernekee" <cernekee@gmail.com>,
+        "Lukas Wunner" <lukas@wunner.de>,
+        "Manuel Lauss" <manuel.lauss@gmail.com>,
+        "Oliver Hartkopp" <socketcan@hartkopp.net>,
+        "Olof Johansson" <olof@lixom.net>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22/02/2023 19:39, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> The RT3352 and RT5350 SoCs each contain different pin muxing information,
-> therefore, should be split. This can be done now that there are compatible
-> strings to distinguish them from other SoCs.
-> 
-> Split the schema out to mediatek,rt3352-pinctrl.yaml and
-> mediatek,rt5350-pinctrl.yaml.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../pinctrl/mediatek,rt305x-pinctrl.yaml      |  78 +-----
->  .../pinctrl/mediatek,rt3352-pinctrl.yaml      | 247 ++++++++++++++++++
->  .../pinctrl/mediatek,rt5350-pinctrl.yaml      | 210 +++++++++++++++
->  3 files changed, 462 insertions(+), 73 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,rt5350-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-> index 61fcf3ab1091..1e6c7e7f2fe2 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
-> @@ -11,8 +11,7 @@ maintainers:
->    - Sergio Paracuellos <sergio.paracuellos@gmail.com>
->  
->  description:
-> -  MediaTek RT305X pin controller for RT3050, RT3052, RT3350, RT3352 and RT5350
-> -  SoCs.
-> +  MediaTek RT305X pin controller for RT3050, RT3052, and RT3350 SoCs.
->    The pin controller can only set the muxing of pin groups. Muxing individual
->    pins is not supported. There is no pinconf support.
->  
-> @@ -36,21 +35,9 @@ patternProperties:
->            function:
->              description:
->                A string containing the name of the function to mux to the group.
-> -            anyOf:
-> -              - description: For RT3050, RT3052 and RT3350 SoCs
-> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio,
-> -                       pcm gpio, pcm i2s, pcm uartf, rgmii, sdram, spi, uartf,
-> -                       uartlite]
-> -
-> -              - description: For RT3352 SoC
-> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led,
-> -                       lna, mdio, pa, pcm gpio, pcm i2s, pcm uartf, rgmii, spi,
-> -                       spi_cs1, uartf, uartlite, wdg_cs1]
-> -
-> -              - description: For RT5350 SoC
-> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led,
-> -                       pcm gpio, pcm i2s, pcm uartf, spi, spi_cs1, uartf,
-> -                       uartlite, wdg_cs1]
-> +            enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio,
-> +                   pcm gpio, pcm i2s, pcm uartf, rgmii, sdram, spi, uartf,
-> +                   uartlite]
->  
->            groups:
->              description:
-> @@ -69,17 +56,7 @@ patternProperties:
->              then:
->                properties:
->                  groups:
-> -                  anyOf:
-> -                    - description: For RT3050, RT3052 and RT3350 SoCs
-> -                      enum: [i2c, jtag, mdio, rgmii, sdram, spi, uartf,
-> -                             uartlite]
-> -
-> -                    - description: For RT3352 SoC
-> -                      enum: [i2c, jtag, led, lna, mdio, pa, rgmii, spi, spi_cs1,
-> -                             uartf, uartlite]
-> -
-> -                    - description: For RT5350 SoC
-> -                      enum: [i2c, jtag, led, spi, spi_cs1, uartf, uartlite]
-> +                  enum: [i2c, jtag, mdio, rgmii, sdram, spi, uartf, uartlite]
->  
->            - if:
->                properties:
-> @@ -126,24 +103,6 @@ patternProperties:
->                  groups:
->                    enum: [jtag]
->  
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: led
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [led]
-> -
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: lna
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [lna]
-> -
->            - if:
->                properties:
->                  function:
-> @@ -153,15 +112,6 @@ patternProperties:
->                  groups:
->                    enum: [mdio]
->  
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: pa
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [pa]
-> -
->            - if:
->                properties:
->                  function:
-> @@ -216,15 +166,6 @@ patternProperties:
->                  groups:
->                    enum: [spi]
->  
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: spi_cs1
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [spi_cs1]
-> -
->            - if:
->                properties:
->                  function:
-> @@ -243,15 +184,6 @@ patternProperties:
->                  groups:
->                    enum: [uartlite]
->  
-> -          - if:
-> -              properties:
-> -                function:
-> -                  const: wdg_cs1
-> -            then:
-> -              properties:
-> -                groups:
-> -                  enum: [spi_cs1]
-> -
->          additionalProperties: false
->  
->      additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..7a74c1602afc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
-> @@ -0,0 +1,247 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/mediatek,rt3352-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek RT3352 Pin Controller
-> +
-> +maintainers:
-> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
-> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> +
-> +description:
-> +  MediaTek RT3352 pin controller for RT3352 SoC.
-> +  The pin controller can only set the muxing of pin groups. Muxing individual
-> +  pins is not supported. There is no pinconf support.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,rt3352-pinctrl
-> +      - ralink,rt305x-pinctrl
-> +      - ralink,rt2880-pinmux
+On Tue, Feb 28, 2023, at 04:57, Larry Finger wrote:
+> On 2/27/23 15:30, Arnd Bergmann wrote:
+>
+> It was a configuration problem. In the .config obtained by installing 
+> your 
+> patches, and doing a make, CONFIG_CARDBUS was not mentioned, and 
+> CONFIG_PCI_HOTPLUG was not selected. When I deleted the reference to 
+> the latter, 
+> did a make, and set ..._HOTPLUG, I got CONFIG+CARDBUS set to "m", and 
+> the yenta 
+> modules were built. This version sees the BCM4318 in the lspci scan, 
+> and the 
+> interface works. Your patches are OK.
 
-Following Rob's comments, you need to keep old compatibles when
-splitting binding.
+Ok, great, thanks for testing!
 
-Best regards,
-Krzysztof
+> I am not sure how to warn people about the configuration change possible 
+> breaking things.
 
+My intention was to keep Cardbus support working with old defconfig files,
+and I've not moved CONFIG_CARDBUS into a separate submenu between
+CONFIG_PCI_HOTPLUG and CONFIG_PCI_CONTROLLER but left the driver in
+drivers/pci/hotplug. I think that's the best compromise here, but maybe
+the PCI maintainers have a better idea.
+
+     Arnd
