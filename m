@@ -2,139 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4716A5FDD
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 20:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FDF6A60FA
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 22:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjB1Tmb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Feb 2023 14:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S229840AbjB1VLY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Feb 2023 16:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjB1Tm3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 14:42:29 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7F934C33
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 11:42:28 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id d6so6376769pgu.2
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 11:42:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677613348;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B1+1Obj0n84DVZopavvNSOG4SsRgdMGD6WVHa50zJHI=;
-        b=TyCz/cmY+U/EUkQqnLksFu6c2Exip03sCm6cBbm6jE5hS77YAt+AsEHWR/XUSo0j6S
-         6yt5aSjr2gt9gUuLMIx82ZWNHfd2WgRS8PQZvu/SbNybCcUJB4I/5R9QeOhZaz2JSK6f
-         yBFhOiyyTXLaS6BZ/+ZelI1d722ZZjnUnNfo3o2E8L6ks4+xLaZQ8ARcW1xtoYUn2tX2
-         UvDLlDRMvzSnLPH7oyL442XscNIGnCnsz48KYj/0ZsWIAGIKr3lnJ+WWw98SPBfpmhhR
-         0l5/xlwDJuMo/cgTcX5QSijzkHuEyAx/ra+rCnPG5cc39PNNYCIsMCvvwMEZJv+1XvUp
-         mptA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677613348;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B1+1Obj0n84DVZopavvNSOG4SsRgdMGD6WVHa50zJHI=;
-        b=NHJMNUMI7k3MregsHuVZIBSBJ2FF7mjvhpqB2lFmBefMa/aXhRKT0Z+oofyQEiR4cM
-         Ka03AfgprkpGHK5CDzwrTVPgCF243nfkNJ1VMejKNzJmUqLhJHuVyog+CNFbSPaCROHJ
-         FAyuHT+ak6SuuBfGCaBAFC6Uzsm1ImTaqNgKNEyKgmJvDDLosmQYtl3xkknTypL8AqIu
-         /u6licJ3ucZIQI1QUWH0XSWihiRtdJjYbonVkutwKLufiMaPALhibvg7ULrzKxfofboq
-         2o02DOtRqrDl63RbGOgjUhdZbOiHS/bYT3Mmzz477QK6fGs9KHCBC5HpgxFf0sfiCDB+
-         sweQ==
-X-Gm-Message-State: AO0yUKVWa/Vqj61nWQWoR5cF26SRp+oRJRhn+Kae/m5FhHbE8MM61wDt
-        La9cndfB+aB4OKIlUyxAkUDnEzgdh/uz9bZVVVSCPQ==
-X-Google-Smtp-Source: AK7set/VelgnWNTVSoSQ8B0CqE9bheG1PPFErdPpsNVtbPtXYLyL4kyCx5Ar7OZM++ldTyudw6+GINe9ZLR8bLbjc2c=
-X-Received: by 2002:a05:6a00:3247:b0:593:dcf6:acc2 with SMTP id
- bn7-20020a056a00324700b00593dcf6acc2mr1496156pfb.1.1677613347408; Tue, 28 Feb
- 2023 11:42:27 -0800 (PST)
+        with ESMTP id S229635AbjB1VLW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 16:11:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8786A2B2B1;
+        Tue, 28 Feb 2023 13:11:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 251AC611D6;
+        Tue, 28 Feb 2023 21:11:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 67CEDC4339C;
+        Tue, 28 Feb 2023 21:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677618677;
+        bh=hQNwE+IEUbKQvI91yvljJosaVP7JCZ7+8bppV3cOFbg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EWCQE/HQjrWuM9JLi5n8h88COIVDC0Dwj8Ls7hxDeYr4SIALkO/qqCk/UGcAvWK5o
+         c02+sh/QcUi/6bE0ILdbEb/C+A8GV+CJaLo8WfaGxJWgLFvkSK7vL/E7uokCa4MOxg
+         ngdg3jXiJrkGUm98gEQXAgu/dxa50c+7WgMlmDgNw1PpnJ2oFrWoeU4ingGh4tZ7R7
+         NCLLPqaZ1Zn4rnovGjIPX8BlJ6CPAfDs1vwTGYqI9oMCtgbAk9Bh8oF1Q3q6KxteX4
+         j5u6Jm2tA55Z1q6NEJRkgLy4vCcaaRiYhIH8qBVhYl9/Ucn2GR4gvjnvRg/iSe5UV4
+         UdVCGz5UeLKDg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3FB70C691DE;
+        Tue, 28 Feb 2023 21:11:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230228193459.15365-1-jiaxun.yang@flygoat.com>
-In-Reply-To: <20230228193459.15365-1-jiaxun.yang@flygoat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 28 Feb 2023 11:42:15 -0800
-Message-ID: <CAKwvOdkxA0kgH3rafvZtQCuKq88ee8ur=BfEPaQvK6GmwV77kg@mail.gmail.com>
-Subject: Re: [PATCH v3] MIPS: Workaround clang inline compat branch issue
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        nathan@kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH mm-unstable v1 00/26] mm: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE on all architectures with swap PTEs
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167761867725.10135.3611718470427113262.git-patchwork-notify@kernel.org>
+Date:   Tue, 28 Feb 2023 21:11:17 +0000
+References: <20230113171026.582290-1-david@redhat.com>
+In-Reply-To: <20230113171026.582290-1-david@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, hughd@google.com, jhubbard@nvidia.com,
+        jgg@nvidia.com, rppt@linux.ibm.com, shy828301@gmail.com,
+        vbabka@suse.cz, namit@vmware.com, aarcange@redhat.com,
+        peterx@redhat.com, linux-mm@kvack.org, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, aou@eecs.berkeley.edu,
+        anton.ivanov@cambridgegreys.com, bp@alien8.de, bcain@quicinc.com,
+        christophe.leroy@csgroup.eu, chris@zankel.net,
+        dave.hansen@linux.intel.com, davem@davemloft.net,
+        dinguyen@kernel.org, geert@linux-m68k.org, gerg@linux-m68k.org,
+        guoren@kernel.org, deller@gmx.de, hpa@zytor.com,
+        chenhuacai@kernel.org, mingo@redhat.com, ink@jurassic.park.msu.ru,
+        James.Bottomley@HansenPartnership.com, johannes@sipsolutions.net,
+        mattst88@gmail.com, jcmvbkbc@gmail.com, mpe@ellerman.id.au,
+        monstr@monstr.eu, npiggin@gmail.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, richard.henderson@linaro.org,
+        richard@nod.at, dalias@libc.org, linux@armlinux.org.uk,
+        shorne@gmail.com, stefan.kristiansson@saunalahti.fi,
+        tsbogend@alpha.franken.de, tglx@linutronix.de, vgupta@kernel.org,
+        kernel@xen0n.name, ysato@users.sourceforge.jp
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 11:35=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.c=
-om> wrote:
->
-> Clang is unable to handle the situation that a chunk of inline
-> assembly ends with a compat branch instruction and then compiler
-> generates another control transfer instruction immediately after
-> this compat branch. The later instruction will end up in forbidden
-> slot and cause exception.
->
-> Workaround by add a option to control the use of compact branch.
-> Currently it's selected by CC_IS_CLANG and hopefully we can change
-> it to a version check in future if clang manages to fix it.
->
-> Fix boot on boston board.
->
-> Link: https://github.com/llvm/llvm-project/issues/61045
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Acked-by: Nathan Chancellor <nathan@kernel.org>
+Hello:
 
-Thanks for the patch!
+This series was applied to riscv/linux.git (for-next)
+by Andrew Morton <akpm@linux-foundation.org>:
 
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+On Fri, 13 Jan 2023 18:10:00 +0100 you wrote:
+> This is the follow-up on [1]:
+> 	[PATCH v2 0/8] mm: COW fixes part 3: reliable GUP R/W FOLL_GET of
+> 	anonymous pages
+> 
+> After we implemented __HAVE_ARCH_PTE_SWP_EXCLUSIVE on most prominent
+> enterprise architectures, implement __HAVE_ARCH_PTE_SWP_EXCLUSIVE on all
+> remaining architectures that support swap PTEs.
+> 
+> [...]
 
-> ---
-> v2: Add Link tag to LLVM bug
-> v3: Docuement issue link in Kconfig as well
-> ---
->  arch/mips/Kconfig           | 4 ++++
->  arch/mips/include/asm/asm.h | 2 +-
->  2 files changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 37072e15b263..c8b878aa690f 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -3206,6 +3206,10 @@ config CC_HAS_MNO_BRANCH_LIKELY
->         def_bool y
->         depends on $(cc-option,-mno-branch-likely)
->
-> +# https://github.com/llvm/llvm-project/issues/61045
-> +config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
-> +       def_bool y if CC_IS_CLANG
-> +
->  menu "Power management options"
->
->  config ARCH_HIBERNATION_POSSIBLE
-> diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
-> index 336ac9b65235..2e99450f4228 100644
-> --- a/arch/mips/include/asm/asm.h
-> +++ b/arch/mips/include/asm/asm.h
-> @@ -336,7 +336,7 @@ symbol              =3D       value
->   */
->  #ifdef CONFIG_WAR_R10000_LLSC
->  # define SC_BEQZ       beqzl
-> -#elif MIPS_ISA_REV >=3D 6
-> +#elif !defined(CONFIG_CC_HAS_BROKEN_INLINE_COMPAT_BRANCH) && MIPS_ISA_RE=
-V >=3D 6
->  # define SC_BEQZ       beqzc
->  #else
->  # define SC_BEQZ       beqz
-> --
-> 2.37.1 (Apple Git-137.1)
->
->
+Here is the summary with links:
+  - [mm-unstable,v1,01/26] mm/debug_vm_pgtable: more pte_swp_exclusive() sanity checks
+    (no matching commit)
+  - [mm-unstable,v1,02/26] alpha/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,03/26] arc/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,04/26] arm/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,05/26] csky/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,06/26] hexagon/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,07/26] ia64/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,08/26] loongarch/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,09/26] m68k/mm: remove dummy __swp definitions for nommu
+    (no matching commit)
+  - [mm-unstable,v1,10/26] m68k/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,11/26] microblaze/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,12/26] mips/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,13/26] nios2/mm: refactor swap PTE layout
+    (no matching commit)
+  - [mm-unstable,v1,14/26] nios2/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,15/26] openrisc/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,16/26] parisc/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,17/26] powerpc/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE on 32bit book3s
+    (no matching commit)
+  - [mm-unstable,v1,18/26] powerpc/nohash/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,19/26] riscv/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    https://git.kernel.org/riscv/c/51a1007d4113
+  - [mm-unstable,v1,20/26] sh/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,21/26] sparc/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE on 32bit
+    (no matching commit)
+  - [mm-unstable,v1,22/26] sparc/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE on 64bit
+    (no matching commit)
+  - [mm-unstable,v1,23/26] um/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,24/26] x86/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE also on 32bit
+    (no matching commit)
+  - [mm-unstable,v1,25/26] xtensa/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+  - [mm-unstable,v1,26/26] mm: remove __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
---=20
-Thanks,
-~Nick Desaulniers
