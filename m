@@ -2,141 +2,278 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFC76A5266
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 05:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF24E6A5456
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 09:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjB1Eog (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Feb 2023 23:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
+        id S229549AbjB1IYa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Feb 2023 03:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjB1Eoe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Feb 2023 23:44:34 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0472ECA3D;
-        Mon, 27 Feb 2023 20:44:34 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id m25-20020a05683026d900b006941a2838caso98458otu.7;
-        Mon, 27 Feb 2023 20:44:33 -0800 (PST)
+        with ESMTP id S230114AbjB1IY3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 03:24:29 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5993BE3AC
+        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 00:24:27 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so8892112wms.2
+        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 00:24:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bfmYJ0b4hWHKRlFdtuun1P3pZqVYLgA8CJ0d1ZnpCJc=;
-        b=Nun8IwVYUt4tkernIxKDSObpXVAN4e8cBwu2epATj8pUm0q3TzvSaiUCisyzqXQNMN
-         FThh0nzWxEO0jWKbZ3/5JbrNu3KtUDFsBDCD4f8P3s8J/3Fu366+5U8vgbGJ5LDBwsCz
-         mHnAJ5VTSq5SAjih2cwMsbM7wKGEpzk9ElDHeXBInQ+HI4CtkLRYXxXZBNe2wGpHZRU7
-         TQjVNuBHyCNhVmKbnU9fxc+dbORgAmr9sbKusYZR1GNnKB82DYcpZhlIQ3JcJ0qt/s9Q
-         4xoqAz5GB62Z2OBLjgFxiVKWh4Uop0LYcPp/cYXcbFSf/Bffxq9nCO5YbxH9NMKzUt0O
-         yfGQ==
+        d=linaro.org; s=google; t=1677572666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qCa9eFA4MAuvdUpjEutbEhVDEXa13F9jRr5aGoUB3t8=;
+        b=R97enwMN3XC+NbplCZTfX0/1FWjL0/ibd4Ss7LWrablB8qE+oj645pJM4lUVcG2EEO
+         vT4qiDpVqbxagWtoO1z4PLBqy4XmiPInZ3XxdKejzfVzudVwj4+Hg09nkH1aPUwX0Kdu
+         2ltBKOx6NpeHs8/c3p/XXEDTB/fCeTS/L//E0hZwGieMPAKebRtYtD+RKcM5udhu/3Y0
+         Uryt7404F5L8593ZAXq4ttqTT7UQxkwlm5S4PepoiclPT6AdtZqf+SSJXIT1LKcYiFIS
+         Sl49KwNlUkrQjzXfad09XVJMs2nWT2saj8lRZV5LrmtCdhYPKSeNONnLhSCJ7Xiyhnvl
+         ZEqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bfmYJ0b4hWHKRlFdtuun1P3pZqVYLgA8CJ0d1ZnpCJc=;
-        b=gVmT499byRfgRIPhUlOd2RBJz/oZx9KGvbr/Wk7hExGLUmnrdcnkjbWQwKqjns7tll
-         BFFNcYrtUkoCfu4YXvP7SPBZHDkNjxKUuPfBtDTgWwl38xlYrYW8PJLGBz7+a9wzWf5/
-         pVL7CoTSjFSYywrmBYlshh5pH1pe0uUnbgCpRA7FvYPbPpXAnACEdz9HVDtY7eK1ArVG
-         lw1ZwURbl32GO/c7ZowF57s/FnPiMtTTGA4Au6lpaAt8I+RLsLgmQPFbbiJNNNxI0E08
-         Zqm0Kl5CLgELI9XdfRQ2Pocki4fEkal8cL6n49lowugdx8gXYJJF7NmCfAqD8Fvb9gaD
-         I8kQ==
-X-Gm-Message-State: AO0yUKWufwCnJ0M+5mQ9EmTQ6vP80bEE46ua32rW0rIbmgBnhY/QAPeW
-        RlQGxjsI17yyRyGCZfs0/hcqYJ62X+bWXMsbzkR6b/gT
-X-Google-Smtp-Source: AK7set9408o7HwNQmk1pEZVmQzCN2Uu1vGVHDLMhtP3EEByROmYUfXm5A+HXZsapO/7zHYtBGMcqoPCtllteVJa25wo=
-X-Received: by 2002:a05:6830:244b:b0:68b:e3b2:8ca7 with SMTP id
- x11-20020a056830244b00b0068be3b28ca7mr466491otr.6.1677559473326; Mon, 27 Feb
- 2023 20:44:33 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677572666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qCa9eFA4MAuvdUpjEutbEhVDEXa13F9jRr5aGoUB3t8=;
+        b=ieBgqPSGAtKc2/2MRoi2BV7DY8xhBe0GNMPsKzPctBI6CtnLYsv6ihZ6nwpHN3zfOD
+         3mzw+C7o9YeM0R72pBBSpn7SmcvR6WZCeAUDP1M7091sdDJIw48+AWMa3EEPVl1OfMa6
+         uOR3U5GhKqTJlM8wrVQ1Y9HRuOYNN0ziYkLsx7ACrTN8y5xpfk3+Bo3jmeIA0I2olmjO
+         N3+NqCQaokinjpQPLp/ijbtlnOCx1BiN6My97EKZJy6dI7gBmE9Cl7KW+brKz2kPdIJI
+         WcXydUcq8EMpQiNO8CLMXhC+EOsI7nCnWFdRBo0UODowcqz6ZG5i8L+/GFL7Yk3TtO0o
+         njqA==
+X-Gm-Message-State: AO0yUKWMDFv1HxttvVZPt7TP+Aw0JJvhVOkxckh1n001tgLylKYaGpSK
+        A4pRrPIjjyb0SP/+OOGqhy5J7g==
+X-Google-Smtp-Source: AK7set+561ScUMYHwh6Ics+VWI683XONjmmmO5cGE2PRQI2VyhOWzhywPrSMutxHQNhiUzsuMT3LiA==
+X-Received: by 2002:a05:600c:1d29:b0:3eb:2708:86ce with SMTP id l41-20020a05600c1d2900b003eb270886cemr1337572wms.31.1677572665796;
+        Tue, 28 Feb 2023 00:24:25 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p15-20020a7bcdef000000b003e200d3b2d1sm11651518wmj.38.2023.02.28.00.24.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 00:24:25 -0800 (PST)
+Message-ID: <1cf02768-aa92-3ad4-af00-566c16128352@linaro.org>
+Date:   Tue, 28 Feb 2023 09:24:22 +0100
 MIME-Version: 1.0
-References: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
- <20230214103936.1061078-3-sergio.paracuellos@gmail.com> <20230214151101.GB742354@roeck-us.net>
- <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
-In-Reply-To: <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 28 Feb 2023 05:44:21 +0100
-Message-ID: <CAMhs-H_Ce-+MFi5zTMg8v8dSSg5ioaTy+Pw-0QMgK++PVtEViQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/5] mips: dts: ralink: mt7621: rename watchdog node
- from 'wdt' into 'watchdog'
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
-        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 09/16] dt-bindings: pinctrl: mediatek: rt305x: split
+ binding
+Content-Language: en-US
+To:     arinc9.unal@gmail.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-10-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230222183932.33267-10-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 4:12 PM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
->
-> On Tue, Feb 14, 2023 at 4:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Tue, Feb 14, 2023 at 11:39:33AM +0100, Sergio Paracuellos wrote:
-> > > Watchdog nodes must use 'watchdog' for node name. When a 'make dtbs_c=
-heck'
-> > > is performed the following warning appears:
-> > >
-> > > wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-=
-f])?$'
-> > >
-> > > Fix this warning up properly renaming the node into 'watchdog'.
-> > >
-> > > Reviewed-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> > > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-> > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> >
-> > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> >
-> > Note that we can not apply this and the next patch of the series
-> > through the watchdog tree since it crosses a maintainer boundary.
->
-> I was expecting Thomas to get these two arch/mips patches or get an
-> Acked-by from him in order for you to apply them.
+On 22/02/2023 19:39, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> The RT3352 and RT5350 SoCs each contain different pin muxing information,
+> therefore, should be split. This can be done now that there are compatible
+> strings to distinguish them from other SoCs.
+> 
+> Split the schema out to mediatek,rt3352-pinctrl.yaml and
+> mediatek,rt5350-pinctrl.yaml.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../pinctrl/mediatek,rt305x-pinctrl.yaml      |  78 +-----
+>  .../pinctrl/mediatek,rt3352-pinctrl.yaml      | 247 ++++++++++++++++++
+>  .../pinctrl/mediatek,rt5350-pinctrl.yaml      | 210 +++++++++++++++
+>  3 files changed, 462 insertions(+), 73 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,rt5350-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
+> index 61fcf3ab1091..1e6c7e7f2fe2 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt305x-pinctrl.yaml
+> @@ -11,8 +11,7 @@ maintainers:
+>    - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>  
+>  description:
+> -  MediaTek RT305X pin controller for RT3050, RT3052, RT3350, RT3352 and RT5350
+> -  SoCs.
+> +  MediaTek RT305X pin controller for RT3050, RT3052, and RT3350 SoCs.
+>    The pin controller can only set the muxing of pin groups. Muxing individual
+>    pins is not supported. There is no pinconf support.
+>  
+> @@ -36,21 +35,9 @@ patternProperties:
+>            function:
+>              description:
+>                A string containing the name of the function to mux to the group.
+> -            anyOf:
+> -              - description: For RT3050, RT3052 and RT3350 SoCs
+> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio,
+> -                       pcm gpio, pcm i2s, pcm uartf, rgmii, sdram, spi, uartf,
+> -                       uartlite]
+> -
+> -              - description: For RT3352 SoC
+> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led,
+> -                       lna, mdio, pa, pcm gpio, pcm i2s, pcm uartf, rgmii, spi,
+> -                       spi_cs1, uartf, uartlite, wdg_cs1]
+> -
+> -              - description: For RT5350 SoC
+> -                enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led,
+> -                       pcm gpio, pcm i2s, pcm uartf, spi, spi_cs1, uartf,
+> -                       uartlite, wdg_cs1]
+> +            enum: [gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio,
+> +                   pcm gpio, pcm i2s, pcm uartf, rgmii, sdram, spi, uartf,
+> +                   uartlite]
+>  
+>            groups:
+>              description:
+> @@ -69,17 +56,7 @@ patternProperties:
+>              then:
+>                properties:
+>                  groups:
+> -                  anyOf:
+> -                    - description: For RT3050, RT3052 and RT3350 SoCs
+> -                      enum: [i2c, jtag, mdio, rgmii, sdram, spi, uartf,
+> -                             uartlite]
+> -
+> -                    - description: For RT3352 SoC
+> -                      enum: [i2c, jtag, led, lna, mdio, pa, rgmii, spi, spi_cs1,
+> -                             uartf, uartlite]
+> -
+> -                    - description: For RT5350 SoC
+> -                      enum: [i2c, jtag, led, spi, spi_cs1, uartf, uartlite]
+> +                  enum: [i2c, jtag, mdio, rgmii, sdram, spi, uartf, uartlite]
+>  
+>            - if:
+>                properties:
+> @@ -126,24 +103,6 @@ patternProperties:
+>                  groups:
+>                    enum: [jtag]
+>  
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: led
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [led]
+> -
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: lna
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [lna]
+> -
+>            - if:
+>                properties:
+>                  function:
+> @@ -153,15 +112,6 @@ patternProperties:
+>                  groups:
+>                    enum: [mdio]
+>  
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: pa
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [pa]
+> -
+>            - if:
+>                properties:
+>                  function:
+> @@ -216,15 +166,6 @@ patternProperties:
+>                  groups:
+>                    enum: [spi]
+>  
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: spi_cs1
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [spi_cs1]
+> -
+>            - if:
+>                properties:
+>                  function:
+> @@ -243,15 +184,6 @@ patternProperties:
+>                  groups:
+>                    enum: [uartlite]
+>  
+> -          - if:
+> -              properties:
+> -                function:
+> -                  const: wdg_cs1
+> -            then:
+> -              properties:
+> -                groups:
+> -                  enum: [spi_cs1]
+> -
+>          additionalProperties: false
+>  
+>      additionalProperties: false
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..7a74c1602afc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,rt3352-pinctrl.yaml
+> @@ -0,0 +1,247 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/mediatek,rt3352-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek RT3352 Pin Controller
+> +
+> +maintainers:
+> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
+> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> +
+> +description:
+> +  MediaTek RT3352 pin controller for RT3352 SoC.
+> +  The pin controller can only set the muxing of pin groups. Muxing individual
+> +  pins is not supported. There is no pinconf support.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,rt3352-pinctrl
+> +      - ralink,rt305x-pinctrl
+> +      - ralink,rt2880-pinmux
 
-Hi Thomas,
+Following Rob's comments, you need to keep old compatibles when
+splitting binding.
 
-I think you have missed this series since you have started to apply
-newer stuff in mips-next. Are you ok with taking or Acking patches 2
-and 3 of this series?
+Best regards,
+Krzysztof
 
-Thanks,
-    Sergio Paracuellos
-
->
-> Thanks,
->     Sergio Paracuellos
->
-> >
-> > Guenter
-> >
-> > > ---
-> > >  arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/d=
-ts/ralink/mt7621.dtsi
-> > > index 5ca40fd21662..ac818fd721ae 100644
-> > > --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > > +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > > @@ -70,7 +70,7 @@ sysc: syscon@0 {
-> > >                                            "250m", "270m";
-> > >               };
-> > >
-> > > -             wdt: wdt@100 {
-> > > +             wdt: watchdog@100 {
-> > >                       compatible =3D "mediatek,mt7621-wdt";
-> > >                       reg =3D <0x100 0x100>;
-> > >               };
-> > > --
-> > > 2.25.1
-> > >
