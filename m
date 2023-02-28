@@ -2,93 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A5C6A58C3
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 13:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4256A5924
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 13:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjB1MC1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Feb 2023 07:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
+        id S229978AbjB1Mfq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Feb 2023 07:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbjB1MC1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 07:02:27 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D425E2CC45
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 04:02:25 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id j3so6231047wms.2
-        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 04:02:25 -0800 (PST)
+        with ESMTP id S229671AbjB1Mfq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 07:35:46 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1132E823
+        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 04:35:44 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id s18so5546655pgq.1
+        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 04:35:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WOil+rmUBFJnsQrtO4mSmdPRv6I6Z8F/QkUyhuD4Ppo=;
-        b=Lg8uh+4cTsDN+Kf4VvOc7btsCDJvtNMmrwLkQ8tCBKnJZ7oi/a+fMX6SdOwpn6l2p5
-         SH5vEoCsC3WE+c42LJ9SejOh4W2S06JGi2+qdeX5gdhIm6+KgaMPJzO0skzPwNEQfwMN
-         DDp0VsxYWVi8OPFQxe15KAj/fUBPgDxtwESkIx0aHzTNGo/0JEGMCoAzO7nnYgvF22ua
-         A6qTOhMxzkWP1HNa+oFu+LiqUqmvOuIRw400N+B2A2DLhHKJ6MO95KhUEi1cEnplx0nl
-         471q1cQ+gqdNs4JylSAm80nyFzQqZ13+wWSFJGt/j8vK7ieT1hOCzH4G2Ds+mjRjUDE2
-         JtAw==
+        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KhWe8sLMccBLRrPsWcYHRaaybNDxZ0zi1CaL4lrAFvc=;
+        b=iJtweGpDdSTqN2kXZgyLyRHBqBC9GUkRRoy6rynxSdBwc/xi7Vbq/3f2N94C5mLujq
+         w9EG2wiCllviId6GNDlLkbXFwd3mXYXseKL95wKTB6KmEQRjBHJCGbOqKmbCti3DI+ge
+         /jjBYZdSq+2BssKiI8DTPI5TE4zup3ctckwnYAZoqcHmwlnU/lF34WLBlpPh5DbmZW1x
+         OnYjrkr1l05OXbW3P7CY1B6CopBD27raod6Z7rbWXHCofjgDskhx3QBlMTRKsjTh8d0+
+         GZZSBSrne7Q72pybnSMNmSC0ZLCujlURHmZoqWO/H6Tviay4BkJWod6ZfRaG33ptLhER
+         A9Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WOil+rmUBFJnsQrtO4mSmdPRv6I6Z8F/QkUyhuD4Ppo=;
-        b=74rijXD6mzk8h3nUsLwPaEVshGQi/+LhB+i3Llym65ZKBUGtLGvoxTZ0Sll74k1phC
-         Z8QjRudmWZkvVMwcCKjEUoTCW6ZQ+EzYvdP4VrRnBmTsvEfLAb9w6N3ilTYLGfUAV9Rd
-         XFlRtSOufIXY21vZxewVBk1DLw9OdQ/yG3oMs/VTMzsgJJVi4U1CsBUVNhRkPDjg8nWv
-         cslSgXge3LX7y1L7LiuX29chwJ0tESbQYIxEokNO+kV46+59ve/o+FgCXKhj0nqN/uWe
-         iw18wg74YVdwwyVJfG+a6nOaP+RcCIEmmN6UE8/OORNOWY4lfktaL0xoZEiAoekhfbok
-         XVyQ==
-X-Gm-Message-State: AO0yUKURTV3CrDhNPpXV8wk6nn7EVJM7qe8enLm/ewZj5wHhRtEcWIVt
-        He6prA6GFI6rxgGY0l9NQwaQa9TuI4p+iPog
-X-Google-Smtp-Source: AK7set8naYHPskgq2n+dpMigAxIXBgugkmme9zsENGOr36KsES9+Ir0HbUQfWSuX1p/zAanX0YizeA==
-X-Received: by 2002:a05:600c:1992:b0:3ea:f0d6:5d36 with SMTP id t18-20020a05600c199200b003eaf0d65d36mr1952197wmq.29.1677585744390;
-        Tue, 28 Feb 2023 04:02:24 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id k22-20020a7bc416000000b003dc521f336esm11966128wmi.14.2023.02.28.04.02.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 04:02:23 -0800 (PST)
-Message-ID: <6198f1c8-29b7-dba4-2469-2a99eb03c83e@linaro.org>
-Date:   Tue, 28 Feb 2023 13:02:22 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KhWe8sLMccBLRrPsWcYHRaaybNDxZ0zi1CaL4lrAFvc=;
+        b=hRsi1Onmtu5d8V4DGOUIxdV8qR3fT6r8g46kgOibRXtp2G7uUfLbgSACnrmB9cVhuS
+         UuJYmvpHo1AXmAw3Ty56R5AdmPVc7b0Lr8uACS6WjQGfaEOxvCuQHDTFTHoRgfMi6Lh4
+         JVEFwMaxkp2aMG1fUl3SBSTYCUKeZehtyxo/C+618PAunA3RQXb4o3nFoQ5I+CFkkLnx
+         9zXTsPCvQtuTo9esVIIj724n7XFGnHmSlLbvXvu22OAuX0eMKtVnuiF6y2vjKlQp9Hmq
+         MIrDBo+14PtZWEUoca11U1BWUW0KCZd5FerOupfHLwEAJI1IKKjXFPlwcoLc+0PO6Yzd
+         gcGA==
+X-Gm-Message-State: AO0yUKU9w/Kka5kY6PURn0KZdsRRdi/4vhSLhspFzzexylv99xt3Zj48
+        EEBpiODBeJbRoT7iNQMoZNM1dGn9kqHI+bu7Ycn38g==
+X-Google-Smtp-Source: AK7set982toa957BfsESaT9p96TlyfxqaTB6xdGDJ93u6JOrGrfrsLteEwl7OmrMxFUw0AK+STVOgMbUnjwZ3PQRWHE=
+X-Received: by 2002:a63:7807:0:b0:502:f4c6:b96 with SMTP id
+ t7-20020a637807000000b00502f4c60b96mr701622pgc.5.1677587743821; Tue, 28 Feb
+ 2023 04:35:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] MIPS: ebpf jit: Implement DADDI workarounds
-Content-Language: en-US
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
-        bpf@vger.kernel.org
-References: <20230228113305.83751-1-jiaxun.yang@flygoat.com>
- <20230228113305.83751-2-jiaxun.yang@flygoat.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+References: <20230228113305.83751-1-jiaxun.yang@flygoat.com> <20230228113305.83751-2-jiaxun.yang@flygoat.com>
 In-Reply-To: <20230228113305.83751-2-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date:   Tue, 28 Feb 2023 13:35:32 +0100
+Message-ID: <CAM1=_QTwYqAH+21fNnG3aBW-cV8vxtgM7h=enqZYaj2wbRnV8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] MIPS: ebpf jit: Implement DADDI workarounds
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, paulburton@kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 28/2/23 12:33, Jiaxun Yang wrote:
+Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+
+On Tue, Feb 28, 2023 at 12:33=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.c=
+om> wrote:
+>
 > For DADDI errata we just workaround by disable immediate operation
 > for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
-> 
+>
 > All other use cases in JIT won't cause overflow thus they are all safe.
-> 
+>
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
 > v2: Drop 64BIT ifdef
 > ---
->   arch/mips/Kconfig            | 1 -
->   arch/mips/net/bpf_jit_comp.c | 4 ++++
->   2 files changed, 4 insertions(+), 1 deletion(-)
-
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-
+>  arch/mips/Kconfig            | 1 -
+>  arch/mips/net/bpf_jit_comp.c | 4 ++++
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 37072e15b263..df0910e3895c 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -64,7 +64,6 @@ config MIPS
+>         select HAVE_DMA_CONTIGUOUS
+>         select HAVE_DYNAMIC_FTRACE
+>         select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+> -                               !CPU_DADDI_WORKAROUNDS && \
+>                                 !CPU_R4000_WORKAROUNDS && \
+>                                 !CPU_R4400_WORKAROUNDS
+>         select HAVE_EXIT_THREAD
+> diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
+> index b17130d510d4..a40d926b6513 100644
+> --- a/arch/mips/net/bpf_jit_comp.c
+> +++ b/arch/mips/net/bpf_jit_comp.c
+> @@ -218,9 +218,13 @@ bool valid_alu_i(u8 op, s32 imm)
+>                 /* All legal eBPF values are valid */
+>                 return true;
+>         case BPF_ADD:
+> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> +                       return false;
+>                 /* imm must be 16 bits */
+>                 return imm >=3D -0x8000 && imm <=3D 0x7fff;
+>         case BPF_SUB:
+> +               if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> +                       return false;
+>                 /* -imm must be 16 bits */
+>                 return imm >=3D -0x7fff && imm <=3D 0x8000;
+>         case BPF_AND:
+> --
+> 2.37.1 (Apple Git-137.1)
+>
