@@ -2,156 +2,181 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58ED86A5C3E
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 16:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5706A5C5A
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Feb 2023 16:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjB1PqY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Feb 2023 10:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        id S230150AbjB1Pum (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Feb 2023 10:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjB1PqY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 10:46:24 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E49E302B3;
-        Tue, 28 Feb 2023 07:46:23 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id g6-20020a056830308600b0068d4b30536aso5801110ots.9;
-        Tue, 28 Feb 2023 07:46:23 -0800 (PST)
+        with ESMTP id S230166AbjB1Pul (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Feb 2023 10:50:41 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F0C311CA
+        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 07:50:37 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id y2so10268792pjg.3
+        for <linux-mips@vger.kernel.org>; Tue, 28 Feb 2023 07:50:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vBC6OVNsrTR74m7E6zxcjbZx0E4uXq6c6qLU8cPPu8w=;
-        b=qcRfhI+DjRCPChROMhUlpR69nX3r/YbFhcHRZryG9e6J5dcy9dC9e7xz+mHTcjPanZ
-         WZ/rKxt65Drsc5YwKefqKhjbdKeO6LgIDuHXteidVe9n/3driiJwbQ9HR+xi0aqNAWd/
-         Z/vJqtAK+BghcxqFbjfYfZWNbMlJ4+QDmdh2acDbkBAdseZQcQgu+75npUvD4D2NR2x4
-         ElF/TfZVMbTLmU44X/v7vUwhlNWoPXCF5afCq9BgolFibGG/AxhcGVTa9u2iiM3Hjdnd
-         sZM83ya/rKv4WTxsOqcZ+4vgcRGrdhfa46+kWB5IwGWQyKBaqBUkq84pLWCs3gARzUs4
-         4Phg==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1677599437;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UryJW0EuVY8u2sW6z9mCQGQjWTzi+ldNIkpQGB8+HtU=;
+        b=B87Sz4AD1+v0XwCsrRoMpTHOfPGa5C2kWXfopmI+Go4uM/GlteH88Prr3xnOjgOBpK
+         5TXEM23YJaNZ7g9EbVYCuK/JD08Tarh0thhlMnTFFyMOEygBOFNnHXUltVMCUsr+soSV
+         N7JymoT7+eTk9L3hW6gd0jRYqCQJylQ1Sv9bK+MVkRTzPo6kpx2lySfN5ZcoLvOslGRO
+         KPapypwptYDfTKoui/kxjkto9aXQEXnB0zNI2xnF9K9K1w6AMTAlsuNOBVAzoDOh6S9m
+         XMeLlvUu7AtZRerpGExszQw24rKkktWNdf98ePl6noAkKeRplxZuYNOqKiII4Yi6n3n8
+         TCXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vBC6OVNsrTR74m7E6zxcjbZx0E4uXq6c6qLU8cPPu8w=;
-        b=LFfafcSDG3k0oHXR8CSA9fLID84tgutxHDYCn961cJKRz8DhwQYW6M9u+XbAVV9l49
-         jfmAmtETzBAxFr2fMIOlU7OKhVOaA37HWLyve7wnlzm6/oNNsWKMBBzJM52CiZ9Gbb/9
-         Sc11mdFzMd5Sm1k7h1V8yrkH/Elp+MDwzCw461gzLxJjcBUqf/PQqpIxESlXqMlEz3Uw
-         +sZe5hmKDW9rd1HvIBlUwVNhneIqsh5NQZwrE0gxWsCrshkZUgiMD0QZhN9mAVz5odVv
-         dJWHgUDUhsgv8232/0EHE+8wZKcw0RAb0rMlnqUKCdFRDEQpsLPJ7bqjyvKIq1Vdq6fJ
-         s0XQ==
-X-Gm-Message-State: AO0yUKWtiDmJBJOCHaLtBXa5GdFfvh8/hFC7GlyXdxg4lhryTRR9ijxb
-        tHMu/mLfVpjsO3fiYGyjYNIrRnBmJ5nGchstokpNVnM2
-X-Google-Smtp-Source: AK7set9C8cFya8pjgLJpKrGJ6GNk0nZskiNqYkfvA7UgZ6ypL5uzpHNs6llHzf7CVPCZtofa5Sc/CuV/D/0W8Ha057s=
-X-Received: by 2002:a9d:705c:0:b0:693:c521:f86d with SMTP id
- x28-20020a9d705c000000b00693c521f86dmr1101399otj.6.1677599182481; Tue, 28 Feb
- 2023 07:46:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
- <20230214103936.1061078-3-sergio.paracuellos@gmail.com> <20230214151101.GB742354@roeck-us.net>
- <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
- <CAMhs-H_Ce-+MFi5zTMg8v8dSSg5ioaTy+Pw-0QMgK++PVtEViQ@mail.gmail.com>
- <20230228083920.GA5801@alpha.franken.de> <CAMhs-H8xGjGs0-qvxb5KgQ3YZw=2=scqaY15K3ZRp50jQcncSg@mail.gmail.com>
- <82659eef-528d-e421-aed4-21e1a7794bf5@roeck-us.net>
-In-Reply-To: <82659eef-528d-e421-aed4-21e1a7794bf5@roeck-us.net>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 28 Feb 2023 16:46:10 +0100
-Message-ID: <CAMhs-H8uPztGhWCRiQj69dZd8gtXy-fTDcn7ovOpp0LcX0H=wA@mail.gmail.com>
-Subject: Re: [PATCH v7 2/5] mips: dts: ralink: mt7621: rename watchdog node
- from 'wdt' into 'watchdog'
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1677599437;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UryJW0EuVY8u2sW6z9mCQGQjWTzi+ldNIkpQGB8+HtU=;
+        b=uKnpJjb708dQI6MuoIoFfmQHFLV0fkUABHfOApm3oTrNEbxCYvkIx52oGGnrL/rPYs
+         hTykPhQlNmytfB0BT0D7nw15qIyN/1tBmYHnWCShS5CSUhAvtVj583bmBEC84NzwU7kq
+         DgpxALiBcdOYYQ9LmItmQWgksvgRjZ4OPyYN/vdArNnvs47vMKbJ+G63ZlqFqmEgutsR
+         eiRTp0Q6m3SsHt/8pgGvoAUy1VHxZG/pNmKGFRJao7Ziju9DarmuMZLEvuQCt4bu9Ttq
+         mQYe9uoBLNy7ChmsN5qYo/wU/yfnJrYFT8o9e52/LwiKfL5X3v8p0iZvXNdazd69mmF7
+         zOKQ==
+X-Gm-Message-State: AO0yUKXbp+Wpur8LEiIYOTZQkYUj612OUz6pBK8XsTkXPR6Y+MzyD2Ge
+        eZ1CYeRKvWbDnI97l1fX//I5AA==
+X-Google-Smtp-Source: AK7set80NPLuAAPSgZZsRqS35byB+8nywbDP9pe24Tyk+tjImkNZjMRv8vvzE4HsisyOpmumYVDG2Q==
+X-Received: by 2002:a17:902:d2c7:b0:19c:fbdb:43cb with SMTP id n7-20020a170902d2c700b0019cfbdb43cbmr3953598plc.51.1677599436809;
+        Tue, 28 Feb 2023 07:50:36 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id h12-20020a170902f7cc00b0019d1f42b00csm3612084plw.17.2023.02.28.07.50.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 07:50:36 -0800 (PST)
+Date:   Tue, 28 Feb 2023 07:50:36 -0800 (PST)
+X-Google-Original-Date: Tue, 28 Feb 2023 07:49:44 PST (-0800)
+Subject:     Re: [PATCH mm-unstable v1 19/26] riscv/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+In-Reply-To: <20230113171026.582290-20-david@redhat.com>
+CC:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        hughd@google.com, jhubbard@nvidia.com, jgg@nvidia.com,
+        rppt@linux.ibm.com, shy828301@gmail.com, vbabka@suse.cz,
+        namit@vmware.com, aarcange@redhat.com, peterx@redhat.com,
+        linux-mm@kvack.org, x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        david@redhat.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     david@redhat.com
+Message-ID: <mhng-b8dc8a57-dde0-4995-bbb7-3948a95ba0b1@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 3:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 2/28/23 00:51, Sergio Paracuellos wrote:
-> > On Tue, Feb 28, 2023 at 9:41 AM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> >>
-> >> On Tue, Feb 28, 2023 at 05:44:21AM +0100, Sergio Paracuellos wrote:
-> >>> On Tue, Feb 14, 2023 at 4:12 PM Sergio Paracuellos
-> >>> <sergio.paracuellos@gmail.com> wrote:
-> >>>>
-> >>>> On Tue, Feb 14, 2023 at 4:11 PM Guenter Roeck <linux@roeck-us.net> w=
-rote:
-> >>>>>
-> >>>>> On Tue, Feb 14, 2023 at 11:39:33AM +0100, Sergio Paracuellos wrote:
-> >>>>>> Watchdog nodes must use 'watchdog' for node name. When a 'make dtb=
-s_check'
-> >>>>>> is performed the following warning appears:
-> >>>>>>
-> >>>>>> wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-=
-9a-f])?$'
-> >>>>>>
-> >>>>>> Fix this warning up properly renaming the node into 'watchdog'.
-> >>>>>>
-> >>>>>> Reviewed-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> >>>>>> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-> >>>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> >>>>>
-> >>>>> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> >>>>>
-> >>>>> Note that we can not apply this and the next patch of the series
-> >>>>> through the watchdog tree since it crosses a maintainer boundary.
-> >>>>
-> >>>> I was expecting Thomas to get these two arch/mips patches or get an
-> >>>> Acked-by from him in order for you to apply them.
-> >>>
-> >>> Hi Thomas,
-> >>>
-> >>> I think you have missed this series since you have started to apply
-> >>> newer stuff in mips-next. Are you ok with taking or Acking patches 2
-> >>> and 3 of this series?
-> >>
-> >> yes, I sort of missed it. If it's enough to take patch 2/3 I'll do tha=
-t.
-> >> If it's better to keep the series, I'm also ok with acking them.
-> >> What's the best way forward ?
-> >
-> > Both trees work for me. The rest of the patches of this series should
-> > go through the watchdog tree. Guenter, what is better for you?
-> >
->
-> Wim is handling pull requests. He has queued the other three patches in h=
-is
-> tree. I would suggest to apply the two remaining patches through the mips
-> tree.
+On Fri, 13 Jan 2023 09:10:19 PST (-0800), david@redhat.com wrote:
+> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE by stealing one bit
+> from the offset. This reduces the maximum swap space per file: on 32bit
+> to 16 GiB (was 32 GiB).
 
-Thanks for letting me know, Guenter.
+Seems fine to me, I doubt anyone wants a huge pile of swap on rv32.
 
-Thomas, please, take the patches 2 and 3 through the mips tree, then.
+>
+> Note that this bit does not conflict with swap PMDs and could also be used
+> in swap PMD context later.
+>
+> While at it, mask the type in __swp_entry().
+>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  arch/riscv/include/asm/pgtable-bits.h |  3 +++
+>  arch/riscv/include/asm/pgtable.h      | 29 ++++++++++++++++++++++-----
+>  2 files changed, 27 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/pgtable-bits.h b/arch/riscv/include/asm/pgtable-bits.h
+> index b9e13a8fe2b7..f896708e8331 100644
+> --- a/arch/riscv/include/asm/pgtable-bits.h
+> +++ b/arch/riscv/include/asm/pgtable-bits.h
+> @@ -27,6 +27,9 @@
+>   */
+>  #define _PAGE_PROT_NONE _PAGE_GLOBAL
+>
+> +/* Used for swap PTEs only. */
+> +#define _PAGE_SWP_EXCLUSIVE _PAGE_ACCESSED
+> +
+>  #define _PAGE_PFN_SHIFT 10
+>
+>  /*
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 4eba9a98d0e3..03a4728db039 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -724,16 +724,18 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>
+>  /*
+> - * Encode and decode a swap entry
+> + * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
+> + * are !pte_none() && !pte_present().
+>   *
+>   * Format of swap PTE:
+>   *	bit            0:	_PAGE_PRESENT (zero)
+>   *	bit       1 to 3:       _PAGE_LEAF (zero)
+>   *	bit            5:	_PAGE_PROT_NONE (zero)
+> - *	bits      6 to 10:	swap type
+> - *	bits 10 to XLEN-1:	swap offset
+> + *	bit            6:	exclusive marker
+> + *	bits      7 to 11:	swap type
+> + *	bits 11 to XLEN-1:	swap offset
+>   */
+> -#define __SWP_TYPE_SHIFT	6
+> +#define __SWP_TYPE_SHIFT	7
+>  #define __SWP_TYPE_BITS		5
+>  #define __SWP_TYPE_MASK		((1UL << __SWP_TYPE_BITS) - 1)
+>  #define __SWP_OFFSET_SHIFT	(__SWP_TYPE_BITS + __SWP_TYPE_SHIFT)
+> @@ -744,11 +746,28 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>  #define __swp_type(x)	(((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
+>  #define __swp_offset(x)	((x).val >> __SWP_OFFSET_SHIFT)
+>  #define __swp_entry(type, offset) ((swp_entry_t) \
+> -	{ ((type) << __SWP_TYPE_SHIFT) | ((offset) << __SWP_OFFSET_SHIFT) })
+> +	{ (((type) & __SWP_TYPE_MASK) << __SWP_TYPE_SHIFT) | \
+> +	  ((offset) << __SWP_OFFSET_SHIFT) })
+>
+>  #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
+>  #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
+>
+> +#define __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+> +static inline int pte_swp_exclusive(pte_t pte)
+> +{
+> +	return pte_val(pte) & _PAGE_SWP_EXCLUSIVE;
+> +}
+> +
+> +static inline pte_t pte_swp_mkexclusive(pte_t pte)
+> +{
+> +	return __pte(pte_val(pte) | _PAGE_SWP_EXCLUSIVE);
+> +}
+> +
+> +static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+> +{
+> +	return __pte(pte_val(pte) & ~_PAGE_SWP_EXCLUSIVE);
+> +}
+> +
+>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+>  #define __pmd_to_swp_entry(pmd) ((swp_entry_t) { pmd_val(pmd) })
+>  #define __swp_entry_to_pmd(swp) __pmd((swp).val)
 
-Thanks,
-    Sergio Paracuellos
->
-> Guenter
->
-> > Thanks,
-> >      Sergio Paracuellos
-> >
-> >>
-> >> Thomas.
-> >>
-> >> --
-> >> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
-rily a
-> >> good idea.                                                [ RFC1925, 2=
-.3 ]
->
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
