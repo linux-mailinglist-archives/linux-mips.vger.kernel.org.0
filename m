@@ -2,103 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914B46A6881
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Mar 2023 09:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D426A68A3
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Mar 2023 09:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjCAIBy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Mar 2023 03:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S229637AbjCAIPf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Mar 2023 03:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjCAIBx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Mar 2023 03:01:53 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7671D37569;
-        Wed,  1 Mar 2023 00:01:52 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3F37F5C006E;
-        Wed,  1 Mar 2023 03:01:49 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 01 Mar 2023 03:01:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677657709; x=1677744109; bh=HiNMFVsaBw
-        wCxMOFcvgCnu4C3JGr7mO5AhegKiv449U=; b=Iek9K2kvPfnHfSxaaV5b+LYbwJ
-        2Wvnq9VrP6J2WyAB/D87b5aW1f1L0puj8CMuHlCgSLSoW/VkH2Uf6EIM3hfvOjJY
-        wLaIc+8W5OzSjRJ+iwL9wAV2Z6b4HfBeVde0BGPE7VUz0eSVgrv835TKt4UNUNTv
-        N8yf+04nEu40z7AnBjAg/UcSP88fmZkQLjq0vN7g2Co68qH1N5QVBjUbVPVwauNT
-        EsZK50EnmveqUWgo/Im/fGY4neKa8v2rDs8DVvOs1D+pK0CnsstgekihohKOSbKB
-        JZlK2bTvs38Fa8JJVgp7yaUP5F9udIRrf41NCahNhKsmANgNB0KtFX8Rt9rQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677657709; x=1677744109; bh=HiNMFVsaBwwCxMOFcvgCnu4C3JGr
-        7mO5AhegKiv449U=; b=hH5nYC9cimwawQ4osP7+SYD2eF6xutXdIAi9tcrpZZgR
-        MSEM13ehfcMamfy1q6ri+sEm4qYYyrDa9TUc4h/Dz2QngWk7QkFuiIYdyaGQIUDw
-        LHCB9Gy/Kg3LLqiGUKzkHbBjBnw0J0IneN3Al5JevOQn1VzVQ4lYznAdjV1zYE1q
-        UxZpScMbg+0gVQXHt4GbY86Y2ocBl5TL5GQpLkVEAjwENqTl10xcmeZpPZAktf6p
-        bMs7LdmXKmC1f2s6DUWI1N5yMGmuGmCK/YQ93E7IsMA+9/tiHxNndeIC/fRW+DjH
-        L2vpNSAD1mYgOvpH78nRpdF20O1dlIKxMwm0xW0Rww==
-X-ME-Sender: <xms:awb_YxNsQZBw_husNUreOec4Nsq7E5jwO7RsMTDtW3fpPI7zHXk2BA>
-    <xme:awb_Yz8ybpZ-CBl2KR3OpPStkcfsHJJ9CQyNC1bqGlAwFzyF4YEgurcmejq_DgWPT
-    9--MorystY6eBbv7dk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:awb_YwRXhPnqjcjcTOFwlPAJwwF2MaowW_aeYBJI88QXyaIWZaqboA>
-    <xmx:awb_Y9sQGhgvWIBrfQejaZTGXI9OE-bTU8zmkzZgAAMD08L57u79ag>
-    <xmx:awb_Y5ezZV44Fw1hiFCUQD8B3C9REGfdEOyv1oN03lMnJm8HGsg1Hw>
-    <xmx:bQb_Y_9WfNm3G3sMwT_z2CYwZMVOiwvUkT5p_ruxxvCU-NVmXfpVwQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A5E78B60086; Wed,  1 Mar 2023 03:01:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <6cfc194b-9d30-47d5-8ea9-fa5c13ad0e7c@app.fastmail.com>
-In-Reply-To: <866973b7-1f54-21a3-79aa-992ed0594c1a@lwfinger.net>
-References: <20230227133457.431729-1-arnd@kernel.org>
- <3d8f28d7-78df-5276-612c-85b5262a987a@lwfinger.net>
- <c17bff4e-031e-4101-8564-51f6298b1c68@app.fastmail.com>
- <e9f8501f-ede0-4d38-6585-d3dc2469d3fe@lwfinger.net>
- <7085019b-4fad-4d8d-89c0-1dd33fb27bb7@app.fastmail.com>
- <18be9b45-e7c1-9f81-afeb-3e0d4cfe5f73@lwfinger.net>
- <31fee002-db3b-43d9-b8bc-5a869516c2d7@app.fastmail.com>
- <866973b7-1f54-21a3-79aa-992ed0594c1a@lwfinger.net>
-Date:   Wed, 01 Mar 2023 09:01:27 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Larry Finger" <Larry.Finger@lwfinger.net>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org
-Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Hartley Sweeten" <hsweeten@visionengravers.com>,
-        "Ian Abbott" <abbotti@mev.co.uk>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Kevin Cernekee" <cernekee@gmail.com>,
-        "Lukas Wunner" <lukas@wunner.de>,
-        "Manuel Lauss" <manuel.lauss@gmail.com>,
-        "Oliver Hartkopp" <socketcan@hartkopp.net>,
-        "Olof Johansson" <olof@lixom.net>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        with ESMTP id S229534AbjCAIPe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Mar 2023 03:15:34 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE4B9004;
+        Wed,  1 Mar 2023 00:15:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677658508; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=K5rqZm5I60Bmtew0uSXmf2QdNGCVWX1lhlyhU8380uu1m8/CKfubPcGBbvh+osbNYNcC8tVs+Gu/OEFciXuZ/aHuCMPN+sErbg5KHGqP3hZRlRxjVxlsNwtv05WtyOEguVdlpg6HDQ71mLqPNZCVkPKxc1FAmozR0Dr3HFCNlCE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1677658508; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=loHyMMxyuLpIik8Ed+HNPAQgCqKfx0atv75vwMAnXyg=; 
+        b=OXSalVxFM3c/JcYzZ8n5+DZDYdhPgKo5DQwJCUwV68BmQCtPp2qW3Jjlb/CLBKuzowWC5ENWp2S6F/ak/lK2AIe4GKhoMrr5tmZa1fcKlIvyQMaIuK4/rf7kXK346372ns5r13TmnH0L57WyuxJOXb8jKh3rO87z3wUlOtiC6ZU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677658508;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=loHyMMxyuLpIik8Ed+HNPAQgCqKfx0atv75vwMAnXyg=;
+        b=LIMMHzZ2dE9bY9Yig8KeA77aDkINNP4M/XYzhvWOkj633Ejy+RkLTNNwykzdX8QC
+        RDgVO0t6wr/HuR12ifAUHKOgCydy3pU5pxQdfHa2gyTtRKKsgLtqHVpHbwg3Bd/UftA
+        SgurdupqykIt/825g7WuaO2XwA9ICT+eSCEjA3i0=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1677658506523162.75111868803015; Wed, 1 Mar 2023 00:15:06 -0800 (PST)
+Message-ID: <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
+Date:   Wed, 1 Mar 2023 11:15:00 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
+ compatible strings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-8-arinc.unal@arinc9.com>
+ <20230227173333.GA496999-robh@kernel.org>
+ <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
+ <20230301024431.GA251215-robh@kernel.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230301024431.GA251215-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,29 +79,74 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 1, 2023, at 02:13, Larry Finger wrote:
-> On 2/28/23 02:37, Arnd Bergmann wrote:
->> My intention was to keep Cardbus support working with old defconfig files,
->> and I've not moved CONFIG_CARDBUS into a separate submenu between
->> CONFIG_PCI_HOTPLUG and CONFIG_PCI_CONTROLLER but left the driver in
->> drivers/pci/hotplug. I think that's the best compromise here, but maybe
->> the PCI maintainers have a better idea.
->
-> I did a bit more investigation. My original .config had CONFIG_PCI_HOTPLUG not 
-> defined, but did have CONFIG_CARDBUS and the various yenta modules turned on. 
-> With your changes, the CONFIG_PCI_HOTPLUG overrode CARDBUS.
->
-> I thought mine was a corner case, but now I am not sure. As stated above, the 
-> Debian 12 factory configuration for ppc32 does not turn on PCI hotplug, but the 
-> x86_64 configuration for openSUSE Tumbleweed does. The x86_64 configuration in 
-> Fedora 37 does not contain CONFIG_PCI_HOTPLUG, but does have CARDBUS set.
->
-> It seems that several distros may get the wrong result with this change,
+On 1.03.2023 05:44, Rob Herring wrote:
+> On Tue, Feb 28, 2023 at 07:46:36PM +0300, Arınç ÜNAL wrote:
+>> On 27/02/2023 20:33, Rob Herring wrote:
+>>> On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
+>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>
+>>>> Add the ralink,rt2880-pinmux compatible string. It had been removed from
+>>>> the driver which broke the ABI.
+>>>>
+>>>> Add the mediatek compatible strings. Change the compatible string on the
+>>>> examples with the mediatek compatible strings.
+>>>>
+>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>> ---
+>>>>    .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
+>>>>    .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
+>>>>    .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
+>>>>    .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
+>>>>    .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
+>>>>    5 files changed, 25 insertions(+), 10 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>> index 1e63ea34146a..531b5f616c3d 100644
+>>>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>> @@ -17,7 +17,10 @@ description:
+>>>>    properties:
+>>>>      compatible:
+>>>> -    const: ralink,mt7620-pinctrl
+>>>> +    enum:
+>>>> +      - mediatek,mt7620-pinctrl
+>>>> +      - ralink,mt7620-pinctrl
+>>>
+>>> We don't update compatible strings based on acquistions nor marketing
+>>> whims. If you want to use 'mediatek' for new things, then fine.
+>>
+>> Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs share
+>> the same architecture from Ralink, so they were incorrectly called Ralink
+>> SoCs.
+>>
+>> I can remove the new strings from Ralink SoCs and add them only for MediaTek
+>> SoCs. Or you could make an exception for this one, regarding the situation.
+>> Whatever you think is best.
+> 
+> I'm not in a position to make an exception as I know little about this
+> platform. Carrying both strings is a NAK. Either you (and everyone using
+> these platforms) care about the ABI and are stuck with the "wrong"
+> string. In the end, they are just unique identifiers. Or you don't care
+> and break the ABI and rename everything. If you do that, do just that in
+> your patches and make it crystal clear in the commit msg that is your
+> intention and why that is okay.
 
-As far as I can tell, this should work with the changes I described
-above, since CONFIG_CARDBUS no longer depends on CONFIG_PCI_HOTPLUG.
-I now uploaded the changed version to
+Ralink had their MIPS SoCs pre-acquisition, RT2880, etc. MediaTek 
+introduced new SoCs post-acquisition, MT7620, MT7621, MT7628, and 
+MT7688, utilising the same platform from Ralink, sharing the same 
+architecture code, pinctrl core driver, etc.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=pccard-rework-2
+I don't intend to break the ABI at all. On the contrary, I fix it where 
+possible.
 
-    Arnd
+If I understand correctly, from this conversation and what Krzysztof 
+said, all strings must be kept on the schemas so I can do what I said on 
+the composed mail. Only match the pin muxing information on the strings 
+that won't match multiple pin muxing information from other schemas.
+
+This way we don't break the ABI, introduce new compatible strings while 
+keeping the remaining ones, and make schemas match correctly.
+
+Let me know if this is acceptable to you.
+
+Arınç
