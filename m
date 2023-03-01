@@ -2,70 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163816A6A0B
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Mar 2023 10:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042A86A6AB9
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Mar 2023 11:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjCAJud (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Mar 2023 04:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
+        id S229713AbjCAKXR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Mar 2023 05:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCAJuc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Mar 2023 04:50:32 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F2925B8C;
-        Wed,  1 Mar 2023 01:50:28 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id cq23so51519097edb.1;
-        Wed, 01 Mar 2023 01:50:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/qA5ZFeLE/hhjzy4kqiXBkHpSYNDEtXNEiCoxkQ8GIE=;
-        b=pTF9D0MQn3mmpu9pJ5FXzNm4p5KcIqLVfIWv4wB+m5QZu8tMyVdkm2OpYEspiGmjx5
-         U1Ahqjsg2Oh9DMKimZ8JAnVoPGk6CxyDyRAu0SDK3RCryD+MxCKULCioq/JfE5HciOHv
-         np1+QkGGGoeLOlncFW3QOlik6qnCjItl6rIjki3yBeLExPeruxvSs/gxGwRUvhnCuBlY
-         4Bb2RRpNF3uBIyREoXUgMzAEojd+s2IuoJMg9IKffZTQxnaAc0hKn4Yjb9jLXjPb+WmA
-         IIHQUGxRwcJcJV97/gdILakqjgLoeL7X/EdPx+cskP2SzD91AsT6gbsBZUq2D8vkXh7q
-         D8Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/qA5ZFeLE/hhjzy4kqiXBkHpSYNDEtXNEiCoxkQ8GIE=;
-        b=2xhTJEvb/xdKW3KLuQrzn745W5dv0P54eLvDpyIP5KA20Lwi7hWHS6y4AAkTOHWrMs
-         ah4F2hNvvv4b2UQyhREwM2YY5a1sOGds1QdGjcLajEHmhHaGewW9Bjxc+oePKOCwx3O6
-         i9OHyTYvXt84cOsSm+6DhX9h/at+Dz1qX7UxJ9hpcHR3dr+Jv4q7tgJBx+Nt4Yu7fUHK
-         mt8qFXHfAk8h74hEXfX5xP4uyPr7/udeeO/V4zp+ySNg3zU5exqx6lCOHkuza4sFhDo6
-         AO4CHTWiGUBzv6pdmUjTQcLTQbp1a5TfAOK5wNRf1HLxSISh9ZChpI1wQlpgjtsng9qg
-         IBLA==
-X-Gm-Message-State: AO0yUKUjNpXM+ZnRMbPLMEqu5jx8BfYtMi8Jh7LMzm5jHExcOVvEu4z4
-        9HxuXlnx1ccqj+u0zdEs+5NyIMNBmBZiHTiy1qcJt1Dj7H0=
-X-Google-Smtp-Source: AK7set8Y0j2oUGKL6afGBF88DWXfyo/9L2sEQMoOqwHMjnBv0LEDByGQxw35zwIwVsdWmtF/I/qRg/P5RfUEKF3D/jE=
-X-Received: by 2002:a50:f695:0:b0:4bb:e549:a2ad with SMTP id
- d21-20020a50f695000000b004bbe549a2admr872671edn.4.1677664226668; Wed, 01 Mar
- 2023 01:50:26 -0800 (PST)
+        with ESMTP id S229632AbjCAKXL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Mar 2023 05:23:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021283B3C1
+        for <linux-mips@vger.kernel.org>; Wed,  1 Mar 2023 02:22:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677666145;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q+2djVSvldfSahdORfv588Sx4RfUpN9M2v3A+79Xsag=;
+        b=WBi81jfcn48YXaTRqrwq/eBC24y9PThMYKcM8EYdQcXYNxu8riHt68zg5SGJVUHl29rtJV
+        DND0Jbdhb2URXowNZsZ+GvfH1fmoeLg7/DBX18WOi9Dx+g5Ukmz6DbxyhXdfKSBZhfx7XD
+        ffR+k/RnZXNJMyVPde1xMqQua+Y8VHg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-doUGhHLUP6WD_lcTWKfTgA-1; Wed, 01 Mar 2023 05:22:21 -0500
+X-MC-Unique: doUGhHLUP6WD_lcTWKfTgA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A706585A5B1;
+        Wed,  1 Mar 2023 10:22:20 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-180.pek2.redhat.com [10.72.13.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 088FB492C14;
+        Wed,  1 Mar 2023 10:22:15 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        geert@linux-m68k.org, hch@infradead.org, mcgrof@kernel.org,
+        Baoquan He <bhe@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v2 1/2] mips: add <asm-generic/io.h> including
+Date:   Wed,  1 Mar 2023 18:22:07 +0800
+Message-Id: <20230301102208.148490-2-bhe@redhat.com>
+In-Reply-To: <20230301102208.148490-1-bhe@redhat.com>
+References: <20230301102208.148490-1-bhe@redhat.com>
 MIME-Version: 1.0
-References: <20230222111213.2241633-1-keguang.zhang@gmail.com>
- <20230222111213.2241633-5-keguang.zhang@gmail.com> <18d1048e-c66b-fea8-2755-6c1c6e23fde9@linaro.org>
-In-Reply-To: <18d1048e-c66b-fea8-2755-6c1c6e23fde9@linaro.org>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Wed, 1 Mar 2023 17:50:10 +0800
-Message-ID: <CAJhJPsUOYJ6B=YSiZxDe3_h5+Rix_uuFvUDbo9wO084N71Q+jQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: gpio: Add Loongson-1 GPIO
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,105 +65,120 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 8:35=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 22/02/2023 12:12, Keguang Zhang wrote:
-> > Add devicetree binding document for Loongson-1 GPIO.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> >  .../bindings/gpio/loongson,ls1x-gpio.yaml     | 60 +++++++++++++++++++
-> >  1 file changed, 60 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls1=
-x-gpio.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.=
-yaml b/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
-> > new file mode 100644
-> > index 000000000000..e4ab49d48fae
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
-> > @@ -0,0 +1,60 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/gpio/loongson,ls1x-gpio.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Loongson-1 GPIO controller
-> > +
-> > +maintainers:
-> > +  - Keguang Zhang <keguang.zhang@gmail.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: loongson,ls1x-gpio
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  gpio-controller: true
-> > +
-> > +  "#gpio-cells":
-> > +    const: 2
-> > +
-> > +  ngpios:
-> > +    minimum: 1
-> > +    maximum: 32
->
-> Isn't this fixed at 32? Do you have hardware with different number of GPI=
-Os?
->
-Yes. The GPIO number of some groups is less than 32.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - gpio-controller
-> > +  - '#gpio-cells'
->
-> Use consistent quotes - either " or '
->
-Will do.
+With the adding, some default ioremap_xx methods defined in
+asm-generic/io.h can be used. E.g the default ioremap_uc() returning
+NULL.
 
-> > +  - ngpios
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    gpio0: gpio@1fd010c0 {
-> > +        compatible =3D "loongson,ls1x-gpio";
-> > +        reg =3D <0x1fd010c0 0x4>;
-> > +
-> > +        gpio-controller;
-> > +        #gpio-cells =3D <2>;
-> > +
-> > +        ngpios =3D <32>;
-> > +    };
-> > +
-> > +  - |
-> > +    gpio1: gpio@1fd010c4 {
-> > +        compatible =3D "loongson,ls1x-gpio";
-> > +        reg =3D <0x1fd010c4 0x4>;
-> > +
-> > +        gpio-controller;
-> > +        #gpio-cells =3D <2>;
-> > +
-> > +        ngpios =3D <32>;
-> > +    };
->
-> These are two the same examples, keep only one.
->
-Will do.
+Here, remove the <asm/io.h> including in asm/mmiowb.h, otherwise nested
+including will cause compiling error.
 
-> Best regards,
-> Krzysztof
->
+Signed-off-by: Baoquan He <bhe@redhat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-mips@vger.kernel.org
+---
+ arch/mips/include/asm/io.h     | 46 ++++++++++++++++++++++++++++++++++
+ arch/mips/include/asm/mmiowb.h |  2 --
+ 2 files changed, 46 insertions(+), 2 deletions(-)
 
+diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+index cec8347f0b85..3737b48f37dd 100644
+--- a/arch/mips/include/asm/io.h
++++ b/arch/mips/include/asm/io.h
+@@ -126,6 +126,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
+  *     almost all conceivable cases a device driver should not be using
+  *     this function
+  */
++#define phys_to_virt phys_to_virt
+ static inline void * phys_to_virt(unsigned long address)
+ {
+ 	return __va(address);
+@@ -480,14 +481,17 @@ BUILDSTRING(l, u32)
+ BUILDSTRING(q, u64)
+ #endif
+ 
++#define memset_io memset_io
+ static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
+ {
+ 	memset((void __force *) addr, val, count);
+ }
++#define memcpy_fromio memcpy_fromio
+ static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
+ {
+ 	memcpy(dst, (void __force *) src, count);
+ }
++#define memcpy_toio memcpy_toio
+ static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
+ {
+ 	memcpy((void __force *) dst, src, count);
+@@ -548,6 +552,46 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
+ #define csr_out32(v, a) (*(volatile u32 *)((unsigned long)(a) + __CSR_32_ADJUST) = (v))
+ #define csr_in32(a)    (*(volatile u32 *)((unsigned long)(a) + __CSR_32_ADJUST))
+ 
++
++#define inb_p inb_p
++#define inw_p inw_p
++#define inl_p inl_p
++#define insb insb
++#define insw insw
++#define insl insl
++
++#define outb_p outb_p
++#define outw_p outw_p
++#define outl_p outl_p
++#define outsb outsb
++#define outsw outsw
++#define outsl outsl
++
++#define readb readb
++#define readw readw
++#define readl readl
++#define writeb writeb
++#define writew writew
++#define writel writel
++
++#define readsb readsb
++#define readsw readsw
++#define readsl readsl
++#define readsq readsq
++#define writesb writesb
++#define writesw writesw
++#define writesl writesl
++#define writesq writesq
++
++#define __raw_readb __raw_readb
++#define __raw_readw __raw_readw
++#define __raw_readl __raw_readl
++#define __raw_readq __raw_readq
++#define __raw_writeb __raw_writeb
++#define __raw_writew __raw_writew
++#define __raw_writel __raw_writel
++#define __raw_writeq __raw_writeq
++
+ /*
+  * Convert a physical pointer to a virtual kernel pointer for /dev/mem
+  * access
+@@ -556,4 +600,6 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
+ 
+ void __ioread64_copy(void *to, const void __iomem *from, size_t count);
+ 
++#include <asm-generic/io.h>
++
+ #endif /* _ASM_IO_H */
+diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
+index a40824e3ef8e..007fe55bc7d1 100644
+--- a/arch/mips/include/asm/mmiowb.h
++++ b/arch/mips/include/asm/mmiowb.h
+@@ -2,8 +2,6 @@
+ #ifndef _ASM_MMIOWB_H
+ #define _ASM_MMIOWB_H
+ 
+-#include <asm/io.h>
+-
+ #define mmiowb()	iobarrier_w()
+ 
+ #include <asm-generic/mmiowb.h>
+-- 
+2.34.1
 
---=20
-Best regards,
-
-Kelvin Cheung
