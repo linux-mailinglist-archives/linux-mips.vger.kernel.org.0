@@ -2,82 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15BA6A6DD5
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Mar 2023 15:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E3A6A6E43
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Mar 2023 15:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjCAOHW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Mar 2023 09:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S230094AbjCAOUA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Mar 2023 09:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCAOHV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Mar 2023 09:07:21 -0500
+        with ESMTP id S230185AbjCAOTf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Mar 2023 09:19:35 -0500
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34672A6F3;
-        Wed,  1 Mar 2023 06:07:20 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 52EA25C00E2;
-        Wed,  1 Mar 2023 09:07:19 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 01 Mar 2023 09:07:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677679639; x=1677766039; bh=5m3HfYKwmw
-        BaOjWZWUy6qvDlncIvme0bGcT9RvLhnCs=; b=NY6zRLj9LNQXp1PiMPVL+Sr2oM
-        7BYgON/qWAtNrM7M8WK2lJjFXaTtPW4TtKYCcqbe47p//ahHMaHQLwWFuIFATzjk
-        KeqqWMXthvgK6HbJf2swGC57Xh3eXlECzJiL0gb5jDESuRLq6HNxOCT1146Xgx55
-        ijgcnmQaLTV3bBWWFboOhI4iAcpadeSB6l4B3KOZMqN+I+1aMsLrcmMZq3WgDZCb
-        v1+MXnjnnCKnOUAmqlHIHwnIHo18eTxn17OueOcnYbiy0ISVe2dEvnICjwgTDT0y
-        ix2Ubj7mtVdljq1Qt9nDwyFDEBOLeZ58cjofqrckolUcunsiEIuE2k7lbWiQ==
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06BD32E66;
+        Wed,  1 Mar 2023 06:18:26 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 875B45C0163;
+        Wed,  1 Mar 2023 09:18:25 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 01 Mar 2023 09:18:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677680305; x=
+        1677766705; bh=IU/BrE3ixZGyLbVgFOOh2R6wZHPN5yx1P6eJFhscw+U=; b=A
+        yJkYHBaTE99CfV0zEVGrqCLHzthiENTPQupgFPss0vM4CUrpWrkivXAApij0gYsT
+        +xPD3Rpc/++PsYBQvrW9hn/hGp5z1kJoDTKu8esHfTpzxYVj9sjk/5h3FzsALxOv
+        +quyZGu6DFBwv/POff8XjUz23+OiS94YV8ZMnxMa30GHbjgA0qdpfeDWzdFegUTF
+        JjgiC69It8pIoz8XTrMim7wSiJQMJF1b4cUGUEECraqzCDqEeaP20zLliPVFQSXu
+        TFPADhCVuhmaN0vJCDGwg+YI7rNie7XSDZJJWMWzxl32RfaTabum+2CLoI+WuKF2
+        vmkG+p5H/Nx0Wcq/maTew==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677679639; x=1677766039; bh=5m3HfYKwmwBaOjWZWUy6qvDlncIv
-        me0bGcT9RvLhnCs=; b=PAmVBsQn04eoXV7tafopSDqW1GPJUefcqlmXK9zwvsJo
-        uuXz52sQwkE8j/aIiAR8OtC3BOTi2V1EhCRZqi9sw5Tl5ruA+b0iI4ip2AXvLh3C
-        oh/shkGAA8TP3P3irDX9SBcugi1Q6yYpnUw4EkBrQRAkOCCPnnIP9iR23uFGqXAw
-        q6wNgyzecjaVQSGPlMDd9d+hJAF2SOiWmXB0HS7hG+/vchOIuyAiu67MO/E1fZcj
-        AS7BdrOkWre003ihJhlHjCarbJEfKLuJm6mBas3w0m7mnJjqCso8FGoYTqVgDoIT
-        NpakBSvosoXDk/GmDa9DaQokJmngemfbheJzVwvIDw==
-X-ME-Sender: <xms:Flz_Y-6iYkpWayTgX_kvG8bGxQCJVEFZGZAD2Htm2St55dKROFxhDw>
-    <xme:Flz_Y35Pvyn1jvLk6NqQpK2Zq7UOkx6AYgeeBRceeijNcsdOpphBA_4pg90cfCQQR
-    U_-mDCzy34bTy4NxZM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedgheefucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677680305; x=
+        1677766705; bh=IU/BrE3ixZGyLbVgFOOh2R6wZHPN5yx1P6eJFhscw+U=; b=O
+        2DMRQr+RXddOPya6ZL9/CwAlS0f67jYqs3r1/Tlci3ZUhBGuFRNTySolg0fc7Thx
+        Qwacb6833WSWgprw759VX997Y1jW+3qR/bkZkoKW2rIWeamlDTJeiURTx2UoPtON
+        37KjaIaMAuuf+VuEQlHeQ1/zcmzg/xbOlgtcyA1S2Prbx6J+UQJM25m5oczStOf/
+        DSdt8RYBPeIGDB9mZQShW0pkEPhqjglEsNSLbjsPcIa1rQSzYHphHvExC+MV1uel
+        Gl7rmQYC6i2Q33m6SdZ8SQbk9LXGoK4Cda7mixuoDB6nOELcKMRoGgJ56iG6GTQT
+        WCXy1cmw5jPXa4B4W3r9g==
+X-ME-Sender: <xms:r17_Y-tUFo2LL8eR0fi-GokoMXitP2n_JUf-XIy5nnStsSe6FJRj2g>
+    <xme:r17_YzdmZ32m1yaGJBQRp-URupP-6PBTv_L6UVtboHOI4DESaWNr17PvtrpLA_r8d
+    Yf3Wwzo8la7sbRUHjs>
+X-ME-Received: <xmr:r17_Y5xH8C7zLFMosNSu7Rk8dva1PbIKD44Fj8-pO12vIfF3EwUQ2C7l9wT2zjo29ZAQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedgheehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Flz_Y9dkaCvlP0KTkAp3mSa7p7S6FrpWjQy1ymSo2jCIvSRSEwws_w>
-    <xmx:Flz_Y7KFI_NnNmyeL72FqzLSh9wnuUzJsR0x0_QkZ0WNk7Sq8ZvGhg>
-    <xmx:Flz_YyKdmUhH8jKDqt2ZkQbejONqtT6589g5X_ofrnURKoO9Cw44-A>
-    <xmx:F1z_Yx8xZl81ocms4LScCca1AOq3aloCOes4YRCeOUaNNW2PfAL9Kg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 75B41B60089; Wed,  1 Mar 2023 09:07:18 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <5edd5304-ef11-4607-9189-a07613ecfee2@app.fastmail.com>
-In-Reply-To: <20230301102208.148490-2-bhe@redhat.com>
-References: <20230301102208.148490-1-bhe@redhat.com>
- <20230301102208.148490-2-bhe@redhat.com>
-Date:   Wed, 01 Mar 2023 15:06:57 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Baoquan He" <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mips: add <asm-generic/io.h> including
-Content-Type: text/plain
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:r17_Y5MRWG36jqqYcsG4mbJe5qRD3FWZkO-uj5TIkFXI7jBOennvjw>
+    <xmx:r17_Y-9REZjCJ_ziFlN4x3EGZMLQymJqqL1O5OR4K6IL99QYuA_3vA>
+    <xmx:r17_YxU5N5rhCyqTaH1Kivq2jpad5SoUB9zVRzgaSZZg74d7WWBPiA>
+    <xmx:sV7_Y_09vA_UNMGlZu7NoezTW3ovu03S-v6NaeYyYQxNqODnkQ-mww>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 1 Mar 2023 09:18:22 -0500 (EST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [PATCH v2 5/5] of: address: Always use dma_default_coherent for
+ default coherency
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230301130613.GC467@lst.de>
+Date:   Wed, 1 Mar 2023 14:18:10 +0000
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, linux-riscv@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B43602D1-89D4-465F-83B1-CD106E07CB29@flygoat.com>
+References: <20230223113644.23356-1-jiaxun.yang@flygoat.com>
+ <20230223113644.23356-6-jiaxun.yang@flygoat.com>
+ <20230301130613.GC467@lst.de>
+To:     Christoph Hellwig <hch@lst.de>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -88,58 +93,25 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 1, 2023, at 11:22, Baoquan He wrote:
-> With the adding, some default ioremap_xx methods defined in
-> asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-> NULL.
->
-> Here, remove the <asm/io.h> including in asm/mmiowb.h, otherwise nested
-> including will cause compiling error.
->
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: linux-mips@vger.kernel.org
 
-This looks good to me,
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> 2023=E5=B9=B43=E6=9C=881=E6=97=A5 13:06=EF=BC=8CChristoph Hellwig =
+<hch@lst.de> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+>> - select OF_DMA_DEFAULT_COHERENT if !NOT_COHERENT_CACHE
+>=20
+> Doesn't powerpc need to select CONFIG_ARCH_DMA_DEFAULT_COHERENT now,
+> or even better should be doing that in the patch adding that
+> symbol?
 
-but it obviously needs to be properly reviewed by the MIPS
-maintainers as well. I think others have tried to do this
-in the past but did not make it in.
+If I read the code correctly for powerpc OF_DMA_DEFAULT_COHERENT is only =
+selected
+with !NOT_COHERENT_CACHE, which means non-coherent dma support is =
+disabled=E2=80=A6.
 
-> @@ -548,6 +552,46 @@ extern void (*_dma_cache_inv)(unsigned long start, 
-> unsigned long size);
->  #define csr_out32(v, a) (*(volatile u32 *)((unsigned long)(a) + 
-> __CSR_32_ADJUST) = (v))
->  #define csr_in32(a)    (*(volatile u32 *)((unsigned long)(a) + 
-> __CSR_32_ADJUST))
-> 
-> +
-> +#define inb_p inb_p
-> +#define inw_p inw_p
-> +#define inl_p inl_p
-> +#define insb insb
-> +#define insw insw
-> +#define insl insl
+>=20
+> In fact I wonder if adding CONFIG_ARCH_DMA_DEFAULT_COHERENT and =
+removing
+> OF_DMA_DEFAULT_COHERENT should be one patch, as that seems to bring
+> over the intent a little better I'd say.
 
-I would prefer to put the #defines next to the function declarations,
-even when they come from macros.
-
-> 
-> -#include <asm/io.h>
-> -
->  #define mmiowb()	iobarrier_w()
-> 
-
-I think this only works as long as asm/spinlock.h also includes
-asm/io.h, otherwise linux/spinlock.h will be missing the
-iobarrier_w definition.
-
-Most likely this is implicitly included from somewhere else
-below linux/spinlock.h, but it would be better not to rely
-on that, and instead define mmiowb() to wmb() directly.
-
-     Arnd
