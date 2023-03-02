@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A26A6A80BB
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 12:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880ED6A80C4
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 12:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjCBLJv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Mar 2023 06:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        id S229723AbjCBLLs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Mar 2023 06:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjCBLJo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 06:09:44 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4214ECC;
-        Thu,  2 Mar 2023 03:09:43 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id a25so3558454edb.0;
-        Thu, 02 Mar 2023 03:09:43 -0800 (PST)
+        with ESMTP id S229461AbjCBLLr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 06:11:47 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D428930B24;
+        Thu,  2 Mar 2023 03:11:45 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id o12so66008121edb.9;
+        Thu, 02 Mar 2023 03:11:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HoSGGNYUT4/xbw3atghaSHbQc9iKyRsggIVy3U9yZNI=;
-        b=lP8Gza3confFH9Vf7PpoGuJ1EHy6c1D082gHDuDgz/R0/oBawed6QFc3XjCw8XObD0
-         o9T6OuOYTbzTnBqlTg7idUJMSPWfYbUY2n5sjC5J33TwgesZJJeIQQIDxc7aqtKgmiNL
-         laX5yV0gjeQURbiEWkITGlQWPu8pCr7MYsxofK/vHQ9kvRk67JRR0L9cdRLc7Oe3DDsf
-         mgNGkGKFEgGpzwxpDMN7CSHVdWBDPcSUmL5aQ6X3g/DY6zqnVYLONU3oAvYuiD6bBcid
-         UeYSVZrWrzW70D+2S1aVbC5TAFRn6NZdz7rd3q/yumo7gf3qciufULqP07k0knxmrcVj
-         7zUg==
+        bh=I24OPDq/kLlSuHGPflRm2uXznKj1xztkIch5YbiVGGE=;
+        b=TJomh1mcGrs7i47cr1rc9TMO9xm/mM/qr5if6bZuCS7KnWYb1jG1oY/48lvGoZyXvv
+         20Xg9apPCvX2+/DgSVN/TvjCuPIU8Wn347+PIh8Bv7av77WnLHfGm4H23AitQ3gnEcfd
+         cx2hFn8qtTJDmDqxPzlAKs6mFIM/YTxw8PPoU3Kkrki4JGiEow3hOf/Z416Vk10UnvoJ
+         vhpfuRuZgcZezt3+ICXBy3bktHDu88Kq7AxzyGtOaB/OZJhP9Lm3wnRsAu7yi1prn8NN
+         OCxYJiuq7VJdNL0Q2srwazM7FzqiX5VDEZR8k95pImv9lWUMN14mplK1O/uELmCAr8va
+         HT8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HoSGGNYUT4/xbw3atghaSHbQc9iKyRsggIVy3U9yZNI=;
-        b=mc8hhtgPOKH56qWldILMJq3tJtuWa/S54HZaECJPNn9WnKr/yoVcgTxkAGyUPyUDXR
-         ON+Hud3jE+sYgDutDrsXWyNmhHYQuVp4DqJHblAD5JB1Yl9FxUnxGL3o7A9fczPG/eix
-         T+FURlbDHou7Vt5gG/PTdIu8UGwqkE22Ui+9ScF9ZiL5NoLpH6RDMnW318W//9cdNK3S
-         dPOM604GvGM84090aX5OPQk5yz9eE+C8/+0hCsblox7tVzWgdo5g2oZyNknp1J/2CxPo
-         vD5p7dGeOSV06vghqjKvvNGDOjIXfQZHBm2RZbB/H2gAU8Bmfeiu6+6AnZT3KxIi5Be6
-         dMBg==
-X-Gm-Message-State: AO0yUKXiFibIsC8B1Gm1YvRnANc8p8vfTnYz9PeqaNV8bpU6CgXhUhf0
-        UVt5gcmXx3AyED9YOEQbI7ty97qIxH8v6d9TxF4=
-X-Google-Smtp-Source: AK7set/UAUT0ZoleIEVhU1VALVQUYCYEbnO+s+Mj1UC156zCDiSwbMKkt5Z1Sjw+d0HwkQSlO+ZMlmsO2AAOYJ9vWhs=
-X-Received: by 2002:a50:d547:0:b0:4ad:6fc8:69be with SMTP id
- f7-20020a50d547000000b004ad6fc869bemr5717563edj.4.1677755381914; Thu, 02 Mar
- 2023 03:09:41 -0800 (PST)
+        bh=I24OPDq/kLlSuHGPflRm2uXznKj1xztkIch5YbiVGGE=;
+        b=rxAETuxqKUkwqQ+gIhVZEmghkWqSs2tCEwGuTig+fpb0fObpqbb4wUd1B+WBUoXWsI
+         /gcHUWoajgGCFdoFu6x2vq9ppDLq+OG/nGXQXSJACLMq1Q/oF/wYzI9va/3u3ENWX/ju
+         uQlLF6UxQHYzutftlFUNfMlMXexDH2zl+HRUl0DXc8+fGq6lby24EX5qX0SIVFxa+bSF
+         o+f4lALATVDIT0ER5JgOrsbQ4hHz44XQN7rHmq26R5k890gSvNMM1btyqfH64RzQK0o6
+         cS/alsEwzODvPbM6JXlTaqtZ+ixz7I4P5uDYNnJ4+cKlYduGGA2SxmTqarB4G9YaupTL
+         qrFg==
+X-Gm-Message-State: AO0yUKUzNCEp13rLEKmqkYghQ+NBLa6+avAJfbVk3ygItRtLcN8VSsNm
+        s4t8M+ot7VQn6gdQulL4PanPi2+WIlVWxpL81vc=
+X-Google-Smtp-Source: AK7set87dFh2ULeTzYdjiEUjlSali6yM7p8x0e9gJKkw3KGbj/oaX3bqDk/rZnTirFKciv/eBiPu1AJkl4YKrflj6tE=
+X-Received: by 2002:a50:cdce:0:b0:4ad:7389:d298 with SMTP id
+ h14-20020a50cdce000000b004ad7389d298mr5770007edj.4.1677755504278; Thu, 02 Mar
+ 2023 03:11:44 -0800 (PST)
 MIME-Version: 1.0
 References: <20230222111213.2241633-1-keguang.zhang@gmail.com>
- <20230222111213.2241633-2-keguang.zhang@gmail.com> <Y/YH20aKp+u+QEwA@surfacebook>
-In-Reply-To: <Y/YH20aKp+u+QEwA@surfacebook>
+ <20230222111213.2241633-3-keguang.zhang@gmail.com> <Y/YIDobQW8W3QAAh@surfacebook>
+In-Reply-To: <Y/YIDobQW8W3QAAh@surfacebook>
 From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Thu, 2 Mar 2023 19:09:25 +0800
-Message-ID: <CAJhJPsVqPAC_GP0JE98nrpmvDTwXdt4m0z3SZQPX3GFCijT09w@mail.gmail.com>
-Subject: Re: [PATCH 1/4] gpio: loongson1: Update copyright
+Date:   Thu, 2 Mar 2023 19:11:28 +0800
+Message-ID: <CAJhJPsUYR55aLNWi-VC2wmNEZZj=7E1aPpFTB6a+Bzhw=E4y5g@mail.gmail.com>
+Subject: Re: [PATCH 2/4] gpio: loongson1: Introduce ls1x_gpio_chip struct
 To:     andy.shevchenko@gmail.com
 Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -75,37 +75,16 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Wed, Feb 22, 2023 at 8:18=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
 >
-> Wed, Feb 22, 2023 at 07:12:10PM +0800, Keguang Zhang kirjoitti:
-> > This patch updates copyright and author information.
+> Wed, Feb 22, 2023 at 07:12:11PM +0800, Keguang Zhang kirjoitti:
+> > Introduce and allocate ls1x_gpio_chip struct containing
+> > gpio_chip and reg_base to avoid global gpio_reg_base.
+> >
+> > Use readl() & writel() instead of __raw_readl() & __raw_writel().
 >
-> ...
+> Please, split this to two pathes.
 >
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
->
-> Have you talked to your lawers? This is an inequivalent to what was writt=
-en
-> below.
->
-Yes.
-> >  /*
-> >   * GPIO Driver for Loongson 1 SoC
-> >   *
-> > - * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com>
-> > - *
-> > - * This file is licensed under the terms of the GNU General Public
-> > - * License version 2. This program is licensed "as is" without any
-> > - * warranty of any kind, whether express or implied.
-> > + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
-> >   */
->
-> ...
->
-> > -MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
-> > +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
->
-> So, which name here is in your official documents?
->
-Keguang Zhang is my official.
+Sure.
+Thanks!
 
 > --
 > With Best Regards,
@@ -114,7 +93,7 @@ Keguang Zhang is my official.
 >
 
 
---
+--=20
 Best regards,
 
 Kelvin Cheung
