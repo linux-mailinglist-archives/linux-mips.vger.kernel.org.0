@@ -2,175 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0A36A7C99
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 09:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042B16A7D52
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 10:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjCBI21 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Mar 2023 03:28:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S229572AbjCBJKJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Mar 2023 04:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCBI20 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 03:28:26 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6AC55A7
-        for <linux-mips@vger.kernel.org>; Thu,  2 Mar 2023 00:28:25 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id eg37so64236460edb.12
-        for <linux-mips@vger.kernel.org>; Thu, 02 Mar 2023 00:28:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677745703;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=binSKFTDATr+VUKohUw2T7hk+6PX9qDP2BHHB8PRuJo=;
-        b=mjWQKSxWU0MWNWy+hU0ECvGqOwKXr5a/+XYWNhxzSUdCH0AsfpGHiTfH2W7uX8Y5A6
-         g/B8AoDC5b10P420IBVnUI72+9vvZndG9XLWb7hk+reTCagYgIOKlcjW+JVGAxtqjQEF
-         AJOL2pVmMlQm5Ow5PrigaLvuegmbMF4lxa+AL9ye1vd37CsnEhfl2xhNja9vuPsi7FTI
-         qicGKxLERMp3M9lWlJPFitAqWzXeCKVVUbaQvTE7eRqabUhUrpfGPv+85WueCeb02AzT
-         Y2FnJ4NIfnZzersPkJJopWkgKZIIq1rk3DXZVUcVgHVgDjj3P1CVjWCkx4eNSUUHkhS0
-         0x9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677745703;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=binSKFTDATr+VUKohUw2T7hk+6PX9qDP2BHHB8PRuJo=;
-        b=O6rwIO8aeZ81SbDDyYxOVFeP3o4zE854kAw359IBL7Kln8IMn5wqhUoyGYnZm7URKb
-         0zlenvces9/TJ4oI7HdxJUeiC5gkYy2e0DWskYJ74cH0qDOG1TZflrK4ZTyBK57A0neb
-         DdYalh3dpkSCJICsCH4c6PpUUVm5ow9Ja58+HdX1pzaCJhpkoHekp/a/X7eFO70tuKpY
-         s/aA+B9eVUB1C9i5tu2tQOjoJ+lMiPSjZv/Z9EkfYc1NT3cYSrK+7b6KxNUrQpO+AX7E
-         9M8u0oyN5PeV/HP41wp4Ok370pel4KXjPPfH6e+1haxzBnMt7l0EOV5vp9w6YcGFXvQQ
-         PShQ==
-X-Gm-Message-State: AO0yUKWATK1csulIGgCBFqsxUVOEbH3rCBMQHtoPZolYt+bEzc9Dp9S7
-        r7RCeoXf0D/VaCW+AVNYdJVd4A==
-X-Google-Smtp-Source: AK7set+sya+UufcyMJpds/o5eIN1syxY+wLyLZB9BFt9OhvL1PkZ9IK+iHqBR/gdWrOSJTSc4p7EVQ==
-X-Received: by 2002:aa7:d856:0:b0:4af:6e95:861b with SMTP id f22-20020aa7d856000000b004af6e95861bmr1487899eds.2.1677745703475;
-        Thu, 02 Mar 2023 00:28:23 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q21-20020a50cc95000000b004c0c5864cc5sm214800edi.25.2023.03.02.00.28.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 00:28:23 -0800 (PST)
-Message-ID: <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
-Date:   Thu, 2 Mar 2023 09:28:21 +0100
+        with ESMTP id S229449AbjCBJKI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 04:10:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576CF126C1
+        for <linux-mips@vger.kernel.org>; Thu,  2 Mar 2023 01:09:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677748166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BAmp8cQXmAY8O+zkFjEu1kD8x7lwlOJ1BmEXR6luRcA=;
+        b=HFZ5aIsPrWFrdjI3TNkh7lE5vtS/skIkphXG+2CgcoqEfwARiNjHxT3GSHiraO7UQ+lxGF
+        pq2h7LWuTi1VJsUWMh5uRZbWS8sz/C1I89As4WCj09fxGp5HHifIqYqvkmxaxb0aSPtEbn
+        WwvXeNeWG4e09YBwabILmU5a8Zl8aVk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-357-S7owwZrhMpm03B2s7hegTg-1; Thu, 02 Mar 2023 04:09:23 -0500
+X-MC-Unique: S7owwZrhMpm03B2s7hegTg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C59DD80351F;
+        Thu,  2 Mar 2023 09:09:22 +0000 (UTC)
+Received: from localhost (ovpn-12-142.pek2.redhat.com [10.72.12.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E8382492B00;
+        Thu,  2 Mar 2023 09:09:21 +0000 (UTC)
+Date:   Thu, 2 Mar 2023 17:09:18 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mips: add <asm-generic/io.h> including
+Message-ID: <ZABnvqNJR/8oQbbM@bhe.users.ipa.redhat.com>
+References: <20230301102208.148490-1-bhe@redhat.com>
+ <20230301102208.148490-2-bhe@redhat.com>
+ <5edd5304-ef11-4607-9189-a07613ecfee2@app.fastmail.com>
+ <ZAAiJcx80RU0QuHw@MiWiFi-R3L-srv>
+ <b2958824-786b-46d7-a880-17c948fbe2b0@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
- compatible strings
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-8-arinc.unal@arinc9.com>
- <20230227173333.GA496999-robh@kernel.org>
- <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
- <20230301024431.GA251215-robh@kernel.org>
- <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2958824-786b-46d7-a880-17c948fbe2b0@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 01/03/2023 09:15, Arınç ÜNAL wrote:
-> On 1.03.2023 05:44, Rob Herring wrote:
->> On Tue, Feb 28, 2023 at 07:46:36PM +0300, Arınç ÜNAL wrote:
->>> On 27/02/2023 20:33, Rob Herring wrote:
->>>> On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
->>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>
->>>>> Add the ralink,rt2880-pinmux compatible string. It had been removed from
->>>>> the driver which broke the ABI.
->>>>>
->>>>> Add the mediatek compatible strings. Change the compatible string on the
->>>>> examples with the mediatek compatible strings.
->>>>>
->>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>> ---
->>>>>    .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
->>>>>    .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
->>>>>    .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
->>>>>    .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
->>>>>    .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
->>>>>    5 files changed, 25 insertions(+), 10 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
->>>>> index 1e63ea34146a..531b5f616c3d 100644
->>>>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
->>>>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
->>>>> @@ -17,7 +17,10 @@ description:
->>>>>    properties:
->>>>>      compatible:
->>>>> -    const: ralink,mt7620-pinctrl
->>>>> +    enum:
->>>>> +      - mediatek,mt7620-pinctrl
->>>>> +      - ralink,mt7620-pinctrl
->>>>
->>>> We don't update compatible strings based on acquistions nor marketing
->>>> whims. If you want to use 'mediatek' for new things, then fine.
->>>
->>> Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs share
->>> the same architecture from Ralink, so they were incorrectly called Ralink
->>> SoCs.
->>>
->>> I can remove the new strings from Ralink SoCs and add them only for MediaTek
->>> SoCs. Or you could make an exception for this one, regarding the situation.
->>> Whatever you think is best.
->>
->> I'm not in a position to make an exception as I know little about this
->> platform. Carrying both strings is a NAK. Either you (and everyone using
->> these platforms) care about the ABI and are stuck with the "wrong"
->> string. In the end, they are just unique identifiers. Or you don't care
->> and break the ABI and rename everything. If you do that, do just that in
->> your patches and make it crystal clear in the commit msg that is your
->> intention and why that is okay.
+On 03/02/23 at 08:12am, Arnd Bergmann wrote:
+> On Thu, Mar 2, 2023, at 05:12, Baoquan He wrote:
+> > On 03/01/23 at 03:06pm, Arnd Bergmann wrote:
+> >
+> > Yeah, defining mmiowb() to wmb() directly is also good to me. I tried
+> > to comb including sequence and find where asm/io.h is included, but
+> > failed. Mainly asm/mmiowb.h including asm/io.h will cause below
+> > compiling error, the asm/io.h need see mmiowb_set_pending which is
+> > defnined in asm-generic/mmiowb.h. Moving asm-generic/mmiowb.h to above
+> > asm/io.h can also fix the compiling error.
+> >
+> > =============
+> > diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
+> > index a40824e3ef8e..cae2745935bc 100644
+> > --- a/arch/mips/include/asm/mmiowb.h
+> > +++ b/arch/mips/include/asm/mmiowb.h
+> > @@ -2,10 +2,8 @@
+> >  #ifndef _ASM_MMIOWB_H
+> >  #define _ASM_MMIOWB_H
+> > 
+> > +#include <asm-generic/mmiowb.h>
+> >  #include <asm/io.h>
+> > 
+> >  #define mmiowb()       iobarrier_w()
+> > -
+> > -#include <asm-generic/mmiowb.h>
+> > -
+> >  #endif /* _ASM_MMIOWB_H */
 > 
-> Ralink had their MIPS SoCs pre-acquisition, RT2880, etc. MediaTek 
-> introduced new SoCs post-acquisition, MT7620, MT7621, MT7628, and 
-> MT7688, utilising the same platform from Ralink, sharing the same 
-> architecture code, pinctrl core driver, etc.
-> 
-> I don't intend to break the ABI at all. On the contrary, I fix it where 
-> possible.
-> 
-> If I understand correctly, from this conversation and what Krzysztof 
-> said, all strings must be kept on the schemas so I can do what I said on 
-> the composed mail. Only match the pin muxing information on the strings 
-> that won't match multiple pin muxing information from other schemas.
-> 
-> This way we don't break the ABI, introduce new compatible strings while 
-> keeping the remaining ones, and make schemas match correctly.
-> 
-> Let me know if this is acceptable to you.
+> According to the comment in asm-generic/mmiowb.h, the intention is
+> to have the mmiowb definition before the #include, though this would
+> only be necessary if there was an "#ifndef mmiowb" fallback in that
+> file. If the definition to wmb() works, I'd go for that one and
+> leave the include order unchanged.
 
-If by "introduce new compatible strings" you mean duplicate compatibles
-to fix the ralink->mediatek, then you ignored entire email from Rob -
-this and previous. We don't do this. Leave them as is.
-
-If you meant something else, explain more...
-
-Best regards,
-Krzysztof
+Ah, I didn't notice the comment. Then will change the definition to
+wmb(). Thanks.
 
