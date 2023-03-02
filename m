@@ -2,173 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC546A7C27
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 08:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0A36A7C99
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 09:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCBH5Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Mar 2023 02:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S229535AbjCBI21 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Mar 2023 03:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCBH5X (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 02:57:23 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDBF36464
-        for <linux-mips@vger.kernel.org>; Wed,  1 Mar 2023 23:57:21 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so954376wmq.2
-        for <linux-mips@vger.kernel.org>; Wed, 01 Mar 2023 23:57:21 -0800 (PST)
+        with ESMTP id S229510AbjCBI20 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 03:28:26 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6AC55A7
+        for <linux-mips@vger.kernel.org>; Thu,  2 Mar 2023 00:28:25 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id eg37so64236460edb.12
+        for <linux-mips@vger.kernel.org>; Thu, 02 Mar 2023 00:28:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1677743839;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3gGlmdrxpk12L0HtiU5R9bJeUayhxQ74GXgfAq6meuw=;
-        b=pn+DJn+k9uImMGeBMXuwnMQE1biMNzy71Plo8H7DOI3fKK/ceps9rgGUxc/bmw8s6L
-         4TQMSud9TXFc8/r2OEOEiAKv5SApxcJ1Yd/LQHA0imhiw3qi8hrsJYLIdS7LaNAmBH1O
-         AbgLlGVWFn2hf8BkmR90At5+g3zqQ61Ankq9cGuBB9WgQfAsyn4JZulcRbW71gf7ZeYz
-         oRP4F6/LxUTL9nxCbjnWUdwQSV0fTcnbx/sIcDMk8fB8xQ9dJ6UAQMnDD3HBbCn+Qr4a
-         fIykdIwuX5WmEnYpwkBvfu6oXc7MDCcdwlfNYOa5JGNIdVdo8Hubuxh+Kfco99U7Z89i
-         QfaQ==
+        d=linaro.org; s=google; t=1677745703;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=binSKFTDATr+VUKohUw2T7hk+6PX9qDP2BHHB8PRuJo=;
+        b=mjWQKSxWU0MWNWy+hU0ECvGqOwKXr5a/+XYWNhxzSUdCH0AsfpGHiTfH2W7uX8Y5A6
+         g/B8AoDC5b10P420IBVnUI72+9vvZndG9XLWb7hk+reTCagYgIOKlcjW+JVGAxtqjQEF
+         AJOL2pVmMlQm5Ow5PrigaLvuegmbMF4lxa+AL9ye1vd37CsnEhfl2xhNja9vuPsi7FTI
+         qicGKxLERMp3M9lWlJPFitAqWzXeCKVVUbaQvTE7eRqabUhUrpfGPv+85WueCeb02AzT
+         Y2FnJ4NIfnZzersPkJJopWkgKZIIq1rk3DXZVUcVgHVgDjj3P1CVjWCkx4eNSUUHkhS0
+         0x9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677743839;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3gGlmdrxpk12L0HtiU5R9bJeUayhxQ74GXgfAq6meuw=;
-        b=lG2Se3ypzdx2I12t4yRhYbn1oLSAqrOs3BIPZY0OOTqDjcrxhSVmnCN8lEzbIsIEIV
-         YD+FnqJVJGUTwysOXaX//Q/4lfDImziY9ojDy7OyTky0R/ui4XFR2bRob2NlrKDW3KyU
-         mbR45wAhZic4VaZv/F89QuDL4oSVMtb+l8DpUUGAXpszORh834Urg9Tb8eyQ50VOQzBU
-         uyMjT8/b5Xsoe6DoUgSon5nDk8JnjjE5uXR28wbS83wUxu/5u/vqINcOUhzEkiA7nIMf
-         bNDHDP+5RkWThRrsNYUBKL4WLaJ7hit9wY81UbCOzxb/YtL72O4pfaUII0/7Oms/tJZQ
-         W82w==
-X-Gm-Message-State: AO0yUKUck+8m26nk0sqYbedc3GeMKWNfPe1v/YLCnRIh2YaXgn8+kxuk
-        qTP+n0SSBBb+iVMkg5NfEthJ/eFSw/AZoSskoC5HbQ==
-X-Google-Smtp-Source: AK7set8WtHYe+gEo1Fgs1pSlJqsnM2tCvgsXzdB6/J3n+P8FnRw3jetc5Yrjj9TAlqQSjPmyeFZCYlu44lotg0az/Sk=
-X-Received: by 2002:a05:600c:4591:b0:3ea:8ed9:8e4b with SMTP id
- r17-20020a05600c459100b003ea8ed98e4bmr2655128wmo.6.1677743839531; Wed, 01 Mar
- 2023 23:57:19 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677745703;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=binSKFTDATr+VUKohUw2T7hk+6PX9qDP2BHHB8PRuJo=;
+        b=O6rwIO8aeZ81SbDDyYxOVFeP3o4zE854kAw359IBL7Kln8IMn5wqhUoyGYnZm7URKb
+         0zlenvces9/TJ4oI7HdxJUeiC5gkYy2e0DWskYJ74cH0qDOG1TZflrK4ZTyBK57A0neb
+         DdYalh3dpkSCJICsCH4c6PpUUVm5ow9Ja58+HdX1pzaCJhpkoHekp/a/X7eFO70tuKpY
+         s/aA+B9eVUB1C9i5tu2tQOjoJ+lMiPSjZv/Z9EkfYc1NT3cYSrK+7b6KxNUrQpO+AX7E
+         9M8u0oyN5PeV/HP41wp4Ok370pel4KXjPPfH6e+1haxzBnMt7l0EOV5vp9w6YcGFXvQQ
+         PShQ==
+X-Gm-Message-State: AO0yUKWATK1csulIGgCBFqsxUVOEbH3rCBMQHtoPZolYt+bEzc9Dp9S7
+        r7RCeoXf0D/VaCW+AVNYdJVd4A==
+X-Google-Smtp-Source: AK7set+sya+UufcyMJpds/o5eIN1syxY+wLyLZB9BFt9OhvL1PkZ9IK+iHqBR/gdWrOSJTSc4p7EVQ==
+X-Received: by 2002:aa7:d856:0:b0:4af:6e95:861b with SMTP id f22-20020aa7d856000000b004af6e95861bmr1487899eds.2.1677745703475;
+        Thu, 02 Mar 2023 00:28:23 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q21-20020a50cc95000000b004c0c5864cc5sm214800edi.25.2023.03.02.00.28.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 00:28:23 -0800 (PST)
+Message-ID: <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
+Date:   Thu, 2 Mar 2023 09:28:21 +0100
 MIME-Version: 1.0
-References: <Y+tSBlSsQBQF/Ro2@osiris> <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
-In-Reply-To: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Thu, 2 Mar 2023 08:57:08 +0100
-Message-ID: <CAHVXubgdr_NrLPnZ6NhuDt8uZYZD+R_swpCVGoLDxnD+eOJcuA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     hca@linux.ibm.com, geert@linux-m68k.org, corbet@lwn.net,
-        Richard Henderson <richard.henderson@linaro.org>,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, chenhuacai@kernel.org,
-        kernel@xen0n.name, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        chris@zankel.net, jcmvbkbc@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
+ compatible strings
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-8-arinc.unal@arinc9.com>
+ <20230227173333.GA496999-robh@kernel.org>
+ <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
+ <20230301024431.GA251215-robh@kernel.org>
+ <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 4:17=E2=80=AFAM Palmer Dabbelt <palmer@dabbelt.com> =
-wrote:
->
-> On Tue, 14 Feb 2023 01:19:02 PST (-0800), hca@linux.ibm.com wrote:
-> > On Tue, Feb 14, 2023 at 09:58:17AM +0100, Geert Uytterhoeven wrote:
-> >> Hi Heiko,
-> >>
-> >> On Tue, Feb 14, 2023 at 9:39 AM Heiko Carstens <hca@linux.ibm.com> wro=
-te:
-> >> > On Tue, Feb 14, 2023 at 08:49:01AM +0100, Alexandre Ghiti wrote:
-> >> > > This all came up in the context of increasing COMMAND_LINE_SIZE in=
- the
-> >> > > RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE =
-is the
-> >> > > maximum length of /proc/cmdline and userspace could staticly rely =
-on
-> >> > > that to be correct.
-> >> > >
-> >> > > Usually I wouldn't mess around with changing this sort of thing, b=
-ut
-> >> > > PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LIN=
-E_SIZE
-> >> > > to 2048").  There are also a handful of examples of COMMAND_LINE_S=
-IZE
-> >> > > increasing, but they're from before the UAPI split so I'm not quit=
-e sure
-> >> > > what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE =
-from
-> >> > > asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to ker=
-nel
-> >> > > boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE=
-"),
-> >> > > and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-> >> > > asm-generic/setup.h.").
-> >> > >
-> >> > > It seems to me like COMMAND_LINE_SIZE really just shouldn't have b=
-een
-> >> > > part of the uapi to begin with, and userspace should be able to ha=
-ndle
-> >> > > /proc/cmdline of whatever length it turns out to be.  I don't see =
-any
-> >> > > references to COMMAND_LINE_SIZE anywhere but Linux via a quick Goo=
-gle
-> >> > > search, but that's not really enough to consider it unused on my e=
-nd.
-> >> > >
-> >> > > The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE r=
-eally
-> >> > > shouldn't be part of uapi, so this now touches all the ports.  I'v=
-e
-> >> > > tried to split this all out and leave it bisectable, but I haven't
-> >> > > tested it all that aggressively.
-> >> >
-> >> > Just to confirm this assumption a bit more: that's actually the same
-> >> > conclusion that we ended up with when commit 3da0243f906a ("s390: ma=
-ke
-> >> > command line configurable") went upstream.
->
-> Thanks, I guess I'd missed that one.  At some point I think there was
-> some discussion of making this a Kconfig for everyone, which seems
-> reasonable to me -- our use case for this being extended is syzkaller,
-> but we're sort of just picking a value that's big enough for now and
-> running with it.
->
-> Probably best to get it out of uapi first, though, as that way at least
-> it's clear that it's not uABI.
->
-> >> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
-> >> I assume?
-> >
-> > Yes, sorry for that. I got distracted while writing and used the wrong
-> > branch to look this up.
->
-> Alex: Probably worth adding that to the list in the cover letter as it
-> looks like you were planning on a v4 anyway (which I guess you now have
-> to do, given that I just added the issue to RISC-V).
+On 01/03/2023 09:15, Arınç ÜNAL wrote:
+> On 1.03.2023 05:44, Rob Herring wrote:
+>> On Tue, Feb 28, 2023 at 07:46:36PM +0300, Arınç ÜNAL wrote:
+>>> On 27/02/2023 20:33, Rob Herring wrote:
+>>>> On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
+>>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>>
+>>>>> Add the ralink,rt2880-pinmux compatible string. It had been removed from
+>>>>> the driver which broke the ABI.
+>>>>>
+>>>>> Add the mediatek compatible strings. Change the compatible string on the
+>>>>> examples with the mediatek compatible strings.
+>>>>>
+>>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>> ---
+>>>>>    .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
+>>>>>    .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
+>>>>>    .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
+>>>>>    .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
+>>>>>    .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
+>>>>>    5 files changed, 25 insertions(+), 10 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>> index 1e63ea34146a..531b5f616c3d 100644
+>>>>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>> @@ -17,7 +17,10 @@ description:
+>>>>>    properties:
+>>>>>      compatible:
+>>>>> -    const: ralink,mt7620-pinctrl
+>>>>> +    enum:
+>>>>> +      - mediatek,mt7620-pinctrl
+>>>>> +      - ralink,mt7620-pinctrl
+>>>>
+>>>> We don't update compatible strings based on acquistions nor marketing
+>>>> whims. If you want to use 'mediatek' for new things, then fine.
+>>>
+>>> Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs share
+>>> the same architecture from Ralink, so they were incorrectly called Ralink
+>>> SoCs.
+>>>
+>>> I can remove the new strings from Ralink SoCs and add them only for MediaTek
+>>> SoCs. Or you could make an exception for this one, regarding the situation.
+>>> Whatever you think is best.
+>>
+>> I'm not in a position to make an exception as I know little about this
+>> platform. Carrying both strings is a NAK. Either you (and everyone using
+>> these platforms) care about the ABI and are stuck with the "wrong"
+>> string. In the end, they are just unique identifiers. Or you don't care
+>> and break the ABI and rename everything. If you do that, do just that in
+>> your patches and make it crystal clear in the commit msg that is your
+>> intention and why that is okay.
+> 
+> Ralink had their MIPS SoCs pre-acquisition, RT2880, etc. MediaTek 
+> introduced new SoCs post-acquisition, MT7620, MT7621, MT7628, and 
+> MT7688, utilising the same platform from Ralink, sharing the same 
+> architecture code, pinctrl core driver, etc.
+> 
+> I don't intend to break the ABI at all. On the contrary, I fix it where 
+> possible.
+> 
+> If I understand correctly, from this conversation and what Krzysztof 
+> said, all strings must be kept on the schemas so I can do what I said on 
+> the composed mail. Only match the pin muxing information on the strings 
+> that won't match multiple pin muxing information from other schemas.
+> 
+> This way we don't break the ABI, introduce new compatible strings while 
+> keeping the remaining ones, and make schemas match correctly.
+> 
+> Let me know if this is acceptable to you.
 
-Yep, I will :)
+If by "introduce new compatible strings" you mean duplicate compatibles
+to fix the ralink->mediatek, then you ignored entire email from Rob -
+this and previous. We don't do this. Leave them as is.
 
-Thanks,
+If you meant something else, explain more...
 
-Alex
+Best regards,
+Krzysztof
+
