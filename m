@@ -2,95 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45BB6A8302
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 13:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650F66A8514
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 16:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjCBM7B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Mar 2023 07:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S229683AbjCBPVg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Mar 2023 10:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjCBM7A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 07:59:00 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFF528865
-        for <linux-mips@vger.kernel.org>; Thu,  2 Mar 2023 04:58:47 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id da10so67288979edb.3
-        for <linux-mips@vger.kernel.org>; Thu, 02 Mar 2023 04:58:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677761925;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2vVmmF2sI36t+dGidCoWeCzXUPaa6cM0yHfnPJQrwvs=;
-        b=iyt20uqVFfkgyTkctVAvDZBFnnRN4DWQ+rcJp97tmuIUL6e1KbZdg5sPhd9wSNev92
-         TPh6QuSgs9IhlckgwHWn63+pjXuXyNBOwXdOqdoohO2uudkYtCMNkSig0KpVRi4rwaHq
-         VYud+w7JKGAId/rR6WmYMaWcMeg5n21FdL0EXP0F0DCxzd8S/c6CDfECsR/GKXkoOOFJ
-         4qbSkcwU0k0rI4NfWgLP+dzAqWuvbgvJFl+9w7CPmiwFiIfgep9B4bTRez31pweIZiuB
-         VeJFlU4ND0hlbFtj58Mc3P62nrWUqQ9raJy3cInOVy7o3bVdyGW5SQ9XD9VER0FAHUZ0
-         M+ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677761925;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2vVmmF2sI36t+dGidCoWeCzXUPaa6cM0yHfnPJQrwvs=;
-        b=YQ1bTgzImAVok2dEUd5Fobc2Sxi1M0qUUTqnaNC61DWcsQzzAIUhsW9DvjJwF94/i7
-         mfkTcv7w/chlHmhiUYnmUFTBc4FcbsV62y1RH1W+r94iMQZDJ7t7P/2NGu12eHcpDOmD
-         WwS+z4Jm/B9Rn5vWnZohiT8VZHpeMuvm12lBj1O+zf3fzApbOHn+CqhxTEuRDCUwm1sF
-         Ysk9AugtKFGml9cvWI8UgtR0ZtrzZRbUUX7y/I9emucgc/RUNknuoplO1bBX62rEvW6G
-         2bHXQR4Rh2u7kRTSFsHsdq0M3XRNnXzvbVaM621DRBZV3E3DtMXc57cjxxihMk+lexNx
-         1tcA==
-X-Gm-Message-State: AO0yUKUulHFDQGCbU+WTmClRyIecHC+RaAzadx9h/31dDm747rcyfioD
-        UOerWQwes706Vi1mGcKKK5/bMFYQi+mHH2Ex
-X-Google-Smtp-Source: AK7set9yzFoHBRZALvxYMI2qZ2Dhgl4YUhY3JtG91zpveRyK5yXkIoq9AHTSTjq6ovYpZ7Ra0ZwR7w==
-X-Received: by 2002:aa7:c98c:0:b0:4ac:bdf3:36ca with SMTP id c12-20020aa7c98c000000b004acbdf336camr11290426edt.10.1677761925672;
-        Thu, 02 Mar 2023 04:58:45 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id d27-20020a50cd5b000000b004c0eac41829sm463097edj.63.2023.03.02.04.58.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 04:58:45 -0800 (PST)
-Message-ID: <d29d44b2-3848-e64e-c397-9ccf6dba7eaa@linaro.org>
-Date:   Thu, 2 Mar 2023 13:58:43 +0100
+        with ESMTP id S229557AbjCBPVf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 10:21:35 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34FFC2D149;
+        Thu,  2 Mar 2023 07:21:34 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pXkkN-0006vy-00; Thu, 02 Mar 2023 16:21:31 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id B7329C11F4; Thu,  2 Mar 2023 16:21:23 +0100 (CET)
+Date:   Thu, 2 Mar 2023 16:21:23 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes part 2 for v6.3
+Message-ID: <20230302152123.GA11226@alpha.franken.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 5/5] dt-bindings: gpio: Add Loongson-1 GPIO
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230302125215.214014-1-keguang.zhang@gmail.com>
- <20230302125215.214014-6-keguang.zhang@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230302125215.214014-6-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02/03/2023 13:52, Keguang Zhang wrote:
-> Add devicetree binding document for Loongson-1 GPIO.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
-> V1 -> V2: Use the same consistent quotes
->           Delete superfluous examples
-> ---
+The following changes since commit 91dc288f4edf0d768e46c2c6d33e0ab703403459:
 
+  MIPS: vpe-mt: drop physical_memsize (2023-02-20 15:11:01 +0100)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+are available in the Git repository at:
 
-Best regards,
-Krzysztof
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.3_1
 
+for you to fetch changes up to 1a2c73f4834dd79e4f2c590ac75358fb44137650:
+
+  MIPS: Workaround clang inline compat branch issue (2023-02-28 23:09:49 +0100)
+
+----------------------------------------------------------------
+a few more cleanups/fixes
+
+----------------------------------------------------------------
+Arınç ÜNAL (2):
+      mips: remove SYS_HAS_CPU_MIPS32_R1 from RALINK
+      mips: ralink: make SOC_MT7621 select PINCTRL
+
+Jiaxun Yang (4):
+      MIPS: Remove DMA_PERDEV_COHERENT
+      MIPS: smp-cps: Don't rely on CP0_CMGCRBASE
+      MIPS: cevt-r4k: Offset the value used to clear compare interrupt
+      MIPS: Workaround clang inline compat branch issue
+
+Sergio Paracuellos (2):
+      mips: dts: ralink: mt7621: rename watchdog node from 'wdt' into 'watchdog'
+      mips: dts: ralink: mt7621: add phandle to system controller node for watchdog
+
+ arch/mips/Kconfig                     | 10 ++++------
+ arch/mips/boot/dts/ralink/mt7621.dtsi |  3 ++-
+ arch/mips/include/asm/asm.h           |  2 +-
+ arch/mips/include/asm/smp-cps.h       |  4 ++++
+ arch/mips/kernel/cevt-r4k.c           |  4 ++--
+ arch/mips/kernel/cps-vec.S            | 35 +++++++++++++++--------------------
+ arch/mips/kernel/smp-cps.c            |  2 ++
+ arch/mips/ralink/Kconfig              |  2 +-
+ 8 files changed, 31 insertions(+), 31 deletions(-)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
