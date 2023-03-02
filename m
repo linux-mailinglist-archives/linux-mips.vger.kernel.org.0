@@ -2,159 +2,221 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53086A7E95
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 10:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA8E6A7F55
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 11:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCBJss convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 2 Mar 2023 04:48:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S229567AbjCBKAP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Mar 2023 05:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCBJsc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 04:48:32 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973BC1F5C0;
-        Thu,  2 Mar 2023 01:48:07 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id l13so17405161qtv.3;
-        Thu, 02 Mar 2023 01:48:07 -0800 (PST)
+        with ESMTP id S229927AbjCBJ7R (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 04:59:17 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2A9497ED
+        for <linux-mips@vger.kernel.org>; Thu,  2 Mar 2023 01:58:25 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id s11so1283840edy.8
+        for <linux-mips@vger.kernel.org>; Thu, 02 Mar 2023 01:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677751089;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=quQsZmkiKaETnYTMJly9CAnrwXfTyfISOr41GqRBHEQ=;
+        b=EquMUUnvVYKbhMQ8FO3/GqZAqUdsqFcAHF2Od/g2fwxJrzGIcnUXUguaQjkE210wYQ
+         JTRHE/CL4DRh63ooBFLsL4VF3wxWvUT2m2/AbAOlbgWRaBbUau0Gfwfta6TaVjWcQckD
+         +acdhoOnX9sSQoVs3a2vipKxW2kFD4EEEmM0TG3FW8Wnx1pffFUMV5DzL4SubvC5cI1R
+         LmxzySDELNeUx0jsrq+zGmqaCezKsWOSuitbBU784p6DqpfC7vjLGOqtms8+3eQjFhkX
+         6bs+8ygvoNXRPdnxBiJVyENjZ/1RoiwlFPvpMxy3kHLRiXdpjjZdjk6APmc7MBY51oir
+         eImg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SFYMa4F5zx6QmdN+xdk9xuKBVfUQIkEC+rLl+xVi7rY=;
-        b=EfWCg05Dz/dIbTXy8d2dQdWFtNHulqzR5EmYrJOAWtetN56edOc/BaF2idN6KAtGMv
-         opLrvdZbPb9X+UprI3QsRj9fMZZfsDlMBtsPl68xxLKA1kn5tjSTzWXyCm6xlPhnB+xz
-         otE4rBY/2jKe1fKwVD4sYB8yq6JvRO6t5W7qaUzpPjK1Vz+l911AdHurr6Ij00EGAwER
-         6xnLNpSqAJ+hKClqQv++dhRSSmVEyVn3w0Ym5molSy/+o96NGs0uNL+1yRKOGD0lM5N3
-         Ty+i4/9XKXfBskLwETb40iZ9FHxLAMW1XmkSMHBgtcuNHFp6jqFL9vt8pxO3uqpXuUe/
-         wDwA==
-X-Gm-Message-State: AO0yUKXKX8sJ4VHXrlnHjrU6pDWVI13jwSCl3Pk36ofUfOqiYXZpBWHB
-        ASg/FHuiu1O8Ki2y3CWgeu4I7J0FPx+ppQ==
-X-Google-Smtp-Source: AK7set/8n0Vqjnq+nbmuXuxHIwYDhUAg1l+gXXyY1EkLs/qabGOfH5PkBGr8PPpz0kMiSJVhaw07kw==
-X-Received: by 2002:a05:622a:1a8c:b0:3b9:bc8c:c1fb with SMTP id s12-20020a05622a1a8c00b003b9bc8cc1fbmr2434895qtc.6.1677750486350;
-        Thu, 02 Mar 2023 01:48:06 -0800 (PST)
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com. [209.85.160.177])
-        by smtp.gmail.com with ESMTPSA id s184-20020a372cc1000000b0073bb00eb0besm10573028qkh.22.2023.03.02.01.48.03
+        d=1e100.net; s=20210112; t=1677751089;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=quQsZmkiKaETnYTMJly9CAnrwXfTyfISOr41GqRBHEQ=;
+        b=WLe+EmMA5sXepStGMMQ+FrddkJY5IOG45bDGYg82Se/Z52RhPDLiCaO0z0+b/G24IV
+         aYUVp1biUpNzieqJV1Cosrh9coW01mSi9Q1ZsXLyKrFfvTOczHVtU66qaEDgHTFPPl7k
+         j0YwgknbZa8U/HasXnjowEVMHRm74mKvODWdvI8hZe44htvUWEkQjUtpUU9UMbG9sg0z
+         RsePMImKdJf3THQBSTJo2O2EYhhOr2C7W+Tt0tk476SulO+R8xPoBhyH57d5O46s1/7h
+         PnqK+2tbgFComCuhIm7ciU/I1W+XF8jM/XSBLSlTAStSZNCM5R1UWCxwIJYZZUDUb2mb
+         oigg==
+X-Gm-Message-State: AO0yUKWxg9Adq58K7kPYIcs4PSy0+ZHwpHbHj9QihRIrX32ImwL8qwZH
+        C0SivVvKwHFD5uLkOcGmja3N0Q==
+X-Google-Smtp-Source: AK7set9OnArQH/PxHu599zgwQafDCjw20cNu6UwnMirkt5rBsGrvK3lhjvbsD0K6SyI6ANwQJ1e26g==
+X-Received: by 2002:a17:906:1907:b0:8b1:304e:58a3 with SMTP id a7-20020a170906190700b008b1304e58a3mr9990669eje.52.1677751089159;
+        Thu, 02 Mar 2023 01:58:09 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h12-20020a170906530c00b008d71e08c78dsm6852623ejo.81.2023.03.02.01.58.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 01:48:05 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id cf14so17332967qtb.10;
-        Thu, 02 Mar 2023 01:48:03 -0800 (PST)
-X-Received: by 2002:a81:ad43:0:b0:533:91d2:9d94 with SMTP id
- l3-20020a81ad43000000b0053391d29d94mr5972312ywk.5.1677750462713; Thu, 02 Mar
- 2023 01:47:42 -0800 (PST)
+        Thu, 02 Mar 2023 01:58:08 -0800 (PST)
+Message-ID: <1aae7ac9-c83d-71b4-4fce-325f02fcd722@linaro.org>
+Date:   Thu, 2 Mar 2023 10:58:06 +0100
 MIME-Version: 1.0
-References: <20230302093539.372962-1-alexghiti@rivosinc.com>
-In-Reply-To: <20230302093539.372962-1-alexghiti@rivosinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Mar 2023 10:47:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
-Message-ID: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/24] Remove COMMAND_LINE_SIZE from uapi
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
+ compatible strings
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230222183932.33267-1-arinc.unal@arinc9.com>
+ <20230222183932.33267-8-arinc.unal@arinc9.com>
+ <20230227173333.GA496999-robh@kernel.org>
+ <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
+ <20230301024431.GA251215-robh@kernel.org>
+ <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
+ <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
+ <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Alex,
+On 02/03/2023 10:17, Arınç ÜNAL wrote:
+> On 2.03.2023 11:28, Krzysztof Kozlowski wrote:
+>> On 01/03/2023 09:15, Arınç ÜNAL wrote:
+>>> On 1.03.2023 05:44, Rob Herring wrote:
+>>>> On Tue, Feb 28, 2023 at 07:46:36PM +0300, Arınç ÜNAL wrote:
+>>>>> On 27/02/2023 20:33, Rob Herring wrote:
+>>>>>> On Wed, Feb 22, 2023 at 09:39:23PM +0300, arinc9.unal@gmail.com wrote:
+>>>>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>>>>
+>>>>>>> Add the ralink,rt2880-pinmux compatible string. It had been removed from
+>>>>>>> the driver which broke the ABI.
+>>>>>>>
+>>>>>>> Add the mediatek compatible strings. Change the compatible string on the
+>>>>>>> examples with the mediatek compatible strings.
+>>>>>>>
+>>>>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>>>> ---
+>>>>>>>     .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
+>>>>>>>     .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++++--
+>>>>>>>     .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++++--
+>>>>>>>     .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++++--
+>>>>>>>     .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++++--
+>>>>>>>     5 files changed, 25 insertions(+), 10 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>>>> index 1e63ea34146a..531b5f616c3d 100644
+>>>>>>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>>>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+>>>>>>> @@ -17,7 +17,10 @@ description:
+>>>>>>>     properties:
+>>>>>>>       compatible:
+>>>>>>> -    const: ralink,mt7620-pinctrl
+>>>>>>> +    enum:
+>>>>>>> +      - mediatek,mt7620-pinctrl
+>>>>>>> +      - ralink,mt7620-pinctrl
+>>>>>>
+>>>>>> We don't update compatible strings based on acquistions nor marketing
+>>>>>> whims. If you want to use 'mediatek' for new things, then fine.
+>>>>>
+>>>>> Understood. Only the SoCs with rtXXXX were rebranded, the mtXXXX SoCs share
+>>>>> the same architecture from Ralink, so they were incorrectly called Ralink
+>>>>> SoCs.
+>>>>>
+>>>>> I can remove the new strings from Ralink SoCs and add them only for MediaTek
+>>>>> SoCs. Or you could make an exception for this one, regarding the situation.
+>>>>> Whatever you think is best.
+>>>>
+>>>> I'm not in a position to make an exception as I know little about this
+>>>> platform. Carrying both strings is a NAK. Either you (and everyone using
+>>>> these platforms) care about the ABI and are stuck with the "wrong"
+>>>> string. In the end, they are just unique identifiers. Or you don't care
+>>>> and break the ABI and rename everything. If you do that, do just that in
+>>>> your patches and make it crystal clear in the commit msg that is your
+>>>> intention and why that is okay.
+>>>
+>>> Ralink had their MIPS SoCs pre-acquisition, RT2880, etc. MediaTek
+>>> introduced new SoCs post-acquisition, MT7620, MT7621, MT7628, and
+>>> MT7688, utilising the same platform from Ralink, sharing the same
+>>> architecture code, pinctrl core driver, etc.
+>>>
+>>> I don't intend to break the ABI at all. On the contrary, I fix it where
+>>> possible.
+>>>
+>>> If I understand correctly, from this conversation and what Krzysztof
+>>> said, all strings must be kept on the schemas so I can do what I said on
+>>> the composed mail. Only match the pin muxing information on the strings
+>>> that won't match multiple pin muxing information from other schemas.
+>>>
+>>> This way we don't break the ABI, introduce new compatible strings while
+>>> keeping the remaining ones, and make schemas match correctly.
+>>>
+>>> Let me know if this is acceptable to you.
+>>
+>> If by "introduce new compatible strings" you mean duplicate compatibles
+>> to fix the ralink->mediatek, then you ignored entire email from Rob -
+>> this and previous. We don't do this. Leave them as is.
+>>
+>> If you meant something else, explain more...
+> 
+> Let me put them in a group to better explain.
+> 
+> ## Fix ABI
+> 
+> ralink,rt2880-pinmux was there before, it was removed which broke the 
+> ABI. I'm reintroducing it to fix it.
+> 
+> ## New strings to be able to split bindings
+> 
+> New strings are needed for MT7628/MT7688 and some RT SoCs to be able to 
+> properly document the pin muxing information.
 
-On Thu, Mar 2, 2023 at 10:35 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
-> This all came up in the context of increasing COMMAND_LINE_SIZE in the
-> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
-> maximum length of /proc/cmdline and userspace could staticly rely on
-> that to be correct.
->
-> Usually I wouldn't mess around with changing this sort of thing, but
-> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
-> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
-> increasing, but they're from before the UAPI split so I'm not quite sure
-> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
-> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
-> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
-> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-> asm-generic/setup.h.").
->
-> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
-> part of the uapi to begin with, and userspace should be able to handle
-> /proc/cmdline of whatever length it turns out to be.  I don't see any
-> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
-> search, but that's not really enough to consider it unused on my end.
->
-> This issue was already considered in s390 and they reached the same
-> conclusion in commit 622021cd6c56 ("s390: make command line
-> configurable").
->
-> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
-> shouldn't be part of uapi, so this now touches all the ports.  I've
-> tried to split this all out and leave it bisectable, but I haven't
-> tested it all that aggressively.
->
-> Changes since v3 <https://lore.kernel.org/all/20230214074925.228106-1-alexghiti@rivosinc.com/>:
-> * Added RB/AB
-> * Added a mention to commit 622021cd6c56 ("s390: make command line
->   configurable") in the cover letter
+Then ok.
 
-Thanks for the update!
+> 
+> ## Incorrect naming
+> 
+> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink, 
+> introduce new ralink->mediatek compatible strings to address it.
 
- Apparently you forgot to add your own SoB?
+So this part was addressed by Rob - we don't do it, because it does not
+matter. Ralink is now Mediatek, thus there is no conflict and no issues
+with different vendor used.
 
-Gr{oetje,eeting}s,
+> 
+> ## Exception for RT SoCs to be called MediaTek
+> 
+> This is where I was asking an exception to be made. Rob told us here 
+> they know little about the platform so I explained it.
+> 
+> MediaTek acquired Ralink and then introduced new MediaTek SoCs utilising 
+> the same platform from Ralink.
+> 
+> Anyway, now that I look at this again, it makes sense to me as well not 
+> to rename the Ralink SoCs. I'll call the RT SoCs Ralink on the kconfig, 
+> pinctrl driver,
 
-                        Geert
+These are separate. We did not comment on how you call Linux drivers.
+The mail thread was only about:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> and dt-binding schemas on my next version.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof
+
