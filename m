@@ -2,110 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2015F6A806D
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 11:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 748736A80B4
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 12:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjCBK4E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Mar 2023 05:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S229692AbjCBLJE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Mar 2023 06:09:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjCBK4E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 05:56:04 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9737B3D0AC
-        for <linux-mips@vger.kernel.org>; Thu,  2 Mar 2023 02:56:02 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id q16so16111231wrw.2
-        for <linux-mips@vger.kernel.org>; Thu, 02 Mar 2023 02:56:02 -0800 (PST)
+        with ESMTP id S229778AbjCBLJD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 06:09:03 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9343D09F;
+        Thu,  2 Mar 2023 03:09:02 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id s26so65880959edw.11;
+        Thu, 02 Mar 2023 03:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677754561;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KcB+LkE9o/I91gQw86q7yd+Ffjb03AeLOMDNvAVG6zU=;
-        b=e+rBLcD31qUq8ofcmunQB9T7cslMikWVWW6tnNkoeRTZSr0ibaKWx6rD8a8dIYWPbf
-         fW0lAdd1SlGla3ldAdLc2WNM647uUJVdreNaB/qg7aUUMgDDePMIWN3pb/AoMCiJb+St
-         tow4zUg3XCJzfV66feCzlombFmSlirJwAwJYJJXxg73C74+IUIAmk+CfZV7/C8RF237X
-         ATaGKPpZHMGMf9NOyVzbyWTAcRJ2fyN3xTL77ldU6Hy2rlID/O21D1kJ//SZkIYlIO5l
-         DDGWvkXwGEua7w2cyrIHn6vIVLfQNHuKTWku29kPg5x4VOTcuWrsPVQur+EkO3X8IVit
-         RLEQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RacVy3hXHfWoxAe1518Rm8TC6/ZADn7tUMEhIQdTBK0=;
+        b=A0cz96ZWU3eXaL9NhIe2+pOXpgOGV+sZCxIIEyUSaKTrxOX9jFhW6z6lv50xAdV+FG
+         et4oXwQc5jRha8/gxjLd5NF2IyCxM0JWuzCoi3eUFHzcsh1AENLcMY6TDnp+kK7z+m0N
+         lAKah1cUalMDvw+43MtPHGzGScieosFKJkFaYFn8+6tbtC3LhlmmZ1pYy2v7fGIJscqd
+         u5TT0MwNMDDwb/OsUMH+2nF9N4G+BnKzAZ9sukGODk6CpAY/1kepBCn5ivJj73/v3xrl
+         UZwCrAeB05WezS5v+GaP4Hgvi2CdKSZwYE1jZ5Ls0qkEwPMlR6hwG3ffon9k2OUEPQ/m
+         0w0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677754561;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KcB+LkE9o/I91gQw86q7yd+Ffjb03AeLOMDNvAVG6zU=;
-        b=b9hFLaU4YNRSdCUTWlE410eNlLSByF8dZV1QbnO2iOn4BmrUYYFj8GuU1GwqTy0JgD
-         3mghQ7h2H02t0WHWjbne8CFzqT166aPkYVaq3f14l7pYi/hZdBgnTSxTKbBRXxfsPtK/
-         XV6gfCZnY7HAtnkk2PCGGUycGMXFCdoJDPSO6SzN1YFO2qyAsnKI8x/od/VAYr1pc5uf
-         l28trWZLGw33WnM1WV9nzKMs7sKGl2nGAoeJfIEB/ayq4fH5Nx6ssfZ83hJGoxk8PujU
-         nhfODicaoWA1U1su5LbfjD7QuXXOoTL3yW2A1C8drf/7a0sfeeq5STL+anfJVGHpa5DD
-         aBNg==
-X-Gm-Message-State: AO0yUKUHOWqtBoo4y2OClMKwiCu8K595EEpNma5xgSg5uINNF/7CtGh0
-        hyErtQ/zNRTkGdDTlhEr3pgj+g==
-X-Google-Smtp-Source: AK7set/m1l0TRmjNbMf9+h0ZaEF1Xb+SrFR0Wb95q+XihEhxpIYi+zG0JloSFSR6HCHnrFBnWnL2Qw==
-X-Received: by 2002:a5d:4d43:0:b0:2c7:1e43:f46e with SMTP id a3-20020a5d4d43000000b002c71e43f46emr7571202wru.37.1677754561094;
-        Thu, 02 Mar 2023 02:56:01 -0800 (PST)
-Received: from [192.168.74.175] (89.red-88-28-21.dynamicip.rima-tde.net. [88.28.21.89])
-        by smtp.gmail.com with ESMTPSA id l16-20020adfe590000000b002c70e60eb40sm15183667wrm.11.2023.03.02.02.55.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 02:56:00 -0800 (PST)
-Message-ID: <1a4df71c-3934-6956-4120-d6cf3fcf4ca9@linaro.org>
-Date:   Thu, 2 Mar 2023 11:55:52 +0100
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RacVy3hXHfWoxAe1518Rm8TC6/ZADn7tUMEhIQdTBK0=;
+        b=m0EmNRVSoXmn4yDFkqN0FzWsC35ThT3V7oHnLeP8wPGNnJad70TCZSK3a9GA0ICxoq
+         Ftk6MAKCtFMxEi23WcnRlcWT11aeMUvtbrF380dLDugoH/q+6akp5x0pTi9+611CZcAb
+         9H/LkWC8ZEUxG7wFN5OZmvtlfCxNuctw310HOAjT5AAZLlhtRBE8HSqcmUT8rWCimCj7
+         iE2yFAPAjWroa0QhCEAhIVX+V3eANkT23Fer3iCirIZ4QL/5PumgNEg7kROZXPS7kFtT
+         UOBAVmDckZw23XrbOGj9NHxAS4FihHkY5BS0EfLkjOce7HVNKY4lnWqqn2ZPYT3kt7t0
+         feFw==
+X-Gm-Message-State: AO0yUKUax9Q503tl5+4zQv489M+B0GNsKNCK3ZMDhhlWqCpZORtgmpNG
+        xnqvyN2dvNiBKT2K+e8Iq85jxkbGhX4GXfpQ0gY=
+X-Google-Smtp-Source: AK7set8CoEjHJ/rHs600IdSLGFBaSy3dFcnTU4ZobDw6qy431GZN2ZxCdzT53sLeJRp42zuqigihfrNwvq050079Sl0=
+X-Received: by 2002:a17:906:c08c:b0:8f1:4cc5:f14c with SMTP id
+ f12-20020a170906c08c00b008f14cc5f14cmr5084068ejz.0.1677755340793; Thu, 02 Mar
+ 2023 03:09:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v2.1 04/24] arm64/cpu: Mark cpu_die() __noreturn
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     juri.lelli@redhat.com, dalias@libc.org, linux-ia64@vger.kernel.org,
-        linux-sh@vger.kernel.org, peterz@infradead.org,
-        catalin.marinas@arm.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, jiaxun.yang@flygoat.com,
-        linux-mips@vger.kernel.org, bsegall@google.com, jcmvbkbc@gmail.com,
-        guoren@kernel.org, hpa@zytor.com, sparclinux@vger.kernel.org,
-        kernel@xen0n.name, will@kernel.org, vschneid@redhat.com,
-        f.fainelli@gmail.com, vincent.guittot@linaro.org,
-        ysato@users.sourceforge.jp, chenhuacai@kernel.org,
-        linux@armlinux.org.uk, linux-csky@vger.kernel.org,
-        dietmar.eggemann@arm.com, mingo@redhat.com,
-        bcm-kernel-feedback-list@broadcom.com, mgorman@suse.de,
-        mattst88@gmail.com, linux-xtensa@linux-xtensa.org,
-        paulmck@kernel.org, richard.henderson@linaro.org,
-        npiggin@gmail.com, ink@jurassic.park.msu.ru, rostedt@goodmis.org,
-        loongarch@lists.linux.dev, tglx@linutronix.de,
-        linux-arm-kernel@lists.infradead.org, jgross@suse.com,
-        chris@zankel.net, tsbogend@alpha.franken.de, bristot@redhat.com,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        bp@alien8.de, linuxppc-dev@lists.ozlabs.org, davem@davemloft.net
-References: <cover.1676358308.git.jpoimboe@kernel.org>
- <e47fc487980d5330e6059ac6e16416bec88cda0e.1676358308.git.jpoimboe@kernel.org>
- <14274f04-2991-95bd-c29b-07e86e8755c1@linaro.org>
- <Y+zZgZIP7RPIgyQf@FVFF77S0Q05N> <20230215194538.aiiris3uabnuvkkg@treble>
- <20230216184157.4hup6y6mmspr2kll@treble>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230216184157.4hup6y6mmspr2kll@treble>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230222111213.2241633-1-keguang.zhang@gmail.com>
+ <20230222111213.2241633-4-keguang.zhang@gmail.com> <Y/YIlb8axBVVW3VV@surfacebook>
+In-Reply-To: <Y/YIlb8axBVVW3VV@surfacebook>
+From:   Kelvin Cheung <keguang.zhang@gmail.com>
+Date:   Thu, 2 Mar 2023 19:08:44 +0800
+Message-ID: <CAJhJPsVUEe8h8an5ywWTjcLSXj3uHyxW7bg8q4=Byp-3CTgL0w@mail.gmail.com>
+Subject: Re: [PATCH 3/4] gpio: loongson1: Add DT support
+To:     andy.shevchenko@gmail.com
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 16/2/23 19:41, Josh Poimboeuf wrote:
-> cpu_die() doesn't return.  Annotate it as such.  By extension this also
-> makes arch_cpu_idle_dead() noreturn.
-> 
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> ---
->   arch/arm64/include/asm/smp.h | 2 +-
->   arch/arm64/kernel/smp.c      | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, Feb 22, 2023 at 8:21=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
+>
+> Wed, Feb 22, 2023 at 07:12:12PM +0800, Keguang Zhang kirjoitti:
+> > This patch adds DT support for Loongson-1 GPIO driver,
+> > including the following changes.
+> > - Add the of_match_table
+> > - Parse the ngpios property
+> > - Parse the alias id
+>
+> Split!
+>
+> ...
+>
+> > +     if (of_property_read_u32(dn, "ngpios", &ngpios)) {
+> > +             dev_err(dev, "Missing ngpios OF property\n");
+> > +             return -ENODEV;
+> > +     }
+>
+> Why?! GPIO library has this already.
+>
+Will make use of gpiolib and remove this part.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> ...
+>
+> > +     id =3D of_alias_get_id(dn, "gpio");
+> > +     if (id < 0) {
+> > +             dev_err(dev, "Couldn't get OF id\n");
+> > +             return id;
+> > +     }
+>
+> What is this for?
+>
+Will remove this part.
 
+> ...
+>
+> > +     ls1x_gc->gc.base =3D pdev->id * BITS_PER_LONG;
+> > -     ls1x_gc->gc.base =3D pdev->id * 32;
+>
+> No way. This is change makes me thing that initially it's simply wrong. P=
+lease,
+> just use -1 for the base.
+>
+Sure. And this is already done by bgpio_init().
+So I will simply remove this line.
+> ...
+>
+> > +static const struct of_device_id ls1x_gpio_dt_ids[] =3D {
+> > +     { .compatible =3D "loongson,ls1x-gpio", },
+>
+> Inner comma is not needed.
+>
+Will do.
+> > +     { /* sentinel */ }
+> > +};
+>
+> You missed MODULE_DEVICE_TABLE().
+>
+Will add MODULE_DEVICE_TABLE().
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+
+
+--=20
+Best regards,
+
+Kelvin Cheung
