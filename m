@@ -2,127 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD1D6A8BDE
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Mar 2023 23:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774016A8DBF
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Mar 2023 01:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjCBWdn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Mar 2023 17:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S229662AbjCCAMF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Mar 2023 19:12:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjCBWdm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 17:33:42 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256B418B3D;
-        Thu,  2 Mar 2023 14:33:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677796392; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=lBCQbOiFyAmeOEVnmwQZ3yTXp2V0AY1SCLPpNL6vE2riTjV0I/F9LTudbg+rbGrjG59mCFGH4JfaIo51o7dsekrkITurO0sUppYQ1b/afNSgdCMFotJxb3QZKObnqksZPdNSNWgopJSEgMI2LZMTupnar4dvojqZaVBzOq2p/ZU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677796392; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=yyTZqHVs4Hz4Oc9XCojpIACppOj/tZWNrsgAedss690=; 
-        b=LzeSs3j2FxZ1TQdQLFVDMMdbttZnDNCd+WbU+ZDZCAGhb69vqdkT36YwcQgiz9w/JcqeFIgVnF8yh79IM/CCTzyMqjDcoGaWnx85Y0+6NXFyTbkL/xZiN+m2MlLiMal9AsayYdssSGHa9WeFa7Km1pdS9LX5Pl7RXfW0FyKWeIQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677796392;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=yyTZqHVs4Hz4Oc9XCojpIACppOj/tZWNrsgAedss690=;
-        b=GoA8sT48FUeGNk5D7fPJ1d64zGlZVdG9xax+B358IjI+zLrcwAM9hDX2JS9Q4cyl
-        NZrlaBO62b8oGWwpboyyPlxfIV664KOTgeSOvIgKRh2Uw+Z4H+264R/DGjteHk/FI8Q
-        GMLGEnUqKvZ6+D37lCyiWOx8KEpHN1HpcA9NaPs4=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1677796390635558.0560065866928; Thu, 2 Mar 2023 14:33:10 -0800 (PST)
-Message-ID: <86f18aee-bc75-9f7e-baaf-fc547517609a@arinc9.com>
-Date:   Fri, 3 Mar 2023 01:33:02 +0300
+        with ESMTP id S229487AbjCCAMF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 19:12:05 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A6355539;
+        Thu,  2 Mar 2023 16:12:04 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PST185lsbz4x1R;
+        Fri,  3 Mar 2023 11:11:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1677802320;
+        bh=y8wWNYars5Wp25KTgB4IaQUGxk80vrVSQ9DCSBUaDpQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=nCx/NlLyhE7MIPjtBUMoILPKlGudC5d2X4jiywJrXt2G2IbBAq3FuwrzyeIV1XsQ/
+         NJhxQxGiIyBkyMp8QrPWxWlSps7uA0HF0VhGHR8xtsyc5kcZdN8wLecb13lRYyN5Hz
+         JvK4CU2orYG4IpG++/9+SS5Tnbgxt4LZ7o7S0eHrjAY8/NH1bGMEfge/UGx+342qiA
+         8n1Mfv5d3ZTVAJoN4lBQczBMy4E8yRwtygE/uOKh0UeJvdODbBM5s6hm+TCpqKu5ID
+         j22U/sK3TyINj7wezs+YeHg9OQFhmM2QorjVFKz4640ZVitj5YmZ1+DCSX/d+VPxM1
+         nK5PnlzmxfGRw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 5/5] of: address: Always use dma_default_coherent for
+ default coherency
+In-Reply-To: <B43602D1-89D4-465F-83B1-CD106E07CB29@flygoat.com>
+References: <20230223113644.23356-1-jiaxun.yang@flygoat.com>
+ <20230223113644.23356-6-jiaxun.yang@flygoat.com>
+ <20230301130613.GC467@lst.de>
+ <B43602D1-89D4-465F-83B1-CD106E07CB29@flygoat.com>
+Date:   Fri, 03 Mar 2023 11:11:56 +1100
+Message-ID: <87356mlmlv.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
- compatible strings
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230222183932.33267-1-arinc.unal@arinc9.com>
- <20230222183932.33267-8-arinc.unal@arinc9.com>
- <20230227173333.GA496999-robh@kernel.org>
- <d7aea90f-d077-3a41-996c-804c95d72e24@arinc9.com>
- <20230301024431.GA251215-robh@kernel.org>
- <ae3346de-140f-f181-b6a3-ccaa694e1548@arinc9.com>
- <11d3c806-04b6-da54-65f1-c0bd154affbc@linaro.org>
- <a9acd3b4-2b03-86c0-711c-a3840aeab574@arinc9.com>
- <1aae7ac9-c83d-71b4-4fce-325f02fcd722@linaro.org>
- <89588f69-9cf0-e7a4-b976-5ce87d42e296@arinc9.com>
- <2ccb573d-39f4-cb80-7a3e-63a60c2bc0a8@linaro.org>
- <b48e0a5e-dd45-8b8a-4ee3-357a0985ca9c@arinc9.com>
-Content-Language: en-US
-In-Reply-To: <b48e0a5e-dd45-8b8a-4ee3-357a0985ca9c@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2.03.2023 13:47, Arınç ÜNAL wrote:
-> On 2.03.2023 13:29, Krzysztof Kozlowski wrote:
->> On 02/03/2023 11:22, Arınç ÜNAL wrote:
->>>>>
->>>>> ## Incorrect naming
->>>>>
->>>>> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink,
->>>>> introduce new ralink->mediatek compatible strings to address it.
->>>>
->>>> So this part was addressed by Rob - we don't do it, because it does not
->>>> matter. Ralink is now Mediatek, thus there is no conflict and no issues
->>>> with different vendor used.
->>>
->>> I think Rob was rather addressing that updating compatible strings based
->>> on acquisition or marketing whims is not permitted. This condition does
->>> not apply here as these SoCs were never Ralink.
->>>
->>> I understand your point that Ralink is now MediaTek but still, calling
->>> these SoCs Ralink would be a bit misleading, don't you think?
->>
->> Misleading yes, but also does not matter. At least matter not enough to
->> justify ABI break, so you would need to deprecate old ones and keep
->> everything backwards compatible. You still would affect 3rd party users
->> of DTS, though...
-> 
-> I intend to do just that. Introduce new mediatek strings, keep the old 
-> ones so it's backwards compatible, therefore don't break the ABI.
-> 
-> Instead of deprecating old strings, I intend to introduce the checks I 
-> mentioned, on the schema, so the pin muxing bindings only apply if the 
-> DT has got a string that won't match multiple schemas. This way it 
-> shouldn't affect 3rd party DTs.
+Jiaxun Yang <jiaxun.yang@flygoat.com> writes:
+>> 2023=E5=B9=B43=E6=9C=881=E6=97=A5 13:06=EF=BC=8CChristoph Hellwig <hch@l=
+st.de> =E5=86=99=E9=81=93=EF=BC=9A
+>>=20
+>>> - select OF_DMA_DEFAULT_COHERENT if !NOT_COHERENT_CACHE
+>>=20
+>> Doesn't powerpc need to select CONFIG_ARCH_DMA_DEFAULT_COHERENT now,
+>> or even better should be doing that in the patch adding that
+>> symbol?
+>
+> If I read the code correctly for powerpc OF_DMA_DEFAULT_COHERENT is only =
+selected
+> with !NOT_COHERENT_CACHE, which means non-coherent dma support is disable=
+d=E2=80=A6.
 
-I'm looking at this again and I see that doing this brings more issues 
-than it solves. I think deprecating the old strings from the schemas is 
-better. They will be on the driver anyway so newer kernels will still 
-work fine with old DTs.
+I think you're right, but it's not easy to understand.
 
-Arınç
+powerpc's NOT_COHERENT_CACHE selects:
+
+  select ARCH_HAS_DMA_PREP_COHERENT
+  select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+  select ARCH_HAS_SYNC_DMA_FOR_CPU
+
+
+Then in your patch 3 you do:
+
+ #if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
+-bool dma_default_coherent;
++bool dma_default_coherent =3D IS_ENABLED(CONFIG_ARCH_DMA_DEFAULT_COHERENT);
+ #endif
+
+So for powerpc if NOT_COHERENT_CACHE=3Dn, then none of those ARCH_HAS
+symbols are defined, and so CONFIG_ARCH_DMA_DEFAULT_COHERENT is never used.
+
+But like I said it's not very obvious, and it also seems fragile to
+future changes.
+
+So it seems it would be more future proof, and self documenting for
+powerpc to just have:
+
+        select ARCH_DMA_DEFAULT_COHERENT if !NOT_COHERENT_CACHE
+
+
+cheers
