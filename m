@@ -2,62 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4493D6A916B
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Mar 2023 08:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AA66A91DE
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Mar 2023 08:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjCCHFr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Mar 2023 02:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        id S229515AbjCCHpP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Mar 2023 02:45:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCCHFq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Mar 2023 02:05:46 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F5A13DDC
-        for <linux-mips@vger.kernel.org>; Thu,  2 Mar 2023 23:05:45 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id o15so6389615edr.13
-        for <linux-mips@vger.kernel.org>; Thu, 02 Mar 2023 23:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677827144;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7hyO83Agm9J1LkrNZzgMmPOSi1e0C8pD1X+9+f3Pu8E=;
-        b=DTsZvcGSh0JqYAWl73FtkLBOgToNuhgRMthIP75ZhbLj4hvKzx8xLSWmq6ZecBm+fc
-         WnGaFSR/szAif5FxMioBLi8lXOMjwyl9YYBRW1qvfrNJQ7y6enmqBFXC6knizv5FRC7w
-         gLcW7RZF7IeggDaKwtL/qn/wbEyuyR91AVlWq5dAw46hbqc6EYma+NwexHXqBlDdZGaB
-         0Kw0lNAnA0Yk98iEdnIWnFQ2Wi5nbeYto+qJucXYry5HG84g0JbO9dCjhmRWcEXGLp9r
-         AnMwj+SQ1t8ltYXBcQvr/J9V6aYgCkp+SkBohiYeeoKguZDW2uGNeBFyo3FRxcIff5gD
-         KvIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677827144;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hyO83Agm9J1LkrNZzgMmPOSi1e0C8pD1X+9+f3Pu8E=;
-        b=ZrlJUHlOEjzPcOIr2Hbs6lgziqVKCaRkM4SEy5ddRZoP3ty1V/SZxoE2XW8rS6cCY0
-         /A9eDlJYytCEITuw3XXpKSHRKgjSAuo3q7I3O22ifm5PAXILxIrze+lXfRY+bgvk6w1h
-         2huFIJPU0G0qyLLXjOD3F2REHSO7xF6Dbji99XKWbZuQ2isvA72/ODIG0Av8ASX5L9BK
-         HdltGQTh+dSDua2eYzi+72xK0caoflJP7yZyh9RxHsT6KHsy1vA2uQ9G8QsTh1B9VqsE
-         DYAxMCO56UTrWrPcnT2+RnyLgtbUqrJMSFmS3aBqdvibHb1JwaL11kuV4WfAyRSWvE+9
-         Z4sA==
-X-Gm-Message-State: AO0yUKXyuwSBsKUhEccwjuhmaR5e0e0hKxF+njvMSubHZG75QPlOpk7X
-        lmuSvy0wPa2lo3/avkHAbP9Rcw==
-X-Google-Smtp-Source: AK7set872PawA8YLwYxckp8bhyhvu6/0N24CzD55UJ1kPz74D0pEza8jIQRyk/4Shrewd1pziePgRg==
-X-Received: by 2002:a05:6402:1347:b0:4ab:1c69:5c4 with SMTP id y7-20020a056402134700b004ab1c6905c4mr884592edw.26.1677827143862;
-        Thu, 02 Mar 2023 23:05:43 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id k12-20020a50ce4c000000b004c0459c20f9sm772279edj.66.2023.03.02.23.05.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 23:05:43 -0800 (PST)
-Message-ID: <a696bea5-3ba6-3b71-10ad-a04a7412c178@linaro.org>
-Date:   Fri, 3 Mar 2023 08:05:40 +0100
+        with ESMTP id S229457AbjCCHpO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Mar 2023 02:45:14 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43EF15555;
+        Thu,  2 Mar 2023 23:45:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677829488; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=PxjbRLVNt8tc3gqOBUlPuEl2vdem8DJ630dv7Cquf5/ORgxh3aN49y8OfW8XI8TSx+RScUMsugtfe3wYVB6eoPqYV1uXZwAE0k0sVKH8n79oMQQYb5QFsC8G/EyJHrPBUInlfZNB+GIovqfwukgxjq9ciHozemAoUI9Ihj46G2g=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1677829488; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=ryO/715HXYmlcWLd+2L0EnmXwar4LhfC0gZCXwMnKL8=; 
+        b=GQ4sFZMyQkBUlRU6zDhErU5+p9JhegjLhelz6elwhYVFt7w1UX3zM5UOmZicwL7U1fEUEGVMKXfD5rl8iYY+blBe9K1daayaOjJIbTglbMjcI15/CdevugsJS1AZgusVppKStj0d0wUa7lQULsEZjqCvilNenCknyyz6uyYHNRg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677829488;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=ryO/715HXYmlcWLd+2L0EnmXwar4LhfC0gZCXwMnKL8=;
+        b=jNe8Y4Sdpp08C58lbyr60V+t3wE7dP+kZJohcYAwcLUCqJyI3/G+1YpVgour+lPJ
+        db+aup8CYNUX5dpWE4uVnGHrt/8ZvaIwy8NttJGZdm/BJDRCpJ0gk5SLy/Q49P6sc27
+        wu8bkkemaep391c56ufUBki+BhENtQb0u2vQ43Mw=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1677829486602727.4785012329536; Thu, 2 Mar 2023 23:44:46 -0800 (PST)
+Message-ID: <4c522dc3-d6f4-fd3e-e715-4c7795576541@arinc9.com>
+Date:   Fri, 3 Mar 2023 10:44:31 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
+ Thunderbird/102.7.1
 Subject: Re: [RFC PATCH 07/16] dt-bindings: pinctrl: ralink: add new
  compatible strings
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>
 Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -89,70 +73,91 @@ References: <20230222183932.33267-1-arinc.unal@arinc9.com>
  <b48e0a5e-dd45-8b8a-4ee3-357a0985ca9c@arinc9.com>
  <83a03258-9e52-3d09-67fe-12e9e5ed4b76@linaro.org>
  <11d10e4e-65ec-3bec-3e0c-7e57feb03506@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <11d10e4e-65ec-3bec-3e0c-7e57feb03506@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
+ <a696bea5-3ba6-3b71-10ad-a04a7412c178@linaro.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <a696bea5-3ba6-3b71-10ad-a04a7412c178@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02/03/2023 12:50, Arınç ÜNAL wrote:
-> On 2.03.2023 14:36, Krzysztof Kozlowski wrote:
->> On 02/03/2023 11:47, Arınç ÜNAL wrote:
->>> On 2.03.2023 13:29, Krzysztof Kozlowski wrote:
->>>> On 02/03/2023 11:22, Arınç ÜNAL wrote:
+On 3.03.2023 10:05, Krzysztof Kozlowski wrote:
+> On 02/03/2023 12:50, Arınç ÜNAL wrote:
+>> On 2.03.2023 14:36, Krzysztof Kozlowski wrote:
+>>> On 02/03/2023 11:47, Arınç ÜNAL wrote:
+>>>> On 2.03.2023 13:29, Krzysztof Kozlowski wrote:
+>>>>> On 02/03/2023 11:22, Arınç ÜNAL wrote:
+>>>>>>>>
+>>>>>>>> ## Incorrect naming
+>>>>>>>>
+>>>>>>>> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink,
+>>>>>>>> introduce new ralink->mediatek compatible strings to address it.
 >>>>>>>
->>>>>>> ## Incorrect naming
->>>>>>>
->>>>>>> MT7620, MT7621, MT7628, and MT7688 SoCs are incorrectly called Ralink,
->>>>>>> introduce new ralink->mediatek compatible strings to address it.
+>>>>>>> So this part was addressed by Rob - we don't do it, because it does not
+>>>>>>> matter. Ralink is now Mediatek, thus there is no conflict and no issues
+>>>>>>> with different vendor used.
 >>>>>>
->>>>>> So this part was addressed by Rob - we don't do it, because it does not
->>>>>> matter. Ralink is now Mediatek, thus there is no conflict and no issues
->>>>>> with different vendor used.
+>>>>>> I think Rob was rather addressing that updating compatible strings based
+>>>>>> on acquisition or marketing whims is not permitted. This condition does
+>>>>>> not apply here as these SoCs were never Ralink.
+>>>>>>
+>>>>>> I understand your point that Ralink is now MediaTek but still, calling
+>>>>>> these SoCs Ralink would be a bit misleading, don't you think?
 >>>>>
->>>>> I think Rob was rather addressing that updating compatible strings based
->>>>> on acquisition or marketing whims is not permitted. This condition does
->>>>> not apply here as these SoCs were never Ralink.
->>>>>
->>>>> I understand your point that Ralink is now MediaTek but still, calling
->>>>> these SoCs Ralink would be a bit misleading, don't you think?
+>>>>> Misleading yes, but also does not matter. At least matter not enough to
+>>>>> justify ABI break, so you would need to deprecate old ones and keep
+>>>>> everything backwards compatible. You still would affect 3rd party users
+>>>>> of DTS, though...
 >>>>
->>>> Misleading yes, but also does not matter. At least matter not enough to
->>>> justify ABI break, so you would need to deprecate old ones and keep
->>>> everything backwards compatible. You still would affect 3rd party users
->>>> of DTS, though...
+>>>> I intend to do just that. Introduce new mediatek strings, keep the old
+>>>> ones so it's backwards compatible, therefore don't break the ABI.
+>>>>
+>>>> Instead of deprecating old strings, I intend to introduce the checks I
+>>>> mentioned, on the schema, so the pin muxing bindings only apply if the
+>>>> DT has got a string that won't match multiple schemas. This way it
+>>>> shouldn't affect 3rd party DTs.
 >>>
->>> I intend to do just that. Introduce new mediatek strings, keep the old
->>> ones so it's backwards compatible, therefore don't break the ABI.
->>>
->>> Instead of deprecating old strings, I intend to introduce the checks I
->>> mentioned, on the schema, so the pin muxing bindings only apply if the
->>> DT has got a string that won't match multiple schemas. This way it
->>> shouldn't affect 3rd party DTs.
+>>> I meant, 3rd party users of DTS. You will replace the compatible in the
+>>> DTS, right? So the DTS exported and used in all other projects, OS,
+>>> firmwares, bootloaders, out of tree kernel forks will stop working.
 >>
->> I meant, 3rd party users of DTS. You will replace the compatible in the
->> DTS, right? So the DTS exported and used in all other projects, OS,
->> firmwares, bootloaders, out of tree kernel forks will stop working.
+>> I plan to change it on the DTs for MediaTek SoCs, yes. Is this a
+>> problem? From what I can tell, what must be ensured is that old DTs must
+>> work with newer kernels, not new DTs on older kernels.
 > 
-> I plan to change it on the DTs for MediaTek SoCs, yes. Is this a 
-> problem? From what I can tell, what must be ensured is that old DTs must 
-> work with newer kernels, not new DTs on older kernels.
+> Can I be clearer than this?
+> 
+> " So the DTS exported and used in all other projects, OS,
+> firmwares, bootloaders, out of tree kernel forks will stop working."
+> 
+> Yes, this is a problem - they will stop working.
 
-Can I be clearer than this?
+I've never seen any project just exporting DTs from the latest kernel 
+version and slap it onto old versions, as a new devicetree that was 
+introduced with a newer kernel version is not guaranteed to work with 
+older kernel versions.
 
-" So the DTS exported and used in all other projects, OS,
-firmwares, bootloaders, out of tree kernel forks will stop working."
+If someone is actually doing this on a project, I think it's the 
+responsibility of the maintainers of these said projects to account for 
+this and modify the DT for the kernel version they're running it on.
 
-Yes, this is a problem - they will stop working.
+What's more usual is one'd run the kernel version where the new DT was 
+introduced, which will work fine.
 
-Best regards,
-Krzysztof
+On to real life implications, popular projects like U-Boot and OpenWrt 
+maintain their own DTs for this platform so I think the impact is very 
+minimal.
 
+Anyway, I'm not doing this change on this patch series so why don't we 
+cross this bridge when we get to it.
+
+Arınç
