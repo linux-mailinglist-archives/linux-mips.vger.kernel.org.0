@@ -2,107 +2,188 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774016A8DBF
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Mar 2023 01:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701276A8DD8
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Mar 2023 01:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjCCAMF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Mar 2023 19:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
+        id S229653AbjCCA3y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Mar 2023 19:29:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCCAMF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 19:12:05 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A6355539;
-        Thu,  2 Mar 2023 16:12:04 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PST185lsbz4x1R;
-        Fri,  3 Mar 2023 11:11:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1677802320;
-        bh=y8wWNYars5Wp25KTgB4IaQUGxk80vrVSQ9DCSBUaDpQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=nCx/NlLyhE7MIPjtBUMoILPKlGudC5d2X4jiywJrXt2G2IbBAq3FuwrzyeIV1XsQ/
-         NJhxQxGiIyBkyMp8QrPWxWlSps7uA0HF0VhGHR8xtsyc5kcZdN8wLecb13lRYyN5Hz
-         JvK4CU2orYG4IpG++/9+SS5Tnbgxt4LZ7o7S0eHrjAY8/NH1bGMEfge/UGx+342qiA
-         8n1Mfv5d3ZTVAJoN4lBQczBMy4E8yRwtygE/uOKh0UeJvdODbBM5s6hm+TCpqKu5ID
-         j22U/sK3TyINj7wezs+YeHg9OQFhmM2QorjVFKz4640ZVitj5YmZ1+DCSX/d+VPxM1
-         nK5PnlzmxfGRw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 5/5] of: address: Always use dma_default_coherent for
- default coherency
-In-Reply-To: <B43602D1-89D4-465F-83B1-CD106E07CB29@flygoat.com>
-References: <20230223113644.23356-1-jiaxun.yang@flygoat.com>
- <20230223113644.23356-6-jiaxun.yang@flygoat.com>
- <20230301130613.GC467@lst.de>
- <B43602D1-89D4-465F-83B1-CD106E07CB29@flygoat.com>
-Date:   Fri, 03 Mar 2023 11:11:56 +1100
-Message-ID: <87356mlmlv.fsf@mpe.ellerman.id.au>
+        with ESMTP id S229484AbjCCA3x (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Mar 2023 19:29:53 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB6C144A4;
+        Thu,  2 Mar 2023 16:29:52 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id x6so782046ljq.1;
+        Thu, 02 Mar 2023 16:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677803390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZYzYl65lrl4NIak+68JmKnOBYHqlW8O3mwHR68tLLkw=;
+        b=JfUrCkNOnBcbDT2s9JlFztH5eY16LbVYb4C4xlE3tDBEaRi1JVwxRjJW6XAU5eouio
+         DcX/lkRwKBMgu3gN0nnPo9Z8DHNteKZP9MGznEXoq6tXdWAnWJLlRsLhGnL95kCD1IAQ
+         1TcP2EbyNyugC48p2leCDlnW7XQXwdqxvCjyqfYkd/oS5wePLrNAuzolUUSzmbq87BF1
+         R73MWB7pdv+kB3gy5HSSQQbHZgqvAMp3bNAyab/HI7s0kMa6ow0VRYv7xgnV9kcuPfbZ
+         ZCtm+/UfIQZnX22E1R+AFe/g14uKLHxS7705jZWtq6ZbwzjAnQT3Yis7dmLqFveX7LU2
+         bfkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677803390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZYzYl65lrl4NIak+68JmKnOBYHqlW8O3mwHR68tLLkw=;
+        b=x0RxDDMkny/p0FdQMXPIdWGMSilVI/vcBzcko9hrPjYbynCL3W5U+SUQYC05hY59EA
+         +pb1FJwNIBE61ZF9tLt2+vfL6kEg5ugvsPk5l2ljen+kJuJBHbinzJhTACdMXtH44bRb
+         U/vOeKIlUv2YRrlpxsDK/pbDqLFW5Kq5A+MrSTqYaZ+mcevm6PKfkTkbVykVBKuCqSYh
+         /0zl8lDTQzGhd7Y1ApA8wAKuDNWcdcYc5+nSXIhrLuzq4Ju7myYlbK2w4w2w10zfevTJ
+         bHyVOVny+6H9OPfLe6vQyGEtPwwnMZwJKwjUZJ4gKJpDfDSSRFtRmiOvguEsZxaSjEN2
+         8OKw==
+X-Gm-Message-State: AO0yUKVwHoIDyXeyocX6jjsLf9OFGJaEK/DThMFJtlkjwYqdBCaqnhg6
+        xhRuY+G+5elL5qAxFTpgpsY=
+X-Google-Smtp-Source: AK7set+pFQzgv0tmjuSOt+nwG3CWBIaTBdJ79tRgzbqGyFk7pkKXomLzTWSeIdFDPbHTOMiURlC0zQ==
+X-Received: by 2002:a2e:9111:0:b0:295:a2d0:57ed with SMTP id m17-20020a2e9111000000b00295a2d057edmr4067558ljg.4.1677803390200;
+        Thu, 02 Mar 2023 16:29:50 -0800 (PST)
+Received: from arinc9-PC.lan ([212.68.60.226])
+        by smtp.gmail.com with ESMTPSA id v19-20020a2e9f53000000b002932b817990sm64901ljk.31.2023.03.02.16.29.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 16:29:49 -0800 (PST)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Subject: [PATCH 00/20] pinctrl: ralink: fix ABI, improve driver, move to mediatek, improve dt-bindings
+Date:   Fri,  3 Mar 2023 03:28:29 +0300
+Message-Id: <20230303002850.51858-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Jiaxun Yang <jiaxun.yang@flygoat.com> writes:
->> 2023=E5=B9=B43=E6=9C=881=E6=97=A5 13:06=EF=BC=8CChristoph Hellwig <hch@l=
-st.de> =E5=86=99=E9=81=93=EF=BC=9A
->>=20
->>> - select OF_DMA_DEFAULT_COHERENT if !NOT_COHERENT_CACHE
->>=20
->> Doesn't powerpc need to select CONFIG_ARCH_DMA_DEFAULT_COHERENT now,
->> or even better should be doing that in the patch adding that
->> symbol?
->
-> If I read the code correctly for powerpc OF_DMA_DEFAULT_COHERENT is only =
-selected
-> with !NOT_COHERENT_CACHE, which means non-coherent dma support is disable=
-d=E2=80=A6.
+[PATCH 00/20] pinctrl: ralink: fix ABI, improve driver, move to mediatek, improve dt-bindings
 
-I think you're right, but it's not easy to understand.
+This is an ambitious effort I've been wanting to do for months.
 
-powerpc's NOT_COHERENT_CACHE selects:
+Straight off the bat, I'm fixing the ABI that I broke a while back, by
+reintroducing the ralink,rt2880-pinmux compatible string.
 
-  select ARCH_HAS_DMA_PREP_COHERENT
-  select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-  select ARCH_HAS_SYNC_DMA_FOR_CPU
+If you take a look at the schema for mt7620 and rt305x, some functions got
+multiple lists for groups. Like refclk on mt7620. Because mt7620 and
+mt7628/mt7688 SoCs use the same compatible string, it's impossible to
+differentiate on the binding which SoC a devicetree is actually for.
+Therefore, the binding will allow all groups listed for that function. For
+example, if the SoC is mt7620, only the refclk function for the mdio group
+can be used. If one were to put "spi cs1" as the function there, there
+wouldn't be a warning.
+
+I address this by introducing new compatible strings for these SoCs, then
+split the schemas. I also separate mt7628/mt7688 from mt7620 pinctrl
+subdriver in the process.
+
+I wanted to split the rt305x driver too but too much code would be reused
+so I backed down from that.
+
+This platform from Ralink was acquired by MediaTek in 2011. Then, MediaTek
+introduced new SoCs which utilise this platform. We're moving the Ralink
+pinctrl driver to MediaTek, and rename the schemas for MediaTek SoCs to
+mediatek.
+
+I've renamed the ralink core driver to mtmips. I decided to call the core
+mtmips as I've seen folks from MediaTek use the same name when they added
+support for MT7621 pinctrl on U-Boot. Feel free to comment on this.
+
+Arınç
+
+RFC to v1:
+- Address Rob and Krzysztof's reviews, add Rob's acked-by.
+- More cleanups, hooray!
+- Keep ralink,rt2880-pinmux deprecated.
+- Deprecate ralink,mt7620-pinctrl. Another one bites the dust!
+- More slight changes I can't currently remember to mention.
+
+Arınç ÜNAL (20):
+  pinctrl: ralink: reintroduce ralink,rt2880-pinmux compatible string
+  pinctrl: ralink: {mt7620,mt7621}: add new mediatek compatible strings
+  pinctrl: ralink: rt305x: add new compatible string for every SoC
+  pinctrl: ralink: mt7620: split out to mt76x8
+  pinctrl: ralink: move to mediatek as mtmips
+  pinctrl: mediatek: remove OF_GPIO as reverse dependency
+  dt-bindings: pinctrl: ralink: improve bindings
+  dt-bindings: pinctrl: ralink: add new compatible strings
+  dt-bindings: pinctrl: ralink: {mt7620,mt7621}: rename to mediatek
+  dt-bindings: pinctrl: mediatek: mt6795: rename to mediatek,mt6795-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8186: rename to mediatek,mt8186-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8192: rename to mediatek,mt8192-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8195: rename to mediatek,mt8195-pinctrl
+  dt-bindings: pinctrl: mediatek: fix naming inconsistency
+  dt-bindings: pinctrl: {mediatek,ralink}: fix formatting
+  dt-bindings: pinctrl: mediatek: drop quotes from referred schemas
+  dt-bindings: pinctrl: mediatek: mt7986: fix patternProperties regex
+  dt-bindings: pinctrl: ralink: rt305x: split binding
+  dt-bindings: pinctrl: mediatek: mt7620: split binding
+  MAINTAINERS: move ralink pinctrl to mediatek mips pinctrl
+
+ .../pinctrl/mediatek,mt65xx-pinctrl.yaml        |  28 +-
+ .../pinctrl/mediatek,mt6779-pinctrl.yaml        |  37 +-
+ ...mt6795.yaml => mediatek,mt6795-pinctrl.yaml} |  39 +-
+ .../pinctrl/mediatek,mt7620-pinctrl.yaml        | 298 ++++++++++++++
+ ...inctrl.yaml => mediatek,mt7621-pinctrl.yaml} |  23 +-
+ .../pinctrl/mediatek,mt7622-pinctrl.yaml        |  32 +-
+ ...inctrl.yaml => mediatek,mt76x8-pinctrl.yaml} | 252 ++----------
+ .../pinctrl/mediatek,mt7981-pinctrl.yaml        |  35 +-
+ .../pinctrl/mediatek,mt7986-pinctrl.yaml        |  72 ++--
+ .../pinctrl/mediatek,mt8183-pinctrl.yaml        |  30 +-
+ ...mt8186.yaml => mediatek,mt8186-pinctrl.yaml} |  51 ++-
+ .../pinctrl/mediatek,mt8188-pinctrl.yaml        |  76 ++--
+ ...mt8192.yaml => mediatek,mt8192-pinctrl.yaml} |  53 +--
+ ...mt8195.yaml => mediatek,mt8195-pinctrl.yaml} |  44 +--
+ .../pinctrl/mediatek,mt8365-pinctrl.yaml        |  28 +-
+ .../bindings/pinctrl/ralink,rt2880-pinctrl.yaml |  11 +-
+ .../bindings/pinctrl/ralink,rt305x-pinctrl.yaml |  89 +----
+ .../bindings/pinctrl/ralink,rt3352-pinctrl.yaml | 243 ++++++++++++
+ .../bindings/pinctrl/ralink,rt3883-pinctrl.yaml |  11 +-
+ .../bindings/pinctrl/ralink,rt5350-pinctrl.yaml | 206 ++++++++++
+ MAINTAINERS                                     |  29 +-
+ drivers/pinctrl/Kconfig                         |   1 -
+ drivers/pinctrl/Makefile                        |   1 -
+ drivers/pinctrl/mediatek/Kconfig                |  54 ++-
+ drivers/pinctrl/mediatek/Makefile               |  63 +--
+ drivers/pinctrl/mediatek/pinctrl-mt7620.c       | 138 +++++++
+ .../{ralink => mediatek}/pinctrl-mt7621.c       |  32 +-
+ drivers/pinctrl/mediatek/pinctrl-mt76x8.c       | 283 ++++++++++++++
+ .../pinctrl-mtmips.c}                           |  90 ++---
+ .../pinctrl-mtmips.h}                           |  16 +-
+ .../{ralink => mediatek}/pinctrl-rt2880.c       |  21 +-
+ .../{ralink => mediatek}/pinctrl-rt305x.c       |  47 +--
+ .../{ralink => mediatek}/pinctrl-rt3883.c       |  29 +-
+ drivers/pinctrl/ralink/Kconfig                  |  35 --
+ drivers/pinctrl/ralink/Makefile                 |   8 -
+ drivers/pinctrl/ralink/pinctrl-mt7620.c         | 391 -------------------
+ 36 files changed, 1723 insertions(+), 1173 deletions(-)
 
 
-Then in your patch 3 you do:
-
- #if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
--bool dma_default_coherent;
-+bool dma_default_coherent =3D IS_ENABLED(CONFIG_ARCH_DMA_DEFAULT_COHERENT);
- #endif
-
-So for powerpc if NOT_COHERENT_CACHE=3Dn, then none of those ARCH_HAS
-symbols are defined, and so CONFIG_ARCH_DMA_DEFAULT_COHERENT is never used.
-
-But like I said it's not very obvious, and it also seems fragile to
-future changes.
-
-So it seems it would be more future proof, and self documenting for
-powerpc to just have:
-
-        select ARCH_DMA_DEFAULT_COHERENT if !NOT_COHERENT_CACHE
-
-
-cheers
