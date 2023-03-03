@@ -2,289 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B06A6A994B
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Mar 2023 15:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF53A6A9BEC
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Mar 2023 17:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjCCOSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Mar 2023 09:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S230039AbjCCQlp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Mar 2023 11:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjCCOSU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Mar 2023 09:18:20 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2953D1167D;
-        Fri,  3 Mar 2023 06:18:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677853069; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=W045bdmzx75s5wZRdqKXSj6MKbsu2H2RGd+UAnNckVvKqLut14P74dngx9EFa3evMrmBYiHdBTRXJyPx2A4RrAaB9laruuFL2SwFjdx9hQUid2fVKXWKx7WL+MK1YPXYFFKHTxgcsJJ3Z6VlRjXLRQ6cNqlTNKsqb7apzFbFe8U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1677853069; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=J1x4ZN9o6V9W+qBh0ggz87xL1gWqHwTlf5r/ePU2u7s=; 
-        b=HJnA1Gl0ulvNFNp12PIcPvVUaBO6ptuEg6ynGu9Yl44nim8zC+8upY72jeHPZRItXgGOYveaI+tR5pZI7GIPIkurvIukwH05ZudxJOyZ9j1NeT95XpvNzgp/Y+QXqj18DFIbH079gA0xokv+XXs7ClCvyKPjG9eW71OFxJMz3WI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1677853069;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=J1x4ZN9o6V9W+qBh0ggz87xL1gWqHwTlf5r/ePU2u7s=;
-        b=MaWvmbrf7SOR8X/C8UKjWp5SLXWJ2UbwfRjhDt+BXZvBSmv3nFgNLQZ5KGi97Y5K
-        ESrqbdmG0ZN1lnt5Rze51IjtCv2PetxHEqIe7SO4WubKJkNu1cmAnGILIpLlwXLq+4T
-        FWKpYkEwBL8lWP22gmTE+9UXhAJ6eDW+Hnt+PMxk=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1677853067111992.3122175211197; Fri, 3 Mar 2023 06:17:47 -0800 (PST)
-Message-ID: <fc6dc970-5bae-1c27-9473-8c9d90ac79a1@arinc9.com>
-Date:   Fri, 3 Mar 2023 17:17:39 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 05/20] pinctrl: ralink: move to mediatek as mtmips
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230303002850.51858-1-arinc.unal@arinc9.com>
- <20230303002850.51858-6-arinc.unal@arinc9.com>
- <CAMhs-H-VGjP32AZc2cuY=Co4iqx8xPtvjr+hMg-haMMFaQzzsg@mail.gmail.com>
- <CAMhs-H8OsG-SEWigimG3fT-SGjZruH-7tnjff198Z2qhb0O=yA@mail.gmail.com>
- <2106f6d0-63cc-4656-1e52-19640994fb43@arinc9.com>
- <CAMhs-H869pR6CzaWfvf44w-ak+0OCyxnMEEU4kWYpw=C14ShsQ@mail.gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CAMhs-H869pR6CzaWfvf44w-ak+0OCyxnMEEU4kWYpw=C14ShsQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231158AbjCCQll (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Mar 2023 11:41:41 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0505B28D11;
+        Fri,  3 Mar 2023 08:41:23 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 0DEE9581876;
+        Fri,  3 Mar 2023 11:41:23 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 03 Mar 2023 11:41:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1677861683; x=1677868883; bh=cq
+        QZ3RgaXf1BBbVEeoodJ6F1ZwSPMj6A5MLY/vjXzGA=; b=Qg18LNgvOVfFg7uMPf
+        8fRKoa7WlhijGwszu3Ic5SITTKwawR9B4I6XiClcZ6ujIEL9zVzHiioA2EjIov5s
+        tRcxg3C97rd5Qh3iqM/nd48Hb9b7a50w/6DZE1MzWvKwa+aOXKgEBbAuFqwTw8IO
+        2/zrTU4zUJhWjGOFVyk4cMUxKlr0jFTzBpR0rcRkXCqmlSQg+1mKD1l/rCUxrq7V
+        AihMHWGAQq5UOL4IcNCaCr0vFPf0edeb4YgCH1r82QvI+8miMlqwJ9RIy277z2fo
+        EYkDNEf8mCiriMB8VOffc0buYRAQEBhVnDohf6yDdBARed4fr/O8O2naCxLKuEJ1
+        FmIA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1677861683; x=1677868883; bh=cqQZ3RgaXf1BB
+        bVEeoodJ6F1ZwSPMj6A5MLY/vjXzGA=; b=B7rPNJeusJPtOmHPup8e0wxsJaB14
+        FGL6vkrY8GHqsXIc2V5zsu3B4xZEBJOHklvsYTn6cMwmxpEeSnRvlTctzLXXyrXP
+        9TrBh5erAm5rnNg9EUeTsf+lY9yT/91mQrCarXvtL1boNYFm9EBkDhTchuKj9wo/
+        Vcljkzp6um1LTXdLqg+kNYUapTvAI76XHCPOKqRJAjH8uzC14hkGGbIhqvg9smqE
+        9gk7xnhPT94YAL+KeKmqqFj3ep1BV/HHgDskGZEGHTV139D4jm59Krp4ve/+OW5/
+        HbWdFOCVWJeLjyz/P08DuMz9uoT2Z1BPftr9Y2L2ohywcFpCIMJxhhtIw==
+X-ME-Sender: <xms:MCMCZFL4Vj5B4o3IALIvz6pg60SCJX6TD7RqwuRdJoAXjFHZ0Phf8w>
+    <xme:MCMCZBKDr_18-ZCp9fq_mQ4hcfnV3bmMG_AWa-n5fjtp8mZF3Lhw2HF6H3yj4rqId
+    bqalm9nA4D9Or8b-2Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledgkeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:MCMCZNtSdRvlahaw8kkpJg5S_mXaS2NGhMnRJHAOSZVgamhknWW26A>
+    <xmx:MCMCZGZ1LKp15mUy0pPlL-EOq16PpXi1zG62wPySDj-SICoXbN6kvg>
+    <xmx:MCMCZMZks1DsXpkJ0U23I5CMsMZR0ofN8WaGql7nqVneRcx1e3czpQ>
+    <xmx:MyMCZBjiubroXaC0t4anGM3CORVrncxIG1WjD4S72n_xh-uiQS8zyQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9A291B60086; Fri,  3 Mar 2023 11:41:20 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <c500840b-b57d-47f2-a3d9-41465b10ffae@app.fastmail.com>
+In-Reply-To: <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
+References: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
+ <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
+ <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
+Date:   Fri, 03 Mar 2023 17:40:46 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Alexandre Ghiti" <alex@ghiti.fr>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>
+Cc:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Alexandre Ghiti" <alexghiti@rivosinc.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Richard Henderson" <richard.henderson@linaro.org>,
+        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+        "Matt Turner" <mattst88@gmail.com>,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, gor@linux.ibm.com,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
+        ysato@users.osdn.me, "Rich Felker" <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        chris@zankel.net, "Max Filippov" <jcmvbkbc@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Heyo,
+On Fri, Mar 3, 2023, at 12:59, Alexandre Ghiti wrote:
+> On 3/2/23 20:50, H. Peter Anvin wrote:
+>> On March 1, 2023 7:17:18 PM PST, Palmer Dabbelt <palmer@dabbelt.com> wrote:
 
-On 3.03.2023 13:57, Sergio Paracuellos wrote:
-> Hi Arınç,
-> 
-> On Fri, Mar 3, 2023 at 9:16 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>
->> Hey Sergio,
->>
->> On 3.03.2023 09:34, Sergio Paracuellos wrote:
->>> On Fri, Mar 3, 2023 at 7:17 AM Sergio Paracuellos
->>> <sergio.paracuellos@gmail.com> wrote:
->>>>
->>>>    Hi Arınç,
->>>>
->>>> On Fri, Mar 3, 2023 at 1:30 AM <arinc9.unal@gmail.com> wrote:
->>>>>
->>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>
->>>>> This platform from Ralink was acquired by MediaTek in 2011. Then, MediaTek
->>>>> introduced new SoCs which utilise this platform. Move the driver to
->>>>> mediatek pinctrl directory. Rename the ralink core driver to mtmips.
->>>>>
->>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>> ---
->>>>>    drivers/pinctrl/Kconfig                       |  1 -
->>>>>    drivers/pinctrl/Makefile                      |  1 -
->>>>>    drivers/pinctrl/mediatek/Kconfig              | 51 ++++++++++-
->>>>>    drivers/pinctrl/mediatek/Makefile             | 63 +++++++------
->>>>>    .../{ralink => mediatek}/pinctrl-mt7620.c     | 34 +++----
->>>>>    .../{ralink => mediatek}/pinctrl-mt7621.c     | 30 +++----
->>>>>    .../{ralink => mediatek}/pinctrl-mt76x8.c     | 60 ++++++-------
->>>>>    .../pinctrl-mtmips.c}                         | 90 +++++++++----------
->>>>>    .../pinctrl-mtmips.h}                         | 16 ++--
->>>>>    .../{ralink => mediatek}/pinctrl-rt2880.c     | 20 ++---
->>>>>    .../{ralink => mediatek}/pinctrl-rt305x.c     | 44 ++++-----
->>>>>    .../{ralink => mediatek}/pinctrl-rt3883.c     | 28 +++---
->>>>>    drivers/pinctrl/ralink/Kconfig                | 40 ---------
->>>>>    drivers/pinctrl/ralink/Makefile               |  9 --
->>>>>    14 files changed, 246 insertions(+), 241 deletions(-)
->>>>>    rename drivers/pinctrl/{ralink => mediatek}/pinctrl-mt7620.c (81%)
->>>>>    rename drivers/pinctrl/{ralink => mediatek}/pinctrl-mt7621.c (80%)
->>>>>    rename drivers/pinctrl/{ralink => mediatek}/pinctrl-mt76x8.c (81%)
->>>>>    rename drivers/pinctrl/{ralink/pinctrl-ralink.c => mediatek/pinctrl-mtmips.c} (74%)
->>>>>    rename drivers/pinctrl/{ralink/pinctrl-ralink.h => mediatek/pinctrl-mtmips.h} (75%)
->>>>>    rename drivers/pinctrl/{ralink => mediatek}/pinctrl-rt2880.c (71%)
->>>>>    rename drivers/pinctrl/{ralink => mediatek}/pinctrl-rt305x.c (75%)
->>>>>    rename drivers/pinctrl/{ralink => mediatek}/pinctrl-rt3883.c (80%)
->>>>>    delete mode 100644 drivers/pinctrl/ralink/Kconfig
->>>>>    delete mode 100644 drivers/pinctrl/ralink/Makefile
->>>>>
->>>>> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
->>>>> index dcb53c4a9584..8a6012770640 100644
->>>>> --- a/drivers/pinctrl/Kconfig
->>>>> +++ b/drivers/pinctrl/Kconfig
->>>>> @@ -537,7 +537,6 @@ source "drivers/pinctrl/nomadik/Kconfig"
->>>>>    source "drivers/pinctrl/nuvoton/Kconfig"
->>>>>    source "drivers/pinctrl/pxa/Kconfig"
->>>>>    source "drivers/pinctrl/qcom/Kconfig"
->>>>> -source "drivers/pinctrl/ralink/Kconfig"
->>>>>    source "drivers/pinctrl/renesas/Kconfig"
->>>>>    source "drivers/pinctrl/samsung/Kconfig"
->>>>>    source "drivers/pinctrl/spear/Kconfig"
->>>>> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
->>>>> index d5939840bb2a..ada6ed1d4e91 100644
->>>>> --- a/drivers/pinctrl/Makefile
->>>>> +++ b/drivers/pinctrl/Makefile
->>>>> @@ -66,7 +66,6 @@ obj-y                         += nomadik/
->>>>>    obj-y                          += nuvoton/
->>>>>    obj-$(CONFIG_PINCTRL_PXA)      += pxa/
->>>>>    obj-$(CONFIG_ARCH_QCOM)                += qcom/
->>>>> -obj-$(CONFIG_PINCTRL_RALINK)   += ralink/
->>>>>    obj-$(CONFIG_PINCTRL_RENESAS)  += renesas/
->>>>>    obj-$(CONFIG_PINCTRL_SAMSUNG)  += samsung/
->>>>>    obj-$(CONFIG_PINCTRL_SPEAR)    += spear/
->>>>> diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
->>>>> index a71874fed3d6..2eeb55010563 100644
->>>>> --- a/drivers/pinctrl/mediatek/Kconfig
->>>>> +++ b/drivers/pinctrl/mediatek/Kconfig
->>>>> @@ -1,6 +1,6 @@
->>>>>    # SPDX-License-Identifier: GPL-2.0-only
->>>>>    menu "MediaTek pinctrl drivers"
->>>>> -       depends on ARCH_MEDIATEK || COMPILE_TEST
->>>>> +       depends on ARCH_MEDIATEK || RALINK || COMPILE_TEST
->>>>>
->>>>>    config EINT_MTK
->>>>>           tristate "MediaTek External Interrupt Support"
->>>>> @@ -22,6 +22,12 @@ config PINCTRL_MTK
->>>>>    config PINCTRL_MTK_V2
->>>>>           tristate
->>>>>
->>>>> +config PINCTRL_MTK_MTMIPS
->>>>> +       bool
->>>>> +       depends on RALINK
->>>>> +       select PINMUX
->>>>> +       select GENERIC_PINCONF
->>>>> +
->>>>>    config PINCTRL_MTK_MOORE
->>>>>           bool
->>>>>           depends on OF
->>>>> @@ -43,6 +49,49 @@ config PINCTRL_MTK_PARIS
->>>>>           select OF_GPIO
->>>>>           select PINCTRL_MTK_V2
->>>>>
->>>>> +# For MIPS SoCs
->>>>> +config PINCTRL_MT7620
->>>>> +       bool "MediaTek MT7620 pin control"
->>>>> +       depends on SOC_MT7620 || COMPILE_TEST
->>>>> +       depends on RALINK
->>>>> +       default SOC_MT7620
->>>>> +       select PINCTRL_MTK_MTMIPS
->>>>> +
->>>>> +config PINCTRL_MT7621
->>>>> +       bool "MediaTek MT7621 pin control"
->>>>> +       depends on SOC_MT7621 || COMPILE_TEST
->>>>> +       depends on RALINK
->>>>> +       default SOC_MT7621
->>>>> +       select PINCTRL_MTK_MTMIPS
->>>>> +
->>>>> +config PINCTRL_MT76X8
->>>>> +       bool "MediaTek MT76X8 pin control"
->>>>> +       depends on SOC_MT7620 || COMPILE_TEST
->>>>> +       depends on RALINK
->>>>> +       default SOC_MT7620
->>>>> +       select PINCTRL_MTK_MTMIPS
->>>>> +
->>>>> +config PINCTRL_RT2880
->>>>> +       bool "Ralink RT2880 pin control"
->>>>> +       depends on SOC_RT288X || COMPILE_TEST
->>>>> +       depends on RALINK
->>>>> +       default SOC_RT288X
->>>>> +       select PINCTRL_MTK_MTMIPS
->>>>> +
->>>>> +config PINCTRL_RT305X
->>>>> +       bool "Ralink RT305X pin control"
->>>>> +       depends on SOC_RT305X || COMPILE_TEST
->>>>> +       depends on RALINK
->>>>> +       default SOC_RT305X
->>>>> +       select PINCTRL_MTK_MTMIPS
->>>>> +
->>>>> +config PINCTRL_RT3883
->>>>> +       bool "Ralink RT3883 pin control"
->>>>> +       depends on SOC_RT3883 || COMPILE_TEST
->>>>> +       depends on RALINK
->>>>> +       default SOC_RT3883
->>>>> +       select PINCTRL_MTK_MTMIPS
->>>>> +
->>>>
->>>> I am not a Kconfig expert at all but...
->>>>
->>>> Should not all of these be depends on SOC_XXX || (COMPILE_TEST &&
->>>> RALINK) and avoid the " depends on RALINK" next line in all of them?
->>
->> This seems to do the same thing but I'm following the "either change
->> them all or fit into the crowd" ideology.
->>
->>>>
->>>> Just asking since we have yet arch read and write register operations
->>>> in pinctrl common ralink code. Having in this way, when we address
->>>> this arch thing  in the next series just removing the "&& RALINK" part
->>>> makes the review pretty obvious.
->>
->> You'd have to change RALINK with OF since we're still depending on that.
->> RALINK selects OF by default so it's currently a hidden dependency.
->>
->>>>
->>>> Other than that, changes look good to me.
->>>
->>> I think "depends on SOC_XXX || (COMPILE_TEST && MIPS)" would work also
->>> and might be more accurate for compile testing targets.
-> 
-> Are you sure? SOC_XXX here is already being enabled only if RALINK is
-> already enabled, right? [0]
+>>>>> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
+>>>>> I assume?
+>>>> Yes, sorry for that. I got distracted while writing and used the wrong
+>>>> branch to look this up.
+>>> Alex: Probably worth adding that to the list in the cover letter as it looks like you were planning on a v4 anyway (which I guess you now have to do, given that I just added the issue to RISC-V).
+>> The only use that is uapi is the *default* length of the command line if the kernel header doesn't include it (in the case of x86, it is in the bzImage header, but that is atchitecture- or even boot format-specific.)
+>
+> Is COMMAND_LINE_SIZE what you call the default length? Does that mean 
+> that to you the patchset is wrong?
 
-I'm not sure who's your reply to, or what it's about here.
+On x86, the COMMAND_LINE_SIZE value is already not part of a uapi header,
+but instead (since bzImage format version 2.06) is communicated from
+the kernel to the boot loader, which then knows how much data the
+kernel will read (at most) from the command line.
 
-> 
->>
->> This is not OK in both cases. If the driver is dependent on Ralink
->> architecture code, choosing any other MIPS platform will make the driver
->> available to compile, which will fail.
-> 
-> SOC_XXX is already dependent on RALINK for real uses but the driver is
-> going to be selected for other MIPS platforms only for COMPILE_TEST
-> targets. Ideally drivers should be arch agnostic so can be selected
-> for any single arch build. Now we have arch dependent read and write
-> calls in the code, so you need the right headers to be properly found
-> to be able to compile testing. I think MIPS is enough dependency here
-> to properly find them. But if not, this should be (COMPILE_TEST &&
-> RALINK)
+Most x86 kernels these days are booted using UEFI, which I think has
+no such interface, the firmware just passes the command line and a
+length, but has no way of knowing if the kernel will truncate this.
+I think that is the same as with any other architecture that passes
+the command line through UEFI, DT or ATAGS, all of which use
+length/value pairs.
 
-I expect below to work without requiring the MIPS option.
+Russell argued on IRC that this can be considered an ABI since a
+boot loader may use its knowledge of the kernel's command line size
+limit to reject long command lines. On the other hand, I don't
+think that any boot loader actually does, they just trust that it
+fits and don't have a good way of rejecting invalid configuration
+other than truncating and/or warning.
 
-ifeq ($(CONFIG_COMPILE_TEST),y)
-CFLAGS_pinctrl-mtmips.o		+= -I$(srctree)/arch/mips/include
-endif
+One notable exception I found while looking through is the old
+(pre-ATAGS) parameter structure on Arm, which uses COMMAND_LINE_SIZE
+as part of the structure definition. Apparently this was deprecated
+22 years ago, so hopefully the remaining riscpc and footbridge
+users have all upgraded their bootloaders.
 
-> 
->>
->> If the driver is independent of Ralink architecture code, you're
->> limiting the driver to be compiled only when a MIPS platform is selected.
-> 
-> So... how are you planning to allow compile testing of the driver in
-> any single arch when we get rid of all the arch dependent code? If you
-> make everything dependent on RALINK you cannot.
+The only other case I could find that might go wrong is
+m68knommu with a few files copying a COMMAND_LINE_SIZE sized
+buffer from flash into a kernel buffer:
 
-I intend to make it dependent on OF, not RALINK.
+arch/m68k/coldfire/m5206.c:void __init config_BSP(char *commandp, int size)
+arch/m68k/coldfire/m5206.c-{
+arch/m68k/coldfire/m5206.c-#if defined(CONFIG_NETtel)
+arch/m68k/coldfire/m5206.c-     /* Copy command line from FLASH to local buffer... */
+arch/m68k/coldfire/m5206.c-     memcpy(commandp, (char *) 0xf0004000, size);
+arch/m68k/coldfire/m5206.c-     commandp[size-1] = 0;
+arch/m68k/coldfire/m5206.c-#endif /* CONFIG_NETtel */
 
-Arınç
+     Arnd
