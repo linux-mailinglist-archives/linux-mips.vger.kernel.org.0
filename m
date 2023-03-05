@@ -2,118 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE816AACF0
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Mar 2023 23:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F84F6AAE98
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Mar 2023 09:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjCDWPu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 4 Mar 2023 17:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
+        id S229519AbjCEIll (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 5 Mar 2023 03:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjCDWPt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Mar 2023 17:15:49 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C66E1ACD6
-        for <linux-mips@vger.kernel.org>; Sat,  4 Mar 2023 14:15:48 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id A7F915C00AD;
-        Sat,  4 Mar 2023 17:15:47 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 04 Mar 2023 17:15:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1677968147; x=
-        1678054547; bh=YAu1/qlx37xuX26VH7NcnTQfwdpQul+z5p/k8GJJKM4=; b=s
-        0J9F/KT6qdoeJGU9j9B5SiHqk9O0lRV2rnIPdw8GLtB8rc9qROQ0JM3kUkIAoDp4
-        zzUH4jxJKZLMWY08tgtBGcY6r7xu+mLTQR6tTfj6jp/F1IOMXuYu2eG8uvle3i0/
-        i2jMhnlBse9FMYYtfEKAygZCAEv6qEQqBHroX3W8dMyg4y/bQON0xnQOAOAHeN7t
-        F9SOO1FrGl0++C7XAMD0bLLXupe3ZAhKTLne6K0rsUVYNYtUm0NuSNqSa1RbYazm
-        02tYW1ubLjDZ9hMG/T9oKsdYfp2z6nZJIWg6EqJ/OwWnKhW2y6CpF4EYtx2rJ3xY
-        omKezaNM63ZIDu6UVr+EQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677968147; x=
-        1678054547; bh=YAu1/qlx37xuX26VH7NcnTQfwdpQul+z5p/k8GJJKM4=; b=h
-        sJyvQ8V6uM6dbztnm7oE9a4iHI+hZjuVB8fnylA32Xmf9U5A2T5lqHg0mhScd8HS
-        IVZQmG9kn3T5BIcruwu/OwVpVIi7UWTA4Fs5GrgpTyhIsxYQTwcGMgndmsRuYkuf
-        dlTyC+fmscDVkeFEJXnD2yF6sA7LIvGKG5Sou0sAw5NEFrRWl+zxeSEibQIwBtX9
-        WNJSpp7LtGZrqE8hx4qyWZZ/udcPDc2bp42Q11BGFvA3uFuvszBnItYMwKooYV9x
-        oDAE4lvCQCfEDybMy2IuEn/d5rgAtCQXPuEqTf0djTh+ciRR1nXQbU/20ec+o7uo
-        DCuPQMPABrhBh8AZrh09w==
-X-ME-Sender: <xms:E8MDZPdhjl-gx1hW9pIUWI9zHQLYcNOxzCTUEGXhXUxfYn80WBHXiw>
-    <xme:E8MDZFO8TWUsNQYRKA4JfYwSN8fa68z_HvnhRkHAGCXsr3-L1JVOHRt7xyLL1eua0
-    z8gHIk-YQwmbbTyCC0>
-X-ME-Received: <xmr:E8MDZIgZMIfoEO_ODm-hX71Lufk938TfRikUxV0DuMYQXbFsHJHYoqWtsw_L>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtuddgudehiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestd
-    ekredtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigr
-    nhhgsehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeefledufeehgedvue
-    dvvdegkefgvddttedtleeiiefhgeetudegkefhvdfhjeeftdenucevlhhushhtvghrufhi
-    iigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflh
-    ihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:E8MDZA97roQuP0W6fakfldsfsMldFhbciz-NnLu0Aw1OT2NpbYvfFg>
-    <xmx:E8MDZLuj8fBdf4wU87_sJL9FBXbcI1YGx7uKa63kla1iYzi0A4NT9A>
-    <xmx:E8MDZPFUR0ucndDlX1FHECdshcbSrxgMJa4OXa2LaNucmVg7Da_0mA>
-    <xmx:E8MDZE5Nqa_2Z2wT-xlDMlkGQjmxMFIsEpEo8WkIwyJ65cxwx0ENkQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 4 Mar 2023 17:15:46 -0500 (EST)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, philmd@linaro.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 12/12] MIPS: generic: Enable all CPUs supported by virt board in Kconfig
-Date:   Sat,  4 Mar 2023 22:15:24 +0000
-Message-Id: <20230304221524.47160-13-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230304221524.47160-1-jiaxun.yang@flygoat.com>
+        with ESMTP id S229379AbjCEIll (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Mar 2023 03:41:41 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE8114EBD
+        for <linux-mips@vger.kernel.org>; Sun,  5 Mar 2023 00:41:39 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bi9so8902964lfb.2
+        for <linux-mips@vger.kernel.org>; Sun, 05 Mar 2023 00:41:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678005698;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l/6jq56Yvc36xd1OM1A2FdfBvyFdAynxYAYf7yoRefU=;
+        b=pP/gZGnFOsR0wCNbLoe32dFHLTNuaNiBtIRtGyO9SioqV5xsoH7ePuv0xEjVbPSXEe
+         Y1bFIlVfF84xlI35V6QoyWedzr05Xp+uiJha6gZtqnsaEXyWa8IRUW04BnH7+d3gZHum
+         0drC3qBIdt5SmMEc3cgw/ipn73zblPw3Ey3VlrxAuS+I9Y5ad4WaV1dFeLGGF3wJsmPh
+         vjvxB4TlAvjpT37DTYT8+Qe4QTu6rgPIMk09dnxQYdb70M+JJU4m67K6P1WPcDG7jEqL
+         j0HCDrIxPzG5HyGPTFN4PUF2gpfmWLGy2xRIBoUmVjHlWmEerohe/fs+IkDJsEx9nTOi
+         ONSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678005698;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l/6jq56Yvc36xd1OM1A2FdfBvyFdAynxYAYf7yoRefU=;
+        b=D7sLCY/3C41rRlNBlvYMz6/8W14L7E8DqFhl+9l+JjkQAGxkzAoLQDiW0aSd+1dDqA
+         VdgLpeu9p4f1kexSlfSJRnlGCWwmFj0aewgny46g+7te1FbwfeUjn60PVgAt8bvmeJsr
+         2W2pNnuUsUCZQqpmLW31p9xQkAE8/diqB/mX9MkkOj43wsflAGyTUWqf35vzTopzKQH/
+         MmE9VgiMoYLV125tV7ajfqMPYRgKJ+IpOrnriOVAjnH9R2OEisaX1eTOv5s8LbYPMz1o
+         H3xpGHAoS5q9xMce4H1k4DiJqYDGix+JsXJXcy5F8fGa7fWWVa3MZfHUD6Ku0c2ncJCZ
+         AfVg==
+X-Gm-Message-State: AO0yUKUyeoa/ILPUa8MyzdVD5z0eSY/VCGMnr0x1Q3AMHeZlfm7j9MCl
+        pZav/Xr/f12Sxknhi98IG7p5dFxOp8A=
+X-Google-Smtp-Source: AK7set8K7EUQYZl/Ut9AIRGhjvwu5TxRVlV73aqye7TMxkcTM2mAHWJ8joWqC/Xk7qf3Hje9uxRLDQ==
+X-Received: by 2002:a05:6512:4d9:b0:4db:3e7e:51dc with SMTP id w25-20020a05651204d900b004db3e7e51dcmr2115824lfq.55.1678005697860;
+        Sun, 05 Mar 2023 00:41:37 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.79.54])
+        by smtp.gmail.com with ESMTPSA id t8-20020a2e9d08000000b00295a3a64816sm1174092lji.2.2023.03.05.00.41.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Mar 2023 00:41:37 -0800 (PST)
+Subject: Re: [PATCH 06/12] MIPS: c-octeon: Provide alternative SMP cache flush
+ function
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, philmd@linaro.org
 References: <20230304221524.47160-1-jiaxun.yang@flygoat.com>
+ <20230304221524.47160-7-jiaxun.yang@flygoat.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <defab4e3-85c7-1fed-729f-6eb12a4b7a0c@gmail.com>
+Date:   Sun, 5 Mar 2023 11:41:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230304221524.47160-7-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Enable extra CPUs that may be supported by virt board, including
-R4x00 (R4000 in QEMU), Cavium Octeon (Octeon68XX in QEMU), loongson2e,
-loongson2f.
+Hello!
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+On 3/5/23 1:15 AM, Jiaxun Yang wrote:
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 940ade1c9449..53160d49387c 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -155,12 +155,16 @@ config MIPS_GENERIC_KERNEL
- 	select PCI_DRIVERS_GENERIC
- 	select SMP_UP if SMP
- 	select SWAP_IO_SPACE
-+	select SYS_HAS_CPU_CAVIUM_OCTEON
-+	select SYS_HAS_CPU_LOONGSON2E
-+	select SYS_HAS_CPU_LOONGSON2F
- 	select SYS_HAS_CPU_MIPS32_R1
- 	select SYS_HAS_CPU_MIPS32_R2
- 	select SYS_HAS_CPU_MIPS32_R6
- 	select SYS_HAS_CPU_MIPS64_R1
- 	select SYS_HAS_CPU_MIPS64_R2
- 	select SYS_HAS_CPU_MIPS64_R6
-+	select SYS_HAS_CPU_R4X00
- 	select SYS_SUPPORTS_32BIT_KERNEL
- 	select SYS_SUPPORTS_64BIT_KERNEL
- 	select SYS_SUPPORTS_BIG_ENDIAN
--- 
-2.34.1
+> Curretly c-octeon relies on octeon's own smp function to flush
 
+   Currently.
+
+> I-Cache. However this function is not available on generic platform.
+> 
+> Just use smp_call_function_many on generic platform.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/mm/c-octeon.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/mm/c-octeon.c b/arch/mips/mm/c-octeon.c
+> index c7ed589de882..61db09e5044c 100644
+> --- a/arch/mips/mm/c-octeon.c
+> +++ b/arch/mips/mm/c-octeon.c
+> @@ -83,8 +83,14 @@ static void octeon_flush_icache_all_cores(struct vm_area_struct *vma)
+>  	else
+>  		mask = *cpu_online_mask;
+>  	cpumask_clear_cpu(cpu, &mask);
+> -	for_each_cpu(cpu, &mask)
+> +#ifdef CONFIG_CAVIUM_OCTEON_SOC
+> +	for_each_cpu(cpu, &mask) {
+>  		octeon_send_ipi_single(cpu, SMP_ICACHE_FLUSH);
+> +	}
+
+   I think {} aren't needed here.
+
+> +#else
+> +	smp_call_function_many(&mask, (smp_call_func_t)octeon_local_flush_icache,
+> +			       NULL, 1);
+> +#endif
+>  
+>  	preempt_enable();
+>  #endif
+
+MBR, Sergey
