@@ -2,119 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8ED6AAEC8
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Mar 2023 10:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4836AB011
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Mar 2023 14:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCEJaH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 5 Mar 2023 04:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S229495AbjCENwQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 5 Mar 2023 08:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCEJaH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Mar 2023 04:30:07 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D897AB7;
-        Sun,  5 Mar 2023 01:30:06 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id z6so7651640qtv.0;
-        Sun, 05 Mar 2023 01:30:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678008605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vgd0m+/MCaDvNZBjSvDtubD53Qmudtg807BEeMSQ1f0=;
-        b=TgJfpiw6bQwfYRwu06aJLoVRQ9AE57Buw1rCCjqjSdej4lOQnY/ypZTNIoWmAIBmcL
-         Em++mWom34GrU4QJQSgXF15ULPCUPb/4v1xcaXvnK9adWv2o5WO+jsV3qcZoB8fq8cfP
-         C16Vo+nmsMlH81ypwR1gf6WQQy9AkmOpWRKfzAlTSoIbNgpsw/iN/XJstKm/VTV/m6b5
-         C+HM8MgMUDoy1HBaNpfW5TVDjg9M8IVRtorxSvyjfJmcknHNOnqDYSicmwfJKT7Dqr7R
-         3437uLqqzIs8lQEydVsYcHvZjyo0Tl6HMuhYm+VtBJ3heeCQzANIYFy08q5c7pVDG8bT
-         6Dmw==
-X-Gm-Message-State: AO0yUKWT0vT+HQ+ETIXCy0EYolndTCyiDe3PUOsB2M6jqQWUa9Y1hNma
-        CRGZCzcwa0nO3eBfdnE778jrRQ07yhEs+Q==
-X-Google-Smtp-Source: AK7set/Qet7Y2xObux9A9+h42PzkaHtV04/tBNVDpaZLXtJ4Bp9Tna6wIAKORhr1xA+Wc7IjPVmuMw==
-X-Received: by 2002:a05:622a:19a7:b0:3b8:2e92:94e7 with SMTP id u39-20020a05622a19a700b003b82e9294e7mr13025765qtc.44.1678008605119;
-        Sun, 05 Mar 2023 01:30:05 -0800 (PST)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id l11-20020a37f90b000000b0071ddbe8fe23sm5221567qkj.24.2023.03.05.01.30.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 01:30:04 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-536be69eadfso128890197b3.1;
-        Sun, 05 Mar 2023 01:30:04 -0800 (PST)
-X-Received: by 2002:a81:af0c:0:b0:52f:1c23:ef1 with SMTP id
- n12-20020a81af0c000000b0052f1c230ef1mr4669025ywh.5.1678008604127; Sun, 05 Mar
- 2023 01:30:04 -0800 (PST)
+        with ESMTP id S229773AbjCENwP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Mar 2023 08:52:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3EDDBC4;
+        Sun,  5 Mar 2023 05:52:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 595FD60AD7;
+        Sun,  5 Mar 2023 13:52:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33604C4339B;
+        Sun,  5 Mar 2023 13:52:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678024333;
+        bh=Hzk9IvwA7y6VQfWSvbFOzDfMXY+1sArz+O0UOp50ojY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BqWRBpwT0S7ggDnoEAzSFCnw90ZRyuSZDWLRKeoZKdhds+cr5eEI6Z4Zov1za4dSu
+         b2XD8y2gOb0skqzicU55iR6HVsBSWw6Wj523kUUeACXo0zs9sNMIBq7lOP5vffYn6l
+         1B10wUrJvAeaXndB5CV+kMN/V6vKP41cnOsBguGcHnxkP3hYwkqKblNKkuXQOJvahB
+         VuAknTlKr4tsymozzjGG3kH16svjjh5m2Jwl+OtfMWVdBtt7VFZqoWyCIQNek4gYFA
+         fjs5n4MrM2O8PiDij8z8Tew6ry29v0wXL2PS1ZP08M8SJzKVz0JU0cvothIook69aD
+         5TR6/S6G+xIOw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     xurui <xurui@kylinos.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 02/16] MIPS: Fix a compilation issue
+Date:   Sun,  5 Mar 2023 08:51:53 -0500
+Message-Id: <20230305135207.1793266-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230305135207.1793266-1-sashal@kernel.org>
+References: <20230305135207.1793266-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20230303102817.212148-1-bhe@redhat.com> <20230303102817.212148-3-bhe@redhat.com>
- <87sfej1rie.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87sfej1rie.fsf@mpe.ellerman.id.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 5 Mar 2023 10:29:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXoM24uAZGcjBtscNMOSY_+4u08PEOR7gOfCH7jvCceDg@mail.gmail.com>
-Message-ID: <CAMuHMdXoM24uAZGcjBtscNMOSY_+4u08PEOR7gOfCH7jvCceDg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] arch/*/io.h: remove ioremap_uc in some architectures
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        mcgrof@kernel.org, hch@infradead.org, linux-alpha@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Michael,
+From: xurui <xurui@kylinos.cn>
 
-On Sun, Mar 5, 2023 at 10:23 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> Baoquan He <bhe@redhat.com> writes:
-> > ioremap_uc() is only meaningful on old x86-32 systems with the PAT
-> > extension, and on ia64 with its slightly unconventional ioremap()
-> > behavior, everywhere else this is the same as ioremap() anyway.
-> >
-> > Here, remove the ioremap_uc() definition in architecutures other
-> > than x86 and ia64. These architectures all have asm-generic/io.h
-> > included and will have the default ioremap_uc() definition which
-> > returns NULL.
-> >
-> > Note: This changes the existing behaviour and could break code
-> > calling ioremap_uc(). If any ARCH meets this breakage and really
-> > needs a specific ioremap_uc() for its own usage, one ioremap_uc()
-> > can be added in the ARCH.
->
-> I see one use in:
->
-> drivers/video/fbdev/aty/atyfb_base.c:        par->ati_regbase = ioremap_uc(info->fix.mmio_start, 0x1000);
->
->
-> Which isn't obviously x86/ia64 specific.
->
-> I'm pretty sure some powermacs (powerpc) use that driver.
+[ Upstream commit 109d587a4b4d7ccca2200ab1f808f43ae23e2585 ]
 
-I originally wrote that driver for CHRP, so yes.
+arch/mips/include/asm/mach-rc32434/pci.h:377:
+cc1: error: result of ‘-117440512 << 16’ requires 44 bits to represent, but ‘int’ only has 32 bits [-Werror=shift-overflow=]
 
-> Maybe that exact code path is only reachable on x86/ia64? But if so
-> please explain why.
->
-> Otherwise it looks like this series could break that driver on powerpc
-> at least.
+All bits in KORINA_STAT are already at the correct position, so there is
+no addtional shift needed.
 
-Indeed.
+Signed-off-by: xurui <xurui@kylinos.cn>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/include/asm/mach-rc32434/pci.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/arch/mips/include/asm/mach-rc32434/pci.h b/arch/mips/include/asm/mach-rc32434/pci.h
+index 9a6eefd127571..3eb767c8a4eec 100644
+--- a/arch/mips/include/asm/mach-rc32434/pci.h
++++ b/arch/mips/include/asm/mach-rc32434/pci.h
+@@ -374,7 +374,7 @@ struct pci_msu {
+ 				 PCI_CFG04_STAT_SSE | \
+ 				 PCI_CFG04_STAT_PE)
+ 
+-#define KORINA_CNFG1		((KORINA_STAT<<16)|KORINA_CMD)
++#define KORINA_CNFG1		(KORINA_STAT | KORINA_CMD)
+ 
+ #define KORINA_REVID		0
+ #define KORINA_CLASS_CODE	0
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.39.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
