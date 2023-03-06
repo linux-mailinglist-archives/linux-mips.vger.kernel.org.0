@@ -2,154 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C96E6AB8BC
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Mar 2023 09:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558316AB9DA
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Mar 2023 10:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCFIri (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Mar 2023 03:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S229707AbjCFJ3i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Mar 2023 04:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjCFIrg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 03:47:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E24859F7
-        for <linux-mips@vger.kernel.org>; Mon,  6 Mar 2023 00:46:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678092411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vSd8hwHPbmWReXdvpQsZ0BwbyP6BUUMBochFuTwRaSI=;
-        b=L4suZ5zF0+S2034UcFpDVWLXVGyQVJPW+/B+qkkV5hpQn8a8zRXwMAXiJ0+5WJT7HL6On6
-        jTke5COWuR+ialbEZp7IYwNzFi/fKB4bSRxza0JRcWrqQC6SlJFEPbUAJILllqYDncjkVa
-        z9zjCSh3F5c0+H+VoEllLgEVKC270n0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-100-LYVAfDgZPR-21MvuG0sNlw-1; Mon, 06 Mar 2023 03:46:44 -0500
-X-MC-Unique: LYVAfDgZPR-21MvuG0sNlw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2893E802C18;
-        Mon,  6 Mar 2023 08:46:43 +0000 (UTC)
-Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 20EFAC16029;
-        Mon,  6 Mar 2023 08:46:41 +0000 (UTC)
-Date:   Mon, 6 Mar 2023 16:46:38 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mips: add <asm-generic/io.h> including
-Message-ID: <ZAWobtBuBYBng6s+@MiWiFi-R3L-srv>
-References: <20230303102817.212148-1-bhe@redhat.com>
- <20230303102817.212148-2-bhe@redhat.com>
- <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
+        with ESMTP id S229715AbjCFJ3h (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 04:29:37 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BBD3C12
+        for <linux-mips@vger.kernel.org>; Mon,  6 Mar 2023 01:29:35 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id o2so8468118vss.8
+        for <linux-mips@vger.kernel.org>; Mon, 06 Mar 2023 01:29:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678094974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qvQIkDYLjKi1xYa8PrsuWYhMkTUsPQ5bO7uaHkoyHmk=;
+        b=mCi1+sduhkZCcF2FmwXn2Dqy97YfHE+Tq+pWTIJMTliBycII7wVJmM/NdvGq1R2U1g
+         pAgO1lGyMVTxhg7Xp9X9Yh02GvDU1hMtNuMLFLXT1BoSwwt+zeD1C8VkxRQpeOpHUhVc
+         Ta5lzEE+glpZkBMY3x3bgr5kFtpDYGiBfOP0iBM2LINiGBVnmTdAdNwXe12JpkjS+wHw
+         hCqyVrgattuUkwoeXo1Fsxr25p+WL6qkAyg59W/V0j5i0L2f1Iw23CBpS9/tp83roNLd
+         jwJT0w+ZkprunZPQzx5gWQwIYl6Z7hsCdXiZQEvFDvRjWdwgKTazxUSUQHNVO2177bD6
+         TS2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678094974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qvQIkDYLjKi1xYa8PrsuWYhMkTUsPQ5bO7uaHkoyHmk=;
+        b=rWcrfbFoWWTgt3CW7/A6Xyp+c3QqK+kedbXdAprQT6gb6ih0xJlzVu4To6ZzPR6aIu
+         07QMGnv5IL44CUqchqSyi0J7S/RKfG9dwucw0mkk/C82eem1Eu5Wj9QUJ5FcSuRNErxX
+         qhHM3hfxlXXWBMlLFuVRIa8VQoBmrzV+2K+KXnq/TaDk3GKn8C8r0flhweMOynGyNSjU
+         YfGrRYbiVhgrEzwn4p021p4eHgCZ1uXJ/FIE1GSxVDxS9yIgRPyeEtfbii2lyMFtUmRZ
+         WwN1frGQv/x2hGUczIskV5PRwMAXAFubdzgPKbYlJsVkdPYYY6V7KePA+ZSughXNNkIJ
+         Mu7g==
+X-Gm-Message-State: AO0yUKVgxuGsbNZoelsq/cUA77SaD28pF/gUOCAeR++rLq4N0gK2UyOJ
+        7m+Pfop3FwFZospFX01bps/3vNPSHdoXK945Sinwrr7FoBQoNqvz
+X-Google-Smtp-Source: AK7set8up+nvdh8MZZ//VuYTKLoxEsHVHN4YdURn1YFhptrsjt+rU4qjrNP6eUQ9U+bIEeMCcFd/KBNJ0/AWG7eq9xc=
+X-Received: by 2002:a67:ec4f:0:b0:411:c9c5:59ae with SMTP id
+ z15-20020a67ec4f000000b00411c9c559aemr6763838vso.5.1678094974566; Mon, 06 Mar
+ 2023 01:29:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230302125215.214014-1-keguang.zhang@gmail.com> <20230302125215.214014-2-keguang.zhang@gmail.com>
+In-Reply-To: <20230302125215.214014-2-keguang.zhang@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Mar 2023 10:29:23 +0100
+Message-ID: <CAMRc=Me=Yrr5BuRaMd4r91URzmdYHWUvVGvLL9YFuZPaV0WYFA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] gpio: loongson1: Convert to SPDX identifier
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/03/23 at 01:40pm, Arnd Bergmann wrote:
-> On Fri, Mar 3, 2023, at 11:28, Baoquan He wrote:
-> > With the adding, some default ioremap_xx methods defined in
-> > asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-> > NULL.
-> >
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Cc: Helge Deller <deller@gmx.de>
-> > Cc: Serge Semin <fancer.lancer@gmail.com>
-> > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > Cc: linux-mips@vger.kernel.org
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> I think this is all good. I had look at what cleanups we could do as
-> follow-ups:
+On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail.c=
+om> wrote:
+>
+> Use SPDX-License-Identifier instead of the license text and
+> update the author information.
+>
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+> V1 -> V2: Keep GPLv2, just convert to SPDX identifier
+> ---
+>  drivers/gpio/gpio-loongson1.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.=
+c
+> index 5d90b3bc5a25..8862c9ea0d41 100644
+> --- a/drivers/gpio/gpio-loongson1.c
+> +++ b/drivers/gpio/gpio-loongson1.c
+> @@ -1,11 +1,8 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * GPIO Driver for Loongson 1 SoC
+>   *
+> - * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com>
+> - *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+> + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
+>   */
+>
+>  #include <linux/module.h>
+> @@ -90,6 +87,6 @@ static struct platform_driver ls1x_gpio_driver =3D {
+>
+>  module_platform_driver(ls1x_gpio_driver);
+>
+> -MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
 
-Thanks a lot for careful reviewing and great suggestions.
+Why are you removing credits of the old author?
 
-> 
-> > +#define phys_to_virt phys_to_virt
-> >  static inline void * phys_to_virt(unsigned long address)
-> >  {
-> >  	return __va(address);
-> 
-> This is the same as the asm-generic version, so the mips definition
-> is no longer needed.
+Bart
 
-Agree, I can clean this up with a followup patch.
-
-> 
-> > @@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
-> >  __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
-> >  #endif
-> > 
-> > +#define readb readb
-> > +#define readw readw
-> > +#define readl readl
-> > +#define writeb writeb
-> > +#define writew writew
-> > +#define writel writel
-> > +
-> > +#ifdef CONFIG_64BIT
-> > +#define readq readq
-> > +#define writeq writeq
-> > +#define __raw_readq __raw_readq
-> > +#define __raw_writeq __raw_writeq
-> > +#endif
-> > +
-> > +#define __raw_readb __raw_readb
-> > +#define __raw_readw __raw_readw
-> > +#define __raw_readl __raw_readl
-> > +#define __raw_writeb __raw_writeb
-> > +#define __raw_writew __raw_writew
-> > +#define __raw_writel __raw_writel
-> 
-> The mips code defines the __raw variants with slightly different
-> semantics on both barriers and byteswap, which makes it impractical
-> to share any of the above.				
-> 
-> > +#define memset_io memset_io
-> >  static inline void memset_io(volatile void __iomem *addr, unsigned 
-> > char val, int count)
-> >  {
-> >  	memset((void __force *) addr, val, count);
-> >  }
-> > +#define memcpy_fromio memcpy_fromio
-> >  static inline void memcpy_fromio(void *dst, const volatile void 
-> > __iomem *src, int count)
-> >  {
-> >  	memcpy(dst, (void __force *) src, count);
-> >  }
-> > +#define memcpy_toio memcpy_toio
-> 
-> These are again the same as the generic version
-
-OK, can remove this with the above change.
-
+> +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+>  MODULE_DESCRIPTION("Loongson1 GPIO driver");
+>  MODULE_LICENSE("GPL");
+> --
+> 2.34.1
+>
