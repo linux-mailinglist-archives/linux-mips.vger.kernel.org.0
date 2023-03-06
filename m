@@ -2,145 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1210F6AB9F8
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Mar 2023 10:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7416ABA16
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Mar 2023 10:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjCFJfi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Mar 2023 04:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S229638AbjCFJjy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Mar 2023 04:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjCFJfh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 04:35:37 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D56CA275;
-        Mon,  6 Mar 2023 01:35:33 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id D7AAE60017;
-        Mon,  6 Mar 2023 09:35:17 +0000 (UTC)
-Message-ID: <caaed678-4a5a-70e5-2ee7-cb2c8042afc0@ghiti.fr>
-Date:   Mon, 6 Mar 2023 10:35:17 +0100
+        with ESMTP id S230062AbjCFJjo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 04:39:44 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF9A211C5
+        for <linux-mips@vger.kernel.org>; Mon,  6 Mar 2023 01:39:41 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id f20so5985680uam.3
+        for <linux-mips@vger.kernel.org>; Mon, 06 Mar 2023 01:39:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678095580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EG4fYlpMlkVYz3KkfqTU8Qlmp6+wB13r9lUMK+XkXD0=;
+        b=aGmb2xBNNCIunGeDl9p7uscsTgiuO1Q8udjIOerQ5AtqIC/QLR0Wa6xi/zpiP1mfXU
+         841m5SKCVKYvBcOME9xiLpz7wXvqzX+5tDMtIqIp6/yd2QGdmbfkSZ0pp8KHlQptuFMO
+         wjyjkzDX7mpfRrY4xWscFNTnz4Q+Bu1i8H/leRauyP3v5YDCVlc5D7nJe48dvF/bOn4i
+         QzqBukZn5lSAXeW6byC5i7/tTYL16Gvq8443z1U93byxXGKgNfYdWcAz+7tJhp1KQG6/
+         AHyFpe6/P5HJRZ9WBZdwRr3cjqsuzSAIOpXgER9y4ivMhw4ZbiH5I+CKiALPec9YZ+zf
+         ARaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678095580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EG4fYlpMlkVYz3KkfqTU8Qlmp6+wB13r9lUMK+XkXD0=;
+        b=kXRaM6I4caOvuoNzqlyQN17IsxI4VgCU6JGj5aW9WXg1NbRy+JZ5UXv9zW+kZE8EBv
+         geXmTtwoANh8LCYkq2OQiAIhKTUj+zvhKV5O3vLIPuziGP8uLc5oievJghU0Kd4BBlfB
+         TUHLGTVYxJJx4ZLLFjOfyOs16kmzZgmFh5LC++l45qgN1fNgMuQJwrFtHhaPwQf70+C1
+         uc1uYKuMPGW9aGipprhnfNcbelctx1wd7uouWQt3RBwXY8hWAS/Q4aTDVULNwGGuaXj7
+         ZItrKnYYtixhjxCmoRSMd5jKG4PInoX/Ts2HkqlEaRyp/2GywoJI7bXAG6Ef3zg2kSkL
+         fynw==
+X-Gm-Message-State: AO0yUKUsL4Iqc7Vqfe4SqDYJENW77SSQkj7W7CHFJZbbVR3zTu9WB+yW
+        Di9YOw87p1BjlwbO4O6Dyh/4pqnQErXfpSvVi2shcQ==
+X-Google-Smtp-Source: AK7set9u32uo6jrigMFm0tYwWs6u6fKLZKYVnAgovZrS1Q70HbqXU/8l9eDzZI+y+OWVGtClmC8X+d621sscPTLhmHc=
+X-Received: by 2002:a1f:2dcb:0:b0:401:42e5:6d2e with SMTP id
+ t194-20020a1f2dcb000000b0040142e56d2emr6159927vkt.1.1678095580318; Mon, 06
+ Mar 2023 01:39:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        ysato@users.osdn.me, Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        chris@zankel.net, Max Filippov <jcmvbkbc@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-References: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
- <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
- <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
- <c500840b-b57d-47f2-a3d9-41465b10ffae@app.fastmail.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <c500840b-b57d-47f2-a3d9-41465b10ffae@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230302125215.214014-1-keguang.zhang@gmail.com> <20230302125215.214014-5-keguang.zhang@gmail.com>
+In-Reply-To: <20230302125215.214014-5-keguang.zhang@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Mar 2023 10:39:29 +0100
+Message-ID: <CAMRc=McLt2+NJhmzFRuKF5LWMOqyZa-Y-eH7Ecx2ZiMHsTf1ag@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] gpio: loongson1: Add DT support
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-On 3/3/23 17:40, Arnd Bergmann wrote:
-> On Fri, Mar 3, 2023, at 12:59, Alexandre Ghiti wrote:
->> On 3/2/23 20:50, H. Peter Anvin wrote:
->>> On March 1, 2023 7:17:18 PM PST, Palmer Dabbelt <palmer@dabbelt.com> wrote:
->>>>>> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
->>>>>> I assume?
->>>>> Yes, sorry for that. I got distracted while writing and used the wrong
->>>>> branch to look this up.
->>>> Alex: Probably worth adding that to the list in the cover letter as it looks like you were planning on a v4 anyway (which I guess you now have to do, given that I just added the issue to RISC-V).
->>> The only use that is uapi is the *default* length of the command line if the kernel header doesn't include it (in the case of x86, it is in the bzImage header, but that is atchitecture- or even boot format-specific.)
->> Is COMMAND_LINE_SIZE what you call the default length? Does that mean
->> that to you the patchset is wrong?
-> On x86, the COMMAND_LINE_SIZE value is already not part of a uapi header,
-> but instead (since bzImage format version 2.06) is communicated from
-> the kernel to the boot loader, which then knows how much data the
-> kernel will read (at most) from the command line.
+On Thu, Mar 2, 2023 at 1:53=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail.c=
+om> wrote:
 >
-> Most x86 kernels these days are booted using UEFI, which I think has
-> no such interface, the firmware just passes the command line and a
-> length, but has no way of knowing if the kernel will truncate this.
-> I think that is the same as with any other architecture that passes
-> the command line through UEFI, DT or ATAGS, all of which use
-> length/value pairs.
+> This patch adds DT support for Loongson-1 GPIO driver.
 >
-> Russell argued on IRC that this can be considered an ABI since a
-> boot loader may use its knowledge of the kernel's command line size
-> limit to reject long command lines. On the other hand, I don't
-> think that any boot loader actually does, they just trust that it
-> fits and don't have a good way of rejecting invalid configuration
-> other than truncating and/or warning.
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+> V1 -> V2: Let gpiolib parse ngpios property
+>           Remove unnecessary alias id parsing
+>           Remove superfluous initialization done by bgpio_init()
+>           Add MODULE_DEVICE_TABLE()
+>           Other minor fixes
+> ---
+>  drivers/gpio/gpio-loongson1.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
 >
-> One notable exception I found while looking through is the old
-> (pre-ATAGS) parameter structure on Arm, which uses COMMAND_LINE_SIZE
-> as part of the structure definition. Apparently this was deprecated
-> 22 years ago, so hopefully the remaining riscpc and footbridge
-> users have all upgraded their bootloaders.
+> diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.=
+c
+> index 3ac9e49e7efb..94ac0ccb450f 100644
+> --- a/drivers/gpio/gpio-loongson1.c
+> +++ b/drivers/gpio/gpio-loongson1.c
+> @@ -68,25 +68,38 @@ static int ls1x_gpio_probe(struct platform_device *pd=
+ev)
+>         ls1x_gc->gc.owner =3D THIS_MODULE;
+>         ls1x_gc->gc.request =3D ls1x_gpio_request;
+>         ls1x_gc->gc.free =3D ls1x_gpio_free;
+> -       ls1x_gc->gc.base =3D pdev->id * 32;
+> +       /*
+> +        * Clear ngpio to let gpiolib get the correct number
+> +        * by reading ngpios property
+> +        */
+> +       ls1x_gc->gc.ngpio =3D 0;
 >
-> The only other case I could find that might go wrong is
-> m68knommu with a few files copying a COMMAND_LINE_SIZE sized
-> buffer from flash into a kernel buffer:
+
+Who could have set it before and why would this information need to be
+unconditionally discarded?
+
+Bart
+
+>         ret =3D devm_gpiochip_add_data(dev, &ls1x_gc->gc, ls1x_gc);
+>         if (ret)
+>                 goto err;
 >
-> arch/m68k/coldfire/m5206.c:void __init config_BSP(char *commandp, int size)
-> arch/m68k/coldfire/m5206.c-{
-> arch/m68k/coldfire/m5206.c-#if defined(CONFIG_NETtel)
-> arch/m68k/coldfire/m5206.c-     /* Copy command line from FLASH to local buffer... */
-> arch/m68k/coldfire/m5206.c-     memcpy(commandp, (char *) 0xf0004000, size);
-> arch/m68k/coldfire/m5206.c-     commandp[size-1] = 0;
-> arch/m68k/coldfire/m5206.c-#endif /* CONFIG_NETtel */
-
-
-I see, thanks your thorough explanation: I don't see this m64k issue as 
-a blocker (unless Geert disagrees but he already reviewed the m64k 
-patches),  so I'll send the v5 now.
-
-Thanks again,
-
-Alex
-
-
+>         platform_set_drvdata(pdev, ls1x_gc);
+> -       dev_info(dev, "Loongson1 GPIO driver registered\n");
+> +
+> +       dev_info(dev, "GPIO controller registered with %d pins\n",
+> +                ls1x_gc->gc.ngpio);
 >
->       Arnd
+>         return 0;
+>  err:
+> -       dev_err(dev, "failed to register GPIO device\n");
+> +       dev_err(dev, "failed to register GPIO controller\n");
+>         return ret;
+>  }
+>
+> +static const struct of_device_id ls1x_gpio_dt_ids[] =3D {
+> +       { .compatible =3D "loongson,ls1x-gpio" },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ls1x_gpio_dt_ids);
+> +
+>  static struct platform_driver ls1x_gpio_driver =3D {
+>         .probe  =3D ls1x_gpio_probe,
+>         .driver =3D {
+>                 .name   =3D "ls1x-gpio",
+> +               .of_match_table =3D ls1x_gpio_dt_ids,
+>         },
+>  };
+>
+> --
+> 2.34.1
+>
