@@ -2,298 +2,358 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF046AC4A4
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Mar 2023 16:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FD16AC79C
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Mar 2023 17:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjCFPSN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Mar 2023 10:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
+        id S229734AbjCFQUf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Mar 2023 11:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCFPSN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 10:18:13 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10444241C8;
-        Mon,  6 Mar 2023 07:18:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=SHcUp
-        svgcZPe8P352lV4erA+ycpq5uT1Gk16abIeYcY=; b=f5288em6renFj/P7/kPeY
-        0rk1Rge6aFNM7878GwMSrJ21CemN47/si+W+TrFQHEQZv6idNm2Bhjk2qpX2/bJY
-        W6m8vuUb0qWEQPGY88WRCrKqM4wdt7ppKHNcL+Cpn5xeLittc+0KQPiqZ2iSK/Un
-        EllatwV1HhBnlwHS/mVyFk=
-Received: from lizhe.. (unknown [120.245.132.120])
-        by zwqz-smtp-mta-g0-3 (Coremail) with SMTP id _____wAXF7WWAwZkMTVDCQ--.5123S4;
-        Mon, 06 Mar 2023 23:16:19 +0800 (CST)
-From:   Lizhe <sensor1010@163.com>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl, geert+renesas@glider.be,
-        info@metux.net, shc_work@mail.ru, j-keerthy@ti.com,
-        hoan@os.amperecomputing.com, fancer.lancer@gmail.com,
-        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, kaloz@openwrt.org, khalasa@piap.pl,
-        keguang.zhang@gmail.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Lizhe <sensor1010@163.com>
-Subject: [PATCH v1] drivers/gpio: remove redundant platform_set_drvdata()
-Date:   Mon,  6 Mar 2023 23:15:32 +0800
-Message-Id: <20230306151532.23246-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230149AbjCFQTm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 11:19:42 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D28A5D7;
+        Mon,  6 Mar 2023 08:17:07 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-176d1a112bfso3086079fac.5;
+        Mon, 06 Mar 2023 08:17:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678119349;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TgdT/YtWm0g09J975wQLLJKIJx3wVMWVgah7dEH2bco=;
+        b=I436onofBERXhxwZ8iyGU8YndM9/HbZKw04GlZ9RKvicO5pNTpMgmOa1D+AKT55Hzb
+         UGtBF55toPolPBCNGGMUo1mjijgWdbROYLyjxq8mcTBiPePGf3Cw3jMRe6VxIOVhoKJ6
+         eCZUxI8vqb5dn297zUtlQ+Yl5YjMhGc08Gu/IW/u49OTCeHo97eujy124kqNiJDmWPjo
+         RBoLhKUlBODwIqen8B6EtK1J7iOFqeLR+ka1/00S68FtU0ZvR9ER0OWm2DmtCu0nFspf
+         +wya8oyV+6DL+/estAnX9kYMQB8kUBVHAak2MRtIs9r952b1jEfDHPa2jQ8i8UNrxJqA
+         tsQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678119349;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TgdT/YtWm0g09J975wQLLJKIJx3wVMWVgah7dEH2bco=;
+        b=ohcaAjsM6xRuvTkUBSFb9/GjQrquNtGR509eLNV5rOrWTuHnNauKoNxBoxZLZop4c4
+         /bbZh0rS6drKVTvpPEmRqpKAH59sVuyd5WmXjG3o1AmrbMOas+i4zkTCAlFf67tsHPLM
+         jK9DWpv+YgxPXD/lKyVhTppseyMYw+rp92FATmOTAjvFvbf9ggSnNfWVnPy7mmMW3Wf0
+         Vz45olyvG2VMPQ3VjvenyjaG+G0OMXbkgfYYDpMt3BBI9FLqlxnuJ6VtwuJRGyAtvbhs
+         2F1aaw+Pwixk8uotmsf0bbCPjp5ZIzYu9q39nt+9cZr6CdIjoug7REDTk8GPp1YHJu8E
+         omYw==
+X-Gm-Message-State: AO0yUKVy+eJtu7UHmdcFKPv5Ive/l8zcXu8otLdWV+F89nO/QVkrUmNo
+        m2touTH1NT/zvbQyLOJt9qdungMwu+gfOURlmtYIN2WT6lDTZQ==
+X-Google-Smtp-Source: AK7set9iTA9AO4Etm6Qa6BetwCKi4s9NKpG7X8X0EqbX+5L+CoaJUzr/UhCCfQS5fJIS/u7YsOAg2h5lNwb4vZhgsu4=
+X-Received: by 2002:a05:6870:d346:b0:176:2168:12a2 with SMTP id
+ h6-20020a056870d34600b00176216812a2mr3902807oag.2.1678119349301; Mon, 06 Mar
+ 2023 08:15:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wAXF7WWAwZkMTVDCQ--.5123S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3XFy7GF1kCw18XF1kAw1kKrg_yoW3tr1UpF
-        4jqFy8Cr1UKF43try7A3WrZa4Yka47ta4jgFy7K395Zr1jqryDXFWrJFZ7Zr98tFWDWr43
-        tFnrKr4Uua1Ivr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pNiiSbUUUUU=
-X-Originating-IP: [120.245.132.120]
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBdAQqq1gi5e7C4gAAsg
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230303002850.51858-1-arinc.unal@arinc9.com> <20230303002850.51858-6-arinc.unal@arinc9.com>
+ <CAMhs-H-VGjP32AZc2cuY=Co4iqx8xPtvjr+hMg-haMMFaQzzsg@mail.gmail.com>
+ <CAMhs-H8OsG-SEWigimG3fT-SGjZruH-7tnjff198Z2qhb0O=yA@mail.gmail.com>
+ <2106f6d0-63cc-4656-1e52-19640994fb43@arinc9.com> <CAMhs-H869pR6CzaWfvf44w-ak+0OCyxnMEEU4kWYpw=C14ShsQ@mail.gmail.com>
+ <fc6dc970-5bae-1c27-9473-8c9d90ac79a1@arinc9.com> <CAMhs-H_SryQqCZ3mB_VsO20ZSvKCMR5V9E7wrt+a-kbcqQxsWQ@mail.gmail.com>
+ <00d4dd34-efe5-8bc7-031a-0f9d19a1b8e0@arinc9.com>
+In-Reply-To: <00d4dd34-efe5-8bc7-031a-0f9d19a1b8e0@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 6 Mar 2023 17:15:36 +0100
+Message-ID: <CAMhs-H_nTDZMQPQ8R5JeWtgWyP1y57uhym-A4f3LcTgJYV+8pw@mail.gmail.com>
+Subject: Re: [PATCH 05/20] pinctrl: ralink: move to mediatek as mtmips
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-remove redundant platform_set_drvdata(),
-Because there is no place to use the platform_get_drvdata
-
-Signed-off-by: Lizhe <sensor1010@163.com>
+On Mon, Mar 6, 2023 at 4:06 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9=
+.com> wrote:
+>
+> On 6.03.2023 17:07, Sergio Paracuellos wrote:
+> > On Fri, Mar 3, 2023 at 3:18 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@ar=
+inc9.com> wrote:
+> >>
+> >> Heyo,
+> >>
+> >> On 3.03.2023 13:57, Sergio Paracuellos wrote:
+> >>> Hi Ar=C4=B1n=C3=A7,
+> >>>
+> >>> On Fri, Mar 3, 2023 at 9:16 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@=
+arinc9.com> wrote:
+> >>>>
+> >>>> Hey Sergio,
+> >>>>
+> >>>> On 3.03.2023 09:34, Sergio Paracuellos wrote:
+> >>>>> On Fri, Mar 3, 2023 at 7:17 AM Sergio Paracuellos
+> >>>>> <sergio.paracuellos@gmail.com> wrote:
+> >>>>>>
+> >>>>>>     Hi Ar=C4=B1n=C3=A7,
+> >>>>>>
+> >>>>>> On Fri, Mar 3, 2023 at 1:30 AM <arinc9.unal@gmail.com> wrote:
+> >>>>>>>
+> >>>>>>> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >>>>>>>
+> >>>>>>> This platform from Ralink was acquired by MediaTek in 2011. Then,=
+ MediaTek
+> >>>>>>> introduced new SoCs which utilise this platform. Move the driver =
+to
+> >>>>>>> mediatek pinctrl directory. Rename the ralink core driver to mtmi=
+ps.
+> >>>>>>>
+> >>>>>>> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >>>>>>> ---
+> >>>>>>>     drivers/pinctrl/Kconfig                       |  1 -
+> >>>>>>>     drivers/pinctrl/Makefile                      |  1 -
+> >>>>>>>     drivers/pinctrl/mediatek/Kconfig              | 51 ++++++++++=
+-
+> >>>>>>>     drivers/pinctrl/mediatek/Makefile             | 63 +++++++---=
 ---
- drivers/gpio/gpio-74xx-mmio.c  | 2 --
- drivers/gpio/gpio-aggregator.c | 1 -
- drivers/gpio/gpio-amd-fch.c    | 2 --
- drivers/gpio/gpio-clps711x.c   | 1 -
- drivers/gpio/gpio-davinci.c    | 1 -
- drivers/gpio/gpio-dwapb.c      | 2 --
- drivers/gpio/gpio-eic-sprd.c   | 1 -
- drivers/gpio/gpio-exar.c       | 2 --
- drivers/gpio/gpio-f7188x.c     | 2 --
- drivers/gpio/gpio-htc-egpio.c  | 2 --
- drivers/gpio/gpio-ixp4xx.c     | 1 -
- drivers/gpio/gpio-janz-ttl.c   | 1 -
- drivers/gpio/gpio-kempld.c     | 2 --
- drivers/gpio/gpio-logicvc.c    | 2 --
- drivers/gpio/gpio-loongson1.c  | 1 -
- drivers/gpio/gpio-lp3943.c     | 2 --
- drivers/gpio/gpio-lp873x.c     | 2 --
- 17 files changed, 27 deletions(-)
+> >>>>>>>     .../{ralink =3D> mediatek}/pinctrl-mt7620.c     | 34 +++----
+> >>>>>>>     .../{ralink =3D> mediatek}/pinctrl-mt7621.c     | 30 +++----
+> >>>>>>>     .../{ralink =3D> mediatek}/pinctrl-mt76x8.c     | 60 ++++++--=
+-----
+> >>>>>>>     .../pinctrl-mtmips.c}                         | 90 +++++++++-=
+---------
+> >>>>>>>     .../pinctrl-mtmips.h}                         | 16 ++--
+> >>>>>>>     .../{ralink =3D> mediatek}/pinctrl-rt2880.c     | 20 ++---
+> >>>>>>>     .../{ralink =3D> mediatek}/pinctrl-rt305x.c     | 44 ++++----=
+-
+> >>>>>>>     .../{ralink =3D> mediatek}/pinctrl-rt3883.c     | 28 +++---
+> >>>>>>>     drivers/pinctrl/ralink/Kconfig                | 40 ---------
+> >>>>>>>     drivers/pinctrl/ralink/Makefile               |  9 --
+> >>>>>>>     14 files changed, 246 insertions(+), 241 deletions(-)
+> >>>>>>>     rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt7620.=
+c (81%)
+> >>>>>>>     rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt7621.=
+c (80%)
+> >>>>>>>     rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt76x8.=
+c (81%)
+> >>>>>>>     rename drivers/pinctrl/{ralink/pinctrl-ralink.c =3D> mediatek=
+/pinctrl-mtmips.c} (74%)
+> >>>>>>>     rename drivers/pinctrl/{ralink/pinctrl-ralink.h =3D> mediatek=
+/pinctrl-mtmips.h} (75%)
+> >>>>>>>     rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt2880.=
+c (71%)
+> >>>>>>>     rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt305x.=
+c (75%)
+> >>>>>>>     rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt3883.=
+c (80%)
+> >>>>>>>     delete mode 100644 drivers/pinctrl/ralink/Kconfig
+> >>>>>>>     delete mode 100644 drivers/pinctrl/ralink/Makefile
+> >>>>>>>
+> >>>>>>> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+> >>>>>>> index dcb53c4a9584..8a6012770640 100644
+> >>>>>>> --- a/drivers/pinctrl/Kconfig
+> >>>>>>> +++ b/drivers/pinctrl/Kconfig
+> >>>>>>> @@ -537,7 +537,6 @@ source "drivers/pinctrl/nomadik/Kconfig"
+> >>>>>>>     source "drivers/pinctrl/nuvoton/Kconfig"
+> >>>>>>>     source "drivers/pinctrl/pxa/Kconfig"
+> >>>>>>>     source "drivers/pinctrl/qcom/Kconfig"
+> >>>>>>> -source "drivers/pinctrl/ralink/Kconfig"
+> >>>>>>>     source "drivers/pinctrl/renesas/Kconfig"
+> >>>>>>>     source "drivers/pinctrl/samsung/Kconfig"
+> >>>>>>>     source "drivers/pinctrl/spear/Kconfig"
+> >>>>>>> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+> >>>>>>> index d5939840bb2a..ada6ed1d4e91 100644
+> >>>>>>> --- a/drivers/pinctrl/Makefile
+> >>>>>>> +++ b/drivers/pinctrl/Makefile
+> >>>>>>> @@ -66,7 +66,6 @@ obj-y                         +=3D nomadik/
+> >>>>>>>     obj-y                          +=3D nuvoton/
+> >>>>>>>     obj-$(CONFIG_PINCTRL_PXA)      +=3D pxa/
+> >>>>>>>     obj-$(CONFIG_ARCH_QCOM)                +=3D qcom/
+> >>>>>>> -obj-$(CONFIG_PINCTRL_RALINK)   +=3D ralink/
+> >>>>>>>     obj-$(CONFIG_PINCTRL_RENESAS)  +=3D renesas/
+> >>>>>>>     obj-$(CONFIG_PINCTRL_SAMSUNG)  +=3D samsung/
+> >>>>>>>     obj-$(CONFIG_PINCTRL_SPEAR)    +=3D spear/
+> >>>>>>> diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/m=
+ediatek/Kconfig
+> >>>>>>> index a71874fed3d6..2eeb55010563 100644
+> >>>>>>> --- a/drivers/pinctrl/mediatek/Kconfig
+> >>>>>>> +++ b/drivers/pinctrl/mediatek/Kconfig
+> >>>>>>> @@ -1,6 +1,6 @@
+> >>>>>>>     # SPDX-License-Identifier: GPL-2.0-only
+> >>>>>>>     menu "MediaTek pinctrl drivers"
+> >>>>>>> -       depends on ARCH_MEDIATEK || COMPILE_TEST
+> >>>>>>> +       depends on ARCH_MEDIATEK || RALINK || COMPILE_TEST
+> >>>>>>>
+> >>>>>>>     config EINT_MTK
+> >>>>>>>            tristate "MediaTek External Interrupt Support"
+> >>>>>>> @@ -22,6 +22,12 @@ config PINCTRL_MTK
+> >>>>>>>     config PINCTRL_MTK_V2
+> >>>>>>>            tristate
+> >>>>>>>
+> >>>>>>> +config PINCTRL_MTK_MTMIPS
+> >>>>>>> +       bool
+> >>>>>>> +       depends on RALINK
+> >>>>>>> +       select PINMUX
+> >>>>>>> +       select GENERIC_PINCONF
+> >>>>>>> +
+> >>>>>>>     config PINCTRL_MTK_MOORE
+> >>>>>>>            bool
+> >>>>>>>            depends on OF
+> >>>>>>> @@ -43,6 +49,49 @@ config PINCTRL_MTK_PARIS
+> >>>>>>>            select OF_GPIO
+> >>>>>>>            select PINCTRL_MTK_V2
+> >>>>>>>
+> >>>>>>> +# For MIPS SoCs
+> >>>>>>> +config PINCTRL_MT7620
+> >>>>>>> +       bool "MediaTek MT7620 pin control"
+> >>>>>>> +       depends on SOC_MT7620 || COMPILE_TEST
+> >>>>>>> +       depends on RALINK
+> >>>>>>> +       default SOC_MT7620
+> >>>>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>>>> +
+> >>>>>>> +config PINCTRL_MT7621
+> >>>>>>> +       bool "MediaTek MT7621 pin control"
+> >>>>>>> +       depends on SOC_MT7621 || COMPILE_TEST
+> >>>>>>> +       depends on RALINK
+> >>>>>>> +       default SOC_MT7621
+> >>>>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>>>> +
+> >>>>>>> +config PINCTRL_MT76X8
+> >>>>>>> +       bool "MediaTek MT76X8 pin control"
+> >>>>>>> +       depends on SOC_MT7620 || COMPILE_TEST
+> >>>>>>> +       depends on RALINK
+> >>>>>>> +       default SOC_MT7620
+> >>>>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>>>> +
+> >>>>>>> +config PINCTRL_RT2880
+> >>>>>>> +       bool "Ralink RT2880 pin control"
+> >>>>>>> +       depends on SOC_RT288X || COMPILE_TEST
+> >>>>>>> +       depends on RALINK
+> >>>>>>> +       default SOC_RT288X
+> >>>>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>>>> +
+> >>>>>>> +config PINCTRL_RT305X
+> >>>>>>> +       bool "Ralink RT305X pin control"
+> >>>>>>> +       depends on SOC_RT305X || COMPILE_TEST
+> >>>>>>> +       depends on RALINK
+> >>>>>>> +       default SOC_RT305X
+> >>>>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>>>> +
+> >>>>>>> +config PINCTRL_RT3883
+> >>>>>>> +       bool "Ralink RT3883 pin control"
+> >>>>>>> +       depends on SOC_RT3883 || COMPILE_TEST
+> >>>>>>> +       depends on RALINK
+> >>>>>>> +       default SOC_RT3883
+> >>>>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>>>> +
+> >>>>>>
+> >>>>>> I am not a Kconfig expert at all but...
+> >>>>>>
+> >>>>>> Should not all of these be depends on SOC_XXX || (COMPILE_TEST &&
+> >>>>>> RALINK) and avoid the " depends on RALINK" next line in all of the=
+m?
+> >>>>
+> >>>> This seems to do the same thing but I'm following the "either change
+> >>>> them all or fit into the crowd" ideology.
+> >>>>
+> >>>>>>
+> >>>>>> Just asking since we have yet arch read and write register operati=
+ons
+> >>>>>> in pinctrl common ralink code. Having in this way, when we address
+> >>>>>> this arch thing  in the next series just removing the "&& RALINK" =
+part
+> >>>>>> makes the review pretty obvious.
+> >>>>
+> >>>> You'd have to change RALINK with OF since we're still depending on t=
+hat.
+> >>>> RALINK selects OF by default so it's currently a hidden dependency.
+> >>>>
+> >>>>>>
+> >>>>>> Other than that, changes look good to me.
+> >>>>>
+> >>>>> I think "depends on SOC_XXX || (COMPILE_TEST && MIPS)" would work a=
+lso
+> >>>>> and might be more accurate for compile testing targets.
+> >>>
+> >>> Are you sure? SOC_XXX here is already being enabled only if RALINK is
+> >>> already enabled, right? [0]
+> >>
+> >> I'm not sure who's your reply to, or what it's about here.
+> >
+> > Bad insertion between lines, sorry :). I was just trying to explain to
+> > you that SOC_RTXX ralink stuff is only available when RALINK is
+> > already selected.
+>
+> Makes sense. However, I believe what I said below is still true. This
+> option will be available to compile if a Ralink SoC (and therefore
+> RALINK) is enabled, OR, COMPILE_TEST and MIPS is enabled. The latter
+> will fail to compile if the enabled MIPS platform is not RALINK.
+>
+> >
+> >>
+> >>>
+> >>>>
+> >>>> This is not OK in both cases. If the driver is dependent on Ralink
+> >>>> architecture code, choosing any other MIPS platform will make the dr=
+iver
+> >>>> available to compile, which will fail.
+> >>>
+> >>> SOC_XXX is already dependent on RALINK for real uses but the driver i=
+s
+> >>> going to be selected for other MIPS platforms only for COMPILE_TEST
+> >>> targets. Ideally drivers should be arch agnostic so can be selected
+> >>> for any single arch build. Now we have arch dependent read and write
+> >>> calls in the code, so you need the right headers to be properly found
+> >>> to be able to compile testing. I think MIPS is enough dependency here
+> >>> to properly find them. But if not, this should be (COMPILE_TEST &&
+> >>> RALINK)
+> >>
+> >> I expect below to work without requiring the MIPS option.
+> >>
+> >> ifeq ($(CONFIG_COMPILE_TEST),y)
+> >> CFLAGS_pinctrl-mtmips.o         +=3D -I$(srctree)/arch/mips/include
+> >> endif
+> >
+> > Yes, this will work but won't be necessary at all when we get rid of
+> > ralink arch dependent code in the next series.
+>
+> Oh, you plan to completely get rid of it, including headers. That's bette=
+r!
 
-diff --git a/drivers/gpio/gpio-74xx-mmio.c b/drivers/gpio/gpio-74xx-mmio.c
-index 0464f1ecd20d..c7ac5a9ffb1f 100644
---- a/drivers/gpio/gpio-74xx-mmio.c
-+++ b/drivers/gpio/gpio-74xx-mmio.c
-@@ -135,8 +135,6 @@ static int mmio_74xx_gpio_probe(struct platform_device *pdev)
- 	priv->gc.ngpio = MMIO_74XX_BIT_CNT(priv->flags);
- 	priv->gc.owner = THIS_MODULE;
- 
--	platform_set_drvdata(pdev, priv);
--
- 	return devm_gpiochip_add_data(&pdev->dev, &priv->gc, priv);
- }
- 
-diff --git a/drivers/gpio/gpio-aggregator.c b/drivers/gpio/gpio-aggregator.c
-index 6d17d262ad91..f67d1d46c093 100644
---- a/drivers/gpio/gpio-aggregator.c
-+++ b/drivers/gpio/gpio-aggregator.c
-@@ -495,7 +495,6 @@ static int gpio_aggregator_probe(struct platform_device *pdev)
- 	if (IS_ERR(fwd))
- 		return PTR_ERR(fwd);
- 
--	platform_set_drvdata(pdev, fwd);
- 	return 0;
- }
- 
-diff --git a/drivers/gpio/gpio-amd-fch.c b/drivers/gpio/gpio-amd-fch.c
-index 2a21354ed6a0..8a7f861513eb 100644
---- a/drivers/gpio/gpio-amd-fch.c
-+++ b/drivers/gpio/gpio-amd-fch.c
-@@ -172,8 +172,6 @@ static int amd_fch_gpio_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
- 
--	platform_set_drvdata(pdev, priv);
--
- 	return devm_gpiochip_add_data(&pdev->dev, &priv->gc, priv);
- }
- 
-diff --git a/drivers/gpio/gpio-clps711x.c b/drivers/gpio/gpio-clps711x.c
-index 75f6f8d4323e..b9ba85ef94b2 100644
---- a/drivers/gpio/gpio-clps711x.c
-+++ b/drivers/gpio/gpio-clps711x.c
-@@ -62,7 +62,6 @@ static int clps711x_gpio_probe(struct platform_device *pdev)
- 
- 	gc->base = -1;
- 	gc->owner = THIS_MODULE;
--	platform_set_drvdata(pdev, gc);
- 
- 	return devm_gpiochip_add_data(&pdev->dev, gc, NULL);
- }
-diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
-index 26b1f7465e09..ec619c3fde90 100644
---- a/drivers/gpio/gpio-davinci.c
-+++ b/drivers/gpio/gpio-davinci.c
-@@ -266,7 +266,6 @@ static int davinci_gpio_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	platform_set_drvdata(pdev, chips);
- 	ret = davinci_gpio_irq_setup(pdev);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/gpio/gpio-dwapb.c b/drivers/gpio/gpio-dwapb.c
-index c22fcaa44a61..8db67674078e 100644
---- a/drivers/gpio/gpio-dwapb.c
-+++ b/drivers/gpio/gpio-dwapb.c
-@@ -734,8 +734,6 @@ static int dwapb_gpio_probe(struct platform_device *pdev)
- 			return err;
- 	}
- 
--	platform_set_drvdata(pdev, gpio);
--
- 	return 0;
- }
- 
-diff --git a/drivers/gpio/gpio-eic-sprd.c b/drivers/gpio/gpio-eic-sprd.c
-index 84352a6f4973..53db88ae2a20 100644
---- a/drivers/gpio/gpio-eic-sprd.c
-+++ b/drivers/gpio/gpio-eic-sprd.c
-@@ -653,7 +653,6 @@ static int sprd_eic_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	platform_set_drvdata(pdev, sprd_eic);
- 	return 0;
- }
- 
-diff --git a/drivers/gpio/gpio-exar.c b/drivers/gpio/gpio-exar.c
-index df1bdaae441c..5170fe7599cd 100644
---- a/drivers/gpio/gpio-exar.c
-+++ b/drivers/gpio/gpio-exar.c
-@@ -217,8 +217,6 @@ static int gpio_exar_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	platform_set_drvdata(pdev, exar_gpio);
--
- 	return 0;
- }
- 
-diff --git a/drivers/gpio/gpio-f7188x.c b/drivers/gpio/gpio-f7188x.c
-index 9effa7769bef..5475614c1872 100644
---- a/drivers/gpio/gpio-f7188x.c
-+++ b/drivers/gpio/gpio-f7188x.c
-@@ -499,8 +499,6 @@ static int f7188x_gpio_probe(struct platform_device *pdev)
- 	}
- 	data->sio = sio;
- 
--	platform_set_drvdata(pdev, data);
--
- 	/* For each GPIO bank, register a GPIO chip. */
- 	for (i = 0; i < data->nr_bank; i++) {
- 		struct f7188x_gpio_bank *bank = &data->bank[i];
-diff --git a/drivers/gpio/gpio-htc-egpio.c b/drivers/gpio/gpio-htc-egpio.c
-index a40bd56673fe..e38352ee25ac 100644
---- a/drivers/gpio/gpio-htc-egpio.c
-+++ b/drivers/gpio/gpio-htc-egpio.c
-@@ -300,8 +300,6 @@ static int __init egpio_probe(struct platform_device *pdev)
- 
- 	ei->reg_mask = (1 << pdata->reg_width) - 1;
- 
--	platform_set_drvdata(pdev, ei);
--
- 	ei->nchips = pdata->num_chips;
- 	ei->chip = devm_kcalloc(&pdev->dev,
- 				ei->nchips, sizeof(struct egpio_chip),
-diff --git a/drivers/gpio/gpio-ixp4xx.c b/drivers/gpio/gpio-ixp4xx.c
-index 56656fb519f8..3f59658dd316 100644
---- a/drivers/gpio/gpio-ixp4xx.c
-+++ b/drivers/gpio/gpio-ixp4xx.c
-@@ -287,7 +287,6 @@ static int ixp4xx_gpio_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	platform_set_drvdata(pdev, g);
- 	dev_info(dev, "IXP4 GPIO registered\n");
- 
- 	return 0;
-diff --git a/drivers/gpio/gpio-janz-ttl.c b/drivers/gpio/gpio-janz-ttl.c
-index cdf50e4ea165..ea68f49c1824 100644
---- a/drivers/gpio/gpio-janz-ttl.c
-+++ b/drivers/gpio/gpio-janz-ttl.c
-@@ -154,7 +154,6 @@ static int ttl_probe(struct platform_device *pdev)
- 	if (!mod)
- 		return -ENOMEM;
- 
--	platform_set_drvdata(pdev, mod);
- 	spin_lock_init(&mod->lock);
- 
- 	/* get access to the MODULbus registers for this module */
-diff --git a/drivers/gpio/gpio-kempld.c b/drivers/gpio/gpio-kempld.c
-index 4ea15f08e0f4..2065a8a121b2 100644
---- a/drivers/gpio/gpio-kempld.c
-+++ b/drivers/gpio/gpio-kempld.c
-@@ -151,8 +151,6 @@ static int kempld_gpio_probe(struct platform_device *pdev)
- 
- 	gpio->pld = pld;
- 
--	platform_set_drvdata(pdev, gpio);
--
- 	chip = &gpio->chip;
- 	chip->label = "gpio-kempld";
- 	chip->owner = THIS_MODULE;
-diff --git a/drivers/gpio/gpio-logicvc.c b/drivers/gpio/gpio-logicvc.c
-index 992cc958a43f..9b4789deae45 100644
---- a/drivers/gpio/gpio-logicvc.c
-+++ b/drivers/gpio/gpio-logicvc.c
-@@ -139,8 +139,6 @@ static int logicvc_gpio_probe(struct platform_device *pdev)
- 	logicvc->chip.set = logicvc_gpio_set;
- 	logicvc->chip.direction_output = logicvc_gpio_direction_output;
- 
--	platform_set_drvdata(pdev, logicvc);
--
- 	return devm_gpiochip_add_data(dev, &logicvc->chip, logicvc);
- }
- 
-diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.c
-index 5d90b3bc5a25..0ff4ea7af9c0 100644
---- a/drivers/gpio/gpio-loongson1.c
-+++ b/drivers/gpio/gpio-loongson1.c
-@@ -72,7 +72,6 @@ static int ls1x_gpio_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err;
- 
--	platform_set_drvdata(pdev, gc);
- 	dev_info(dev, "Loongson1 GPIO driver registered\n");
- 
- 	return 0;
-diff --git a/drivers/gpio/gpio-lp3943.c b/drivers/gpio/gpio-lp3943.c
-index 79edd5db49d2..8e58242f5123 100644
---- a/drivers/gpio/gpio-lp3943.c
-+++ b/drivers/gpio/gpio-lp3943.c
-@@ -199,8 +199,6 @@ static int lp3943_gpio_probe(struct platform_device *pdev)
- 	lp3943_gpio->chip = lp3943_gpio_chip;
- 	lp3943_gpio->chip.parent = &pdev->dev;
- 
--	platform_set_drvdata(pdev, lp3943_gpio);
--
- 	return devm_gpiochip_add_data(&pdev->dev, &lp3943_gpio->chip,
- 				      lp3943_gpio);
- }
-diff --git a/drivers/gpio/gpio-lp873x.c b/drivers/gpio/gpio-lp873x.c
-index 5c79ba1f229c..7427a74ce4e2 100644
---- a/drivers/gpio/gpio-lp873x.c
-+++ b/drivers/gpio/gpio-lp873x.c
-@@ -140,8 +140,6 @@ static int lp873x_gpio_probe(struct platform_device *pdev)
- 	if (!gpio)
- 		return -ENOMEM;
- 
--	platform_set_drvdata(pdev, gpio);
--
- 	gpio->lp873 = dev_get_drvdata(pdev->dev.parent);
- 	gpio->chip = template_chip;
- 	gpio->chip.parent = gpio->lp873->dev;
--- 
-2.34.1
+I'd really love to get rid of all of that, yes.
 
+>
+> However, rt305x_pinctrl_probe() on pinctrl-rt305x.c needs them to find
+> out the SoC to match the pinmux data. Sure, splitting the driver further
+> will work but I'm wondering if you've got something else in mind to
+> address this.
+
+I know. Sharing the same compatible string makes really hard to do
+this easily. One of my thoughts was to split also that in the driver
+as you are pointing out here. I have also submitted this series [0] to
+be able to make use of soc_match stuff instead of relying on
+compatible strings for these kinds of situations. However I am not
+also sure that would be a valid approach. Let's see. At the end we can
+end up splitting the driver if nothing seems to work.
+
+Thanks,
+    Sergio Paracuellos
+
+[0]: https://lore.kernel.org/linux-mips/20230227105806.2394101-1-sergio.par=
+acuellos@gmail.com/T/#t
+
+>
+> Ar=C4=B1n=C3=A7
