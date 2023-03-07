@@ -2,145 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F916AED32
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 19:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DAF6AF403
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 20:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjCGSC1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Mar 2023 13:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S233717AbjCGTMe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Mar 2023 14:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjCGSCC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 13:02:02 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61169A8C58;
-        Tue,  7 Mar 2023 09:55:21 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-176b48a9a05so8475427fac.0;
-        Tue, 07 Mar 2023 09:55:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678211720;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uHG36lzNr+0MKns2Z8CLtBxE1/BWaAWLiQcYx5kbvTI=;
-        b=h69phTOnMkva0qAJniwtPXqWnZBB20ZvoeVHVDLVJeHrLgcfFPWj38k4itcLwOlnNv
-         M7pb3iPMH1VFpISaJDqXvTteYXF4Z4r1jLkxDHAdZ2aEhBdPCJP2OqDCShTgU8nmPKw+
-         Q19CsP7x7F0TGZENf70DfPyC7y/W101avtunhvAwGnngUEb1ur+wecqw13nbLG0wUCka
-         bVk5ke4C6JWtUe8waZPrDggLV8hSYe83++9bFfLam/jyG8N39Ic1Cvjuw1nqCFgGUtxi
-         i6RxGkL0FxXBgBXvIQLbxiZ5DDXfUOPvex82NewhYQZx1wqjvgnTu1Uy5ssDaf6/VLDc
-         beww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678211720;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uHG36lzNr+0MKns2Z8CLtBxE1/BWaAWLiQcYx5kbvTI=;
-        b=jN92wPCVHuZRgga4051t60L7r9p134hrfm8XNKm2aXhUuwDMCIhnU7MaQjOnyQkN89
-         Fec+k4rSpZlSd1sEwSW7FB69z17NLDNU2fLXe0aquZX5J8D4Ah1MPsSgzyxW7tUPSgvp
-         SD+3JjVLjW4JPQBe6obfn1bxXb809g4kusjL0XS7Lot0JLvyETk1QWdNXdj/MQj/83Ht
-         ykYS11YwjK4K28WLeiZiXWBmsmLxdGMeSUUkFY8utBuiXdfQj8BfjSGEw3CZOjJVkkMQ
-         KJrwRMCp5zBhdzqdxzHMtAtpt7ChaSLlxX3uZL8Le5gVW42nkx5Bknp8dFm8wiCvhPuA
-         B3hQ==
-X-Gm-Message-State: AO0yUKWmvKbocvxnAJb02DDCy4IAOQ//wV+9LS1cWIRImK8JJVtxO4sV
-        zni0ucZOnsT74NdUEe0y558=
-X-Google-Smtp-Source: AK7set8n+Y8sZKSYTNBR5dC2J0IYWxQgIchgUGkDmOPwc4oBXKBbxCYC4mqx7e6bnlKwlfIA2ouAqA==
-X-Received: by 2002:a05:6870:3a06:b0:176:3218:a837 with SMTP id du6-20020a0568703a0600b001763218a837mr7463844oab.16.1678211720222;
-        Tue, 07 Mar 2023 09:55:20 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ax39-20020a05687c022700b0016b0369f08fsm5329261oac.15.2023.03.07.09.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 09:55:19 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 7 Mar 2023 09:55:18 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Keguang Zhang <keguang.zhang@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] watchdog: loongson1: Use devm_clk_get_enabled() helper
-Message-ID: <3144eb08-ca46-42df-9a7d-c541ad534857@roeck-us.net>
-References: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231439AbjCGTMM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 14:12:12 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA01900BF;
+        Tue,  7 Mar 2023 10:56:11 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 0C3423200AAF;
+        Tue,  7 Mar 2023 13:46:47 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 07 Mar 2023 13:46:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678214807; x=1678301207; bh=OE
+        0XkuYckKW+GV/gWAK6SUZf1WFVHEYo5bhdTGgQVN4=; b=W/WGual0eYfv4QKUVL
+        WzXz0DTkfhwRa48v6O0kFX9fWqJgTdyzV28j7YxJ2xNZdhWWQ9IyvZi/7wGksTMh
+        3wmiAqpcHxMaGTn+PHPi3t2+/tzWq/DpdEVe/slnVdul4jIvd7vGnqrc6mW51o4v
+        CkUPriAiyCc29n9FLpeYTjzu0kWbG5MLPQgSfOLT+gcUbIWeqF5bkdjcwI1vzHgK
+        iGB4ZOqLB6a4d9+l+63bs6zcyTxGCEfuuUD2TN8SXJq9nQMKBcbIroJtoFCLSI4B
+        CyVcUAiXCQUZnhTX+QNc1n/P9w1bNDs63MQt+CpuY5Ms1dq3MUtYcsEfr27A5tHM
+        L/jA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678214807; x=1678301207; bh=OE0XkuYckKW+G
+        V/gWAK6SUZf1WFVHEYo5bhdTGgQVN4=; b=m7TVa4KG6wHKhfGoKLUje2p/HRtb/
+        dIlC+eUgh6fs/069UwToTHsgru/89gUSNK5WefYhPHXulsw6W558NBVdzn7b1S2x
+        mHQ0FyG2KWy5QbiP1hfg0l/a73zfGSd8cNUQCsVbP7A2FW8wpCDC0v6JlzUzgLao
+        G56dhZ7gwo++txP5rInGZn6kXxT1JbQ7Hej2aNjP4VIBznnEBLxF9lNywQeM+hTI
+        wBzusSa6cj1D56SAAaWRJQg7dbr6g66UwYiHL60xauur9Wd+YojZ4NEJ0stOtdyq
+        s6Y4X7foQfTaiKI68bY9c567x5NqsZOU5xADYMZFQXphtddkm5+20iSXg==
+X-ME-Sender: <xms:l4YHZOnTM3RukeqswTV7qdiYgVHWetRK6yzbLaIe4RnnsQqXWmKaBQ>
+    <xme:l4YHZF2sNrtnkmUPk5N8x-pFscEpqWcHZKhBM_mKakkvuSbpKANiTBzcdum0lu-ZF
+    rgYkwK4tOkYfzBfnQU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddutddgudduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:l4YHZMpJP1iFESkvIP8z99ddcn5RZrkB0vSnvFvbsVTLtuBdNeWdXw>
+    <xmx:l4YHZClTWeaoNd09EhqjuZNCw2JvvFiQ-gP50GijV1CvR24KsXye4w>
+    <xmx:l4YHZM0Cz8gN6O0o-KWpV9xJ-YnFJaEMd6_zhxhni46aUZOfQs29OQ>
+    <xmx:l4YHZNI43E0lp01IqYSxRV148U9QPOyEONq9CBQDnAqDhGY6UH5gqQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EB07CB60086; Tue,  7 Mar 2023 13:46:46 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
+Mime-Version: 1.0
+Message-Id: <76be6056-2057-4199-9dd2-52d28bbb37e8@app.fastmail.com>
+In-Reply-To: <CA+G9fYvX8W6R6FtxZbCmdeKhSikmdD9Tten8U5qXX4cG3+-1VQ@mail.gmail.com>
+References: <CA+G9fYvX8W6R6FtxZbCmdeKhSikmdD9Tten8U5qXX4cG3+-1VQ@mail.gmail.com>
+Date:   Tue, 07 Mar 2023 19:46:26 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org, lkft-triage@lists.linaro.org,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Cc:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Anders Roxell" <anders.roxell@linaro.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        =?UTF-8?Q?Phil_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: Re: next: arch/mips/ar7/gpio.c:19:33: error: field 'chip' has incomplete type
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 12:14:30PM +0100, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->    - calls devm_clk_get()
->    - calls clk_prepare_enable() and registers what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
-> 
-> This simplifies the code and avoids the need of a dedicated function used
-> with devm_add_action_or_reset().
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Tue, Mar 7, 2023, at 18:10, Naresh Kamboju wrote:
+> Following build regression found while building mips ar7_defconfig
+> on Linux next-20230307 tag.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> Please find the build log and details below.
+>
+> build log:
+> --------
+> arch/mips/ar7/gpio.c:19:33: error: field 'chip' has incomplete type
+>    19 |         struct gpio_chip        chip;
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+It sounds like a result of 21d9526d13b5 ("gpiolib: Make the
+legacy <linux/gpio.h> consumer-only"). I haven't tried it,
+but I think this should fix it, unless there is another bug:
 
-> ---
-> Note that I get a compilation error because <loongson1.h> is not found on
-> my system (x86_64).
-> So I think that a "depends on LOONG<something>" in missing in a KConfig
-> file.
+--- a/arch/mips/ar7/gpio.c
++++ b/arch/mips/ar7/gpio.c
+@@ -7,7 +7,7 @@
+ 
+ #include <linux/init.h>
+ #include <linux/export.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/driver.h>
+ 
+ #include <asm/mach-ar7/ar7.h>
+ 
 
-It has "depends on MACH_LOONGSON32" and is not expected to be buildable if
-MACH_LOONGSON32 is not selected. It builds just fine if MACH_LOONGSON32
-is selected.
 
-Guenter
-
-> 
-> Fixing it could help compilation farms build-bots.
-> ---
->  drivers/watchdog/loongson1_wdt.c | 17 +----------------
->  1 file changed, 1 insertion(+), 16 deletions(-)
-> 
-> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-> index bb3d075c0633..c55656cfb403 100644
-> --- a/drivers/watchdog/loongson1_wdt.c
-> +++ b/drivers/watchdog/loongson1_wdt.c
-> @@ -79,11 +79,6 @@ static const struct watchdog_ops ls1x_wdt_ops = {
->  	.set_timeout = ls1x_wdt_set_timeout,
->  };
->  
-> -static void ls1x_clk_disable_unprepare(void *data)
-> -{
-> -	clk_disable_unprepare(data);
-> -}
-> -
->  static int ls1x_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -100,20 +95,10 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(drvdata->base))
->  		return PTR_ERR(drvdata->base);
->  
-> -	drvdata->clk = devm_clk_get(dev, pdev->name);
-> +	drvdata->clk = devm_clk_get_enabled(dev, pdev->name);
->  	if (IS_ERR(drvdata->clk))
->  		return PTR_ERR(drvdata->clk);
->  
-> -	err = clk_prepare_enable(drvdata->clk);
-> -	if (err) {
-> -		dev_err(dev, "clk enable failed\n");
-> -		return err;
-> -	}
-> -	err = devm_add_action_or_reset(dev, ls1x_clk_disable_unprepare,
-> -				       drvdata->clk);
-> -	if (err)
-> -		return err;
-> -
->  	clk_rate = clk_get_rate(drvdata->clk);
->  	if (!clk_rate)
->  		return -EINVAL;
+      Arnd
