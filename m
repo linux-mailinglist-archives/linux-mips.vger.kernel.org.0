@@ -2,71 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DA66AD407
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 02:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DCE6AD4A2
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 03:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjCGBdR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Mar 2023 20:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
+        id S229696AbjCGCZ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Mar 2023 21:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjCGBcp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 20:32:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5449857D23
-        for <linux-mips@vger.kernel.org>; Mon,  6 Mar 2023 17:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678152654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A8ahPZDaVvcIaob1vmzodN2QF3Hw6BRjjqbc38rwl/Q=;
-        b=EHmX2Nm6ULfGbDcXUvaZOsKjx1RljW6znPn4f5VtTeBM5wnuo37e4v20021/wfAMTrmp9f
-        eiq3Irsmnk4bf2L6Qo0A8oUlddVhxLPfvwXtKIKpwDwD2bzkhc16iB8K5t9xWDSJKndx2V
-        iTjH6aY7xq2Vm7eDTlaSUO+DfPKtOqA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-q-PJP5gANaiVF8sVjYLtpg-1; Mon, 06 Mar 2023 20:30:49 -0500
-X-MC-Unique: q-PJP5gANaiVF8sVjYLtpg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9974385CBE0;
-        Tue,  7 Mar 2023 01:30:48 +0000 (UTC)
-Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D0E44492C3E;
-        Tue,  7 Mar 2023 01:30:47 +0000 (UTC)
-Date:   Tue, 7 Mar 2023 09:30:43 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-sh@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        linux-mm@kvack.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 2/2] arch/*/io.h: remove ioremap_uc in some
- architectures
-Message-ID: <ZAaTw+841xBsz/m9@MiWiFi-R3L-srv>
-References: <20230303102817.212148-1-bhe@redhat.com>
- <20230303102817.212148-3-bhe@redhat.com>
- <87sfej1rie.fsf@mpe.ellerman.id.au>
- <CAMuHMdXoM24uAZGcjBtscNMOSY_+4u08PEOR7gOfCH7jvCceDg@mail.gmail.com>
- <5dec69d0-0bc9-4f6c-8d0d-ee5422783100@app.fastmail.com>
- <87jzzt1ioc.fsf@mpe.ellerman.id.au>
+        with ESMTP id S229484AbjCGCZ5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 21:25:57 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649F72B610;
+        Mon,  6 Mar 2023 18:25:56 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id cy23so46639078edb.12;
+        Mon, 06 Mar 2023 18:25:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678155955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F0OImnvXE30615yFSuU+y0WJr5V6M6GufdN6hNO0u+w=;
+        b=GA/poEVIJpqg9rZCv1nR1OdPgVEmWhihBKyk4ktwDG7wRth7vr3pbbqtGKZ4B8OM2k
+         mss/Lg5SQT2cAkM3X6gTF23ihfLs5QBHlbct2bS6OGLomyN3WgNILv1VjOk5F6e18I+4
+         NktHDWxmjgLoHhl1QoPu+6Ih2l5X812sEfEQI1FsgN4Jt3qpIQ0KE2Si+eGo7UkTsnf0
+         BgCGQWBqTJlJu4thgwezefgxtxPc1ZVCJBMD5/MOQOqDBpPbQIsgFqxKy8PnjVJ1q3gN
+         83HMbgMgbE/p1yE+I583c2TAeeQoBDzfqPsc6WdnlF1/p5d9TRVw9nrerhSl4jYXfXZW
+         jsHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678155955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F0OImnvXE30615yFSuU+y0WJr5V6M6GufdN6hNO0u+w=;
+        b=Q4asiuWC53fvxSMqUyD8uxKEQqxOt9TSApy/m0LCTtmjvph78A5AG8hByTJhWxBqDF
+         uObe/KQSYLqQ7q/A01qhn+TuMtr5D7eu3mNeD6Vodu8/BebFaSu87hv4QsY0Ta/ICGdO
+         vImmyLWn5pOEVB/ngDVJxoYNrhYu/BpSj/7MxX+O5Tkv9fd/GCoEgMayfYn9E/ssID/t
+         ms5S639AauGi3bkznzEDzz3vdQVDUaxE3wk3ncjhVWRMWKO52U2bR4jaRUNRyRtwBjQk
+         p9NdcsT6zo4PfkwzzWn+JsfoW7aM314kRKJefaC3YHxFqAp+N4KyPO9jWE8xeyh45MKs
+         Wk0A==
+X-Gm-Message-State: AO0yUKVAi+hcGS6anyyWLA3ZkSFRlTe6s8KJmIVnTpTMohBvqv0ZuS9r
+        YCXAbb8tlZJoX6HPrW8yirjkoJoPo09abtXDpNQuUnJwzA8g1Q==
+X-Google-Smtp-Source: AK7set+PYNQzrC6X2koOkFfG0i+Qn9+Vzwd9lMtQbr7M5T3BqoE41n8B1xNT7+UMARRkuXT3BRnH1+t8blqPKPACn3g=
+X-Received: by 2002:a17:906:6d55:b0:8d0:2c55:1aa with SMTP id
+ a21-20020a1709066d5500b008d02c5501aamr5726180ejt.0.1678155954763; Mon, 06 Mar
+ 2023 18:25:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87jzzt1ioc.fsf@mpe.ellerman.id.au>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230302125215.214014-1-keguang.zhang@gmail.com>
+ <20230302125215.214014-2-keguang.zhang@gmail.com> <CAMRc=Me=Yrr5BuRaMd4r91URzmdYHWUvVGvLL9YFuZPaV0WYFA@mail.gmail.com>
+In-Reply-To: <CAMRc=Me=Yrr5BuRaMd4r91URzmdYHWUvVGvLL9YFuZPaV0WYFA@mail.gmail.com>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Tue, 7 Mar 2023 10:25:38 +0800
+Message-ID: <CAJhJPsVf8EvFc9N8eMtc8Qu2BhODv7PzZm9C5ePR+GdTFiAY1w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] gpio: loongson1: Convert to SPDX identifier
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +72,64 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/07/23 at 11:58am, Michael Ellerman wrote:
-> "Arnd Bergmann" <arnd@arndb.de> writes:
-> > On Sun, Mar 5, 2023, at 10:29, Geert Uytterhoeven wrote:
-> >> On Sun, Mar 5, 2023 at 10:23 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> >>> Maybe that exact code path is only reachable on x86/ia64? But if so
-> >>> please explain why.
-> >>>
-> >>> Otherwise it looks like this series could break that driver on powerpc
-> >>> at least.
-> >>
-> >> Indeed.
+On Mon, Mar 6, 2023 at 5:29=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
+wrote:
+>
+> On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail=
+.com> wrote:
 > >
-> > When I last looked into this, I sent a patch to use ioremap()
-> > on non-x86:
+> > Use SPDX-License-Identifier instead of the license text and
+> > update the author information.
 > >
-> > https://lore.kernel.org/all/20191111192258.2234502-1-arnd@arndb.de/
-> 
-> OK thanks.
-> 
-> Baoquan can you add that patch to the start of this series if/when you
-> post the next version?
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> > V1 -> V2: Keep GPLv2, just convert to SPDX identifier
+> > ---
+> >  drivers/gpio/gpio-loongson1.c | 9 +++------
+> >  1 file changed, 3 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson=
+1.c
+> > index 5d90b3bc5a25..8862c9ea0d41 100644
+> > --- a/drivers/gpio/gpio-loongson1.c
+> > +++ b/drivers/gpio/gpio-loongson1.c
+> > @@ -1,11 +1,8 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> >  /*
+> >   * GPIO Driver for Loongson 1 SoC
+> >   *
+> > - * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com>
+> > - *
+> > - * This file is licensed under the terms of the GNU General Public
+> > - * License version 2. This program is licensed "as is" without any
+> > - * warranty of any kind, whether express or implied.
+> > + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
+> >   */
+> >
+> >  #include <linux/module.h>
+> > @@ -90,6 +87,6 @@ static struct platform_driver ls1x_gpio_driver =3D {
+> >
+> >  module_platform_driver(ls1x_gpio_driver);
+> >
+> > -MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
+>
+> Why are you removing credits of the old author?
+Kelvin Cheung and Keguang Zhang are the same person.
+This change is to keep pace with the related entry of MAINTAINERS.
 
-Sure, will do. Wondering if we need make change to cover powerpc other
-than x86 and ia64 in Arnd's patch as you and Geert pointed out.
+>
+> Bart
+>
+> > +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+> >  MODULE_DESCRIPTION("Loongson1 GPIO driver");
+> >  MODULE_LICENSE("GPL");
+> > --
+> > 2.34.1
+> >
 
+
+
+--=20
+Best regards,
+
+Kelvin Cheung
