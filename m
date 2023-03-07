@@ -2,216 +2,272 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4F36AE231
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 15:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 281D46AE336
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 15:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjCGOYK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Mar 2023 09:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S230194AbjCGOtD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Mar 2023 09:49:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjCGOXs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 09:23:48 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1F78F505;
-        Tue,  7 Mar 2023 06:18:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/3jbkIwpVJ/VerNvF0LcqYUDPFjsDPeMNCNxu5wBOKE=; b=hFkr/k0HYfEwqSYnZYQjP6xJlB
-        SXxUkyEFol6rmETacQwE3KcRkl3rQHT4mbB04b6bCdS0j7xAD2GH7E7L4ts18nSpzS4KqTFTsCNl5
-        ozUNCPHKQefQC1Jwu6hiksRNHavxszZXWjuK359WHoH8pHiD18dz0cNTLvhsiIV5AqGBzf/jdJLIP
-        n4eVT0xafl+uZ2d5mgpQERBO2dnkFMU1DCF+sIJl5FZ5mzSbCRUcd+pYBi/utNHEeySvJdB7rAUic
-        CUZlnDu/ByqumJYilKO6h4lA/8GIkaHjAOzr6hqBIq3F8cp14EHEJ2iJpAQ8nABsWOB6QtexfHf9q
-        Og4lznRg==;
-Received: from [2001:8b0:10b:5:640c:634b:db90:9c87] (helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZY8h-006TLE-Q9; Tue, 07 Mar 2023 14:18:04 +0000
-Message-ID: <26e3ecb35c36d178cc7d02d04dfaeaaf51d58366.camel@infradead.org>
-Subject: Re: [PATCH v6 20/20] irqdomain: Switch to per-domain locking
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Juergen Gross <jgross@suse.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
+        with ESMTP id S231135AbjCGOrN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 09:47:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA3711E82
+        for <linux-mips@vger.kernel.org>; Tue,  7 Mar 2023 06:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678199791;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yMscSn7/v7gE6eZusBzcl4tSE2iMOh2pPYNqXPmBjFI=;
+        b=OUohGG/J1AReH1N3f63roppCEHTIvJWMC32erNzd6xvJ/34tMeNdMo1wozUgv3cRhRlEZR
+        Yo5Ws6QW0zLD4xrp3xluty7UxMqmZWi0syRUe3r0uJKkAA/zKfgFMNj0cf4fwj5qPb3Nlh
+        gehnaeNN0oniYDkjYPo8bDxdPQ09meU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-8Xan7_2yOZyL38nkQLtwpw-1; Tue, 07 Mar 2023 09:36:28 -0500
+X-MC-Unique: 8Xan7_2yOZyL38nkQLtwpw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A55D185A794;
+        Tue,  7 Mar 2023 14:36:26 +0000 (UTC)
+Received: from vschneid.remote.csb (unknown [10.33.37.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3D43B40CF8EE;
+        Tue,  7 Mar 2023 14:36:21 +0000 (UTC)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        xen-devel <xen-devel@lists.xenproject.org>
-Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Date:   Tue, 07 Mar 2023 14:18:01 +0000
-In-Reply-To: <33118f0b-6752-7e4c-49a3-a8c9345f02a1@suse.com>
-References: <20230213104302.17307-1-johan+linaro@kernel.org>
-         <20230213104302.17307-21-johan+linaro@kernel.org>
-         <f149fe1eb3836c14655e3e7eaa4032298ae68545.camel@infradead.org>
-         <33118f0b-6752-7e4c-49a3-a8c9345f02a1@suse.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-O5rbambac+Czr9Q3WDDZ"
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH v5 0/7] Generic IPI sending tracepoint
+Date:   Tue,  7 Mar 2023 14:35:51 +0000
+Message-Id: <20230307143558.294354-1-vschneid@redhat.com>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Background
+==========
 
---=-O5rbambac+Czr9Q3WDDZ
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Detecting IPI *reception* is relatively easy, e.g. using
+trace_irq_handler_{entry,exit} or even just function-trace
+flush_smp_call_function_queue() for SMP calls.  
 
-On Tue, 2023-03-07 at 15:06 +0100, Juergen Gross wrote:
-> On 07.03.23 14:51, David Woodhouse wrote:
-> > On Mon, 2023-02-13 at 11:43 +0100, Johan Hovold wrote:
-> > > The IRQ domain structures are currently protected by the global
-> > > irq_domain_mutex. Switch to using more fine-grained per-domain lockin=
-g,
-> > > which can speed up parallel probing by reducing lock contention.
-> > >=20
-> > > On a recent arm64 laptop, the total time spent waiting for the locks
-> > > during boot drops from 160 to 40 ms on average, while the maximum
-> > > aggregate wait time drops from 550 to 90 ms over ten runs for example=
-.
-> > >=20
-> > > Note that the domain lock of the root domain (innermost domain) must =
-be
-> > > used for hierarchical domains. For non-hierarchical domains (as for r=
-oot
-> > > domains), the new root pointer is set to the domain itself so that
-> > > &domain->root->mutex always points to the right lock.
-> > >=20
-> > > Also note that hierarchical domains should be constructed using
-> > > irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoi=
-d
-> > > having racing allocations access a not fully initialised domain. As a
-> > > safeguard, the lockdep assertion in irq_domain_set_mapping() will cat=
-ch
-> > > any offenders that also fail to set the root domain pointer.
-> > >=20
-> > > Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > > Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> >=20
-> > Broke Xen.
->=20
-> Fixed with commit ad32ab9604f2.
+Figuring out their *origin*, is trickier as there is no generic tracepoint tied
+to e.g. smp_call_function():
 
-Thanks.
+o AFAIA x86 has no tracepoint tied to sending IPIs, only receiving them
+  (cf. trace_call_function{_single}_entry()).
+o arm/arm64 do have trace_ipi_raise(), which gives us the target cpus but also a
+  mostly useless string (smp_calls will all be "Function call interrupts").
+o Other architectures don't seem to have any IPI-sending related tracepoint.  
 
---=-O5rbambac+Czr9Q3WDDZ
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+I believe one reason those tracepoints used by arm/arm64 ended up as they were
+is because these archs used to handle IPIs differently from regular interrupts
+(the IRQ driver would directly invoke an IPI-handling routine), which meant they 
+never showed up in trace_irq_handler_{entry, exit}. The trace_ipi_{entry,exit}
+tracepoints gave a way to trace IPI reception but those have become redundant as
+of: 
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzA3MTQxODAxWjAvBgkqhkiG9w0BCQQxIgQgtFKrZPkh
-35qQ1OUst9mi5TytFQGHvChC43pzoLEutQgwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAeAyUJ27zvjBYOYdSzp3h4W+0KitGJdW2R
-WNLQETCB6qVFTvle/EZ9iZyMoOWDOV5vGV+0s6QulHjmP0UHU7DGwNVWHtUBAkPGKnon0QiKcS4s
-ZuE+iYyu/Ey7LqMvLXwnZQBnmuLo9TE+ezzbyHDmTpFv7VQyZFqiHtT5NqndLsxDhHvdVeGX4Iwx
-mAX2UEIAbYEp9AdIwQk4SZV0V2L28BfhEkg/CfC0fI9j3e8G6yyOa2D4unzXw6gvrSQ3t3TynWU3
-qIdYNxC0dMKZpfPJvr9qjlo6bT1fJHeL7rm2RjeucerIyEoPTsoLafGvAEJcY5dSVohHfqKS4yEC
-JAiuyQExSFfHjmkigpX9nu/9/OJ5rGlrJ94Psl1ZdBzjyI5JqzMCHA2zk9J0bucXGLbt5w9ZMhGK
-soZR4RL4xZpOuvkLYcDvOeTFNEL90dg1hd/SHwmHXaW4Mj5nZvHIj4LYzkjCI13dPlKO87YVsevx
-MrGssQXuwId57pqEZL5FEdVtx+bRKIvGI4ieGG0u1qSAhyp00eC69NyU8bSm5zHlaq1nQWKaLTCO
-eEyC5J0ghShA6bviXnqn9FJGQBnm4mQ7fvf3CTsblyee/HxRlEOBWGDTowdZ4ak0BOhiZJ0dUatT
-I/oN3hJkZTHYAPZ7rL6Gqmor0MzYCTIzzc+Zqe7ZQQAAAAAAAA==
+      56afcd3dbd19 ("ARM: Allow IPIs to be handled as normal interrupts")
+      d3afc7f12987 ("arm64: Allow IPIs to be handled as normal interrupts")
 
+which gave IPIs a "proper" handler function used through
+generic_handle_domain_irq(), which makes them show up via
+trace_irq_handler_{entry, exit}.
 
---=-O5rbambac+Czr9Q3WDDZ--
+Changing stuff up
+=================
+
+Per the above, it would make sense to reshuffle trace_ipi_raise() and move it
+into generic code. This also came up during Daniel's talk on Osnoise at the CPU
+isolation MC of LPC 2022 [1]. 
+
+Now, to be useful, such a tracepoint needs to export:
+o targeted CPU(s)
+o calling context
+
+The only way to get the calling context with trace_ipi_raise() is to trigger a
+stack dump, e.g. $(trace-cmd -e ipi* -T echo 42).
+
+This is instead introducing a new tracepoint which exports the relevant context
+(callsite, and requested callback for when the callsite isn't helpful), and is
+usable by all architectures as it sits in generic code. 
+
+Another thing worth mentioning is that depending on the callsite, the _RET_IP_
+fed to the tracepoint is not always useful - generic_exec_single() doesn't tell
+you much about the actual callback being sent via IPI, which is why the new
+tracepoint also has a @callback argument.
+
+Patches
+=======
+
+o Patches 1-5 spread out the tracepoint across relevant sites.
+  Patch 5 ends up sprinkling lots of #include <trace/events/ipi.h> which I'm not
+  the biggest fan of, but is the least horrible solution I've been able to come
+  up with so far.
+  
+o Patch 7 is trying to be smart about tracing the callback associated with the
+  IPI.
+
+This results in having IPI trace events for:
+
+o smp_call_function*()
+o smp_send_reschedule()
+o irq_work_queue*()
+o standalone uses of __smp_call_single_queue()
+
+This is incomplete, just looking at arm64 there's more IPI types that aren't
+covered: 
+
+  IPI_CPU_STOP,
+  IPI_CPU_CRASH_STOP,
+  IPI_TIMER,
+  IPI_WAKEUP,
+
+but apart from IPI_TIMER (cf. tick_broadcast()), those IPIs are both unfrequent
+and accompanied with identifiable interference (stopper or cpuhp threads being
+scheduled). I've added a point in my todolist to handle those in a later series
+for the sake of completeness, but IMO this is ready to use.
+
+Results
+=======
+
+Using a recent enough libtraceevent (1.7.0 and above):
+
+  $ trace-cmd record -e 'ipi:*' hackbench
+  $ trace-cmd report
+	 hackbench-159   [002]   136.973122: ipi_send_cpumask:     cpumask=0 callsite=generic_exec_single+0x33 callback=nohz_csd_func+0x0
+	 hackbench-159   [002]   136.977945: ipi_send_cpumask:     cpumask=0 callsite=generic_exec_single+0x33 callback=nohz_csd_func+0x0
+	 hackbench-159   [002]   136.984576: ipi_send_cpumask:     cpumask=3 callsite=check_preempt_curr+0x37 callback=0x0
+	 hackbench-159   [002]   136.985996: ipi_send_cpumask:     cpumask=0 callsite=generic_exec_single+0x33 callback=nohz_csd_func+0x0
+	 [...]
+
+Links
+=====
+
+[1]: https://youtu.be/5gT57y4OzBM?t=14234
+
+Revisions
+=========
+
+v4: https://lore.kernel.org/lkml/20230119143619.2733236-1-vschneid@redhat.com/
+v3: https://lore.kernel.org/lkml/20221202155817.2102944-1-vschneid@redhat.com/
+v2: https://lore.kernel.org/lkml/20221102182949.3119584-1-vschneid@redhat.com/
+v1: https://lore.kernel.org/lkml/20221007154145.1877054-1-vschneid@redhat.com/
+
+v5 -> v4
+++++++++
+
+o Rebased against 6.3-rc1
+
+v3 -> v4
+++++++++
+
+o Rebased against 6.2-rc4
+  Re-ran my coccinelle scripts for the treewide change; only loongarch needed
+  changes
+o Dropped cpumask trace event field patch (now in 6.2-rc1)
+o Applied RB and Ack tags
+  Ingo, I wasn't sure if you meant to Ack the whole series or just the patch you
+  replied to, so since I didn't want to unlawfully forge any tag I only added
+  the one.
+o Did a small pass on comments and changelogs
+
+v2 -> v3
+++++++++
+
+o Dropped the generic export of smp_send_reschedule(), turned it into a macro
+  and a bunch of imports
+o Dropped the send_call_function_single_ipi() macro madness, split it into sched
+  and smp bits using some of Peter's suggestions
+
+v1 -> v2
+++++++++
+
+o Ditched single-CPU tracepoint
+o Changed tracepoint signature to include callback
+o Changed tracepoint callsite field to void *; the parameter is still UL to save
+  up on casts due to using _RET_IP_.
+o Fixed linking failures due to not exporting smp_send_reschedule()
+
+Valentin Schneider (7):
+  trace: Add trace_ipi_send_cpumask()
+  sched, smp: Trace IPIs sent via send_call_function_single_ipi()
+  smp: Trace IPIs sent via arch_send_call_function_ipi_mask()
+  irq_work: Trace self-IPIs sent via arch_irq_work_raise()
+  treewide: Trace IPIs sent via smp_send_reschedule()
+  smp: reword smp call IPI comment
+  sched, smp: Trace smp callback causing an IPI
+
+ arch/alpha/kernel/smp.c                  |  2 +-
+ arch/arc/kernel/smp.c                    |  2 +-
+ arch/arm/kernel/smp.c                    |  5 +-
+ arch/arm/mach-actions/platsmp.c          |  2 +
+ arch/arm64/kernel/smp.c                  |  3 +-
+ arch/csky/kernel/smp.c                   |  2 +-
+ arch/hexagon/kernel/smp.c                |  2 +-
+ arch/ia64/kernel/smp.c                   |  4 +-
+ arch/loongarch/kernel/smp.c              |  4 +-
+ arch/mips/include/asm/smp.h              |  2 +-
+ arch/mips/kernel/rtlx-cmp.c              |  2 +
+ arch/openrisc/kernel/smp.c               |  2 +-
+ arch/parisc/kernel/smp.c                 |  4 +-
+ arch/powerpc/kernel/smp.c                |  6 +-
+ arch/powerpc/kvm/book3s_hv.c             |  3 +
+ arch/powerpc/platforms/powernv/subcore.c |  2 +
+ arch/riscv/kernel/smp.c                  |  4 +-
+ arch/s390/kernel/smp.c                   |  2 +-
+ arch/sh/kernel/smp.c                     |  2 +-
+ arch/sparc/kernel/smp_32.c               |  2 +-
+ arch/sparc/kernel/smp_64.c               |  2 +-
+ arch/x86/include/asm/smp.h               |  2 +-
+ arch/x86/kvm/svm/svm.c                   |  4 ++
+ arch/x86/kvm/x86.c                       |  2 +
+ arch/xtensa/kernel/smp.c                 |  2 +-
+ include/linux/smp.h                      | 11 +++-
+ include/trace/events/ipi.h               | 22 +++++++
+ kernel/irq_work.c                        | 14 ++++-
+ kernel/sched/core.c                      | 19 ++++--
+ kernel/sched/smp.h                       |  2 +-
+ kernel/smp.c                             | 78 +++++++++++++++++++-----
+ virt/kvm/kvm_main.c                      |  2 +
+ 32 files changed, 164 insertions(+), 53 deletions(-)
+
+--
+2.31.1
+
