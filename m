@@ -2,121 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DAF6AF403
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 20:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D8B6AF7D0
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 22:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbjCGTMe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Mar 2023 14:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
+        id S231187AbjCGVmD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Mar 2023 16:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjCGTMM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 14:12:12 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA01900BF;
-        Tue,  7 Mar 2023 10:56:11 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 0C3423200AAF;
-        Tue,  7 Mar 2023 13:46:47 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 07 Mar 2023 13:46:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678214807; x=1678301207; bh=OE
-        0XkuYckKW+GV/gWAK6SUZf1WFVHEYo5bhdTGgQVN4=; b=W/WGual0eYfv4QKUVL
-        WzXz0DTkfhwRa48v6O0kFX9fWqJgTdyzV28j7YxJ2xNZdhWWQ9IyvZi/7wGksTMh
-        3wmiAqpcHxMaGTn+PHPi3t2+/tzWq/DpdEVe/slnVdul4jIvd7vGnqrc6mW51o4v
-        CkUPriAiyCc29n9FLpeYTjzu0kWbG5MLPQgSfOLT+gcUbIWeqF5bkdjcwI1vzHgK
-        iGB4ZOqLB6a4d9+l+63bs6zcyTxGCEfuuUD2TN8SXJq9nQMKBcbIroJtoFCLSI4B
-        CyVcUAiXCQUZnhTX+QNc1n/P9w1bNDs63MQt+CpuY5Ms1dq3MUtYcsEfr27A5tHM
-        L/jA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678214807; x=1678301207; bh=OE0XkuYckKW+G
-        V/gWAK6SUZf1WFVHEYo5bhdTGgQVN4=; b=m7TVa4KG6wHKhfGoKLUje2p/HRtb/
-        dIlC+eUgh6fs/069UwToTHsgru/89gUSNK5WefYhPHXulsw6W558NBVdzn7b1S2x
-        mHQ0FyG2KWy5QbiP1hfg0l/a73zfGSd8cNUQCsVbP7A2FW8wpCDC0v6JlzUzgLao
-        G56dhZ7gwo++txP5rInGZn6kXxT1JbQ7Hej2aNjP4VIBznnEBLxF9lNywQeM+hTI
-        wBzusSa6cj1D56SAAaWRJQg7dbr6g66UwYiHL60xauur9Wd+YojZ4NEJ0stOtdyq
-        s6Y4X7foQfTaiKI68bY9c567x5NqsZOU5xADYMZFQXphtddkm5+20iSXg==
-X-ME-Sender: <xms:l4YHZOnTM3RukeqswTV7qdiYgVHWetRK6yzbLaIe4RnnsQqXWmKaBQ>
-    <xme:l4YHZF2sNrtnkmUPk5N8x-pFscEpqWcHZKhBM_mKakkvuSbpKANiTBzcdum0lu-ZF
-    rgYkwK4tOkYfzBfnQU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddutddgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:l4YHZMpJP1iFESkvIP8z99ddcn5RZrkB0vSnvFvbsVTLtuBdNeWdXw>
-    <xmx:l4YHZClTWeaoNd09EhqjuZNCw2JvvFiQ-gP50GijV1CvR24KsXye4w>
-    <xmx:l4YHZM0Cz8gN6O0o-KWpV9xJ-YnFJaEMd6_zhxhni46aUZOfQs29OQ>
-    <xmx:l4YHZNI43E0lp01IqYSxRV148U9QPOyEONq9CBQDnAqDhGY6UH5gqQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EB07CB60086; Tue,  7 Mar 2023 13:46:46 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
-Mime-Version: 1.0
-Message-Id: <76be6056-2057-4199-9dd2-52d28bbb37e8@app.fastmail.com>
-In-Reply-To: <CA+G9fYvX8W6R6FtxZbCmdeKhSikmdD9Tten8U5qXX4cG3+-1VQ@mail.gmail.com>
-References: <CA+G9fYvX8W6R6FtxZbCmdeKhSikmdD9Tten8U5qXX4cG3+-1VQ@mail.gmail.com>
-Date:   Tue, 07 Mar 2023 19:46:26 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org, lkft-triage@lists.linaro.org,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Cc:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Anders Roxell" <anders.roxell@linaro.org>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
-        =?UTF-8?Q?Phil_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: Re: next: arch/mips/ar7/gpio.c:19:33: error: field 'chip' has incomplete type
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230420AbjCGVmC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 16:42:02 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278C9A648E
+        for <linux-mips@vger.kernel.org>; Tue,  7 Mar 2023 13:41:59 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so83404pjb.1
+        for <linux-mips@vger.kernel.org>; Tue, 07 Mar 2023 13:41:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1678225318;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h0UBWEzua7mI1E3a/+R1pzklpJ+RGJpYFy9mijom/UM=;
+        b=3d0i9L9fgsM6wfDV6SgEVPe2doCmA84h8dgaHpMbejZeZuQRklJuURRf6PhkCN7ukc
+         w/n+8nbuC+OW0mQWtjtERbzb9wBvkWnsuB3UcR0sH2Ba3g7FDMT+jDol43sV0ZSapUuU
+         afFVzDtGs7qaCnWpNgGUvXPCI9VeRCtjLQt1T3AcBXMLT19wGawFny88dkq7b+SM519J
+         izcWM0iUW0/Sac/AVhLneLvdpP7x0olNKc4YqRIWvevDICe0+qs1ypmIQEYjXt6H2n6Q
+         PGyqmNUpfeGmcTALJ+qCkHjqjpTn7tbuCsOrFtOo3YqXRw3n/PRxx6fcIN5oBf8fOwBc
+         hPrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678225318;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h0UBWEzua7mI1E3a/+R1pzklpJ+RGJpYFy9mijom/UM=;
+        b=SI/gaR6+epMuvlYQvzFFAZU/SzuRs2pWtv9ey1XV+D8d6fD0Ifetm9RZ3P3PbhAs43
+         jSwOnpyhyJka8Xqc0xYhjjg8T+SEihswKNDdMMuwwLmObNCm0HFMq0oID3M9FrHt+A/j
+         r8+ioOXAYGHZ6OCOKB9EJjAQkR98UuUODgAjiR3TUpOVSfKXmHHb+qaLqfAEOqVjDN0M
+         55hotmo6OwG+fy9ztbfbARwhjl4Bpqa+5J8W28Gd6+6HvQufNrzg9NSX5R5A6jNUbneB
+         vMzb18gTFsO7bwiUTKNNc6gWvBucEx4IUKt4R8q7wz4Kur7yn75B18gnkE97EMrkOd2q
+         A67Q==
+X-Gm-Message-State: AO0yUKVDyrt9hPMpbD46YWuVhKfbuBY2qtsCIq9Rp3lcYtVghZ003OSP
+        VEQfzNoc4B9U3KMhVtpba9BSFg==
+X-Google-Smtp-Source: AK7set/K6eJAQf/eSbaq269PoSBswE0gsDc5h7lzSW9lr2zauw1plinMmCGHpVyR/4qKnDR1/eXDIg==
+X-Received: by 2002:a17:902:ce90:b0:19a:9434:af30 with SMTP id f16-20020a170902ce9000b0019a9434af30mr18505363plg.18.1678225318377;
+        Tue, 07 Mar 2023 13:41:58 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id km12-20020a17090327cc00b0019e30e3068bsm8866509plb.168.2023.03.07.13.41.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 13:41:57 -0800 (PST)
+Date:   Tue, 07 Mar 2023 13:41:57 -0800 (PST)
+X-Google-Original-Date: Tue, 07 Mar 2023 13:40:59 PST (-0800)
+Subject:     Re: [PATCH v5 12/26] riscv: Remove COMMAND_LINE_SIZE from uapi
+In-Reply-To: <20230306100508.1171812-13-alexghiti@rivosinc.com>
+CC:     Greg KH <gregkh@linuxfoundation.org>, corbet@lwn.net,
+        Richard Henderson <richard.henderson@linaro.org>,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, alexghiti@rivosinc.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alexghiti@rivosinc.com
+Message-ID: <mhng-d4be5bb5-f0ad-4e76-9b11-83732d233a45@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 7, 2023, at 18:10, Naresh Kamboju wrote:
-> Following build regression found while building mips ar7_defconfig
-> on Linux next-20230307 tag.
+On Mon, 06 Mar 2023 02:04:54 PST (-0800), alexghiti@rivosinc.com wrote:
+> As far as I can tell this is not used by userspace and thus should not
+> be part of the user-visible API.
 >
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/setup.h      | 7 +++++++
+>  arch/riscv/include/uapi/asm/setup.h | 2 --
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/riscv/include/asm/setup.h
 >
-> Please find the build log and details below.
+> diff --git a/arch/riscv/include/asm/setup.h b/arch/riscv/include/asm/setup.h
+> new file mode 100644
+> index 000000000000..f165a14344e2
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/setup.h
+> @@ -0,0 +1,7 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef _ASM_RISCV_SETUP_H
+> +#define _ASM_RISCV_SETUP_H
+> +
+> +#define COMMAND_LINE_SIZE       1024
+> +
+> +#endif /* _ASM_RISCV_SETUP_H */
+> diff --git a/arch/riscv/include/uapi/asm/setup.h b/arch/riscv/include/uapi/asm/setup.h
+> index 66b13a522880..17fcecd4a2f8 100644
+> --- a/arch/riscv/include/uapi/asm/setup.h
+> +++ b/arch/riscv/include/uapi/asm/setup.h
+> @@ -3,6 +3,4 @@
+>  #ifndef _UAPI_ASM_RISCV_SETUP_H
+>  #define _UAPI_ASM_RISCV_SETUP_H
 >
-> build log:
-> --------
-> arch/mips/ar7/gpio.c:19:33: error: field 'chip' has incomplete type
->    19 |         struct gpio_chip        chip;
+> -#define COMMAND_LINE_SIZE	1024
+> -
+>  #endif /* _UAPI_ASM_RISCV_SETUP_H */
 
-It sounds like a result of 21d9526d13b5 ("gpiolib: Make the
-legacy <linux/gpio.h> consumer-only"). I haven't tried it,
-but I think this should fix it, unless there is another bug:
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
---- a/arch/mips/ar7/gpio.c
-+++ b/arch/mips/ar7/gpio.c
-@@ -7,7 +7,7 @@
- 
- #include <linux/init.h>
- #include <linux/export.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/driver.h>
- 
- #include <asm/mach-ar7/ar7.h>
- 
-
-
-      Arnd
+Thanks!
