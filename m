@@ -2,137 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4BB6AD5CD
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 04:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AAD6AD83A
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Mar 2023 08:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjCGDp4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Mar 2023 22:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S230466AbjCGHSA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Mar 2023 02:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjCGDpz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Mar 2023 22:45:55 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC7B3250C;
-        Mon,  6 Mar 2023 19:45:54 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id g3so47340480eda.1;
-        Mon, 06 Mar 2023 19:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678160753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7WFYzmYMI13NGyI9RVWU+B5u5ZNy5SSZeg3RTeQ3FS4=;
-        b=RbGZd472V0mVea6Q/CdYoaWjP6UZwTd+MXhE38lo2a4xGqBjdGJBk/FxdFXeribDDi
-         3zDaZmVB7PU2pwW/kHOM2RuQFCkUTuLt9OIRjqHmoVIbrxY9+NlxD9PjMsk67Llj5L2o
-         qgQuRhr/fNfRypyEir8uyuKCNINxA71JFHyfxAFRal+zMnJEIiUOikmzR3oiqcefc76m
-         X7SBfQQVCJw0CCpMWhLPPvme8sPIlbztqy8VqrwdmrBP3Nv98hrK1MbB3fdd0Nu25N0L
-         Gkwozz8oRk1N2ZPFA6lPCPqMr4gCVCNbycQCMyu2rhd+yDXCKkRmEEbdGgKtCeWaEkX+
-         3LEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678160753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7WFYzmYMI13NGyI9RVWU+B5u5ZNy5SSZeg3RTeQ3FS4=;
-        b=xiuhe3XH7IZfxjGh4kuB6Pk6pLXdiPU7mqeaD0miF1fmN/DQowENxP8VP9RcK2+KpH
-         2/OgR51dlbgoxfEXc37mNsqHD0H+NlQMPt/Yc/fxOVFRsCL5+GjKepNrumy1h3jXceM+
-         fVIBjlu4id9QqcJcp7/vSLWU1CNjDB858/+6IDv45AfixtZawYsU3Kdtl7RN+aRaW8n9
-         aa8CIesNevcaO2aZQKRZC2Hs94xqKir0Xqy+PzCVp2kb1q3LtGMzWz2ACRIkBelIBvf1
-         7MvBM/j/WYYN09k+ulvlLBQloBLVMB7rejTyx40rQFxdQUqzQxcJ1DXPBhKdWbJI12ls
-         hhYQ==
-X-Gm-Message-State: AO0yUKXGydHu/uvutjoLOL1WMNbjjsVfOopQDR2cbfhtTHgZdKxrbQiT
-        wLNaKmKjnxEx2PcrVSKs6OkMG1D2KPQmzhb7tek=
-X-Google-Smtp-Source: AK7set/bDf7jZs8BadF17KUJmFRr2SpATO3txBELeojm6hKxTx9bH/strG41JGbMxurM5Eq8vfjECTwY7Abzb+ve+gg=
-X-Received: by 2002:a50:d581:0:b0:4ab:4b85:a6a8 with SMTP id
- v1-20020a50d581000000b004ab4b85a6a8mr7092721edi.4.1678160753041; Mon, 06 Mar
- 2023 19:45:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20230302125215.214014-1-keguang.zhang@gmail.com>
- <20230302125215.214014-3-keguang.zhang@gmail.com> <CAMRc=Me3yVwQm8=CmUVM2gyYnFxntW47-OOPdmq1TzXTJB5ETg@mail.gmail.com>
-In-Reply-To: <CAMRc=Me3yVwQm8=CmUVM2gyYnFxntW47-OOPdmq1TzXTJB5ETg@mail.gmail.com>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Tue, 7 Mar 2023 11:45:36 +0800
-Message-ID: <CAJhJPsX1q6PGSb+eoCSdCC2_vDtbaShLLzEbuNOqD_Jzd8Ozdw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] gpio: loongson1: Use readl() & writel()
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S229570AbjCGHR4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 02:17:56 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92062D75;
+        Mon,  6 Mar 2023 23:17:53 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0C2795C0267;
+        Tue,  7 Mar 2023 02:17:53 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 07 Mar 2023 02:17:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1678173473; x=1678259873; bh=qEXKdcaZZ2RtX2iYZ7qIlOWk0bUKh5e0zsP
+        y9GctdU4=; b=EVRS9l0SgvuuYtQJV4VfCOBDd5P19/ufqL/xok5l9oWD530qvRl
+        32OGHmJT2bayLahPVS0gWRhnLxK6Z+Jlk++srAgloB6tZ4t6RnEQYl9dtmHEbUEF
+        41yZP0BmrDRa116+CrN+4XevwsaS770TCHXUy+xB6oK0X09IiOjiuVuH0C/ARmo6
+        fO6SZlgLkFxz5cjkZRClchxi0pyAZ+FHLG3nl/CBKqBfT5jRISfkTQNn0YYywD4T
+        Wj92noz9HFGKpzdsy/cwomQIzdk3+YO7/KK9SAc605foLfc32u4qJDvXpP1n5P7c
+        peGtwY/JqW+0XBFgu8QLiruwVmEZvdvu2Mw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1678173473; x=1678259873; bh=qEXKdcaZZ2RtX2iYZ7qIlOWk0bUKh5e0zsP
+        y9GctdU4=; b=drzmil3385Lov2w7beShJrFQ3GATqdBgomeK+nZBz6RibzrgaH9
+        Ph4oAZFDXe1gA4dz02jni1x8rYLPU8csmNt0y/kcxAHHuEqFKFb3SExrpsrl2+ox
+        U3hGgfD2s/cIMt8ObvuYqHtHz6rCzw4uyLsanVK3GWvMbQj1h7ydE9biXdh6IlAo
+        vbBrXEwKvNYO63OEEXlqSJsO+MvOnXKAazVOsOpMwDKqVBcWpraKL3cF2FUOLPH8
+        UeMggh88CpSEmj+eZVgGHUKWgsHEc9fW6HXemWUPFDglt5cDYOzE/+dXaTvRkKAT
+        +fxjvbLqJBJC5gz7jKtljcIml1zGKCfQHUA==
+X-ME-Sender: <xms:IOUGZNt444Blsb2CJgWVwvaA3q7cIpqk4Aurj850w7PB2pFddLW_2Q>
+    <xme:IOUGZGdTSdtyeCMJgOipQiIPfHDIoHGyi32o6chNgVL66YAnAWyqMOqsYDE7kyEDF
+    D8mw-a2MlpLRvahZBg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtledguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
+    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:IOUGZAxle2sK94bL_Sv0epth1M9WSOpp80SbYE5KdPlt6hZoubNNTw>
+    <xmx:IOUGZEM6RnQIS_yxJzQrjETPabDxGUQ5yKtgqKI26-XJ0WsTCzecGw>
+    <xmx:IOUGZN_ERqYTyoR5IRPG-Ib0D_4bvp2mSCmNzsxQKB_0bbay6-dj_Q>
+    <xmx:IeUGZLe9d7grz_DOWcQ4denP8nvxrHBfCStmI9ZP3mjw4WhQQuhvZw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 13F47B60086; Tue,  7 Mar 2023 02:17:52 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
+Mime-Version: 1.0
+Message-Id: <9d8292ad-c865-4b82-b6e3-d7db75820d0f@app.fastmail.com>
+In-Reply-To: <ZAaTw+841xBsz/m9@MiWiFi-R3L-srv>
+References: <20230303102817.212148-1-bhe@redhat.com>
+ <20230303102817.212148-3-bhe@redhat.com> <87sfej1rie.fsf@mpe.ellerman.id.au>
+ <CAMuHMdXoM24uAZGcjBtscNMOSY_+4u08PEOR7gOfCH7jvCceDg@mail.gmail.com>
+ <5dec69d0-0bc9-4f6c-8d0d-ee5422783100@app.fastmail.com>
+ <87jzzt1ioc.fsf@mpe.ellerman.id.au> <ZAaTw+841xBsz/m9@MiWiFi-R3L-srv>
+Date:   Tue, 07 Mar 2023 08:17:30 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Baoquan He" <bhe@redhat.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+Cc:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-sh@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        "Christoph Hellwig" <hch@infradead.org>, linux-mm@kvack.org,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v3 2/2] arch/*/io.h: remove ioremap_uc in some architectures
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 5:30=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
+On Tue, Mar 7, 2023, at 02:30, Baoquan He wrote:
+> On 03/07/23 at 11:58am, Michael Ellerman wrote:
+>> "Arnd Bergmann" <arnd@arndb.de> writes:
+>> > On Sun, Mar 5, 2023, at 10:29, Geert Uytterhoeven wrote:
+>> >> On Sun, Mar 5, 2023 at 10:23=E2=80=AFAM Michael Ellerman <mpe@elle=
+rman.id.au> wrote:
+>> >>> Maybe that exact code path is only reachable on x86/ia64? But if =
+so
+>> >>> please explain why.
+>> >>>
+>> >>> Otherwise it looks like this series could break that driver on po=
+werpc
+>> >>> at least.
+>> >>
+>> >> Indeed.
+>> >
+>> > When I last looked into this, I sent a patch to use ioremap()
+>> > on non-x86:
+>> >
+>> > https://lore.kernel.org/all/20191111192258.2234502-1-arnd@arndb.de/
+>>=20
+>> OK thanks.
+>>=20
+>> Baoquan can you add that patch to the start of this series if/when you
+>> post the next version?
 >
-> On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail=
-.com> wrote:
-> >
-> > This patch replace __raw_readl() & __raw_writel() with readl() & writel=
-().
-> >
->
-> Please say WHY you're doing this.
->
-readl & writel contain memory barriers which can guarantee access order.
+> Sure, will do. Wondering if we need make change to cover powerpc other
+> than x86 and ia64 in Arnd's patch as you and Geert pointed out.
 
-> Bart
->
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> > V1 -> V2: Split this change to a separate patch
-> > ---
-> >  drivers/gpio/gpio-loongson1.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson=
-1.c
-> > index 8862c9ea0d41..b6c11caa3ade 100644
-> > --- a/drivers/gpio/gpio-loongson1.c
-> > +++ b/drivers/gpio/gpio-loongson1.c
-> > @@ -23,8 +23,8 @@ static int ls1x_gpio_request(struct gpio_chip *gc, un=
-signed int offset)
-> >         unsigned long flags;
-> >
-> >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
-> > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) | BIT(offset=
-),
-> > -                    gpio_reg_base + GPIO_CFG);
-> > +       writel(readl(gpio_reg_base + GPIO_CFG) | BIT(offset),
-> > +              gpio_reg_base + GPIO_CFG);
-> >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
-> >
-> >         return 0;
-> > @@ -35,8 +35,8 @@ static void ls1x_gpio_free(struct gpio_chip *gc, unsi=
-gned int offset)
-> >         unsigned long flags;
-> >
-> >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
-> > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) & ~BIT(offse=
-t),
-> > -                    gpio_reg_base + GPIO_CFG);
-> > +       writel(readl(gpio_reg_base + GPIO_CFG) & ~BIT(offset),
-> > +              gpio_reg_base + GPIO_CFG);
-> >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
-> >  }
-> >
-> > --
-> > 2.34.1
-> >
+The patch fixes the aty driver for all architectures, including the
+ones that were already broken before your series with the 'return NULL'
+version.
 
+The only other callers of ioremap_uc() and devm_ioremap_uc() are
+in architecture specific code and in drivers/mfd/intel-lpss.c, which
+is x86 specific.
 
-
---
-Best regards,
-
-Kelvin Cheung
+     Arnd
