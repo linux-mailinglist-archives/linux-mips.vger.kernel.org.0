@@ -2,99 +2,181 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAD16B0426
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 11:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FFB6B0611
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 12:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCHK0e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Mar 2023 05:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S230329AbjCHLgg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Mar 2023 06:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjCHK02 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Mar 2023 05:26:28 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51762B78B5
-        for <linux-mips@vger.kernel.org>; Wed,  8 Mar 2023 02:26:26 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id f13so14932813vsg.6
-        for <linux-mips@vger.kernel.org>; Wed, 08 Mar 2023 02:26:26 -0800 (PST)
+        with ESMTP id S230059AbjCHLgE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Mar 2023 06:36:04 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31684AF294;
+        Wed,  8 Mar 2023 03:36:03 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id a25so64692931edb.0;
+        Wed, 08 Mar 2023 03:36:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678271185;
+        d=gmail.com; s=20210112; t=1678275361;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AGmotPoG2120yB70tKLvm/NcUMvlY8fYIwzXAE2sT5E=;
-        b=ikmN3FQLY36alaZWM7yikv6mQnHmAO0CBsIMnVSL0SKNv8lQ6Jgck86pX0+z/SNheX
-         fCJpcMd2Vri0U8uNDvBhlt5K6RP4f5Vnwp9pQT2iv6C8jSHQUMxtQL9muBb/2qclAi5N
-         0lNXLlkl5sisMB6TrhuNIjxJTyj2kvySbMn3Uz9wbex7OfKBYn7WSpF+BwkzjZgH8oQM
-         NldSecCcEDlHOQeZEqoaRbIogSqOeSnMLcANZ2iDNUX1f1f2nX5F9YL5bQk/i3yn9NUj
-         0z3V6I6y0HT02asXaBJam4cjb768Whr+HEQXJ9BJZZv6MeFI/uP8qoVkA7uxVch2JQnB
-         0V7A==
+        bh=pkqtkcAPDhHcKXHJJhzZGkadcuoCSlM8Je8c/sebOSk=;
+        b=Uxditw6bMjdlAa4tQirez9bPQT80pkxBdU0vkvdov83E7EJCKgtMgvvEzigUMmICqo
+         7r/28EKK/HXqXqGNu15VJbPT/3FwMttnWz4rKiQcNDFj1ZpavEgj7JulU+J/Q0vYFNQO
+         Dg4rQpFnQetRbBsl2TFx10mpdUpQ9XHuPuDagLxxMQ2VCgIYgBul67bTcSjTYfNmluYF
+         WJQvqrJRnlRhnNV10ouHOMtcuwSlTh5yQP9UcydhkTx16LtxJJcFrsk3f0MhooN+RwQ8
+         qHPdkuOKtekXLgETObHPMZqt4UJw/xk5X4tfcJYCHGQ7qCWSpoOspReezBbzdOt2ZpJA
+         lVxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678271185;
+        d=1e100.net; s=20210112; t=1678275361;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AGmotPoG2120yB70tKLvm/NcUMvlY8fYIwzXAE2sT5E=;
-        b=qk6l1AmEvkKoCWZvD3305L+Qo133bST5abgKS78/yw6XQzTnAbSPxIUCM05Li+JL1z
-         zr4zKkKf+tUKGryJ9rptDIp+9R8flTpC78lERmoyCxPD5I2rjcRXX8e5LjRbbw1bqnPB
-         mNF8eUrKQGxpdMcMU3de5zRHgkT8qEqohu9QXoUMH/VjSKmxZTu9mHU54TaQD1FyQOq9
-         tXcKAgAmDlVfRrR3KUgZHzhfu6BDV9VVIU1DMv2PirnzWWVQMKrgr1dTRdfun37VGSyC
-         mdKW6gN3c1NW9xnvXcrvw9YgGSteiezf3eFoInD5wvHZnVhuOTXINdEqmxXMsRnzZnQT
-         7PPw==
-X-Gm-Message-State: AO0yUKXD1mglcHoaeZe6r5E56DE4GMXwhSXFAbz5hi1xklY885QgcW2Z
-        tfoO73zFVWyZjXknBWXbIinwwcGM7W6WGzR3ui+/GQ==
-X-Google-Smtp-Source: AK7set+nfFCDXVga6XlswqORZjNQ+XvGO2KUTaYGALjfouQWJGkZeidT1GEBY8YrejCjCD/g0wbdlikML4iY6myTQWA=
-X-Received: by 2002:a67:ea49:0:b0:411:a740:c3ea with SMTP id
- r9-20020a67ea49000000b00411a740c3eamr11948516vso.0.1678271185398; Wed, 08 Mar
- 2023 02:26:25 -0800 (PST)
+        bh=pkqtkcAPDhHcKXHJJhzZGkadcuoCSlM8Je8c/sebOSk=;
+        b=tXNX81rztjA3XYCJ97q0PVaAkPH6rZSWCGMkOMIiKt/qGc8fyF9WTQCn8HZpFs6fAR
+         uk/XCkHdIAqeoplov+ACdx0hsehAblQDgROlbk5MkuNNybDX/XGQ9Oq0io/kdkDaXfZc
+         fI0nPxhosgJN9wBWBaxK7q0J+VR2U6ezRhcCZoAFqMqL0e78F6zKO2SxtJ/0dt+ygopu
+         yfi6R1VeJmFbWU0X80gbRLv6kCS8+kIHHs+uLUdHdz51Vl2gIhbbEzGjydljfMUINCt2
+         5tRYfDDfOK46RtapZtSsLBHHruOiXCjJl69iVUVYujoPMaDpSV/aOG+E7R16F1Hck3JT
+         B+dg==
+X-Gm-Message-State: AO0yUKVzzeRIRrWAHVHtcTdo3PkypiBPJagSdDyzK6k6YxwI1Xjza1RJ
+        ICouQhVxifU4s41IndZcX42dxtBWqhCnSRAdsZ0=
+X-Google-Smtp-Source: AK7set+8IVqHUCP7lpW4Tu0PFR/uGhVXOh2XCgJ0nI8owJdMs3y7iNlYcasQPs28+hxxB5z53ejUH1b0gSyCIQYYEl4=
+X-Received: by 2002:a50:baa6:0:b0:4c1:6acc:ea5 with SMTP id
+ x35-20020a50baa6000000b004c16acc0ea5mr9818706ede.4.1678275361500; Wed, 08 Mar
+ 2023 03:36:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306151532.23246-1-sensor1010@163.com> <ZAZvH6CFtH4I1BOm@surfacebook>
-In-Reply-To: <ZAZvH6CFtH4I1BOm@surfacebook>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 8 Mar 2023 11:26:14 +0100
-Message-ID: <CAMRc=MemEXVcqL0axaduTrAZhT1Zx6APCY_qo2TM2E-aD=Seqw@mail.gmail.com>
-Subject: Re: [PATCH v1] drivers/gpio: remove redundant platform_set_drvdata()
-To:     andy.shevchenko@gmail.com
-Cc:     Lizhe <sensor1010@163.com>, linus.walleij@linaro.org,
-        geert+renesas@glider.be, info@metux.net, shc_work@mail.ru,
-        j-keerthy@ti.com, hoan@os.amperecomputing.com,
-        fancer.lancer@gmail.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        kaloz@openwrt.org, khalasa@piap.pl, keguang.zhang@gmail.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+References: <20230302125215.214014-1-keguang.zhang@gmail.com>
+ <20230302125215.214014-3-keguang.zhang@gmail.com> <CAMRc=Me3yVwQm8=CmUVM2gyYnFxntW47-OOPdmq1TzXTJB5ETg@mail.gmail.com>
+ <CAJhJPsX1q6PGSb+eoCSdCC2_vDtbaShLLzEbuNOqD_Jzd8Ozdw@mail.gmail.com> <2d5521ff21ea4b99be3dd2e449f53934@AcuMS.aculab.com>
+In-Reply-To: <2d5521ff21ea4b99be3dd2e449f53934@AcuMS.aculab.com>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Wed, 8 Mar 2023 19:35:45 +0800
+Message-ID: <CAJhJPsUy0U-SdP2Vk9B8qz=CGA=oDSxbaaqqS+HOiDnQoBAThA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] gpio: loongson1: Use readl() & writel()
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 11:54=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
+On Wed, Mar 8, 2023 at 5:42=E2=80=AFPM David Laight <David.Laight@aculab.co=
+m> wrote:
 >
-> Mon, Mar 06, 2023 at 11:15:32PM +0800, Lizhe kirjoitti:
-> > remove redundant platform_set_drvdata(),
-> > Because there is no place to use the platform_get_drvdata
+> From: Keguang Zhang
+> > Sent: 07 March 2023 03:46
+> >
+> > On Mon, Mar 6, 2023 at 5:30=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.=
+pl> wrote:
+> > >
+> > > On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@g=
+mail.com> wrote:
+> > > >
+> > > > This patch replace __raw_readl() & __raw_writel() with readl() & wr=
+itel().
+> > > >
+> > >
+> > > Please say WHY you're doing this.
+> > >
+> > readl & writel contain memory barriers which can guarantee access order=
+.
 >
-> The commit message has to be improved:
-> - English grammar and punctuation
-> - style of func()
-> - clearer wording on what it all means
+> So what...
 >
-> Note, to get driver data the dev_get_drvdata() can be used. Do you aware =
-about
-> this? And hHow did you check these drivers?
+> There is a data dependency between the read and write.
+> The read can't be scheduled before the lock is acquired.
+> The write can't be scheduled after the lock is released.
 >
-> --
-> With Best Regards,
-> Andy Shevchenko
+> So any barriers in readl()/writel() aren't needed.
 >
+> If they are only compile barriers they'll have no real effect.
+> OTOH if the cpu needs actual synchronising instructions (as some
+> ppc do) then they will slow things down.
 >
+Thanks for the explanation.
+The intention of this change is to prevent possible order issues.
+At present, __raw_readl() & __raw_writel() do work fine.
+I will drop this patch in the next version.
 
-I would also add to that: you need to use your full first and family
-name in SoB because I assume you don't just go by "Lizhe".
 
-Bartosz
+>         David
+>
+> >
+> > > Bart
+> > >
+> > > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > > > ---
+> > > > V1 -> V2: Split this change to a separate patch
+> > > > ---
+> > > >  drivers/gpio/gpio-loongson1.c | 8 ++++----
+> > > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loon=
+gson1.c
+> > > > index 8862c9ea0d41..b6c11caa3ade 100644
+> > > > --- a/drivers/gpio/gpio-loongson1.c
+> > > > +++ b/drivers/gpio/gpio-loongson1.c
+> > > > @@ -23,8 +23,8 @@ static int ls1x_gpio_request(struct gpio_chip *gc=
+, unsigned int offset)
+> > > >         unsigned long flags;
+> > > >
+> > > >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+> > > > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) | BIT(of=
+fset),
+> > > > -                    gpio_reg_base + GPIO_CFG);
+> > > > +       writel(readl(gpio_reg_base + GPIO_CFG) | BIT(offset),
+> > > > +              gpio_reg_base + GPIO_CFG);
+> > > >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+> > > >
+> > > >         return 0;
+> > > > @@ -35,8 +35,8 @@ static void ls1x_gpio_free(struct gpio_chip *gc, =
+unsigned int offset)
+> > > >         unsigned long flags;
+> > > >
+> > > >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+> > > > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) & ~BIT(o=
+ffset),
+> > > > -                    gpio_reg_base + GPIO_CFG);
+> > > > +       writel(readl(gpio_reg_base + GPIO_CFG) & ~BIT(offset),
+> > > > +              gpio_reg_base + GPIO_CFG);
+> > > >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+> > > >  }
+> > > >
+> > > > --
+> > > > 2.34.1
+> > > >
+> >
+> >
+> >
+> > --
+> > Best regards,
+> >
+> > Kelvin Cheung
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
+
+
+
+--
+Best regards,
+
+Kelvin Cheung
